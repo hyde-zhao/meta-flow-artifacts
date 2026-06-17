@@ -7,7 +7,7 @@ current_agent: "host-orchestrator"
 iteration: 13
 blocked: false
 active_change: ""
-last_action: "关闭 CR-030：docs 已拆分为源码跟踪的公开文档入口和 artifact 归档的内部文档，验证通过"
+last_action: "关闭 CR-031：初始化相关 skill 和 workspace link 已补齐 process 软链接建立与断链阻断规则"
 next_action: "delivered；等待后续新请求或观察阈值触发新的 CR"
 orchestrator_session:
   kind: "host"
