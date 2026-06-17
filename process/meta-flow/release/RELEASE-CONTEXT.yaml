@@ -1,21 +1,23 @@
 schema_version: "1.0"
 release_scope:
-  feature: "workflow-eval-governance"
-  source_crs: ["CR-018", "CR-019", "CR-020", "CR-021", "CR-022", "CR-023"]
+  feature: "meta-flow-artifact-routing-and-eval-governance"
+  source_crs: ["CR-018", "CR-019", "CR-020", "CR-021", "CR-022", "CR-023", "CR-024", "CR-026", "CR-027", "CR-028"]
   in_scope:
-    - "Workflow eval contracts and generated workflow fixture"
-    - "Local deterministic eval runner"
-    - "CP7/meta-qa evaluation evidence consumption"
-    - "Suite health and failure backlog"
-    - "Optional adapter and CI policy"
+    - "Workflow eval contracts, generated workflow fixtures, local deterministic eval runner, suite health and optional adapter policy"
+    - "CP7/meta-qa evaluation evidence consumption rules"
+    - "Process artifact routing health checks and workspace link/check CLI"
+    - "Externalized process directory tracked by meta-flow-artifacts"
+    - "Externalized docs directory tracked by meta-flow-artifacts"
+    - "Advanced eval runner grader coverage and expected-failure case semantics"
   out_of_scope:
     - "External Promptfoo / DeepEval / Langfuse / Garak real execution"
-    - "Credentialed network calls"
+    - "Credentialed network calls or trace upload"
     - "Production target project writes"
+    - "True publish, live deployment or release execution"
 version_decision:
   current_version: "0.4.0"
   recommended_change: "minor"
-  reason: "Adds CLI subcommand and new eval governance assets without breaking installer CLI."
+  reason: "Adds CLI workflow-eval and workspace health capabilities, plus process/docs artifact routing behavior, without breaking installer CLI."
 quality_summary:
   verification_report: "docs/quality/VERIFICATION-REPORT.md"
   test_report: "docs/quality/TEST-REPORT.md"
@@ -24,19 +26,23 @@ quality_summary:
   high_count: 0
   release_decision: "READY_WITH_RISK"
   residual_risks:
-    - "Runner uses conservative YAML-like parsing."
+    - "Runner uses conservative YAML-like parsing and should keep eval config shape simple."
     - "External adapters are policy-only and disabled by default."
+    - "process/ and docs/ rely on symlinks to /home/hyde/projects/meta-flow-artifacts; missing or broken links hard-stop workflow recovery."
 affected_surface:
   platforms: ["codex", "claude", "openclaw"]
-  components: ["cli", "evals", "docs", "delivery-rules", "meta-qa", "verification-execution"]
-  state_schema: ["target_project_profile", "validation_target", "workflow_eval"]
+  components: ["cli", "evals", "workspace-routing", "docs", "process", "delivery-rules", "meta-qa", "verification-execution"]
+  state_schema: ["artifact_routing", "target_project_profile", "validation_target", "workflow_eval"]
   external_interfaces: []
 install_validation_summary:
   commands:
-    - "python3 -m py_compile meta_flow/cli.py meta_flow/evals/runner.py"
-    - "python3 -m meta_flow.cli eval validate --eval evals/fixtures/generated-workflow-basic/WORKFLOW-EVAL.yaml"
-    - "python3 -m meta_flow.cli eval run --eval evals/fixtures/generated-workflow-basic/WORKFLOW-EVAL.yaml --out process/evals/runs/generated-workflow-basic"
-    - "python3 -m meta_flow.cli eval suite-health --runs process/evals/runs --out docs/quality/EVAL-SUITE-HEALTH.md"
+    - "meta-flow workspace check"
+    - "meta-flow check cr-tracking --project-root ."
+    - "meta-flow eval validate --eval evals/fixtures/generated-workflow-basic/WORKFLOW-EVAL.yaml"
+    - "meta-flow eval run --eval evals/fixtures/generated-workflow-basic/WORKFLOW-EVAL.yaml --out /tmp/meta-flow-eval-existing"
+    - "meta-flow eval validate --eval evals/fixtures/generated-workflow-advanced/WORKFLOW-EVAL.yaml"
+    - "meta-flow eval run --eval evals/fixtures/generated-workflow-advanced/WORKFLOW-EVAL.yaml --out /tmp/meta-flow-eval-advanced"
+    - "scripts/check_delivery_guardrails.py"
   result: "PASS"
 release_documents:
   profile: "compact"
@@ -51,6 +57,8 @@ non_authorized_items:
   - "Trace upload"
   - "Publish / live operation"
   - "Production target project write"
+  - "Replacing or deleting user-provided artifact directories outside the approved symlink targets"
 follow_up_summary:
   open_candidates: 0
   failure_backlog: "docs/quality/FAILURE-BACKLOG.md"
+  next_follow_up_trigger: "Create a new CR only if symlink health fails, eval parser complexity grows beyond the simple contract, or external adapters need real execution."

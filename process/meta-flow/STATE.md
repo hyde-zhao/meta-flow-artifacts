@@ -7,8 +7,8 @@ current_agent: "host-orchestrator"
 iteration: 13
 blocked: false
 active_change: ""
-last_action: "完成 CR-028 收尾：artifact repo 与源码仓库均已提交推送，工作区 clean，workspace check 和 CR tracking 通过"
-next_action: "无 active CR；等待用户下一步指令"
+last_action: "发起 CP8 Delivery Readiness 人工审查：自动预检 PASS，human-gate 校验 PASS，等待用户对 READY_WITH_RISK 和不授权边界做最终确认"
+next_action: "等待用户回复 CP8：approve、修改: <具体修改点> 或 reject"
 orchestrator_session:
   kind: "host"
   role: "host-orchestrator"
@@ -16,19 +16,25 @@ orchestrator_session:
   agent_id: ""
   agent_name: ""
   thread_id: ""
-  status: "active"
+  status: "awaiting-user"
   workflow_id: "meta-flow"
   active_change: ""
-  pending_gate: ""
-  pending_checklist_path: ""
-  pending_user_decision: ""
-  pending_decision_ids: []
-  pending_non_authorized_items: []
+  pending_gate: "CP8"
+  pending_checklist_path: "process/checkpoints/CP8-DELIVERY-READINESS.md"
+  pending_user_decision: "approve | 修改: <具体修改点> | reject"
+  pending_decision_ids: ["CP8-DQ-01", "CP8-DQ-02", "CP8-DQ-03"]
+  pending_non_authorized_items:
+    - "External SaaS execution"
+    - "Credentials"
+    - "Trace upload"
+    - "Publish / live operation"
+    - "Production target project write"
+    - "Replacing or deleting user-provided artifact directories outside the approved symlink targets"
   subagent_auto_dispatch: "enabled"
   resume_instruction: "用户回复人工检查点结论后，由 Host Orchestrator 主进程重新读取 STATE、checkpoint 和相关产物后继续；不得 spawn / resume 编排子 agent"
   spawned_at: ""
   last_seen_at: "2026-06-17T09:43:49+08:00"
-  awaiting_since: ""
+  awaiting_since: "2026-06-17T13:49:25+08:00"
   resumed_at: ""
   closed_at: ""
   previous_agent_id: ""
@@ -135,6 +141,11 @@ checkpoints:
   final_review_confirmed: false
 parallel_waves: []
 history:
+  - at: "2026-06-17T13:49:25+08:00"
+    actor: "host-orchestrator"
+    action: "launch-cp8-delivery-readiness-gate"
+    phase: "documentation"
+    summary: "生成 CP8 delivery context、自动预检、人工审查稿和发起消息；human-gate 校验通过。当前等待用户回复 approve / 修改: <具体修改点> / reject；approve 仅表示接受 READY_WITH_RISK 交付就绪和 3 项推荐决策，不授权真实发布、凭据、外部 SaaS、trace upload、publish/live 或 production 写入。"
   - at: "2026-06-17T13:46:02+08:00"
     actor: "host-orchestrator"
     action: "sync-state-after-cr-028-push"
