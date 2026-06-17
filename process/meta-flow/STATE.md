@@ -7,7 +7,7 @@ current_agent: "host-orchestrator"
 iteration: 13
 blocked: false
 active_change: ""
-last_action: "CP8 Delivery Readiness 已获用户同意：接受 READY_WITH_RISK、确认不授权真实运行、当前无 immediate follow-up CR；工作流推进到 delivered"
+last_action: "关闭 CR-029：delivery state-router STATE 模板已是正确交付真相源；本机 .agents 忽略副本已同步，workspace / CR tracking / guardrail 通过"
 next_action: "delivered；等待后续新请求或观察阈值触发新的 CR"
 orchestrator_session:
   kind: "host"
@@ -135,6 +135,16 @@ checkpoints:
   final_review_confirmed: true
 parallel_waves: []
 history:
+  - at: "2026-06-17T14:16:22+08:00"
+    actor: "host-orchestrator"
+    action: "close-cr-029-state-template-sync"
+    phase: "delivered"
+    summary: "关闭 CR-029：确认源码跟踪的 delivery/skills/state-router/templates/STATE-TEMPLATE.md 已包含 artifact_routing、target_project_profile 和 workflow_eval；本机忽略目录 .agents 对应模板已同步到相同内容但不提交源码；workspace check、CR tracking 和 guardrail 通过。"
+  - at: "2026-06-17T14:16:22+08:00"
+    actor: "host-orchestrator"
+    action: "activate-cr-029-state-template-sync"
+    phase: "documentation"
+    summary: "用户询问流程相关技能是否都已更新后，核对发现 delivery state-router STATE 模板已包含 artifact_routing / target_project_profile / workflow_eval，但 .agents 内置运行模板缺失；启动 CR-029 补齐模板漂移。"
   - at: "2026-06-17T14:04:19+08:00"
     actor: "host-orchestrator"
     action: "approve-cp8-and-deliver"
