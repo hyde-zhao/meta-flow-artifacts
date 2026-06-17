@@ -1,0 +1,117 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR089-QMT-INTERFACE-VALIDATION-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "quant-lab-cr089"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready"
+created_at: "2026-06-17T21:08:59+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-089"
+token_control:
+  read_profile: "compact"
+  max_source_files: 7
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整文档。"
+must_read:
+  - path: "docs/qmt/CR089-STRATEGY-PACKAGE-NAS-DELIVERY-PLAN.md"
+    reason: "recommended architecture for NAS package exchange and trading_pc intake"
+    required: true
+  - path: "process/checkpoints/CP2-CR089-QMT-INTERFACE-VALIDATION-BASELINE.md"
+    reason: "scope and non-authorization decisions"
+    required: true
+  - path: "docs/qmt/CR046-DUAL-TARGET-STRATEGY-FRAMEWORK.md"
+    reason: "upstream strategy package contract reference"
+    required: false
+  - path: "docs/research/HOST-WORKFLOW.md"
+    reason: "research_pc / NAS / trading_pc boundary reference"
+    required: false
+read_if_needed:
+  - path: "docs/research/ARCHIVE-GOVERNANCE.md"
+    trigger: "需要核对 STRATEGY_PACKAGE_EXCHANGE_ROOT package exchange 禁止项时读取"
+  - path: "process/docs/design/HLD-CR051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK.md"
+    trigger: "需要核对 CR051 trading_pc package consumer 边界时读取"
+  - path: "process/STATE.md"
+    trigger: "需要核对 active_change 或 CR089 blocked status"
+do_not_read_by_default:
+  - path_or_pattern: "NAS 实际挂载内容"
+    reason: "CP3 只设计目录合同，不访问实际 NAS。"
+  - path_or_pattern: ".env*"
+    reason: "凭据不属于架构评审输入。"
+  - path_or_pattern: "QMT / MiniQMT runtime"
+    reason: "CP3 不启动或连接 runtime。"
+  - path_or_pattern: "旧根 STATE / CR020 运行态"
+    reason: "CR020 deleted-by-user，仅可引用只读接口代码边界。"
+key_facts:
+  scope_summary: "推荐架构为 research_pc 生成策略包，发布到 NAS package exchange；trading_pc 只读拉取 approved package，校验 sha256/manifest 后复制到本地不可变缓存运行。"
+  accepted_decisions:
+    - "NAS is package exchange, not default execution root."
+    - "Strategy package structure includes manifest.yaml, strategy_core, targets/qmt_terminal, targets/miniqmt_runner, validation and docs."
+    - "First smoke strategy is qmt_interface_smoke."
+  active_constraints:
+    - "No NAS original execution as default."
+    - "No agent credential access."
+    - "No submit/cancel/simulation/live."
+    - "Endpoint matrix conflict for query_positions default failure semantics remains a design risk for CP5/implementation."
+  downstream_tasks:
+    - "Define package manifest/index/approval/quarantine contract."
+    - "Define trading_pc immutable cache and active symlink convention."
+    - "Define readonly smoke evidence redaction template."
+  traceability:
+    requirements:
+      - "R-CR089-01 package exchange contract"
+      - "R-CR089-02 trading_pc intake"
+      - "R-CR089-03 readonly QMT smoke"
+    use_cases:
+      - "QMT runtime can obtain runnable strategy packages from NAS after approval."
+    scenarios:
+      - "checksum pass"
+      - "checksum fail to quarantine"
+      - "missing manifest fail closed"
+      - "readonly query_positions evidence redacted"
+    stories:
+      - "CR089-S01-package-exchange-contract"
+      - "CR089-S02-qmt-interface-smoke-strategy-package"
+      - "CR089-S03-trading-pc-package-intake"
+      - "CR089-S04-readonly-qmt-interface-smoke"
+    features:
+      - "strategy-package-nas-exchange"
+      - "qmt-readonly-smoke"
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP3-CR089-01..06"
+  non_authorized_items:
+    - "NAS content operation"
+    - "credential read"
+    - "QMT/MiniQMT runtime start"
+    - "account raw query"
+    - "submit/cancel/simulation/live"
+  risk_acceptance_items:
+    - "qmt_interface_smoke remains a verification strategy, not production trading strategy."
+    - "query_positions failure precedence conflict must be decided before implementation changes."
+  open_questions:
+    - "Actual STRATEGY_PACKAGE_EXCHANGE_ROOT and TRADING_PACKAGE_CACHE_ROOT values are not captured in repository because they may reveal environment details."
+  n_a_or_waived_items:
+    - "Full HLD N/A: CR089 design evidence is the CR089 strategy package NAS delivery plan plus CP3 Decision Brief."
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP3 auto precheck"
+    - "CP3 manual checkpoint"
+    - "human gate launch message"
+  exit_criteria:
+    - "Architecture decisions approved or revised"
+  blocked_if_missing:
+    - "CP2 baseline checkpoint"
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "docs/qmt/CR089-STRATEGY-PACKAGE-NAS-DELIVERY-PLAN.md"
+    - "process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "No runtime source or credential source read."

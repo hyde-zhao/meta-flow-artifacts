@@ -1,0 +1,53 @@
+context_id: CP7-CR080-VERIFICATION-CONTEXT
+change_id: CR-080
+created_at: "2026-06-17T07:14:53+08:00"
+created_by: host-orchestrator
+status: ready
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - process/checks/CP6-CR080-DATA-REPORTS-RESTORE-CODING-DONE.md
+    - process/checks/CP7-CR080-DATA-REPORTS-RESTORE-VERIFICATION-DONE.md
+    - docs/quality/VERIFICATION-REPORT-CR080.md
+  read_if_needed:
+    - docs/quality/TEST-REPORT-CR080.md
+    - docs/quality/REVIEW-CR080.md
+    - docs/quality/FIXES-CR080.md
+  do_not_read_by_default:
+    - reports/
+    - data/
+    - .env
+    - complete logs
+    - full diff
+  read_expansion_log: []
+verification_summary:
+  result: PASS_WITH_RISK
+  validation_mode: mixed
+  reports_files_source: 772
+  reports_files_target: 772
+  reports_bytes_source: 4529789958
+  reports_bytes_target: 4529789958
+  data_files_source: 8
+  data_files_target: 8
+  data_bytes_source: 61723552
+  data_bytes_target: 61723552
+  rsync_dry_run_created: 0
+  rsync_dry_run_deleted: 0
+  rsync_dry_run_transferred: 0
+agent_review:
+  meta_qa_agent_id: 019ed2af-8c32-7b83-a685-7e68e74f8f3a
+  result: PASS_WITH_RISK
+risks:
+  - id: R-CR080-001
+    severity: MEDIUM
+    status: pending-cp8-risk-acceptance
+    summary: metadata-only verification does not prove content hash or semantic quality.
+  - id: R-CR080-002
+    severity: LOW
+    status: pending-cp8-risk-acceptance
+    summary: NAS/provider/lake/catalog were not verified.
+  - id: R-CR080-003
+    severity: LOW
+    status: pending-cp8-risk-acceptance
+    summary: old root remains retained and is not retired by this CR.

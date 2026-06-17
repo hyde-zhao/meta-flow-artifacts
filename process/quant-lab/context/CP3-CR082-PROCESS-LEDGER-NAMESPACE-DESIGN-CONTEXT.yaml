@@ -1,0 +1,27 @@
+context_id: CP3-CR082-PROCESS-LEDGER-NAMESPACE-DESIGN
+change_id: CR-082
+status: ready
+read_profile: compact
+created_at: '2026-06-17T09:11:43+08:00'
+owner: host-orchestrator
+architecture_summary:
+  current_layout: `/home/hyde/workspace/process` directly contains quant-lab ledger files.
+  target_layout: `/home/hyde/workspace/process/quant-lab` contains quant-lab ledger files.
+  symlink_change: `/home/hyde/workspace/quant-lab/process -> ../process/quant-lab`.
+  root_readme_change: `/home/hyde/workspace/process/README.md` becomes multi-project container README.
+  project_readme_change: existing Quant Lab README moves to `/home/hyde/workspace/process/quant-lab/README.md`.
+must_read:
+  - process/changes/CR-082-PROCESS-LEDGER-PROJECT-NAMESPACE-NORMALIZATION-2026-06-17.md
+  - process/checks/CP3-CR082-PROCESS-LEDGER-NAMESPACE-DESIGN-CONSISTENCY.md
+  - process/checkpoints/CP3-CR082-PROCESS-LEDGER-NAMESPACE-DESIGN-REVIEW.md
+risk_summary:
+  - symlink breakage if target directory missing
+  - accidental nested move if `quant-lab/` already exists
+  - stale bootstrap pointer if script not updated
+  - CR078 Git governance should wait for CR082 closure
+non_authorized:
+  - move external process ledger before CP5 approval
+  - git commit or push
+  - cleanup or delete backup
+  - data/reports/NAS/credential/runtime operations
+read_expansion_log: []

@@ -1,0 +1,188 @@
+schema_version: "1.0"
+status: closed-current-delivery
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+created_at: "2026-06-16T09:13:26+08:00"
+updated_at: "2026-06-16T09:13:26+08:00"
+closed_at: "2026-06-16T09:13:26+08:00"
+source_gate: CP8-CR071
+
+release_scope:
+  current_version: "local_backtest-shadow-root"
+  target_version: "quant-lab-shadow-root-cr071"
+  included_features:
+    - "Copy-first shadow root from /home/hyde/workspace/local_backtest to /home/hyde/workspace/quant-lab"
+    - "Old root retained without delete, rename or move"
+    - "Explicit exclusion of reports/, data/, .venv/, node_modules/ and .env"
+    - "Local static verification and CP8 closure evidence"
+  included_stories:
+    - "CR071-copy-first-shadow-root"
+  excluded_scope:
+    - "daily working root cutover"
+    - "old root retirement, delete, rename or move"
+    - "copy or restore reports/data/.venv/node_modules/.env into target"
+    - "credential read or .env migration"
+    - "remote Git add/set-url/push/tag or branch/default branch governance"
+    - "data lake root switch, provider fetch, lake write or catalog publish"
+    - "QMT/MiniQMT runtime, account query, order action, simulation or live trading"
+    - "CR046 recovery"
+  user_visible_changes:
+    - "A sibling shadow root exists at /home/hyde/workspace/quant-lab."
+    - "The legacy /home/hyde/workspace/local_backtest root remains available."
+    - "Target intentionally does not contain reports/, data/, .venv/, node_modules/ or .env."
+  internal_changes:
+    - "CR071 CP6/CP7/CP8 evidence generated."
+    - "CR072 archived local reports/data/process evidence to NAS and cleaned rebuildable caches."
+    - "reports Git tracking risk was mitigated locally in both roots before CP8 closure."
+  breaking_changes: []
+  known_risks:
+    - "R-CR071-02"
+    - "R-CR071-03"
+    - "R-CR071-04"
+
+version_decision:
+  current_version: "local_backtest-shadow-root"
+  target_version: "quant-lab-shadow-root-cr071"
+  change_type: "PATCH"
+  compatibility: "compatible-with-old-root-retained"
+  reason: "本轮新增同级 shadow root，不移除旧根、不改变远端仓库、数据湖或运行时。"
+
+quality_summary:
+  cp6_results:
+    - "process/checks/CP6-CR071-COPY-FIRST-SHADOW-ROOT-CODING-DONE.md: PASS_WITH_RISK"
+  cp7_results:
+    - "process/checks/CP7-CR071-COPY-FIRST-SHADOW-ROOT-VERIFICATION-DONE.md: PASS_WITH_RISK"
+  test_report_path: "docs/quality/TEST-REPORT-CR071.md"
+  review_path: "docs/quality/REVIEW-CR071.md"
+  blocker_count: 0
+  high_count: 0
+  accepted_risk_ids:
+    - "R-CR071-02"
+    - "R-CR071-03"
+    - "R-CR071-04"
+  mitigated_risk_ids:
+    - "R-CR071-01"
+  unresolved_findings: []
+  mitigation_notes:
+    - "R-CR071-01 target reports Git deleted risk was mitigated by removing reports from Git tracking while retaining local reports files."
+    - "Target checks for reports/data/.venv/node_modules/.env are empty in git status, git ls-files and filesystem maxdepth checks."
+
+affected_surface:
+  platforms:
+    - "local Linux filesystem"
+  components:
+    - "source root: /home/hyde/workspace/local_backtest"
+    - "target root: /home/hyde/workspace/quant-lab"
+    - "local Git working trees"
+    - "process/changes"
+    - "process/checks"
+    - "process/checkpoints"
+    - "process/context"
+    - "process/release"
+    - "docs/release"
+    - "docs/quality"
+  install_scopes: []
+  config_changes:
+    - "No .env copied; no credential or runtime config migration."
+  permission_changes: []
+  migration_required: true
+  external_interfaces: []
+  state_schema_changes:
+    - "CR071 classification changes to closed-current-delivery / READY_WITH_RISK."
+  command_parameter_changes: []
+
+install_validation_summary:
+  commands:
+    - "test -d /home/hyde/workspace/local_backtest"
+    - "test -d /home/hyde/workspace/quant-lab"
+    - "git -C /home/hyde/workspace/quant-lab status --short -- reports data .venv node_modules .env"
+    - "git -C /home/hyde/workspace/quant-lab ls-files reports data .venv node_modules .env"
+    - "find /home/hyde/workspace/quant-lab -maxdepth 1 for excluded names"
+    - "git ls-remote git@github.com:hyde-zhao/quant-lab.git refs/heads/master"
+  results:
+    - "source root exists"
+    - "target root exists"
+    - "target excluded path git status is empty"
+    - "target excluded path git ls-files is empty"
+    - "target excluded paths absent from target filesystem root"
+    - "remote master read-only check remains 3ade165e8b1edad031a911490cf6c1cee942616e"
+  log_paths:
+    - "process/checks/CP8-CR071-DELIVERY-READINESS.md"
+  skipped_with_reason:
+    - "No dependency sync or full pytest: target excludes .venv/data/reports/.env by design, and runtime rebuild was not authorized."
+    - "No remote write validation: remote Git writes remain unauthorized."
+    - "No QMT/data lake validation: runtime and data lake changes remain unauthorized."
+
+release_documents:
+  release_notes:
+    path: "docs/release/RELEASE-NOTES-CR071.md"
+    status: ready
+    na_reason: ""
+  deploy_checklist:
+    path: "docs/release/DEPLOY-CHECKLIST-CR071.md"
+    status: ready
+    na_reason: ""
+  rollback:
+    path: "docs/release/ROLLBACK-CR071.md"
+    status: ready
+    na_reason: ""
+  migration:
+    path: "docs/release/MIGRATION-CR071.md"
+    status: ready
+    na_reason: ""
+  feedback:
+    path: "docs/release/FEEDBACK-CR071.md"
+    status: ready
+    na_reason: ""
+
+non_authorized_items:
+  - id: NA-CR071-01
+    operation: "Delete, rename, move or retire /home/hyde/workspace/local_backtest"
+    reason: "Old root retention is part of approved MIG-A scope."
+    required_authorization: "Separate root retirement CR"
+  - id: NA-CR071-02
+    operation: "Root cutover / shell, IDE, automation or default workflow switch to /home/hyde/workspace/quant-lab"
+    reason: "CR071 only creates a shadow root."
+    required_authorization: "Separate root cutover decision"
+  - id: NA-CR071-03
+    operation: "Copy .env, read credentials, copy secrets, restore data/reports into target or rebuild runtime environment"
+    reason: "Sensitive and large/runtime paths were explicitly excluded."
+    required_authorization: "Dedicated environment/data restoration gate"
+  - id: NA-CR071-04
+    operation: "Git remote add/set-url/push/tag, branch/default branch governance, history rewrite, force push or remote deletion"
+    reason: "CR071 is local filesystem migration only."
+    required_authorization: "Dedicated Git runtime authorization / execution manifest"
+  - id: NA-CR071-05
+    operation: "Data lake root switch, provider fetch, lake write, catalog publish, QMT/MiniQMT runtime or CR046 recovery"
+    reason: "Out of CR071 scope and explicitly forbidden by user."
+    required_authorization: "Dedicated runtime/data lake/CR046 instruction"
+
+follow_up_summary:
+  observation_items:
+    - "CR071 closed as READY_WITH_RISK; no external runtime, data lake or remote Git facts changed."
+    - "Two local roots now exist; avoid editing both as authoritative roots without a cutover decision."
+  feedback_items:
+    - "If /home/hyde/workspace/quant-lab should become the daily working root, start a root cutover CR."
+    - "If target needs data/reports/.env/.venv restored, start a separate data/runtime restoration gate."
+    - "If old root should be deleted or archived, start a separate retirement gate after recovery checks."
+  follow_up_candidates:
+    - "FU-CR071-01 root cutover / daily workflow switch"
+    - "FU-CR071-02 old root retention or retirement policy"
+    - "FU-CR071-03 target environment rebuild and smoke test"
+    - "FU-CR071-04 target data/reports restoration or mount policy"
+    - "FU-CR071-05 remote Git sync/governance"
+  risk_acceptance_items:
+    - "R-CR071-02 target is not a complete runtime/data/report mirror"
+    - "R-CR071-03 root cutover remains deferred"
+    - "R-CR071-04 dual roots can diverge if both are edited"
+
+token_control:
+  default_read_mode: capsule-first
+  copied_long_text: false
+  allowed_payload: "summary, count, risk id, decision id, evidence path"
+  full_doc_read_triggers:
+    - missing_capsule_field
+    - unreadable_evidence_path
+    - conflicting_conclusion
+    - user_requested_deep_review
+

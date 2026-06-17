@@ -1,0 +1,87 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR069-SUPERSESSION-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "local_backtest-cr069"
+phase: "documentation"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-06-15T22:26:11+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-069"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整文档。"
+must_read:
+  - path: "process/changes/CR-069-CR062-SUPERSESSION-PUBLICATION-LEDGER-CLEANUP-2026-06-15.md"
+    reason: "CR069 范围和门禁"
+    required: true
+  - path: "process/changes/CR-INDEX.yaml"
+    reason: "CR062 blocked 与 CR069 active tracking"
+    required: true
+  - path: "process/STATE.md"
+    reason: "状态机和不授权边界"
+    required: true
+read_if_needed:
+  - path: "process/changes/CR-062-GIT-REMOTE-CUTOVER-REPOSITORY-PUBLICATION-GATE-2026-06-15.md"
+    trigger: "需要核对 CR062 blocker 原文"
+  - path: "process/checkpoints/CP8-CR068-DELIVERY-READINESS.md"
+    trigger: "需要核对 CR068 follow-up decision"
+do_not_read_by_default:
+  - path_or_pattern: ".env*"
+    reason: "凭据不属于本 CR"
+  - path_or_pattern: "reports/**"
+    reason: "CR062 blocker evidence 已摘要化，不读取报告正文"
+  - path_or_pattern: "runs/**"
+    reason: "CR062 blocker evidence 已摘要化，不读取运行产物"
+key_facts:
+  scope_summary: "CR069 只启动 CR062 supersession / publication ledger cleanup 门禁；CP5 前不实施 ledger 变更。"
+  accepted_decisions:
+    - "CR068 closed-current-delivery / READY_WITH_RISK"
+    - "CR062 post-approval preflight blocked"
+  active_constraints:
+    - "CR046 remains user-paused"
+    - "No Git remote write"
+    - "No NAS/lake/runtime/credential operation"
+  downstream_tasks:
+    - "CP2/CP3/CP5 human gate review"
+  traceability:
+    requirements:
+      - "CR062 blocked cleanup"
+    use_cases: []
+    scenarios: []
+    stories: []
+    features: []
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP2-CR069-01..05"
+  non_authorized_items:
+    - "Git remote write / branch governance"
+    - "NAS/data lake/runtime/credential"
+    - "CR046 recovery"
+  risk_acceptance_items:
+    - "CR062 remains as historical blocker until approved cleanup"
+  open_questions: []
+  n_a_or_waived_items:
+    - "Scenario Gray Areas N/A: ledger-only CR"
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP2 checkpoint review"
+  exit_criteria:
+    - "CP2 approved before proceeding"
+  blocked_if_missing:
+    - "CR069 formal CR"
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "process/changes/CR-INDEX.yaml"
+    - "process/changes/CR-062-GIT-REMOTE-CUTOVER-REPOSITORY-PUBLICATION-GATE-2026-06-15.md"
+    - "process/checkpoints/CP8-CR068-DELIVERY-READINESS.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes: []

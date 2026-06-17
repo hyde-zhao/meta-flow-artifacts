@@ -1,0 +1,94 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR066-CLEAN-PUBLICATION-DESIGN"
+project_id: "local_backtest"
+workflow_id: "local_backtest-cr066"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready"
+created_at: "2026-06-15T10:24:37+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-066"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: "CR066 CP3 需要比较 clean publication architecture 选项。"
+  default_instruction: "Agent 必须先读取本 capsule；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+must_read:
+  - path: "docs/release/CLEAN-PUBLICATION-STRATEGY-CR066.md"
+    reason: "clean publication architecture options"
+    required: true
+  - path: "docs/release/TRACKED-FORBIDDEN-PATHS-AUDIT-CR066.md"
+    reason: "tracked forbidden path facts"
+    required: true
+  - path: "docs/release/CLEAN-PUBLICATION-MANIFEST-CR066.yaml"
+    reason: "strategy manifest and forbidden actions"
+    required: true
+read_if_needed:
+  - path: "docs/release/REPOSITORY-HYGIENE-SCOPE-CR066.md"
+    trigger: "scope ambiguity"
+  - path: "process/checks/CR062-POST-APPROVAL-PREFLIGHT.md"
+    trigger: "blocker evidence audit"
+do_not_read_by_default:
+  - path_or_pattern: "reports/**"
+    reason: "do not inspect report bodies by default"
+  - path_or_pattern: "runs/**"
+    reason: "do not inspect run bodies by default"
+  - path_or_pattern: ".env*"
+    reason: "credential boundary"
+key_facts:
+  scope_summary: "CP3 compares current branch publish, clean snapshot, orphan branch, history rewrite and private repo strategies."
+  accepted_decisions:
+    - "CR062 current branch publish blocked."
+  active_constraints:
+    - "CR066 does not execute Git writes."
+    - "History rewrite and force push remain unauthorized."
+  downstream_tasks:
+    - "Select recommended architecture."
+    - "Define when to switch."
+  traceability:
+    requirements:
+      - "clean public baseline"
+    use_cases:
+      - "safe GitHub publication"
+    scenarios:
+      - "tracked forbidden path remediation"
+    stories:
+      - "CR066-S03-clean-publication-architecture"
+    features:
+      - "clean publication architecture"
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP3-CR066-01..05"
+  non_authorized_items:
+    - "branch creation / rename"
+    - "history rewrite / force push"
+    - "remote add / push"
+  risk_acceptance_items:
+    - "clean snapshot delays publication"
+  open_questions:
+    - "whether .env.example can be conditional include"
+  n_a_or_waived_items: []
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP3 auto precheck and manual gate"
+  exit_criteria:
+    - "CP3 approved or changes requested"
+  blocked_if_missing:
+    - "clean publication strategy"
+read_expansion_log:
+  - at: "2026-06-15T10:24:37+08:00"
+    actor: "host-orchestrator"
+    expanded_to: "CR066 strategy/audit/manifest docs"
+    reason: "CP3 architecture decision brief"
+validation:
+  generated_from_sources:
+    - "docs/release/CLEAN-PUBLICATION-STRATEGY-CR066.md"
+    - "docs/release/TRACKED-FORBIDDEN-PATHS-AUDIT-CR066.md"
+    - "docs/release/CLEAN-PUBLICATION-MANIFEST-CR066.yaml"
+  missing_sources: []
+  consistency_status: "pass"
+  notes: []

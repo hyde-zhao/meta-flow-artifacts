@@ -1,0 +1,148 @@
+schema_version: "1.0"
+change_id: "CR-085"
+created_at: "2026-06-17T14:20:48+08:00"
+created_by: "host-orchestrator"
+purpose: "Clean snapshot materialization and content scan manifest after user approved the scan step."
+approval_scope:
+  user_reply: "同意"
+  interpreted_as:
+    - "Materialize local clean snapshot candidates."
+    - "Run content-level no-secret, .env.example placeholder, forbidden-path, large-file, and topology scans."
+  not_authorized:
+    - "remote write"
+    - "git push or git push -u"
+    - "remote deletion"
+    - "force push"
+    - "history rewrite"
+    - "tag"
+    - "default branch governance"
+    - ".env read, print, save, copy, or upload"
+source:
+  local_source_commit: "d4d2881"
+  local_source_commit_title: "CR078 process ledger publication gate"
+  remote_url: "git@github.com:hyde-zhao/quant-lab.git"
+  remote_branch: "master"
+  remote_master_commit: "3ade165e8b1edad031a911490cf6c1cee942616e"
+  remote_master_snapshot: "/tmp/cr085-remote-master-snapshot-20260617T142141"
+scan_policy:
+  precise_secret_patterns:
+    - "private key block"
+    - "AWS access key id"
+    - "GitHub token prefix"
+    - "OpenAI sk-style token"
+  forbidden_paths:
+    - ".env"
+    - ".env.* except .env.example"
+    - "data/**"
+    - "reports/**"
+    - "runs/**"
+    - "process/**"
+    - "checkpoints/**"
+    - ".claude/**"
+    - "issues/**"
+    - "notebooks/**"
+    - "ops/**"
+    - "caches and bytecode"
+  large_file_threshold: "5 MiB"
+  topology_blockers:
+    - "/home/*/workspace or /home/hyde"
+    - "private IPv4 outside test fixtures"
+    - "NAS, NFS, systemd, mount operation markers"
+    - "/mnt, /media, /srv, /var/lib absolute paths"
+  topology_warnings:
+    - "/tmp paths"
+    - "private IPv4 inside test fixtures"
+candidates:
+  source_full_candidate:
+    snapshot_path: "/tmp/cr085-clean-snapshot-20260617T141556"
+    file_count: 436
+    source: "d4d2881 must include + docs/** + experiments/**"
+    result: "FAIL_TOPOLOGY"
+    forbidden_path_hit_count: 0
+    large_file_hit_count_over_5mib: 0
+    precise_secret_hit_count: 0
+    env_example_placeholder_status: "PASS; 19 assignments are empty or placeholder-like"
+    topology_blocker_count: 80
+    handling: "Rejected as publication candidate because conditional docs include internal topology references."
+  source_v2_candidate:
+    snapshot_path: "/tmp/cr085-clean-snapshot-v2-20260617T141824"
+    file_count: 302
+    source: "d4d2881 strict code/docs-excluded candidate"
+    result: "FAIL_TOPOLOGY"
+    forbidden_path_hit_count: 0
+    large_file_hit_count_over_5mib: 0
+    precise_secret_hit_count: 0
+    env_example_placeholder_status: "PASS; 19 assignments are empty or placeholder-like"
+    topology_blocker_count: 14
+    handling: "Rejected as standalone publication candidate because README, .gitignore, selected tests and scripts still contain topology blockers."
+  source_v3_clean_overlay_set:
+    snapshot_path: "/tmp/cr085-clean-snapshot-v3-20260617T141938"
+    file_count: 288
+    path_list_sha256_no_trailing_newline: "4a3275ac39c89222a9dbc6e7729a83b208492b7818f4d92ee6b9f3afb049b6e1"
+    path_list_sha256_with_trailing_newline: "ada1e60948339fbb62a13890ec16a3d11e96eb9db62404bd2bfe09433f784132"
+    source: "d4d2881 clean overlay path set"
+    result: "PASS_WITH_WARNINGS"
+    forbidden_path_hit_count: 0
+    large_file_hit_count_over_5mib: 0
+    precise_secret_hit_count: 0
+    env_example_placeholder_status: "PASS; 19 assignments are empty or placeholder-like"
+    topology_blocker_count: 0
+    topology_warning_count: 4
+    warning_basis: "Warnings are limited to test fixtures using /tmp or private IPv4 examples."
+    caveat: "Not a full replacement tree because it omits remote README, docs/USER-MANUAL.md and quant_lab/** unless overlaid onto remote master."
+  remote_master_baseline:
+    snapshot_path: "/tmp/cr085-remote-master-snapshot-20260617T142141"
+    file_count: 136
+    path_list_sha256_no_trailing_newline: "a3e96068e50c280e9024bd9f49a208931d06d99372ee56b4ad4a08c93968f317"
+    result: "PASS_WITH_EXISTING_TOPOLOGY_RISK"
+    forbidden_path_hit_count: 0
+    large_file_hit_count_over_5mib: 0
+    precise_secret_hit_count: 0
+    env_example_placeholder_status: "PASS; 19 assignments are empty or placeholder-like"
+    topology_blocker_count: 2
+    topology_blocker_paths:
+      - "README.md"
+      - "docs/USER-MANUAL.md"
+    handling: "Existing remote risk; not modified by this step."
+  overlay_a_retain_remote_docs:
+    snapshot_path: "/tmp/cr085-remote-overlay-v3-retain-docs-20260617T142304"
+    file_count: 297
+    path_list_sha256_no_trailing_newline: "fc6436fad0621be7ff2f21c0a87c1c5252cb482fc7a28c1ec73dbe85afdb42fe"
+    source: "remote master baseline + source_v3 overlay"
+    result: "PASS_WITH_EXISTING_TOPOLOGY_RISK"
+    forbidden_path_hit_count: 0
+    large_file_hit_count_over_5mib: 0
+    precise_secret_hit_count: 0
+    env_example_placeholder_status: "PASS; 19 assignments are empty or placeholder-like"
+    topology_blocker_count: 2
+    topology_blocker_paths:
+      - "README.md"
+      - "docs/USER-MANUAL.md"
+    topology_warning_count: 4
+    tradeoff: "Keeps existing remote documentation but retains the two existing topology blockers."
+  overlay_b_strict_remove_remote_docs:
+    snapshot_path: "/tmp/cr085-remote-overlay-v3-strict-20260617T142304"
+    file_count: 295
+    path_list_sha256_no_trailing_newline: "7a406af74dae3bd924c37231210226b082a467fca9d594405707ae3bbf3eca1a"
+    source: "remote master baseline without README/docs + source_v3 overlay"
+    result: "PASS_WITH_WARNINGS"
+    forbidden_path_hit_count: 0
+    large_file_hit_count_over_5mib: 0
+    precise_secret_hit_count: 0
+    env_example_placeholder_status: "PASS; 19 assignments are empty or placeholder-like"
+    topology_blocker_count: 0
+    topology_warning_count: 4
+    warning_basis: "Warnings are limited to test fixtures using /tmp or private IPv4 examples."
+    tradeoff: "Removes README.md and docs/USER-MANUAL.md from the remote candidate; this remote deletion is not authorized yet."
+recommended_next_gate:
+  gate_name: "CR085 Remote Publication / Documentation Handling Decision"
+  required_decisions:
+    - "Choose overlay A, overlay B, or a sanitize-docs option."
+    - "Confirm whether README.md and docs/USER-MANUAL.md should be kept, deleted, or sanitized before remote publication."
+    - "Confirm whether topology warnings inside test fixtures are accepted."
+    - "Explicitly authorize or reject the next remote write step."
+  default_recommendation: "Do not push yet; ask for a dedicated remote write gate. Prefer sanitize-docs if README and user manual are required on remote."
+evidence:
+  materialization_scan: "process/checks/CR085-CLEAN-SNAPSHOT-MATERIALIZATION-SCAN-2026-06-17.md"
+  path_manifest: "docs/release/CLEAN-PUBLICATION-CANDIDATE-MANIFEST-CR085.yaml"
+  remote_readonly_scan: "process/checks/CR085-REMOTE-READONLY-SCAN-2026-06-17.md"

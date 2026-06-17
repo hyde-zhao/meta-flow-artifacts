@@ -1,0 +1,69 @@
+release_context_id: RELEASE-CONTEXT-CR081
+change_id: CR-081
+created_at: '2026-06-17T08:40:59+08:00'
+release_artifact_profile: full
+release_decision: READY_WITH_RISK
+release_scope:
+  summary: Process ledger externalized to sibling directory and exposed through symlink.
+  in_scope:
+    - /home/hyde/workspace/process
+    - /home/hyde/workspace/quant-lab/process -> ../process
+    - .gitignore /process rule
+    - LEDGER.md
+    - ledger.yaml
+    - scripts/link-engineering-ledger.sh
+  out_of_scope:
+    - data/reports content
+    - credentials
+    - NAS content
+    - provider/lake/catalog
+    - remote Git write
+    - runtime
+version_decision:
+  scheme: process-release
+  target_version: CR081-process-ledger-cutover
+  reason: repository/process ownership migration, not application version release
+quality_summary:
+  cp6_status: PASS
+  cp7_status: PASS_WITH_RISK
+  blocker_count: 0
+  high_count: 0
+  risk_acceptance_ids:
+    - R-CR081-001
+    - R-CR081-002
+    - R-CR081-003
+affected_surface:
+  git_index: process/** removed from current repo index
+  filesystem:
+    external_process_project: /home/hyde/workspace/process
+    symlink: /home/hyde/workspace/quant-lab/process -> ../process
+    backup: /home/hyde/workspace/process.backup-cr081-20260617T083645
+  docs:
+    - LEDGER.md
+    - ledger.yaml
+    - /home/hyde/workspace/process/README.md
+install_validation_summary:
+  bootstrap_script: scripts/link-engineering-ledger.sh
+  result: PASS
+release_documents:
+  release_notes: docs/release/RELEASE-NOTES-CR081.md
+  deploy_checklist: docs/release/DEPLOY-CHECKLIST-CR081.md
+  rollback: docs/release/ROLLBACK-CR081.md
+  migration: docs/release/MIGRATION-CR081.md
+  feedback: docs/release/FEEDBACK-CR081.md
+non_authorized_items:
+  - Git commit / push / remote write
+  - data/reports content read or mutation
+  - credential read
+  - NAS content access
+  - provider/lake/catalog operation
+  - QMT/MiniQMT runtime
+  - CR046 recovery
+  - old root retirement or destructive cleanup
+follow_up_summary:
+  required_before_close:
+    - CP8 user approval
+  optional_after_close:
+    - CR078 remote Git governance
+    - CR077 old root retirement
+    - optional docs externalization CR

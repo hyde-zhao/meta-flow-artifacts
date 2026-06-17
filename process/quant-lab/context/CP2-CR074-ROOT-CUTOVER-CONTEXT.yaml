@@ -1,0 +1,77 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR074-ROOT-CUTOVER-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "CR074"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-06-16T22:14:44+08:00"
+created_by: "host-orchestrator"
+source_cr: "process/changes/CR-074-ROOT-CUTOVER-DAILY-WORKFLOW-SWITCH-2026-06-16.md"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读取本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整正式文档。"
+must_read:
+  - path: "process/STATE.md"
+    reason: "CR074 当前状态、CR073 readiness 和人工门禁队列"
+    required: true
+  - path: "process/changes/CR-074-ROOT-CUTOVER-DAILY-WORKFLOW-SWITCH-2026-06-16.md"
+    reason: "CR074 范围、禁止项和验收标准"
+    required: true
+read_if_needed:
+  - path: "process/checks/CR073-TARGET-CUTOVER-READINESS-VERIFICATION-2026-06-16.md"
+    trigger: "需要审计 CR073 readiness 依据"
+  - path: "process/changes/CR-INDEX.yaml"
+    trigger: "需要核对 follow-up candidate 和 active CR"
+do_not_read_by_default:
+  - path_or_pattern: "reports/**"
+    reason: "CR074 不读取报告目录"
+  - path_or_pattern: "data/**"
+    reason: "CR074 不读取数据目录"
+  - path_or_pattern: ".env"
+    reason: "不得读取凭据"
+key_facts:
+  scope_summary: "启动 CR074 root cutover / daily workflow switch 门禁；批准前不切换 root。"
+  accepted_decisions:
+    - "CR073 target evidence convergence 已 PASS。"
+  active_constraints:
+    - "旧根保留；不删除/移动/重命名。"
+    - "不复制或读取 reports/data/.venv/node_modules/.env。"
+    - "不做远端 Git、data lake、runtime 或 CR046 recovery。"
+  downstream_tasks:
+    - "生成 CP2/CP3/CP5 人工门禁。"
+  traceability:
+    requirements: ["CR074-candidate"]
+    use_cases: ["daily workflow root switch"]
+    scenarios: ["logical cutover without destructive filesystem action"]
+    stories: []
+    features: []
+risks_and_decisions:
+  pending_human_decisions: ["DQ-CP2-CR074-01..05"]
+  non_authorized_items: ["NA-CR074-001..009"]
+  risk_acceptance_items: ["target 可能仍非 runtime-ready，CR075/CR076 后续处理"]
+  open_questions: []
+  n_a_or_waived_items: ["Scenario Gray Areas N/A：用户已用“继续”启动下一候选，范围由 CR073 follow-up 定义。"]
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP2 manual checkpoint"
+  exit_criteria:
+    - "CP2 auto precheck PASS"
+    - "用户确认前不执行 cutover"
+  blocked_if_missing:
+    - "CR073 readiness evidence"
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "process/STATE.md"
+    - "process/changes/CR-INDEX.yaml"
+    - "process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes: []

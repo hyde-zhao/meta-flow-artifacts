@@ -1,0 +1,109 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR071-REQUIREMENT-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "local_backtest-cr071"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-06-16T07:16:44+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-071"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "Agent 必须先读取本 capsule；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+must_read:
+  - path: "process/changes/CR-071-COPY-FIRST-SHADOW-ROOT-MIGRATION-2026-06-16.md"
+    reason: "CR071 范围、排除清单、门禁和不授权项"
+    required: true
+  - path: "docs/release/COPY-FIRST-SHADOW-ROOT-MIGRATION-PLAN-CR071.md"
+    reason: "MIG-A copy-first 执行计划"
+    required: true
+  - path: "docs/release/COPY-FIRST-SHADOW-ROOT-MANIFEST-CR071.yaml"
+    reason: "机器可读执行清单"
+    required: true
+read_if_needed:
+  - path: "process/changes/CR-053-QUANT-LAB-MIGRATION-INVENTORY-AND-DRY-RUN-2026-06-14.md"
+    trigger: "需要追溯 quant-lab migration inventory / dry-run 基线"
+  - path: "process/changes/CR-060-REPO-LOCAL-MECHANICAL-MIGRATION-EXECUTION-GATE-2026-06-15.md"
+    trigger: "需要追溯 identity convergence 与 preserve-audit 边界"
+  - path: "process/changes/CR-061-PACKAGE-IMPORT-LAYOUT-CONVERGENCE-2026-06-15.md"
+    trigger: "需要追溯 package/import/layout 收敛"
+  - path: "process/changes/CR-INDEX.yaml"
+    trigger: "需要核对 CR tracking"
+do_not_read_by_default:
+  - path_or_pattern: ".env*"
+    reason: "凭据与真实环境变量不属于 CR071 CP2 输入；.env 默认不复制"
+  - path_or_pattern: "reports/**"
+    reason: "本轮明确不复制 reports/"
+  - path_or_pattern: "data/**"
+    reason: "本轮明确不复制 data/"
+  - path_or_pattern: ".venv/**"
+    reason: "本轮明确不复制虚拟环境"
+  - path_or_pattern: "node_modules/**"
+    reason: "本轮明确不复制 node_modules"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "不得作为下游默认输入"
+key_facts:
+  scope_summary: "CR071/MIG-A 仅授权在 CP2/CP3/CP5 approved 后执行本机 copy-first shadow root：local_backtest -> sibling quant-lab；旧目录保留；排除 reports/data/.venv/node_modules/.env；不做 NAS、remote Git、QMT runtime 或 data lake 切换。"
+  accepted_decisions:
+    - "quant-lab 是 canonical project name；local_backtest 保留为 legacy alias。"
+    - "CR071 不继承 CR067/CR068 的远端 Git 写授权，也不继承 CR059 的 NAS 操作授权。"
+  active_constraints:
+    - "CP2/CP3/CP5 approved 前不得复制。"
+    - "目标目录当前不存在；执行前若非空必须阻断。"
+    - ".env 默认不复制，且不读取正文。"
+  downstream_tasks:
+    - "生成 CP2 scope baseline 和人工决策项。"
+    - "进入 CP3 copy-first shadow root 架构确认。"
+    - "进入 CP5 execution readiness。"
+  traceability:
+    requirements:
+      - "REQ-CR071-01 local copy-first shadow root"
+      - "REQ-CR071-02 old root retained"
+      - "REQ-CR071-03 explicit exclusion list"
+      - "REQ-CR071-04 no external/runtime/data-lake side effects"
+    use_cases:
+      - "UC-CR071-01 migrate working root by copy-first"
+    scenarios:
+      - "SC-CR071-01 target absent happy path"
+      - "SC-CR071-02 excluded paths absent"
+      - "SC-CR071-03 target non-empty blocked"
+    stories: []
+    features: []
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP2-CR071-01..05"
+  non_authorized_items:
+    - "delete/rename/move old root"
+    - "copy reports/data/.venv/node_modules/.env"
+    - "NAS / remote Git write / data lake / QMT runtime / CR046 recovery"
+  risk_acceptance_items:
+    - "shadow root may initially omit reports/data artifacts by design; downstream workflows must not assume those roots exist in target."
+  open_questions: []
+  n_a_or_waived_items:
+    - "Scenario Gray Areas discussion log N/A：用户已直接给出范围、排除项和禁止操作边界。"
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP2 auto precheck"
+    - "CP2 manual checkpoint"
+  exit_criteria:
+    - "CP2 checkpoint exists and human-gate validation passes"
+  blocked_if_missing:
+    - "CR071 formal CR"
+    - "CR071 manifest"
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "process/changes/CR-071-COPY-FIRST-SHADOW-ROOT-MIGRATION-2026-06-16.md"
+    - "docs/release/COPY-FIRST-SHADOW-ROOT-MIGRATION-PLAN-CR071.md"
+    - "docs/release/COPY-FIRST-SHADOW-ROOT-MANIFEST-CR071.yaml"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "No copy, NAS operation, remote Git write, credential read, provider fetch, catalog publish or runtime was performed while generating this capsule."

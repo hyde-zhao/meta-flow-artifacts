@@ -1,0 +1,68 @@
+release_context_id: RELEASE-CONTEXT-CR076
+change_id: CR-076
+created_at: "2026-06-17T00:41:44+08:00"
+created_by: host-orchestrator
+release_artifact_profile: minimal
+release_decision: READY_WITH_RISK
+scope:
+  included:
+    - data/reports access policy baseline
+    - policy-first / no-data-touch decision ledger
+    - local retained / NAS archive / provider rebuild candidate modeling
+    - per-run explicit runtime authorization requirement for future real access
+    - evidence redaction and memory boundary
+    - CR076 process evidence and closure gate
+  excluded:
+    - reading, listing, copying, restoring, comparing or deleting reports/
+    - reading, listing, copying, restoring, comparing or deleting data/
+    - .env and credential access
+    - provider fetch, lake write, catalog publish
+    - remote Git write, branch/default branch governance
+    - QMT/MiniQMT runtime, account query, order submit/cancel, simulation/live
+    - CR046 recovery
+    - optional dependency groups and full tests
+    - deleting .venv or destructive cleanup
+quality_summary:
+  cp2_manual_status: approved
+  cp3_manual_status: approved
+  cp5_manual_status: approved
+  policy_ledger_execution: PASS
+  no_data_touch_verification: PASS_WITH_RISK
+evidence:
+  - process/checkpoints/CP2-CR076-DATA-REPORTS-BASELINE.md
+  - process/checkpoints/CP3-CR076-DATA-REPORTS-POLICY-REVIEW.md
+  - process/checkpoints/CP5-CR076-DATA-REPORTS-READINESS.md
+  - process/checks/CR076-POLICY-LEDGER-EXECUTION-2026-06-17.md
+  - process/checks/CR076-NO-DATA-TOUCH-VERIFICATION-2026-06-17.md
+  - process/context/CP8-CR076-DELIVERY-CONTEXT.yaml
+risks:
+  - id: R-CR076-01
+    severity: MEDIUM
+    status: accepted-by-recommended-cp8
+    summary: data/reports readiness remains unknown because real access is intentionally not authorized in CR076.
+  - id: R-CR076-02
+    severity: MEDIUM
+    status: accepted-by-recommended-cp8
+    summary: local retained / NAS archive / provider rebuild remains candidate modeling only; no path is executed.
+  - id: R-CR076-03
+    severity: LOW
+    status: accepted-by-recommended-cp8
+    summary: future evidence may need redacted samples or manifests, requiring a separate authorization boundary.
+follow_up_candidates:
+  - id: CR076-real-access-candidate
+    summary: Future real access to reports/data must be a separate runtime_authorization / execution CR.
+  - id: CR077-candidate
+    summary: Old root retirement remains separate and not automatically started.
+  - id: CR078-candidate
+    summary: Remote Git governance remains separate and not automatically started.
+  - id: CR046-recovery
+    summary: QMT/MiniQMT framework verification recovery remains paused and requires explicit user instruction.
+non_authorized:
+  - reports/data read/list/copy/restore/compare/delete
+  - .env or credentials
+  - provider/lake/catalog
+  - remote Git writes
+  - QMT/MiniQMT runtime
+  - CR046 recovery
+  - optional groups/full tests
+  - destructive cleanup

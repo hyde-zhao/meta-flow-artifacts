@@ -1,0 +1,74 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR084-REMOTE-TARGET-CONTEXT"
+project_id: "local_backtest"
+canonical_project_name: "quant-lab"
+workflow_id: "local_backtest-cr084"
+phase: "documentation"
+checkpoint: "CP5"
+capsule_type: "cp5-readiness"
+status: "ready"
+created_at: "2026-06-17T11:49:53+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-084"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整文档。"
+must_read:
+  - path: "process/changes/CR-084-REMOTE-TARGET-CONFIGURATION-PUSH-EXECUTION-GATE-2026-06-17.md"
+    reason: "CR084 execution authorization boundary"
+    required: true
+  - path: "process/checkpoints/CP2-CR084-REMOTE-TARGET-BASELINE.md"
+    reason: "scope decisions"
+    required: true
+  - path: "process/checkpoints/CP3-CR084-REMOTE-TARGET-HLD-REVIEW.md"
+    reason: "fail-closed target design"
+    required: true
+  - path: "process/checks/CR083-REMOTE-PUSH-PREFLIGHT-2026-06-17.md"
+    reason: "preflight evidence"
+    required: true
+read_if_needed:
+  - path: "process/STATE.md"
+    trigger: "需要核对 human gate 或 active_change"
+  - path: "process/changes/CR-INDEX.yaml"
+    trigger: "需要核对 CR tracking"
+do_not_read_by_default:
+  - path_or_pattern: ".git/config"
+    reason: "只有用户明确提供 / 确认 remote URL 后才需要对比。"
+  - path_or_pattern: ".env*"
+    reason: "凭据不属于 CR084。"
+  - path_or_pattern: "data/**"
+    reason: "数据内容不属于 CR084。"
+  - path_or_pattern: "reports/**"
+    reason: "报告内容不属于 CR084。"
+key_facts:
+  approved_before_execution: false
+  local_commit: "d4d2881 CR078 process ledger publication gate"
+  current_branch: "work/chapter3-factor-gap-remediation-20260608"
+  remote_configured: false
+  upstream_configured: false
+  staged_area_clean: true
+  dirty_worktree_excluded: true
+  recommended_action_sequence:
+    - "确认 remote URL 和 remote name"
+    - "可选执行 git ls-remote"
+    - "如批准且无 remote，执行 git remote add"
+    - "如批准，执行普通非 force push，可选择 -u 设置 upstream"
+    - "任一 stop condition 命中即停止"
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP5-CR084-01..10"
+  non_authorized_items:
+    - "force push, tag, history rewrite"
+    - "remote set-url/delete"
+    - "default branch governance"
+    - "dirty worktree commit"
+    - "external process Git/NAS"
+    - "credentials, data/reports, runtime, CR046 recovery"
+read_expansion_log: []
+validation:
+  consistency_status: "pending-human-gate"
+

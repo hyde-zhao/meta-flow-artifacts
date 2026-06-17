@@ -1,0 +1,102 @@
+release_context_id: RELEASE-CONTEXT-CR079
+change_id: CR-079
+created_at: "2026-06-17T06:25:00+08:00"
+created_by: host-orchestrator
+release_artifact_profile: minimal
+release_decision: READY_WITH_RISK
+delivery_status: closed-current-delivery
+approved_by: user
+approved_at: "2026-06-17T06:28:29+08:00"
+scope:
+  included:
+    - CR079 CP2/CP3/CP5 approved metadata-only access gate
+    - one metadata-only inventory over target/legacy reports/data paths
+    - CP6 inventory evidence and CP7 verification evidence
+    - CP8 delivery readiness for the current metadata-only scope
+    - follow-up candidate routing for restore/copy, NAS compare and provider rebuild
+  excluded:
+    - file content read, sample print, parquet/csv/json parse or content hash
+    - copying, restoring, comparing content, moving, renaming or deleting reports/data
+    - .env and credential access
+    - provider fetch, lake write, catalog publish, MARKET_DATA_LAKE_ROOT replacement or NAS promote
+    - remote Git write, branch/default branch governance, history rewrite, force push, tag or remote deletion
+    - QMT/MiniQMT runtime, account query, order submit/cancel, simulation or live trading
+    - CR046 recovery
+    - old root retirement
+    - optional dependency groups, full tests, deleting .venv or destructive cleanup
+quality_summary:
+  cp2_manual_status: approved
+  cp3_manual_status: approved
+  cp5_manual_status: approved
+  cp6_inventory_status: PASS_WITH_RISK
+  cp7_verification_status: PASS_WITH_RISK
+  blocker_count: 0
+  high_risk_count: 1
+evidence:
+  - process/checkpoints/CP2-CR079-DATA-REPORTS-ACCESS-BASELINE.md
+  - process/checkpoints/CP3-CR079-DATA-REPORTS-ACCESS-DESIGN-REVIEW.md
+  - process/checkpoints/CP5-CR079-DATA-REPORTS-ACCESS-READINESS.md
+  - process/checks/CR079-DATA-REPORTS-ACCESS-INVENTORY-2026-06-17.md
+  - process/checks/CR079-DATA-REPORTS-ACCESS-VERIFICATION-2026-06-17.md
+  - process/context/CP8-CR079-DELIVERY-CONTEXT.yaml
+inventory_summary:
+  target_root:
+    path: /home/hyde/workspace/quant-lab
+    reports_exists: false
+    data_exists: false
+  legacy_root:
+    path: /home/hyde/workspace/local_backtest
+    reports_exists: true
+    reports_files: 772
+    reports_dirs: 126
+    reports_total_bytes: 4529789958
+    data_exists: true
+    data_files: 8
+    data_dirs: 10
+    data_total_bytes: 61723552
+operation_counts:
+  file_content_read: 0
+  sample_print: 0
+  parquet_csv_json_parse: 0
+  content_hash: 0
+  copy_restore_move_delete: 0
+  credential_or_env_read: 0
+  provider_fetch: 0
+  lake_write: 0
+  catalog_publish: 0
+  remote_git_write: 0
+  qmt_miniqmt_runtime: 0
+  old_root_retirement: 0
+risks:
+  - id: R-CR079-01
+    severity: HIGH
+    status: accepted-by-cp8
+    summary: target root lacks reports/ and data/; current authorized root is not data/report complete.
+  - id: R-CR079-02
+    severity: MEDIUM
+    status: accepted-by-cp8
+    summary: legacy retained assets exist, but content quality and freshness are not verified by metadata-only inventory.
+  - id: R-CR079-03
+    severity: LOW
+    status: accepted-by-cp8
+    summary: risk-name hits are filename-pattern indicators only and do not prove credential or content exposure.
+follow_up_candidates:
+  - id: CR079-restore-candidate
+    status: candidate
+    summary: Restore/copy reports/data into the authoritative root after a separate CR approves source, destination, operation type and verification.
+  - id: CR079-nas-compare-candidate
+    status: candidate
+    summary: Compare local retained assets with NAS archive under a separate access boundary if local retained assets are insufficient or stale.
+  - id: CR079-provider-rebuild-candidate
+    status: candidate
+    summary: Rebuild data from provider/lake/catalog only after a separate provider authorization CR.
+non_authorized:
+  - content read, sample print, parse or content hash
+  - reports/data copy, restore, compare content, move, rename or delete
+  - .env or credentials
+  - provider/lake/catalog/NAS promote
+  - remote Git writes
+  - QMT/MiniQMT runtime
+  - CR046 recovery
+  - old root retirement
+  - optional groups/full tests/destructive cleanup

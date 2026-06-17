@@ -1,0 +1,102 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR066-REPOSITORY-HYGIENE"
+project_id: "local_backtest"
+workflow_id: "local_backtest-cr066"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-06-15T10:24:37+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-066"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: "CR066 由 CR062 blocker 触发；已读取 CR062 preflight、STATE、CR-INDEX 和相关 release scope。"
+  default_instruction: "Agent 必须先读取本 capsule；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+must_read:
+  - path: "process/checks/CR062-POST-APPROVAL-PREFLIGHT.md"
+    reason: "CR066 来源 blocker 和 tracked forbidden paths"
+    required: true
+  - path: "process/changes/CR-066-REPOSITORY-HYGIENE-CLEAN-PUBLICATION-STRATEGY-2026-06-15.md"
+    reason: "正式 CR 和范围"
+    required: true
+  - path: "docs/release/REPOSITORY-HYGIENE-SCOPE-CR066.md"
+    reason: "In scope / out of scope"
+    required: true
+read_if_needed:
+  - path: "process/STATE.md"
+    trigger: "需要核对 pending decisions、CR tracking 或历史状态"
+  - path: "process/changes/CR-INDEX.yaml"
+    trigger: "需要核对 CR 编号和 active / blocked 状态"
+  - path: "docs/release/REPOSITORY-PUBLICATION-MANIFEST-CR062.yaml"
+    trigger: "需要核对 CR062 原 publication policy"
+do_not_read_by_default:
+  - path_or_pattern: "reports/**"
+    reason: "运行 / 报告产物，不属于 CR066 默认读取对象"
+  - path_or_pattern: "runs/**"
+    reason: "运行态证据，不默认读取正文"
+  - path_or_pattern: ".env*"
+    reason: "凭据边界；只允许检查路径和 `.env.example` 策略，不读取真实 env"
+  - path_or_pattern: "process/STATE.md full history"
+    reason: "状态文件很大，仅在冲突排查时读取相关片段"
+key_facts:
+  scope_summary: "CR066 暂停 CR062 publication execution，定义 repository hygiene / clean publication strategy。"
+  accepted_decisions:
+    - "DQ-CR062-BLOCKER-01 approved: pause CR062 publication and start clean publication strategy."
+  active_constraints:
+    - "No git add/commit/remote add/push/tag/branch creation/rename/history rewrite/force push."
+    - "No NAS/data lake/provider/catalog/runtime/credential operation."
+    - "CR046 remains paused."
+  downstream_tasks:
+    - "CP2 confirm scope and blocker intake."
+    - "CP3 confirm clean publication architecture."
+    - "CP5 confirm readiness policy and follow-up execution boundary."
+  traceability:
+    requirements:
+      - "CR062 preflight blocker"
+    use_cases:
+      - "publish quant-lab public-safe baseline"
+    scenarios:
+      - "tracked forbidden paths block current branch push"
+    stories:
+      - "CR066-S01..S05"
+    features:
+      - "repository hygiene / clean publication"
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP2-CR066-01..05"
+  non_authorized_items:
+    - "Git write actions"
+    - "history rewrite / force push"
+    - "NAS/data lake/provider/catalog/runtime/credential"
+  risk_acceptance_items:
+    - "current branch publication remains blocked until new execution CR"
+  open_questions:
+    - ".env.example exception policy"
+    - "tracked reports/runs handling"
+  n_a_or_waived_items: []
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP2 auto precheck and manual gate"
+  exit_criteria:
+    - "CP2 approved or changes requested"
+  blocked_if_missing:
+    - "CR062 preflight evidence"
+read_expansion_log:
+  - at: "2026-06-15T10:24:37+08:00"
+    actor: "host-orchestrator"
+    expanded_to: "CR062 preflight, STATE, CR-INDEX, CR062 manifest"
+    reason: "人工审计和 CR066 创建需要确认 blocker、编号和权限边界"
+validation:
+  generated_from_sources:
+    - "process/checks/CR062-POST-APPROVAL-PREFLIGHT.md"
+    - "process/STATE.md"
+    - "process/changes/CR-INDEX.yaml"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "CR063/064/065 reserved; CR066 selected."

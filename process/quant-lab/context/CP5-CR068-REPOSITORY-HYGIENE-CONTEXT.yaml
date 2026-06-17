@@ -1,0 +1,41 @@
+schema_version: "1.0"
+context_id: "CP5-CR068-REPOSITORY-HYGIENE-CONTEXT"
+change_id: "CR-068"
+created_at: "2026-06-15T14:13:45+08:00"
+created_by: "host-orchestrator"
+status: "ready"
+context_type: "cp5-lld"
+read_profile: "compact"
+purpose: "Minimal context for CR068 implementability and runtime authorization gate."
+must_read:
+  - "process/changes/CR-068-REPOSITORY-HYGIENE-GITIGNORE-FORWARD-FIX-2026-06-15.md"
+  - "docs/release/REPOSITORY-HYGIENE-FORWARD-FIX-PLAN-CR068.md"
+  - "docs/release/REPOSITORY-HYGIENE-FORWARD-FIX-MANIFEST-CR068.yaml"
+  - "docs/release/REPOSITORY-HYGIENE-SCAN-GATE-CR068.md"
+  - "process/checkpoints/CP5-CR068-REPOSITORY-HYGIENE-READINESS.md"
+read_if_needed:
+  - ".gitignore"
+  - "process/release/RELEASE-CONTEXT-CR067.yaml"
+do_not_read_by_default:
+  - ".env"
+  - ".env.*"
+  - "data/**"
+  - "reports/**"
+  - "runs/**"
+  - "NAS / data lake / provider / catalog / runtime material"
+key_facts:
+  - "CP5 approval is required before clone/fetch/commit/push."
+  - "Forward-fix must be fast-forward only and only add .gitignore."
+  - "No branch/default branch governance is authorized."
+risks_and_decisions:
+  - id: "DQ-CP5-CR068-01..05"
+    status: "pending"
+    summary: "Runtime authorization, manifest freeze, scan gate, validation subset and rollback policy require human approval."
+non_authorized_items:
+  - "Git write or remote operation before CP5 approval."
+  - "Force push, tag, history rewrite, remote deletion, remote set-url."
+  - "Branch/default branch governance."
+  - "Credential, NAS/lake/provider/catalog/runtime, physical move, bulk import rewrite, CR046 recovery."
+token_control:
+  full_doc_read_policy: "Do not read full historical docs or .env; expand only for manifest or scan conflict investigation."
+  read_expansion_log: []

@@ -1,0 +1,78 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR069-SUPERSESSION-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "local_backtest-cr069"
+phase: "documentation"
+checkpoint: "CP5"
+capsule_type: "cp5-lld"
+status: "ready"
+created_at: "2026-06-15T22:26:11+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-069"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；执行前必须确认 CP5 approved。"
+must_read:
+  - path: "docs/release/CR062-SUPERSESSION-LEDGER-CLEANUP-MANIFEST-CR069.yaml"
+    reason: "execution target manifest"
+    required: true
+  - path: "process/checkpoints/CP5-CR069-SUPERSESSION-READINESS.md"
+    reason: "human readiness gate"
+    required: true
+read_if_needed:
+  - path: "process/changes/CR-INDEX.yaml"
+    trigger: "更新 active/blocked/superseded ledger 前"
+  - path: "process/STATE.md"
+    trigger: "同步状态和 history 前"
+do_not_read_by_default:
+  - path_or_pattern: "reports/**"
+    reason: "不读取报告正文"
+  - path_or_pattern: "runs/**"
+    reason: "不读取运行产物"
+key_facts:
+  scope_summary: "CP5 approval would authorize only ledger/documentation updates for CR062 supersession."
+  accepted_decisions: []
+  active_constraints:
+    - "No Git remote write"
+    - "No data/runtime/credential operation"
+  downstream_tasks:
+    - "ledger cleanup execution after approval"
+    - "CP6/CP7 equivalent validation"
+  traceability:
+    requirements:
+      - "CR069 acceptance criteria"
+    use_cases: []
+    scenarios: []
+    stories: []
+    features: []
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP5-CR069-01..05"
+  non_authorized_items:
+    - "Git remote write / branch governance"
+    - "NAS/data lake/runtime/credential"
+    - "CR046 recovery"
+  risk_acceptance_items:
+    - "Supersession is ledger-only and does not alter remote history"
+  open_questions: []
+  n_a_or_waived_items:
+    - "LLD batch N/A: no code Story"
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "ledger-only update after CP5 approval"
+  exit_criteria:
+    - "CP5 approved"
+  blocked_if_missing:
+    - "manifest"
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "docs/release/CR062-SUPERSESSION-LEDGER-CLEANUP-MANIFEST-CR069.yaml"
+  missing_sources: []
+  consistency_status: "pass"
+  notes: []

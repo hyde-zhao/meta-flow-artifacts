@@ -1,0 +1,118 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR089-QMT-INTERFACE-VALIDATION-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "quant-lab-cr089"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-06-17T21:08:59+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-089"
+token_control:
+  read_profile: "compact"
+  max_source_files: 6
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整文档。"
+must_read:
+  - path: "process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md"
+    reason: "CR089 scope, conflict decision and non-authorization boundary"
+    required: true
+  - path: "process/checks/CR089-STARTUP-CONFLICT-PRECHECK-2026-06-17.md"
+    reason: "startup conflict precheck and offline validation risk"
+    required: true
+  - path: "docs/qmt/CR089-STRATEGY-PACKAGE-NAS-DELIVERY-PLAN.md"
+    reason: "strategy package, NAS exchange and readonly smoke planning"
+    required: true
+read_if_needed:
+  - path: "process/STATE.md"
+    trigger: "需要核对 active_change、blocked_crs、human_gate_decisions 或 context_budget"
+  - path: "process/changes/CR-INDEX.yaml"
+    trigger: "需要核对 CR tracking blocked entry"
+  - path: "docs/qmt/CR046-DUAL-TARGET-STRATEGY-FRAMEWORK.md"
+    trigger: "需要核对上游 StrategyPackageContract 时读取"
+do_not_read_by_default:
+  - path_or_pattern: ".env*"
+    reason: "凭据不属于 CP2 范围。"
+  - path_or_pattern: "NAS 实际挂载内容"
+    reason: "CP2 只确认 package exchange 规划，不读取或列目录。"
+  - path_or_pattern: "QMT / MiniQMT runtime"
+    reason: "CP2 不启动 runtime、不连接账户。"
+  - path_or_pattern: "/home/hyde/workspace/local_backtest/process/STATE.md"
+    reason: "旧根 STATE 含 CR020 active 历史遗留，不可恢复为当前状态来源。"
+key_facts:
+  scope_summary: "CR089 规划 QMT 接口验证的策略包输出规范、NAS package exchange 交付位置、交易主机取包校验流程和 query_positions 只读 smoke 边界。"
+  accepted_decisions:
+    - "用户 2026-06-17 回复“同意”，接受 CR089 startup DQ-CR089-01..04 推荐方案。"
+    - "CR089 保持独立 blocked formal CR 记录；CR046 仍是 active formal CR。"
+    - "不从 NAS 原地执行策略；从 NAS 拉取 approved package，校验后复制到交易主机本地不可变缓存。"
+    - "本次验证目标限定为 query_positions 只读 smoke，scope=qmt:positions:read。"
+    - "agent 不读取 .env、NAS 凭据或 QMT 账号，真实值仅由用户本机保存。"
+  active_constraints:
+    - "active formal CR remains CR-046."
+    - "CR-020 status is deleted-by-user and must not be restored."
+    - "No NAS content access, no credential read, no QMT/MiniQMT start, no account raw query, no submit/cancel, no simulation/live."
+  downstream_tasks:
+    - "CP2: confirm scope and non-authorization boundary."
+    - "CP3: confirm NAS/package/trading_pc architecture."
+    - "CP5: confirm readiness boundary before any package assembly or manual readonly smoke instructions."
+  traceability:
+    requirements:
+      - "R-CR089-01 strategy package output contract"
+      - "R-CR089-02 NAS package exchange delivery location"
+      - "R-CR089-03 trading_pc local immutable cache"
+      - "R-CR089-04 readonly query_positions smoke evidence"
+    use_cases:
+      - "User wants QMT interface validation using runnable strategy packages obtainable from NAS."
+    scenarios:
+      - "NAS approved package discovery"
+      - "sha256 / manifest verification"
+      - "trading_pc local cache activation"
+      - "user-run readonly query_positions smoke with redacted evidence"
+    stories:
+      - "CR089-S01-package-exchange-contract"
+      - "CR089-S02-qmt-interface-smoke-strategy-package"
+      - "CR089-S03-trading-pc-package-intake"
+      - "CR089-S04-readonly-qmt-interface-smoke"
+    features:
+      - "qmt-interface-validation"
+      - "nas-strategy-package-exchange"
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP2-CR089-01..05"
+  non_authorized_items:
+    - "NAS content read/write/copy/list"
+    - ".env, token, account, password, HMAC secret or QMT credential read"
+    - "QMT/MiniQMT/XtQuant/gateway process start"
+    - "broker account raw positions or trades"
+    - "submit_order, cancel_order, simulation, live"
+    - "restore CR020 or recover old-root STATE"
+  risk_acceptance_items:
+    - "CR089 remains blocked while CR046 is active; user may later choose merge/wait/split."
+  open_questions:
+    - "Whether to later activate CR089 or keep it blocked until CR046 CP8 is resolved."
+  n_a_or_waived_items:
+    - "Scenario discussion log N/A: this is a CR runtime gate, not a new product discovery flow."
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP2 auto precheck"
+    - "CP2 manual checkpoint"
+    - "human gate launch message"
+  exit_criteria:
+    - "User approve / 修改 / reject captured in checkpoint"
+  blocked_if_missing:
+    - "CR089 formal CR"
+    - "strategy package NAS delivery plan"
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md"
+    - "process/checks/CR089-STARTUP-CONFLICT-PRECHECK-2026-06-17.md"
+    - "docs/qmt/CR089-STRATEGY-PACKAGE-NAS-DELIVERY-PLAN.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "Capsule captures startup approval as scope input only; it does not authorize runtime."

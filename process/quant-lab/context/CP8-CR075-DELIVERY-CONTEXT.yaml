@@ -1,0 +1,67 @@
+context_id: CP8-CR075-DELIVERY-CONTEXT
+change_id: CR-075
+created_at: "2026-06-17T00:08:23+08:00"
+created_by: host-orchestrator
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - process/checks/CR075-ENV-REBUILD-EXECUTION-2026-06-16.md
+    - process/checks/CR075-ENV-SMOKE-VERIFICATION-2026-06-16.md
+    - process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md
+  read_if_needed:
+    - process/checkpoints/CP2-CR075-ENV-REBUILD-BASELINE.md
+    - process/checkpoints/CP3-CR075-ENV-SMOKE-DESIGN-REVIEW.md
+    - process/checkpoints/CP5-CR075-ENV-SMOKE-READINESS.md
+  do_not_read_by_default:
+    - .env
+    - reports/
+    - data/
+    - provider credentials
+    - account/trading facts
+summary:
+  target_root: /home/hyde/workspace/quant-lab
+  legacy_root: /home/hyde/workspace/local_backtest
+  scope: CR075 target env rebuild and minimal smoke closure
+  release_artifact_profile: minimal
+  release_decision: READY_WITH_RISK
+  cp2_manual_status: approved
+  cp3_manual_status: approved
+  cp5_manual_status: approved
+  env_rebuild: PASS
+  import_smoke: PASS
+  cr061_package_layout_smoke: PASS
+  target_minimal_smoke_status: PASS
+  target_runtime_ready: false
+evidence:
+  env_rebuild: process/checks/CR075-ENV-REBUILD-EXECUTION-2026-06-16.md
+  smoke_verification: process/checks/CR075-ENV-SMOKE-VERIFICATION-2026-06-16.md
+  formal_cr: process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md
+  cr_index: process/changes/CR-INDEX.yaml
+  state: process/STATE.md
+risks:
+  - id: R-CR075-01
+    severity: MEDIUM
+    summary: CR075 only proves minimal Python environment and package/import layout smoke.
+    accepted_by_recommendation: true
+  - id: R-CR075-02
+    severity: MEDIUM
+    summary: target_runtime_ready remains false because data/reports/provider/lake/catalog/runtime are not validated.
+    accepted_by_recommendation: true
+  - id: R-CR075-03
+    severity: LOW
+    summary: local .venv was created and retained; no cleanup is authorized by this closure gate.
+    accepted_by_recommendation: true
+non_authorized:
+  - read_or_copy_env_or_credentials
+  - read_copy_restore_compare_delete_reports_data
+  - provider_fetch
+  - lake_write
+  - catalog_publish
+  - remote_git_write_or_branch_governance
+  - qmt_miniqmt_runtime
+  - cr046_recovery
+  - optional_groups
+  - full_tests
+  - destructive_cleanup
+next_step: CP8 manual review for CR075 closure

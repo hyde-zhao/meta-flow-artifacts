@@ -1,0 +1,161 @@
+schema_version: "1.0"
+change_id: "CR-071"
+status: "closed-current-delivery"
+created_at: "2026-06-16T07:16:44+08:00"
+created_by: "host-orchestrator"
+execute_allowed_now: false
+execute_allowed_after_cp2_cp3_cp5_approval: true
+approval:
+  approved_by: "user"
+  approved_at: "2026-06-16T07:33:48+08:00"
+  approval_text: "同意"
+  cp8_approved_by: "user"
+  cp8_approved_at: "2026-06-16T09:13:26+08:00"
+  cp8_approval_text: "好的关闭cr"
+  accepted_decisions:
+    - "DQ-CP2-CR071-01..05"
+    - "DQ-CP3-CR071-01..05"
+    - "DQ-CP5-CR071-01..06"
+    - "DQ-CP8-CR071-01..06"
+execution_mode: "local-copy-first-shadow-root"
+source_root: "/home/hyde/workspace/local_backtest"
+target_root: "/home/hyde/workspace/quant-lab"
+source_commit:
+  short: "e7a3a0d"
+  full: "e7a3a0d7e66b3972b95c047f017790d9853625d0"
+git_state:
+  branch: "work/chapter3-factor-gap-remediation-20260608"
+  include_git_dir: true
+  remote_write_authorized: false
+copy_policy:
+  mode: "rsync-archive"
+  create_target_root: true
+  keep_old_root: true
+  delete_old_root: false
+  rename_old_root: false
+  overwrite_existing_target: false
+  block_if_target_non_empty: true
+  default_env_copy: false
+exclude_patterns:
+  - "/reports/"
+  - "/data/"
+  - "/.venv/"
+  - "/node_modules/"
+  - "/.env"
+preflight:
+  rsync_path: "/usr/bin/rsync"
+  target_current_status: "absent-at-2026-06-16T07:16:44+08:00"
+  cp2_checkpoint: "process/checkpoints/CP2-CR071-REQUIREMENTS-BASELINE.md"
+  cp3_checkpoint: "process/checkpoints/CP3-CR071-HLD-REVIEW.md"
+  cp5_checkpoint: "process/checkpoints/CP5-CR071-COPY-FIRST-SHADOW-ROOT-READINESS.md"
+  rsync_dry_run:
+    ran_at: "2026-06-16T07:16:44+08:00"
+    status: "PASS"
+    command: "rsync -an --stats --exclude '/reports/' --exclude '/data/' --exclude '/.venv/' --exclude '/node_modules/' --exclude '/.env' /home/hyde/workspace/local_backtest/ /home/hyde/workspace/quant-lab/"
+    created_files_count: 7926
+    regular_files_transferred_count: 7415
+    total_file_size_bytes: 94069292
+    literal_data_bytes: 0
+    note: "DRY RUN only; no target directory was created and no file data was transferred."
+commands:
+  - id: "CR071-ACT-001"
+    description: "Create target root"
+    command: "mkdir -p /home/hyde/workspace/quant-lab"
+    allowed_after_cp5: true
+  - id: "CR071-ACT-002"
+    description: "Copy source root to target shadow root with explicit exclusions"
+    command: "rsync -a --exclude '/reports/' --exclude '/data/' --exclude '/.venv/' --exclude '/node_modules/' --exclude '/.env' /home/hyde/workspace/local_backtest/ /home/hyde/workspace/quant-lab/"
+    allowed_after_cp5: true
+validation:
+  - id: "CR071-VAL-001"
+    command: "test -d /home/hyde/workspace/quant-lab"
+    expected: "target exists"
+  - id: "CR071-VAL-002"
+    command: "test -d /home/hyde/workspace/local_backtest"
+    expected: "old root retained"
+  - id: "CR071-VAL-003"
+    command: "test ! -e /home/hyde/workspace/quant-lab/reports && test ! -e /home/hyde/workspace/quant-lab/data && test ! -e /home/hyde/workspace/quant-lab/.venv && test ! -e /home/hyde/workspace/quant-lab/node_modules && test ! -e /home/hyde/workspace/quant-lab/.env"
+    expected: "excluded paths absent"
+  - id: "CR071-VAL-004"
+    command: "git -C /home/hyde/workspace/quant-lab status --short"
+    expected: "git metadata copied and status readable"
+non_authorized_items:
+  - "delete/rename/move old root"
+  - "copy reports/data/.venv/node_modules/.env"
+  - "read credentials or .env content"
+  - "NAS operation"
+  - "remote Git write"
+  - "branch/default branch governance"
+  - "history rewrite/force push/tag/remote deletion/set-url"
+  - "data lake root switch/provider fetch/lake write/catalog publish"
+  - "QMT/MiniQMT runtime or CR046 recovery"
+execution_result:
+  executed_at: "2026-06-16T07:33:48+08:00"
+  executed_by: "host-orchestrator"
+  execution_mode: "local-copy-first-rsync"
+  executed_actions:
+    - "CR071-ACT-001"
+    - "CR071-ACT-002"
+  rsync_stats:
+    number_of_files: 7926
+    number_of_created_files: 7925
+    number_of_deleted_files: 0
+    regular_files_transferred: 7415
+    total_file_size_bytes: 94071175
+    total_transferred_file_size_bytes: 94071175
+    literal_data_bytes: 94071175
+    total_bytes_sent: 94816857
+    total_bytes_received: 144774
+  validation_result:
+    status: "PASS_WITH_RISK"
+    target_exists: true
+    old_root_retained: true
+    excluded_paths_absent:
+      reports: true
+      data: true
+      venv: true
+      node_modules: true
+      env: true
+    git_dir_copied: true
+    git_head: "e7a3a0d7e66b3972b95c047f017790d9853625d0"
+    git_branch: "work/chapter3-factor-gap-remediation-20260608"
+    risk_note: "initial CP7 target reports/** Git deleted risk was mitigated before CP8 by stopping reports Git tracking while retaining local reports files."
+  final_evidence_sync:
+    ran_at: "2026-06-16T07:33:48+08:00"
+    status: "PASS"
+    created_files: 6
+    regular_files_transferred: 11
+    transferred_size_bytes: 1980844
+    note: "Second rsync used the same exclude list to copy CR071 evidence files into target."
+  consistency_checks:
+    cr_tracking: "PASS"
+    yaml_parse: "PASS"
+    git_diff_check: "PASS"
+cp8_closure:
+  closed_at: "2026-06-16T09:13:26+08:00"
+  release_decision: "READY_WITH_RISK"
+  checkpoint: "process/checkpoints/CP8-CR071-DELIVERY-READINESS.md"
+  auto_precheck: "process/checks/CP8-CR071-DELIVERY-READINESS.md"
+  release_context: "process/release/RELEASE-CONTEXT-CR071.yaml"
+  current_source_head_after_report_tracking_fix: "45a426d"
+  current_target_head_after_report_tracking_fix: "2aaf21b"
+  target_excluded_path_checks:
+    git_status_empty: true
+    git_ls_files_empty: true
+    filesystem_root_absent: true
+  remote_master_readonly: "3ade165e8b1edad031a911490cf6c1cee942616e"
+  reports_git_tracking_risk: "mitigated-before-cp8"
+  remaining_risks:
+    - "target is not a complete runtime/data/report mirror"
+    - "root cutover remains unauthorized"
+    - "old root retirement remains unauthorized"
+    - "dual local roots may diverge if both are edited"
+  non_authorized_after_close:
+    - "root cutover"
+    - "old root delete/rename/move"
+    - "copy or read .env/credentials"
+    - "target data/reports restoration or .venv rebuild"
+    - "remote Git write or branch/default branch governance"
+    - "data lake/provider/catalog/runtime operations"
+    - "QMT/MiniQMT runtime"
+    - "CR046 recovery"

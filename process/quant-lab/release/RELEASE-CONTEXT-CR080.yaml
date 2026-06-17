@@ -1,0 +1,143 @@
+schema_version: "1.0"
+status: closed-current-delivery
+release_context_id: RELEASE-CONTEXT-CR080
+change_id: CR-080
+release_artifact_profile: full
+release_decision: READY_WITH_RISK
+created_at: "2026-06-17T07:14:53+08:00"
+updated_at: "2026-06-17T07:32:59+08:00"
+approved_by: user
+approved_at: "2026-06-17T07:32:59+08:00"
+delivery_status: closed-current-delivery
+source_gate: CP8
+release_scope:
+  current_version: "process-only"
+  target_version: "process-only-cr080"
+  included_features:
+    - target root reports/data local restore/copy
+  included_stories:
+    - CR080
+  excluded_scope:
+    - content read or checksum
+    - credential or .env access
+    - NAS/provider/lake/catalog
+    - remote Git or publish
+    - runtime or CR046 recovery
+    - old root retirement
+  user_visible_changes:
+    - /home/hyde/workspace/quant-lab now has reports/ and data/ restored from legacy retained assets.
+  internal_changes:
+    - process state and CR tracking updated to reflect CR080 execution and verification.
+  breaking_changes: []
+  known_risks:
+    - R-CR080-001
+    - R-CR080-002
+    - R-CR080-003
+version_decision:
+  current_version: "process-only"
+  target_version: "process-only-cr080"
+  change_type: "PATCH"
+  compatibility: "compatible"
+  reason: "No code/package API version changed; target root local assets were restored under a process CR."
+quality_summary:
+  cp7_results:
+    - process/checks/CP7-CR080-DATA-REPORTS-RESTORE-VERIFICATION-DONE.md
+  test_report_path: docs/quality/TEST-REPORT-CR080.md
+  review_path: docs/quality/REVIEW-CR080.md
+  blocker_count: 0
+  high_count: 0
+  accepted_risk_ids:
+    - R-CR080-001
+    - R-CR080-002
+    - R-CR080-003
+  unresolved_findings: []
+affected_surface:
+  platforms:
+    - local filesystem
+    - target authoritative root
+  components:
+    - reports/
+    - data/
+    - process ledger
+  install_scopes: []
+  config_changes: []
+  permission_changes:
+    - user approved CP2/CP3/CP5 and post-approval preflight-gated local copy
+  migration_required: true
+  external_interfaces: []
+  state_schema_changes: []
+  command_parameter_changes: []
+install_validation_summary:
+  commands:
+    - metadata-only find/du
+    - local rsync -a --stats
+    - local rsync -an --stats
+  results:
+    - PASS
+    - PASS
+    - PASS
+  log_paths:
+    - process/checks/CR080-DATA-REPORTS-RESTORE-PREFLIGHT-2026-06-17.md
+    - process/checks/CR080-DATA-REPORTS-RESTORE-EXECUTION-2026-06-17.md
+    - process/checks/CP7-CR080-DATA-REPORTS-RESTORE-VERIFICATION-DONE.md
+  skipped_with_reason:
+    - "content checksum skipped: not authorized"
+release_documents:
+  release_notes:
+    path: docs/release/RELEASE-NOTES-CR080.md
+    status: ready
+    na_reason: ""
+  deploy_checklist:
+    path: docs/release/DEPLOY-CHECKLIST-CR080.md
+    status: ready
+    na_reason: ""
+  rollback:
+    path: docs/release/ROLLBACK-CR080.md
+    status: ready
+    na_reason: ""
+  migration:
+    path: docs/release/MIGRATION-CR080.md
+    status: ready
+    na_reason: ""
+  feedback:
+    path: docs/release/FEEDBACK-CR080.md
+    status: ready
+    na_reason: ""
+non_authorized_items:
+  - id: NA-CR080-001
+    operation: "content read / parse / checksum"
+    reason: "CR080 only authorized metadata-only verification."
+    required_authorization: "separate content validation CR"
+  - id: NA-CR080-002
+    operation: "credentials / .env / account or trading facts"
+    reason: "sensitive data remains out of scope."
+    required_authorization: "separate security/runtime authorization"
+  - id: NA-CR080-003
+    operation: "NAS/provider/lake/catalog/remote Git/runtime/old root retirement"
+    reason: "external, destructive or runtime surfaces are independent candidates."
+    required_authorization: "separate CR and gate"
+follow_up_summary:
+  observation_items:
+    - target workflow can now find reports/ and data/ directories, subject to metadata-only risk.
+  feedback_items:
+    - request content-level validation only if metadata-only proof is insufficient.
+  follow_up_candidates:
+    - content-validation-candidate
+    - CR079-nas-compare-candidate
+    - CR079-provider-rebuild-candidate
+    - CR077 old-root-retirement candidate
+    - CR078 remote-git-governance candidate
+  risk_acceptance_items:
+    - R-CR080-001
+    - R-CR080-002
+    - R-CR080-003
+  risk_acceptance_status: accepted-by-cp8
+token_control:
+  default_read_mode: capsule-first
+  copied_long_text: false
+  allowed_payload: "summary, count, risk id, decision id, evidence path"
+  full_doc_read_triggers:
+    - missing_capsule_field
+    - unreadable_evidence_path
+    - conflicting_conclusion
+    - user_requested_deep_review

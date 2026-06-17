@@ -1,0 +1,103 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR073-DESIGN-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "CR-073"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready"
+created_at: "2026-06-16T10:07:45+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-073"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 12
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读取本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整正式文档。"
+
+must_read:
+  - path: "process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md"
+    reason: "scoped sync 架构、排除项和失败路径"
+    required: true
+  - path: "process/checks/CR073-TARGET-EVIDENCE-DIFF-2026-06-16.md"
+    reason: "设计输入差异分类"
+    required: true
+
+read_if_needed:
+  - path: "process/release/RELEASE-CONTEXT-CR071.yaml"
+    trigger: "需要复核 CR071 release / non-authorized items 时读取"
+  - path: "docs/release/LOCAL-ASSETS-NAS-ARCHIVE-MANIFEST-CR072.yaml"
+    trigger: "需要复核 CR072 NAS archive manifest 时读取"
+
+do_not_read_by_default:
+  - path_or_pattern: "reports/**"
+    reason: "禁止读取/复制 reports"
+  - path_or_pattern: "data/**"
+    reason: "禁止读取/复制 data"
+  - path_or_pattern: ".env"
+    reason: "凭据边界"
+  - path_or_pattern: ".git/**"
+    reason: "不复制 .git，不做远端 Git 操作"
+  - path_or_pattern: "完整历史 checkpoint 全集"
+    reason: "只读取 CR071/CR072/CR073 相关 evidence"
+
+key_facts:
+  scope_summary: "推荐架构为 scoped local evidence sync：以旧根为 source，target 为 destination，只同步 CR071/CR072/CR073/STATE/CR-INDEX/release/context/checkpoint/check evidence。"
+  accepted_decisions:
+    - "不采用 root cutover。"
+    - "不采用 full mirror。"
+    - "不采用 tracked-only Git export。"
+  active_constraints:
+    - "rsync 使用 --relative 和 --files-from 控制白名单。"
+    - "exclude 固定为 .git、reports/、data/、.venv/、node_modules/、.env。"
+    - "不使用 --delete；target-only 文件不在本轮删除。"
+  downstream_tasks:
+    - "CP5 冻结命令和验证。"
+    - "approve 后执行 scoped sync。"
+    - "生成或记录 CP6/CP7 等价执行/验证证据。"
+  traceability:
+    requirements: ["CR073 acceptance_criteria"]
+    use_cases: ["auditable candidate root"]
+    scenarios: ["dry-run first", "no forbidden path", "no destructive action"]
+    stories: []
+    features: ["target-root-convergence"]
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP3-CR073-01..05"
+  non_authorized_items:
+    - "root cutover"
+    - "old root retirement"
+    - "target env rebuild"
+    - "data/reports access"
+    - "remote Git governance"
+  risk_acceptance_items:
+    - "target evidence sync may update process/docs evidence but remains non-authoritative until future root cutover CR."
+  open_questions: []
+  n_a_or_waived_items:
+    - "Architecture Gray Areas N/A：scope is explicit; advisor table captured in CP3 checkpoint."
+
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP3 architecture gate"
+    - "CP5 scoped sync readiness gate"
+  exit_criteria:
+    - "scoped sync design approved"
+    - "alternatives and switch conditions documented"
+  blocked_if_missing:
+    - "dry-run"
+    - "conflict classification"
+
+read_expansion_log: []
+
+validation:
+  generated_from_sources:
+    - "process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "设计不依赖外部 runtime 或 remote state。"

@@ -1,0 +1,111 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR071-EXECUTION-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "local_backtest-cr071"
+phase: "story-planning"
+checkpoint: "CP5"
+capsule_type: "cp5-lld"
+status: "ready"
+created_at: "2026-06-16T07:16:44+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-071"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整文档。"
+must_read:
+  - path: "process/changes/CR-071-COPY-FIRST-SHADOW-ROOT-MIGRATION-2026-06-16.md"
+    reason: "CP5 readiness 范围和不授权项"
+    required: true
+  - path: "docs/release/COPY-FIRST-SHADOW-ROOT-MANIFEST-CR071.yaml"
+    reason: "执行命令、排除项、验证命令"
+    required: true
+  - path: "docs/release/COPY-FIRST-SHADOW-ROOT-MIGRATION-PLAN-CR071.md"
+    reason: "执行窗口与回退策略"
+    required: true
+read_if_needed:
+  - path: "process/checkpoints/CP2-CR071-REQUIREMENTS-BASELINE.md"
+    trigger: "需要核对 scope approval"
+  - path: "process/checkpoints/CP3-CR071-HLD-REVIEW.md"
+    trigger: "需要核对 design approval"
+  - path: "process/changes/CR-INDEX.yaml"
+    trigger: "需要核对 CR tracking"
+do_not_read_by_default:
+  - path_or_pattern: ".env*"
+    reason: "CP5 不读取凭据；.env 不复制"
+  - path_or_pattern: "reports/**"
+    reason: "排除目录"
+  - path_or_pattern: "data/**"
+    reason: "排除目录"
+  - path_or_pattern: ".venv/**"
+    reason: "排除目录"
+  - path_or_pattern: "node_modules/**"
+    reason: "排除目录"
+key_facts:
+  scope_summary: "CP5 冻结 CR071 copy-first execution readiness：mkdir target + rsync -a with explicit excludes；执行后验证目标存在、旧 root 保留、排除项不存在、Git status 可读。"
+  accepted_decisions:
+    - "No Story LLD batch: CR071 is a single local filesystem migration action."
+    - "Use CP5 execution readiness instead of Story LLD implementability."
+  active_constraints:
+    - "No copy before CP2/CP3/CP5 approved."
+    - "No --delete and no cleanup of old root or target partial copy."
+    - "Block if target root is non-empty before execution."
+  downstream_tasks:
+    - "Run CP5 human gate validation."
+    - "After approve, perform preflight and local rsync copy."
+    - "Write CP6/CP7 evidence after execution."
+  traceability:
+    requirements:
+      - "REQ-CR071-01"
+      - "REQ-CR071-02"
+      - "REQ-CR071-03"
+      - "REQ-CR071-04"
+    use_cases:
+      - "UC-CR071-01"
+    scenarios:
+      - "SC-CR071-01 target absent happy path"
+      - "SC-CR071-02 excluded paths absent"
+      - "SC-CR071-03 target non-empty blocked"
+    stories: []
+    features:
+      - "copy-first-shadow-root"
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP5-CR071-01..06"
+  non_authorized_items:
+    - "copy excluded paths"
+    - "delete/rename/move old root"
+    - "delete target partial copy"
+    - "remote Git/NAS/data lake/runtime/credential/CR046 recovery"
+  risk_acceptance_items:
+    - "Target root will not contain reports/data/.venv/node_modules/.env by design."
+    - "If .git is copied, target is a local Git working tree with same local config; no remote operation is authorized."
+  open_questions: []
+  n_a_or_waived_items:
+    - "Story full-lld / technical-note / waived N/A：single-operation local migration gate."
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP5 auto precheck"
+    - "CP5 manual checkpoint"
+    - "CP5 launch message"
+  exit_criteria:
+    - "CP5 checkpoint exists and human-gate validation passes"
+    - "User approve received before execution"
+  blocked_if_missing:
+    - "CR071 manifest"
+    - "CP2 checkpoint"
+    - "CP3 checkpoint"
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "process/changes/CR-071-COPY-FIRST-SHADOW-ROOT-MIGRATION-2026-06-16.md"
+    - "docs/release/COPY-FIRST-SHADOW-ROOT-MIGRATION-PLAN-CR071.md"
+    - "docs/release/COPY-FIRST-SHADOW-ROOT-MANIFEST-CR071.yaml"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "No target directory was created and no rsync copy was executed while generating this capsule."

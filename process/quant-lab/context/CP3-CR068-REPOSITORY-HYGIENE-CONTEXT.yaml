@@ -1,0 +1,38 @@
+schema_version: "1.0"
+context_id: "CP3-CR068-REPOSITORY-HYGIENE-CONTEXT"
+change_id: "CR-068"
+created_at: "2026-06-15T14:13:45+08:00"
+created_by: "host-orchestrator"
+status: "ready"
+context_type: "cp3-design"
+read_profile: "compact"
+purpose: "Minimal context for CR068 repo hygiene architecture and safety review."
+must_read:
+  - "process/changes/CR-068-REPOSITORY-HYGIENE-GITIGNORE-FORWARD-FIX-2026-06-15.md"
+  - "docs/release/REPOSITORY-HYGIENE-FORWARD-FIX-PLAN-CR068.md"
+  - "docs/release/REPOSITORY-HYGIENE-FORWARD-FIX-MANIFEST-CR068.yaml"
+  - "docs/release/REPOSITORY-HYGIENE-SCAN-GATE-CR068.md"
+read_if_needed:
+  - ".gitignore"
+  - "docs/release/RELEASE-NOTES-CR067.md"
+do_not_read_by_default:
+  - ".env"
+  - ".env.*"
+  - "data/**"
+  - "reports/**"
+  - "runs/**"
+key_facts:
+  - "Architecture uses temporary exact remote checkout and ordinary fast-forward forward-fix."
+  - "It does not rename branches and does not publish current branch as-is."
+  - "Only .gitignore is intended as delta."
+risks_and_decisions:
+  - id: "DQ-CP3-CR068-01..05"
+    status: "pending"
+    summary: "Architecture, branch governance exclusion, scan-before-commit, conflict policy and risk acceptance require human approval."
+non_authorized_items:
+  - "No remote mutation before CP5 approval."
+  - "No force/tag/rewrite/branch/default branch governance."
+  - "No credential, NAS, lake, runtime, physical move or CR046 recovery."
+token_control:
+  full_doc_read_policy: "Expand only for .gitignore rule audit or remote conflict investigation."
+  read_expansion_log: []

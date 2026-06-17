@@ -1,0 +1,85 @@
+schema_version: "1.0"
+change_id: "CR-061"
+batch_id: "CR061-BATCH-B"
+created_at: "2026-06-15T09:05:12+08:00"
+created_by: "host-orchestrator"
+release_artifact_profile: "full"
+release_decision: "READY_WITH_RISK"
+cp8_approval:
+  approved_by: "user"
+  approved_at: "2026-06-15T09:23:26+08:00"
+  approval_text: "同意，下一步是做什么？"
+  approval_scope: "READY_WITH_RISK acceptance only; no real release/push/NAS/lake/runtime/credential/CR046 authorization"
+release_scope:
+  feature_id: "cr061-package-import-layout"
+  in_scope:
+    - "pyproject project name changed to quant-lab"
+    - "uv.lock regenerated with quant-lab virtual package"
+    - "quant_lab compatibility namespace added"
+    - "legacy import roots preserved"
+    - "offline import smoke test added"
+  out_of_scope:
+    - "physical source relayout"
+    - "bulk import rewrite"
+    - "legacy root deletion"
+    - "Git remote / push / tag / branch rename / history rewrite"
+    - "NAS / data lake / provider / catalog operations"
+    - "credentials and QMT/MiniQMT runtime"
+    - "CR046 recovery"
+version_decision:
+  current_version: "0.1.0"
+  target_version: "0.1.0"
+  semver_level: "no-version-bump"
+  reason: "Internal repo-local migration slice; distribution metadata name changed but package version remains unchanged."
+quality_summary:
+  cp6: "PASS"
+  cp7: "PASS_WITH_RISK"
+  blocker_count: 0
+  high_count: 0
+  medium_risks:
+    - "R-CR061B-V01 full pytest not run"
+  evidence:
+    implementation: "docs/features/cr061-package-import-layout/IMPLEMENTATION.md"
+    verification: "docs/features/cr061-package-import-layout/VERIFICATION.md"
+    test_report: "docs/features/cr061-package-import-layout/TEST-REPORT.md"
+    review: "docs/features/cr061-package-import-layout/REVIEW.md"
+affected_surface:
+  code:
+    - "pyproject.toml"
+    - "uv.lock"
+    - "quant_lab/**"
+    - "tests/test_cr061_package_import_layout.py"
+  config: []
+  permissions: []
+  external_interfaces: []
+  data_migration: []
+install_validation_summary:
+  package_manager: "uv"
+  validation:
+    - command: "uv lock"
+      result: "PASS"
+    - command: "uv run --python 3.11 pytest -q tests/test_cr061_package_import_layout.py"
+      result: "PASS"
+    - command: "git diff --check"
+      result: "PASS"
+release_documents:
+  release_notes: "docs/release/RELEASE-NOTES-CR061.md"
+  deploy_checklist: "docs/release/DEPLOY-CHECKLIST-CR061.md"
+  rollback: "docs/release/ROLLBACK-CR061.md"
+  migration: "docs/release/MIGRATION-CR061.md"
+  feedback: "docs/release/FEEDBACK-CR061.md"
+non_authorized_items:
+  - "REAL_RELEASE_EXECUTION"
+  - "GIT_REMOTE_PUSH_TAG_HISTORY"
+  - "NAS_DATA_MIGRATION"
+  - "DATA_LAKE_PROVIDER_CATALOG"
+  - "CREDENTIAL_READ"
+  - "QMT_MINIQMT_RUNTIME"
+  - "CR046_RECOVERY"
+follow_up_summary:
+  recommended_next_cr: "CR062 Git remote cutover / repository publication gate"
+  later_candidates:
+    - "bulk physical relayout / import rewrite"
+    - "NAS archive/data migration"
+    - "data lake root/catalog migration"
+    - "runtime/trading authorization if ever resumed"

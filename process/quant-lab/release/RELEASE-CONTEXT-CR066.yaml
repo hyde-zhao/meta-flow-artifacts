@@ -1,0 +1,166 @@
+schema_version: "1.0"
+status: ready
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+created_at: "2026-06-15T10:46:59+08:00"
+updated_at: "2026-06-15T10:46:59+08:00"
+source_gate: CP8-CR066
+
+release_scope:
+  current_version: "quant-lab migration state before CR066 close"
+  target_version: "CR066 strategy-ready baseline"
+  included_features:
+    - "Repository hygiene / clean publication strategy"
+    - "Tracked forbidden path classification for reports/**, runs/** and .env.example"
+    - "Clean snapshot / allowlist manifest recommendation"
+    - "Future CR067 execution gate boundary"
+  included_stories:
+    - "CR066-S01-tracked-forbidden-paths-audit"
+    - "CR066-S02-env-example-exception-policy"
+    - "CR066-S03-clean-publication-architecture"
+    - "CR066-S04-clean-manifest-and-scan-gate"
+    - "CR066-S05-follow-up-execution-boundary"
+  excluded_scope:
+    - "Git add / commit / remote add / push"
+    - "Git tag, branch creation / rename, history rewrite, force push, remote deletion"
+    - "NAS/data lake/provider/catalog/runtime/credential operations"
+    - "Physical move / rename / delete and bulk import rewrite"
+    - "CR046 recovery"
+  user_visible_changes:
+    - "CR062 remains blocked and current branch is not published as-is."
+    - "CR066 recommends clean snapshot / allowlist manifest as the next route."
+    - "CR067 is the recommended future execution gate, not yet started."
+  internal_changes:
+    - "CR066 CP2/CP3/CP5 decisions approved by user."
+    - "CP8 readiness package prepared for strategy-only closure."
+  breaking_changes: []
+  known_risks:
+    - "R-CR066-001: GitHub publication remains incomplete until a future execution CR is approved."
+    - "R-CR066-002: .env.example conditional include still requires future placeholder / no-secret scan."
+    - "R-CR066-003: reports/**, runs/** and full process history are excluded from clean public baseline unless separately approved."
+
+version_decision:
+  current_version: "N/A"
+  target_version: "N/A"
+  change_type: "rc"
+  compatibility: "compatible"
+  reason: "CR066 is a process / publication strategy baseline, not a package runtime release."
+
+quality_summary:
+  cp7_results:
+    - "N/A: CR066 is strategy-only; no implementation or runtime verification was performed."
+  test_report_path: "N/A"
+  review_path: "N/A"
+  blocker_count: 0
+  high_count: 0
+  accepted_risk_ids:
+    - "DQ-CP5-CR066-04"
+  unresolved_findings:
+    - "Publication execution deferred to CR067."
+
+affected_surface:
+  platforms:
+    - "Git repository publication process"
+  components:
+    - "process/changes"
+    - "process/checkpoints"
+    - "process/checks"
+    - "process/context"
+    - "docs/release"
+  install_scopes: []
+  config_changes: []
+  permission_changes:
+    - "No new runtime permission granted."
+    - "No Git write permission granted by CR066."
+  migration_required: false
+  external_interfaces:
+    - "GitHub remote remains candidate only; no remote operation executed."
+  state_schema_changes: []
+  command_parameter_changes: []
+
+install_validation_summary:
+  commands:
+    - "uv run --python 3.11 python scripts/check_human_gate_decision_brief.py --checkpoint-file process/checkpoints/CP2-CR066-REPOSITORY-HYGIENE-BASELINE.md --launch-message-file process/checks/CP2-CR066-HUMAN-GATE-LAUNCH-MESSAGE.md"
+    - "uv run --python 3.11 python scripts/check_human_gate_decision_brief.py --checkpoint-file process/checkpoints/CP3-CR066-CLEAN-PUBLICATION-HLD-REVIEW.md --launch-message-file process/checks/CP3-CR066-HUMAN-GATE-LAUNCH-MESSAGE.md"
+    - "uv run --python 3.11 python scripts/check_human_gate_decision_brief.py --checkpoint-file process/checkpoints/CP5-CR066-CLEAN-PUBLICATION-READINESS.md --launch-message-file process/checks/CP5-CR066-HUMAN-GATE-LAUNCH-MESSAGE.md"
+    - "uv run --python 3.11 python scripts/check_cr_tracking_consistency.py --project-root ."
+    - "git diff --check"
+  results:
+    - "CP2/CP3/CP5 human gate launch validation PASS before user approval."
+    - "CR tracking consistency PASS before CP8 package creation."
+    - "Whitespace diff check PASS before CP8 package creation."
+  log_paths:
+    - "process/checkpoints/CP2-CR066-REPOSITORY-HYGIENE-BASELINE.md"
+    - "process/checkpoints/CP3-CR066-CLEAN-PUBLICATION-HLD-REVIEW.md"
+    - "process/checkpoints/CP5-CR066-CLEAN-PUBLICATION-READINESS.md"
+  skipped_with_reason:
+    - "No pytest: CR066 changes only strategy / checkpoint / release process documents."
+    - "No Git publication smoke: CR066 explicitly forbids Git writes and remote operations."
+
+release_documents:
+  release_notes:
+    path: "docs/release/RELEASE-NOTES-CR066.md"
+    status: ready
+    na_reason: ""
+  deploy_checklist:
+    path: "docs/release/DEPLOY-CHECKLIST-CR066.md"
+    status: ready
+    na_reason: ""
+  rollback:
+    path: "docs/release/ROLLBACK-CR066.md"
+    status: ready
+    na_reason: ""
+  migration:
+    path: "docs/release/MIGRATION-CR066.md"
+    status: ready
+    na_reason: ""
+  feedback:
+    path: "docs/release/FEEDBACK-CR066.md"
+    status: ready
+    na_reason: ""
+
+non_authorized_items:
+  - id: NA-CR066-001
+    operation: "git add / commit / remote add / push"
+    reason: "CR066 is strategy-only."
+    required_authorization: "Future CR067 runtime_authorization / CP5 approval"
+  - id: NA-CR066-002
+    operation: "git tag / branch creation / branch rename / history rewrite / force push / remote deletion"
+    reason: "High-risk Git governance operations are outside CR066."
+    required_authorization: "Separate CR and explicit user approval"
+  - id: NA-CR066-003
+    operation: "NAS/data lake/provider/catalog/runtime/credential operations"
+    reason: "Not part of repository hygiene strategy closure."
+    required_authorization: "Separate scoped CR"
+  - id: NA-CR066-004
+    operation: "physical move / rename / delete or bulk import rewrite"
+    reason: "Not part of CR066 and still unsafe without dedicated plan."
+    required_authorization: "Separate scoped CR"
+  - id: NA-CR066-005
+    operation: "CR046 recovery"
+    reason: "CR046 remains user-paused."
+    required_authorization: "Explicit user request to resume CR046"
+
+follow_up_summary:
+  observation_items:
+    - "CR067 should verify clean allowlist and scans before any Git write."
+  feedback_items:
+    - "If user changes publication target or visibility, create a new decision item before execution."
+  follow_up_candidates:
+    - id: "CR-067"
+      title: "Clean Publication Execution Gate"
+      status: candidate-after-CR066-CP8
+      required_precondition: "CR066 CP8 approved"
+  risk_acceptance_items:
+    - id: "DQ-CP5-CR066-04"
+      summary: "Accept publication delay to obtain a clean baseline."
+
+token_control:
+  default_read_mode: capsule-first
+  copied_long_text: false
+  allowed_payload: "summary, count, risk id, decision id, evidence path"
+  full_doc_read_triggers:
+    - missing_capsule_field
+    - unreadable_evidence_path
+    - conflicting_conclusion
+    - user_requested_deep_review

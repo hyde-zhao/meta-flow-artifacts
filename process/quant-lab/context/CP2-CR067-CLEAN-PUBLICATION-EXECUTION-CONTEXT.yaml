@@ -1,0 +1,53 @@
+schema_version: "1.0"
+context_id: "CP2-CR067-CLEAN-PUBLICATION-EXECUTION-CONTEXT"
+change_id: "CR-067"
+created_at: "2026-06-15T11:53:48+08:00"
+created_by: "host-orchestrator"
+status: "ready"
+context_type: "cp2-requirement"
+read_profile: "compact"
+purpose: "Minimal context for CR067 CP2 clean publication execution scope gate."
+must_read:
+  - "process/changes/CR-067-CLEAN-PUBLICATION-EXECUTION-GATE-2026-06-15.md"
+  - "process/checkpoints/CP8-CR066-DELIVERY-READINESS.md"
+  - "docs/release/CLEAN-PUBLICATION-EXECUTION-MANIFEST-CR067.yaml"
+  - "docs/release/CLEAN-PUBLICATION-EXECUTION-PLAN-CR067.md"
+read_if_needed:
+  - "process/checks/CR062-POST-APPROVAL-PREFLIGHT.md"
+  - "docs/release/CLEAN-PUBLICATION-STRATEGY-CR066.md"
+  - "docs/release/CLEAN-PUBLICATION-MANIFEST-CR066.yaml"
+  - "docs/release/CLEAN-PUBLICATION-SCAN-GATE-CR067.md"
+do_not_read_by_default:
+  - ".env"
+  - ".env* except .env.example only after CP5 approval"
+  - "data/**"
+  - "reports/**"
+  - "runs/**"
+  - "process/STATE.md full history"
+  - "full process/checks/** and process/checkpoints/** history"
+  - "NAS / data lake / runtime paths"
+key_facts:
+  - "CR066 is closed-current-delivery / READY_WITH_RISK and created CR067 candidate."
+  - "CR062 remains blocked because current branch tracks reports/**, runs/** and .env.example."
+  - "CR067 scope is clean publication execution gate, not current branch as-is push."
+  - "CR046 remains user-paused and must not be recovered."
+risks_and_decisions:
+  - id: "DQ-CP2-CR067-01..05"
+    status: "pending"
+    summary: "Scope, non-scope, allowlist baseline, no current branch push, and follow-up execution sequencing require human approval."
+non_authorized_items:
+  - "git add / commit / remote add / push"
+  - "git tag"
+  - "branch creation / rename"
+  - "history rewrite / force push / remote deletion"
+  - "credential or .env read"
+  - "NAS/data lake/provider/catalog/runtime operations"
+  - "physical move / rename / delete"
+  - "bulk import rewrite"
+  - "CR046 recovery"
+downstream_tasks:
+  - "Review CP2 Decision Brief."
+  - "If approved together with CP3/CP5, proceed only to post-approval execution order."
+token_control:
+  full_doc_read_policy: "Read full upstream docs only for conflict, audit, or missing-field investigation."
+  read_expansion_log: []

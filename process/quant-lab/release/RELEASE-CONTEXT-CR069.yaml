@@ -1,0 +1,140 @@
+schema_version: "1.0"
+status: closed-current-delivery
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+created_at: "2026-06-15T23:01:31+08:00"
+updated_at: "2026-06-15T23:31:58+08:00"
+closed_at: "2026-06-15T23:25:58+08:00"
+source_gate: CP8-CR069
+
+release_scope:
+  current_version: "process-ledger"
+  target_version: "process-ledger-cr069"
+  included_features:
+    - "CR062 blocked publication route supersession ledger cleanup"
+  included_stories:
+    - "CR069-ledger-cleanup"
+  excluded_scope:
+    - "Git remote add / set-url / push / tag"
+    - "branch/default branch governance"
+    - "history rewrite / force push / remote deletion"
+    - "NAS/data lake/provider/catalog/runtime/credential"
+    - "physical move / rename / delete"
+    - "bulk import rewrite"
+    - "CR046 recovery"
+  user_visible_changes:
+    - "CR062 状态从 blocked publication route 收口为 closed-blocked-superseded。"
+    - "后续 Git governance 与 NAS/data lake/runtime 迁移必须独立 CR。"
+  internal_changes:
+    - "CR-INDEX and STATE tracking synchronized."
+    - "CR069 CP6/CP7/CP8 evidence generated."
+  breaking_changes: []
+  known_risks:
+    - "R-CR069-01"
+    - "R-CR069-02"
+    - "R-CR069-03"
+
+version_decision:
+  current_version: "process-ledger"
+  target_version: "process-ledger-cr069"
+  change_type: "PATCH"
+  compatibility: "compatible"
+  reason: "只调整 process ledger 和 CR tracking，不改变代码、远端仓库或数据面。"
+
+quality_summary:
+  cp7_results:
+    - "process/checks/CP7-CR069-LEDGER-CLEANUP-VERIFICATION-DONE.md: PASS_WITH_RISK"
+  test_report_path: "docs/quality/TEST-REPORT-CR069.md"
+  review_path: "docs/quality/REVIEW-CR069.md"
+  blocker_count: 0
+  high_count: 0
+  accepted_risk_ids:
+    - "R-CR069-01"
+    - "R-CR069-02"
+    - "R-CR069-03"
+  unresolved_findings: []
+
+affected_surface:
+  platforms: []
+  components:
+    - "process/changes"
+    - "process/STATE.md"
+    - "docs/release"
+    - "docs/quality"
+  install_scopes: []
+  config_changes: []
+  permission_changes: []
+  migration_required: false
+  external_interfaces: []
+  state_schema_changes:
+    - "CR062 classification changed to closed-blocked-superseded"
+  command_parameter_changes: []
+
+install_validation_summary:
+  commands: []
+  results: []
+  log_paths: []
+  skipped_with_reason:
+    - "No installable artifact changes in CR069."
+
+release_documents:
+  release_notes:
+    path: "docs/release/RELEASE-NOTES-CR069.md"
+    status: ready
+    na_reason: ""
+  deploy_checklist:
+    path: "docs/release/DEPLOY-CHECKLIST-CR069.md"
+    status: ready
+    na_reason: ""
+  rollback:
+    path: "docs/release/ROLLBACK-CR069.md"
+    status: ready
+    na_reason: ""
+  migration:
+    path: "docs/release/MIGRATION-CR069.md"
+    status: ready
+    na_reason: ""
+  feedback:
+    path: "docs/release/FEEDBACK-CR069.md"
+    status: ready
+    na_reason: ""
+
+non_authorized_items:
+  - id: NA-CR069-01
+    operation: "Git remote add / push / tag / branch governance / history rewrite / force push / remote deletion / set-url"
+    reason: "Out of CR069 ledger-only scope."
+    required_authorization: "New Git governance CR"
+  - id: NA-CR069-02
+    operation: "NAS/data lake/provider/catalog/runtime/credential"
+    reason: "Out of CR069 ledger-only scope."
+    required_authorization: "Dedicated migration/runtime CR"
+  - id: NA-CR069-03
+    operation: "CR046 recovery"
+    reason: "CR046 remains user-paused."
+    required_authorization: "Explicit CR046 recovery instruction"
+
+follow_up_summary:
+  observation_items:
+    - "CP8 risk acceptance confirmed; CR069 closed."
+  feedback_items:
+    - "CR070 Git governance candidate registered; start formal CR before any remote or branch action."
+    - "Start NAS/archive preparation CR after Git governance boundary is clear."
+  follow_up_candidates:
+    - "Git governance / repository policy gate"
+    - "NAS archive / data migration gate"
+    - "Data lake root / catalog migration gate"
+    - "Runtime / trading authorization gate"
+  risk_acceptance_items:
+    - "R-CR069-01"
+    - "R-CR069-02"
+    - "R-CR069-03"
+
+token_control:
+  default_read_mode: capsule-first
+  copied_long_text: false
+  allowed_payload: "summary, count, risk id, decision id, evidence path"
+  full_doc_read_triggers:
+    - missing_capsule_field
+    - unreadable_evidence_path
+    - conflicting_conclusion
+    - user_requested_deep_review

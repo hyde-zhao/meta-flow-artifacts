@@ -1,0 +1,48 @@
+schema_version: "1.0"
+context_id: "CP5-CR067-CLEAN-PUBLICATION-EXECUTION-CONTEXT"
+change_id: "CR-067"
+created_at: "2026-06-15T11:53:48+08:00"
+created_by: "host-orchestrator"
+status: "ready"
+context_type: "cp5-lld"
+read_profile: "compact"
+purpose: "Minimal context for CR067 CP5 runtime authorization and implementability gate."
+must_read:
+  - "process/changes/CR-067-CLEAN-PUBLICATION-EXECUTION-GATE-2026-06-15.md"
+  - "docs/release/CLEAN-PUBLICATION-EXECUTION-PLAN-CR067.md"
+  - "docs/release/CLEAN-PUBLICATION-EXECUTION-MANIFEST-CR067.yaml"
+  - "docs/release/CLEAN-PUBLICATION-SCAN-GATE-CR067.md"
+  - "process/checkpoints/CP5-CR067-CLEAN-PUBLICATION-EXECUTION-READINESS.md"
+read_if_needed:
+  - "pyproject.toml"
+  - "process/checks/CR062-POST-APPROVAL-PREFLIGHT.md"
+  - "process/checkpoints/CP8-CR066-DELIVERY-READINESS.md"
+do_not_read_by_default:
+  - ".env"
+  - ".env.local"
+  - ".envrc"
+  - "data/**"
+  - "reports/**"
+  - "runs/**"
+  - "NAS / data lake / provider / catalog / runtime material"
+  - "full process history"
+key_facts:
+  - "CP5 approval is required before any temporary clean snapshot, scan, Git init/add/commit/remote add/push."
+  - "Approval must be fail-closed: scan or remote conflict stops execution."
+  - "No force push, no tag, no history rewrite, no remote deletion."
+  - ".env.example can only be included after placeholder/no-secret scan PASS."
+risks_and_decisions:
+  - id: "DQ-CP5-CR067-01..05"
+    status: "pending"
+    summary: "Runtime authorization, manifest freeze, scan gate, validation subset, rollback/forward-fix require human approval."
+non_authorized_items:
+  - "Git write actions before CP5 approval."
+  - "Credential or .env reads except approved .env.example scan after CP5."
+  - "NAS/data lake/provider/catalog/runtime operations."
+  - "Physical move / bulk import rewrite / CR046 recovery."
+downstream_tasks:
+  - "If CP5 approved, execute only approved CR067 post-approval order."
+  - "Write execution evidence and route to CP6/CP7/CP8 or blocked repair."
+token_control:
+  full_doc_read_policy: "Do not read full historical docs or .env; expand only for manifest conflict investigation."
+  read_expansion_log: []

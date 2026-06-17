@@ -1,0 +1,35 @@
+context_id: CP3-CR081-PROCESS-LEDGER-ARCHITECTURE-CONTEXT
+change_id: CR-081
+created_at: "2026-06-17T08:03:08+08:00"
+created_by: host-orchestrator
+status: ready-for-human-gate
+read_profile: compact
+architecture_summary:
+  recommended_architecture: external process ledger project owns process/**; current project uses ignored local symlink process -> ${ENGINEERING_LEDGER_ROOT}/projects/quant-lab/process
+  default_ledger_root: /home/hyde/workspace/engineering-ledger
+  default_project_path: projects/quant-lab/process
+  ownership:
+    process: external-ledger
+    code: current-project
+    data_reports: current-project-or-external-assets-but-not-this-cr
+    docs_process_evidence: deferred
+  bootstrap:
+    - LEDGER.md
+    - ledger.yaml
+    - scripts/link-engineering-ledger.sh
+must_read:
+  - process/changes/CR-081-PROCESS-LEDGER-EXTERNALIZATION-SYMLINK-CUTOVER-2026-06-17.md
+  - process/checkpoints/CP3-CR081-PROCESS-LEDGER-ARCHITECTURE-REVIEW.md
+read_if_needed:
+  - .gitignore
+  - scripts/check_cr_tracking_consistency.py
+do_not_read_by_default:
+  - data/**
+  - reports/**
+  - .env
+  - NAS archive contents
+decision_summary:
+  pending_decision_count: 5
+  gate: CP3-CR081
+  recommendation: approve ignored symlink + external ledger project architecture; defer docs migration
+read_expansion_log: []

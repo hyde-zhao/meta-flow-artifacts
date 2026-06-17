@@ -1,0 +1,89 @@
+schema_version: "1.0"
+change_id: "CR-085"
+created_at: "2026-06-17T14:42:30+08:00"
+created_by: "host-orchestrator"
+purpose: "Sanitized docs remote overlay candidate after CP5 Remote Publication Readiness approval."
+approval_scope:
+  source_checkpoint: "process/checkpoints/CP5-CR085-REMOTE-PUBLICATION-READINESS.md"
+  approved_by: "user"
+  approved_at: "2026-06-17T14:37:22+08:00"
+  approved_recommendation: "sanitize-docs"
+  not_authorized:
+    - "remote write"
+    - "git push or git push -u"
+    - "remote deletion"
+    - "force push"
+    - "history rewrite"
+    - "tag"
+    - "default branch governance"
+    - ".env read, print, save, copy, or upload"
+candidate:
+  id: "overlay_v6_sanitize_docs"
+  snapshot_path: "/tmp/cr085-remote-overlay-v6-sanitize-docs-20260617T143722"
+  file_count: 297
+  source: "remote master baseline + source v3 clean overlay + sanitized README.md/docs/USER-MANUAL.md"
+  remote_master_base_commit: "3ade165e8b1edad031a911490cf6c1cee942616e"
+  path_list_sha256_no_trailing_newline: "fc6436fad0621be7ff2f21c0a87c1c5252cb482fc7a28c1ec73dbe85afdb42fe"
+  path_list_sha256_with_trailing_newline: "32b490e821b299370bb1dddae20d6b5a7a7388e38bd87a008e4d4332978b4e5b"
+  content_manifest_sha256_no_trailing_newline: "7eb0ba516471fcd38c808176f2f621bd0d8f6cea7e32a864090da508363190e7"
+  content_manifest_sha256_with_trailing_newline: "70a7067ec76b844152d3dc689fbbe244a94a2c05eac96ab4c78b6f1633b24e03"
+sanitized_docs:
+  changed_paths:
+    - "README.md"
+    - "docs/USER-MANUAL.md"
+  changes:
+    - "Replace absolute /tmp UV cache examples with relative .cache/uv."
+    - "Replace NAS-specific wording with generic external storage wording."
+    - "Replace notebooks/tmp/ example path with notebooks/temp/."
+scan_result:
+  status: "PASS_WITH_WARNINGS"
+  forbidden_path_hit_count: 0
+  precise_secret_hit_count: 0
+  large_file_hit_count_over_5mib: 0
+  topology_blocker_count: 0
+  topology_warning_count: 4
+  env_example:
+    present: true
+    line_count: 29
+    assignment_count: 19
+    realish_value_keys: []
+    empty_or_placeholder_count: 19
+  largest_file:
+    path: "engine/research_dataset.py"
+    bytes: 336211
+  warnings:
+    - "tests/test_cr010_jqdata_index_members_source.py: /tmp fixture warning"
+    - "tests/test_cr020_hmac_pairing_allowlist_scope.py: private IPv4 fixture warning"
+    - "tests/test_cr020_windows_gateway_runtime_admission.py: private IPv4 fixture warning"
+    - "tests/test_cr019_qmt_gateway_lifecycle.py: private IPv4 fixture warning"
+remote_write_status:
+  authorized: true
+  authorized_by: "user"
+  authorized_at: "2026-06-17T15:01:33+08:00"
+  source_checkpoint: "process/checkpoints/CP5-CR085-REMOTE-WRITE-READINESS.md"
+  executed: true
+  executed_at: "2026-06-17T15:07:01+08:00"
+  result: "PASS_WITH_RISK"
+  previous_remote_master: "3ade165e8b1edad031a911490cf6c1cee942616e"
+  new_remote_master: "57d4fc1e9b8808b4371e12af72f9cddcba01aaa0"
+  execution_evidence: "process/checks/CR085-REMOTE-WRITE-EXECUTION-2026-06-17.md"
+  next_gate: "CP8-CR085-DELIVERY-READINESS"
+recommended_remote_write_route:
+  route: "temporary clone based on remote master, apply sanitized candidate, normal non-force push"
+  preconditions:
+    - "Run read-only remote head check immediately before push."
+    - "Remote master must still equal 3ade165e8b1edad031a911490cf6c1cee942616e or the operation must stop."
+    - "Use a temporary clone/worktree, not the current dirty worktree."
+    - "Commit only the sanitized candidate tree."
+    - "Push only as a normal fast-forward update to refs/heads/master."
+  forbidden:
+    - "force push"
+    - "history rewrite"
+    - "tag"
+    - "default branch governance"
+    - "current worktree dirty commit"
+    - ".env read/copy/upload"
+evidence:
+  scan: "process/checks/CR085-SANITIZED-DOCS-SNAPSHOT-SCAN-2026-06-17.md"
+  source_materialization: "docs/release/CLEAN-SNAPSHOT-MATERIALIZATION-MANIFEST-CR085.yaml"
+  source_checkpoint: "process/checkpoints/CP5-CR085-REMOTE-PUBLICATION-READINESS.md"

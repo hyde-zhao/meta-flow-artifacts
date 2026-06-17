@@ -1,0 +1,115 @@
+schema_version: "1.0"
+change_id: "CR-061"
+batch_id: "CR061-BATCH-B"
+title: "Batch B implementation authorization candidate manifest"
+created_at: "2026-06-15T08:41:42+08:00"
+created_by: "host-orchestrator"
+status: "authorization-candidate-only"
+execute_allowed_now: false
+requires_human_gate: "process/checkpoints/CP5-CR061-BATCH-B-IMPLEMENTATION-AUTHORIZATION.md"
+source_hashes:
+  - path: "docs/release/CR061-PACKAGE-IMPORT-CANDIDATE-LIST.md"
+    sha256: "79f4c3d578416804a2199939e4f015306651853e1a81f170c064d8393376df92"
+  - path: "docs/release/REPO-LOCAL-PACKAGE-LAYOUT-PLAN-CR061.md"
+    sha256: "ab250c7bbf79f63086be3d60d37c29b50ed118561b0ad2b1b4bbaf319147bc63"
+  - path: "docs/release/PRESERVE-AUDIT-DECISIONS-CR061.md"
+    sha256: "dd25d1e8c5f3660f154c11feac6413c8ae8365c62c4ee31a721378ea9a19b349"
+  - path: "docs/release/ROLLBACK-REF-CR061.md"
+    sha256: "1249467bca91ac34b2f58dbaf88ec1de619c816a83e38747147931c41330065b"
+  - path: "docs/release/MIGRATION-EXECUTION-MANIFEST-CR061.yaml"
+    sha256: "45b40b0451bbe6d9d91f24e78f7cf751a17bc6bbad65821004b167d3621acdd9"
+  - path: "process/checkpoints/CP5-CR061-PACKAGE-IMPORT-LAYOUT-READINESS.md"
+    sha256: "7bf10a2461f32a984ff2c3f804dced19b66f4ef12c43eb27d30d7f74b7996e16"
+proposed_actions:
+  - action_id: "BATCH-B-ACT-001"
+    candidate_ref: "CR061-CAND-001"
+    path: "pyproject.toml"
+    action: "metadata_update"
+    exact_intent: "Change [project].name from local-backtest to quant-lab."
+    allowed_now: false
+    allowed_after_batch_b_approval: true
+    verification:
+      - "TOML parse"
+      - "uv lock dry evidence or actual uv lock after approval"
+      - "offline import smoke"
+    rollback:
+      - "restore pyproject.toml from pre-Batch-B diff"
+  - action_id: "BATCH-B-ACT-002"
+    candidate_ref: "CR061-CAND-002"
+    path: "uv.lock"
+    action: "uv_lock_regeneration"
+    exact_intent: "Regenerate lock metadata with uv lock; do not manually edit uv.lock."
+    allowed_now: false
+    allowed_after_batch_b_approval: true
+    verification:
+      - "uv lock completes"
+      - "lock diff contains expected package metadata change only"
+    rollback:
+      - "restore uv.lock from pre-Batch-B diff"
+  - action_id: "BATCH-B-ACT-003"
+    candidate_ref: "CR061-CAND-003..006"
+    path: "quant_lab/__init__.py"
+    action: "compatibility_namespace_add"
+    exact_intent: "Add a minimal quant_lab namespace without moving legacy roots."
+    allowed_now: false
+    allowed_after_batch_b_approval: true
+    verification:
+      - "import quant_lab"
+      - "legacy imports still pass"
+    rollback:
+      - "remove newly added quant_lab files from Batch B diff only"
+  - action_id: "BATCH-B-ACT-004"
+    candidate_ref: "CR061-CAND-003..006"
+    path: "quant_lab/{engine,market_data,strategies,trading}.py or package bridge"
+    action: "compatibility_alias_optional"
+    exact_intent: "Expose optional aliases for existing import roots if implementation can keep behavior read-only and static."
+    allowed_now: false
+    allowed_after_batch_b_approval: true
+    verification:
+      - "import quant_lab.engine"
+      - "import quant_lab.market_data"
+      - "import quant_lab.strategies"
+      - "import quant_lab.trading"
+      - "no provider / lake / QMT runtime"
+    rollback:
+      - "remove alias modules from Batch B diff only"
+  - action_id: "BATCH-B-ACT-005"
+    candidate_ref: "CR061-CAND-009"
+    path: "tests/test_cr061_package_import_layout.py"
+    action: "offline_import_smoke_test_add"
+    exact_intent: "Add tests covering legacy import stability and optional quant_lab import smoke."
+    allowed_now: false
+    allowed_after_batch_b_approval: true
+    verification:
+      - "uv run --python 3.11 pytest -q tests/test_cr061_package_import_layout.py"
+    rollback:
+      - "remove new test file from Batch B diff only"
+blocked_actions:
+  - action_id: "BATCH-B-BLOCK-001"
+    operation: "physical move of engine/**, market_data/**, strategies/**, trading/**"
+    reason: "Bulk relayout requires later CR / gate with full dry-run and clean candidate list."
+  - action_id: "BATCH-B-BLOCK-002"
+    operation: "bulk import rewrite"
+    reason: "High blast radius across scripts/tests/experiments; not part of narrow Batch B."
+  - action_id: "BATCH-B-BLOCK-003"
+    operation: "remove legacy roots"
+    reason: "Compatibility-first design requires legacy roots remain importable."
+  - action_id: "BATCH-B-BLOCK-004"
+    operation: "Git remote add / push / tag / branch rename / history rewrite"
+    reason: "Git remote cutover belongs to CR062 or later."
+  - action_id: "BATCH-B-BLOCK-005"
+    operation: "NAS / data lake / provider / catalog"
+    reason: "External data surfaces belong to CR063 / CR064 or later."
+  - action_id: "BATCH-B-BLOCK-006"
+    operation: "credential read"
+    reason: "Credentials are not needed for package/import/layout."
+  - action_id: "BATCH-B-BLOCK-007"
+    operation: "QMT / MiniQMT runtime or CR046 recovery"
+    reason: "CR046 remains user-paused; runtime must be separate authorization."
+post_approval_execution_order:
+  - "Re-read CP5 Batch B checkpoint and confirm approved."
+  - "Re-run git status and compare with dirty worktree include/exclude policy."
+  - "Refresh rollback_ref or record explicit risk acceptance."
+  - "Implement only BATCH-B-ACT-001..005 that remain necessary after source inspection."
+  - "Run offline validation only."
+  - "Write CP6 and CP7 evidence before any release decision."

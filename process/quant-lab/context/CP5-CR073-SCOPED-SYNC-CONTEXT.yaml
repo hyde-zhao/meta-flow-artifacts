@@ -1,0 +1,111 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR073-SCOPED-SYNC-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "CR-073"
+phase: "story-planning"
+checkpoint: "CP5"
+capsule_type: "cp5-lld"
+status: "ready"
+created_at: "2026-06-16T10:07:45+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-073"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 14
+  max_summary_items: 24
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读取本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整正式文档。"
+
+must_read:
+  - path: "process/checks/CP5-CR073-SCOPED-SYNC-READINESS.md"
+    reason: "执行 readiness、dry-run 和验证命令"
+    required: true
+  - path: "process/checks/CR073-TARGET-EVIDENCE-DIFF-2026-06-16.md"
+    reason: "冲突分类和 target baseline"
+    required: true
+  - path: "process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md"
+    reason: "同步范围和不授权项"
+    required: true
+
+read_if_needed:
+  - path: "process/checkpoints/CP8-CR071-DELIVERY-READINESS.md"
+    trigger: "需要确认 CP8 closure 具体 DQ 时读取"
+  - path: "docs/release/LOCAL-ASSETS-NAS-ARCHIVE-MANIFEST-CR072.yaml"
+    trigger: "需要确认 CR072 NAS archive 具体 manifest 时读取"
+
+do_not_read_by_default:
+  - path_or_pattern: "reports/**"
+    reason: "禁止读取/复制"
+  - path_or_pattern: "data/**"
+    reason: "禁止读取/复制"
+  - path_or_pattern: ".env"
+    reason: "禁止读取凭据"
+  - path_or_pattern: ".git/**"
+    reason: "不复制 .git"
+  - path_or_pattern: ".venv/**"
+    reason: "target env rebuild 后续 CR"
+  - path_or_pattern: "node_modules/**"
+    reason: "不复制依赖缓存"
+
+key_facts:
+  scope_summary: "CP5 只授权在 CP2/CP3/CP5 都 approved 后执行 scoped evidence sync；同步本身不关闭 CR073，不切 root。"
+  accepted_decisions:
+    - "rsync dry-run first"
+    - "no --delete"
+    - "forbidden paths excluded"
+    - "target-only unrelated files not deleted"
+  active_constraints:
+    - "实际 sync 命令必须与 dry-run 同源，只去掉 -n。"
+    - "执行前再次检查 target 根目录 forbidden paths 为空。"
+    - "执行后验证 target CR071/CR072/CR073 tracking evidence。"
+  downstream_tasks:
+    - "await user approve"
+    - "execute scoped sync"
+    - "write execution and validation evidence"
+  traceability:
+    requirements: ["acceptance_criteria"]
+    use_cases: ["cutover readiness"]
+    scenarios: ["missing evidence add", "different evidence update", "forbidden path absence"]
+    stories: []
+    features: ["migration-governance"]
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP5-CR073-01..05"
+  non_authorized_items:
+    - "destructive cleanup"
+    - "root cutover"
+    - "remote Git write"
+    - "runtime/data lake/credential"
+  risk_acceptance_items:
+    - "target remains a candidate root; runtime readiness deferred."
+  open_questions: []
+  n_a_or_waived_items:
+    - "Story LLD N/A：single-operation scoped evidence sync, no code implementation."
+
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "scoped sync after approval"
+    - "target verification"
+  exit_criteria:
+    - "target CR tracking and CP8 evidence latest"
+    - "forbidden paths absent"
+    - "no root cutover performed"
+  blocked_if_missing:
+    - "user approve"
+    - "dry-run"
+    - "forbidden path baseline"
+
+read_expansion_log: []
+
+validation:
+  generated_from_sources:
+    - "process/checks/CR073-TARGET-EVIDENCE-DIFF-2026-06-16.md"
+    - "process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "CP5 does not authorize CP8 close or delivered state."

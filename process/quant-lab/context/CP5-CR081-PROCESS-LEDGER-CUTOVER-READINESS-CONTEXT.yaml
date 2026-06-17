@@ -1,0 +1,32 @@
+context_id: CP5-CR081-PROCESS-LEDGER-CUTOVER-READINESS-CONTEXT
+change_id: CR-081
+created_at: "2026-06-17T08:03:08+08:00"
+created_by: host-orchestrator
+status: ready-for-human-gate
+read_profile: compact
+execution_summary:
+  recommended_sequence:
+    - preflight current process directory and external ledger root
+    - mirror process/ to external ledger without --delete
+    - verify mirror with rsync dry-run and CR tracking consistency
+    - update .gitignore and bootstrap docs/scripts
+    - stop tracking process/** only after explicit approval
+    - replace local process directory with symlink only after backup and verification
+  no_execution_before_approval: true
+  default_external_ledger_root: /home/hyde/workspace/engineering-ledger
+must_read:
+  - process/changes/CR-081-PROCESS-LEDGER-EXTERNALIZATION-SYMLINK-CUTOVER-2026-06-17.md
+  - process/checkpoints/CP5-CR081-PROCESS-LEDGER-CUTOVER-READINESS.md
+read_if_needed:
+  - process/checks/CP2-CR081-PROCESS-LEDGER-EXTERNALIZATION-BASELINE.md
+  - process/checks/CP3-CR081-PROCESS-LEDGER-ARCHITECTURE-CONSISTENCY.md
+do_not_read_by_default:
+  - data/**
+  - reports/**
+  - .env
+  - NAS archive contents
+decision_summary:
+  pending_decision_count: 5
+  gate: CP5-CR081
+  recommendation: approve readiness for controlled process ledger mirror and symlink cutover; still no Git commit/push
+read_expansion_log: []

@@ -1,0 +1,45 @@
+schema_version: "1.0"
+context_id: "CP3-CR067-CLEAN-PUBLICATION-EXECUTION-CONTEXT"
+change_id: "CR-067"
+created_at: "2026-06-15T11:53:48+08:00"
+created_by: "host-orchestrator"
+status: "ready"
+context_type: "cp3-design"
+read_profile: "compact"
+purpose: "Minimal context for CR067 CP3 clean publication execution architecture gate."
+must_read:
+  - "docs/release/CLEAN-PUBLICATION-EXECUTION-PLAN-CR067.md"
+  - "docs/release/CLEAN-PUBLICATION-EXECUTION-MANIFEST-CR067.yaml"
+  - "docs/release/CLEAN-PUBLICATION-SCAN-GATE-CR067.md"
+  - "process/changes/CR-067-CLEAN-PUBLICATION-EXECUTION-GATE-2026-06-15.md"
+read_if_needed:
+  - "docs/release/CLEAN-PUBLICATION-STRATEGY-CR066.md"
+  - "process/checks/CR062-POST-APPROVAL-PREFLIGHT.md"
+  - "pyproject.toml"
+  - "docs/release/CR061-PACKAGE-IMPORT-CANDIDATE-LIST.md"
+do_not_read_by_default:
+  - ".env"
+  - "data/**"
+  - "reports/**"
+  - "runs/**"
+  - "full historical process/**"
+  - "NAS / data lake / provider / runtime material"
+key_facts:
+  - "Recommended architecture is temporary clean snapshot outside current worktree."
+  - "Current branch is not pushed as-is."
+  - "Allowlist must include legacy roots engine, market_data, strategies, trading because pyproject package=false and quant_lab modules bridge to legacy roots."
+  - "Scan gate must run before any Git write in snapshot."
+risks_and_decisions:
+  - id: "DQ-CP3-CR067-01..05"
+    status: "pending"
+    summary: "Architecture, branch/default policy, remote conflict, scan fail-closed, and evidence scope require human approval."
+non_authorized_items:
+  - "No Git write before CP5 approval."
+  - "No history rewrite, force push, tag, remote deletion."
+  - "No credential, NAS, data lake, provider, catalog, runtime, CR046 recovery."
+downstream_tasks:
+  - "Review CP3 Decision Brief."
+  - "If approved, CP5 can decide exact post-approval execution authorization."
+token_control:
+  full_doc_read_policy: "Use compact docs and manifest first; expand only if architecture facts conflict."
+  read_expansion_log: []

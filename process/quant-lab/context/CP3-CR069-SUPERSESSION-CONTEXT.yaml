@@ -1,0 +1,77 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR069-SUPERSESSION-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "local_backtest-cr069"
+phase: "documentation"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready"
+created_at: "2026-06-15T22:26:11+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-069"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只在需要核对 blocker 原文或审计时读取完整 CR。"
+must_read:
+  - path: "process/changes/CR-069-CR062-SUPERSESSION-PUBLICATION-LEDGER-CLEANUP-2026-06-15.md"
+    reason: "CR069 design scope"
+    required: true
+  - path: "docs/release/CR062-SUPERSESSION-LEDGER-CLEANUP-PLAN-CR069.md"
+    reason: "ledger cleanup design"
+    required: true
+read_if_needed:
+  - path: "process/changes/CR-062-GIT-REMOTE-CUTOVER-REPOSITORY-PUBLICATION-GATE-2026-06-15.md"
+    trigger: "需要核对 CR062 状态和 blocker"
+  - path: "docs/release/CR062-SUPERSESSION-LEDGER-CLEANUP-MANIFEST-CR069.yaml"
+    trigger: "需要核对 target objects"
+do_not_read_by_default:
+  - path_or_pattern: "完整历史 conversation"
+    reason: "正式 CR 与 checkpoint 已提供足够上下文"
+key_facts:
+  scope_summary: "设计采用 ledger-only supersession；不触发 Git external state。"
+  accepted_decisions:
+    - "replacement evidence set = CR066 + CR067 + CR068"
+  active_constraints:
+    - "CR062 status not changed before CP5"
+    - "branch governance out of scope"
+  downstream_tasks:
+    - "CP5 freeze manifest and execution readiness"
+  traceability:
+    requirements:
+      - "CR062 blocked ledger cleanup"
+    use_cases: []
+    scenarios: []
+    stories: []
+    features: []
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP3-CR069-01..05"
+  non_authorized_items:
+    - "Git remote write"
+    - "branch/default branch governance"
+    - "NAS/lake/runtime/credential"
+  risk_acceptance_items:
+    - "CR062 blocker remains traceable after supersession"
+  open_questions: []
+  n_a_or_waived_items:
+    - "Blueprint/HLD full docs N/A: scoped ledger CR"
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP3 architecture consistency review"
+  exit_criteria:
+    - "CP3 approved"
+  blocked_if_missing:
+    - "ledger cleanup plan"
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "docs/release/CR062-SUPERSESSION-LEDGER-CLEANUP-PLAN-CR069.md"
+    - "process/changes/CR-069-CR062-SUPERSESSION-PUBLICATION-LEDGER-CLEANUP-2026-06-15.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes: []

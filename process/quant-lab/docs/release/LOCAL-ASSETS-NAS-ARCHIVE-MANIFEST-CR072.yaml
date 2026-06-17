@@ -1,0 +1,116 @@
+version: 1
+cr_id: CR-072
+status: closed-current-delivery
+created_at: "2026-06-16T08:19:50+08:00"
+created_by: host-orchestrator
+approval_source: user-current-turn
+source_root: /home/hyde/workspace/local_backtest
+target_roots:
+  reports: /mnt/quant-lab-primary/research/reports/cr072-local-backtest-reports-20260616T081950
+  data: /mnt/quant-lab-primary/data-lake/snapshots/cr072-local-backtest-data-20260616T081950
+  evidence: /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950
+local_policy:
+  keep_reports: true
+  keep_data: true
+  cleanup_rebuildable_caches: true
+  no_remote_git_write: true
+  no_data_lake_switch: true
+  no_qmt_runtime: true
+  no_credential_read: true
+archive_inputs:
+  reports:
+    path: reports/
+    precheck_size: 4.3G
+    action: archive-to-nas
+  data:
+    path: data/
+    precheck_size: 59M
+    action: archive-to-nas
+  evidence:
+    paths:
+      - docs/
+      - process/
+      - ops/
+    action: archive-to-nas
+cache_cleanup:
+  paths:
+    - .venv/
+    - node_modules/
+    - .pytest_cache/
+    - "**/__pycache__/"
+execution_result:
+  status: PASS_WITH_RISK
+  executed_at: "2026-06-16T08:19:50+08:00"
+  reports_rsync:
+    status: PASS_WITH_RISK
+    first_run_exit_code: 23
+    normalized_run_exit_code: 0
+    note: "First rsync copied all content but NFS rejected chgrp metadata; normalized rsync used --no-owner --no-group --no-perms --omit-dir-times and completed with code 0."
+    number_of_files: 898
+    regular_files: 772
+    directories: 126
+    total_file_size_bytes: 4529789958
+    transferred_file_size_bytes: 4529789958
+    destination_file_count: 772
+  data_rsync:
+    status: PASS
+    exit_code: 0
+    number_of_files: 18
+    regular_files: 8
+    directories: 10
+    total_file_size_bytes: 61723552
+    transferred_file_size_bytes: 61723552
+    destination_file_count: 8
+  evidence_rsync:
+    status: PASS_WITH_NOTE
+    exit_code: 0
+    number_of_files: 2173
+    regular_files: 2091
+    directories: 82
+    total_file_size_bytes: null
+    transferred_file_size_bytes: null
+    final_incremental_transfer_bytes: 20173
+    destination_file_count: 2091
+    official_destination: /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950/evidence-tree
+    note: "Initial tree sync copied 2,088 files; final sync after CR072 evidence creation updated the official audit tree to 2,091 files. Because the local manifest is itself inside docs/ and therefore part of the evidence tree, the final source/dest SHA256 files are authoritative for exact content verification. An initial flat copy exists as evidence-flat-initial-copy; official audit tree is evidence-tree."
+  manifest_files:
+    - /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950/reports-rsync.log
+    - /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950/reports-rsync-normalized.log
+    - /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950/data-rsync.log
+    - /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950/evidence-tree-rsync.log
+    - /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950/evidence-tree-final-rsync.log
+    - /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950/evidence-tree-final2-rsync.log
+  checksum_files:
+    - /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950/reports-source-sha256.txt
+    - /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950/reports-dest-sha256.txt
+    - /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950/data-source-sha256.txt
+    - /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950/data-dest-sha256.txt
+    - /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950/evidence-source-sha256.txt
+    - /mnt/quant-lab-primary/archive/migration-evidence/cr072-local-assets-evidence-20260616T081950/evidence-dest-sha256.txt
+  cache_cleanup:
+    status: PASS
+    removed:
+      - .venv/
+      - node_modules/
+      - .pytest_cache/
+    pycache_before_count: 132
+    pycache_after_count: 0
+verification:
+  status: PASS_WITH_RISK
+  reports_sha256_match: true
+  data_sha256_match: true
+  evidence_sha256_match: true
+  local_reports_retained: true
+  local_reports_file_count: 772
+  local_reports_size: 4.3G
+  local_data_retained: true
+  local_data_file_count: 8
+  local_data_size: 59M
+  remote_git_write_executed: false
+  remote_master_after_verification: "3ade165e8b1edad031a911490cf6c1cee942616e"
+  notes:
+    - "No local reports/data deletion was executed."
+    - "No remote Git write was executed."
+    - "No data lake switch, QMT runtime, credential read or CR046 recovery was executed."
+    - "Local uv environment was removed intentionally as rebuildable cache; run uv sync to rebuild when needed."
+    - "Official evidence tree contains 2,091 files after final sync."

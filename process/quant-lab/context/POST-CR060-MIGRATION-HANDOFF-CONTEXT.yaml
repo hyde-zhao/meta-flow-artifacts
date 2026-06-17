@@ -1,0 +1,173 @@
+schema_version: "1.0"
+context_id: "POST-CR060-MIGRATION-HANDOFF"
+status: "ready"
+created_at: "2026-06-15T07:23:14+08:00"
+purpose: >-
+  Clear-context recovery capsule for continuing the quant-lab migration after
+  CR060 without relying on prior chat history.
+
+current_truth:
+  canonical_project_name: "quant-lab"
+  legacy_project_alias: "local_backtest"
+  current_repo_path: "/home/hyde/workspace/local_backtest"
+  latest_closed_migration_cr: "CR-060"
+  active_formal_cr:
+    id: "CR-046"
+    status: "paused-by-user"
+    resume_policy: "Do not resume unless the user explicitly asks to recover CR046."
+  cr060_result:
+    status: "closed-current-delivery"
+    release_decision: "READY_WITH_RISK"
+    delivered_scope:
+      - "Docs-only identity convergence to quant-lab."
+      - "README.md now presents quant-lab as the canonical project name."
+      - "docs/USER-MANUAL.md now presents quant-lab as the canonical root."
+      - "local_backtest remains only as a legacy alias and historical audit name."
+    intentionally_not_done:
+      - "No package/import/module rename."
+      - "No real file move, delete, or directory rewrite."
+      - "No NAS data migration."
+      - "No data lake root replacement."
+      - "No provider fetch, lake write, or catalog publish."
+      - "No QMT or MiniQMT runtime action."
+      - "No credential read."
+      - "No git push, tag, remote rename, or history rewrite."
+    final_verification:
+      - "YAML parse PASS."
+      - "Human gate checker PASS."
+      - "CR tracking consistency PASS."
+      - "git diff --check PASS."
+
+must_read:
+  - path: "AGENTS.md"
+    reason: "Repository workflow rules, language policy, CR/checkpoint rules, and safety boundaries."
+  - path: "process/context/POST-CR060-MIGRATION-HANDOFF-CONTEXT.yaml"
+    reason: "This clear-context recovery capsule."
+  - path: "process/STATE.md"
+    reason: "Current workflow state; confirms CR060 closure and CR046 paused state."
+  - path: "process/changes/CR-INDEX.yaml"
+    reason: "Canonical CR index and closed/active CR relationship."
+  - path: "process/changes/CR-060-REPO-LOCAL-MECHANICAL-MIGRATION-EXECUTION-GATE-2026-06-15.md"
+    reason: "CR060 formal record, decisions, gate results, and follow-up routing."
+  - path: "process/release/RELEASE-CONTEXT-CR060.yaml"
+    reason: "CR060 release capsule and candidate next CR sequence."
+  - path: "docs/release/MIGRATION-CR060.md"
+    reason: "CR060 migration summary and explicit non-authorized operations."
+  - path: "docs/release/MIGRATION-EXECUTION-MANIFEST-CR060.yaml"
+    reason: "Executed docs-only migration manifest and preserve-audit/rollback references."
+  - path: "process/changes/CR-053-FOLLOW-UP-TRACKING-2026-06-14.md"
+    reason: "Original follow-up tracking root for migration sequence."
+
+read_if_needed:
+  - path: "process/changes/CR-059-MIGRATION-PREPARATION-FOUNDATION-2026-06-14.md"
+    reason: "NAS preparation foundation CR details."
+  - path: "docs/release/MIGRATION-EXECUTION-MANIFEST-CR059.yaml"
+    reason: "CR059 execution manifest and NAS/pre-migration backup evidence."
+  - path: "docs/release/NAS-MOUNT-PLAN-CR059.md"
+    reason: "NAS mount design and mount point mapping."
+  - path: "docs/release/NAS-DIRECTORY-MAP-CR059.md"
+    reason: "NAS directory skeleton and storage tier policy."
+  - path: "docs/release/BACKUP-POINT-PLAN-CR059.md"
+    reason: "Backup point and rollback material locations."
+  - path: "docs/release/CR058-CANDIDATE-LIST.md"
+    reason: "Candidate list model used before real moves."
+  - path: "docs/release/CR058-PRESERVE-AUDIT-ALLOWLIST.md"
+    reason: "Preserve-audit allowlist model for historical process/docs paths."
+  - path: "docs/release/CR058-ROLLBACK-GATE.md"
+    reason: "Rollback gate model for real migration authorization."
+
+do_not_read_by_default:
+  - path: "process/**"
+    reason: "Large historical runtime surface; use must_read/read_if_needed first."
+  - path: "process/stories/**"
+    reason: "Historical story execution files are not needed for the next migration CR by default."
+  - path: "process/handoffs/**"
+    reason: "Read only if a specific handoff is referenced by STATE or a CR."
+  - path: ".env"
+    reason: "May contain credentials or provider/runtime secrets."
+  - path: "/mnt/quant-lab-*/*"
+    reason: "NAS data bodies are outside the next CR unless CR063 is explicitly started."
+  - path: "docs/quality/TEST-REPORT-CR0*.md"
+    reason: "Read only if checking a specific prior CR verification detail."
+
+nas_state_from_cr059:
+  status: "prepared"
+  mount_points:
+    hot:
+      local_path: "/mnt/quant-lab-hot"
+      remote_export: "192.168.101.83:/volume3/quant-lab-hot"
+      intended_use: "Hot SSD workspace/cache/staging."
+    primary:
+      local_path: "/mnt/quant-lab-primary"
+      remote_export: "192.168.101.83:/volume2/quant-lab-primary"
+      intended_use: "Primary RAID storage for production research and lake-facing data."
+    cold:
+      local_path: "/mnt/quant-lab-cold"
+      remote_export: "192.168.101.83:/volume1/quant-lab-cold"
+      intended_use: "Cold non-RAID archive, backups, bundles, historical snapshots."
+  backup_refs:
+    cold_snapshot: "/mnt/quant-lab-cold/backups/pre-migration/cr059/repo-data-snapshot-20260614"
+    git_bundle: "/mnt/quant-lab-cold/git-bundles/pre-cr059/local_backtest-pre-cr059-e7a3a0d.bundle"
+  warning: "Prepared mounts do not authorize NAS copy/move/delete in the next CR unless that CR is CR063 or an equivalent approved NAS migration CR."
+
+git_remote_state:
+  intended_remote: "git@github.com:hyde-zhao/quant-lab.git"
+  current_policy: >-
+    Treat remote initialization/cutover as CR062 unless the user explicitly
+    changes sequencing and a new human gate authorizes it.
+  known_status: "Remote expected to be empty from prior discussion; verify before CR062 actions."
+
+recommended_next_cr_sequence:
+  - id: "CR061"
+    title: "Package/import/layout convergence"
+    goal: >-
+      Converge repo-local code/package/import/layout names toward quant-lab while
+      preserving historical audit paths and without remote/NAS/lake/runtime actions.
+    include:
+      - "Package/import/name candidate list."
+      - "Mechanical rename/relayout design."
+      - "Preserve-audit allowlist."
+      - "Rollback reference and dry-run."
+      - "CP2/CP3/CP5 human gates before real file moves or path rewrites."
+    exclude:
+      - "Git remote push/tag/history rewrite."
+      - "NAS data migration."
+      - "Data lake root switch."
+      - "QMT/MiniQMT runtime."
+      - "Credential reads."
+  - id: "CR062"
+    title: "GitHub remote and release identity cutover"
+    goal: "Initialize/cut over git remote to git@github.com:hyde-zhao/quant-lab.git after repo-local identity is coherent."
+  - id: "CR063"
+    title: "NAS archive and process-data migration"
+    goal: "Move/archive approved non-code assets to NAS tiers using CR059 mounts and backup refs."
+  - id: "CR064"
+    title: "Data lake root and catalog cutover"
+    goal: "Switch configured lake roots/catalog references after backup, dry-run, and gate approval."
+  - id: "CR065"
+    title: "Trading runtime and provider rebinding"
+    goal: "Rebind runtime/provider/QMT/MiniQMT surfaces only after explicit runtime authorization."
+
+invariant_boundaries:
+  - "Do not resume CR046 without explicit user instruction."
+  - "Do not read credentials, .env secrets, tokens, cookies, private keys, or account data."
+  - "Do not start QMT/MiniQMT or any trading/runtime provider process."
+  - "Do not fetch provider data, write lake data, publish catalogs, or replace MARKET_DATA_LAKE_ROOT outside CR064."
+  - "Do not copy, move, delete, or rewrite NAS data outside CR063 or an equivalent approved NAS CR."
+  - "Do not git push, tag, remote rename, or rewrite history outside CR062 or an equivalent approved git remote CR."
+  - "Preserve process/**, historical CR/checkpoint/release docs, and audit evidence unless an allowlist explicitly permits moving generated non-audit material."
+
+next_cr_preflight:
+  - "Read must_read files in this capsule."
+  - "Confirm CR060 is closed-current-delivery and CR046 remains paused."
+  - "Run CR tracking consistency checks before editing CR index/state."
+  - "Create the next CR file and CP2/CP3/CP5 gates before implementation."
+  - "For CR061, build candidate list, preserve-audit allowlist, rollback_ref, and dry-run plan before real moves."
+  - "Run YAML parse and git diff --check after changing process/release docs."
+
+suggested_restart_prompt: >-
+  继续 quant-lab 迁移。先读取 AGENTS.md、
+  process/context/POST-CR060-MIGRATION-HANDOFF-CONTEXT.yaml、process/STATE.md、
+  process/changes/CR-INDEX.yaml；不要恢复 CR046。按 handoff 建议启动
+  CR061 package/import/layout convergence 的正式 CR 和门禁，不执行 Git remote、
+  NAS/data lake、runtime 或凭据操作。

@@ -1,0 +1,70 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR074-CUTOVER-READINESS-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "CR074"
+phase: "story-planning"
+checkpoint: "CP5"
+capsule_type: "cp5-lld"
+status: "ready"
+created_at: "2026-06-16T22:14:44+08:00"
+created_by: "host-orchestrator"
+source_cr: "process/changes/CR-074-ROOT-CUTOVER-DAILY-WORKFLOW-SWITCH-2026-06-16.md"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读取本 capsule；CR074 无 Story LLD，使用 cutover readiness 替代 CP5 批次。"
+must_read:
+  - path: "process/checks/CP5-CR074-CUTOVER-READINESS.md"
+    reason: "cutover readiness 自动预检"
+    required: true
+  - path: "process/changes/CR-074-ROOT-CUTOVER-DAILY-WORKFLOW-SWITCH-2026-06-16.md"
+    reason: "执行边界和验收标准"
+    required: true
+read_if_needed:
+  - path: "process/checks/CR073-TARGET-CUTOVER-READINESS-VERIFICATION-2026-06-16.md"
+    trigger: "验证 target baseline"
+do_not_read_by_default:
+  - path_or_pattern: "reports/**"
+    reason: "CR074 不读取报告目录"
+  - path_or_pattern: "data/**"
+    reason: "CR074 不读取数据目录"
+  - path_or_pattern: ".env"
+    reason: "不得读取凭据"
+key_facts:
+  scope_summary: "CP5 只确认 logical cutover readiness；approved 前不执行。"
+  accepted_decisions: []
+  active_constraints:
+    - "target env rebuild 属于 CR075。"
+    - "data/reports access 属于 CR076。"
+    - "old root retirement 属于 CR077。"
+    - "remote Git governance 属于 CR078。"
+  downstream_tasks:
+    - "发起 CP5 人工门禁。"
+  traceability:
+    requirements: ["CR074-candidate"]
+    use_cases: ["authoritative root marker"]
+    scenarios: ["preflight PASS before logical cutover"]
+    stories: []
+    features: []
+risks_and_decisions:
+  pending_human_decisions: ["DQ-CP5-CR074-01..05"]
+  non_authorized_items: ["NA-CR074-001..009"]
+  risk_acceptance_items: ["old root retained as rollback path"]
+  open_questions: []
+  n_a_or_waived_items: ["Story LLD N/A：无代码实现。"]
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output: ["CP5 manual checkpoint"]
+  exit_criteria: ["CP5 approved 前不执行 logical cutover"]
+  blocked_if_missing: ["target CR tracking PASS", "forbidden paths checks empty"]
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "process/changes/CR-074-ROOT-CUTOVER-DAILY-WORKFLOW-SWITCH-2026-06-16.md"
+    - "process/checks/CR073-TARGET-CUTOVER-READINESS-VERIFICATION-2026-06-16.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes: []

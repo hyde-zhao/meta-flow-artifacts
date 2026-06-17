@@ -1,0 +1,100 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR070-GIT-GOVERNANCE-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "local_backtest-cr070"
+phase: "documentation"
+checkpoint: "CP5"
+capsule_type: "cp5-lld"
+status: "ready"
+created_at: "2026-06-15T23:48:32+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-070"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整文档。"
+must_read:
+  - path: "process/changes/CR-070-GIT-REMOTE-GOVERNANCE-DEFAULT-BRANCH-CUTOVER-GATE-2026-06-15.md"
+    reason: "CR070 CP5 readiness 范围"
+    required: true
+  - path: "process/context/CP2-CR070-GIT-GOVERNANCE-CONTEXT.yaml"
+    reason: "范围基线"
+    required: true
+  - path: "process/context/CP3-CR070-GIT-GOVERNANCE-CONTEXT.yaml"
+    reason: "治理架构基线"
+    required: true
+read_if_needed:
+  - path: "process/checkpoints/CP2-CR070-GIT-GOVERNANCE-BASELINE.md"
+    trigger: "需要核对 CP2 Decision Brief"
+  - path: "process/checkpoints/CP3-CR070-GIT-GOVERNANCE-HLD-REVIEW.md"
+    trigger: "需要核对 CP3 Decision Brief"
+  - path: "process/changes/CR-INDEX.yaml"
+    trigger: "需要核对 CR070 active formal CR 索引"
+do_not_read_by_default:
+  - path_or_pattern: ".git/config"
+    reason: "本轮不需要读取或修改 remote 配置"
+  - path_or_pattern: ".env*"
+    reason: "凭据不属于 CR070 本轮门禁生成范围"
+  - path_or_pattern: "reports/**"
+    reason: "历史报告正文不属于 CP5 默认输入"
+  - path_or_pattern: "runs/**"
+    reason: "历史运行产物不属于 CP5 默认输入"
+key_facts:
+  scope_summary: "CP5 只审查 CR070 的本地 readiness：门禁产物、执行前置条件、不授权项、回退和校验命令；不授权远端执行。"
+  accepted_decisions:
+    - "CR070 当前无 Story LLD 批次；以 governance readiness checkpoint 代替。"
+    - "Any future remote write requires a separate explicit authorization after gates are approved."
+  active_constraints:
+    - "No remote Git write in this turn."
+    - "No NAS operation in this turn."
+    - "No credential read or runtime connection."
+  downstream_tasks:
+    - "生成 CP5 Decision Brief 和人工门禁稿。"
+    - "运行 human-gate 校验。"
+    - "等待用户确认后再决定是否进入后续 execution planning。"
+  traceability:
+    requirements:
+      - "CR070 readiness gate"
+    use_cases: []
+    scenarios:
+      - "readiness no-op"
+      - "remote write remains blocked"
+    stories: []
+    features: []
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP5-CR070-01..05"
+  non_authorized_items:
+    - "git remote add/set-url/push/tag"
+    - "branch rename/default branch governance/history rewrite/force push/remote deletion"
+    - "NAS/data lake/provider/catalog/runtime/credential"
+    - "physical move/bulk import rewrite/CR046 recovery"
+  risk_acceptance_items:
+    - "CP5 readiness may leave default branch governance unresolved until later explicit authorization."
+  open_questions: []
+  n_a_or_waived_items:
+    - "Story full-lld / technical-note / waived N/A: CR070 当前为 governance gate，不实施代码 Story。"
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP5 checkpoint review draft"
+    - "CP5 human-gate launch message"
+  exit_criteria:
+    - "CP5 checkpoint file exists"
+    - "human-gate validation passes"
+  blocked_if_missing:
+    - "CP2 context"
+    - "CP3 context"
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "process/changes/CR-070-GIT-REMOTE-GOVERNANCE-DEFAULT-BRANCH-CUTOVER-GATE-2026-06-15.md"
+    - "process/context/CP2-CR070-GIT-GOVERNANCE-CONTEXT.yaml"
+    - "process/context/CP3-CR070-GIT-GOVERNANCE-CONTEXT.yaml"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "No remote Git command, NAS operation, provider fetch, catalog publish or credential read was performed while generating this capsule."

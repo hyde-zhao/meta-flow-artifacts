@@ -1,0 +1,123 @@
+schema_version: "1.0"
+capsule_id: "CP8-CR066-DELIVERY-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "local_backtest-cr066"
+phase: "documentation"
+checkpoint: "CP8"
+capsule_type: "cp8-delivery"
+status: "ready"
+created_at: "2026-06-15T10:46:59+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-066"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 10
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: "N/A: CP8 package assembled from CR066 scoped release context and approved CP2/CP3/CP5 gates."
+  default_instruction: "Agent 必须先读取本 capsule；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+
+must_read:
+  - path: "process/STATE.md"
+    reason: "状态机、当前阶段、门禁和上下文预算"
+    required: true
+  - path: "process/release/RELEASE-CONTEXT-CR066.yaml"
+    reason: "CR066 release scope, decision and non-authorized items"
+    required: true
+  - path: "process/checkpoints/CP8-CR066-DELIVERY-READINESS.md"
+    reason: "CP8 Decision Brief and pending human decisions"
+    required: true
+
+read_if_needed:
+  - path: "process/changes/CR-066-REPOSITORY-HYGIENE-CLEAN-PUBLICATION-STRATEGY-2026-06-15.md"
+    trigger: "Need full CR066 scope or follow-up boundary"
+  - path: "docs/release/CLEAN-PUBLICATION-STRATEGY-CR066.md"
+    trigger: "Need strategy details for CR067 planning"
+  - path: "docs/release/CLEAN-PUBLICATION-MANIFEST-CR066.yaml"
+    trigger: "Need include/exclude policy details"
+  - path: "process/checks/CR062-POST-APPROVAL-PREFLIGHT.md"
+    trigger: "Need original blocker evidence"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不属于当前 CP8 默认上下文"
+  - path_or_pattern: "process/checks/CP5-CR058-*"
+    reason: "CR058 旧检查不属于 CR066 收尾默认上下文"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "不得作为下游默认输入"
+
+key_facts:
+  scope_summary: "CR066 is a strategy-only repository hygiene / clean publication baseline. It closes the CR062 blocker follow-up only after CP8 approval; it does not execute publication."
+  accepted_decisions:
+    - "DQ-CR062-BLOCKER-01"
+    - "DQ-CP2-CR066-01..05"
+    - "DQ-CP3-CR066-01..05"
+    - "DQ-CP5-CR066-01..05"
+  active_constraints:
+    - "No Git writes in CR066."
+    - "CR062 remains blocked by tracked forbidden paths."
+    - "CR046 remains paused."
+    - "CR067 is only a candidate until CP8 approval and explicit start."
+  downstream_tasks:
+    - "Ask user for CP8 approval."
+    - "If CP8 approved, mark CR066 closed-current-delivery / READY_WITH_RISK and keep CR067 as candidate."
+  traceability:
+    requirements:
+      - "CR062 blocker: current branch cannot be pushed as-is."
+    use_cases:
+      - "Establish clean public publication route without publishing forbidden tracked history."
+    scenarios:
+      - "Strategy approval before any Git write."
+    stories:
+      - "CR066-S01"
+      - "CR066-S02"
+      - "CR066-S03"
+      - "CR066-S04"
+      - "CR066-S05"
+    features:
+      - "Repository publication gate"
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP8-CR066-01"
+    - "DQ-CP8-CR066-02"
+    - "DQ-CP8-CR066-03"
+    - "DQ-CP8-CR066-04"
+    - "DQ-CP8-CR066-05"
+  non_authorized_items:
+    - "git add / commit / remote add / push"
+    - "git tag / branch creation / branch rename / history rewrite / force push / remote deletion"
+    - "NAS/data lake/provider/catalog/runtime/credential operations"
+    - "physical move / bulk import rewrite"
+    - "CR046 recovery"
+  risk_acceptance_items:
+    - "DQ-CP5-CR066-04: accept publication delay for clean baseline"
+  open_questions:
+    - "CR067 execution details are not approved."
+  n_a_or_waived_items:
+    - "CP7 implementation verification N/A: CR066 has no code/runtime implementation."
+
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP8 approval result"
+    - "CR066 close or rework decision"
+  exit_criteria:
+    - "CP8 manual review approved / changes_requested / rejected"
+  blocked_if_missing:
+    - "process/release/RELEASE-CONTEXT-CR066.yaml"
+    - "process/checkpoints/CP8-CR066-DELIVERY-READINESS.md"
+
+read_expansion_log: []
+
+validation:
+  generated_from_sources:
+    - "process/release/RELEASE-CONTEXT-CR066.yaml"
+    - "process/checkpoints/CP2-CR066-REPOSITORY-HYGIENE-BASELINE.md"
+    - "process/checkpoints/CP3-CR066-CLEAN-PUBLICATION-HLD-REVIEW.md"
+    - "process/checkpoints/CP5-CR066-CLEAN-PUBLICATION-READINESS.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "CP8 approve confirms strategy readiness only; it does not authorize real publication."

@@ -1,0 +1,115 @@
+schema_version: "1.0"
+change_id: "CR-085"
+created_at: "2026-06-17T13:59:51+08:00"
+created_by: "host-orchestrator"
+purpose: "Path-level clean publication candidate manifest after approved CR085 CP2/CP3/CP5."
+execute_allowed_now: false
+remote_write_authorized: false
+materialization_status: "completed-with-risk"
+materialization_manifest: "docs/release/CLEAN-SNAPSHOT-MATERIALIZATION-MANIFEST-CR085.yaml"
+materialization_scan: "process/checks/CR085-CLEAN-SNAPSHOT-MATERIALIZATION-SCAN-2026-06-17.md"
+candidate_preparation_scope:
+  - "Classify paths from source commit d4d2881 only."
+  - "Do not copy files into a clean snapshot yet."
+  - "Do not initialize a temporary Git repository."
+  - "Do not create a commit, tag, branch, upstream, or remote."
+  - "Do not push, delete remote files, rewrite history, or force push."
+  - "Do not read, print, save, or upload .env."
+source:
+  authoritative_root: "/home/hyde/workspace/quant-lab"
+  source_commit: "d4d2881"
+  source_commit_title: "CR078 process ledger publication gate"
+  current_branch: "work/chapter3-factor-gap-remediation-20260608"
+  remote_url: "git@github.com:hyde-zhao/quant-lab.git"
+  remote_branch: "master"
+  remote_master_commit: "3ade165e8b1edad031a911490cf6c1cee942616e"
+path_classification_counts:
+  remote_tracked_file_count: 136
+  local_source_tracked_file_count: 570
+  must_include_path_count: 291
+  conditional_include_path_count: 145
+  default_exclude_path_count: 135
+  unclassified_path_count: 0
+must_include:
+  - "README.md"
+  - "AGENTS.md"
+  - "CLAUDE.md"
+  - ".gitignore"
+  - ".env.example"
+  - "pyproject.toml"
+  - "uv.lock"
+  - "config/**"
+  - "engine/**"
+  - "market_data/**"
+  - "quant_lab/**"
+  - "strategies/**"
+  - "trading/**"
+  - "tests/**"
+  - "scripts/**"
+  - "LEDGER.md"
+  - "ledger.yaml"
+conditional_include:
+  - path: "docs/**"
+    condition: "Public-safe content review PASS; no credential, internal topology, data/report content, or oversized process dump."
+  - path: "experiments/**"
+    condition: "Public-safe code/content review PASS; no generated output, credential, data/report content, or runtime-only artifact."
+default_exclude:
+  - ".env"
+  - ".env.*"
+  - ".venv/**"
+  - "data/**"
+  - "reports/**"
+  - "runs/**"
+  - "process/**"
+  - "checkpoints/**"
+  - ".claude/**"
+  - "DEV-LOG.md"
+  - "issues/**"
+  - "notebooks/**"
+  - "ops/**"
+  - "**/__pycache__/**"
+  - "**/*.pyc"
+  - ".pytest_cache/**"
+known_source_path_findings:
+  allowed_template:
+    - ".env.example"
+  forbidden_hits:
+    - "runs/RUN-EXEC-20260613-001.md"
+  current_remote_delete_candidates: []
+required_before_snapshot_materialization:
+  - "Content-level no-secret scan."
+  - ".env.example placeholder-only scan."
+  - "Forbidden path scan for .env, data, reports, runs, process, checkpoints, and cache paths."
+  - "Large-file scan."
+  - "Internal topology and local machine path scan."
+  - "Human gate approving materialization of the clean snapshot."
+required_before_any_remote_write:
+  - "Clean snapshot materialization evidence PASS."
+  - "No-secret and forbidden-path scans PASS."
+  - "Exact remote URL and target branch re-confirmed."
+  - "Separate human gate explicitly authorizes the specific remote write."
+fail_closed_on:
+  - "Any .env path in the candidate snapshot."
+  - "Any run, report, data, process, checkpoint, cache, or runtime-only artifact in the candidate snapshot."
+  - "Any secret-like content or real credential in .env.example or any other included file."
+  - "Any unclassified path after applying include/exclude rules."
+  - "Any mismatch between approved remote target and execution target."
+not_authorized_by_this_manifest:
+  - "git remote add, set-url, or remove"
+  - "git fetch into the current repository"
+  - "git add, commit, tag, branch creation, or branch rename"
+  - "git push, git push -u, remote deletion, force push, or history rewrite"
+  - "default branch governance"
+  - "dirty worktree commit"
+  - ".env read, print, save, or upload"
+  - "data/reports content read"
+  - "NAS content operation, provider fetch, lake write, catalog publish, runtime, CR046 recovery, old root retirement, backup deletion, or cleanup"
+evidence:
+  path_scan: "process/checks/CR085-CLEAN-PUBLICATION-CANDIDATE-PATH-SCAN-2026-06-17.md"
+  materialization_manifest: "docs/release/CLEAN-SNAPSHOT-MATERIALIZATION-MANIFEST-CR085.yaml"
+  materialization_scan: "process/checks/CR085-CLEAN-SNAPSHOT-MATERIALIZATION-SCAN-2026-06-17.md"
+  remote_readonly_scan: "process/checks/CR085-REMOTE-READONLY-SCAN-2026-06-17.md"
+  cp2_checkpoint: "process/checkpoints/CP2-CR085-REMOTE-CLEANUP-BASELINE.md"
+  cp3_checkpoint: "process/checkpoints/CP3-CR085-REMOTE-CLEANUP-HLD-REVIEW.md"
+  cp5_checkpoint: "process/checkpoints/CP5-CR085-REMOTE-CLEANUP-READINESS.md"
+next_recommended_gate: "CR085 remote publication and README/USER-MANUAL handling decision"

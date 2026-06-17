@@ -1,0 +1,47 @@
+schema_version: "1.0"
+context_id: "CP3-CR062-DESIGN-CONTEXT"
+created_at: "2026-06-15T09:34:08+08:00"
+created_by: "host-orchestrator"
+status: "ready"
+read_profile: "compact"
+change_id: "CR-062"
+architecture_summary:
+  recommended_strategy: "gate-first fail-closed GitHub publication"
+  sequence:
+    - "CP2 / CP3 / CP5 approval"
+    - "post-approval read-only preflight and scan"
+    - "freeze commit manifest"
+    - "normal Git commit from approved allowlist"
+    - "configure remote candidate only if absent or non-conflicting"
+    - "push current branch without branch rename, tag or history rewrite"
+  remote_candidate: "git@github.com:hyde-zhao/quant-lab.git"
+  branch_policy: "do not rename branch; if target branch is ambiguous, stop and ask"
+  remote_conflict_policy: "if an existing remote differs from target, stop and ask; do not silently set-url"
+security_design:
+  fail_closed_scans:
+    - "secret pattern scan excluding .env*, data/**, reports/**, runs/** and external mounts"
+    - "data body/path boundary scan"
+    - "large file scan"
+    - "Git status include/exclude manifest review"
+  prohibited_even_after_gate:
+    - "tag creation"
+    - "branch rename"
+    - "history rewrite / force push"
+    - "remote deletion"
+    - "credential or .env read"
+    - "NAS / data lake / provider / catalog / runtime operations"
+    - "physical move / bulk import rewrite"
+    - "CR046 recovery"
+decision_summary:
+  pending_decisions:
+    - "DQ-CP3-CR062-01"
+    - "DQ-CP3-CR062-02"
+    - "DQ-CP3-CR062-03"
+    - "DQ-CP3-CR062-04"
+    - "DQ-CP3-CR062-05"
+traceability:
+  requirements_context: "process/context/CP2-CR062-REQUIREMENT-CONTEXT.yaml"
+  scope_doc: "docs/release/GIT-PUBLICATION-SCOPE-CR062.md"
+  manifest: "docs/release/REPOSITORY-PUBLICATION-MANIFEST-CR062.yaml"
+  scan_plan: "docs/release/PUBLICATION-SCAN-PLAN-CR062.md"
+  rollback_ref: "docs/release/ROLLBACK-REF-CR062.md"

@@ -1,0 +1,114 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR089-QMT-INTERFACE-VALIDATION-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "quant-lab-cr089"
+phase: "story-planning"
+checkpoint: "CP5"
+capsule_type: "cp5-lld"
+status: "ready"
+created_at: "2026-06-17T21:08:59+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-089"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整文档。"
+must_read:
+  - path: "process/checkpoints/CP2-CR089-QMT-INTERFACE-VALIDATION-BASELINE.md"
+    reason: "scope decisions"
+    required: true
+  - path: "process/checkpoints/CP3-CR089-QMT-INTERFACE-VALIDATION-HLD-REVIEW.md"
+    reason: "architecture decisions"
+    required: true
+  - path: "docs/qmt/CR089-STRATEGY-PACKAGE-NAS-DELIVERY-PLAN.md"
+    reason: "readiness and package/smoke contract"
+    required: true
+  - path: "process/checks/CR089-STARTUP-CONFLICT-PRECHECK-2026-06-17.md"
+    reason: "offline validation status and endpoint conflict risk"
+    required: true
+read_if_needed:
+  - path: "trading/qmt_client.py"
+    trigger: "需要评审 query_positions client semantics 时读取"
+  - path: "trading/qmt_runtime_cli.py"
+    trigger: "需要评审 user-run readonly CLI contract 时读取"
+  - path: "tests/test_cr020_query_positions_readonly.py"
+    trigger: "需要评审只读接口测试边界时读取"
+  - path: "process/STATE.md"
+    trigger: "需要核对 active_change、CR089 status 或 human gate"
+do_not_read_by_default:
+  - path_or_pattern: ".env*"
+    reason: "CP5 不读取凭据。"
+  - path_or_pattern: "NAS 实际挂载内容"
+    reason: "CP5 只评审 readiness，不发布或拉取 package。"
+  - path_or_pattern: "QMT / MiniQMT runtime"
+    reason: "CP5 不启动 runtime，后续只允许用户手工只读 smoke。"
+  - path_or_pattern: "账户原始持仓 / 成交 / 委托数据"
+    reason: "证据必须脱敏，只记录计数和状态。"
+key_facts:
+  scope_summary: "CP5 readiness 只准备 qmt_interface_smoke 策略包与只读 smoke 的执行边界；不授权 agent 代跑真实 QMT。"
+  accepted_decisions:
+    - "Strategy id qmt_interface_smoke."
+    - "Allowed endpoint is query_positions only, scope=qmt:positions:read."
+    - "Evidence must be redacted: run_id, status, endpoint_id, position_count, auth_status, redaction_status."
+  active_constraints:
+    - "No NAS publish, no trading_pc copy, no runtime start without a later explicit runtime authorization."
+    - "If user later runs commands, user must keep credentials local and return only redacted summary."
+    - "Endpoint matrix conflict must be resolved before code changes to query_positions failure precedence."
+  downstream_tasks:
+    - "After approval, produce local package skeleton or exact user-run checklist only if requested."
+    - "Run only offline tests unless user separately authorizes runtime."
+    - "Keep CR089 blocked until active CR policy is resolved."
+  traceability:
+    requirements:
+      - "R-CR089-04 readonly smoke evidence"
+    use_cases:
+      - "User validates QMT interface through minimal no-order smoke strategy."
+    scenarios:
+      - "manifest/checksum pass"
+      - "missing authorization fail closed"
+      - "query_positions returns redacted count"
+      - "transport unavailable without configured runtime"
+    stories:
+      - "CR089-S01-package-exchange-contract"
+      - "CR089-S02-qmt-interface-smoke-strategy-package"
+      - "CR089-S03-trading-pc-package-intake"
+      - "CR089-S04-readonly-qmt-interface-smoke"
+    features:
+      - "readonly-qmt-smoke"
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP5-CR089-01..07"
+  non_authorized_items:
+    - "agent-run QMT/MiniQMT"
+    - "NAS write/read/list/copy"
+    - "credential read"
+    - "submit/cancel/simulation/live"
+    - "raw account evidence"
+  risk_acceptance_items:
+    - "Offline validation can pass while real QMT remains unverified until user manual run."
+  open_questions:
+    - "User must later provide redacted smoke result if real interface validation is performed outside agent."
+  n_a_or_waived_items:
+    - "Full Story LLD N/A at this gate; CR089 is a gate/readiness package, not implementation execution yet."
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP5 auto precheck"
+    - "CP5 manual checkpoint"
+    - "human gate launch message"
+  exit_criteria:
+    - "Readiness decisions approved or revised"
+  blocked_if_missing:
+    - "CP2 and CP3 checkpoints"
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "docs/qmt/CR089-STRATEGY-PACKAGE-NAS-DELIVERY-PLAN.md"
+    - "process/checks/CR089-STARTUP-CONFLICT-PRECHECK-2026-06-17.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "CP5 readiness remains non-runtime."

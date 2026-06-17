@@ -1,0 +1,90 @@
+schema_version: "1.0"
+change_id: "CR-061"
+status: "active-cp5-approved-pending-implementation-authorization"
+created_at: "2026-06-15T07:29:19+08:00"
+execute_allowed_now: false
+execute_allowed_after_cp5_approval: false
+execution_mode: "gate-only"
+cp2_approval:
+  approved_by: "user"
+  approved_at: "2026-06-15T07:52:05+08:00"
+  approval_text: "同意"
+cp3_approval:
+  approved_by: "user"
+  approved_at: "2026-06-15T07:52:05+08:00"
+  approval_text: "同意"
+cp5_approval:
+  approved_by: "user"
+  approved_at: "2026-06-15T07:52:05+08:00"
+  approval_text: "同意"
+  approval_scope: "gate-only; no real package/import/layout changes authorized"
+source_commit:
+  short: "e7a3a0d"
+  full: "e7a3a0d7e66b3972b95c047f017790d9853625d0"
+git_state:
+  branch_policy: "preserve current branch; no branch rename in CR061"
+  remote_configured: false
+  dirty_worktree: true
+rollback_refs:
+  cr059_git_bundle:
+    path: "/mnt/quant-lab-cold/git-bundles/pre-cr059/local_backtest-pre-cr059-e7a3a0d.bundle"
+    verify_status: "PASS in CR059"
+    reuse_policy: "planning-only for CR061; refresh or risk-accept before implementation"
+  cr059_cold_backup:
+    path: "/mnt/quant-lab-cold/backups/pre-migration/cr059/repo-data-snapshot-20260614"
+    observed_size: "4.4G"
+    reuse_policy: "planning-only for CR061; data/NAS/lake migration requires separate refresh"
+preserve_audit_policy:
+  default: "preserve historical evidence"
+  protected_path_patterns:
+    - "process/**"
+    - "process/checks/**"
+    - "process/checkpoints/**"
+    - "process/handoffs/**"
+    - "process/stories/**"
+    - "process/context/**"
+    - "DEV-LOG.md"
+    - "checkpoints/**"
+  exemption_count: 0
+execution_items:
+  - action_id: "CR061-ACT-001"
+    candidate_ref: "CR061-CAND-001"
+    path: "pyproject.toml"
+    action: "metadata_update_candidate"
+    execution_status: "blocked-pending-cp5-and-rollback-ref"
+    execute_allowed_now: false
+  - action_id: "CR061-ACT-002"
+    candidate_ref: "CR061-CAND-002"
+    path: "uv.lock"
+    action: "uv_lock_regeneration_candidate"
+    execution_status: "blocked-pending-cp5-and-uv-command"
+    execute_allowed_now: false
+  - action_id: "CR061-ACT-003"
+    candidate_ref: "CR061-CAND-003..006"
+    path: "quant_lab/ compatibility namespace"
+    action: "compatibility_bridge_candidate"
+    execution_status: "blocked-pending-design-evidence"
+    execute_allowed_now: false
+blocked_items:
+  - action_id: "CR061-BLOCK-001"
+    path_pattern: "file move / rename / delete"
+    reason: "requires second execution authorization"
+  - action_id: "CR061-BLOCK-002"
+    path_pattern: "bulk import rewrite"
+    reason: "requires candidate manifest hash, rollback_ref and full dry-run"
+  - action_id: "CR061-BLOCK-003"
+    path_pattern: "git remote / push / tag / branch rename / history rewrite"
+    reason: "CR062 only"
+  - action_id: "CR061-BLOCK-004"
+    path_pattern: "NAS data / data lake / provider / catalog"
+    reason: "CR063 / CR064 only"
+  - action_id: "CR061-BLOCK-005"
+    path_pattern: "QMT / MiniQMT runtime and credentials"
+    reason: "CR065 or explicit CR046 recovery only"
+post_approval_execution_order:
+  - "Reconfirm git status and dirty worktree include/exclude."
+  - "Refresh rollback_ref or record explicit risk acceptance."
+  - "Freeze candidate manifest hash."
+  - "Implement only CP5-approved Batch B if separately authorized."
+  - "Run static import smoke and offline pytest subset/full run."
+  - "Prepare CP6 / CP7 evidence; do not push, access NAS/lake, provider, credentials, or runtime."

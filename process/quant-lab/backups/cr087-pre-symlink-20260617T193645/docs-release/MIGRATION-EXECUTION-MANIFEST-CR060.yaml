@@ -1,0 +1,124 @@
+schema_version: "1.0"
+change_id: "CR-060"
+status: "closed-current-delivery"
+created_at: "2026-06-15T06:43:41+08:00"
+execute_allowed_now: false
+execute_allowed_after_cp5_approval: true
+cp5_approval:
+  approved_by: "user"
+  approved_at: "2026-06-15T06:43:41+08:00"
+  approval_text: "同意"
+execution_result:
+  executed_at: "2026-06-15T06:43:41+08:00"
+  executed_by: "host-orchestrator"
+  execution_mode: "docs-only-direct-execution"
+  executed_actions:
+    - "CR060-ACT-001"
+    - "CR060-ACT-002"
+  skipped_actions:
+    - "file move / rename / delete"
+    - "repo-wide bulk rewrite"
+    - "pyproject/import/package rename"
+    - "MARKET_DATA_LAKE_ROOT replacement"
+    - "NAS data migration"
+    - "git remote add / push / tag / branch rename / history rewrite"
+    - "credential read"
+    - "QMT / MiniQMT runtime"
+cp8_approval:
+  approved_by: "user"
+  approved_at: "2026-06-15T07:14:03+08:00"
+  approval_text: "批准"
+  release_decision: "READY_WITH_RISK"
+source_commit:
+  short: "e7a3a0d"
+  full: "e7a3a0d7e66b3972b95c047f017790d9853625d0"
+git_state:
+  branch: "work/chapter3-factor-gap-remediation-20260608"
+  remote_origin: ""
+  remote_configured: false
+rollback_refs:
+  cr059_git_bundle:
+    path: "/mnt/quant-lab-cold/git-bundles/pre-cr059/local_backtest-pre-cr059-e7a3a0d.bundle"
+    verify_status: "PASS in CR059"
+    reuse_policy: "acceptable for CR060 gate because HEAD unchanged at manifest creation; refresh if HEAD changes before execution"
+  cr059_cold_backup:
+    path: "/mnt/quant-lab-cold/backups/pre-migration/cr059/repo-data-snapshot-20260614"
+    observed_size: "4.4G"
+    reuse_policy: "acceptable for docs-only repo-local rewrite; refresh before data/NAS/lake migration"
+preserve_audit_policy:
+  default: "preserve historical evidence"
+  protected_path_patterns:
+    - "process/**"
+    - "process/checks/**"
+    - "process/checkpoints/**"
+    - "process/handoffs/**"
+    - "process/stories/**"
+    - "process/context/**"
+    - "process/changes/CR-*.md"
+    - "DEV-LOG.md"
+    - "checkpoints/**"
+  exemption_count: 0
+execution_items:
+  - action_id: "CR060-ACT-001"
+    candidate_ref: "CR058-CAND-001"
+    path: "README.md"
+    action: "replace_text"
+    classification: "mechanical-candidate"
+    owner: "meta-doc / host-orchestrator"
+    risk: "medium"
+    execute_allowed_now: false
+    execute_allowed_after_cp5_approval: true
+    execution_status: "done"
+    source_evidence:
+      - "docs/release/CR058-CANDIDATE-LIST.md"
+      - "docs/release/PATH-REFERENCES-CR053.md"
+    required_edits:
+      - "Set first-viewport project identity to quant-lab."
+      - "State local_backtest as legacy alias / historical repository name, not future canonical identity."
+      - "Keep MARKET_DATA_LAKE_ROOT wording unchanged."
+      - "Do not rewrite historical CR / process references."
+    verification_rule: "rg review for local_backtest references in README.md; historical references may remain only where explicitly labeled legacy/historical."
+    rollback_ref_required: true
+  - action_id: "CR060-ACT-002"
+    candidate_ref: "CR058-CAND-002"
+    path: "docs/USER-MANUAL.md"
+    action: "replace_text"
+    classification: "mechanical-candidate"
+    owner: "meta-doc / host-orchestrator"
+    risk: "medium"
+    execute_allowed_now: false
+    execute_allowed_after_cp5_approval: true
+    execution_status: "done"
+    source_evidence:
+      - "docs/release/CR058-CANDIDATE-LIST.md"
+      - "docs/release/PATH-REFERENCES-CR053.md"
+    required_edits:
+      - "Set user-facing project root identity to quant-lab."
+      - "Preserve local_backtest as legacy alias and historical audit name."
+      - "Keep data lake and MARKET_DATA_LAKE_ROOT instructions unchanged."
+      - "Do not add real NAS credentials, token values or account facts."
+    verification_rule: "rg review for local_backtest references in docs/USER-MANUAL.md; remaining references must be legacy/historical or runtime variable context."
+    rollback_ref_required: true
+blocked_items:
+  - action_id: "CR060-BLOCK-001"
+    path_pattern: "process/**"
+    reason: "preserve-audit"
+  - action_id: "CR060-BLOCK-002"
+    path_pattern: "pyproject.toml / imports / package names"
+    reason: "requires CR061 package/import compatibility design"
+  - action_id: "CR060-BLOCK-003"
+    path_pattern: "MARKET_DATA_LAKE_ROOT and data lake roots"
+    reason: "requires CR064 data lake migration gate"
+  - action_id: "CR060-BLOCK-004"
+    path_pattern: "git remote / branch / tag / push"
+    reason: "requires CR062 git remote cutover gate"
+  - action_id: "CR060-BLOCK-005"
+    path_pattern: "NAS data migration"
+    reason: "requires CR063 NAS/archive migration gate"
+post_approval_execution_order:
+  - "Reconfirm git status and HEAD."
+  - "Apply only CR060-ACT-001 and CR060-ACT-002 text edits."
+  - "Run rg verification for local_backtest / quant-lab references in touched docs."
+  - "Run git diff --check."
+  - "Run CR tracking and human gate validation scripts."
+  - "Prepare CP6 / CP7 evidence; do not push or commit unless later authorized."

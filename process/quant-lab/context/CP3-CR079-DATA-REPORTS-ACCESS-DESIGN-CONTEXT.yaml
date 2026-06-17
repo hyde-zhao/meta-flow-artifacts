@@ -1,0 +1,36 @@
+context_id: CP3-CR079-DATA-REPORTS-ACCESS-DESIGN-CONTEXT
+change_id: CR-079
+created_at: "2026-06-17T05:56:16+08:00"
+created_by: host-orchestrator
+status: ready-for-human-gate
+read_profile: compact
+architecture_summary:
+  recommended_option: minimal read/list metadata inventory
+  roots:
+    target_root: /home/hyde/workspace/quant-lab
+    legacy_root: /home/hyde/workspace/local_backtest
+  allowed_after_approval:
+    - existence checks for reports/ and data/
+    - top-level listing with redaction review
+    - aggregate counts, size totals, mtime ranges
+  blocked:
+    - file content read
+    - data sample extraction
+    - content hash
+    - copy/restore/delete/move/rename
+    - provider/lake/catalog operations
+    - credentials and runtime operations
+must_read:
+  - process/changes/CR-079-REAL-DATA-REPORTS-ACCESS-GATE-2026-06-17.md
+  - process/checkpoints/CP3-CR079-DATA-REPORTS-ACCESS-DESIGN-REVIEW.md
+read_if_needed:
+  - process/checkpoints/CP3-CR076-DATA-REPORTS-POLICY-REVIEW.md
+do_not_read_by_default:
+  - reports/**
+  - data/**
+  - .env
+decision_summary:
+  pending_decision_count: 5
+  gate: CP3-CR079
+  recommendation: approve minimal metadata-only access design
+read_expansion_log: []

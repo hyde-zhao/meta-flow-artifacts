@@ -1,0 +1,68 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR075-ENV-SMOKE-DESIGN-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "CR075"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready"
+created_at: "2026-06-16T23:31:26+08:00"
+created_by: "host-orchestrator"
+source_cr: "process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读取本 capsule；CR075 CP3 只评审 env/smoke 方案和失败路径。"
+must_read:
+  - path: "process/checks/CP3-CR075-ENV-SMOKE-DESIGN-CONSISTENCY.md"
+    reason: "CR075 CP3 自动预检"
+    required: true
+  - path: "process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md"
+    reason: "推荐方案、备选方案、边界和回退"
+    required: true
+read_if_needed:
+  - path: "pyproject.toml"
+    trigger: "需要审计基础依赖和 dependency groups"
+do_not_read_by_default:
+  - path_or_pattern: ".env"
+    reason: "不得读取凭据"
+  - path_or_pattern: "reports/**"
+    reason: "CR075 不读取报告目录"
+  - path_or_pattern: "data/**"
+    reason: "CR075 不读取数据目录"
+key_facts:
+  scope_summary: "推荐方案为 uv sync 基础依赖 + quant_lab import smoke + CR061 package layout 小回归。"
+  accepted_decisions: []
+  active_constraints:
+    - "不运行 optional groups、full tests、provider/lake/catalog/runtime。"
+    - "失败时记录 BLOCKED，不自动清理 .venv。"
+  downstream_tasks:
+    - "发起 CP3 人工门禁。"
+  traceability:
+    requirements: ["CR075-candidate"]
+    use_cases: ["target runtime readiness"]
+    scenarios: ["minimal env rebuild", "import smoke"]
+    stories: []
+    features: []
+risks_and_decisions:
+  pending_human_decisions: ["DQ-CP3-CR075-01..05"]
+  non_authorized_items: ["NA-CR075-001..008"]
+  risk_acceptance_items: ["network dependency resolution after approval"]
+  open_questions: []
+  n_a_or_waived_items: ["HLD/ADR N/A：本轮为本机 target env gate，不改代码架构。"]
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output: ["CP3 manual checkpoint"]
+  exit_criteria: ["CP3 approved 前不执行 uv sync 或 smoke"]
+  blocked_if_missing: ["CR075 formal CR"]
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md"
+    - "pyproject.toml"
+  missing_sources: []
+  consistency_status: "pass"
+  notes: []

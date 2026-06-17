@@ -1,0 +1,107 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR071-DESIGN-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "local_backtest-cr071"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready"
+created_at: "2026-06-16T07:16:44+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-071"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整文档。"
+must_read:
+  - path: "process/changes/CR-071-COPY-FIRST-SHADOW-ROOT-MIGRATION-2026-06-16.md"
+    reason: "copy-first shadow root 架构边界"
+    required: true
+  - path: "docs/release/COPY-FIRST-SHADOW-ROOT-MIGRATION-PLAN-CR071.md"
+    reason: "执行设计与回退策略"
+    required: true
+  - path: "docs/release/COPY-FIRST-SHADOW-ROOT-MANIFEST-CR071.yaml"
+    reason: "命令、排除项和验证规则"
+    required: true
+read_if_needed:
+  - path: "docs/research/PROJECT-IDENTITY-MIGRATION.md"
+    trigger: "需要核对 quant-lab canonical name 与 legacy alias"
+  - path: "docs/release/MIGRATION-PLAN-CR053.md"
+    trigger: "需要核对迁移门禁历史基线"
+  - path: "docs/release/MIGRATION-EXECUTION-MANIFEST-CR060.yaml"
+    trigger: "需要核对前序 docs-only 迁移执行边界"
+do_not_read_by_default:
+  - path_or_pattern: ".git/config"
+    reason: "CP3 不需要读取或修改 remote 配置"
+  - path_or_pattern: ".env*"
+    reason: "凭据不属于设计输入"
+  - path_or_pattern: "reports/**"
+    reason: "本轮排除"
+  - path_or_pattern: "data/**"
+    reason: "本轮排除"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不是默认设计输入"
+key_facts:
+  scope_summary: "推荐架构为本机 copy-first shadow root：创建 sibling target，rsync archive copy，排除用户指定的大体积/敏感目录和 .env，保留 .git 以使目标成为完整本地工作树。"
+  accepted_decisions:
+    - "copy-first 优先于 rename/move，降低不可逆风险。"
+    - ".git 默认复制；remote write 仍不授权。"
+    - "不切换 MARKET_DATA_LAKE_ROOT，不调整 NAS，不恢复 CR046。"
+  active_constraints:
+    - "target root 若存在且非空则阻断。"
+    - "不使用 --delete，不执行旧目录清理。"
+    - "失败后不自动删除 partial target。"
+  downstream_tasks:
+    - "生成 CP3 Decision Brief，确认 copy-first 架构、.git 策略、target preflight 和回退边界。"
+    - "生成 CP5 readiness，冻结命令和验证。"
+  traceability:
+    requirements:
+      - "REQ-CR071-01"
+      - "REQ-CR071-02"
+      - "REQ-CR071-03"
+      - "REQ-CR071-04"
+    use_cases:
+      - "UC-CR071-01"
+    scenarios:
+      - "SC-CR071-01"
+      - "SC-CR071-02"
+      - "SC-CR071-03"
+    stories: []
+    features:
+      - "copy-first-shadow-root"
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP3-CR071-01..05"
+  non_authorized_items:
+    - "move/rename/delete old root"
+    - "remote Git write"
+    - "NAS/data lake/provider/catalog/runtime/credential"
+  risk_acceptance_items:
+    - "Copying .git preserves local repo state but also copies local Git config; no remote operation is performed."
+    - "Excluding data/reports means target root is not a complete artifact mirror."
+  open_questions: []
+  n_a_or_waived_items:
+    - "BLUEPRINT / DOMAIN-MAP / DEPENDENCY-MAP N/A：CR071 是 single-operation local migration gate，不引入新 domain model。"
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP3 auto precheck"
+    - "CP3 manual checkpoint"
+  exit_criteria:
+    - "CP3 checkpoint exists and human-gate validation passes"
+  blocked_if_missing:
+    - "CP2 context"
+    - "CR071 manifest"
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "process/changes/CR-071-COPY-FIRST-SHADOW-ROOT-MIGRATION-2026-06-16.md"
+    - "docs/release/COPY-FIRST-SHADOW-ROOT-MIGRATION-PLAN-CR071.md"
+    - "docs/release/COPY-FIRST-SHADOW-ROOT-MANIFEST-CR071.yaml"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "CP3 context records architecture decisions only; no target directory was created."

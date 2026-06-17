@@ -1,0 +1,115 @@
+schema_version: "1.0"
+change_id: "CR-059"
+status: "seed-only"
+created_at: "2026-06-14T23:59:58+08:00"
+execute_allowed: false
+backup_copy_status: "completed-for-cr059"
+backup_snapshot:
+  path: "/mnt/quant-lab-cold/backups/pre-migration/cr059/repo-data-snapshot-20260614"
+  observed_size: "4.4G"
+  includes:
+    - "data"
+    - "reports"
+    - "process"
+    - "docs"
+    - "notebooks"
+    - "runs"
+    - "code/config working tree excluding .env, .venv, node_modules, caches"
+  excludes:
+    - ".env"
+    - ".venv"
+    - "node_modules"
+    - ".pytest_cache"
+    - "__pycache__"
+git_bundle:
+  path: "/mnt/quant-lab-cold/git-bundles/pre-cr059/local_backtest-pre-cr059-e7a3a0d.bundle"
+  observed_size: "7.8M"
+  verify_status: "PASS"
+source_commit:
+  short: "e7a3a0d"
+  full: "e7a3a0d7e66b3972b95c047f017790d9853625d0"
+git_state:
+  branch: "work/chapter3-factor-gap-remediation-20260608"
+  remote_origin: ""
+  remote_configured: false
+nas_mounts:
+  hot:
+    export: "192.168.101.83:/volume3/quant-lab-hot"
+    mount_point: "/mnt/quant-lab-hot"
+    purpose: "staging/cache/preflight"
+  primary:
+    export: "192.168.101.83:/volume2/quant-lab-primary"
+    mount_point: "/mnt/quant-lab-primary"
+    purpose: "data-lake/research/process evidence"
+  cold:
+    export: "192.168.101.83:/volume1/quant-lab-cold"
+    mount_point: "/mnt/quant-lab-cold"
+    purpose: "backup/git-bundles/restore drills/cold archive"
+source_inventory_seed:
+  repo_code_to_github_candidates:
+    - path: "engine"
+      observed_size: "2.9M"
+      target_surface: "GitHub repo quant-lab"
+    - path: "market_data"
+      observed_size: "1.8M"
+      target_surface: "GitHub repo quant-lab"
+    - path: "experiments"
+      observed_size: "1.1M"
+      target_surface: "GitHub repo quant-lab"
+    - path: "strategies"
+      observed_size: "28K"
+      target_surface: "GitHub repo quant-lab"
+    - path: "scripts"
+      observed_size: "780K"
+      target_surface: "GitHub repo quant-lab"
+    - path: "tests"
+      observed_size: "not measured in CR059 seed"
+      target_surface: "GitHub repo quant-lab"
+    - path: "trading"
+      observed_size: "964K"
+      target_surface: "GitHub repo quant-lab"
+  nas_primary_candidates:
+    - path: "reports"
+      observed_size: "4.3G"
+      target_path: "/mnt/quant-lab-primary/research/reports"
+    - path: "process"
+      observed_size: "47M"
+      target_path: "/mnt/quant-lab-primary/process/cp-evidence"
+    - path: "docs"
+      observed_size: "1.3M"
+      target_path: "/mnt/quant-lab-primary/project/docs"
+    - path: "notebooks"
+      observed_size: "16K"
+      target_path: "/mnt/quant-lab-primary/research/notebooks"
+  data_lake_candidates:
+    - path: "data"
+      observed_size: "59M"
+      target_path: "/mnt/quant-lab-primary/data-lake"
+      root_switch_allowed: false
+  cold_backup_candidates:
+    - path: ".git"
+      target_path: "/mnt/quant-lab-cold/backups/repo"
+      action_allowed_now: false
+    - path: "reports"
+      target_path: "/mnt/quant-lab-cold/backups/research"
+      action_allowed_now: false
+    - path: "data"
+      target_path: "/mnt/quant-lab-cold/backups/data-lake"
+      action_allowed_now: false
+    - path: "process"
+      target_path: "/mnt/quant-lab-cold/backups/process"
+      action_allowed_now: false
+blocked_until_future_gate:
+  - "real file move / rename / delete"
+  - "bulk path reference rewrite"
+  - "data copy to NAS"
+  - "data lake root replacement"
+  - "git remote add / push / tag / branch rename"
+  - "credential read"
+  - "QMT / MiniQMT runtime"
+rollback_requirements_for_future_execution:
+  - "clean candidate manifest with action, source, target, owner, size, checksum policy and preserve-audit classification"
+  - "pre-execution git bundle exists for CR059; refresh under the next execution CR if HEAD changes"
+  - "pre-migration backup evidence exists for CR059; refresh under the next execution CR if source data changes"
+  - "restore drill or documented waived reason"
+  - "human gate approval for the specific execution CR"

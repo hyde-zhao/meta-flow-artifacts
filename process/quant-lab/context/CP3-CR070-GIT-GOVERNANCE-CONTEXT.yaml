@@ -1,0 +1,97 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR070-GIT-GOVERNANCE-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "local_backtest-cr070"
+phase: "documentation"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready"
+created_at: "2026-06-15T23:48:32+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-070"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整文档。"
+must_read:
+  - path: "process/changes/CR-070-GIT-REMOTE-GOVERNANCE-DEFAULT-BRANCH-CUTOVER-GATE-2026-06-15.md"
+    reason: "CR070 治理架构边界"
+    required: true
+  - path: "process/context/CP2-CR070-GIT-GOVERNANCE-CONTEXT.yaml"
+    reason: "CP2 范围上下文"
+    required: true
+  - path: "process/checkpoints/CP8-CR069-DELIVERY-READINESS.md"
+    reason: "CR070 来源与不授权项"
+    required: true
+read_if_needed:
+  - path: "docs/release/RELEASE-NOTES-CR067.md"
+    trigger: "需要核对 CR067 clean publication baseline 说明"
+  - path: "docs/release/RELEASE-NOTES-CR068.md"
+    trigger: "需要核对 CR068 forward-fix 说明"
+  - path: "process/changes/CR-062-GIT-REMOTE-CUTOVER-REPOSITORY-PUBLICATION-GATE-2026-06-15.md"
+    trigger: "需要核对禁止重开 current branch publication route 的原因"
+do_not_read_by_default:
+  - path_or_pattern: ".git/config"
+    reason: "本轮不需要读取本地 remote 配置细节"
+  - path_or_pattern: ".env*"
+    reason: "凭据不属于 CR070 本轮门禁生成范围"
+  - path_or_pattern: "reports/**"
+    reason: "历史报告正文不属于 CP3 默认输入"
+  - path_or_pattern: "runs/**"
+    reason: "历史运行产物不属于 CP3 默认输入"
+key_facts:
+  scope_summary: "CP3 只审查 CR070 的治理架构：计划优先、分阶段授权、fail-closed、不做远端写入。"
+  accepted_decisions:
+    - "CR070 不重开 CR062 current-branch publication route。"
+    - "CR067/CR068 已提供 clean publication / .gitignore forward-fix 背景，但本轮不新增远端提交。"
+  active_constraints:
+    - "Any future remote write requires explicit runtime_authorization."
+    - "No history rewrite, force push, remote deletion or set-url by default."
+    - "Default branch cutover remains a governance decision, not an implicit action."
+  downstream_tasks:
+    - "生成 CP3 Decision Brief 和人工门禁稿。"
+    - "等待用户确认治理架构或提出修改。"
+  traceability:
+    requirements:
+      - "CR070 Git governance architecture"
+    use_cases: []
+    scenarios:
+      - "No-op governance planning"
+      - "Future remote-write authorization must be separate"
+    stories: []
+    features: []
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP3-CR070-01..05"
+  non_authorized_items:
+    - "git remote add/set-url/push/tag"
+    - "branch rename/default branch governance/history rewrite/force push/remote deletion"
+    - "NAS/data lake/provider/catalog/runtime/credential"
+  risk_acceptance_items:
+    - "Remote repository branch/default branch residual risk remains unchanged in this turn."
+  open_questions: []
+  n_a_or_waived_items:
+    - "BLUEPRINT / DOMAIN-MAP / DEPENDENCY-MAP N/A: CR070 是 governance gate，不新增产品架构模块。"
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP3 checkpoint review draft"
+    - "CP3 human-gate launch message"
+  exit_criteria:
+    - "CP3 checkpoint file exists"
+    - "human-gate validation passes"
+  blocked_if_missing:
+    - "CP2 context"
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "process/changes/CR-070-GIT-REMOTE-GOVERNANCE-DEFAULT-BRANCH-CUTOVER-GATE-2026-06-15.md"
+    - "process/context/CP2-CR070-GIT-GOVERNANCE-CONTEXT.yaml"
+    - "process/checkpoints/CP8-CR069-DELIVERY-READINESS.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "No remote Git command or NAS operation was performed while generating this capsule."

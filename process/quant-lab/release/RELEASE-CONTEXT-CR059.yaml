@@ -1,0 +1,53 @@
+schema_version: "1.0"
+status: "approved"
+release_artifact_profile: "full"
+release_artifact_profile_reason: "CR059 涉及 NAS、systemd root unit、迁移 manifest seed 和真实迁移前置门禁。"
+release_decision: "READY_WITH_RISK"
+release_decision_scope: "迁移准备基础设施和一次 cold backup 已就绪；真实迁移仍未执行。"
+created_at: "2026-06-14T23:59:58+08:00"
+updated_at: "2026-06-14T23:59:58+08:00"
+approved_at: "2026-06-14T23:59:58+08:00"
+approved_by: "user"
+approval_result: "approved"
+source_gate: "CP8"
+change_id: "CR-059"
+context_id: "RELEASE-CONTEXT-CR059"
+release_scope:
+  included_artifacts:
+    - "ops/systemd/quant-lab-hot.mount"
+    - "ops/systemd/quant-lab-primary.mount"
+    - "ops/systemd/quant-lab-cold.mount"
+    - "docs/release/NAS-MOUNT-PLAN-CR059.md"
+    - "docs/release/NAS-DIRECTORY-MAP-CR059.md"
+    - "docs/release/MIGRATION-MANIFEST-SEED-CR059.yaml"
+    - "docs/release/BACKUP-POINT-PLAN-CR059.md"
+  excluded_scope:
+    - "real migration"
+    - "data copy"
+    - "lake root replacement"
+    - "git remote cutover"
+    - "QMT / MiniQMT runtime"
+quality_summary:
+  result: "PASS_WITH_RISK"
+  risks:
+    - "No reboot validation yet; future execution CR must re-run findmnt/systemctl checks."
+    - "No reboot validation yet; future execution CR must re-run findmnt/systemctl checks."
+non_authorized_items:
+  - "repo-local move / rename / delete"
+  - "bulk rewrite"
+  - "data copy / delete"
+  - "MARKET_DATA_LAKE_ROOT replacement"
+  - "git push / tag / branch rename / history rewrite"
+  - "credential read"
+  - "QMT / MiniQMT runtime"
+follow_up_summary:
+  next_recommended_cr: "CR060 real repo-local migration execution gate"
+  prerequisites_satisfied:
+    - "NAS mounts available"
+    - "systemd units enabled"
+    - "directory skeleton created"
+    - "manifest seed created"
+  prerequisites_remaining:
+    - "freeze execution manifest"
+    - "refresh git bundle / backup evidence if HEAD or source data changes"
+    - "run future CR human gate"

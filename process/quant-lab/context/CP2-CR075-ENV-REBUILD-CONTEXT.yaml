@@ -1,0 +1,68 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR075-ENV-REBUILD-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "CR075"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-06-16T23:31:26+08:00"
+created_by: "host-orchestrator"
+source_cr: "process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读取本 capsule；CR075 CP2 只冻结 target env rebuild / smoke 范围，不执行命令。"
+must_read:
+  - path: "process/checks/CP2-CR075-ENV-REBUILD-BASELINE.md"
+    reason: "CR075 CP2 自动预检"
+    required: true
+  - path: "process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md"
+    reason: "范围、不授权边界和验收标准"
+    required: true
+read_if_needed:
+  - path: "process/checks/CR074-ROOT-CUTOVER-VERIFICATION-2026-06-16.md"
+    trigger: "需要审计 target authoritative root 依据"
+do_not_read_by_default:
+  - path_or_pattern: ".env"
+    reason: "不得读取凭据"
+  - path_or_pattern: "reports/**"
+    reason: "CR075 不读取报告目录"
+  - path_or_pattern: "data/**"
+    reason: "CR075 不读取数据目录"
+key_facts:
+  scope_summary: "启动 CR075 target env rebuild and smoke；approved 前不执行 uv sync 或 smoke。"
+  accepted_decisions: []
+  active_constraints:
+    - "仅授权门禁文件创建；实际 env rebuild 仍需 CP2/CP3/CP5 approve。"
+    - "不访问 .env、reports、data、provider/lake/catalog、remote Git、QMT/MiniQMT。"
+  downstream_tasks:
+    - "发起 CP2 人工门禁。"
+  traceability:
+    requirements: ["CR075-candidate"]
+    use_cases: ["target runtime readiness"]
+    scenarios: ["dependency sync", "import smoke", "package layout smoke"]
+    stories: []
+    features: []
+risks_and_decisions:
+  pending_human_decisions: ["DQ-CP2-CR075-01..05"]
+  non_authorized_items: ["NA-CR075-001..008"]
+  risk_acceptance_items: ["dependency sync may create .venv and download packages after approval"]
+  open_questions: []
+  n_a_or_waived_items: ["Scenario Gray Areas N/A：用户明确启动 CR075，范围由 CR073/CR074 follow-up 定义。"]
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output: ["CP2 manual checkpoint"]
+  exit_criteria: ["CP2 approved 前不执行 target env rebuild"]
+  blocked_if_missing: ["CR075 formal CR", "CR tracking PASS"]
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md"
+    - "process/changes/CR-INDEX.yaml"
+  missing_sources: []
+  consistency_status: "pass"
+  notes: []

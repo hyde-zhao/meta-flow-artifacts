@@ -1,0 +1,73 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR083-REMOTE-PUSH-CONTEXT"
+project_id: "local_backtest"
+canonical_project_name: "quant-lab"
+workflow_id: "local_backtest-cr083"
+phase: "documentation"
+checkpoint: "CP5"
+capsule_type: "cp5-lld"
+status: "ready"
+created_at: "2026-06-17T10:45:39+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-083"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整文档。"
+must_read:
+  - path: "process/changes/CR-083-REMOTE-PUSH-PREFLIGHT-PUBLICATION-GATE-2026-06-17.md"
+    reason: "CP5 readiness and authorization"
+    required: true
+  - path: "process/context/CP2-CR083-REMOTE-PUSH-CONTEXT.yaml"
+    reason: "scope baseline"
+    required: true
+  - path: "process/context/CP3-CR083-REMOTE-PUSH-CONTEXT.yaml"
+    reason: "fail-closed design"
+    required: true
+read_if_needed:
+  - path: "process/checkpoints/CP2-CR083-REMOTE-PUSH-BASELINE.md"
+    trigger: "需要核对 CP2 Decision Brief"
+  - path: "process/checkpoints/CP3-CR083-REMOTE-PUSH-HLD-REVIEW.md"
+    trigger: "需要核对 CP3 Decision Brief"
+do_not_read_by_default:
+  - path_or_pattern: ".env*"
+    reason: "凭据不属于 CR083。"
+  - path_or_pattern: "data/**"
+    reason: "数据内容不属于 CR083。"
+  - path_or_pattern: "reports/**"
+    reason: "报告内容不属于 CR083。"
+key_facts:
+  local_commit: "d4d2881"
+  current_branch: "work/chapter3-factor-gap-remediation-20260608"
+  proposed_after_approval:
+    read_only_preflight:
+      - "git status --short --branch"
+      - "git branch --show-current"
+      - "git branch -vv"
+      - "git remote -v"
+      - "git log -1 --oneline"
+    user_output_rule:
+      - "Redact credentials or token-like substrings from remote URLs before reporting."
+      - "Do not write remote config."
+      - "Do not contact network remotes."
+    push_execution: "not authorized by default"
+  excluded_actions:
+    - "git fetch"
+    - "git ls-remote"
+    - "git push"
+    - "git remote add/set-url/delete"
+    - "git tag"
+    - "git merge/rebase/squash/amend/reset"
+    - "force push/history rewrite/default branch governance"
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP5-CR083-01..08"
+  risk_acceptance_items:
+    - "Remote/upstream metadata may expose repository identity; user-facing output must redact credentials."
+    - "Read-only preflight does not complete publication."
+read_expansion_log: []
+validation:
+  consistency_status: "pending-human-gate"

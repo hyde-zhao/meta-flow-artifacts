@@ -1,0 +1,27 @@
+schema_version: "1.0"
+context_id: "CP5-CR061-LLD-CONTEXT"
+status: "ready"
+created_at: "2026-06-15T07:29:19+08:00"
+read_profile: "compact"
+purpose: "CR061 package/import/layout implementation readiness gate context."
+key_facts:
+  - "CP5 approval will approve the CR061 candidate/design package, not execute real file moves."
+  - "execute_allowed_now=false and execute_allowed_after_cp5_approval=false in the manifest."
+  - "Implementation requires a later explicit step with rollback_ref, dirty manifest and candidate hash."
+must_read:
+  - "docs/release/MIGRATION-EXECUTION-MANIFEST-CR061.yaml"
+  - "docs/release/ROLLBACK-REF-CR061.md"
+  - "docs/release/CR061-PACKAGE-IMPORT-CANDIDATE-LIST.md"
+  - "docs/release/REPO-LOCAL-PACKAGE-LAYOUT-PLAN-CR061.md"
+risks_and_decisions:
+  - "Current worktree is dirty; user changes must not be overwritten."
+  - "CR059 bundle is stale-but-present and planning-only for CR061."
+  - "No Git remote/NAS/lake/runtime/credential authorization is granted."
+downstream_tasks:
+  - "If CP5 approved, next turn may prepare implementation design or request explicit implementation authorization."
+token_control:
+  full_doc_read_policy: "Read source files only when preparing implementation, not for this gate."
+  do_not_read_by_default:
+    - ".env"
+    - "/mnt/quant-lab-*/*"
+    - "provider config or credential bodies"

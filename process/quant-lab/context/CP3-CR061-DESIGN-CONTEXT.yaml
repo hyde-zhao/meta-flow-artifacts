@@ -1,0 +1,26 @@
+schema_version: "1.0"
+context_id: "CP3-CR061-DESIGN-CONTEXT"
+status: "ready"
+created_at: "2026-06-15T07:29:19+08:00"
+read_profile: "compact"
+purpose: "CR061 package/import/layout architecture gate context."
+key_facts:
+  - "Recommended architecture is staged compatibility-first."
+  - "Legacy import roots engine, market_data, strategies and trading remain valid during transition."
+  - "Optional quant_lab compatibility namespace is a later implementation candidate, not yet created."
+  - "Bulk physical relayout to src/quant_lab is deferred behind a second execution authorization."
+must_read:
+  - "docs/release/REPO-LOCAL-PACKAGE-LAYOUT-PLAN-CR061.md"
+  - "docs/release/CR061-PACKAGE-IMPORT-CANDIDATE-LIST.md"
+  - "docs/release/PRESERVE-AUDIT-DECISIONS-CR061.md"
+risks_and_decisions:
+  - "Bulk move can break many imports and CLI entrypoints."
+  - "trading/** overlaps with CR046 runtime semantics and must remain static-only."
+downstream_tasks:
+  - "If CP3 approved, proceed to CP5 implementation readiness gate."
+token_control:
+  full_doc_read_policy: "Read full scan outputs only if candidate rows are insufficient."
+  do_not_read_by_default:
+    - ".env"
+    - "NAS data bodies"
+    - "full historical process tree"

@@ -1,0 +1,67 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR083-REMOTE-PUSH-CONTEXT"
+project_id: "local_backtest"
+canonical_project_name: "quant-lab"
+workflow_id: "local_backtest-cr083"
+phase: "documentation"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready"
+created_at: "2026-06-17T10:45:39+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-083"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只有缺失、冲突、人工审计或深度评审时才读取完整文档。"
+must_read:
+  - path: "process/changes/CR-083-REMOTE-PUSH-PREFLIGHT-PUBLICATION-GATE-2026-06-17.md"
+    reason: "publication design options and stop conditions"
+    required: true
+  - path: "process/context/CP2-CR083-REMOTE-PUSH-CONTEXT.yaml"
+    reason: "baseline scope"
+    required: true
+read_if_needed:
+  - path: "process/checkpoints/CP2-CR083-REMOTE-PUSH-BASELINE.md"
+    trigger: "需要核对 CP2 Decision Brief"
+  - path: "process/checkpoints/CP5-CR078-GIT-PUBLICATION-READINESS.md"
+    trigger: "需要核对 CR078 push deferral"
+do_not_read_by_default:
+  - path_or_pattern: ".git/config"
+    reason: "remote URL 读取需 CP5 approve。"
+  - path_or_pattern: ".env*"
+    reason: "凭据不属于 CR083。"
+  - path_or_pattern: "data/**"
+    reason: "数据内容不属于 CR083。"
+  - path_or_pattern: "reports/**"
+    reason: "报告内容不属于 CR083。"
+key_facts:
+  architecture_recommendation: "two-step fail-closed remote publication: read-only local remote/upstream preflight first, then ask before push"
+  preflight_allowed_after_approval:
+    - "git status --short --branch"
+    - "git branch --show-current"
+    - "git branch -vv"
+    - "git remote -v with credential redaction in user-facing output"
+    - "git log -1 --oneline"
+  push_default: "not-authorized"
+  stop_conditions:
+    - "no upstream or ambiguous upstream"
+    - "unexpected branch target"
+    - "remote URL appears to embed credentials"
+    - "dirty worktree suggests wrong baseline"
+    - "any request for tag, force push, default branch, remote set-url, history rewrite"
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP3-CR083-01..07"
+  non_authorized_items:
+    - "git push"
+    - "fetch / ls-remote network contact"
+    - "remote add/set-url/delete"
+    - "default branch governance"
+    - "tag/force/history rewrite"
+read_expansion_log: []
+validation:
+  consistency_status: "pending-human-gate"

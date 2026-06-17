@@ -1,0 +1,73 @@
+context_id: CP8-CR080-DELIVERY-CONTEXT
+change_id: CR-080
+created_at: "2026-06-17T07:14:53+08:00"
+created_by: host-orchestrator
+status: ready
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - process/release/RELEASE-CONTEXT-CR080.yaml
+    - process/checks/CP6-CR080-DATA-REPORTS-RESTORE-CODING-DONE.md
+    - process/checks/CP7-CR080-DATA-REPORTS-RESTORE-VERIFICATION-DONE.md
+  read_if_needed:
+    - docs/quality/VERIFICATION-REPORT-CR080.md
+    - docs/quality/TEST-REPORT-CR080.md
+    - docs/quality/REVIEW-CR080.md
+    - docs/quality/FIXES-CR080.md
+    - docs/release/RELEASE-NOTES-CR080.md
+    - docs/release/DEPLOY-CHECKLIST-CR080.md
+    - docs/release/ROLLBACK-CR080.md
+    - docs/release/MIGRATION-CR080.md
+    - docs/release/FEEDBACK-CR080.md
+  do_not_read_by_default:
+    - reports/
+    - data/
+    - .env
+    - complete logs
+    - full diff
+  read_expansion_log: []
+scope_summary:
+  included:
+    - CR080 local restore/copy preflight
+    - CR080 local rsync execution from legacy retained assets to target authoritative root
+    - metadata-only verification and CR-scoped quality reports
+    - release readiness for current CR080 scope
+  excluded:
+    - content read, sample parse or checksum
+    - credentials and .env
+    - NAS/provider/lake/catalog
+    - remote Git and publish
+    - QMT/MiniQMT runtime and CR046 recovery
+    - old root retirement and destructive cleanup
+quality_summary:
+  cp2_manual_status: approved
+  cp3_manual_status: approved
+  cp5_manual_status: approved
+  cp6_status: PASS
+  cp7_status: PASS_WITH_RISK
+  release_decision: READY_WITH_RISK
+risks:
+  - id: R-CR080-001
+    severity: MEDIUM
+    status: pending-cp8-risk-acceptance
+    summary: metadata-only verification does not prove content hash or semantic quality.
+  - id: R-CR080-002
+    severity: LOW
+    status: pending-cp8-risk-acceptance
+    summary: NAS/provider/lake/catalog were not verified.
+  - id: R-CR080-003
+    severity: LOW
+    status: pending-cp8-risk-acceptance
+    summary: old root remains retained.
+recommended_decision:
+  decision: READY_WITH_RISK
+  next_gate: CP8 manual review
+  after_approve: close CR080 current restore/copy delivery; keep content validation, NAS/provider rebuild, CR077 and CR078 as separate follow-up items only if explicitly started.
+non_authorized_items:
+  - content read, sample print, parse or checksum
+  - credential or .env access
+  - NAS/provider/lake/catalog
+  - remote Git writes or publish
+  - QMT/MiniQMT runtime or CR046 recovery
+  - old root retirement or destructive cleanup

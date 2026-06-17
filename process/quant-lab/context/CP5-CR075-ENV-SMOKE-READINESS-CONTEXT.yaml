@@ -1,0 +1,68 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR075-ENV-SMOKE-READINESS-CONTEXT"
+project_id: "local_backtest"
+workflow_id: "CR075"
+phase: "story-planning"
+checkpoint: "CP5"
+capsule_type: "cp5-lld"
+status: "ready"
+created_at: "2026-06-16T23:31:26+08:00"
+created_by: "host-orchestrator"
+source_cr: "process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md"
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读取本 capsule；CR075 无 Story LLD，使用 env smoke readiness 替代 CP5 批次。"
+must_read:
+  - path: "process/checks/CP5-CR075-ENV-SMOKE-READINESS.md"
+    reason: "CR075 CP5 自动预检"
+    required: true
+  - path: "process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md"
+    reason: "执行边界和验收标准"
+    required: true
+read_if_needed:
+  - path: "tests/test_cr061_package_import_layout.py"
+    trigger: "需要审计 smoke 子集"
+do_not_read_by_default:
+  - path_or_pattern: ".env"
+    reason: "不得读取凭据"
+  - path_or_pattern: "reports/**"
+    reason: "CR075 不读取报告目录"
+  - path_or_pattern: "data/**"
+    reason: "CR075 不读取数据目录"
+key_facts:
+  scope_summary: "CP5 只确认执行 readiness；approved 前不执行 env rebuild。"
+  accepted_decisions: []
+  active_constraints:
+    - "三门 approved 且 preflight PASS 后才允许 uv sync 和最小 smoke。"
+    - "不授权 optional groups、full tests、data/reports、provider/lake/catalog/runtime。"
+  downstream_tasks:
+    - "发起 CP5 人工门禁。"
+  traceability:
+    requirements: ["CR075-candidate"]
+    use_cases: ["target runtime readiness"]
+    scenarios: ["preflight", "dependency sync", "import smoke", "pytest package layout smoke"]
+    stories: []
+    features: []
+risks_and_decisions:
+  pending_human_decisions: ["DQ-CP5-CR075-01..05"]
+  non_authorized_items: ["NA-CR075-001..008"]
+  risk_acceptance_items: ["smoke failure may leave .venv partial state; no automatic destructive cleanup"]
+  open_questions: []
+  n_a_or_waived_items: ["Story LLD N/A：无代码实现。"]
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output: ["CP5 manual checkpoint"]
+  exit_criteria: ["CP5 approved 前不执行 target env rebuild"]
+  blocked_if_missing: ["CP2 approved", "CP3 approved", "CR tracking PASS"]
+read_expansion_log: []
+validation:
+  generated_from_sources:
+    - "process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md"
+    - "tests/test_cr061_package_import_layout.py"
+  missing_sources: []
+  consistency_status: "pass"
+  notes: []

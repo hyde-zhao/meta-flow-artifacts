@@ -1,0 +1,40 @@
+schema_version: "1.0"
+context_id: "CP2-CR068-REPOSITORY-HYGIENE-CONTEXT"
+change_id: "CR-068"
+created_at: "2026-06-15T14:13:45+08:00"
+created_by: "host-orchestrator"
+status: "ready"
+context_type: "cp2-requirement"
+read_profile: "compact"
+purpose: "Minimal context for CR068 repo hygiene / .gitignore forward-fix baseline gate."
+must_read:
+  - "process/changes/CR-068-REPOSITORY-HYGIENE-GITIGNORE-FORWARD-FIX-2026-06-15.md"
+  - "process/checkpoints/CP8-CR067-DELIVERY-READINESS.md"
+  - "docs/release/RELEASE-NOTES-CR067.md"
+  - "process/changes/CR-INDEX.yaml"
+read_if_needed:
+  - ".gitignore"
+  - "process/release/RELEASE-CONTEXT-CR067.yaml"
+do_not_read_by_default:
+  - ".env"
+  - ".env.*"
+  - "data/**"
+  - "reports/**"
+  - "runs/**"
+  - "NAS / data lake / provider / catalog / runtime material"
+key_facts:
+  - "CR067 closed READY_WITH_RISK and published baseline to git@github.com:hyde-zhao/quant-lab.git master commit 495fcc495170454d709626dcde0923d8fa38c57a."
+  - "CR067 residual risk: .gitignore was omitted from public baseline."
+  - "CR068 CP2 only approves scope baseline; it does not authorize implementation."
+risks_and_decisions:
+  - id: "DQ-CP2-CR068-01..05"
+    status: "pending"
+    summary: "Scope, separation from branch governance, .gitignore candidate, CR062/CR046 boundaries and fail-closed policy require human approval."
+non_authorized_items:
+  - "No .gitignore modification before CP5 approval."
+  - "No clone/fetch/commit/push before CP5 approval."
+  - "No branch/default branch governance."
+  - "No NAS/lake/runtime/credential/CR046 recovery."
+token_control:
+  full_doc_read_policy: "Read compact CR067 evidence only; expand to full docs only for conflict audit."
+  read_expansion_log: []

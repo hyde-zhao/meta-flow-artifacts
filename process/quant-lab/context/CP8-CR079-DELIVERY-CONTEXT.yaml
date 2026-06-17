@@ -1,0 +1,79 @@
+context_id: CP8-CR079-DELIVERY-CONTEXT
+change_id: CR-079
+created_at: "2026-06-17T06:25:00+08:00"
+created_by: host-orchestrator
+status: ready
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - process/release/RELEASE-CONTEXT-CR079.yaml
+    - process/checks/CR079-DATA-REPORTS-ACCESS-INVENTORY-2026-06-17.md
+    - process/checks/CR079-DATA-REPORTS-ACCESS-VERIFICATION-2026-06-17.md
+  read_if_needed:
+    - process/changes/CR-079-REAL-DATA-REPORTS-ACCESS-GATE-2026-06-17.md
+    - process/checkpoints/CP2-CR079-DATA-REPORTS-ACCESS-BASELINE.md
+    - process/checkpoints/CP3-CR079-DATA-REPORTS-ACCESS-DESIGN-REVIEW.md
+    - process/checkpoints/CP5-CR079-DATA-REPORTS-ACCESS-READINESS.md
+  do_not_read_by_default:
+    - reports/
+    - data/
+    - .env
+    - complete diff
+    - complete logs
+  read_expansion_log: []
+scope_summary:
+  included:
+    - CR079 metadata-only inventory execution evidence
+    - CR079 CP7 verification evidence
+    - target/legacy reports/data existence and aggregate metadata result
+    - release readiness decision for current CR079 scope
+  excluded:
+    - file content read
+    - sample print
+    - parquet/csv/json parse
+    - content hash
+    - copy, restore, move, rename or delete
+    - .env or credential access
+    - provider fetch, lake write or catalog publish
+    - remote Git writes
+    - QMT/MiniQMT runtime
+    - CR046 recovery
+    - old root retirement
+quality_summary:
+  cp2_manual_status: approved
+  cp3_manual_status: approved
+  cp5_manual_status: approved
+  cp6_inventory_status: PASS_WITH_RISK
+  cp7_verification_status: PASS_WITH_RISK
+  release_decision: READY_WITH_RISK
+key_findings:
+  - target root /home/hyde/workspace/quant-lab lacks reports/ and data/.
+  - legacy root /home/hyde/workspace/local_backtest retains reports/ and data/ aggregate assets.
+  - CR079 did not perform real copy/restore and does not prove content quality.
+risks:
+  - id: R-CR079-01
+    severity: HIGH
+    status: pending-cp8-risk-acceptance
+    summary: target root lacks reports/ and data/.
+  - id: R-CR079-02
+    severity: MEDIUM
+    status: pending-cp8-risk-acceptance
+    summary: legacy retained assets exist, but content quality was not verified.
+  - id: R-CR079-03
+    severity: LOW
+    status: pending-cp8-risk-acceptance
+    summary: risk-name hits are filename-pattern indicators only, not content evidence.
+recommended_decision:
+  decision: READY_WITH_RISK
+  next_gate: CP8 manual review
+  after_approve: close CR079 current metadata-only delivery; keep restore/copy as a follow-up candidate.
+non_authorized_items:
+  - content read, sample print, parse or content hash
+  - copy, restore, compare content, move, rename or delete
+  - .env, token, password, cookie, session, private key, account or trading facts
+  - provider/lake/catalog/NAS promote
+  - remote Git writes
+  - QMT/MiniQMT runtime
+  - CR046 recovery
+  - old root retirement or cleanup

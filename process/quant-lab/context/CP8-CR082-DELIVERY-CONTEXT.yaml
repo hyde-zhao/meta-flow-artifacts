@@ -1,0 +1,49 @@
+version: 1
+context_id: CP8-CR082-DELIVERY-CONTEXT
+change_id: CR-082
+status: ready
+read_profile: compact
+created_at: '2026-06-17T09:36:23+08:00'
+owner: host-orchestrator
+summary:
+  objective: Close CR082 Process Ledger Project Namespace Normalization.
+  release_decision: READY_WITH_RISK
+  namespace_target: /home/hyde/workspace/process/quant-lab
+  process_symlink: /home/hyde/workspace/quant-lab/process -> ../process/quant-lab
+must_read:
+- process/checks/CP6-CR082-PROCESS-LEDGER-NAMESPACE-CODING-DONE.md
+- process/checks/CP7-CR082-PROCESS-LEDGER-NAMESPACE-VERIFICATION-DONE.md
+- docs/quality/VERIFICATION-REPORT-CR082.md
+- docs/release/RELEASE-NOTES-CR082.md
+read_if_needed:
+- process/checks/CR082-PROCESS-LEDGER-NAMESPACE-PREFLIGHT-2026-06-17.md
+- process/checks/CR082-PROCESS-LEDGER-NAMESPACE-EXECUTION-2026-06-17.md
+- docs/release/ROLLBACK-CR082.md
+- docs/release/MIGRATION-CR082.md
+do_not_read_by_default:
+- data/
+- reports/
+- .env
+- /home/hyde/workspace/process.backup-cr081-20260617T083645
+risks:
+- id: R-CR082-001
+  level: MEDIUM
+  status: open-for-risk-acceptance
+  summary: staged process/** removals remain for CR078 governance.
+- id: R-CR082-002
+  level: LOW
+  status: open-for-risk-acceptance
+  summary: future projects must follow namespace convention.
+- id: R-CR082-003
+  level: LOW
+  status: open-for-risk-acceptance
+  summary: historical CR081 evidence may mention flat root path.
+non_authorized:
+- Git commit / push / remote write / branch governance
+- data/reports content read or modification
+- credential read
+- NAS content operation
+- provider fetch / lake write / catalog publish
+- QMT/MiniQMT runtime or CR046 recovery
+- backup deletion or destructive cleanup
+read_expansion_log: []
