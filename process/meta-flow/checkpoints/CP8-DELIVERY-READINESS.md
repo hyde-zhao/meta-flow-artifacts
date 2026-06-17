@@ -2,11 +2,11 @@
 checkpoint_id: "CP8"
 checkpoint_name: "Delivery Readiness"
 type: "auto_then_manual"
-status: "pending"
+status: "approved"
 owner: "host-orchestrator"
 created_at: "2026-06-17T13:49:25+08:00"
-reviewed_by: ""
-reviewed_at: ""
+reviewed_by: "user"
+reviewed_at: "2026-06-17T14:04:19+08:00"
 auto_check_result: "process/checks/CP8-DELIVERY-READINESS.md"
 target:
   phase: "documentation"
@@ -74,7 +74,7 @@ target:
 |---|---|---|---|---|---|
 | 关闭范围 | CLOSE-01 | closed | CR-018..CR-028 进入本轮交付就绪范围 | `process/checkpoints/CP8-DELIVERY-READINESS.md` | 由 CP8 人工确认决定是否进入 delivered |
 | 不授权范围 | NA-01 | not-authorized | 不进入本轮执行授权 | `process/release/RELEASE-CONTEXT.yaml` | 外部 SaaS、凭据、trace upload、publish/live、production write、删除 artifact repo |
-| 风险接受项 | RA-01 | pending | 用户接受后以 `READY_WITH_RISK` 放行 | `process/checkpoints/CP8-DELIVERY-READINESS.md` | eval parser、symlink 依赖、policy-only adapter |
+| 风险接受项 | RA-01 | accepted-risk | 用户已接受，以 `READY_WITH_RISK` 放行 | `process/checkpoints/CP8-DELIVERY-READINESS.md` | eval parser、symlink 依赖、policy-only adapter |
 | 后续 CR 候选项 | CR-FOLLOW-01 | none | 当前不创建候选；由观察阈值触发 | `docs/release/FEEDBACK.md` | 无 open follow-up candidate |
 | 取消 / deferred 项 | DEF-01 | deferred | 外部 adapter 真运行延期到 runtime_authorization | `docs/release/FEEDBACK.md` | 不由 CP8 approve 授权 |
 
@@ -82,42 +82,42 @@ target:
 
 | 条目 | 状态 | 证据 | 审查意见 |
 |---|---|---|---|
-| 自动预检通过 | 待审查 | `process/checks/CP8-DELIVERY-READINESS.md` |  |
-| Release context 可读 | 待审查 | `process/release/RELEASE-CONTEXT.yaml` |  |
-| Release docs 可读 | 待审查 | `docs/release/*` |  |
+| 自动预检通过 | approved | `process/checks/CP8-DELIVERY-READINESS.md` | 用户回复“同意” |
+| Release context 可读 | approved | `process/release/RELEASE-CONTEXT.yaml` | 用户回复“同意” |
+| Release docs 可读 | approved | `docs/release/*` | 用户回复“同意” |
 
 ## Checklist
 
 | # | 检查项 | 审查结果 | 证据 | 审查意见 |
 |---|---|---|---|---|
-| 1 | 是否接受 `READY_WITH_RISK` 结论 | 待审查 | CP8-DQ-01 |  |
-| 2 | 是否确认 CP8 approve 不授权真实运行 | 待审查 | CP8-DQ-02 |  |
-| 3 | 是否确认无 immediate follow-up CR | 待审查 | CP8-DQ-03 |  |
-| 4 | release docs 是否覆盖部署、迁移、回滚、反馈 | 待审查 | `docs/release/*` |  |
+| 1 | 是否接受 `READY_WITH_RISK` 结论 | approved | CP8-DQ-01 | 接受 `READY_WITH_RISK` |
+| 2 | 是否确认 CP8 approve 不授权真实运行 | approved | CP8-DQ-02 | 确认不授权真实发布、外部 SaaS、凭据、trace、publish/live、production 写入或删除 artifact repo |
+| 3 | 是否确认无 immediate follow-up CR | approved | CP8-DQ-03 | 当前不创建后续 CR，由观察阈值触发 |
+| 4 | release docs 是否覆盖部署、迁移、回滚、反馈 | approved | `docs/release/*` | 接受当前 release docs |
 
 ## Exit Criteria
 
 | 条目 | 审查结果 | 证据 | 审查意见 |
 |---|---|---|---|
-| CP8 人工结论明确 | 待审查 | `approve / 修改: <具体修改点> / reject` |  |
-| 风险接受项已分类 | 待审查 | RA-01 |  |
-| 不授权项已列明 | 待审查 | NA-01 |  |
+| CP8 人工结论明确 | approved | 用户回复“同意” | 等同 `approve` |
+| 风险接受项已分类 | approved | RA-01 | accepted-risk |
+| 不授权项已列明 | approved | NA-01 | not-authorized |
 
 ## Deliverables
 
 | 交付物 | 路径 | 审查结果 | 审查意见 |
 |---|---|---|---|
-| Release context | `process/release/RELEASE-CONTEXT.yaml` | 待审查 |  |
-| Release notes | `docs/release/RELEASE-NOTES.md` | 待审查 |  |
-| Deploy checklist | `docs/release/DEPLOY-CHECKLIST.md` | 待审查 |  |
-| Rollback | `docs/release/ROLLBACK.md` | 待审查 |  |
-| Migration | `docs/release/MIGRATION.md` | 待审查 |  |
-| Feedback | `docs/release/FEEDBACK.md` | 待审查 |  |
+| Release context | `process/release/RELEASE-CONTEXT.yaml` | approved |  |
+| Release notes | `docs/release/RELEASE-NOTES.md` | approved |  |
+| Deploy checklist | `docs/release/DEPLOY-CHECKLIST.md` | approved |  |
+| Rollback | `docs/release/ROLLBACK.md` | approved |  |
+| Migration | `docs/release/MIGRATION.md` | approved |  |
+| Feedback | `docs/release/FEEDBACK.md` | approved |  |
 
 ## 人工审查结果
 
-- 结论：`pending`
-- 审查人：
-- 审查时间：
-- 修改意见：
-- 风险接受项：
+- 结论：`approved`
+- 审查人：user
+- 审查时间：2026-06-17T14:04:19+08:00
+- 修改意见：无；用户回复“同意”，按 `approve` 处理。
+- 风险接受项：接受 `READY_WITH_RISK`；残余风险为 eval runner 保守 YAML-like parser、process/docs artifact symlink 依赖、外部 adapters policy-only。

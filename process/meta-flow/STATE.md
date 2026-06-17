@@ -2,13 +2,13 @@
 project_id: "meta-flow"
 workflow_mode: "standard"
 orchestration_model: "host-orchestrated"
-current_phase: "documentation"
+current_phase: "delivered"
 current_agent: "host-orchestrator"
 iteration: 13
 blocked: false
 active_change: ""
-last_action: "发起 CP8 Delivery Readiness 人工审查：自动预检 PASS，human-gate 校验 PASS，等待用户对 READY_WITH_RISK 和不授权边界做最终确认"
-next_action: "等待用户回复 CP8：approve、修改: <具体修改点> 或 reject"
+last_action: "CP8 Delivery Readiness 已获用户同意：接受 READY_WITH_RISK、确认不授权真实运行、当前无 immediate follow-up CR；工作流推进到 delivered"
+next_action: "delivered；等待后续新请求或观察阈值触发新的 CR"
 orchestrator_session:
   kind: "host"
   role: "host-orchestrator"
@@ -16,25 +16,19 @@ orchestrator_session:
   agent_id: ""
   agent_name: ""
   thread_id: ""
-  status: "awaiting-user"
+  status: "active"
   workflow_id: "meta-flow"
   active_change: ""
-  pending_gate: "CP8"
-  pending_checklist_path: "process/checkpoints/CP8-DELIVERY-READINESS.md"
-  pending_user_decision: "approve | 修改: <具体修改点> | reject"
-  pending_decision_ids: ["CP8-DQ-01", "CP8-DQ-02", "CP8-DQ-03"]
-  pending_non_authorized_items:
-    - "External SaaS execution"
-    - "Credentials"
-    - "Trace upload"
-    - "Publish / live operation"
-    - "Production target project write"
-    - "Replacing or deleting user-provided artifact directories outside the approved symlink targets"
+  pending_gate: ""
+  pending_checklist_path: ""
+  pending_user_decision: ""
+  pending_decision_ids: []
+  pending_non_authorized_items: []
   subagent_auto_dispatch: "enabled"
   resume_instruction: "用户回复人工检查点结论后，由 Host Orchestrator 主进程重新读取 STATE、checkpoint 和相关产物后继续；不得 spawn / resume 编排子 agent"
   spawned_at: ""
   last_seen_at: "2026-06-17T09:43:49+08:00"
-  awaiting_since: "2026-06-17T13:49:25+08:00"
+  awaiting_since: ""
   resumed_at: ""
   closed_at: ""
   previous_agent_id: ""
@@ -97,9 +91,9 @@ context_budget:
       missing_or_waived_reason: ""
     cp8_delivery:
       path: "process/context/CP8-DELIVERY-CONTEXT.yaml"
-      status: "pending"
+      status: "ready"
       read_profile: "compact"
-      generated_at: ""
+      generated_at: "2026-06-17T13:49:25+08:00"
       missing_or_waived_reason: ""
   read_expansion_log: []
 workflow_health:
@@ -138,9 +132,14 @@ checkpoints:
   requirement_confirmed: false
   hld_confirmed: true
   story_package_confirmed: true
-  final_review_confirmed: false
+  final_review_confirmed: true
 parallel_waves: []
 history:
+  - at: "2026-06-17T14:04:19+08:00"
+    actor: "host-orchestrator"
+    action: "approve-cp8-and-deliver"
+    phase: "delivered"
+    summary: "用户回复“同意”，按 CP8 approve 处理：接受 READY_WITH_RISK，确认 CP8 不授权真实发布、外部 SaaS、凭据、trace upload、publish/live、production 写入或删除 artifact repo，并确认当前无 immediate follow-up CR；工作流推进到 delivered。"
   - at: "2026-06-17T13:49:25+08:00"
     actor: "host-orchestrator"
     action: "launch-cp8-delivery-readiness-gate"
