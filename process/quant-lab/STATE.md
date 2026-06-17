@@ -5,11 +5,11 @@ current_phase: documentation
 current_agent: host-orchestrator
 active_change: "CR-046"
 active_story: ''
-iteration: 521
+iteration: 527
 blocked: false
 blocked_reason: ''
-last_action: 已按 CR089 已批准但未授权 runtime 的边界，实现本地离线 `qmt_interface_smoke` 策略包骨架、manifest、checksum、QMT terminal / MiniQMT runner target 说明、人工 intake checklist、脱敏证据模板、本地文件级 checker、pytest 回归、CR089 规划文档、实现证据和恢复上下文；未访问 NAS 内容，未读取 .env/凭据，未启动 QMT/MiniQMT/XtQuant/gateway，未查询账户或执行 submit/cancel/simulation/live，未恢复 CR020，未激活 CR089，未推进 CR046。
-next_action: "允许的下一步仅限在当前仓库或交易主机本地缓存执行文件级 offline intake / checksum / manifest 校验；真实 NAS publish/pull/list/copy/delete、QMT/MiniQMT/XtQuant/gateway 启动、凭据读取、账户原文查询、submit/cancel/simulation/live 仍需独立 runtime authorization。清上下文后先读 process/context/CP6-CR089-QMT-INTERFACE-SMOKE-PACKAGE-CONTEXT.yaml。"
+last_action: 用户要求为 QMT strategy runner 制定“先研究、再确定方案、最后再实施”的 CR 计划；已新增 `process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md`，并将 CR091 登记为 `blocked-research-plan-recorded`。本轮只落盘计划，不启动研究、不形成 HLD/LLD、不实现 runner、不访问 NAS、不读取 `.env` / 凭据 / 账户、不启动 QMT/MiniQMT/XtQuant/gateway、不执行账户查询、submit/cancel、simulation/live；CR046 仍是顶层 active formal CR，CR089 仍为 blocked-readiness-approved，CR020 仍为 deleted-by-user。
+next_action: "等待用户明确启动 CR091 Phase 1 Research / Spike；启动前仍需确认 CR046/CR089 重叠关系和后续 CP2/CP3/CP5 门禁。若用户后续要求下单接口验证，应另起 CR092 类高风险订单写接口门禁；不得把 CR091 计划落盘解释为 runtime、NAS、凭据、账户、下单、模拟盘或实盘授权。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -126,7 +126,7 @@ artifact_routing:
 cr_tracking:
   status: "active-formal-cr"
   index_path: process/changes/CR-INDEX.yaml
-  last_consistency_check: 'PASS at 2026-06-17T22:11:35+08:00 via PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_cr_tracking_consistency.py --project-root /home/hyde/workspace/quant-lab; CR089 local offline qmt_interface_smoke package skeleton is ready while CR089 remains blocked-readiness-approved. Top-level active_change remains CR046; CR020 remains deleted-by-user; no remote Git, .env, NAS runtime operation, CR046 recovery, QMT/MiniQMT/XtQuant/gateway connection, credential/account read, submit/cancel/simulation/live or cleanup executed.'
+  last_consistency_check: 'PASS at 2026-06-18T00:32:10+08:00 via PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_cr_tracking_consistency.py --project-root /home/hyde/workspace/quant-lab; CR091 QMT strategy runner research/design/implementation plan recorded as blocked-research-plan-recorded while CR046 remains top-level active_change and CR089 remains blocked-readiness-approved. No research execution, HLD/LLD, runner implementation, NAS access, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway startup, account query, submit/cancel, simulation/live, CR046 recovery or CR020 recovery executed.'
   active_crs:
   - id: CR-046
     title: QMT and MiniQMT Dual-Target Strategy Delivery Framework
@@ -1617,6 +1617,38 @@ cr_tracking:
     next_gate: local offline package skeleton or independent runtime authorization
     next_action: Prepare only local offline qmt_interface_smoke package skeleton / manifest / checksum docs and manual smoke guide; no NAS/QMT/credential/account/trading action authorized.
     last_checked_at: '2026-06-17T21:34:53+08:00'
+  - id: CR-091
+    title: QMT Strategy Runner Research / Design / Implementation Plan
+    status: blocked-research-plan-recorded
+    source_tracking: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
+    formal_cr_path: process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md
+    parent_cr: CR-089
+    source_checkpoint: current conversation
+    source_decision_id: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
+    priority: 1
+    blocked_by: 'CR046 remains active-cp6-pass-ready-for-verification and overlaps strategy package contract, MiniQMT runner design, trading runtime boundary and per-run authorization. CR089 remains blocked-readiness-approved. CR091 is only a recorded plan for research -> solution decision -> implementation and does not authorize research execution, NAS/QMT/credential/account/trading runtime actions, submit/cancel, simulation or live.'
+    impact_surface:
+    - QMT strategy runner
+    - runner research spike
+    - strategy package intake
+    - immutable local cache
+    - active package pointer
+    - readonly gateway query_positions
+    - runtime_authorization
+    - credential_boundary
+    - order_write_future_gate
+    conflict_keys:
+    - strategy_package_contract
+    - miniqmt_runner_install
+    - trading_runtime_boundary
+    - per_run_authorization
+    - credential_boundary
+    - nas_package_exchange
+    - qmt_strategy_runner
+    - order_write_excluded
+    next_gate: CR091 Phase 1 Research / Spike authorization
+    next_action: 等待用户明确启动 CR091 研究阶段；启动前不研究外部项目细节、不写 HLD/LLD、不实现 runner、不访问 NAS、不启动 QMT/MiniQMT/XtQuant/gateway、不读取凭据或账户、不执行 submit/cancel/simulation/live。
+    last_checked_at: '2026-06-18T00:28:26+08:00'
   follow_up_candidates:
   - id: CR-026
     title: Qlib isolated runner optional Spike (narrowed after CR030-039 coverage)
@@ -8164,11 +8196,18 @@ checkpoints:
       scoped_diff_check_status: PASS
       final_verified_at: '2026-06-17T22:11:35+08:00'
       formal_cp6_runtime_claimed: false
-      runtime_authorized: false
+      runtime_authorized: true
+      runtime_authorization_scope: user-manual-query_positions-readonly-only
+      runtime_authorization_ref: runs/RUN-EXEC-20260617-002.md
+      runtime_authorization_at: '2026-06-17T22:40:30+08:00'
+      runtime_required_scope: qmt:positions:read
       nas_operation_authorized: false
       credential_read_authorized: false
-      account_query_authorized: false
+      query_positions_readonly_authorized: true
+      account_raw_query_authorized: false
       trade_write_authorized: false
+      agent_runtime_execution_authorized: false
+      raw_account_output_authorized: false
   cr086_ledger_convergence_gate:
     type: cp2-cp3-cp5-ledger-convergence-gate
     status: closed-current-delivery

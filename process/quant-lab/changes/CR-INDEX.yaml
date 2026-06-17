@@ -1,6 +1,6 @@
 version: 1
 status: "active-formal-cr"
-updated_at: '2026-06-17T20:10:23+08:00'
+updated_at: '2026-06-18T00:32:10+08:00'
 owner: meta-po
 source: >
   CR-046 started by user target change to terminal-native simulation strategy export,
@@ -94,7 +94,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: 'PASS at 2026-06-17T21:34:53+08:00 via PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_cr_tracking_consistency.py --project-root /home/hyde/workspace/quant-lab; CR089 CP2/CP3/CP5 approved as blocked-readiness-approved. Top-level active_change remains CR046; CR020 remains deleted-by-user; no remote Git, .env, data/reports/NAS runtime operation, CR046 recovery, QMT/MiniQMT connection, credential/account read or cleanup executed.'
+last_consistency_check: 'PASS at 2026-06-18T00:32:10+08:00 via PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_cr_tracking_consistency.py --project-root /home/hyde/workspace/quant-lab; CR091 QMT strategy runner research/design/implementation plan recorded as blocked-research-plan-recorded while CR046 remains top-level active_change and CR089 remains blocked-readiness-approved. No research execution, HLD/LLD, runner implementation, NAS access, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway startup, account query, submit/cancel, simulation/live, CR046 recovery or CR020 recovery executed.'
 root_authority:
   status: logical-cutover-complete
   authoritative_root: /home/hyde/workspace/quant-lab
@@ -1715,6 +1715,38 @@ blocked_crs:
   next_gate: local offline package skeleton or independent runtime authorization
   next_action: Prepare only local offline qmt_interface_smoke package skeleton / manifest / checksum docs and manual smoke guide; no NAS/QMT/credential/account/trading action authorized.
   last_checked_at: '2026-06-17T21:34:53+08:00'
+- id: CR-091
+  title: QMT Strategy Runner Research / Design / Implementation Plan
+  status: blocked-research-plan-recorded
+  source_tracking: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
+  formal_cr_path: process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md
+  parent_cr: CR-089
+  source_checkpoint: current conversation
+  source_decision_id: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
+  priority: 1
+  blocked_by: 'CR046 remains active-cp6-pass-ready-for-verification and overlaps strategy package contract, MiniQMT runner design, trading runtime boundary and per-run authorization. CR089 remains blocked-readiness-approved. CR091 is only a recorded plan for research -> solution decision -> implementation and does not authorize research execution, NAS/QMT/credential/account/trading runtime actions, submit/cancel, simulation or live.'
+  impact_surface:
+  - QMT strategy runner
+  - runner research spike
+  - strategy package intake
+  - immutable local cache
+  - active package pointer
+  - readonly gateway query_positions
+  - runtime_authorization
+  - credential_boundary
+  - order_write_future_gate
+  conflict_keys:
+  - strategy_package_contract
+  - miniqmt_runner_install
+  - trading_runtime_boundary
+  - per_run_authorization
+  - credential_boundary
+  - nas_package_exchange
+  - qmt_strategy_runner
+  - order_write_excluded
+  next_gate: CR091 Phase 1 Research / Spike authorization
+  next_action: 等待用户明确启动 CR091 研究阶段；启动前不研究外部项目细节、不写 HLD/LLD、不实现 runner、不访问 NAS、不启动 QMT/MiniQMT/XtQuant/gateway、不读取凭据或账户、不执行 submit/cancel/simulation/live。
+  last_checked_at: '2026-06-18T00:28:26+08:00'
 follow_up_candidates:
 - id: "CR-026"
   title: Qlib isolated runner optional Spike (narrowed after CR030-039 coverage)

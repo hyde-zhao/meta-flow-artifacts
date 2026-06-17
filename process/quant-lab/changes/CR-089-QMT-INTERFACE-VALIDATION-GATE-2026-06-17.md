@@ -188,6 +188,74 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 
 本实现只完成本地离线策略包骨架、manifest、checksum、目标说明、人工 intake checklist、脱敏证据模板和本地文件级 checker。它不表示 CR089 已 active，不表示 formal CP6 runtime PASS，不表示 QMT 接口已验证，也不授权 NAS publish/pull/list/copy/delete、凭据读取、QMT/MiniQMT/XtQuant/gateway 启动、账户原文查询、submit/cancel、simulation 或 live。
 
+## Runtime Smoke 授权记录
+
+| 字段 | 内容 |
+|---|---|
+| 授权时间 | 2026-06-17T22:40:30+08:00 |
+| 授权记录 | `runs/RUN-EXEC-20260617-002.md` |
+| 授权范围 | 仅允许用户本人在交易主机手工执行 `qmt_interface_smoke` 的 `query_positions` 只读验证 |
+| required scope | `qmt:positions:read` |
+| agent 权限 | 不授权 agent 读取 `.env`、账号、密码、token、session 或 QMT 凭据；不授权 agent 代跑 runtime |
+| 输出限制 | 不授权输出账户、持仓、资金、委托、成交或日志原文；只允许回填脱敏摘要 |
+| 交易写入 | 不授权 `submit_order`、`cancel_order`、simulation、live |
+| CR 状态影响 | 不激活 CR089，不恢复 CR046 CP7，不恢复 CR020；仅登记本次手工 runtime smoke 许可 |
+
+## Runtime Smoke server diagnostics 记录
+
+| 字段 | 内容 |
+|---|---|
+| 执行记录 | `runs/RUN-EXEC-20260617-003.md` |
+| 用户执行命令 | `uv run --with typer --python 3.11 python -m trading.qmt_runtime_cli server-diagnostics --env-file .env --host 127.0.0.1 --port 18765 --runtime-authorization-ref cr089-runtime-smoke-20260617-query-positions` |
+| 诊断结果 | PASS：`status=ok`、`schema_version=cr020-runtime-manual-validation-v1`、`secrets_redacted=true` |
+| 配置摘要 | `host=127.0.0.1`、`port=18765`、`allowed_source=127.0.0.1/32`、`runtime_authorization_ref=cr089-runtime-smoke-20260617-query-positions` |
+| 脱敏摘要 | `client_secret_ref=[REDACTED]`；`client_id_hash` 与 `account_ref` 具体哈希值未落库；`miniqmt_path_configured=true`；`xtquant_site_packages_configured=true` |
+| 结论边界 | 仅证明 `.env` 配置加载与公开诊断脱敏通过；不证明 gateway 已启动，不证明 XtQuant / MiniQMT 已连接，不证明 `query_positions` 已通过 |
+| CR 状态影响 | 不激活 CR089，不恢复 CR046 CP7，不恢复 CR020 |
+
+## Runtime Smoke gateway serve health 记录
+
+| 字段 | 内容 |
+|---|---|
+| 执行记录 | `runs/RUN-EXEC-20260617-004.md` |
+| 用户执行命令 | `uv run --with typer --python 3.11 python -m trading.qmt_runtime_cli serve --env-file .env --host 127.0.0.1 --port 18765 --runtime-authorization-ref cr089-runtime-smoke-20260617-query-positions` |
+| 初始 health 结果 | PASS：`status=starting`，`health.status=ok`、`health.session_ready=true`、`health.session_state=ready`、`health.blocked_reason` 为空、`health.runtime_status=xtquant-ready` |
+| 配置摘要 | `host=127.0.0.1`、`port=18765`、`allowed_source=127.0.0.1/32`、`runtime_authorization_ref=cr089-runtime-smoke-20260617-query-positions` |
+| 脱敏摘要 | `client_secret_ref=[REDACTED]`；`client_id_hash` 与 `account_ref` 具体哈希值未落库；`miniqmt_path_configured=true`；`xtquant_site_packages_configured=true` |
+| 结论边界 | 仅证明 gateway `serve` 初始 health 和 QMT / MiniQMT session ready gate 通过；不证明 `query_positions` 已通过 |
+| CR 状态影响 | 不激活 CR089，不恢复 CR046 CP7，不恢复 CR020 |
+
+## Runtime Smoke query_positions 记录
+
+| 字段 | 内容 |
+|---|---|
+| 执行记录 | `runs/RUN-EXEC-20260617-005.md` |
+| 用户执行命令 | `uv run --with typer --python 3.11 python -m trading.qmt_runtime_cli client-diagnostics --env-file .env --base-url http://127.0.0.1:18765`；`uv run --with typer --python 3.11 python -m trading.qmt_runtime_cli query-positions --env-file .env --base-url http://127.0.0.1:18765 --run-id cr089-query-positions-20260617-001 --request-id cr089-query-positions-20260617-001 --timeout-seconds 10` |
+| Client diagnostics | PASS：`status=ok`、`base_url=http://127.0.0.1:18765`、`client_secret_ref=[REDACTED]`；`client_id_hash` 具体值未落库 |
+| Query 结果 | PASS：client `status=ok`、`endpoint=positions`、`reason_code` 为空、`blocked_result=null`；gateway `allowed=true`、`blocked=false`、`transport_status=allowed`、`status_code=200` |
+| 授权与 scope | `authorization_ref=cr089-runtime-smoke-20260617-query-positions`、`scope=qmt:positions:read`、`readonly_query_authorized=true`、`operation_authorized=false`、`real_operation=false` |
+| 脱敏摘要 | `position_count_bucket=zero`、`positions_digest=positions:e025dfde5d22f9d1`、`redaction_status=pass`、`raw_payload_emitted=false` |
+| 安全计数 | `query_positions_read_attempt=1`、`readonly_positions_adapter_call=1`、`raw_positions_emit=0`、`redaction_fallback_to_raw=0`、`real_order=0`、`real_cancel=0`、`account_write=0`、`provider_fetch=0`、`lake_write=0`、`publish=0`、`simulation_or_live_run=0` |
+| 不落库字段 | 用户输出中的 `client_id_hash`、`client_id_ref`、`nonce_ref`、`signature_ref` 具体值不保存 |
+| 结论边界 | 仅证明 `query_positions` 只读 smoke 在本次授权范围内通过；不授权账户 / 持仓 / 资金 / 委托 / 成交 / 日志原文输出，不授权 submit / cancel / simulation / live |
+| CR 状态影响 | 不激活 CR089，不恢复 CR046 CP7，不恢复 CR020 |
+
+## Runtime Smoke redacted collector 记录
+
+| 字段 | 内容 |
+|---|---|
+| 执行记录 | `runs/RUN-EXEC-20260618-001.md` |
+| 用户执行命令 | `uv run --python 3.11 python scripts/collect_cr089_qmt_runtime_smoke_summary.py --env-file .env --base-url http://127.0.0.1:18765 --runtime-authorization-ref cr089-runtime-smoke-20260617-query-positions --run-id cr089-query-positions-20260617-002 --request-id cr089-query-positions-20260617-002 --timeout-seconds 10 --output-json cr089-redacted-runtime-smoke-summary.json` |
+| Collector 结果 | PASS：`status=pass`、schema `cr089-qmt-runtime-smoke-redacted-summary-v1` |
+| Server health | PASS：`status=ok`、`session_ready=true`、`session_state=ready`、`blocked_reason` 为空、`runtime_status=xtquant-ready`、`redaction_status=redacted` |
+| Local config summary | `client_id_configured=true`、`client_secret_configured=true`、`account_ref_configured=true`、`miniqmt_path_configured=true`、`xtquant_site_packages_configured=true`、`allowed_source=127.0.0.1/32`、`account_type=STOCK` |
+| Query 结果 | PASS：`readonly_smoke.status=pass`、`transport_status=allowed`、`status_code=200`、`required_scope=qmt:positions:read`、`readonly_query_authorized=true`、`operation_authorized=false`、`real_operation=false` |
+| 脱敏摘要 | `position_count_bucket=zero`、`positions_digest=positions:e025dfde5d22f9d1`、`redaction_status=pass`、`raw_payload_included=false`、`raw_account_output_included=false`、`items_redacted_count=0` |
+| 安全计数 | NAS、凭据、原始账户、原始持仓、下单、撤单、simulation、live、provider、lake、publish、gateway/QMT 启动类 forbidden counters 均为 0 |
+| Redaction assurance | `client_or_account_refs_included=false`、`nonce_or_signature_refs_included=false`、`qmt_logs_included=false`、`raw_account_output_included=false`、`raw_payload_included=false` |
+| 结论边界 | collector 可作为本轮只读 smoke 的首选回填格式；仍不授权账户 / 持仓 / 资金 / 委托 / 成交 / 日志原文输出，不授权 submit / cancel / simulation / live |
+| CR 状态影响 | 不激活 CR089，不恢复 CR046 CP7，不恢复 CR020 |
+
 ## 关联对象
 
 | 类型 | 标识 | 说明 |
@@ -200,3 +268,9 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | 本地 package | `packages/qmt_interface_smoke/0.1.0` | CR089 批准范围内的本地离线策略包骨架 |
 | 实现证据 | `process/stories/CR089-QMT-INTERFACE-SMOKE-PACKAGE-LOCAL-IMPLEMENTATION.md` | 本地离线实现范围、验证和剩余风险 |
 | 恢复上下文 | `process/context/CP6-CR089-QMT-INTERFACE-SMOKE-PACKAGE-CONTEXT.yaml` | 清上下文后的最小恢复入口 |
+| 执行反馈 | `runs/RUN-EXEC-20260617-001.md` | 交易主机离线 intake PASS |
+| Runtime 授权 | `runs/RUN-EXEC-20260617-002.md` | 用户手工 `query_positions` 只读 smoke 授权 |
+| Runtime 诊断 | `runs/RUN-EXEC-20260617-003.md` | 交易主机 `server-diagnostics` PASS；尚未启动 gateway / query |
+| Runtime Gateway | `runs/RUN-EXEC-20260617-004.md` | 交易主机 gateway `serve` 初始 health PASS；尚未执行 query |
+| Runtime Query | `runs/RUN-EXEC-20260617-005.md` | 交易主机 `query_positions` 只读 smoke PASS；只保存脱敏摘要 |
+| Runtime Collector | `runs/RUN-EXEC-20260618-001.md` | 交易主机 redacted collector PASS；脚本输出可作为后续回填首选格式 |
