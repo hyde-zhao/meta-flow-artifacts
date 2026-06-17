@@ -1,0 +1,168 @@
+schema_version: "1.0"
+capsule_id: "CP6-CR089-QMT-INTERFACE-SMOKE-PACKAGE-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "CR089-QMT-INTERFACE-VALIDATION"
+phase: "story-execution"
+checkpoint: "CP6"
+capsule_type: "cp6-implementation"
+status: "ready"
+readiness_status: "local-offline-ready-with-limits"
+created_at: "2026-06-17T22:03:03+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-089"
+
+token_control:
+  read_profile: "minimal"
+  max_source_files: 12
+  max_summary_items: 30
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "Agent 必须先读取本 capsule；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+
+must_read:
+  - path: "process/STATE.md"
+    reason: "确认 active_change 仍为 CR046、CR089 仍为 blocked-readiness-approved、runtime 未授权。"
+    required: true
+  - path: "process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md"
+    reason: "CR089 的正式授权边界、不授权项和状态。"
+    required: true
+  - path: "packages/qmt_interface_smoke/0.1.0/manifest.yaml"
+    reason: "策略包 schema、target、只读接口合同、exchange 合同和禁止动作。"
+    required: true
+  - path: "packages/qmt_interface_smoke/0.1.0/README.md"
+    reason: "包目录说明、允许离线动作、本地校验命令和交易主机 intake 原则。"
+    required: true
+  - path: "packages/qmt_interface_smoke/0.1.0/validation/offline-intake-checklist.md"
+    reason: "交易主机文件级 intake checklist。"
+    required: true
+  - path: "process/stories/CR089-QMT-INTERFACE-SMOKE-PACKAGE-LOCAL-IMPLEMENTATION.md"
+    reason: "本地离线实现证据、验证命令、未覆盖项和剩余风险。"
+    required: true
+
+read_if_needed:
+  - path: "docs/qmt/CR089-STRATEGY-PACKAGE-NAS-DELIVERY-PLAN.md"
+    trigger: "需要解释策略输出规范、NAS package exchange 合同或交易主机交付位置时读取。"
+  - path: "packages/qmt_interface_smoke/0.1.0/checksums/SHA256SUMS"
+    trigger: "需要人工复核 checksum 或调试 checker 失败时读取。"
+  - path: "packages/qmt_interface_smoke/0.1.0/evidence/redacted-smoke-result-template.yaml"
+    trigger: "后续 runtime authorization 后用户需要回填脱敏 smoke 结果时读取。"
+  - path: "scripts/check_cr089_qmt_interface_smoke_package.py"
+    trigger: "需要调试本地 package checker 或扩展离线校验规则时读取。"
+  - path: "tests/test_cr089_qmt_interface_smoke_package.py"
+    trigger: "需要调试 / 扩展 CR089 package checker 回归测试时读取。"
+  - path: "process/checkpoints/CP2-CR089-QMT-INTERFACE-VALIDATION-BASELINE.md"
+    trigger: "需要复核 CP2 人工决策或范围边界时读取。"
+  - path: "process/checkpoints/CP3-CR089-QMT-INTERFACE-VALIDATION-HLD-REVIEW.md"
+    trigger: "需要复核 NAS exchange / local cache 架构决策时读取。"
+  - path: "process/checkpoints/CP5-CR089-QMT-INTERFACE-VALIDATION-READINESS.md"
+    trigger: "需要复核 CP5 readiness 批准和不授权项时读取。"
+
+do_not_read_by_default:
+  - path_or_pattern: "/home/hyde/workspace/local_backtest/process/STATE.md"
+    reason: "旧根 STATE 尾部仍有 CR020 历史摘要，已确认不是当前权威状态。"
+  - path_or_pattern: ".env"
+    reason: "CR089 未授权凭据读取。"
+  - path_or_pattern: "NAS 路径或 STRATEGY_PACKAGE_EXCHANGE_ROOT 实际内容"
+    reason: "CR089 当前未授权 NAS read/list/copy/publish/pull/delete。"
+  - path_or_pattern: "QMT / MiniQMT / XtQuant / gateway runtime"
+    reason: "CR089 当前未授权启动或连接任何交易 runtime。"
+  - path_or_pattern: "账户 / 持仓 / 委托 / 成交 / 日志原文"
+    reason: "只允许未来授权后的脱敏摘要，不允许原文入库。"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不属于当前默认上下文。"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "不得作为下游默认输入；以本 capsule、CR、STATE 和实现证据为准。"
+
+key_facts:
+  scope_summary: "CR089 已批准 CP2/CP3/CP5 readiness，但未授权 runtime。本次仅实现本地离线 qmt_interface_smoke package skeleton、manifest、checksum、人工 checklist、脱敏证据模板、checker 和测试。"
+  accepted_decisions:
+    - "DQ-CP2-CR089-01..05 accepted: CR089 保持 blocked，不设 active；范围仅策略包 + query_positions 只读 smoke；不恢复 CR020。"
+    - "DQ-CP3-CR089-01..06 accepted: NAS 只作为 package exchange；交易主机使用本地不可变缓存；策略包使用 zip/sha256/manifest/docs/validation 结构。"
+    - "DQ-CP5-CR089-01..07 accepted: 本地离线 skeleton 可准备；真实 NAS/QMT/凭据/账户/交易动作仍需独立授权。"
+  active_constraints:
+    - "active formal CR 仍是 CR046。"
+    - "CR089 status=blocked-readiness-approved。"
+    - "CR020 status=deleted-by-user，不得恢复为当前验证入口。"
+    - "package_root=packages/qmt_interface_smoke/0.1.0。"
+    - "runtime_authorized=false。"
+    - "nas_operation_authorized=false。"
+    - "credential_read_authorized=false。"
+    - "account_query_authorized=false。"
+    - "trade_write_authorized=false。"
+  downstream_tasks:
+    - "恢复后先运行本地 checker 和 pytest，确认 package skeleton 未漂移。"
+    - "若用户要在交易主机测试，只能先做本地文件级 intake / checksum 校验。"
+    - "真实 `query_positions` smoke 必须另起 runtime authorization，并由用户在交易主机手工执行后回填脱敏摘要。"
+    - "若要发布到 NAS package exchange，必须另起 transfer / publish authorization，补齐 package index、approval record、zip 和 quarantine 处理。"
+  traceability:
+    requirements:
+      - "CR089 acceptance_criteria: 策略包输出规范、NAS package exchange 交付位置、交易主机取包校验流程、只读接口 smoke 边界。"
+    use_cases:
+      - "交易主机从已批准 package exchange 获取 `qmt_interface_smoke`，校验后复制到本地不可变缓存。"
+    scenarios:
+      - "offline package discovery / manifest validation / sha256 validation / redacted evidence template check。"
+    stories:
+      - "CR089-S02-qmt-interface-smoke-strategy-package: local offline subset implemented."
+    features:
+      - "CR089-QMT-INTERFACE-VALIDATION"
+
+risks_and_decisions:
+  pending_human_decisions: []
+  non_authorized_items:
+    - "NAS content read/write/list/copy/publish/pull/delete"
+    - ".env, token, API key, password, HMAC secret, cookie, session, private key or QMT credential read"
+    - "QMT/MiniQMT/XtQuant/gateway start or remote trading host command"
+    - "raw account positions/trades/orders/log upload"
+    - "submit_order, cancel_order, simulation, live_readonly, small_live or scale_up"
+    - "restore CR020, activate CR089, recover CR046 or read old-root STATE as authority"
+  risk_acceptance_items:
+    - id: "R-CR089-IMPL-001"
+      status: "mitigated-by-doc-and-checker"
+      summary: "本地 skeleton 可能被误读为 runtime-ready；manifest / README / plan / context 均显式写 runtime_authorized=false。"
+    - id: "R-CR089-IMPL-002"
+      status: "open-for-future-runtime-gate"
+      summary: "真实 package publish / pull / QMT smoke 仍未验证，必须后续授权。"
+  open_questions:
+    - "后续是否生成 zip、package-index.yaml、approval record 和 quarantine record，取决于 transfer / publish gate。"
+    - "后续是否执行真实 `query_positions`，取决于 runtime authorization。"
+  n_a_or_waived_items:
+    - "formal CP6 runtime PASS: N/A，本次只声明 local-offline-package-ready。"
+    - "CP7 QMT verification: N/A，runtime 未授权。"
+
+handoff:
+  target_agent: "host-orchestrator or future meta-qa after explicit gate"
+  expected_output:
+    - "本地 package checker 仍 PASS。"
+    - "CR089 状态说明保持 blocked-readiness-approved，除非用户另行授权状态切换。"
+    - "交易主机只执行文件级 intake；真实 runtime smoke 另起授权。"
+  exit_criteria:
+    - "Package skeleton files present."
+    - "SHA256SUMS matches package text files."
+    - "Checker and pytest pass."
+    - "STATE / CR089 / implementation evidence all state no runtime authorization."
+  blocked_if_missing:
+    - "process/STATE.md unavailable or process route unhealthy."
+    - "manifest.yaml missing or runtime / credential / trade flags drift to true."
+    - "checksum mismatch."
+    - "user requests NAS/QMT/runtime action without explicit runtime authorization."
+
+read_expansion_log:
+  - at: "2026-06-17T22:03:03+08:00"
+    actor: "host-orchestrator"
+    expanded_to: "CR089 CR, STATE, package skeleton, implementation template"
+    reason: "生成本地离线实现证据和清上下文恢复 capsule。"
+
+validation:
+  generated_from_sources:
+    - "process/STATE.md"
+    - "process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md"
+    - "process/checkpoints/CP2-CR089-QMT-INTERFACE-VALIDATION-BASELINE.md"
+    - "process/checkpoints/CP3-CR089-QMT-INTERFACE-VALIDATION-HLD-REVIEW.md"
+    - "process/checkpoints/CP5-CR089-QMT-INTERFACE-VALIDATION-READINESS.md"
+    - "packages/qmt_interface_smoke/0.1.0/manifest.yaml"
+    - "process/stories/CR089-QMT-INTERFACE-SMOKE-PACKAGE-LOCAL-IMPLEMENTATION.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "本 capsule 是恢复入口，不替代正式 CR、STATE 或 manifest。"
+    - "若与正式文件冲突，以正式文件为准，并更新 capsule。"

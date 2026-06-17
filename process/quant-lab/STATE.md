@@ -5,11 +5,11 @@ current_phase: documentation
 current_agent: host-orchestrator
 active_change: "CR-046"
 active_story: ''
-iteration: 520
+iteration: 521
 blocked: false
 blocked_reason: ''
-last_action: 用户回复“同意”，按 CR089 CP2/CP3/CP5 approve 处理；接受 DQ-CP2-CR089-01..05、DQ-CP3-CR089-01..06、DQ-CP5-CR089-01..07 的推荐方案。CR089 状态收口为 blocked-readiness-approved，CR046 仍保持 active-cp6-pass-ready-for-verification，CR020 仍为 deleted-by-user；未访问 NAS 内容，未读取 .env/凭据，未启动 QMT/MiniQMT，未查询账户或执行 submit/cancel/simulation/live。
-next_action: "允许的下一步仅限本地工作区准备 / 整理 qmt_interface_smoke 离线策略包骨架、manifest/checksum 说明和人工 smoke guide；真实 NAS publish/pull/list/copy/delete、QMT/MiniQMT/XtQuant/gateway 启动、凭据读取、账户原文查询、submit/cancel/simulation/live 仍需独立 runtime authorization。"
+last_action: 已按 CR089 已批准但未授权 runtime 的边界，实现本地离线 `qmt_interface_smoke` 策略包骨架、manifest、checksum、QMT terminal / MiniQMT runner target 说明、人工 intake checklist、脱敏证据模板、本地文件级 checker、pytest 回归、CR089 规划文档、实现证据和恢复上下文；未访问 NAS 内容，未读取 .env/凭据，未启动 QMT/MiniQMT/XtQuant/gateway，未查询账户或执行 submit/cancel/simulation/live，未恢复 CR020，未激活 CR089，未推进 CR046。
+next_action: "允许的下一步仅限在当前仓库或交易主机本地缓存执行文件级 offline intake / checksum / manifest 校验；真实 NAS publish/pull/list/copy/delete、QMT/MiniQMT/XtQuant/gateway 启动、凭据读取、账户原文查询、submit/cancel/simulation/live 仍需独立 runtime authorization。清上下文后先读 process/context/CP6-CR089-QMT-INTERFACE-SMOKE-PACKAGE-CONTEXT.yaml。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -126,7 +126,7 @@ artifact_routing:
 cr_tracking:
   status: "active-formal-cr"
   index_path: process/changes/CR-INDEX.yaml
-  last_consistency_check: 'PASS at 2026-06-17T21:34:53+08:00 via PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_cr_tracking_consistency.py --project-root /home/hyde/workspace/quant-lab; CR089 CP2/CP3/CP5 approved as blocked-readiness-approved. Top-level active_change remains CR046; CR020 remains deleted-by-user; no remote Git, .env, data/reports/NAS runtime operation, CR046 recovery, QMT/MiniQMT connection, credential/account read or cleanup executed.'
+  last_consistency_check: 'PASS at 2026-06-17T22:11:35+08:00 via PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_cr_tracking_consistency.py --project-root /home/hyde/workspace/quant-lab; CR089 local offline qmt_interface_smoke package skeleton is ready while CR089 remains blocked-readiness-approved. Top-level active_change remains CR046; CR020 remains deleted-by-user; no remote Git, .env, NAS runtime operation, CR046 recovery, QMT/MiniQMT/XtQuant/gateway connection, credential/account read, submit/cancel/simulation/live or cleanup executed.'
   active_crs:
   - id: CR-046
     title: QMT and MiniQMT Dual-Target Strategy Delivery Framework
@@ -1591,13 +1591,13 @@ cr_tracking:
     next_action: 不启动；不从任何历史 small-live 或研究结果自动放大资金。
     last_checked_at: '2026-06-10T22:20:00+08:00'
   blocked_crs:
-- id: CR-089
-  title: QMT Interface Validation Gate with NAS Strategy Package Exchange
-  status: blocked-readiness-approved
+  - id: CR-089
+    title: QMT Interface Validation Gate with NAS Strategy Package Exchange
+    status: blocked-readiness-approved
     source_tracking: USER-20260617-QMT-NAS-STRATEGY-PACKAGE-INTERFACE-VALIDATION
     formal_cr_path: process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md
     priority: 1
-  blocked_by: CR046 remains active-cp6-pass-ready-for-verification and overlaps strategy package contract, QMT terminal target, MiniQMT runner target, trading runtime boundary and per-run authorization. User approved CR089 CP2/CP3/CP5 recommendations at 2026-06-17T21:34:53+08:00; CR089 remains blocked-readiness-approved and does not authorize NAS/QMT/credential/account/trading runtime actions.
+    blocked_by: CR046 remains active-cp6-pass-ready-for-verification and overlaps strategy package contract, QMT terminal target, MiniQMT runner target, trading runtime boundary and per-run authorization. User approved CR089 CP2/CP3/CP5 recommendations at 2026-06-17T21:34:53+08:00; CR089 remains blocked-readiness-approved and does not authorize NAS/QMT/credential/account/trading runtime actions.
     impact_surface:
     - QMT interface validation
     - NAS strategy package exchange
@@ -1614,9 +1614,9 @@ cr_tracking:
     - per_run_authorization
     - credential_boundary
     - nas_package_exchange
-  next_gate: local offline package skeleton or independent runtime authorization
-  next_action: Prepare only local offline qmt_interface_smoke package skeleton / manifest / checksum docs and manual smoke guide; no NAS/QMT/credential/account/trading action authorized.
-  last_checked_at: '2026-06-17T21:34:53+08:00'
+    next_gate: local offline package skeleton or independent runtime authorization
+    next_action: Prepare only local offline qmt_interface_smoke package skeleton / manifest / checksum docs and manual smoke guide; no NAS/QMT/credential/account/trading action authorized.
+    last_checked_at: '2026-06-17T21:34:53+08:00'
   follow_up_candidates:
   - id: CR-026
     title: Qlib isolated runner optional Spike (narrowed after CR030-039 coverage)
@@ -8144,6 +8144,31 @@ checkpoints:
     - raw account positions/trades/orders/log upload
     - submit_order, cancel_order, simulation, live_readonly, small_live or scale_up
     - restore CR020, activate CR089, recover CR046 or read old-root STATE as authority
+    local_offline_package_skeleton:
+      status: ready
+      implemented_at: '2026-06-17T22:03:03+08:00'
+      package_root: packages/qmt_interface_smoke/0.1.0
+      manifest: packages/qmt_interface_smoke/0.1.0/manifest.yaml
+      checksum_file: packages/qmt_interface_smoke/0.1.0/checksums/SHA256SUMS
+      offline_intake_checklist: packages/qmt_interface_smoke/0.1.0/validation/offline-intake-checklist.md
+      redacted_evidence_template: packages/qmt_interface_smoke/0.1.0/evidence/redacted-smoke-result-template.yaml
+      local_checker: scripts/check_cr089_qmt_interface_smoke_package.py
+      checker_tests: tests/test_cr089_qmt_interface_smoke_package.py
+      delivery_plan: docs/qmt/CR089-STRATEGY-PACKAGE-NAS-DELIVERY-PLAN.md
+      implementation_evidence: process/stories/CR089-QMT-INTERFACE-SMOKE-PACKAGE-LOCAL-IMPLEMENTATION.md
+      implementation_context: process/context/CP6-CR089-QMT-INTERFACE-SMOKE-PACKAGE-CONTEXT.yaml
+      package_checker_status: PASS
+      pytest_status: "PASS: tests/test_cr089_qmt_interface_smoke_package.py (5 passed)"
+      workspace_check_status: PASS
+      cr_tracking_consistency_status: PASS
+      scoped_diff_check_status: PASS
+      final_verified_at: '2026-06-17T22:11:35+08:00'
+      formal_cp6_runtime_claimed: false
+      runtime_authorized: false
+      nas_operation_authorized: false
+      credential_read_authorized: false
+      account_query_authorized: false
+      trade_write_authorized: false
   cr086_ledger_convergence_gate:
     type: cp2-cp3-cp5-ledger-convergence-gate
     status: closed-current-delivery
@@ -38180,7 +38205,39 @@ history:
     cr020_restore_authorized: false
     cr089_active_authorized: false
     cr046_recovery_authorized: false
-last_updated: '2026-06-17T21:34:53+08:00'
+- at: '2026-06-17T22:03:03+08:00'
+  action: cr089-local-offline-qmt-interface-smoke-package-ready
+  actor: host-orchestrator
+  reason: 按用户要求和 CR089 已批准推荐方案，落地本地离线 `qmt_interface_smoke` 策略包骨架、manifest、checksum、人工 intake checklist、脱敏证据模板、本地 checker、pytest 回归、策略交付规划文档、实现证据和上下文胶囊；仅允许文件级 offline intake，不授权 runtime。
+  artifacts:
+  - packages/qmt_interface_smoke/0.1.0/manifest.yaml
+  - packages/qmt_interface_smoke/0.1.0/checksums/SHA256SUMS
+  - packages/qmt_interface_smoke/0.1.0/README.md
+  - packages/qmt_interface_smoke/0.1.0/targets/qmt_terminal/README.md
+  - packages/qmt_interface_smoke/0.1.0/targets/miniqmt_runner/README.md
+  - packages/qmt_interface_smoke/0.1.0/validation/offline-intake-checklist.md
+  - packages/qmt_interface_smoke/0.1.0/evidence/redacted-smoke-result-template.yaml
+  - docs/qmt/CR089-STRATEGY-PACKAGE-NAS-DELIVERY-PLAN.md
+  - scripts/check_cr089_qmt_interface_smoke_package.py
+  - tests/test_cr089_qmt_interface_smoke_package.py
+  - process/stories/CR089-QMT-INTERFACE-SMOKE-PACKAGE-LOCAL-IMPLEMENTATION.md
+  - process/context/CP6-CR089-QMT-INTERFACE-SMOKE-PACKAGE-CONTEXT.yaml
+  checkpoints_updated:
+    cr089_status: blocked-readiness-approved
+    local_offline_package_skeleton_status: ready
+    formal_cp6_runtime_claimed: false
+  safety_confirmations:
+    local_offline_package_skeleton_completed: true
+    nas_operation_authorized: false
+    credential_read_authorized: false
+    qmt_miniqmt_runtime_authorized: false
+    account_query_authorized: false
+    submit_cancel_authorized: false
+    simulation_live_authorized: false
+    cr020_restore_authorized: false
+    cr089_active_authorized: false
+    cr046_recovery_authorized: false
+last_updated: '2026-06-17T22:11:35+08:00'
 ---
 
 # 工作流状态

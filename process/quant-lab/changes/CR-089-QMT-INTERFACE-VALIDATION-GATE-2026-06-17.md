@@ -170,6 +170,24 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 - [ ] 待人工确认（中风险）
 - [x] 待人工审批（高风险）- 已于 2026-06-17T21:34:53+08:00 approve；仅批准 CP2/CP3/CP5 readiness，不授权 runtime
 
+## 本地离线骨架实现结果
+
+| 字段 | 内容 |
+|---|---|
+| 实现时间 | 2026-06-17T22:03:03+08:00 |
+| 实现状态 | `local-offline-package-ready` |
+| package root | `packages/qmt_interface_smoke/0.1.0` |
+| manifest | `packages/qmt_interface_smoke/0.1.0/manifest.yaml` |
+| checksum | `packages/qmt_interface_smoke/0.1.0/checksums/SHA256SUMS` |
+| 人工 intake checklist | `packages/qmt_interface_smoke/0.1.0/validation/offline-intake-checklist.md` |
+| 脱敏证据模板 | `packages/qmt_interface_smoke/0.1.0/evidence/redacted-smoke-result-template.yaml` |
+| 本地 checker | `scripts/check_cr089_qmt_interface_smoke_package.py` |
+| checker tests | `tests/test_cr089_qmt_interface_smoke_package.py` |
+| 实现证据 | `process/stories/CR089-QMT-INTERFACE-SMOKE-PACKAGE-LOCAL-IMPLEMENTATION.md` |
+| 恢复上下文 | `process/context/CP6-CR089-QMT-INTERFACE-SMOKE-PACKAGE-CONTEXT.yaml` |
+
+本实现只完成本地离线策略包骨架、manifest、checksum、目标说明、人工 intake checklist、脱敏证据模板和本地文件级 checker。它不表示 CR089 已 active，不表示 formal CP6 runtime PASS，不表示 QMT 接口已验证，也不授权 NAS publish/pull/list/copy/delete、凭据读取、QMT/MiniQMT/XtQuant/gateway 启动、账户原文查询、submit/cancel、simulation 或 live。
+
 ## 关联对象
 
 | 类型 | 标识 | 说明 |
@@ -179,3 +197,6 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | 历史 CR | CR-020 | deleted-by-user；只可作为审计和代码参考 |
 | 上下文 | `process/context/QMT-INTERFACE-VALIDATION-CR-CONTEXT-2026-06-17.md` | 指定真实接口验证应新建独立 CR |
 | 规划文档 | `docs/qmt/CR089-STRATEGY-PACKAGE-NAS-DELIVERY-PLAN.md` | 策略输出、规范与交付位置 |
+| 本地 package | `packages/qmt_interface_smoke/0.1.0` | CR089 批准范围内的本地离线策略包骨架 |
+| 实现证据 | `process/stories/CR089-QMT-INTERFACE-SMOKE-PACKAGE-LOCAL-IMPLEMENTATION.md` | 本地离线实现范围、验证和剩余风险 |
+| 恢复上下文 | `process/context/CP6-CR089-QMT-INTERFACE-SMOKE-PACKAGE-CONTEXT.yaml` | 清上下文后的最小恢复入口 |

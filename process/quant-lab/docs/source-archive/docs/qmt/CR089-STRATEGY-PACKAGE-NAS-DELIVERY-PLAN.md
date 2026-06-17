@@ -1,8 +1,10 @@
 ---
-status: "draft-readiness-approved-no-runtime-authorization"
-version: "0.1"
-change_id: "CR-089"
-owner: "host-orchestrator"
+change_id: CR-089
+status: draft-readiness-approved-no-runtime-authorization
+created_at: "2026-06-17T22:03:03+08:00"
+created_by: host-orchestrator
+source_gate: CP2/CP3/CP5-CR089-QMT-INTERFACE-VALIDATION
+package_root: packages/qmt_interface_smoke/0.1.0
 runtime_authorized: false
 nas_operation_authorized: false
 credential_read_authorized: false
@@ -14,277 +16,107 @@ credential_read_authorized: false
 
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
-| 0.1 | 2026-06-17 | host-orchestrator | 初版策略包输出、NAS package exchange、交易主机取包、本地缓存和只读 QMT smoke 规划 |
-| 0.2 | 2026-06-17 | host-orchestrator | 用户批准 CR089 CP2/CP3/CP5 推荐方案；规划进入 readiness-approved，但仍不授权 NAS / QMT / 凭据 / 账户 / 交易动作 |
+| 0.1 | 2026-06-17 | host-orchestrator | 新增 CR089 `qmt_interface_smoke` 离线策略包骨架、交付合同、交易主机 intake 边界和不授权项。 |
 
-## 目标
+## 1. 状态
 
-本规划定义 QMT 接口验证前，研究侧如何输出可运行策略包，QMT 运行级如何从 NAS 获取策略包，以及交易主机如何校验和本地化策略包。
+本文件定义 CR089 下 `qmt_interface_smoke` 策略包的输出规范、策略交付位置合同和交易主机 intake 流程。当前状态是 `draft-readiness-approved-no-runtime-authorization`：
 
-本规划不是运行授权。当前不访问 NAS，不创建真实策略包，不启动 QMT / MiniQMT / XtQuant，不读取凭据，不查询账户，不 submit/cancel，不 simulation/live。
+- CR089 CP2 / CP3 / CP5 推荐方案已由用户批准。
+- CR089 仍是 `blocked-readiness-approved`，不设为 active。
+- CR046 仍是当前 active formal CR，保持 `active-cp6-pass-ready-for-verification`。
+- CR020 仍是 `deleted-by-user`，只可审计复用代码和 runbook 边界。
+- 本轮未访问 NAS、未读取 `.env` 或凭据、未启动 QMT / MiniQMT / XtQuant / gateway、未查询账户、未 submit/cancel/simulation/live。
 
-## 总体链路
+## 2. 策略包输出位置
 
-```text
-research_pc
-  生成 strategy package、manifest、sha256、docs、validation evidence
-      |
-      v
-NAS: STRATEGY_PACKAGE_EXCHANGE_ROOT
-  只保存 approved package exchange 对象
-      |
-      v
-trading_pc
-  只读拉取 -> sha256/manifest 校验 -> 本地不可变缓存 -> QMT terminal / MiniQMT runner 消费
-```
-
-默认不建议 QMT 运行级在 NAS 路径原地执行策略代码。推荐行为是从 NAS 只读拉取已批准 package，校验后复制到交易主机本地缓存再运行。NAS 原地执行只可作为临时人工 smoke 选项，不能作为默认生产路径。
-
-## NAS 交付位置
-
-逻辑 root：
+当前本地离线包骨架写入：
 
 ```text
-${STRATEGY_PACKAGE_EXCHANGE_ROOT}/
+packages/qmt_interface_smoke/0.1.0/
 ```
 
-目录布局：
+该目录是源码仓库内的离线交付材料，不是 NAS 目录，也不是交易主机运行缓存。
 
-```text
-${STRATEGY_PACKAGE_EXCHANGE_ROOT}/
-  packages/
-    <strategy_id>/
-      <version>/
-        strategy-package-<strategy_id>-<version>.zip
-        strategy-package-<strategy_id>-<version>.zip.sha256
-        manifest.yaml
-        manifest.sha256
-        docs/
-          USER-RUNBOOK.md
-          AUTHORIZATION-BOUNDARY.md
-          TROUBLESHOOTING.md
-        validation/
-          evidence.yaml
-          static_guardrails.yaml
-          fixture_result.yaml
-  index/
-    package-index.yaml
-  approvals/
-    CR089-readonly-<date>-001.yaml
-  quarantine/
-    <package_id>/
-      rejection.yaml
-  archive/
-    <strategy_id>/
-      <version>/
-        closed-package-record.yaml
+## 3. 策略包规范
+
+| 对象 | 路径 | 规范 |
+|---|---|---|
+| manifest | `packages/qmt_interface_smoke/0.1.0/manifest.yaml` | `schema_version=cr089-strategy-package-manifest-v1`，记录授权边界、target、只读接口合同和交付合同 |
+| checksum | `packages/qmt_interface_smoke/0.1.0/checksums/SHA256SUMS` | 关键文本文件的 SHA256，全部使用相对路径 |
+| target: QMT terminal | `packages/qmt_interface_smoke/0.1.0/targets/qmt_terminal/README.md` | 只描述 QMT terminal 后续手工只读 smoke 边界 |
+| target: MiniQMT runner | `packages/qmt_interface_smoke/0.1.0/targets/miniqmt_runner/README.md` | 只描述 MiniQMT runner 后续消费边界 |
+| intake checklist | `packages/qmt_interface_smoke/0.1.0/validation/offline-intake-checklist.md` | 文件级 intake 检查，不包含 runtime 执行 |
+| evidence template | `packages/qmt_interface_smoke/0.1.0/evidence/redacted-smoke-result-template.yaml` | 后续用户手工 runtime smoke 的脱敏结果模板 |
+
+首个策略包不包含真实交易策略逻辑，不包含终端脚本，不包含 runner 安装器，不包含账号、凭据或环境变量。
+
+## 4. NAS package exchange 合同
+
+CR089 推荐的 NAS 只作为 package exchange，不作为默认执行根。合同路径如下：
+
+| 合同对象 | 路径模板 | 当前动作 |
+|---|---|---|
+| package root | `${STRATEGY_PACKAGE_EXCHANGE_ROOT}/packages/qmt_interface_smoke/0.1.0` | 仅记录合同，未访问 |
+| package index | `${STRATEGY_PACKAGE_EXCHANGE_ROOT}/index/package-index.yaml` | 仅记录合同，未访问 |
+| approval record | `${STRATEGY_PACKAGE_EXCHANGE_ROOT}/approvals/qmt_interface_smoke-0.1.0.yaml` | 仅记录合同，未访问 |
+| quarantine record | `${STRATEGY_PACKAGE_EXCHANGE_ROOT}/quarantine/qmt_interface_smoke-0.1.0/rejection.yaml` | 仅记录合同，未访问 |
+
+默认规则：
+
+- 研究侧只发布不可变 package 版本，不覆盖同名版本目录。
+- NAS 目录只用于已批准包的交换与审计。
+- 交易主机不从 NAS 原地运行策略。
+- 交易主机必须先校验 package，再复制到本地不可变缓存。
+
+## 5. 交易主机交付位置
+
+交易主机推荐使用本地不可变缓存：
+
+| 合同对象 | 路径模板 | 规则 |
+|---|---|---|
+| local cache | `${TRADING_PACKAGE_CACHE_ROOT}/packages/qmt_interface_smoke/0.1.0` | checksum 通过后才允许放入 |
+| active pointer | `${TRADING_PACKAGE_CACHE_ROOT}/active/qmt_interface_smoke` | 指向已校验版本；切换必须可回滚 |
+| evidence | `${TRADING_PACKAGE_CACHE_ROOT}/evidence/qmt_interface_smoke/<run_id>/redacted-smoke-result.yaml` | 仅保存脱敏摘要 |
+
+本轮没有在交易主机执行任何命令，也没有写入上述路径。
+
+## 6. 本地离线校验
+
+仓库内提供只读本地 checker：
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_cr089_qmt_interface_smoke_package.py --package-root packages/qmt_interface_smoke/0.1.0
 ```
 
-规则：
+checker 只验证：
 
-| 区域 | 写入方 | 读取方 | 说明 |
-|---|---|---|---|
-| `packages/` | package builder / research_pc | trading_pc 只读 | 正式策略包交换区 |
-| `index/` | package builder | trading_pc 只读 | 当前可消费 package 索引 |
-| `approvals/` | 人工门禁 / CR089 | trading_pc 只读 | 脱敏授权摘要 |
-| `quarantine/` | 验证方 | 人工审计 | 失败包隔离，不允许运行 |
-| `archive/` | package owner | 审计 | 已下线版本记录 |
+- 目录结构。
+- manifest schema 和关键字段。
+- 禁止操作列表。
+- target 文档存在。
+- 脱敏证据模板存在且 raw 输出关闭。
+- `checksums/SHA256SUMS` 与文件内容一致。
 
-禁止把 NAS 用户名、NAS 密码、QMT 账号、HMAC secret、token、session、cookie、交易密码或 raw broker payload 写入上述目录。
+checker 不读取 `.env`，不访问 NAS，不打开网络，不导入 trading runtime，不导入 QMT / MiniQMT / XtQuant。
 
-## 策略包结构
+## 7. 后续 runtime smoke 边界
 
-```text
-strategy-package-<strategy_id>-<version>/
-  manifest.yaml
-  strategy_core/
-    contract.yaml
-    inputs.schema.yaml
-    target_portfolio.schema.yaml
-    order_intents.schema.yaml
-    risk_assumptions.yaml
-  targets/
-    qmt_terminal/
-      target.yaml
-      entrypoint.py
-      config.example.yaml
-      import_steps.md
-      shadow_report.schema.yaml
-    miniqmt_runner/
-      target.yaml
-      runner_entrypoint.py
-      config.example.yaml
-      install_plan.yaml
-      start_stop_status_contract.md
-  validation/
-    fixtures/
-    expected/
-    static_guardrails.yaml
-    evidence.schema.yaml
-  docs/
-    USER-RUNBOOK.md
-    AUTHORIZATION-BOUNDARY.md
-    TROUBLESHOOTING.md
-```
+后续真实接口验证仍需单独 runtime authorization。授权后也只允许：
 
-`strategy_core/` 必须平台无关，不得导入 QMT、XtQuant、MiniQMT 或 broker SDK。真实 broker 接口只能在后续 target adapter 的授权设计中出现。
+- 用户本人在交易主机手工执行。
+- endpoint 限定为 `query_positions`。
+- scope 限定为 `qmt:positions:read`。
+- 输出限定为脱敏摘要。
+- 结果回填到 `evidence/redacted-smoke-result-template.yaml` 的副本中。
 
-## manifest 最小合同
+授权前不允许执行任何真实 QMT / MiniQMT / XtQuant / gateway 动作。
 
-```yaml
-package_id: "strategy-package-qmt_interface_smoke-0.1.0"
-layout_version: "1.0"
-strategy_id: "qmt_interface_smoke"
-strategy_version: "0.1.0"
-source_commit: "<git-commit>"
-created_at: "2026-06-17T00:00:00+08:00"
+## 8. 明确不授权项
 
-artifact:
-  name: "strategy-package-qmt_interface_smoke-0.1.0.zip"
-  checksum_sha256: "<sha256>"
-  size_bytes: 0
-
-storage:
-  exchange_root_ref: "STRATEGY_PACKAGE_EXCHANGE_ROOT"
-  storage_tier: "nas_hot"
-  package_ref: "packages/qmt_interface_smoke/0.1.0/strategy-package-qmt_interface_smoke-0.1.0.zip"
-  execute_policy: "copy_to_trading_local_then_run"
-
-targets:
-  - target_id: "qmt_terminal"
-    enabled: true
-    entry_file: "targets/qmt_terminal/entrypoint.py"
-    runtime_authorized: false
-    account_query_authorized: false
-    submit_cancel_authorized: false
-  - target_id: "miniqmt_runner"
-    enabled: false
-    connection_authorized: false
-    submit_cancel_authorized: false
-
-validation_suite:
-  static_guardrails: "validation/static_guardrails.yaml"
-  fixture_result: "validation/fixture_result.yaml"
-  evidence_schema: "validation/evidence.schema.yaml"
-
-authorization_boundary:
-  cr_id: "CR-089"
-  allowed_scope:
-    - "package_checksum_verify"
-    - "manifest_parse"
-    - "qmt_interface_readonly_smoke"
-  forbidden_scope:
-    - "order_submit"
-    - "order_cancel"
-    - "account_write"
-    - "simulation"
-    - "live"
-    - "credential_output"
-    - "raw_positions_output"
-
-docs_bundle:
-  runbook: "docs/USER-RUNBOOK.md"
-  authorization_boundary: "docs/AUTHORIZATION-BOUNDARY.md"
-  troubleshooting: "docs/TROUBLESHOOTING.md"
-```
-
-## 首个验证策略
-
-| 字段 | 推荐值 |
-|---|---|
-| `strategy_id` | `qmt_interface_smoke` |
-| `strategy_version` | `0.1.0` |
-| 目标 | 验证 package discovery、manifest/sha256 校验、交易主机本地化缓存、QMT 只读接口 smoke |
-| 允许 | 读取自身 manifest、输出 package digest、检查 target 配置、在授权后执行只读 `query_positions` |
-| 禁止 | 生成真实订单、撤单、账户写入、持仓原文输出、simulation/live |
-
-该策略不代表生产策略，不代表 QMT-ready，不代表 trade-ready。
-
-## 交易主机本地缓存
-
-逻辑 root：
-
-```text
-${TRADING_PACKAGE_CACHE_ROOT}/
-```
-
-推荐布局：
-
-```text
-${TRADING_PACKAGE_CACHE_ROOT}/
-  packages/
-    qmt_interface_smoke/
-      0.1.0/
-        strategy-package-qmt_interface_smoke-0.1.0.zip
-        manifest.yaml
-        checksum.ok
-        extracted/
-          ...
-  active/
-    qmt_interface_smoke -> ../packages/qmt_interface_smoke/0.1.0/extracted
-  evidence/
-    CR089-readonly-<date>-001/
-      package_intake_evidence.yaml
-      qmt_readonly_smoke_evidence.yaml
-```
-
-交易主机只保存当前被批准导入的 package、少量 evidence 和脱敏日志，不保存 full research archive，不运行研究脚本。
-
-## 状态机
-
-```text
-draft -> staged -> checksum_pass -> approved -> pulled_by_trading_pc -> active_local -> retired
-                         \-> rejected/quarantine
-```
-
-QMT 运行级只消费 `approved`。不得消费 `draft` 或 `staged`。
-
-## 校验规则
-
-| 校验项 | 失败处理 |
-|---|---|
-| zip sha256 与 `.sha256` 一致 | fail closed，进入 quarantine |
-| `manifest.yaml` 必填字段完整 | fail closed |
-| `strategy_core` 无 QMT / XtQuant / MiniQMT / broker SDK import | fail closed |
-| `runtime_authorized=false` 未被私自改为 true | fail closed |
-| `submit_cancel_authorized=false` | fail closed |
-| 示例配置不含账号、密码、token、session | fail closed |
-| docs 不声明 `qmt_ready` / `trade_ready` / `runtime_verified=true` | fail closed |
-| package ref 只指向 `STRATEGY_PACKAGE_EXCHANGE_ROOT` 下相对路径 | fail closed |
-
-## 只读 QMT smoke 证据
-
-用户手工执行后只允许回填脱敏摘要：
-
-```yaml
-cr: CR-089
-endpoint_id: query_positions
-scope: qmt:positions:read
-run_id: CR089-readonly-<date>-001
-request_id: CR089-readonly-<date>-001-pos
-status: ok
-session_ready: true
-auth_status: ok
-redaction_status: pass
-position_count: 0
-positions_digest: "positions:<hash>"
-forbidden_counters:
-  real_order: 0
-  real_cancel: 0
-  account_write: 0
-  provider_fetch: 0
-  lake_write: 0
-  publish: 0
-  simulation_or_live_run: 0
-```
-
-禁止提交真实 `.env`、账号、密码、token、session、cookie、HMAC secret、raw signature、raw positions、未脱敏证券代码、精确持仓数量、市值或交易 PC 私有路径。
-
-## 不授权边界
-
-- 不访问 NAS 内容、不挂载 NAS、不复制真实 package。
-- 不启动 QMT、MiniQMT、XtQuant、gateway 或 socket。
-- 不读取 `.env`、NAS 凭据、QMT 账号、HMAC secret。
-- 不查询真实账户原文、资金、持仓原文、委托或成交。
+- 不访问、挂载、列取、复制、发布、拉取或删除 NAS 内容。
+- 不读取 `.env`、token、API key、密码、HMAC secret、cookie、session、私钥、QMT 账号或交易密码。
+- 不启动 QMT、MiniQMT、XtQuant 或 gateway。
+- 不查询真实账户、资金、持仓、委托、成交或日志原文。
 - 不 submit/cancel，不 simulation/live。
-- 不把本规划解释为 CR089 active、QMT-ready、trade-ready 或 runtime verified。
+- 不恢复 CR020，不激活 CR089，不恢复 CR046 CP7。
