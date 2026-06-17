@@ -7,7 +7,7 @@ current_agent: "host-orchestrator"
 iteration: 13
 blocked: false
 active_change: ""
-last_action: "关闭 CR-029：delivery state-router STATE 模板已是正确交付真相源；本机 .agents 忽略副本已同步，workspace / CR tracking / guardrail 通过"
+last_action: "关闭 CR-030：docs 已拆分为源码跟踪的公开文档入口和 artifact 归档的内部文档，验证通过"
 next_action: "delivered；等待后续新请求或观察阈值触发新的 CR"
 orchestrator_session:
   kind: "host"
@@ -135,6 +135,16 @@ checkpoints:
   final_review_confirmed: true
 parallel_waves: []
 history:
+  - at: "2026-06-17T14:33:04+08:00"
+    actor: "host-orchestrator"
+    action: "close-cr-030-public-internal-docs-split"
+    phase: "delivered"
+    summary: "关闭 CR-030：docs 根目录改为源码真实目录，源码跟踪 docs/README.md、docs/USER-MANUAL.md、docs/release/RELEASE-NOTES.md；内部设计、Feature、质量、内部发布审查、修改记录和偏好类文档继续由 artifact repo 跟踪，并通过 ignored symlink 保持旧路径可读；workspace check、CR tracking 和 guardrail 通过。"
+  - at: "2026-06-17T14:33:04+08:00"
+    actor: "host-orchestrator"
+    action: "activate-cr-030-public-internal-docs-split"
+    phase: "documentation"
+    summary: "用户指出 docs 整目录外置不合适，应拆分为可发布用户文档和内部归档文档；启动 CR-030 修正 docs 路由：公开文档进入 meta-flow 源码仓库，内部设计/质量/发布审查文档继续归档到 meta-flow-artifacts。"
   - at: "2026-06-17T14:16:22+08:00"
     actor: "host-orchestrator"
     action: "close-cr-029-state-template-sync"
