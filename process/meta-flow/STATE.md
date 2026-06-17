@@ -7,8 +7,8 @@ current_agent: "host-orchestrator"
 iteration: 13
 blocked: false
 active_change: ""
-last_action: "关闭 CR-026：当前 process 已迁移到 /home/hyde/projects/meta-flow-artifacts/process/meta-flow，源码仓库 process 已切换为 symlink"
-next_action: "提交源码仓库迁移变更和 artifact repo initial commit；后续可启动 CR-027 处理 docs 过程文档归档"
+last_action: "关闭 CR-027：docs 过程文档已迁移到 /home/hyde/projects/meta-flow-artifacts/docs/meta-flow，源码仓库 docs 已切换为 symlink"
+next_action: "提交并推送 artifact repo docs 快照与源码仓库 docs 外置变更；meta_flow/evals/runner.py 仍需单独处理"
 orchestrator_session:
   kind: "host"
   role: "host-orchestrator"
@@ -120,7 +120,7 @@ workflow_health:
 cr_tracking:
   index_path: "process/changes/CR-INDEX.yaml"
   consistency_check:
-    last_run_at: "2026-06-17T10:04:10+08:00"
+    last_run_at: "2026-06-17T11:37:30+08:00"
     command: "meta-flow check cr-tracking --project-root ."
     result: "PASS"
   active_crs: []
@@ -135,6 +135,16 @@ checkpoints:
   final_review_confirmed: false
 parallel_waves: []
 history:
+  - at: "2026-06-17T11:37:30+08:00"
+    actor: "host-orchestrator"
+    action: "close-cr-027-docs-artifact-routing"
+    phase: "documentation"
+    summary: "完成 docs 外置迁移：/home/hyde/projects/meta-flow/docs 已切换为指向 ../meta-flow-artifacts/docs/meta-flow 的 symlink；guardrail、workspace check 和 CR tracking 均通过；原普通 docs 目录备份到 /home/hyde/projects/.meta-flow-migration-backups/docs.local-backup-CR027-20260617T113443。"
+  - at: "2026-06-17T11:34:43+08:00"
+    actor: "host-orchestrator"
+    action: "activate-cr-027-docs-artifact-routing"
+    phase: "documentation"
+    summary: "用户要求继续后，启动 CR-027：将源码仓库 docs 过程文档迁移到 /home/hyde/projects/meta-flow-artifacts/docs/meta-flow；源码仓库保留 README、delivery/README、delivery/doc/USER-MANUAL 和平台契约。"
   - at: "2026-06-17T10:04:10+08:00"
     actor: "host-orchestrator"
     action: "close-cr-026-process-migration"
@@ -375,7 +385,7 @@ history:
     action: "verify-change-request"
     phase: "documentation"
     summary: "CR-006：静态检索确认关键规则包含待人工决策清单协议；guardrail 在禁写 bytecode 环境下通过；未发现新增 __pycache__ / pyc"
-last_updated: "2026-06-17T10:04:10+08:00"
+last_updated: "2026-06-17T11:37:30+08:00"
 ---
 
 <!--
