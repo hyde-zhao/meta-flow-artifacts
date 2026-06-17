@@ -7,8 +7,8 @@ current_agent: "host-orchestrator"
 iteration: 13
 blocked: false
 active_change: ""
-last_action: "关闭 CR-027：docs 过程文档已迁移到 /home/hyde/projects/meta-flow-artifacts/docs/meta-flow，源码仓库 docs 已切换为 symlink"
-next_action: "提交并推送 artifact repo docs 快照与源码仓库 docs 外置变更；meta_flow/evals/runner.py 仍需单独处理"
+last_action: "关闭 CR-028：workflow eval runner grader 扩展已通过旧 fixture 兼容验证和 advanced fixture 新能力验证"
+next_action: "提交并推送 artifact repo 与源码仓库；随后确认工作区 clean"
 orchestrator_session:
   kind: "host"
   role: "host-orchestrator"
@@ -135,6 +135,16 @@ checkpoints:
   final_review_confirmed: false
 parallel_waves: []
 history:
+  - at: "2026-06-17T13:42:40+08:00"
+    actor: "host-orchestrator"
+    action: "close-cr-028-eval-runner-hardening"
+    phase: "documentation"
+    summary: "关闭 CR-028：旧 generated-workflow-basic fixture validate/run 通过；新增 generated-workflow-advanced fixture 覆盖新增 grader、case results 和 expected failure 语义并通过；workspace check、CR tracking 和 guardrail 通过。"
+  - at: "2026-06-17T13:40:14+08:00"
+    actor: "host-orchestrator"
+    action: "activate-cr-028-eval-runner-hardening"
+    phase: "documentation"
+    summary: "用户要求继续推进后，启动 CR-028：收口 workflow eval runner 的新增 grader、case results 与 expected failure 语义；本 CR 只影响 meta_flow/evals/runner.py 和 eval fixture，不涉及外部 adapter 授权。"
   - at: "2026-06-17T11:37:30+08:00"
     actor: "host-orchestrator"
     action: "close-cr-027-docs-artifact-routing"
