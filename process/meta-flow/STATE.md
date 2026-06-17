@@ -7,8 +7,8 @@ current_agent: "host-orchestrator"
 iteration: 13
 blocked: false
 active_change: ""
-last_action: "关闭 CR-028：workflow eval runner grader 扩展已通过旧 fixture 兼容验证和 advanced fixture 新能力验证"
-next_action: "提交并推送 artifact repo 与源码仓库；随后确认工作区 clean"
+last_action: "完成 CR-028 收尾：artifact repo 与源码仓库均已提交推送，工作区 clean，workspace check 和 CR tracking 通过"
+next_action: "无 active CR；等待用户下一步指令"
 orchestrator_session:
   kind: "host"
   role: "host-orchestrator"
@@ -135,6 +135,11 @@ checkpoints:
   final_review_confirmed: false
 parallel_waves: []
 history:
+  - at: "2026-06-17T13:46:02+08:00"
+    actor: "host-orchestrator"
+    action: "sync-state-after-cr-028-push"
+    phase: "documentation"
+    summary: "CR-028 的 artifact repo 提交 cf65620 已推送；源码仓库提交 6cc108d 已推送；两个仓库均 clean，workspace check 与 CR tracking 通过。"
   - at: "2026-06-17T13:42:40+08:00"
     actor: "host-orchestrator"
     action: "close-cr-028-eval-runner-hardening"
