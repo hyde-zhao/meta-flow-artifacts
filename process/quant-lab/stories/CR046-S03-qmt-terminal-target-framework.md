@@ -2,7 +2,7 @@
 story_id: "CR046-S03-qmt-terminal-target-framework"
 title: "QMT terminal target 框架"
 story_slug: "qmt-terminal-target-framework"
-status: "ready-for-verification"
+status: "verified-with-risk"
 priority: "P0"
 wave: "CR046-W2-TARGETS-INSTALL"
 depends_on:

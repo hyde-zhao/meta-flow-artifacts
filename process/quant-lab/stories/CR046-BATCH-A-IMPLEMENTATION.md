@@ -2,7 +2,7 @@
 change_id: "CR-046"
 batch_id: "CR046-DUAL-TARGET-FRAMEWORK-BATCH-A"
 phase: "story-execution"
-status: "ready-for-verification"
+status: "cp7-pass-with-risk-pending-cp8"
 owner: "host-orchestrator"
 created_at: "2026-06-14T00:16:26+08:00"
 source_context: "process/context/CP6-CR046-IMPLEMENTATION-CONTEXT.yaml"

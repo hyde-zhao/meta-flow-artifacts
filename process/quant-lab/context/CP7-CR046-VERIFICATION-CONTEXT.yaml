@@ -1,0 +1,145 @@
+version: 1
+context_id: "CP7-CR046-VERIFICATION-CONTEXT"
+change_id: "CR-046"
+status: "ready"
+phase: "story-execution"
+checkpoint: "CP7"
+created_at: "2026-06-18T06:34:50+08:00"
+created_by: "host-orchestrator"
+owner: "meta-qa"
+validation_mode: "mixed"
+verification_result: "PASS_WITH_RISK"
+read_profile: "compact"
+scope_summary: "CR046 framework-first static / fixture-plan / docs / contract verification only"
+
+source_context:
+  state: "process/STATE.md"
+  cr_index: "process/changes/CR-INDEX.yaml"
+  formal_cr: "process/changes/CR-046-TERMINAL-NATIVE-SIMULATION-STRATEGY-EXPORT-2026-06-13.md"
+  cp6_context: "process/context/CP6-CR046-IMPLEMENTATION-CONTEXT.yaml"
+  cp6_check: "process/checks/CP6-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-CODING-DONE.md"
+  cp6_implementation: "process/stories/CR046-BATCH-A-IMPLEMENTATION.md"
+  product_baseline:
+    - "process/USE-CASES.md"
+    - "process/REQUIREMENTS.md"
+  design_baseline:
+    - "process/docs/design/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md"
+    - "process/docs/design/ARCHITECTURE-DECISION-CR046.md"
+    - "process/docs/design/FEATURE-DESIGN-MATRIX.md"
+  implementation_artifacts:
+    - "process/docs/source-archive/docs/qmt/CR046-DUAL-TARGET-STRATEGY-FRAMEWORK.md"
+    - "process/docs/source-archive/docs/qmt/CR046-MINIQMT-RUNNER-INSTALL-DESIGN.md"
+    - "process/docs/source-archive/docs/qmt/CR046-VERIFICATION-FRAMEWORK.md"
+    - "process/docs/source-archive/docs/research/CR046-RESEARCH-FRAMEWORK-FOLLOWUP.md"
+    - "process/stories/CR046-S06-follow-up-strategy-delivery-gate.md"
+
+allowed_verification:
+  - "static document review"
+  - "fixture-plan and evidence-model review"
+  - "contract marker scan"
+  - "state and CR ledger consistency check"
+  - "no-runtime authorization boundary review"
+
+forbidden_operations:
+  qmt_miniqmt_xtquant_gateway_start: false
+  nas_access: false
+  env_read: false
+  credential_read: false
+  account_cash_position_order_fill_read: false
+  raw_log_read: false
+  submit_cancel: false
+  simulation_live: false
+  provider_fetch: false
+  lake_write: false
+  catalog_publish: false
+  cr020_restore: false
+  cr089_auto_start: false
+  cr091_auto_start: false
+
+dispatch_evidence:
+  mode: "spawn_agent"
+  agent_type: "meta-qa"
+  agent_name: "qa-he"
+  agent_id: "019ed7b0-70b5-78d2-a59c-09a96ee97c14"
+  thread_id: "019ed7b0-70b5-78d2-a59c-09a96ee97c14"
+  tool_name: "multi_agent_v1.spawn_agent"
+  completed_at: "2026-06-18T06:30:44+08:00"
+  note: "spawned_at was not exposed as a separate timestamp by the tool result; dispatch evidence is the returned agent_id/thread_id plus completed_at."
+  inline_fallback_used: false
+
+verification_commands:
+  - id: "CMD-CR046-CP7-00"
+    command: "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab"
+    result: "PASS"
+    evidence: "process_link_health=ok; routing_mode=symlink; artifact_git_dirty=clean"
+  - id: "CMD-CR046-CP7-01"
+    command: "uv run --python 3.11 python scripts/check_cr_tracking_consistency.py --project-root /home/hyde/workspace/quant-lab"
+    result: "PASS"
+    evidence: "CR tracking consistency: PASS"
+  - id: "CMD-CR046-CP7-02"
+    command: "uv run --python 3.11 python -c <yaml parse scoped files>"
+    result: "PASS"
+    evidence: "YAML_OK process/DEVELOPMENT-PLAN.yaml,process/context/CP6-CR046-IMPLEMENTATION-CONTEXT.yaml"
+  - id: "CMD-CR046-CP7-03"
+    command: "git diff --check -- <CR046 scoped input files>"
+    result: "PASS"
+    evidence: "no output"
+  - id: "CMD-CR046-CP7-04"
+    command: "static contract marker scan"
+    result: "PASS"
+    evidence: "CR046_CONTRACT_MARKERS_OK 9"
+  - id: "CMD-CR046-CP7-05"
+    command: "ready/runtime wording negative-context scan"
+    result: "PASS"
+    evidence: "CR046_READY_RUNTIME_TERMS_NEGATIVE_CONTEXT_OK 8"
+  - id: "CMD-CR046-CP7-06"
+    command: "dangerous executable or runtime pattern scan"
+    result: "PASS"
+    evidence: "NO_EXECUTABLE_DANGEROUS_OR_RUNTIME_PATTERNS"
+
+trace_summary:
+  stories:
+    - "CR046-S01-dual-target-strategy-architecture"
+    - "CR046-S02-strategy-package-contract-and-schema"
+    - "CR046-S03-qmt-terminal-target-framework"
+    - "CR046-S04-miniqmt-runner-install-and-runtime-boundary"
+    - "CR046-S05-verification-framework-and-evidence-model"
+    - "CR046-S06-follow-up-strategy-delivery-gate"
+    - "CR046-S07-research-framework-follow-up-contract"
+  use_cases:
+    - "UC-28"
+    - "UC-29"
+    - "UC-30"
+    - "UC-31"
+    - "UC-32"
+  requirements:
+    - "REQ-186..REQ-200"
+  scenarios:
+    - "TS-046-01..TS-046-07"
+
+known_risks:
+  - id: "R-CR046-CP7-001"
+    severity: "medium"
+    status: "open-for-cp8-risk-acceptance"
+    summary: "Canonical docs/product SCENARIOS.yaml and TEST-MATRIX.md are absent for CR046; equivalent legacy product baseline is in process/USE-CASES.md and process/REQUIREMENTS.md per REQ-198."
+  - id: "R-CR046-CP7-002"
+    severity: "medium"
+    status: "open-non-cr046-ledger-debt"
+    summary: "Full YAML parse of process/changes/CR-INDEX.yaml fails on a non-CR046 CR075 blocked_by scalar, while CR tracking consistency script still passes. Not fixed in CR046 scope."
+  - id: "R-CR046-CP7-003"
+    severity: "medium"
+    status: "expected-by-scope"
+    summary: "No QMT terminal, MiniQMT, XtQuant, gateway, NAS, credential, account, submit/cancel, simulation or live runtime verification was authorized or executed."
+
+stage_decision:
+  decision: "PASS_WITH_RISK"
+  next_gate: "CP8 Delivery Readiness"
+  cp8_must_not_authorize:
+    - "QMT/MiniQMT/XtQuant/gateway startup"
+    - "NAS operation"
+    - ".env or credential read"
+    - "account/cash/position/order/fill query"
+    - "submit/cancel"
+    - "simulation/live"
+    - "CR020 restore"
+    - "CR089 or CR091 auto-start"

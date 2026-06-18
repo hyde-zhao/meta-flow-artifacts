@@ -2,7 +2,7 @@
 story_id: "CR046-S06-follow-up-strategy-delivery-gate"
 title: "后续具体策略交付门禁"
 story_slug: "follow-up-strategy-delivery-gate"
-status: "ready-for-verification"
+status: "verified-with-risk"
 priority: "P1"
 wave: "CR046-W4-FOLLOW-UP-HANDOFF"
 depends_on:

@@ -1,12 +1,12 @@
 version: 1
-status: "active-formal-cr"
-updated_at: '2026-06-18T00:32:10+08:00'
+status: "no-active-formal-cr"
+updated_at: '2026-06-18T07:59:20+08:00'
 owner: meta-po
 source: >
   CR-046 started by user target change to terminal-native simulation strategy export,
   then upgraded to QMT + MiniQMT dual-target strategy delivery framework; CR046
-  remains user-paused at CP6 recovery point and must not be recovered without
-  explicit user instruction. CR061 closed-current-delivery / READY_WITH_RISK on
+  was resumed by explicit user instruction on 2026-06-18 and closed by CP8
+  approval at 2026-06-18T07:59:20+08:00 as closed-current-delivery / READY_WITH_RISK. CR061 closed-current-delivery / READY_WITH_RISK on
   2026-06-15 and recommended CR062 Git remote cutover / repository publication
   gate. CR062 CP2/CP3/CP5 was approved, but post-approval preflight blocked
   publication because the current Git index already tracks forbidden publication
@@ -57,7 +57,8 @@ source: >
   CR051 CP3 approved hardware-aware storage tiering and project
   identity rename from local_backtest to quant-lab with local_backtest retained
   as legacy alias. CR-045, CR-044, CR-043, CR-042, CR-041, CR-039 and CR-040 are
-  closed; CR-020 is deleted-by-user; CR-021..CR-024 are cancelled-user-deleted.
+  closed; CR-020 is closed-current-delivery with the user-deleted QMT route
+  archived; CR-021..CR-024 are cancelled-user-deleted.
   User requested CR071 / MIG-A at 2026-06-16T07:16:44+08:00: copy-first
   shadow root from /home/hyde/workspace/local_backtest to sibling
   /home/hyde/workspace/quant-lab after CP2/CP3/CP5 approval; old directory
@@ -94,7 +95,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: 'PASS at 2026-06-18T00:32:10+08:00 via PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_cr_tracking_consistency.py --project-root /home/hyde/workspace/quant-lab; CR091 QMT strategy runner research/design/implementation plan recorded as blocked-research-plan-recorded while CR046 remains top-level active_change and CR089 remains blocked-readiness-approved. No research execution, HLD/LLD, runner implementation, NAS access, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway startup, account query, submit/cancel, simulation/live, CR046 recovery or CR020 recovery executed.'
+last_consistency_check: 'PASS at 2026-06-18T08:10:27+08:00 after CR046 CP8 approval; CR046 status is closed-current-delivery. CR089 remains blocked-readiness-approved and CR091 remains blocked-research-plan-recorded. No NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway startup, submit/cancel, simulation/live, CR089 auto-start or CR091 auto-start executed.'
 root_authority:
   status: logical-cutover-complete
   authoritative_root: /home/hyde/workspace/quant-lab
@@ -131,12 +132,12 @@ index_schema:
 active_crs:
 - id: CR-046
   title: QMT and MiniQMT Dual-Target Strategy Delivery Framework
-  status: active-cp6-pass-ready-for-verification
+  status: closed-current-delivery
   source_tracking: USER-20260613-TERMINAL-NATIVE-STRATEGY-EXPORT
   formal_cr_path: process/changes/CR-046-TERMINAL-NATIVE-SIMULATION-STRATEGY-EXPORT-2026-06-13.md
   follow_up_tracking: process/changes/CR-046-FOLLOW-UP-TRACKING-2026-06-13.md
   priority: 1
-  blocked_by: 'USER-20260614-PAUSE-CR046: user-paused before CP7 verification. Recovery point remains CP6 framework-first implementation PASS at 2026-06-14T00:16:26+08:00 / ready-for-verification. CR046 remains framework-first for QMT terminal + MiniQMT runner dual-target strategy delivery, verification framework design, package contract, and MiniQMT runner install design. It does not deliver a concrete strategy, does not execute QMT terminal validation, and still does not authorize real transfer/import, credential_read, account_id_read, account/cash/position/order/fill query, MiniQMT connection, order_submit, order_cancel, simulation submit, live trading, Windows bridge runtime, provider_fetch, lake_write or catalog_publish.'
+  blocked_by: 'closed: 用户于 2026-06-18T07:59:20+08:00 同意 CR046 CP8，接受 READY_WITH_RISK 和 DQ-CP8-CR046-01..05；CR046 当前 framework-first 文档 / 契约 / fixture / 静态验证交付关闭。仍不授权具体策略交付、QMT terminal validation、real transfer/import、NAS、credential_read、account_id_read、account/cash/position/order/fill query、MiniQMT/XtQuant/gateway connection、order_submit、order_cancel、simulation submit、live trading、Windows bridge runtime、provider_fetch、lake_write 或 catalog_publish。'
   impact_surface:
   - dual-target strategy delivery framework
   - QMT terminal strategy
@@ -161,9 +162,9 @@ active_crs:
   - per_run_authorization
   - no_runtime_connection
   - no_terminal_validation
-  next_gate: User Paused before CP7 Verification
-  next_action: 等待用户明确恢复 CR046 后再进入 CP7 verification-execution；挂起期间不调度 CP7、不启动 CR047/CR048/CR049、不执行真实运行 / 交易 / 凭据 / 传输导入。CR051 已关闭当前 Git 内交付，但不授权真实迁移、后续 CR 自动启动或 runtime。
-  last_checked_at: '2026-06-14T00:29:41+08:00'
+  next_gate: closed
+  next_action: CR046 当前交付已关闭；后续可由用户明确选择 CR091 runner research/design/implementation plan、CR047 首个具体策略交付、CR089 本地离线 package skeleton 或其他候选。任何后续候选都必须新建 / 恢复独立门禁，不自动启动。
+  last_checked_at: '2026-06-18T07:59:20+08:00'
 - id: CR-080
   title: Data/reports Restore or Copy Gate
   status: closed-current-delivery
@@ -1597,11 +1598,11 @@ closed_crs:
 cancelled_crs:
 - id: CR-020
   title: QMT Windows Gateway 服务端登录与只读查询接口准入
-  status: deleted-by-user
+  status: closed-current-delivery
   source_tracking: USER-20260610-NO-MINIQMT-GOLDMINER-ROUTE
   formal_cr_path: process/changes/CR-020-QMT-WINDOWS-GATEWAY-SERVER-LOGIN-READONLY-QUERY-ADMISSION-2026-06-04.md
   priority: 1
-  blocked_by: 用户确认无法获取 MiniQMT 权限，并要求将 QMT 相关 CR 全部标记为删除，不再做。
+  blocked_by: 'closed: 用户确认 CR020 可以关闭；2026-06-10 user-deleted QMT gateway 路线已归档，不恢复 CR020，不作为当前 QMT 接口验证入口。'
   impact_surface:
   - QMT_gateway
   - MiniQMT_permission
@@ -1612,9 +1613,9 @@ cancelled_crs:
   - qmt_route_deleted
   - CR-020
   - D-CP8-CR019-02
-  next_gate: deleted
-  next_action: 不再等待 MiniQMT；不再执行 Windows/QMT gateway 实机验证；仅保留历史 CP2-CP7 证据用于审计。若未来恢复 QMT，必须重新发起 CR。
-  last_checked_at: '2026-06-10T22:20:00+08:00'
+  next_gate: closed
+  next_action: 无后续动作；仅保留历史 CP2-CP7 证据用于审计。未来若需要 QMT/MiniQMT/XtQuant/gateway 或账户只读/订单验证，必须新建独立 CR 并通过 runtime authorization gate。
+  last_checked_at: '2026-06-18T07:22:20+08:00'
 - id: "CR-021"
   title: QMT simulation 账号接入准入
   status: cancelled-user-deleted
@@ -1695,7 +1696,7 @@ blocked_crs:
   source_tracking: USER-20260617-QMT-NAS-STRATEGY-PACKAGE-INTERFACE-VALIDATION
   formal_cr_path: process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md
   priority: 1
-  blocked_by: CR046 remains active-cp6-pass-ready-for-verification and overlaps strategy package contract, QMT terminal target, MiniQMT runner target, trading runtime boundary and per-run authorization. User approved CR089 CP2/CP3/CP5 at 2026-06-17T21:34:53+08:00; CR089 remains blocked-readiness-approved and no NAS/QMT/credential/account/trading runtime action is authorized.
+  blocked_by: CR046 framework-first delivery is now closed-current-delivery / READY_WITH_RISK. User approved CR089 CP2/CP3/CP5 at 2026-06-17T21:34:53+08:00, but CR089 remains blocked-readiness-approved until the user explicitly starts the next CR / runtime authorization; no NAS/QMT/credential/account/trading runtime action is authorized.
   impact_surface:
   - QMT interface validation
   - NAS strategy package exchange
@@ -1713,8 +1714,8 @@ blocked_crs:
   - credential_boundary
   - nas_package_exchange
   next_gate: local offline package skeleton or independent runtime authorization
-  next_action: Prepare only local offline qmt_interface_smoke package skeleton / manifest / checksum docs and manual smoke guide; no NAS/QMT/credential/account/trading action authorized.
-  last_checked_at: '2026-06-17T21:34:53+08:00'
+  next_action: 可作为后续候选准备本地离线 qmt_interface_smoke package skeleton / manifest / checksum docs / manual smoke guide；启动前必须用户明确选择，不授权 NAS/QMT/credential/account/trading action。
+  last_checked_at: '2026-06-18T07:59:20+08:00'
 - id: CR-091
   title: QMT Strategy Runner Research / Design / Implementation Plan
   status: blocked-research-plan-recorded
@@ -1724,7 +1725,7 @@ blocked_crs:
   source_checkpoint: current conversation
   source_decision_id: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
   priority: 1
-  blocked_by: 'CR046 remains active-cp6-pass-ready-for-verification and overlaps strategy package contract, MiniQMT runner design, trading runtime boundary and per-run authorization. CR089 remains blocked-readiness-approved. CR091 is only a recorded plan for research -> solution decision -> implementation and does not authorize research execution, NAS/QMT/credential/account/trading runtime actions, submit/cancel, simulation or live.'
+  blocked_by: 'CR046 framework-first delivery is now closed-current-delivery / READY_WITH_RISK. CR089 remains blocked-readiness-approved. CR091 is only a recorded plan for research -> solution decision -> implementation and does not authorize research execution, NAS/QMT/credential/account/trading runtime actions, submit/cancel, simulation or live. It may be started only by explicit user instruction after context reset or a new gate.'
   impact_surface:
   - QMT strategy runner
   - runner research spike
@@ -1746,7 +1747,7 @@ blocked_crs:
   - order_write_excluded
   next_gate: CR091 Phase 1 Research / Spike authorization
   next_action: 等待用户明确启动 CR091 研究阶段；启动前不研究外部项目细节、不写 HLD/LLD、不实现 runner、不访问 NAS、不启动 QMT/MiniQMT/XtQuant/gateway、不读取凭据或账户、不执行 submit/cancel/simulation/live。
-  last_checked_at: '2026-06-18T00:28:26+08:00'
+  last_checked_at: '2026-06-18T07:59:20+08:00'
 follow_up_candidates:
 - id: "CR-026"
   title: Qlib isolated runner optional Spike (narrowed after CR030-039 coverage)
@@ -1794,7 +1795,7 @@ follow_up_candidates:
   source_tracking: process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md
   formal_cr_path: process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md
   priority: 2
-  blocked_by: closed: user approved CR075 CP8 at 2026-06-17T00:18:01+08:00; CR075 closed as READY_WITH_RISK after env rebuild and minimal smoke PASS.
+  blocked_by: 'closed: user approved CR075 CP8 at 2026-06-17T00:18:01+08:00; CR075 closed as READY_WITH_RISK after env rebuild and minimal smoke PASS.'
   impact_surface:
   - target environment
   - dependency sync
@@ -1812,7 +1813,7 @@ follow_up_candidates:
   source_tracking: process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md
   formal_cr_path: process/changes/CR-076-DATA-REPORTS-ACCESS-POLICY-2026-06-17.md
   priority: 3
-  blocked_by: closed: user approved CR076 CP8 at 2026-06-17T05:36:08+08:00; formal CR076 closed policy-only / no-data-touch delivery as READY_WITH_RISK. Future real access requires a new explicit CR.
+  blocked_by: 'closed: user approved CR076 CP8 at 2026-06-17T05:36:08+08:00; formal CR076 closed policy-only / no-data-touch delivery as READY_WITH_RISK. Future real access requires a new explicit CR.'
   impact_surface:
   - reports access
   - data access
@@ -1833,7 +1834,7 @@ follow_up_candidates:
   source_tracking: process/checkpoints/CP8-CR076-DELIVERY-READINESS.md
   formal_cr_path: process/changes/CR-079-REAL-DATA-REPORTS-ACCESS-GATE-2026-06-17.md
   priority: 3
-  blocked_by: closed: formal CR079 approved at CP8 on 2026-06-17T06:28:29+08:00 and closed metadata-only inventory as READY_WITH_RISK; follow-up restore/copy completed and closed by CR080 at 2026-06-17T07:32:59+08:00.
+  blocked_by: 'closed: formal CR079 approved at CP8 on 2026-06-17T06:28:29+08:00 and closed metadata-only inventory as READY_WITH_RISK; follow-up restore/copy completed and closed by CR080 at 2026-06-17T07:32:59+08:00.'
   impact_surface:
   - reports access
   - data access
@@ -2090,9 +2091,9 @@ route_view:
   - CR-022
   - CR-023
   - CR-024
-  status: deleted-by-user
-  next_action: 用户确认无法获取 MiniQMT 权限并要求删除 QMT 相关 CR。CR-020 标记为 deleted-by-user，CR-021..CR-024 标记为 cancelled-user-deleted；不再等待权限、不再执行
-    QMT gateway 实机验证、不启动 QMT simulation/live。
+  status: closed-current-delivery
+  next_action: 用户确认 CR020 可以关闭；CR-020 作为 user-deleted QMT gateway 路线已归档为 closed-current-delivery，CR-021..CR-024 保持 cancelled-user-deleted；不再等待权限、不再执行
+    QMT gateway 实机验证、不启动 QMT simulation/live。未来需要 QMT 接口验证时必须新建独立 CR。
 - id: line-d-paper-simulation-goldminer-route
   title: 本地 Paper Simulation / 掘金候选路线
   current_objects:

@@ -2,7 +2,7 @@
 story_id: "CR046-S04-miniqmt-runner-install-and-runtime-boundary"
 title: "MiniQMT runner 安装设计与运行边界"
 story_slug: "miniqmt-runner-install-and-runtime-boundary"
-status: "ready-for-verification"
+status: "verified-with-risk"
 priority: "P0"
 wave: "CR046-W2-TARGETS-INSTALL"
 depends_on:

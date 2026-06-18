@@ -1,8 +1,8 @@
 ---
-last_updated: "2026-06-14T00:29:41+08:00"
+last_updated: "2026-06-18T07:59:20+08:00"
 current_wave: "CR046-W1-ARCHITECTURE-CONTRACT"
 current_story: ""
-current_gate: "CR-046 用户挂起于 CP6 PASS / ready-for-verification；S01..S07 保持 ready-for-verification。恢复前不得推进 CP7、不得交付具体策略、不得真实传输 / 导入、不得 QMT 运行验证、不得连接 / 安装 MiniQMT、不得 submit/cancel、不得 simulation/live、不得 provider/lake/publish 或凭据读取。"
+current_gate: "CR-046 CP8 已 approved；当前 framework-first 文档 / 契约交付关闭为 closed-current-delivery / READY_WITH_RISK。仍不得交付具体策略、不得真实传输 / 导入、不得 QMT 运行验证、不得连接 / 安装 MiniQMT、不得访问 NAS、不得读取 .env / 凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交 / 日志原文、不得 submit/cancel、不得 simulation/live、不得 provider/lake/publish。后续候选需用户明确启动；CR089/CR091 保持 blocked。"
 ---
 
 ## Story 状态汇总
@@ -13,20 +13,22 @@ current_gate: "CR-046 用户挂起于 CP6 PASS / ready-for-verification；S01..S
 |---|---|---|---|
 | Story Plan | cp4-auto-pass-pending-lld | `process/STORY-BACKLOG.md`、`process/DEVELOPMENT-PLAN.yaml`、7 张 `process/stories/CR046-S*.md`、`process/checks/CP4-CR046-STORY-DAG-PARALLEL-SAFETY.md` | 进入全量设计证据批次；CP5 前不得实现。 |
 | LLD batch | approved | `CR046-DUAL-TARGET-FRAMEWORK-BATCH-A` | S01..S05 full-lld，S06..S07 technical-note，7 份 CP5 自动预检 PASS；CP5 人工确认 approved。 |
-| CP6 implementation | PASS / user-paused-before-CP7 | `process/checks/CP6-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-CODING-DONE.md` | framework-first 文档 / 契约实现完成；用户已挂起 CR046，恢复前不进入 CP7。 |
+| CP6 implementation | PASS | `process/checks/CP6-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-CODING-DONE.md` | framework-first 文档 / 契约实现完成。 |
+| CP7 verification | PASS_WITH_RISK | `process/checks/CP7-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-VERIFICATION-DONE.md`、`process/docs/quality/VERIFICATION-REPORT-CR046.md` | 仅静态 / fixture / 文档 / 契约验证；无 runtime / NAS / 凭据 / 账户 / 交易动作授权。 |
+| CP8 readiness | approved | `process/checks/CP8-CR046-DELIVERY-READINESS.md`、`process/checkpoints/CP8-CR046-DELIVERY-READINESS.md`、`process/release/RELEASE-CONTEXT-CR046.yaml` | 用户已同意；CR046 当前 framework-first 交付关闭为 `closed-current-delivery / READY_WITH_RISK`。 |
 | 安全边界 | not-authorized | CP2 / CP3 / CP4 不授权项 | 真实运行、连接、安装、submit/cancel、simulation/live、凭据、provider/lake/publish 均 blocked。 |
 
 ### CR046 Story Plan 队列
 
 | Story ID | 标题 | Wave | 状态 | 设计证据 | lld_policy | Dev Gate | 负责人 | 阻塞 |
 |---|---|---|---|---|---|---|---|---|
-| CR046-S01-dual-target-strategy-architecture | 双目标策略交付架构与 FEAT-09 边界 | CR046-W1-ARCHITECTURE-CONTRACT | ready-for-verification | CP6 PASS | full-lld | blocked-runtime | host-orchestrator | CP7 前不得 verified |
-| CR046-S02-strategy-package-contract-and-schema | 策略包合同、目录结构与 schema | CR046-W1-ARCHITECTURE-CONTRACT | ready-for-verification | CP6 PASS | full-lld | blocked-runtime | host-orchestrator | CP7 前不得 verified |
-| CR046-S03-qmt-terminal-target-framework | QMT terminal target 框架 | CR046-W2-TARGETS-INSTALL | ready-for-verification | CP6 PASS | full-lld | blocked-runtime | host-orchestrator | QMT runtime not-authorized |
-| CR046-S04-miniqmt-runner-install-and-runtime-boundary | MiniQMT runner 安装设计与运行边界 | CR046-W2-TARGETS-INSTALL | ready-for-verification | CP6 PASS | full-lld | blocked-runtime | host-orchestrator | MiniQMT install / connection not-authorized |
-| CR046-S05-verification-framework-and-evidence-model | 验证框架与证据模型 | CR046-W3-VALIDATION-GATES | ready-for-verification | CP6 PASS | full-lld | blocked-runtime | host-orchestrator | 不得声明 runtime verified |
-| CR046-S06-follow-up-strategy-delivery-gate | 后续具体策略交付门禁 | CR046-W4-FOLLOW-UP-HANDOFF | ready-for-verification | CP6 PASS | technical-note | blocked-runtime | host-orchestrator | 不启动 CR047 / CR049 |
-| CR046-S07-research-framework-follow-up-contract | 研究框架反向完善合同 | CR046-W4-FOLLOW-UP-HANDOFF | ready-for-verification | CP6 PASS | technical-note | blocked-runtime | host-orchestrator | 不实施 CR051 |
+| CR046-S01-dual-target-strategy-architecture | 双目标策略交付架构与 FEAT-09 边界 | CR046-W1-ARCHITECTURE-CONTRACT | verified-with-risk | CP6 PASS / CP7 PASS_WITH_RISK | full-lld | cp7-pass-with-risk | host-orchestrator | 等待 CP8 风险接受；runtime not-authorized |
+| CR046-S02-strategy-package-contract-and-schema | 策略包合同、目录结构与 schema | CR046-W1-ARCHITECTURE-CONTRACT | verified-with-risk | CP6 PASS / CP7 PASS_WITH_RISK | full-lld | cp7-pass-with-risk | host-orchestrator | 等待 CP8 风险接受；真实传输 / 导入 not-authorized |
+| CR046-S03-qmt-terminal-target-framework | QMT terminal target 框架 | CR046-W2-TARGETS-INSTALL | verified-with-risk | CP6 PASS / CP7 PASS_WITH_RISK | full-lld | cp7-pass-with-risk | host-orchestrator | QMT runtime not-authorized |
+| CR046-S04-miniqmt-runner-install-and-runtime-boundary | MiniQMT runner 安装设计与运行边界 | CR046-W2-TARGETS-INSTALL | verified-with-risk | CP6 PASS / CP7 PASS_WITH_RISK | full-lld | cp7-pass-with-risk | host-orchestrator | MiniQMT install / connection not-authorized |
+| CR046-S05-verification-framework-and-evidence-model | 验证框架与证据模型 | CR046-W3-VALIDATION-GATES | verified-with-risk | CP6 PASS / CP7 PASS_WITH_RISK | full-lld | cp7-pass-with-risk | host-orchestrator | 不得声明 runtime verified |
+| CR046-S06-follow-up-strategy-delivery-gate | 后续具体策略交付门禁 | CR046-W4-FOLLOW-UP-HANDOFF | verified-with-risk | CP6 PASS / CP7 PASS_WITH_RISK | technical-note | cp7-pass-with-risk | host-orchestrator | 不启动 CR047 / CR049 |
+| CR046-S07-research-framework-follow-up-contract | 研究框架反向完善合同 | CR046-W4-FOLLOW-UP-HANDOFF | verified-with-risk | CP6 PASS / CP7 PASS_WITH_RISK | technical-note | cp7-pass-with-risk | host-orchestrator | 不实施 CR051 / CR091 |
 
 ## CR-030：多因子研究框架借鉴与研究闭环标准化
 

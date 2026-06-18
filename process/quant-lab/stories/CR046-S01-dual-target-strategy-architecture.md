@@ -2,7 +2,7 @@
 story_id: "CR046-S01-dual-target-strategy-architecture"
 title: "双目标策略交付架构与 FEAT-09 边界"
 story_slug: "dual-target-strategy-architecture"
-status: "ready-for-verification"
+status: "verified-with-risk"
 priority: "P0"
 wave: "CR046-W1-ARCHITECTURE-CONTRACT"
 depends_on: []

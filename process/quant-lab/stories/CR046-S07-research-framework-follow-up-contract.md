@@ -2,7 +2,7 @@
 story_id: "CR046-S07-research-framework-follow-up-contract"
 title: "研究框架反向完善合同"
 story_slug: "research-framework-follow-up-contract"
-status: "ready-for-verification"
+status: "verified-with-risk"
 priority: "P1"
 wave: "CR046-W4-FOLLOW-UP-HANDOFF"
 depends_on:

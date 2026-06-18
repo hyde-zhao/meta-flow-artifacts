@@ -1,13 +1,15 @@
 ---
 cr_id: "CR-020"
 title: "QMT Windows Gateway 服务端登录与只读查询接口准入"
-status: "deleted-by-user"
+status: "closed-current-delivery"
 impact_level: "high"
 workflow_mode_before: "standard"
 workflow_mode_after_change: "standard"
 fast_lane_upgrade_reason: "该变更涉及 Windows 服务启动、端口监听、QMT / MiniQMT / XtQuant 外部接口、服务端账号登录、凭据 `.env`、HMAC / allowlist、安全脱敏、只读真实查询和多 Story 依赖，必须按 standard 模式执行。"
 rollback_to: "requirement-clarification"
-approval_result: "deleted-by-user-after-miniqmt-permission-unavailable"
+approval_result: "closed-user-deleted-route-archived"
+closed_at: "2026-06-18T07:22:20+08:00"
+close_reason: "用户确认 CR020 可以关闭；关闭含义为归档 user-deleted QMT gateway 路线，不恢复 CR020，不启动 QMT/MiniQMT/XtQuant/gateway，不读取凭据或账户数据。"
 created_at: "2026-06-04T22:28:31+08:00"
 created_by: "meta-po"
 approved_by: "user"
@@ -167,7 +169,7 @@ cp7_fixture_static_status: "PASS"
 cp7_fixture_static_result: "process/checks/CP7-CR020-FIXTURE-STATIC-VERIFICATION-DONE.md"
 cp7_fixture_static_handoff: "process/handoffs/META-QA-CR020-CP7-FIXTURE-STATIC-2026-06-05.md"
 cp7_fixture_static_completed_at: "2026-06-05T09:13:41+08:00"
-manual_windows_qmt_validation_status: "pending-miniqmt-permission"
+manual_windows_qmt_validation_status: "closed-user-deleted-route-archived"
 manual_windows_qmt_validation_docs:
   - "docs/QMT-GATEWAY-INSTALL.md#cr020-windows-s-端手工安装调试手册"
   - "docs/QMT-C-S-BRIDGE-RUNBOOK.md#9-cr020-manual-install-debug-guide"
@@ -184,6 +186,8 @@ first_query_interface: "query_positions"
 ---
 
 # CR-020 QMT Windows Gateway 服务端登录与只读查询接口准入
+
+> 2026-06-18T07:22:20+08:00 关闭记录：用户明确指出“CR020 可以关闭”。本 CR 状态更新为 `closed-current-delivery`，关闭含义是归档 2026-06-10 用户删除的 QMT gateway 路线，历史 CP2-CP7 证据仅保留审计用途；不恢复 CR020，不等待 MiniQMT，不执行 Windows/QMT gateway 实机验证，不授权 QMT/MiniQMT/XtQuant/gateway 启动、凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交读取、submit/cancel、simulation/live 或 provider/lake/publish。未来如需 QMT 接口验证，必须新建独立 CR 并通过 runtime authorization gate。
 
 > 2026-06-10 删除记录：用户确认无法获取 MiniQMT 权限，并要求“将 qmt 相关的 CR 全部标记为删除，不再做了”。CR-020 状态更新为 `deleted-by-user`。本记录不物理删除历史设计、代码、文档或 CP2-CP7 证据；但 CR-020 不再等待 MiniQMT 权限，不再进行 Windows/QMT gateway 实机验证，不再作为后续 simulation / live 路线前置。
 

@@ -1,0 +1,123 @@
+release_context_id: "RELEASE-CONTEXT-CR046"
+change_id: "CR-046"
+release_profile: "framework-first-document-contract"
+status: "approved-closed-current-delivery"
+created_at: "2026-06-18T07:41:38+08:00"
+created_by: "host-orchestrator"
+decision: "READY_WITH_RISK"
+approved_by: "user"
+approved_at: "2026-06-18T07:59:20+08:00"
+closed_at: "2026-06-18T07:59:20+08:00"
+
+scope:
+  in_scope:
+    - "QMT terminal + MiniQMT runner dual-target strategy delivery framework"
+    - "strategy package contract"
+    - "QMT terminal target framework"
+    - "MiniQMT runner install design and runtime boundary"
+    - "verification framework and evidence model"
+    - "follow-up strategy delivery and research framework handoff"
+  out_of_scope:
+    - "concrete strategy package"
+    - "QMT terminal run"
+    - "MiniQMT install or connection"
+    - "XtQuant/gateway runtime"
+    - "NAS package exchange"
+    - "credential/account/funds/position/order/fill/log raw reads"
+    - "submit/cancel"
+    - "simulation/live"
+    - "provider/lake/catalog operations"
+
+evidence:
+  implementation:
+    status: "PASS"
+    check: "process/checks/CP6-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-CODING-DONE.md"
+    implementation_summary: "process/stories/CR046-BATCH-A-IMPLEMENTATION.md"
+  verification:
+    status: "PASS_WITH_RISK"
+    check: "process/checks/CP7-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-VERIFICATION-DONE.md"
+    context: "process/context/CP7-CR046-VERIFICATION-CONTEXT.yaml"
+    verification_report: "process/docs/quality/VERIFICATION-REPORT-CR046.md"
+    test_report: "process/docs/quality/TEST-REPORT-CR046.md"
+    review_report: "process/docs/quality/REVIEW-CR046.md"
+    fixes_report: "process/docs/quality/FIXES-CR046.md"
+  source_archive:
+    qmt_framework: "process/docs/source-archive/docs/qmt/CR046-DUAL-TARGET-STRATEGY-FRAMEWORK.md"
+    verification_framework: "process/docs/source-archive/docs/qmt/CR046-VERIFICATION-FRAMEWORK.md"
+    miniqmt_install_design: "process/docs/source-archive/docs/qmt/CR046-MINIQMT-RUNNER-INSTALL-DESIGN.md"
+    research_followup: "process/docs/source-archive/docs/research/CR046-RESEARCH-FRAMEWORK-FOLLOWUP.md"
+
+release_artifacts:
+  release_notes: "process/docs/release/RELEASE-NOTES-CR046.md"
+  deploy_checklist: "process/docs/release/DEPLOY-CHECKLIST-CR046.md"
+  rollback: "process/docs/release/ROLLBACK-CR046.md"
+  migration: "process/docs/release/MIGRATION-CR046.md"
+  feedback: "process/docs/release/FEEDBACK-CR046.md"
+  cp8_auto_check: "process/checks/CP8-CR046-DELIVERY-READINESS.md"
+  cp8_manual_review: "process/checkpoints/CP8-CR046-DELIVERY-READINESS.md"
+  cp8_context: "process/context/CP8-CR046-DELIVERY-CONTEXT.yaml"
+
+risk_register:
+  - id: "R-CR046-CP7-001"
+    severity: "medium"
+    owner: "future-doc-governance"
+    decision: "accept for CR046 CP8"
+    summary: "docs/product canonical scenarios/test matrix 缺失，legacy process baseline 可追溯。"
+  - id: "R-CR046-CP7-002"
+    severity: "medium"
+    owner: "future-ledger-hygiene"
+    decision: "accept for CR046 CP8"
+    summary: "CR-INDEX 全量 YAML parse 历史债务不在 CR046 范围内修复。"
+  - id: "R-CR046-CP7-003"
+    severity: "high"
+    owner: "runtime-authorization-gate"
+    decision: "accept as scope boundary"
+    summary: "无 runtime evidence；CP8 approve 不等于 runtime authorization。"
+  - id: "REV-CR046-004"
+    severity: "low"
+    owner: "documentation-route"
+    decision: "non-blocking"
+    summary: "历史 docs/qmt 路径引用改以 source-archive 路径追溯。"
+
+follow_up_routes:
+  - id: "CR047-candidate"
+    status: "candidate"
+    gate: "strategy_delivery_gate"
+    summary: "选择具体研究策略，执行双目标策略交付。"
+  - id: "CR048-candidate"
+    status: "candidate"
+    gate: "runtime_authorization"
+    summary: "QMT terminal shadow / minimal submit-cancel 验证，需逐 run 授权。"
+  - id: "CR049-candidate"
+    status: "candidate"
+    gate: "environment_authorization"
+    summary: "MiniQMT/XtQuant 只读连接与 runner install 实机验证。"
+  - id: "CR050-candidate"
+    status: "spike_candidate"
+    gate: "research_spike"
+    summary: "tick 级 MiniQMT runner / resource control spike。"
+  - id: "CR091"
+    status: "blocked-research-plan-recorded"
+    gate: "future-research-and-implementation-plan"
+    summary: "runner 未开发问题的后续研究/设计/实现路线，不由 CR046 CP8 自动启动。"
+
+non_authorized_items:
+  - "QMT/MiniQMT/XtQuant/gateway startup"
+  - "NAS access"
+  - ".env or credential read"
+  - "account id, account, funds, position, order, fill, or raw log read"
+  - "submit/cancel"
+  - "simulation/live"
+  - "provider fetch, lake write, catalog publish"
+  - "automatic CR089 or CR091 activation"
+
+rollback_summary:
+  type: "document-and-ledger-state-only"
+  trigger: "CP8 reject or user-requested scope correction"
+  rollback_target: "CR046 CP7 PASS_WITH_RISK pending CP8"
+  destructive_action_required: false
+
+token_control:
+  read_profile: "compact"
+  full_doc_read_required: false
+  full_doc_read_reason: ""

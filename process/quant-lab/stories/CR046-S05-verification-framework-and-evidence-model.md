@@ -2,7 +2,7 @@
 story_id: "CR046-S05-verification-framework-and-evidence-model"
 title: "验证框架与证据模型"
 story_slug: "verification-framework-and-evidence-model"
-status: "ready-for-verification"
+status: "verified-with-risk"
 priority: "P0"
 wave: "CR046-W3-VALIDATION-GATES"
 depends_on:

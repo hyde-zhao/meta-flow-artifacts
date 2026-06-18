@@ -1,0 +1,114 @@
+context_id: "CP8-CR046-DELIVERY-CONTEXT"
+change_id: "CR-046"
+phase: "documentation"
+gate: "CP8"
+status: "approved-closed-current-delivery"
+created_at: "2026-06-18T07:41:38+08:00"
+created_by: "host-orchestrator"
+read_profile: "compact"
+
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - "process/release/RELEASE-CONTEXT-CR046.yaml"
+    - "process/checks/CP8-CR046-DELIVERY-READINESS.md"
+    - "process/checkpoints/CP8-CR046-DELIVERY-READINESS.md"
+    - "process/changes/CR-046-TERMINAL-NATIVE-SIMULATION-STRATEGY-EXPORT-2026-06-13.md"
+    - "process/checks/CP7-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-VERIFICATION-DONE.md"
+    - "process/docs/quality/VERIFICATION-REPORT-CR046.md"
+  read_if_needed:
+    - "process/checks/CP6-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-CODING-DONE.md"
+    - "process/stories/CR046-BATCH-A-IMPLEMENTATION.md"
+    - "process/docs/quality/TEST-REPORT-CR046.md"
+    - "process/docs/quality/REVIEW-CR046.md"
+    - "process/docs/quality/FIXES-CR046.md"
+    - "process/docs/source-archive/docs/qmt/CR046-DUAL-TARGET-STRATEGY-FRAMEWORK.md"
+    - "process/docs/source-archive/docs/qmt/CR046-VERIFICATION-FRAMEWORK.md"
+    - "process/docs/source-archive/docs/qmt/CR046-MINIQMT-RUNNER-INSTALL-DESIGN.md"
+    - "process/docs/source-archive/docs/research/CR046-RESEARCH-FRAMEWORK-FOLLOWUP.md"
+    - "process/changes/CR-046-FOLLOW-UP-TRACKING-2026-06-13.md"
+  do_not_read_by_default:
+    - ".env"
+    - "credentials"
+    - "account/cash/position/order/fill raw data"
+    - "raw logs"
+    - "NAS content"
+    - "QMT/MiniQMT/XtQuant/gateway runtime state"
+    - "full conversation transcript"
+    - "unrelated CR history"
+
+scope_summary:
+  included:
+    - "QMT terminal + MiniQMT runner dual-target strategy delivery framework"
+    - "strategy package contract and schema-oriented documentation"
+    - "MiniQMT runner install design and runtime boundary"
+    - "fixture/static/document/contract verification evidence"
+    - "follow-up gate split for concrete strategy, QMT shadow, MiniQMT readonly, submit/cancel, and runner research"
+  excluded:
+    - "concrete trading strategy delivery"
+    - "QMT terminal shadow or simulation execution"
+    - "MiniQMT/XtQuant install, connection, or runner execution"
+    - "NAS access"
+    - "credential/account/funds/position/order/fill/log raw reads"
+    - "submit/cancel"
+    - "simulation/live"
+    - "provider fetch, lake write, catalog publish"
+
+evidence_summary:
+  cp6_status: "PASS"
+  cp6_check: "process/checks/CP6-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-CODING-DONE.md"
+  cp7_status: "PASS_WITH_RISK"
+  cp7_check: "process/checks/CP7-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-VERIFICATION-DONE.md"
+  verification_report: "process/docs/quality/VERIFICATION-REPORT-CR046.md"
+  test_report: "process/docs/quality/TEST-REPORT-CR046.md"
+  review_report: "process/docs/quality/REVIEW-CR046.md"
+  fixes_report: "process/docs/quality/FIXES-CR046.md"
+  release_context: "process/release/RELEASE-CONTEXT-CR046.yaml"
+  release_docs:
+    - "process/docs/release/RELEASE-NOTES-CR046.md"
+    - "process/docs/release/DEPLOY-CHECKLIST-CR046.md"
+    - "process/docs/release/ROLLBACK-CR046.md"
+    - "process/docs/release/MIGRATION-CR046.md"
+    - "process/docs/release/FEEDBACK-CR046.md"
+
+release_decision:
+  recommended: "READY_WITH_RISK"
+  reason: "CR046 framework-first 文档、契约、fixture 和静态验证已完成；剩余风险均为可追踪的范围边界、历史台账债务或后续 runtime 授权缺口。"
+  next_gate: "CP8 human review / risk acceptance"
+  close_after_approval: true
+  approved_by: "user"
+  approved_at: "2026-06-18T07:59:20+08:00"
+
+known_risks:
+  - id: "R-CR046-CP7-001"
+    status: "accepted-for-cp8-review"
+    summary: "docs/product canonical scenarios/test matrix 缺失；等价基线来自 legacy process/USE-CASES.md 和 process/REQUIREMENTS.md。"
+    cp8_handling: "不在 CR046 内静默迁移；作为后续文档治理风险接受。"
+  - id: "R-CR046-CP7-002"
+    status: "accepted-for-cp8-review"
+    summary: "CR-INDEX 全量 YAML parse 仍受非 CR046 历史 CR075 字段影响。"
+    cp8_handling: "CR046 只依赖一致性脚本和局部 CR046 跟踪；全量账本卫生另行治理。"
+  - id: "R-CR046-CP7-003"
+    status: "accepted-for-cp8-review"
+    summary: "无真实 QMT/MiniQMT/NAS/credential/account/submit/cancel/simulation/live evidence。"
+    cp8_handling: "符合本轮未授权范围；不得被解释为 runtime verified。"
+  - id: "REV-CR046-004"
+    status: "non-blocking"
+    summary: "CP6 引用历史 docs/qmt 路径，实际源文档位于 process/docs/source-archive/docs/qmt。"
+    cp8_handling: "在 CP8 材料中以 source-archive 路径作为追溯源，不阻断。"
+
+pending_human_decisions:
+  - "DQ-CP8-CR046-01"
+  - "DQ-CP8-CR046-02"
+  - "DQ-CP8-CR046-03"
+  - "DQ-CP8-CR046-04"
+  - "DQ-CP8-CR046-05"
+
+non_authorized_items:
+  - "QMT/MiniQMT/XtQuant/gateway startup or connection"
+  - "NAS access"
+  - ".env, credential, account id, account, funds, position, order, fill, or raw log read"
+  - "submit/cancel"
+  - "simulation/live"
+  - "provider fetch, lake write, catalog publish"
+  - "automatic CR089 or CR091 startup"

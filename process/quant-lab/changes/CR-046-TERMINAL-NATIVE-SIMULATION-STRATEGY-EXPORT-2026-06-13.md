@@ -1,15 +1,30 @@
 ---
 cr_id: "CR-046"
-status: "active-cp6-pass-ready-for-verification"
+status: "closed-current-delivery"
 impact_level: "high"
 workflow_mode_before: "standard"
 workflow_mode_after_change: "standard"
 fast_lane_upgrade_reason: "命中交易终端、模拟盘执行、外部接口契约和运行授权边界；不得使用 fast-lane。"
 rollback_to: "CP2 requirement baseline for CR046"
-approval_result: "cp5-approved-cp6-pass-ready-for-cp7"
-pause_status: "user-paused-before-cp7"
+approval_result: "cp8-approved-ready-with-risk"
+pause_status: "resumed-cp7-complete"
 paused_at: "2026-06-14T00:29:41+08:00"
 pause_reason: "用户要求 CR046 先挂起；恢复点保持 CP6 PASS / ready-for-verification，恢复前不推进 CP7。"
+resumed_at: "2026-06-18T06:34:50+08:00"
+cp7_result: "PASS_WITH_RISK"
+cp7_check: "process/checks/CP7-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-VERIFICATION-DONE.md"
+cp7_context: "process/context/CP7-CR046-VERIFICATION-CONTEXT.yaml"
+cp8_release_decision: "READY_WITH_RISK"
+cp8_context: "process/context/CP8-CR046-DELIVERY-CONTEXT.yaml"
+release_context: "process/release/RELEASE-CONTEXT-CR046.yaml"
+cp8_auto_check: "process/checks/CP8-CR046-DELIVERY-READINESS.md"
+cp8_manual_review: "process/checkpoints/CP8-CR046-DELIVERY-READINESS.md"
+cp8_launch_message: "process/checks/CP8-CR046-HUMAN-GATE-LAUNCH-MESSAGE.md"
+cp8_ready_at: "2026-06-18T07:41:38+08:00"
+cp8_approved_by: "user"
+cp8_approved_at: "2026-06-18T07:59:20+08:00"
+closed_at: "2026-06-18T07:59:20+08:00"
+close_result: "closed-current-delivery / READY_WITH_RISK"
 created_at: "2026-06-13T14:05:40+08:00"
 created_by: "meta-po"
 approved_by: "user"
@@ -33,6 +48,19 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | 时间 | 触发 | 恢复点 | 挂起期间不授权 |
 |---|---|---|---|
 | 2026-06-14T00:29:41+08:00 | 用户要求“这个CR先挂起” | CP6 framework-first implementation PASS / ready-for-verification；恢复后应从 CP7 verification-execution 前置状态继续 | 不推进 CP7、不关闭 CR046、不启动 CR047 / CR051、不执行真实传输、导入、QMT 运行验证、MiniQMT 连接 / 安装、账户查询、submit/cancel、simulation/live、provider fetch、lake write 或 catalog publish |
+
+## CP7 恢复验证记录
+
+| 时间 | 动作 | 结论 | 证据 | 不授权边界 |
+|---|---|---|---|---|
+| 2026-06-18T06:34:50+08:00 | 按用户要求恢复 CR046，从 CP7 verification-execution 继续；仅执行静态 / fixture / 文档 / 契约验证 | `PASS_WITH_RISK`，可进入 CP8 Delivery Readiness / Risk Acceptance | `process/context/CP7-CR046-VERIFICATION-CONTEXT.yaml`、`process/checks/CP7-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-VERIFICATION-DONE.md`、`process/docs/quality/VERIFICATION-REPORT-CR046.md`、`process/docs/quality/TEST-REPORT-CR046.md`、`process/docs/quality/REVIEW-CR046.md`、`process/docs/quality/FIXES-CR046.md` | 不启动 QMT/MiniQMT/XtQuant/gateway，不访问 NAS，不读取 `.env` / 凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交 / 日志原文，不执行 submit/cancel、simulation/live；CR089/CR091 保持 blocked |
+
+## CP8 发布就绪记录
+
+| 时间 | 动作 | 结论 | 证据 | 不授权边界 |
+|---|---|---|---|---|
+| 2026-06-18T07:41:38+08:00 | 生成 CR046 CP8 Delivery Readiness、Release Context、release docs 和人工终验稿 | `READY_WITH_RISK`，等待用户 CP8 人工确认 | `process/context/CP8-CR046-DELIVERY-CONTEXT.yaml`、`process/release/RELEASE-CONTEXT-CR046.yaml`、`process/checks/CP8-CR046-DELIVERY-READINESS.md`、`process/checkpoints/CP8-CR046-DELIVERY-READINESS.md`、`process/checks/CP8-CR046-HUMAN-GATE-LAUNCH-MESSAGE.md`、`process/docs/release/RELEASE-NOTES-CR046.md` | CP8 只确认 framework-first 文档 / 契约交付和风险接受；不授权 QMT/MiniQMT/XtQuant/gateway、NAS、`.env` / 凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交 / 日志原文、submit/cancel、simulation/live、provider/lake/publish；CR089/CR091 保持 blocked |
+| 2026-06-18T07:59:20+08:00 | 用户回复“同意，下一步做什么？准备好提示词和上下文，我会清除上下文”，按 CP8 `approve` 处理 | `approved`；CR046 当前 framework-first 交付关闭为 `closed-current-delivery / READY_WITH_RISK` | `process/checkpoints/CP8-CR046-DELIVERY-READINESS.md`、`process/context/CR046-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-18.md` | approve 只接受 DQ-CP8-CR046-01..05 和风险项；不授权 runtime、NAS、敏感数据、submit/cancel、simulation/live；后续 CR047/048/049/050、CR089、CR091 均需用户另行明确启动 |
 
 ## 变更描述
 

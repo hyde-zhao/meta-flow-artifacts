@@ -2,7 +2,7 @@
 story_id: "CR046-S02-strategy-package-contract-and-schema"
 title: "策略包合同、目录结构与 schema"
 story_slug: "strategy-package-contract-and-schema"
-status: "ready-for-verification"
+status: "verified-with-risk"
 priority: "P0"
 wave: "CR046-W1-ARCHITECTURE-CONTRACT"
 depends_on:
