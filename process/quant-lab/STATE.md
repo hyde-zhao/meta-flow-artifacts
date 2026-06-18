@@ -8,8 +8,8 @@ active_story: ''
 iteration: 532
 blocked: false
 blocked_reason: ''
-last_action: CR091 CP8 已由用户于 2026-06-18T15:40:09+08:00 同意，接受 DQ-CP8-CR091-01..05 和 READY_WITH_RISK；CR091 当前离线 runner 研究 / 设计 / 实现 / fixture 验证交付已关闭为 closed-current-delivery。仍未启动 QMT/MiniQMT/XtQuant/gateway/runner，未访问 NAS，未读取 `.env` / 凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交 / 日志原文，未执行 submit/cancel、simulation/live、provider/lake/publish。
-next_action: "当前没有 active formal CR。推荐下一目标：启动 CR091-FU-01 真实只读 runtime smoke 设计门禁；备选为 CR091-FU-02 NAS package exchange、CR091-FU-03 order-write 设计门禁、CR091-FU-04 ledger hygiene。任何候选必须由用户明确选择后再按 meta-flow 创建 / 恢复门禁，不自动启动。"
+last_action: CR091 CP8 已由用户于 2026-06-18T15:40:09+08:00 同意，接受 DQ-CP8-CR091-01..05 和 READY_WITH_RISK；CR091 当前离线 runner 研究 / 设计 / 实现 / fixture 验证交付已关闭为 closed-current-delivery。已生成清上下文恢复交接 `process/context/CR091-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-18.md`。仍未启动 QMT/MiniQMT/XtQuant/gateway/runner，未访问 NAS，未读取 `.env` / 凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交 / 日志原文，未执行 submit/cancel、simulation/live、provider/lake/publish。
+next_action: "当前没有 active formal CR。清上下文后优先读取 process/context/CR091-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-18.md。推荐下一目标：启动 CR091-FU-01 真实只读 runtime smoke 设计门禁；备选为 CR091-FU-02 NAS package exchange、CR091-FU-03 order-write 设计门禁、CR091-FU-04 ledger hygiene。任何候选必须由用户明确选择后再按 meta-flow 创建 / 恢复门禁，不自动启动。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -22247,6 +22247,25 @@ agent_lifecycle:
     completed_at: '2026-05-16T19:33:15+08:00'
     closed_at: '2026-05-16T19:33:15+08:00'
 history:
+- at: '2026-06-18T15:47:14+08:00'
+  actor: host-orchestrator
+  action: cr091-closure-context-reset-handoff-created
+  reason: 用户询问是否有足够上下文并表示需要清除上下文；host-orchestrator 生成 CR091 关闭后的最小恢复交接，包含恢复后第一条命令、必读文件、当前事实、不授权边界和下一目标候选。
+  artifacts:
+  - process/context/CR091-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-18.md
+  - process/STATE.md
+  result:
+    status: ready-for-context-reset
+    active_formal_cr: none
+    recommended_next_target: CR091-FU-01 readonly runtime smoke design gate
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credential, account id, account, funds, position, order, fill or raw log read
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup
+  - CR020 gateway-route restore
 - at: '2026-06-18T15:40:09+08:00'
   actor: host-orchestrator
   action: cr091-cp8-approved-closed-current-delivery
