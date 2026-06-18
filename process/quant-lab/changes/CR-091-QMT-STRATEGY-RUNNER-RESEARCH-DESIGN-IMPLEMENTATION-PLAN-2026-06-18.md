@@ -19,7 +19,7 @@ source_decision_id: "USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENT
 follow_up_type: "strategy-runner-gate"
 risk_class: "trading-runtime-boundary"
 owner: "host-orchestrator"
-revisit_condition: "用户已于 2026-06-18T14:16:02+08:00 批准 CR091 CP2/CP3/CP5；离线实现切片已于 2026-06-18T14:41:31+08:00 达到 CP6 PASS / ready-for-verification。任何逐 run runtime authorization 仍需后续独立门禁。"
+revisit_condition: "用户已于 2026-06-18T14:16:02+08:00 批准 CR091 CP2/CP3/CP5；离线实现切片已于 2026-06-18T14:41:31+08:00 达到 CP6 PASS，并于 2026-06-18T15:05:02+08:00 达到 CP7 PASS_WITH_RISK / ready-for-CP8。任何逐 run runtime authorization 仍需后续独立门禁。"
 acceptance_criteria: "完成 runner 参考项目研究和风险矩阵，形成 HLD 推荐方案、LLD、TEST-PLAN、CP2/CP3/CP5 checkpoint 与待决策项；CP5 approve 后才允许实施离线 runner；本 CR 门禁不授权任何 QMT/MiniQMT/XtQuant/gateway/runner runtime、NAS、凭据、账户、下单或模拟/实盘动作。"
 close_condition: "CR091 研究、方案、实现、验证和 CP8 均完成并由用户确认；或用户取消 / 合并到 CR089 / 拆分为后续 CR。"
 cr_index_path: "process/changes/CR-INDEX.yaml"
@@ -29,7 +29,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 
 ## 变更描述
 
-用户要求围绕 QMT strategy runner 制定新的 CR 计划，并明确采用“先研究、再确定方案、最后再实施”的路线。用户随后明确选择启动 CR091，并要求方案优先考虑多因子策略，同时具备其他策略的运行能力。本轮将 CR091 从已记录的 blocked plan 推进到 CP2/CP3/CP5 人工门禁：只完成静态研究、HLD、LLD、测试计划和待决策项，不进入实现或 runtime。
+用户要求围绕 QMT strategy runner 制定新的 CR 计划，并明确采用“先研究、再确定方案、最后再实施”的路线。用户随后明确选择启动 CR091，并要求方案优先考虑多因子策略，同时具备其他策略的运行能力。CR091 已从已记录的 blocked plan 推进到 CP2/CP3/CP5 人工门禁，并在用户同意后进入离线实现切片和离线 CP7 验证；当前仍不进入真实 QMT / MiniQMT / XtQuant / gateway / runner runtime。
 
 本 CR 不改变 CR046 / CR089 的状态事实：
 
@@ -39,7 +39,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | `CR-089` | `blocked-readiness-approved`，只读 `query_positions` smoke 和脱敏 collector 可作为经验输入 | CR091 可复用 CR089 的只读网关与脱敏证据模型，但不激活 CR089 runtime |
 | `CR-020` | `closed-current-delivery`，用户删除的 QMT gateway 路线已归档 | 仅保留历史审计和当前 typed contract 参考，不得恢复为当前验证入口 |
 
-因此，CR091 当前状态更新为 `active-cp6-pass-ready-for-verification`：研究、HLD、LLD、测试计划和 CP2/CP3/CP5 门禁已由用户批准，离线实现切片已通过 CP6；下一步仅允许离线 CP7 验证，runtime 仍未授权。
+因此，CR091 当前状态更新为 `active-cp7-pass-with-risk-ready-for-cp8`：研究、HLD、LLD、测试计划和 CP2/CP3/CP5 门禁已由用户批准，离线实现切片已通过 CP6，离线验证已通过 CP7 `PASS_WITH_RISK`；下一步仅允许准备 CP8 交付就绪 / 风险接受，runtime 仍未授权。
 
 ## 冲突预检结论
 
@@ -358,6 +358,30 @@ CR091 离线实现切片已由 meta-dev 子 agent `dev-zhu` 实现，并经 host
 - `git diff --check`：PASS
 
 CP6 证据：`process/checks/CP6-CR091-QMT-STRATEGY-RUNNER-CODING-DONE.md`。下一步仅允许离线 CP7 验证；仍不授权 QMT / MiniQMT / XtQuant / gateway / runner runtime、NAS、`.env` / 凭据 / 账户、submit / cancel、simulation / live、provider / lake / publish。
+
+## CP7 验证结果
+
+CR091 离线 CP7 已由 meta-qa-critical 子 agent `qa-critical-he` 完成，并由 host-orchestrator 回填调度证据。
+
+验证结果：
+
+- `PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr091_strategy_runner_contracts.py`：`13 passed in 0.12s`
+- `PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_cr091_strategy_runner_package.py --package-root tests/fixtures/cr091_strategy_runner/cr091_strategy_package --json`：`passed=true`，forbidden counters 全 0
+- `git diff --check`：PASS
+- 静态边界扫描：PASS，未发现真实 runtime / sensitive read 入口
+- `py_compile`：PASS
+- `uv run --python 3.11 meta-flow check cr-tracking --project-root .`：exit 1，但仅为历史 CR025 nested active_change 与 CR019 follow-up 旧账，不阻断 CR091
+
+CP7 证据：
+
+- `process/checks/CP7-CR091-QMT-STRATEGY-RUNNER-VERIFICATION-DONE.md`
+- `docs/quality/CR091-QMT-STRATEGY-RUNNER-VERIFICATION-REPORT.md`
+- `docs/quality/CR091-QMT-STRATEGY-RUNNER-TEST-REPORT.md`
+- `docs/quality/CR091-QMT-STRATEGY-RUNNER-REVIEW.md`
+- `docs/quality/CR091-QMT-STRATEGY-RUNNER-FIXES.md`
+- `process/handoffs/META-QA-CR091-OFFLINE-RUNNER-VERIFY-2026-06-18.md`
+
+CP7 结论：`PASS_WITH_RISK`。下一步仅允许准备 CP8 交付就绪 / 风险接受；仍不授权 QMT / MiniQMT / XtQuant / gateway / runner runtime、NAS、`.env` / 凭据 / 账户、submit / cancel、simulation / live、provider / lake / publish。
 
 ## 关联对象
 

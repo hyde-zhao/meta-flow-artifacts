@@ -1,0 +1,55 @@
+schema_version: meta_flow_context_capsule_v1
+context_id: CP7-CR091-QMT-STRATEGY-RUNNER-CONTEXT
+created_at: "2026-06-18T14:56:35+08:00"
+created_by: host-orchestrator
+change_id: CR-091
+gate: CP7
+status: ready-for-offline-verification
+summary: >
+  CR091 offline implementation slice reached CP6 PASS. CP7 verifies only the
+  offline strategy runner contracts, package intake, fake readonly gateway,
+  redacted evidence, checker and fixtures. CP7 does not authorize any real
+  QMT, MiniQMT, XtQuant, gateway, runner runtime, NAS, credential, account,
+  submit/cancel, simulation/live, provider/lake or publish operation.
+must_read:
+  - process/checks/CP6-CR091-QMT-STRATEGY-RUNNER-CODING-DONE.md
+  - process/stories/CR091-QMT-STRATEGY-RUNNER-IMPLEMENTATION.md
+  - process/stories/CR091-QMT-STRATEGY-RUNNER-LLD.md
+  - docs/qmt/CR091-QMT-STRATEGY-RUNNER-HLD.md
+  - docs/qmt/CR091-QMT-STRATEGY-RUNNER-TEST-PLAN.md
+  - process/checkpoints/CP5-CR091-QMT-STRATEGY-RUNNER-READINESS.md
+  - trading/strategy_runner/
+  - scripts/check_cr091_strategy_runner_package.py
+  - tests/test_cr091_strategy_runner_contracts.py
+  - tests/fixtures/cr091_strategy_runner/
+read_if_needed:
+  - process/context/CP5-CR091-QMT-STRATEGY-RUNNER-CONTEXT.yaml
+  - process/handoffs/META-DEV-CR091-OFFLINE-RUNNER-IMPLEMENT-2026-06-18.md
+  - process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md
+  - process/STATE.md
+do_not_read_by_default:
+  - .env
+  - credentials
+  - account_raw_outputs
+  - qmt_logs
+  - NAS paths
+  - account/cash/position/order/fill raw files
+safety_boundary:
+  qmt_miniqmt_xtquant_gateway_runner_start_authorized: false
+  nas_operation_authorized: false
+  env_credential_account_read_authorized: false
+  account_cash_position_order_fill_read_authorized: false
+  submit_cancel_authorized: false
+  simulation_live_authorized: false
+  provider_lake_publish_authorized: false
+verification_scope:
+  validation_mode: static-only-plus-fixture
+  allowed_commands:
+    - uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab
+    - PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr091_strategy_runner_contracts.py
+    - PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_cr091_strategy_runner_package.py --package-root tests/fixtures/cr091_strategy_runner/cr091_strategy_package --json
+    - git diff --check
+  expected_decision: PASS_WITH_RISK
+  risk_reason: >
+    Offline CP7 can prove contracts, fixture behavior and forbidden counters,
+    but cannot prove real QMT/MiniQMT/XtQuant/gateway/runtime readiness.

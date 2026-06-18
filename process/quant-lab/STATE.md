@@ -8,8 +8,8 @@ active_story: ''
 iteration: 530
 blocked: false
 blocked_reason: ''
-last_action: CR091 离线 implementation slice 已按用户要求通过 meta-dev/dev-zhu 子 agent 实现，并由 host-orchestrator 主线程复核收紧 fail-closed 行为；新增 trading/strategy_runner 薄模块、离线 checker、fixtures/tests、fake transport 和脱敏 evidence。验证结果：CR091 contract tests 13 passed，离线 checker passed=true，git diff --check PASS。仍未启动 QMT/MiniQMT/XtQuant/gateway/runner，未访问 NAS，未读取 `.env` / 凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交 / 日志原文，未执行 submit/cancel、simulation/live、provider/lake/publish。
-next_action: "进入 CR091 离线 CP7 验证；只允许 meta-qa/QA 复跑离线 tests、checker、静态边界扫描和证据审查，不授权 QMT/MiniQMT/XtQuant/gateway/runner runtime、NAS、.env/凭据/账户读取、submit/cancel、simulation/live、provider/lake/publish。"
+last_action: CR091 离线 CP7 已由 meta-qa-critical/qa-critical-he 完成并回填，结论为 PASS_WITH_RISK；验证证据包括 CR091 pytest 13 passed、offline checker passed=true、git diff --check PASS、静态边界扫描 PASS、py_compile PASS，cr-tracking 仅剩历史 CR025/CR019 旧账且不阻断 CR091。AGENTS.md / CLAUDE.md 已通过 commit 2419341 从 quant-lab Git 跟踪移除并推送，本地文件保留且被 .gitignore 忽略。仍未启动 QMT/MiniQMT/XtQuant/gateway/runner，未访问 NAS，未读取 `.env` / 凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交 / 日志原文，未执行 submit/cancel、simulation/live、provider/lake/publish。
+next_action: "准备 CR091 CP8 交付就绪 / 风险接受门禁：汇总 CP7 PASS_WITH_RISK 风险、生成 release context / CP8 自动预检和人工审查稿；不授权 QMT/MiniQMT/XtQuant/gateway/runner runtime、NAS、.env/凭据/账户读取、submit/cancel、simulation/live、provider/lake/publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -124,9 +124,9 @@ artifact_routing:
   health_status: "local-remediation-complete"
   updated_at: "2026-06-17T19:50:00+08:00"
 cr_tracking:
-  status: "active-formal-cr-cp6-pass-ready-for-verification"
+  status: "active-formal-cr-cp7-pass-with-risk-ready-for-cp8"
   index_path: process/changes/CR-INDEX.yaml
-  last_consistency_check: 'CP6-PASS at 2026-06-18T14:41:31+08:00. CR091 offline implementation slice completed by meta-dev/dev-zhu and host-orchestrator review; tests 13 passed, checker passed=true, git diff --check PASS. CR046 remains closed-current-delivery / READY_WITH_RISK. CR089 remains blocked-readiness-approved. No NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or runtime action executed.'
+  last_consistency_check: 'CP7-PASS_WITH_RISK at 2026-06-18T15:05:02+08:00. CR091 offline verification completed by meta-qa-critical/qa-critical-he; tests 13 passed, checker passed=true, git diff --check PASS, static boundary scan PASS, py_compile PASS. meta-flow check cr-tracking exited 1 only for historical CR025 nested active_change and CR019 follow-up debt, non-blocking for CR091. CR046 remains closed-current-delivery / READY_WITH_RISK. CR089 remains blocked-readiness-approved. No NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or runtime action executed.'
   active_crs:
   - id: CR-091
     title: QMT Strategy Runner Research / Design / Implementation Plan
@@ -137,7 +137,7 @@ cr_tracking:
     source_checkpoint: current conversation
     source_decision_id: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
     priority: 1
-    blocked_by: 'not blocked: user approved CR091 CP2/CP3/CP5 at 2026-06-18T14:16:02+08:00; offline implementation slice reached CP6 PASS at 2026-06-18T14:41:31+08:00. Approval and CP6 only cover fake transport, fixtures/tests, local package/cache intake and redacted evidence; they do not authorize NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish or CR089 runtime.'
+    blocked_by: 'not blocked: user approved CR091 CP2/CP3/CP5 at 2026-06-18T14:16:02+08:00; offline implementation slice reached CP6 PASS at 2026-06-18T14:41:31+08:00 and CP7 PASS_WITH_RISK at 2026-06-18T15:05:02+08:00. Approval, CP6 and CP7 only cover fake transport, fixtures/tests, local package/cache intake and redacted evidence; they do not authorize NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish or CR089 runtime.'
     impact_surface:
     - QMT strategy runner
     - multi-factor strategy adapter
@@ -161,9 +161,9 @@ cr_tracking:
     - multi_factor_strategy_runner
     - generic_strategy_adapter
     - order_write_excluded
-    next_gate: CP7 CR091 offline verification
-    next_action: '调度 meta-qa/QA 执行离线 CP7：复跑 tests、checker、静态边界扫描和证据审查；不授权 NAS/QMT/MiniQMT/XtQuant/gateway/runner runtime、凭据、账户、submit/cancel、simulation/live。'
-    last_checked_at: '2026-06-18T14:41:31+08:00'
+    next_gate: CP8 CR091 delivery readiness / risk acceptance
+    next_action: '准备 CR091 CP8：汇总 CP7 PASS_WITH_RISK、离线验证证据、剩余 runtime 风险和不授权项；不授权 NAS/QMT/MiniQMT/XtQuant/gateway/runner runtime、凭据、账户、submit/cancel、simulation/live。'
+    last_checked_at: '2026-06-18T15:05:02+08:00'
   - id: CR-046
     title: QMT and MiniQMT Dual-Target Strategy Delivery Framework
     status: closed-current-delivery
@@ -17143,7 +17143,7 @@ agent_lifecycle:
       available: true
       method: codex-tools
       checked_at: '2026-06-18T14:26:37+08:00'
-      note: CR091 用户明确要求使用 meta-dev 子 agent；host-orchestrator 通过 multi_agent_v1.spawn_agent 启动 meta-dev/dev-zhu 执行离线 implementation slice。
+      note: CR091 用户明确要求使用 meta-dev 子 agent；host-orchestrator 通过 multi_agent_v1.spawn_agent 启动 meta-dev/dev-zhu 执行离线 implementation slice，并启动 meta-qa-critical/qa-critical-he 执行离线 CP7 verification。
   active_agents:
   - role: meta-dev
     codex_agent_name: meta-dev
@@ -17166,6 +17166,28 @@ agent_lifecycle:
     last_seen_at: '2026-06-18T14:41:31+08:00'
     completed_at: '2026-06-18T14:41:31+08:00'
     closed_at: '2026-06-18T14:43:48+08:00'
+    fallback_reason: ''
+  - role: meta-qa
+    codex_agent_name: meta-qa-critical
+    reasoning_profile: critical
+    dispatch_trigger: CR091 CP7 high-risk QMT boundary offline verification
+    agent_id: 019ed984-580a-7b93-bea2-41137b61ed83
+    agent_name: qa-critical-he
+    thread_id: 019ed984-580a-7b93-bea2-41137b61ed83
+    workflow_id: quant-lab-cr091
+    change_id: CR-091
+    story_id: CR091-QMT-STRATEGY-RUNNER
+    wave_id: CR091-OFFLINE-RUNNER-VERIFICATION
+    handoff_path: process/handoffs/META-QA-CR091-OFFLINE-RUNNER-VERIFY-2026-06-18.md
+    status: completed
+    evidence: main thread spawn_agent returned agent_id=019ed984-580a-7b93-bea2-41137b61ed83 nickname=qa-critical-he for CR091 offline runner CP7 verification; wait_agent returned completed with CP7 PASS_WITH_RISK, tests 13 passed, checker passed=true, git diff --check PASS, static boundary scan PASS and py_compile PASS.
+    tool_name: multi_agent_v1.spawn_agent
+    reusable: false
+    spawned_at: '2026-06-18T14:56:35+08:00'
+    resumed_at: ''
+    last_seen_at: '2026-06-18T15:05:02+08:00'
+    completed_at: '2026-06-18T15:05:02+08:00'
+    closed_at: '2026-06-18T15:05:02+08:00'
     fallback_reason: ''
   - role: meta-qa
     agent_id: 019ec478-0a72-72d3-9e5a-c092f97c45b0
@@ -22209,6 +22231,35 @@ agent_lifecycle:
     completed_at: '2026-05-16T19:33:15+08:00'
     closed_at: '2026-05-16T19:33:15+08:00'
 history:
+- at: '2026-06-18T15:05:02+08:00'
+  actor: host-orchestrator
+  action: cr091-cp7-pass-with-risk-ready-for-cp8
+  reason: meta-qa-critical/qa-critical-he 完成 CR091 离线 runner CP7 验证并返回 PASS_WITH_RISK；host-orchestrator 已关闭 QA 线程，回填 handoff、CP7 Agent Dispatch Evidence、STATE 和 CR tracking。验证仅覆盖 fake transport、fixtures/tests、本地 package/cache intake 和脱敏 evidence，不证明真实 QMT/MiniQMT/XtQuant/gateway/runner runtime 可用。
+  artifacts:
+  - process/handoffs/META-QA-CR091-OFFLINE-RUNNER-VERIFY-2026-06-18.md
+  - process/context/CP7-CR091-QMT-STRATEGY-RUNNER-CONTEXT.yaml
+  - process/checks/CP7-CR091-QMT-STRATEGY-RUNNER-VERIFICATION-DONE.md
+  - docs/quality/CR091-QMT-STRATEGY-RUNNER-VERIFICATION-REPORT.md
+  - docs/quality/CR091-QMT-STRATEGY-RUNNER-TEST-REPORT.md
+  - docs/quality/CR091-QMT-STRATEGY-RUNNER-REVIEW.md
+  - docs/quality/CR091-QMT-STRATEGY-RUNNER-FIXES.md
+  - process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    status: active-formal-cr-cp7-pass-with-risk-ready-for-cp8
+    cp7_result: PASS_WITH_RISK
+    next_gate: CP8-CR091-delivery-readiness-risk-acceptance
+    agent_id: 019ed984-580a-7b93-bea2-41137b61ed83
+    thread_id: 019ed984-580a-7b93-bea2-41137b61ed83
+    closed_at: '2026-06-18T15:05:02+08:00'
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credential, account id, account, funds, position, order, fill or raw log read
+  - submit/cancel, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup or CR020 gateway-route restore
 - at: '2026-06-18T07:41:38+08:00'
   actor: host-orchestrator
   action: cr046-cp8-delivery-readiness-generated-awaiting-user

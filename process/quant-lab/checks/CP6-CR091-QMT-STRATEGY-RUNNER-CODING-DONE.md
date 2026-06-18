@@ -58,7 +58,7 @@ manual_checkpoint: ""
 |---|---|---|---|
 | strategy runner package | `trading/strategy_runner/` | PASS | CR091 薄模块。 |
 | offline checker | `scripts/check_cr091_strategy_runner_package.py` | PASS | package/cache/evidence 离线检查。 |
-| contract tests | `tests/test_cr091_strategy_runner_contracts.py` | PASS | 10 项。 |
+| contract tests | `tests/test_cr091_strategy_runner_contracts.py` | PASS | 13 项。 |
 | fixtures | `tests/fixtures/cr091_strategy_runner/` | PASS | 多因子、legacy、package、fake positions。 |
 | implementation evidence | `process/stories/CR091-QMT-STRATEGY-RUNNER-IMPLEMENTATION.md` | PASS | 实现证据与交接。 |
 
