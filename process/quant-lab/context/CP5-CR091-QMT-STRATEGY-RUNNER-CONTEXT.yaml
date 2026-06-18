@@ -1,0 +1,38 @@
+schema_version: meta_flow_context_capsule_v1
+context_id: CP5-CR091-QMT-STRATEGY-RUNNER-CONTEXT
+created_at: "2026-06-18T08:29:53+08:00"
+created_by: host-orchestrator
+change_id: CR-091
+gate: CP5
+status: pending-human-approval
+summary: >
+  CP5 reviews implementation readiness for CR091. Proposed first slice adds a
+  thin module under trading/strategy_runner plus an offline checker script and
+  fixture tests. It remains offline-only and fake-transport-only unless a later
+  runtime authorization gate is explicitly approved.
+must_read:
+  - docs/qmt/CR091-QMT-STRATEGY-RUNNER-HLD.md
+  - docs/qmt/CR091-QMT-STRATEGY-RUNNER-TEST-PLAN.md
+  - process/stories/CR091-QMT-STRATEGY-RUNNER-LLD.md
+  - process/checkpoints/CP5-CR091-QMT-STRATEGY-RUNNER-READINESS.md
+read_if_needed:
+  - scripts/check_cr089_qmt_interface_smoke_package.py
+  - packages/qmt_interface_smoke/0.1.0/manifest.yaml
+do_not_read_by_default:
+  - .env
+  - credentials
+  - account_raw_outputs
+  - qmt_logs
+safety_boundary:
+  qmt_miniqmt_xtquant_gateway_runner_start_authorized: false
+  nas_operation_authorized: false
+  env_credential_account_read_authorized: false
+  account_cash_position_order_fill_read_authorized: false
+  submit_cancel_authorized: false
+  simulation_live_authorized: false
+  provider_lake_publish_authorized: false
+implementation_recommendation:
+  first_slice: trading.strategy_runner module plus offline checker
+  automatic_validation: fixture-and-fake-transport-only
+  runtime_validation: later-per-run-authorization-only
+

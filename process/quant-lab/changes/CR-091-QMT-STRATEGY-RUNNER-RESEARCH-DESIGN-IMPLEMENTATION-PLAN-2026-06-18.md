@@ -1,16 +1,16 @@
 ---
 cr_id: "CR-091"
-status: "blocked-research-plan-recorded"
+status: "active"
 impact_level: "high"
 workflow_mode_before: "standard"
 workflow_mode_after_change: "standard"
 fast_lane_upgrade_reason: "命中 QMT strategy runner、策略包消费、交易主机执行边界、运行授权、安全边界和未来下单接口扩展风险；不得使用 fast-lane。"
-rollback_to: "CR089 blocked-readiness-approved / CR046 CP6 framework-first recovery point"
-approval_result: "plan-recorded / pending-future-authorization"
+rollback_to: "CR091 blocked-research-plan-recorded / CR089 blocked-readiness-approved / CR046 closed-current-delivery recovery point"
+approval_result: "approved / CP2-CP3-CP5"
 created_at: "2026-06-18T00:28:26+08:00"
 created_by: "host-orchestrator"
-approved_by: ""
-approved_at: ""
+approved_by: "user"
+approved_at: "2026-06-18T14:16:02+08:00"
 source: "user"
 linked_issue: ""
 parent_cr: "CR-089"
@@ -19,8 +19,8 @@ source_decision_id: "USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENT
 follow_up_type: "strategy-runner-gate"
 risk_class: "trading-runtime-boundary"
 owner: "host-orchestrator"
-revisit_condition: "用户明确启动 CR091 research phase、解除或接受 CR046/CR089 重叠阻塞、并通过后续 CP2/CP3/CP5 与逐 run runtime authorization。"
-acceptance_criteria: "先完成 runner 参考项目研究和风险矩阵，再形成 HLD 推荐方案与待决策项，之后完成 LLD/TEST-PLAN，最后才允许实施只读 runner；本 CR 创建本身不授权任何运行、NAS、凭据、账户、下单或模拟/实盘动作。"
+revisit_condition: "用户已于 2026-06-18T14:16:02+08:00 批准 CR091 CP2/CP3/CP5；当前可进入离线实现切片。任何逐 run runtime authorization 仍需后续独立门禁。"
+acceptance_criteria: "完成 runner 参考项目研究和风险矩阵，形成 HLD 推荐方案、LLD、TEST-PLAN、CP2/CP3/CP5 checkpoint 与待决策项；CP5 approve 后才允许实施离线 runner；本 CR 门禁不授权任何 QMT/MiniQMT/XtQuant/gateway/runner runtime、NAS、凭据、账户、下单或模拟/实盘动作。"
 close_condition: "CR091 研究、方案、实现、验证和 CP8 均完成并由用户确认；或用户取消 / 合并到 CR089 / 拆分为后续 CR。"
 cr_index_path: "process/changes/CR-INDEX.yaml"
 ---
@@ -29,40 +29,43 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 
 ## 变更描述
 
-用户要求围绕 QMT strategy runner 制定新的 CR 计划，并明确采用“先研究、再确定方案、最后再实施”的路线。本 CR 只负责把该路线登记为可追溯计划，后续是否进入研究、方案评审、实现和交易主机 runtime smoke，必须另行显式启动对应门禁。
+用户要求围绕 QMT strategy runner 制定新的 CR 计划，并明确采用“先研究、再确定方案、最后再实施”的路线。用户随后明确选择启动 CR091，并要求方案优先考虑多因子策略，同时具备其他策略的运行能力。本轮将 CR091 从已记录的 blocked plan 推进到 CP2/CP3/CP5 人工门禁：只完成静态研究、HLD、LLD、测试计划和待决策项，不进入实现或 runtime。
 
 本 CR 不改变 CR046 / CR089 的状态事实：
 
 | 对象 | 当前事实 | 对 CR091 的含义 |
 |---|---|---|
-| `CR-046` | 仍是 active formal CR，状态为 `active-cp6-pass-ready-for-verification`，用户暂停在 CP7 前 | CR091 与其策略包合同、MiniQMT runner 和交易运行边界重叠，不能静默 active |
-| `CR-089` | `blocked-readiness-approved`，只读 `query_positions` smoke 和脱敏 collector 已完成 | CR091 可复用 CR089 的只读网关与脱敏证据经验，但不激活 CR089 |
-| `CR-020` | `deleted-by-user` | 仅能作为历史审计和代码边界参考，不得恢复为当前验证入口 |
+| `CR-046` | 已于 2026-06-18T07:59:20+08:00 关闭为 `closed-current-delivery / READY_WITH_RISK` | CR091 可承接 runner 缺口，但不能把 CR046 framework-first 交付解释为 runtime ready |
+| `CR-089` | `blocked-readiness-approved`，只读 `query_positions` smoke 和脱敏 collector 可作为经验输入 | CR091 可复用 CR089 的只读网关与脱敏证据模型，但不激活 CR089 runtime |
+| `CR-020` | `closed-current-delivery`，用户删除的 QMT gateway 路线已归档 | 仅保留历史审计和当前 typed contract 参考，不得恢复为当前验证入口 |
 
-因此，CR091 当前状态登记为 `blocked-research-plan-recorded`：计划已落盘，但后续研究、方案、实现和 runtime 均未开始。
+因此，CR091 当前状态更新为 `active`：研究、HLD、LLD、测试计划和 CP2/CP3/CP5 门禁已由用户批准；下一步仅允许离线实现切片，runtime 仍未授权。
 
 ## 冲突预检结论
 
 | 对象 | 影响面 | 冲突判断 | 处理方式 |
 |---|---|---|---|
-| `CR-046` | 双目标策略交付框架、策略包合同、MiniQMT runner 安装设计、验证框架 | 重叠 | CR091 先登记 blocked plan，不改 `active_change` |
-| `CR-089` | QMT 接口验证、交易主机取包、只读 query_positions smoke、运行授权 | 重叠 | CR091 作为后续 runner gate 计划，未来可由 CR089 派生或合并 |
+| `CR-046` | 双目标策略交付框架、策略包合同、MiniQMT runner 安装设计、验证框架 | 已关闭但语义重叠 | CR091 只承接 runner 缺口，不恢复 CR046 |
+| `CR-089` | QMT 接口验证、交易主机取包、只读 query_positions smoke、运行授权 | 相关但仍 blocked | CR091 可复用 CR089 离线 package / redaction 模型，不自动启动 CR089 |
 | `qmt_interface_smoke` package | 离线策略包骨架、manifest、checksum、脱敏 evidence 模板 | 可复用 | 只作为只读 runner 初始测试包输入，不授权 NAS 或 runtime |
 | 外部 runner / gateway 项目 | runner、gateway、event engine、dry-run first 设计经验 | 可参考 | 仅研究借鉴，不直接照搬高风险 live/order 能力 |
 
-结论：允许创建 CR091 计划文件并同步 blocked CR 视图；不得进入研究执行、HLD、LLD、实现、NAS package pull/publish、gateway/QMT 启动或账户查询。
+结论：允许启动 CR091 静态研究和方案门禁；不得进入 runner 实现、NAS package pull/publish、gateway/QMT 启动或账户查询。CP5 未批准前不得写 runner 代码。
 
 ## 文档处理决策
 
 | 受影响文档 | 处理方式 | 旧基线保留方式 | 修订记录位置 | 批准状态 |
 |---|---|---|---|---|
-| `process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md` | 新增 | 以 CR046 / CR089 为上游基线，不替换 | 本文件 frontmatter 与章节 | plan-recorded |
-| `process/changes/CR-INDEX.yaml` | 原文档更新 | 保留 CR046 active 与 CR089 blocked 事实 | `blocked_crs` | plan-recorded |
-| `process/STATE.md` | 原文档更新 | 保留当前 workflow state 与 CR046 active lock | frontmatter / `cr_tracking.blocked_crs` | plan-recorded |
-| `docs/qmt/CR091-RUNNER-RESEARCH-NOTES.md` | 新增，未来计划 | 本 CR 只登记目标路径，不创建研究正文 | 未来文档头部 | pending-future-authorization |
-| `docs/qmt/CR091-QMT-STRATEGY-RUNNER-HLD.md` | 新增，未来计划 | 研究完成后再形成方案 | 未来文档头部 | pending-future-authorization |
-| `process/checkpoints/CP3-CR091-QMT-STRATEGY-RUNNER-HLD-REVIEW.md` | 新增，未来计划 | HLD 人工门禁 | 未来 checkpoint | pending-future-authorization |
-| `process/checkpoints/CP5-CR091-QMT-STRATEGY-RUNNER-READINESS.md` | 新增，未来计划 | LLD / TEST-PLAN / 实施边界人工门禁 | 未来 checkpoint | pending-future-authorization |
+| `process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md` | 原文档更新 | 保留 plan-recorded 历史段，追加本轮启动事实和门禁批准事实 | 本文件 frontmatter 与章节 | approved-cp2-cp3-cp5 |
+| `process/changes/CR-INDEX.yaml` | 原文档更新 | 保留 CR046 closed 与 CR089 blocked 事实 | CR091 entry | approved-cp2-cp3-cp5 |
+| `process/STATE.md` | 原文档更新 | 保留当前 workflow state 与 CR046 closure history | `orchestrator_session` / `cr_tracking` | approved-cp2-cp3-cp5 |
+| `docs/qmt/CR091-RUNNER-RESEARCH-NOTES.md` | 新增 | 记录本轮静态研究，不替换上游 CR | 修订记录 | approved-cp2-cp3-cp5 |
+| `docs/qmt/CR091-QMT-STRATEGY-RUNNER-HLD.md` | 新增 | 形成推荐方案与备选方案 | 修订记录 | approved-cp2-cp3-cp5 |
+| `process/stories/CR091-QMT-STRATEGY-RUNNER-LLD.md` | 新增 | CP5 实施准备输入 | 修订记录 | approved-for-offline-implementation |
+| `docs/qmt/CR091-QMT-STRATEGY-RUNNER-TEST-PLAN.md` | 新增 | CP5 测试准备输入 | 修订记录 | approved-cp2-cp3-cp5 |
+| `process/checkpoints/CP2-CR091-QMT-STRATEGY-RUNNER-SCOPE-REVIEW.md` | 新增 | CP2 人工门禁 | 人工审查结果 | approved |
+| `process/checkpoints/CP3-CR091-QMT-STRATEGY-RUNNER-HLD-REVIEW.md` | 新增 | HLD 人工门禁 | 人工审查结果 | approved |
+| `process/checkpoints/CP5-CR091-QMT-STRATEGY-RUNNER-READINESS.md` | 新增 | LLD / TEST-PLAN / 实施边界人工门禁 | 人工审查结果 | approved |
 
 ## 旧基线映射
 
@@ -114,18 +117,18 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 
 ### Phase 0: Startup Conflict / Preflight
 
-目标：确认 CR091 只能先登记为 blocked plan。
+目标：确认 CR091 可从历史 `blocked-research-plan-recorded` 迁移到本轮 CP2/CP3/CP5 人工门禁。
 
 进入条件：
 
 - 用户明确要求形成 CR 计划并落盘。
 - `process` 路由健康检查通过。
-- 已确认 CR046 仍是 active formal CR，CR089 仍是 blocked formal CR。
+- 已确认 CR046 已关闭为 `closed-current-delivery / READY_WITH_RISK`，CR089 仍是 `blocked-readiness-approved`。
 
 退出条件：
 
-- CR091 计划文件创建。
-- `CR-INDEX.yaml` 与 `STATE.md.cr_tracking.blocked_crs` 同步。
+- CR091 研究、HLD、LLD、测试计划和 CP2/CP3/CP5 checkpoint 创建。
+- `CR-INDEX.yaml` 与 `STATE.md` 同步为 CR091 CP2/CP3/CP5 approved，进入离线实现准备态。
 - 一致性检查通过。
 
 本阶段不授权：
@@ -289,12 +292,14 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 
 | 决策 ID | 决策类型 | 待确认问题 | 推荐方案 | 备选方案 | 优劣摘要 | 影响 / 风险 | 回退 / 切换条件 |
 |---|---|---|---|---|---|---|---|
-| DQ-CR091-01 | scope | CR091 是否先只做 runner 研究与只读方案？ | 先研究，再 HLD，再 LLD，最后只读实现 | 直接实现；合并 CR089；等待 CR046 关闭 | 推荐方案最小化状态冲突和运行风险 | 进度更慢，但避免把 smoke 成功误解为可交易 | 用户要求快速实现时需重新 CP5 |
-| DQ-CR091-02 | architecture | runner 主体采用什么路线？ | clean-room lightweight runner | 改造 lite-qmt-executor；引入 vn.py；只保留脚本 | 推荐方案最小依赖、边界清晰 | 需要自行实现 package/cache/evidence | 若未来需要复杂事件驱动再切换 |
-| DQ-CR091-03 | implementation | 首版产物形态是什么？ | 先脚本级 MVP，再沉淀模块 | 直接 package module；只写文档 | 脚本 MVP 更容易保持小范围验证 | 后续需要重构为模块 | 接口稳定后迁入 `trading/strategy_runner/` |
-| DQ-CR091-04 | security | runner 是否直接从 NAS 运行策略？ | 不直接运行；只读校验后复制到本地 immutable cache | NAS 原地运行；手工复制；Git release | 推荐方案避免半写入、网络抖动和路径漂移 | 需要 cache/pointer 设计 | 临时 smoke 可手工复制，但不能成为默认 |
-| DQ-CR091-05 | runtime_authorization | 首版 gateway scope 到哪里？ | health + capabilities + query_positions，只读 | 增加 submit/cancel；增加 simulation/live | 推荐方案延续 CR089 已验证只读边界 | 不能验证下单链路 | 下单接口必须另起 CR092 |
-| DQ-CR091-06 | follow_up_tracking | 下单接口是否纳入 CR091？ | 不纳入，作为 CR092 候选 | 纳入 CR091 后半段 | 推荐方案避免一个 CR 同时覆盖只读 runner 与订单写风险 | 需要后续再走门禁 | 用户明确要验证下单时启动 CR092 |
+| DQ-CP2-CR091-01 | scope | CR091 当前是否启动为静态研究 / 方案 / 实施计划门禁？ | 启动 CR091 门禁，但 CP5 前不实现、不运行 | 暂停；直接 CR047；直接实现 | 推荐方案解决 runner 结构缺口且保留权限边界 | 不证明真实 runtime 可用 | 用户要求先交付策略包时切 CR047 |
+| DQ-CP3-CR091-02 | architecture | runner 主体采用什么路线？ | clean-room package-driven runner | 改造 lite-qmt-executor；接入 qmt-gateway/xqshare；接入 vn.py；仅手工脚本 | 推荐方案最小依赖、边界清晰；外部项目实盘接口面过大 | 需要自行实现 package/cache/evidence | 未来复杂事件驱动需求出现时再评估 vn.py / Lean |
+| DQ-CP3-CR091-03 | architecture | 多因子与其他策略如何兼容？ | 多因子优先，统一 StrategyAdapter 输出合同 | 多因子专用 runner；每类策略各自 runner | 推荐方案同时满足多因子优先和通用扩展 | adapter contract 需要稳定测试 | 若多因子字段不稳定，先降级 legacy adapter |
+| DQ-CP5-CR091-04 | implementation | 首版产物形态是什么？ | `trading/strategy_runner` 薄模块 + 离线 checker + fixtures/tests | 只写脚本；直接完整 runtime | 推荐方案可复用且仍小范围；脚本方案扩展弱，runtime 方案越权 | 实现量高于单脚本 | 若范围过大，可先交付 adapters + evidence 子集 |
+| DQ-CP5-CR091-05 | security | runner 是否直接从 NAS 运行策略？ | 不直接运行；只读本地 immutable cache / active pointer | NAS 原地运行；自动 pull/publish | 推荐方案避免 NAS 和发布边界；备选需新 CR | 后续需要单独处理包分发 | 用户要求 NAS 自动取包时启动 CR093 |
+| DQ-CP5-CR091-06 | runtime_authorization | 首版是否允许真实 QMT runtime？ | 自动验证只允许 fake transport；真实只读 smoke 需后续逐 run 授权 | 立即连接 QMT；完全取消只读 smoke | 推荐方案保留验证路线但不越权 | 无真实 runtime ready 结论 | 用户给出逐 run 授权后再开 runtime gate |
+| DQ-CP5-CR091-07 | follow_up_tracking | 下单 / 撤单是否纳入 CR091？ | 不纳入，拆为 CR092 候选 | 纳入 CR091 后半段 | 推荐方案隔离 order write 风险；纳入会扩大门禁复杂度 | CR091 不能验证下单链路 | 用户明确要求订单写验证时启动 CR092 |
+| DQ-CP5-CR091-08 | risk_acceptance | 是否接受 CR091 首版不证明真实可交易？ | 接受；只证明 runner 合同和离线验证 | 要求真实交易机验证后才通过；取消 runner | 推荐方案符合当前权限；真实验证需要额外授权 | CP8 仍可能是 READY_WITH_RISK | 用户拒绝风险时暂停或新增 runtime gate |
 
 ## 订单接口明确排除
 
@@ -335,18 +340,18 @@ CR091 不验证下单接口。以下能力全部排除：
 
 ## 处理结论
 
-- 审批结论：`plan-recorded / pending-future-authorization`
+- 审批结论：`approved / CP2-CP3-CP5`
 - [ ] 自动批准（低风险）
-- [ ] 待人工确认（中风险）
-- [x] 待人工审批（高风险）
+- [x] 人工确认通过（高风险）
+- [ ] 待人工审批（高风险）
 
-本轮只完成 CR091 计划落盘和 blocked tracking 同步。后续若用户说“启动 CR091 研究”，第一步应进入 Phase 1 Research / Spike，并在不访问凭据、不连接 QMT、不访问 NAS 内容的前提下输出研究矩阵。
+用户于 `2026-06-18T14:16:02+08:00` 回复“同意”，按 CP2/CP3/CP5 `approve` 处理，接受 DQ-CP2-CR091-01、DQ-CP3-CR091-02..03、DQ-CP5-CR091-04..08 的推荐方案。下一步允许进入 CR091 离线实现切片：`trading/strategy_runner` 薄模块、离线 checker、fixtures/tests、fake transport 和脱敏 evidence；仍不授权 QMT / MiniQMT / XtQuant / gateway / runner runtime、NAS、`.env` / 凭据 / 账户、submit / cancel、simulation / live、provider / lake / publish。
 
 ## 关联对象
 
 | 类型 | 标识 | 说明 |
 |---|---|---|
-| CR | `CR-046` | 上游 active formal CR，保持暂停，不恢复 |
+| CR | `CR-046` | 上游 framework-first 交付已关闭，不恢复 |
 | CR | `CR-089` | QMT 接口验证门禁，保持 blocked-readiness-approved |
 | RUN-EXEC | `runs/RUN-EXEC-20260618-001.md` | CR089 redacted collector PASS，可作为只读 evidence 模型参考 |
 | Package | `packages/qmt_interface_smoke/0.1.0` | 未来 runner 首个只读 package fixture / 手工包候选 |

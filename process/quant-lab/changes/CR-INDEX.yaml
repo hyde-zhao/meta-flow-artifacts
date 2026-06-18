@@ -1,6 +1,6 @@
 version: 1
-status: "no-active-formal-cr"
-updated_at: '2026-06-18T07:59:20+08:00'
+status: "active-formal-cr-cp5-approved-ready-for-implementation"
+updated_at: '2026-06-18T14:16:02+08:00'
 owner: meta-po
 source: >
   CR-046 started by user target change to terminal-native simulation strategy export,
@@ -95,7 +95,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: 'PASS at 2026-06-18T08:10:27+08:00 after CR046 CP8 approval; CR046 status is closed-current-delivery. CR089 remains blocked-readiness-approved and CR091 remains blocked-research-plan-recorded. No NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway startup, submit/cancel, simulation/live, CR089 auto-start or CR091 auto-start executed.'
+last_consistency_check: 'USER-APPROVED at 2026-06-18T14:16:02+08:00. CR091 CP2/CP3/CP5 approved for offline implementation slice only. CR046 remains closed-current-delivery / READY_WITH_RISK. CR089 remains blocked-readiness-approved. No NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or runtime action executed.'
 root_authority:
   status: logical-cutover-complete
   authoritative_root: /home/hyde/workspace/quant-lab
@@ -130,6 +130,42 @@ index_schema:
 - next_action
 - last_checked_at
 active_crs:
+- id: CR-091
+  title: QMT Strategy Runner Research / Design / Implementation Plan
+  status: active
+  source_tracking: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
+  formal_cr_path: process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md
+  parent_cr: CR-089
+  source_checkpoint: current conversation
+  source_decision_id: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
+  priority: 1
+  blocked_by: 'not blocked: user approved CR091 CP2/CP3/CP5 at 2026-06-18T14:16:02+08:00. Approval only authorizes offline implementation slice with fake transport, fixtures/tests and redacted evidence; it does not authorize NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish or CR089 runtime.'
+  impact_surface:
+  - QMT strategy runner
+  - multi-factor strategy adapter
+  - generic strategy adapter
+  - runner research spike
+  - strategy package intake
+  - immutable local cache
+  - active package pointer
+  - readonly gateway query_positions
+  - runtime_authorization
+  - credential_boundary
+  - order_write_future_gate
+  conflict_keys:
+  - strategy_package_contract
+  - miniqmt_runner_install
+  - trading_runtime_boundary
+  - per_run_authorization
+  - credential_boundary
+  - nas_package_exchange
+  - qmt_strategy_runner
+  - multi_factor_strategy_runner
+  - generic_strategy_adapter
+  - order_write_excluded
+  next_gate: CP6 CR091 coding-done after offline implementation
+  next_action: '提交并推送两个仓库后进入离线 implementation slice；只允许 trading/strategy_runner 薄模块、离线 checker、fixtures/tests、fake transport 和脱敏 evidence，不授权 NAS/QMT/MiniQMT/XtQuant/gateway/runner runtime、凭据、账户、submit/cancel、simulation/live。'
+  last_checked_at: '2026-06-18T14:16:02+08:00'
 - id: CR-046
   title: QMT and MiniQMT Dual-Target Strategy Delivery Framework
   status: closed-current-delivery
@@ -1715,38 +1751,6 @@ blocked_crs:
   - nas_package_exchange
   next_gate: local offline package skeleton or independent runtime authorization
   next_action: 可作为后续候选准备本地离线 qmt_interface_smoke package skeleton / manifest / checksum docs / manual smoke guide；启动前必须用户明确选择，不授权 NAS/QMT/credential/account/trading action。
-  last_checked_at: '2026-06-18T07:59:20+08:00'
-- id: CR-091
-  title: QMT Strategy Runner Research / Design / Implementation Plan
-  status: blocked-research-plan-recorded
-  source_tracking: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
-  formal_cr_path: process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md
-  parent_cr: CR-089
-  source_checkpoint: current conversation
-  source_decision_id: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
-  priority: 1
-  blocked_by: 'CR046 framework-first delivery is now closed-current-delivery / READY_WITH_RISK. CR089 remains blocked-readiness-approved. CR091 is only a recorded plan for research -> solution decision -> implementation and does not authorize research execution, NAS/QMT/credential/account/trading runtime actions, submit/cancel, simulation or live. It may be started only by explicit user instruction after context reset or a new gate.'
-  impact_surface:
-  - QMT strategy runner
-  - runner research spike
-  - strategy package intake
-  - immutable local cache
-  - active package pointer
-  - readonly gateway query_positions
-  - runtime_authorization
-  - credential_boundary
-  - order_write_future_gate
-  conflict_keys:
-  - strategy_package_contract
-  - miniqmt_runner_install
-  - trading_runtime_boundary
-  - per_run_authorization
-  - credential_boundary
-  - nas_package_exchange
-  - qmt_strategy_runner
-  - order_write_excluded
-  next_gate: CR091 Phase 1 Research / Spike authorization
-  next_action: 等待用户明确启动 CR091 研究阶段；启动前不研究外部项目细节、不写 HLD/LLD、不实现 runner、不访问 NAS、不启动 QMT/MiniQMT/XtQuant/gateway、不读取凭据或账户、不执行 submit/cancel/simulation/live。
   last_checked_at: '2026-06-18T07:59:20+08:00'
 follow_up_candidates:
 - id: "CR-026"
