@@ -1,0 +1,78 @@
+schema_version: meta_flow_context_capsule_v1
+context_id: CP8-CR091-DELIVERY-CONTEXT
+created_at: "2026-06-18T15:24:12+08:00"
+created_by: host-orchestrator
+change_id: CR-091
+gate: CP8
+status: ready-for-human-review
+read_profile: compact
+summary: >
+  CR091 has completed research, HLD, LLD, offline implementation, CP6 PASS and
+  offline CP7 PASS_WITH_RISK for a QMT strategy runner thin module. CP8 is a
+  delivery-readiness and risk-acceptance gate. It may close only the offline
+  runner contract / fixture / checker / documentation slice. It must not be
+  read as authorization for real QMT/MiniQMT/XtQuant/gateway/runner runtime,
+  NAS, credentials, account reads, submit/cancel, simulation/live, provider,
+  lake or publish.
+must_read:
+  - process/release/RELEASE-CONTEXT-CR091.yaml
+  - process/checks/CP7-CR091-QMT-STRATEGY-RUNNER-VERIFICATION-DONE.md
+  - docs/quality/CR091-QMT-STRATEGY-RUNNER-VERIFICATION-REPORT.md
+  - docs/quality/CR091-QMT-STRATEGY-RUNNER-TEST-REPORT.md
+  - docs/quality/CR091-QMT-STRATEGY-RUNNER-REVIEW.md
+  - docs/quality/CR091-QMT-STRATEGY-RUNNER-FIXES.md
+  - process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md
+read_if_needed:
+  - process/context/CP7-CR091-QMT-STRATEGY-RUNNER-CONTEXT.yaml
+  - process/checks/CP6-CR091-QMT-STRATEGY-RUNNER-CODING-DONE.md
+  - process/stories/CR091-QMT-STRATEGY-RUNNER-IMPLEMENTATION.md
+  - process/stories/CR091-QMT-STRATEGY-RUNNER-LLD.md
+  - docs/qmt/CR091-QMT-STRATEGY-RUNNER-HLD.md
+  - docs/qmt/CR091-QMT-STRATEGY-RUNNER-TEST-PLAN.md
+  - process/checkpoints/CP5-CR091-QMT-STRATEGY-RUNNER-READINESS.md
+  - process/STATE.md
+do_not_read_by_default:
+  - .env
+  - credentials
+  - account_raw_outputs
+  - qmt_logs
+  - NAS paths
+  - account/cash/position/order/fill raw files
+  - full historical STATE sections unrelated to CR091
+key_facts:
+  - "CP6 status: PASS at 2026-06-18T14:41:31+08:00."
+  - "CP7 status: PASS_WITH_RISK at 2026-06-18T15:05:02+08:00."
+  - "CR091 tests: 13 passed; offline checker passed=true; forbidden counters all zero."
+  - "No implementation findings require meta-dev rework."
+  - "Release decision recommendation: READY_WITH_RISK."
+risks_and_decisions:
+  - id: R-CR091-CP7-001
+    type: risk_acceptance
+    severity: high
+    status: pending-human-acceptance
+    summary: "Offline CP7 does not prove real runtime readiness or tradability."
+  - id: R-CR091-CP7-002
+    type: follow_up_tracking
+    severity: medium
+    status: pending-human-acceptance
+    summary: "Historical cr-tracking debt remains non-blocking for CR091."
+  - id: R-CR091-CP7-003
+    type: follow_up_tracking
+    severity: low
+    status: pending-human-acceptance
+    summary: "Future evidence file write needs output-path gate."
+non_authorized_items:
+  - "QMT/MiniQMT/XtQuant/gateway/runner runtime"
+  - "NAS"
+  - ".env / credentials / account / funds / positions / orders / fills / raw logs"
+  - "submit/cancel, buy/sell, simulation/live"
+  - "provider/lake/catalog/publish"
+  - "CR089 auto-start or CR020 gateway route restore"
+downstream_tasks:
+  - "Human reviews process/checkpoints/CP8-CR091-DELIVERY-READINESS.md."
+  - "If approve, host-orchestrator closes CR091 as closed-current-delivery / READY_WITH_RISK."
+  - "If modification or reject, host-orchestrator updates DQ/Decision Brief and reissues CP8."
+token_control:
+  read_profile: compact
+  full_doc_read_policy: "Only expand to full HLD/LLD/implementation documents for conflict, audit or user-requested deep review."
+  read_expansion_log: []

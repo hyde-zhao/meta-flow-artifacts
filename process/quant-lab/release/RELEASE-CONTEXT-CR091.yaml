@@ -1,0 +1,175 @@
+release_context_id: "RELEASE-CONTEXT-CR091"
+change_id: "CR-091"
+release_profile: "compact"
+status: "ready-with-risk-pending-human-approval"
+created_at: "2026-06-18T15:24:12+08:00"
+created_by: "host-orchestrator"
+decision: "READY_WITH_RISK"
+approved_by: ""
+approved_at: ""
+closed_at: ""
+
+release_scope:
+  version_decision:
+    current_version: "0.0.0-local"
+    target_version: "0.1.0-cr091-offline-runner"
+    semver_level: "minor-internal"
+    reason: "新增 QMT strategy runner 离线合同、adapter、package/cache intake、fake readonly gateway 与 redacted evidence；不发布公开版本，不执行真实运行。"
+  in_scope:
+    - "CR091 runner research / HLD / LLD / TEST-PLAN"
+    - "trading/strategy_runner offline thin module"
+    - "multifactor-first StrategyAdapter contract with generic adapter extension"
+    - "local package manifest/checksum validation"
+    - "immutable local cache and active pointer"
+    - "fake readonly gateway wrapper for health/capabilities/query_positions"
+    - "redacted evidence summary and forbidden operation counters"
+    - "offline checker, fixtures and contract tests"
+    - "CP6 implementation evidence and CP7 verification evidence"
+  out_of_scope:
+    - "QMT/MiniQMT/XtQuant/gateway/runner runtime startup or connection"
+    - "NAS package exchange, pull, publish, list, copy or write"
+    - ".env, credential, account id, account, funds, position, order, fill or raw log read"
+    - "submit/cancel, buy/sell, simulation/live"
+    - "provider fetch, lake write, catalog publish"
+    - "CR089 auto-start or CR020 gateway route restore"
+
+quality_summary:
+  cp6:
+    status: "PASS"
+    check: "process/checks/CP6-CR091-QMT-STRATEGY-RUNNER-CODING-DONE.md"
+    implementation_evidence: "process/stories/CR091-QMT-STRATEGY-RUNNER-IMPLEMENTATION.md"
+    summary: "offline implementation slice completed by meta-dev/dev-zhu and host-orchestrator review; CR091 contract tests 13 passed, checker passed=true, git diff --check PASS."
+  cp7:
+    status: "PASS_WITH_RISK"
+    check: "process/checks/CP7-CR091-QMT-STRATEGY-RUNNER-VERIFICATION-DONE.md"
+    context: "process/context/CP7-CR091-QMT-STRATEGY-RUNNER-CONTEXT.yaml"
+    verification_report: "docs/quality/CR091-QMT-STRATEGY-RUNNER-VERIFICATION-REPORT.md"
+    test_report: "docs/quality/CR091-QMT-STRATEGY-RUNNER-TEST-REPORT.md"
+    review_report: "docs/quality/CR091-QMT-STRATEGY-RUNNER-REVIEW.md"
+    fixes_report: "docs/quality/CR091-QMT-STRATEGY-RUNNER-FIXES.md"
+    blocker_count: 0
+    high_count: 0
+    medium_count: 0
+    low_count: 0
+    observation_count: 2
+  command_summary:
+    workspace_check: "PASS"
+    pytest: "PASS: 13 passed"
+    offline_checker: "PASS: passed=true, forbidden counters all zero"
+    diff_check: "PASS"
+    static_boundary_scan: "PASS"
+    py_compile: "PASS"
+    cr_tracking: "NON-BLOCKING FAIL: active formal CRs CR-091; historical CR025/CR019 ledger debt"
+
+affected_surface:
+  platforms:
+    - "local Linux development workspace"
+  code:
+    - "trading/strategy_runner/"
+    - "scripts/check_cr091_strategy_runner_package.py"
+    - "tests/test_cr091_strategy_runner_contracts.py"
+    - "tests/fixtures/cr091_strategy_runner/"
+  process:
+    - "process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md"
+    - "process/changes/CR-INDEX.yaml"
+    - "process/STATE.md"
+  configuration: []
+  install_scope: "N/A: no install script or platform agent/skill delivery"
+  migration_scope: "N/A: no persisted state schema or user data migration"
+  external_interfaces:
+    - "N/A: fake readonly transport only; no real QMT/gateway/NAS/provider/lake interface"
+
+install_validation_summary:
+  status: "N/A"
+  reason: "CR091 does not deliver installer, platform agent, platform skill or deployment script."
+  performed_checks:
+    - "uv workspace check"
+    - "pytest contract tests"
+    - "offline checker"
+    - "static boundary scan"
+
+release_documents:
+  release_notes:
+    path: "process/docs/release/RELEASE-NOTES-CR091.md"
+    profile: "compact"
+    status: "generated"
+  deploy_checklist:
+    path: "process/docs/release/DEPLOY-CHECKLIST-CR091.md"
+    profile: "compact"
+    status: "generated"
+  rollback:
+    path: "process/docs/release/ROLLBACK-CR091.md"
+    profile: "compact"
+    status: "generated"
+  migration:
+    path: "process/docs/release/MIGRATION-CR091.md"
+    profile: "compact"
+    status: "generated"
+  feedback:
+    path: "process/docs/release/FEEDBACK-CR091.md"
+    profile: "compact"
+    status: "generated"
+  cp8_auto_check: "process/checks/CP8-CR091-DELIVERY-READINESS.md"
+  cp8_manual_review: "process/checkpoints/CP8-CR091-DELIVERY-READINESS.md"
+  cp8_context: "process/context/CP8-CR091-DELIVERY-CONTEXT.yaml"
+
+risk_register:
+  - id: "R-CR091-CP7-001"
+    severity: "high"
+    owner: "runtime-authorization-gate"
+    decision: "pending CP8 risk acceptance"
+    summary: "Offline CP7 does not prove real QMT/MiniQMT/XtQuant/gateway/runner runtime readiness or tradability."
+  - id: "R-CR091-CP7-002"
+    severity: "medium"
+    owner: "future-ledger-hygiene"
+    decision: "pending CP8 follow-up tracking"
+    summary: "Historical CR tracking debt makes global cr-tracking command exit 1, but active formal CR is CR091 and this does not block CR091."
+  - id: "R-CR091-CP7-003"
+    severity: "low"
+    owner: "future-evidence-output-gate"
+    decision: "pending CP8 follow-up tracking"
+    summary: "write_evidence_summary supports local write, but CP7 did not enable evidence output path; future use needs output directory and sensitive scan gate."
+
+follow_up_summary:
+  - id: "CR091-FU-01"
+    category: "runtime_authorization"
+    status: "candidate-not-started"
+    summary: "Real QMT/MiniQMT/XtQuant/gateway/runner readonly smoke requires independent runtime authorization and redacted evidence gate."
+  - id: "CR091-FU-02"
+    category: "nas_package_exchange"
+    status: "candidate-not-started"
+    summary: "NAS package exchange / pull / publish remains out of scope and requires independent gate."
+  - id: "CR091-FU-03"
+    category: "order_write"
+    status: "candidate-not-started"
+    summary: "submit/cancel or simulation/live order-write capability remains excluded and requires separate high-risk CR."
+  - id: "CR091-FU-04"
+    category: "ledger_hygiene"
+    status: "candidate-not-started"
+    summary: "Historical CR025 nested active_change and CR019 follow-up status debt may be cleaned in a separate governance task."
+
+non_authorized_items:
+  - "QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime"
+  - "NAS access, list, read, copy, pull, write, publish or delete"
+  - ".env, credentials, account id, account, funds, position, order, fill or raw log read"
+  - "submit/cancel, buy/sell, simulation/live"
+  - "provider fetch, lake write, catalog publish"
+  - "CR089 auto-start"
+  - "CR020 gateway route restore"
+
+rollback_summary:
+  type: "code-and-ledger-state"
+  trigger: "CP8 reject, user-requested scope correction, or later evidence that offline contract is unsafe"
+  rollback_target: "CR091 CP7 PASS_WITH_RISK pending CP8"
+  destructive_action_required: false
+  rollback_paths:
+    - "trading/strategy_runner/"
+    - "scripts/check_cr091_strategy_runner_package.py"
+    - "tests/test_cr091_strategy_runner_contracts.py"
+    - "tests/fixtures/cr091_strategy_runner/"
+    - "process CR091 CP6/CP7/CP8 ledger entries"
+
+token_control:
+  read_profile: "compact"
+  full_doc_read_required: false
+  full_doc_read_reason: ""

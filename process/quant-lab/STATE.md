@@ -1,15 +1,15 @@
 ---
 project_id: quant-lab
 workflow_mode: production
-current_phase: story-execution
+current_phase: documentation
 current_agent: host-orchestrator
 active_change: "CR-091"
 active_story: ''
-iteration: 530
+iteration: 531
 blocked: false
 blocked_reason: ''
-last_action: CR091 离线 CP7 已由 meta-qa-critical/qa-critical-he 完成并回填，结论为 PASS_WITH_RISK；验证证据包括 CR091 pytest 13 passed、offline checker passed=true、git diff --check PASS、静态边界扫描 PASS、py_compile PASS，cr-tracking 仅剩历史 CR025/CR019 旧账且不阻断 CR091。AGENTS.md / CLAUDE.md 已通过 commit 2419341 从 quant-lab Git 跟踪移除并推送，本地文件保留且被 .gitignore 忽略。仍未启动 QMT/MiniQMT/XtQuant/gateway/runner，未访问 NAS，未读取 `.env` / 凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交 / 日志原文，未执行 submit/cancel、simulation/live、provider/lake/publish。
-next_action: "准备 CR091 CP8 交付就绪 / 风险接受门禁：汇总 CP7 PASS_WITH_RISK 风险、生成 release context / CP8 自动预检和人工审查稿；不授权 QMT/MiniQMT/XtQuant/gateway/runner runtime、NAS、.env/凭据/账户读取、submit/cancel、simulation/live、provider/lake/publish。"
+last_action: CR091 CP8 交付就绪 / 风险接受材料已生成并通过 human-gate 校验。新增 Release Context、CP8 Context、五份 release docs、CP8 自动预检、CP8 人工审查稿和 launch message；推荐结论为 READY_WITH_RISK，等待用户 approve / 修改 / reject。仍未启动 QMT/MiniQMT/XtQuant/gateway/runner，未访问 NAS，未读取 `.env` / 凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交 / 日志原文，未执行 submit/cancel、simulation/live、provider/lake/publish。
+next_action: "等待用户审查 process/checkpoints/CP8-CR091-DELIVERY-READINESS.md 并回复 approve / 修改: <具体修改点> / reject。approve 仅接受 CR091 离线 runner 交付 READY_WITH_RISK，不授权 runtime、NAS、凭据、账户、交易写、simulation/live、provider/lake/publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -124,9 +124,9 @@ artifact_routing:
   health_status: "local-remediation-complete"
   updated_at: "2026-06-17T19:50:00+08:00"
 cr_tracking:
-  status: "active-formal-cr-cp7-pass-with-risk-ready-for-cp8"
+  status: "active-formal-cr-cp8-review-pending"
   index_path: process/changes/CR-INDEX.yaml
-  last_consistency_check: 'CP7-PASS_WITH_RISK at 2026-06-18T15:05:02+08:00. CR091 offline verification completed by meta-qa-critical/qa-critical-he; tests 13 passed, checker passed=true, git diff --check PASS, static boundary scan PASS, py_compile PASS. meta-flow check cr-tracking exited 1 only for historical CR025 nested active_change and CR019 follow-up debt, non-blocking for CR091. CR046 remains closed-current-delivery / READY_WITH_RISK. CR089 remains blocked-readiness-approved. No NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or runtime action executed.'
+  last_consistency_check: 'CP8-PASS_WITH_RISK pending human approval at 2026-06-18T15:24:12+08:00. CR091 release context, CP8 context, release docs, CP8 auto check, manual checkpoint and human gate launch message generated; human-gate check returned OK. CR046 remains closed-current-delivery / READY_WITH_RISK. CR089 remains blocked-readiness-approved. No NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or runtime action executed.'
   active_crs:
   - id: CR-091
     title: QMT Strategy Runner Research / Design / Implementation Plan
@@ -161,9 +161,9 @@ cr_tracking:
     - multi_factor_strategy_runner
     - generic_strategy_adapter
     - order_write_excluded
-    next_gate: CP8 CR091 delivery readiness / risk acceptance
-    next_action: '准备 CR091 CP8：汇总 CP7 PASS_WITH_RISK、离线验证证据、剩余 runtime 风险和不授权项；不授权 NAS/QMT/MiniQMT/XtQuant/gateway/runner runtime、凭据、账户、submit/cancel、simulation/live。'
-    last_checked_at: '2026-06-18T15:05:02+08:00'
+    next_gate: CP8 CR091 delivery readiness / risk acceptance human review
+    next_action: '等待用户审查 process/checkpoints/CP8-CR091-DELIVERY-READINESS.md 并回复 approve / 修改: <具体修改点> / reject；不授权 NAS/QMT/MiniQMT/XtQuant/gateway/runner runtime、凭据、账户、submit/cancel、simulation/live。'
+    last_checked_at: '2026-06-18T15:24:12+08:00'
   - id: CR-046
     title: QMT and MiniQMT Dual-Target Strategy Delivery Framework
     status: closed-current-delivery
@@ -1863,18 +1863,23 @@ cr_tracking:
     不占执行锁
   consistency_check: scripts/check_cr_tracking_consistency.py --project-root .
 human_gate_decisions:
-  status: approved
-  active_gate: ''
-  active_checkpoint: ''
-  active_launch_message: process/checks/CR091-HUMAN-GATE-LAUNCH-MESSAGE.md
-  pending_gate: ''
+  status: awaiting-user
+  active_gate: CP8-CR091-DELIVERY-READINESS
+  active_checkpoint: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md
+  active_launch_message: process/checks/CP8-CR091-HUMAN-GATE-LAUNCH-MESSAGE.md
+  pending_gate: CP8-CR091-DELIVERY-READINESS
   approved_gate: CP2/CP3/CP5-CR091-QMT-STRATEGY-RUNNER
   approved_at: '2026-06-18T14:16:02+08:00'
   approved_by: user
   approval_input: '用户回复“同意”，按 CR091 CP2/CP3/CP5 approve 处理；接受 DQ-CP2-CR091-01、DQ-CP3-CR091-02..03、DQ-CP5-CR091-04..08 的推荐方案。该批准只允许离线 implementation slice，不授权 QMT/MiniQMT/XtQuant/gateway/runner runtime、NAS、.env/凭据/账户、submit/cancel、simulation/live、provider/lake/publish。'
-  pending_checklist_path: ''
-  launch_message_path: process/checks/CR091-HUMAN-GATE-LAUNCH-MESSAGE.md
-  pending_decision_ids: []
+  pending_checklist_path: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md
+  launch_message_path: process/checks/CP8-CR091-HUMAN-GATE-LAUNCH-MESSAGE.md
+  pending_decision_ids:
+  - DQ-CP8-CR091-01
+  - DQ-CP8-CR091-02
+  - DQ-CP8-CR091-03
+  - DQ-CP8-CR091-04
+  - DQ-CP8-CR091-05
   accepted_decision_ids:
   - DQ-CP2-CR091-01
   - DQ-CP3-CR091-02
@@ -2182,6 +2187,11 @@ human_gate_decisions:
   - 不执行 optional groups、full tests、章节研究 smoke、删除 .venv 或 destructive cleanup。
   - 不恢复或推进 CR046 CP7。
   pending_human_decisions:
+  - {id: DQ-CP8-CR091-01, gate: CP8, decision_type: risk_acceptance, question: "是否接受 CR091 当前 CP8 结论并关闭当前离线 runner 交付？", recommendation: "接受 READY_WITH_RISK，关闭 CR091 当前离线 runner 研究 / 设计 / 实现 / fixture 验证交付。", alternatives: ["补真实 runtime gate 后再关闭", "reject 回退到 CP7 pending CP8"], pros_cons: "推荐方案与 CP6/CP7 离线证据一致，能关闭结构缺口；补 runtime 会进入未授权 QMT/MiniQMT/XtQuant/gateway/runner 范围。", impact_risk: "关闭后仍不声明真实 QMT/MiniQMT/XtQuant/gateway/runner 可用。", rollback_switch: "用户要求补 runtime 证据或 reject 时回退到 CP7 / 新建 runtime gate。", status: pending, source: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T15:24:12+08:00"}
+  - {id: DQ-CP8-CR091-02, gate: CP8, decision_type: scope, question: "CR091 关闭范围是否限定为研究 / 设计 / 离线实现 / fixture 验证？", recommendation: "仅关闭离线 runner 合同、package/cache/adapters/fake transport、checker、fixtures/tests 和脱敏 evidence 切片。", alternatives: ["扩大到真实 QMT runner", "扩大到 NAS package exchange", "扩大到 submit/cancel"], pros_cons: "推荐方案边界清晰且符合已授权范围；备选均需要独立高风险门禁。", impact_risk: "后续真实运行、NAS 交换和订单写能力仍需新 CR。", rollback_switch: "用户要求扩大范围时暂停 CP8 并创建对应 CR。", status: pending, source: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T15:24:12+08:00"}
+  - {id: DQ-CP8-CR091-03, gate: CP8, decision_type: runtime_authorization, question: "CP8 approve 是否授权 QMT/MiniQMT/XtQuant/gateway/runner、NAS、凭据、账户或交易动作？", recommendation: "不授权；approve 仅接受交付就绪和风险，不授权任何 runtime / NAS / 凭据 / 账户 / 交易写动作。", alternatives: ["授权只读 runtime smoke", "授权 NAS package exchange", "授权 submit/cancel"], pros_cons: "推荐方案保持安全边界；备选均涉及外部状态、敏感信息或交易风险。", impact_risk: "无需访问交易主机、NAS、凭据或账户即可关闭当前离线交付。", rollback_switch: "需要真实运行时另起逐 run runtime_authorization gate。", status: pending, source: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T15:24:12+08:00"}
+  - {id: DQ-CP8-CR091-04, gate: CP8, decision_type: follow_up_tracking, question: "CR091 后续候选如何分流？", recommendation: "保留 runtime readonly smoke、NAS package exchange、order-write、ledger hygiene 为后续候选，不自动启动。", alternatives: ["本轮强制启动某个候选", "取消全部候选"], pros_cons: "推荐方案不扩大当前关闭范围且保留追溯；强制启动会绕过新门禁，取消会丢失后续路线。", impact_risk: "后续 backlog 存在但不阻断 CR091 当前交付关闭。", rollback_switch: "用户明确选择某个候选时再按 meta-flow 创建 / 恢复对应门禁。", status: pending, source: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T15:24:12+08:00"}
+  - {id: DQ-CP8-CR091-05, gate: CP8, decision_type: implementation, question: "是否接受当前无需额外用户手工 runtime 验证即可关闭离线切片？", recommendation: "接受；当前离线切片已通过自动化测试、checker、静态边界扫描和 CP7 PASS_WITH_RISK。", alternatives: ["要求交易主机手工验证后再关闭", "取消 runner 交付"], pros_cons: "推荐方案符合当前不授权 runtime 的边界；手工验证需新的运行授权，取消会丢失已完成合同能力。", impact_risk: "关闭结论只覆盖离线 runner，不证明交易主机可运行。", rollback_switch: "用户要求手工 runtime 验证时暂停 CP8 并创建 readonly smoke gate。", status: pending, source: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T15:24:12+08:00"}
   - {id: DQ-CP2-CR091-01, gate: CP2, decision_type: scope, question: "CR091 当前是否启动为静态研究 / 方案 / 实施计划门禁？", recommendation: "启动 CR091 门禁，但 CP5 前不实现、不运行。", alternatives: ["暂停", "直接 CR047", "直接实现"], pros_cons: "推荐方案解决 runner 结构缺口且保留权限边界；直接实现会绕过设计门禁。", impact_risk: "不证明真实 runtime 可用。", rollback_switch: "用户要求先交付策略包时切 CR047。", status: accepted, answer: "同意 at 2026-06-18T14:16:02+08:00", source: process/checkpoints/CP2-CR091-QMT-STRATEGY-RUNNER-SCOPE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T14:16:02+08:00"}
   - {id: DQ-CP3-CR091-02, gate: CP3, decision_type: architecture, question: "runner 主体路线是什么？", recommendation: "clean-room package-driven runner。", alternatives: ["改造 lite-qmt-executor", "接入 qmt-gateway/xqshare", "接入 vn.py", "仅手工脚本"], pros_cons: "推荐方案依赖少、边界清晰；外部项目实盘接口面过大。", impact_risk: "需要自行实现 package/cache/evidence。", rollback_switch: "未来复杂事件驱动需求出现时再评估 vn.py / Lean。", status: accepted, answer: "同意 at 2026-06-18T14:16:02+08:00", source: process/checkpoints/CP3-CR091-QMT-STRATEGY-RUNNER-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T14:16:02+08:00"}
   - {id: DQ-CP3-CR091-03, gate: CP3, decision_type: architecture, question: "多因子与其他策略如何兼容？", recommendation: "多因子优先，统一 StrategyAdapter 输出合同。", alternatives: ["多因子专用 runner", "每类策略各自 runner"], pros_cons: "推荐方案同时满足多因子优先和通用扩展；专用 runner 后续会分裂。", impact_risk: "adapter contract 需要稳定测试。", rollback_switch: "若多因子字段不稳定，先降级 legacy adapter。", status: accepted, answer: "同意 at 2026-06-18T14:16:02+08:00", source: process/checkpoints/CP3-CR091-QMT-STRATEGY-RUNNER-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T14:16:02+08:00"}
@@ -16637,14 +16647,19 @@ orchestrator_session:
   thread_id: ''
   workflow_id: local_backtest
   active_change: "CR-091"
-  status: active
-  pending_gate: ''
+  status: awaiting-user
+  pending_gate: CP8-CR091-DELIVERY-READINESS
   approved_gate: CP2/CP3/CP5-CR091-QMT-STRATEGY-RUNNER
   approved_at: '2026-06-18T14:16:02+08:00'
-  pending_checklist_path: ''
-  launch_message_path: process/checks/CR091-HUMAN-GATE-LAUNCH-MESSAGE.md
-  pending_user_decision: ''
-  pending_decision_ids: []
+  pending_checklist_path: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md
+  launch_message_path: process/checks/CP8-CR091-HUMAN-GATE-LAUNCH-MESSAGE.md
+  pending_user_decision: 'awaiting approve / 修改: <具体修改点> / reject for CR091 CP8 READY_WITH_RISK'
+  pending_decision_ids:
+  - DQ-CP8-CR091-01
+  - DQ-CP8-CR091-02
+  - DQ-CP8-CR091-03
+  - DQ-CP8-CR091-04
+  - DQ-CP8-CR091-05
   approved_decision_ids:
   - DQ-CP2-CR091-01
   - DQ-CP3-CR091-02
@@ -22231,6 +22246,39 @@ agent_lifecycle:
     completed_at: '2026-05-16T19:33:15+08:00'
     closed_at: '2026-05-16T19:33:15+08:00'
 history:
+- at: '2026-06-18T15:24:12+08:00'
+  actor: host-orchestrator
+  action: cr091-cp8-delivery-readiness-generated-awaiting-user
+  reason: CR091 CP8 交付就绪材料已生成并通过 human-gate 校验；推荐结论为 READY_WITH_RISK，等待用户审查 CP8 人工检查点并回复 approve / 修改 / reject。当前只发起风险接受门禁，不执行 runtime、NAS、凭据、账户或交易动作。
+  artifacts:
+  - process/release/RELEASE-CONTEXT-CR091.yaml
+  - process/context/CP8-CR091-DELIVERY-CONTEXT.yaml
+  - process/docs/release/RELEASE-NOTES-CR091.md
+  - process/docs/release/DEPLOY-CHECKLIST-CR091.md
+  - process/docs/release/ROLLBACK-CR091.md
+  - process/docs/release/MIGRATION-CR091.md
+  - process/docs/release/FEEDBACK-CR091.md
+  - process/checks/CP8-CR091-DELIVERY-READINESS.md
+  - process/checkpoints/CP8-CR091-DELIVERY-READINESS.md
+  - process/checks/CP8-CR091-HUMAN-GATE-LAUNCH-MESSAGE.md
+  - process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    status: active-formal-cr-cp8-review-pending
+    pending_gate: CP8-CR091-DELIVERY-READINESS
+    pending_decision_count: 5
+    release_decision: READY_WITH_RISK
+    human_gate_check: OK
+    top_level_active_change: CR-091
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credential, account id, account, funds, position, order, fill or raw log read
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup
+  - CR020 gateway-route restore
 - at: '2026-06-18T15:05:02+08:00'
   actor: host-orchestrator
   action: cr091-cp7-pass-with-risk-ready-for-cp8

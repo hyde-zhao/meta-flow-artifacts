@@ -19,7 +19,7 @@ source_decision_id: "USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENT
 follow_up_type: "strategy-runner-gate"
 risk_class: "trading-runtime-boundary"
 owner: "host-orchestrator"
-revisit_condition: "用户已于 2026-06-18T14:16:02+08:00 批准 CR091 CP2/CP3/CP5；离线实现切片已于 2026-06-18T14:41:31+08:00 达到 CP6 PASS，并于 2026-06-18T15:05:02+08:00 达到 CP7 PASS_WITH_RISK / ready-for-CP8。任何逐 run runtime authorization 仍需后续独立门禁。"
+revisit_condition: "用户已于 2026-06-18T14:16:02+08:00 批准 CR091 CP2/CP3/CP5；离线实现切片已于 2026-06-18T14:41:31+08:00 达到 CP6 PASS，并于 2026-06-18T15:05:02+08:00 达到 CP7 PASS_WITH_RISK。CP8 交付就绪材料已于 2026-06-18T15:24:12+08:00 生成并通过 human-gate 校验，当前等待用户人工确认。任何逐 run runtime authorization 仍需后续独立门禁。"
 acceptance_criteria: "完成 runner 参考项目研究和风险矩阵，形成 HLD 推荐方案、LLD、TEST-PLAN、CP2/CP3/CP5 checkpoint 与待决策项；CP5 approve 后才允许实施离线 runner；本 CR 门禁不授权任何 QMT/MiniQMT/XtQuant/gateway/runner runtime、NAS、凭据、账户、下单或模拟/实盘动作。"
 close_condition: "CR091 研究、方案、实现、验证和 CP8 均完成并由用户确认；或用户取消 / 合并到 CR089 / 拆分为后续 CR。"
 cr_index_path: "process/changes/CR-INDEX.yaml"
@@ -39,7 +39,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | `CR-089` | `blocked-readiness-approved`，只读 `query_positions` smoke 和脱敏 collector 可作为经验输入 | CR091 可复用 CR089 的只读网关与脱敏证据模型，但不激活 CR089 runtime |
 | `CR-020` | `closed-current-delivery`，用户删除的 QMT gateway 路线已归档 | 仅保留历史审计和当前 typed contract 参考，不得恢复为当前验证入口 |
 
-因此，CR091 当前状态更新为 `active-cp7-pass-with-risk-ready-for-cp8`：研究、HLD、LLD、测试计划和 CP2/CP3/CP5 门禁已由用户批准，离线实现切片已通过 CP6，离线验证已通过 CP7 `PASS_WITH_RISK`；下一步仅允许准备 CP8 交付就绪 / 风险接受，runtime 仍未授权。
+因此，CR091 当前状态更新为 `active-cp8-review-pending`：研究、HLD、LLD、测试计划和 CP2/CP3/CP5 门禁已由用户批准，离线实现切片已通过 CP6，离线验证已通过 CP7 `PASS_WITH_RISK`，CP8 交付就绪 / 风险接受材料已生成并通过 human-gate 校验；下一步仅允许等待用户审查 CP8，runtime 仍未授权。
 
 ## 冲突预检结论
 
@@ -382,6 +382,43 @@ CP7 证据：
 - `process/handoffs/META-QA-CR091-OFFLINE-RUNNER-VERIFY-2026-06-18.md`
 
 CP7 结论：`PASS_WITH_RISK`。下一步仅允许准备 CP8 交付就绪 / 风险接受；仍不授权 QMT / MiniQMT / XtQuant / gateway / runner runtime、NAS、`.env` / 凭据 / 账户、submit / cancel、simulation / live、provider / lake / publish。
+
+## CP8 交付就绪
+
+CR091 CP8 交付就绪 / 风险接受材料已于 `2026-06-18T15:24:12+08:00` 生成，`meta-flow check human-gate` 校验结果为 `OK`。
+
+CP8 推荐结论：`READY_WITH_RISK`。该结论只表示 CR091 当前离线 runner 研究、设计、实现、fixture 验证和文档交付可进入人工风险接受，不表示真实 QMT / MiniQMT / XtQuant / gateway / runner 可用，也不表示任何运行时动作被授权。
+
+CP8 证据：
+
+- `process/release/RELEASE-CONTEXT-CR091.yaml`
+- `process/context/CP8-CR091-DELIVERY-CONTEXT.yaml`
+- `process/docs/release/RELEASE-NOTES-CR091.md`
+- `process/docs/release/DEPLOY-CHECKLIST-CR091.md`
+- `process/docs/release/ROLLBACK-CR091.md`
+- `process/docs/release/MIGRATION-CR091.md`
+- `process/docs/release/FEEDBACK-CR091.md`
+- `process/checks/CP8-CR091-DELIVERY-READINESS.md`
+- `process/checkpoints/CP8-CR091-DELIVERY-READINESS.md`
+- `process/checks/CP8-CR091-HUMAN-GATE-LAUNCH-MESSAGE.md`
+
+待用户确认的 CP8 决策项：
+
+- `DQ-CP8-CR091-01`：是否接受 CR091 当前 CP8 `READY_WITH_RISK` 并关闭当前离线 runner 交付。
+- `DQ-CP8-CR091-02`：关闭范围是否限定为研究 / 设计 / 离线实现 / fixture 验证。
+- `DQ-CP8-CR091-03`：CP8 approve 是否继续不授权 runtime / NAS / 凭据 / 账户 / 交易动作。
+- `DQ-CP8-CR091-04`：后续候选是否保留但不自动启动。
+- `DQ-CP8-CR091-05`：是否接受无需额外用户手工 runtime 验证即可关闭离线切片。
+
+当前仍不授权：
+
+- 不启动、连接、安装或运行 QMT / MiniQMT / XtQuant / gateway / runner。
+- 不访问 NAS。
+- 不读取 `.env`、凭据、账号、账户、资金、持仓、委托、成交或日志原文。
+- 不执行 `submit_order`、`cancel_order`、buy/sell、simulation 或 live。
+- 不执行 provider、lake、catalog 或 publish。
+- 不自动启动 CR089。
+- 不恢复 CR020 用户删除的 gateway 路线。
 
 ## 关联对象
 
