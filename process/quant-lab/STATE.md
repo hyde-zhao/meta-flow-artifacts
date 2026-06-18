@@ -8,8 +8,8 @@ active_story: ''
 iteration: 530
 blocked: false
 blocked_reason: ''
-last_action: 用户于 2026-06-18T14:16:02+08:00 回复“同意”，按 CR091 CP2/CP3/CP5 approve 处理；已回填三份 checkpoint 人工审查结果，接受 DQ-CP2-CR091-01、DQ-CP3-CR091-02..03、DQ-CP5-CR091-04..08 的推荐方案。该批准只允许后续离线 implementation slice（trading/strategy_runner 薄模块、离线 checker、fixtures/tests、fake transport、脱敏 evidence）；仍未启动 QMT/MiniQMT/XtQuant/gateway/runner，未访问 NAS，未读取 `.env` / 凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交 / 日志原文，未执行 submit/cancel、simulation/live、provider/lake/publish。
-next_action: "先提交并推送 quant-lab 与 meta-flow-artifacts 两个仓库，固化 CR091 CP2/CP3/CP5 approve 状态；随后进入 CR091 离线 implementation slice。若平台无法真实调度 meta-dev 子 agent，则必须先取得用户 inline-fallback 批准，不能静默由 host-orchestrator 代实现。"
+last_action: CR091 离线 implementation slice 已按用户要求通过 meta-dev/dev-zhu 子 agent 实现，并由 host-orchestrator 主线程复核收紧 fail-closed 行为；新增 trading/strategy_runner 薄模块、离线 checker、fixtures/tests、fake transport 和脱敏 evidence。验证结果：CR091 contract tests 13 passed，离线 checker passed=true，git diff --check PASS。仍未启动 QMT/MiniQMT/XtQuant/gateway/runner，未访问 NAS，未读取 `.env` / 凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交 / 日志原文，未执行 submit/cancel、simulation/live、provider/lake/publish。
+next_action: "进入 CR091 离线 CP7 验证；只允许 meta-qa/QA 复跑离线 tests、checker、静态边界扫描和证据审查，不授权 QMT/MiniQMT/XtQuant/gateway/runner runtime、NAS、.env/凭据/账户读取、submit/cancel、simulation/live、provider/lake/publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -124,9 +124,9 @@ artifact_routing:
   health_status: "local-remediation-complete"
   updated_at: "2026-06-17T19:50:00+08:00"
 cr_tracking:
-  status: "active-formal-cr-cp5-approved-ready-for-implementation"
+  status: "active-formal-cr-cp6-pass-ready-for-verification"
   index_path: process/changes/CR-INDEX.yaml
-  last_consistency_check: 'USER-APPROVED at 2026-06-18T14:16:02+08:00. CR091 CP2/CP3/CP5 approved for offline implementation slice only. CR046 remains closed-current-delivery / READY_WITH_RISK. CR089 remains blocked-readiness-approved. No NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or runtime action executed.'
+  last_consistency_check: 'CP6-PASS at 2026-06-18T14:41:31+08:00. CR091 offline implementation slice completed by meta-dev/dev-zhu and host-orchestrator review; tests 13 passed, checker passed=true, git diff --check PASS. CR046 remains closed-current-delivery / READY_WITH_RISK. CR089 remains blocked-readiness-approved. No NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or runtime action executed.'
   active_crs:
   - id: CR-091
     title: QMT Strategy Runner Research / Design / Implementation Plan
@@ -137,7 +137,7 @@ cr_tracking:
     source_checkpoint: current conversation
     source_decision_id: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
     priority: 1
-    blocked_by: 'not blocked: user approved CR091 CP2/CP3/CP5 at 2026-06-18T14:16:02+08:00. Approval only authorizes offline implementation slice with fake transport, fixtures/tests and redacted evidence; it does not authorize NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish or CR089 runtime.'
+    blocked_by: 'not blocked: user approved CR091 CP2/CP3/CP5 at 2026-06-18T14:16:02+08:00; offline implementation slice reached CP6 PASS at 2026-06-18T14:41:31+08:00. Approval and CP6 only cover fake transport, fixtures/tests, local package/cache intake and redacted evidence; they do not authorize NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish or CR089 runtime.'
     impact_surface:
     - QMT strategy runner
     - multi-factor strategy adapter
@@ -161,9 +161,9 @@ cr_tracking:
     - multi_factor_strategy_runner
     - generic_strategy_adapter
     - order_write_excluded
-    next_gate: CP6 CR091 coding-done after offline implementation
-    next_action: '提交并推送两个仓库后进入离线 implementation slice；只允许 trading/strategy_runner 薄模块、离线 checker、fixtures/tests、fake transport 和脱敏 evidence，不授权 NAS/QMT/MiniQMT/XtQuant/gateway/runner runtime、凭据、账户、submit/cancel、simulation/live。'
-    last_checked_at: '2026-06-18T14:16:02+08:00'
+    next_gate: CP7 CR091 offline verification
+    next_action: '调度 meta-qa/QA 执行离线 CP7：复跑 tests、checker、静态边界扫描和证据审查；不授权 NAS/QMT/MiniQMT/XtQuant/gateway/runner runtime、凭据、账户、submit/cancel、simulation/live。'
+    last_checked_at: '2026-06-18T14:41:31+08:00'
   - id: CR-046
     title: QMT and MiniQMT Dual-Target Strategy Delivery Framework
     status: closed-current-delivery
@@ -17141,10 +17141,32 @@ agent_lifecycle:
   platform_capabilities:
     subagent_dispatch:
       available: true
-      method: main-thread-spawn_agent-user-reported
-      checked_at: '2026-05-17T20:53:58+08:00'
-      note: CR005-S02 blocker fix meta-dev/dev-zhu 已完成 CP6；meta-qa/qa-he the 2nd 已完成 S02 CP7 重验并 PASS；CR-005 Batch A 已 verified。
+      method: codex-tools
+      checked_at: '2026-06-18T14:26:37+08:00'
+      note: CR091 用户明确要求使用 meta-dev 子 agent；host-orchestrator 通过 multi_agent_v1.spawn_agent 启动 meta-dev/dev-zhu 执行离线 implementation slice。
   active_agents:
+  - role: meta-dev
+    codex_agent_name: meta-dev
+    reasoning_profile: default
+    dispatch_trigger: CR091 CP2/CP3/CP5 approved; user explicitly requested meta-dev sub agent implementation
+    agent_id: 019ed968-8e97-70d0-89ff-b2fb451929e6
+    agent_name: dev-zhu
+    thread_id: 019ed968-8e97-70d0-89ff-b2fb451929e6
+    workflow_id: quant-lab-cr091
+    change_id: CR-091
+    story_id: CR091-QMT-STRATEGY-RUNNER
+    wave_id: CR091-OFFLINE-RUNNER-IMPLEMENTATION
+    handoff_path: process/handoffs/META-DEV-CR091-OFFLINE-RUNNER-IMPLEMENT-2026-06-18.md
+    status: completed
+    evidence: main thread spawn_agent returned agent_id=019ed968-8e97-70d0-89ff-b2fb451929e6 nickname=dev-zhu for CR091 offline runner implementation slice; host-orchestrator复核并补充 fail-closed 回归后，tests 13 passed，checker passed=true，git diff --check PASS。
+    tool_name: multi_agent_v1.spawn_agent
+    reusable: false
+    spawned_at: '2026-06-18T14:26:37+08:00'
+    resumed_at: ''
+    last_seen_at: '2026-06-18T14:41:31+08:00'
+    completed_at: '2026-06-18T14:41:31+08:00'
+    closed_at: '2026-06-18T14:43:48+08:00'
+    fallback_reason: ''
   - role: meta-qa
     agent_id: 019ec478-0a72-72d3-9e5a-c092f97c45b0
     agent_name: qa-jin

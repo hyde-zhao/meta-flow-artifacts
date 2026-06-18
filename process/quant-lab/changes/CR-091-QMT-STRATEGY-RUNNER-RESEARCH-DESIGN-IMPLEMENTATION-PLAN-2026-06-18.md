@@ -19,7 +19,7 @@ source_decision_id: "USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENT
 follow_up_type: "strategy-runner-gate"
 risk_class: "trading-runtime-boundary"
 owner: "host-orchestrator"
-revisit_condition: "用户已于 2026-06-18T14:16:02+08:00 批准 CR091 CP2/CP3/CP5；当前可进入离线实现切片。任何逐 run runtime authorization 仍需后续独立门禁。"
+revisit_condition: "用户已于 2026-06-18T14:16:02+08:00 批准 CR091 CP2/CP3/CP5；离线实现切片已于 2026-06-18T14:41:31+08:00 达到 CP6 PASS / ready-for-verification。任何逐 run runtime authorization 仍需后续独立门禁。"
 acceptance_criteria: "完成 runner 参考项目研究和风险矩阵，形成 HLD 推荐方案、LLD、TEST-PLAN、CP2/CP3/CP5 checkpoint 与待决策项；CP5 approve 后才允许实施离线 runner；本 CR 门禁不授权任何 QMT/MiniQMT/XtQuant/gateway/runner runtime、NAS、凭据、账户、下单或模拟/实盘动作。"
 close_condition: "CR091 研究、方案、实现、验证和 CP8 均完成并由用户确认；或用户取消 / 合并到 CR089 / 拆分为后续 CR。"
 cr_index_path: "process/changes/CR-INDEX.yaml"
@@ -39,7 +39,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | `CR-089` | `blocked-readiness-approved`，只读 `query_positions` smoke 和脱敏 collector 可作为经验输入 | CR091 可复用 CR089 的只读网关与脱敏证据模型，但不激活 CR089 runtime |
 | `CR-020` | `closed-current-delivery`，用户删除的 QMT gateway 路线已归档 | 仅保留历史审计和当前 typed contract 参考，不得恢复为当前验证入口 |
 
-因此，CR091 当前状态更新为 `active`：研究、HLD、LLD、测试计划和 CP2/CP3/CP5 门禁已由用户批准；下一步仅允许离线实现切片，runtime 仍未授权。
+因此，CR091 当前状态更新为 `active-cp6-pass-ready-for-verification`：研究、HLD、LLD、测试计划和 CP2/CP3/CP5 门禁已由用户批准，离线实现切片已通过 CP6；下一步仅允许离线 CP7 验证，runtime 仍未授权。
 
 ## 冲突预检结论
 
@@ -346,6 +346,18 @@ CR091 不验证下单接口。以下能力全部排除：
 - [ ] 待人工审批（高风险）
 
 用户于 `2026-06-18T14:16:02+08:00` 回复“同意”，按 CP2/CP3/CP5 `approve` 处理，接受 DQ-CP2-CR091-01、DQ-CP3-CR091-02..03、DQ-CP5-CR091-04..08 的推荐方案。下一步允许进入 CR091 离线实现切片：`trading/strategy_runner` 薄模块、离线 checker、fixtures/tests、fake transport 和脱敏 evidence；仍不授权 QMT / MiniQMT / XtQuant / gateway / runner runtime、NAS、`.env` / 凭据 / 账户、submit / cancel、simulation / live、provider / lake / publish。
+
+## CP6 实现结果
+
+CR091 离线实现切片已由 meta-dev 子 agent `dev-zhu` 实现，并经 host-orchestrator 主线程复核收紧。新增 `trading/strategy_runner` 薄模块、离线 checker、fixtures/tests、fake transport 和脱敏 evidence；主线程额外收紧 package wrapper 授权 flags、payload checksum 覆盖、readonly counters / status 纳入 evidence 判定。
+
+验证结果：
+
+- `PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr091_strategy_runner_contracts.py`：`13 passed in 0.15s`
+- `PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_cr091_strategy_runner_package.py --package-root tests/fixtures/cr091_strategy_runner/cr091_strategy_package --json`：`passed=true`
+- `git diff --check`：PASS
+
+CP6 证据：`process/checks/CP6-CR091-QMT-STRATEGY-RUNNER-CODING-DONE.md`。下一步仅允许离线 CP7 验证；仍不授权 QMT / MiniQMT / XtQuant / gateway / runner runtime、NAS、`.env` / 凭据 / 账户、submit / cancel、simulation / live、provider / lake / publish。
 
 ## 关联对象
 
