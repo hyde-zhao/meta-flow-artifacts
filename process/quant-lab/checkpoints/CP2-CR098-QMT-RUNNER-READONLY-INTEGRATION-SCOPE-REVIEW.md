@@ -2,11 +2,11 @@
 checkpoint_id: "CP2"
 checkpoint_name: "CR098 QMT Runner Readonly Integration Scope Review"
 type: "auto_then_manual"
-status: "pending"
+status: "approved"
 owner: "host-orchestrator"
 created_at: "2026-06-19T11:55:26+08:00"
-reviewed_by: ""
-reviewed_at: ""
+reviewed_by: "user"
+reviewed_at: "2026-06-19T12:00:19+08:00"
 auto_check_result: "process/checks/CP2-CR098-QMT-RUNNER-READONLY-INTEGRATION-SCOPE-PRECHECK.md"
 target:
   phase: "requirement-clarification"
@@ -86,18 +86,18 @@ CR098 的用户意图是把 CR091 离线 runner 与 CR097 已验证的 Windows g
 | 条目 | 审查结果 | 证据 | 审查意见 |
 |---|---|---|---|
 | 用户启动 CR098 | 待审查 | 当前对话 | 用户明确要求启动 gate |
-| CR098 已创建 | 待审查 | `process/changes/CR-098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-SMOKE-2026-06-19.md` | 待确认范围 |
-| CP2 context ready | 待审查 | `process/context/CP2-CR098-RUNNER-READONLY-INTEGRATION-CONTEXT.yaml` | 最小上下文已生成 |
+| CR098 已创建 | approved | `process/changes/CR-098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-SMOKE-2026-06-19.md` | 范围已确认 |
+| CP2 context ready | approved | `process/context/CP2-CR098-RUNNER-READONLY-INTEGRATION-CONTEXT.yaml` | 最小上下文已生成 |
 
 ## Checklist
 
 | # | 检查项 | 审查结果 | 证据 | 审查意见 |
 |---|---|---|---|---|
-| 1 | 范围是否清晰 | 待审查 | Decision Brief | 仅 runner readonly integration |
-| 2 | 架构方向是否可接受 | 待审查 | `DQ-CP2-CR098-02` | runner-owned readonly adapter |
-| 3 | runtime 不授权是否清楚 | 待审查 | `DQ-CP2-CR098-03` | CP2 不授权 secret / gateway / runner run |
-| 4 | evidence / secret 边界是否清楚 | 待审查 | `DQ-CP2-CR098-04` | `.quant-lab` redacted evidence |
-| 5 | 后续分流是否清楚 | 待审查 | `DQ-CP2-CR098-05` | NAS/order-write/非空复测独立 |
+| 1 | 范围是否清晰 | approved | Decision Brief | 仅 runner readonly integration |
+| 2 | 架构方向是否可接受 | approved | `DQ-CP2-CR098-02` | runner-owned readonly adapter |
+| 3 | runtime 不授权是否清楚 | approved | `DQ-CP2-CR098-03` | CP2 不授权 secret / gateway / runner run |
+| 4 | evidence / secret 边界是否清楚 | approved | `DQ-CP2-CR098-04` | `.quant-lab` redacted evidence |
+| 5 | 后续分流是否清楚 | approved | `DQ-CP2-CR098-05` | NAS/order-write/非空复测独立 |
 
 ## Exit Criteria
 
@@ -117,10 +117,10 @@ CR098 的用户意图是把 CR091 离线 runner 与 CR097 已验证的 Windows g
 
 ## 人工审查结果
 
-- 结论：`pending`
-- 审查人：
-- 审查时间：
-- 用户回复：
-- 接受的决策项：
-- 修改意见：
-- 不授权边界：
+- 结论：`approved`
+- 审查人：user
+- 审查时间：2026-06-19T12:00:19+08:00
+- 用户回复：同意
+- 接受的决策项：`DQ-CP2-CR098-01`、`DQ-CP2-CR098-02`、`DQ-CP2-CR098-03`、`DQ-CP2-CR098-04`、`DQ-CP2-CR098-05`
+- 修改意见：无
+- 不授权边界：仍不授权读取 `/home/hyde/.quant-lab/runtime/qmt/cr097/client.env.template` 或任何 HMAC secret；不授权读取 Windows `.env`、QMT 账号原文、资金、持仓明细原文、委托、成交或原始日志；不授权启动 Windows gateway、执行 runner runtime 或查询账户；不授权 NAS、submit/cancel、simulation/live、provider/lake/publish；不自动启动 CR089 或 CR020 gateway route restore。

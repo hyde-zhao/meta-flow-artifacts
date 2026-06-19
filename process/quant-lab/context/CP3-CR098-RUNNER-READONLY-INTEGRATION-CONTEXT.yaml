@@ -1,0 +1,48 @@
+schema_version: "context-capsule-v1"
+context_id: "CP3-CR098-RUNNER-READONLY-INTEGRATION"
+context_type: "cp3-design"
+status: "ready"
+created_at: "2026-06-19T12:00:19+08:00"
+owner: "host-orchestrator"
+read_profile: "minimal"
+target:
+  cr_id: "CR-098"
+  phase: "solution-design"
+  checkpoint: "CP3"
+scope_summary: "CR098 HLD recommends runner-owned readonly gateway adapter facade with fake/offline default and per-run authorized real transport."
+key_facts:
+  - "CP2 approved at 2026-06-19T12:00:19+08:00."
+  - "Recommended architecture: extend runner readonly facade; inject fake or real transport; no direct XtQuant import."
+  - "CP3 approve does not authorize secret read, gateway startup, runner runtime execution or account query."
+must_read:
+  - "docs/qmt/CR098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-HLD.md"
+  - "process/checkpoints/CP3-CR098-QMT-RUNNER-READONLY-INTEGRATION-HLD-REVIEW.md"
+read_if_needed:
+  - path: "process/discussions/CP3-CR098-HLD-DISCUSSION-LOG.md"
+    reason: "Need AGA advisor details"
+  - path: "trading/strategy_runner/readonly_gateway.py"
+    reason: "Need current runner wrapper implementation"
+  - path: "tests/test_cr091_strategy_runner_contracts.py"
+    reason: "Need regression baseline"
+do_not_read_by_default:
+  - "HMAC secret env files"
+  - "Windows .env"
+  - "raw account / positions / orders / trades / logs"
+  - "NAS paths"
+risks_and_decisions:
+  - id: "DQ-CP3-CR098-01"
+    type: "architecture"
+    summary: "Adopt runner-owned readonly gateway adapter facade."
+  - id: "DQ-CP3-CR098-04"
+    type: "runtime_authorization"
+    summary: "CP3 approve does not authorize real runner runtime."
+  - id: "R-CR098-01"
+    type: "risk"
+    summary: "Real adapter may be mistaken for trading readiness; mitigated by endpoint allowlist and operation_authorized=false."
+downstream_tasks:
+  - "CP3 approve -> CP5 design readiness."
+  - "CP5 must define file owner, typed contracts, tests, and runtime authorization manifest."
+token_control:
+  full_doc_read_policy: "only-if-capsule-insufficient-or-conflict"
+  max_source_files: 6
+  read_expansion_log: []
