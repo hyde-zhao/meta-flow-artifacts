@@ -3,13 +3,13 @@ project_id: quant-lab
 workflow_mode: production
 current_phase: delivered
 current_agent: host-orchestrator
-active_change: ""
+active_change: ''
 active_story: ''
-iteration: 532
+iteration: 545
 blocked: false
 blocked_reason: ''
-last_action: CR091 CP8 已由用户于 2026-06-18T15:40:09+08:00 同意，接受 DQ-CP8-CR091-01..05 和 READY_WITH_RISK；CR091 当前离线 runner 研究 / 设计 / 实现 / fixture 验证交付已关闭为 closed-current-delivery。已生成清上下文恢复交接 `process/context/CR091-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-18.md`。仍未启动 QMT/MiniQMT/XtQuant/gateway/runner，未访问 NAS，未读取 `.env` / 凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交 / 日志原文，未执行 submit/cancel、simulation/live、provider/lake/publish。
-next_action: "当前没有 active formal CR。清上下文后优先读取 process/context/CR091-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-18.md。推荐下一目标：启动 CR091-FU-01 真实只读 runtime smoke 设计门禁；备选为 CR091-FU-02 NAS package exchange、CR091-FU-03 order-write 设计门禁、CR091-FU-04 ledger hygiene。任何候选必须由用户明确选择后再按 meta-flow 创建 / 恢复门禁，不自动启动。"
+last_action: 用户回复“同意”，按 CR096 CP8 approve 解析，接受 DQ-CP8-CR096-01..03；已回填 CP8 人工审查结果，关闭 CR096 为 READY / closed-current-delivery。关闭范围仅覆盖 contract-filled redacted evidence YAML 和单文件 checker passed=true。
+next_action: "当前无 active_change。若继续推进，推荐候选为 CR092-FU-02 real readonly runtime smoke per-run authorization，但它涉及真实 QMT / MiniQMT / XtQuant / gateway / runner runtime，必须独立人工门禁和明确逐 run 授权；NAS、凭据/账户、交易、provider/lake/publish 仍不授权。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -124,10 +124,154 @@ artifact_routing:
   health_status: "local-remediation-complete"
   updated_at: "2026-06-17T19:50:00+08:00"
 cr_tracking:
-  status: "no-active-formal-cr"
+  status: "active-formal-cr"
   index_path: process/changes/CR-INDEX.yaml
-  last_consistency_check: 'CR091 CP8 approved by user at 2026-06-18T15:40:09+08:00 and closed-current-delivery / READY_WITH_RISK. Current state has no active formal CR. CR046 remains closed-current-delivery / READY_WITH_RISK. CR089 remains blocked-readiness-approved. CR091 follow-up candidates remain candidate-not-started and are not auto-started. No NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or runtime action executed.'
+  last_consistency_check: 'CR095 CP8 approved and closed at 2026-06-19T09:39:15+08:00. CR096 started from CR092-FU-01 and is active-awaiting-user-evidence-path. Scope is a single user-provided simulated evidence YAML/JSON checker run only. This does not authorize NAS, directory scan, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
   active_crs:
+  - id: CR-096
+    title: User-provided Simulated Evidence Checker Run
+    status: active-formal-cr
+    source_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-096-USER-PROVIDED-SIMULATED-EVIDENCE-CHECKER-RUN-2026-06-19.md
+    parent_cr: CR-092
+    source_checkpoint: process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR092-04
+    priority: 1
+    blocked_by: 'waiting-user-evidence-path: user must provide exactly one evidence YAML/JSON file path before checker execution'
+    impact_surface:
+    - simulated_evidence
+    - single_file_read
+    - scripts/check_cr092_simulated_evidence.py
+    - process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+    conflict_keys:
+    - simulated_evidence
+    - single_file_read
+    - credential_boundary
+    - redacted_evidence
+    - no_runtime_connection
+    - no_credential_read
+    - no_nas_access
+    next_gate: user-evidence-path
+    next_action: 等待用户提供一个明确 evidence YAML / JSON 文件路径；不得扫描目录或自行查找。
+    last_checked_at: '2026-06-19T09:39:15+08:00'
+  - id: CR-095
+    title: Standalone Checker / CLI Output Convergence
+    status: closed-current-delivery
+    source_tracking: process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+    formal_cr_path: process/changes/CR-095-STANDALONE-CHECKER-CLI-OUTPUT-CONVERGENCE-2026-06-19.md
+    parent_cr: CR-093
+    source_checkpoint: process/checkpoints/CP8-CR094-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR094-03
+    priority: 2
+    blocked_by: 'closed: user approved CR095 CP8 at 2026-06-19T09:39:15+08:00, accepting DQ-CP8-CR095-01..04 and READY. Closure only covers standalone checker / main CLI output convergence; it does not authorize runtime, NAS, credential/account reads, trading, provider/lake/publish or real release.'
+    impact_surface:
+    - checker_output_convergence
+    - scripts/check_cr_tracking_consistency.py
+    - tests/test_cr093_cr_tracking_consistency.py
+    - process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+    conflict_keys:
+    - cr_tracking_consistency
+    - checker_output_convergence
+    - no_runtime_connection
+    - no_credential_read
+    - no_nas_access
+    next_gate: closed
+    next_action: CR095 当前交付已关闭。
+    last_checked_at: '2026-06-19T09:39:15+08:00'
+  - id: CR-094
+    title: Warning Cleanup / Strict-Warnings Readiness
+    status: closed-current-delivery
+    source_tracking: process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+    formal_cr_path: process/changes/CR-094-WARNING-CLEANUP-STRICT-WARNINGS-READINESS-2026-06-19.md
+    parent_cr: CR-093
+    source_checkpoint: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR093-02; DQ-CP8-CR093-04
+    priority: 1
+    blocked_by: 'closed: user approved CR094 CP8 at 2026-06-19T09:08:56+08:00, accepting DQ-CP8-CR094-01..04 and READY. CR094 current strict-warnings readiness delivery is closed. Closure only covers static ledger / checker warning cleanup; it does not authorize QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, .env/credential/account read, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
+    impact_surface:
+    - cr_tracking_consistency
+    - strict_warnings
+    - cp8_follow_up_tracking_rows
+    - process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+    - /home/hyde/workspace/meta-flow/meta_flow/checks/cr_tracking.py
+    conflict_keys:
+    - ledger_hygiene
+    - cr_tracking_consistency
+    - strict_warnings
+    - no_runtime_connection
+    - no_credential_read
+    - no_nas_access
+    next_gate: closed
+    next_action: CR094 当前交付已关闭为 READY；CR093-FU-02 保持 candidate-not-started，必须用户明确选择后另起门禁。
+    last_checked_at: '2026-06-19T09:08:56+08:00'
+  - id: CR-093
+    title: Ledger Hygiene for CR019 / CR025 Tracking Cleanup
+    status: closed-current-delivery
+    source_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-093-LEDGER-HYGIENE-CR019-CR025-TRACKING-CLEANUP-2026-06-18.md
+    parent_cr: CR-092
+    source_checkpoint: process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR092-04
+    priority: 1
+    blocked_by: 'closed: user approved CR093 CP8 at 2026-06-19T08:39:22+08:00, accepting DQ-CP8-CR093-01..05 and READY_WITH_RISK. CR093 current ledger hygiene delivery is closed. Closure only covers CR019/CR025 cr-tracking blocker governance; it does not authorize QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, .env/credential/account read, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
+    impact_surface:
+    - cr_tracking_consistency
+    - CR019 follow-up tracking
+    - CR025 historical active_change
+    - scripts/check_cr_tracking_consistency.py
+    - process/STATE.md history scan
+    - process/changes/CR-INDEX.yaml
+    conflict_keys:
+    - ledger_hygiene
+    - cr_tracking_consistency
+    - no_runtime_connection
+    - no_credential_read
+    - no_nas_access
+    next_gate: closed
+    next_action: CR093 当前交付已关闭为 READY_WITH_RISK。推荐下一个低风险候选为 CR093-FU-01 warning cleanup / strict-warnings readiness；CR093-FU-02 checker output convergence、CR092-FU-01 simulated evidence checker run、CR092-FU-02 real runtime smoke、CR091-FU-02 NAS 和 CR091-FU-03 order-write 均需用户明确选择后另起门禁。
+    last_checked_at: '2026-06-19T08:39:22+08:00'
+  - id: CR-092
+    title: Real QMT Readonly Runtime Smoke Design Gate
+    status: closed-current-delivery
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-092-REAL-QMT-READONLY-RUNTIME-SMOKE-DESIGN-GATE-2026-06-18.md
+    parent_cr: CR-091
+    source_checkpoint: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR091-04
+    priority: 1
+    follow_up_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+    blocked_by: 'closed: user approved CR092 CP8 at 2026-06-18T17:25:00+08:00, accepting DQ-CP8-CR092-01..05 and READY_WITH_RISK while explicitly skipping optional manual evidence validation. CR092 current readiness / evidence guardrail delivery is closed. Closure only covers guide/template/checker/tests/quality/release/process evidence; it does not authorize QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, .env/credential/account read, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
+    impact_surface:
+    - real QMT readonly runtime smoke design
+    - runtime_authorization
+    - per_run_authorization
+    - qmt_strategy_runner
+    - readonly gateway health
+    - readonly gateway capabilities
+    - readonly query_positions smoke design
+    - redacted runtime evidence
+    - forbidden operation counters
+    - credential_boundary
+    - account_read_boundary
+    conflict_keys:
+    - trading_runtime_boundary
+    - per_run_authorization
+    - credential_boundary
+    - account_permission
+    - readonly_query_positions
+    - qmt_strategy_runner
+    - redacted_evidence
+    - no_nas_package_exchange
+    - order_write_excluded
+    next_gate: closed
+    next_action: CR092 当前交付已关闭为 READY_WITH_RISK。后续候选见 process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md；实际模拟 evidence 检查、真实 runtime smoke、NAS、order-write、ledger hygiene 均需用户明确选择后另起门禁。
+    last_checked_at: '2026-06-18T17:25:00+08:00'
   - id: CR-091
     title: QMT Strategy Runner Research / Design / Implementation Plan
     status: closed-current-delivery
@@ -1863,19 +2007,58 @@ cr_tracking:
     不占执行锁
   consistency_check: scripts/check_cr_tracking_consistency.py --project-root .
 human_gate_decisions:
-  status: idle
+  status: approved
   active_gate: ''
-  active_checkpoint: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md
-  active_launch_message: process/checks/CP8-CR091-HUMAN-GATE-LAUNCH-MESSAGE.md
+  active_checkpoint: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md
+  active_launch_message: process/checks/CP8-CR093-HUMAN-GATE-LAUNCH-MESSAGE.md
   pending_gate: ''
-  approved_gate: CP8-CR091-DELIVERY-READINESS
-  approved_at: '2026-06-18T15:40:09+08:00'
+  approved_gate: CP8-CR093-DELIVERY-READINESS
+  approved_at: '2026-06-19T08:39:22+08:00'
   approved_by: user
-  approval_input: '用户回复“同意，下一目标是什么？”，按 CR091 CP8 approve 处理；接受 DQ-CP8-CR091-01..05 的推荐方案，关闭 CR091 当前交付为 closed-current-delivery / READY_WITH_RISK。该批准不授权 QMT/MiniQMT/XtQuant/gateway/runner runtime、NAS、.env/凭据/账户、submit/cancel、simulation/live、provider/lake/publish。'
+  approval_input: '用户回复“好了，同意接受所有项。下一步推进什么，你需要准备好上下文，我需要清除上下文了。”，按 CR093 CP8 approve 处理；接受 DQ-CP8-CR093-01..05 的推荐方案，关闭 CR093 当前交付为 READY_WITH_RISK。该批准不授权 QMT/MiniQMT/XtQuant/gateway/runner runtime、NAS、.env/凭据/真实账户、submit/cancel、simulation/live、provider/lake/publish、CR089 自动启动、CR091-FU-02、CR091-FU-03、CR093-FU-01/02 自动启动或 CR020 gateway 路线恢复。'
   pending_checklist_path: ''
-  launch_message_path: process/checks/CP8-CR091-HUMAN-GATE-LAUNCH-MESSAGE.md
+  launch_message_path: process/checks/CP8-CR093-HUMAN-GATE-LAUNCH-MESSAGE.md
   pending_decision_ids: []
   accepted_decision_ids:
+  - DQ-CP8-CR093-01
+  - DQ-CP8-CR093-02
+  - DQ-CP8-CR093-03
+  - DQ-CP8-CR093-04
+  - DQ-CP8-CR093-05
+  - DQ-CP5-CR093-01
+  - DQ-CP5-CR093-02
+  - DQ-CP5-CR093-03
+  - DQ-CP5-CR093-04
+  - DQ-CP5-CR093-05
+  - DQ-CP3-CR093-01
+  - DQ-CP3-CR093-02
+  - DQ-CP3-CR093-03
+  - DQ-CP3-CR093-04
+  - DQ-CP2-CR093-01
+  - DQ-CP2-CR093-02
+  - DQ-CP2-CR093-03
+  - DQ-CP2-CR093-04
+  - DQ-CP2-CR093-05
+  - DQ-CP8-CR092-01
+  - DQ-CP8-CR092-02
+  - DQ-CP8-CR092-03
+  - DQ-CP8-CR092-04
+  - DQ-CP8-CR092-05
+  - DQ-CP5-CR092-01
+  - DQ-CP5-CR092-02
+  - DQ-CP5-CR092-03
+  - DQ-CP5-CR092-04
+  - DQ-CP5-CR092-05
+  - DQ-CP5-CR092-06
+  - DQ-CP3-CR092-01
+  - DQ-CP3-CR092-02
+  - DQ-CP3-CR092-03
+  - DQ-CP3-CR092-04
+  - DQ-CP2-CR092-01
+  - DQ-CP2-CR092-02
+  - DQ-CP2-CR092-03
+  - DQ-CP2-CR092-04
+  - DQ-CP2-CR092-05
   - DQ-CP8-CR091-01
   - DQ-CP8-CR091-02
   - DQ-CP8-CR091-03
@@ -2188,6 +2371,25 @@ human_gate_decisions:
   - 不执行 optional groups、full tests、章节研究 smoke、删除 .venv 或 destructive cleanup。
   - 不恢复或推进 CR046 CP7。
   pending_human_decisions:
+  - {id: DQ-CP8-CR093-01, gate: CP8, decision_type: risk_acceptance, question: "是否接受 CR093 READY_WITH_RISK 并关闭当前交付？", recommendation: "接受并关闭 CR093 当前 ledger hygiene 交付。", alternatives: ["修改后重提 CP8", "reject 回 CP7/CP6"], pros_cons: "推荐方案目标 DoD 已达成，阻断项 0；重提会延后关闭。", impact_risk: "CR093 active 可关闭；风险带入 follow-up。", rollback_switch: "若 warning 不可接受，回 CP7 或新建 follow-up。", status: accepted, answer: "好了，同意接受所有项。下一步推进什么，你需要准备好上下文，我需要清除上下文了。 at 2026-06-19T08:39:22+08:00", source: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T08:39:22+08:00"}
+  - {id: DQ-CP8-CR093-02, gate: CP8, decision_type: risk_acceptance, question: "是否接受 R-CR093-01 broader warning-only backlog 保留？", recommendation: "接受 warning-only 不阻断本轮。", alternatives: ["本轮清零所有 warnings", "开启 strict-warnings"], pros_cons: "推荐方案符合 CP5 并控制范围；清零会扩大范围。", impact_risk: "后续仍会看到 warning，但 exit 0。", rollback_switch: "用户要求 warning 清零时启动 CR093-FU-01。", status: accepted, answer: "好了，同意接受所有项。下一步推进什么，你需要准备好上下文，我需要清除上下文了。 at 2026-06-19T08:39:22+08:00", source: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T08:39:22+08:00"}
+  - {id: DQ-CP8-CR093-03, gate: CP8, decision_type: risk_acceptance, question: "是否接受 R-CR093-02 standalone checker warning 明细低于主 CLI？", recommendation: "接受，以主 CLI 为验收入口。", alternatives: ["本轮收敛两套 checker 输出"], pros_cons: "推荐方案聚焦目标；收敛输出是新范围。", impact_risk: "standalone 脚本可通过但 warning 细节少。", rollback_switch: "用户要求一致输出时启动 CR093-FU-02。", status: accepted, answer: "好了，同意接受所有项。下一步推进什么，你需要准备好上下文，我需要清除上下文了。 at 2026-06-19T08:39:22+08:00", source: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T08:39:22+08:00"}
+  - {id: DQ-CP8-CR093-04, gate: CP8, decision_type: follow_up_tracking, question: "CR093-FU-01/02 是否只保留为候选？", recommendation: "保留 candidate-not-started，不自动启动。", alternatives: ["本轮直接启动后续候选"], pros_cons: "推荐方案避免范围膨胀；直接启动会延长当前 CR。", impact_risk: "关闭 CR093 后仍可追踪后续。", rollback_switch: "用户明确选择时再创建正式 CR。", status: accepted, answer: "好了，同意接受所有项。下一步推进什么，你需要准备好上下文，我需要清除上下文了。 at 2026-06-19T08:39:22+08:00", source: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T08:39:22+08:00"}
+  - {id: DQ-CP8-CR093-05, gate: CP8, decision_type: security, question: "CP8 approve 是否授权 runtime、NAS、凭据、交易或 publish？", recommendation: "不授权；approve 只确认交付就绪和风险接受。", alternatives: ["另起独立 runtime / NAS / publish gate"], pros_cons: "推荐方案保持安全边界；备选需独立门禁。", impact_risk: "无外部副作用。", rollback_switch: "需要外部动作时必须新 CR / 明确授权。", status: accepted, answer: "好了，同意接受所有项。下一步推进什么，你需要准备好上下文，我需要清除上下文了。 at 2026-06-19T08:39:22+08:00", source: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T08:39:22+08:00"}
+  - {id: DQ-CP5-CR093-01, gate: CP5, decision_type: implementation, question: "是否批准 CR093 单 Story full-lld 作为实现设计证据？", recommendation: "批准当前 LLD，允许进入受限实施。", alternatives: ["修改 LLD 后重提", "reject 回 CP3"], pros_cons: "推荐方案已覆盖文件、接口、测试、回退；修改会延后但可提高精度。", impact_risk: "CP5 通过后可改 checker / tests / CR019 tracking。", rollback_switch: "发现文件 owner 或测试缺口时重提 CP5。", status: accepted, answer: "好的，同意，继续推进 at 2026-06-18T17:58:38+08:00", source: process/checkpoints/CP5-CR093-LEDGER-HYGIENE-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:58:38+08:00"}
+  - {id: DQ-CP5-CR093-02, gate: CP5, decision_type: implementation, question: "是否按 TASKS 的串行顺序实施？", recommendation: "先写测试，再改 checker，再最小规范化 CR019 tracking。", alternatives: ["先改 checker", "先改旧台账"], pros_cons: "推荐方案降低回归风险；先改实现容易缺少失败基线。", impact_risk: "有利于证明目标缺陷被修复。", rollback_switch: "若测试构造成本过高，可先 py_compile + cr-tracking 验证。", status: accepted, answer: "好的，同意，继续推进 at 2026-06-18T17:58:38+08:00", source: process/checkpoints/CP5-CR093-LEDGER-HYGIENE-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:58:38+08:00"}
+  - {id: DQ-CP5-CR093-03, gate: CP5, decision_type: security, question: "CP5 approve 是否继续禁止外部动作？", recommendation: "继续禁止；只允许读写列明的仓库文本文件。", alternatives: ["授权 NAS / runtime / 账户证据", "授权清理 broader warnings"], pros_cons: "推荐方案符合 ledger-only；备选扩大风险。", impact_risk: "无外部副作用。", rollback_switch: "用户要求外部动作时另起 CR。", status: accepted, answer: "好的，同意，继续推进 at 2026-06-18T17:58:38+08:00", source: process/checkpoints/CP5-CR093-LEDGER-HYGIENE-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:58:38+08:00"}
+  - {id: DQ-CP5-CR093-04, gate: CP5, decision_type: risk_acceptance, question: "broader warning-only 项是否仍不作为本轮 DoD？", recommendation: "接受；DoD 只要求 CR019 / CR025 阻断项收敛。", alternatives: ["本轮清所有 warnings", "全部 suppress"], pros_cons: "推荐方案聚焦目标；清全部会扩大范围。", impact_risk: "CP7 可能仍有 warning，但不阻断当前目标。", rollback_switch: "用户要求 warning 清零时另起后续 CR。", status: accepted, answer: "好的，同意，继续推进 at 2026-06-18T17:58:38+08:00", source: process/checkpoints/CP5-CR093-LEDGER-HYGIENE-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:58:38+08:00"}
+  - {id: DQ-CP5-CR093-05, gate: CP5, decision_type: implementation, question: "CP5 approve 后允许的实施范围是什么？", recommendation: "只允许修改 scripts/check_cr_tracking_consistency.py、新增 tests/test_cr093_cr_tracking_consistency.py、最小修改 CR019 tracking 和必要 process 证据。", alternatives: ["仅改 checker", "仅改文档", "全量重写 checker"], pros_cons: "推荐方案覆盖根因且可验证；单边改动容易残留问题。", impact_risk: "进入 CP6 后以该范围为文件 owner。", rollback_switch: "超出文件范围必须回 CP5 或新 CR。", status: accepted, answer: "好的，同意，继续推进 at 2026-06-18T17:58:38+08:00", source: process/checkpoints/CP5-CR093-LEDGER-HYGIENE-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:58:38+08:00"}
+  - {id: DQ-CP3-CR093-01, gate: CP3, decision_type: architecture, question: "checker 当前状态读取模型如何冻结？", recommendation: "采用 current / tracking-current / audit-history 三层模型；history 不作为 current failure。", alternatives: ["继续全文扫描", "完全跳过 history"], pros_cons: "推荐方案兼顾审计与准确性；全文扫描继续误报；完全跳过 history 会失去审计价值。", impact_risk: "修复 CR025 / CR092 nested active_change 误报。", rollback_switch: "若审计要求强扫 history，改为 audit-only warning。", status: accepted, answer: "同意 at 2026-06-18T17:55:00+08:00", source: process/checkpoints/CP3-CR093-LEDGER-HYGIENE-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:55:00+08:00"}
+  - {id: DQ-CP3-CR093-02, gate: CP3, decision_type: implementation, question: "CP5 设计是否采用状态等价表 + 最小 CR019 台账规范化？", recommendation: "采用集中状态等价表，并只做必要文档规范化。", alternatives: ["只改文档", "只改 checker", "全量重写 checker"], pros_cons: "推荐方案修根因且改动可控；只改单边会留下歧义；全量重写成本高。", impact_risk: "CP5 需输出 fixture、回滚和文件 owner。", rollback_switch: "CP5 发现成本过高时降级为最小账本规范化。", status: accepted, answer: "同意 at 2026-06-18T17:55:00+08:00", source: process/checkpoints/CP3-CR093-LEDGER-HYGIENE-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:55:00+08:00"}
+  - {id: DQ-CP3-CR093-03, gate: CP3, decision_type: security, question: "CP3 approve 是否继续不授权实施和外部动作？", recommendation: "继续不授权；只允许进入 CP5 LLD / TEST-PLAN / TASKS。", alternatives: ["直接授权修 checker", "授权读取 NAS / runtime / 账户证据"], pros_cons: "推荐方案符合门禁；直接实施会越过 CP5，外部动作不属于本 CR。", impact_risk: "防止把架构批准误读成代码 / 账本修复批准。", rollback_switch: "用户要求直接实施时需重出 CP5 或新 CR。", status: accepted, answer: "同意 at 2026-06-18T17:55:00+08:00", source: process/checkpoints/CP3-CR093-LEDGER-HYGIENE-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:55:00+08:00"}
+  - {id: DQ-CP3-CR093-04, gate: CP3, decision_type: risk_acceptance, question: "broader source=cp8-follow-up missing tracking row warnings 是否本轮强修？", recommendation: "不强修，保持 warning-only；本轮只治理 CR019 / CR025 阻断项。", alternatives: ["本轮一起修所有 warnings", "全部 suppress"], pros_cons: "推荐方案控制范围；一起修会扩大到多个旧 CR；suppress 风险高。", impact_risk: "CP7 后可能仍有 warning，但不应阻断 CR019 / CR025 目标。", rollback_switch: "用户要求清 warning-only 项时另起后续 CR。", status: accepted, answer: "同意 at 2026-06-18T17:55:00+08:00", source: process/checkpoints/CP3-CR093-LEDGER-HYGIENE-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:55:00+08:00"}
+  - {id: DQ-CP2-CR093-01, gate: CP2, decision_type: scope, question: "CR093 是否只治理 CR019 / CR025 相关历史账本与 cr-tracking 一致性？", recommendation: "是，仅覆盖静态账本、状态索引和检查器语义。", alternatives: ["扩大到 runtime / NAS 台账", "取消 CR093 保留旧账"], pros_cons: "推荐方案聚焦目标缺陷且风险低；扩大范围会混入高风险授权；取消会继续阻断检查。", impact_risk: "不处理交易业务或真实环境，只提升过程账本可靠性。", rollback_switch: "用户要求扩大范围时拆新 CR；用户 reject 时回到 follow-up backlog。", status: accepted, answer: "同意 at 2026-06-18T17:45:00+08:00", source: process/checkpoints/CP2-CR093-LEDGER-HYGIENE-SCOPE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:45:00+08:00"}
+  - {id: DQ-CP2-CR093-02, gate: CP2, decision_type: implementation, question: "后续修复路线采用什么策略？", recommendation: "采用检查器语义修正 + 最小台账规范化：解析当前权威状态、接受等价 closed 状态、排除历史审计文本误扫。", alternatives: ["只改旧账本迎合旧检查器", "只 suppress 警告", "重写全量 checker"], pros_cons: "推荐方案能修根因且控制改动面；只改账本会保留误扫缺陷；suppress 风险较高；全量重写成本过大。", impact_risk: "CP5 后可能修改 checker、测试 fixture、CR019 follow-up tracking 和状态索引。", rollback_switch: "CP3/CP5 发现检查器结构不可控时降级为最小账本规范化。", status: accepted, answer: "同意 at 2026-06-18T17:45:00+08:00", source: process/checkpoints/CP2-CR093-LEDGER-HYGIENE-SCOPE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:45:00+08:00"}
+  - {id: DQ-CP2-CR093-03, gate: CP2, decision_type: security, question: "CR093 是否继续禁止 runtime、NAS、凭据、账户、交易写和数据发布？", recommendation: "继续全部禁止。", alternatives: ["允许读取 NAS 台账", "允许执行 runtime smoke", "允许读取账户证据"], pros_cons: "推荐方案符合 ledger-only 范围；备选会引入外部状态和敏感边界。", impact_risk: "无外部副作用，避免把账本治理误扩展为运行授权。", rollback_switch: "用户明确授权外部动作时必须新建独立 runtime / NAS gate。", status: accepted, answer: "同意 at 2026-06-18T17:45:00+08:00", source: process/checkpoints/CP2-CR093-LEDGER-HYGIENE-SCOPE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:45:00+08:00"}
+  - {id: DQ-CP2-CR093-04, gate: CP2, decision_type: risk_acceptance, question: "是否接受历史正文保留但 checker 不把历史审计文本当作当前缺陷？", recommendation: "接受；历史追溯保留，当前状态以权威字段 / 当前表格为准。", alternatives: ["删除历史片段", "继续全量文本扫描", "把所有旧状态统一改写"], pros_cons: "推荐方案兼顾追溯与检查准确性；删除历史会损失审计；全量扫描会继续误报。", impact_risk: "需要在设计中明确当前状态和历史审计文本的边界。", rollback_switch: "若审计要求必须全文扫描，则改为分层扫描并标注 audit-only。", status: accepted, answer: "同意 at 2026-06-18T17:45:00+08:00", source: process/checkpoints/CP2-CR093-LEDGER-HYGIENE-SCOPE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:45:00+08:00"}
+  - {id: DQ-CP2-CR093-05, gate: CP2, decision_type: follow_up_tracking, question: "CR092-FU-02 runtime、CR091-FU-02 NAS、CR091-FU-03 order-write 如何处理？", recommendation: "全部保持候选，不随 CR093 启动。", alternatives: ["合并 runtime / NAS / order-write", "取消全部候选"], pros_cons: "推荐方案避免范围膨胀且保留后续路线；合并会扩大风险；取消会丢失 backlog。", impact_risk: "CR093 approve 只推进 ledger hygiene，不授权其他候选。", rollback_switch: "用户明确选择其他候选时另起独立 CR。", status: accepted, answer: "同意 at 2026-06-18T17:45:00+08:00", source: process/checkpoints/CP2-CR093-LEDGER-HYGIENE-SCOPE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T17:45:00+08:00"}
   - {id: DQ-CP8-CR091-01, gate: CP8, decision_type: risk_acceptance, question: "是否接受 CR091 当前 CP8 结论并关闭当前离线 runner 交付？", recommendation: "接受 READY_WITH_RISK，关闭 CR091 当前离线 runner 研究 / 设计 / 实现 / fixture 验证交付。", alternatives: ["补真实 runtime gate 后再关闭", "reject 回退到 CP7 pending CP8"], pros_cons: "推荐方案与 CP6/CP7 离线证据一致，能关闭结构缺口；补 runtime 会进入未授权 QMT/MiniQMT/XtQuant/gateway/runner 范围。", impact_risk: "关闭后仍不声明真实 QMT/MiniQMT/XtQuant/gateway/runner 可用。", rollback_switch: "用户要求补 runtime 证据或 reject 时回退到 CP7 / 新建 runtime gate。", status: accepted, answer: "同意，下一目标是什么？ at 2026-06-18T15:40:09+08:00", source: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T15:40:09+08:00"}
   - {id: DQ-CP8-CR091-02, gate: CP8, decision_type: scope, question: "CR091 关闭范围是否限定为研究 / 设计 / 离线实现 / fixture 验证？", recommendation: "仅关闭离线 runner 合同、package/cache/adapters/fake transport、checker、fixtures/tests 和脱敏 evidence 切片。", alternatives: ["扩大到真实 QMT runner", "扩大到 NAS package exchange", "扩大到 submit/cancel"], pros_cons: "推荐方案边界清晰且符合已授权范围；备选均需要独立高风险门禁。", impact_risk: "后续真实运行、NAS 交换和订单写能力仍需新 CR。", rollback_switch: "用户要求扩大范围时暂停 CP8 并创建对应 CR。", status: accepted, answer: "同意，下一目标是什么？ at 2026-06-18T15:40:09+08:00", source: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T15:40:09+08:00"}
   - {id: DQ-CP8-CR091-03, gate: CP8, decision_type: runtime_authorization, question: "CP8 approve 是否授权 QMT/MiniQMT/XtQuant/gateway/runner、NAS、凭据、账户或交易动作？", recommendation: "不授权；approve 仅接受交付就绪和风险，不授权任何 runtime / NAS / 凭据 / 账户 / 交易写动作。", alternatives: ["授权只读 runtime smoke", "授权 NAS package exchange", "授权 submit/cancel"], pros_cons: "推荐方案保持安全边界；备选均涉及外部状态、敏感信息或交易风险。", impact_risk: "无需访问交易主机、NAS、凭据或账户即可关闭当前离线交付。", rollback_switch: "需要真实运行时另起逐 run runtime_authorization gate。", status: accepted, answer: "同意，下一目标是什么？ at 2026-06-18T15:40:09+08:00", source: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-18T15:40:09+08:00"}
@@ -16647,16 +16849,55 @@ orchestrator_session:
   agent_name: host-orchestrator
   thread_id: ''
   workflow_id: local_backtest
-  active_change: ""
-  status: active
+  active_change: ''
+  status: completed
   pending_gate: ''
-  approved_gate: CP8-CR091-DELIVERY-READINESS
-  approved_at: '2026-06-18T15:40:09+08:00'
+  approved_gate: CP8-CR093-DELIVERY-READINESS
+  approved_at: '2026-06-19T08:39:22+08:00'
   pending_checklist_path: ''
-  launch_message_path: process/checks/CP8-CR091-HUMAN-GATE-LAUNCH-MESSAGE.md
-  pending_user_decision: ''
+  launch_message_path: process/checks/CP8-CR093-HUMAN-GATE-LAUNCH-MESSAGE.md
+  pending_user_decision: ""
   pending_decision_ids: []
   approved_decision_ids:
+  - DQ-CP8-CR093-01
+  - DQ-CP8-CR093-02
+  - DQ-CP8-CR093-03
+  - DQ-CP8-CR093-04
+  - DQ-CP8-CR093-05
+  - DQ-CP5-CR093-01
+  - DQ-CP5-CR093-02
+  - DQ-CP5-CR093-03
+  - DQ-CP5-CR093-04
+  - DQ-CP5-CR093-05
+  - DQ-CP3-CR093-01
+  - DQ-CP3-CR093-02
+  - DQ-CP3-CR093-03
+  - DQ-CP3-CR093-04
+  - DQ-CP2-CR093-01
+  - DQ-CP2-CR093-02
+  - DQ-CP2-CR093-03
+  - DQ-CP2-CR093-04
+  - DQ-CP2-CR093-05
+  - DQ-CP8-CR092-01
+  - DQ-CP8-CR092-02
+  - DQ-CP8-CR092-03
+  - DQ-CP8-CR092-04
+  - DQ-CP8-CR092-05
+  - DQ-CP5-CR092-01
+  - DQ-CP5-CR092-02
+  - DQ-CP5-CR092-03
+  - DQ-CP5-CR092-04
+  - DQ-CP5-CR092-05
+  - DQ-CP5-CR092-06
+  - DQ-CP3-CR092-01
+  - DQ-CP3-CR092-02
+  - DQ-CP3-CR092-03
+  - DQ-CP3-CR092-04
+  - DQ-CP2-CR092-01
+  - DQ-CP2-CR092-02
+  - DQ-CP2-CR092-03
+  - DQ-CP2-CR092-04
+  - DQ-CP2-CR092-05
   - DQ-CP8-CR091-01
   - DQ-CP8-CR091-02
   - DQ-CP8-CR091-03
@@ -17161,6 +17402,50 @@ agent_lifecycle:
       checked_at: '2026-06-18T14:26:37+08:00'
       note: CR091 用户明确要求使用 meta-dev 子 agent；host-orchestrator 通过 multi_agent_v1.spawn_agent 启动 meta-dev/dev-zhu 执行离线 implementation slice，并启动 meta-qa-critical/qa-critical-he 执行离线 CP7 verification。
   active_agents:
+  - role: meta-qa
+    codex_agent_name: meta-qa-critical
+    reasoning_profile: xhigh
+    dispatch_trigger: CR093 CP7 verification after CP6 PASS
+    agent_id: 019eda39-e666-7b73-b9fd-36f36bf0ffd1
+    agent_name: qa-critical-shi
+    thread_id: 019eda39-e666-7b73-b9fd-36f36bf0ffd1
+    workflow_id: quant-lab-cr093
+    change_id: CR-093
+    story_id: CR093-LEDGER-HYGIENE-CONSISTENCY
+    wave_id: CR093-VERIFICATION
+    handoff_path: process/checks/CP6-CR093-LEDGER-HYGIENE-CONSISTENCY-CODING-DONE.md
+    status: completed-closed
+    evidence: main thread spawn_agent returned agent_id=019eda39-e666-7b73-b9fd-36f36bf0ffd1 nickname=qa-critical-shi for CR093 CP7 verification; wait_agent returned PASS_WITH_RISK evidence; close_agent completed.
+    tool_name: multi_agent_v1.spawn_agent
+    reusable: false
+    spawned_at: '2026-06-18T18:11:40+08:00'
+    resumed_at: ''
+    last_seen_at: '2026-06-18T18:18:18+08:00'
+    completed_at: '2026-06-18T18:18:18+08:00'
+    closed_at: '2026-06-18T18:18:18+08:00'
+    fallback_reason: ''
+  - role: meta-dev
+    codex_agent_name: meta-dev
+    reasoning_profile: medium
+    dispatch_trigger: CR093 CP5 approved; bounded ledger hygiene implementation
+    agent_id: 019eda2a-f557-7dc3-ab66-a99c1f9cec89
+    agent_name: dev-qin
+    thread_id: 019eda2a-f557-7dc3-ab66-a99c1f9cec89
+    workflow_id: quant-lab-cr093
+    change_id: CR-093
+    story_id: CR093-LEDGER-HYGIENE-CONSISTENCY
+    wave_id: CR093-IMPLEMENTATION
+    handoff_path: process/context/CP5-CR093-LEDGER-HYGIENE-CONTEXT.yaml
+    status: completed-closed
+    evidence: main thread spawn_agent returned agent_id=019eda2a-f557-7dc3-ab66-a99c1f9cec89 nickname=dev-qin for CR093 bounded implementation after CP5 approval; wait_agent returned completed; close_agent completed. Authorized local script/tests/CR019 note passed, but CP6 remains BLOCKED because target meta-flow CLI uses external /home/hyde/workspace/meta-flow/meta_flow/checks/cr_tracking.py outside CP5 file owner.
+    tool_name: multi_agent_v1.spawn_agent
+    reusable: false
+    spawned_at: '2026-06-18T17:58:38+08:00'
+    resumed_at: ''
+    last_seen_at: '2026-06-18T18:07:40+08:00'
+    completed_at: '2026-06-18T18:07:40+08:00'
+    closed_at: '2026-06-18T18:07:40+08:00'
+    fallback_reason: ''
   - role: meta-dev
     codex_agent_name: meta-dev
     reasoning_profile: default
@@ -22247,6 +22532,497 @@ agent_lifecycle:
     completed_at: '2026-05-16T19:33:15+08:00'
     closed_at: '2026-05-16T19:33:15+08:00'
 history:
+- at: '2026-06-19T08:39:22+08:00'
+  actor: host-orchestrator
+  action: cr093-cp8-approved-closed-context-handoff-prepared
+  reason: 用户回复“好了，同意接受所有项。下一步推进什么，你需要准备好上下文，我需要清除上下文了。”；host-orchestrator 回填 CR093 CP8 approved，接受 DQ-CP8-CR093-01..05、R-CR093-01/R-CR093-02 和不授权边界，关闭 CR093 当前 ledger hygiene 交付为 closed-current-delivery / READY_WITH_RISK，并生成上下文重置 handoff。
+  artifacts:
+  - process/checkpoints/CP8-CR093-DELIVERY-READINESS.md
+  - process/release/RELEASE-CONTEXT-CR093.yaml
+  - process/changes/CR-093-LEDGER-HYGIENE-CR019-CR025-TRACKING-CLEANUP-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  - process/context/CR093-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-19.md
+  result:
+    current_phase: delivered
+    active_formal_cr: ''
+    closed_cr: CR-093
+    status: closed-current-delivery
+    release_decision: READY_WITH_RISK
+    next_recommendation: CR093-FU-01 warning cleanup / strict-warnings readiness
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credentials, real account, real funds, real positions, real orders, real fills or unspecified raw logs
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic start of CR093-FU-01, CR093-FU-02, CR092-FU-01, CR092-FU-02, CR091-FU-02 or CR091-FU-03
+- at: '2026-06-18T18:18:18+08:00'
+  actor: host-orchestrator
+  action: cr093-cp7-pass-with-risk
+  reason: meta-qa-critical/qa-critical-shi 完成 CR093 CP7 验证；目标 CLI、单元测试、py_compile、workspace health、diff check 均通过。结论 PASS_WITH_RISK，阻断项 0，LOW 风险 R-CR093-01/R-CR093-02 进入 CP8。
+  artifacts:
+  - docs/features/CR093-ledger-hygiene/VERIFICATION.md
+  - process/checks/CP7-CR093-LEDGER-HYGIENE-CONSISTENCY-VERIFICATION-DONE.md
+  result:
+    status: verified-with-risk
+    cp7_checkpoint: process/checks/CP7-CR093-LEDGER-HYGIENE-CONSISTENCY-VERIFICATION-DONE.md
+    risks:
+    - R-CR093-01
+    - R-CR093-02
+    next_gate: CP8 delivery readiness
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credentials, real account, real funds, real positions, real orders, real fills or unspecified raw logs
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+- at: '2026-06-18T18:11:40+08:00'
+  actor: host-orchestrator
+  action: cr093-cp6-pass-after-external-cli-owner-expansion
+  reason: 用户在 CP6 blocker 决策中选择“扩大 owner”，并询问修改原因；host-orchestrator 说明目标命令实际调用外部 meta-flow CLI checker，不修改会导致正式验收命令继续失败。随后最小修改 `/home/hyde/workspace/meta-flow/meta_flow/checks/cr_tracking.py`，同步状态归一和 nested active_change audit-history warning-only 语义；正式 `meta-flow check cr-tracking --project-root .` 通过。
+  artifacts:
+  - /home/hyde/workspace/meta-flow/meta_flow/checks/cr_tracking.py
+  - process/checks/CP6-CR093-LEDGER-HYGIENE-CONSISTENCY-CODING-DONE.md
+  - process/stories/CR093-LEDGER-HYGIENE-CONSISTENCY-IMPLEMENTATION.md
+  result:
+    status: ready-for-verification
+    cp6_checkpoint: process/checks/CP6-CR093-LEDGER-HYGIENE-CONSISTENCY-CODING-DONE.md
+    passed_validations:
+    - meta-flow check cr-tracking --project-root . PASS
+    - external meta-flow checker py_compile PASS
+    - CR093 pytest 4 passed
+    - local scripts/check_cr_tracking_consistency.py PASS
+    - git diff --check PASS
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credentials, real account, real funds, real positions, real orders, real fills or unspecified raw logs
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - broader source=cp8-follow-up warning-only cleanup
+- at: '2026-06-18T18:07:40+08:00'
+  actor: host-orchestrator
+  action: cr093-cp6-blocked-external-cli-owner-gap
+  reason: meta-dev/dev-qin 完成 CR093 授权范围内实现，主线程复跑 CR093 单测、py_compile、仓库脚本自检与 diff check 均 PASS；但目标命令 `meta-flow check cr-tracking --project-root .` 仍 FAIL。复核发现 uv tool `meta-flow` 实际调用 `/home/hyde/workspace/meta-flow/meta_flow/checks/cr_tracking.py`，不在 CP5 文件 owner 内，因此 CP6 保持 BLOCKED，等待用户决定是否扩大 owner 或调整验证入口。
+  artifacts:
+  - scripts/check_cr_tracking_consistency.py
+  - tests/test_cr093_cr_tracking_consistency.py
+  - process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+  - process/stories/CR093-LEDGER-HYGIENE-CONSISTENCY-IMPLEMENTATION.md
+  - process/checks/CP6-CR093-LEDGER-HYGIENE-CONSISTENCY-CODING-DONE.md
+  result:
+    status: blocked
+    cp6_checkpoint: process/checks/CP6-CR093-LEDGER-HYGIENE-CONSISTENCY-CODING-DONE.md
+    blocking_decision_required: DQ-CP6-CR093-01
+    passed_validations:
+    - CR093 pytest 4 passed
+    - py_compile PASS
+    - local scripts/check_cr_tracking_consistency.py PASS
+    - git diff --check PASS
+    failed_validations:
+    - meta-flow check cr-tracking --project-root . exit 1
+  not_authorized:
+  - silent edit of /home/hyde/workspace/meta-flow/meta_flow/checks/cr_tracking.py before user decision
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credentials, real account, real funds, real positions, real orders, real fills or unspecified raw logs
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - broader source=cp8-follow-up warning-only cleanup
+- at: '2026-06-18T17:58:38+08:00'
+  actor: host-orchestrator
+  action: cr093-cp5-approved-implementation-dispatched
+  reason: 用户回复“好的，同意，继续推进”，接受 CR093 CP5 DQ-CP5-CR093-01..05；host-orchestrator 回填 CP5 approved，并通过 multi_agent_v1.spawn_agent 调度 meta-dev/dev-qin 执行受限实现。当前只允许 checker 语义修正、CR093 测试、最小 CR019 tracking 规范化和必要 process 证据。
+  artifacts:
+  - process/checkpoints/CP5-CR093-LEDGER-HYGIENE-READINESS.md
+  - process/context/CP5-CR093-LEDGER-HYGIENE-CONTEXT.yaml
+  - process/stories/CR093-LEDGER-HYGIENE-CONSISTENCY-LLD.md
+  - docs/features/CR093-ledger-hygiene/TEST-PLAN.md
+  - docs/features/CR093-ledger-hygiene/TASKS.md
+  result:
+    status: implementation-running
+    approved_gate: CP5-CR093-LEDGER-HYGIENE-READINESS
+    pending_gate: ''
+    approved_decision_ids:
+    - DQ-CP5-CR093-01
+    - DQ-CP5-CR093-02
+    - DQ-CP5-CR093-03
+    - DQ-CP5-CR093-04
+    - DQ-CP5-CR093-05
+    dispatch:
+      canonical_role: meta-dev
+      codex_agent_name: meta-dev
+      nickname: dev-qin
+      agent_id: 019eda2a-f557-7dc3-ab66-a99c1f9cec89
+      thread_id: 019eda2a-f557-7dc3-ab66-a99c1f9cec89
+      tool_name: multi_agent_v1.spawn_agent
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credentials, real account, real funds, real positions, real orders, real fills or unspecified raw logs
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - broader source=cp8-follow-up warning-only cleanup
+  - automatic CR089 startup, CR091-FU-02, CR091-FU-03 or CR020 gateway-route restore
+- at: '2026-06-18T17:55:00+08:00'
+  actor: host-orchestrator
+  action: cr093-cp3-approved-cp5-readiness-generated-awaiting-user
+  reason: 用户回复“同意”，接受 CR093 CP3 DQ-CP3-CR093-01..04；host-orchestrator 回填 CP3 approved，并生成 CR093 Feature Matrix、Feature DESIGN / TEST-PLAN / TASKS、Story LLD、CP4 自动预检、CP5 context、CP5 自动预检、CP5 人工审查稿和 launch message。当前只允许 CP5 readiness 审查，不授权 checker / 旧账本修复实施。
+  artifacts:
+  - process/checkpoints/CP3-CR093-LEDGER-HYGIENE-HLD-REVIEW.md
+  - docs/design/HLD-CR093-LEDGER-HYGIENE.md
+  - docs/design/FEATURE-DESIGN-MATRIX-CR093.md
+  - docs/features/CR093-ledger-hygiene/DESIGN.md
+  - docs/features/CR093-ledger-hygiene/TEST-PLAN.md
+  - docs/features/CR093-ledger-hygiene/TASKS.md
+  - process/stories/CR093-LEDGER-HYGIENE-CONSISTENCY-LLD.md
+  - process/checks/CP4-CR093-STORY-DAG-PARALLEL-SAFETY.md
+  - process/context/CP5-CR093-LEDGER-HYGIENE-CONTEXT.yaml
+  - process/checks/CP5-CR093-LEDGER-HYGIENE-READINESS.md
+  - process/checkpoints/CP5-CR093-LEDGER-HYGIENE-READINESS.md
+  - process/checks/CP5-CR093-HUMAN-GATE-LAUNCH-MESSAGE.md
+  result:
+    status: active
+    approved_gate: CP3-CR093-LEDGER-HYGIENE-HLD-REVIEW
+    pending_gate: CP5-CR093-LEDGER-HYGIENE-READINESS
+    approved_decision_ids:
+    - DQ-CP3-CR093-01
+    - DQ-CP3-CR093-02
+    - DQ-CP3-CR093-03
+    - DQ-CP3-CR093-04
+    pending_decision_ids:
+    - DQ-CP5-CR093-01
+    - DQ-CP5-CR093-02
+    - DQ-CP5-CR093-03
+    - DQ-CP5-CR093-04
+    - DQ-CP5-CR093-05
+  not_authorized:
+  - checker or legacy ledger repair implementation before CP5 approval
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credentials, real account, real funds, real positions, real orders, real fills or unspecified raw logs
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup, CR091-FU-02, CR091-FU-03 or CR020 gateway-route restore
+- at: '2026-06-18T17:45:00+08:00'
+  actor: host-orchestrator
+  action: cr093-cp2-approved-cp3-hld-generated-awaiting-user
+  reason: 用户回复“同意”，接受 CR093 CP2 DQ-CP2-CR093-01..05；host-orchestrator 回填 CP2 approved，并生成 CR093 CP3 HLD、discussion log、discussion checkpoint、context capsule、自动预检、人工审查稿和 launch message。当前只允许 CP3 架构审查，不授权 checker / 旧账本修复实施。
+  artifacts:
+  - process/checkpoints/CP2-CR093-LEDGER-HYGIENE-SCOPE-REVIEW.md
+  - docs/design/HLD-CR093-LEDGER-HYGIENE.md
+  - process/discussions/CP3-CR093-HLD-DISCUSSION-LOG.md
+  - process/checks/CP3-CR093-DISCUSSION-CHECKPOINT.json
+  - process/context/CP3-CR093-LEDGER-HYGIENE-CONTEXT.yaml
+  - process/checks/CP3-CR093-LEDGER-HYGIENE-HLD-CONSISTENCY.md
+  - process/checkpoints/CP3-CR093-LEDGER-HYGIENE-HLD-REVIEW.md
+  - process/checks/CP3-CR093-HUMAN-GATE-LAUNCH-MESSAGE.md
+  result:
+    status: active
+    approved_gate: CP2-CR093-LEDGER-HYGIENE-SCOPE-REVIEW
+    pending_gate: CP3-CR093-LEDGER-HYGIENE-HLD-REVIEW
+    approved_decision_ids:
+    - DQ-CP2-CR093-01
+    - DQ-CP2-CR093-02
+    - DQ-CP2-CR093-03
+    - DQ-CP2-CR093-04
+    - DQ-CP2-CR093-05
+    pending_decision_ids:
+    - DQ-CP3-CR093-01
+    - DQ-CP3-CR093-02
+    - DQ-CP3-CR093-03
+    - DQ-CP3-CR093-04
+  not_authorized:
+  - checker or legacy ledger repair implementation before CP5 approval
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credentials, real account, real funds, real positions, real orders, real fills or unspecified raw logs
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup, CR091-FU-02, CR091-FU-03 or CR020 gateway-route restore
+- at: '2026-06-18T17:30:00+08:00'
+  actor: host-orchestrator
+  action: cr093-ledger-hygiene-started-awaiting-cp2
+  reason: 用户要求启动 CR091-FU-04；host-orchestrator 创建 CR093 作为 CR019 / CR025 历史账本旧账治理 CR，并生成 CP2 context capsule、自动预检、人工审查稿和 launch message。CR091 / CR092 follow-up tracking 与 CR-INDEX 已同步到 CR093 active / pending CP2。当前只允许 CP2 范围审查，不授权 checker / 旧账本修复实施。
+  artifacts:
+  - process/changes/CR-093-LEDGER-HYGIENE-CR019-CR025-TRACKING-CLEANUP-2026-06-18.md
+  - process/context/CP2-CR093-LEDGER-HYGIENE-CONTEXT.yaml
+  - process/checks/CP2-CR093-LEDGER-HYGIENE-SCOPE.md
+  - process/checkpoints/CP2-CR093-LEDGER-HYGIENE-SCOPE-REVIEW.md
+  - process/checks/CP2-CR093-HUMAN-GATE-LAUNCH-MESSAGE.md
+  - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  result:
+    status: active
+    pending_gate: CP2-CR093-LEDGER-HYGIENE-SCOPE-REVIEW
+    pending_decision_ids:
+    - DQ-CP2-CR093-01
+    - DQ-CP2-CR093-02
+    - DQ-CP2-CR093-03
+    - DQ-CP2-CR093-04
+    - DQ-CP2-CR093-05
+  not_authorized:
+  - checker or legacy ledger repair implementation before CP2 approval
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credentials, real account, real funds, real positions, real orders, real fills or unspecified raw logs
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup, CR091-FU-02, CR091-FU-03 or CR020 gateway-route restore
+- at: '2026-06-18T17:25:00+08:00'
+  actor: host-orchestrator
+  action: cr092-cp8-approved-closed-current-delivery
+  reason: 用户回复“不手动验证了，其他的我同意了”，接受 CR092 CP8 DQ-CP8-CR092-01..05；可选手工 evidence 验证不执行。CR092 当前 readiness / evidence guardrail 交付关闭为 closed-current-delivery / READY_WITH_RISK，后续候选写入 CR092 follow-up tracking。
+  artifacts:
+  - process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
+  - process/release/RELEASE-CONTEXT.yaml
+  - docs/release/RELEASE-NOTES.md
+  - docs/release/DEPLOY-CHECKLIST.md
+  - docs/release/ROLLBACK.md
+  - docs/release/MIGRATION.md
+  - docs/release/FEEDBACK.md
+  - process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  result:
+    status: closed-current-delivery
+    release_decision: READY_WITH_RISK
+    approved_gate: CP8-CR092-DELIVERY-READINESS
+    approved_decision_ids:
+    - DQ-CP8-CR092-01
+    - DQ-CP8-CR092-02
+    - DQ-CP8-CR092-03
+    - DQ-CP8-CR092-04
+    - DQ-CP8-CR092-05
+    follow_up_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credentials, real account, real funds, real positions, real orders, real fills or unspecified raw logs
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup
+  - CR020 gateway-route restore
+- at: '2026-06-18T17:15:00+08:00'
+  actor: host-orchestrator
+  action: cr092-cp8-delivery-readiness-generated-awaiting-user
+  reason: 已生成 CR092 CP8 release context、release docs、context capsule、自动预检、人工审查稿和 launch message；human-gate 校验通过。CP8 推荐 READY_WITH_RISK，等待用户确认 DQ-CP8-CR092-01..05。
+  artifacts:
+  - process/release/RELEASE-CONTEXT.yaml
+  - docs/release/RELEASE-NOTES.md
+  - docs/release/DEPLOY-CHECKLIST.md
+  - docs/release/ROLLBACK.md
+  - docs/release/MIGRATION.md
+  - docs/release/FEEDBACK.md
+  - process/context/CP8-CR092-DELIVERY-CONTEXT.yaml
+  - process/checks/CP8-CR092-DELIVERY-READINESS.md
+  - process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
+  - process/checks/CP8-CR092-HUMAN-GATE-LAUNCH-MESSAGE.md
+  result:
+    status: awaiting-user
+    pending_gate: CP8-CR092-DELIVERY-READINESS
+    pending_decision_ids:
+    - DQ-CP8-CR092-01
+    - DQ-CP8-CR092-02
+    - DQ-CP8-CR092-03
+    - DQ-CP8-CR092-04
+    - DQ-CP8-CR092-05
+    human_gate_check: OK
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credentials, real account, real funds, real positions, real orders, real fills or unspecified raw logs
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup
+  - CR020 gateway-route restore
+- at: '2026-06-18T17:05:00+08:00'
+  actor: host-orchestrator
+  action: cr092-cp5-approved-cp6-cp7-pass-with-risk-ready-for-cp8
+  reason: 用户回复“同意”，接受 CR092 CP5 DQ-CP5-CR092-01..06。host-orchestrator 已回填 CP5 approved，完成 CP6 manual guide、simulated evidence template、single-file static checker 和 tests，并完成 CP7 静态验证，结论 PASS_WITH_RISK。当前仍不授权 runtime、NAS、凭据、真实账户、submit/cancel、simulation/live、provider/lake/publish。
+  artifacts:
+  - process/checkpoints/CP5-CR092-READONLY-RUNTIME-SMOKE-READINESS.md
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-MANUAL-GUIDE.md
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-EVIDENCE-TEMPLATE.yaml
+  - scripts/check_cr092_simulated_evidence.py
+  - tests/test_cr092_simulated_evidence_checker.py
+  - process/stories/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-IMPLEMENTATION.md
+  - process/checks/CP6-CR092-READONLY-RUNTIME-SMOKE-CODING-DONE.md
+  - process/context/CP6-CR092-IMPLEMENTATION-CONTEXT.yaml
+  - docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-VERIFICATION-REPORT.md
+  - docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-TEST-REPORT.md
+  - docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-REVIEW.md
+  - docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-FIXES.md
+  - process/checks/CP7-CR092-READONLY-RUNTIME-SMOKE-VERIFICATION-DONE.md
+  - process/context/CP7-CR092-VERIFICATION-CONTEXT.yaml
+  result:
+    status: pass_with_risk-ready-for-cp8
+    approved_gate: CP5-CR092-READONLY-RUNTIME-SMOKE-READINESS
+    approved_decision_ids:
+    - DQ-CP5-CR092-01
+    - DQ-CP5-CR092-02
+    - DQ-CP5-CR092-03
+    - DQ-CP5-CR092-04
+    - DQ-CP5-CR092-05
+    - DQ-CP5-CR092-06
+    cp6_status: PASS
+    cp7_status: PASS_WITH_RISK
+    next_gate: CP8-CR092-DELIVERY-READINESS
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credentials, real account, real funds, real positions, real orders, real fills or unspecified raw logs
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup
+  - CR020 gateway-route restore
+- at: '2026-06-18T16:45:00+08:00'
+  actor: host-orchestrator
+  action: cr092-cp3-approved-cp5-readiness-generated-awaiting-user
+  reason: 用户接受修订后的 DQ-CP3-CR092-01..04，要求进入 CP5 LLD / TEST-PLAN / readiness。已回填 CP3 approved，并生成 CP5 LLD、TEST-PLAN、context capsule、自动预检、人工审查稿和 human-gate launch message。CP5 仍是 readiness 设计门禁，不授权 runtime。
+  artifacts:
+  - process/checkpoints/CP3-CR092-READONLY-RUNTIME-SMOKE-HLD-REVIEW.md
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-HLD.md
+  - process/stories/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-LLD.md
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-TEST-PLAN.md
+  - process/context/CP5-CR092-READINESS-CONTEXT.yaml
+  - process/checks/CP5-CR092-READONLY-RUNTIME-SMOKE-READINESS.md
+  - process/checkpoints/CP5-CR092-READONLY-RUNTIME-SMOKE-READINESS.md
+  - process/checks/CP5-CR092-HUMAN-GATE-LAUNCH-MESSAGE.md
+  result:
+    status: pending-user-review
+    approved_gate: CP3-CR092-READONLY-RUNTIME-SMOKE-HLD-REVIEW
+    approved_decision_ids:
+    - DQ-CP3-CR092-01
+    - DQ-CP3-CR092-02
+    - DQ-CP3-CR092-03
+    - DQ-CP3-CR092-04
+    pending_gate: CP5-CR092-READONLY-RUNTIME-SMOKE-READINESS
+    pending_decision_ids:
+    - DQ-CP5-CR092-01
+    - DQ-CP5-CR092-02
+    - DQ-CP5-CR092-03
+    - DQ-CP5-CR092-04
+    - DQ-CP5-CR092-05
+    - DQ-CP5-CR092-06
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credentials, real account, real funds, real positions, real orders, real fills or unspecified raw logs
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup
+  - CR020 gateway-route restore
+- at: '2026-06-18T16:44:00+08:00'
+  actor: host-orchestrator
+  action: cr092-cp3-feedback-applied-awaiting-user
+  reason: 用户反馈 DQ-CP3-CR092-02 当前为模拟账户测试并允许读取相关信息，同时询问 DQ-CP3-CR092-04 是否需要 NAS 参与。已将 DQ-CP3-CR092-02 修订为“允许读取用户明确提供的模拟账户测试证据，但不读取凭据、真实账户、NAS 或未指定日志”；DQ-CP3-CR092-04 维持 NAS / order-write / ledger hygiene 独立分流，当前 CR092 CP3 不需要 NAS 参与。
+  artifacts:
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-HLD.md
+  - process/context/CP3-CR092-DESIGN-CONTEXT.yaml
+  - process/checkpoints/CP3-CR092-READONLY-RUNTIME-SMOKE-HLD-REVIEW.md
+  - process/checks/CP3-CR092-HUMAN-GATE-LAUNCH-MESSAGE.md
+  result:
+    status: pending-user-review
+    pending_gate: CP3-CR092-READONLY-RUNTIME-SMOKE-HLD-REVIEW
+    human_gate_check: OK
+    diff_check: PASS
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credentials, real account, real funds, real positions, real orders, real fills or unspecified raw logs
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup
+  - CR020 gateway-route restore
+- at: '2026-06-18T16:17:35+08:00'
+  actor: host-orchestrator
+  action: cr092-cp2-approved-cp3-hld-generated-awaiting-user
+  reason: 用户同意 CR092 CP2 决策项，接受 DQ-CP2-CR092-01..05；host-orchestrator 已回填 CP2 approved，并生成 CP3 HLD / discussion / context / check / checkpoint / launch message。CP3 仍需人工确认，且 CP3 approve 只允许进入 CP5 LLD / TEST-PLAN / readiness。
+  artifacts:
+  - process/checkpoints/CP2-CR092-READONLY-RUNTIME-SMOKE-SCOPE-REVIEW.md
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-HLD.md
+  - process/discussions/CP3-CR092-HLD-DISCUSSION-LOG.md
+  - process/checks/CP3-CR092-DISCUSSION-CHECKPOINT.json
+  - process/context/CP3-CR092-DESIGN-CONTEXT.yaml
+  - process/checks/CP3-CR092-HLD-CONSISTENCY.md
+  - process/checkpoints/CP3-CR092-READONLY-RUNTIME-SMOKE-HLD-REVIEW.md
+  - process/checks/CP3-CR092-HUMAN-GATE-LAUNCH-MESSAGE.md
+  result:
+    status: pending-user-review
+    approved_gate: CP2-CR092-READONLY-RUNTIME-SMOKE-SCOPE-REVIEW
+    approved_decision_ids:
+    - DQ-CP2-CR092-01
+    - DQ-CP2-CR092-02
+    - DQ-CP2-CR092-03
+    - DQ-CP2-CR092-04
+    - DQ-CP2-CR092-05
+    pending_gate: CP3-CR092-READONLY-RUNTIME-SMOKE-HLD-REVIEW
+    pending_decision_ids:
+    - DQ-CP3-CR092-01
+    - DQ-CP3-CR092-02
+    - DQ-CP3-CR092-03
+    - DQ-CP3-CR092-04
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credential, account id, account, funds, position, order, fill or raw log read
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup
+  - CR020 gateway-route restore
+- at: '2026-06-18T16:05:00+08:00'
+  actor: host-orchestrator
+  action: cr092-cp2-scope-review-generated-awaiting-user
+  reason: CR092 已完成 CP2 范围 / 运行授权基线材料，推荐批准后进入 CP3 HLD；CP2 approve 只允许设计，不授权真实 runtime。
+  artifacts:
+  - process/context/CP2-CR092-REQUIREMENT-CONTEXT.yaml
+  - process/checks/CP2-CR092-READONLY-RUNTIME-SMOKE-SCOPE.md
+  - process/checkpoints/CP2-CR092-READONLY-RUNTIME-SMOKE-SCOPE-REVIEW.md
+  - process/checks/CP2-CR092-HUMAN-GATE-LAUNCH-MESSAGE.md
+  - process/STATE.md
+  result:
+    status: pending-user-review
+    pending_gate: CP2-CR092-READONLY-RUNTIME-SMOKE-SCOPE-REVIEW
+    pending_decision_ids:
+    - DQ-CP2-CR092-01
+    - DQ-CP2-CR092-02
+    - DQ-CP2-CR092-03
+    - DQ-CP2-CR092-04
+    - DQ-CP2-CR092-05
+    human_gate_check: OK
+    diff_check: PASS
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credential, account id, account, funds, position, order, fill or raw log read
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup
+  - CR020 gateway-route restore
+- at: '2026-06-18T15:58:59+08:00'
+  actor: host-orchestrator
+  action: cr092-started-from-cr091-fu01
+  reason: 用户在清上下文恢复后选择 `CR091-FU-01（推荐）`。host-orchestrator 按 state-router 和 change-impact-analysis 规则执行冲突预检：顶层 active_change 为空，无 active formal CR 执行锁；CR091 已关闭为 closed-current-delivery / READY_WITH_RISK；CR089 保持 blocked-readiness-approved 且不自动启动；CR020 用户删除 gateway 路线不得恢复。已创建 CR092 作为真实只读 runtime smoke 设计门禁，状态 active，下一门禁为 CP2 scope / runtime authorization baseline。
+  artifacts:
+  - process/changes/CR-092-REAL-QMT-READONLY-RUNTIME-SMOKE-DESIGN-GATE-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    status: active
+    active_change: CR-092
+    parent_cr: CR-091
+    source_follow_up: CR091-FU-01
+    next_gate: CP2 scope / runtime authorization baseline
+    pending_checkpoint: process/checkpoints/CP2-CR092-READONLY-RUNTIME-SMOKE-SCOPE-REVIEW.md
+  not_authorized:
+  - QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime
+  - NAS access
+  - .env, credential, account id, account, funds, position, order, fill or raw log read
+  - submit/cancel, buy/sell, simulation/live
+  - provider fetch, lake write or catalog publish
+  - automatic CR089 startup
+  - CR020 gateway-route restore
 - at: '2026-06-18T15:47:14+08:00'
   actor: host-orchestrator
   action: cr091-closure-context-reset-handoff-created

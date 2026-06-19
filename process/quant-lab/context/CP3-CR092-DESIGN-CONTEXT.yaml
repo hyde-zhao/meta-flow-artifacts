@@ -1,0 +1,72 @@
+schema_version: meta_flow_context_capsule_v1
+context_id: CP3-CR092-DESIGN-CONTEXT
+created_at: "2026-06-18T16:17:35+08:00"
+created_by: host-orchestrator
+change_id: CR-092
+gate: CP3
+status: approved
+read_profile: compact
+summary: >
+  CR092 CP2 was approved by the user. The CP3 HLD recommends a manual per-run
+  readonly smoke design gate. The design keeps CR089 blocked, does not restore
+  CR020, and does not authorize QMT/MiniQMT/XtQuant/gateway/runner startup,
+  NAS, credentials, real-account raw reads, submit/cancel, simulation/live or
+  provider/lake/catalog/publish. The user stated the current test uses a
+  simulated account and allows reading explicitly provided simulated-account
+  test evidence; this does not authorize runtime startup, credential reads,
+  real-account reads, NAS, or unspecified raw logs.
+must_read:
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-HLD.md
+  - process/checkpoints/CP2-CR092-READONLY-RUNTIME-SMOKE-SCOPE-REVIEW.md
+  - process/changes/CR-092-REAL-QMT-READONLY-RUNTIME-SMOKE-DESIGN-GATE-2026-06-18.md
+  - process/discussions/CP3-CR092-HLD-DISCUSSION-LOG.md
+read_if_needed:
+  - process/context/CP2-CR092-REQUIREMENT-CONTEXT.yaml
+  - docs/qmt/CR091-QMT-STRATEGY-RUNNER-HLD.md
+  - process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md
+do_not_read_by_default:
+  - .env
+  - credentials
+  - real_account_raw_outputs
+  - qmt_logs
+  - NAS paths
+  - real account/cash/position/order/fill raw files
+key_facts:
+  - "CP2 approved at 2026-06-18T16:17:35+08:00."
+  - "CP3 approved by user at 2026-06-18T16:45:00+08:00; proceed to CP5 LLD / TEST-PLAN / readiness."
+  - "Recommended architecture: manual per-run readonly smoke design gate."
+  - "CR089 remains blocked-readiness-approved and is not auto-started."
+  - "CR020 gateway route remains user-deleted / archived."
+risks_and_decisions:
+  - id: DQ-CP3-CR092-01
+    type: architecture
+    status: accepted
+    summary: "Approve manual per-run readonly smoke as the recommended architecture."
+  - id: DQ-CP3-CR092-02
+    type: security
+    status: accepted
+    summary: "Approve reading explicitly provided simulated-account test evidence while rejecting credentials, real-account raw evidence, NAS paths and unspecified raw logs."
+  - id: DQ-CP3-CR092-03
+    type: runtime_authorization
+    status: accepted
+    summary: "Confirm CP3 approval still does not authorize runtime execution."
+  - id: DQ-CP3-CR092-04
+    type: follow_up_tracking
+    status: accepted
+    summary: "Keep NAS, order-write and ledger hygiene as separate follow-up candidates."
+non_authorized_items:
+  - "QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime"
+  - "NAS access, list, read, copy, pull, write, publish or delete"
+  - ".env / credentials / real account / real funds / real positions / real orders / real fills / unspecified raw logs"
+  - "submit/cancel, buy/sell, simulation/live"
+  - "provider/lake/catalog/publish"
+  - "CR089 auto-start"
+  - "CR020 gateway route restore"
+downstream_tasks:
+  - "CP3 is approved; generate CR092 LLD / TEST-PLAN / CP5 readiness."
+  - "If CP3 is changed, update HLD and regenerate Decision Brief."
+  - "If CP3 is rejected, return to CP2 or follow-up backlog."
+token_control:
+  read_profile: compact
+  full_doc_read_policy: "Only expand to full CR091 / CR089 documents for conflict, audit or user-requested deep review."
+  read_expansion_log: []

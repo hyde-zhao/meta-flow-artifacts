@@ -1,0 +1,153 @@
+schema_version: "1.0"
+context_id: "RELEASE-CONTEXT-CR096"
+cr_id: "CR-096"
+status: approved
+release_artifact_profile: minimal
+release_decision: READY
+created_at: "2026-06-19T10:24:00+08:00"
+updated_at: "2026-06-19T10:30:00+08:00"
+source_gate: CP8
+owner: host-orchestrator
+
+manual_review:
+  checkpoint_path: "process/checkpoints/CP8-CR096-DELIVERY-READINESS.md"
+  status: approved
+  reviewed_by: "user"
+  reviewed_at: "2026-06-19T10:30:00+08:00"
+  approval_text: "同意"
+  interpretation: "Accepted DQ-CP8-CR096-01..03; closes CR096 current single-file evidence checker delivery as READY and does not authorize runtime / NAS / credentials / account reads / trading / provider-lake-publish."
+
+release_scope:
+  current_version: "cr092-readonly-runtime-smoke-readiness-alpha"
+  target_version: "cr096-user-provided-simulated-evidence-checker-run"
+  included_features:
+    - "Fill the user-local redacted CR096 evidence YAML according to the CR092 evidence contract."
+    - "Run the existing single-file simulated evidence checker against that exact file."
+  included_stories:
+    - "CR096-SIMULATED-EVIDENCE-CHECKER-RUN"
+  excluded_scope:
+    - "QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime"
+    - "NAS access, list, read, copy, pull, write, publish or delete"
+    - ".env / credentials / real account / real funds / real positions / real orders / real fills / unspecified raw logs"
+    - "submit/cancel, buy/sell, simulation/live"
+    - "provider/lake/catalog/publish"
+  user_visible_changes:
+    - "已创建并填写 `/home/hyde/.quant-lab/evidence/qmt/cr096/redacted/cr096-user-provided-evidence.yaml`。"
+    - "已对该单文件运行 CR092 simulated evidence checker，结果 passed=true。"
+  internal_changes:
+    - "CR096 状态从 evidence content 等待推进到 CP8 review。"
+  breaking_changes: []
+  known_risks:
+    - "R-CR096-01: Contract-filled evidence verifies schema and redaction boundary only; it does not prove real QMT runtime readiness."
+    - "R-CR096-02: CP6/CP7 used host-orchestrator inline execution for a low-risk single-file checker run."
+
+version_decision:
+  current_version: "cr092-readonly-runtime-smoke-readiness-alpha"
+  target_version: "cr096-user-provided-simulated-evidence-checker-run"
+  change_type: patch
+  compatibility: compatible
+  reason: "只填写和检查用户本地脱敏 evidence 单文件，不改变代码、接口、安装路径或 runtime 行为。"
+
+quality_summary:
+  cp6_results:
+    - "PASS: evidence YAML filled according to CR092 contract."
+  cp7_results:
+    - "PASS: scripts/check_cr092_simulated_evidence.py returned passed=true with no errors and no warnings."
+  blocker_count: 0
+  high_count: 0
+  accepted_risk_ids:
+    - "R-CR096-01"
+    - "R-CR096-02"
+  unresolved_findings: []
+  verification_commands:
+    - command: "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_cr092_simulated_evidence.py --evidence /home/hyde/.quant-lab/evidence/qmt/cr096/redacted/cr096-user-provided-evidence.yaml --json"
+      result: "PASS: passed=true; errors=[]; warnings=[]"
+
+affected_surface:
+  platforms:
+    - "Python 3.11 / uv local static checker"
+    - "User-local private evidence directory under /home/hyde/.quant-lab"
+  components:
+    - "/home/hyde/.quant-lab/evidence/qmt/cr096/redacted/cr096-user-provided-evidence.yaml"
+    - "scripts/check_cr092_simulated_evidence.py"
+    - "process/checks/CP6-CR096-SIMULATED-EVIDENCE-CHECKER-RUN-CODING-DONE.md"
+    - "process/checks/CP7-CR096-SIMULATED-EVIDENCE-CHECKER-RUN-VERIFICATION-DONE.md"
+    - "process/checks/CP8-CR096-DELIVERY-READINESS.md"
+    - "process/checkpoints/CP8-CR096-DELIVERY-READINESS.md"
+  install_scopes: []
+  config_changes: []
+  permission_changes:
+    - "No runtime permission granted; CP8 approve is not runtime authorization."
+  migration_required: false
+  external_interfaces: []
+  state_schema_changes: []
+  command_parameter_changes: []
+
+install_validation_summary:
+  commands:
+    - "N/A: no installer, service, package publication or runtime deployment changed."
+  results:
+    - "N/A"
+  log_paths: []
+  skipped_with_reason:
+    - "CR096 is a single-file static evidence checker run."
+
+release_documents:
+  release_notes:
+    path: "N/A"
+    status: n/a
+    na_reason: "minimal profile; CP8 summary is sufficient for single-file checker run."
+  deploy_checklist:
+    path: "N/A"
+    status: n/a
+    na_reason: "no deploy or install surface."
+  rollback:
+    path: "N/A"
+    status: n/a
+    na_reason: "evidence file can be edited or restored from CR092 template if needed."
+  migration:
+    path: "N/A"
+    status: n/a
+    na_reason: "no schema migration beyond filling existing evidence contract fields."
+  feedback:
+    path: "N/A"
+    status: n/a
+    na_reason: "no new feedback channel; follow-up remains in CR092 tracking."
+
+non_authorized_items:
+  - id: NA-CR096-01
+    operation: "QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime"
+    reason: "CR096 only checks a single redacted evidence file."
+    required_authorization: "Separate per-run runtime authorization gate."
+  - id: NA-CR096-02
+    operation: "NAS access, directory scan, credential/account read, raw log read, submit/cancel, simulation/live, provider/lake/publish"
+    reason: "Outside CR096 scope and not required for the static checker."
+    required_authorization: "Separate explicit CR and human gate."
+
+follow_up_summary:
+  observation_items:
+    - id: OBS-CR096-01
+      status: open
+      summary: "If real QMT runtime proof is needed, start CR092-FU-02 with per-run runtime authorization."
+  feedback_items:
+    - id: FB-CR096-01
+      type: risk
+      summary: "Contract-filled evidence does not prove real runtime readiness."
+  follow_up_candidates:
+    - id: CR092-FU-02
+      summary: "Separate real readonly runtime smoke run authorization."
+      status: candidate
+  risk_acceptance_items:
+    - "DQ-CP8-CR096-01"
+    - "DQ-CP8-CR096-02"
+    - "DQ-CP8-CR096-03"
+
+token_control:
+  default_read_mode: capsule-first
+  copied_long_text: false
+  allowed_payload: "summary, count, risk id, decision id, evidence path"
+  full_doc_read_triggers:
+    - missing_capsule_field
+    - unreadable_evidence_path
+    - conflicting_conclusion
+    - user_requested_deep_review

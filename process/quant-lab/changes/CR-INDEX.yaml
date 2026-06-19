@@ -1,6 +1,6 @@
 version: 1
-status: "no-active-formal-cr"
-updated_at: '2026-06-18T15:40:09+08:00'
+status: "active-formal-cr"
+updated_at: '2026-06-19T09:39:15+08:00'
 owner: meta-po
 source: >
   CR-046 started by user target change to terminal-native simulation strategy export,
@@ -95,7 +95,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: 'CR091 CP8 approved by user at 2026-06-18T15:40:09+08:00 and closed-current-delivery / READY_WITH_RISK. Current state has no active formal CR. CR046 remains closed-current-delivery / READY_WITH_RISK. CR089 remains blocked-readiness-approved. CR091 follow-up candidates remain candidate-not-started and are not auto-started. No NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or runtime action executed.'
+last_consistency_check: 'CR096 CP8 approved by user at 2026-06-19T10:30:00+08:00 and closed as READY / closed-current-delivery. Closure only covers contract-filled redacted evidence YAML and single-file checker passed=true; it does not authorize NAS, directory scan, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
 root_authority:
   status: logical-cutover-complete
   authoritative_root: /home/hyde/workspace/quant-lab
@@ -130,6 +130,150 @@ index_schema:
 - next_action
 - last_checked_at
 active_crs:
+- id: CR-096
+  title: User-provided Simulated Evidence Checker Run
+  status: closed-current-delivery
+  source_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+  formal_cr_path: process/changes/CR-096-USER-PROVIDED-SIMULATED-EVIDENCE-CHECKER-RUN-2026-06-19.md
+  parent_cr: CR-092
+  source_checkpoint: process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
+  source_decision_id: DQ-CP8-CR092-04
+  priority: 1
+  blocked_by: 'closed: user approved CR096 CP8 at 2026-06-19T10:30:00+08:00, accepting DQ-CP8-CR096-01..03 and READY. Closure only covers contract-filled redacted evidence YAML and single-file checker passed=true; it does not authorize runtime, NAS, credential/account reads, trading, provider/lake/publish or real release.'
+  impact_surface:
+  - simulated_evidence
+  - single_file_read
+  - scripts/check_cr092_simulated_evidence.py
+  - process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  conflict_keys:
+  - simulated_evidence
+  - single_file_read
+  - credential_boundary
+  - redacted_evidence
+  - no_runtime_connection
+  - no_credential_read
+  - no_nas_access
+  next_gate: closed
+  next_action: CR096 当前交付已关闭为 READY；真实只读 runtime smoke、NAS、凭据/账户、交易、provider/lake/publish 均需独立 CR 和明确授权。
+  last_checked_at: '2026-06-19T10:30:00+08:00'
+- id: CR-095
+  title: Standalone Checker / CLI Output Convergence
+  status: closed-current-delivery
+  source_tracking: process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+  formal_cr_path: process/changes/CR-095-STANDALONE-CHECKER-CLI-OUTPUT-CONVERGENCE-2026-06-19.md
+  parent_cr: CR-093
+  source_checkpoint: process/checkpoints/CP8-CR094-DELIVERY-READINESS.md
+  source_decision_id: DQ-CP8-CR094-03
+  priority: 2
+  blocked_by: 'closed: user approved CR095 CP8 at 2026-06-19T09:39:15+08:00, accepting DQ-CP8-CR095-01..04 and READY. Closure only covers standalone checker / main CLI output convergence; it does not authorize runtime, NAS, credential/account reads, trading, provider/lake/publish or real release.'
+  impact_surface:
+  - checker_output_convergence
+  - scripts/check_cr_tracking_consistency.py
+  - tests/test_cr093_cr_tracking_consistency.py
+  - process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  conflict_keys:
+  - cr_tracking_consistency
+  - checker_output_convergence
+  - no_runtime_connection
+  - no_credential_read
+  - no_nas_access
+  next_gate: closed
+  next_action: CR095 当前交付已关闭。
+  last_checked_at: '2026-06-19T09:39:15+08:00'
+- id: CR-094
+  title: Warning Cleanup / Strict-Warnings Readiness
+  status: closed-current-delivery
+  source_tracking: process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+  formal_cr_path: process/changes/CR-094-WARNING-CLEANUP-STRICT-WARNINGS-READINESS-2026-06-19.md
+  parent_cr: CR-093
+  source_checkpoint: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md
+  source_decision_id: DQ-CP8-CR093-02; DQ-CP8-CR093-04
+  priority: 1
+  blocked_by: 'closed: user approved CR094 CP8 at 2026-06-19T09:08:56+08:00, accepting DQ-CP8-CR094-01..04 and READY. CR094 current strict-warnings readiness delivery is closed. Closure only covers static ledger / checker warning cleanup; it does not authorize QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, .env/credential/account read, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
+  impact_surface:
+  - cr_tracking_consistency
+  - strict_warnings
+  - cp8_follow_up_tracking_rows
+  - process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  - /home/hyde/workspace/meta-flow/meta_flow/checks/cr_tracking.py
+  conflict_keys:
+  - ledger_hygiene
+  - cr_tracking_consistency
+  - strict_warnings
+  - no_runtime_connection
+  - no_credential_read
+  - no_nas_access
+  next_gate: closed
+  next_action: CR094 当前交付已关闭为 READY；CR093-FU-02 保持 candidate-not-started，必须用户明确选择后另起门禁。
+  last_checked_at: '2026-06-19T09:08:56+08:00'
+- id: CR-093
+  title: Ledger Hygiene for CR019 / CR025 Tracking Cleanup
+  status: closed-current-delivery
+  source_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+  formal_cr_path: process/changes/CR-093-LEDGER-HYGIENE-CR019-CR025-TRACKING-CLEANUP-2026-06-18.md
+  parent_cr: CR-092
+  source_checkpoint: process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
+  source_decision_id: DQ-CP8-CR092-04
+  priority: 1
+  blocked_by: 'closed: user approved CR093 CP8 at 2026-06-19T08:39:22+08:00, accepting DQ-CP8-CR093-01..05 and READY_WITH_RISK. CR093 current ledger hygiene delivery is closed. Closure only covers CR019/CR025 cr-tracking blocker governance; it does not authorize QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, .env/credential/account read, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
+  impact_surface:
+  - cr_tracking_consistency
+  - CR019 follow-up tracking
+  - CR025 historical active_change
+  - scripts/check_cr_tracking_consistency.py
+  - process/STATE.md history scan
+  - process/changes/CR-INDEX.yaml
+  conflict_keys:
+  - ledger_hygiene
+  - cr_tracking_consistency
+  - no_runtime_connection
+  - no_credential_read
+  - no_nas_access
+  next_gate: closed
+  next_action: CR093 当前交付已关闭为 READY_WITH_RISK。推荐下一个低风险候选为 CR093-FU-01 warning cleanup / strict-warnings readiness；CR093-FU-02 checker output convergence、CR092-FU-01 simulated evidence checker run、CR092-FU-02 real runtime smoke、CR091-FU-02 NAS 和 CR091-FU-03 order-write 均需用户明确选择后另起门禁。
+  last_checked_at: '2026-06-19T08:39:22+08:00'
+- id: CR-092
+  title: Real QMT Readonly Runtime Smoke Design Gate
+  status: closed-current-delivery
+  source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  formal_cr_path: process/changes/CR-092-REAL-QMT-READONLY-RUNTIME-SMOKE-DESIGN-GATE-2026-06-18.md
+  parent_cr: CR-091
+  source_checkpoint: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md
+  source_decision_id: DQ-CP8-CR091-04
+  priority: 1
+  follow_up_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+  blocked_by: 'closed: user approved CR092 CP8 at 2026-06-18T17:25:00+08:00, accepting DQ-CP8-CR092-01..05 and READY_WITH_RISK while explicitly skipping optional manual evidence validation. CR092 current readiness / evidence guardrail delivery is closed. Closure only covers guide/template/checker/tests/quality/release/process evidence; it does not authorize QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, .env/credential/account read, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
+  impact_surface:
+  - real QMT readonly runtime smoke design
+  - runtime_authorization
+  - per_run_authorization
+  - qmt_strategy_runner
+  - readonly gateway health
+  - readonly gateway capabilities
+  - readonly query_positions smoke design
+  - redacted runtime evidence
+  - forbidden operation counters
+  - credential_boundary
+  - account_read_boundary
+  conflict_keys:
+  - trading_runtime_boundary
+  - per_run_authorization
+  - credential_boundary
+  - account_permission
+  - readonly_query_positions
+  - qmt_strategy_runner
+  - redacted_evidence
+  - no_nas_package_exchange
+  - order_write_excluded
+  next_gate: closed
+  next_action: CR092 当前交付已关闭为 READY_WITH_RISK。后续候选见 process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md；实际模拟 evidence 检查、真实 runtime smoke、NAS、order-write、ledger hygiene 均需用户明确选择后另起门禁。
+  last_checked_at: '2026-06-18T17:25:00+08:00'
 - id: CR-091
   title: QMT Strategy Runner Research / Design / Implementation Plan
   status: closed-current-delivery

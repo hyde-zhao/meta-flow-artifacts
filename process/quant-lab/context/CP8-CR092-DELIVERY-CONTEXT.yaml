@@ -1,0 +1,61 @@
+schema_version: meta_flow_context_capsule_v1
+context_id: CP8-CR092-DELIVERY-CONTEXT
+created_at: "2026-06-18T17:15:00+08:00"
+created_by: host-orchestrator
+change_id: CR-092
+gate: CP8
+status: ready-for-human-review
+read_profile: minimal
+summary: >
+  CR092 reached CP8 delivery readiness with release_decision READY_WITH_RISK.
+  The delivery contains readiness documentation, a simulated-account evidence
+  template, an explicit single-file static checker, tests, CP6 implementation
+  evidence and CP7 static verification. It does not authorize or prove real
+  QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, credentials, real account
+  reads, submit/cancel, simulation/live or provider/lake/catalog publish.
+must_read:
+  - process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
+  - process/checks/CP8-CR092-DELIVERY-READINESS.md
+  - process/release/RELEASE-CONTEXT.yaml
+  - docs/release/RELEASE-NOTES.md
+  - docs/release/DEPLOY-CHECKLIST.md
+  - docs/release/ROLLBACK.md
+  - docs/release/MIGRATION.md
+  - docs/release/FEEDBACK.md
+read_if_needed:
+  - process/checks/CP7-CR092-READONLY-RUNTIME-SMOKE-VERIFICATION-DONE.md
+  - docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-VERIFICATION-REPORT.md
+  - docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-TEST-REPORT.md
+  - docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-REVIEW.md
+  - docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-FIXES.md
+do_not_read_by_default:
+  - .env
+  - credentials
+  - real_account_raw_outputs
+  - qmt_logs
+  - NAS paths
+  - real account/cash/position/order/fill raw files
+key_facts:
+  - "release_decision: READY_WITH_RISK."
+  - "CP7 result: PASS_WITH_RISK."
+  - "Targeted pytest passed: 5 tests."
+  - "Template self-check passed."
+  - "No runtime / NAS / credential / real-account access was authorized or executed."
+pending_human_decisions:
+  - DQ-CP8-CR092-01
+  - DQ-CP8-CR092-02
+  - DQ-CP8-CR092-03
+  - DQ-CP8-CR092-04
+  - DQ-CP8-CR092-05
+non_authorized_items:
+  - "QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime"
+  - "NAS access, list, read, copy, pull, write, publish or delete"
+  - ".env / credentials / real account / real funds / real positions / real orders / real fills / unspecified raw logs"
+  - "submit/cancel, buy/sell, simulation/live"
+  - "provider/lake/catalog/publish"
+  - "CR089 auto-start"
+  - "CR020 gateway route restore"
+token_control:
+  read_profile: minimal
+  full_doc_read_policy: "Only expand to CP6 / CP7 artifacts for audit or contradiction checks."
+  read_expansion_log: []

@@ -1,0 +1,50 @@
+schema_version: meta_flow_context_capsule_v1
+context_id: CP6-CR092-IMPLEMENTATION-CONTEXT
+created_at: "2026-06-18T16:55:00+08:00"
+created_by: host-orchestrator
+change_id: CR-092
+gate: CP6
+status: ready-for-verification
+read_profile: minimal
+summary: >
+  CR092 CP5 was approved by the user. CP6 implemented only manual guide,
+  simulated-account evidence template and an explicit single-file static checker.
+  No QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, credentials, real-account
+  reads, submit/cancel, simulation/live or provider/lake/catalog publish were
+  executed or authorized.
+must_read:
+  - process/stories/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-IMPLEMENTATION.md
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-MANUAL-GUIDE.md
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-EVIDENCE-TEMPLATE.yaml
+  - scripts/check_cr092_simulated_evidence.py
+  - tests/test_cr092_simulated_evidence_checker.py
+read_if_needed:
+  - process/stories/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-LLD.md
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-TEST-PLAN.md
+  - process/checkpoints/CP5-CR092-READONLY-RUNTIME-SMOKE-READINESS.md
+do_not_read_by_default:
+  - .env
+  - credentials
+  - real_account_raw_outputs
+  - qmt_logs
+  - NAS paths
+  - real account/cash/position/order/fill raw files
+key_facts:
+  - "CP5 approved at 2026-06-18T16:55:00+08:00."
+  - "Checker reads only the explicit --evidence file."
+  - "Template self-check passed."
+  - "Unit tests passed: tests/test_cr092_simulated_evidence_checker.py."
+non_authorized_items:
+  - "QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime"
+  - "NAS access, list, read, copy, pull, write, publish or delete"
+  - ".env / credentials / real account / real funds / real positions / real orders / real fills / unspecified raw logs"
+  - "submit/cancel, buy/sell, simulation/live"
+  - "provider/lake/catalog/publish"
+  - "CR089 auto-start"
+  - "CR020 gateway route restore"
+downstream_tasks:
+  - "Run CP7 verification on manual guide, evidence template, checker and tests."
+token_control:
+  read_profile: minimal
+  full_doc_read_policy: "Only expand to HLD / LLD / TEST-PLAN for audit or contradiction checks."
+  read_expansion_log: []

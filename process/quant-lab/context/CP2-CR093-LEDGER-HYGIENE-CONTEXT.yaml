@@ -1,0 +1,56 @@
+version: 1
+context_id: CP2-CR093-LEDGER-HYGIENE-CONTEXT
+change_id: CR-093
+gate: CP2
+status: ready-for-human-review
+created_at: '2026-06-18T17:30:00+08:00'
+created_by: host-orchestrator
+read_profile: compact
+summary:
+  user_intent: 用户明确要求启动 CR091-FU-04，即 CR019 / CR025 历史账本旧账治理。
+  current_state: CR092 已关闭为 closed-current-delivery / READY_WITH_RISK；顶层 active_change 为空；CR093 已创建为 active-cp2-intake。
+  scope: 静态账本与 cr-tracking checker 治理；不涉及交易 runtime、NAS、凭据、账户、行情或 publish。
+  baseline_defect: meta-flow check cr-tracking 当前 exit 1；失败项集中在 CR019 follow-up 状态硬编码不一致和 STATE 历史 active_change 误扫。
+  recommended_path: 先通过 CP2 确认范围，再进入 CP3 / CP5 设计，之后才允许实施检查器语义修正与最小台账规范化。
+must_read:
+  - path: process/changes/CR-093-LEDGER-HYGIENE-CR019-CR025-TRACKING-CLEANUP-2026-06-18.md
+    reason: CR093 正式变更范围、影响分析和不授权边界
+  - path: process/checks/CP2-CR093-LEDGER-HYGIENE-SCOPE.md
+    reason: CP2 自动预检与 baseline defect 摘要
+  - path: process/checkpoints/CP2-CR093-LEDGER-HYGIENE-SCOPE-REVIEW.md
+    reason: CP2 人工决策清单
+read_if_needed:
+  - path: scripts/check_cr_tracking_consistency.py
+    reason: CP3 / CP5 设计或实现前需要确认静态检查器当前逻辑
+  - path: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    reason: CP5 设计或修复前需要确认旧 follow-up 行的状态语义
+  - path: process/STATE.md
+    reason: 只在需要核对当前顶层状态或历史误扫样本时读取
+  - path: process/changes/CR-INDEX.yaml
+    reason: 状态索引同步与 active / blocked / candidate 分类
+do_not_read_by_default:
+  - data/
+  - reports/
+  - .env
+  - NAS
+  - QMT / MiniQMT / XtQuant runtime
+  - raw account / position / order / fill logs
+read_expansion_log:
+  - at: '2026-06-18T17:30:00+08:00'
+    actor: host-orchestrator
+    full_doc_read_reason: "CP2 启动需要确认 STATE 顶层状态、CR091/CR092 follow-up 行和 CR-INDEX 当前分类；未读取数据、凭据、NAS 或 runtime。"
+non_authorized_items:
+  - QMT / MiniQMT / XtQuant / gateway / runner 启动、连接、安装或运行
+  - NAS access / list / read / copy / pull / write / publish / delete
+  - .env、token、密码、cookie、session、private key、真实账户、资金、持仓、委托、成交或原始日志读取
+  - submit / cancel / buy / sell
+  - simulation / live
+  - provider fetch / lake write / catalog publish
+  - 自动启动 CR089 或恢复 CR020 用户删除的 gateway 路线
+open_decisions:
+  - DQ-CP2-CR093-01
+  - DQ-CP2-CR093-02
+  - DQ-CP2-CR093-03
+  - DQ-CP2-CR093-04
+  - DQ-CP2-CR093-05
+next_action: 等待用户审查 CP2 scope review；approve 只接受范围和设计方向，不直接授权实施修复。

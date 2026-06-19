@@ -43,6 +43,8 @@ cr_index: "process/changes/CR-INDEX.yaml"
 | `cancelled-user-deleted` | 用户明确要求删除路线下的候选项 | 候选项不再作为后续入口，未来恢复必须重新发起 CR。 |
 | `superseded` | 被另一个 CR 替代 | 填写替代 CR 路径和替代原因。 |
 
+CR093 状态规范化补充（2026-06-18）：机器检查应按语义归一状态，而不是按单一字面值匹配。`closed-current-delivery`、`closed-spike-complete`、`closed-cp8-approved` 与 `closed` 均归一为 `closed`；`cancelled-user-deleted` 与 `deleted-by-user` 均归一为 `cancelled`。本补充只澄清当前行的机器判定语义，不删除历史决策、不恢复 QMT 路线、不授权 runtime / NAS / 凭据 / 账户 / 交易 / provider / lake / publish。
+
 ## 分流总览
 
 | 类别 | 数量 | 阻断当前交付 | 说明 |

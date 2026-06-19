@@ -1,0 +1,70 @@
+---
+release_context_id: "RELEASE-CONTEXT-CR093"
+cr_id: "CR-093"
+story_id: "CR093-LEDGER-HYGIENE-CONSISTENCY"
+status: "closed-current-delivery"
+created_at: "2026-06-18T18:22:00+08:00"
+release_artifact_profile: "compact"
+release_decision: "READY_WITH_RISK"
+approved_at: "2026-06-19T08:39:22+08:00"
+approved_by: "user"
+approval_result: "CP8 approved; CR093 current delivery closed as READY_WITH_RISK"
+version_decision:
+  current_version: "cr092-readonly-runtime-smoke-readiness-alpha"
+  target_version: "cr093-ledger-hygiene-ready-with-risk"
+  change_type: "patch"
+  compatibility: "compatible"
+  reason: "修复 CR tracking checker 的 current/history 分层和状态等价语义；不改变交易、runtime、数据或发布行为。"
+release_scope:
+  in_scope:
+    - "scripts/check_cr_tracking_consistency.py"
+    - "tests/test_cr093_cr_tracking_consistency.py"
+    - "/home/hyde/workspace/meta-flow/meta_flow/checks/cr_tracking.py"
+    - "process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md"
+    - "CR093 process evidence"
+  out_of_scope:
+    - "runtime / NAS / credential / account / trading"
+    - "provider fetch / lake write / catalog publish"
+    - "broader cp8-follow-up warning-only cleanup"
+quality_summary:
+  cp6: "PASS"
+  cp7: "PASS_WITH_RISK"
+  blocker_count: 0
+  high_count: 0
+  residual_risks:
+    - "R-CR093-01"
+    - "R-CR093-02"
+affected_surface:
+  code:
+    - "quant-lab local checker script"
+    - "meta-flow uv tool checker source"
+  process_ledger:
+    - "CR019 follow-up tracking note"
+    - "CR093 CP6 / CP7 / CP8 evidence"
+  configuration: []
+  migration: "none"
+install_validation_summary:
+  required: false
+  reason: "无安装脚本、配置、环境变量或 runtime 部署变更；验证通过 py_compile、pytest、目标 CLI 和 workspace check。"
+release_documents:
+  release_notes: "docs/release/RELEASE-NOTES-CR093.md"
+  deploy_checklist: "docs/release/DEPLOY-CHECKLIST-CR093.md"
+  rollback: "docs/release/ROLLBACK-CR093.md"
+  migration: "docs/release/MIGRATION-CR093.md"
+  feedback: "docs/release/FEEDBACK-CR093.md"
+non_authorized_items:
+  - "QMT / MiniQMT / XtQuant / gateway / runner runtime"
+  - "NAS access"
+  - ".env / credentials / account / funds / positions / orders / fills / raw logs"
+  - "submit / cancel / buy / sell"
+  - "simulation / live"
+  - "provider fetch / lake write / catalog publish"
+follow_up_summary:
+  accepted_risks:
+    - id: "R-CR093-01"
+      summary: "主 CLI 仍输出 broader source=cp8-follow-up missing tracking row warnings。"
+      handling: "accept-as-warning-only; future candidate if warning cleanup is required"
+    - id: "R-CR093-02"
+      summary: "本仓库 standalone checker 不打印 audit-history warning 明细。"
+      handling: "accept-as-output-shape-risk; future candidate if checker convergence is required"
+---

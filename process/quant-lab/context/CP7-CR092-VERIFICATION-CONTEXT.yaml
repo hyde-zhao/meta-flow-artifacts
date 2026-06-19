@@ -1,0 +1,70 @@
+schema_version: meta_flow_context_capsule_v1
+context_id: CP7-CR092-VERIFICATION-CONTEXT
+created_at: "2026-06-18T17:05:00+08:00"
+created_by: host-orchestrator
+change_id: CR-092
+gate: CP7
+status: pass_with_risk
+read_profile: minimal
+summary: >
+  CR092 CP7 completed static verification for the manual guide, simulated-account
+  evidence template, explicit single-file checker and tests. The result is
+  PASS_WITH_RISK because no real QMT/MiniQMT/XtQuant/gateway/runner runtime,
+  NAS, credentials, real-account reads, submit/cancel, simulation/live or
+  provider/lake/catalog publish were authorized or executed.
+must_read:
+  - process/checks/CP7-CR092-READONLY-RUNTIME-SMOKE-VERIFICATION-DONE.md
+  - docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-VERIFICATION-REPORT.md
+  - docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-TEST-REPORT.md
+  - docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-REVIEW.md
+  - docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-FIXES.md
+read_if_needed:
+  - process/stories/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-IMPLEMENTATION.md
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-MANUAL-GUIDE.md
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-EVIDENCE-TEMPLATE.yaml
+  - scripts/check_cr092_simulated_evidence.py
+  - tests/test_cr092_simulated_evidence_checker.py
+do_not_read_by_default:
+  - .env
+  - credentials
+  - real_account_raw_outputs
+  - qmt_logs
+  - NAS paths
+  - real account/cash/position/order/fill raw files
+key_facts:
+  - "CP7 result: PASS_WITH_RISK."
+  - "Targeted pytest passed: 5 tests."
+  - "Template self-check passed."
+  - "py_compile passed."
+  - "No runtime / NAS / credential / real-account access was authorized or executed."
+risks:
+  - id: R-CR092-CP7-001
+    severity: high
+    summary: "Static CP7 does not prove real runtime readiness."
+    status: accepted-for-cp8
+  - id: R-CR092-CP7-002
+    severity: medium
+    summary: "No user-provided simulated-account evidence file was validated beyond the template."
+    status: accepted-for-cp8
+  - id: R-CR092-CP7-003
+    severity: medium
+    summary: "No independent meta-qa subagent dispatch; host-orchestrator used inline fallback."
+    status: accepted-for-cp8
+  - id: R-CR092-CP7-004
+    severity: low
+    summary: "CR019 / CR025 historical ledger debt remains non-blocking."
+    status: follow-up-cr091-fu-04
+non_authorized_items:
+  - "QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime"
+  - "NAS access, list, read, copy, pull, write, publish or delete"
+  - ".env / credentials / real account / real funds / real positions / real orders / real fills / unspecified raw logs"
+  - "submit/cancel, buy/sell, simulation/live"
+  - "provider/lake/catalog/publish"
+  - "CR089 auto-start"
+  - "CR020 gateway route restore"
+downstream_tasks:
+  - "Prepare CP8 delivery readiness and explicit risk acceptance."
+token_control:
+  read_profile: minimal
+  full_doc_read_policy: "Only expand to CP5 / CP6 artifacts for audit or contradiction checks."
+  read_expansion_log: []

@@ -1,0 +1,80 @@
+schema_version: meta_flow_context_capsule_v1
+context_id: CP5-CR092-READINESS-CONTEXT
+created_at: "2026-06-18T16:45:00+08:00"
+created_by: host-orchestrator
+change_id: CR-092
+gate: CP5
+status: approved
+read_profile: compact
+summary: >
+  CR092 CP3 was approved by the user. CP5 readiness now reviews the LLD,
+  TEST-PLAN, Authorization Brief contract, Manual Readonly Smoke Guide boundary
+  and simulated-account evidence contract. CP5 approval does not authorize
+  QMT/MiniQMT/XtQuant/gateway/runner startup, NAS access, credential reads,
+  real-account reads, submit/cancel, simulation/live, provider/lake/catalog
+  publish, CR089 auto-start or CR020 gateway restore.
+must_read:
+  - process/stories/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-LLD.md
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-TEST-PLAN.md
+  - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-HLD.md
+  - process/checkpoints/CP3-CR092-READONLY-RUNTIME-SMOKE-HLD-REVIEW.md
+  - process/changes/CR-092-REAL-QMT-READONLY-RUNTIME-SMOKE-DESIGN-GATE-2026-06-18.md
+read_if_needed:
+  - process/context/CP3-CR092-DESIGN-CONTEXT.yaml
+  - process/checks/CP3-CR092-HLD-CONSISTENCY.md
+  - docs/qmt/CR091-QMT-STRATEGY-RUNNER-HLD.md
+  - process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md
+do_not_read_by_default:
+  - .env
+  - credentials
+  - real_account_raw_outputs
+  - qmt_logs
+  - NAS paths
+  - real account/cash/position/order/fill raw files
+key_facts:
+  - "CP3 approved at 2026-06-18T16:45:00+08:00."
+  - "CP5 approved at 2026-06-18T16:55:00+08:00; proceed to CP6 manual guide / evidence template / static checker implementation."
+  - "CP5 reviews LLD / TEST-PLAN / readiness only."
+  - "Simulated-account evidence may be read only when explicitly provided by the user."
+  - "NAS is not needed for CR092 CP5 and remains CR091-FU-02."
+risks_and_decisions:
+  - id: DQ-CP5-CR092-01
+    type: implementation
+    status: accepted
+    summary: "Approve the LLD as sufficient design evidence for readiness preparation."
+  - id: DQ-CP5-CR092-02
+    type: security
+    status: accepted
+    summary: "Approve the simulated-account evidence contract and sensitive-field reject rules."
+  - id: DQ-CP5-CR092-03
+    type: runtime_authorization
+    status: accepted
+    summary: "Confirm CP5 approval still does not authorize runtime execution."
+  - id: DQ-CP5-CR092-04
+    type: follow_up_tracking
+    status: accepted
+    summary: "Confirm NAS / order-write / ledger hygiene remain separate follow-up candidates."
+  - id: DQ-CP5-CR092-05
+    type: risk_acceptance
+    status: accepted
+    summary: "Accept that real runtime readiness remains unproven until later explicit evidence."
+  - id: DQ-CP5-CR092-06
+    type: implementation
+    status: accepted
+    summary: "Allow next stage to prepare manual guide / evidence template only, not runtime execution."
+non_authorized_items:
+  - "QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime"
+  - "NAS access, list, read, copy, pull, write, publish or delete"
+  - ".env / credentials / real account / real funds / real positions / real orders / real fills / unspecified raw logs"
+  - "submit/cancel, buy/sell, simulation/live"
+  - "provider/lake/catalog/publish"
+  - "CR089 auto-start"
+  - "CR020 gateway route restore"
+downstream_tasks:
+  - "CP5 is approved; manual guide / evidence template / static checker implementation is allowed, still without runtime execution."
+  - "If CP5 is changed, update LLD / TEST-PLAN and regenerate CP5 Decision Brief."
+  - "If CP5 is rejected, return to CP3 approved / CP5 redesign."
+token_control:
+  read_profile: compact
+  full_doc_read_policy: "Only expand to full CR091 / CR089 documents for conflict, audit or user-requested deep review."
+  read_expansion_log: []

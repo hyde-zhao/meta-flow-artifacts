@@ -1,0 +1,79 @@
+---
+release_context_id: "RELEASE-CONTEXT-CR094"
+cr_id: "CR-094"
+story_id: "CR094-WARNING-CLEANUP-STRICT-WARNINGS-READINESS"
+status: "closed-current-delivery"
+created_at: "2026-06-19T08:52:56+08:00"
+release_artifact_profile: "minimal"
+release_decision: "READY"
+approved_at: "2026-06-19T09:08:56+08:00"
+approved_by: "user"
+approval_result: "CP8 approved; CR094 current delivery closed as READY"
+version_decision:
+  current_version: "cr093-ledger-hygiene-ready-with-risk"
+  target_version: "cr094-strict-warnings-ready"
+  change_type: "patch"
+  compatibility: "compatible"
+  reason: "清理 CR tracking warning-only backlog，使 strict-warnings 校验可通过；不改变 runtime、数据、交易或发布行为。"
+release_scope:
+  in_scope:
+    - "process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md"
+    - "process/changes/CR-094-WARNING-CLEANUP-STRICT-WARNINGS-READINESS-2026-06-19.md"
+    - "process/STATE.md"
+    - "process/changes/CR-INDEX.yaml"
+    - "/home/hyde/workspace/meta-flow/meta_flow/checks/cr_tracking.py"
+    - "scripts/check_cr_tracking_consistency.py"
+    - "tests/test_cr093_cr_tracking_consistency.py"
+    - "CR094 process evidence"
+  out_of_scope:
+    - "runtime / NAS / credential / account / trading"
+    - "provider fetch / lake write / catalog publish"
+    - "standalone checker output convergence (CR093-FU-02)"
+quality_summary:
+  cp6: "PASS"
+  cp7: "PASS"
+  blocker_count: 0
+  high_count: 0
+  residual_risks:
+    - "R-CR094-01"
+    - "R-CR094-02"
+affected_surface:
+  code:
+    - "meta-flow CLI cr_tracking checker"
+    - "quant-lab local checker fixture/test"
+  process_ledger:
+    - "CR093 follow-up tracking"
+    - "CR094 formal CR"
+    - "STATE / CR-INDEX active CR"
+  configuration: []
+  migration: "none"
+install_validation_summary:
+  required: false
+  reason: "无安装脚本、配置、环境变量或 runtime 部署变更；验证通过 py_compile、pytest、standalone checker、主 CLI 和 strict-warnings。"
+release_documents:
+  release_notes: "docs/release/RELEASE-NOTES-CR094.md"
+  deploy_checklist: "docs/release/DEPLOY-CHECKLIST-CR094.md"
+  rollback: "docs/release/ROLLBACK-CR094.md"
+  migration: "docs/release/MIGRATION-CR094.md"
+  feedback: "docs/release/FEEDBACK-CR094.md"
+non_authorized_items:
+  - "QMT / MiniQMT / XtQuant / gateway / runner runtime"
+  - "NAS access"
+  - ".env / credentials / account / funds / positions / orders / fills / raw logs"
+  - "submit / cancel / buy / sell"
+  - "simulation / live"
+  - "provider fetch / lake write / catalog publish"
+  - "real release execution / publish"
+follow_up_summary:
+  candidates:
+    - id: "CR093-FU-02"
+      summary: "standalone checker 与主 CLI 输出收敛"
+      handling: "candidate-not-started"
+  residual_risks:
+    - id: "R-CR094-01"
+      summary: "CR093-FU-02 不在本轮范围内"
+      handling: "follow-up candidate"
+    - id: "R-CR094-02"
+      summary: "未启动 subagent，按工具策略 inline 执行"
+      handling: "accepted low-risk CP8 decision"
+---
