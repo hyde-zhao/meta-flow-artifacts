@@ -5,11 +5,11 @@ current_phase: delivered
 current_agent: host-orchestrator
 active_change: 'CR-097'
 active_story: ''
-iteration: 548
+iteration: 551
 blocked: false
 blocked_reason: ''
-last_action: 用户确认 CR097 账户模式为模拟账户，执行方式为 Windows gateway，gateway host 为 172.30.32.1；host-orchestrator 选定端口 18765，WSL client IP 为 172.30.33.29，推荐 allowlist 为 172.30.33.29/32，evidence 目录沿用 `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/`。
-next_action: "CR097 active，等待用户在 Windows 侧按指引启动 QMT gateway：host=172.30.32.1 port=18765 runtime_ref=cr097-readonly-smoke-20260619-sim allowlist=172.30.33.29/32。启动后先由 WSL 执行 health/client-diagnostics preflight；通过后再执行 capabilities / query_positions_readonly，并只保存脱敏 evidence。"
+last_action: 用户修复 Windows XtQuant import 后继续 CR097 测试；host-orchestrator 在 WSL 侧复验：端口 `172.30.32.1:18765` 连通，`/qmt/health` 返回 `status=ok`、`session_ready=true`、`runtime_status=xtquant-ready`，`/qmt/capabilities` 返回且仍标记 operation/live/simulation/order/cancel 未授权；未签名 `POST /qmt/account/positions` 按预期在 auth gate 前 `auth_header_missing` fail-closed，adapter/query counters 为 0。已写脱敏 evidence `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/cr097-runtime-preflight-redacted-20260619.json`。
+next_action: "CR097 runtime 已 ready，下一步需要用户创建并授权读取 WSL 最小 HMAC client env `/home/hyde/.quant-lab/runtime/qmt/cr097/client.env`（只含 gateway host/port、QMT_CLIENT_ID、QMT_CLIENT_SECRET、QMT_RUNTIME_REF），然后执行 query_positions_readonly 成功路径并保存脱敏 evidence；继续禁止读取 Windows `.env`、账号原文、持仓原文、NAS、交易写、provider/lake/publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
