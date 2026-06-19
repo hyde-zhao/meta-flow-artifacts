@@ -3,13 +3,13 @@ project_id: quant-lab
 workflow_mode: production
 current_phase: delivered
 current_agent: host-orchestrator
-active_change: ''
+active_change: 'CR-098'
 active_story: ''
-iteration: 553
+iteration: 554
 blocked: false
 blocked_reason: ''
-last_action: 用户回复“同意。给出下一步建议”，接受 CR097 CP8 READY、空持仓 / 非交易日剩余风险、inline fallback WAIVED 和不授权边界；host-orchestrator 已回填 `process/checkpoints/CP8-CR097-DELIVERY-READINESS.md`，将 CR097 关闭为 `closed-current-delivery / READY`。
-next_action: "当前无 active formal CR。建议下一步优先做 QMT runner readonly integration design/smoke gate：让 runner 消费已验证的 Windows gateway 只读能力和 `.quant-lab` redacted evidence 路由，但仍禁止 NAS、交易写、simulation/live、provider/lake/publish。备选是 CR097-FU-01 非空持仓/交易日只读复测，或 CR091-FU-02 NAS package exchange；不建议立即启动 CR091-FU-03 order-write。"
+last_action: 用户要求“启动 QMT runner readonly integration gate”；host-orchestrator 创建 CR098、CR097 follow-up tracking、CP2 context、CP2 precheck 和 CP2 scope review。CR098 当前为 `active-pending-cp2-scope-approval`，尚不授权读取 HMAC secret、Windows `.env`、启动 gateway、执行 runner runtime 或账户查询。
+next_action: "等待用户审查 `process/checkpoints/CP2-CR098-QMT-RUNNER-READONLY-INTEGRATION-SCOPE-REVIEW.md` 并回复 `approve` / `修改: <具体修改点>` / `reject`。approve 只允许进入 CP3 HLD，不授权 HMAC secret 读取、Windows `.env`、gateway 启动、runner runtime、账户原文、NAS、交易写、simulation/live 或 provider/lake/publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:

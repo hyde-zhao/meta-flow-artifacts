@@ -1,0 +1,51 @@
+schema_version: "context-capsule-v1"
+context_id: "CP2-CR098-RUNNER-READONLY-INTEGRATION"
+context_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-06-19T11:55:26+08:00"
+owner: "host-orchestrator"
+read_profile: "minimal"
+target:
+  cr_id: "CR-098"
+  phase: "requirement-clarification"
+  checkpoint: "CP2"
+scope_summary: "启动 QMT runner readonly gateway integration gate：runner 消费 CR097 已验证的 Windows gateway 只读能力，仍保持逐 run 授权和脱敏 evidence 边界。"
+key_facts:
+  - "CR091 closed-current-delivery / READY_WITH_RISK: 离线 runner 合同和 fake readonly gateway 已存在。"
+  - "CR097 closed-current-delivery / READY: Windows gateway health/capabilities/query_positions_readonly 已通过，结果为空持仓脱敏 evidence。"
+  - "CR098 当前不授权读取 HMAC secret、不启动 gateway、不执行 runner；只进入 CP2 scope review。"
+must_read:
+  - "process/changes/CR-098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-SMOKE-2026-06-19.md"
+  - "process/checkpoints/CP2-CR098-QMT-RUNNER-READONLY-INTEGRATION-SCOPE-REVIEW.md"
+read_if_needed:
+  - path: "trading/strategy_runner/readonly_gateway.py"
+    reason: "设计 runner adapter 时读取"
+  - path: "tests/test_cr091_strategy_runner_contracts.py"
+    reason: "设计 fixture / regression scope 时读取"
+  - path: "docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-HLD.md"
+    reason: "需要复核 runner 内置 readonly transport 方案时读取"
+  - path: "process/checkpoints/CP8-CR097-DELIVERY-READINESS.md"
+    reason: "需要复核 CR097 CP8 风险接受和不授权项时读取"
+do_not_read_by_default:
+  - "Windows .env or any credential file"
+  - "raw QMT account / positions / orders / trades / logs"
+  - "NAS paths or package shares"
+  - "full historical CR transcripts"
+risks_and_decisions:
+  - id: "DQ-CP2-CR098-01"
+    type: "scope"
+    summary: "确认本轮只覆盖 runner readonly integration，不覆盖 NAS 或交易写。"
+  - id: "DQ-CP2-CR098-02"
+    type: "runtime_authorization"
+    summary: "CP2 approve 不授权 runtime 执行；真实 runner smoke 后续逐 run 授权。"
+  - id: "R-CR098-01"
+    type: "risk"
+    summary: "runner 接入真实 gateway 后可能被误读为交易能力可用，必须保持 operation_authorized=false 和 no order-write。"
+downstream_tasks:
+  - "CP2 approve 后生成 CP3 HLD，冻结 runner adapter 边界。"
+  - "CP3 approve 后生成 CP5 design readiness，明确文件 owner、tests 和 runtime evidence contract。"
+  - "CP5 approve 后才允许修改 runner code 或执行 runtime smoke。"
+token_control:
+  full_doc_read_policy: "only-if-capsule-insufficient-or-conflict"
+  max_source_files: 6
+  read_expansion_log: []

@@ -95,7 +95,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: 'CR097 runtime smoke passed and was closed at 2026-06-19T11:51:06+08:00 after user approved CP8 READY. Scope was health, capabilities, unsigned auth-negative positions, and authenticated query_positions_readonly with redacted evidence. Result: simulated empty account, position_count=0, raw_payload_emitted=false. It does not authorize NAS, Windows .env/credential reads, account originals, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
+last_consistency_check: 'CR098 started at 2026-06-19T11:55:26+08:00 after user requested QMT runner readonly integration gate. Scope is runner readonly gateway integration design/smoke gate only: runner-owned readonly adapter for health, capabilities and query_positions_readonly with .quant-lab redacted evidence. CP2 is pending. It does not authorize HMAC secret reads, Windows .env reads, gateway startup, runner runtime execution, account originals, NAS, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
 root_authority:
   status: logical-cutover-complete
   authoritative_root: /home/hyde/workspace/quant-lab
@@ -130,6 +130,38 @@ index_schema:
 - next_action
 - last_checked_at
 active_crs:
+- id: CR-098
+  title: QMT Runner Readonly Gateway Integration Smoke
+  status: active-formal-cr
+  source_tracking: process/changes/CR-097-FOLLOW-UP-TRACKING-2026-06-19.md
+  formal_cr_path: process/changes/CR-098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-SMOKE-2026-06-19.md
+  parent_cr: CR-097
+  source_checkpoint: process/checkpoints/CP8-CR097-DELIVERY-READINESS.md
+  source_decision_id: USER-20260619-START-QMT-RUNNER-READONLY-INTEGRATION-GATE
+  priority: 1
+  blocked_by: 'cp2-pending: user started the gate, but scope, architecture, runtime authorization boundary, evidence routing and follow-up split still require CP2 approval'
+  impact_surface:
+  - qmt_runner
+  - readonly_gateway
+  - runtime_authorization
+  - per_run_authorization
+  - hmac_client_env
+  - redacted_evidence
+  - credential_boundary
+  - process/changes/CR-097-FOLLOW-UP-TRACKING-2026-06-19.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  conflict_keys:
+  - runtime_authorization
+  - qmt_runner
+  - readonly_gateway
+  - credential_boundary
+  - no_order_write
+  - no_nas_access
+  - no_provider_lake_publish
+  next_gate: cp2-human-approval
+  next_action: 发起 CP2 人工确认；approve 后进入 CP3 HLD。当前不得读取 HMAC secret、Windows `.env`、账户原文、NAS，不得启动 gateway、执行 runner runtime、交易写、simulation/live 或 provider/lake/publish。
+  last_checked_at: '2026-06-19T11:55:26+08:00'
 - id: CR-097
   title: Real QMT Readonly Runtime Smoke Per-run Authorization
   status: closed-current-delivery
