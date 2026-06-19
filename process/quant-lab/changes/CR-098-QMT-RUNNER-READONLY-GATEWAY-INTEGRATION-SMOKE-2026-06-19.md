@@ -1,12 +1,12 @@
 ---
 cr_id: "CR-098"
-status: "active-cp7-passed-with-risk-pending-cp8"
+status: "closed-current-delivery"
 impact_level: "high"
 workflow_mode_before: "production"
 workflow_mode_after_change: "standard"
 fast_lane_upgrade_reason: "命中 QMT runner、Windows gateway、HMAC client env、真实只读账户查询、redacted evidence 和未来交易写扩展边界；不得使用 fast-lane。"
 rollback_to: "CR097 closed-current-delivery / READY"
-approval_result: "cp7-pass-with-risk-pending-cp8"
+approval_result: "cp8-approved-ready-with-risk-closed-current-delivery"
 created_at: "2026-06-19T11:55:26+08:00"
 created_by: "host-orchestrator"
 approved_by: "user"
@@ -124,17 +124,18 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | CP5 design readiness | approved | 用户已确认 LLD / TEST-PLAN / TASKS 和不授权边界 |
 | CP6 implementation | passed | 离线 adapter / evidence / tests 已完成 |
 | CP7 verification | PASS_WITH_RISK | 离线 / fixture 验证通过；真实 runtime、非空持仓和交易日路径未证明 |
-| CP8 closure | pending-human-review | CP8 自动预检和人工审查稿已生成 |
+| CP8 closure | approved / closed-current-delivery | 用户已接受 `READY_WITH_RISK` 并关闭当前交付 |
 
 ## 处理结论
 
-- 审批结论：`cp7-pass-with-risk-pending-cp8`
+- 审批结论：`cp8-approved-ready-with-risk-closed-current-delivery`
 - [x] 已启动正式 CR（用户明确要求启动）
 - [x] CP2 人工确认完成（高风险 runner / gateway integration）
 - [x] CP3 HLD 人工确认完成（runner-owned readonly facade）
 - [x] CP5 design readiness 人工确认完成
 - [x] CP6 offline implementation 完成
 - [x] CP7 offline verification 完成，结论 `PASS_WITH_RISK`
+- [x] CP8 delivery readiness 已由用户接受，当前交付关闭
 - [ ] 未授权运行（当前不读取 HMAC env、不启动 gateway、不执行 runner）
 
 ## CP2 审查结果
@@ -198,6 +199,19 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | 人工审查稿 | `process/checkpoints/CP8-CR098-DELIVERY-READINESS.md` |
 | Release Context | `process/release/RELEASE-CONTEXT-CR098.yaml` |
 | 推荐结论 | `READY_WITH_RISK` |
+
+## CP8 审查结果
+
+| 字段 | 内容 |
+|---|---|
+| 结论 | `approved / READY_WITH_RISK / closed-current-delivery` |
+| 审查时间 | `2026-06-19T12:31:24+08:00` |
+| 用户回复 | “同意，准备好下一个cr的上下文，开始之前我需要清除上下文。” |
+| 接受决策 | `DQ-CP8-CR098-01..05` |
+| 风险接受 | 真实 runner runtime smoke 未执行；非空持仓 / 交易日路径未证明；CP6/CP7 inline fallback WAIVED |
+| 不授权边界 | 不授权 HMAC secret、Windows `.env`、gateway 启动、runner runtime、账户原文、NAS、交易写、simulation/live、provider/lake/publish、真实 release execution / publish、CR089 auto-start 或 CR020 gateway route restore |
+| Follow-up tracking | `process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md` |
+| Context reset handoff | `process/context/CR098-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-19.md` |
 
 ## 关联对象
 

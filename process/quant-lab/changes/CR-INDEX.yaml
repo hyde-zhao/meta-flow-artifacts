@@ -1,6 +1,6 @@
 version: 1
-status: "active-formal-cr"
-updated_at: '2026-06-19T12:25:05+08:00'
+status: "no-active-formal-cr"
+updated_at: '2026-06-19T12:31:24+08:00'
 owner: meta-po
 source: >
   CR-046 started by user target change to terminal-native simulation strategy export,
@@ -95,7 +95,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: 'CR098 CP8 delivery readiness generated at 2026-06-19T12:25:05+08:00. CP8 auto precheck is PASS_WITH_RISK and manual checkpoint is pending user approval. Scope remains runner readonly gateway integration only. It does not authorize HMAC secret reads, Windows .env reads, gateway startup, runner runtime execution, account originals, NAS, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
+last_consistency_check: 'CR098 CP8 approved and closed at 2026-06-19T12:31:24+08:00 as closed-current-delivery / READY_WITH_RISK. No active formal CR remains. Recommended next candidate is CR098-FU-01 runner real readonly smoke per-run authorization, but it is not started. No runtime authorization is active; HMAC secret reads, Windows .env reads, gateway startup, runner runtime execution, account originals, NAS, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start and CR020 gateway route restore remain unauthorized.'
 root_authority:
   status: logical-cutover-complete
   authoritative_root: /home/hyde/workspace/quant-lab
@@ -132,14 +132,15 @@ index_schema:
 active_crs:
 - id: CR-098
   title: QMT Runner Readonly Gateway Integration Smoke
-  status: active-formal-cr
+  status: closed-current-delivery
   source_tracking: process/changes/CR-097-FOLLOW-UP-TRACKING-2026-06-19.md
   formal_cr_path: process/changes/CR-098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-SMOKE-2026-06-19.md
+  follow_up_tracking: process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
   parent_cr: CR-097
   source_checkpoint: process/checkpoints/CP8-CR097-DELIVERY-READINESS.md
   source_decision_id: USER-20260619-START-QMT-RUNNER-READONLY-INTEGRATION-GATE
   priority: 1
-  blocked_by: 'cp8-human-review-pending: CP8 auto precheck PASS_WITH_RISK and manual checkpoint generated; waiting user approve / modify / reject'
+  blocked_by: 'closed: user approved CR098 CP8 at 2026-06-19T12:31:24+08:00, accepting READY_WITH_RISK, real runner runtime not executed, non-empty/trading-day residual risks, inline-fallback waiver and non-authorization boundary'
   impact_surface:
   - qmt_runner
   - readonly_gateway
@@ -159,9 +160,9 @@ active_crs:
   - no_order_write
   - no_nas_access
   - no_provider_lake_publish
-  next_gate: cp8-delivery-readiness
-  next_action: 等待用户审查 `process/checkpoints/CP8-CR098-DELIVERY-READINESS.md` 并回复 approve / 修改 / reject。当前不得读取 HMAC secret、Windows `.env`、账户原文、NAS，不得启动 gateway、执行 runner runtime、交易写、simulation/live 或 provider/lake/publish。真实 runner smoke 必须另行逐 run 授权。
-  last_checked_at: '2026-06-19T12:25:05+08:00'
+  next_gate: closed
+  next_action: CR098 当前交付已关闭。推荐下一个候选为 CR098-FU-01 runner real readonly smoke per-run authorization；启动前必须用户明确确认，且在新的 CR 门禁通过前仍不授权 secret/env/runtime/NAS/trading/publish。
+  last_checked_at: '2026-06-19T12:31:24+08:00'
 - id: CR-097
   title: Real QMT Readonly Runtime Smoke Per-run Authorization
   status: closed-current-delivery

@@ -3,13 +3,13 @@ project_id: quant-lab
 workflow_mode: production
 current_phase: delivered
 current_agent: host-orchestrator
-active_change: 'CR-098'
+active_change: ''
 active_story: ''
-iteration: 559
+iteration: 560
 blocked: false
 blocked_reason: ''
-last_action: CR098 CP8 delivery readiness 已生成：Release Context、CP8 context、compact release docs、CP8 auto precheck 和人工审查稿；推荐 READY_WITH_RISK，等待用户确认。
-next_action: "等待用户审查 `process/checkpoints/CP8-CR098-DELIVERY-READINESS.md` 并回复 `approve` / `修改: <具体修改点>` / `reject`。approve 只关闭 CR098 当前离线 runner readonly integration 交付，不授权 HMAC secret 读取、Windows `.env`、gateway 启动、runner runtime、账户原文、NAS、交易写、simulation/live 或 provider/lake/publish。"
+last_action: CR098 CP8 已由用户同意，当前交付关闭为 closed-current-delivery / READY_WITH_RISK；已准备上下文重置 handoff 和 CR098 follow-up tracking。
+next_action: "清理上下文后先读取 `process/context/CR098-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-19.md`。推荐下一个候选为 `CR098-FU-01 Runner real readonly smoke per-run authorization`，但当前未启动；新的 CR 门禁和逐 run 授权前，不授权 HMAC secret、Windows `.env`、gateway 启动、runner runtime、账户原文、NAS、交易写、simulation/live 或 provider/lake/publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -124,9 +124,9 @@ artifact_routing:
   health_status: "local-remediation-complete"
   updated_at: "2026-06-17T19:50:00+08:00"
 cr_tracking:
-  status: "active-formal-cr"
+  status: "no-active-formal-cr"
   index_path: process/changes/CR-INDEX.yaml
-  last_consistency_check: 'CR095 CP8 approved and closed at 2026-06-19T09:39:15+08:00. CR096 started from CR092-FU-01 and is active-awaiting-user-evidence-path. Scope is a single user-provided simulated evidence YAML/JSON checker run only. This does not authorize NAS, directory scan, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
+  last_consistency_check: 'CR098 CP8 approved and closed at 2026-06-19T12:31:24+08:00 as closed-current-delivery / READY_WITH_RISK. No active formal CR remains. Recommended next candidate is CR098-FU-01 runner real readonly smoke per-run authorization, but it is not started. No runtime authorization is active; HMAC secret reads, Windows .env reads, gateway startup, runner runtime execution, account originals, NAS, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start and CR020 gateway route restore remain unauthorized.'
   active_crs:
   - id: CR-096
     title: User-provided Simulated Evidence Checker Run

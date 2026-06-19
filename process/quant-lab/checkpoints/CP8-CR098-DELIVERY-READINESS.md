@@ -2,11 +2,11 @@
 checkpoint_id: "CP8"
 checkpoint_name: "CR098 Delivery Readiness"
 type: "auto_then_manual"
-status: "pending"
+status: "approved"
 owner: "host-orchestrator"
 created_at: "2026-06-19T12:25:05+08:00"
-reviewed_by: ""
-reviewed_at: ""
+reviewed_by: "user"
+reviewed_at: "2026-06-19T12:31:24+08:00"
 auto_check_result: "process/checks/CP8-CR098-DELIVERY-READINESS.md"
 target:
   phase: "documentation"
@@ -104,18 +104,18 @@ CR098 已完成 runner readonly integration 的离线实现和验证：默认 fa
 
 | 条目 | 审查结果 | 证据 | 审查意见 |
 |---|---|---|---|
-| CP6 PASS | 待审查 | `process/checks/CP6-CR098-RUNNER-READONLY-INTEGRATION-CODING-DONE.md` |  |
-| CP7 PASS_WITH_RISK | 待审查 | `process/checks/CP7-CR098-RUNNER-READONLY-INTEGRATION-VERIFICATION-DONE.md` |  |
-| Release context ready | 待审查 | `process/release/RELEASE-CONTEXT-CR098.yaml` |  |
+| CP6 PASS | approved | `process/checks/CP6-CR098-RUNNER-READONLY-INTEGRATION-CODING-DONE.md` | 用户接受当前交付关闭。 |
+| CP7 PASS_WITH_RISK | approved | `process/checks/CP7-CR098-RUNNER-READONLY-INTEGRATION-VERIFICATION-DONE.md` | 用户接受真实 runner runtime、非空持仓和交易日路径未证明的剩余风险。 |
+| Release context ready | approved | `process/release/RELEASE-CONTEXT-CR098.yaml` | 用户接受 `READY_WITH_RISK`。 |
 
 ## Checklist
 
 | # | 检查项 | 审查结果 | 证据 | 审查意见 |
 |---|---|---|---|---|
-| 1 | DoD 是否达成 | 待审查 | CP6 / CP7 |  |
-| 2 | 风险是否可接受 | 待审查 | `R-CR098-01`、`R-CR098-02` |  |
-| 3 | release context 是否完整 | 待审查 | `process/release/RELEASE-CONTEXT-CR098.yaml` |  |
-| 4 | 不授权边界是否完整 | 待审查 | 本文件 |  |
+| 1 | DoD 是否达成 | approved | CP6 / CP7 | 离线实现和验证证据已接受。 |
+| 2 | 风险是否可接受 | approved | `R-CR098-01`、`R-CR098-02` | 真实 runtime、非空持仓和交易日路径风险转入 follow-up。 |
+| 3 | release context 是否完整 | approved | `process/release/RELEASE-CONTEXT-CR098.yaml` | release context 已更新为 approved closure。 |
+| 4 | 不授权边界是否完整 | approved | 本文件 | approve 不授权 secret/env/runtime/NAS/trading/publish。 |
 
 ## Exit Criteria
 
@@ -138,11 +138,11 @@ CR098 已完成 runner readonly integration 的离线实现和验证：默认 fa
 
 ## 人工审查结果
 
-- 结论：`pending`
-- 审查人：
-- 审查时间：
-- 用户回复：
-- 接受的决策项：
-- 修改意见：
-- 风险接受项：
-- 不授权边界：
+- 结论：`approved / READY_WITH_RISK / closed-current-delivery`
+- 审查人：`user`
+- 审查时间：`2026-06-19T12:31:24+08:00`
+- 用户回复：“同意，准备好下一个cr的上下文，开始之前我需要清除上下文。”
+- 接受的决策项：`DQ-CP8-CR098-01..05`
+- 修改意见：无
+- 风险接受项：接受真实 runner runtime smoke 未执行；接受非空持仓 / 交易日路径未证明；接受 CP6/CP7 inline fallback WAIVED。
+- 不授权边界：仍不授权 HMAC secret、Windows `.env`、gateway 启动、runner runtime、账户原文、NAS、交易写、simulation/live、provider/lake/publish、真实 release execution / publish、CR089 auto-start 或 CR020 gateway route restore。
