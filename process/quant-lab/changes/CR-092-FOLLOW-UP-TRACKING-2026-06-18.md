@@ -23,7 +23,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | 关闭范围 | 1 | 否 | CR092 readiness / evidence guardrail 已关闭 |
 | 不授权范围 | 1 | 否 | runtime、NAS、凭据、真实账户、交易写和 publish 均不授权 |
 | 风险接受项 | 4 | 否 | `R-CR092-CP7-001..004` 已由 CP8 接受 |
-| 后续 CR 候选项 | 4 | 否 | `CR092-FU-02` 已转为 CR097 active 并通过 runtime smoke，等待 CP8 确认关闭；保留的 `CR091-FU-02..04` 仍是候选 / closed |
+| 后续 CR 候选项 | 4 | 否 | `CR092-FU-02` 已转为 CR097 并关闭为 READY；保留的 `CR091-FU-02..04` 仍是候选 / closed |
 | 取消 / deferred 项 | 1 | 否 | 手工验证 / 真实运行均后置，需独立授权 |
 
 ## 后续 CR / Spike 候选索引
@@ -31,7 +31,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | 候选编号 | 标题 | 状态 | 类型 | 优先级 | 影响面 / 冲突键 | 正式 CR 路径 | 相关 active CR / blocked_by / superseded_by | 当前门控 | 阻塞原因 | 下一步 | 来源 |
 |---|---|---|---|---:|---|---|---|---|---|---|---|
 | CR-096 | User-provided simulated-account evidence checker run | closed | CR | 1 | simulated_evidence; single_file_read; credential_boundary; redacted_evidence | `process/changes/CR-096-USER-PROVIDED-SIMULATED-EVIDENCE-CHECKER-RUN-2026-06-19.md` | closed-current-delivery | closed | 用户已确认 `.quant-lab` 方案并授权按合同填入；`/home/hyde/.quant-lab/evidence/qmt/cr096/redacted/cr096-user-provided-evidence.yaml` 已通过单文件 checker；CP8 已同意关闭；不得读取目录、凭据、真实账户或 NAS | 当前交付已关闭；真实 runtime smoke 需独立 CR092-FU-02 授权 | DQ-CP8-CR092-04 |
-| CR-097 | Real readonly runtime smoke per-run authorization | active | CR | 2 | runtime_authorization; per_run_authorization; qmt_runtime; readonly_query_positions; credential_boundary | `process/changes/CR-097-REAL-QMT-READONLY-RUNTIME-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md` | active-runtime-smoke-pass-pending-cp8-approval | cp8-pending | health / capabilities / query_positions_readonly 均已完成并产生脱敏 evidence；等待用户 CP8 approve 后关闭 | 发起 CP8 人工确认；approve 后关闭 CR097 当前交付 | DQ-CP8-CR092-04 |
+| CR-097 | Real readonly runtime smoke per-run authorization | closed | CR | 2 | runtime_authorization; per_run_authorization; qmt_runtime; readonly_query_positions; credential_boundary | `process/changes/CR-097-REAL-QMT-READONLY-RUNTIME-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md` | closed-current-delivery | closed | health / capabilities / query_positions_readonly 均已完成并产生脱敏 evidence；CP8 已同意关闭 | 当前交付已关闭；如需非空持仓、交易日或实盘只读验证，另起 runtime authorization | DQ-CP8-CR092-04 |
 | CR091-FU-02 | NAS package exchange gate | candidate | CR | 3 | nas_package_exchange; package_pull; package_publish; credential_boundary |  |  | 未启动 | 涉及 NAS，必须独立授权 | 等待用户选择 | DQ-CP8-CR092-04 |
 | CR091-FU-03 | Order-write / submit-cancel design gate | candidate | CR | 4 | submit_cancel; order_write; simulation_live; trading_runtime_boundary |  |  | 未启动 | 最高风险，必须独立 CR | 不建议立即启动 | DQ-CP8-CR092-04 |
 | CR091-FU-04 | Ledger hygiene | closed | CR | 5 | CR019 tracking; CR025 nested active_change; cr_tracking consistency | `process/changes/CR-093-LEDGER-HYGIENE-CR019-CR025-TRACKING-CLEANUP-2026-06-18.md` | `CR-093` | closed | CR093 已关闭为 READY_WITH_RISK；R-CR093-01/02 已由用户接受 | 当前交付已关闭；后续 warning cleanup / checker convergence 需用户另选候选后新建 CR | DQ-CP8-CR092-04 |

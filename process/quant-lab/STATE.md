@@ -3,13 +3,13 @@ project_id: quant-lab
 workflow_mode: production
 current_phase: delivered
 current_agent: host-orchestrator
-active_change: 'CR-097'
+active_change: ''
 active_story: ''
-iteration: 552
+iteration: 553
 blocked: false
 blocked_reason: ''
-last_action: 用户授权读取最小 HMAC client env `/home/hyde/.quant-lab/runtime/qmt/cr097/client.env.template` 并执行一次 CR097 query_positions 成功路径；host-orchestrator 运行 `qmt_runtime_cli query-positions` 后返回 `status=ok`、`position_count=0`、`items_redacted=[]`、`raw_payload_emitted=false`、`redaction_status=pass`。已写脱敏 evidence `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/cr097-query-positions-redacted-20260619.json`，并生成 CP6/CP7/CP8 与 release context。
-next_action: "CR097 runtime smoke 已 PASS，当前等待用户审查 `process/checkpoints/CP8-CR097-DELIVERY-READINESS.md` 并回复 `approve` / `修改: <具体修改点>` / `reject`。approve 只关闭 CR097 当前只读 smoke，不授权 Windows `.env`、账号原文、持仓原文、NAS、交易写、simulation/live、provider/lake/publish。"
+last_action: 用户回复“同意。给出下一步建议”，接受 CR097 CP8 READY、空持仓 / 非交易日剩余风险、inline fallback WAIVED 和不授权边界；host-orchestrator 已回填 `process/checkpoints/CP8-CR097-DELIVERY-READINESS.md`，将 CR097 关闭为 `closed-current-delivery / READY`。
+next_action: "当前无 active formal CR。建议下一步优先做 QMT runner readonly integration design/smoke gate：让 runner 消费已验证的 Windows gateway 只读能力和 `.quant-lab` redacted evidence 路由，但仍禁止 NAS、交易写、simulation/live、provider/lake/publish。备选是 CR097-FU-01 非空持仓/交易日只读复测，或 CR091-FU-02 NAS package exchange；不建议立即启动 CR091-FU-03 order-write。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:

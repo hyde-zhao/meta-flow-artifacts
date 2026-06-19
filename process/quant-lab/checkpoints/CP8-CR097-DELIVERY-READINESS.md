@@ -2,11 +2,11 @@
 checkpoint_id: "CP8"
 checkpoint_name: "CR097 Delivery Readiness"
 type: "auto_then_manual"
-status: "pending"
+status: "approved"
 owner: "host-orchestrator"
 created_at: "2026-06-19T11:42:47+08:00"
-reviewed_by: ""
-reviewed_at: ""
+reviewed_by: "user"
+reviewed_at: "2026-06-19T11:51:06+08:00"
 auto_check_result: "process/checks/CP8-CR097-DELIVERY-READINESS.md"
 target:
   phase: "documentation"
@@ -79,10 +79,10 @@ CR097 已完成 CR092-FU-02：在用户逐 run 授权范围内，通过 Windows 
 
 | 分流类别 | 项目 ID | 状态 | 处理方式 | 台账 / CR 路径 | 说明 |
 |---|---|---|---|---|---|
-| 关闭范围 | CLOSE-CR097-01 | pending | 用户 approve 后关闭 CR097 当前交付 | `process/checkpoints/CP8-CR097-DELIVERY-READINESS.md` | 只关闭本次只读 runtime smoke |
+| 关闭范围 | CLOSE-CR097-01 | closed | 用户已同意，关闭 CR097 当前交付 | `process/checkpoints/CP8-CR097-DELIVERY-READINESS.md` | 只关闭本次只读 runtime smoke |
 | 不授权范围 | NA-CR097-01 | not-authorized | 不进入本轮执行授权 | 本文件 | NAS、Windows `.env`、账号原文、交易写、simulation/live、provider/lake/publish 均不授权 |
-| 风险接受项 | R-CR097-01 | pending-risk | 用户接受后放行 | 本文件 | 空持仓 / 非交易日不覆盖更广 runtime 行为 |
-| 风险接受项 | R-CR097-02 | pending-risk | 用户接受后放行 | CP6 / CP7 | 未启动 subagent |
+| 风险接受项 | R-CR097-01 | accepted-risk | 用户已接受 | 本文件 | 空持仓 / 非交易日不覆盖更广 runtime 行为 |
+| 风险接受项 | R-CR097-02 | accepted-risk | 用户已接受 | CP6 / CP7 | 未启动 subagent |
 | 后续 CR 候选项 | CR097-FU-01 | candidate | 需要更高覆盖时另起 | 本文件 / 后续 tracking | 非空持仓、交易日或实盘只读验证 |
 | 取消 / deferred | DEF-CR097-01 | deferred | 不在本轮处理 | 本文件 | NAS、order-write、provider/lake/publish 不进入本轮 |
 
@@ -99,18 +99,18 @@ CR097 已完成 CR092-FU-02：在用户逐 run 授权范围内，通过 Windows 
 
 | 条目 | 审查结果 | 证据 | 审查意见 |
 |---|---|---|---|
-| CP6 PASS | 待审查 | `process/checks/CP6-CR097-REAL-QMT-READONLY-RUNTIME-SMOKE-CODING-DONE.md` | runtime evidence 已准备 |
-| CP7 PASS | 待审查 | `process/checks/CP7-CR097-REAL-QMT-READONLY-RUNTIME-SMOKE-VERIFICATION-DONE.md` | runtime smoke 验证通过 |
-| Release context ready | 待审查 | `process/release/RELEASE-CONTEXT-CR097.yaml` | READY / minimal |
+| CP6 PASS | approved | `process/checks/CP6-CR097-REAL-QMT-READONLY-RUNTIME-SMOKE-CODING-DONE.md` | runtime evidence 已准备 |
+| CP7 PASS | approved | `process/checks/CP7-CR097-REAL-QMT-READONLY-RUNTIME-SMOKE-VERIFICATION-DONE.md` | runtime smoke 验证通过 |
+| Release context ready | approved | `process/release/RELEASE-CONTEXT-CR097.yaml` | READY / minimal |
 
 ## Checklist
 
 | # | 检查项 | 审查结果 | 证据 | 审查意见 |
 |---|---|---|---|---|
-| 1 | DoD 是否达成 | 待审查 | runtime preflight + query evidence | health / capabilities / query_positions_readonly 已完成 |
-| 2 | 风险是否可接受 | 待审查 | `R-CR097-01`、`R-CR097-02` | 空持仓 / 非交易日和 inline fallback 风险 |
-| 3 | release context 是否完整 | 待审查 | `process/release/RELEASE-CONTEXT-CR097.yaml` | minimal profile |
-| 4 | 不授权边界是否完整 | 待审查 | 本文件 | approve 不授权 NAS、Windows `.env`、账户原文、交易写或 publish |
+| 1 | DoD 是否达成 | approved | runtime preflight + query evidence | health / capabilities / query_positions_readonly 已完成 |
+| 2 | 风险是否可接受 | approved | `R-CR097-01`、`R-CR097-02` | 用户接受空持仓 / 非交易日和 inline fallback 风险 |
+| 3 | release context 是否完整 | approved | `process/release/RELEASE-CONTEXT-CR097.yaml` | minimal profile |
+| 4 | 不授权边界是否完整 | approved | 本文件 | approve 不授权 NAS、Windows `.env`、账户原文、交易写或 publish |
 
 ## Exit Criteria
 
@@ -132,11 +132,11 @@ CR097 已完成 CR092-FU-02：在用户逐 run 授权范围内，通过 Windows 
 
 ## 人工审查结果
 
-- 结论：`pending`
-- 审查人：
-- 审查时间：
-- 用户回复：
-- 接受的决策项：
-- 修改意见：
-- 风险接受项：
-- 不授权边界：
+- 结论：`approved / READY / closed-current-delivery`
+- 审查人：user
+- 审查时间：2026-06-19T11:51:06+08:00
+- 用户回复：同意。给出下一步建议
+- 接受的决策项：`DQ-CP8-CR097-01`、`DQ-CP8-CR097-02`、`DQ-CP8-CR097-03`、`DQ-CP8-CR097-04`
+- 修改意见：无
+- 风险接受项：接受 `R-CR097-01` 空持仓 / 非交易日不覆盖更广 runtime 行为；接受 `R-CR097-02` 未启动 subagent 的 inline fallback WAIVED。
+- 不授权边界：仍不授权 NAS、Windows `.env`、QMT 账号原文、资金、持仓明细原文、委托、成交、原始日志、submit / cancel、buy / sell、simulation / live、provider fetch、lake write、catalog publish、真实 release execution / publish，也不自动启动 CR089 或 CR020 gateway route restore。

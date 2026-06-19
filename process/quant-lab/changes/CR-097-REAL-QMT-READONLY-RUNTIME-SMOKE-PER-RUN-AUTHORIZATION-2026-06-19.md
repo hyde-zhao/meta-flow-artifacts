@@ -1,12 +1,12 @@
 ---
 cr_id: "CR-097"
-status: "active-runtime-smoke-pass-pending-cp8-approval"
+status: "closed-current-delivery"
 impact_level: "high"
 workflow_mode_before: "production"
 workflow_mode_after_change: "standard"
 fast_lane_upgrade_reason: "真实 QMT / MiniQMT / XtQuant / gateway / runner runtime 属于高风险运行授权，必须 standard gate"
 rollback_to: "delivered"
-approval_result: "runtime-smoke-pass-pending-cp8-approval"
+approval_result: "approved-ready-closed-current-delivery"
 created_at: "2026-06-19T10:45:00+08:00"
 created_by: "host-orchestrator"
 approved_by: "user"
@@ -48,7 +48,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | 授权范围 | 启动真实 QMT 只读 runtime smoke 门禁，并在完成 preflight 后执行 health / capabilities / query_positions_readonly |
 | 不授权范围 | NAS、`.env` / 凭据读取、账户原文、资金 / 持仓明细 / 委托 / 成交原文、submit / cancel / buy / sell、simulation / live、provider fetch、lake write、catalog publish、真实 release |
 | 有效期 | 本 CR 当前 run；若中断或改 scope，需重新确认 |
-| 当前状态 | 已完成 runtime preflight 和 query_positions_readonly 成功路径；等待 CP8 人工确认关闭 |
+| 当前状态 | 已完成 runtime preflight 和 query_positions_readonly 成功路径；CP8 已由用户同意并关闭 |
 
 ## CP8 Follow-up 来源
 
@@ -172,7 +172,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
   - [x] 明确最终执行命令 / 手工运行步骤和 evidence 输出路径
   - [x] forbidden counters 初始为 0
   - [x] query_positions_readonly 成功路径产生脱敏 evidence
-  - [ ] CP8 人工确认关闭
+  - [x] CP8 人工确认关闭
 
 ## 执行链路
 
@@ -202,10 +202,21 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 
 ## 处理结论
 
-- 审批结论：`runtime-smoke-pass-pending-cp8-approval`
+- 审批结论：`approved-ready-closed-current-delivery`
 - [ ] 自动批准（低风险启动）
-- [x] 待人工确认（高风险 runtime；runtime smoke 已完成，当前等待 CP8 确认关闭）
+- [x] 人工确认完成（高风险 runtime；runtime smoke 已完成，CP8 已同意关闭）
 - [ ] 待人工审批（高风险且无授权）
+
+## 关闭记录
+
+| 字段 | 内容 |
+|---|---|
+| 关闭结论 | `closed-current-delivery / READY` |
+| 关闭时间 | `2026-06-19T11:51:06+08:00` |
+| 用户回复 | “同意。给出下一步建议” |
+| 接受的 CP8 决策 | `DQ-CP8-CR097-01`、`DQ-CP8-CR097-02`、`DQ-CP8-CR097-03`、`DQ-CP8-CR097-04` |
+| 主要证据 | `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/cr097-query-positions-redacted-20260619.json` |
+| 保留边界 | 不授权 NAS、Windows `.env`、账号原文、持仓原文、交易写、simulation/live、provider/lake/publish、CR089 auto-start 或 CR020 route restore |
 
 ## 关联对象
 
