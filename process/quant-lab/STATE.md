@@ -5,11 +5,11 @@ current_phase: delivered
 current_agent: host-orchestrator
 active_change: 'CR-097'
 active_story: ''
-iteration: 546
+iteration: 548
 blocked: false
 blocked_reason: ''
-last_action: 用户要求提交并推送项目后启动 CR092-FU-02，并明确“同意授权真实 QMT runtime”。源码仓库已推送 commit a4e5ec8，artifact 仓库已推送 commit bf04eef。已创建 CR097 作为 CR092-FU-02 正式 runtime 授权门禁。
-next_action: "CR097 active，进入 runtime preflight。需要用户协助确认 H-CR097-01..05：QMT 客户端运行位置 / 是否当前环境可达、账户模式、只读入口或手工运行方式、脱敏 evidence 输出路径、运行时人工中止协助。确认前不得读取凭据、账户原文、NAS、执行交易写、simulation/live 或 provider/lake/publish。"
+last_action: 用户确认 CR097 账户模式为模拟账户，执行方式为 Windows gateway，gateway host 为 172.30.32.1；host-orchestrator 选定端口 18765，WSL client IP 为 172.30.33.29，推荐 allowlist 为 172.30.33.29/32，evidence 目录沿用 `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/`。
+next_action: "CR097 active，等待用户在 Windows 侧按指引启动 QMT gateway：host=172.30.32.1 port=18765 runtime_ref=cr097-readonly-smoke-20260619-sim allowlist=172.30.33.29/32。启动后先由 WSL 执行 health/client-diagnostics preflight；通过后再执行 capabilities / query_positions_readonly，并只保存脱敏 evidence。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:

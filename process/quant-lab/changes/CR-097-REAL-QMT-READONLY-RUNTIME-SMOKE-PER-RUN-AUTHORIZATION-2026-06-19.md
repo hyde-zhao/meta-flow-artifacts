@@ -114,11 +114,27 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 
 | 编号 | 需要用户协助 | 为什么需要 | 当前状态 |
 |---|---|---|---|
-| H-CR097-01 | 确认运行位置：当前 Linux 环境是否能访问 QMT 客户端，或需要在 Windows / 交易主机执行 | QMT / MiniQMT / XtQuant 通常依赖本地客户端和登录态 | OPEN |
-| H-CR097-02 | 确认账户模式：模拟账户 / 实盘只读 / 其他 | 决定 evidence 脱敏级别和是否允许 query_positions_readonly | OPEN |
-| H-CR097-03 | 确认只读入口：已有 gateway / runner 命令、XtQuant Python 环境，或需要用户手工执行后回传 evidence | 决定是由 Codex 执行命令，还是用户在交易主机手工运行 | OPEN |
-| H-CR097-04 | 确认 evidence 输出路径 | 推荐 `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/`；真实交易主机可先生成本地文件再转脱敏摘要 | OPEN |
-| H-CR097-05 | 运行时保持人工可中止 | 防止误触非只读操作或客户端异常 | OPEN |
+| H-CR097-01 | 确认运行位置：当前 Linux 环境是否能访问 QMT 客户端，或需要在 Windows / 交易主机执行 | QMT / MiniQMT / XtQuant 通常依赖本地客户端和登录态 | RESOLVED：QMT 运行在 Windows，Codex 当前在 WSL；优先采用 Windows 侧执行 / WSL 侧接收脱敏 evidence |
+| H-CR097-02 | 确认账户模式：模拟账户 / 实盘只读 / 其他 | 决定 evidence 脱敏级别和是否允许 query_positions_readonly | RESOLVED：模拟账户 |
+| H-CR097-03 | 确认只读入口：已有 gateway / runner 命令、XtQuant Python 环境，或需要用户手工执行后回传 evidence | 决定是由 Codex 执行命令，还是用户在交易主机手工运行 | RESOLVED：Windows gateway；Windows host `172.30.32.1`；推荐端口 `18765`；WSL client IP `172.30.33.29/32` |
+| H-CR097-04 | 确认 evidence 输出路径 | 推荐 `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/`；真实交易主机可先生成本地文件再转脱敏摘要 | RESOLVED：使用 `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/`，Windows 侧可写入 `C:\Users\<user>\.quant-lab\evidence\qmt\cr097\redacted\` 后复制到 WSL |
+| H-CR097-05 | 运行时保持人工可中止 | 防止误触非只读操作或客户端异常 | PARTIAL：用户在 Windows 侧启动 gateway；执行 health / capabilities / query_positions 前保持人工可中止，若出现异常立即 Ctrl+C 停止 gateway |
+
+## Runtime Preflight 参数
+
+| 字段 | 值 |
+|---|---|
+| account_mode | simulated |
+| execution_mode | windows_gateway |
+| windows_gateway_host | `172.30.32.1` |
+| windows_gateway_port | `18765` |
+| base_url | `http://172.30.32.1:18765` |
+| wsl_client_ip | `172.30.33.29` |
+| recommended_allowlist | `172.30.33.29/32` |
+| runtime_authorization_ref | `cr097-readonly-smoke-20260619-sim` |
+| run_id | `cr097-readonly-smoke-20260619-sim-001` |
+| request_id | `cr097-readonly-smoke-20260619-sim-001-query-positions` |
+| wsl_redacted_evidence_dir | `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/` |
 
 ## fast-lane / standard 判定
 
