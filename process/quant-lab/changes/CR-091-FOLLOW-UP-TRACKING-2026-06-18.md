@@ -3,7 +3,7 @@ source_cr: "CR-091"
 status: "open"
 created_at: "2026-06-18T15:58:59+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-19T08:39:22+08:00"
+updated_at: "2026-06-19T18:45:00+08:00"
 checkpoint_source: "CP8"
 cr_index_path: "process/changes/CR-INDEX.yaml"
 ---
@@ -31,7 +31,7 @@ CR091 已于 `2026-06-18T15:40:09+08:00` 关闭为 `closed-current-delivery / RE
 | 候选编号 | 标题 | 状态 | 类型 | 优先级 | 影响面 / 冲突键 | 正式 CR 路径 | 相关 active CR / blocked_by / superseded_by | 当前门控 | 阻塞原因 | 下一步 | 来源 |
 |---|---|---|---|---:|---|---|---|---|---|---|---|
 | CR091-FU-01 | Real QMT readonly runtime smoke design gate | closed | CR | 1 | runtime_authorization; per_run_authorization; readonly_query_positions; credential_boundary; redacted_evidence | `process/changes/CR-092-REAL-QMT-READONLY-RUNTIME-SMOKE-DESIGN-GATE-2026-06-18.md` | `CR-092` | closed | CR092 已关闭为 READY_WITH_RISK；真实运行仍未授权 | 后续候选转入 `process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md` | DQ-CP8-CR091-04 |
-| CR091-FU-02 | NAS package exchange gate | candidate | CR | 2 | nas_package_exchange; package_pull; package_publish; credential_boundary |  |  | 未启动 | 涉及 NAS，必须独立授权 | 等待用户选择 | DQ-CP8-CR091-04 |
+| CR091-FU-02 | NAS package exchange gate | closed | CR | 2 | nas_package_exchange; package_pull; package_publish; credential_boundary | `process/changes/CR-100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-GATE-2026-06-19.md` | `CR-100` | closed | CR100 已关闭为 READY_WITH_RISK；真实 NAS 仍未授权 | 后续真实 NAS publish / pull / copy / 校验需独立 gate | DQ-CP8-CR091-04 |
 | CR091-FU-03 | Order-write / submit-cancel design gate | candidate | CR | 3 | submit_cancel; order_write; simulation_live; trading_runtime_boundary |  |  | 未启动 | 最高风险，必须独立 CR | 不建议立即启动 | DQ-CP8-CR091-04 |
 | CR091-FU-04 | Ledger hygiene | closed | CR | 4 | CR019 tracking; CR025 nested active_change; cr_tracking consistency | `process/changes/CR-093-LEDGER-HYGIENE-CR019-CR025-TRACKING-CLEANUP-2026-06-18.md` | `CR-093` | closed | CR093 已关闭为 READY_WITH_RISK；R-CR093-01/02 已由用户接受 | 当前交付已关闭；后续 warning cleanup / checker convergence 需用户另选候选后新建 CR | DQ-CP8-CR091-04 |
 

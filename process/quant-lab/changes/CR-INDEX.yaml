@@ -1,6 +1,6 @@
 version: 1
 status: "no-active-formal-cr"
-updated_at: '2026-06-19T12:31:24+08:00'
+updated_at: '2026-06-19T18:45:00+08:00'
 owner: meta-po
 source: >
   CR-046 started by user target change to terminal-native simulation strategy export,
@@ -95,7 +95,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: 'CR098 CP8 approved and closed at 2026-06-19T12:31:24+08:00 as closed-current-delivery / READY_WITH_RISK. No active formal CR remains. Recommended next candidate is CR098-FU-01 runner real readonly smoke per-run authorization, but it is not started. No runtime authorization is active; HMAC secret reads, Windows .env reads, gateway startup, runner runtime execution, account originals, NAS, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start and CR020 gateway route restore remain unauthorized.'
+last_consistency_check: '2026-06-19T18:45:00+08:00 OK: CR100 closed-current-delivery / READY_WITH_RISK after local fake package exchange offline readiness implementation. No real NAS access/list/read/copy/write/publish/delete, credential/env/account read, QMT/MiniQMT/XtQuant/gateway/runner runtime, submit/cancel, simulation/live, provider/lake/catalog publish, CR089 auto-start or CR020 route restore authorized.'
 root_authority:
   status: logical-cutover-complete
   authoritative_root: /home/hyde/workspace/quant-lab
@@ -130,6 +130,73 @@ index_schema:
 - next_action
 - last_checked_at
 active_crs:
+- id: CR-100
+  title: NAS Package Exchange Offline Readiness Gate
+  status: closed-current-delivery
+  source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  formal_cr_path: process/changes/CR-100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-GATE-2026-06-19.md
+  follow_up_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  parent_cr: CR-091
+  source_checkpoint: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md
+  source_decision_id: DQ-CP8-CR091-04; USER-20260619-COMPLETE-CR100-OFFLINE-READINESS
+  priority: 2
+  blocked_by: 'closed: user authorized completing all non-real-NAS CR091-FU-02 delivery and remote push at 2026-06-19. CR100 closed as READY_WITH_RISK; real NAS path/mount/permission/publish/pull/copy/check remain unverified and unauthorized.'
+  impact_surface:
+  - nas_package_exchange
+  - package_pull
+  - package_publish
+  - package_manifest
+  - fake_exchange_fixture
+  - immutable_local_cache
+  - active_pointer
+  - credential_boundary
+  - no_runtime_connection
+  - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  conflict_keys:
+  - nas_package_exchange
+  - package_publish
+  - package_pull
+  - credential_boundary
+  - no_runtime_connection
+  - no_order_write
+  - no_provider_lake_publish
+  next_gate: closed
+  next_action: "CR100 当前交付已关闭为 READY_WITH_RISK。后续若要真实 NAS publish / pull / copy / 校验，必须另起独立授权 gate；当前仍不授权 NAS、凭据、runtime、交易或 provider/lake/catalog publish。"
+  last_checked_at: '2026-06-19T18:45:00+08:00'
+- id: CR-099
+  title: QMT Runner Real Readonly Smoke Per-run Authorization
+  status: closed-current-delivery
+  source_tracking: process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+  formal_cr_path: process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
+  parent_cr: CR-098
+  source_checkpoint: process/checkpoints/CP8-CR098-DELIVERY-READINESS.md
+  source_decision_id: DQ-CP8-CR098-02
+  priority: 1
+  blocked_by: 'closed: user approved CR099 CP8 at 2026-06-19T17:15:29+08:00, accepting READY_WITH_RISK, zero-position / trading-day residual risks and non-authorization boundary. No additional runtime, order submit/cancel, Windows .env, NAS, publish or trading-write authorization granted.'
+  impact_surface:
+  - qmt_runner
+  - readonly_gateway
+  - runtime_authorization
+  - per_run_authorization
+  - hmac_client_env
+  - redacted_evidence
+  - credential_boundary
+  - process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  conflict_keys:
+  - runtime_authorization
+  - qmt_runner
+  - readonly_gateway
+  - credential_boundary
+  - no_order_write
+  - no_nas_access
+  - no_provider_lake_publish
+  next_gate: closed
+  next_action: "CR099 当前交付已关闭为 READY_WITH_RISK。后续可按用户选择启动非空 / 交易日 readonly retest、NAS package exchange gate 或 order-write design gate；均需独立门禁和明确授权。"
+  last_checked_at: '2026-06-19T17:15:29+08:00'
 - id: CR-098
   title: QMT Runner Readonly Gateway Integration Smoke
   status: closed-current-delivery

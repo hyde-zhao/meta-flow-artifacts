@@ -16,13 +16,13 @@ owner: "host-orchestrator"
 | 关闭范围 | 1 | 否 | CR098 当前 runner readonly integration 离线交付已关闭为 `READY_WITH_RISK` |
 | 不授权范围 | 1 | 否 | HMAC secret、Windows `.env`、gateway 启动、runner runtime、账户原文、NAS、交易写、simulation/live、provider/lake/publish 均不授权 |
 | 风险接受项 | 3 | 否 | 真实 runner runtime 未执行、非空持仓 / 交易日路径未证明、CP6/CP7 inline fallback WAIVED 已由 CP8 接受 |
-| 后续 CR 候选项 | 4 | 否 | 推荐下一项为 `CR098-FU-01`；所有候选均未启动，必须由用户在清理上下文后明确启动 |
+| 后续 CR 候选项 | 4 | 否 | `CR098-FU-01` 已按用户本轮要求转入正式 `CR-099`，并经 CP8 approved 关闭为 `closed-current-delivery / READY_WITH_RISK`；其他候选仍未启动 |
 
 ## 后续 CR / Spike 候选索引
 
 | 候选编号 | 标题 | 状态 | 类型 | 优先级 | 影响面 / 冲突键 | 正式 CR 路径 | 相关 active CR / blocked_by / superseded_by | 当前门控 | 阻塞原因 | 下一步 | 来源 |
 |---|---|---|---|---:|---|---|---|---|---|---|---|
-| CR098-FU-01 | Runner real readonly smoke per-run authorization | candidate-not-started | CR | 1 | runtime_authorization; qmt_runner; readonly_gateway; hmac_client_env; redacted_evidence; credential_boundary |  |  | 未启动 | 需要用户明确启动并逐 run 授权；不得复用 CR097 / CR098 approval 作为运行授权 | 推荐作为清理上下文后的下一个 CR；启动前先读 `process/context/CR098-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-19.md` | DQ-CP8-CR098-02 |
+| CR-099 | Runner real readonly smoke per-run authorization | closed-current-delivery | CR | 1 | runtime_authorization; qmt_runner; readonly_gateway; hmac_client_env; redacted_evidence; credential_boundary | `process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md` | closed_by=CP8-CR099 | CP8 approved | CP2/CP3/CP5 已由用户回复“同意”批准，CP6 PASS；用户刷新 Windows gateway session 后，CR099 runtime rerun PASS，health/capabilities/query_positions_readonly 均通过，forbidden counters 全 0；用户接受 CP8 5 项推荐方案和风险 | 当前交付已关闭为 `READY_WITH_RISK`；非空持仓 / 交易日复测仍作为独立 follow-up 风险处理；不自动授权新增 runtime / 下单撤单 / Windows `.env` / NAS / publish / 交易写 | CR098-FU-01 / DQ-CP8-CR098-02 |
 | CR097-FU-01 | Non-empty / trading-day readonly retest | candidate-not-started | CR | 2 | runtime_authorization; readonly_query_positions; evidence_coverage; non_empty_positions; trading_day_path |  |  | 未启动 | 需要非空持仓或交易日条件，且必须独立逐 run 授权 | 等待用户选择 | DQ-CP8-CR098-03 / DQ-CP8-CR097-02 |
 | CR091-FU-02 | NAS package exchange gate | candidate-not-started | CR | 3 | nas_package_exchange; package_delivery; credential_boundary; no_runtime_connection |  |  | 未启动 | NAS 访问和 package exchange 不在 CR098 范围内 | 等待用户选择 | CR091 / CR098 not-authorized boundary |
 | ORDER-WRITE-FU | Order-write / simulation / live design gate | candidate-not-started | CR | 4 | order_write; submit_cancel; simulation_live; trading_runtime_boundary; account_permission |  |  | 未启动 | 交易写风险最高，必须独立设计、门禁和逐项授权 | 不建议立即启动；需要用户明确提出并接受更高风险门禁 | CR098 not-authorized boundary |

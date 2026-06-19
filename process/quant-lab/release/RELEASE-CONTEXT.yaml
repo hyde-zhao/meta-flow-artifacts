@@ -1,122 +1,118 @@
 schema_version: "1.0"
-context_id: "RELEASE-CONTEXT-CR092"
-cr_id: "CR-092"
+context_id: "RELEASE-CONTEXT-CR099"
+cr_id: "CR-099"
 status: ready
 release_artifact_profile: compact
 release_decision: READY_WITH_RISK
-created_at: "2026-06-18T17:15:00+08:00"
-updated_at: "2026-06-18T17:25:00+08:00"
+created_at: "2026-06-19T17:02:06+08:00"
+updated_at: "2026-06-19T17:15:29+08:00"
 source_gate: CP8
 owner: host-orchestrator
 
 manual_review:
-  checkpoint_path: "process/checkpoints/CP8-CR092-DELIVERY-READINESS.md"
+  checkpoint_path: "process/checkpoints/CP8-CR099-DELIVERY-READINESS.md"
   status: approved
   reviewed_by: "user"
-  reviewed_at: "2026-06-18T17:25:00+08:00"
-  approval_text: "不手动验证了，其他的我同意了"
-  interpretation: "Accepted DQ-CP8-CR092-01..05; closes CR092 current readiness / evidence guardrail delivery as READY_WITH_RISK and does not authorize runtime / NAS / credentials / real account / order-write / simulation-live / publish."
+  reviewed_at: "2026-06-19T17:15:29+08:00"
+  approval_text: "接受 CR099 CP8 的 5 项推荐方案和风险，不表示授权新的 runtime run、下单 / 撤单验证、读取 Windows .env、访问 NAS、publish 或任何交易写操作。"
+  interpretation: "CP8 approved. User accepted CR099 READY_WITH_RISK and residual zero-position / trading-day coverage risks. Approval does not authorize additional runtime runs, Windows .env, account originals, NAS, order write, simulation/live, provider/lake/publish, non-empty/trading-day retest, submit/cancel, or buy/sell."
 
 release_scope:
-  current_version: "cr091-offline-runner-ready-with-risk"
-  target_version: "cr092-readonly-runtime-smoke-readiness-alpha"
+  current_version: "cr098-runner-readonly-integration-ready-with-risk"
+  target_version: "cr099-runner-real-readonly-smoke-runtime-pass-rc"
   included_features:
-    - "Real QMT readonly runtime smoke readiness design gate"
-    - "Manual guide for user-provided simulated-account evidence"
-    - "Simulated-account evidence template"
-    - "Explicit single-file static evidence checker"
-    - "Checker unit tests and CP7 static verification"
+    - "Runner real readonly smoke per-run authorization gate"
+    - "WSL client-side CR099 runtime collector"
+    - "CR099 redacted evidence checker and collector tests"
+    - "Authorized runtime smoke evidence for health, capabilities, query_positions_readonly"
   included_stories:
-    - "CR092-READONLY-RUNTIME-SMOKE-DESIGN"
+    - "CR099-RUNNER-REAL-READONLY-SMOKE"
   excluded_scope:
-    - "QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime"
-    - "NAS access, list, read, copy, pull, write, publish or delete"
-    - ".env / credentials / real account / real funds / real positions / real orders / real fills / unspecified raw logs"
+    - "Windows .env reads or printing secret values"
+    - "Account originals, raw positions, security codes, quantities, cash, orders, fills or raw logs"
+    - "NAS access or package exchange"
     - "submit/cancel, buy/sell, simulation/live"
-    - "provider/lake/catalog/publish"
-    - "CR089 auto-start"
-    - "CR020 gateway route restore"
+    - "provider fetch, lake write, catalog publish"
+    - "non-empty positions or trading-day retest"
   user_visible_changes:
-    - "新增 CR092 真实只读 runtime smoke 的 readiness 说明和模拟账户 evidence 填写模板。"
-    - "新增本地静态 checker，可验证用户明确提供的单个模拟账户 evidence 文件是否越界。"
+    - "CR098-FU-01 已升级并完成 CR099 真实只读 runner smoke。"
+    - "在用户逐 run 授权范围内，runner 通过 Windows gateway 完成 health / capabilities / query_positions_readonly，输出脱敏 evidence。"
   internal_changes:
-    - "新增 CR092 CP6 / CP7 过程证据、质量报告和 release readiness 文档。"
-    - "STATE / CR-INDEX / CR091 follow-up tracking 已同步到 CP8 readiness。"
+    - "新增 `scripts/collect_cr099_runner_readonly_smoke.py`。"
+    - "新增 / 更新 CR099 checker、collector tests、verification、test report、review 和 CP7 runtime pass 证据。"
+    - "STATE / CR-INDEX / CR098 follow-up tracking 已同步到 CP8 readiness。"
   breaking_changes: []
   known_risks:
-    - "R-CR092-CP7-001: Static CP7 does not prove real runtime readiness."
-    - "R-CR092-CP7-002: No user-provided simulated-account evidence file was validated beyond the template."
-    - "R-CR092-CP7-003: No independent meta-qa subagent dispatch; host-orchestrator used inline fallback."
-    - "R-CR092-CP7-004: CR019 / CR025 historical ledger debt remains non-blocking."
+    - "R-CR099-CP8-001: Current runtime evidence is zero-position path; non-empty positions redaction is not proven."
+    - "R-CR099-CP8-002: Trading-day path is not proven in this run."
 
 version_decision:
-  current_version: "cr091-offline-runner-ready-with-risk"
-  target_version: "cr092-readonly-runtime-smoke-readiness-alpha"
-  change_type: alpha
+  current_version: "cr098-runner-readonly-integration-ready-with-risk"
+  target_version: "cr099-runner-real-readonly-smoke-runtime-pass-rc"
+  change_type: rc
   compatibility: compatible
-  reason: "新增 readiness / evidence guardrail，不启用真实 runtime，不改变交易执行语义。"
+  reason: "新增受控真实只读 smoke 证据和本地 collector；不改变交易写语义，不启用 NAS / publish / simulation/live。"
 
 quality_summary:
   cp6_results:
-    - "PASS: manual guide, simulated evidence template, static checker and tests delivered."
+    - "PASS: CR099 redacted evidence checker and tests delivered."
   cp7_results:
-    - "PASS_WITH_RISK: static-only verification completed."
-  test_report_path: "docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-TEST-REPORT.md"
-  review_path: "docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-REVIEW.md"
-  verification_report_path: "docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-VERIFICATION-REPORT.md"
-  fixes_path: "docs/quality/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-FIXES.md"
+    - "PASS: authorized runtime rerun passed after Windows gateway session refresh."
+  test_report_path: "docs/features/cr099-runner-real-readonly-smoke/TEST-REPORT.md"
+  review_path: "docs/features/cr099-runner-real-readonly-smoke/REVIEW.md"
+  verification_report_path: "docs/features/cr099-runner-real-readonly-smoke/VERIFICATION.md"
+  fixes_path: "docs/features/cr099-runner-real-readonly-smoke/FIXES.md"
+  runtime_evidence_path: "/home/hyde/.quant-lab/evidence/qmt/cr099/redacted/cr099-runner-readonly-smoke-20260619-sim-001/evidence.json"
   blocker_count: 0
   high_count: 0
   accepted_risk_ids:
-    - "R-CR092-CP7-001"
-    - "R-CR092-CP7-002"
-    - "R-CR092-CP7-003"
-    - "R-CR092-CP7-004"
+    - "R-CR099-CP8-001"
+    - "R-CR099-CP8-002"
   unresolved_findings: []
   verification_commands:
-    - command: "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr092_simulated_evidence_checker.py"
-      result: "PASS: 5 passed"
-    - command: "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_cr092_simulated_evidence.py --evidence docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-EVIDENCE-TEMPLATE.yaml --json"
-      result: "PASS: passed=true"
-    - command: "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python -m py_compile scripts/check_cr092_simulated_evidence.py tests/test_cr092_simulated_evidence_checker.py"
+    - command: "uv run --python 3.11 python scripts/collect_cr099_runner_readonly_smoke.py --env-file /home/hyde/.quant-lab/runtime/qmt/cr097/client.env.template --base-url http://172.30.32.1:18765 --authorization-ref cr099-runner-readonly-smoke-20260619-sim --run-id cr099-runner-readonly-smoke-20260619-sim-001 ..."
+      result: "PASS: evidence overall_status=pass"
+    - command: "uv run --python 3.11 python scripts/check_cr099_redacted_evidence.py --evidence /home/hyde/.quant-lab/evidence/qmt/cr099/redacted/cr099-runner-readonly-smoke-20260619-sim-001/evidence.json --json"
+      result: "PASS: errors=0, warnings=0"
+    - command: "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr099_runner_real_readonly_smoke_contract.py tests/test_cr098_runner_readonly_integration.py"
+      result: "PASS: 16 passed"
+    - command: "PYTHONPYCACHEPREFIX=/tmp/cr099-final-pycompile uv run --python 3.11 python -m py_compile scripts/collect_cr099_runner_readonly_smoke.py scripts/check_cr099_redacted_evidence.py tests/test_cr099_runner_real_readonly_smoke_contract.py"
       result: "PASS"
-    - command: "git diff --check -- CR092 scoped files"
-      result: "PASS"
-    - command: "uv run --python 3.11 meta-flow check cr-tracking --project-root ."
-      result: "NON-BLOCKING exit 1: active formal CRs=CR-092; CR019/CR025 historical ledger debt"
+    - command: "uv run --python 3.11 meta-flow check cr-tracking --project-root . --strict-warnings"
+      result: "OK"
 
 affected_surface:
   platforms:
-    - "Python 3.11 / uv local static checker"
+    - "Python 3.11 / uv local checker and WSL client-side collector"
+    - "Windows gateway consumed only via user-started runtime endpoint"
   components:
-    - "docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-MANUAL-GUIDE.md"
-    - "docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-EVIDENCE-TEMPLATE.yaml"
-    - "scripts/check_cr092_simulated_evidence.py"
-    - "tests/test_cr092_simulated_evidence_checker.py"
-    - "docs/quality/CR092-*"
+    - "scripts/check_cr099_redacted_evidence.py"
+    - "scripts/collect_cr099_runner_readonly_smoke.py"
+    - "tests/test_cr099_runner_real_readonly_smoke_contract.py"
+    - "docs/qmt/CR099-QMT-RUNNER-REAL-READONLY-SMOKE-HLD.md"
+    - "docs/features/cr099-runner-real-readonly-smoke/*"
+    - "process/checks/CP7-CR099-RUNTIME-AUTHORIZED-SMOKE-RERUN-PASS-2026-06-19.md"
     - "docs/release/*"
-    - "process/checks/CP6-CR092-*"
-    - "process/checks/CP7-CR092-*"
-    - "process/checkpoints/CP8-CR092-DELIVERY-READINESS.md"
   install_scopes: []
   config_changes: []
   permission_changes:
-    - "No runtime permission granted; CP8 approve is not runtime authorization."
+    - "One CR099 per-run readonly authorization was consumed for WSL client-side smoke."
+    - "CP8 approval does not authorize additional runtime runs."
   migration_required: false
   external_interfaces:
-    - "None enabled; real QMT/MiniQMT/XtQuant/gateway/runner remains not authorized."
+    - "Read-only HTTP calls to user-started Windows gateway at http://172.30.32.1:18765 during authorized run only."
   state_schema_changes: []
   command_parameter_changes:
-    - "New local checker command requires explicit --evidence <file>."
+    - "New collector command requires explicit --env-file, --base-url, --authorization-ref, --run-id and --output-json."
 
 install_validation_summary:
   commands:
-    - "N/A: no installer, service, package publication or runtime deployment changed."
+    - "N/A: no installer, package publication, Windows service installation, or dependency lock change."
   results:
     - "N/A"
   log_paths: []
   skipped_with_reason:
-    - "CR092 delivers readiness documents, static checker and tests only."
+    - "CR099 delivers local scripts/tests/process evidence; Windows gateway was user-started and not installed or modified by this CR."
 
 release_documents:
   release_notes:
@@ -141,61 +137,58 @@ release_documents:
     na_reason: ""
 
 non_authorized_items:
-  - id: NA-CR092-01
-    operation: "QMT/MiniQMT/XtQuant/gateway/runner startup, connection, install or runtime"
-    reason: "CR092 CP8 only confirms readiness / evidence guardrail delivery."
-    required_authorization: "Separate per-run runtime authorization gate."
-  - id: NA-CR092-02
-    operation: "NAS access, list, read, copy, pull, write, publish or delete"
-    reason: "User confirmed NAS is not needed for current CR092."
-    required_authorization: "Separate NAS package exchange gate, e.g. CR091-FU-02."
-  - id: NA-CR092-03
-    operation: ".env / credentials / real account / real funds / real positions / real orders / real fills / unspecified raw logs"
-    reason: "Only user-provided simulated-account evidence is allowed by CP5."
+  - id: NA-CR099-01
+    operation: "Additional QMT/MiniQMT/XtQuant/gateway/runner runtime runs"
+    reason: "CR099 consumed one explicit run; CP8 approval is not new runtime authorization."
+    required_authorization: "Separate per-run runtime authorization."
+  - id: NA-CR099-02
+    operation: "Windows .env read, credential read, account original output, raw positions, raw logs"
+    reason: "CR099 only allows redacted evidence and explicit WSL client env reference."
     required_authorization: "Separate security / runtime evidence gate."
-  - id: NA-CR092-04
+  - id: NA-CR099-03
+    operation: "NAS access, package exchange, pull, copy, write or publish"
+    reason: "NAS is outside CR099."
+    required_authorization: "Separate NAS package exchange gate."
+  - id: NA-CR099-04
     operation: "submit/cancel, buy/sell, simulation/live"
-    reason: "Order-write and simulation/live remain out of scope."
-    required_authorization: "Separate order-write design gate, e.g. CR091-FU-03."
-  - id: NA-CR092-05
-    operation: "provider fetch / lake write / catalog publish"
-    reason: "Out of CR092 scope."
-    required_authorization: "Separate data/publish authorization."
+    reason: "Order-write and live operations remain out of scope."
+    required_authorization: "Separate order-write / live design gate."
+  - id: NA-CR099-05
+    operation: "provider fetch, lake write, catalog publish"
+    reason: "Data publish is outside CR099."
+    required_authorization: "Separate data/publish gate."
 
 follow_up_summary:
   observation_items:
-    - id: OBS-CR092-01
+    - id: OBS-CR099-01
       status: open
-      summary: "If user provides a simulated-account evidence file, run checker against exactly that file."
-    - id: OBS-CR092-02
+      summary: "If non-empty positions need proof, run a separate non-empty / trading-day readonly retest."
+    - id: OBS-CR099-02
       status: open
-      summary: "If user wants real runtime smoke, start a separate per-run authorization gate."
+      summary: "If session_expired recurs, review Windows gateway session TTL / refresh behavior in a separate CR."
   feedback_items:
-    - id: FB-CR092-01
-      type: risk
-      summary: "Readiness guardrail delivered; runtime readiness remains unproven."
+    - id: FB-CR099-01
+      type: scenario-gap
+      summary: "Current run proves zero-position simulated path only."
   follow_up_candidates:
-    - id: CR092-FU-01
-      summary: "Validate a user-provided simulated-account evidence file with the checker."
+    - id: CR097-FU-01
+      summary: "Non-empty / trading-day readonly retest."
       status: candidate
-    - id: CR092-FU-02
-      summary: "Separate real readonly runtime smoke run authorization."
+    - id: CR099-FU-01
+      summary: "Windows gateway session TTL / refresh resilience review if session_expired recurs."
       status: candidate
     - id: CR091-FU-02
       summary: "NAS package exchange gate remains separate."
       status: candidate
-    - id: CR091-FU-03
-      summary: "Order-write / submit-cancel design gate remains separate."
-      status: candidate
-    - id: CR091-FU-04
-      summary: "Ledger hygiene for CR019 / CR025 historical debt remains separate."
+    - id: ORDER-WRITE-FU
+      summary: "Order-write / simulation / live design gate remains separate."
       status: candidate
   risk_acceptance_items:
-    - "DQ-CP8-CR092-01"
-    - "DQ-CP8-CR092-02"
-    - "DQ-CP8-CR092-03"
-    - "DQ-CP8-CR092-04"
-    - "DQ-CP8-CR092-05"
+    - "DQ-CP8-CR099-01"
+    - "DQ-CP8-CR099-02"
+    - "DQ-CP8-CR099-03"
+    - "DQ-CP8-CR099-04"
+    - "DQ-CP8-CR099-05"
 
 token_control:
   default_read_mode: capsule-first

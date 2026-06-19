@@ -1,0 +1,95 @@
+schema_version: "1.0"
+context_id: "CP8-CR099-DELIVERY-CONTEXT"
+status: ready-for-human-review
+created_at: "2026-06-19T17:02:06+08:00"
+owner: host-orchestrator
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - "process/release/RELEASE-CONTEXT.yaml"
+    - "process/checks/CP7-CR099-RUNTIME-AUTHORIZED-SMOKE-RERUN-PASS-2026-06-19.md"
+    - "docs/features/cr099-runner-real-readonly-smoke/TEST-REPORT.md"
+    - "docs/features/cr099-runner-real-readonly-smoke/REVIEW.md"
+  read_if_needed:
+    - "docs/features/cr099-runner-real-readonly-smoke/VERIFICATION.md"
+    - "docs/release/RELEASE-NOTES.md"
+    - "docs/release/DEPLOY-CHECKLIST.md"
+    - "docs/release/ROLLBACK.md"
+    - "docs/release/MIGRATION.md"
+    - "docs/release/FEEDBACK.md"
+  do_not_read_by_default:
+    - "full HLD"
+    - "full LLD"
+    - "full diff"
+    - "raw runtime output"
+    - "Windows .env"
+
+release_summary:
+  cr_id: "CR-099"
+  release_decision: READY_WITH_RISK
+  release_artifact_profile: compact
+  target_version: "cr099-runner-real-readonly-smoke-runtime-pass-rc"
+  scope_summary: "Runner real readonly smoke per-run authorization; WSL collector consumed user-started Windows gateway and produced redacted evidence."
+  close_recommendation: "Close CR099 current delivery as READY_WITH_RISK after CP8 approval."
+
+quality_summary:
+  cp6_status: PASS
+  cp7_status: PASS
+  runtime_status: PASS
+  blocker_findings: 0
+  high_findings: 0
+  test_summary:
+    - "CR099 + CR098 regression: 16 passed"
+    - "CR099 runtime evidence checker: passed=true, errors=0, warnings=0"
+    - "py_compile: PASS"
+    - "cr-tracking strict warnings: OK"
+  runtime_evidence:
+    path: "/home/hyde/.quant-lab/evidence/qmt/cr099/redacted/cr099-runner-readonly-smoke-20260619-sim-001/evidence.json"
+    overall_status: pass
+    health: "ok / session_ready=true"
+    capabilities: "ok / readonly_supported=true"
+    query_positions_readonly: "ok / position_count_bucket=zero / items_redacted_count=0"
+    forbidden_counters: "all zero"
+    raw_payload_emitted: false
+
+risk_summary:
+  accepted_risks:
+    - id: "R-CR099-CP8-001"
+      severity: MEDIUM
+      summary: "Current evidence is zero-position path; non-empty positions redaction is not proven."
+      treatment: "Accept for CR099 current delivery; track as separate follow-up if needed."
+    - id: "R-CR099-CP8-002"
+      severity: MEDIUM
+      summary: "Trading-day path is not proven in this run."
+      treatment: "Accept for CR099 current delivery; track as separate follow-up if needed."
+  resolved_risks:
+    - id: "R-CR099-CP7-SESSION-EXPIRED"
+      summary: "First runtime attempt blocked with session_expired; user restarted Windows gateway session and rerun passed."
+
+non_authorized_items:
+  - "Additional runtime runs / gateway operations"
+  - "Windows .env, credentials, account originals, raw positions, raw logs"
+  - "NAS access or package exchange"
+  - "submit/cancel, buy/sell, simulation/live"
+  - "provider fetch, lake write, catalog publish"
+
+follow_up_summary:
+  candidates:
+    - id: "CR097-FU-01"
+      summary: "Non-empty / trading-day readonly retest"
+      status: candidate-not-started
+    - id: "CR099-FU-01"
+      summary: "Windows gateway session TTL / refresh resilience review if session_expired recurs"
+      status: candidate-not-started
+    - id: "CR091-FU-02"
+      summary: "NAS package exchange gate"
+      status: candidate-not-started
+    - id: "ORDER-WRITE-FU"
+      summary: "Order-write / simulation / live design gate"
+      status: candidate-not-started
+
+read_expansion_log:
+  - source: "release-readiness"
+    read_profile: compact
+    full_doc_read_reason: "N/A; CP8 prepared from capsule, CP7 summary, feature quality summaries and release docs only."

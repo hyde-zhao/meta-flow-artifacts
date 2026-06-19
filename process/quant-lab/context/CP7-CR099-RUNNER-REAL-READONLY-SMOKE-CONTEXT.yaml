@@ -1,0 +1,46 @@
+schema_version: 1
+context_id: CP7-CR099-RUNNER-REAL-READONLY-SMOKE
+status: pass-with-risk
+created_at: '2026-06-19T16:20:16+08:00'
+owner: host-orchestrator
+cr_id: CR-099
+phase: story-execution
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - process/checks/CP7-CR099-RUNNER-REAL-READONLY-SMOKE-VERIFICATION-DONE.md
+    - docs/features/cr099-runner-real-readonly-smoke/VERIFICATION.md
+  read_if_needed:
+    - docs/features/cr099-runner-real-readonly-smoke/TEST-REPORT.md
+    - docs/features/cr099-runner-real-readonly-smoke/REVIEW.md
+    - docs/features/cr099-runner-real-readonly-smoke/FIXES.md
+    - process/checks/CP6-CR099-RUNNER-REAL-READONLY-SMOKE-CODING-DONE.md
+  do_not_read_by_default:
+    - /home/hyde/.quant-lab/runtime/qmt/cr097/client.env.template
+    - Windows .env
+    - HMAC secrets
+    - raw QMT account / positions / orders / trades / logs
+    - NAS package exchange roots
+    - provider / lake / catalog publish targets
+summary:
+  cp6: PASS
+  cp7: PASS_WITH_RISK
+  runtime_authorization: not-authorized
+  remaining_risks:
+    - real runner to Windows gateway smoke not executed
+    - HMAC env / gateway connectivity not verified
+    - non-empty positions path not proven
+not_authorized:
+  hmac_secret_read: false
+  windows_env_read: false
+  gateway_start: false
+  runner_runtime_execution: false
+  account_raw_read: false
+  nas_operation: false
+  submit_cancel: false
+  buy_sell: false
+  simulation_live: false
+  provider_fetch: false
+  lake_write: false
+  catalog_publish: false

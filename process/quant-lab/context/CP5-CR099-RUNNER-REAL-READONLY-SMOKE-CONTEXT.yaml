@@ -1,0 +1,56 @@
+schema_version: 1
+context_id: CP5-CR099-RUNNER-REAL-READONLY-SMOKE
+status: ready-for-human-review
+created_at: '2026-06-19T16:04:52+08:00'
+owner: host-orchestrator
+cr_id: CR-099
+phase: story-planning
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - process/checkpoints/CP5-CR099-RUNNER-REAL-READONLY-SMOKE-READINESS.md
+  read_if_needed:
+    - docs/qmt/CR099-QMT-RUNNER-REAL-READONLY-SMOKE-HLD.md
+    - docs/features/cr099-runner-real-readonly-smoke/DESIGN.md
+    - docs/features/cr099-runner-real-readonly-smoke/TEST-PLAN.md
+    - docs/features/cr099-runner-real-readonly-smoke/TASKS.md
+    - process/stories/CR099-RUNNER-REAL-READONLY-SMOKE-LLD.md
+    - process/checkpoints/CP3-CR099-RUNNER-REAL-READONLY-SMOKE-HLD-REVIEW.md
+  do_not_read_by_default:
+    - /home/hyde/.quant-lab/runtime/qmt/cr097/client.env.template
+    - Windows .env
+    - HMAC secrets
+    - raw QMT account / positions / orders / trades / logs
+    - NAS package exchange roots
+    - provider / lake / catalog publish targets
+summary:
+  cp2: approved
+  cp3: approved
+  cp5: pending-human-review
+  recommendation: approve run contract / redacted evidence schema / preflight blocked paths / test plan, then proceed to CP6 contract and schema implementation without runtime execution.
+authorization_boundary:
+  cp5_approval_authorizes:
+    - CP6 offline contract and schema checker implementation
+    - offline tests and fixture validation
+    - redacted evidence schema preparation
+    - blocked preflight logic design
+  cp5_approval_does_not_authorize:
+    - HMAC secret read
+    - Windows env read
+    - gateway startup
+    - runner runtime execution
+    - account original read
+    - NAS access
+    - submit_cancel_or_trade_write
+    - simulation_or_live
+    - provider_lake_publish
+decision_items:
+  - DQ-CP5-CR099-01
+  - DQ-CP5-CR099-02
+  - DQ-CP5-CR099-03
+  - DQ-CP5-CR099-04
+  - DQ-CP5-CR099-05
+validation:
+  auto_precheck: process/checks/CP5-CR099-RUNNER-REAL-READONLY-SMOKE-READINESS.md
+  checkpoint: process/checkpoints/CP5-CR099-RUNNER-REAL-READONLY-SMOKE-READINESS.md

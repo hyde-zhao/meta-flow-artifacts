@@ -1,0 +1,56 @@
+schema_version: "context-capsule-v1"
+context_id: "CP2-CR099-RUNNER-REAL-READONLY-SMOKE"
+context_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-06-19T15:24:50+08:00"
+owner: "host-orchestrator"
+read_profile: "minimal"
+target:
+  cr_id: "CR-099"
+  source_follow_up: "CR098-FU-01"
+  phase: "requirement-clarification"
+  checkpoint: "CP2"
+scope_summary: "启动 CR098-FU-01：runner 在真实 Windows gateway readonly path 下执行 health / capabilities / query_positions_readonly smoke；当前只进入 CP2 范围确认，不授权真实运行。"
+key_facts:
+  - "CR098 closed-current-delivery / READY_WITH_RISK：runner readonly integration 离线实现和验证已完成，但真实 runner runtime 未执行。"
+  - "CR097 closed-current-delivery / READY：Windows gateway readonly health / capabilities / query_positions_readonly 曾通过，结果为空持仓脱敏 evidence；该一次性授权不能复用。"
+  - "CR099 当前只启动正式 CR 和 CP2 scope review；不读取 HMAC secret，不读取 Windows .env，不启动 gateway，不执行 runner runtime，不查询账户。"
+  - "CR089 仍 blocked-readiness-approved；CR099 不恢复 CR089、不访问 NAS、不合并 package exchange。"
+must_read:
+  - "process/context/CR098-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-19.md"
+  - "process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md"
+  - "process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md"
+  - "process/checkpoints/CP2-CR099-RUNNER-REAL-READONLY-SMOKE-SCOPE-REVIEW.md"
+read_if_needed:
+  - path: "process/changes/CR-098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-SMOKE-2026-06-19.md"
+    reason: "需要复核 CR098 交付范围和不授权边界时读取"
+  - path: "process/changes/CR-097-REAL-QMT-READONLY-RUNTIME-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md"
+    reason: "需要复核 Windows gateway readonly smoke 的运行参数模式时读取"
+  - path: "trading/strategy_runner/readonly_gateway.py"
+    reason: "CP3 / CP5 设计真实 runner smoke 时读取"
+  - path: "trading/qmt_client.py"
+    reason: "确认 QmtClient health / capabilities authorization_ref 合同时读取"
+do_not_read_by_default:
+  - "/home/hyde/.quant-lab/runtime/qmt/cr097/client.env.template"
+  - "Windows .env or any credential file"
+  - "raw QMT account / positions / orders / trades / logs"
+  - "NAS paths or package shares"
+  - "provider / lake / catalog data roots"
+risks_and_decisions:
+  - id: "DQ-CP2-CR099-01"
+    type: "scope"
+    summary: "确认 CR099 只覆盖 runner real readonly smoke，不覆盖 NAS、order-write、simulation/live 或 publish。"
+  - id: "DQ-CP2-CR099-02"
+    type: "runtime_authorization"
+    summary: "CP2 approve 只授权进入设计门禁，不授权真实 run；真实 run 必须在 CP5 后逐 run 授权。"
+  - id: "DQ-CP2-CR099-03"
+    type: "security"
+    summary: "evidence 只能输出 redacted summary；禁止账户原文、secret、Windows .env 和 raw payload。"
+downstream_tasks:
+  - "CP2 approve 后生成 CP3 HLD，冻结 runner real readonly smoke 架构和失败路径。"
+  - "CP3 approve 后生成 CP5 design readiness，明确 run_id、authorization_ref、endpoint allowlist、evidence schema 和 forbidden counters。"
+  - "CP5 approve 后仍需用户逐 run 授权，才允许真实 runner readonly smoke。"
+token_control:
+  full_doc_read_policy: "only-if-capsule-insufficient-or-conflict"
+  max_source_files: 6
+  read_expansion_log: []

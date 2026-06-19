@@ -5,11 +5,11 @@ current_phase: delivered
 current_agent: host-orchestrator
 active_change: ''
 active_story: ''
-iteration: 560
+iteration: 568
 blocked: false
 blocked_reason: ''
-last_action: CR098 CP8 已由用户同意，当前交付关闭为 closed-current-delivery / READY_WITH_RISK；已准备上下文重置 handoff 和 CR098 follow-up tracking。
-next_action: "清理上下文后先读取 `process/context/CR098-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-19.md`。推荐下一个候选为 `CR098-FU-01 Runner real readonly smoke per-run authorization`，但当前未启动；新的 CR 门禁和逐 run 授权前，不授权 HMAC secret、Windows `.env`、gateway 启动、runner runtime、账户原文、NAS、交易写、simulation/live 或 provider/lake/publish。"
+last_action: "CR091-FU-02 已转为正式 CR100 并完成 NAS Package Exchange Offline Readiness Gate；交付本地 fake exchange fixture、manifest/schema 校验、fake publish/pull/check CLI、聚焦测试和 NAS 恢复 runbook。CR100 关闭为 READY_WITH_RISK；未访问真实 NAS、未读取凭据、未启动 runtime、未执行交易或 provider/lake/catalog publish。"
+next_action: "如需验证真实 NAS package exchange，必须在 NAS 可达后另起独立授权 gate，明确 access/list/read/copy/write/publish/delete 范围、路径来源和脱敏 evidence schema；当前可提交并推送 CR100 离线交付。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -126,18 +126,84 @@ artifact_routing:
 cr_tracking:
   status: "no-active-formal-cr"
   index_path: process/changes/CR-INDEX.yaml
-  last_consistency_check: 'CR098 CP8 approved and closed at 2026-06-19T12:31:24+08:00 as closed-current-delivery / READY_WITH_RISK. No active formal CR remains. Recommended next candidate is CR098-FU-01 runner real readonly smoke per-run authorization, but it is not started. No runtime authorization is active; HMAC secret reads, Windows .env reads, gateway startup, runner runtime execution, account originals, NAS, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start and CR020 gateway route restore remain unauthorized.'
+  last_consistency_check: '2026-06-19T18:45:00+08:00 CR100 closed-current-delivery / READY_WITH_RISK after local fake package exchange offline readiness. No real NAS access/list/read/copy/write/publish/delete, credential/env/account read, QMT/MiniQMT/XtQuant/gateway/runner runtime, submit/cancel, simulation/live, provider/lake/catalog publish, CR089 auto-start or CR020 route restore authorized.'
   active_crs:
+  - id: CR-100
+    title: NAS Package Exchange Offline Readiness Gate
+    status: closed-current-delivery
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-GATE-2026-06-19.md
+    parent_cr: CR-091
+    source_checkpoint: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR091-04; USER-20260619-COMPLETE-CR100-OFFLINE-READINESS
+    priority: 2
+    blocked_by: 'closed: CR100 offline readiness completed and approved by current user instruction; real NAS remains not authorized and unverified.'
+    impact_surface:
+    - nas_package_exchange
+    - package_pull
+    - package_publish
+    - package_manifest
+    - fake_exchange_fixture
+    - immutable_local_cache
+    - active_pointer
+    - credential_boundary
+    - no_runtime_connection
+    - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+    conflict_keys:
+    - nas_package_exchange
+    - package_publish
+    - package_pull
+    - credential_boundary
+    - no_runtime_connection
+    - no_order_write
+    - no_provider_lake_publish
+    next_gate: closed
+    next_action: "CR100 当前交付已关闭为 READY_WITH_RISK；真实 NAS publish / pull / copy / 校验需独立授权 gate。"
+    last_checked_at: '2026-06-19T18:45:00+08:00'
+  - id: CR-099
+    title: QMT Runner Real Readonly Smoke Per-run Authorization
+    status: closed-current-delivery
+    source_tracking: process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+    formal_cr_path: process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
+    parent_cr: CR-098
+    source_checkpoint: process/checkpoints/CP8-CR098-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR098-02
+    priority: 1
+    blocked_by: 'closed: user approved CR099 CP8 at 2026-06-19T17:15:29+08:00, accepting READY_WITH_RISK, zero-position / trading-day residual risks and non-authorization boundary. No additional runtime, order submit/cancel, Windows .env, NAS, publish or trading-write authorization granted.'
+    impact_surface:
+    - qmt_runner
+    - readonly_gateway
+    - runtime_authorization
+    - per_run_authorization
+    - hmac_client_env
+    - redacted_evidence
+    - credential_boundary
+    - process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+    conflict_keys:
+    - runtime_authorization
+    - qmt_runner
+    - readonly_gateway
+    - credential_boundary
+    - no_order_write
+    - no_nas_access
+    - no_provider_lake_publish
+    next_gate: closed
+    next_action: "CR099 当前交付已关闭为 READY_WITH_RISK。后续可按用户选择启动非空 / 交易日 readonly retest、NAS package exchange gate 或 order-write design gate；均需独立门禁和明确授权。"
+    last_checked_at: '2026-06-19T17:15:29+08:00'
   - id: CR-096
     title: User-provided Simulated Evidence Checker Run
-    status: active-formal-cr
+    status: closed-current-delivery
     source_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
     formal_cr_path: process/changes/CR-096-USER-PROVIDED-SIMULATED-EVIDENCE-CHECKER-RUN-2026-06-19.md
     parent_cr: CR-092
     source_checkpoint: process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
     source_decision_id: DQ-CP8-CR092-04
     priority: 1
-    blocked_by: 'waiting-user-evidence-path: user must provide exactly one evidence YAML/JSON file path before checker execution'
+    blocked_by: 'closed: user approved CR096 CP8 at 2026-06-19T10:30:00+08:00, accepting READY. Closure only covers contract-filled redacted evidence YAML and single-file checker passed=true; it does not authorize runtime, NAS, credential/account reads, trading, provider/lake/publish or real release.'
     impact_surface:
     - simulated_evidence
     - single_file_read
@@ -153,9 +219,9 @@ cr_tracking:
     - no_runtime_connection
     - no_credential_read
     - no_nas_access
-    next_gate: user-evidence-path
-    next_action: 等待用户提供一个明确 evidence YAML / JSON 文件路径；不得扫描目录或自行查找。
-    last_checked_at: '2026-06-19T09:39:15+08:00'
+    next_gate: closed
+    next_action: CR096 当前交付已关闭为 READY；真实只读 runtime smoke、NAS、凭据/账户、交易、provider/lake/publish 均需独立 CR 和明确授权。
+    last_checked_at: '2026-06-19T10:30:00+08:00'
   - id: CR-095
     title: Standalone Checker / CLI Output Convergence
     status: closed-current-delivery
@@ -2009,17 +2075,22 @@ cr_tracking:
 human_gate_decisions:
   status: approved
   active_gate: ''
-  active_checkpoint: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md
-  active_launch_message: process/checks/CP8-CR093-HUMAN-GATE-LAUNCH-MESSAGE.md
+  active_checkpoint: ''
+  active_launch_message: ''
   pending_gate: ''
-  approved_gate: CP8-CR093-DELIVERY-READINESS
-  approved_at: '2026-06-19T08:39:22+08:00'
+  approved_gate: CP8-CR099-DELIVERY-READINESS
+  approved_at: '2026-06-19T17:15:29+08:00'
   approved_by: user
-  approval_input: '用户回复“好了，同意接受所有项。下一步推进什么，你需要准备好上下文，我需要清除上下文了。”，按 CR093 CP8 approve 处理；接受 DQ-CP8-CR093-01..05 的推荐方案，关闭 CR093 当前交付为 READY_WITH_RISK。该批准不授权 QMT/MiniQMT/XtQuant/gateway/runner runtime、NAS、.env/凭据/真实账户、submit/cancel、simulation/live、provider/lake/publish、CR089 自动启动、CR091-FU-02、CR091-FU-03、CR093-FU-01/02 自动启动或 CR020 gateway 路线恢复。'
+  approval_input: '用户回复“接受 CR099 CP8 的 5 项推荐方案和风险，不表示授权新的 runtime run、下单 / 撤单验证、读取 Windows .env、访问 NAS、publish 或任何交易写操作。 列出下一步推进的建议”，按 CR099 CP8 approve 处理；接受 DQ-CP8-CR099-01..05 的推荐方案，关闭 CR099 当前交付为 READY_WITH_RISK。该批准不授权新的 QMT/MiniQMT/XtQuant/gateway/runner runtime run、下单 / 撤单验证、读取 Windows .env、账户原文、NAS、publish 或任何交易写操作。'
   pending_checklist_path: ''
-  launch_message_path: process/checks/CP8-CR093-HUMAN-GATE-LAUNCH-MESSAGE.md
+  launch_message_path: ''
   pending_decision_ids: []
   accepted_decision_ids:
+  - DQ-CP8-CR099-01
+  - DQ-CP8-CR099-02
+  - DQ-CP8-CR099-03
+  - DQ-CP8-CR099-04
+  - DQ-CP8-CR099-05
   - DQ-CP8-CR093-01
   - DQ-CP8-CR093-02
   - DQ-CP8-CR093-03
@@ -2371,6 +2442,11 @@ human_gate_decisions:
   - 不执行 optional groups、full tests、章节研究 smoke、删除 .venv 或 destructive cleanup。
   - 不恢复或推进 CR046 CP7。
   pending_human_decisions:
+  - {id: DQ-CP8-CR099-01, gate: CP8, decision_type: risk_acceptance, question: "是否接受 CR099 release_decision？", recommendation: "接受 READY_WITH_RISK，关闭当前 runner real readonly smoke 交付。", alternatives: ["READY 关闭但不标风险", "NOT_READY 回 CP7", "保持 active 等待非空 / 交易日复测"], pros_cons: "推荐方案诚实记录残余覆盖缺口；READY 会弱化风险；NOT_READY 会把后续复测混入当前 CR。", impact_risk: "当前交付可收口，风险转 follow-up。", rollback_switch: "若用户要求非空 / 交易日证明，启动独立 follow-up。", status: accepted, answer: "接受 CR099 CP8 的 5 项推荐方案和风险，不表示授权新的 runtime run、下单 / 撤单验证、读取 Windows .env、访问 NAS、publish 或任何交易写操作。 at 2026-06-19T17:15:29+08:00", source: process/checkpoints/CP8-CR099-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T17:15:29+08:00"}
+  - {id: DQ-CP8-CR099-02, gate: CP8, decision_type: risk_acceptance, question: "是否接受 CP8 剩余风险？", recommendation: "接受 R-CR099-CP8-001..002：空持仓路径、交易日路径未证明。", alternatives: ["本轮补非空持仓", "要求交易日复测", "取消当前交付"], pros_cons: "推荐方案不扩大授权；补测需要新的账户状态 / 时间窗口和运行授权。", impact_risk: "后续不能声称非空 / 交易日已证明。", rollback_switch: "用户要求更强覆盖时启动 CR097-FU-01 或新 CR。", status: accepted, answer: "接受 CR099 CP8 的 5 项推荐方案和风险，不表示授权新的 runtime run、下单 / 撤单验证、读取 Windows .env、访问 NAS、publish 或任何交易写操作。 at 2026-06-19T17:15:29+08:00", source: process/checkpoints/CP8-CR099-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T17:15:29+08:00"}
+  - {id: DQ-CP8-CR099-03, gate: CP8, decision_type: runtime_authorization, question: "CP8 approve 是否授权额外真实运行或外部访问？", recommendation: "不授权；CP8 approve 只确认当前 evidence 和风险接受，不授权新的 runtime、Windows .env、NAS、交易写或 publish。", alternatives: ["授权一次非空复测", "授权 NAS", "授权 order-write"], pros_cons: "推荐方案权限最小；备选均需独立高风险门禁。", impact_risk: "防止 CP8 被误读为额外运行授权。", rollback_switch: "需要外部动作时必须新建逐 run gate。", status: accepted, answer: "接受 CR099 CP8 的 5 项推荐方案和风险，不表示授权新的 runtime run、下单 / 撤单验证、读取 Windows .env、访问 NAS、publish 或任何交易写操作。 at 2026-06-19T17:15:29+08:00", source: process/checkpoints/CP8-CR099-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T17:15:29+08:00"}
+  - {id: DQ-CP8-CR099-04, gate: CP8, decision_type: follow_up_tracking, question: "后续事项如何分流？", recommendation: "非空 / 交易日复测、session TTL 复发复核、NAS、order-write 均作为后续候选，不自动启动。", alternatives: ["立即启动非空复测", "立即启动 NAS", "立即启动 order-write"], pros_cons: "推荐方案关闭当前 CR 且保留追踪；立即启动会扩大当前范围。", impact_risk: "后续候选仍需用户明确选择。", rollback_switch: "用户明确选择候选时创建 / 恢复正式 CR。", status: accepted, answer: "接受 CR099 CP8 的 5 项推荐方案和风险，不表示授权新的 runtime run、下单 / 撤单验证、读取 Windows .env、访问 NAS、publish 或任何交易写操作。 at 2026-06-19T17:15:29+08:00", source: process/checkpoints/CP8-CR099-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T17:15:29+08:00"}
+  - {id: DQ-CP8-CR099-05, gate: CP8, decision_type: scope, question: "是否关闭 CR099 当前交付？", recommendation: "CP8 approve 后关闭 CR099 为 closed-current-delivery / READY_WITH_RISK。", alternatives: ["保持 active 等待更多 runtime 证据", "取消 CR099"], pros_cons: "推荐方案清晰切分当前 smoke 与后续复测；保持 active 容易混淆授权边界。", impact_risk: "关闭后新增真实运行必须另起授权。", rollback_switch: "用户要求继续当前 CR 时重定义 exit criteria。", status: accepted, answer: "接受 CR099 CP8 的 5 项推荐方案和风险，不表示授权新的 runtime run、下单 / 撤单验证、读取 Windows .env、访问 NAS、publish 或任何交易写操作。 at 2026-06-19T17:15:29+08:00", source: process/checkpoints/CP8-CR099-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T17:15:29+08:00"}
   - {id: DQ-CP8-CR093-01, gate: CP8, decision_type: risk_acceptance, question: "是否接受 CR093 READY_WITH_RISK 并关闭当前交付？", recommendation: "接受并关闭 CR093 当前 ledger hygiene 交付。", alternatives: ["修改后重提 CP8", "reject 回 CP7/CP6"], pros_cons: "推荐方案目标 DoD 已达成，阻断项 0；重提会延后关闭。", impact_risk: "CR093 active 可关闭；风险带入 follow-up。", rollback_switch: "若 warning 不可接受，回 CP7 或新建 follow-up。", status: accepted, answer: "好了，同意接受所有项。下一步推进什么，你需要准备好上下文，我需要清除上下文了。 at 2026-06-19T08:39:22+08:00", source: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T08:39:22+08:00"}
   - {id: DQ-CP8-CR093-02, gate: CP8, decision_type: risk_acceptance, question: "是否接受 R-CR093-01 broader warning-only backlog 保留？", recommendation: "接受 warning-only 不阻断本轮。", alternatives: ["本轮清零所有 warnings", "开启 strict-warnings"], pros_cons: "推荐方案符合 CP5 并控制范围；清零会扩大范围。", impact_risk: "后续仍会看到 warning，但 exit 0。", rollback_switch: "用户要求 warning 清零时启动 CR093-FU-01。", status: accepted, answer: "好了，同意接受所有项。下一步推进什么，你需要准备好上下文，我需要清除上下文了。 at 2026-06-19T08:39:22+08:00", source: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T08:39:22+08:00"}
   - {id: DQ-CP8-CR093-03, gate: CP8, decision_type: risk_acceptance, question: "是否接受 R-CR093-02 standalone checker warning 明细低于主 CLI？", recommendation: "接受，以主 CLI 为验收入口。", alternatives: ["本轮收敛两套 checker 输出"], pros_cons: "推荐方案聚焦目标；收敛输出是新范围。", impact_risk: "standalone 脚本可通过但 warning 细节少。", rollback_switch: "用户要求一致输出时启动 CR093-FU-02。", status: accepted, answer: "好了，同意接受所有项。下一步推进什么，你需要准备好上下文，我需要清除上下文了。 at 2026-06-19T08:39:22+08:00", source: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T08:39:22+08:00"}
@@ -22532,6 +22608,172 @@ agent_lifecycle:
     completed_at: '2026-05-16T19:33:15+08:00'
     closed_at: '2026-05-16T19:33:15+08:00'
 history:
+- at: '2026-06-19T16:20:16+08:00'
+  action: cr099-cp7-offline-verification-pass-with-risk
+  actor: host-orchestrator
+  reason: CR099 CP6 offline contract / redacted evidence checker implementation 已 PASS；继续执行 CP7 offline verification，验证 checker、negative tests、CR098 regression、py_compile、CLI help、cr-tracking 和 diff check。真实 runtime 未授权未执行。
+  artifacts:
+  - docs/features/cr099-runner-real-readonly-smoke/VERIFICATION.md
+  - docs/features/cr099-runner-real-readonly-smoke/TEST-REPORT.md
+  - docs/features/cr099-runner-real-readonly-smoke/REVIEW.md
+  - docs/features/cr099-runner-real-readonly-smoke/FIXES.md
+  - process/context/CP7-CR099-RUNNER-REAL-READONLY-SMOKE-CONTEXT.yaml
+  - process/checks/CP7-CR099-RUNNER-REAL-READONLY-SMOKE-VERIFICATION-DONE.md
+  - process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
+  - process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-099
+    cr099_status: active-cp7-pass-with-risk-runtime-authorization-pending
+    next_gate: runtime authorization decision or CP8 risk acceptance
+    runtime_authorization: not-authorized
+    cp7: PASS_WITH_RISK
+  remaining_risks:
+    - real runner to Windows gateway smoke not executed
+    - HMAC env / gateway connectivity not verified
+    - non-empty positions path not proven
+  safety_confirmations:
+    hmac_secret_read_authorized: false
+    windows_env_read_authorized: false
+    gateway_start_authorized: false
+    runner_runtime_authorized: false
+    account_raw_read_authorized: false
+    nas_operation_authorized: false
+    submit_cancel_authorized: false
+    simulation_live_authorized: false
+    provider_lake_publish_authorized: false
+- at: '2026-06-19T16:13:23+08:00'
+  action: cr099-cp5-approved-cp6-offline-implementation-pass
+  actor: host-orchestrator
+  reason: 用户回复“同意”，按 CP5 approve 回填 CR099 readiness，接受 `DQ-CP5-CR099-01..05`；随后完成 CP6 offline contract / redacted evidence checker implementation，并运行聚焦测试、CR098 回归、py_compile 和 CLI help。未执行真实 runtime。
+  artifacts:
+  - process/checkpoints/CP5-CR099-RUNNER-REAL-READONLY-SMOKE-READINESS.md
+  - process/stories/CR099-RUNNER-REAL-READONLY-SMOKE-LLD.md
+  - scripts/check_cr099_redacted_evidence.py
+  - tests/test_cr099_runner_real_readonly_smoke_contract.py
+  - process/stories/CR099-RUNNER-REAL-READONLY-SMOKE-IMPLEMENTATION.md
+  - process/context/CP6-CR099-RUNNER-REAL-READONLY-SMOKE-CONTEXT.yaml
+  - process/checks/CP6-CR099-RUNNER-REAL-READONLY-SMOKE-CODING-DONE.md
+  - process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
+  - process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-099
+    cr099_status: active-cp6-pass-ready-for-verification
+    next_gate: CP7 offline verification
+    runtime_authorization: not-authorized
+    tests:
+      cr099_focused: "7 passed"
+      cr099_cr098_regression: "14 passed"
+      py_compile: PASS
+      cli_help: PASS
+  safety_confirmations:
+    hmac_secret_read_authorized: false
+    windows_env_read_authorized: false
+    gateway_start_authorized: false
+    runner_runtime_authorized: false
+    account_raw_read_authorized: false
+    nas_operation_authorized: false
+    submit_cancel_authorized: false
+    simulation_live_authorized: false
+    provider_lake_publish_authorized: false
+- at: '2026-06-19T16:04:52+08:00'
+  action: cr099-cp3-approved-cp5-readiness-ready
+  actor: host-orchestrator
+  reason: 用户回复“同意”，按 CP3 approve 回填 CR099 HLD review，接受 `DQ-CP3-CR099-01..05`；随后生成 CP5 Feature Design、TEST-PLAN、TASKS、full LLD、context capsule、自动预检、人工审查稿和 launch message。CP5 仍只确认设计证据，不授权真实 runtime。
+  artifacts:
+  - process/checkpoints/CP3-CR099-RUNNER-REAL-READONLY-SMOKE-HLD-REVIEW.md
+  - docs/qmt/CR099-QMT-RUNNER-REAL-READONLY-SMOKE-HLD.md
+  - docs/features/cr099-runner-real-readonly-smoke/DESIGN.md
+  - docs/features/cr099-runner-real-readonly-smoke/TEST-PLAN.md
+  - docs/features/cr099-runner-real-readonly-smoke/TASKS.md
+  - process/stories/CR099-RUNNER-REAL-READONLY-SMOKE-LLD.md
+  - process/context/CP5-CR099-RUNNER-REAL-READONLY-SMOKE-CONTEXT.yaml
+  - process/checks/CP5-CR099-RUNNER-REAL-READONLY-SMOKE-READINESS.md
+  - process/checkpoints/CP5-CR099-RUNNER-REAL-READONLY-SMOKE-READINESS.md
+  - process/checks/CP5-CR099-HUMAN-GATE-LAUNCH-MESSAGE.md
+  - process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
+  - process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-099
+    cr099_status: active-cp5-review-pending
+    next_gate: CP5 design readiness
+    runtime_authorization: not-authorized
+  safety_confirmations:
+    hmac_secret_read_authorized: false
+    windows_env_read_authorized: false
+    gateway_start_authorized: false
+    runner_runtime_authorized: false
+    account_raw_read_authorized: false
+    nas_operation_authorized: false
+    submit_cancel_authorized: false
+    simulation_live_authorized: false
+    provider_lake_publish_authorized: false
+- at: '2026-06-19T15:54:07+08:00'
+  action: cr099-cp2-approved-cp3-hld-ready
+  actor: host-orchestrator
+  reason: 用户回复“同意”，按 CP2 approve 回填 CR099 scope review，接受 `DQ-CP2-CR099-01..05`；随后生成 CP3 HLD、Architecture Gray Areas 讨论日志、context capsule、自动预检、人工审查稿和 launch message。CP3 仍只确认 HLD 架构方向，不授权真实 runtime。
+  artifacts:
+  - process/checkpoints/CP2-CR099-RUNNER-REAL-READONLY-SMOKE-SCOPE-REVIEW.md
+  - process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
+  - docs/qmt/CR099-QMT-RUNNER-REAL-READONLY-SMOKE-HLD.md
+  - process/discussions/CP3-CR099-HLD-DISCUSSION-LOG.md
+  - process/checks/CP3-CR099-DISCUSSION-CHECKPOINT.json
+  - process/context/CP3-CR099-RUNNER-REAL-READONLY-SMOKE-CONTEXT.yaml
+  - process/checks/CP3-CR099-RUNNER-REAL-READONLY-SMOKE-HLD-PRECHECK.md
+  - process/checkpoints/CP3-CR099-RUNNER-REAL-READONLY-SMOKE-HLD-REVIEW.md
+  - process/checks/CP3-CR099-HUMAN-GATE-LAUNCH-MESSAGE.md
+  - process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-099
+    cr099_status: active-cp3-review-pending
+    next_gate: CP3 HLD review
+    runtime_authorization: not-authorized
+  safety_confirmations:
+    hmac_secret_read_authorized: false
+    windows_env_read_authorized: false
+    gateway_start_authorized: false
+    runner_runtime_authorized: false
+    account_raw_read_authorized: false
+    nas_operation_authorized: false
+    submit_cancel_authorized: false
+    simulation_live_authorized: false
+    provider_lake_publish_authorized: false
+- at: '2026-06-19T15:24:50+08:00'
+  action: cr099-started-from-cr098-fu-01-pending-cp2
+  actor: host-orchestrator
+  reason: 用户要求读取 handoff 文件并推进 `CR098-FU-01 Runner real readonly smoke per-run authorization`。host-orchestrator 已读取 `process/context/CR098-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-19.md` 和 `process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md`，完成冲突预检：启动前无 active formal CR；CR089 仍 blocked-readiness-approved 且不合并、不恢复 NAS / package exchange；CR097 / CR098 的一次性批准不复用为 runtime 授权。已创建正式 `CR-099`、CP2 context、CP2 自动预检和 CP2 人工审查稿。
+  artifacts:
+  - process/context/CR098-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-19.md
+  - process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+  - process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
+  - process/context/CP2-CR099-RUNNER-REAL-READONLY-SMOKE-CONTEXT.yaml
+  - process/checks/CP2-CR099-RUNNER-REAL-READONLY-SMOKE-SCOPE-PRECHECK.md
+  - process/checkpoints/CP2-CR099-RUNNER-REAL-READONLY-SMOKE-SCOPE-REVIEW.md
+  - process/checks/CP2-CR099-HUMAN-GATE-LAUNCH-MESSAGE.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-099
+    cr099_status: active-cp2-intake
+    next_gate: CP2 scope review
+    runtime_authorization: not-authorized
+  safety_confirmations:
+    hmac_secret_read_authorized: false
+    windows_env_read_authorized: false
+    gateway_start_authorized: false
+    runner_runtime_authorized: false
+    account_raw_read_authorized: false
+    nas_operation_authorized: false
+    submit_cancel_authorized: false
+    simulation_live_authorized: false
+    provider_lake_publish_authorized: false
 - at: '2026-06-19T08:39:22+08:00'
   actor: host-orchestrator
   action: cr093-cp8-approved-closed-context-handoff-prepared
@@ -39403,7 +39645,55 @@ history:
     cr020_restore_authorized: false
     cr089_auto_start_authorized: false
     cr091_auto_start_authorized: false
-last_updated: '2026-06-18T08:06:30+08:00'
+- at: '2026-06-19T17:15:29+08:00'
+  action: cr099-cp8-approved-closed-current-delivery
+  actor: host-orchestrator
+  reason: 用户接受 CR099 CP8 的 5 项推荐方案和风险，并明确该接受不表示授权新的 runtime run、下单 / 撤单验证、读取 Windows .env、访问 NAS、publish 或任何交易写操作。CR099 当前交付关闭为 closed-current-delivery / READY_WITH_RISK。
+  artifacts:
+  - process/checkpoints/CP8-CR099-DELIVERY-READINESS.md
+  - process/release/RELEASE-CONTEXT.yaml
+  - process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
+  - process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    cr099_status: closed-current-delivery
+    release_decision: READY_WITH_RISK
+    accepted_decision_ids:
+    - DQ-CP8-CR099-01
+    - DQ-CP8-CR099-02
+    - DQ-CP8-CR099-03
+    - DQ-CP8-CR099-04
+    - DQ-CP8-CR099-05
+    next_recommended_choice: CR097-FU-01 non-empty / trading-day readonly retest when conditions and explicit per-run authorization are available; otherwise NAS package exchange gate or order-write design gate remain separate candidates.
+  safety_confirmations:
+    qmt_miniqmt_xtquant_gateway_runner_new_runtime_authorized: false
+    windows_env_read_authorized: false
+    nas_operation_authorized: false
+    submit_cancel_authorized: false
+    trading_write_authorized: false
+    simulation_live_authorized: false
+    provider_lake_publish_authorized: false
+- at: '2026-06-19T17:32:50+08:00'
+  action: cr091-fu-02-start-handoff-created
+  actor: host-orchestrator
+  reason: 用户同意按建议在清除上下文后开启 CR091-FU-02；当前 NAS 无法连接，因此先准备 NAS Package Exchange Offline Readiness Gate 的最小启动上下文。该动作只创建 handoff，不创建正式 CR，不授权 NAS 访问、凭据读取、runtime、submit/cancel、simulation/live 或 publish。
+  artifacts:
+  - process/context/CR091-FU-02-START-HANDOFF-2026-06-19.md
+  - process/STATE.md
+  result:
+    active_formal_cr: ''
+    next_candidate: CR091-FU-02
+    recommended_scope: NAS Package Exchange Offline Readiness Gate
+    formal_cr_created: false
+  safety_confirmations:
+    nas_access_authorized: false
+    credential_read_authorized: false
+    qmt_runtime_authorized: false
+    submit_cancel_authorized: false
+    simulation_live_authorized: false
+    provider_lake_publish_authorized: false
+last_updated: '2026-06-19T17:32:50+08:00'
 ---
 
 # 工作流状态
