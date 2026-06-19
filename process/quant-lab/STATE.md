@@ -5,11 +5,11 @@ current_phase: delivered
 current_agent: host-orchestrator
 active_change: 'CR-097'
 active_story: ''
-iteration: 551
+iteration: 552
 blocked: false
 blocked_reason: ''
-last_action: 用户修复 Windows XtQuant import 后继续 CR097 测试；host-orchestrator 在 WSL 侧复验：端口 `172.30.32.1:18765` 连通，`/qmt/health` 返回 `status=ok`、`session_ready=true`、`runtime_status=xtquant-ready`，`/qmt/capabilities` 返回且仍标记 operation/live/simulation/order/cancel 未授权；未签名 `POST /qmt/account/positions` 按预期在 auth gate 前 `auth_header_missing` fail-closed，adapter/query counters 为 0。已写脱敏 evidence `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/cr097-runtime-preflight-redacted-20260619.json`。
-next_action: "CR097 runtime 已 ready，下一步需要用户创建并授权读取 WSL 最小 HMAC client env `/home/hyde/.quant-lab/runtime/qmt/cr097/client.env`（只含 gateway host/port、QMT_CLIENT_ID、QMT_CLIENT_SECRET、QMT_RUNTIME_REF），然后执行 query_positions_readonly 成功路径并保存脱敏 evidence；继续禁止读取 Windows `.env`、账号原文、持仓原文、NAS、交易写、provider/lake/publish。"
+last_action: 用户授权读取最小 HMAC client env `/home/hyde/.quant-lab/runtime/qmt/cr097/client.env.template` 并执行一次 CR097 query_positions 成功路径；host-orchestrator 运行 `qmt_runtime_cli query-positions` 后返回 `status=ok`、`position_count=0`、`items_redacted=[]`、`raw_payload_emitted=false`、`redaction_status=pass`。已写脱敏 evidence `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/cr097-query-positions-redacted-20260619.json`，并生成 CP6/CP7/CP8 与 release context。
+next_action: "CR097 runtime smoke 已 PASS，当前等待用户审查 `process/checkpoints/CP8-CR097-DELIVERY-READINESS.md` 并回复 `approve` / `修改: <具体修改点>` / `reject`。approve 只关闭 CR097 当前只读 smoke，不授权 Windows `.env`、账号原文、持仓原文、NAS、交易写、simulation/live、provider/lake/publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:

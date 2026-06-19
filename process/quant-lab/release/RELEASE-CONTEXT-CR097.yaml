@@ -1,0 +1,102 @@
+schema_version: "release-context-v1"
+release_context_id: "RELEASE-CONTEXT-CR097"
+cr_id: "CR-097"
+parent_cr: "CR-092"
+story_id: "CR097-REAL-QMT-READONLY-RUNTIME-SMOKE"
+created_at: "2026-06-19T11:42:47+08:00"
+owner: "host-orchestrator"
+release_artifact_profile: "minimal"
+release_decision: "READY"
+release_scope:
+  in_scope:
+    - "CR092-FU-02 real readonly runtime smoke per-run authorization"
+    - "Windows gateway health"
+    - "capabilities boundary check"
+    - "query_positions_readonly authenticated success path"
+    - "redacted evidence under ~/.quant-lab/evidence/qmt/cr097/redacted/"
+  out_of_scope:
+    - "NAS"
+    - "Windows .env read"
+    - "raw account / raw positions / raw orders / raw trades / raw logs"
+    - "submit / cancel / buy / sell"
+    - "simulation / live run"
+    - "provider fetch / lake write / catalog publish"
+    - "CR089 auto-start"
+    - "CR020 gateway route restore"
+version_decision:
+  current_version: "N/A"
+  target_version: "N/A"
+  version_bump: "N/A"
+  reason: "Runtime smoke evidence closure only; no code/package release."
+quality_summary:
+  cp6_result: "PASS"
+  cp7_result: "PASS"
+  blocker_count: 0
+  high_count: 0
+  release_risks:
+    - id: "R-CR097-01"
+      severity: "LOW"
+      status: "pending_cp8_acceptance"
+      summary: "本次账户为模拟新账户、空持仓、非交易日；不覆盖非空持仓、交易日、实盘账户或交易写接口。"
+evidence:
+  preflight_check: "process/checks/CR097-RUNTIME-PREFLIGHT-2026-06-19.md"
+  cp6: "process/checks/CP6-CR097-REAL-QMT-READONLY-RUNTIME-SMOKE-CODING-DONE.md"
+  cp7: "process/checks/CP7-CR097-REAL-QMT-READONLY-RUNTIME-SMOKE-VERIFICATION-DONE.md"
+  redacted_preflight: "/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/cr097-runtime-preflight-redacted-20260619.json"
+  redacted_query_positions: "/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/cr097-query-positions-redacted-20260619.json"
+affected_surface:
+  code_changed: false
+  process_docs_changed: true
+  runtime_external_state_touched: true
+  runtime_scope: "health/capabilities/query_positions_readonly only"
+  data_written:
+    - "redacted evidence JSON under ~/.quant-lab"
+    - "process checkpoint / release context files"
+install_validation_summary:
+  required: false
+  reason: "No installation or package change in CR097."
+release_documents:
+  release_notes:
+    path: "N/A"
+    profile: "minimal"
+    status: "N/A"
+    reason: "No user-facing package release."
+  deploy_checklist:
+    path: "N/A"
+    profile: "minimal"
+    status: "N/A"
+    reason: "No deployment action."
+  rollback:
+    path: "N/A"
+    profile: "minimal"
+    status: "N/A"
+    reason: "No state migration; stop gateway / disregard CR097 evidence if rejected."
+  migration:
+    path: "N/A"
+    profile: "minimal"
+    status: "N/A"
+    reason: "No schema or data migration."
+  feedback:
+    path: "process/checkpoints/CP8-CR097-DELIVERY-READINESS.md"
+    profile: "minimal"
+    status: "embedded"
+    reason: "Feedback and follow-up routing embedded in CP8."
+non_authorized_items:
+  - "NAS"
+  - "Windows .env / credential read"
+  - "raw account / raw positions / raw orders / raw trades / raw logs"
+  - "submit / cancel / buy / sell"
+  - "simulation / live run"
+  - "provider fetch / lake write / catalog publish"
+  - "real release execution"
+  - "CR089 auto-start"
+  - "CR020 gateway route restore"
+follow_up_summary:
+  candidates:
+    - id: "CR097-FU-01"
+      status: "candidate"
+      summary: "若后续需要非空持仓、交易日或实盘只读验证，必须另起 runtime authorization。"
+    - id: "CR091-FU-02"
+      status: "candidate"
+      summary: "NAS package exchange remains separate and not authorized by CR097."
+release_decision_rationale: "CR097 runtime smoke scope passed and evidence is redacted; no code release or external publish is performed."

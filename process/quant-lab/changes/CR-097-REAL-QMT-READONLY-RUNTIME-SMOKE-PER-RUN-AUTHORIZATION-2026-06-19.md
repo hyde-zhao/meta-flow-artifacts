@@ -1,12 +1,12 @@
 ---
 cr_id: "CR-097"
-status: "active-pending-runtime-preflight"
+status: "active-runtime-smoke-pass-pending-cp8-approval"
 impact_level: "high"
 workflow_mode_before: "production"
 workflow_mode_after_change: "standard"
 fast_lane_upgrade_reason: "真实 QMT / MiniQMT / XtQuant / gateway / runner runtime 属于高风险运行授权，必须 standard gate"
 rollback_to: "delivered"
-approval_result: "runtime-scope-authorized-by-user-pending-preflight"
+approval_result: "runtime-smoke-pass-pending-cp8-approval"
 created_at: "2026-06-19T10:45:00+08:00"
 created_by: "host-orchestrator"
 approved_by: "user"
@@ -48,7 +48,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | 授权范围 | 启动真实 QMT 只读 runtime smoke 门禁，并在完成 preflight 后执行 health / capabilities / query_positions_readonly |
 | 不授权范围 | NAS、`.env` / 凭据读取、账户原文、资金 / 持仓明细 / 委托 / 成交原文、submit / cancel / buy / sell、simulation / live、provider fetch、lake write、catalog publish、真实 release |
 | 有效期 | 本 CR 当前 run；若中断或改 scope，需重新确认 |
-| 当前状态 | 已授权 scope，但实际执行仍等待 runtime preflight 和人工协助信息 |
+| 当前状态 | 已完成 runtime preflight 和 query_positions_readonly 成功路径；等待 CP8 人工确认关闭 |
 
 ## CP8 Follow-up 来源
 
@@ -118,7 +118,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | H-CR097-02 | 确认账户模式：模拟账户 / 实盘只读 / 其他 | 决定 evidence 脱敏级别和是否允许 query_positions_readonly | RESOLVED：模拟账户 |
 | H-CR097-03 | 确认只读入口：已有 gateway / runner 命令、XtQuant Python 环境，或需要用户手工执行后回传 evidence | 决定是由 Codex 执行命令，还是用户在交易主机手工运行 | RESOLVED：Windows gateway；Windows host `172.30.32.1`；推荐端口 `18765`；WSL client IP `172.30.33.29/32` |
 | H-CR097-04 | 确认 evidence 输出路径 | 推荐 `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/`；真实交易主机可先生成本地文件再转脱敏摘要 | RESOLVED：使用 `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/`，Windows 侧可写入 `C:\Users\<user>\.quant-lab\evidence\qmt\cr097\redacted\` 后复制到 WSL |
-| H-CR097-05 | 运行时保持人工可中止 | 防止误触非只读操作或客户端异常 | PARTIAL：用户在 Windows 侧启动 gateway；执行 health / capabilities / query_positions 前保持人工可中止，若出现异常立即 Ctrl+C 停止 gateway |
+| H-CR097-05 | 运行时保持人工可中止 | 防止误触非只读操作或客户端异常 | RESOLVED：用户在 Windows 侧启动 gateway；执行 health / capabilities / query_positions 期间保持人工可中止 |
 
 ## Runtime Preflight 参数
 
@@ -135,6 +135,18 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | run_id | `cr097-readonly-smoke-20260619-sim-001` |
 | request_id | `cr097-readonly-smoke-20260619-sim-001-query-positions` |
 | wsl_redacted_evidence_dir | `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/` |
+
+## Runtime Smoke 执行结果
+
+| 检查项 | 结论 | 证据 | 说明 |
+|---|---|---|---|
+| network_port | PASS | `timeout 5 nc -vz 172.30.32.1 18765` | WSL 到 Windows gateway 端口连通 |
+| health | PASS | `GET /qmt/health` | `status=ok`、`session_ready=true`、`runtime_status=xtquant-ready` |
+| capabilities | PASS | `GET /qmt/capabilities` | contract 可读；operation/live/simulation/order/cancel 未授权 |
+| auth negative gate | PASS | unsigned `POST /qmt/account/positions` | `auth_header_missing`，adapter / query counters 为 0 |
+| query_positions_readonly | PASS | `qmt_runtime_cli query-positions` | `position_count=0`、`items_redacted=[]`、`raw_payload_emitted=false`、`redaction_status=pass` |
+| redacted evidence | PASS | `/home/hyde/.quant-lab/evidence/qmt/cr097/redacted/cr097-query-positions-redacted-20260619.json` | 只保存脱敏摘要，不保存原始持仓或 secret |
+| forbidden boundary | PASS | CP7 / evidence | NAS、Windows `.env`、账户原文、交易写、simulation/live、provider/lake/publish 均未执行 |
 
 ## fast-lane / standard 判定
 
@@ -155,10 +167,12 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 - 开发 / 执行启动条件：
   - [x] 用户明确授权真实 QMT runtime 只读 smoke
   - [x] 冲突预检通过
-  - [ ] 用户补充 `H-CR097-01..05`
-  - [ ] 生成 runtime preflight evidence
-  - [ ] 明确最终执行命令 / 手工运行步骤和 evidence 输出路径
-  - [ ] forbidden counters 初始为 0
+  - [x] 用户补充 `H-CR097-01..05`
+  - [x] 生成 runtime preflight evidence
+  - [x] 明确最终执行命令 / 手工运行步骤和 evidence 输出路径
+  - [x] forbidden counters 初始为 0
+  - [x] query_positions_readonly 成功路径产生脱敏 evidence
+  - [ ] CP8 人工确认关闭
 
 ## 执行链路
 
@@ -188,9 +202,9 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 
 ## 处理结论
 
-- 审批结论：`runtime-scope-authorized-by-user-pending-preflight`
+- 审批结论：`runtime-smoke-pass-pending-cp8-approval`
 - [ ] 自动批准（低风险启动）
-- [x] 待人工确认（高风险 runtime；用户已给出启动授权，但执行前仍需 H-CR097-01..05）
+- [x] 待人工确认（高风险 runtime；runtime smoke 已完成，当前等待 CP8 确认关闭）
 - [ ] 待人工审批（高风险且无授权）
 
 ## 关联对象

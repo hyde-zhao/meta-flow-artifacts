@@ -95,7 +95,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: 'CR097 started from CR092-FU-02 at 2026-06-19T10:45:00+08:00 after user authorized true QMT runtime. Scope is real readonly runtime smoke only: health, capabilities, query_positions_readonly with redacted evidence. It does not authorize NAS, .env/credential reads, account originals, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
+last_consistency_check: 'CR097 runtime smoke passed at 2026-06-19T11:42:47+08:00 after user authorized true QMT runtime and a minimal HMAC client env read. Scope was health, capabilities, unsigned auth-negative positions, and authenticated query_positions_readonly with redacted evidence. Result: simulated empty account, position_count=0, raw_payload_emitted=false. It does not authorize NAS, Windows .env/credential reads, account originals, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore. CR097 awaits CP8 approval to close.'
 root_authority:
   status: logical-cutover-complete
   authoritative_root: /home/hyde/workspace/quant-lab
@@ -139,7 +139,7 @@ active_crs:
   source_checkpoint: process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
   source_decision_id: DQ-CP8-CR092-04
   priority: 2
-  blocked_by: 'runtime-preflight: user authorized true QMT runtime, but execution still requires H-CR097-01..05: client location/reachability, account mode, readonly entrypoint, redacted evidence output path, and human abort support'
+  blocked_by: 'cp8-pending: runtime smoke passed with redacted evidence; waiting user approval of CP8 READY, empty-account/non-trading-day residual risk, inline-fallback waiver and non-authorization boundary'
   impact_surface:
   - runtime_authorization
   - per_run_authorization
@@ -159,9 +159,9 @@ active_crs:
   - no_order_write
   - no_nas_access
   - no_provider_lake_publish
-  next_gate: runtime-preflight
-  next_action: 收集 H-CR097-01..05 后执行 runtime preflight；确认前不得读取凭据、账户原文、NAS、执行交易写、simulation/live 或 provider/lake/publish。
-  last_checked_at: '2026-06-19T10:45:00+08:00'
+  next_gate: cp8-human-approval
+  next_action: 发起 CP8 人工确认；用户 approve 后关闭 CR097 当前交付。不得读取 Windows `.env`、账户原文、NAS、执行交易写、simulation/live 或 provider/lake/publish。
+  last_checked_at: '2026-06-19T11:42:47+08:00'
 - id: CR-096
   title: User-provided Simulated Evidence Checker Run
   status: closed-current-delivery
