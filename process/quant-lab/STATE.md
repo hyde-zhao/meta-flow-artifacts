@@ -3,13 +3,13 @@ project_id: quant-lab
 workflow_mode: production
 current_phase: delivered
 current_agent: host-orchestrator
-active_change: ''
+active_change: 'CR-097'
 active_story: ''
-iteration: 545
+iteration: 546
 blocked: false
 blocked_reason: ''
-last_action: 用户回复“同意”，按 CR096 CP8 approve 解析，接受 DQ-CP8-CR096-01..03；已回填 CP8 人工审查结果，关闭 CR096 为 READY / closed-current-delivery。关闭范围仅覆盖 contract-filled redacted evidence YAML 和单文件 checker passed=true。
-next_action: "当前无 active_change。若继续推进，推荐候选为 CR092-FU-02 real readonly runtime smoke per-run authorization，但它涉及真实 QMT / MiniQMT / XtQuant / gateway / runner runtime，必须独立人工门禁和明确逐 run 授权；NAS、凭据/账户、交易、provider/lake/publish 仍不授权。"
+last_action: 用户要求提交并推送项目后启动 CR092-FU-02，并明确“同意授权真实 QMT runtime”。源码仓库已推送 commit a4e5ec8，artifact 仓库已推送 commit bf04eef。已创建 CR097 作为 CR092-FU-02 正式 runtime 授权门禁。
+next_action: "CR097 active，进入 runtime preflight。需要用户协助确认 H-CR097-01..05：QMT 客户端运行位置 / 是否当前环境可达、账户模式、只读入口或手工运行方式、脱敏 evidence 输出路径、运行时人工中止协助。确认前不得读取凭据、账户原文、NAS、执行交易写、simulation/live 或 provider/lake/publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
