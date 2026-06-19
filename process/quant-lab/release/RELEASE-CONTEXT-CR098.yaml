@@ -1,0 +1,113 @@
+schema_version: "release-context-v1"
+release_context_id: "RELEASE-CONTEXT-CR098"
+cr_id: "CR-098"
+parent_cr: "CR-097"
+story_id: "CR098-RUNNER-READONLY-INTEGRATION"
+created_at: "2026-06-19T12:25:05+08:00"
+owner: "host-orchestrator"
+release_artifact_profile: "compact"
+release_decision: "READY_WITH_RISK"
+release_scope:
+  in_scope:
+    - "runner readonly adapter fake default"
+    - "injected QmtClient / transport fixture path"
+    - "evidence readonly summary fields"
+    - "CR098 contract tests and CR091/CR020 regression"
+    - "process CP5/CP6/CP7 evidence"
+  out_of_scope:
+    - "HMAC secret read"
+    - "Windows .env read"
+    - "Windows gateway startup"
+    - "runner runtime execution"
+    - "raw account / raw positions / raw orders / raw trades / raw logs"
+    - "NAS"
+    - "submit / cancel / buy / sell"
+    - "simulation / live"
+    - "provider fetch / lake write / catalog publish"
+version_decision:
+  current_version: "0.1.0-cr091-offline-runner"
+  target_version: "0.1.1-cr098-runner-readonly-integration"
+  version_bump: "patch-internal"
+  reason: "Extends existing offline runner with readonly gateway integration facade and evidence summary; no public release or install change."
+quality_summary:
+  cp6_result: "PASS"
+  cp7_result: "PASS_WITH_RISK"
+  blocker_count: 0
+  high_count: 0
+  release_risks:
+    - id: "R-CR098-01"
+      severity: "HIGH"
+      status: "requires-risk-acceptance"
+      summary: "Real runner runtime smoke was not authorized or executed."
+    - id: "R-CR098-02"
+      severity: "MEDIUM"
+      status: "requires-risk-acceptance"
+      summary: "Non-empty positions and trading-day path remain unproven."
+evidence:
+  cp5: "process/checkpoints/CP5-CR098-RUNNER-READONLY-INTEGRATION-READINESS.md"
+  cp6: "process/checks/CP6-CR098-RUNNER-READONLY-INTEGRATION-CODING-DONE.md"
+  implementation: "process/stories/CR098-RUNNER-READONLY-INTEGRATION-IMPLEMENTATION.md"
+  cp7: "process/checks/CP7-CR098-RUNNER-READONLY-INTEGRATION-VERIFICATION-DONE.md"
+  verification: "docs/features/cr098-runner-readonly-integration/VERIFICATION.md"
+  test_report: "docs/features/cr098-runner-readonly-integration/TEST-REPORT.md"
+  review: "docs/features/cr098-runner-readonly-integration/REVIEW.md"
+  fixes: "docs/features/cr098-runner-readonly-integration/FIXES.md"
+affected_surface:
+  code_changed: true
+  process_docs_changed: true
+  runtime_external_state_touched: false
+  runtime_scope: "not executed"
+  code:
+    - "trading/qmt_client.py"
+    - "trading/strategy_runner/readonly_gateway.py"
+    - "trading/strategy_runner/evidence.py"
+    - "trading/strategy_runner/__init__.py"
+    - "tests/test_cr098_runner_readonly_integration.py"
+install_validation_summary:
+  required: false
+  reason: "No installer, platform agent, platform skill, dependency or deployment script changed."
+release_documents:
+  release_notes:
+    path: "process/docs/release/RELEASE-NOTES-CR098.md"
+    profile: "compact"
+    status: "generated"
+  deploy_checklist:
+    path: "process/docs/release/DEPLOY-CHECKLIST-CR098.md"
+    profile: "compact"
+    status: "generated"
+  rollback:
+    path: "process/docs/release/ROLLBACK-CR098.md"
+    profile: "compact"
+    status: "generated"
+  migration:
+    path: "process/docs/release/MIGRATION-CR098.md"
+    profile: "compact"
+    status: "generated"
+  feedback:
+    path: "process/docs/release/FEEDBACK-CR098.md"
+    profile: "compact"
+    status: "generated"
+non_authorized_items:
+  - "HMAC secret / Windows .env / credential read"
+  - "Windows gateway startup or runner runtime execution"
+  - "raw account / raw positions / raw orders / raw trades / raw logs"
+  - "NAS access"
+  - "submit / cancel / buy / sell"
+  - "simulation / live"
+  - "provider fetch / lake write / catalog publish"
+  - "real release execution / publish"
+follow_up_summary:
+  candidates:
+    - id: "CR098-FU-01"
+      status: "candidate"
+      summary: "Runner real readonly smoke with explicit per-run authorization."
+    - id: "CR097-FU-01"
+      status: "candidate"
+      summary: "Non-empty positions or trading-day readonly retest."
+    - id: "CR091-FU-02"
+      status: "candidate"
+      summary: "NAS package exchange remains separate."
+    - id: "ORDER-WRITE-FU"
+      status: "candidate"
+      summary: "Order-write / simulation / live remains separate high-risk gate."
+release_decision_rationale: "Offline integration and fixture verification passed; real runner runtime and non-empty/trading-day behavior remain unproven and require risk acceptance."

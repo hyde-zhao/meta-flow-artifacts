@@ -5,11 +5,11 @@ current_phase: delivered
 current_agent: host-orchestrator
 active_change: 'CR-098'
 active_story: ''
-iteration: 557
+iteration: 559
 blocked: false
 blocked_reason: ''
-last_action: 用户回复“同意”，接受 CR098 CP5 design readiness；host-orchestrator 已回填 CP5，并完成 CP6 offline implementation：新增 runner readonly runtime config / injected QmtClient facade、evidence readonly summary 扩展、CR098 contract tests 和 CP6 实现证据。
-next_action: "进入 CR098 CP7 offline verification。当前仍不授权 HMAC secret 读取、Windows `.env`、gateway 启动、runner runtime、账户原文、NAS、交易写、simulation/live 或 provider/lake/publish；如需真实 runner smoke 必须逐 run 另行授权。"
+last_action: CR098 CP8 delivery readiness 已生成：Release Context、CP8 context、compact release docs、CP8 auto precheck 和人工审查稿；推荐 READY_WITH_RISK，等待用户确认。
+next_action: "等待用户审查 `process/checkpoints/CP8-CR098-DELIVERY-READINESS.md` 并回复 `approve` / `修改: <具体修改点>` / `reject`。approve 只关闭 CR098 当前离线 runner readonly integration 交付，不授权 HMAC secret 读取、Windows `.env`、gateway 启动、runner runtime、账户原文、NAS、交易写、simulation/live 或 provider/lake/publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
