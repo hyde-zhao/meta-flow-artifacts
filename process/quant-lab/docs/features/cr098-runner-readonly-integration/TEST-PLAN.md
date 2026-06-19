@@ -1,7 +1,7 @@
 ---
 test_plan_id: "cr098-runner-readonly-integration"
 cr_id: "CR-098"
-status: "draft-pending-cp5-approval"
+status: "implemented-pending-cp7"
 owner: "host-orchestrator"
 created_at: "2026-06-19T12:07:32+08:00"
 ---
@@ -13,6 +13,7 @@ created_at: "2026-06-19T12:07:32+08:00"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 0.1 | 2026-06-19 | host-orchestrator | 初版测试计划，覆盖离线 contract、real transport fixture、redaction 和可选 runtime smoke。 |
+| 0.2 | 2026-06-19 | host-orchestrator | CP6 已新增离线/fixture 测试并通过，真实 runtime smoke 仍未授权。 |
 
 ## 1. 测试策略
 

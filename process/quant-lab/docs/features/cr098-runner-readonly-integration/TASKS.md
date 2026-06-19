@@ -1,7 +1,7 @@
 ---
 task_plan_id: "cr098-runner-readonly-integration"
 cr_id: "CR-098"
-status: "draft-pending-cp5-approval"
+status: "implemented-pending-cp7"
 owner: "host-orchestrator"
 created_at: "2026-06-19T12:07:32+08:00"
 ---
@@ -13,6 +13,7 @@ created_at: "2026-06-19T12:07:32+08:00"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 0.1 | 2026-06-19 | host-orchestrator | 初版任务计划，按 adapter、evidence、tests、optional runtime evidence 分组。 |
+| 0.2 | 2026-06-19 | host-orchestrator | CP6 完成 T01-T06；T07 evidence schema 字段已落地，T08 runtime checklist 留待 CP7 授权。 |
 
 ## Wave 1: Offline Contract
 

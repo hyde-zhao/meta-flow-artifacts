@@ -1,7 +1,7 @@
 ---
 feature_id: "cr098-runner-readonly-integration"
 cr_id: "CR-098"
-status: "draft-pending-cp5-approval"
+status: "implemented-pending-cp7"
 owner: "host-orchestrator"
 created_at: "2026-06-19T12:07:32+08:00"
 source_hld: "docs/qmt/CR098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-HLD.md"
@@ -14,6 +14,7 @@ source_hld: "docs/qmt/CR098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-HLD.md"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 0.1 | 2026-06-19 | host-orchestrator | 初版 CP5 Feature Design，冻结 runner readonly gateway adapter、runtime authorization 和 evidence 合同。 |
+| 0.2 | 2026-06-19 | host-orchestrator | CP5 approved 后完成 CP6 offline implementation，等待 CP7 验证。 |
 
 ## 1. Feature 边界
 

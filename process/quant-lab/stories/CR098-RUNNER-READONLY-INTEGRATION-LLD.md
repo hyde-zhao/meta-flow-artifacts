@@ -1,7 +1,7 @@
 ---
 story_id: "CR098-RUNNER-READONLY-INTEGRATION"
 cr_id: "CR-098"
-status: "draft-pending-cp5-approval"
+status: "approved-for-offline-implementation"
 lld_policy: "technical-note"
 owner: "host-orchestrator"
 created_at: "2026-06-19T12:07:32+08:00"
@@ -15,6 +15,7 @@ source_hld: "docs/qmt/CR098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-HLD.md"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 0.1 | 2026-06-19 | host-orchestrator | 初版 LLD，冻结文件影响范围、接口、失败行为、测试和运行授权边界。 |
+| 0.2 | 2026-06-19 | host-orchestrator | 用户回复“同意”批准 CP5；进入 CP6 offline implementation。 |
 
 ## 1. 实现目标
 

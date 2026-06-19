@@ -1,12 +1,12 @@
 ---
 cr_id: "CR-098"
-status: "active-cp3-approved-pending-cp5-design-readiness"
+status: "active-cp6-passed-pending-cp7-verification"
 impact_level: "high"
 workflow_mode_before: "production"
 workflow_mode_after_change: "standard"
 fast_lane_upgrade_reason: "命中 QMT runner、Windows gateway、HMAC client env、真实只读账户查询、redacted evidence 和未来交易写扩展边界；不得使用 fast-lane。"
 rollback_to: "CR097 closed-current-delivery / READY"
-approval_result: "cp3-approved-pending-cp5-design-readiness"
+approval_result: "cp6-passed-pending-cp7-verification"
 created_at: "2026-06-19T11:55:26+08:00"
 created_by: "host-orchestrator"
 approved_by: "user"
@@ -31,7 +31,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 
 用户要求启动 `QMT runner readonly integration gate`。本 CR 的目标是把 CR091 已交付的离线 strategy runner 与 CR097 已验证的 Windows gateway 只读链路衔接起来：runner 不直接 import XtQuant，不直接读取 Windows `.env`，只通过受控 gateway client 完成 `health`、`capabilities` 和 `query_positions_readonly`，并把结果保存为 `.quant-lab` 下的脱敏 evidence。
 
-本 CR 已通过 CP2 scope 和 CP3 HLD 人工确认，当前进入 CP5 design readiness 评审；它仍不授权立即读取 HMAC secret、启动 gateway、执行 runner、查询账户或写任何交易动作。
+本 CR 已通过 CP2 scope、CP3 HLD 和 CP5 design readiness 人工确认，并已完成 CP6 离线实现；它仍不授权读取 HMAC secret、启动 gateway、执行 runner runtime、查询账户或写任何交易动作。
 
 ## 上游事实
 
@@ -121,17 +121,19 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 |---|---|---|
 | CP2 scope review | approved | 用户已确认范围、不授权边界和推荐方案 |
 | CP3 HLD | approved | 用户已确认 HLD 和不授权边界 |
-| CP5 design readiness | pending | LLD / TEST-PLAN / TASKS 已生成，等待用户确认 |
-| CP6 implementation | not-started | CP5 approve 后才允许 |
-| CP7 verification | not-started | CP6 后执行；真实 runtime 仍需逐 run 授权 |
+| CP5 design readiness | approved | 用户已确认 LLD / TEST-PLAN / TASKS 和不授权边界 |
+| CP6 implementation | passed | 离线 adapter / evidence / tests 已完成 |
+| CP7 verification | pending | 需要执行离线验证；真实 runtime 仍需逐 run 授权 |
 | CP8 closure | not-started | CP7 后发起 |
 
 ## 处理结论
 
-- 审批结论：`cp3-approved-pending-cp5-design-readiness`
+- 审批结论：`cp6-passed-pending-cp7-verification`
 - [x] 已启动正式 CR（用户明确要求启动）
 - [x] CP2 人工确认完成（高风险 runner / gateway integration）
 - [x] CP3 HLD 人工确认完成（runner-owned readonly facade）
+- [x] CP5 design readiness 人工确认完成
+- [x] CP6 offline implementation 完成
 - [ ] 未授权运行（当前不读取 HMAC env、不启动 gateway、不执行 runner）
 
 ## CP2 审查结果
@@ -153,6 +155,26 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | 用户回复 | “同意” |
 | 接受决策 | `DQ-CP3-CR098-01..05` |
 | 下一门控 | CP5 design readiness |
+
+## CP5 审查结果
+
+| 字段 | 内容 |
+|---|---|
+| 结论 | `approved` |
+| 审查时间 | `2026-06-19T12:18:02+08:00` |
+| 用户回复 | “同意” |
+| 接受决策 | `DQ-CP5-CR098-01..05` |
+| 下一门控 | CP6 offline implementation |
+
+## CP6 实现结果
+
+| 字段 | 内容 |
+|---|---|
+| 结论 | `PASS` |
+| 检查文件 | `process/checks/CP6-CR098-RUNNER-READONLY-INTEGRATION-CODING-DONE.md` |
+| 实现说明 | `process/stories/CR098-RUNNER-READONLY-INTEGRATION-IMPLEMENTATION.md` |
+| 源码范围 | `trading/strategy_runner/readonly_gateway.py`、`trading/strategy_runner/evidence.py`、`trading/qmt_client.py`、`tests/test_cr098_runner_readonly_integration.py` |
+| 下一门控 | CP7 offline verification；真实 runner runtime smoke 仍需逐 run 授权 |
 
 ## 关联对象
 
