@@ -5,11 +5,11 @@ current_phase: delivered
 current_agent: host-orchestrator
 active_change: 'CR-098'
 active_story: ''
-iteration: 555
+iteration: 556
 blocked: false
 blocked_reason: ''
-last_action: 用户回复“同意”，接受 CR098 CP2 范围、推荐 runner-owned readonly adapter 方向、runtime 不授权边界、`.quant-lab` redacted evidence 路由和 follow-up 分流；host-orchestrator 已回填 CP2 并生成 CR098 HLD、CP3 discussion、CP3 context、CP3 precheck 和 CP3 HLD review。
-next_action: "等待用户审查 `process/checkpoints/CP3-CR098-QMT-RUNNER-READONLY-INTEGRATION-HLD-REVIEW.md` 并回复 `approve` / `修改: <具体修改点>` / `reject`。approve 只允许进入 CP5 design readiness，不授权 HMAC secret 读取、Windows `.env`、gateway 启动、runner runtime、账户原文、NAS、交易写、simulation/live 或 provider/lake/publish。"
+last_action: 用户回复“同意”，接受 CR098 CP3 HLD、runner-owned readonly gateway adapter facade、per-run explicit env boundary、CP3 不授权 runtime 和 follow-up 分流；host-orchestrator 已回填 CP3 并生成 CR098 Feature Design、LLD、TEST-PLAN、TASKS、CP5 context、CP5 auto precheck 和 CP5 readiness review。
+next_action: "等待用户审查 `process/checkpoints/CP5-CR098-RUNNER-READONLY-INTEGRATION-READINESS.md` 并回复 `approve` / `修改: <具体修改点>` / `reject`。approve 只允许进入 CP6 offline implementation，不授权 HMAC secret 读取、Windows `.env`、gateway 启动、runner runtime、账户原文、NAS、交易写、simulation/live 或 provider/lake/publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:

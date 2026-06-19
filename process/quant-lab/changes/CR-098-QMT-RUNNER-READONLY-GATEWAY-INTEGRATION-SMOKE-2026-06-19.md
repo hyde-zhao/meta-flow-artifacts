@@ -1,12 +1,12 @@
 ---
 cr_id: "CR-098"
-status: "active-cp2-approved-pending-cp3-hld-approval"
+status: "active-cp3-approved-pending-cp5-design-readiness"
 impact_level: "high"
 workflow_mode_before: "production"
 workflow_mode_after_change: "standard"
 fast_lane_upgrade_reason: "命中 QMT runner、Windows gateway、HMAC client env、真实只读账户查询、redacted evidence 和未来交易写扩展边界；不得使用 fast-lane。"
 rollback_to: "CR097 closed-current-delivery / READY"
-approval_result: "cp2-approved-pending-cp3-hld-approval"
+approval_result: "cp3-approved-pending-cp5-design-readiness"
 created_at: "2026-06-19T11:55:26+08:00"
 created_by: "host-orchestrator"
 approved_by: "user"
@@ -31,7 +31,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 
 用户要求启动 `QMT runner readonly integration gate`。本 CR 的目标是把 CR091 已交付的离线 strategy runner 与 CR097 已验证的 Windows gateway 只读链路衔接起来：runner 不直接 import XtQuant，不直接读取 Windows `.env`，只通过受控 gateway client 完成 `health`、`capabilities` 和 `query_positions_readonly`，并把结果保存为 `.quant-lab` 下的脱敏 evidence。
 
-本 CR 已通过 CP2 scope 人工确认，当前进入 CP3 HLD 评审；它仍不授权立即读取 HMAC secret、启动 gateway、执行 runner、查询账户或写任何交易动作。
+本 CR 已通过 CP2 scope 和 CP3 HLD 人工确认，当前进入 CP5 design readiness 评审；它仍不授权立即读取 HMAC secret、启动 gateway、执行 runner、查询账户或写任何交易动作。
 
 ## 上游事实
 
@@ -120,17 +120,18 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | 门控 | 状态 | 说明 |
 |---|---|---|
 | CP2 scope review | approved | 用户已确认范围、不授权边界和推荐方案 |
-| CP3 HLD | pending | HLD 已生成，等待用户确认 |
-| CP5 design readiness | not-started | CP3 approve 后生成 |
+| CP3 HLD | approved | 用户已确认 HLD 和不授权边界 |
+| CP5 design readiness | pending | LLD / TEST-PLAN / TASKS 已生成，等待用户确认 |
 | CP6 implementation | not-started | CP5 approve 后才允许 |
 | CP7 verification | not-started | CP6 后执行；真实 runtime 仍需逐 run 授权 |
 | CP8 closure | not-started | CP7 后发起 |
 
 ## 处理结论
 
-- 审批结论：`cp2-approved-pending-cp3-hld-approval`
+- 审批结论：`cp3-approved-pending-cp5-design-readiness`
 - [x] 已启动正式 CR（用户明确要求启动）
 - [x] CP2 人工确认完成（高风险 runner / gateway integration）
+- [x] CP3 HLD 人工确认完成（runner-owned readonly facade）
 - [ ] 未授权运行（当前不读取 HMAC env、不启动 gateway、不执行 runner）
 
 ## CP2 审查结果
@@ -142,6 +143,16 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | 用户回复 | “同意” |
 | 接受决策 | `DQ-CP2-CR098-01..05` |
 | 下一门控 | CP3 HLD review |
+
+## CP3 审查结果
+
+| 字段 | 内容 |
+|---|---|
+| 结论 | `approved` |
+| 审查时间 | `2026-06-19T12:07:32+08:00` |
+| 用户回复 | “同意” |
+| 接受决策 | `DQ-CP3-CR098-01..05` |
+| 下一门控 | CP5 design readiness |
 
 ## 关联对象
 

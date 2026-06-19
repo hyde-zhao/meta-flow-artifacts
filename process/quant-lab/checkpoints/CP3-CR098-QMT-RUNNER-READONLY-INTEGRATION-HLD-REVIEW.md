@@ -2,11 +2,11 @@
 checkpoint_id: "CP3"
 checkpoint_name: "CR098 QMT Runner Readonly Integration HLD Review"
 type: "auto_then_manual"
-status: "pending"
+status: "approved"
 owner: "host-orchestrator"
 created_at: "2026-06-19T12:00:19+08:00"
-reviewed_by: ""
-reviewed_at: ""
+reviewed_by: "user"
+reviewed_at: "2026-06-19T12:07:32+08:00"
 auto_check_result: "process/checks/CP3-CR098-QMT-RUNNER-READONLY-INTEGRATION-HLD-PRECHECK.md"
 target:
   phase: "solution-design"
@@ -85,19 +85,19 @@ CR098 HLD 推荐采用 `runner-owned readonly gateway adapter facade`：在 CR09
 
 | 条目 | 审查结果 | 证据 | 审查意见 |
 |---|---|---|---|
-| CP2 approved | 待审查 | `process/checkpoints/CP2-CR098-QMT-RUNNER-READONLY-INTEGRATION-SCOPE-REVIEW.md` | 用户已同意 |
-| HLD ready | 待审查 | `docs/qmt/CR098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-HLD.md` | 待审查 |
-| AGA ready | 待审查 | `process/discussions/CP3-CR098-HLD-DISCUSSION-LOG.md` | 已记录 |
+| CP2 approved | approved | `process/checkpoints/CP2-CR098-QMT-RUNNER-READONLY-INTEGRATION-SCOPE-REVIEW.md` | 用户已同意 |
+| HLD ready | approved | `docs/qmt/CR098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-HLD.md` | 用户已同意 |
+| AGA ready | approved | `process/discussions/CP3-CR098-HLD-DISCUSSION-LOG.md` | 已记录 |
 
 ## Checklist
 
 | # | 检查项 | 审查结果 | 证据 | 审查意见 |
 |---|---|---|---|---|
-| 1 | 推荐架构是否可接受 | 待审查 | `DQ-CP3-CR098-01` | runner-owned readonly facade |
-| 2 | secret/env 边界是否可接受 | 待审查 | `DQ-CP3-CR098-02` | per-run explicit env path |
-| 3 | CP5 前不实现是否可接受 | 待审查 | `DQ-CP3-CR098-03` | 标准门禁 |
-| 4 | runtime 不授权是否清楚 | 待审查 | `DQ-CP3-CR098-04` | CP3 不授权执行 |
-| 5 | follow-up 分流是否清楚 | 待审查 | `DQ-CP3-CR098-05` | NAS/order-write 独立 |
+| 1 | 推荐架构是否可接受 | approved | `DQ-CP3-CR098-01` | 接受 runner-owned readonly facade |
+| 2 | secret/env 边界是否可接受 | approved | `DQ-CP3-CR098-02` | 接受 per-run explicit env path |
+| 3 | CP5 前不实现是否可接受 | approved | `DQ-CP3-CR098-03` | 接受标准门禁 |
+| 4 | runtime 不授权是否清楚 | approved | `DQ-CP3-CR098-04` | CP3 不授权执行 |
+| 5 | follow-up 分流是否清楚 | approved | `DQ-CP3-CR098-05` | NAS/order-write 独立 |
 
 ## Exit Criteria
 
@@ -117,10 +117,10 @@ CR098 HLD 推荐采用 `runner-owned readonly gateway adapter facade`：在 CR09
 
 ## 人工审查结果
 
-- 结论：`pending`
-- 审查人：
-- 审查时间：
-- 用户回复：
-- 接受的决策项：
-- 修改意见：
-- 不授权边界：
+- 结论：`approved`
+- 审查人：user
+- 审查时间：2026-06-19T12:07:32+08:00
+- 用户回复：同意
+- 接受的决策项：`DQ-CP3-CR098-01..05`
+- 修改意见：无
+- 不授权边界：CP3 approve 只允许进入 CP5 design readiness；不授权 HMAC secret 读取、Windows `.env`、gateway 启动、runner runtime、账户原文、NAS、交易写、simulation/live、provider/lake/publish、CR089 auto-start 或 CR020 gateway route restore。
