@@ -129,14 +129,41 @@ cr_tracking:
   index_path: process/changes/CR-INDEX.yaml
   current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
   last_consistency_check: '2026-06-20T10:13:18+08:00 closed: CR101 CP8 approved by user reply 批准，并推送到远端; CR101 current offline delivery closed as READY_WITH_RISK. No real NAS access/list/read/copy/write/publish/delete, credential/env/account read, QMT/MiniQMT/XtQuant/gateway runtime, submit/cancel, simulation/live, provider/lake/catalog publish, CR089 auto-start or CR020 route restore authorized.'
-  next_action_queue:
-  - candidate_id: FU-CR091-005
-    legacy_id: CR091-FU-05
-    title: Cross-platform strategy delivery and adapter layer realignment
-    formal_cr_path: process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
-    recommended_action: closed_current_delivery_ready_with_risk
-    gate_status: closed
-    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+	  next_action_queue:
+	  - candidate_id: RA-CR101-001
+	    legacy_ids:
+	    - QMT-DIRECT-RUN-VALIDATION-FU
+	    title: QMT direct-run validation authorization gate
+	    formal_cr_path: ""
+	    recommended_action: wait_for_user_selection_and_runtime_authorization
+	    gate_status: not_started
+	    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+	  - candidate_id: RA-CR101-002
+	    legacy_ids:
+	    - MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU
+	    title: MiniQMT gateway adapter validation authorization gate
+	    formal_cr_path: ""
+	    recommended_action: wait_for_user_selection_and_runtime_authorization
+	    gate_status: not_started
+	    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+	  - candidate_id: RA-CR101-003
+	    legacy_ids:
+	    - NAS-REAL-EXCHANGE-FU
+	    title: NAS real package exchange validation authorization gate
+	    formal_cr_path: ""
+	    recommended_action: wait_for_user_selection_and_nas_authorization
+	    gate_status: not_started
+	    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+	  - candidate_id: FU-CR101-001
+	    legacy_ids:
+	    - ORDER-WRITE-SIMULATION-LIVE-FU
+	    - ORDER-WRITE-FU
+	    - CR091-FU-03
+	    title: Order-write / simulation / live design authorization gate
+	    formal_cr_path: ""
+	    recommended_action: wait_for_user_selection_and_high_risk_design_gate
+	    gate_status: not_started
+	    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
   active_crs:
   - id: CR-101
     title: Cross-Platform Strategy Delivery and Adapter Layer Realignment

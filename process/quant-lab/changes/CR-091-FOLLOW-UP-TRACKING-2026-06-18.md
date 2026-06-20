@@ -3,7 +3,7 @@ source_cr: "CR-091"
 status: "open"
 created_at: "2026-06-18T15:58:59+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-20T09:30:00+08:00"
+updated_at: "2026-06-20T10:45:00+08:00"
 checkpoint_source: "CP8"
 cr_index_path: "process/changes/CR-INDEX.yaml"
 ---
@@ -23,7 +23,7 @@ CR091 已于 `2026-06-18T15:40:09+08:00` 关闭为 `closed-current-delivery / RE
 | 关闭范围 | 1 | 否 | CR091 离线 runner 研究 / 设计 / 实现 / fixture 验证已关闭 |
 | 不授权范围 | 1 | 否 | 真实运行、NAS、凭据、账户、交易写和 publish 均不授权 |
 | 风险接受项 | 3 | 否 | `R-CR091-CP7-001..003` 已由 CP8 接受 |
-| 后续 CR 候选项 | 5 | 否 | `CR091-FU-01..05`；`CR091-FU-05` 为用户 2026-06-19 新确认的首选重对齐候选 |
+| 后续 CR 候选项 | 9 | 否 | `CR091-FU-01..05` 中 `CR091-FU-05` 已由 CR101 关闭；CR101 后续真实验证 gate 已规范为 `RA-CR101-001..003` / `FU-CR101-001` |
 | 取消 / deferred 项 | 1 | 否 | 真实交易、真实账户和真实运行全部后置 |
 
 ## 结构化候选项
@@ -72,11 +72,55 @@ follow_up_items:
     historical_baseline_status: reframed
     reframed_by: FU-CR091-005
     reframe_summary: Quant-lab owns the runner; MiniQMT is the current adapter target, while strategy delivery keeps a cross-platform target contract with QMT direct-run supported now.
-    next_action: cp8_delivery_readiness_ready_with_risk
-  - id: FU-CR091-003
+    next_action: CR101 closed-current-delivery / READY_WITH_RISK; child validation gates require independent authorization.
+  - id: RA-CR101-001
     legacy_ids:
+      - QMT-DIRECT-RUN-VALIDATION-FU
+    title: QMT direct-run validation authorization gate
+    kind: runtime-authorization
+    lifecycle_status: candidate
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: runtime
+    formal_cr_path: ""
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    historical_baseline_status: n/a
+    next_action: wait_for_user_selection_and_runtime_authorization
+  - id: RA-CR101-002
+    legacy_ids:
+      - MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU
+    title: MiniQMT gateway adapter validation authorization gate
+    kind: runtime-authorization
+    lifecycle_status: candidate
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: runtime
+    formal_cr_path: ""
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    historical_baseline_status: n/a
+    next_action: wait_for_user_selection_and_runtime_authorization
+  - id: RA-CR101-003
+    legacy_ids:
+      - NAS-REAL-EXCHANGE-FU
+    title: NAS real package exchange validation authorization gate
+    kind: runtime-authorization
+    lifecycle_status: candidate
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: runtime
+    formal_cr_path: ""
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    historical_baseline_status: n/a
+    next_action: wait_for_user_selection_and_nas_authorization
+  - id: FU-CR101-001
+    legacy_ids:
+      - ORDER-WRITE-SIMULATION-LIVE-FU
+      - ORDER-WRITE-FU
       - CR091-FU-03
-    title: Order-write / submit-cancel design gate
+    title: Order-write / simulation / live design authorization gate
     kind: runtime-authorization
     lifecycle_status: candidate
     readiness_status: n/a
@@ -84,10 +128,25 @@ follow_up_items:
     gate_profile: standard
     formal_cr_path: ""
     blocked_by:
-      - FU-CR091-005
+      - RA-CR101-001
+      - RA-CR101-002
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
     historical_baseline_status: retained
-    next_action: blocked_until_adapter_and_delivery_target_realignment
+    next_action: not_recommended_until_readonly_validation_gates_are_settled
+  - id: FU-CR091-003
+    legacy_ids:
+      - CR091-FU-03
+    title: Order-write / submit-cancel design gate
+    kind: runtime-authorization
+    lifecycle_status: superseded
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: standard
+    formal_cr_path: ""
+    superseded_by: FU-CR101-001
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    historical_baseline_status: retained
+    next_action: use_FU-CR101-001_as_current_candidate_key
   - id: FU-CR091-004
     legacy_ids:
       - CR091-FU-04
@@ -111,7 +170,11 @@ follow_up_items:
 | CR091-FU-01 | Real QMT readonly runtime smoke design gate | closed | CR | 1 | runtime_authorization; per_run_authorization; readonly_query_positions; credential_boundary; redacted_evidence | `process/changes/CR-092-REAL-QMT-READONLY-RUNTIME-SMOKE-DESIGN-GATE-2026-06-18.md` | `CR-092` | closed | CR092 已关闭为 READY_WITH_RISK；真实运行仍未授权 | 后续候选转入 `process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md` | DQ-CP8-CR091-04 |
 | CR091-FU-02 | NAS package exchange gate | closed | CR | 2 | nas_package_exchange; package_pull; package_publish; credential_boundary | `process/changes/CR-100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-GATE-2026-06-19.md` | `CR-100` | closed | CR100 已关闭为 READY_WITH_RISK；真实 NAS 仍未授权 | 后续真实 NAS publish / pull / copy / 校验需独立 gate | DQ-CP8-CR091-04 |
 | CR091-FU-05 | Cross-platform strategy delivery and adapter layer realignment | closed | CR | 1 | strategy_package_contract; cross_platform_delivery_target; qmt_direct_run_target; quant_lab_runner_adapter_layer; miniqmt_gateway_adapter; goldminer_future_adapter; manifest_schema; evidence_redaction | `process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md` | `CR-101` | closed | 用户已批准 CR101 CP8；CR101 当前离线交付关闭为 READY_WITH_RISK。真实系统仍未授权或验证。 | 后续 QMT direct-run、MiniQMT gateway、NAS real exchange、order-write / simulation / live 均保留为独立 candidate gate，不自动启动。 | USER-20260619-RUNNER-ADAPTER-AND-CROSS-PLATFORM-DELIVERY / DQ-CP8-CR101-01..05 |
-| CR091-FU-03 | Order-write / submit-cancel design gate | candidate | CR | 4 | submit_cancel; order_write; simulation_live; trading_runtime_boundary |  | blocked_by=CR091-FU-05 | 未启动 | 最高风险，且应等待 runner adapter / delivery target 边界重对齐后再设计 | 不建议立即启动 | DQ-CP8-CR091-04 / USER-20260619-RUNNER-ADAPTER-AND-CROSS-PLATFORM-DELIVERY |
+| RA-CR101-001 | QMT direct-run validation authorization gate | candidate | CR | 1 | qmt_direct_run_target; qmt_terminal_runtime; runtime_authorization; redacted_evidence; credential_boundary |  | legacy=QMT-DIRECT-RUN-VALIDATION-FU | 未启动 | 需要独立 runtime_authorization CR 和脱敏 evidence 方案 | 等待用户明确选择；不自动代跑 QMT | DQ-CP8-CR101-04 |
+| RA-CR101-002 | MiniQMT gateway adapter validation authorization gate | candidate | CR | 2 | quant_lab_runner_adapter_layer; miniqmt_gateway_adapter; readonly_gateway; runtime_authorization; credential_boundary |  | legacy=MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU | 未启动 | 需要独立 readonly runtime gate，只允许 health/capabilities/query_positions | 等待用户明确选择；不把策略放入 MiniQMT runner | DQ-CP8-CR101-04 |
+| RA-CR101-003 | NAS real package exchange validation authorization gate | candidate | CR | 3 | nas_package_exchange; package_publish; package_pull; package_copy; credential_boundary |  | legacy=NAS-REAL-EXCHANGE-FU | 未启动 | 需要用户明确 NAS path、权限、read/write 范围和脱敏 evidence | 等待用户明确选择；当前不授权 NAS 访问 | DQ-CP8-CR101-04 |
+| FU-CR101-001 | Order-write / simulation / live design authorization gate | candidate | CR | 4 | submit_cancel; order_write; simulation_live; trading_runtime_boundary |  | legacy=ORDER-WRITE-SIMULATION-LIVE-FU / ORDER-WRITE-FU / CR091-FU-03 | 未启动 | 最高风险，应等待 readonly runtime / adapter evidence 稳定后再评审 | 不建议立即启动 | DQ-CP8-CR101-04 |
+| CR091-FU-03 | Order-write / submit-cancel design gate | superseded | CR | 4 | submit_cancel; order_write; simulation_live; trading_runtime_boundary |  | superseded_by=FU-CR101-001 | 未启动 | 已由 CR101 后续 gate 命名规范重解释 | 不作为当前候选主键；保留历史别名 | DQ-CP8-CR091-04 / USER-20260619-RUNNER-ADAPTER-AND-CROSS-PLATFORM-DELIVERY |
 | CR091-FU-04 | Ledger hygiene | closed | CR | 4 | CR019 tracking; CR025 nested active_change; cr_tracking consistency | `process/changes/CR-093-LEDGER-HYGIENE-CR019-CR025-TRACKING-CLEANUP-2026-06-18.md` | `CR-093` | closed | CR093 已关闭为 READY_WITH_RISK；R-CR093-01/02 已由用户接受 | 当前交付已关闭；后续 warning cleanup / checker convergence 需用户另选候选后新建 CR | DQ-CP8-CR091-04 |
 
 ## 2026-06-19 架构重对齐补充
@@ -121,27 +184,27 @@ follow_up_items:
 1. runner 是 quant-lab 的 runner，不是 MiniQMT runner；MiniQMT 只是当前第一个接口适配目标，后续可能接掘金量化等其他接口。
 2. 策略交付同样要按跨平台模型设计；当前只实现 / 验证 QMT direct-run target，但 manifest、entrypoint、validation 和 package layout 必须保留可扩展 target / adapter 边界。
 
-因此，后续正式 CR 的推荐顺序调整为：
+因此，后续正式 CR 的推荐顺序已调整为以下历史计划；其中 `CR091-FU-05` 已由 CR101 承接并关闭，旧式自由文本 gate ID 仅作为 `legacy_id` 保留：
 
 | 顺序 | 候选 | 推荐目标 | 当前支持范围 | 明确不做 |
 |---:|---|---|---|---|
-| 1 | `CR091-FU-05` | 重对齐策略包 target taxonomy、quant-lab runner adapter protocol、QMT direct-run 当前 target、MiniQMT gateway 当前 adapter contract | 只做离线设计 / schema / fixture / checker / 包重生成；当前策略交付只支持 QMT，runner adapter 当前只适配 MiniQMT gateway | 不连接 QMT/MiniQMT/NAS，不读 `.env` / 凭据 / 账户，不下单，不 simulation/live |
-| 2 | `QMT-DIRECT-RUN-VALIDATION-FU` | 在用户手工环境证明 QMT 可直接加载当前策略 target | 需要独立逐 run 授权和脱敏 evidence | 不由 agent 代跑，不读取账号 / 日志原文 |
-| 3 | `MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU` | 证明 quant-lab runner 通过 MiniQMT gateway adapter 完成只读链路 | 仅 health / capabilities / query_positions，只保留脱敏 evidence | 不把策略放到 MiniQMT runner 中运行 |
-| 4 | `CR091-FU-03` | order-write / submit-cancel / simulation-live 设计门禁 | 等 adapter protocol、QMT target 和只读 evidence 稳定后再启动 | 不建议当前启动 |
+| 1 | `FU-CR091-005` / legacy `CR091-FU-05` | 重对齐策略包 target taxonomy、quant-lab runner adapter protocol、QMT direct-run 当前 target、MiniQMT gateway 当前 adapter contract | 已由 `CR-101` 关闭为 READY_WITH_RISK | 真实 QMT/MiniQMT/NAS/runtime/交易仍未授权 |
+| 2 | `RA-CR101-001` / legacy `QMT-DIRECT-RUN-VALIDATION-FU` | 在用户环境证明 QMT 可直接加载当前策略 target | 需要独立逐 run 授权和脱敏 evidence | 不由 agent 自动代跑，不读取账号 / 日志原文 |
+| 3 | `RA-CR101-002` / legacy `MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU` | 证明 quant-lab runner 通过 MiniQMT gateway adapter 完成只读链路 | 仅 health / capabilities / query_positions，只保留脱敏 evidence | 不把策略放到 MiniQMT runner 中运行 |
+| 4 | `FU-CR101-001` / legacy `ORDER-WRITE-SIMULATION-LIVE-FU` | order-write / submit-cancel / simulation-live 设计门禁 | 等 adapter protocol、QMT target 和只读 evidence 稳定后再启动 | 不建议当前启动 |
 
-`CR091-FU-05` 启动时的候选正式标题建议为：`Cross-Platform Strategy Delivery and Adapter Layer Realignment`。正式 CR ID 必须在启动时先做冲突预检后再分配，不在本台账中预设。
+`FU-CR091-005` 的正式 CR 为 `CR-101 Cross-Platform Strategy Delivery and Adapter Layer Realignment`，已于 `2026-06-20T10:13:18+08:00` 关闭。后续候选不得复用旧启动交接作为当前入口。
 
 ## 2026-06-20 CR101 后续授权 Gate
 
 CR101 S04 将以下对象登记为后续候选 gate。它们不是当前授权范围，不能因 CR101 CP8 approve 自动启动。
 
-| Gate ID | 状态 | 目标 | 启动条件 | 不授权边界 |
-|---|---|---|---|---|
-| QMT-DIRECT-RUN-VALIDATION-FU | candidate-not-started | 真实 QMT terminal direct-run 验证 | 用户明确发起 runtime_authorization CR，并确认 evidence 脱敏方式 | 当前不授权 agent 代跑 QMT、读取账号/日志或声明真实 ready。 |
-| MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU | candidate-not-started | MiniQMT gateway readonly adapter 验证 | 用户明确发起 readonly runtime gate，限定 health / capabilities / query_positions | 当前不授权 gateway connect、账户原文、订单写入或 runtime 启动。 |
-| NAS-REAL-EXCHANGE-FU | candidate-not-started | 真实 NAS package exchange 验证 | 用户明确发起 NAS gate，逐项列出 path、权限和 read/write 范围 | 当前不授权 NAS list/read/write/copy/publish/pull/delete/mount。 |
-| ORDER-WRITE-SIMULATION-LIVE-FU | candidate-not-started | order-write / simulation / live 设计门禁 | S01-S04 完成且用户明确接受高风险门禁 | 当前不授权 submit/cancel/buy/sell、simulation/live 或交易。 |
+| Candidate ID | Legacy ID | 状态 | 目标 | 启动条件 | 不授权边界 |
+|---|---|---|---|---|---|
+| RA-CR101-001 | QMT-DIRECT-RUN-VALIDATION-FU | candidate | 真实 QMT terminal direct-run 验证 | 用户明确发起 runtime_authorization CR，并确认 evidence 脱敏方式 | 当前不授权 agent 代跑 QMT、读取账号/日志或声明真实 ready。 |
+| RA-CR101-002 | MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU | candidate | MiniQMT gateway readonly adapter 验证 | 用户明确发起 readonly runtime gate，限定 health / capabilities / query_positions | 当前不授权 gateway connect、账户原文、订单写入或 runtime 启动。 |
+| RA-CR101-003 | NAS-REAL-EXCHANGE-FU | candidate | 真实 NAS package exchange 验证 | 用户明确发起 NAS gate，逐项列出 path、权限和 read/write 范围 | 当前不授权 NAS list/read/write/copy/publish/pull/delete/mount。 |
+| FU-CR101-001 | ORDER-WRITE-SIMULATION-LIVE-FU | candidate | order-write / simulation / live 设计门禁 | S01-S04 完成且用户明确接受高风险门禁 | 当前不授权 submit/cancel/buy/sell、simulation/live 或交易。 |
 
 S04 收口文档路径：`docs/qmt/CR101-VALIDATION-AND-FOLLOW-UP-GATES.md`。
 

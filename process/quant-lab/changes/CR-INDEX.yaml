@@ -122,19 +122,66 @@ status_model:
     - blocked
 current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
 next_action_queue:
-  - candidate_id: FU-CR091-005
-    title: Cross-platform strategy delivery and adapter layer realignment
+  - candidate_id: RA-CR101-001
+    legacy_ids:
+      - QMT-DIRECT-RUN-VALIDATION-FU
+    title: QMT direct-run validation authorization gate
     source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
-    formal_cr_path: process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
-    recommended_action: closed_current_delivery_ready_with_risk
-    gate_status: closed
+    formal_cr_path: ""
+    recommended_action: wait_for_user_selection_and_runtime_authorization
+    gate_status: not_started
     non_authorized_scope:
       - qmt_miniqmt_xtquant_gateway_runtime
-      - nas_access
       - credential_or_env_read
       - account_funds_positions_orders_fills_raw_log_read
       - submit_cancel_buy_sell
       - simulation_live
+      - provider_lake_catalog_publish
+  - candidate_id: RA-CR101-002
+    legacy_ids:
+      - MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU
+    title: MiniQMT gateway adapter validation authorization gate
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: ""
+    recommended_action: wait_for_user_selection_and_runtime_authorization
+    gate_status: not_started
+    non_authorized_scope:
+      - qmt_miniqmt_xtquant_gateway_runtime
+      - credential_or_env_read
+      - account_funds_positions_orders_fills_raw_log_read
+      - submit_cancel_buy_sell
+      - simulation_live
+      - provider_lake_catalog_publish
+  - candidate_id: RA-CR101-003
+    legacy_ids:
+      - NAS-REAL-EXCHANGE-FU
+    title: NAS real package exchange validation authorization gate
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: ""
+    recommended_action: wait_for_user_selection_and_nas_authorization
+    gate_status: not_started
+    non_authorized_scope:
+      - nas_access
+      - credential_or_env_read
+      - qmt_miniqmt_xtquant_gateway_runtime
+      - submit_cancel_buy_sell
+      - simulation_live
+      - provider_lake_catalog_publish
+  - candidate_id: FU-CR101-001
+    legacy_ids:
+      - ORDER-WRITE-SIMULATION-LIVE-FU
+      - ORDER-WRITE-FU
+      - CR091-FU-03
+    title: Order-write / simulation / live design authorization gate
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: ""
+    recommended_action: wait_for_user_selection_and_high_risk_design_gate
+    gate_status: not_started
+    non_authorized_scope:
+      - submit_cancel_buy_sell
+      - simulation_live
+      - account_funds_positions_orders_fills_raw_log_read
+      - qmt_miniqmt_xtquant_gateway_runtime
       - provider_lake_catalog_publish
 root_authority:
   status: logical-cutover-complete
@@ -170,800 +217,974 @@ index_schema:
 - next_action
 - last_checked_at
 active_crs: []
-- id: CR-100
-  title: NAS Package Exchange Offline Readiness Gate
-  status: closed-current-delivery
-  source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
-  formal_cr_path: process/changes/CR-100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-GATE-2026-06-19.md
-  follow_up_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
-  parent_cr: CR-091
-  source_checkpoint: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md
-  source_decision_id: DQ-CP8-CR091-04; USER-20260619-COMPLETE-CR100-OFFLINE-READINESS
-  priority: 2
-  blocked_by: 'closed: user authorized completing all non-real-NAS CR091-FU-02 delivery and remote push at 2026-06-19. CR100 closed as READY_WITH_RISK; real NAS path/mount/permission/publish/pull/copy/check remain unverified and unauthorized.'
-  impact_surface:
-  - nas_package_exchange
-  - package_pull
-  - package_publish
-  - package_manifest
-  - fake_exchange_fixture
-  - immutable_local_cache
-  - active_pointer
-  - credential_boundary
-  - no_runtime_connection
-  - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
-  - process/changes/CR-INDEX.yaml
-  - process/STATE.md
-  conflict_keys:
-  - nas_package_exchange
-  - package_publish
-  - package_pull
-  - credential_boundary
-  - no_runtime_connection
-  - no_order_write
-  - no_provider_lake_publish
-  next_gate: closed
-  next_action: "CR100 当前交付已关闭为 READY_WITH_RISK。后续若要真实 NAS publish / pull / copy / 校验，必须另起独立授权 gate；当前仍不授权 NAS、凭据、runtime、交易或 provider/lake/catalog publish。"
-  last_checked_at: '2026-06-19T18:45:00+08:00'
-- id: CR-099
-  title: QMT Runner Real Readonly Smoke Per-run Authorization
-  status: closed-current-delivery
-  source_tracking: process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
-  formal_cr_path: process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
-  parent_cr: CR-098
-  source_checkpoint: process/checkpoints/CP8-CR098-DELIVERY-READINESS.md
-  source_decision_id: DQ-CP8-CR098-02
-  priority: 1
-  blocked_by: 'closed: user approved CR099 CP8 at 2026-06-19T17:15:29+08:00, accepting READY_WITH_RISK, zero-position / trading-day residual risks and non-authorization boundary. No additional runtime, order submit/cancel, Windows .env, NAS, publish or trading-write authorization granted.'
-  impact_surface:
-  - qmt_runner
-  - readonly_gateway
-  - runtime_authorization
-  - per_run_authorization
-  - hmac_client_env
-  - redacted_evidence
-  - credential_boundary
-  - process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
-  - process/changes/CR-INDEX.yaml
-  - process/STATE.md
-  conflict_keys:
-  - runtime_authorization
-  - qmt_runner
-  - readonly_gateway
-  - credential_boundary
-  - no_order_write
-  - no_nas_access
-  - no_provider_lake_publish
-  next_gate: closed
-  next_action: "CR099 当前交付已关闭为 READY_WITH_RISK。后续可按用户选择启动非空 / 交易日 readonly retest、NAS package exchange gate 或 order-write design gate；均需独立门禁和明确授权。"
-  last_checked_at: '2026-06-19T17:15:29+08:00'
-- id: CR-098
-  title: QMT Runner Readonly Gateway Integration Smoke
-  status: closed-current-delivery
-  source_tracking: process/changes/CR-097-FOLLOW-UP-TRACKING-2026-06-19.md
-  formal_cr_path: process/changes/CR-098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-SMOKE-2026-06-19.md
-  follow_up_tracking: process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
-  parent_cr: CR-097
-  source_checkpoint: process/checkpoints/CP8-CR097-DELIVERY-READINESS.md
-  source_decision_id: USER-20260619-START-QMT-RUNNER-READONLY-INTEGRATION-GATE
-  priority: 1
-  blocked_by: 'closed: user approved CR098 CP8 at 2026-06-19T12:31:24+08:00, accepting READY_WITH_RISK, real runner runtime not executed, non-empty/trading-day residual risks, inline-fallback waiver and non-authorization boundary'
-  impact_surface:
-  - qmt_runner
-  - readonly_gateway
-  - runtime_authorization
-  - per_run_authorization
-  - hmac_client_env
-  - redacted_evidence
-  - credential_boundary
-  - process/changes/CR-097-FOLLOW-UP-TRACKING-2026-06-19.md
-  - process/changes/CR-INDEX.yaml
-  - process/STATE.md
-  conflict_keys:
-  - runtime_authorization
-  - qmt_runner
-  - readonly_gateway
-  - credential_boundary
-  - no_order_write
-  - no_nas_access
-  - no_provider_lake_publish
-  next_gate: closed
-  next_action: CR098 当前交付已关闭。推荐下一个候选为 CR098-FU-01 runner real readonly smoke per-run authorization；启动前必须用户明确确认，且在新的 CR 门禁通过前仍不授权 secret/env/runtime/NAS/trading/publish。
-  last_checked_at: '2026-06-19T12:31:24+08:00'
-- id: CR-097
-  title: Real QMT Readonly Runtime Smoke Per-run Authorization
-  status: closed-current-delivery
-  source_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
-  formal_cr_path: process/changes/CR-097-REAL-QMT-READONLY-RUNTIME-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
-  parent_cr: CR-092
-  source_checkpoint: process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
-  source_decision_id: DQ-CP8-CR092-04
-  priority: 2
-  blocked_by: 'closed: user approved CP8 at 2026-06-19T11:51:06+08:00, accepting READY, empty-account/non-trading-day residual risk, inline-fallback waiver and non-authorization boundary'
-  impact_surface:
-  - runtime_authorization
-  - per_run_authorization
-  - qmt_runtime
-  - miniqmt_xtquant
-  - readonly_query_positions
-  - credential_boundary
-  - redacted_evidence
-  - process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
-  - process/changes/CR-INDEX.yaml
-  - process/STATE.md
-  conflict_keys:
-  - runtime_authorization
-  - qmt_runtime
-  - readonly_query_positions
-  - credential_boundary
-  - no_order_write
-  - no_nas_access
-  - no_provider_lake_publish
-  next_gate: closed
-  next_action: CR097 当前交付已关闭。后续如需非空持仓、交易日、实盘只读、NAS、交易写、simulation/live 或 provider/lake/publish，必须另起独立授权 CR。
-  last_checked_at: '2026-06-19T11:51:06+08:00'
-- id: CR-096
-  title: User-provided Simulated Evidence Checker Run
-  status: closed-current-delivery
-  source_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
-  formal_cr_path: process/changes/CR-096-USER-PROVIDED-SIMULATED-EVIDENCE-CHECKER-RUN-2026-06-19.md
-  parent_cr: CR-092
-  source_checkpoint: process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
-  source_decision_id: DQ-CP8-CR092-04
-  priority: 1
-  blocked_by: 'closed: user approved CR096 CP8 at 2026-06-19T10:30:00+08:00, accepting DQ-CP8-CR096-01..03 and READY. Closure only covers contract-filled redacted evidence YAML and single-file checker passed=true; it does not authorize runtime, NAS, credential/account reads, trading, provider/lake/publish or real release.'
-  impact_surface:
-  - simulated_evidence
-  - single_file_read
-  - scripts/check_cr092_simulated_evidence.py
-  - process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
-  - process/changes/CR-INDEX.yaml
-  - process/STATE.md
-  conflict_keys:
-  - simulated_evidence
-  - single_file_read
-  - credential_boundary
-  - redacted_evidence
-  - no_runtime_connection
-  - no_credential_read
-  - no_nas_access
-  next_gate: closed
-  next_action: CR096 当前交付已关闭为 READY；真实只读 runtime smoke、NAS、凭据/账户、交易、provider/lake/publish 均需独立 CR 和明确授权。
-  last_checked_at: '2026-06-19T10:30:00+08:00'
-- id: CR-095
-  title: Standalone Checker / CLI Output Convergence
-  status: closed-current-delivery
-  source_tracking: process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
-  formal_cr_path: process/changes/CR-095-STANDALONE-CHECKER-CLI-OUTPUT-CONVERGENCE-2026-06-19.md
-  parent_cr: CR-093
-  source_checkpoint: process/checkpoints/CP8-CR094-DELIVERY-READINESS.md
-  source_decision_id: DQ-CP8-CR094-03
-  priority: 2
-  blocked_by: 'closed: user approved CR095 CP8 at 2026-06-19T09:39:15+08:00, accepting DQ-CP8-CR095-01..04 and READY. Closure only covers standalone checker / main CLI output convergence; it does not authorize runtime, NAS, credential/account reads, trading, provider/lake/publish or real release.'
-  impact_surface:
-  - checker_output_convergence
-  - scripts/check_cr_tracking_consistency.py
-  - tests/test_cr093_cr_tracking_consistency.py
-  - process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
-  - process/changes/CR-INDEX.yaml
-  - process/STATE.md
-  conflict_keys:
-  - cr_tracking_consistency
-  - checker_output_convergence
-  - no_runtime_connection
-  - no_credential_read
-  - no_nas_access
-  next_gate: closed
-  next_action: CR095 当前交付已关闭。
-  last_checked_at: '2026-06-19T09:39:15+08:00'
-- id: CR-094
-  title: Warning Cleanup / Strict-Warnings Readiness
-  status: closed-current-delivery
-  source_tracking: process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
-  formal_cr_path: process/changes/CR-094-WARNING-CLEANUP-STRICT-WARNINGS-READINESS-2026-06-19.md
-  parent_cr: CR-093
-  source_checkpoint: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md
-  source_decision_id: DQ-CP8-CR093-02; DQ-CP8-CR093-04
-  priority: 1
-  blocked_by: 'closed: user approved CR094 CP8 at 2026-06-19T09:08:56+08:00, accepting DQ-CP8-CR094-01..04 and READY. CR094 current strict-warnings readiness delivery is closed. Closure only covers static ledger / checker warning cleanup; it does not authorize QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, .env/credential/account read, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
-  impact_surface:
-  - cr_tracking_consistency
-  - strict_warnings
-  - cp8_follow_up_tracking_rows
-  - process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
-  - process/changes/CR-INDEX.yaml
-  - process/STATE.md
-  - /home/hyde/workspace/meta-flow/meta_flow/checks/cr_tracking.py
-  conflict_keys:
-  - ledger_hygiene
-  - cr_tracking_consistency
-  - strict_warnings
-  - no_runtime_connection
-  - no_credential_read
-  - no_nas_access
-  next_gate: closed
-  next_action: CR094 当前交付已关闭为 READY；CR093-FU-02 保持 candidate-not-started，必须用户明确选择后另起门禁。
-  last_checked_at: '2026-06-19T09:08:56+08:00'
-- id: CR-093
-  title: Ledger Hygiene for CR019 / CR025 Tracking Cleanup
-  status: closed-current-delivery
-  source_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
-  formal_cr_path: process/changes/CR-093-LEDGER-HYGIENE-CR019-CR025-TRACKING-CLEANUP-2026-06-18.md
-  parent_cr: CR-092
-  source_checkpoint: process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
-  source_decision_id: DQ-CP8-CR092-04
-  priority: 1
-  blocked_by: 'closed: user approved CR093 CP8 at 2026-06-19T08:39:22+08:00, accepting DQ-CP8-CR093-01..05 and READY_WITH_RISK. CR093 current ledger hygiene delivery is closed. Closure only covers CR019/CR025 cr-tracking blocker governance; it does not authorize QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, .env/credential/account read, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
-  impact_surface:
-  - cr_tracking_consistency
-  - CR019 follow-up tracking
-  - CR025 historical active_change
-  - scripts/check_cr_tracking_consistency.py
-  - process/STATE.md history scan
-  - process/changes/CR-INDEX.yaml
-  conflict_keys:
-  - ledger_hygiene
-  - cr_tracking_consistency
-  - no_runtime_connection
-  - no_credential_read
-  - no_nas_access
-  next_gate: closed
-  next_action: CR093 当前交付已关闭为 READY_WITH_RISK。推荐下一个低风险候选为 CR093-FU-01 warning cleanup / strict-warnings readiness；CR093-FU-02 checker output convergence、CR092-FU-01 simulated evidence checker run、CR092-FU-02 real runtime smoke、CR091-FU-02 NAS 和 CR091-FU-03 order-write 均需用户明确选择后另起门禁。
-  last_checked_at: '2026-06-19T08:39:22+08:00'
-- id: CR-092
-  title: Real QMT Readonly Runtime Smoke Design Gate
-  status: closed-current-delivery
-  source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
-  formal_cr_path: process/changes/CR-092-REAL-QMT-READONLY-RUNTIME-SMOKE-DESIGN-GATE-2026-06-18.md
-  parent_cr: CR-091
-  source_checkpoint: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md
-  source_decision_id: DQ-CP8-CR091-04
-  priority: 1
-  follow_up_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
-  blocked_by: 'closed: user approved CR092 CP8 at 2026-06-18T17:25:00+08:00, accepting DQ-CP8-CR092-01..05 and READY_WITH_RISK while explicitly skipping optional manual evidence validation. CR092 current readiness / evidence guardrail delivery is closed. Closure only covers guide/template/checker/tests/quality/release/process evidence; it does not authorize QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, .env/credential/account read, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
-  impact_surface:
-  - real QMT readonly runtime smoke design
-  - runtime_authorization
-  - per_run_authorization
-  - qmt_strategy_runner
-  - readonly gateway health
-  - readonly gateway capabilities
-  - readonly query_positions smoke design
-  - redacted runtime evidence
-  - forbidden operation counters
-  - credential_boundary
-  - account_read_boundary
-  conflict_keys:
-  - trading_runtime_boundary
-  - per_run_authorization
-  - credential_boundary
-  - account_permission
-  - readonly_query_positions
-  - qmt_strategy_runner
-  - redacted_evidence
-  - no_nas_package_exchange
-  - order_write_excluded
-  next_gate: closed
-  next_action: CR092 当前交付已关闭为 READY_WITH_RISK。后续候选见 process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md；实际模拟 evidence 检查、真实 runtime smoke、NAS、order-write、ledger hygiene 均需用户明确选择后另起门禁。
-  last_checked_at: '2026-06-18T17:25:00+08:00'
-- id: CR-091
-  title: QMT Strategy Runner Research / Design / Implementation Plan
-  status: closed-current-delivery
-  source_tracking: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
-  formal_cr_path: process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md
-  parent_cr: CR-089
-  source_checkpoint: current conversation
-  source_decision_id: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
-  priority: 1
-  blocked_by: 'closed: user approved CR091 CP8 at 2026-06-18T15:40:09+08:00, accepting DQ-CP8-CR091-01..05 and READY_WITH_RISK. CR091 current offline runner research / design / implementation / fixture verification delivery is closed. Closure only covers fake transport, fixtures/tests, local package/cache intake and redacted evidence; it does not authorize NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish or CR089 runtime.'
-  impact_surface:
-  - QMT strategy runner
-  - multi-factor strategy adapter
-  - generic strategy adapter
-  - runner research spike
-  - strategy package intake
-  - immutable local cache
-  - active package pointer
-  - readonly gateway query_positions
-  - runtime_authorization
-  - credential_boundary
-  - order_write_future_gate
-  conflict_keys:
-  - strategy_package_contract
-  - miniqmt_runner_install
-  - trading_runtime_boundary
-  - per_run_authorization
-  - credential_boundary
-  - nas_package_exchange
-  - qmt_strategy_runner
-  - multi_factor_strategy_runner
-  - generic_strategy_adapter
-  - order_write_excluded
-  next_gate: closed
-  next_action: 'CR091 当前交付已关闭。基于 2026-06-19 用户纠正，推荐下一目标改为 CR091-FU-05 Cross-platform strategy delivery and adapter layer realignment：runner 属于 quant-lab，MiniQMT 只是当前 adapter，策略交付当前仅支持 QMT direct-run 但保留跨平台 target 扩展。CR091-FU-03 order-write、真实 NAS 和真实 runtime 均需等待独立门禁。'
-  last_checked_at: '2026-06-18T15:40:09+08:00'
-- id: CR-046
-  title: QMT and MiniQMT Dual-Target Strategy Delivery Framework
-  status: closed-current-delivery
-  source_tracking: USER-20260613-TERMINAL-NATIVE-STRATEGY-EXPORT
-  formal_cr_path: process/changes/CR-046-TERMINAL-NATIVE-SIMULATION-STRATEGY-EXPORT-2026-06-13.md
-  follow_up_tracking: process/changes/CR-046-FOLLOW-UP-TRACKING-2026-06-13.md
-  priority: 1
-  blocked_by: 'closed: 用户于 2026-06-18T07:59:20+08:00 同意 CR046 CP8，接受 READY_WITH_RISK 和 DQ-CP8-CR046-01..05；CR046 当前 framework-first 文档 / 契约 / fixture / 静态验证交付关闭。仍不授权具体策略交付、QMT terminal validation、real transfer/import、NAS、credential_read、account_id_read、account/cash/position/order/fill query、MiniQMT/XtQuant/gateway connection、order_submit、order_cancel、simulation submit、live trading、Windows bridge runtime、provider_fetch、lake_write 或 catalog_publish。'
-  impact_surface:
-  - dual-target strategy delivery framework
-  - QMT terminal strategy
-  - MiniQMT runner install design
-  - strategy package contract
-  - verification framework
-  - adapter boundary
-  - runner component layout
-  - risk guard
-  - evidence model
-  - follow-up strategy delivery gate
-  - research framework follow-up
-  conflict_keys:
-  - dual_target_strategy_framework
-  - qmt_terminal_strategy
-  - miniqmt_runner_install
-  - strategy_package_contract
-  - verification_framework
-  - trading_runtime_boundary
-  - credential_boundary
-  - account_permission
-  - per_run_authorization
-  - no_runtime_connection
-  - no_terminal_validation
-  next_gate: closed
-  next_action: CR046 当前交付已关闭；早期 QMT / MiniQMT 双目标和 MiniQMT runner install 表述保留为历史基线。基于 2026-06-19 用户纠正，后续应先启动 CR091-FU-05 重对齐跨平台策略交付 target 和 quant-lab runner adapter layer；CR047/CR048/CR049 需按重对齐后的 QMT direct-run / MiniQMT gateway adapter 语义重新消费。
-  last_checked_at: '2026-06-18T07:59:20+08:00'
-- id: CR-080
-  title: Data/reports Restore or Copy Gate
-  status: closed-current-delivery
-  source_tracking: process/checkpoints/CP8-CR079-DELIVERY-READINESS.md
-  formal_cr_path: process/changes/CR-080-DATA-REPORTS-RESTORE-COPY-GATE-2026-06-17.md
-  parent_cr: CR-079
-  source_checkpoint: process/checkpoints/CP8-CR079-DELIVERY-READINESS.md
-  source_decision_id: DQ-CP8-CR079-04
-  priority: 1
-  blocked_by: 'closed: 用户于 2026-06-17T07:32:59+08:00 回复“同意”，接受 DQ-CP8-CR080-01..05、READY_WITH_RISK 和 R-CR080-001..03；CR080 当前 local restore/copy 交付关闭。仍不授权重复 copy、restore、delete、content read/checksum/sample parse、credential read、NAS/provider/lake/catalog、remote Git、runtime、old root retirement、destructive cleanup 或 CR046 recovery。'
-  impact_surface:
-  - reports restore
-  - data restore
-  - target authoritative root
-  - legacy retained assets
-  - copy_restore_boundary
-  - content_read_boundary
-  - verification and rollback
-  conflict_keys:
-  - reports_data_restore
-  - copy_restore_boundary
-  - content_read_boundary
-  - no_credential_read
-  - no_provider_fetch
-  - no_lake_write
-  - no_catalog_publish
-  - no_git_remote_write_boundary
-  - no_old_root_retirement
-  - CR046_paused_boundary
-  next_gate: closed
-  next_action: CR080 已关闭；target root 已有 reports/data。内容级证明、NAS compare、provider rebuild、CR077 old root retirement、CR078 remote governance 和 CR046 recovery 均保持后续候选或暂停状态，必须独立授权。
-  last_checked_at: '2026-06-17T07:32:59+08:00'
-- id: CR-081
-  title: Process Ledger Externalization / Symlink Cutover Gate
-  status: closed-current-delivery
-  source_tracking: USER-20260617-PROCESS-LEDGER-EXTERNALIZATION
-  formal_cr_path: process/changes/CR-081-PROCESS-LEDGER-EXTERNALIZATION-SYMLINK-CUTOVER-2026-06-17.md
-  parent_cr: CR-080
-  source_checkpoint: current conversation
-  source_decision_id: USER-20260617-PROCESS-LEDGER-EXTERNALIZATION
-  priority: 1
-  blocked_by: 'closed: 用户于 2026-06-17T08:59:23+08:00 回复“同意，下一步做什么？”，接受 DQ-CP8-CR081-01..05、READY_WITH_RISK 和 R-CR081-001..03；CR081 当前 process ledger externalization / symlink cutover 交付关闭。仍不授权 Git commit/push、remote governance、data/reports content read、credential read、NAS content access、provider/lake/catalog、runtime、CR046 recovery、old root retirement、backup deletion 或 cleanup。'
-  impact_surface:
-  - process ledger ownership
-  - external engineering ledger project
-  - process symlink entry
-  - Git tracking boundary
-  - bootstrap and clone recovery
-  - target authoritative root
-  - CR tracking consistency
-  - symlink safety boundary
-  - /home/hyde/workspace/process
-  - process -> ../process
-  - staged process/** removals
-  - process backup retained
-  conflict_keys:
-  - process_ledger_externalization
-  - process_symlink_cutover
-  - git_tracking_boundary
-  - no_data_reports_content_read
-  - no_credential_read
-  - no_nas_content_access
-  - no_remote_git_write_boundary
-  - no_runtime_connection
-  - CR046_paused_boundary
-  next_gate: closed
-  next_action: CR081 已关闭；建议下一步启动 CR078 remote Git governance / publication gate，决定 staged process/** removals、ledger pointer files 和 CR081 docs 是否提交 / 推送。仍不得自动 commit/push、remote write、cleanup、data/reports、凭据、NAS 内容、runtime 或 CR046 recovery。
-  last_checked_at: '2026-06-17T09:02:58+08:00'
-- id: CR-082
-  title: Process Ledger Project Namespace Normalization
-  status: closed-current-delivery
-  source_tracking: USER-20260617-PROCESS-LEDGER-PROJECT-ARCHIVE-QUESTION
-  formal_cr_path: process/changes/CR-082-PROCESS-LEDGER-PROJECT-NAMESPACE-NORMALIZATION-2026-06-17.md
-  parent_cr: CR-081
-  source_checkpoint: current conversation
-  source_decision_id: USER-20260617-CONTINUE-CR082
-  priority: 1
-  blocked_by: 'closed: 用户于 2026-06-17T09:57:53+08:00 回复“同意，下一步做什么。你需要准备足够的上下文。我需要清除上下文了”，接受 DQ-CP8-CR082-01..05、READY_WITH_RISK 和 R-CR082-001..03；CR082 当前 process ledger project namespace normalization 交付关闭。仍不授权 Git commit/push、remote governance、data/reports content read、credential read、NAS content access、provider/lake/catalog、runtime、CR046 recovery、old root retirement、backup deletion 或 cleanup。'
-  impact_surface:
-  - process ledger project namespace
-  - /home/hyde/workspace/process/quant-lab
-  - /home/hyde/workspace/quant-lab/process -> ../process/quant-lab
-  - external process root README
-  - quant-lab project process README
-  - LEDGER.md
-  - ledger.yaml
-  - scripts/link-engineering-ledger.sh
-  - staged process/** removals
-  - CR078 ordering
-  conflict_keys:
-  - process_ledger_namespace_normalization
-  - process_symlink_cutover
-  - git_tracking_boundary
-  - no_data_reports_content_read
-  - no_credential_read
-  - no_nas_content_access
-  - no_remote_git_write_boundary
-  - no_runtime_connection
-  - CR046_paused_boundary
-  next_gate: closed
-  next_action: CR082 已关闭；建议下一步启动 CR078 remote Git governance / publication gate，决定 staged process/** removals、ledger pointer files、CR081/CR082 docs 是否提交 / 推送。仍不得自动 commit/push、remote write、cleanup、data/reports、凭据、NAS 内容、runtime 或 CR046 recovery。
-  last_checked_at: '2026-06-17T09:57:53+08:00'
-- id: CR-078
-  title: Remote Git Governance / Publication Gate
-  status: closed-current-delivery
-  source_tracking: process/context/CR082-CLOSURE-TO-CR078-HANDOFF-2026-06-17.md
-  formal_cr_path: process/changes/CR-078-REMOTE-GIT-GOVERNANCE-PUBLICATION-GATE-2026-06-17.md
-  parent_cr: CR-082
-  source_checkpoint: process/checkpoints/CP8-CR082-DELIVERY-READINESS.md
-  source_decision_id: DQ-CP8-CR082-05
-  priority: 1
-  blocked_by: 'closed-local-commit-complete: user approved CP2/CP3/CP5 at 2026-06-17T10:30:39+08:00; local commit d4d2881 completed at 2026-06-17T10:37:21+08:00. Git push, remote URL/default branch/tag/force/history rewrite, external process Git/NAS governance, data/reports, credential, NAS content, provider/lake/catalog, runtime, CR046 recovery, old root retirement, backup deletion and cleanup remain unauthorized.'
-  impact_surface:
-  - staged process/** removals
-  - Git publication scope
-  - process ledger pointer files
-  - .gitignore /process boundary
-  - CR081 quality and release docs
-  - CR082 quality and release docs
-  - commit authorization
-  - push authorization
-  - remote URL/default branch/tag/force/history boundary
-  - external process project governance
-  conflict_keys:
-  - git_index_publication
-  - process_ledger_externalization_publication
-  - no_remote_write_boundary
-  - no_default_branch_governance
-  - no_history_rewrite
-  - external_process_project_governance
-  - no_data_reports_content_read
-  - no_credential_read
-  - no_nas_content_access
-  - no_runtime_connection
-  - CR046_paused_boundary
-  next_gate: closed
-  next_action: CR078 本地提交 d4d2881 已完成；如需 push 或 remote/default/tag/external process Git/NAS governance，必须另起独立门禁。
-  last_checked_at: '2026-06-17T10:37:21+08:00'
-- id: CR-083
-  title: Remote Push Preflight / Publication Gate
-  status: closed-current-delivery
-  source_tracking: USER-20260617-CONTINUE-AFTER-CR078
-  formal_cr_path: process/changes/CR-083-REMOTE-PUSH-PREFLIGHT-PUBLICATION-GATE-2026-06-17.md
-  parent_cr: CR-078
-  source_checkpoint: process/checkpoints/CP5-CR078-GIT-PUBLICATION-READINESS.md
-  source_decision_id: DQ-CP5-CR078-05
-  priority: 1
-  blocked_by: 'closed-preflight-complete: user approved CP2/CP3/CP5 at 2026-06-17T11:14:54+08:00. Read-only local Git preflight completed; `git remote -v` has no remote entries and current branch has no upstream. Git push is impossible under CR083 existing-upstream policy and remains unauthorized. Network remote query, remote write, set-upstream, default branch governance, tag, force/history rewrite, external process Git/NAS, data/reports, credential, runtime and CR046 recovery remain unauthorized.'
-  impact_surface:
-  - remote push preflight
-  - CR078 local commit d4d2881
-  - current branch work/chapter3-factor-gap-remediation-20260608
-  - remote URL and upstream metadata
-  - push authorization
-  - dirty worktree exclusion
-  - default branch/tag/force/history boundary
-  - external process project governance boundary
-  conflict_keys:
-  - remote_push_preflight
-  - git_remote_metadata_read
-  - push_authorization_boundary
-  - no_network_remote_query
-  - no_remote_write_boundary
-  - no_default_branch_governance
-  - no_tag_force_history_rewrite
-  - dirty_worktree_excluded_from_publication
-  - external_process_project_governance
-  - no_data_reports_content_read
-  - no_credential_read
-  - no_nas_content_access
-  - no_runtime_connection
-  - CR046_paused_boundary
-  next_gate: closed
-  next_action: CR083 preflight 已关闭；如需继续发布，建议新起 CR084 Remote Target Configuration / Push Execution Gate，先决策 remote URL、remote name、目标分支、是否允许 ls-remote、remote add、set-upstream 和普通 push。
-  last_checked_at: '2026-06-17T11:40:11+08:00'
-- id: CR-084
-  title: Remote Target Configuration / Push Execution Gate
-  status: closed-superseded-by-cr085
-  source_tracking: process/context/CR083-CLOSURE-TO-CR084-HANDOFF-2026-06-17.md
-  formal_cr_path: process/changes/CR-084-REMOTE-TARGET-CONFIGURATION-PUSH-EXECUTION-GATE-2026-06-17.md
-  parent_cr: CR-083
-  source_checkpoint: process/checks/CR083-REMOTE-PUSH-PREFLIGHT-2026-06-17.md
-  source_decision_id: CR083-stop-condition-no-remote-no-upstream
-  priority: 1
-  blocked_by: 'closed-superseded-by-cr085: user approved CR086 CP2/CP3/CP5 at 2026-06-17T15:46:35+08:00. CR084 ordinary push route was superseded by CR085 clean publication sync; no CR084 remote add/fetch-to-current/set-upstream/push/default branch/tag/force/history rewrite executed. Top-level active_change remains CR046 user-paused; CR084 does not recover CR046.'
-  impact_surface:
-  - remote URL configuration
-  - remote name
-  - target branch
-  - network remote query
-  - remote add
-  - set upstream
-  - ordinary push
-  - dirty worktree exclusion
-  - default branch/tag/force/history boundary
-  - external process project governance boundary
-  conflict_keys:
-  - remote_target_configuration
-  - push_execution_gate
-  - no_network_remote_query
-  - no_remote_write_boundary
-  - no_default_branch_governance
-  - no_tag_force_history_rewrite
-  - dirty_worktree_excluded_from_publication
-  - external_process_project_governance
-  - no_data_reports_content_read
-  - no_credential_read
-  - no_nas_content_access
-  - no_runtime_connection
-  - CR046_paused_boundary
-  next_gate: closed
-  next_action: CR084 已由 CR086 ledger-only 收敛关闭；恢复 ordinary push route 或新增远端治理必须另起独立 CR。
-  last_checked_at: '2026-06-17T15:46:35+08:00'
-- id: CR-085
-  title: Remote Synchronization / Cleanup Gate
-  status: closed-current-delivery
-  source_tracking: "user request: 需要处理远程同步，不应该推送的内容也需要从远端删除"
-  formal_cr_path: process/changes/CR-085-REMOTE-SYNCHRONIZATION-CLEANUP-GATE-2026-06-17.md
-  parent_cr: CR-084
-  source_checkpoint: process/checks/CR085-REMOTE-READONLY-SCAN-2026-06-17.md
-  source_decision_id: USER-20260617-REMOTE-SYNC-CLEANUP
-  priority: 1
-  blocked_by: 'closed: user replied “同意” at 2026-06-17T15:19:06+08:00, accepting DQ-CP8-CR085-01..03 and READY_WITH_RISK. Remote master remains 57d4fc1e9b8808b4371e12af72f9cddcba01aaa0 after the approved ordinary fast-forward clean publication push. .env.example remains allowed template; .env remains forbidden and was not read or uploaded. No force, history rewrite, tag, default branch governance, remote deletion, current dirty worktree commit, rollback/revert, data/reports/NAS/runtime, CR046 recovery, old root retirement or cleanup executed.'
-  impact_surface:
-  - remote synchronization
-  - remote cleanup
-  - remote master branch
-  - .env upload boundary
-  - .env.example allowed template
-  - runs/RUN-EXEC-20260613-001.md
-  - clean publication commit
-  - exceptional ordinary deletion boundary
-  - history purge / force push boundary
-  - default branch/tag/history boundary
-  - credential and data boundary
-  conflict_keys:
-  - remote_synchronization_cleanup
-  - no_direct_push_d4d2881
-  - no_remote_write_boundary
-  - no_history_rewrite_without_gate
-  - no_force_push_without_gate
-  - env_file_upload_boundary
-  - env_example_allowed_template
-  - forbidden_boundary_runs
-  - no_data_reports_content_read
-  - no_credential_read
-  - no_runtime_connection
-  - CR046_paused_boundary
-  next_gate: closed
-  next_action: CR085 已关闭为 READY_WITH_RISK；如需 Git history purge、force、tag、default branch governance、remote deletion、rollback/revert、额外 push、`.env` 处置、data/reports/NAS/runtime、CR046 recovery、old root retirement 或 cleanup，必须另起独立 CR / 人工门禁。
-  last_checked_at: '2026-06-17T15:19:06+08:00'
-- id: CR-086
-  title: Post-CR085 Ledger State Convergence
-  status: closed-current-delivery
-  source_tracking: USER-20260617-START-CR086
-  formal_cr_path: process/changes/CR-086-POST-CR085-LEDGER-STATE-CONVERGENCE-2026-06-17.md
-  parent_cr: CR-085
-  source_checkpoint: process/checkpoints/CP8-CR085-DELIVERY-READINESS.md
-  source_decision_id: USER-20260617-START-CR086
-  priority: 1
-  blocked_by: 'closed: user approved CR086 CP8 at 2026-06-17T16:02:06+08:00. Ledger-only convergence closed as READY_WITH_RISK; CR084 closed-superseded-by-cr085, CR073/CR074 closed-current-delivery / READY_WITH_RISK. Top-level active_change remains user-paused CR046. Remote Git, .env, data/reports/NAS/runtime, CR046 recovery, old root retirement and cleanup remain unauthorized.'
-  impact_surface:
-  - post-cr085 ledger state convergence
-  - CR084 supersession by CR085
-  - CR073 achieved-state closure
-  - CR074 achieved-state closure
-  - process/STATE.md
-  - process/changes/CR-INDEX.yaml
-  - process symlink target ledger
-  - next-action view cleanup
-  conflict_keys:
-  - ledger_state_convergence
-  - cr084_supersession
-  - cr073_active_achieved_cleanup
-  - cr074_active_achieved_cleanup
-  - no_remote_write_boundary
-  - no_env_read_upload_boundary
-  - no_data_reports_content_read
-  - no_nas_runtime_boundary
-  - CR046_paused_boundary
-  next_gate: closed
-  next_action: CR086 已关闭；后续候选保留但不自动启动。若要继续，用户需选择恢复 CR046、启动数据/NAS/Provider 证明类候选、CR077 old root retirement policy 或 CR026/CR027/CR028 Spike。
-  last_checked_at: '2026-06-17T16:02:06+08:00'
-- id: CR-087
-  title: Process Docs Archive Routing Remediation
-  status: closed-local-remediation
-  source_tracking: USER-20260617-PROCESS-DOCS-ARCHIVE-ROUTING
-  formal_cr_path: process/changes/CR-087-PROCESS-DOCS-ARCHIVE-ROUTING-REMEDIATION-2026-06-17.md
-  parent_cr: CR-082
-  source_checkpoint: process/checkpoints/CP5-CR081-PROCESS-LEDGER-CUTOVER-READINESS.md
-  source_decision_id: DQ-CP3-CR081-04
-  priority: 1
-  blocked_by: 'closed: user requested local remediation for changed meta-flow process file archive routing. CR087 archived docs/design, docs/features, docs/quality, internal docs/release artifacts and legacy root checkpoints to /home/hyde/workspace/process/quant-lab, rebuilt readable local symlinks, added process/.meta-flow-process.yaml and updated pointer metadata. No data/reports content read, credential read, NAS content operation, remote Git write, provider/lake/catalog, runtime, cleanup or CR046 recovery was executed.'
-  impact_surface:
-  - process docs archive routing
-  - docs/design externalization
-  - docs/features externalization
-  - docs/quality externalization
-  - internal docs/release externalization
-  - legacy checkpoints externalization
-  - process/.meta-flow-process.yaml
-  - local symlink bootstrap
-  - Git tracking boundary
-  conflict_keys:
-  - process_docs_archive_routing
-  - docs_archive_symlink
-  - git_tracking_boundary
-  - no_data_reports_content_read
-  - no_credential_read
-  - no_nas_content_access
-  - no_remote_write_boundary
-  - no_runtime_connection
-  - CR046_paused_boundary
-  next_gate: closed
-  next_action: CR087 本地整改已关闭；若要提交 staged process-doc deletions / pointer updates 或治理外部 process Git/NAS，需要独立 Git / publication gate。
-  last_checked_at: '2026-06-17T19:36:45+08:00'
-- id: CR-088
-  title: Meta Flow Artifacts Root Realignment
-  status: closed-local-remediation
-  source_tracking: USER-20260617-META-FLOW-ARTIFACTS-ROOT-CORRECTION
-  formal_cr_path: process/changes/CR-088-META-FLOW-ARTIFACTS-ROOT-REALIGNMENT-2026-06-17.md
-  parent_cr: CR-087
-  source_checkpoint: current conversation
-  source_decision_id: USER-20260617-META-FLOW-ARTIFACTS-ROOT-CORRECTION
-  priority: 1
-  blocked_by: 'closed: user corrected artifact root to /home/hyde/workspace/meta-flow-artifacts. CR088 copied the existing ledger from /home/hyde/workspace/process/quant-lab to /home/hyde/workspace/meta-flow-artifacts/process/quant-lab, repointed process/docs/checkpoints symlinks, and updated pointer metadata. Legacy /home/hyde/workspace/process/quant-lab was not deleted. No data/reports content read, credential read, NAS content operation, remote Git write, provider/lake/catalog, runtime, cleanup or CR046 recovery was executed.'
-  impact_surface:
-  - artifact root realignment
-  - meta-flow-artifacts process namespace
-  - process symlink
-  - docs archive symlink
-  - checkpoints symlink
-  - process/.meta-flow-process.yaml
-  - bootstrap script
-  - Git tracking boundary
-  conflict_keys:
-  - artifact_root_realignment
-  - meta_flow_artifacts_root
-  - process_symlink
-  - docs_archive_symlink
-  - git_tracking_boundary
-  - no_data_reports_content_read
-  - no_credential_read
-  - no_nas_content_access
-  - no_remote_write_boundary
-  - no_runtime_connection
-  - CR046_paused_boundary
-  next_gate: closed
-  next_action: CR088 本地纠偏已关闭；后续提交 staged process-doc removals、pointer updates 或治理 meta-flow-artifacts Git remote，需要独立 Git / publication gate。
-  last_checked_at: '2026-06-17T19:50:00+08:00'
-- id: CR-090
-  title: Docs Public Surface Governance
-  status: closed-local-remediation
-  source_tracking: USER-20260617-DOCS-PUBLIC-SURFACE-GOVERNANCE
-  formal_cr_path: process/changes/CR-090-DOCS-PUBLIC-SURFACE-GOVERNANCE-2026-06-17.md
-  parent_cr: CR-087
-  source_checkpoint: current conversation
-  source_decision_id: USER-20260617-DOCS-PUBLIC-SURFACE-GOVERNANCE
-  priority: 1
-  blocked_by: 'closed: user requested docs public surface governance. CR090 archived roadmap, CR contract/register, qmt design-only docs, release deploy/migration/rollback/feedback docs and research governance specs to /home/hyde/workspace/meta-flow-artifacts/process/quant-lab/docs/source-archive/docs; quant-lab Git now keeps only component user manuals/install-runbooks/quickstarts/reference manuals and docs/release/RELEASE-NOTES.md. No data/reports content read, credential read, NAS content operation, provider/lake/catalog, runtime, cleanup or CR046 recovery was executed.'
-  impact_surface:
-  - docs public surface
-  - docs/source-archive
-  - README.md
-  - docs/USER-MANUAL.md
-  - docs/QMT-C-S-BRIDGE-RUNBOOK.md
-  - docs/CR030-FACTOR-RESEARCH-QUICKSTART.md
-  - docs/release/RELEASE-NOTES.md
-  - documentation guardrail tests
-  - LEDGER.md
-  - ledger.yaml
-  conflict_keys:
-  - docs_public_surface_governance
-  - source_archive_docs
-  - git_tracking_boundary
-  - no_data_reports_content_read
-  - no_credential_read
-  - no_nas_content_access
-  - no_runtime_connection
-  - CR046_paused_boundary
-  next_gate: closed
-  next_action: CR090 本地整改已关闭；后续若新增组件文档，只允许组件用户手册 / 发布说明进入源码 docs，过程文档继续归档到 meta-flow-artifacts。
-  last_checked_at: '2026-06-17T22:10:00+08:00'
-- id: CR-073
-  title: Target Root Convergence / Cutover Readiness Gate (MIG-B)
-  status: closed-current-delivery
-  source_tracking: USER-20260616-START-CR073-MIG-B
-  formal_cr_path: process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md
-  parent_cr: CR-071, CR-072
-  source_checkpoint: process/checkpoints/CP8-CR071-DELIVERY-READINESS.md
-  source_decision_id: USER-20260616-START-CR073-MIG-B
-  priority: 1
-  blocked_by: 'closed-by-cr086: user approved CR086 ledger-only convergence at 2026-06-17T15:46:35+08:00. CR073 target evidence convergence / cutover readiness achieved and is closed-current-delivery / READY_WITH_RISK. CR046 remains user-paused and is not recovered.'
-  impact_surface:
-  - target evidence convergence
-  - cutover readiness
-  - /home/hyde/workspace/quant-lab
-  - CR071 CP8 evidence
-  - CR072 NAS archive evidence
-  - CR073 gate evidence
-  - STATE and CR-INDEX sync
-  - release/context/checkpoint/check evidence
-  conflict_keys:
-  - target_root_convergence
-  - scoped_local_evidence_sync
-  - no_root_cutover_boundary
-  - no_old_root_delete_rename_move
-  - exclude_git_reports_data_venv_node_modules_env
-  - no_credential_read
-  - no_git_remote_write_boundary
-  - no_data_lake_root_replacement
-  - no_runtime_connection
-  - CR046_paused_boundary
-  next_gate: closed
-  next_action: CR073 当前交付已关闭；后续 root cutover、target env rebuild、data/reports access、old root retirement 和 remote Git governance 必须另起 CR。仍不得 root cutover、旧根删除/移动、forbidden paths、凭据、远端 Git、NAS 新写入、data lake、runtime 或 CR046 recovery。
-  last_checked_at: '2026-06-17T15:46:35+08:00'
-- id: CR-074
-  title: Root Cutover / Daily Workflow Switch
-  status: closed-current-delivery
-  source_tracking: USER-20260616-CONTINUE-AFTER-CR073
-  formal_cr_path: process/changes/CR-074-ROOT-CUTOVER-DAILY-WORKFLOW-SWITCH-2026-06-16.md
-  parent_cr: CR-073
-  source_checkpoint: process/checks/CR073-TARGET-CUTOVER-READINESS-VERIFICATION-2026-06-16.md
-  source_decision_id: CR074-candidate
-  priority: 1
-  blocked_by: 'closed-by-cr086: user approved CR086 ledger-only convergence at 2026-06-17T15:46:35+08:00. CR074 logical root authority marker achieved and is closed-current-delivery / READY_WITH_RISK. CR046 remains user-paused and is not recovered.'
-  impact_surface:
-  - root cutover
-  - daily workflow switch
-  - authoritative root
-  - /home/hyde/workspace/quant-lab
-  - /home/hyde/workspace/local_backtest legacy root
-  - STATE and CR-INDEX root authority
-  conflict_keys:
-  - root_cutover
-  - daily_workflow_switch
-  - target_authoritative_root
-  - old_root_boundary
-  - no_env_rebuild
-  - no_reports_data_access
-  - no_git_remote_write_boundary
-  - no_data_lake_root_replacement
-  - no_runtime_connection
-  - CR046_paused_boundary
-  next_gate: closed
-  next_action: CR074 当前交付已关闭；后续以 /home/hyde/workspace/quant-lab 为 authoritative daily workflow root，旧根 /home/hyde/workspace/local_backtest 保留。target env rebuild、data/reports access、old root retirement、remote Git governance、runtime 和 CR046 recovery 均需后续 CR 单独授权。
-  last_checked_at: '2026-06-17T15:46:35+08:00'
+recent_items:
+  - id: CR-101
+    title: Cross-platform Strategy Delivery and Adapter Layer Realignment
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+    follow_up_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    parent_cr: CR-091
+    source_checkpoint: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
+    source_decision_id: USER-20260620-APPROVE-CR101-CP8
+    priority: 1
+    blocked_by: 'closed: user approved CR101 CP8 at 2026-06-20T10:13:18+08:00. CR101 current offline cross-platform strategy delivery / adapter realignment closed as READY_WITH_RISK. Real QMT direct-run, MiniQMT gateway, NAS exchange, order-write, simulation/live and trading remain unauthorized.'
+    impact_surface:
+    - strategy_package_contract
+    - cross_platform_delivery_target
+    - qmt_direct_run_target
+    - quant_lab_runner_adapter_layer
+    - miniqmt_gateway_adapter
+    - future_adapter_extension
+    - manifest_schema
+    - package_exchange_checker
+    - evidence_redaction
+    - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+    conflict_keys:
+    - strategy_package_contract
+    - qmt_direct_run_target
+    - quant_lab_runner_adapter_layer
+    - miniqmt_gateway_adapter
+    - runtime_authorization
+    - nas_package_exchange
+    - no_order_write
+    - credential_boundary
+    next_gate: closed
+    next_action: "CR101 当前离线交付已关闭为 READY_WITH_RISK。后续真实 QMT direct-run、MiniQMT gateway、NAS real exchange、order-write / simulation / live 均需独立候选 gate 和明确授权。"
+    last_checked_at: '2026-06-20T10:13:18+08:00'
+  - id: RA-CR101-001
+    title: QMT direct-run validation authorization gate
+    status: candidate
+    lifecycle_status: candidate
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: ""
+    legacy_ids:
+    - QMT-DIRECT-RUN-VALIDATION-FU
+    parent_cr: CR-101
+    source_checkpoint: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR101-04
+    priority: 1
+    blocked_by: "not started; requires explicit runtime_authorization gate and redacted evidence plan"
+    impact_surface:
+    - qmt_direct_run_target
+    - qmt_terminal_runtime
+    - runtime_authorization
+    - redacted_evidence
+    - credential_boundary
+    conflict_keys:
+    - qmt_runtime
+    - runtime_authorization
+    - credential_boundary
+    - no_order_write
+    next_gate: not_started
+    next_action: "等待用户明确选择并启动正式 CR；启动前必须冲突预检和逐 run 授权。"
+    last_checked_at: '2026-06-20T10:13:18+08:00'
+  - id: RA-CR101-002
+    title: MiniQMT gateway adapter validation authorization gate
+    status: candidate
+    lifecycle_status: candidate
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: ""
+    legacy_ids:
+    - MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU
+    parent_cr: CR-101
+    source_checkpoint: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR101-04
+    priority: 2
+    blocked_by: "not started; requires explicit readonly runtime_authorization gate"
+    impact_surface:
+    - quant_lab_runner_adapter_layer
+    - miniqmt_gateway_adapter
+    - readonly_gateway
+    - runtime_authorization
+    - redacted_evidence
+    - credential_boundary
+    conflict_keys:
+    - miniqmt_gateway_runtime
+    - runtime_authorization
+    - readonly_query_positions
+    - credential_boundary
+    - no_order_write
+    next_gate: not_started
+    next_action: "等待用户明确选择并启动正式 CR；只允许 health / capabilities / query_positions 等只读 allowlist。"
+    last_checked_at: '2026-06-20T10:13:18+08:00'
+  - id: RA-CR101-003
+    title: NAS real package exchange validation authorization gate
+    status: candidate
+    lifecycle_status: candidate
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: ""
+    legacy_ids:
+    - NAS-REAL-EXCHANGE-FU
+    parent_cr: CR-101
+    source_checkpoint: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR101-04
+    priority: 3
+    blocked_by: "not started; requires explicit NAS path, permission and read/write scope authorization"
+    impact_surface:
+    - nas_package_exchange
+    - package_publish
+    - package_pull
+    - package_copy
+    - manifest_check
+    - credential_boundary
+    conflict_keys:
+    - nas_access
+    - package_publish
+    - package_pull
+    - credential_boundary
+    - no_runtime_connection
+    next_gate: not_started
+    next_action: "等待用户明确选择并启动正式 NAS gate；当前不授权 list/read/write/copy/publish/pull/delete/mount。"
+    last_checked_at: '2026-06-20T10:13:18+08:00'
+  - id: FU-CR101-001
+    title: Order-write / simulation / live design authorization gate
+    status: candidate
+    lifecycle_status: candidate
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: ""
+    legacy_ids:
+    - ORDER-WRITE-SIMULATION-LIVE-FU
+    - ORDER-WRITE-FU
+    - CR091-FU-03
+    parent_cr: CR-101
+    source_checkpoint: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR101-04
+    priority: 4
+    blocked_by: "not started; high-risk trading-write design gate requires explicit user selection and risk acceptance"
+    impact_surface:
+    - order_write
+    - submit_cancel
+    - buy_sell
+    - simulation_live
+    - trading_runtime_boundary
+    - account_permission
+    conflict_keys:
+    - trading_runtime_boundary
+    - order_write
+    - submit_cancel
+    - simulation_live
+    - account_permission
+    next_gate: not_started
+    next_action: "不建议自动启动；需要用户明确提出并接受更高风险门禁。"
+    last_checked_at: '2026-06-20T10:13:18+08:00'
+  - id: CR-100
+    title: NAS Package Exchange Offline Readiness Gate
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-GATE-2026-06-19.md
+    follow_up_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    parent_cr: CR-091
+    source_checkpoint: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR091-04; USER-20260619-COMPLETE-CR100-OFFLINE-READINESS
+    priority: 2
+    blocked_by: 'closed: user authorized completing all non-real-NAS CR091-FU-02 delivery and remote push at 2026-06-19. CR100 closed as READY_WITH_RISK; real NAS path/mount/permission/publish/pull/copy/check remain unverified and unauthorized.'
+    impact_surface:
+    - nas_package_exchange
+    - package_pull
+    - package_publish
+    - package_manifest
+    - fake_exchange_fixture
+    - immutable_local_cache
+    - active_pointer
+    - credential_boundary
+    - no_runtime_connection
+    - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+    conflict_keys:
+    - nas_package_exchange
+    - package_publish
+    - package_pull
+    - credential_boundary
+    - no_runtime_connection
+    - no_order_write
+    - no_provider_lake_publish
+    next_gate: closed
+    next_action: "CR100 当前交付已关闭为 READY_WITH_RISK。后续若要真实 NAS publish / pull / copy / 校验，必须另起独立授权 gate；当前仍不授权 NAS、凭据、runtime、交易或 provider/lake/catalog publish。"
+    last_checked_at: '2026-06-19T18:45:00+08:00'
+  - id: CR-099
+    title: QMT Runner Real Readonly Smoke Per-run Authorization
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+    formal_cr_path: process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
+    parent_cr: CR-098
+    source_checkpoint: process/checkpoints/CP8-CR098-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR098-02
+    priority: 1
+    blocked_by: 'closed: user approved CR099 CP8 at 2026-06-19T17:15:29+08:00, accepting READY_WITH_RISK, zero-position / trading-day residual risks and non-authorization boundary. No additional runtime, order submit/cancel, Windows .env, NAS, publish or trading-write authorization granted.'
+    impact_surface:
+    - qmt_runner
+    - readonly_gateway
+    - runtime_authorization
+    - per_run_authorization
+    - hmac_client_env
+    - redacted_evidence
+    - credential_boundary
+    - process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+    conflict_keys:
+    - runtime_authorization
+    - qmt_runner
+    - readonly_gateway
+    - credential_boundary
+    - no_order_write
+    - no_nas_access
+    - no_provider_lake_publish
+    next_gate: closed
+    next_action: "CR099 当前交付已关闭为 READY_WITH_RISK。后续可按用户选择启动非空 / 交易日 readonly retest、NAS package exchange gate 或 order-write design gate；均需独立门禁和明确授权。"
+    last_checked_at: '2026-06-19T17:15:29+08:00'
+  - id: CR-098
+    title: QMT Runner Readonly Gateway Integration Smoke
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: process/changes/CR-097-FOLLOW-UP-TRACKING-2026-06-19.md
+    formal_cr_path: process/changes/CR-098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-SMOKE-2026-06-19.md
+    follow_up_tracking: process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+    parent_cr: CR-097
+    source_checkpoint: process/checkpoints/CP8-CR097-DELIVERY-READINESS.md
+    source_decision_id: USER-20260619-START-QMT-RUNNER-READONLY-INTEGRATION-GATE
+    priority: 1
+    blocked_by: 'closed: user approved CR098 CP8 at 2026-06-19T12:31:24+08:00, accepting READY_WITH_RISK, real runner runtime not executed, non-empty/trading-day residual risks, inline-fallback waiver and non-authorization boundary'
+    impact_surface:
+    - qmt_runner
+    - readonly_gateway
+    - runtime_authorization
+    - per_run_authorization
+    - hmac_client_env
+    - redacted_evidence
+    - credential_boundary
+    - process/changes/CR-097-FOLLOW-UP-TRACKING-2026-06-19.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+    conflict_keys:
+    - runtime_authorization
+    - qmt_runner
+    - readonly_gateway
+    - credential_boundary
+    - no_order_write
+    - no_nas_access
+    - no_provider_lake_publish
+    next_gate: closed
+    next_action: CR098 当前交付已关闭。推荐下一个候选为 CR098-FU-01 runner real readonly smoke per-run authorization；启动前必须用户明确确认，且在新的 CR 门禁通过前仍不授权 secret/env/runtime/NAS/trading/publish。
+    last_checked_at: '2026-06-19T12:31:24+08:00'
+  - id: CR-097
+    title: Real QMT Readonly Runtime Smoke Per-run Authorization
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-097-REAL-QMT-READONLY-RUNTIME-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
+    parent_cr: CR-092
+    source_checkpoint: process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR092-04
+    priority: 2
+    blocked_by: 'closed: user approved CP8 at 2026-06-19T11:51:06+08:00, accepting READY, empty-account/non-trading-day residual risk, inline-fallback waiver and non-authorization boundary'
+    impact_surface:
+    - runtime_authorization
+    - per_run_authorization
+    - qmt_runtime
+    - miniqmt_xtquant
+    - readonly_query_positions
+    - credential_boundary
+    - redacted_evidence
+    - process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+    conflict_keys:
+    - runtime_authorization
+    - qmt_runtime
+    - readonly_query_positions
+    - credential_boundary
+    - no_order_write
+    - no_nas_access
+    - no_provider_lake_publish
+    next_gate: closed
+    next_action: CR097 当前交付已关闭。后续如需非空持仓、交易日、实盘只读、NAS、交易写、simulation/live 或 provider/lake/publish，必须另起独立授权 CR。
+    last_checked_at: '2026-06-19T11:51:06+08:00'
+  - id: CR-096
+    title: User-provided Simulated Evidence Checker Run
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-096-USER-PROVIDED-SIMULATED-EVIDENCE-CHECKER-RUN-2026-06-19.md
+    parent_cr: CR-092
+    source_checkpoint: process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR092-04
+    priority: 1
+    blocked_by: 'closed: user approved CR096 CP8 at 2026-06-19T10:30:00+08:00, accepting DQ-CP8-CR096-01..03 and READY. Closure only covers contract-filled redacted evidence YAML and single-file checker passed=true; it does not authorize runtime, NAS, credential/account reads, trading, provider/lake/publish or real release.'
+    impact_surface:
+    - simulated_evidence
+    - single_file_read
+    - scripts/check_cr092_simulated_evidence.py
+    - process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+    conflict_keys:
+    - simulated_evidence
+    - single_file_read
+    - credential_boundary
+    - redacted_evidence
+    - no_runtime_connection
+    - no_credential_read
+    - no_nas_access
+    next_gate: closed
+    next_action: CR096 当前交付已关闭为 READY；真实只读 runtime smoke、NAS、凭据/账户、交易、provider/lake/publish 均需独立 CR 和明确授权。
+    last_checked_at: '2026-06-19T10:30:00+08:00'
+  - id: CR-095
+    title: Standalone Checker / CLI Output Convergence
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+    formal_cr_path: process/changes/CR-095-STANDALONE-CHECKER-CLI-OUTPUT-CONVERGENCE-2026-06-19.md
+    parent_cr: CR-093
+    source_checkpoint: process/checkpoints/CP8-CR094-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR094-03
+    priority: 2
+    blocked_by: 'closed: user approved CR095 CP8 at 2026-06-19T09:39:15+08:00, accepting DQ-CP8-CR095-01..04 and READY. Closure only covers standalone checker / main CLI output convergence; it does not authorize runtime, NAS, credential/account reads, trading, provider/lake/publish or real release.'
+    impact_surface:
+    - checker_output_convergence
+    - scripts/check_cr_tracking_consistency.py
+    - tests/test_cr093_cr_tracking_consistency.py
+    - process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+    conflict_keys:
+    - cr_tracking_consistency
+    - checker_output_convergence
+    - no_runtime_connection
+    - no_credential_read
+    - no_nas_access
+    next_gate: closed
+    next_action: CR095 当前交付已关闭。
+    last_checked_at: '2026-06-19T09:39:15+08:00'
+  - id: CR-094
+    title: Warning Cleanup / Strict-Warnings Readiness
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+    formal_cr_path: process/changes/CR-094-WARNING-CLEANUP-STRICT-WARNINGS-READINESS-2026-06-19.md
+    parent_cr: CR-093
+    source_checkpoint: process/checkpoints/CP8-CR093-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR093-02; DQ-CP8-CR093-04
+    priority: 1
+    blocked_by: 'closed: user approved CR094 CP8 at 2026-06-19T09:08:56+08:00, accepting DQ-CP8-CR094-01..04 and READY. CR094 current strict-warnings readiness delivery is closed. Closure only covers static ledger / checker warning cleanup; it does not authorize QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, .env/credential/account read, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
+    impact_surface:
+    - cr_tracking_consistency
+    - strict_warnings
+    - cp8_follow_up_tracking_rows
+    - process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+    - /home/hyde/workspace/meta-flow/meta_flow/checks/cr_tracking.py
+    conflict_keys:
+    - ledger_hygiene
+    - cr_tracking_consistency
+    - strict_warnings
+    - no_runtime_connection
+    - no_credential_read
+    - no_nas_access
+    next_gate: closed
+    next_action: CR094 当前交付已关闭为 READY；CR093-FU-02 保持 candidate-not-started，必须用户明确选择后另起门禁。
+    last_checked_at: '2026-06-19T09:08:56+08:00'
+  - id: CR-093
+    title: Ledger Hygiene for CR019 / CR025 Tracking Cleanup
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-093-LEDGER-HYGIENE-CR019-CR025-TRACKING-CLEANUP-2026-06-18.md
+    parent_cr: CR-092
+    source_checkpoint: process/checkpoints/CP8-CR092-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR092-04
+    priority: 1
+    blocked_by: 'closed: user approved CR093 CP8 at 2026-06-19T08:39:22+08:00, accepting DQ-CP8-CR093-01..05 and READY_WITH_RISK. CR093 current ledger hygiene delivery is closed. Closure only covers CR019/CR025 cr-tracking blocker governance; it does not authorize QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, .env/credential/account read, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
+    impact_surface:
+    - cr_tracking_consistency
+    - CR019 follow-up tracking
+    - CR025 historical active_change
+    - scripts/check_cr_tracking_consistency.py
+    - process/STATE.md history scan
+    - process/changes/CR-INDEX.yaml
+    conflict_keys:
+    - ledger_hygiene
+    - cr_tracking_consistency
+    - no_runtime_connection
+    - no_credential_read
+    - no_nas_access
+    next_gate: closed
+    next_action: CR093 当前交付已关闭为 READY_WITH_RISK。推荐下一个低风险候选为 CR093-FU-01 warning cleanup / strict-warnings readiness；CR093-FU-02 checker output convergence、CR092-FU-01 simulated evidence checker run、CR092-FU-02 real runtime smoke、CR091-FU-02 NAS 和 CR091-FU-03 order-write 均需用户明确选择后另起门禁。
+    last_checked_at: '2026-06-19T08:39:22+08:00'
+  - id: CR-092
+    title: Real QMT Readonly Runtime Smoke Design Gate
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-092-REAL-QMT-READONLY-RUNTIME-SMOKE-DESIGN-GATE-2026-06-18.md
+    parent_cr: CR-091
+    source_checkpoint: process/checkpoints/CP8-CR091-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR091-04
+    priority: 1
+    follow_up_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+    blocked_by: 'closed: user approved CR092 CP8 at 2026-06-18T17:25:00+08:00, accepting DQ-CP8-CR092-01..05 and READY_WITH_RISK while explicitly skipping optional manual evidence validation. CR092 current readiness / evidence guardrail delivery is closed. Closure only covers guide/template/checker/tests/quality/release/process evidence; it does not authorize QMT/MiniQMT/XtQuant/gateway/runner runtime, NAS, .env/credential/account read, submit/cancel, simulation/live, provider/lake/publish, CR089 auto-start or CR020 gateway route restore.'
+    impact_surface:
+    - real QMT readonly runtime smoke design
+    - runtime_authorization
+    - per_run_authorization
+    - qmt_strategy_runner
+    - readonly gateway health
+    - readonly gateway capabilities
+    - readonly query_positions smoke design
+    - redacted runtime evidence
+    - forbidden operation counters
+    - credential_boundary
+    - account_read_boundary
+    conflict_keys:
+    - trading_runtime_boundary
+    - per_run_authorization
+    - credential_boundary
+    - account_permission
+    - readonly_query_positions
+    - qmt_strategy_runner
+    - redacted_evidence
+    - no_nas_package_exchange
+    - order_write_excluded
+    next_gate: closed
+    next_action: CR092 当前交付已关闭为 READY_WITH_RISK。后续候选见 process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md；实际模拟 evidence 检查、真实 runtime smoke、NAS、order-write、ledger hygiene 均需用户明确选择后另起门禁。
+    last_checked_at: '2026-06-18T17:25:00+08:00'
+  - id: CR-091
+    title: QMT Strategy Runner Research / Design / Implementation Plan
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
+    formal_cr_path: process/changes/CR-091-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN-2026-06-18.md
+    parent_cr: CR-089
+    source_checkpoint: current conversation
+    source_decision_id: USER-20260618-QMT-STRATEGY-RUNNER-RESEARCH-DESIGN-IMPLEMENTATION-PLAN
+    priority: 1
+    blocked_by: 'closed: user approved CR091 CP8 at 2026-06-18T15:40:09+08:00, accepting DQ-CP8-CR091-01..05 and READY_WITH_RISK. CR091 current offline runner research / design / implementation / fixture verification delivery is closed. Closure only covers fake transport, fixtures/tests, local package/cache intake and redacted evidence; it does not authorize NAS, .env/credential/account read, QMT/MiniQMT/XtQuant/gateway/runner startup, submit/cancel, simulation/live, provider/lake/publish or CR089 runtime.'
+    impact_surface:
+    - QMT strategy runner
+    - multi-factor strategy adapter
+    - generic strategy adapter
+    - runner research spike
+    - strategy package intake
+    - immutable local cache
+    - active package pointer
+    - readonly gateway query_positions
+    - runtime_authorization
+    - credential_boundary
+    - order_write_future_gate
+    conflict_keys:
+    - strategy_package_contract
+    - miniqmt_runner_install
+    - trading_runtime_boundary
+    - per_run_authorization
+    - credential_boundary
+    - nas_package_exchange
+    - qmt_strategy_runner
+    - multi_factor_strategy_runner
+    - generic_strategy_adapter
+    - order_write_excluded
+    next_gate: closed
+    next_action: 'CR091 当前交付已关闭。基于 2026-06-19 用户纠正，推荐下一目标改为 CR091-FU-05 Cross-platform strategy delivery and adapter layer realignment：runner 属于 quant-lab，MiniQMT 只是当前 adapter，策略交付当前仅支持 QMT direct-run 但保留跨平台 target 扩展。CR091-FU-03 order-write、真实 NAS 和真实 runtime 均需等待独立门禁。'
+    last_checked_at: '2026-06-18T15:40:09+08:00'
+  - id: CR-046
+    title: QMT and MiniQMT Dual-Target Strategy Delivery Framework
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: USER-20260613-TERMINAL-NATIVE-STRATEGY-EXPORT
+    formal_cr_path: process/changes/CR-046-TERMINAL-NATIVE-SIMULATION-STRATEGY-EXPORT-2026-06-13.md
+    follow_up_tracking: process/changes/CR-046-FOLLOW-UP-TRACKING-2026-06-13.md
+    priority: 1
+    blocked_by: 'closed: 用户于 2026-06-18T07:59:20+08:00 同意 CR046 CP8，接受 READY_WITH_RISK 和 DQ-CP8-CR046-01..05；CR046 当前 framework-first 文档 / 契约 / fixture / 静态验证交付关闭。仍不授权具体策略交付、QMT terminal validation、real transfer/import、NAS、credential_read、account_id_read、account/cash/position/order/fill query、MiniQMT/XtQuant/gateway connection、order_submit、order_cancel、simulation submit、live trading、Windows bridge runtime、provider_fetch、lake_write 或 catalog_publish。'
+    impact_surface:
+    - dual-target strategy delivery framework
+    - QMT terminal strategy
+    - MiniQMT runner install design
+    - strategy package contract
+    - verification framework
+    - adapter boundary
+    - runner component layout
+    - risk guard
+    - evidence model
+    - follow-up strategy delivery gate
+    - research framework follow-up
+    conflict_keys:
+    - dual_target_strategy_framework
+    - qmt_terminal_strategy
+    - miniqmt_runner_install
+    - strategy_package_contract
+    - verification_framework
+    - trading_runtime_boundary
+    - credential_boundary
+    - account_permission
+    - per_run_authorization
+    - no_runtime_connection
+    - no_terminal_validation
+    next_gate: closed
+    next_action: CR046 当前交付已关闭；早期 QMT / MiniQMT 双目标和 MiniQMT runner install 表述保留为历史基线。基于 2026-06-19 用户纠正，后续应先启动 CR091-FU-05 重对齐跨平台策略交付 target 和 quant-lab runner adapter layer；CR047/CR048/CR049 需按重对齐后的 QMT direct-run / MiniQMT gateway adapter 语义重新消费。
+    last_checked_at: '2026-06-18T07:59:20+08:00'
+  - id: CR-080
+    title: Data/reports Restore or Copy Gate
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: process/checkpoints/CP8-CR079-DELIVERY-READINESS.md
+    formal_cr_path: process/changes/CR-080-DATA-REPORTS-RESTORE-COPY-GATE-2026-06-17.md
+    parent_cr: CR-079
+    source_checkpoint: process/checkpoints/CP8-CR079-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR079-04
+    priority: 1
+    blocked_by: 'closed: 用户于 2026-06-17T07:32:59+08:00 回复“同意”，接受 DQ-CP8-CR080-01..05、READY_WITH_RISK 和 R-CR080-001..03；CR080 当前 local restore/copy 交付关闭。仍不授权重复 copy、restore、delete、content read/checksum/sample parse、credential read、NAS/provider/lake/catalog、remote Git、runtime、old root retirement、destructive cleanup 或 CR046 recovery。'
+    impact_surface:
+    - reports restore
+    - data restore
+    - target authoritative root
+    - legacy retained assets
+    - copy_restore_boundary
+    - content_read_boundary
+    - verification and rollback
+    conflict_keys:
+    - reports_data_restore
+    - copy_restore_boundary
+    - content_read_boundary
+    - no_credential_read
+    - no_provider_fetch
+    - no_lake_write
+    - no_catalog_publish
+    - no_git_remote_write_boundary
+    - no_old_root_retirement
+    - CR046_paused_boundary
+    next_gate: closed
+    next_action: CR080 已关闭；target root 已有 reports/data。内容级证明、NAS compare、provider rebuild、CR077 old root retirement、CR078 remote governance 和 CR046 recovery 均保持后续候选或暂停状态，必须独立授权。
+    last_checked_at: '2026-06-17T07:32:59+08:00'
+  - id: CR-081
+    title: Process Ledger Externalization / Symlink Cutover Gate
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: USER-20260617-PROCESS-LEDGER-EXTERNALIZATION
+    formal_cr_path: process/changes/CR-081-PROCESS-LEDGER-EXTERNALIZATION-SYMLINK-CUTOVER-2026-06-17.md
+    parent_cr: CR-080
+    source_checkpoint: current conversation
+    source_decision_id: USER-20260617-PROCESS-LEDGER-EXTERNALIZATION
+    priority: 1
+    blocked_by: 'closed: 用户于 2026-06-17T08:59:23+08:00 回复“同意，下一步做什么？”，接受 DQ-CP8-CR081-01..05、READY_WITH_RISK 和 R-CR081-001..03；CR081 当前 process ledger externalization / symlink cutover 交付关闭。仍不授权 Git commit/push、remote governance、data/reports content read、credential read、NAS content access、provider/lake/catalog、runtime、CR046 recovery、old root retirement、backup deletion 或 cleanup。'
+    impact_surface:
+    - process ledger ownership
+    - external engineering ledger project
+    - process symlink entry
+    - Git tracking boundary
+    - bootstrap and clone recovery
+    - target authoritative root
+    - CR tracking consistency
+    - symlink safety boundary
+    - /home/hyde/workspace/process
+    - process -> ../process
+    - staged process/** removals
+    - process backup retained
+    conflict_keys:
+    - process_ledger_externalization
+    - process_symlink_cutover
+    - git_tracking_boundary
+    - no_data_reports_content_read
+    - no_credential_read
+    - no_nas_content_access
+    - no_remote_git_write_boundary
+    - no_runtime_connection
+    - CR046_paused_boundary
+    next_gate: closed
+    next_action: CR081 已关闭；建议下一步启动 CR078 remote Git governance / publication gate，决定 staged process/** removals、ledger pointer files 和 CR081 docs 是否提交 / 推送。仍不得自动 commit/push、remote write、cleanup、data/reports、凭据、NAS 内容、runtime 或 CR046 recovery。
+    last_checked_at: '2026-06-17T09:02:58+08:00'
+  - id: CR-082
+    title: Process Ledger Project Namespace Normalization
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: USER-20260617-PROCESS-LEDGER-PROJECT-ARCHIVE-QUESTION
+    formal_cr_path: process/changes/CR-082-PROCESS-LEDGER-PROJECT-NAMESPACE-NORMALIZATION-2026-06-17.md
+    parent_cr: CR-081
+    source_checkpoint: current conversation
+    source_decision_id: USER-20260617-CONTINUE-CR082
+    priority: 1
+    blocked_by: 'closed: 用户于 2026-06-17T09:57:53+08:00 回复“同意，下一步做什么。你需要准备足够的上下文。我需要清除上下文了”，接受 DQ-CP8-CR082-01..05、READY_WITH_RISK 和 R-CR082-001..03；CR082 当前 process ledger project namespace normalization 交付关闭。仍不授权 Git commit/push、remote governance、data/reports content read、credential read、NAS content access、provider/lake/catalog、runtime、CR046 recovery、old root retirement、backup deletion 或 cleanup。'
+    impact_surface:
+    - process ledger project namespace
+    - /home/hyde/workspace/process/quant-lab
+    - /home/hyde/workspace/quant-lab/process -> ../process/quant-lab
+    - external process root README
+    - quant-lab project process README
+    - LEDGER.md
+    - ledger.yaml
+    - scripts/link-engineering-ledger.sh
+    - staged process/** removals
+    - CR078 ordering
+    conflict_keys:
+    - process_ledger_namespace_normalization
+    - process_symlink_cutover
+    - git_tracking_boundary
+    - no_data_reports_content_read
+    - no_credential_read
+    - no_nas_content_access
+    - no_remote_git_write_boundary
+    - no_runtime_connection
+    - CR046_paused_boundary
+    next_gate: closed
+    next_action: CR082 已关闭；建议下一步启动 CR078 remote Git governance / publication gate，决定 staged process/** removals、ledger pointer files、CR081/CR082 docs 是否提交 / 推送。仍不得自动 commit/push、remote write、cleanup、data/reports、凭据、NAS 内容、runtime 或 CR046 recovery。
+    last_checked_at: '2026-06-17T09:57:53+08:00'
+  - id: CR-078
+    title: Remote Git Governance / Publication Gate
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: process/context/CR082-CLOSURE-TO-CR078-HANDOFF-2026-06-17.md
+    formal_cr_path: process/changes/CR-078-REMOTE-GIT-GOVERNANCE-PUBLICATION-GATE-2026-06-17.md
+    parent_cr: CR-082
+    source_checkpoint: process/checkpoints/CP8-CR082-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR082-05
+    priority: 1
+    blocked_by: 'closed-local-commit-complete: user approved CP2/CP3/CP5 at 2026-06-17T10:30:39+08:00; local commit d4d2881 completed at 2026-06-17T10:37:21+08:00. Git push, remote URL/default branch/tag/force/history rewrite, external process Git/NAS governance, data/reports, credential, NAS content, provider/lake/catalog, runtime, CR046 recovery, old root retirement, backup deletion and cleanup remain unauthorized.'
+    impact_surface:
+    - staged process/** removals
+    - Git publication scope
+    - process ledger pointer files
+    - .gitignore /process boundary
+    - CR081 quality and release docs
+    - CR082 quality and release docs
+    - commit authorization
+    - push authorization
+    - remote URL/default branch/tag/force/history boundary
+    - external process project governance
+    conflict_keys:
+    - git_index_publication
+    - process_ledger_externalization_publication
+    - no_remote_write_boundary
+    - no_default_branch_governance
+    - no_history_rewrite
+    - external_process_project_governance
+    - no_data_reports_content_read
+    - no_credential_read
+    - no_nas_content_access
+    - no_runtime_connection
+    - CR046_paused_boundary
+    next_gate: closed
+    next_action: CR078 本地提交 d4d2881 已完成；如需 push 或 remote/default/tag/external process Git/NAS governance，必须另起独立门禁。
+    last_checked_at: '2026-06-17T10:37:21+08:00'
+  - id: CR-083
+    title: Remote Push Preflight / Publication Gate
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: USER-20260617-CONTINUE-AFTER-CR078
+    formal_cr_path: process/changes/CR-083-REMOTE-PUSH-PREFLIGHT-PUBLICATION-GATE-2026-06-17.md
+    parent_cr: CR-078
+    source_checkpoint: process/checkpoints/CP5-CR078-GIT-PUBLICATION-READINESS.md
+    source_decision_id: DQ-CP5-CR078-05
+    priority: 1
+    blocked_by: 'closed-preflight-complete: user approved CP2/CP3/CP5 at 2026-06-17T11:14:54+08:00. Read-only local Git preflight completed; `git remote -v` has no remote entries and current branch has no upstream. Git push is impossible under CR083 existing-upstream policy and remains unauthorized. Network remote query, remote write, set-upstream, default branch governance, tag, force/history rewrite, external process Git/NAS, data/reports, credential, runtime and CR046 recovery remain unauthorized.'
+    impact_surface:
+    - remote push preflight
+    - CR078 local commit d4d2881
+    - current branch work/chapter3-factor-gap-remediation-20260608
+    - remote URL and upstream metadata
+    - push authorization
+    - dirty worktree exclusion
+    - default branch/tag/force/history boundary
+    - external process project governance boundary
+    conflict_keys:
+    - remote_push_preflight
+    - git_remote_metadata_read
+    - push_authorization_boundary
+    - no_network_remote_query
+    - no_remote_write_boundary
+    - no_default_branch_governance
+    - no_tag_force_history_rewrite
+    - dirty_worktree_excluded_from_publication
+    - external_process_project_governance
+    - no_data_reports_content_read
+    - no_credential_read
+    - no_nas_content_access
+    - no_runtime_connection
+    - CR046_paused_boundary
+    next_gate: closed
+    next_action: CR083 preflight 已关闭；如需继续发布，建议新起 CR084 Remote Target Configuration / Push Execution Gate，先决策 remote URL、remote name、目标分支、是否允许 ls-remote、remote add、set-upstream 和普通 push。
+    last_checked_at: '2026-06-17T11:40:11+08:00'
+  - id: CR-084
+    title: Remote Target Configuration / Push Execution Gate
+    status: closed-superseded-by-cr085
+    source_tracking: process/context/CR083-CLOSURE-TO-CR084-HANDOFF-2026-06-17.md
+    formal_cr_path: process/changes/CR-084-REMOTE-TARGET-CONFIGURATION-PUSH-EXECUTION-GATE-2026-06-17.md
+    parent_cr: CR-083
+    source_checkpoint: process/checks/CR083-REMOTE-PUSH-PREFLIGHT-2026-06-17.md
+    source_decision_id: CR083-stop-condition-no-remote-no-upstream
+    priority: 1
+    blocked_by: 'closed-superseded-by-cr085: user approved CR086 CP2/CP3/CP5 at 2026-06-17T15:46:35+08:00. CR084 ordinary push route was superseded by CR085 clean publication sync; no CR084 remote add/fetch-to-current/set-upstream/push/default branch/tag/force/history rewrite executed. Top-level active_change remains CR046 user-paused; CR084 does not recover CR046.'
+    impact_surface:
+    - remote URL configuration
+    - remote name
+    - target branch
+    - network remote query
+    - remote add
+    - set upstream
+    - ordinary push
+    - dirty worktree exclusion
+    - default branch/tag/force/history boundary
+    - external process project governance boundary
+    conflict_keys:
+    - remote_target_configuration
+    - push_execution_gate
+    - no_network_remote_query
+    - no_remote_write_boundary
+    - no_default_branch_governance
+    - no_tag_force_history_rewrite
+    - dirty_worktree_excluded_from_publication
+    - external_process_project_governance
+    - no_data_reports_content_read
+    - no_credential_read
+    - no_nas_content_access
+    - no_runtime_connection
+    - CR046_paused_boundary
+    next_gate: closed
+    next_action: CR084 已由 CR086 ledger-only 收敛关闭；恢复 ordinary push route 或新增远端治理必须另起独立 CR。
+    last_checked_at: '2026-06-17T15:46:35+08:00'
+  - id: CR-085
+    title: Remote Synchronization / Cleanup Gate
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: "user request: 需要处理远程同步，不应该推送的内容也需要从远端删除"
+    formal_cr_path: process/changes/CR-085-REMOTE-SYNCHRONIZATION-CLEANUP-GATE-2026-06-17.md
+    parent_cr: CR-084
+    source_checkpoint: process/checks/CR085-REMOTE-READONLY-SCAN-2026-06-17.md
+    source_decision_id: USER-20260617-REMOTE-SYNC-CLEANUP
+    priority: 1
+    blocked_by: 'closed: user replied “同意” at 2026-06-17T15:19:06+08:00, accepting DQ-CP8-CR085-01..03 and READY_WITH_RISK. Remote master remains 57d4fc1e9b8808b4371e12af72f9cddcba01aaa0 after the approved ordinary fast-forward clean publication push. .env.example remains allowed template; .env remains forbidden and was not read or uploaded. No force, history rewrite, tag, default branch governance, remote deletion, current dirty worktree commit, rollback/revert, data/reports/NAS/runtime, CR046 recovery, old root retirement or cleanup executed.'
+    impact_surface:
+    - remote synchronization
+    - remote cleanup
+    - remote master branch
+    - .env upload boundary
+    - .env.example allowed template
+    - runs/RUN-EXEC-20260613-001.md
+    - clean publication commit
+    - exceptional ordinary deletion boundary
+    - history purge / force push boundary
+    - default branch/tag/history boundary
+    - credential and data boundary
+    conflict_keys:
+    - remote_synchronization_cleanup
+    - no_direct_push_d4d2881
+    - no_remote_write_boundary
+    - no_history_rewrite_without_gate
+    - no_force_push_without_gate
+    - env_file_upload_boundary
+    - env_example_allowed_template
+    - forbidden_boundary_runs
+    - no_data_reports_content_read
+    - no_credential_read
+    - no_runtime_connection
+    - CR046_paused_boundary
+    next_gate: closed
+    next_action: CR085 已关闭为 READY_WITH_RISK；如需 Git history purge、force、tag、default branch governance、remote deletion、rollback/revert、额外 push、`.env` 处置、data/reports/NAS/runtime、CR046 recovery、old root retirement 或 cleanup，必须另起独立 CR / 人工门禁。
+    last_checked_at: '2026-06-17T15:19:06+08:00'
+  - id: CR-086
+    title: Post-CR085 Ledger State Convergence
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: USER-20260617-START-CR086
+    formal_cr_path: process/changes/CR-086-POST-CR085-LEDGER-STATE-CONVERGENCE-2026-06-17.md
+    parent_cr: CR-085
+    source_checkpoint: process/checkpoints/CP8-CR085-DELIVERY-READINESS.md
+    source_decision_id: USER-20260617-START-CR086
+    priority: 1
+    blocked_by: 'closed: user approved CR086 CP8 at 2026-06-17T16:02:06+08:00. Ledger-only convergence closed as READY_WITH_RISK; CR084 closed-superseded-by-cr085, CR073/CR074 closed-current-delivery / READY_WITH_RISK. Top-level active_change remains user-paused CR046. Remote Git, .env, data/reports/NAS/runtime, CR046 recovery, old root retirement and cleanup remain unauthorized.'
+    impact_surface:
+    - post-cr085 ledger state convergence
+    - CR084 supersession by CR085
+    - CR073 achieved-state closure
+    - CR074 achieved-state closure
+    - process/STATE.md
+    - process/changes/CR-INDEX.yaml
+    - process symlink target ledger
+    - next-action view cleanup
+    conflict_keys:
+    - ledger_state_convergence
+    - cr084_supersession
+    - cr073_active_achieved_cleanup
+    - cr074_active_achieved_cleanup
+    - no_remote_write_boundary
+    - no_env_read_upload_boundary
+    - no_data_reports_content_read
+    - no_nas_runtime_boundary
+    - CR046_paused_boundary
+    next_gate: closed
+    next_action: CR086 已关闭；后续候选保留但不自动启动。若要继续，用户需选择恢复 CR046、启动数据/NAS/Provider 证明类候选、CR077 old root retirement policy 或 CR026/CR027/CR028 Spike。
+    last_checked_at: '2026-06-17T16:02:06+08:00'
+  - id: CR-087
+    title: Process Docs Archive Routing Remediation
+    status: closed-local-remediation
+    source_tracking: USER-20260617-PROCESS-DOCS-ARCHIVE-ROUTING
+    formal_cr_path: process/changes/CR-087-PROCESS-DOCS-ARCHIVE-ROUTING-REMEDIATION-2026-06-17.md
+    parent_cr: CR-082
+    source_checkpoint: process/checkpoints/CP5-CR081-PROCESS-LEDGER-CUTOVER-READINESS.md
+    source_decision_id: DQ-CP3-CR081-04
+    priority: 1
+    blocked_by: 'closed: user requested local remediation for changed meta-flow process file archive routing. CR087 archived docs/design, docs/features, docs/quality, internal docs/release artifacts and legacy root checkpoints to /home/hyde/workspace/process/quant-lab, rebuilt readable local symlinks, added process/.meta-flow-process.yaml and updated pointer metadata. No data/reports content read, credential read, NAS content operation, remote Git write, provider/lake/catalog, runtime, cleanup or CR046 recovery was executed.'
+    impact_surface:
+    - process docs archive routing
+    - docs/design externalization
+    - docs/features externalization
+    - docs/quality externalization
+    - internal docs/release externalization
+    - legacy checkpoints externalization
+    - process/.meta-flow-process.yaml
+    - local symlink bootstrap
+    - Git tracking boundary
+    conflict_keys:
+    - process_docs_archive_routing
+    - docs_archive_symlink
+    - git_tracking_boundary
+    - no_data_reports_content_read
+    - no_credential_read
+    - no_nas_content_access
+    - no_remote_write_boundary
+    - no_runtime_connection
+    - CR046_paused_boundary
+    next_gate: closed
+    next_action: CR087 本地整改已关闭；若要提交 staged process-doc deletions / pointer updates 或治理外部 process Git/NAS，需要独立 Git / publication gate。
+    last_checked_at: '2026-06-17T19:36:45+08:00'
+  - id: CR-088
+    title: Meta Flow Artifacts Root Realignment
+    status: closed-local-remediation
+    source_tracking: USER-20260617-META-FLOW-ARTIFACTS-ROOT-CORRECTION
+    formal_cr_path: process/changes/CR-088-META-FLOW-ARTIFACTS-ROOT-REALIGNMENT-2026-06-17.md
+    parent_cr: CR-087
+    source_checkpoint: current conversation
+    source_decision_id: USER-20260617-META-FLOW-ARTIFACTS-ROOT-CORRECTION
+    priority: 1
+    blocked_by: 'closed: user corrected artifact root to /home/hyde/workspace/meta-flow-artifacts. CR088 copied the existing ledger from /home/hyde/workspace/process/quant-lab to /home/hyde/workspace/meta-flow-artifacts/process/quant-lab, repointed process/docs/checkpoints symlinks, and updated pointer metadata. Legacy /home/hyde/workspace/process/quant-lab was not deleted. No data/reports content read, credential read, NAS content operation, remote Git write, provider/lake/catalog, runtime, cleanup or CR046 recovery was executed.'
+    impact_surface:
+    - artifact root realignment
+    - meta-flow-artifacts process namespace
+    - process symlink
+    - docs archive symlink
+    - checkpoints symlink
+    - process/.meta-flow-process.yaml
+    - bootstrap script
+    - Git tracking boundary
+    conflict_keys:
+    - artifact_root_realignment
+    - meta_flow_artifacts_root
+    - process_symlink
+    - docs_archive_symlink
+    - git_tracking_boundary
+    - no_data_reports_content_read
+    - no_credential_read
+    - no_nas_content_access
+    - no_remote_write_boundary
+    - no_runtime_connection
+    - CR046_paused_boundary
+    next_gate: closed
+    next_action: CR088 本地纠偏已关闭；后续提交 staged process-doc removals、pointer updates 或治理 meta-flow-artifacts Git remote，需要独立 Git / publication gate。
+    last_checked_at: '2026-06-17T19:50:00+08:00'
+  - id: CR-090
+    title: Docs Public Surface Governance
+    status: closed-local-remediation
+    source_tracking: USER-20260617-DOCS-PUBLIC-SURFACE-GOVERNANCE
+    formal_cr_path: process/changes/CR-090-DOCS-PUBLIC-SURFACE-GOVERNANCE-2026-06-17.md
+    parent_cr: CR-087
+    source_checkpoint: current conversation
+    source_decision_id: USER-20260617-DOCS-PUBLIC-SURFACE-GOVERNANCE
+    priority: 1
+    blocked_by: 'closed: user requested docs public surface governance. CR090 archived roadmap, CR contract/register, qmt design-only docs, release deploy/migration/rollback/feedback docs and research governance specs to /home/hyde/workspace/meta-flow-artifacts/process/quant-lab/docs/source-archive/docs; quant-lab Git now keeps only component user manuals/install-runbooks/quickstarts/reference manuals and docs/release/RELEASE-NOTES.md. No data/reports content read, credential read, NAS content operation, provider/lake/catalog, runtime, cleanup or CR046 recovery was executed.'
+    impact_surface:
+    - docs public surface
+    - docs/source-archive
+    - README.md
+    - docs/USER-MANUAL.md
+    - docs/QMT-C-S-BRIDGE-RUNBOOK.md
+    - docs/CR030-FACTOR-RESEARCH-QUICKSTART.md
+    - docs/release/RELEASE-NOTES.md
+    - documentation guardrail tests
+    - LEDGER.md
+    - ledger.yaml
+    conflict_keys:
+    - docs_public_surface_governance
+    - source_archive_docs
+    - git_tracking_boundary
+    - no_data_reports_content_read
+    - no_credential_read
+    - no_nas_content_access
+    - no_runtime_connection
+    - CR046_paused_boundary
+    next_gate: closed
+    next_action: CR090 本地整改已关闭；后续若新增组件文档，只允许组件用户手册 / 发布说明进入源码 docs，过程文档继续归档到 meta-flow-artifacts。
+    last_checked_at: '2026-06-17T22:10:00+08:00'
+  - id: CR-073
+    title: Target Root Convergence / Cutover Readiness Gate (MIG-B)
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: USER-20260616-START-CR073-MIG-B
+    formal_cr_path: process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md
+    parent_cr: CR-071, CR-072
+    source_checkpoint: process/checkpoints/CP8-CR071-DELIVERY-READINESS.md
+    source_decision_id: USER-20260616-START-CR073-MIG-B
+    priority: 1
+    blocked_by: 'closed-by-cr086: user approved CR086 ledger-only convergence at 2026-06-17T15:46:35+08:00. CR073 target evidence convergence / cutover readiness achieved and is closed-current-delivery / READY_WITH_RISK. CR046 remains user-paused and is not recovered.'
+    impact_surface:
+    - target evidence convergence
+    - cutover readiness
+    - /home/hyde/workspace/quant-lab
+    - CR071 CP8 evidence
+    - CR072 NAS archive evidence
+    - CR073 gate evidence
+    - STATE and CR-INDEX sync
+    - release/context/checkpoint/check evidence
+    conflict_keys:
+    - target_root_convergence
+    - scoped_local_evidence_sync
+    - no_root_cutover_boundary
+    - no_old_root_delete_rename_move
+    - exclude_git_reports_data_venv_node_modules_env
+    - no_credential_read
+    - no_git_remote_write_boundary
+    - no_data_lake_root_replacement
+    - no_runtime_connection
+    - CR046_paused_boundary
+    next_gate: closed
+    next_action: CR073 当前交付已关闭；后续 root cutover、target env rebuild、data/reports access、old root retirement 和 remote Git governance 必须另起 CR。仍不得 root cutover、旧根删除/移动、forbidden paths、凭据、远端 Git、NAS 新写入、data lake、runtime 或 CR046 recovery。
+    last_checked_at: '2026-06-17T15:46:35+08:00'
+  - id: CR-074
+    title: Root Cutover / Daily Workflow Switch
+    status: closed-current-delivery
+    lifecycle_status: closed
+    source_tracking: USER-20260616-CONTINUE-AFTER-CR073
+    formal_cr_path: process/changes/CR-074-ROOT-CUTOVER-DAILY-WORKFLOW-SWITCH-2026-06-16.md
+    parent_cr: CR-073
+    source_checkpoint: process/checks/CR073-TARGET-CUTOVER-READINESS-VERIFICATION-2026-06-16.md
+    source_decision_id: CR074-candidate
+    priority: 1
+    blocked_by: 'closed-by-cr086: user approved CR086 ledger-only convergence at 2026-06-17T15:46:35+08:00. CR074 logical root authority marker achieved and is closed-current-delivery / READY_WITH_RISK. CR046 remains user-paused and is not recovered.'
+    impact_surface:
+    - root cutover
+    - daily workflow switch
+    - authoritative root
+    - /home/hyde/workspace/quant-lab
+    - /home/hyde/workspace/local_backtest legacy root
+    - STATE and CR-INDEX root authority
+    conflict_keys:
+    - root_cutover
+    - daily_workflow_switch
+    - target_authoritative_root
+    - old_root_boundary
+    - no_env_rebuild
+    - no_reports_data_access
+    - no_git_remote_write_boundary
+    - no_data_lake_root_replacement
+    - no_runtime_connection
+    - CR046_paused_boundary
+    next_gate: closed
+    next_action: CR074 当前交付已关闭；后续以 /home/hyde/workspace/quant-lab 为 authoritative daily workflow root，旧根 /home/hyde/workspace/local_backtest 保留。target env rebuild、data/reports access、old root retirement、remote Git governance、runtime 和 CR046 recovery 均需后续 CR 单独授权。
+    last_checked_at: '2026-06-17T15:46:35+08:00'
 closed_crs:
 - id: CR-101
   title: Cross-Platform Strategy Delivery and Adapter Layer Realignment
@@ -1009,6 +1230,7 @@ closed_crs:
 - id: CR-079
   title: Real Data/reports Access Gate
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260617-CR079-CP8-APPROVED
   formal_cr_path: process/changes/CR-079-REAL-DATA-REPORTS-ACCESS-GATE-2026-06-17.md
   parent_cr: CR-073, CR-074, CR-076
@@ -1041,6 +1263,7 @@ closed_crs:
 - id: CR-076
   title: Data/reports Access Policy
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260617-CR076-CP8-APPROVED
   formal_cr_path: process/changes/CR-076-DATA-REPORTS-ACCESS-POLICY-2026-06-17.md
   parent_cr: CR-073, CR-074, CR-075
@@ -1075,6 +1298,7 @@ closed_crs:
 - id: CR-075
   title: Target Env Rebuild and Smoke
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260617-CR075-CP8-APPROVED-AND-START-CR076
   formal_cr_path: process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md
   parent_cr: CR-073, CR-074
@@ -1108,6 +1332,7 @@ closed_crs:
 - id: CR-071
   title: Copy-first Shadow Root Migration (MIG-A)
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260616-CR071-CP8-APPROVED
   formal_cr_path: process/changes/CR-071-COPY-FIRST-SHADOW-ROOT-MIGRATION-2026-06-16.md
   parent_cr: CR-070
@@ -1143,6 +1368,7 @@ closed_crs:
 - id: CR-072
   title: NAS Archive Local Assets
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260616-ARCHIVE-LOCAL-ASSETS
   formal_cr_path: process/changes/CR-072-NAS-ARCHIVE-LOCAL-ASSETS-2026-06-16.md
   parent_cr: CR-071
@@ -1176,6 +1402,7 @@ closed_crs:
 - id: CR-070
   title: Git Remote Governance / Default Branch Cutover Gate
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260616-CR070-CP8-APPROVED
   formal_cr_path: process/changes/CR-070-GIT-REMOTE-GOVERNANCE-DEFAULT-BRANCH-CUTOVER-GATE-2026-06-15.md
   parent_cr: CR-069
@@ -1208,6 +1435,7 @@ closed_crs:
 - id: CR-069
   title: CR062 Supersession / Publication Ledger Cleanup
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260615-CR069-CP8-APPROVED
   formal_cr_path: process/changes/CR-069-CR062-SUPERSESSION-PUBLICATION-LEDGER-CLEANUP-2026-06-15.md
   parent_cr: CR-062
@@ -1289,6 +1517,7 @@ closed_crs:
 - id: CR-068
   title: Repository Hygiene / .gitignore Forward-fix Gate
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260615-APPROVE-CR068-CP8-READY-WITH-RISK
   formal_cr_path: process/changes/CR-068-REPOSITORY-HYGIENE-GITIGNORE-FORWARD-FIX-2026-06-15.md
   parent_cr: CR-067
@@ -1331,6 +1560,7 @@ closed_crs:
 - id: CR-067
   title: Clean Publication Execution Gate
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260615-APPROVE-CR067-CP8-READY-WITH-RISK
   formal_cr_path: process/changes/CR-067-CLEAN-PUBLICATION-EXECUTION-GATE-2026-06-15.md
   parent_cr: CR-066
@@ -1379,6 +1609,7 @@ closed_crs:
 - id: CR-066
   title: Repository Hygiene / Clean Publication Strategy
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260615-APPROVE-CR066-CP8-READY-WITH-RISK
   formal_cr_path: process/changes/CR-066-REPOSITORY-HYGIENE-CLEAN-PUBLICATION-STRATEGY-2026-06-15.md
   parent_cr: CR-062
@@ -1419,6 +1650,7 @@ closed_crs:
 - id: CR-061
   title: Package / Import / Layout Convergence
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260615-START-CR061-PACKAGE-IMPORT-LAYOUT-CONVERGENCE
   formal_cr_path: process/changes/CR-061-PACKAGE-IMPORT-LAYOUT-CONVERGENCE-2026-06-15.md
   parent_cr: CR-060
@@ -1463,6 +1695,7 @@ closed_crs:
 - id: CR-060
   title: Repo-local Mechanical Migration Execution Gate
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260615-RESUME-MIGRATION-AFTER-DEVICE-INTERRUPTION
   formal_cr_path: process/changes/CR-060-REPO-LOCAL-MECHANICAL-MIGRATION-EXECUTION-GATE-2026-06-15.md
   parent_cr: CR-059
@@ -1493,6 +1726,7 @@ closed_crs:
 - id: CR-059
   title: Migration Preparation Foundation
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260614-COMPLETE-MIGRATION-PREPARATION
   formal_cr_path: process/changes/CR-059-MIGRATION-PREPARATION-FOUNDATION-2026-06-14.md
   priority: 1
@@ -1518,6 +1752,7 @@ closed_crs:
 - id: CR-058
   title: Repo-local Mechanical Migration / Relayout Gate
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: process/changes/CR-053-FOLLOW-UP-TRACKING-2026-06-14.md#FU-CR053-01
   formal_cr_path: process/changes/CR-058-REPO-LOCAL-MECHANICAL-MIGRATION-RELAYOUT-GATE-2026-06-14.md
   follow_up_tracking: process/changes/CR-053-FOLLOW-UP-TRACKING-2026-06-14.md
@@ -1546,6 +1781,7 @@ closed_crs:
 - id: CR-053
   title: quant-lab Migration Inventory and Dry-run
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260614-START-CR053-MIGRATION-INVENTORY
   formal_cr_path: process/changes/CR-053-QUANT-LAB-MIGRATION-INVENTORY-AND-DRY-RUN-2026-06-14.md
   follow_up_tracking: process/changes/CR-053-FOLLOW-UP-TRACKING-2026-06-14.md
@@ -1576,6 +1812,7 @@ closed_crs:
 - id: CR-051
   title: Strategy Research Lifecycle Framework and Strategy Taxonomy
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260614-START-CR051-DESIGN
   formal_cr_path: process/changes/CR-051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK-2026-06-14.md
   priority: 1
@@ -1608,6 +1845,7 @@ closed_crs:
 - id: CR-045
   title: Goldminer Windows Bridge Readonly Probe
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260611-START-CR045
   formal_cr_path: process/changes/CR-045-GOLDMINER-WINDOWS-BRIDGE-READONLY-PROBE-2026-06-11.md
   priority: 5
@@ -1636,6 +1874,7 @@ closed_crs:
 - id: CR-044
   title: Goldminer Simulation Admission
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260611-START-CR044
   formal_cr_path: process/changes/CR-044-GOLDMINER-SIMULATION-ADMISSION-2026-06-11.md
   priority: 5
@@ -1687,6 +1926,7 @@ closed_crs:
 - id: CR-042
   title: Broker-Neutral Adapter Contract
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260611-START-CR042
   formal_cr_path: process/changes/CR-042-BROKER-NEUTRAL-ADAPTER-CONTRACT-2026-06-11.md
   priority: 3
@@ -1713,6 +1953,7 @@ closed_crs:
 - id: CR-041
   title: API-less Paper Simulation Runner
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260610-ACCEPT-CR039-START-CR041
   formal_cr_path: process/changes/CR-041-API-LESS-PAPER-SIMULATION-RUNNER-2026-06-10.md
   priority: 1
@@ -1741,6 +1982,7 @@ closed_crs:
 - id: CR-039
   title: 多因子策略研究闭环与候选策略准入
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260610-BOOK-RESEARCH-PLAN
   formal_cr_path: process/changes/CR-039-MULTIFACTOR-STRATEGY-RESEARCH-ADMISSION-2026-06-10.md
   priority: 5
@@ -1768,6 +2010,7 @@ closed_crs:
 - id: CR-040
   title: 删除 QMT 路线并转向 Backtrader 参考的本地 Paper Simulation 与掘金量化接口候选路线
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260610-NO-MINIQMT-GOLDMINER-ROUTE
   formal_cr_path: process/changes/CR-040-QMT-ROUTE-DELETION-BACKTRADER-PAPER-SIM-GOLDMINER-ADAPTER-2026-06-10.md
   priority: 1
@@ -1992,6 +2235,7 @@ cancelled_crs:
 - id: CR-020
   title: QMT Windows Gateway 服务端登录与只读查询接口准入
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: USER-20260610-NO-MINIQMT-GOLDMINER-ROUTE
   formal_cr_path: process/changes/CR-020-QMT-WINDOWS-GATEWAY-SERVER-LOGIN-READONLY-QUERY-ADMISSION-2026-06-04.md
   priority: 1
@@ -2086,6 +2330,7 @@ blocked_crs:
 - id: CR-089
   title: QMT Interface Validation Gate with NAS Strategy Package Exchange
   status: blocked-readiness-approved
+  lifecycle_status: blocked
   source_tracking: USER-20260617-QMT-NAS-STRATEGY-PACKAGE-INTERFACE-VALIDATION
   formal_cr_path: process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md
   priority: 1
@@ -2115,6 +2360,7 @@ follow_up_candidates:
 - id: "CR-026"
   title: Qlib isolated runner optional Spike (narrowed after CR030-039 coverage)
   status: candidate
+  lifecycle_status: candidate
   source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
   formal_cr_path: ''
   priority: 2
@@ -2254,6 +2500,7 @@ follow_up_candidates:
 - id: "CR079-restore-candidate"
   title: Data/reports restore or copy gate
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: process/checkpoints/CP8-CR079-DELIVERY-READINESS.md
   formal_cr_path: process/changes/CR-080-DATA-REPORTS-RESTORE-COPY-GATE-2026-06-17.md
   priority: 1
@@ -2277,6 +2524,7 @@ follow_up_candidates:
 - id: "CR079-nas-compare-candidate"
   title: NAS archive compare gate
   status: candidate
+  lifecycle_status: candidate
   source_tracking: process/checkpoints/CP8-CR079-DELIVERY-READINESS.md
   formal_cr_path: ''
   priority: 2
@@ -2295,6 +2543,7 @@ follow_up_candidates:
 - id: "CR079-provider-rebuild-candidate"
   title: Provider rebuild gate
   status: candidate
+  lifecycle_status: candidate
   source_tracking: process/checkpoints/CP8-CR079-DELIVERY-READINESS.md
   formal_cr_path: ''
   priority: 3
@@ -2315,6 +2564,7 @@ follow_up_candidates:
 - id: "CR077-candidate"
   title: Old root retirement policy
   status: candidate
+  lifecycle_status: candidate
   source_tracking: process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md
   formal_cr_path: ''
   priority: 4
@@ -2333,6 +2583,7 @@ follow_up_candidates:
 - id: "CR078-candidate"
   title: Remote Git governance after cutover
   status: closed-current-delivery
+  lifecycle_status: closed
   source_tracking: process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md
   formal_cr_path: process/changes/CR-078-REMOTE-GIT-GOVERNANCE-PUBLICATION-GATE-2026-06-17.md
   priority: 5
@@ -2492,6 +2743,7 @@ route_view:
   - CR-023
   - CR-024
   status: closed-current-delivery
+  lifecycle_status: closed
   next_action: 用户确认 CR020 可以关闭；CR-020 作为 user-deleted QMT gateway 路线已归档为 closed-current-delivery，CR-021..CR-024 保持 cancelled-user-deleted；不再等待权限、不再执行
     QMT gateway 实机验证、不启动 QMT simulation/live。未来需要 QMT 接口验证时必须新建独立 CR。
 - id: line-d-paper-simulation-goldminer-route
@@ -2505,6 +2757,70 @@ route_view:
   status: cr044_closed_offline_admission_design_ready
   next_action: CR044 已完成 CP8 approved 并关闭为 offline-admission-design-ready / READY_WITH_RISK；未来真实 Goldminer L3/L4/L5 验证仅作为 CR045-candidate，必须单独决策和逐 run 授权。当前不授权读取凭据、登录、连接、查询账户、下单、撤单或 simulation/live。
 items:
+  - id: RA-CR101-001
+    title: QMT direct-run validation authorization gate
+    status: candidate
+    kind: runtime-authorization
+    lifecycle_status: candidate
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: runtime
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: ""
+    legacy_ids:
+      - QMT-DIRECT-RUN-VALIDATION-FU
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    next_action: wait_for_user_selection_and_runtime_authorization
+  - id: RA-CR101-002
+    title: MiniQMT gateway adapter validation authorization gate
+    status: candidate
+    kind: runtime-authorization
+    lifecycle_status: candidate
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: runtime
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: ""
+    legacy_ids:
+      - MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    next_action: wait_for_user_selection_and_runtime_authorization
+  - id: RA-CR101-003
+    title: NAS real package exchange validation authorization gate
+    status: candidate
+    kind: runtime-authorization
+    lifecycle_status: candidate
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: runtime
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: ""
+    legacy_ids:
+      - NAS-REAL-EXCHANGE-FU
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    next_action: wait_for_user_selection_and_nas_authorization
+  - id: FU-CR101-001
+    title: Order-write / simulation / live design authorization gate
+    status: candidate
+    kind: runtime-authorization
+    lifecycle_status: candidate
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: standard
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: ""
+    legacy_ids:
+      - ORDER-WRITE-SIMULATION-LIVE-FU
+      - ORDER-WRITE-FU
+      - CR091-FU-03
+    blocked_by:
+      - RA-CR101-001
+      - RA-CR101-002
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    next_action: not_recommended_until_readonly_validation_gates_are_settled
   - id: CR-020
     title: QMT Windows Gateway 服务端登录与只读查询接口准入
     status: closed
@@ -2583,6 +2899,7 @@ items:
   - id: CR-026
     title: Qlib isolated runner optional Spike
     status: candidate
+    lifecycle_status: candidate
     kind: requirement-change
     lifecycle_status: candidate
     readiness_status: n/a
@@ -2938,16 +3255,17 @@ items:
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
   - id: FU-CR091-003
     title: Order-write / submit-cancel design gate
-    status: candidate
+    status: superseded
+    lifecycle_status: superseded
     kind: runtime-authorization
-    lifecycle_status: candidate
     readiness_status: n/a
     gate_status: not_started
     gate_profile: standard
     legacy_ids: [CR091-FU-03, ORDER-WRITE-FU]
     source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
     formal_cr_path: ""
-    blocked_by: [FU-CR091-005]
+    blocked_by: []
+    superseded_by: FU-CR101-001
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
   - id: FU-CR091-004
     title: Ledger hygiene
@@ -2982,6 +3300,7 @@ items:
   - id: RA-CR097-001
     title: Non-empty / trading-day readonly retest
     status: candidate
+    lifecycle_status: candidate
     kind: runtime-authorization
     lifecycle_status: candidate
     readiness_status: n/a

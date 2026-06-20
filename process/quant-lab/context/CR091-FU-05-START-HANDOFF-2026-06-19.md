@@ -3,22 +3,25 @@ context_id: "CR091-FU-05-START-HANDOFF-2026-06-19"
 candidate_id: "FU-CR091-005"
 legacy_candidate_id: "CR091-FU-05"
 source_tracking: "process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md"
-status: "candidate-start-ready-after-cr-management-schema-v2"
+status: "superseded-by-cr101-closed"
 created_at: "2026-06-19T19:35:00+08:00"
-updated_at: "2026-06-20T00:00:00+08:00"
+updated_at: "2026-06-20T10:45:00+08:00"
 owner: "host-orchestrator"
 read_profile: "minimal"
-formal_cr_created: false
+formal_cr_created: true
+formal_cr_path: "process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md"
+superseded_by: "CR-101"
+superseded_context: "process/context/CR101-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-20.md"
 current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
 cr_index_schema_version: 2
-validation_status: "workspace_check_ok; cr_tracking_strict_ok; yaml_parse_ok"
+validation_status: "superseded; do_not_use_as_current_start_entry"
 ---
 
 # FU-CR091-005 启动交接：跨平台策略交付与适配层重对齐
 
 ## 0. 清上下文恢复入口
 
-清除上下文后，先从本文件恢复，不要从历史对话恢复。
+本文件是历史启动交接，已被 `CR-101` 正式承接并关闭。清除上下文后不要再从本文件启动 `FU-CR091-005`，应改读 `process/context/CR101-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-20.md`。
 
 第一步必须运行：
 
@@ -28,7 +31,7 @@ uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspa
 
 随后读取最小上下文：
 
-1. `process/context/CR091-FU-05-START-HANDOFF-2026-06-19.md`
+1. `process/context/CR101-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-20.md`
 2. `process/STATE.md`
 3. `process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml`
 4. `process/changes/CR-INDEX.yaml`
@@ -44,14 +47,14 @@ uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/works
 
 - `workspace check`: `process_link_health: ok`
 - `cr-tracking --strict-warnings`: `OK`
-- YAML parse: `process/changes/CR-INDEX.yaml` 与 `process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml` 均通过
+- 本文件状态：`superseded-by-cr101-closed`
 
 ## 1. 当前状态
 
 - 当前无 active formal CR。
-- `CR-100` 已关闭为 `closed-current-delivery / READY_WITH_RISK`；只覆盖离线 NAS package exchange readiness，不覆盖真实 NAS。
-- 本文件只为后续正式 CR 启动准备上下文，不预创建正式 CR，不预设正式 CR ID。
-- 当前 CR 管理已迁移为 schema v2。正式 follow-up 主键是 `FU-CR091-005`，历史别名是 `CR091-FU-05`。
+- `CR-101` 已关闭为 `closed-current-delivery / READY_WITH_RISK`。
+- 本文件只作为历史审计入口；不得据此重新启动 `FU-CR091-005`。
+- 当前 CR 管理已迁移为 schema v2。`FU-CR091-005` 已由 `CR-101` 承接并关闭，历史别名是 `CR091-FU-05`。
 - 当前需求基线是 `process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml`；若旧文档与该基线冲突，以当前需求基线和最新 `CR-INDEX.yaml` 为准。
 
 ## 2. 用户最新架构决策
@@ -92,10 +95,10 @@ uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/works
 
 | 顺序 | 候选 | 目标 | 前置 / 说明 |
 |---:|---|---|---|
-| 1 | `FU-CR091-005` / legacy `CR091-FU-05` | 设计/schema/fixture/checker/包结构重对齐 | 当前推荐启动 |
-| 2 | `QMT-DIRECT-RUN-VALIDATION-FU` | 用户在 QMT 环境手工验证 direct-run entrypoint | 需要逐 run 授权和脱敏 evidence |
-| 3 | `MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU` | quant-lab runner 通过 MiniQMT gateway adapter 做只读验证 | 不把策略放到 MiniQMT runner |
-| 4 | `FU-CR091-003` / legacy `CR091-FU-03` | order-write / submit-cancel / simulation-live 设计门禁 | 等 adapter protocol 和只读 evidence 稳定后再评审 |
+| 1 | `FU-CR091-005` / legacy `CR091-FU-05` | 设计/schema/fixture/checker/包结构重对齐 | 已由 `CR-101` 关闭 |
+| 2 | `RA-CR101-001` / legacy `QMT-DIRECT-RUN-VALIDATION-FU` | 用户在 QMT 环境手工验证 direct-run entrypoint | 需要逐 run 授权和脱敏 evidence |
+| 3 | `RA-CR101-002` / legacy `MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU` | quant-lab runner 通过 MiniQMT gateway adapter 做只读验证 | 不把策略放到 MiniQMT runner |
+| 4 | `FU-CR101-001` / legacy `CR091-FU-03` | order-write / submit-cancel / simulation-live 设计门禁 | 等 adapter protocol 和只读 evidence 稳定后再评审 |
 
 ## 6. 明确不授权
 
@@ -180,6 +183,6 @@ uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/works
 
 ## 10. 充分性检查结论
 
-本 handoff 已足够支持清上下文后启动下一轮工作，前提是下一轮先执行 workspace health check，并以 `FU-CR091-005` 作为正式候选主键。
+本 handoff 仅作为历史审计证据。清上下文后应使用 `process/context/CR101-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-20.md`，不得以 `FU-CR091-005` 作为下一轮启动主键。
 
 恢复后第一项交付应是 CP2 scope/risk/runtime-authorization Decision Brief，而不是直接实现、连接 NAS、连接 QMT/MiniQMT、读取凭据或生成真实运行证据。

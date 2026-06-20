@@ -4,7 +4,7 @@ source_cr: "CR-098"
 source_checkpoint: "process/checkpoints/CP8-CR098-DELIVERY-READINESS.md"
 status: "active-follow-up-tracking"
 created_at: "2026-06-19T12:31:24+08:00"
-updated_at: "2026-06-19T19:35:00+08:00"
+updated_at: "2026-06-20T10:45:00+08:00"
 owner: "host-orchestrator"
 ---
 
@@ -17,7 +17,7 @@ owner: "host-orchestrator"
 | 关闭范围 | 1 | 否 | CR098 当前 runner readonly integration 离线交付已关闭为 `READY_WITH_RISK` |
 | 不授权范围 | 1 | 否 | HMAC secret、Windows `.env`、gateway 启动、runner runtime、账户原文、NAS、交易写、simulation/live、provider/lake/publish 均不授权 |
 | 风险接受项 | 3 | 否 | 真实 runner runtime 未执行、非空持仓 / 交易日路径未证明、CP6/CP7 inline fallback WAIVED 已由 CP8 接受 |
-| 后续 CR 候选项 | 5 | 否 | `CR098-FU-01` 已按用户要求转入正式 `CR-099` 并关闭；`CR091-FU-02` 已转入正式 `CR-100` 并关闭；新增 `CR091-FU-05` 作为当前推荐重对齐候选 |
+| 后续 CR 候选项 | 5 | 否 | `CR098-FU-01` 已转入正式 `CR-099` 并关闭；`CR091-FU-02` 已转入正式 `CR-100` 并关闭；`CR091-FU-05` 已转入正式 `CR-101` 并关闭；订单写入后续门禁迁移为 `FU-CR101-001` |
 
 ## 结构化候选项
 
@@ -85,16 +85,33 @@ follow_up_items:
       - CR091-FU-03
     title: Order-write / simulation / live design gate
     kind: runtime-authorization
+    lifecycle_status: superseded
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: standard
+    formal_cr_path: ""
+    superseded_by: FU-CR101-001
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    historical_baseline_status: retained
+    next_action: use_FU-CR101-001_as_current_candidate_key
+  - id: FU-CR101-001
+    legacy_ids:
+      - ORDER-WRITE-FU
+      - ORDER-WRITE-SIMULATION-LIVE-FU
+      - CR091-FU-03
+    title: Order-write / simulation / live design authorization gate
+    kind: runtime-authorization
     lifecycle_status: candidate
     readiness_status: n/a
     gate_status: not_started
     gate_profile: standard
     formal_cr_path: ""
     blocked_by:
-      - FU-CR091-005
+      - RA-CR101-001
+      - RA-CR101-002
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
     historical_baseline_status: retained
-    next_action: blocked_until_adapter_and_delivery_target_realignment
+    next_action: not_recommended_until_readonly_validation_gates_are_settled
 ```
 
 ## 后续 CR / Spike 候选索引
@@ -103,9 +120,9 @@ follow_up_items:
 |---|---|---|---|---:|---|---|---|---|---|---|---|
 | CR-099 | Runner real readonly smoke per-run authorization | closed-current-delivery | CR | 1 | runtime_authorization; qmt_runner; readonly_gateway; hmac_client_env; redacted_evidence; credential_boundary | `process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md` | closed_by=CP8-CR099 | closed | CP2/CP3/CP5 已由用户回复“同意”批准，CP6 PASS；用户刷新 Windows gateway session 后，CR099 runtime rerun PASS，health/capabilities/query_positions_readonly 均通过，forbidden counters 全 0；用户接受 CP8 5 项推荐方案和风险 | 当前交付已关闭为 `READY_WITH_RISK`；非空持仓 / 交易日复测仍作为独立 follow-up 风险处理；不自动授权新增 runtime / 下单撤单 / Windows `.env` / NAS / publish / 交易写 | CR098-FU-01 / DQ-CP8-CR098-02 |
 | CR097-FU-01 | Non-empty / trading-day readonly retest | candidate-not-started | CR | 2 | runtime_authorization; readonly_query_positions; evidence_coverage; non_empty_positions; trading_day_path |  |  | 未启动 | 需要非空持仓或交易日条件，且必须独立逐 run 授权 | 等待用户选择 | DQ-CP8-CR098-03 / DQ-CP8-CR097-02 |
-| CR091-FU-05 | Cross-platform strategy delivery and adapter layer realignment | active | CR | 1 | strategy_package_contract; cross_platform_delivery_target; qmt_direct_run_target; quant_lab_runner_adapter_layer; miniqmt_gateway_adapter; goldminer_future_adapter | `process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md` | `CR-101` | CP5 pending | 用户已批准 CR101 CP2 和 CP3：runner 属于 quant-lab，MiniQMT 只是当前 adapter，策略交付当前仅支持 QMT direct-run 但保留跨平台 target 扩展 | 进入 CP4 story planning / CP5 LLD 设计证据准备；不授权 runtime/NAS/凭据/交易/publish | USER-20260619-RUNNER-ADAPTER-AND-CROSS-PLATFORM-DELIVERY |
+| CR091-FU-05 | Cross-platform strategy delivery and adapter layer realignment | closed-current-delivery | CR | 1 | strategy_package_contract; cross_platform_delivery_target; qmt_direct_run_target; quant_lab_runner_adapter_layer; miniqmt_gateway_adapter; goldminer_future_adapter | `process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md` | closed_by=CR-101 | closed | 用户已批准 CR101 CP8；CR101 当前离线交付关闭为 READY_WITH_RISK。真实系统仍未授权或验证。 | 后续真实 QMT direct-run、MiniQMT gateway、NAS real exchange、order-write / simulation / live 均需独立 candidate gate，不自动启动。 | USER-20260619-RUNNER-ADAPTER-AND-CROSS-PLATFORM-DELIVERY / DQ-CP8-CR101-04 |
 | CR091-FU-02 | NAS package exchange gate | closed-current-delivery | CR | 3 | nas_package_exchange; package_delivery; credential_boundary; no_runtime_connection | `process/changes/CR-100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-GATE-2026-06-19.md` | closed_by=CR100 | closed | CR100 已关闭为 READY_WITH_RISK；真实 NAS 仍未授权 | 如需真实 NAS publish / pull / copy / 校验，必须另起独立授权 gate | CR091 / CR098 not-authorized boundary |
-| ORDER-WRITE-FU | Order-write / simulation / live design gate | candidate-not-started | CR | 4 | order_write; submit_cancel; simulation_live; trading_runtime_boundary; account_permission |  | blocked_by=CR091-FU-05 | 未启动 | 交易写风险最高，且应等待 adapter protocol / delivery target 边界稳定 | 不建议立即启动；需要用户明确提出并接受更高风险门禁 | CR098 not-authorized boundary |
+| FU-CR101-001 | Order-write / simulation / live design authorization gate | candidate | CR | 4 | order_write; submit_cancel; simulation_live; trading_runtime_boundary; account_permission |  | legacy=ORDER-WRITE-FU / ORDER-WRITE-SIMULATION-LIVE-FU / CR091-FU-03 | 未启动 | 交易写风险最高，且应等待 adapter protocol、QMT direct-run 和 MiniQMT gateway readonly evidence 稳定 | 不建议立即启动；需要用户明确提出并接受更高风险门禁 | CR098 not-authorized boundary / DQ-CP8-CR101-04 |
 
 ## 不授权范围
 
@@ -123,4 +140,4 @@ follow_up_items:
 
 ## 推荐下一步
 
-清理上下文后，推荐先读取 `process/context/CR098-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-19.md`。如果用户明确要求继续推进，则推荐启动 `CR098-FU-01 Runner real readonly smoke per-run authorization`，目标是证明 runner 真实消费 Windows gateway readonly path；该启动不继承 CR098 的 approve，也不自动授权读取 secret/env、启动 runtime 或查询账户。
+清理上下文后，推荐先读取 `process/context/CR098-CLOSURE-CONTEXT-RESET-HANDOFF-2026-06-19.md` 和 `process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml`。如果用户明确要求继续推进，必须先确认候选目标：非空 / 交易日 readonly retest 仍是 `RA-CR097-001`；CR101 后续真实 QMT direct-run、MiniQMT gateway、NAS exchange 和 order-write gate 分别是 `RA-CR101-001`、`RA-CR101-002`、`RA-CR101-003`、`FU-CR101-001`。任何启动都不继承 CR098 / CR101 approve，也不自动授权读取 secret/env、启动 runtime、访问 NAS、查询账户原文或执行交易写。

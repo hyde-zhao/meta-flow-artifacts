@@ -3,6 +3,7 @@ baseline_id: CURRENT-REQUIREMENT-BASELINE
 project: quant-lab
 status: active
 created_at: "2026-06-19T20:50:00+08:00"
+updated_at: "2026-06-20T10:45:00+08:00"
 created_by: host-orchestrator
 source_crs:
   - CR-046
@@ -10,6 +11,7 @@ source_crs:
   - CR-091
   - CR-098
   - CR-100
+  - CR-101
 purpose: >
   记录当前可执行需求基线，避免后续 CR 从历史台账中误读已重解释的
   QMT / MiniQMT / runner / strategy package 目标。
@@ -32,7 +34,10 @@ current_baseline:
       - strategy_package_claiming_cross_platform_runtime_support_before_target_validation
     evidence_paths:
       - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
-      - process/context/CR091-FU-05-START-HANDOFF-2026-06-19.md
+      - process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+      - docs/qmt/CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-HLD.md
+      - docs/qmt/CR101-VALIDATION-AND-FOLLOW-UP-GATES.md
+      - process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
       - process/changes/CR-100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-GATE-2026-06-19.md
 
   runner_adapter_layer:
@@ -53,6 +58,9 @@ current_baseline:
       - process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
       - process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
       - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+      - process/stories/CR101-S03-RUNNER-ADAPTER-EVIDENCE-BOUNDARY-IMPLEMENTATION.md
+      - process/checks/CP7-CR101-S03-runner-adapter-evidence-boundary-VERIFICATION-DONE.md
+      - docs/qmt/CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-HLD.md
 
 not_authorized:
   nas_access: true
@@ -66,34 +74,69 @@ not_authorized:
 historical_reframes:
   - source: CR-046
     historical_baseline_status: reframed
-    reframed_by: FU-CR091-005
+    reframed_by: CR-101
     reframe_summary: >
       CR046 的 terminal-native / QMT + MiniQMT 双目标表述保留为历史决策证据；
       当前解释改为策略交付按跨平台 target contract 建模，当前只支持 QMT direct-run。
   - source: CR-089
     historical_baseline_status: reframed
-    reframed_by: FU-CR091-005
+    reframed_by: CR-101
     reframe_summary: >
       CR089 的接口验证准备证据保留为历史输入；当前不得把 readiness
       解释为 QMT direct-run、MiniQMT adapter 或 order-write 已证明。
   - source: CR-091
     historical_baseline_status: reframed
-    reframed_by: FU-CR091-005
+    reframed_by: CR-101
     reframe_summary: >
       CR091 runner 交付目标改为 quant-lab runner 拥有运行职责，并通过 adapter
       连接 MiniQMT gateway；MiniQMT 不是策略 runner 宿主。
   - source: CR-098
     historical_baseline_status: reframed
-    reframed_by: FU-CR091-005
+    reframed_by: CR-101
     reframe_summary: >
       CR098/CR099 的 readonly gateway evidence 只能证明受控只读链路；
       不证明跨平台策略包、QMT direct-run target 或交易写能力。
 
-next_recommended_candidate:
+closed_realignment:
   candidate_id: FU-CR091-005
   legacy_id: CR091-FU-05
+  formal_cr_id: CR-101
   title: Cross-platform strategy delivery and adapter layer realignment
-  required_pre_start_checks:
-    - conflict_precheck
-    - formal_cr_id_allocation
-    - CP2_scope_risk_runtime_authorization_decision_brief
+  lifecycle_status: closed
+  readiness_status: ready_with_risk
+  gate_status: closed
+  closed_at: "2026-06-20T10:13:18+08:00"
+  evidence:
+    - process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+    - process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
+
+next_recommended_candidates:
+  - candidate_id: RA-CR101-001
+    legacy_id: QMT-DIRECT-RUN-VALIDATION-FU
+    title: QMT direct-run validation authorization gate
+    required_pre_start_checks:
+      - conflict_precheck
+      - formal_cr_id_allocation
+      - CP2_scope_risk_runtime_authorization_decision_brief
+  - candidate_id: RA-CR101-002
+    legacy_id: MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU
+    title: MiniQMT gateway adapter validation authorization gate
+    required_pre_start_checks:
+      - conflict_precheck
+      - formal_cr_id_allocation
+      - CP2_scope_risk_runtime_authorization_decision_brief
+  - candidate_id: RA-CR101-003
+    legacy_id: NAS-REAL-EXCHANGE-FU
+    title: NAS real package exchange validation authorization gate
+    required_pre_start_checks:
+      - conflict_precheck
+      - formal_cr_id_allocation
+      - CP2_scope_risk_runtime_authorization_decision_brief
+  - candidate_id: FU-CR101-001
+    legacy_id: ORDER-WRITE-SIMULATION-LIVE-FU
+    title: Order-write / simulation / live design authorization gate
+    required_pre_start_checks:
+      - conflict_precheck
+      - formal_cr_id_allocation
+      - CP2_scope_risk_runtime_authorization_decision_brief
+      - high_risk_acceptance_review
