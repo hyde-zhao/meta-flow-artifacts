@@ -1,11 +1,30 @@
 ---
-last_updated: "2026-06-18T07:59:20+08:00"
-current_wave: "CR046-W1-ARCHITECTURE-CONTRACT"
+last_updated: "2026-06-20T10:13:18+08:00"
+current_wave: "CR101-CLOSED"
 current_story: ""
-current_gate: "CR-046 CP8 已 approved；当前 framework-first 文档 / 契约交付关闭为 closed-current-delivery / READY_WITH_RISK。仍不得交付具体策略、不得真实传输 / 导入、不得 QMT 运行验证、不得连接 / 安装 MiniQMT、不得访问 NAS、不得读取 .env / 凭据 / 账号 / 账户 / 资金 / 持仓 / 委托 / 成交 / 日志原文、不得 submit/cancel、不得 simulation/live、不得 provider/lake/publish。后续候选需用户明确启动；CR089/CR091 保持 blocked。"
+current_gate: "CR-101 CP8 已 approved；当前离线交付关闭为 READY_WITH_RISK。仍不授权真实 NAS、凭据、QMT/MiniQMT/XtQuant/gateway runtime、simulation/live、交易、provider/lake/catalog publish 或后续真实验证 gate 自动启动。"
 ---
 
 ## Story 状态汇总
+
+## CR-101：Cross-Platform Strategy Delivery and Adapter Layer Realignment
+
+| 对象 | 状态 | 证据 | 下一步 |
+|---|---|---|---|
+| Story Plan | cp4-auto-pass | `process/STORY-BACKLOG-CR101.md`、`process/DEVELOPMENT-PLAN-CR101.yaml`、`process/checks/CP4-CR101-STORY-DAG-PARALLEL-SAFETY.md` | S01-S04 均 verified；CP8 已 approved。 |
+| LLD batch | approved | `process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md`、`process/context/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-CONTEXT.yaml` | 用户回复“批准”，接受 DQ-CP5-CR101-01..05。 |
+| CP5 auto checks | PASS | `process/checks/CP5-CR101-S01-target-taxonomy-manifest-contract-LLD-IMPLEMENTABILITY.md`、`process/checks/CP5-CR101-S02-package-checker-fixture-fail-closed-LLD-IMPLEMENTABILITY.md`、`process/checks/CP5-CR101-S03-runner-adapter-evidence-boundary-LLD-IMPLEMENTABILITY.md`、`process/checks/CP5-CR101-S04-docs-validation-and-follow-up-gates-LLD-IMPLEMENTABILITY.md` | 阻断项 0。 |
+| CP8 delivery readiness | approved-closed | `process/checks/CP8-CR101-DELIVERY-READINESS.md`、`process/checkpoints/CP8-CR101-DELIVERY-READINESS.md` | 用户回复“批准，并推送到远端”；CR101 当前离线交付关闭为 `closed-current-delivery / READY_WITH_RISK`。 |
+| 安全边界 | not-authorized | CP5 Decision Brief / launch message | 不授权 NAS、凭据、账户/持仓/委托/成交/原始日志、QMT/MiniQMT/XtQuant/gateway runtime、simulation/live、交易或 publish。 |
+
+### CR101 Story Plan 队列
+
+| Story ID | 标题 | Wave | 状态 | 设计证据 | lld_policy | Dev Gate | 负责人 | 阻塞 |
+|---|---|---|---|---|---|---|---|---|
+| CR101-S01-target-taxonomy-manifest-contract | Target taxonomy and manifest contract realignment | CR101-W1-CONTRACT | verified | `process/stories/CR101-S01-target-taxonomy-manifest-contract-LLD.md`、`process/checks/CP6-CR101-S01-target-taxonomy-manifest-contract-CODING-DONE.md`、`process/checks/CP7-CR101-S01-target-taxonomy-manifest-contract-VERIFICATION-DONE.md` | full-lld | cp7-pass | host-orchestrator | 仅离线验证通过；真实系统 not-authorized。 |
+| CR101-S02-package-checker-fixture-fail-closed | Package checker and fixture fail-closed realignment | CR101-W2-CHECKER-EVIDENCE | verified | `process/stories/CR101-S02-package-checker-fixture-fail-closed-LLD.md`、`process/checks/CP6-CR101-S02-package-checker-fixture-fail-closed-CODING-DONE.md`、`process/checks/CP7-CR101-S02-package-checker-fixture-fail-closed-VERIFICATION-DONE.md` | full-lld | cp7-pass | host-orchestrator | 仅离线验证通过；真实系统 not-authorized。 |
+| CR101-S03-runner-adapter-evidence-boundary | Runner adapter and evidence boundary realignment | CR101-W2-CHECKER-EVIDENCE | verified | `process/stories/CR101-S03-runner-adapter-evidence-boundary-LLD.md`、`process/checks/CP6-CR101-S03-runner-adapter-evidence-boundary-CODING-DONE.md`、`process/checks/CP7-CR101-S03-runner-adapter-evidence-boundary-VERIFICATION-DONE.md` | full-lld | cp7-pass | host-orchestrator | 仅离线验证通过；真实系统 not-authorized。 |
+| CR101-S04-docs-validation-and-follow-up-gates | Docs, validation matrix, and follow-up authorization gates | CR101-W3-DOCS-GATES | verified | `process/stories/CR101-S04-docs-validation-and-follow-up-gates-LLD.md`、`process/checks/CP6-CR101-S04-docs-validation-and-follow-up-gates-CODING-DONE.md`、`process/checks/CP7-CR101-S04-docs-validation-and-follow-up-gates-VERIFICATION-DONE.md` | full-lld | cp7-pass | host-orchestrator | 仅离线验证通过；真实系统 not-authorized。 |
 
 ## CR-046：QMT / MiniQMT 双目标策略交付框架
 

@@ -5,11 +5,11 @@ current_phase: delivered
 current_agent: host-orchestrator
 active_change: ''
 active_story: ''
-iteration: 568
+iteration: 570
 blocked: false
 blocked_reason: ''
-last_action: "CR091-FU-02 已转为正式 CR100 并完成 NAS Package Exchange Offline Readiness Gate；交付本地 fake exchange fixture、manifest/schema 校验、fake publish/pull/check CLI、聚焦测试和 NAS 恢复 runbook。CR100 关闭为 READY_WITH_RISK；未访问真实 NAS、未读取凭据、未启动 runtime、未执行交易或 provider/lake/catalog publish。"
-next_action: "如需验证真实 NAS package exchange，必须在 NAS 可达后另起独立授权 gate，明确 access/list/read/copy/write/publish/delete 范围、路径来源和脱敏 evidence schema；当前可提交并推送 CR100 离线交付。"
+last_action: "用户回复“批准，并推送到远端”；CR101 CP8 已回填 approved，当前离线交付关闭为 closed-current-delivery / READY_WITH_RISK。该批准不授权真实 NAS、凭据、QMT/MiniQMT/XtQuant/gateway runtime、simulation/live、交易、provider/lake/catalog publish 或后续真实验证 gate。"
+next_action: "按用户授权提交并推送本轮 CR101 代码与过程台账到各自远端；推送仅覆盖 Git 远端写入，不授权真实 NAS、凭据、runtime、交易或 publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -125,9 +125,58 @@ artifact_routing:
   updated_at: "2026-06-17T19:50:00+08:00"
 cr_tracking:
   status: "no-active-formal-cr"
+  schema_version: 2
   index_path: process/changes/CR-INDEX.yaml
-  last_consistency_check: '2026-06-19T18:45:00+08:00 CR100 closed-current-delivery / READY_WITH_RISK after local fake package exchange offline readiness. No real NAS access/list/read/copy/write/publish/delete, credential/env/account read, QMT/MiniQMT/XtQuant/gateway/runner runtime, submit/cancel, simulation/live, provider/lake/catalog publish, CR089 auto-start or CR020 route restore authorized.'
+  current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  last_consistency_check: '2026-06-20T10:13:18+08:00 closed: CR101 CP8 approved by user reply 批准，并推送到远端; CR101 current offline delivery closed as READY_WITH_RISK. No real NAS access/list/read/copy/write/publish/delete, credential/env/account read, QMT/MiniQMT/XtQuant/gateway runtime, submit/cancel, simulation/live, provider/lake/catalog publish, CR089 auto-start or CR020 route restore authorized.'
+  next_action_queue:
+  - candidate_id: FU-CR091-005
+    legacy_id: CR091-FU-05
+    title: Cross-platform strategy delivery and adapter layer realignment
+    formal_cr_path: process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+    recommended_action: closed_current_delivery_ready_with_risk
+    gate_status: closed
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
   active_crs:
+  - id: CR-101
+    title: Cross-Platform Strategy Delivery and Adapter Layer Realignment
+    status: closed-current-delivery
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+    parent_cr: CR-091
+    source_decision_id: USER-20260619-RUNNER-ADAPTER-AND-CROSS-PLATFORM-DELIVERY
+    priority: 1
+    blocked_by: 'closed: user replied “批准，并推送到远端” at 2026-06-20T10:13:18+08:00, accepting DQ-CP8-CR101-01..05 and READY_WITH_RISK. Closure does not authorize real NAS, credential/account/raw-log read, QMT/MiniQMT/XtQuant/gateway runtime, submit/cancel, simulation/live, provider/lake/catalog publish, CR089/CR020/order-write auto-start, or follow-up real validation gate execution.'
+    impact_surface:
+    - strategy_package_contract
+    - cross_platform_delivery_target
+    - qmt_direct_run_target
+    - quant_lab_strategy_runner
+    - broker_adapter_protocol
+    - miniqmt_gateway_adapter
+    - goldminer_future_adapter
+    - manifest_schema
+    - package_checker
+    - qmt_package_generation
+    - evidence_redaction_schema
+    conflict_keys:
+    - strategy_package_contract
+    - cross_platform_delivery_target
+    - qmt_direct_run_target
+    - quant_lab_runner_adapter_layer
+    - miniqmt_gateway_adapter
+    - goldminer_future_adapter
+    - manifest_schema
+    - no_runtime_connection
+    - no_credential_read
+    - no_order_write
+    - no_nas_access
+    next_gate: closed
+    next_action: "CR101 当前离线交付已关闭为 READY_WITH_RISK；后续 QMT direct-run、MiniQMT gateway、NAS real exchange、order-write / simulation / live 均需独立授权 gate。"
+    last_checked_at: '2026-06-20T10:13:18+08:00'
   - id: CR-100
     title: NAS Package Exchange Offline Readiness Gate
     status: closed-current-delivery
@@ -362,7 +411,9 @@ cr_tracking:
     - order_write_future_gate
     conflict_keys:
     - strategy_package_contract
-    - miniqmt_runner_install
+    - adapter_layer_realignment
+    - miniqmt_gateway_adapter
+    - qmt_direct_run_target
     - trading_runtime_boundary
     - per_run_authorization
     - credential_boundary
@@ -372,7 +423,7 @@ cr_tracking:
     - generic_strategy_adapter
     - order_write_excluded
     next_gate: closed
-    next_action: 'CR091 当前交付已关闭。推荐下一目标为 CR091-FU-01 真实只读 runtime smoke 设计门禁；备选为 CR091-FU-02 NAS package exchange、CR091-FU-03 order-write 设计门禁或 CR091-FU-04 ledger hygiene。任何候选都必须由用户明确选择后再创建 / 恢复门禁，不自动启动。'
+    next_action: 'CR091 当前交付已关闭。基于 2026-06-19 用户纠正，推荐下一目标改为 CR091-FU-05 Cross-platform strategy delivery and adapter layer realignment：runner 属于 quant-lab，MiniQMT 只是当前 adapter，策略交付当前仅支持 QMT direct-run 但保留跨平台 target 扩展。CR091-FU-03 order-write、真实 NAS 和真实 runtime 均需等待独立门禁。'
     last_checked_at: '2026-06-18T15:40:09+08:00'
   - id: CR-046
     title: QMT and MiniQMT Dual-Target Strategy Delivery Framework
@@ -407,7 +458,7 @@ cr_tracking:
     - no_runtime_connection
     - no_terminal_validation
     next_gate: closed
-    next_action: CR046 当前交付已关闭；后续可由用户明确选择 CR091 runner research/design/implementation plan、CR047 首个具体策略交付、CR089 本地离线 package skeleton 或其他候选。任何后续候选都必须新建 / 恢复独立门禁，不自动启动。
+    next_action: CR046 当前交付已关闭；早期 QMT / MiniQMT 双目标和 MiniQMT runner install 表述保留为历史基线。基于 2026-06-19 用户纠正，后续应先启动 CR091-FU-05 重对齐跨平台策略交付 target 和 quant-lab runner adapter layer；CR047/CR048/CR049 需按重对齐后的 QMT direct-run / MiniQMT gateway adapter 语义重新消费。
     last_checked_at: '2026-06-18T07:59:20+08:00'
   - id: CR-080
     title: Data/reports Restore or Copy Gate
@@ -1860,9 +1911,9 @@ cr_tracking:
     - per_run_authorization
     - credential_boundary
     - nas_package_exchange
-    next_gate: local offline package skeleton or independent runtime authorization
-    next_action: 可作为后续候选准备本地离线 qmt_interface_smoke package skeleton / manifest / checksum docs / manual smoke guide；启动前必须用户明确选择，不授权 NAS/QMT/credential/account/trading action。
-    last_checked_at: '2026-06-18T07:59:20+08:00'
+    next_gate: blocked pending target/adapter realignment or independent runtime authorization
+    next_action: CR089 仍保持 blocked-readiness-approved。基于 2026-06-19 用户纠正，启动真实 package/interface 路线前应先由 CR091-FU-05 重对齐 manifest target taxonomy、QMT direct-run target 和 quant-lab runner adapter layer；不授权 NAS/QMT/credential/account/trading action。
+    last_checked_at: '2026-06-19T19:35:00+08:00'
   follow_up_candidates:
   - id: CR-026
     title: Qlib isolated runner optional Spike (narrowed after CR030-039 coverage)
@@ -1886,6 +1937,45 @@ cr_tracking:
     next_gate: 启动后续 CR 冲突预检 + CP2
     next_action: 仅在用户仍需要 Qlib 对照 runner 时启动 narrowed CR026 Spike；否则后续可人工决策取消。启动前必须重新做冲突预检、依赖隔离设计和运行授权。
     last_checked_at: '2026-06-11T06:35:19+08:00'
+  - id: FU-CR091-005
+    legacy_ids:
+    - CR091-FU-05
+    title: Cross-platform strategy delivery and adapter layer realignment
+    status: active
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+    priority: 1
+    blocked_by: "cp5_pending: CP3 HLD approved by user reply 批准 at 2026-06-20T08:44:49+08:00. Runner belongs to quant-lab, MiniQMT is only the current adapter target, and strategy delivery must be cross-platform by design while currently implementing only QMT direct-run."
+    impact_surface:
+    - strategy_package_contract
+    - cross_platform_delivery_target
+    - qmt_direct_run_target
+    - quant_lab_strategy_runner
+    - broker_adapter_protocol
+    - miniqmt_gateway_adapter
+    - goldminer_future_adapter
+    - manifest_schema
+    - package_checker
+    - qmt_package_generation
+    - evidence_redaction_schema
+    - CR046 follow-up tracking
+    - CR091 follow-up tracking
+    - CR089 blocked readiness
+    conflict_keys:
+    - strategy_package_contract
+    - cross_platform_delivery_target
+    - qmt_direct_run_target
+    - quant_lab_runner_adapter_layer
+    - miniqmt_gateway_adapter
+    - goldminer_future_adapter
+    - manifest_schema
+    - no_runtime_connection
+    - no_credential_read
+    - no_order_write
+    - no_nas_access
+    next_gate: CP4 story planning / CP5 LLD review
+    next_action: 生成 CR101 CP4 story planning 和 CP5 LLD 设计证据，覆盖 target taxonomy、manifest/checker/fixture/evidence/package layout 的文件 owner、Story、测试计划和负向用例；不得直接实现或连接真实 NAS/QMT/MiniQMT/XtQuant/gateway runtime、读取凭据、simulation/live、交易或 publish。
+    last_checked_at: '2026-06-20T08:44:49+08:00'
   - id: CR079-restore-candidate
     title: Data/reports restore or copy gate
     status: active
@@ -2078,14 +2168,34 @@ human_gate_decisions:
   active_checkpoint: ''
   active_launch_message: ''
   pending_gate: ''
-  approved_gate: CP8-CR099-DELIVERY-READINESS
-  approved_at: '2026-06-19T17:15:29+08:00'
+  approved_gate: CP8-CR101-DELIVERY-READINESS
+  approved_at: '2026-06-20T10:13:18+08:00'
   approved_by: user
-  approval_input: '用户回复“接受 CR099 CP8 的 5 项推荐方案和风险，不表示授权新的 runtime run、下单 / 撤单验证、读取 Windows .env、访问 NAS、publish 或任何交易写操作。 列出下一步推进的建议”，按 CR099 CP8 approve 处理；接受 DQ-CP8-CR099-01..05 的推荐方案，关闭 CR099 当前交付为 READY_WITH_RISK。该批准不授权新的 QMT/MiniQMT/XtQuant/gateway/runner runtime run、下单 / 撤单验证、读取 Windows .env、账户原文、NAS、publish 或任何交易写操作。'
+  approval_input: '用户回复“批准，并推送到远端”，按 CR101 CP8 approve 处理；接受 DQ-CP8-CR101-01..05 的推荐方案，关闭 CR101 当前离线交付为 READY_WITH_RISK。该批准不授权 NAS、凭据、账户/持仓/委托/成交/原始日志、QMT/MiniQMT/XtQuant/gateway runtime、simulation/live、交易、provider/lake/catalog publish、CR089/CR020/order-write 自动恢复或后续真实验证 gate。'
   pending_checklist_path: ''
-  launch_message_path: ''
+  launch_message_path: process/checks/CP8-CR101-HUMAN-GATE-LAUNCH-MESSAGE.md
   pending_decision_ids: []
   accepted_decision_ids:
+  - DQ-CP8-CR101-01
+  - DQ-CP8-CR101-02
+  - DQ-CP8-CR101-03
+  - DQ-CP8-CR101-04
+  - DQ-CP8-CR101-05
+  - DQ-CP5-CR101-01
+  - DQ-CP5-CR101-02
+  - DQ-CP5-CR101-03
+  - DQ-CP5-CR101-04
+  - DQ-CP5-CR101-05
+  - DQ-CP3-CR101-01
+  - DQ-CP3-CR101-02
+  - DQ-CP3-CR101-03
+  - DQ-CP3-CR101-04
+  - DQ-CP3-CR101-05
+  - DQ-CP2-CR101-01
+  - DQ-CP2-CR101-02
+  - DQ-CP2-CR101-03
+  - DQ-CP2-CR101-04
+  - DQ-CP2-CR101-05
   - DQ-CP8-CR099-01
   - DQ-CP8-CR099-02
   - DQ-CP8-CR099-03
@@ -2412,6 +2522,7 @@ human_gate_decisions:
   - DQ-CP5-CR074-04
   - DQ-CP5-CR074-05
   non_authorized_items:
+  - CR101 CP2 已 approved；approve 只接受 scope / architecture / implementation / runtime_authorization / risk_acceptance 推荐方案，不授权 NAS、.env/credential/account、QMT/MiniQMT/XtQuant/gateway runtime、submit/cancel、simulation/live、provider/lake/catalog publish 或 CR089 auto-start。
   - CR046 CP8 已 approved 并关闭当前 READY_WITH_RISK；approve 只接受 framework-first 文档 / 契约交付和 R-CR046-CP7-001..003 / REV-CR046-004 风险，不授权 QMT/MiniQMT/XtQuant/gateway、NAS、.env/credential/account、submit/cancel、simulation/live、provider/lake/catalog，也不自动启动 CR089 或 CR091。
   - CR089 CP2/CP3/CP5 已 approved；本批准仅接受策略包 / NAS package exchange / 交易主机本地缓存 / 只读 smoke 边界的推荐方案，不授权 NAS 内容读写列取复制发布、不授权凭据读取、不授权 QMT/MiniQMT/XtQuant/gateway 启动、不授权账户原文查询、不授权 submit/cancel/simulation/live、不恢复 CR020、不激活 CR089、不恢复 CR046 CP7。
   - CR085 已完成只读远端扫描，但尚未批准任何远端写动作；当前不授权 remote add、fetch 到当前仓库、remote set-url/remove、set-upstream、git push、git push -u、force push、tag、default branch governance、history rewrite、远端删除、dirty worktree commit、external process Git/NAS、data/reports、凭据、NAS 内容、provider/lake/catalog、runtime、CR046 recovery、old root retirement、backup 删除或 cleanup。
@@ -2442,6 +2553,26 @@ human_gate_decisions:
   - 不执行 optional groups、full tests、章节研究 smoke、删除 .venv 或 destructive cleanup。
   - 不恢复或推进 CR046 CP7。
   pending_human_decisions:
+  - {id: DQ-CP8-CR101-01, gate: CP8, decision_type: risk_acceptance, question: "是否按 READY_WITH_RISK 关闭 CR101 当前离线交付？", recommendation: "关闭为 READY_WITH_RISK；范围限于离线 contract / checker / evidence / docs。", alternatives: ["暂缓 CP8，要求补充真实验证", "退回 S04 修改文档"], pros_cons: "推荐方案权限最小且完成架构重对齐；真实验证会引入高权限；退回文档会延后关闭。", impact_risk: "不证明真实 QMT / NAS / MiniQMT / order-write ready。", rollback_switch: "若用户不接受残余风险，停止 CP8 并另起 runtime_authorization CR。", status: accepted, answer: "批准，并推送到远端 at 2026-06-20T10:13:18+08:00", source: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T10:13:18+08:00"}
+  - {id: DQ-CP8-CR101-02, gate: CP8, decision_type: runtime_authorization, question: "CP8 approve 是否授权真实 NAS、凭据、QMT/MiniQMT/XtQuant/gateway runtime、simulation/live、交易或 publish？", recommendation: "不授权；CP8 只确认离线交付关闭。", alternatives: ["单独授权某个真实验证 gate", "授权 agent 代跑真实 runtime"], pros_cons: "推荐方案符合当前边界；单独 gate 可控；agent 代跑真实 runtime 风险最高。", impact_risk: "防止把设计 / 离线验证误读为真实运行授权。", rollback_switch: "任何真实动作必须新建 gate 并重新打印授权 / 不授权清单。", status: accepted, answer: "批准，并推送到远端 at 2026-06-20T10:13:18+08:00", source: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T10:13:18+08:00"}
+  - {id: DQ-CP8-CR101-03, gate: CP8, decision_type: follow_up_tracking, question: "4 个后续 gate 如何处理？", recommendation: "全部登记为 candidate-not-started，不自动启动。", alternatives: ["立即启动 QMT direct-run validation", "立即启动 MiniQMT gateway validation"], pros_cons: "推荐方案避免越权；立即启动需要额外 runtime 证据和用户授权。", impact_risk: "影响 CR089 / order-write 后续路线，但不阻断 CR101 关闭。", rollback_switch: "用户指定 gate 时，先做冲突预检并分配新 CR。", status: accepted, answer: "批准，并推送到远端 at 2026-06-20T10:13:18+08:00", source: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T10:13:18+08:00"}
+  - {id: DQ-CP8-CR101-04, gate: CP8, decision_type: implementation, question: "是否接受 S01-S04 当前实现命名和验证矩阵作为 CR101 当前交付基线？", recommendation: "接受当前实现：qmt_terminal_direct delivery target、miniqmt_gateway_readonly adapter、CR101 fake checker、evidence boundary。", alternatives: ["要求改名或拆分 schema", "退回 S01/S02/S03 修改"], pros_cons: "推荐方案与 CP3/CP5 一致；改名会扩大回归；拆分会延长交付。", impact_risk: "影响后续 package / checker / evidence 消费。", rollback_switch: "若用户要求命名变更，回退对应 Story 并重跑 CP6/CP7。", status: accepted, answer: "批准，并推送到远端 at 2026-06-20T10:13:18+08:00", source: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T10:13:18+08:00"}
+  - {id: DQ-CP8-CR101-05, gate: CP8, decision_type: follow_up_tracking, question: "CR089、CR020 或 order-write 是否自动恢复？", recommendation: "不自动恢复；CR089 保持 blocked，CR020 路线不恢复，order-write 仍等待独立 gate。", alternatives: ["自动启动 CR089", "恢复 CR020", "启动 order-write design"], pros_cons: "推荐方案避免把 CR101 离线 ready 扩展成真实运行；备选均需高权限门禁。", impact_risk: "防止后续工作越权或消费错误 readiness。", rollback_switch: "用户明确选择后，重新做 CR 冲突预检和 runtime authorization。", status: accepted, answer: "批准，并推送到远端 at 2026-06-20T10:13:18+08:00", source: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T10:13:18+08:00"}
+  - {id: DQ-CP5-CR101-01, gate: CP5, decision_type: implementation, question: "是否批准 4 个 Story 的 LLD batch 和 Wave / merge order？", recommendation: "批准 S01 -> S02/S03 -> S04 的批次；CP5 后才允许进入受限离线实现。", alternatives: ["拆成两个 CP5 批次", "退回 CP4 重新拆 Story"], pros_cons: "推荐方案覆盖完整且依赖清晰；拆批可降低审查压力但延长门禁；退回 CP4 会推迟修复架构漂移。", impact_risk: "影响 story execution 排期、文件 owner、CP6/CP7 验证范围。", rollback_switch: "若实现时发现 S02/S03 文件冲突不可控，暂停并回 CP5 拆分或指定单一 merge owner。", status: accepted, answer: "批准 at 2026-06-20T09:30:00+08:00", source: process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T09:30:00+08:00"}
+  - {id: DQ-CP5-CR101-02, gate: CP5, decision_type: implementation, question: "manifest target taxonomy 是否按 S01 LLD 冻结？", recommendation: "冻结 delivery_targets / execution_adapters 双边界，当前唯一 implemented delivery target 为 qmt_terminal_direct，MiniQMT 只作为 readonly execution adapter contract。", alternatives: ["QMT-only schema", "保留旧 miniqmt_runner 兼容作为 delivery target"], pros_cons: "推荐方案符合 CP3 并可扩展；QMT-only 后续返工；旧 delivery target 会继续混淆 runner host 和 adapter。", impact_risk: "影响 package_loader、manifest fixture、package exchange、adapter payload 和 tests。", rollback_switch: "若旧 fixture 迁移风险过高，可临时读旧 manifest 但新输出仍禁止 miniqmt_runner delivery target。", status: accepted, answer: "批准 at 2026-06-20T09:30:00+08:00", source: process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T09:30:00+08:00"}
+  - {id: DQ-CP5-CR101-03, gate: CP5, decision_type: implementation, question: "checker / fixture / evidence 负向验证是否按 S02/S03 LLD 执行？", recommendation: "执行 8 类 checker fail-closed、evidence sensitive hit 0、forbidden counters 0、readonly gateway regression。", alternatives: ["只覆盖 checker，不改 evidence", "只改 evidence，不迁移 CR100 fake exchange"], pros_cons: "推荐方案一次关闭主要漂移；拆开会留下边界缺口；跳过任一侧会弱化 CP7 证据。", impact_risk: "影响 package_exchange、adapters、evidence、readonly_gateway 和三组测试。", rollback_switch: "若测试成本超限，保留最小 8 类 checker 测试，evidence schema cleanup 转后续 CR。", status: accepted, answer: "批准 at 2026-06-20T09:30:00+08:00", source: process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T09:30:00+08:00"}
+  - {id: DQ-CP5-CR101-04, gate: CP5, decision_type: runtime_authorization, question: "CP5 approve 是否授权 NAS、凭据、QMT/MiniQMT/XtQuant/gateway runtime、simulation/live、交易或 publish？", recommendation: "不授权；CP5 只允许后续进行离线代码 / 文档实现和本地测试。", alternatives: ["用户另起 per-run gate 授权手工真实验证", "授权 agent 代跑真实 runtime"], pros_cons: "推荐方案权限最小；手工真实验证需独立 evidence；agent 代跑真实 runtime 超出当前边界。", impact_risk: "不证明真实 NAS/QMT/MiniQMT/gateway/account/trading ready。", rollback_switch: "需要真实动作时另起 runtime_authorization CR，并重新打印授权 / 不授权清单。", status: accepted, answer: "批准 at 2026-06-20T09:30:00+08:00", source: process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T09:30:00+08:00"}
+  - {id: DQ-CP5-CR101-05, gate: CP5, decision_type: risk_acceptance, question: "是否接受 CP5 后仍只能达到 offline READY_WITH_RISK 的路线？", recommendation: "接受，CP7/CP8 以离线 contract / checker / redaction 证据关闭；真实验证后置候选 gate。", alternatives: ["要求真实 QMT/NAS/MiniQMT 验证后才继续", "关闭 CR101 为 blocked"], pros_cons: "推荐方案先消除架构漂移；真实验证会引入高权限和环境依赖；blocked 不能修正当前混淆。", impact_risk: "残余风险是离线 evidence 不能代表真实 runtime / NAS / account / trading 链路。", rollback_switch: "若用户不接受 READY_WITH_RISK，回退 CP2 将 CR101 改为 runtime-first CR。", status: accepted, answer: "批准 at 2026-06-20T09:30:00+08:00", source: process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T09:30:00+08:00"}
+  - {id: DQ-CP2-CR101-01, gate: CP2, decision_type: scope, question: "是否启动 CR101，并将本轮限定为跨平台策略交付与 adapter layer 重对齐？", recommendation: "启动 standard CR101，仅做设计 / schema / fixture / checker / package layout 重对齐，不直接实现真实运行链路。", alternatives: ["暂缓启动，保留 FU-CR091-005 为 candidate", "只做文档勘误不进入 CR"], pros_cons: "推荐方案能先修正历史 miniqmt_runner 混淆；暂缓会继续阻塞 CR089 / order-write；只做勘误缺少后续实现门禁。", impact_risk: "影响 manifest、checker、package layout、adapter protocol 和后续 HLD / CP5；不证明真实 runtime ready。", rollback_switch: "若 CP3 发现范围过大，回退到 CP2 拆分 target taxonomy 与 adapter protocol 两个 CR。", status: accepted, answer: "同意 at 2026-06-20T08:17:33+08:00", source: process/checkpoints/CP2-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-SCOPE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T08:17:33+08:00"}
+  - {id: DQ-CP2-CR101-02, gate: CP2, decision_type: architecture, question: "runner 与 MiniQMT 的关系如何冻结？", recommendation: "runner 固定为 quant-lab-side；MiniQMT 只是当前 broker / execution adapter target，不承载策略运行职责。", alternatives: ["MiniQMT runner-hosted", "保留双 runner 模型"], pros_cons: "推荐方案职责清晰并可扩展到 Goldminer；MiniQMT-hosted 会把 runner 和接口宿主耦合；双 runner 增加验证矩阵。", impact_risk: "影响 strategy_runner 边界、adapter protocol、HLD、checker 和 package manifest。", rollback_switch: "若未来确需平台宿主 runner，另起 architecture CR 并定义独立 target。", status: accepted, answer: "同意 at 2026-06-20T08:17:33+08:00", source: process/checkpoints/CP2-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-SCOPE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T08:17:33+08:00"}
+  - {id: DQ-CP2-CR101-03, gate: CP2, decision_type: implementation, question: "当前策略交付 target 支持哪些平台？", recommendation: "当前 implemented 仅 QMT direct-run；manifest / validation / package layout 保留 future targets，但不实现 Goldminer / generic Python。", alternatives: ["同时实现 MiniQMT target", "只做抽象 schema 不交付 QMT target"], pros_cons: "推荐方案匹配当前仅支持 QMT且控制范围；同时实现 MiniQMT 会扩大风险；只做抽象无法解除 CR089 阻塞。", impact_risk: "影响 package generation、entrypoint、fixture、checker、docs/qmt HLD。", rollback_switch: "若 QMT direct-run target 无法离线建模，CP3 回退为 Spike 或拆分。", status: accepted, answer: "同意 at 2026-06-20T08:17:33+08:00", source: process/checkpoints/CP2-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-SCOPE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T08:17:33+08:00"}
+  - {id: DQ-CP2-CR101-04, gate: CP2, decision_type: runtime_authorization, question: "本 CR 是否授权真实 NAS / QMT / MiniQMT / XtQuant / gateway / simulation/live / 交易 / publish？", recommendation: "不授权。本 CR 只允许离线文件、schema、fixture、checker 和本地包结构验证；真实验证后续逐 run gate。", alternatives: ["授权用户手工真实验证", "授权 agent 代跑 runtime / NAS / publish"], pros_cons: "推荐方案权限最小且符合当前对话；用户手工验证需要单独 evidence schema；agent 代跑越过当前边界。", impact_risk: "不证明真实 NAS、QMT direct-run、MiniQMT adapter 或交易链路 ready。", rollback_switch: "需要真实验证时另起 QMT-DIRECT-RUN-VALIDATION-FU、MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU 或 NAS gate。", status: accepted, answer: "同意 at 2026-06-20T08:17:33+08:00", source: process/checkpoints/CP2-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-SCOPE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T08:17:33+08:00"}
+  - {id: DQ-CP2-CR101-05, gate: CP2, decision_type: risk_acceptance, question: "是否接受先完成离线重对齐、真实运行后置的 READY_WITH_RISK 路线？", recommendation: "接受离线优先路线；CP8 若真实 runtime 未执行，可按证据结论关闭为 READY_WITH_RISK 并保留后续 gate。", alternatives: ["等真实环境授权后再做", "把 CR101 关闭为 blocked"], pros_cons: "推荐方案先修正架构和交付契约；等待真实环境会阻塞设计；blocked 不能消除当前混淆。", impact_risk: "残余风险是离线验证不证明真实 runtime、NAS 权限或交易安全。", rollback_switch: "若用户不接受 READY_WITH_RISK，CP2 退回并改为 runtime 授权 CR。", status: accepted, answer: "同意 at 2026-06-20T08:17:33+08:00", source: process/checkpoints/CP2-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-SCOPE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T08:17:33+08:00"}
+  - {id: DQ-CP3-CR101-01, gate: CP3, decision_type: architecture, question: "是否批准 target + adapter 双边界作为 CR101 推荐架构？", recommendation: "批准方案 A：delivery_targets 表达策略交付 target，execution_adapters 表达 runner 到 broker/gateway 的 adapter。", alternatives: ["QMT-only 固化", "沿用 miniqmt_runner 历史字段"], pros_cons: "推荐方案职责最清晰并支持 future target；QMT-only 后续扩展返工；沿用历史字段继续混淆 runner host 和 adapter。", impact_risk: "影响 manifest、checker、fixture、package layout、HLD/LLD 和测试。", rollback_switch: "若 CP5 发现迁移范围过大，拆出 manifest migration Story 或回退 CP3 修订。", status: accepted, answer: "批准 at 2026-06-20T08:44:49+08:00", source: process/checkpoints/CP3-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T08:44:49+08:00"}
+  - {id: DQ-CP3-CR101-02, gate: CP3, decision_type: architecture, question: "当前 implemented delivery target 是否固定为 qmt_terminal_direct？", recommendation: "固定为唯一 implemented target；future target 只保留 schema slot。", alternatives: ["同时实现 MiniQMT target", "只做抽象 schema"], pros_cons: "推荐方案匹配 CP2 和当前基线且可验证；同时实现 MiniQMT 会扩大 runtime 误读；抽象-only 不可验证。", impact_risk: "不证明真实 QMT ready；只证明离线包结构和 checker 合同。", rollback_switch: "若 QMT direct-run target 无法离线建模，转 Spike 或降级为文档-only。", status: accepted, answer: "批准 at 2026-06-20T08:44:49+08:00", source: process/checkpoints/CP3-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T08:44:49+08:00"}
+  - {id: DQ-CP3-CR101-03, gate: CP3, decision_type: implementation, question: "CP5 是否按 manifest / checker / fixture / evidence 重对齐推进？", recommendation: "CP5 进入离线 LLD，覆盖 schema、checker、fixtures、negative tests、evidence redaction 和 package layout。", alternatives: ["只写文档不改实现", "直接进入代码修改不做 LLD"], pros_cons: "推荐方案符合 gate 并控制 shared file 冲突；文档-only 不能关闭风险；跳过 LLD 会扩大实现偏差。", impact_risk: "影响 trading/strategy_runner/*、tests、docs/qmt、package fixtures。", rollback_switch: "CP5 若发现文件冲突，拆分 Story 并按 CP5 批量 LLD 确认。", status: accepted, answer: "批准 at 2026-06-20T08:44:49+08:00", source: process/checkpoints/CP3-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T08:44:49+08:00"}
+  - {id: DQ-CP3-CR101-04, gate: CP3, decision_type: runtime_authorization, question: "CP3 approve 是否授权真实 NAS、凭据、QMT/MiniQMT/XtQuant/gateway runtime、simulation/live、交易或 publish？", recommendation: "不授权；CP3 只确认架构。", alternatives: ["用户手工真实验证另起 per-run gate", "授权 agent 代跑真实 runtime"], pros_cons: "推荐方案权限最小；用户手工验证需单独 evidence schema；agent 代跑越过当前边界。", impact_risk: "不证明真实 runtime、NAS、账号或交易链路 ready。", rollback_switch: "需要真实验证时另起 runtime_authorization CR，并重新打印不授权/授权清单。", status: accepted, answer: "批准 at 2026-06-20T08:44:49+08:00", source: process/checkpoints/CP3-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T08:44:49+08:00"}
+  - {id: DQ-CP3-CR101-05, gate: CP3, decision_type: risk_acceptance, question: "是否接受历史 miniqmt_runner 字段迁移风险和 READY_WITH_RISK 路线？", recommendation: "接受，要求 CP5/CP7 加负向验证，CP8 可在未真实运行时关闭为 READY_WITH_RISK。", alternatives: ["等真实环境授权后再做", "关闭 CR101 为 blocked"], pros_cons: "推荐方案先消除架构漂移；等待真实环境会阻塞；blocked 不能修正当前混淆。", impact_risk: "残余风险是离线证据不能代表真实 NAS/QMT/MiniQMT/gateway。", rollback_switch: "若用户不接受 READY_WITH_RISK，回退 CP2 改为 runtime-first CR。", status: accepted, answer: "批准 at 2026-06-20T08:44:49+08:00", source: process/checkpoints/CP3-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T08:44:49+08:00"}
   - {id: DQ-CP8-CR099-01, gate: CP8, decision_type: risk_acceptance, question: "是否接受 CR099 release_decision？", recommendation: "接受 READY_WITH_RISK，关闭当前 runner real readonly smoke 交付。", alternatives: ["READY 关闭但不标风险", "NOT_READY 回 CP7", "保持 active 等待非空 / 交易日复测"], pros_cons: "推荐方案诚实记录残余覆盖缺口；READY 会弱化风险；NOT_READY 会把后续复测混入当前 CR。", impact_risk: "当前交付可收口，风险转 follow-up。", rollback_switch: "若用户要求非空 / 交易日证明，启动独立 follow-up。", status: accepted, answer: "接受 CR099 CP8 的 5 项推荐方案和风险，不表示授权新的 runtime run、下单 / 撤单验证、读取 Windows .env、访问 NAS、publish 或任何交易写操作。 at 2026-06-19T17:15:29+08:00", source: process/checkpoints/CP8-CR099-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T17:15:29+08:00"}
   - {id: DQ-CP8-CR099-02, gate: CP8, decision_type: risk_acceptance, question: "是否接受 CP8 剩余风险？", recommendation: "接受 R-CR099-CP8-001..002：空持仓路径、交易日路径未证明。", alternatives: ["本轮补非空持仓", "要求交易日复测", "取消当前交付"], pros_cons: "推荐方案不扩大授权；补测需要新的账户状态 / 时间窗口和运行授权。", impact_risk: "后续不能声称非空 / 交易日已证明。", rollback_switch: "用户要求更强覆盖时启动 CR097-FU-01 或新 CR。", status: accepted, answer: "接受 CR099 CP8 的 5 项推荐方案和风险，不表示授权新的 runtime run、下单 / 撤单验证、读取 Windows .env、访问 NAS、publish 或任何交易写操作。 at 2026-06-19T17:15:29+08:00", source: process/checkpoints/CP8-CR099-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T17:15:29+08:00"}
   - {id: DQ-CP8-CR099-03, gate: CP8, decision_type: runtime_authorization, question: "CP8 approve 是否授权额外真实运行或外部访问？", recommendation: "不授权；CP8 approve 只确认当前 evidence 和风险接受，不授权新的 runtime、Windows .env、NAS、交易写或 publish。", alternatives: ["授权一次非空复测", "授权 NAS", "授权 order-write"], pros_cons: "推荐方案权限最小；备选均需独立高风险门禁。", impact_risk: "防止 CP8 被误读为额外运行授权。", rollback_switch: "需要外部动作时必须新建逐 run gate。", status: accepted, answer: "接受 CR099 CP8 的 5 项推荐方案和风险，不表示授权新的 runtime run、下单 / 撤单验证、读取 Windows .env、访问 NAS、publish 或任何交易写操作。 at 2026-06-19T17:15:29+08:00", source: process/checkpoints/CP8-CR099-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-19T17:15:29+08:00"}
@@ -8413,6 +8544,7 @@ human_gate_decisions:
     - DQ-CP3-CR020-06
     - DQ-CP3-CR020-07
   pending_non_authorized_items:
+  - CR101 CP2 approve 只接受 scope / architecture / implementation / runtime_authorization / risk_acceptance 推荐方案，不授权 NAS、.env/credential/account、QMT/MiniQMT/XtQuant/gateway runtime、submit/cancel、simulation/live、provider/lake/catalog publish、CR089 auto-start 或 CR020 route restore。
   - CR089 CP2/CP3/CP5 已 approved；批准只接受门禁内推荐方案，不授权 NAS 内容读写列取复制发布、.env/凭据读取、QMT/MiniQMT/XtQuant/gateway 启动、账户原文查询、submit/cancel、simulation/live、CR020 恢复、CR089 active 或 CR046 recovery。
   - CP2/CP3/CP5 批准前不执行 git add / commit / remote add / remote set-url / push
   - 不执行 git tag
@@ -8427,6 +8559,73 @@ human_gate_decisions:
   - 不恢复或推进 CR046 CP7
   - 不执行 physical move / rename / delete 或 bulk import rewrite
 checkpoints:
+  cr101_cross_platform_strategy_delivery:
+    type: cp5-lld-batch-review
+    status: cp5-approved-story-execution-ready
+    change_id: CR-101
+    formal_cr: process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+    parent_cr: CR-091
+    source_candidate: FU-CR091-005
+    source_decision_id: USER-20260619-RUNNER-ADAPTER-AND-CROSS-PLATFORM-DELIVERY
+    cp2_auto_result: process/checks/CP2-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-SCOPE-PRECHECK.md
+    cp2_auto_status: PASS
+    cp2_manual_review: process/checkpoints/CP2-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-SCOPE-REVIEW.md
+    cp2_manual_status: approved
+    cp2_launch_message: process/checks/CP2-CR101-HUMAN-GATE-LAUNCH-MESSAGE.md
+    cp3_context: process/context/CP3-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-CONTEXT.yaml
+    cp3_hld: docs/qmt/CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-HLD.md
+    cp3_discussion_log: process/discussions/CP3-CR101-HLD-DISCUSSION-LOG.md
+    cp3_discussion_checkpoint: process/checks/CP3-CR101-DISCUSSION-CHECKPOINT.json
+    cp3_auto_result: process/checks/CP3-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-HLD-PRECHECK.md
+    cp3_auto_status: PASS
+    cp3_manual_review: process/checkpoints/CP3-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-HLD-REVIEW.md
+    cp3_manual_status: approved
+    cp3_launch_message: process/checks/CP3-CR101-HUMAN-GATE-LAUNCH-MESSAGE.md
+    story_backlog: process/STORY-BACKLOG-CR101.md
+    development_plan: process/DEVELOPMENT-PLAN-CR101.yaml
+    cp4_auto_result: process/checks/CP4-CR101-STORY-DAG-PARALLEL-SAFETY.md
+    cp4_auto_status: PASS
+    cp5_context: process/context/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-CONTEXT.yaml
+    cp5_auto_status: PASS
+    cp5_auto_results:
+    - process/checks/CP5-CR101-S01-target-taxonomy-manifest-contract-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR101-S02-package-checker-fixture-fail-closed-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR101-S03-runner-adapter-evidence-boundary-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR101-S04-docs-validation-and-follow-up-gates-LLD-IMPLEMENTABILITY.md
+    cp5_manual_review: process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md
+    cp5_manual_status: approved
+    cp5_approved_at: '2026-06-20T09:30:00+08:00'
+    cp5_launch_message: process/checks/CP5-CR101-HUMAN-GATE-LAUNCH-MESSAGE.md
+    story_cards:
+    - process/stories/CR101-S01-target-taxonomy-manifest-contract.md
+    - process/stories/CR101-S02-package-checker-fixture-fail-closed.md
+    - process/stories/CR101-S03-runner-adapter-evidence-boundary.md
+    - process/stories/CR101-S04-docs-validation-and-follow-up-gates.md
+    story_llds:
+    - process/stories/CR101-S01-target-taxonomy-manifest-contract-LLD.md
+    - process/stories/CR101-S02-package-checker-fixture-fail-closed-LLD.md
+    - process/stories/CR101-S03-runner-adapter-evidence-boundary-LLD.md
+    - process/stories/CR101-S04-docs-validation-and-follow-up-gates-LLD.md
+    pending_decision_ids: []
+    approved_decision_ids:
+    - DQ-CP5-CR101-01
+    - DQ-CP5-CR101-02
+    - DQ-CP5-CR101-03
+    - DQ-CP5-CR101-04
+    - DQ-CP5-CR101-05
+    - DQ-CP3-CR101-01
+    - DQ-CP3-CR101-02
+    - DQ-CP3-CR101-03
+    - DQ-CP3-CR101-04
+    - DQ-CP3-CR101-05
+    non_authorized_items:
+    - NAS content read/write/list/copy/publish/pull/delete/mount
+    - .env, token, API key, password, HMAC secret, cookie, session, private key or QMT credential read
+    - account, cash, position, order, fill or raw log read
+    - QMT/MiniQMT/XtQuant/gateway runtime start/connect/install/run
+    - submit/cancel/buy/sell/simulation/live
+    - provider fetch, lake write or catalog publish
+    - CR089 auto-start or CR020 route restore
   cr089_qmt_interface_validation_gate:
     type: cp2-cp3-cp5-qmt-interface-validation-gate
     status: blocked-readiness-approved
@@ -15969,118 +16168,118 @@ parallel_execution:
   max_parallel_dev: 2
   max_parallel_qa: 2
   active_execution_batch:
-    change_id: CR-046
+    change_id: CR-101
     phase: story-execution
-    batch_id: CR046-DUAL-TARGET-FRAMEWORK-BATCH-A
-    cp4_auto_result: process/checks/CP4-CR046-STORY-DAG-PARALLEL-SAFETY.md
+    batch_id: CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-BATCH-A
+    cp4_auto_result: process/checks/CP4-CR101-STORY-DAG-PARALLEL-SAFETY.md
     cp4_auto_status: PASS
-    cp5_manual_review: process/checkpoints/CP5-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-LLD-BATCH.md
+    cp5_manual_review: process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md
     cp5_manual_status: approved
-    cp5_approved_at: '2026-06-14T00:16:26+08:00'
+    cp5_approved_at: '2026-06-20T09:30:00+08:00'
     implementation_allowed: true
-    implementation_scope: framework-first documentation / contract implementation only
-    execution_status: ready-for-verification
+    implementation_scope: restricted offline code / docs / local tests only
+    execution_status: all-stories-verified-ready-for-cp8
     closure_result: ''
     active_dev_ready: []
     active_dev_running: []
-    active_verify_ready:
-    - CR046-S01-dual-target-strategy-architecture
-    - CR046-S02-strategy-package-contract-and-schema
-    - CR046-S03-qmt-terminal-target-framework
-    - CR046-S04-miniqmt-runner-install-and-runtime-boundary
-    - CR046-S05-verification-framework-and-evidence-model
-    - CR046-S06-follow-up-strategy-delivery-gate
-    - CR046-S07-research-framework-follow-up-contract
+    active_verify_ready: []
     active_verify_running: []
-    active_verified: []
+    active_verified:
+    - CR101-S01-target-taxonomy-manifest-contract
+    - CR101-S02-package-checker-fixture-fail-closed
+    - CR101-S03-runner-adapter-evidence-boundary
+    - CR101-S04-docs-validation-and-follow-up-gates
     blocked_by_dependency: []
-    no_real_operation_boundary: CR046 CP5 approved 只允许 framework-first 文档 / 契约实现；不授权具体策略交付、真实传输 / 导入、QMT 运行验证、MiniQMT 真实安装 / 连接、账户/资金/持仓/委托/成交查询、下单、撤单、simulation/live、provider/lake/publish 或凭据读取。
+    no_real_operation_boundary: CR101 CP5 approved 只允许受限离线代码、文档和本地测试实现；不授权真实 NAS、凭据读取、账户/资金/持仓/委托/成交/原始日志、QMT/MiniQMT/XtQuant/gateway runtime、submit/cancel、buy/sell、simulation/live、provider/lake/catalog publish。
   lld_design_batch:
-    batch_id: CR046-DUAL-TARGET-FRAMEWORK-BATCH-A
+    batch_id: CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-BATCH-A
     source: change
-    change_id: CR-046
-    wave_id: CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-LLD
+    change_id: CR-101
+    wave_id: CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD
     stories:
-    - CR046-S01-dual-target-strategy-architecture
-    - CR046-S02-strategy-package-contract-and-schema
-    - CR046-S03-qmt-terminal-target-framework
-    - CR046-S04-miniqmt-runner-install-and-runtime-boundary
-    - CR046-S05-verification-framework-and-evidence-model
-    - CR046-S06-follow-up-strategy-delivery-gate
-    - CR046-S07-research-framework-follow-up-contract
+    - CR101-S01-target-taxonomy-manifest-contract
+    - CR101-S02-package-checker-fixture-fail-closed
+    - CR101-S03-runner-adapter-evidence-boundary
+    - CR101-S04-docs-validation-and-follow-up-gates
     status: approved
     max_parallel_lld: 3
-    max_parallel_dev: 0
-    cp4_auto_result: process/checks/CP4-CR046-STORY-DAG-PARALLEL-SAFETY.md
+    max_parallel_dev: 2
+    cp4_auto_result: process/checks/CP4-CR101-STORY-DAG-PARALLEL-SAFETY.md
     cp4_auto_status: PASS
-    cp5_manual_review: process/checkpoints/CP5-CR046-DUAL-TARGET-FRAMEWORK-BATCH-A-LLD-BATCH.md
-    cp5_context: process/context/CP5-CR046-LLD-CONTEXT.yaml
+    cp5_manual_review: process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md
+    cp5_context: process/context/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-CONTEXT.yaml
     cp5_auto_status: PASS
     cp5_auto_results:
-    - process/checks/CP5-CR046-S01-dual-target-strategy-architecture-LLD-IMPLEMENTABILITY.md
-    - process/checks/CP5-CR046-S02-strategy-package-contract-and-schema-LLD-IMPLEMENTABILITY.md
-    - process/checks/CP5-CR046-S03-qmt-terminal-target-framework-LLD-IMPLEMENTABILITY.md
-    - process/checks/CP5-CR046-S04-miniqmt-runner-install-and-runtime-boundary-LLD-IMPLEMENTABILITY.md
-    - process/checks/CP5-CR046-S05-verification-framework-and-evidence-model-LLD-IMPLEMENTABILITY.md
-    - process/checks/CP5-CR046-S06-follow-up-strategy-delivery-gate-TECHNICAL-NOTE-IMPLEMENTABILITY.md
-    - process/checks/CP5-CR046-S07-research-framework-follow-up-contract-TECHNICAL-NOTE-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR101-S01-target-taxonomy-manifest-contract-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR101-S02-package-checker-fixture-fail-closed-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR101-S03-runner-adapter-evidence-boundary-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR101-S04-docs-validation-and-follow-up-gates-LLD-IMPLEMENTABILITY.md
     cp5_manual_status: approved
-    approved_at: '2026-06-14T00:16:26+08:00'
+    approved_at: '2026-06-20T09:30:00+08:00'
     waves:
-    - wave_id: CR046-W1-ARCHITECTURE-CONTRACT
+    - wave_id: CR101-W1-CONTRACT
       stories:
-      - CR046-S01-dual-target-strategy-architecture
-      - CR046-S02-strategy-package-contract-and-schema
-      parallel: true
-      status: ready-for-cp5-review
-      handoff_path: ''
-      agent_name: ''
-      agent_id: ''
-    - wave_id: CR046-W2-TARGETS-INSTALL
-      stories:
-      - CR046-S03-qmt-terminal-target-framework
-      - CR046-S04-miniqmt-runner-install-and-runtime-boundary
-      parallel: true
-      status: ready-for-cp5-review
-      handoff_path: ''
-      agent_name: ''
-      agent_id: ''
-    - wave_id: CR046-W3-VALIDATION-GATES
-      stories:
-      - CR046-S05-verification-framework-and-evidence-model
+      - CR101-S01-target-taxonomy-manifest-contract
       parallel: false
-      status: ready-for-cp5-review
+      status: verified
       handoff_path: ''
       agent_name: ''
       agent_id: ''
-    - wave_id: CR046-W4-FOLLOW-UP-HANDOFF
+    - wave_id: CR101-W2-CHECKER-EVIDENCE
       stories:
-      - CR046-S06-follow-up-strategy-delivery-gate
-      - CR046-S07-research-framework-follow-up-contract
+      - CR101-S02-package-checker-fixture-fail-closed
+      - CR101-S03-runner-adapter-evidence-boundary
       parallel: true
-      status: ready-for-cp5-review
+      status: verified
+      handoff_path: ''
+      agent_name: ''
+      agent_id: ''
+    - wave_id: CR101-W3-DOCS-GATES
+      stories:
+      - CR101-S04-docs-validation-and-follow-up-gates
+      parallel: false
+      status: verified
       handoff_path: ''
       agent_name: ''
       agent_id: ''
     handoff_paths: []
     story_llds:
-    - process/stories/CR046-S01-dual-target-strategy-architecture-LLD.md
-    - process/stories/CR046-S02-strategy-package-contract-and-schema-LLD.md
-    - process/stories/CR046-S03-qmt-terminal-target-framework-LLD.md
-    - process/stories/CR046-S04-miniqmt-runner-install-and-runtime-boundary-LLD.md
-    - process/stories/CR046-S05-verification-framework-and-evidence-model-LLD.md
-    - process/stories/CR046-S06-follow-up-strategy-delivery-gate.md#技术说明
-    - process/stories/CR046-S07-research-framework-follow-up-contract.md#技术说明
-    cp5_auto_results: []
-    cp5_auto_status: not-started
-    gate: CP5-CR046-BATCH-A-pending-design-evidence
-    implementation_allowed: false
+    - process/stories/CR101-S01-target-taxonomy-manifest-contract-LLD.md
+    - process/stories/CR101-S02-package-checker-fixture-fail-closed-LLD.md
+    - process/stories/CR101-S03-runner-adapter-evidence-boundary-LLD.md
+    - process/stories/CR101-S04-docs-validation-and-follow-up-gates-LLD.md
+    gate: CP8-CR101-pending-delivery-readiness
+    implementation_allowed: true
     agent_name: ''
     agent_id: ''
-    started_at: ''
-    completed_at: ''
-    reason: CR046 CP4 自动预检 PASS；S01-S05 full-lld、S06-S07 technical-note 等待产出。CP5 全量确认前不得实现、运行、连接或交易。
+    started_at: '2026-06-20T09:18:00+08:00'
+    completed_at: '2026-06-20T09:26:00+08:00'
+    reason: CR101 S01-S04 已完成受限离线实现与 CP6/CP7 验证；下一步准备 CP8 delivery readiness。仍不得运行、连接、交易、读取凭据、访问 NAS 或 publish。
   lld_ready:
+  - story_id: CR101-S01-target-taxonomy-manifest-contract
+    wave_id: CR101-W1-CONTRACT
+    lld_policy: full-lld
+    status: verified
+    story_card: process/stories/CR101-S01-target-taxonomy-manifest-contract.md
+    lld: process/stories/CR101-S01-target-taxonomy-manifest-contract-LLD.md
+  - story_id: CR101-S02-package-checker-fixture-fail-closed
+    wave_id: CR101-W2-CHECKER-EVIDENCE
+    lld_policy: full-lld
+    status: verified
+    story_card: process/stories/CR101-S02-package-checker-fixture-fail-closed.md
+    lld: process/stories/CR101-S02-package-checker-fixture-fail-closed-LLD.md
+  - story_id: CR101-S03-runner-adapter-evidence-boundary
+    wave_id: CR101-W2-CHECKER-EVIDENCE
+    lld_policy: full-lld
+    status: verified
+    story_card: process/stories/CR101-S03-runner-adapter-evidence-boundary.md
+    lld: process/stories/CR101-S03-runner-adapter-evidence-boundary-LLD.md
+  - story_id: CR101-S04-docs-validation-and-follow-up-gates
+    wave_id: CR101-W3-DOCS-GATES
+    lld_policy: full-lld
+    status: verified
+    story_card: process/stories/CR101-S04-docs-validation-and-follow-up-gates.md
+    lld: process/stories/CR101-S04-docs-validation-and-follow-up-gates-LLD.md
   - story_id: CR046-S01-dual-target-strategy-architecture
     wave_id: CR046-W1-ARCHITECTURE-CONTRACT
     lld_policy: full-lld
@@ -16926,15 +17125,35 @@ orchestrator_session:
   thread_id: ''
   workflow_id: local_backtest
   active_change: ''
-  status: completed
+  status: active
   pending_gate: ''
-  approved_gate: CP8-CR093-DELIVERY-READINESS
-  approved_at: '2026-06-19T08:39:22+08:00'
+  approved_gate: CP8-CR101-DELIVERY-READINESS
+  approved_at: '2026-06-20T10:13:18+08:00'
   pending_checklist_path: ''
-  launch_message_path: process/checks/CP8-CR093-HUMAN-GATE-LAUNCH-MESSAGE.md
+  launch_message_path: process/checks/CP8-CR101-HUMAN-GATE-LAUNCH-MESSAGE.md
   pending_user_decision: ""
   pending_decision_ids: []
   approved_decision_ids:
+  - DQ-CP8-CR101-01
+  - DQ-CP8-CR101-02
+  - DQ-CP8-CR101-03
+  - DQ-CP8-CR101-04
+  - DQ-CP8-CR101-05
+  - DQ-CP5-CR101-01
+  - DQ-CP5-CR101-02
+  - DQ-CP5-CR101-03
+  - DQ-CP5-CR101-04
+  - DQ-CP5-CR101-05
+  - DQ-CP3-CR101-01
+  - DQ-CP3-CR101-02
+  - DQ-CP3-CR101-03
+  - DQ-CP3-CR101-04
+  - DQ-CP3-CR101-05
+  - DQ-CP2-CR101-01
+  - DQ-CP2-CR101-02
+  - DQ-CP2-CR101-03
+  - DQ-CP2-CR101-04
+  - DQ-CP2-CR101-05
   - DQ-CP8-CR093-01
   - DQ-CP8-CR093-02
   - DQ-CP8-CR093-03
@@ -17424,6 +17643,7 @@ orchestrator_session:
   - DQ-CP5-CR046-04
   - DQ-CP5-CR046-05
   pending_non_authorized_items:
+  - CR101 CP8 已 approved 并关闭当前离线交付为 READY_WITH_RISK；关闭不授权真实 NAS、凭据、账户 / 持仓 / 委托 / 成交 / 原始日志、QMT/MiniQMT/XtQuant/gateway runtime、submit/cancel/buy/sell、simulation/live、provider/lake/catalog publish、CR089/CR020/order-write 自动恢复或后续真实验证 gate 启动。
   - CR089 CP2/CP3/CP5 已 approved；批准只接受门禁内推荐方案，不授权 NAS 内容读写列取复制发布、.env/凭据读取、QMT/MiniQMT/XtQuant/gateway 启动、账户原文查询、submit/cancel、simulation/live、CR020 恢复、CR089 active 或 CR046 recovery。
   - CR084 CP2/CP3/CP5 已由用户回复“同意”批准，但未提供或逐字确认 remote URL；当前阻塞在 remote URL missing stop condition。提供 URL 前不执行 git ls-remote、fetch、remote add/set-url/remove、set-upstream、git push、git push -u、default branch、branch rename、tag、force/history rewrite、dirty worktree commit、external process Git/NAS、data/reports、凭据、NAS 内容、provider/lake/catalog、runtime、CR046 recovery、old root retirement、backup 删除或 cleanup。
   - CR082 CP8 已 approved 并关闭当前 READY_WITH_RISK；关闭不授权 Git commit/push、remote governance、NAS 内容、data/reports 内容、凭据、runtime、CR046 recovery、old root retirement、backup 删除或 destructive cleanup。
@@ -17439,7 +17659,7 @@ orchestrator_session:
   - 不删除、重命名或移动旧根 /home/hyde/workspace/local_backtest。
   - 不执行 optional groups、full tests、章节研究 smoke、删除 .venv 或 destructive cleanup。
   - 不恢复或推进 CR046 CP7。
-  resume_instruction: "CR089 CP2/CP3/CP5 已由用户回复“同意”批准并回填；下一步只允许准备本地离线 qmt_interface_smoke package skeleton、manifest/checksum 说明和人工 smoke guide。真实 NAS / QMT / 凭据 / 账户 / 交易动作必须另起 runtime authorization。"
+  resume_instruction: "CR101 CP8 已 approved；下一步仅允许按用户本轮授权提交并推送 Git 远端。真实 NAS / QMT / 凭据 / 账户 / 交易 / provider/lake/catalog publish 或后续真实验证 gate 仍需独立门禁。"
   cr051_cp4_story_planning_dispatch:
     mode: inline-host-orchestrator
     agent_id: ''
@@ -17478,6 +17698,28 @@ agent_lifecycle:
       checked_at: '2026-06-18T14:26:37+08:00'
       note: CR091 用户明确要求使用 meta-dev 子 agent；host-orchestrator 通过 multi_agent_v1.spawn_agent 启动 meta-dev/dev-zhu 执行离线 implementation slice，并启动 meta-qa-critical/qa-critical-he 执行离线 CP7 verification。
   active_agents:
+  - role: meta-se
+    codex_agent_name: meta-se
+    reasoning_profile: high
+    dispatch_trigger: CR101 CP3 HLD architecture design after CP2 approval
+    agent_id: 019ee26c-b0d6-7c51-bcd2-b49b61310de9
+    agent_name: se-chu
+    thread_id: 019ee26c-b0d6-7c51-bcd2-b49b61310de9
+    workflow_id: quant-lab-cr101
+    change_id: CR-101
+    story_id: CR101-CROSS-PLATFORM-STRATEGY-DELIVERY
+    wave_id: CR101-CP3-HLD
+    handoff_path: process/context/CP3-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-CONTEXT.yaml
+    status: closed-timeout-main-thread-converged
+    evidence: main thread spawn_agent returned agent_id=019ee26c-b0d6-7c51-bcd2-b49b61310de9 nickname=se-chu for CR101 CP3 HLD; wait_agent timed out twice with no artifact landing; close_agent returned previous_status=running; host-orchestrator generated HLD and gate artifacts.
+    tool_name: multi_agent_v1.spawn_agent
+    reusable: false
+    spawned_at: '2026-06-20T08:23:00+08:00'
+    resumed_at: ''
+    last_seen_at: '2026-06-20T08:33:18+08:00'
+    completed_at: '2026-06-20T08:33:18+08:00'
+    closed_at: '2026-06-20T08:33:18+08:00'
+    fallback_reason: subagent timed out before producing files; main thread converged CP3 artifacts under host-orchestrator responsibilities.
   - role: meta-qa
     codex_agent_name: meta-qa-critical
     reasoning_profile: xhigh
@@ -22608,6 +22850,356 @@ agent_lifecycle:
     completed_at: '2026-05-16T19:33:15+08:00'
     closed_at: '2026-05-16T19:33:15+08:00'
 history:
+- at: '2026-06-20T10:13:18+08:00'
+  action: cr101-cp8-approved-closed-current-delivery
+  actor: host-orchestrator
+  reason: 用户回复“批准，并推送到远端”，按 CR101 CP8 approve 处理；接受 DQ-CP8-CR101-01..05，关闭 CR101 当前离线交付为 closed-current-delivery / READY_WITH_RISK。
+  artifacts:
+  - process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
+  - process/checks/CP8-CR101-DELIVERY-READINESS.md
+  - process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+  - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  - process/STORY-STATUS.md
+  - process/STATE.md
+  result:
+    active_change: ''
+    current_phase: delivered
+    cr101_status: closed-current-delivery
+    release_decision: READY_WITH_RISK
+    accepted_decision_ids:
+    - DQ-CP8-CR101-01
+    - DQ-CP8-CR101-02
+    - DQ-CP8-CR101-03
+    - DQ-CP8-CR101-04
+    - DQ-CP8-CR101-05
+    next_action: commit_and_push_authorized_git_remote_only
+  safety_confirmations:
+    nas_access_authorized: false
+    credential_or_env_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_buy_sell_authorized: false
+    simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+    git_remote_push_authorized_by_user_this_turn: true
+- at: '2026-06-20T10:08:00+08:00'
+  action: cr101-cp8-human-gate-awaiting-user
+  actor: host-orchestrator
+  reason: CR101 CP8 Delivery Readiness 自动预检、Decision Brief 和 human-gate 发起消息已生成并通过校验；最终离线测试与台账检查通过，进入用户终验。
+  artifacts:
+  - process/checks/CP8-CR101-DELIVERY-READINESS.md
+  - process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
+  - process/checks/CP8-CR101-HUMAN-GATE-LAUNCH-MESSAGE.md
+  - process/STATE.md
+  result:
+    active_change: CR-101
+    current_phase: story-execution
+    pending_gate: CP8-CR101-DELIVERY-READINESS
+    pending_decision_ids:
+    - DQ-CP8-CR101-01
+    - DQ-CP8-CR101-02
+    - DQ-CP8-CR101-03
+    - DQ-CP8-CR101-04
+    - DQ-CP8-CR101-05
+    validation:
+    - "uv run --python 3.11 meta-flow check human-gate --checkpoint /home/hyde/workspace/quant-lab/process/checkpoints/CP8-CR101-DELIVERY-READINESS.md --launch-message-file /home/hyde/workspace/quant-lab/process/checks/CP8-CR101-HUMAN-GATE-LAUNCH-MESSAGE.md => OK"
+    - "uv run --python 3.11 pytest -q tests/test_cr091_strategy_runner_contracts.py tests/test_cr100_package_exchange.py tests/test_cr098_runner_readonly_integration.py => 41 passed in 0.39s"
+    - "python3 -m py_compile trading/strategy_runner/package_loader.py trading/strategy_runner/package_exchange.py trading/strategy_runner/adapters.py trading/strategy_runner/evidence.py tests/test_cr100_package_exchange.py tests/test_cr091_strategy_runner_contracts.py => PASS"
+    - "uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab --strict-warnings => OK"
+    - "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab => process_link_health: ok; artifact_git_dirty: dirty"
+    - "git diff --check for CR101 changed files => PASS"
+  safety_confirmations:
+    nas_access_authorized: false
+    credential_or_env_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_buy_sell_authorized: false
+    simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-20T10:00:48+08:00'
+  action: cr101-s04-cp6-cp7-pass-ready-for-cp8
+  actor: host-orchestrator
+  reason: CR101 W3/S04 docs validation and follow-up gates 已完成受限离线实现与验证；S01-S04 均已 verified，下一步进入 CP8 delivery readiness。
+  artifacts:
+  - docs/qmt/CR101-VALIDATION-AND-FOLLOW-UP-GATES.md
+  - docs/qmt/CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-HLD.md
+  - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/stories/CR101-S04-docs-validation-and-follow-up-gates-IMPLEMENTATION.md
+  - process/checks/CP6-CR101-S04-docs-validation-and-follow-up-gates-CODING-DONE.md
+  - process/checks/CP7-CR101-S04-docs-validation-and-follow-up-gates-VERIFICATION-DONE.md
+  - process/STORY-STATUS.md
+  - process/STATE.md
+  result:
+    active_change: CR-101
+    current_phase: story-execution
+    s04_story_status: verified
+    all_cr101_stories_verified: true
+    next_gate: CP8-CR101-DELIVERY-READINESS
+    validation:
+    - "rg READY_WITH_RISK / follow-up gate / not-authorized terms across CR101 docs and tracking => PASS"
+    - "uv run --python 3.11 pytest -q tests/test_cr091_strategy_runner_contracts.py tests/test_cr100_package_exchange.py tests/test_cr098_runner_readonly_integration.py => 41 passed in 0.37s"
+    - "uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab --strict-warnings => OK"
+    - "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab => process_link_health: ok"
+  safety_confirmations:
+    nas_access_authorized: false
+    credential_or_env_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_buy_sell_authorized: false
+    simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-20T09:53:27+08:00'
+  action: cr101-s02-s03-cp6-cp7-pass-s04-dev-ready
+  actor: host-orchestrator
+  reason: CR101 W2/S02 package checker / fixture fail-closed 与 W2/S03 runner adapter / evidence boundary 已完成受限离线实现与验证；41 个聚焦/相邻回归测试通过，git diff --check 无输出，S04 按 DAG 解锁为 dev-ready。
+  artifacts:
+  - trading/strategy_runner/package_exchange.py
+  - trading/strategy_runner/adapters.py
+  - trading/strategy_runner/evidence.py
+  - tests/test_cr100_package_exchange.py
+  - tests/test_cr091_strategy_runner_contracts.py
+  - process/stories/CR101-S02-package-checker-fixture-fail-closed-IMPLEMENTATION.md
+  - process/stories/CR101-S03-runner-adapter-evidence-boundary-IMPLEMENTATION.md
+  - process/checks/CP6-CR101-S02-package-checker-fixture-fail-closed-CODING-DONE.md
+  - process/checks/CP7-CR101-S02-package-checker-fixture-fail-closed-VERIFICATION-DONE.md
+  - process/checks/CP6-CR101-S03-runner-adapter-evidence-boundary-CODING-DONE.md
+  - process/checks/CP7-CR101-S03-runner-adapter-evidence-boundary-VERIFICATION-DONE.md
+  - process/STORY-STATUS.md
+  - process/STATE.md
+  result:
+    active_change: CR-101
+    current_phase: story-execution
+    s02_story_status: verified
+    s03_story_status: verified
+    next_dev_ready:
+    - CR101-S04-docs-validation-and-follow-up-gates
+    validation:
+    - "uv run --python 3.11 pytest -q tests/test_cr091_strategy_runner_contracts.py tests/test_cr100_package_exchange.py tests/test_cr098_runner_readonly_integration.py => 41 passed in 0.39s"
+    - "python3 -m py_compile trading/strategy_runner/package_exchange.py trading/strategy_runner/adapters.py trading/strategy_runner/evidence.py tests/test_cr100_package_exchange.py tests/test_cr091_strategy_runner_contracts.py => PASS"
+    - "git diff --check -- trading/strategy_runner/package_exchange.py trading/strategy_runner/adapters.py trading/strategy_runner/evidence.py tests/test_cr100_package_exchange.py tests/test_cr091_strategy_runner_contracts.py => PASS"
+  safety_confirmations:
+    nas_access_authorized: false
+    credential_or_env_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_buy_sell_authorized: false
+    simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-20T09:40:30+08:00'
+  action: cr101-s01-cp6-cp7-pass-w2-dev-ready
+  actor: host-orchestrator
+  reason: CR101 W1/S01 target taxonomy and manifest contract 已完成受限离线实现与验证；31 个聚焦/相邻回归测试通过，git diff --check 无输出，S02/S03 按 DAG 解锁为 dev-ready。
+  artifacts:
+  - trading/strategy_runner/package_loader.py
+  - tests/test_cr091_strategy_runner_contracts.py
+  - process/stories/CR101-S01-target-taxonomy-manifest-contract-IMPLEMENTATION.md
+  - process/checks/CP6-CR101-S01-target-taxonomy-manifest-contract-CODING-DONE.md
+  - process/checks/CP7-CR101-S01-target-taxonomy-manifest-contract-VERIFICATION-DONE.md
+  - process/STORY-STATUS.md
+  - process/STATE.md
+  result:
+    active_change: CR-101
+    current_phase: story-execution
+    s01_story_status: verified
+    next_dev_ready:
+    - CR101-S02-package-checker-fixture-fail-closed
+    - CR101-S03-runner-adapter-evidence-boundary
+    validation:
+    - "uv run --python 3.11 pytest -q tests/test_cr091_strategy_runner_contracts.py tests/test_cr100_package_exchange.py tests/test_cr098_runner_readonly_integration.py => 31 passed in 0.26s"
+    - "git diff --check -- trading/strategy_runner/package_loader.py tests/test_cr091_strategy_runner_contracts.py => PASS"
+  safety_confirmations:
+    nas_access_authorized: false
+    credential_or_env_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_buy_sell_authorized: false
+    simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-20T09:30:00+08:00'
+  action: cr101-cp5-approved-enter-story-execution
+  actor: host-orchestrator
+  reason: 用户回复“批准”，按 CR101 CP5 approve 处理；接受 DQ-CP5-CR101-01..05 推荐方案，允许后续受限离线实现。
+  artifacts:
+  - process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md
+  - process/STORY-STATUS.md
+  - process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+  - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-101
+    cr101_status: active
+    gate_status: cp8_pending
+    current_phase: story-execution
+    approved_gate: CP5-CR101-LLD-BATCH
+    next_dev_ready: CR101-S01-target-taxonomy-manifest-contract
+    accepted_decision_ids:
+    - DQ-CP5-CR101-01
+    - DQ-CP5-CR101-02
+    - DQ-CP5-CR101-03
+    - DQ-CP5-CR101-04
+    - DQ-CP5-CR101-05
+  safety_confirmations:
+    nas_access_authorized: false
+    credential_or_env_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_buy_sell_authorized: false
+    simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-20T09:28:00+08:00'
+  action: cr101-cp4-cp5-design-evidence-generated-pending-review
+  actor: host-orchestrator
+  reason: CR101 CP4 story planning、S01-S04 LLD、CP5 auto checks、context capsule、CP5 LLD batch 人工审查稿和 launch message 已生成；等待用户 CP5 审查。
+  artifacts:
+  - process/STORY-BACKLOG-CR101.md
+  - process/DEVELOPMENT-PLAN-CR101.yaml
+  - process/checks/CP4-CR101-STORY-DAG-PARALLEL-SAFETY.md
+  - process/stories/CR101-S01-target-taxonomy-manifest-contract.md
+  - process/stories/CR101-S02-package-checker-fixture-fail-closed.md
+  - process/stories/CR101-S03-runner-adapter-evidence-boundary.md
+  - process/stories/CR101-S04-docs-validation-and-follow-up-gates.md
+  - process/stories/CR101-S01-target-taxonomy-manifest-contract-LLD.md
+  - process/stories/CR101-S02-package-checker-fixture-fail-closed-LLD.md
+  - process/stories/CR101-S03-runner-adapter-evidence-boundary-LLD.md
+  - process/stories/CR101-S04-docs-validation-and-follow-up-gates-LLD.md
+  - process/checks/CP5-CR101-S01-target-taxonomy-manifest-contract-LLD-IMPLEMENTABILITY.md
+  - process/checks/CP5-CR101-S02-package-checker-fixture-fail-closed-LLD-IMPLEMENTABILITY.md
+  - process/checks/CP5-CR101-S03-runner-adapter-evidence-boundary-LLD-IMPLEMENTABILITY.md
+  - process/checks/CP5-CR101-S04-docs-validation-and-follow-up-gates-LLD-IMPLEMENTABILITY.md
+  - process/context/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-CONTEXT.yaml
+  - process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md
+  - process/checks/CP5-CR101-HUMAN-GATE-LAUNCH-MESSAGE.md
+  - process/STATE.md
+  result:
+    active_change: CR-101
+    cr101_status: active
+    gate_status: cp5_pending
+    current_phase: story-planning
+    pending_gate: CP5-CR101-LLD-BATCH
+    cp4_status: PASS
+    cp5_auto_status: PASS
+    pending_decision_ids:
+    - DQ-CP5-CR101-01
+    - DQ-CP5-CR101-02
+    - DQ-CP5-CR101-03
+    - DQ-CP5-CR101-04
+    - DQ-CP5-CR101-05
+  safety_confirmations:
+    nas_access_authorized: false
+    credential_or_env_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_buy_sell_authorized: false
+    simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-20T08:44:49+08:00'
+  action: cr101-cp3-approved-enter-story-planning
+  actor: host-orchestrator
+  reason: 用户回复“批准”，按 CP3 approve 处理；接受 DQ-CP3-CR101-01..05 推荐方案，进入 CP4 story planning / CP5 LLD 设计证据准备。
+  artifacts:
+  - process/checkpoints/CP3-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-HLD-REVIEW.md
+  - docs/qmt/CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-HLD.md
+  - process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+  - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-101
+    cr101_status: active
+    gate_status: cp5_pending
+    current_phase: story-planning
+    next_gate: CP4 story planning / CP5 LLD review
+    accepted_decision_ids:
+    - DQ-CP3-CR101-01
+    - DQ-CP3-CR101-02
+    - DQ-CP3-CR101-03
+    - DQ-CP3-CR101-04
+    - DQ-CP3-CR101-05
+  safety_confirmations:
+    nas_access_authorized: false
+    credential_or_env_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_buy_sell_authorized: false
+    simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-20T08:33:18+08:00'
+  action: cr101-cp3-hld-generated-pending-review
+  actor: host-orchestrator
+  reason: CR101 CP3 HLD、discussion log、context capsule、自动预检、人工审查稿和 launch message 已生成；meta-se/se-chu 子 agent 已真实 spawn，但两轮 wait 超时且未落盘，主进程关闭该 agent 并收敛产物。
+  artifacts:
+  - docs/qmt/CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-HLD.md
+  - process/discussions/CP3-CR101-HLD-DISCUSSION-LOG.md
+  - process/checks/CP3-CR101-DISCUSSION-CHECKPOINT.json
+  - process/context/CP3-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-CONTEXT.yaml
+  - process/checks/CP3-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-HLD-PRECHECK.md
+  - process/checkpoints/CP3-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-HLD-REVIEW.md
+  - process/checks/CP3-CR101-HUMAN-GATE-LAUNCH-MESSAGE.md
+  - process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-101
+    cr101_status: active
+    gate_status: cp3_pending
+    current_phase: solution-design
+    pending_gate: CP3-CR101-HLD-REVIEW
+    pending_decision_ids:
+    - DQ-CP3-CR101-01
+    - DQ-CP3-CR101-02
+    - DQ-CP3-CR101-03
+    - DQ-CP3-CR101-04
+    - DQ-CP3-CR101-05
+  safety_confirmations:
+    nas_access_authorized: false
+    credential_or_env_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_buy_sell_authorized: false
+    simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-20T08:17:33+08:00'
+  action: cr101-cp2-approved-enter-cp3
+  actor: host-orchestrator
+  reason: 用户回复“同意”，按 CP2 approve 处理；接受 DQ-CP2-CR101-01..05 推荐方案，进入 CP3 HLD。
+  artifacts:
+  - process/checkpoints/CP2-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-SCOPE-REVIEW.md
+  - process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+  - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-101
+    cr101_status: active
+    gate_status: cp3_pending
+    current_phase: solution-design
+    next_gate: CP3 HLD review
+  safety_confirmations:
+    nas_access_authorized: false
+    credential_or_env_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_buy_sell_authorized: false
+    simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-20T00:30:00+08:00'
+  action: cr101-started-from-fu-cr091-005-cp2-pending
+  actor: host-orchestrator
+  reason: 用户明确启动 FU-CR091-005 / legacy CR091-FU-05；先做冲突预检、分配正式 CR ID，并生成 CP2 scope/risk/runtime-authorization Decision Brief。
+  artifacts:
+  - process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+  - process/checks/CP2-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-SCOPE-PRECHECK.md
+  - process/checkpoints/CP2-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-SCOPE-REVIEW.md
+  - process/checks/CP2-CR101-HUMAN-GATE-LAUNCH-MESSAGE.md
+  - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-101
+    cr101_status: active
+    gate_status: cp2_pending
+    next_gate: CP2 scope/risk/runtime-authorization review
+  safety_confirmations:
+    nas_access_authorized: false
+    credential_or_env_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_buy_sell_authorized: false
+    simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
 - at: '2026-06-19T16:20:16+08:00'
   action: cr099-cp7-offline-verification-pass-with-risk
   actor: host-orchestrator

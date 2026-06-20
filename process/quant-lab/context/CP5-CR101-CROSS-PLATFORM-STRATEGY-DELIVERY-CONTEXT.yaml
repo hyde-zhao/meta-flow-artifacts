@@ -1,0 +1,77 @@
+schema_version: 1
+context_id: CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY
+change_id: CR-101
+phase: story-planning
+status: ready-for-human-gate
+created_at: "2026-06-20T09:25:00+08:00"
+owner: host-orchestrator
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md
+    - process/STORY-BACKLOG-CR101.md
+    - process/DEVELOPMENT-PLAN-CR101.yaml
+    - process/checks/CP4-CR101-STORY-DAG-PARALLEL-SAFETY.md
+    - process/stories/CR101-S01-target-taxonomy-manifest-contract-LLD.md
+    - process/stories/CR101-S02-package-checker-fixture-fail-closed-LLD.md
+    - process/stories/CR101-S03-runner-adapter-evidence-boundary-LLD.md
+    - process/stories/CR101-S04-docs-validation-and-follow-up-gates-LLD.md
+  read_if_needed:
+    - docs/qmt/CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-HLD.md
+    - docs/qmt/CR098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-HLD.md
+    - process/changes/CR-100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-GATE-2026-06-19.md
+    - trading/strategy_runner/package_loader.py
+    - trading/strategy_runner/package_exchange.py
+    - trading/strategy_runner/adapters.py
+    - trading/strategy_runner/evidence.py
+    - trading/strategy_runner/readonly_gateway.py
+    - tests/test_cr100_package_exchange.py
+    - tests/test_cr091_strategy_runner_contracts.py
+    - tests/test_cr098_runner_readonly_integration.py
+  do_not_read_by_default:
+    - historical agent lifecycle details
+    - full story archive
+    - historical failed round transcripts
+    - complete conversation transcript
+    - .env and credentials
+    - account, position, order, fill and raw runtime logs
+    - real NAS paths or mounted NAS content
+    - QMT/MiniQMT/XtQuant/gateway runtime files
+summary:
+  hld_decision: target + adapter dual-boundary approved at CP3
+  implemented_delivery_target: qmt_terminal_direct
+  implemented_execution_adapter_contract: miniqmt_gateway_readonly
+  story_count: 4
+  cp4_status: PASS
+  cp5_auto_status: PASS
+  lld_clarification_blockers: 0
+  implementation_allowed_before_cp5_approval: false
+non_authorized_scope:
+  - NAS content read/write/list/copy/publish/pull/delete/mount
+  - .env, token, API key, password, private key, QMT credential or any credential read
+  - account, cash, position, order, fill or raw log read
+  - QMT/MiniQMT/XtQuant/gateway runtime start/connect/install/run
+  - submit/cancel/buy/sell/simulation/live
+  - provider fetch, lake write or catalog publish
+story_batch:
+  batch_id: CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-BATCH-A
+  stories:
+    - id: CR101-S01-target-taxonomy-manifest-contract
+      status: lld-ready-for-review
+      cp5_check: process/checks/CP5-CR101-S01-target-taxonomy-manifest-contract-LLD-IMPLEMENTABILITY.md
+    - id: CR101-S02-package-checker-fixture-fail-closed
+      status: lld-ready-for-review
+      cp5_check: process/checks/CP5-CR101-S02-package-checker-fixture-fail-closed-LLD-IMPLEMENTABILITY.md
+    - id: CR101-S03-runner-adapter-evidence-boundary
+      status: lld-ready-for-review
+      cp5_check: process/checks/CP5-CR101-S03-runner-adapter-evidence-boundary-LLD-IMPLEMENTABILITY.md
+    - id: CR101-S04-docs-validation-and-follow-up-gates
+      status: lld-ready-for-review
+      cp5_check: process/checks/CP5-CR101-S04-docs-validation-and-follow-up-gates-LLD-IMPLEMENTABILITY.md
+pending_human_decisions:
+  - DQ-CP5-CR101-01
+  - DQ-CP5-CR101-02
+  - DQ-CP5-CR101-03
+  - DQ-CP5-CR101-04
+  - DQ-CP5-CR101-05

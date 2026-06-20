@@ -1,0 +1,73 @@
+schema_version: 1
+change_id: CR-101
+title: CR101 Cross-Platform Strategy Delivery Development Plan
+status: ready-for-cp5-review
+created_at: "2026-06-20T09:18:00+08:00"
+owner: host-orchestrator
+implementation_allowed: false
+authorization_boundary:
+  nas_access: false
+  credential_read: false
+  qmt_miniqmt_xtquant_gateway_runtime: false
+  simulation_live: false
+  trade_write: false
+  provider_lake_catalog_publish: false
+lld_design_batch:
+  batch_id: CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-BATCH-A
+  cp4_auto_result: process/checks/CP4-CR101-STORY-DAG-PARALLEL-SAFETY.md
+  cp5_checkpoint: process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md
+  stories:
+    - CR101-S01-target-taxonomy-manifest-contract
+    - CR101-S02-package-checker-fixture-fail-closed
+    - CR101-S03-runner-adapter-evidence-boundary
+    - CR101-S04-docs-validation-and-follow-up-gates
+waves:
+  - wave_id: CR101-W1-CONTRACT
+    goal: Freeze target taxonomy and manifest contract before shared checker/evidence work.
+    parallel: false
+    stories:
+      - CR101-S01-target-taxonomy-manifest-contract
+    dev_gate:
+      cp5_approved: true
+      dependencies_satisfied: true
+      file_conflict_free: true
+  - wave_id: CR101-W2-CHECKER-EVIDENCE
+    goal: Realign package checker/fixture and runner adapter/evidence after S01 contract.
+    parallel: true
+    stories:
+      - CR101-S02-package-checker-fixture-fail-closed
+      - CR101-S03-runner-adapter-evidence-boundary
+    dev_gate:
+      cp5_approved: true
+      dependencies_satisfied:
+        - CR101-S01-target-taxonomy-manifest-contract
+      file_conflict_free: "design can be parallel; implementation must coordinate shared tests and schema constants through S01 merge owner"
+  - wave_id: CR101-W3-DOCS-GATES
+    goal: Update docs, validation matrix, CP7/CP8 expectations, and follow-up authorization gates.
+    parallel: false
+    stories:
+      - CR101-S04-docs-validation-and-follow-up-gates
+    dev_gate:
+      cp5_approved: true
+      dependencies_satisfied:
+        - CR101-S01-target-taxonomy-manifest-contract
+        - CR101-S02-package-checker-fixture-fail-closed
+        - CR101-S03-runner-adapter-evidence-boundary
+      file_conflict_free: true
+merge_order:
+  - CR101-S01-target-taxonomy-manifest-contract
+  - CR101-S02-package-checker-fixture-fail-closed
+  - CR101-S03-runner-adapter-evidence-boundary
+  - CR101-S04-docs-validation-and-follow-up-gates
+validation_plan:
+  offline_only:
+    - pytest -q tests/test_cr100_package_exchange.py
+    - pytest -q tests/test_cr091_strategy_runner_contracts.py tests/test_cr098_runner_readonly_integration.py
+    - python scripts/check_human_gate_decision_brief.py --checkpoint-file process/checkpoints/CP5-CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-LLD-BATCH.md --launch-message-file process/checks/CP5-CR101-HUMAN-GATE-LAUNCH-MESSAGE.md
+  forbidden:
+    - NAS list/read/write/copy/publish/pull/delete
+    - .env or credential read
+    - QMT/MiniQMT/XtQuant/gateway runtime start/connect/run
+    - account/position/order/fill/raw log read
+    - submit/cancel/buy/sell/simulation/live
+    - provider/lake/catalog publish

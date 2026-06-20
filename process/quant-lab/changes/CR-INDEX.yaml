@@ -1,6 +1,8 @@
 version: 1
+schema_version: 2
 status: "no-active-formal-cr"
-updated_at: '2026-06-19T18:45:00+08:00'
+updated_at: '2026-06-20T10:13:18+08:00'
+updated_by: "host-orchestrator"
 owner: meta-po
 source: >
   CR-046 started by user target change to terminal-native simulation strategy export,
@@ -95,7 +97,45 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: '2026-06-19T18:45:00+08:00 OK: CR100 closed-current-delivery / READY_WITH_RISK after local fake package exchange offline readiness implementation. No real NAS access/list/read/copy/write/publish/delete, credential/env/account read, QMT/MiniQMT/XtQuant/gateway/runner runtime, submit/cancel, simulation/live, provider/lake/catalog publish, CR089 auto-start or CR020 route restore authorized.'
+last_consistency_check: '2026-06-20T10:13:18+08:00 closed: CR101 CP8 approved by user reply 批准，并推送到远端; CR101 current offline delivery closed as READY_WITH_RISK. No real NAS access/list/read/copy/write/publish/delete, credential/env/account read, QMT/MiniQMT/XtQuant/gateway runtime, submit/cancel, simulation/live, provider/lake/catalog publish, CR089 auto-start or CR020 route restore authorized.'
+status_model:
+  lifecycle_status_values:
+    - candidate
+    - active
+    - blocked
+    - closed
+    - cancelled
+    - superseded
+  readiness_status_values:
+    - n/a
+    - ready
+    - ready_with_risk
+    - blocked
+    - not_ready
+  gate_status_values:
+    - not_started
+    - cp2_pending
+    - cp3_pending
+    - cp5_pending
+    - cp8_pending
+    - closed
+    - blocked
+current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+next_action_queue:
+  - candidate_id: FU-CR091-005
+    title: Cross-platform strategy delivery and adapter layer realignment
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+    recommended_action: closed_current_delivery_ready_with_risk
+    gate_status: closed
+    non_authorized_scope:
+      - qmt_miniqmt_xtquant_gateway_runtime
+      - nas_access
+      - credential_or_env_read
+      - account_funds_positions_orders_fills_raw_log_read
+      - submit_cancel_buy_sell
+      - simulation_live
+      - provider_lake_catalog_publish
 root_authority:
   status: logical-cutover-complete
   authoritative_root: /home/hyde/workspace/quant-lab
@@ -129,7 +169,7 @@ index_schema:
 - next_gate
 - next_action
 - last_checked_at
-active_crs:
+active_crs: []
 - id: CR-100
   title: NAS Package Exchange Offline Readiness Gate
   status: closed-current-delivery
@@ -440,7 +480,7 @@ active_crs:
   - generic_strategy_adapter
   - order_write_excluded
   next_gate: closed
-  next_action: 'CR091 当前交付已关闭。推荐下一目标为 CR091-FU-01 真实只读 runtime smoke 设计门禁；备选为 CR091-FU-02 NAS package exchange、CR091-FU-03 order-write 设计门禁或 CR091-FU-04 ledger hygiene。任何候选都必须由用户明确选择后再创建 / 恢复门禁，不自动启动。'
+  next_action: 'CR091 当前交付已关闭。基于 2026-06-19 用户纠正，推荐下一目标改为 CR091-FU-05 Cross-platform strategy delivery and adapter layer realignment：runner 属于 quant-lab，MiniQMT 只是当前 adapter，策略交付当前仅支持 QMT direct-run 但保留跨平台 target 扩展。CR091-FU-03 order-write、真实 NAS 和真实 runtime 均需等待独立门禁。'
   last_checked_at: '2026-06-18T15:40:09+08:00'
 - id: CR-046
   title: QMT and MiniQMT Dual-Target Strategy Delivery Framework
@@ -475,7 +515,7 @@ active_crs:
   - no_runtime_connection
   - no_terminal_validation
   next_gate: closed
-  next_action: CR046 当前交付已关闭；后续可由用户明确选择 CR091 runner research/design/implementation plan、CR047 首个具体策略交付、CR089 本地离线 package skeleton 或其他候选。任何后续候选都必须新建 / 恢复独立门禁，不自动启动。
+  next_action: CR046 当前交付已关闭；早期 QMT / MiniQMT 双目标和 MiniQMT runner install 表述保留为历史基线。基于 2026-06-19 用户纠正，后续应先启动 CR091-FU-05 重对齐跨平台策略交付 target 和 quant-lab runner adapter layer；CR047/CR048/CR049 需按重对齐后的 QMT direct-run / MiniQMT gateway adapter 语义重新消费。
   last_checked_at: '2026-06-18T07:59:20+08:00'
 - id: CR-080
   title: Data/reports Restore or Copy Gate
@@ -925,6 +965,47 @@ active_crs:
   next_action: CR074 当前交付已关闭；后续以 /home/hyde/workspace/quant-lab 为 authoritative daily workflow root，旧根 /home/hyde/workspace/local_backtest 保留。target env rebuild、data/reports access、old root retirement、remote Git governance、runtime 和 CR046 recovery 均需后续 CR 单独授权。
   last_checked_at: '2026-06-17T15:46:35+08:00'
 closed_crs:
+- id: CR-101
+  title: Cross-Platform Strategy Delivery and Adapter Layer Realignment
+  status: closed-current-delivery
+  lifecycle_status: closed
+  readiness_status: ready_with_risk
+  gate_status: closed
+  source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  formal_cr_path: process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+  follow_up_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  parent_cr: CR-091
+  source_checkpoint: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
+  source_decision_id: DQ-CP8-CR101-01..05; USER-20260620-CR101-CP8-APPROVED-AND-PUSH
+  priority: 1
+  blocked_by: 'closed: user replied “批准，并推送到远端” at 2026-06-20T10:13:18+08:00, accepting DQ-CP8-CR101-01..05 and READY_WITH_RISK. CR101 current offline target / adapter / checker / evidence / docs delivery is closed. Closure does not authorize real NAS, credential/account/raw-log read, QMT/MiniQMT/XtQuant/gateway runtime, submit/cancel, simulation/live, provider/lake/catalog publish, CR089/CR020/order-write auto-start, or follow-up real validation gate execution.'
+  impact_surface:
+  - strategy_package_contract
+  - cross_platform_delivery_target
+  - qmt_direct_run_target
+  - quant_lab_strategy_runner
+  - broker_adapter_protocol
+  - miniqmt_gateway_adapter
+  - goldminer_future_adapter
+  - manifest_schema
+  - package_checker
+  - qmt_package_generation
+  - evidence_redaction_schema
+  conflict_keys:
+  - strategy_package_contract
+  - cross_platform_delivery_target
+  - qmt_direct_run_target
+  - quant_lab_runner_adapter_layer
+  - miniqmt_gateway_adapter
+  - goldminer_future_adapter
+  - manifest_schema
+  - no_runtime_connection
+  - no_credential_read
+  - no_order_write
+  - no_nas_access
+  next_gate: closed
+  next_action: CR101 当前离线交付已关闭为 READY_WITH_RISK；后续 QMT direct-run、MiniQMT gateway、NAS real exchange、order-write / simulation / live 均需独立授权 gate。
+  last_checked_at: '2026-06-20T10:13:18+08:00'
 - id: CR-079
   title: Real Data/reports Access Gate
   status: closed-current-delivery
@@ -2020,14 +2101,16 @@ blocked_crs:
   conflict_keys:
   - strategy_package_contract
   - qmt_terminal_strategy
-  - miniqmt_runner_install
+  - adapter_layer_realignment
+  - miniqmt_gateway_adapter
+  - qmt_direct_run_target
   - trading_runtime_boundary
   - per_run_authorization
   - credential_boundary
   - nas_package_exchange
-  next_gate: local offline package skeleton or independent runtime authorization
-  next_action: 可作为后续候选准备本地离线 qmt_interface_smoke package skeleton / manifest / checksum docs / manual smoke guide；启动前必须用户明确选择，不授权 NAS/QMT/credential/account/trading action。
-  last_checked_at: '2026-06-18T07:59:20+08:00'
+  next_gate: blocked pending target/adapter realignment or independent runtime authorization
+  next_action: CR089 仍保持 blocked-readiness-approved。基于 2026-06-19 用户纠正，启动真实 package/interface 路线前应先由 CR091-FU-05 重对齐 manifest target taxonomy、QMT direct-run target 和 quant-lab runner adapter layer；不授权 NAS/QMT/credential/account/trading action。
+  last_checked_at: '2026-06-19T19:35:00+08:00'
 follow_up_candidates:
 - id: "CR-026"
   title: Qlib isolated runner optional Spike (narrowed after CR030-039 coverage)
@@ -2051,6 +2134,43 @@ follow_up_candidates:
   next_gate: 启动后续 CR 冲突预检 + CP2
   next_action: 仅在用户仍需要 Qlib 对照 runner 时启动 narrowed CR026 Spike；否则后续可人工决策取消。启动前必须重新做冲突预检、依赖隔离设计和运行授权。
   last_checked_at: '2026-06-11T06:35:19+08:00'
+- id: "CR091-FU-05"
+  title: Cross-platform strategy delivery and adapter layer realignment
+  status: active
+  source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  formal_cr_path: process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+  priority: 1
+  blocked_by: "none: CR101 CP2/CP3/CP5 approved and S01-S04 CP6/CP7 passed; CP8 delivery readiness may proceed."
+  impact_surface:
+  - strategy_package_contract
+  - cross_platform_delivery_target
+  - qmt_direct_run_target
+  - quant_lab_strategy_runner
+  - broker_adapter_protocol
+  - miniqmt_gateway_adapter
+  - goldminer_future_adapter
+  - manifest_schema
+  - package_checker
+  - qmt_package_generation
+  - evidence_redaction_schema
+  - CR046 follow-up tracking
+  - CR091 follow-up tracking
+  - CR089 blocked readiness
+  conflict_keys:
+  - strategy_package_contract
+  - cross_platform_delivery_target
+  - qmt_direct_run_target
+  - quant_lab_runner_adapter_layer
+  - miniqmt_gateway_adapter
+  - goldminer_future_adapter
+  - manifest_schema
+  - no_runtime_connection
+  - no_credential_read
+  - no_order_write
+  - no_nas_access
+  next_gate: CP8 delivery readiness
+  next_action: 准备 CR101 CP8 Delivery Readiness；范围限于本地文档、检查点、Decision Brief 和本地检查，不连接 QMT/MiniQMT/NAS、不读取凭据、不下单、不 publish。
+  last_checked_at: '2026-06-20T10:00:48+08:00'
 - id: "CR074-candidate"
   title: Root cutover / daily workflow switch
   status: closed
@@ -2384,7 +2504,508 @@ route_view:
   - CR-044
   status: cr044_closed_offline_admission_design_ready
   next_action: CR044 已完成 CP8 approved 并关闭为 offline-admission-design-ready / READY_WITH_RISK；未来真实 Goldminer L3/L4/L5 验证仅作为 CR045-candidate，必须单独决策和逐 run 授权。当前不授权读取凭据、登录、连接、查询账户、下单、撤单或 simulation/live。
+items:
+  - id: CR-020
+    title: QMT Windows Gateway 服务端登录与只读查询接口准入
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: process/changes/CR-020-QMT-WINDOWS-GATEWAY-SERVER-LOGIN-READONLY-QUERY-ADMISSION-2026-06-04.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    historical_baseline_status: reframed
+    reframed_by: FU-CR091-005
+    reframe_summary: 历史 QMT gateway 路线归档，不恢复为当前 QMT strategy direct-run 或 MiniQMT adapter 目标。
+  - id: CR-021
+    title: QMT simulation 账号接入准入
+    status: cancelled
+    kind: requirement-change
+    lifecycle_status: cancelled
+    readiness_status: n/a
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: ""
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-022
+    title: Live-readonly 准入
+    status: cancelled
+    kind: requirement-change
+    lifecycle_status: cancelled
+    readiness_status: n/a
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: ""
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-023
+    title: Small-live 准入
+    status: cancelled
+    kind: requirement-change
+    lifecycle_status: cancelled
+    readiness_status: n/a
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: ""
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-024
+    title: Scale-up 准入
+    status: cancelled
+    kind: requirement-change
+    lifecycle_status: cancelled
+    readiness_status: n/a
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: ""
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-025
+    title: Backtrader optional execution backend hardening
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: process/changes/CR-025-BACKTRADER-OPTIONAL-EXECUTION-BACKEND-HARDENING-2026-05-31.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-026
+    title: Qlib isolated runner optional Spike
+    status: candidate
+    kind: requirement-change
+    lifecycle_status: candidate
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: spike
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: ""
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-027
+    title: Minute data feasibility Spike
+    status: spike_candidate
+    kind: spike
+    lifecycle_status: candidate
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: spike
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: ""
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-028
+    title: Level2 rights and microstructure Spike
+    status: spike_candidate
+    kind: spike
+    lifecycle_status: candidate
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: spike
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: ""
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-030
+    title: Multifactor research framework reference and research loop standardization
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: process/changes/CR-030-MULTIFACTOR-RESEARCH-FRAMEWORK-REFERENCE-AND-RESEARCH-LOOP-STANDARDIZATION-2026-06-02.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-040
+    title: QMT 路线删除与 Paper Simulation / 掘金候选路线规划
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: process/changes/CR-040-QMT-ROUTE-DELETION-BACKTRADER-PAPER-SIM-GOLDMINER-ADAPTER-2026-06-10.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    historical_baseline_status: reframed
+    reframed_by: FU-CR091-005
+  - id: CR-041
+    title: API-less Paper Simulation Runner
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: process/changes/CR-041-API-LESS-PAPER-SIMULATION-RUNNER-2026-06-10.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-042
+    title: Broker-Neutral Adapter Contract
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: process/changes/CR-042-BROKER-NEUTRAL-ADAPTER-CONTRACT-2026-06-11.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-043
+    title: Goldminer / 掘金量化 Adapter Spike
+    status: closed
+    kind: spike
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: spike
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: process/changes/CR-043-GOLDMINER-ADAPTER-SPIKE-2026-06-11.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-044
+    title: Goldminer Simulation Admission
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: process/changes/CR-044-GOLDMINER-SIMULATION-ADMISSION-2026-06-11.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-045
+    title: Goldminer Windows Bridge Readonly Probe
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-019-FOLLOW-UP-TRACKING-2026-05-31.md
+    formal_cr_path: process/changes/CR-045-GOLDMINER-WINDOWS-BRIDGE-READONLY-PROBE-2026-06-11.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-046
+    title: Terminal-native simulation strategy export
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-046-FOLLOW-UP-TRACKING-2026-06-13.md
+    formal_cr_path: process/changes/CR-046-TERMINAL-NATIVE-SIMULATION-STRATEGY-EXPORT-2026-06-13.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    historical_baseline_status: reframed
+    reframed_by: FU-CR091-005
+  - id: CR-053
+    title: Quant-lab migration inventory and dry-run
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-053-FOLLOW-UP-TRACKING-2026-06-14.md
+    formal_cr_path: process/changes/CR-053-QUANT-LAB-MIGRATION-INVENTORY-AND-DRY-RUN-2026-06-14.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-058
+    title: Repo-local mechanical migration relayout gate
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-053-FOLLOW-UP-TRACKING-2026-06-14.md
+    formal_cr_path: process/changes/CR-058-REPO-LOCAL-MECHANICAL-MIGRATION-RELAYOUT-GATE-2026-06-14.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-074
+    title: Root Cutover / Daily Workflow Switch
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md
+    formal_cr_path: process/changes/CR-074-ROOT-CUTOVER-DAILY-WORKFLOW-SWITCH-2026-06-16.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-075
+    title: Target env rebuild and smoke
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md
+    formal_cr_path: process/changes/CR-075-TARGET-ENV-REBUILD-AND-SMOKE-2026-06-16.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-078
+    title: Remote Git governance publication gate
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-073-TARGET-ROOT-CONVERGENCE-CUTOVER-READINESS-GATE-2026-06-16.md
+    formal_cr_path: process/changes/CR-078-REMOTE-GIT-GOVERNANCE-PUBLICATION-GATE-2026-06-17.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-080
+    title: Data/reports restore copy gate
+    status: closed
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/checkpoints/CP8-CR079-DELIVERY-READINESS.md
+    formal_cr_path: process/changes/CR-080-DATA-REPORTS-RESTORE-COPY-GATE-2026-06-17.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-089
+    title: QMT Interface Validation Gate
+    status: blocked
+    kind: requirement-change
+    lifecycle_status: blocked
+    readiness_status: ready_with_risk
+    gate_status: cp8_pending
+    gate_profile: runtime
+    source_tracking: process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md
+    formal_cr_path: process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    historical_baseline_status: reframed
+    reframed_by: FU-CR091-005
+  - id: CR-092
+    title: Real QMT readonly runtime smoke design gate
+    status: closed
+    kind: runtime-authorization
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: runtime
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-092-REAL-QMT-READONLY-RUNTIME-SMOKE-DESIGN-GATE-2026-06-18.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-093
+    title: Ledger Hygiene / CR019-CR025 Tracking Cleanup
+    status: closed
+    kind: implementation-gate
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-093-LEDGER-HYGIENE-CR019-CR025-TRACKING-CLEANUP-2026-06-18.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-094
+    title: Warning Cleanup / Strict Warnings Readiness
+    status: closed
+    kind: implementation-gate
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+    formal_cr_path: process/changes/CR-094-WARNING-CLEANUP-STRICT-WARNINGS-READINESS-2026-06-19.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-095
+    title: Standalone checker CLI output convergence
+    status: closed
+    kind: implementation-gate
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-093-FOLLOW-UP-TRACKING-2026-06-19.md
+    formal_cr_path: process/changes/CR-095-STANDALONE-CHECKER-CLI-OUTPUT-CONVERGENCE-2026-06-19.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-096
+    title: User-provided simulated evidence checker run
+    status: closed
+    kind: implementation-gate
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-096-USER-PROVIDED-SIMULATED-EVIDENCE-CHECKER-RUN-2026-06-19.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-097
+    title: Real QMT readonly runtime smoke per-run authorization
+    status: closed
+    kind: runtime-authorization
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: runtime
+    source_tracking: process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-097-REAL-QMT-READONLY-RUNTIME-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-098
+    title: QMT Runner Readonly Gateway Integration Smoke
+    status: closed
+    kind: runtime-authorization
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: runtime
+    source_tracking: process/changes/CR-097-FOLLOW-UP-TRACKING-2026-06-19.md
+    formal_cr_path: process/changes/CR-098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-SMOKE-2026-06-19.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-099
+    title: QMT Runner Real Readonly Smoke Per-run Authorization
+    status: closed
+    kind: runtime-authorization
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: runtime
+    source_tracking: process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+    formal_cr_path: process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: CR-100
+    title: NAS Package Exchange Offline Readiness Gate
+    status: closed
+    kind: implementation-gate
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-GATE-2026-06-19.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: FU-CR091-001
+    title: Real QMT readonly runtime smoke design gate
+    status: closed
+    kind: runtime-authorization
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: runtime
+    legacy_ids: [CR091-FU-01, CR-092]
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-092-REAL-QMT-READONLY-RUNTIME-SMOKE-DESIGN-GATE-2026-06-18.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: FU-CR091-002
+    title: NAS package exchange gate
+    status: closed
+    kind: implementation-gate
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: compact
+    legacy_ids: [CR091-FU-02, CR-100]
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-GATE-2026-06-19.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: FU-CR091-003
+    title: Order-write / submit-cancel design gate
+    status: candidate
+    kind: runtime-authorization
+    lifecycle_status: candidate
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: standard
+    legacy_ids: [CR091-FU-03, ORDER-WRITE-FU]
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: ""
+    blocked_by: [FU-CR091-005]
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: FU-CR091-004
+    title: Ledger hygiene
+    status: closed
+    kind: implementation-gate
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: compact
+    legacy_ids: [CR091-FU-04, CR-093]
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-093-LEDGER-HYGIENE-CR019-CR025-TRACKING-CLEANUP-2026-06-18.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: FU-CR091-005
+    title: Cross-platform strategy delivery and adapter layer realignment
+    status: closed
+    kind: architecture-realignment
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    legacy_ids: [CR091-FU-05]
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    historical_baseline_status: reframed
+    reframed_by: FU-CR091-005
+    reframe_summary: Quant-lab owns the runner; MiniQMT is the current adapter target; strategy delivery keeps cross-platform target taxonomy while QMT direct-run is the only current strategy target.
+    current_execution_status: CR101 CP8 approved; current offline delivery closed as READY_WITH_RISK. Follow-up real validation gates remain candidate-not-started and unauthorized.
+  - id: RA-CR097-001
+    title: Non-empty / trading-day readonly retest
+    status: candidate
+    kind: runtime-authorization
+    lifecycle_status: candidate
+    readiness_status: n/a
+    gate_status: not_started
+    gate_profile: runtime
+    legacy_ids: [CR097-FU-01]
+    source_tracking: process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+    formal_cr_path: ""
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+  - id: RA-CR098-001
+    title: Runner real readonly smoke per-run authorization
+    status: closed
+    kind: runtime-authorization
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: runtime
+    legacy_ids: [CR098-FU-01, CR-099]
+    source_tracking: process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
+    formal_cr_path: process/changes/CR-099-QMT-RUNNER-REAL-READONLY-SMOKE-PER-RUN-AUTHORIZATION-2026-06-19.md
+    blocked_by: []
+    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
 consistency_check:
-  script_path: scripts/check_cr_tracking_consistency.py
-  last_result: PASS
-  last_checked_at: '2026-06-17T19:50:00+08:00'
+    script_path: scripts/check_cr_tracking_consistency.py
+    last_result: PASS
+    last_checked_at: '2026-06-17T19:50:00+08:00'
