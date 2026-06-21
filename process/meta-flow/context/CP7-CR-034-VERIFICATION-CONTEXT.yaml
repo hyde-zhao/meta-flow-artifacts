@@ -1,0 +1,43 @@
+schema_version: 1
+context_id: "CP7-CR-034-VERIFICATION"
+cr_id: "CR-034"
+stage: "CP7"
+profile: "compact"
+generated_at: "2026-06-21T18:57:09+08:00"
+read_profile: "compact"
+state_ref: "process/STATE.md"
+cp6_result_ref: "process/checks/CP6-CR-034-IMPLEMENTATION.result.json"
+cp6_evidence_ref: "process/evidence/CR-034.CP6.index.json"
+allowed_reads:
+  - path: "process/checks/CP6-CR-034-IMPLEMENTATION.result.json"
+    reason: "cp6_result"
+    required: true
+  - path: "process/evidence/CR-034.CP6.index.json"
+    reason: "cp6_evidence_index"
+    required: true
+  - path: "process/stories/STORY-CR-034-IMPLEMENTATION.md"
+    reason: "implementation_summary"
+    required: true
+  - path: "process/checkpoints/CP5-CR-034-LLD-BATCH.md"
+    reason: "approved_design_gate"
+    required: true
+  - path: "docs/release/RELEASE-NOTES.md"
+    reason: "release_note_delta"
+    required: false
+must_not_execute:
+  - "credentials"
+  - "runtime"
+  - "SaaS trace upload"
+  - "production write"
+  - "trading"
+  - "publish"
+  - "CR-033 activation"
+validation_mode: "mixed"
+risk_inputs:
+  - id: "R-CR034-SELF-ADOPTION-READINESS"
+    status: "open"
+    summary: "Current meta-flow source repo doctor adoption still fails because self-repo STATE.current.json and docs/design/PACKAGE-IDENTITY.yaml are not present."
+  - id: "R-CR034-FULL-PYTEST-NOT-RUN"
+    status: "open"
+    summary: "Full pytest command is unavailable in the current environment because pytest is not installed; unittest subset and CLI smoke were executed."
+

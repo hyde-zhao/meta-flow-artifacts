@@ -1,0 +1,80 @@
+{
+  "artifacts": [
+    {
+      "kind": "verification_report",
+      "path": "process/docs/quality/MF-018-VERIFICATION-REPORT.md"
+    },
+    {
+      "kind": "test_report",
+      "path": "process/docs/quality/MF-018-TEST-REPORT.md"
+    },
+    {
+      "kind": "review",
+      "path": "process/docs/quality/MF-018-REVIEW.md"
+    }
+  ],
+  "changed_files": [
+    {
+      "change_type": "modified",
+      "path": "delivery/README.md"
+    },
+    {
+      "change_type": "modified",
+      "path": "delivery/doc/USER-MANUAL.md"
+    },
+    {
+      "change_type": "modified",
+      "path": "docs/release/RELEASE-NOTES.md"
+    },
+    {
+      "change_type": "added",
+      "path": "process/docs/quality/MF-018-VERIFICATION-REPORT.md"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --with pytest --python 3.11 pytest -q",
+      "result": "pass",
+      "summary": "115 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow install --platform codex --scope project --component agent --project-dir . --dry-run",
+      "result": "pass"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_delivery_guardrails.py",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-MF-018-QUALITY-GOVERNANCE-CODING-DONE.result.json --project-root .",
+      "result": "pass"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/MF-018.CP6.index.json --project-root .",
+      "result": "pass"
+    }
+  ],
+  "cr_id": "MF-018",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/returns/MF-018.CP7.return.json",
+  "risks": [],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "MF-018",
+  "tests": [
+    "tests/test_quality_governance.py",
+    "full pytest suite"
+  ],
+  "waivers": [
+    {
+      "approval_ref": "current conversation: 按照你的建议推进",
+      "reason": "Current tool policy disallows spawning subagents unless the user explicitly asks for sub-agents; host-orchestrator executed validation inline and disclosed the fallback.",
+      "scope": "CP7 validation dispatch evidence only",
+      "waiver_id": "MF-018-CP7-INLINE-FALLBACK"
+    }
+  ]
+}

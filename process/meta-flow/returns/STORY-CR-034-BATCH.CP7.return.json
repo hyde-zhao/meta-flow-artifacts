@@ -1,0 +1,42 @@
+{
+  "boundary_check": {
+    "credentials": "not_accessed",
+    "cr_033": "not_started",
+    "quant_lab": "not_accessed",
+    "runtime": "not_executed"
+  },
+  "cr_id": "CR-034",
+  "next_route": "CP8 delivery readiness with risk acceptance",
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "R-CR034-SELF-ADOPTION-READINESS",
+      "severity": "MEDIUM",
+      "status": "open"
+    },
+    {
+      "id": "R-CR034-FULL-PYTEST-NOT-RUN",
+      "severity": "LOW",
+      "status": "open"
+    }
+  ],
+  "stage": "CP7",
+  "story_id": "STORY-CR-034-BATCH",
+  "touched_files": [
+    "process/checks/CP7-CR-034-VERIFICATION-REPORT.md",
+    "process/context/CP7-CR-034-VERIFICATION-CONTEXT.yaml"
+  ],
+  "verification_commands": [
+    "python -m py_compile modified modules",
+    "python -m unittest tests.test_state_v2 tests.test_product_governance tests.test_cr_lifecycle tests.test_quality_governance tests.test_adoption_readiness",
+    "temporary target-project adoption smoke",
+    "meta-flow doctor adoption --project-root .",
+    "meta-flow doctor quality --project-root .",
+    "meta-flow doctor workflow --project-root .",
+    "meta-flow check cp-result --result process/checks/CP6-CR-034-IMPLEMENTATION.result.json --project-root .",
+    "meta-flow event check --ledger process/state/CHECKPOINT-LEDGER.ndjson --type checkpoint",
+    "git diff --check"
+  ],
+  "waivers": []
+}
+

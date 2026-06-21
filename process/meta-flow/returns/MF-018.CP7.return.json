@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "MF-018",
+  "story_id": "MF-018",
+  "status": "verified",
+  "touched_files": [
+    {
+      "path": "delivery/README.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "delivery/doc/USER-MANUAL.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "docs/release/RELEASE-NOTES.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/docs/quality/MF-018-VERIFICATION-REPORT.md",
+      "change_type": "added"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "documentation_changed": true,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "notes": "CP7 only added verification evidence and documented quality init in user/release docs."
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --with pytest --python 3.11 pytest -q",
+        "result": "pass",
+        "summary": "115 passed"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow install --platform codex --scope project --component agent --project-dir . --dry-run",
+        "result": "pass"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_delivery_guardrails.py",
+        "result": "pass"
+      },
+      {
+        "command": "git diff --check",
+        "result": "pass"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-MF-018-QUALITY-GOVERNANCE-CODING-DONE.result.json --project-root .",
+        "result": "pass"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/MF-018.CP6.index.json --project-root .",
+        "result": "pass"
+      }
+    ],
+    "tests": [
+      "tests/test_quality_governance.py",
+      "full pytest suite"
+    ],
+    "skipped": []
+  },
+  "artifacts": [
+    {
+      "path": "process/docs/quality/MF-018-VERIFICATION-REPORT.md",
+      "kind": "verification_report"
+    },
+    {
+      "path": "process/docs/quality/MF-018-TEST-REPORT.md",
+      "kind": "test_report"
+    },
+    {
+      "path": "process/docs/quality/MF-018-REVIEW.md",
+      "kind": "review"
+    }
+  ],
+  "evidence_refs": [
+    "process/docs/quality/MF-018-VERIFICATION-REPORT.md",
+    "process/docs/quality/MF-018-TEST-REPORT.md",
+    "process/docs/quality/MF-018-REVIEW.md",
+    "process/checks/CP6-MF-018-QUALITY-GOVERNANCE-CODING-DONE.result.json"
+  ],
+  "open_questions": [],
+  "risks": [],
+  "waivers": [
+    {
+      "waiver_id": "MF-018-CP7-INLINE-FALLBACK",
+      "scope": "CP7 validation dispatch evidence only",
+      "reason": "Current tool policy disallows spawning subagents unless the user explicitly asks for sub-agents; host-orchestrator executed validation inline and disclosed the fallback.",
+      "approval_ref": "current conversation: 按照你的建议推进"
+    }
+  ],
+  "next_stage_recommendation": "ready_for_cp8"
+}

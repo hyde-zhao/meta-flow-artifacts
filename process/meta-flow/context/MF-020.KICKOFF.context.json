@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "context_type": "cr_kickoff",
+  "cr_id": "MF-020",
+  "stage": "kickoff",
+  "profile": "architecture-major",
+  "budget": {
+    "max_tokens": 10000,
+    "estimated_tokens": 4200,
+    "estimator": "chars_div_4"
+  },
+  "objective": {
+    "summary": "Implement dynamic concurrency checks, recovery policy, schema migration policy, and standardized CR relationship semantics.",
+    "non_goals": [
+      "persistent lock truth source",
+      "full legacy migration implementation",
+      "mandatory rollback plan for low-risk changes"
+    ]
+  },
+  "relationship_semantics": {
+    "allowed_relationships": [
+      "depends_on",
+      "recommended_after",
+      "references",
+      "blocks",
+      "blocked_by",
+      "supersedes",
+      "superseded_by",
+      "enables",
+      "related_to",
+      "derived_from"
+    ],
+    "start_blocking_relationships": [
+      "depends_on",
+      "blocked_by",
+      "superseded_by"
+    ],
+    "non_blocking_relationships": [
+      "recommended_after",
+      "references",
+      "supersedes",
+      "enables",
+      "related_to",
+      "derived_from"
+    ],
+    "conditional_relationships": [
+      "blocks"
+    ],
+    "conflict_detection_must_use": [
+      "conflict_keys",
+      "impact_surface",
+      "affected_docs",
+      "affected_features",
+      "affected_module_paths",
+      "authz_policy_refs",
+      "risk_refs"
+    ],
+    "conflict_detection_must_not_rely_only_on": [
+      "depends_on",
+      "recommended_after",
+      "references",
+      "related_to"
+    ]
+  },
+  "relationships": {
+    "recommended_after": [
+      "MF-018",
+      "MF-019"
+    ],
+    "references": [
+      "MF-003",
+      "MF-006",
+      "MF-007",
+      "MF-009",
+      "MF-010",
+      "MF-015",
+      "MF-017"
+    ],
+    "enables": [
+      "quant-lab redesign code migration readiness"
+    ],
+    "derived_from": [
+      "post-MF-017 engineering delivery governance gap analysis"
+    ]
+  },
+  "allowed_reads": [
+    {
+      "path": "process/changes/summaries/MF-020.summary.json",
+      "mode": "full"
+    },
+    {
+      "path": "delivery/skills/change-impact-analysis/templates/CR-INDEX-TEMPLATE.yaml",
+      "mode": "targeted"
+    },
+    {
+      "path": "delivery/skills/change-impact-analysis/templates/FOLLOW-UP-TRACKING-TEMPLATE.md",
+      "mode": "targeted"
+    },
+    {
+      "path": "meta_flow/checks/cr_tracking.py",
+      "mode": "targeted"
+    },
+    {
+      "path": "meta_flow/workflow/cr_lifecycle.py",
+      "mode": "targeted"
+    },
+    {
+      "path": "meta_flow/context_pack/story_contract.py",
+      "mode": "targeted"
+    },
+    {
+      "path": "meta_flow/workflow/story_evidence.py",
+      "mode": "targeted"
+    }
+  ],
+  "read_if_needed": [
+    "delivery/README.md",
+    "README.md",
+    "meta_flow/design/feature_registry.py",
+    "meta_flow/design/module_boundaries.py",
+    "meta_flow/policies/governance.py"
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/changes/CR-*.md",
+    "process/stories/*-LLD.md",
+    "full conversation transcript"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ]
+}

@@ -1,0 +1,171 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR-034-LLD-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow"
+phase: "story-planning"
+checkpoint: "CP5"
+capsule_type: "cp5-lld"
+status: "ready"
+created_at: "2026-06-21T18:35:00+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-034"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 12
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "Agent 必须先读取本 capsule，并且只读取 allowed_reads / must_read；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+
+allowed_reads:
+  - path: "process/changes/CR-034.md"
+    reason: "CR-034 范围、权限边界、Story 批次和验收标准"
+    required: true
+  - path: "process/changes/CR-INDEX.yaml"
+    reason: "CR-034 active、CR-033 candidate 和 CR 跟踪状态"
+    required: true
+  - path: "process/stories/STORY-CR-034-S01-adoption-readiness-preflight-and-doctor-LLD.md"
+    reason: "S01 设计证据"
+    required: true
+  - path: "process/stories/STORY-CR-034-S02-workspace-state-ledger-bootstrap-LLD.md"
+    reason: "S02 设计证据"
+    required: true
+  - path: "process/stories/STORY-CR-034-S03-package-identity-and-delivery-routing-scan-LLD.md"
+    reason: "S03 设计证据"
+    required: true
+  - path: "process/stories/STORY-CR-034-S04-bootstrap-cr-cp0-context-human-gate-readiness-LLD.md"
+    reason: "S04 设计证据"
+    required: true
+  - path: "process/stories/STORY-CR-034-S05-docs-tests-guardrail-quality-governance-cleanup-LLD.md"
+    reason: "S05 设计证据"
+    required: true
+  - path: "process/checks/CP5-CR-034-LLD-BATCH-PRECHECK.md"
+    reason: "CP5 批次自动预检摘要"
+    required: true
+  - path: "process/checkpoints/CP5-CR-034-LLD-BATCH.md"
+    reason: "CP5 人工审查稿和 Decision Brief"
+    required: true
+
+must_read:
+  - path: "process/changes/CR-034.md"
+    reason: "本批次范围和不授权边界"
+    required: true
+  - path: "process/stories/STORY-CR-034-S01-adoption-readiness-preflight-and-doctor-LLD.md"
+    reason: "adoption readiness preflight 设计"
+    required: true
+  - path: "process/stories/STORY-CR-034-S02-workspace-state-ledger-bootstrap-LLD.md"
+    reason: "workspace/state/ledger bootstrap 设计"
+    required: true
+  - path: "process/stories/STORY-CR-034-S03-package-identity-and-delivery-routing-scan-LLD.md"
+    reason: "package identity / delivery routing scan 设计"
+    required: true
+  - path: "process/stories/STORY-CR-034-S04-bootstrap-cr-cp0-context-human-gate-readiness-LLD.md"
+    reason: "bootstrap CR / CP0 / context / human gate 设计"
+    required: true
+  - path: "process/stories/STORY-CR-034-S05-docs-tests-guardrail-quality-governance-cleanup-LLD.md"
+    reason: "docs/tests/guardrail/quality cleanup 设计"
+    required: true
+
+read_if_needed:
+  - path: "meta_flow/cli.py"
+    trigger: "实现或审计 CLI 命令路由时读取"
+  - path: "meta_flow/workspace/routing.py"
+    trigger: "实现或审计 workspace bootstrap 时读取"
+  - path: "meta_flow/state/current.py"
+    trigger: "实现或审计 STATE.current.json bootstrap 时读取"
+  - path: "meta_flow/design/product_governance.py"
+    trigger: "实现或审计 package identity / delivery routing scan 时读取"
+  - path: "meta_flow/workflow/cr_lifecycle.py"
+    trigger: "实现或审计 bootstrap CR / CR ledger 时读取"
+  - path: "meta_flow/checks/human_gate.py"
+    trigger: "实现或审计 human gate launch 校验时读取"
+  - path: "meta_flow/checks/quality_governance.py"
+    trigger: "收敛 quality governance 现有变更时读取"
+  - path: "tests/"
+    trigger: "设计验证回归范围或实现测试时读取"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "legacy 人类摘要，不作为默认机器上下文；仅字段缺失或人工审计时读取"
+  - path_or_pattern: "process/changes/CR-018-FOLLOW-UP-TRACKING-2026-06-11.md"
+    reason: "CR-033 来源台账；本 CR 不启动 CR-033，默认不读"
+  - path_or_pattern: "process/checks/MF-018-*"
+    reason: "历史 MF-018 runtime 产物；仅审计 CR-033 deferred 边界时读取"
+  - path_or_pattern: "process/context/MF-018.*"
+    reason: "历史 runtime handoff/context；本 CR 不执行 runtime"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不属于当前 CP5 默认上下文"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "不得作为下游默认输入"
+
+key_facts:
+  scope_summary: "CR-034 只改进 meta-flow 自身 adoption readiness 能力；不进入 quant-lab，不创建 quant-lab process 产物，不启动 CR-033。"
+  accepted_decisions:
+    - "用户已批准启动 CR-034，作为当前唯一 active formal CR。"
+    - "后续正式编号统一使用 CR-xxx；MF-xxx 仅为历史别名。"
+    - "CR-033 runtime trace / SaaS / true runtime 保持 deferred candidate。"
+  active_constraints:
+    - "任何 process 写入前必须先运行 workspace check。"
+    - "不得访问凭据、SaaS、runtime、production write、真实交易或真实发布。"
+    - "CP5 通过前不得进入实现。"
+  downstream_tasks:
+    - "审查并确认 5 个 Story LLD 草案。"
+    - "确认 CLI 命名、bootstrap 命令形态、routing 写入策略、CR index 兼容策略和 quality governance 归属。"
+    - "CP5 approved 后进入实现和验证。"
+  traceability:
+    requirements: ["CR-034 acceptance_criteria"]
+    use_cases: ["target-project-adoption-readiness", "quant-lab-future-bootstrap"]
+    scenarios: ["workspace-bootstrap", "identity-scan", "bootstrap-cr-human-gate", "quality-governance-cleanup"]
+    stories: ["STORY-CR-034-S01", "STORY-CR-034-S02", "STORY-CR-034-S03", "STORY-CR-034-S04", "STORY-CR-034-S05"]
+    features: ["adoption-readiness", "workspace-bootstrap", "package-identity", "bootstrap-cr", "quality-governance"]
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "CP5-CR034-DQ-01: adoption readiness CLI 入口命名"
+    - "CP5-CR034-DQ-02: workspace/state/ledger bootstrap 命令形态"
+    - "CP5-CR034-DQ-03: delivery routing scan 是否自动写入 STATE"
+    - "CP5-CR034-DQ-04: CR index YAML / JSON 兼容策略"
+    - "CP5-CR034-DQ-05: 当前 quality governance 变更是否纳入 CR-034"
+  non_authorized_items:
+    - "不进入或写入 quant-lab。"
+    - "不启动 CR-033。"
+    - "不访问凭据、账户、NAS、MiniQMT/QMT、xtquant、交易网关或外部 SaaS。"
+    - "不执行 trace upload、publish、live、production write、真实交易或真实发布。"
+  risk_acceptance_items: []
+  open_questions:
+    - "CLI 命名和 bootstrap 命令形态需 CP5 确认。"
+    - "测试环境 pytest 不可用，验证阶段需用 uv 同步或记录风险。"
+  n_a_or_waived_items:
+    - "HLD / ADR / FEATURE-DESIGN-MATRIX 对本 CR 记为 N/A：这是 meta-flow process improvement，设计依据以 CR-034 和现有 CLI/checker 契约为准。"
+
+handoff:
+  target_agent: "meta-dev"
+  expected_output:
+    - "CP5 approved 后实现 CR-034 S01-S05。"
+    - "实现阶段必须按 LLD 写 CP6 evidence / return / tests。"
+  exit_criteria:
+    - "5 个 Story LLD confirmed=true 或 CP5 人工审查 approved。"
+    - "无 blocks_lld=true 的未回答问题。"
+  blocked_if_missing:
+    - "任一 Story LLD 缺失。"
+    - "CP5 人工审查未 approved。"
+    - "用户未确认 Decision Brief 中的取舍项。"
+
+read_expansion_log: []
+
+validation:
+  generated_from_sources:
+    - "process/changes/CR-034.md"
+    - "process/changes/CR-INDEX.yaml"
+    - "process/stories/STORY-CR-034-S01-adoption-readiness-preflight-and-doctor-LLD.md"
+    - "process/stories/STORY-CR-034-S02-workspace-state-ledger-bootstrap-LLD.md"
+    - "process/stories/STORY-CR-034-S03-package-identity-and-delivery-routing-scan-LLD.md"
+    - "process/stories/STORY-CR-034-S04-bootstrap-cr-cp0-context-human-gate-readiness-LLD.md"
+    - "process/stories/STORY-CR-034-S05-docs-tests-guardrail-quality-governance-cleanup-LLD.md"
+  missing_sources:
+    - "process/state/STATE.current.json currently missing; tracked as CR-034 target, not CP5 blocker."
+    - "docs/design/PACKAGE-IDENTITY.yaml currently missing; tracked as CR-034 target, not CP5 blocker."
+  consistency_status: "pass"
+  notes:
+    - "capsule 只用于 CP5 设计证据确认，不授权实现或 runtime。"

@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-MF-018-DELIVERY-READINESS",
+  "profile": "standard-code",
+  "story_id": "MF-018",
+  "cr_id": "MF-018",
+  "context_ref": "process/context/CP8-DELIVERY-CONTEXT.yaml",
+  "evidence_ref": "process/evidence/MF-018.CP7.index.json",
+  "dispatch_refs": [
+    "inline-fallback: CP8 prepared by host-orchestrator from MF-018 CP7 evidence"
+  ],
+  "items": [
+    {
+      "id": "CP8-MF018-01",
+      "category": "release_context",
+      "name": "MF-018 release context is generated",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT.yaml",
+        "process/context/CP8-DELIVERY-CONTEXT.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "Release context identifies MF-018 scope, compact profile, READY_WITH_RISK decision, non-authorized items, and follow-up trigger."
+    },
+    {
+      "id": "CP8-MF018-02",
+      "category": "quality",
+      "name": "CP6 and CP7 evidence support delivery readiness",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-MF-018-QUALITY-GOVERNANCE-CODING-DONE.result.json",
+        "process/checks/CP7-MF-018-QUALITY-GOVERNANCE-VERIFICATION-DONE.result.json",
+        "process/docs/quality/MF-018-TEST-REPORT.md",
+        "process/docs/quality/MF-018-REVIEW.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "CP7 decision is PASS; blocker_count=0 and high_count=0."
+    },
+    {
+      "id": "CP8-MF018-03",
+      "category": "release_documents",
+      "name": "Compact release documents are available",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/release/RELEASE-NOTES.md",
+        "docs/release/DEPLOY-CHECKLIST.md",
+        "docs/release/ROLLBACK.md",
+        "docs/release/MIGRATION.md",
+        "docs/release/FEEDBACK.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "MF-018 has release notes, deploy checklist, rollback, migration, and feedback routing."
+    },
+    {
+      "id": "CP8-MF018-04",
+      "category": "risk_acceptance",
+      "name": "READY_WITH_RISK risk acceptance is routed to manual decision",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP8-MF-018-DELIVERY-READINESS.md#CP8-MF018-DQ-01"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "The only residual risk is disclosed inline fallback validation dispatch; CP8 approve accepts it for delivery readiness only."
+    },
+    {
+      "id": "CP8-MF018-05",
+      "category": "runtime_authorization",
+      "name": "Runtime and production operations remain not authorized",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT.yaml#non_authorized_items",
+        "process/checkpoints/CP8-MF-018-DELIVERY-READINESS.md#CP8-MF018-DQ-02"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "CP8 approve does not authorize true publish, live release execution, external SaaS, credentials, trace upload, production writes, or deleting artifact repositories."
+    },
+    {
+      "id": "CP8-MF018-06",
+      "category": "follow_up_tracking",
+      "name": "Follow-up tracking is classified",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "docs/release/FEEDBACK.md",
+        "process/checkpoints/CP8-MF-018-DELIVERY-READINESS.md#CP8-MF018-DQ-03"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "No immediate follow-up CR is created; observation thresholds are documented."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "CP8_MANUAL_REVIEW",
+  "checked_at": "2026-06-21T08:40:09+00:00"
+}

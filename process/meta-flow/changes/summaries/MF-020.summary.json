@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "id": "MF-020",
+  "title": "Concurrency / Recovery / Schema Migration Governance",
+  "status": "candidate",
+  "cr_type": "process",
+  "profile": "architecture-major",
+  "risk_profile": "standard-code",
+  "priority": 3,
+  "intent": "Add dynamic Story/file/contract conflict checks, recovery policy, and schema migration policy without introducing stale long-lived lock files.",
+  "scope_delta": [
+    "add dynamic file and contract conflict checks",
+    "add wave merge safety check",
+    "add ROLLBACK-POLICY and RECOVERY-POLICY templates/checks",
+    "add SCHEMA-MIGRATION-POLICY template/check",
+    "standardize CR relationship fields for dependencies, recommendations, references, blockers, supersession, enablement, weak relations, and derivation"
+  ],
+  "non_goals": [
+    "no persistent FILE-OWNERSHIP-LOCK truth source",
+    "no persistent CONTRACT-LOCKS truth source",
+    "no full migration implementation for every legacy project",
+    "no mandatory rollback plan for docs-lite and micro changes"
+  ],
+  "affected_features": [
+    "governance.concurrency",
+    "governance.recovery",
+    "governance.schema_migration",
+    "governance.cr_relationships"
+  ],
+  "expected_outputs": [
+    "meta-flow concurrency check",
+    "meta-flow recovery policy-check",
+    "meta-flow schema policy-check",
+    "CR relationship schema or template fields",
+    "CR relationship validation for depends_on, recommended_after, references, blocks, blocked_by, supersedes, superseded_by, enables, related_to, and derived_from",
+    "CR conflict validation remains based on conflict_keys, impact_surface, affected docs/features/modules, authz policy refs, and risk refs",
+    "tests/test_concurrency_recovery_schema.py"
+  ],
+  "relationship_semantics": {
+    "depends_on": {
+      "meaning": "Hard dependency; prerequisite CR must be closed, ready, or otherwise explicitly satisfied before this CR starts.",
+      "blocks_start": true
+    },
+    "recommended_after": {
+      "meaning": "Recommended order; parallel execution is allowed only with an explicit rationale.",
+      "blocks_start": false
+    },
+    "references": {
+      "meaning": "Background, policy, upstream decision, or related historical context reference.",
+      "blocks_start": false
+    },
+    "blocks": {
+      "meaning": "This CR blocks another CR, gate, capability, release, or follow-up item.",
+      "blocks_start": "depends_on_target"
+    },
+    "blocked_by": {
+      "meaning": "This CR is blocked by another CR, gate, risk, missing authorization, or unresolved decision.",
+      "blocks_start": true
+    },
+    "supersedes": {
+      "meaning": "This CR replaces an older CR or candidate item.",
+      "blocks_start": false
+    },
+    "superseded_by": {
+      "meaning": "This CR has been replaced by another CR and should not continue.",
+      "blocks_start": true
+    },
+    "enables": {
+      "meaning": "This CR unlocks a later CR, capability, profile, or workflow path after completion.",
+      "blocks_start": false
+    },
+    "related_to": {
+      "meaning": "Weak audit/search relation only.",
+      "blocks_start": false
+    },
+    "derived_from": {
+      "meaning": "This CR was derived from another CR, CP decision, follow-up candidate, spike candidate, issue, or user request.",
+      "blocks_start": false
+    }
+  },
+  "conflict_detection_inputs": [
+    "conflict_keys",
+    "impact_surface",
+    "affected_docs",
+    "affected_features",
+    "affected_module_paths",
+    "authz_policy_refs",
+    "risk_refs"
+  ],
+  "relationships": {
+    "depends_on": [],
+    "recommended_after": [
+      "MF-018",
+      "MF-019"
+    ],
+    "references": [
+      "MF-003",
+      "MF-006",
+      "MF-007",
+      "MF-009",
+      "MF-010",
+      "MF-015",
+      "MF-017"
+    ],
+    "blocks": [
+      "quant-lab code migration and multi-story module split"
+    ],
+    "blocked_by": [],
+    "supersedes": [],
+    "superseded_by": [],
+    "enables": [
+      "quant-lab redesign code migration readiness"
+    ],
+    "related_to": [
+      "MF-003",
+      "MF-011"
+    ],
+    "derived_from": [
+      "post-MF-017 engineering delivery governance gap analysis"
+    ]
+  },
+  "quant_lab_relevance": "Required before quant-lab code migration, module split, package identity migration, and multi-story refactor execution.",
+  "handoff_ref": "process/handoffs/MF-020-KICKOFF-HANDOFF.md",
+  "context_ref": "process/context/MF-020.KICKOFF.context.json"
+}

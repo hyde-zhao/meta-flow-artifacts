@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "context_type": "cr_kickoff",
+  "cr_id": "MF-018",
+  "stage": "kickoff",
+  "profile": "standard-code",
+  "budget": {
+    "max_tokens": 8000,
+    "estimated_tokens": 3200,
+    "estimator": "chars_div_4"
+  },
+  "objective": {
+    "summary": "Implement lightweight quality model, eval matrix, and minimal workflow metrics.",
+    "non_goals": [
+      "dashboard",
+      "agent performance scoring",
+      "portfolio reporting",
+      "manual metrics truth source"
+    ]
+  },
+  "relationships": {
+    "depends_on": [],
+    "enables": [
+      "MF-019",
+      "MF-020",
+      "MF-021"
+    ],
+    "references": [
+      "MF-015",
+      "MF-016",
+      "MF-017"
+    ]
+  },
+  "allowed_reads": [
+    {
+      "path": "process/changes/summaries/MF-018.summary.json",
+      "mode": "full"
+    },
+    {
+      "path": "delivery/rules/AGENT-SKILL-CONTRACT.md",
+      "mode": "targeted"
+    },
+    {
+      "path": "delivery/skills/checkpoint-manager/SKILL.md",
+      "mode": "targeted"
+    },
+    {
+      "path": "meta_flow/checks/cp_result.py",
+      "mode": "targeted"
+    },
+    {
+      "path": "meta_flow/cli.py",
+      "mode": "targeted"
+    },
+    {
+      "path": "tests/test_cp_result_event_ledger.py",
+      "mode": "targeted"
+    }
+  ],
+  "read_if_needed": [
+    "README.md",
+    "delivery/README.md",
+    "docs/release/RELEASE-NOTES.md",
+    "meta_flow/checks/context_doctor.py",
+    "meta_flow/checks/token_budget.py"
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/changes/CR-*.md",
+    "process/stories/*-LLD.md",
+    "full conversation transcript"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "expected_outputs": [
+    "quality policy templates",
+    "quality/eval check commands",
+    "doctor quality/workflow reports",
+    "focused tests"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "id": "MF-019",
+  "title": "Permission / Security / Environment Governance",
+  "status": "candidate",
+  "cr_type": "process",
+  "profile": "architecture-major",
+  "risk_profile": "runtime-high-risk-sensitive",
+  "priority": 2,
+  "intent": "Add agent permission boundaries, toolchain/environment profiles, and lightweight secret/redaction checks without forcing a threat model for every project.",
+  "scope_delta": [
+    "add AGENT-PERMISSION-MATRIX policy template and checker",
+    "add TOOLCHAIN-MANIFEST and ENVIRONMENT-PROFILE templates/checks",
+    "add secret and redaction checks",
+    "add runtime-high-risk environment precheck"
+  ],
+  "non_goals": [
+    "no mandatory THREAT-MODEL for every CR",
+    "no mandatory SECURITY-RISK-REGISTER for every project",
+    "no full AGENT-RUN-MANIFEST",
+    "no real credential read"
+  ],
+  "affected_features": [
+    "governance.agent_permissions",
+    "governance.environment_profiles",
+    "governance.security_redaction"
+  ],
+  "expected_outputs": [
+    "process/policies/AGENT-PERMISSION-MATRIX.yaml template",
+    "process/policies/TOOLCHAIN-MANIFEST.yaml template",
+    "process/policies/ENVIRONMENT-PROFILE.yaml template",
+    "meta-flow permission check",
+    "meta-flow security secret-check",
+    "meta-flow security redaction-check",
+    "meta-flow environment check",
+    "tests/test_permission_environment_governance.py"
+  ],
+  "relationships": {
+    "depends_on": [],
+    "recommended_after": [
+      "MF-018"
+    ],
+    "references": [
+      "MF-005",
+      "MF-016",
+      "MF-017"
+    ],
+    "blocks": [
+      "runtime-high-risk quant-lab runtime validation"
+    ],
+    "supersedes": []
+  },
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME_CONNECTION",
+    "NO_ORDER_WRITE",
+    "NO_PROVIDER_LAKE_PUBLISH"
+  ],
+  "quant_lab_relevance": "Defines offline, WSL research, and Windows QMT runtime profiles while keeping credentials, NAS, runtime, and order-write denied by default.",
+  "handoff_ref": "process/handoffs/MF-019-KICKOFF-HANDOFF.md",
+  "context_ref": "process/context/MF-019.KICKOFF.context.json"
+}

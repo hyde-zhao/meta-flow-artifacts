@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "context_type": "cr_kickoff",
+  "cr_id": "MF-019",
+  "stage": "kickoff",
+  "profile": "architecture-major",
+  "budget": {
+    "max_tokens": 10000,
+    "estimated_tokens": 3800,
+    "estimator": "chars_div_4"
+  },
+  "objective": {
+    "summary": "Implement agent permission, security/redaction, and environment/toolchain governance.",
+    "non_goals": [
+      "global threat model requirement",
+      "global security risk register",
+      "full agent run manifest",
+      "real credential read"
+    ]
+  },
+  "relationships": {
+    "recommended_after": [
+      "MF-018"
+    ],
+    "references": [
+      "MF-005",
+      "MF-016",
+      "MF-017"
+    ]
+  },
+  "allowed_reads": [
+    {
+      "path": "process/changes/summaries/MF-019.summary.json",
+      "mode": "full"
+    },
+    {
+      "path": "delivery/rules/AGENT-SKILL-CONTRACT.md",
+      "mode": "targeted"
+    },
+    {
+      "path": "delivery/agents/meta-dev.md",
+      "mode": "targeted"
+    },
+    {
+      "path": "delivery/agents/meta-qa.md",
+      "mode": "targeted"
+    },
+    {
+      "path": "delivery/skills/context-manifest-builder/templates/AUTHZ-POLICY-TEMPLATE.json",
+      "mode": "targeted"
+    },
+    {
+      "path": "meta_flow/policies/authz.py",
+      "mode": "targeted"
+    },
+    {
+      "path": "meta_flow/policies/gate_profiles.py",
+      "mode": "targeted"
+    }
+  ],
+  "read_if_needed": [
+    "README.md",
+    "delivery/README.md",
+    "meta_flow/context_pack/story_contract.py",
+    "meta_flow/workflow/story_evidence.py"
+  ],
+  "denied_default_reads": [
+    ".env",
+    "credentials",
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/changes/CR-*.md",
+    "full conversation transcript"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME_CONNECTION",
+    "NO_ORDER_WRITE",
+    "NO_PROVIDER_LAKE_PUBLISH"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ]
+}

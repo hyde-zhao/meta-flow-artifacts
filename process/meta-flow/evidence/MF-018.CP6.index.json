@@ -1,0 +1,117 @@
+{
+  "artifacts": [
+    {
+      "kind": "implementation_summary",
+      "path": "process/changes/summaries/MF-018.implementation.md"
+    },
+    {
+      "kind": "test_report",
+      "path": "process/docs/quality/MF-018-TEST-REPORT.md"
+    },
+    {
+      "kind": "review",
+      "path": "process/docs/quality/MF-018-REVIEW.md"
+    }
+  ],
+  "changed_files": [
+    {
+      "change_type": "added",
+      "path": "meta_flow/checks/quality_governance.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "meta_flow/cli.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "meta_flow/workspace/routing.py"
+    },
+    {
+      "change_type": "added",
+      "path": "tests/test_quality_governance.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "delivery/skills/context-manifest-builder/SKILL.md"
+    },
+    {
+      "change_type": "added",
+      "path": "delivery/skills/context-manifest-builder/templates/QUALITY-MODEL-TEMPLATE.yaml"
+    },
+    {
+      "change_type": "added",
+      "path": "delivery/skills/context-manifest-builder/templates/EVAL-MATRIX-TEMPLATE.yaml"
+    },
+    {
+      "change_type": "added",
+      "path": "process/policies/QUALITY-MODEL.yaml"
+    },
+    {
+      "change_type": "added",
+      "path": "process/policies/EVAL-MATRIX.yaml"
+    },
+    {
+      "change_type": "added",
+      "path": "process/changes/summaries/MF-018.implementation.md"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow quality model-check --project-root .",
+      "result": "pass"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow quality eval-check --project-root .",
+      "result": "pass"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow doctor quality --project-root .",
+      "result": "pass"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow doctor workflow --project-root .",
+      "result": "pass"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow quality init --project-root /tmp/mf018-quality-init-check --force",
+      "result": "pass"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --with pytest --python 3.11 pytest -q",
+      "result": "pass",
+      "summary": "114 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_delivery_guardrails.py",
+      "result": "pass"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow install --platform codex --scope project --component agent --project-dir . --dry-run",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  ],
+  "cr_id": "MF-018",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/returns/MF-018.CP6.return.json",
+  "risks": [
+    {
+      "id": "MF-018-RISK-01",
+      "severity": "LOW",
+      "status": "closed",
+      "summary": "Policy templates were added to delivery and quality init can write default process policies for future projects."
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "MF-018",
+  "tests": [
+    "tests/test_quality_governance.py",
+    "tests/test_state_v2.py::StateV2Tests::test_status_prefers_state_current_json",
+    "tests/test_workspace_routing.py::test_workspace_link_writes_portable_relative_metadata"
+  ],
+  "waivers": []
+}

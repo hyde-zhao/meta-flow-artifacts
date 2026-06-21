@@ -3,7 +3,7 @@ source_cr: "CR-018"
 status: "closed"
 created_at: "2026-06-11T19:30:30+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-11T19:59:32+08:00"
+updated_at: "2026-06-21T17:52:00+08:00"
 checkpoint_source: "CR-018"
 cr_index_path: "process/changes/CR-INDEX.yaml"
 ---
@@ -36,7 +36,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | 关闭范围 | 6 | 否 | CR-018 基线与 CR-019 至 CR-023 均已预授权实施并关闭 |
 | 不授权范围 | 2 | 否 | CR-018 批准不代表授权外部工具、真实凭据、publish、live、生产写入或目标项目写入 |
 | 风险接受项 | 0 | 否 | 当前没有要求用户接受风险后放行的事项 |
-| 后续 CR 候选项 | 0 | 否 | 候选项已转正式 CR 并关闭 |
+| 后续 CR 候选项 | 1 | 否 | `CR-033` 记录 MF-018 runtime trace / SaaS 分阶段真实验证，待时机合适再启动 |
 | 取消 / deferred 项 | 0 | 否 | 暂无取消项 |
 
 ## 后续 CR / Spike 候选索引
@@ -47,7 +47,8 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | CR-020 | 本地 eval runner 与确定性 grader | closed | CR | 2 | `meta_flow/evals`; run evidence; deterministic fixtures; safety checks | `process/changes/CR-020.md` | related: `CR-019` | closed | 无 | 已完成 `meta-flow eval validate/run/suite-health` | CR-018 |
 | CR-021 | CP7 / meta-qa / verification-execution 集成 | closed | CR | 3 | `delivery/agents/meta-qa.md`; `verification-execution`; `docs/quality/*`; `process/evals/runs/*` | `process/changes/CR-021.md` | related: `CR-019`, `CR-020` | closed | 无 | 已完成 eval evidence 消费规则和质量证据 | CR-018 |
 | CR-022 | case lifecycle、coverage matrix、failure backlog 与 suite health | closed | CR | 4 | `CASE-REGISTRY.yaml`; `EVAL-COVERAGE-MATRIX.md`; `FAILURE-BACKLOG.md`; suite health summary; regression policy | `process/changes/CR-022.md` | related: `CR-019` | closed | 无 | 已完成 suite health 和 failure backlog | CR-018 |
-| CR-023 | CI 策略与 Promptfoo / DeepEval / Langfuse / Garak 可选适配 | closed | CR / Spike | 5 | CI policy; external adapters; trace backend; credential boundary; network authorization | `process/changes/CR-023.md` | related: `CR-020`, `CR-021` | closed | 无 | 已完成本地 CI policy 和 adapter policy；真实外部运行仍未授权 | CR-018 |
+| CR-023 | CI 策略与 Promptfoo / DeepEval / Langfuse / Garak 可选适配 | closed | CR | 5 | CI policy; external adapters; trace backend; credential boundary; network authorization | `process/changes/CR-023.md` | related: `CR-020`, `CR-021` | closed | 无 | 已完成本地 CI policy 和 adapter policy；真实外部运行仍未授权 | CR-018 |
+| CR-033 | MF-018 runtime trace / SaaS 分阶段真实验证 | candidate | runtime-authorization | 6 | OpenTelemetry OTLP; OpenInference; local collector; Phoenix / Langfuse; SaaS contract; credential sandbox; true runtime | - | related: `MF-018`, `CR-023` | not_started | 等待 C0 Runtime target definition 输入 | 待时机合适时启动正式 CR；启动前先消费 `process/checks/MF-018-RUNTIME-COMPONENT-VALIDATION-PLAN.md` | MF-018 |
 
 ## 启动候选 CR 流程
 
@@ -74,7 +75,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 |---|---|---|---|
 | 运行时状态 | `process/STATE.md.cr_tracking` | 记录 active、blocked、candidate、spike_candidate、stale_status_conflicts | synced |
 | CR 索引 | `process/changes/CR-INDEX.yaml` | 记录每个候选项的状态、正式 CR 路径、影响面、blocked_by 和下一步 | synced |
-| 一致性检查 | `meta-flow check cr-tracking --project-root .` | 新增台账、启动候选、关闭 CR 或状态冲突修复后执行 | PASS at 2026-06-11T19:59:32+08:00 |
+| 一致性检查 | `meta-flow check cr-tracking --project-root .` | 新增台账、启动候选、关闭 CR 或状态冲突修复后执行 | PASS at 2026-06-21T17:52:00+08:00 |
 
 ## 不授权范围
 
@@ -82,6 +83,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 |---|---|---|---|---|
 | NA-01 | 外部服务、真实凭据、网络 trace backend、Promptfoo / DeepEval / Langfuse / Garak 真实运行、publish、live、生产写入 | 用户当前只要求完成 CR 写作；CR-018 是治理基线，不是运行授权 | 创建正式 CR / Spike，并在人工门禁中列出 runtime_authorization 决策项 | CR-018 |
 | NA-02 | 在任意 production 目标项目中写入 eval assets、修改项目目录、改变发布路径 | production 项目必须先扫描目标项目 README / docs / 交付约定并写入 `STATE.md.delivery_routing` | 在目标项目上下文中创建正式 CR，确认 delivery_routing 和 project_kind 后再写入 | CR-018 |
+| NA-03 | MF-018 runtime trace / SaaS 真实上传、凭据读取、sandbox / production write | 当前只创建交接包和分阶段验证计划；未启动 runtime CR | 启动 `CR-033`，完成 C0-C8 分阶段门禁后才允许执行 | MF-018 |
 
 ## 风险接受项
 
@@ -105,3 +107,9 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 | 项目 ID | 内容 | 状态 | 原因 | 可重启条件 | 来源 |
 |---|---|---|---|---|---|
 | N/A | 当前没有取消或 deferred 项 | N/A | N/A | N/A | CR-018 |
+
+## 待启动候选说明
+
+| 候选编号 | 启动条件 | 启动后首个门禁 | 当前交接包 |
+|---|---|---|---|
+| CR-033 | 用户明确要求启动 runtime trace / SaaS 真实验证，并提供 C0 目标定义输入 | C0 Runtime target definition | `process/context/MF-018.RUNTIME-AUTHORIZATION.context.yaml`、`process/handoffs/MF-018-RUNTIME-AUTHORIZATION-HANDOFF.md`、`process/checks/MF-018-RUNTIME-COMPONENT-VALIDATION-PLAN.md` |

@@ -1,64 +1,84 @@
-schema_version: "1.0"
+schema_version: 1
+release_context_id: "CR-034-CP8"
+project_id: "meta-flow"
+cr_id: "CR-034"
+generated_at: "2026-06-21T18:57:09+08:00"
+release_artifact_profile: "compact"
+release_decision: "READY_WITH_RISK"
 release_scope:
-  feature: "meta-flow-artifact-routing-and-eval-governance"
-  source_crs: ["CR-018", "CR-019", "CR-020", "CR-021", "CR-022", "CR-023", "CR-024", "CR-026", "CR-027", "CR-028"]
   in_scope:
-    - "Workflow eval contracts, generated workflow fixtures, local deterministic eval runner, suite health and optional adapter policy"
-    - "CP7/meta-qa evaluation evidence consumption rules"
-    - "Process artifact routing health checks and workspace link/check CLI"
-    - "Externalized process directory tracked by meta-flow-artifacts"
-    - "Externalized docs directory tracked by meta-flow-artifacts"
-    - "Advanced eval runner grader coverage and expected-failure case semantics"
+    - "target-project workspace/state/ledger bootstrap support"
+    - "package identity and delivery routing scan"
+    - "adoption readiness doctor"
+    - "bootstrap CR / CP0 context support"
+    - "quality governance baseline cleanup"
   out_of_scope:
-    - "External Promptfoo / DeepEval / Langfuse / Garak real execution"
-    - "Credentialed network calls or trace upload"
-    - "Production target project writes"
-    - "True publish, live deployment or release execution"
-version_decision:
-  current_version: "0.4.0"
-  recommended_change: "minor"
-  reason: "Adds CLI workflow-eval and workspace health capabilities, plus process/docs artifact routing behavior, without breaking installer CLI."
+    - "quant-lab writes"
+    - "CR-033 activation"
+    - "credentials, runtime, SaaS, production write, trading, publish, live release"
 quality_summary:
-  verification_report: "docs/quality/VERIFICATION-REPORT.md"
-  test_report: "docs/quality/TEST-REPORT.md"
-  review: "docs/quality/REVIEW.md"
+  cp6_result_ref: "process/checks/CP6-CR-034-IMPLEMENTATION.result.json"
+  cp7_result_ref: "process/checks/CP7-CR-034-VERIFICATION.result.json"
+  cp7_decision: "PASS_WITH_RISK"
   blocker_count: 0
   high_count: 0
-  release_decision: "READY_WITH_RISK"
-  residual_risks:
-    - "Runner uses conservative YAML-like parsing and should keep eval config shape simple."
-    - "External adapters are policy-only and disabled by default."
-    - "process/ and internal docs rely on symlinks to an artifact root recorded relative to project_root, for example ../meta-flow-artifacts; missing or broken links hard-stop workflow recovery."
+  risk_acceptance_ids:
+    - "R-CR034-SELF-ADOPTION-READINESS"
+    - "R-CR034-FULL-PYTEST-NOT-RUN"
 affected_surface:
-  platforms: ["codex", "claude", "openclaw"]
-  components: ["cli", "evals", "workspace-routing", "docs", "process", "delivery-rules", "meta-qa", "verification-execution"]
-  state_schema: ["artifact_routing", "target_project_profile", "validation_target", "workflow_eval"]
-  external_interfaces: []
+  cli:
+    - "workspace bootstrap"
+    - "state init"
+    - "identity scan"
+    - "doctor adoption"
+    - "cr bootstrap"
+  process_artifacts:
+    - "STATE.current.json"
+    - "base ledgers"
+    - "CR index / summary / ledger"
+    - "CP0 result / context"
+  docs:
+    - "delivery README"
+    - "USER-MANUAL"
+    - "release docs"
 install_validation_summary:
-  commands:
-    - "meta-flow workspace check"
-    - "meta-flow check cr-tracking --project-root ."
-    - "meta-flow eval validate --eval evals/fixtures/generated-workflow-basic/WORKFLOW-EVAL.yaml"
-    - "meta-flow eval run --eval evals/fixtures/generated-workflow-basic/WORKFLOW-EVAL.yaml --out /tmp/meta-flow-eval-existing"
-    - "meta-flow eval validate --eval evals/fixtures/generated-workflow-advanced/WORKFLOW-EVAL.yaml"
-    - "meta-flow eval run --eval evals/fixtures/generated-workflow-advanced/WORKFLOW-EVAL.yaml --out /tmp/meta-flow-eval-advanced"
-    - "scripts/check_delivery_guardrails.py"
-  result: "PASS"
+  mode: "not-real-install"
+  reason: "CR-034 changes core support commands and docs; no real publish or target production write authorized."
+  checks:
+    - command: "temporary target-project adoption smoke"
+      result: "PASS"
+    - command: "python -m unittest selected suites"
+      result: "PASS"
+    - command: "python scripts/check_delivery_guardrails.py"
+      result: "PASS after cache cleanup"
 release_documents:
-  profile: "compact"
-  release_notes: "docs/release/RELEASE-NOTES.md"
-  deploy_checklist: "docs/release/DEPLOY-CHECKLIST.md"
-  rollback: "docs/release/ROLLBACK.md"
-  migration: "docs/release/MIGRATION.md"
-  feedback: "docs/release/FEEDBACK.md"
+  release_notes:
+    path: "docs/release/RELEASE-NOTES.md"
+    status: "updated"
+  deploy_checklist:
+    path: "docs/release/DEPLOY-CHECKLIST.md"
+    status: "updated"
+  migration:
+    path: "docs/release/MIGRATION.md"
+    status: "updated"
+  rollback:
+    path: "docs/release/ROLLBACK.md"
+    status: "updated"
+  feedback:
+    path: "docs/release/FEEDBACK.md"
+    status: "updated"
 non_authorized_items:
-  - "External SaaS execution"
-  - "Credentials"
-  - "Trace upload"
-  - "Publish / live operation"
-  - "Production target project write"
-  - "Replacing or deleting user-provided artifact directories outside the approved symlink targets"
+  - "credentials / secret / account read"
+  - "runtime / SaaS trace upload"
+  - "production write"
+  - "trading / publish / live release"
+  - "CR-033 activation"
 follow_up_summary:
-  open_candidates: 0
-  failure_backlog: "docs/quality/FAILURE-BACKLOG.md"
-  next_follow_up_trigger: "Create a new CR only if symlink health fails, eval parser complexity grows beyond the simple contract, or external adapters need real execution."
+  candidates:
+    - id: "CR-033"
+      status: "deferred"
+      summary: "runtime trace / SaaS / true runtime follow-up candidate"
+    - id: "self-repo-adoption-completion"
+      status: "candidate"
+      summary: "Complete meta-flow self-repo STATE.current.json, base ledgers, and package identity if CP8 does not accept READY_WITH_RISK."
+

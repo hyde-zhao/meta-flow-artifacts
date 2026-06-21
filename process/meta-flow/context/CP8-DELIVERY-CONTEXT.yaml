@@ -1,23 +1,25 @@
 schema_version: "1.0"
 context_id: "CP8-DELIVERY-CONTEXT"
-generated_at: "2026-06-17T13:49:25+08:00"
+generated_at: "2026-06-21T16:40:09+08:00"
 generated_by: "host-orchestrator"
 read_profile: "compact"
 release_context: "process/release/RELEASE-CONTEXT.yaml"
 release_artifact_profile: "compact"
 release_decision: "READY_WITH_RISK"
-source_crs: ["CR-018", "CR-019", "CR-020", "CR-021", "CR-022", "CR-023", "CR-024", "CR-026", "CR-027", "CR-028"]
+source_crs: ["MF-018"]
 quality_summary:
   blocker_count: 0
   high_count: 0
-  test_report: "docs/quality/TEST-REPORT.md"
-  review: "docs/quality/REVIEW.md"
-  verification_report: "docs/quality/VERIFICATION-REPORT.md"
-artifact_routing:
-  process_link: "process -> ../meta-flow-artifacts/process/meta-flow"
-  docs_link: "docs -> ../meta-flow-artifacts/docs/meta-flow"
-  health_check: "meta-flow workspace check"
-  hard_stop_on_missing_or_broken_link: true
+  cp6_result: "process/checks/CP6-MF-018-QUALITY-GOVERNANCE-CODING-DONE.result.json"
+  cp7_result: "process/checks/CP7-MF-018-QUALITY-GOVERNANCE-VERIFICATION-DONE.result.json"
+  test_report: "process/docs/quality/MF-018-TEST-REPORT.md"
+  review: "process/docs/quality/MF-018-REVIEW.md"
+  verification_report: "process/docs/quality/MF-018-VERIFICATION-REPORT.md"
+key_facts:
+  - "MF-018 adds lightweight quality model and eval matrix governance."
+  - "Workflow metrics remain derived-only from existing CP results and ledgers; no WORKFLOW-METRICS manual truth source is introduced."
+  - "CP7 result is PASS with blocker_count=0 and high_count=0."
+  - "CP7 inline fallback is disclosed and routed to CP8 risk acceptance."
 release_documents:
   - "docs/release/RELEASE-NOTES.md"
   - "docs/release/DEPLOY-CHECKLIST.md"
@@ -25,10 +27,25 @@ release_documents:
   - "docs/release/MIGRATION.md"
   - "docs/release/FEEDBACK.md"
 non_authorized_items:
+  - "True publish or live release execution"
   - "External SaaS execution"
-  - "Credentials"
+  - "Credential or secret access"
   - "Trace upload"
-  - "Publish / live operation"
   - "Production target project write"
-  - "Replacing or deleting user-provided artifact directories outside the approved symlink targets"
+  - "Deleting or replacing user-provided artifact repositories"
+allowed_reads:
+  must_read:
+    - "process/release/RELEASE-CONTEXT.yaml"
+    - "process/checks/CP8-MF-018-DELIVERY-READINESS.result.json"
+    - "process/checkpoints/CP8-MF-018-DELIVERY-READINESS.md"
+  read_if_needed:
+    - "process/docs/quality/MF-018-VERIFICATION-REPORT.md"
+    - "process/docs/quality/MF-018-TEST-REPORT.md"
+    - "process/docs/quality/MF-018-REVIEW.md"
+    - "process/evidence/MF-018.CP7.index.json"
+  do_not_read_by_default:
+    - "process/STATE.md"
+    - "process/DEVELOPMENT-PLAN.yaml"
+    - "完整历史 CR Markdown"
+    - "完整会话 transcript"
 read_expansion_log: []

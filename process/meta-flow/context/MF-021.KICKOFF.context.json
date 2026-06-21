@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "context_type": "cr_kickoff",
+  "cr_id": "MF-021",
+  "stage": "kickoff",
+  "profile": "standard-code",
+  "budget": {
+    "max_tokens": 9000,
+    "estimated_tokens": 3600,
+    "estimator": "chars_div_4"
+  },
+  "objective": {
+    "summary": "Implement release policy, compatibility policy, partial approval, and human gate UX improvements.",
+    "non_goals": [
+      "large decision UX state machine",
+      "default deprecation ledger",
+      "full release workflow for low-risk changes"
+    ]
+  },
+  "relationships": {
+    "recommended_after": [
+      "MF-018",
+      "MF-020"
+    ],
+    "references": [
+      "MF-008",
+      "MF-015",
+      "MF-017"
+    ]
+  },
+  "allowed_reads": [
+    {
+      "path": "process/changes/summaries/MF-021.summary.json",
+      "mode": "full"
+    },
+    {
+      "path": "meta_flow/design/product_governance.py",
+      "mode": "targeted"
+    },
+    {
+      "path": "meta_flow/checks/human_gate.py",
+      "mode": "targeted"
+    },
+    {
+      "path": "meta_flow/ask_user.py",
+      "mode": "targeted"
+    },
+    {
+      "path": "delivery/skills/release-readiness/SKILL.md",
+      "mode": "targeted"
+    },
+    {
+      "path": "delivery/rules/AGENT-SKILL-CONTRACT.md",
+      "mode": "targeted"
+    }
+  ],
+  "read_if_needed": [
+    "README.md",
+    "delivery/README.md",
+    "docs/release/RELEASE-NOTES.md",
+    "delivery/skills/checkpoint-manager/SKILL.md"
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/changes/CR-*.md",
+    "full conversation transcript"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ]
+}
