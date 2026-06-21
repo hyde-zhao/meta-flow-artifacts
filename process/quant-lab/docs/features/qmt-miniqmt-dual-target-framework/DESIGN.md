@@ -4,8 +4,8 @@ version: "1.1"
 feature_id: "FEAT-09"
 feature_name: "QMT / MiniQMT Dual-Target Strategy Delivery Framework"
 source_blueprint: "docs/design/BLUEPRINT.md"
-source_hld: "docs/design/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md"
-source_adr: "docs/design/ARCHITECTURE-DECISION-CR046.md"
+source_hld: "docs/features/qmt-miniqmt-dual-target-framework/design/by-cr/CR046/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md"
+source_adr: "docs/features/qmt-miniqmt-dual-target-framework/design/by-cr/CR046/ARCHITECTURE-DECISION-CR046.md"
 source_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md"
 related_stories:
   - "CR046-S01-dual-target-strategy-architecture"
@@ -44,8 +44,8 @@ confirmed_at: ""
 | 来源 | 路径 / ID | 被本设计消费的内容 |
 |---|---|---|
 | Blueprint | `docs/design/BLUEPRINT.md` FEAT-09 | Feature 边界、共享能力、禁止依赖 |
-| HLD | `docs/design/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md` | 模块拆分、验证框架、安装设计 |
-| ADR | `docs/design/ARCHITECTURE-DECISION-CR046.md` ADR-CR046-001..006 | 独立 FEAT-09、平台无关 core、证据分级、后续 CR 切分 |
+| HLD | `docs/features/qmt-miniqmt-dual-target-framework/design/by-cr/CR046/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md` | 模块拆分、验证框架、安装设计 |
+| ADR | `docs/features/qmt-miniqmt-dual-target-framework/design/by-cr/CR046/ARCHITECTURE-DECISION-CR046.md` ADR-CR046-001..006 | 独立 FEAT-09、平台无关 core、证据分级、后续 CR 切分 |
 | Requirements | `process/REQUIREMENTS.md` REQ-186..200 | framework-first 范围、交付包和 runner install design |
 
 ## 目标与非目标

@@ -8,7 +8,7 @@ source_hld:
   - "process/HLD.md"
   - "process/HLD-DATA-LAKE.md"
   - "process/HLD-QMT-TRADING.md"
-  - "docs/design/HLD-CR051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK.md"
+  - "docs/features/strategy-research-lifecycle/design/by-cr/CR051/HLD-CR051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK.md"
 source_adr: "process/ARCHITECTURE-DECISION.md"
 change: "CR-051"
 confirmed_by: ""

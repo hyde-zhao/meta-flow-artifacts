@@ -4,8 +4,8 @@ version: "1.1"
 change: "CR-046"
 legacy_source: "process/ARCHITECTURE-DECISION.md"
 current_change_sources:
-  - "docs/design/ARCHITECTURE-DECISION-CR046.md"
-  - "docs/design/ARCHITECTURE-DECISION-CR053.md"
+  - "docs/features/qmt-miniqmt-dual-target-framework/design/by-cr/CR046/ARCHITECTURE-DECISION-CR046.md"
+  - "docs/features/quant-lab-migration-dry-run/design/by-cr/CR053/ARCHITECTURE-DECISION-CR053.md"
 ---
 
 # Architecture Decision Current Index
@@ -44,6 +44,6 @@ current_change_sources:
 | 是否已有架构决策 | 先查上表，再读 `process/ARCHITECTURE-DECISION.md` 对应 ADR |
 | 是否允许新增依赖 | 查对应 ADR 和 `docs/design/DEPENDENCY-MAP.md`；默认不允许外部框架 / QMT / DuckDB 依赖变更 |
 | 是否允许真实操作 | ADR 只能给出设计边界；真实操作必须另有 CP / per-run authorization |
-| 审查 CR046 ADR | 读取 `docs/design/ARCHITECTURE-DECISION-CR046.md` |
-| 审查 CR053 ADR | 读取 `docs/design/ARCHITECTURE-DECISION-CR053.md` |
+| 审查 CR046 ADR | 读取 `docs/features/qmt-miniqmt-dual-target-framework/design/by-cr/CR046/ARCHITECTURE-DECISION-CR046.md` |
+| 审查 CR053 ADR | 读取 `docs/features/quant-lab-migration-dry-run/design/by-cr/CR053/ARCHITECTURE-DECISION-CR053.md` |
 | ADR 与蓝图冲突 | 以 legacy ADR 正文和 HLD 事实为准，修订蓝图索引 |

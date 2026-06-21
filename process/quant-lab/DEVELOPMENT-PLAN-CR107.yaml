@@ -1,0 +1,102 @@
+schema_version: 1
+cr_id: CR-107
+title: quant-lab remediation design phase plan
+status: ready-for-cp3-review
+owner: host-orchestrator
+created_at: "2026-06-21T21:28:55+08:00"
+authorization_boundary:
+  - no credential reads
+  - no runtime
+  - no SaaS
+  - no production writes
+  - no trading
+  - no CR-033
+phases:
+  - id: P2
+    name: Remediation Design
+    target_crs: ["CR-107"]
+    goal: Freeze recommended design, phase plan, validation matrix, and human-gate decisions.
+    entry:
+      - CR106 closed as P1 completed
+      - identity/state/adoption checks pass
+    exit:
+      - CP3 human gate approved
+      - P3 CR split accepted or modified
+  - id: P3A
+    name: Layered Docs And Package Identity Consistency
+    target_crs: ["CR-108"]
+    goal: Align README, USER-MANUAL, docs/design, docs/features, docs/quality, and inventory-only process historical design/readiness surfaces with package identity, Host Orchestrator protocol, and current-truth boundaries.
+    entry:
+      - CR107 CP3 approved
+    exit:
+      - docs current-truth scan passes
+      - layered docs drift matrix has no unclassified item
+      - meta-flow identity check passes
+    waves:
+      - id: CR108-W1
+        target: README and USER-MANUAL
+        goal: Fix current-facing package identity, CLI, Host Orchestrator, and authorization path wording.
+      - id: CR108-W2
+        target: docs/design
+        goal: Classify and fix current design indexes and current-truth design documents; preserve historical CR-scoped design audit.
+      - id: CR108-W3
+        target: docs/features
+        goal: Classify Feature DESIGN, TEST-PLAN, and TASKS drift around old role names, package identity, authorization paths, and implementation status.
+      - id: CR108-W4
+        target: docs/quality
+        goal: Classify REVIEW, TEST-REPORT, and VERIFICATION-REPORT current-truth versus legacy evidence boundaries.
+      - id: CR108-W5
+        target: process historical design/readiness surfaces
+        goal: Inventory process root HLD/REQUIREMENTS/STORY-BACKLOG, checkpoints, context, and release materials as current, legacy-audit, routing-note, or follow-up without bulk rewriting history.
+  - id: P3B
+    name: CR Tracking Historical Hygiene
+    target_crs: ["CR-109"]
+    goal: Normalize CR tracking machine fields and classify historical follow-up/spike candidates.
+    entry:
+      - CR107 CP3 approved
+      - CR102-CR104 closed on main or accepted as non-overlapping
+    exit:
+      - meta-flow check cr-tracking passes in agreed mode
+      - historical lifecycle failures are resolved or explicitly waived
+  - id: P4
+    name: Non-runtime Verification And Readiness
+    target_crs: ["CR-110"]
+    goal: Run static, non-runtime verification, scan tests/scripts/config/tooling identity references, and close remediation readiness.
+    entry:
+      - CR108 and CR109 completed or accepted with risk
+    exit:
+      - identity/state/adoption/human-gate checks pass
+      - CP8 approved
+validation_matrix:
+  - id: VM-CR107-01
+    target: package identity
+    command: meta-flow identity check --project-root .
+    mode: static
+  - id: VM-CR107-02
+    target: state v2
+    command: meta-flow state check --project-root .
+    mode: static
+  - id: VM-CR107-03
+    target: adoption readiness
+    command: meta-flow doctor adoption --project-root .
+    mode: static
+  - id: VM-CR107-04
+    target: human gate
+    command: meta-flow check human-gate --checkpoint process/checkpoints/CP3-CR107-REMEDIATION-DESIGN-REVIEW.md --launch-message-file process/checks/CP3-CR107-HUMAN-GATE-LAUNCH-MESSAGE.md
+    mode: static
+  - id: VM-CR107-05
+    target: cr tracking
+    command: meta-flow check cr-tracking --project-root . --allow-multiple-active
+    mode: static
+  - id: VM-CR107-06
+    target: layered docs drift
+    command: rg -n "meta-po|local_backtest|local-backtest|console script|runtime_authorization gate" README.md docs/USER-MANUAL.md docs/design docs/features docs/quality
+    mode: static-inventory
+  - id: VM-CR107-07
+    target: process historical design/readiness drift
+    command: rg -n "meta-po|local_backtest|local-backtest|runtime_authorization gate" process/HLD.md process/REQUIREMENTS.md process/STORY-BACKLOG.md process/checkpoints process/context process/release
+    mode: static-inventory
+  - id: VM-CR107-08
+    target: tooling/test identity references
+    command: rg -n "local-backtest|local_backtest|meta-po|quant_lab|quant-lab" tests scripts config pyproject.toml .codex/agents .agents/skills
+    mode: static-inventory

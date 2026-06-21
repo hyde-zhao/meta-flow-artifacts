@@ -4,7 +4,7 @@ version: "1.0"
 feature_id: "FEAT-10"
 feature_name: "Strategy Research Lifecycle and Project Migration Governance"
 source_blueprint: "docs/design/BLUEPRINT.md"
-source_hld: "docs/design/HLD-CR051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK.md"
+source_hld: "docs/features/strategy-research-lifecycle/design/by-cr/CR051/HLD-CR051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK.md"
 source_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md"
 related_stories:
   - "CR051-S01-lifecycle-and-taxonomy-framework"
@@ -40,7 +40,7 @@ confirmed_at: ""
 
 | 来源 | 路径 / ID | 被本设计消费的内容 |
 |---|---|---|
-| HLD | `docs/design/HLD-CR051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK.md` | 单主仓库、外部 archive、冷热分层、项目迁移、后续 CR roadmap、`quant-lab` 命名 |
+| HLD | `docs/features/strategy-research-lifecycle/design/by-cr/CR051/HLD-CR051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK.md` | 单主仓库、外部 archive、冷热分层、项目迁移、后续 CR roadmap、`quant-lab` 命名 |
 | Blueprint | `docs/design/BLUEPRINT.md` FEAT-10 | Feature 边界、共享能力、跨 Feature 流程和禁止依赖 |
 | Domain Map | `docs/design/DOMAIN-MAP.md` OBJ-33..43 / SM-13..15 | lifecycle、archive、identity、migration 领域对象和状态机 |
 | Dependency Map | `docs/design/DEPENDENCY-MAP.md` FD-17..23 | no-real-operation、lake/archive/broker facts 隔离、交易主机边界 |

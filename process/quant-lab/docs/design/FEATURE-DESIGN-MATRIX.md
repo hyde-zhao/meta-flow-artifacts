@@ -1,10 +1,10 @@
 ---
 status: "draft-current-index"
-version: "1.3"
+version: "1.4"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld: "docs/design/HLD.md"
 source_adr: "docs/design/ARCHITECTURE-DECISION.md"
-change: "CR-053"
+change: "CR-108"
 confirmed_by: ""
 confirmed_at: ""
 ---
@@ -19,6 +19,7 @@ confirmed_at: ""
 | 1.1 | 2026-06-13 | meta-po | 按 CR-046 增补 FEAT-09 双目标策略交付框架，实现设计三件套和 7 个 Story 的 lld_policy |
 | 1.2 | 2026-06-14 | host-orchestrator | 按 CR-051 增补 FEAT-10 策略研究生命周期与 quant-lab 迁移治理，实现设计三件套和 6 个 Story 的 lld_policy |
 | 1.3 | 2026-06-14 | host-orchestrator | 按 CR-053 增补 FEAT-10-CR053 quant-lab migration inventory / dry-run scoped design、5 个 Story 和 CP5 批次 |
+| 1.4 | 2026-06-21 | host-orchestrator | 按 CR-108 修正 current-facing 责任方口径：Host Orchestrator 主进程承担 CR / CP 编排；历史修订记录中的 `meta-po` 保留为审计事实。 |
 
 ## 适用性判定规则
 
@@ -91,7 +92,7 @@ confirmed_at: ""
 
 | Feature ID | 豁免 / N/A 原因 | 影响范围 | 风险接受 | 重访条件 | 责任方 |
 |---|---|---|---|---|---|
-| FEAT-01 | 基线已 verified，本轮只补索引 | STORY-001..013 和已关闭基础回测能力 | accepted | 修改核心 engine / strategies / reports schema 时 | meta-po / meta-se |
+| FEAT-01 | 基线已 verified，本轮只补索引 | STORY-001..013 和已关闭基础回测能力 | accepted | 修改核心 engine / strategies / reports schema 时 | Host Orchestrator / meta-se |
 | FEAT-08 | 普通文档刷新可由 CR / CP8 处理 | README、USER-MANUAL、runbook | accepted | 文档新增真实操作步骤或授权语义时 | meta-doc / meta-qa |
 
 ## 自检

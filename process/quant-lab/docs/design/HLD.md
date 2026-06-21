@@ -7,7 +7,7 @@ legacy_sources:
   - "process/HLD-DATA-LAKE.md"
   - "process/HLD-QMT-TRADING.md"
 current_change_sources:
-  - "docs/design/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md"
+  - "docs/features/qmt-miniqmt-dual-target-framework/design/by-cr/CR046/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md"
 ---
 
 # HLD Current Index
@@ -30,7 +30,7 @@ current_change_sources:
 | `process/HLD.md` | 本地研究、轻量回测、研究消费、报告、多因子闭环、Backtrader optional reference、Stage6 admission 和 QMT gateway 相关主线索引 | 主研究 / 消费层 HLD legacy source |
 | `process/HLD-DATA-LAKE.md` | 生产级市场数据湖、P0/P1 dataset、catalog current truth、publish gate、DuckDB readonly candidate、复权双视图、production current truth closure | 数据生产 / 数据事实源 HLD legacy source |
 | `process/HLD-QMT-TRADING.md` | QMT 交易接入、OMS、adapter、broker lake、stage gate、runbook、reconciliation、kill switch、QMT C/S bridge 交易治理侧 | QMT 交易治理 HLD legacy source |
-| `docs/design/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md` | QMT terminal + MiniQMT runner 双目标策略交付框架、策略包契约、验证框架、MiniQMT runner 安装设计和后续 CR 门禁 | CR046 当前 CP3 审查主 HLD |
+| `docs/features/qmt-miniqmt-dual-target-framework/design/by-cr/CR046/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md` | QMT terminal + MiniQMT runner 双目标策略交付框架、策略包契约、验证框架、MiniQMT runner 安装设计和后续 CR 门禁 | CR046 当前 CP3 审查主 HLD |
 
 ## 当前架构摘要
 
@@ -52,7 +52,7 @@ current_change_sources:
 | 判断领域对象和状态 | `docs/design/DOMAIN-MAP.md` |
 | 判断允许 / 禁止依赖 | `docs/design/DEPENDENCY-MAP.md` |
 | 深入 HLD 细节 | 对应 `process/HLD*.md` |
-| 审查 CR046 双目标策略交付框架 | `docs/design/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md` |
+| 审查 CR046 双目标策略交付框架 | `docs/features/qmt-miniqmt-dual-target-framework/design/by-cr/CR046/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md` |
 | 判断 ADR | `docs/design/ARCHITECTURE-DECISION.md` + `process/ARCHITECTURE-DECISION.md` |
 | 判断 Story 范围 | `process/STORY-BACKLOG.md`、`process/stories/*.md` |
 
