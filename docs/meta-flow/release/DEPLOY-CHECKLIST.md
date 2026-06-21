@@ -17,8 +17,8 @@ created_at: "2026-06-17T13:49:25+08:00"
 
 | 项 | 命令 / 证据 | 状态 |
 |---|---|---|
-| Source repository status | `git status --short --branch` in `/home/hyde/projects/meta-flow` | PASS |
-| Artifact repository status | `git status --short --branch` in `/home/hyde/projects/meta-flow-artifacts` | PASS |
+| Source repository status | `git status --short --branch` in `<project-root>` | PASS |
+| Artifact repository status | `git status --short --branch` in `<artifact-root>`，其中 `artifact_root` 相对项目根记录 | PASS |
 | Workspace health | `meta-flow workspace check` | PASS |
 | CR tracking | `meta-flow check cr-tracking --project-root .` | PASS |
 | Guardrail | `scripts/check_delivery_guardrails.py` | PASS |

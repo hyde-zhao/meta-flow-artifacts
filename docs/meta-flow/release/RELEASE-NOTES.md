@@ -19,8 +19,8 @@ created_at: "2026-06-17T13:49:25+08:00"
 | 范围 | 内容 | 证据 |
 |---|---|---|
 | Workflow eval governance | `meta-flow eval validate/run/suite-health`、eval contracts、fixture、suite health、optional adapter policy | CR-018..CR-023 |
-| Process artifact routing | `process/` 外置到 `/home/hyde/projects/meta-flow-artifacts/process/meta-flow`，源码仓库保留 symlink | CR-024、CR-026 |
-| Docs artifact routing | `docs/` 外置到 `/home/hyde/projects/meta-flow-artifacts/docs/meta-flow`，源码仓库保留 symlink | CR-027 |
+| Process artifact routing | `process/` 外置到 `<artifact-root>/process/meta-flow`，其中 `artifact_root` 以相对项目根记录，例如 `../meta-flow-artifacts` | CR-024、CR-026 |
+| Docs artifact routing | 内部 docs 外置到 `<artifact-root>/docs/meta-flow`，其中 `artifact_root` 以相对项目根记录，例如 `../meta-flow-artifacts` | CR-027、CR-030 |
 | Eval runner hardening | 新增 grader、case results 和 expected failure 语义，新增 advanced fixture | CR-028 |
 
 ## 用户可见变化
@@ -34,7 +34,7 @@ created_at: "2026-06-17T13:49:25+08:00"
 ## 兼容性
 
 - 安装器 CLI 未破坏。
-- 已 clone 的源码仓库需要同时准备 artifact repo，或由 `meta-flow workspace link` 指向正确 artifact root。
+- 已 clone 的源码仓库需要同时准备 artifact repo，或由 `meta-flow workspace link --artifact-root <relative-artifact-root>` 指向正确 artifact root；运行态记录不得固化设备相关绝对路径。
 - 纯代码项目不强制 workflow eval。
 - 外部 adapters 默认 disabled，真实运行需要独立 runtime authorization。
 

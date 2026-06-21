@@ -30,8 +30,8 @@ created_at: "2026-06-17T13:49:25+08:00"
 
 | 对象 | 回滚方式 | 验证 |
 |---|---|---|
-| `process/` symlink | 删除 symlink，恢复 `/home/hyde/projects/.meta-flow-migration-backups/process.local-backup-CR026-*` 到源码仓库 | `meta-flow status` 可读且 CR tracking PASS |
-| `docs/` symlink | 删除 symlink，恢复 `/home/hyde/projects/.meta-flow-migration-backups/docs.local-backup-CR027-*` 到源码仓库 | release/docs/design 关键文件可读 |
+| `process/` symlink | 删除 symlink，恢复 `<project-parent>/.meta-flow-migration-backups/process.local-backup-CR026-*` 到源码仓库 | `meta-flow status` 可读且 CR tracking PASS |
+| 内部 docs symlink | 删除内部 docs symlink，恢复 `<project-parent>/.meta-flow-migration-backups/docs.local-backup-CR027-*` 中对应子路径 | release/docs/design 关键文件可读 |
 | artifact repo tracking | 保留 artifact repo 历史，不删除远端 | `git status` clean |
 
 ## 回滚验证
@@ -43,6 +43,6 @@ created_at: "2026-06-17T13:49:25+08:00"
 
 ## 不可静默回滚项
 
-- 不得删除 `/home/hyde/projects/meta-flow-artifacts` 或其远端历史。
+- 不得删除 artifact 仓库根目录或其远端历史；artifact 根应通过相对项目根记录，例如 `../meta-flow-artifacts`。
 - 不得在用户未确认 artifact root 时重建空 `process/STATE.md`。
 - 不得把 CP8 approve 解释为真实发布、远端删除或生产写入授权。

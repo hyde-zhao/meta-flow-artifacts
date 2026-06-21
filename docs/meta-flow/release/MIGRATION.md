@@ -26,8 +26,8 @@ created_at: "2026-06-17T13:49:25+08:00"
 
 | 对象 | 原路径 | 新真实路径 | 源码仓库路径 |
 |---|---|---|---|
-| process artifacts | `/home/hyde/projects/meta-flow/process` 普通目录 | `/home/hyde/projects/meta-flow-artifacts/process/meta-flow` | `process -> ../meta-flow-artifacts/process/meta-flow` |
-| docs artifacts | `/home/hyde/projects/meta-flow/docs` 普通目录 | `/home/hyde/projects/meta-flow-artifacts/docs/meta-flow` | `docs -> ../meta-flow-artifacts/docs/meta-flow` |
+| process artifacts | `<project-root>/process` 普通目录 | `<artifact-root>/process/meta-flow`，`artifact_root=../meta-flow-artifacts` | `process -> ../meta-flow-artifacts/process/meta-flow` |
+| docs artifacts | `<project-root>/docs` 普通目录 | `<artifact-root>/docs/meta-flow`，`artifact_root=../meta-flow-artifacts` | 内部 docs 子路径指向 `../meta-flow-artifacts/docs/meta-flow/...` |
 
 ## 兼容性
 
