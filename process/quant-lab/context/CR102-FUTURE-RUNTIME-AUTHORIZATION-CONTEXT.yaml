@@ -1,0 +1,75 @@
+schema_version: "1.0"
+capsule_id: "CR102-FUTURE-RUNTIME-AUTHORIZATION-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "quant-lab-cr102"
+phase: "story-planning"
+checkpoint: "future-runtime-authorization"
+status: "ready-for-human-gate"
+created_at: "2026-06-21T06:55:43+08:00"
+source_cr: "CR-102"
+source_candidate: "RA-CR101-003"
+read_profile: "compact"
+default_read_policy: "capsule-first"
+full_doc_read_policy: "read full docs only when capsule is missing, inconsistent, insufficient for audit, or user requests deep review"
+must_read:
+  - path: "process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md"
+    reason: "formal CR status, current no-execution authorization boundary"
+  - path: "process/checkpoints/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md"
+    reason: "approved CP5 design-only Decision Brief and accepted DQ"
+  - path: "docs/features/cr102-nas-real-package-exchange-authorization/DESIGN.md"
+    reason: "authorization matrix, operation defaults, execution plan shell, evidence schema"
+  - path: "process/stories/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-LLD.md"
+    reason: "full LLD for fail-closed runtime authorization boundary"
+read_if_needed:
+  - path: "docs/features/cr102-nas-real-package-exchange-authorization/TEST-PLAN.md"
+    trigger: "verify negative cases and redaction contract"
+  - path: "docs/features/cr102-nas-real-package-exchange-authorization/TASKS.md"
+    trigger: "verify future gate task split"
+  - path: "process/context/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-CONTEXT.yaml"
+    trigger: "verify CP5 context and downstream task note"
+  - path: "process/changes/CR-INDEX.yaml"
+    trigger: "verify CR tracking state"
+do_not_read_by_default:
+  - path: "real NAS path/export/root/mount"
+    reason: "not authorized by current user instruction"
+  - path: ".env / credential / account / raw runtime logs"
+    reason: "explicitly not authorized"
+  - path: "QMT/MiniQMT/XtQuant/gateway runtime"
+    reason: "explicitly not authorized"
+key_facts:
+  cp5_status: "approved at 2026-06-21T06:45:46+08:00"
+  current_cr_status: "active-cp5-approved-no-execution-authorized"
+  gate_purpose: "ask the user whether to authorize a future runtime branch and, if yes, exactly which NAS operation class may become eligible"
+  current_authorization:
+    nas_path_export_root_mount_identity: "UNSET_BY_USER"
+    nas_access_list_read_write_copy_publish_pull_delete_check_mount: false
+    credential_env_account_read: false
+    qmt_miniqmt_xtquant_gateway_runtime: false
+    submit_cancel_simulation_live: false
+    provider_fetch_lake_write_catalog_publish: false
+  external_access_performed_this_turn: false
+runtime_authorization_decisions:
+  - id: "DQ-RUNTIME-CR102-01"
+    type: "runtime_authorization"
+    summary: "Whether to open a future runtime authorization branch at all; recommended default remains preparation-only with no execution."
+  - id: "DQ-RUNTIME-CR102-02"
+    type: "security"
+    summary: "Whether path/export/root/mount/identity may be supplied by user as redacted labels; agent discovery remains forbidden."
+  - id: "DQ-RUNTIME-CR102-03"
+    type: "runtime_authorization"
+    summary: "Whether any NAS operation class may be authorized; recommendation is check-only eligibility after explicit values, with all operations still false now."
+  - id: "DQ-RUNTIME-CR102-04"
+    type: "risk_acceptance"
+    summary: "Whether to accept high-risk handling for write/copy/publish/pull/delete as separate gates."
+  - id: "DQ-RUNTIME-CR102-05"
+    type: "security"
+    summary: "Evidence redaction and forbidden credential/runtime/account boundaries."
+  - id: "DQ-RUNTIME-CR102-06"
+    type: "implementation"
+    summary: "Execution plan shell may become a manually approved runbook candidate, but no command/checker/run is created or executed now."
+validation:
+  permission_boundary_result: "PASS for preparation-only; execution remains BLOCKED"
+  runtime_risk_result: "PASS_WITH_RISK for design gate; real execution requires timeout/on_failure/rollback in future gate"
+  nas_access_performed: false
+  credential_or_env_read_performed: false
+  runtime_started: false

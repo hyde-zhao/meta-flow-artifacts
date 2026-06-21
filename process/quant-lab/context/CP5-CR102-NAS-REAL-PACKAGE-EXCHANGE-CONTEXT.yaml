@@ -1,0 +1,81 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "quant-lab-cr102"
+phase: "story-planning"
+checkpoint: "CP5"
+status: "ready-for-human-gate"
+created_at: "2026-06-21T06:32:36+08:00"
+source_cr: "CR-102"
+read_profile: "compact"
+default_read_policy: "capsule-first"
+full_doc_read_policy: "read full docs only when capsule is missing, inconsistent, insufficient for audit, or user requests deep review"
+must_read:
+  - path: "docs/features/cr102-nas-real-package-exchange-authorization/DESIGN.md"
+    reason: "authorization matrix, execution plan shell, evidence schema"
+  - path: "docs/features/cr102-nas-real-package-exchange-authorization/TEST-PLAN.md"
+    reason: "CP5 design-only validation scope and negative cases"
+  - path: "docs/features/cr102-nas-real-package-exchange-authorization/TASKS.md"
+    reason: "CP5 tasks and future gate separation"
+  - path: "process/stories/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-LLD.md"
+    reason: "full LLD for high-risk runtime authorization boundary"
+  - path: "process/checkpoints/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md"
+    reason: "human gate and Decision Brief"
+read_if_needed:
+  - path: "docs/qmt/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-HLD.md"
+    trigger: "audit CP3 architecture decisions"
+  - path: "process/checkpoints/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-REVIEW.md"
+    trigger: "verify CP3 approval and accepted DQ"
+  - path: "process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md"
+    trigger: "verify active CR status and authorization policy"
+  - path: "process/changes/CR-INDEX.yaml"
+    trigger: "verify CR tracking state"
+do_not_read_by_default:
+  - path: "real NAS path/export/root/mount"
+    reason: "not authorized and not a repository artifact"
+  - path: ".env / credential / account / raw runtime logs"
+    reason: "explicitly not authorized"
+  - path: "historical non-CR102 CP5 LLD files"
+    reason: "not needed unless comparing format"
+key_facts:
+  cp3_status: "approved at 2026-06-20T22:01:10+08:00"
+  cp5_scope: "design-only readiness for authorization matrix, execution plan shell, evidence schema"
+  authorization_matrix:
+    nas_operations_all_false: true
+    path_export_root_mount_identity: "UNSET_BY_USER"
+    credentials_runtime_trading_provider_all_false: true
+  execution_authorization: "false; CP5 approve does not authorize NAS access/list/read/write/copy/publish/pull/delete/check/mount"
+  next_gate_if_approved: "CP6 may only prepare offline design/ledger assets if explicitly requested; any real NAS action requires a future runtime_authorization gate"
+risks_and_decisions:
+  - id: "DQ-CP5-CR102-01"
+    type: "implementation"
+    summary: "Approve CP5 design package as design-only input"
+  - id: "DQ-CP5-CR102-02"
+    type: "security"
+    summary: "Keep path/mount/permission user-explicit-only and UNSET_BY_USER"
+  - id: "DQ-CP5-CR102-03"
+    type: "runtime_authorization"
+    summary: "CP5 approve does not authorize real NAS or runtime actions"
+  - id: "DQ-CP5-CR102-04"
+    type: "risk_acceptance"
+    summary: "Accept CR102 remains blocked-for-execution after CP5"
+  - id: "DQ-CP5-CR102-05"
+    type: "follow_up_tracking"
+    summary: "Future check/publish/pull/copy/delete gates remain independent"
+downstream_tasks:
+  - "If CP5 approved, update ledgers to cp5-approved-no-execution-authorized."
+  - "Do not execute NAS or runtime tasks."
+  - "Future runtime authorization must collect path/mount/identity/operation/evidence/rollback."
+token_control:
+  max_source_files: 8
+  read_expansion_log:
+    - path: "docs/qmt/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-HLD.md"
+      reason: "CP5 preparation needs CP3 architecture source"
+    - path: "process/checkpoints/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-REVIEW.md"
+      reason: "verify CP3 approval"
+validation:
+  consistency_status: "pending-human-gate"
+  external_access_performed: false
+  nas_access_performed: false
+  credential_or_env_read_performed: false
+  runtime_started: false

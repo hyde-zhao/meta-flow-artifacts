@@ -1,0 +1,133 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "quant-lab-cr102"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready-for-human-gate"
+created_at: "2026-06-20T21:49:03+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-102"
+parent_cr: "CR-101"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 12
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: "CP3 HLD preparation required CP2 review, CR102 formal CR, CR100/CR101 local HLD pattern and CR index state; no NAS/env/runtime source was read."
+  default_instruction: "Agent 必须先读取本 capsule；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+
+must_read:
+  - path: "docs/qmt/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-HLD.md"
+    reason: "CP3 推荐架构、风险、ADR 和待决策项"
+    required: true
+  - path: "process/checks/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-PRECHECK.md"
+    reason: "CP3 自动预检结论"
+    required: true
+  - path: "process/checkpoints/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-REVIEW.md"
+    reason: "CP3 人工门禁 Decision Brief"
+    required: true
+
+read_if_needed:
+  - path: "process/checkpoints/CP2-CR102-NAS-REAL-PACKAGE-EXCHANGE-SCOPE-REVIEW.md"
+    trigger: "需要追溯 CP2 approved no-execution boundary"
+  - path: "process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md"
+    trigger: "需要追溯正式 CR、authorization_policy 或 CR089 overlap"
+  - path: "process/discussions/CP3-CR102-HLD-DISCUSSION-LOG.md"
+    trigger: "需要审计 Architecture Gray Areas"
+  - path: "process/checks/CP3-CR102-DISCUSSION-CHECKPOINT.json"
+    trigger: "需要恢复 CP3 讨论状态"
+
+do_not_read_by_default:
+  - path_or_pattern: "NAS actual mount/export/package exchange root"
+    reason: "真实路径未授权且为 UNSET_BY_USER"
+  - path_or_pattern: ".env*"
+    reason: "凭据/env 读取未授权"
+  - path_or_pattern: "credential/account/runtime logs"
+    reason: "凭据、账户和 runtime 日志读取未授权"
+  - path_or_pattern: "QMT/MiniQMT/XtQuant/gateway runtime"
+    reason: "runtime 启动/连接未授权"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不属于当前 gate 默认上下文"
+
+key_facts:
+  scope_summary: "CR102 CP3 only reviews NAS real package exchange authorization architecture; it does not authorize any real NAS operation."
+  recommended_architecture: "two-plane authorization design: authorization ledger + future execution plan shell + evidence schema"
+  nas_path_status: "UNSET_BY_USER"
+  nas_mount_status: "not-authorized"
+  permission_status: "all false until explicit future authorization"
+  accepted_decisions:
+    - "DQ-CP2-CR102-01..05 approved at 2026-06-20T21:29:44+08:00"
+  active_constraints:
+    - "nas_access/list/read/write/copy/publish/pull/delete/mount/check false"
+    - "credential/env/account read false"
+    - "QMT/MiniQMT/XtQuant/gateway runtime false"
+    - "submit/cancel/simulation/live false"
+    - "provider/lake/catalog publish false"
+  downstream_tasks:
+    - "If CP3 approved, prepare CP5 design package only: authorization matrix, execution plan shell, evidence schema."
+    - "Do not execute NAS or runtime operations before a future explicit runtime authorization gate."
+  traceability:
+    requirements:
+      - "RA-CR101-003 NAS real package exchange validation authorization gate"
+    use_cases:
+      - "UC-CR102-01 CP3 design-only gate"
+      - "UC-CR102-02 future check-only authorization if explicitly granted"
+      - "UC-CR102-03 high-risk publish/pull/copy request remains blocked"
+    scenarios: []
+    stories: []
+    features: []
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP3-CR102-01"
+    - "DQ-CP3-CR102-02"
+    - "DQ-CP3-CR102-03"
+    - "DQ-CP3-CR102-04"
+    - "DQ-CP3-CR102-05"
+  non_authorized_items:
+    - "real NAS access/list/read/write/copy/publish/pull/delete/mount/check"
+    - "credential/env/account read"
+    - "QMT/MiniQMT/XtQuant/gateway runtime"
+    - "submit/cancel/buy/sell/simulation/live"
+    - "provider fetch/lake write/catalog publish"
+    - "CR089 or CR020 auto-restore"
+  risk_acceptance_items:
+    - "CR089 nas_package_exchange semantic overlap remains PASS_WITH_RISK; CR102 does not restore CR089."
+    - "CP3 approval can move to CP5 design-only while execution remains blocked."
+  open_questions:
+    - "True NAS path/export/root/mount/identity remains UNSET_BY_USER."
+    - "No read/write/copy/publish/pull/delete/check operation is authorized."
+  n_a_or_waived_items:
+    - "BLUEPRINT/DOMAIN-MAP/DEPENDENCY-MAP N/A for single runtime authorization gate; HLD records N/A in CP3 precheck."
+
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output:
+    - "CP3 human gate launch"
+    - "If approved, CP5 design package preparation"
+  exit_criteria:
+    - "CP3 checkpoint approved"
+    - "No NAS/env/runtime/trading/publish operation executed"
+  blocked_if_missing:
+    - "User decision on DQ-CP3-CR102-01..05"
+
+read_expansion_log:
+  - at: "2026-06-20T21:49:03+08:00"
+    actor: "host-orchestrator"
+    expanded_to: "CP2 review, CR102 formal CR, CR100/CR101 local HLD examples, CR index"
+    reason: "CP3 HLD needed local pattern and boundary traceability; no NAS/env/runtime source was read."
+
+validation:
+  generated_from_sources:
+    - "process/checkpoints/CP2-CR102-NAS-REAL-PACKAGE-EXCHANGE-SCOPE-REVIEW.md"
+    - "process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md"
+    - "docs/qmt/CR100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-HLD.md"
+    - "docs/qmt/CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-HLD.md"
+  missing_sources:
+    - "true NAS path/export/root/mount/identity: UNSET_BY_USER, intentionally missing"
+  consistency_status: "pass"
+  notes:
+    - "CP3 gate is ready for human review; execution remains blocked."

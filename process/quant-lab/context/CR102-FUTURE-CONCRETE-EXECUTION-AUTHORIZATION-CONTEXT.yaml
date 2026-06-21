@@ -1,0 +1,62 @@
+schema_version: "1.0"
+capsule_id: "CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "quant-lab-cr102"
+phase: "story-planning"
+checkpoint: "future-concrete-execution-authorization"
+status: "ready-for-human-gate"
+created_at: "2026-06-21T08:39:38+08:00"
+source_cr: "CR-102"
+source_candidate: "RA-CR101-003"
+read_profile: "compact"
+default_read_policy: "capsule-first"
+full_doc_read_policy: "read full docs only when capsule is missing, inconsistent, insufficient for audit, or user requests deep review"
+must_read:
+  - path: "process/checks/CR102-NAS-REAL-PACKAGE-EXCHANGE-FILLED-AUTHORIZATION-TEMPLATE.md"
+    reason: "filled user-provided path, object scope, identity and credential boundary"
+  - path: "process/checks/CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION-INPUT-LIST.md"
+    reason: "minimum input list and fail-closed rules"
+  - path: "process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md"
+    reason: "formal CR status and no-execution baseline"
+read_if_needed:
+  - path: "docs/release/NAS-DIRECTORY-MAP-CR059.md"
+    trigger: "verify local CR059 path planning only; do not access NAS"
+  - path: "process/checkpoints/CR102-FUTURE-RUNTIME-AUTHORIZATION-GATE-REVIEW.md"
+    trigger: "verify prior approved runtime preparation gate"
+  - path: "process/checkpoints/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md"
+    trigger: "verify CP5 design-only constraints"
+do_not_read_by_default:
+  - path: "real NAS contents under /mnt/*"
+    reason: "not authorized until this concrete execution gate is approved"
+  - path: ".env / credential / account / raw runtime logs"
+    reason: "credential_source=none-needed; credential/env/account read remains forbidden"
+  - path: "QMT/MiniQMT/XtQuant/gateway runtime"
+    reason: "out of CR102 concrete NAS package exchange gate"
+key_facts:
+  release_id: "cr102-test-strategy-package-v0.1-20260621T003214Z"
+  object_scope: "test_strategy_package/v0.1/cr102-test-strategy-package-v0.1-20260621T003214Z"
+  research_machine:
+    nas_label: "quant-lab-primary"
+    primary_mount_root: "/mnt/quant-lab-primary"
+    hot_staging_root: "/mnt/quant-lab-hot/staging/release"
+    package_exchange_root: "/mnt/quant-lab-primary/broker/package-exchange"
+    source_package_path_or_label: "/mnt/quant-lab-hot/staging/release/test_strategy_package/v0.1/cr102-test-strategy-package-v0.1-20260621T003214Z"
+    target_package_path_or_label: "/mnt/quant-lab-primary/broker/package-exchange/packages/test_strategy_package/v0.1/cr102-test-strategy-package-v0.1-20260621T003214Z"
+    publish_path_or_label: "/mnt/quant-lab-primary/broker/package-exchange/releases/test_strategy_package/v0.1/cr102-test-strategy-package-v0.1-20260621T003214Z"
+  execution_machine:
+    mount_root: "manual-execution-machine-side"
+    pull_target_path_or_label: "manual-execution-machine-verification"
+    agent_access_authorized: false
+  authorization_inputs:
+    authorized_identity_label: "current-shell-user"
+    credential_source: "none-needed"
+    mount_required: false
+    network_probe_authorized: false
+    delete_authorized: false
+  current_turn_external_access_performed: false
+validation:
+  permission_boundary_result: "PASS_WITH_RISK for gate preparation; real NAS execution awaits manual approve"
+  runtime_risk_result: "PASS_WITH_RISK; timeout/on_failure/rollback/evidence required in gate"
+  nas_access_performed: false
+  credential_or_env_read_performed: false
+  runtime_started: false

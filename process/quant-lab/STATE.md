@@ -1,15 +1,15 @@
 ---
 project_id: quant-lab
 workflow_mode: production
-current_phase: delivered
+current_phase: story-planning
 current_agent: host-orchestrator
-active_change: ''
+active_change: 'CR-103'
 active_story: ''
-iteration: 570
+iteration: 580
 blocked: false
 blocked_reason: ''
-last_action: "用户回复“批准，并推送到远端”；CR101 CP8 已回填 approved，当前离线交付关闭为 closed-current-delivery / READY_WITH_RISK。该批准不授权真实 NAS、凭据、QMT/MiniQMT/XtQuant/gateway runtime、simulation/live、交易、provider/lake/catalog publish 或后续真实验证 gate。"
-next_action: "按用户授权提交并推送本轮 CR101 代码与过程台账到各自远端；推送仅覆盖 Git 远端写入，不授权真实 NAS、凭据、runtime、交易或 publish。"
+last_action: "用户要求启动 QMT/MiniQMT 验证实验并另起明日交易日验证 CR。已创建 CR103 非交易日验证实验并完成本地 checker/fixture/dry-run 验证：CR089 package checker PASS，QMT/MiniQMT 合同回归 125 passed；修正 tests/test_cr019_qmt_endpoint_matrix.py 中 positions 无 transport 阻断口径。已创建 CR104 交易日 runtime validation gate，当前 blocked/cp2_pending。"
+next_action: "准备 CR103 CP8 收口确认，或在 2026-06-22 交易日前准备 CR104 CP2 runtime authorization Decision Brief。未获 CR104 CP2 明确批准前，不启动 QMT/MiniQMT/XtQuant/gateway，不读取 env/凭据/账户，不执行 submit/cancel/simulation/live。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -124,35 +124,35 @@ artifact_routing:
   health_status: "local-remediation-complete"
   updated_at: "2026-06-17T19:50:00+08:00"
 cr_tracking:
-  status: "no-active-formal-cr"
+  status: "active-formal-cr"
   schema_version: 2
   index_path: process/changes/CR-INDEX.yaml
   current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-  last_consistency_check: '2026-06-20T10:13:18+08:00 closed: CR101 CP8 approved by user reply 批准，并推送到远端; CR101 current offline delivery closed as READY_WITH_RISK. No real NAS access/list/read/copy/write/publish/delete, credential/env/account read, QMT/MiniQMT/XtQuant/gateway runtime, submit/cancel, simulation/live, provider/lake/catalog publish, CR089 auto-start or CR020 route restore authorized.'
+  last_consistency_check: '2026-06-21T13:31:01+08:00 active: CR103 non-trading-day QMT/MiniQMT validation PASS_WITH_RISK with local checker and fixture-only regression; CR104 trading-day runtime validation gate created as blocked/cp2_pending for 2026-06-22. No QMT/MiniQMT/XtQuant/gateway runtime started; no env/credential/account read; no submit/cancel/simulation/live.'
 	  next_action_queue:
 	  - candidate_id: RA-CR101-001
 	    legacy_ids:
 	    - QMT-DIRECT-RUN-VALIDATION-FU
 	    title: QMT direct-run validation authorization gate
-	    formal_cr_path: ""
-	    recommended_action: wait_for_user_selection_and_runtime_authorization
-	    gate_status: not_started
+	    formal_cr_path: process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md
+	    recommended_action: wait_for_cr104_cp2_runtime_authorization
+	    gate_status: cp2_pending
 	    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
 	  - candidate_id: RA-CR101-002
 	    legacy_ids:
 	    - MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU
 	    title: MiniQMT gateway adapter validation authorization gate
-	    formal_cr_path: ""
-	    recommended_action: wait_for_user_selection_and_runtime_authorization
-	    gate_status: not_started
+	    formal_cr_path: process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md
+	    recommended_action: wait_for_cr104_cp2_runtime_authorization
+	    gate_status: cp2_pending
 	    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
 	  - candidate_id: RA-CR101-003
 	    legacy_ids:
 	    - NAS-REAL-EXCHANGE-FU
 	    title: NAS real package exchange validation authorization gate
-	    formal_cr_path: ""
-	    recommended_action: wait_for_user_selection_and_nas_authorization
-	    gate_status: not_started
+	    formal_cr_path: process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
+	    recommended_action: prepare_cr102_cp8_closure_confirmation
+	    gate_status: cp8_pending
 	    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
 	  - candidate_id: FU-CR101-001
 	    legacy_ids:
@@ -165,6 +165,67 @@ cr_tracking:
 	    gate_status: not_started
 	    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
   active_crs:
+  - id: CR-102
+    title: NAS Real Package Exchange Validation Authorization Gate
+    status: active-real-nas-package-exchange-validated-pass-pending-cp8
+    lifecycle_status: active
+    readiness_status: ready_with_risk
+    gate_status: cp8_pending
+    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    formal_cr_path: process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
+    parent_cr: CR-101
+    source_decision_id: DQ-CP8-CR101-04
+    priority: 3
+    blocked_by: 'No execution blocker remains for CR102 package exchange validation. Research-machine-side NAS package exchange PASS; execution-machine manual pull/readback PASS via per-file relative path / sha256 / bytes evidence recorded at runs/RUN-EXEC-20260621-003.md. Remaining action is CP8 closure confirmation / risk acceptance. No credential/env/account read, QMT/MiniQMT/XtQuant/gateway runtime, submit/cancel, simulation/live, provider/lake/catalog publish, delete, mount or network probe performed by agent.'
+    impact_surface:
+    - nas_package_exchange
+    - package_publish
+    - package_pull
+    - package_copy
+    - package_check
+    - nas_path_mount_permission
+    - credential_boundary
+    - redacted_evidence
+    conflict_keys:
+    - nas_package_exchange
+    - path_mount_permission
+    - credential_boundary
+    - no_runtime_connection
+    - no_order_write
+    - no_provider_lake_publish
+    - CR-089-overlap
+    next_gate: future concrete execution authorization required
+    next_action: "请用户在执行机侧用真实 UNC 路径或映射盘根目录重跑只读验证，或改验 release publish 区；回传脱敏结果。当前不再执行额外 NAS/env/runtime/trading/provider 动作。"
+    last_checked_at: '2026-06-21T08:50:29+08:00'
+  - id: CR-103
+    title: QMT/MiniQMT Non-Trading-Day Validation Experiment
+    status: active-non-trading-day-validation-pass-pending-cp8
+    lifecycle_status: active
+    readiness_status: ready_with_risk
+    gate_status: cp8_pending
+    source_tracking: USER-20260621-QMT-MINIQMT-VALIDATION-EXPERIMENT
+    formal_cr_path: process/changes/CR-103-QMT-MINIQMT-NON-TRADING-DAY-VALIDATION-EXPERIMENT-2026-06-21.md
+    parent_cr: CR-101
+    source_decision_id: DQ-CP8-CR101-04
+    priority: 1
+    blocked_by: 'No non-trading-day validation blocker remains. Local package checker PASS and QMT/MiniQMT fixture regression PASS with 125 tests. Remaining runtime validation moved to CR104. No QMT/MiniQMT/XtQuant/gateway runtime, env/credential/account read, submit/cancel/simulation/live performed.'
+    impact_surface:
+    - qmt_direct_run_target
+    - miniqmt_gateway_adapter
+    - readonly_gateway
+    - endpoint_matrix
+    - redacted_evidence
+    - credential_boundary
+    conflict_keys:
+    - qmt_runtime
+    - miniqmt_gateway_runtime
+    - runtime_authorization
+    - readonly_query_positions
+    - credential_boundary
+    - no_order_write
+    next_gate: cp8 closure confirmation
+    next_action: 准备 CR103 CP8 收口确认；真实 runtime 转入 CR104。
+    last_checked_at: '2026-06-21T13:31:01+08:00'
   - id: CR-101
     title: Cross-Platform Strategy Delivery and Adapter Layer Realignment
     status: closed-current-delivery
@@ -1941,6 +2002,37 @@ cr_tracking:
     next_gate: blocked pending target/adapter realignment or independent runtime authorization
     next_action: CR089 仍保持 blocked-readiness-approved。基于 2026-06-19 用户纠正，启动真实 package/interface 路线前应先由 CR091-FU-05 重对齐 manifest target taxonomy、QMT direct-run target 和 quant-lab runner adapter layer；不授权 NAS/QMT/credential/account/trading action。
     last_checked_at: '2026-06-19T19:35:00+08:00'
+  - id: CR-104
+    title: QMT/MiniQMT Trading-Day Runtime Validation Gate
+    status: blocked-awaiting-trading-day-cp2-authorization
+    lifecycle_status: blocked
+    readiness_status: not_ready
+    gate_status: cp2_pending
+    source_tracking: USER-20260621-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION
+    formal_cr_path: process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md
+    parent_cr: CR-101
+    source_decision_id: DQ-CP8-CR101-04
+    priority: 1
+    blocked_by: "Awaiting 2026-06-22 trading-day CP2 runtime authorization and user-provided execution host / evidence scope. No QMT/MiniQMT/XtQuant/gateway runtime, env/credential/account read, query_positions, submit/cancel/simulation/live authorized before CP2 approval."
+    impact_surface:
+    - qmt_direct_run_target
+    - qmt_terminal_runtime
+    - miniqmt_gateway_adapter
+    - readonly_gateway
+    - readonly_query_positions
+    - runtime_authorization
+    - redacted_evidence
+    - credential_boundary
+    conflict_keys:
+    - qmt_runtime
+    - miniqmt_gateway_runtime
+    - runtime_authorization
+    - readonly_query_positions
+    - credential_boundary
+    - no_order_write
+    next_gate: cp2 runtime authorization
+    next_action: "准备 CR104 CP2 runtime_authorization Decision Brief；等待用户在 2026-06-22 交易日提供执行主机、账户模式、证据脱敏范围并 approve。"
+    last_checked_at: '2026-06-21T13:31:01+08:00'
   follow_up_candidates:
   - id: CR-026
     title: Qlib isolated runner optional Spike (narrowed after CR030-039 coverage)
@@ -2195,14 +2287,41 @@ human_gate_decisions:
   active_checkpoint: ''
   active_launch_message: ''
   pending_gate: ''
-  approved_gate: CP8-CR101-DELIVERY-READINESS
-  approved_at: '2026-06-20T10:13:18+08:00'
+  approved_gate: CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION
+  approved_at: '2026-06-21T08:47:58+08:00'
   approved_by: user
-  approval_input: '用户回复“批准，并推送到远端”，按 CR101 CP8 approve 处理；接受 DQ-CP8-CR101-01..05 的推荐方案，关闭 CR101 当前离线交付为 READY_WITH_RISK。该批准不授权 NAS、凭据、账户/持仓/委托/成交/原始日志、QMT/MiniQMT/XtQuant/gateway runtime、simulation/live、交易、provider/lake/catalog publish、CR089/CR020/order-write 自动恢复或后续真实验证 gate。'
+  approval_input: '用户回复 approve，按 CR102 future concrete execution authorization gate approve 处理；接受 DQ-CONCRETE-CR102-01..06 推荐方案；授权研究机侧 NAS package exchange 验证，执行机侧 pull/readback 为 manual-execution-machine-verification。不授权读取凭据/env/账户，不授权 QMT/MiniQMT/XtQuant/gateway runtime、submit/cancel、simulation/live、provider/lake/catalog publish、delete、mount、network_probe 或执行机路径访问。'
   pending_checklist_path: ''
-  launch_message_path: process/checks/CP8-CR101-HUMAN-GATE-LAUNCH-MESSAGE.md
+  launch_message_path: process/checks/CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION-LAUNCH-MESSAGE.md
   pending_decision_ids: []
   accepted_decision_ids:
+  - DQ-CONCRETE-CR102-01
+  - DQ-CONCRETE-CR102-02
+  - DQ-CONCRETE-CR102-03
+  - DQ-CONCRETE-CR102-04
+  - DQ-CONCRETE-CR102-05
+  - DQ-CONCRETE-CR102-06
+  - DQ-RUNTIME-CR102-01
+  - DQ-RUNTIME-CR102-02
+  - DQ-RUNTIME-CR102-03
+  - DQ-RUNTIME-CR102-04
+  - DQ-RUNTIME-CR102-05
+  - DQ-RUNTIME-CR102-06
+  - DQ-CP5-CR102-01
+  - DQ-CP5-CR102-02
+  - DQ-CP5-CR102-03
+  - DQ-CP5-CR102-04
+  - DQ-CP5-CR102-05
+  - DQ-CP3-CR102-01
+  - DQ-CP3-CR102-02
+  - DQ-CP3-CR102-03
+  - DQ-CP3-CR102-04
+  - DQ-CP3-CR102-05
+  - DQ-CP2-CR102-01
+  - DQ-CP2-CR102-02
+  - DQ-CP2-CR102-03
+  - DQ-CP2-CR102-04
+  - DQ-CP2-CR102-05
   - DQ-CP8-CR101-01
   - DQ-CP8-CR101-02
   - DQ-CP8-CR101-03
@@ -2549,6 +2668,7 @@ human_gate_decisions:
   - DQ-CP5-CR074-04
   - DQ-CP5-CR074-05
   non_authorized_items:
+  - CR102 CP5 已 approved；本批准只接受 CP5 design-only 设计包和 PASS_WITH_RISK 风险接受，不授权真实 NAS access/list/read/write/copy/publish/pull/delete/check/mount，不授权读取凭据/env/账户，不授权 QMT/MiniQMT/XtQuant/gateway runtime，不授权 submit/cancel/simulation/live，不授权 provider/lake/catalog publish。
   - CR101 CP2 已 approved；approve 只接受 scope / architecture / implementation / runtime_authorization / risk_acceptance 推荐方案，不授权 NAS、.env/credential/account、QMT/MiniQMT/XtQuant/gateway runtime、submit/cancel、simulation/live、provider/lake/catalog publish 或 CR089 auto-start。
   - CR046 CP8 已 approved 并关闭当前 READY_WITH_RISK；approve 只接受 framework-first 文档 / 契约交付和 R-CR046-CP7-001..003 / REV-CR046-004 风险，不授权 QMT/MiniQMT/XtQuant/gateway、NAS、.env/credential/account、submit/cancel、simulation/live、provider/lake/catalog，也不自动启动 CR089 或 CR091。
   - CR089 CP2/CP3/CP5 已 approved；本批准仅接受策略包 / NAS package exchange / 交易主机本地缓存 / 只读 smoke 边界的推荐方案，不授权 NAS 内容读写列取复制发布、不授权凭据读取、不授权 QMT/MiniQMT/XtQuant/gateway 启动、不授权账户原文查询、不授权 submit/cancel/simulation/live、不恢复 CR020、不激活 CR089、不恢复 CR046 CP7。
@@ -2580,6 +2700,28 @@ human_gate_decisions:
   - 不执行 optional groups、full tests、章节研究 smoke、删除 .venv 或 destructive cleanup。
   - 不恢复或推进 CR046 CP7。
   pending_human_decisions:
+  - {id: DQ-CONCRETE-CR102-01, gate: CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION, decision_type: runtime_authorization, question: "是否授权本轮进入真实研究机侧 NAS package exchange 验证？", recommendation: "授权 agent-assisted 研究机侧验证，限定为本 release id 的 staging -> package exchange -> release label；执行机侧只做手工验证记录。", alternatives: ["只生成 runbook 不执行", "只做 check/list/read 不 write/publish", "取消 CR102 真实 NAS 验证"], pros_cons: "推荐方案能完成策略研究机到执行机包交换链路的研究机侧真实验证；备选更保守但验证不足。", impact_risk: "涉及真实 NAS 写入 / publish label，风险为路径污染、半写入、覆盖误操作。", rollback_switch: "若执行前发现路径冲突、权限异常或用户撤回，停止并回到本门禁修订；执行机验证失败时记录为 manual follow-up，不重复写 NAS。", status: accepted, answer: "approve at 2026-06-21T08:47:58+08:00", source: process/checkpoints/CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION-GATE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T08:39:38+08:00"}
+  - {id: DQ-CONCRETE-CR102-02, gate: CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION, decision_type: security, question: "是否采用 CR059 研究机路径和用户确认身份 / 凭据边界？", recommendation: "采用 CR059 本地规划路径；mount_required=false，network_probe_authorized=false，authorized_identity_label=current-shell-user，credential_source=none-needed。", alternatives: ["用户另给本地 build source path", "改为完全手工执行", "授权 mount/network probe"], pros_cons: "推荐方案避免凭据和网络探测；备选会扩大权限或降低自动证据。", impact_risk: "CR059 是本地规划文档，真实 mount 状态在执行前才会以最小动作验证；不读取凭据。", rollback_switch: "若路径不存在或权限不足，按 rollback-then-stop 停止，并要求用户修订路径或手工处理。", status: accepted, answer: "approve at 2026-06-21T08:47:58+08:00", source: process/checkpoints/CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION-GATE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T08:39:38+08:00"}
+  - {id: DQ-CONCRETE-CR102-03, gate: CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION, decision_type: runtime_authorization, question: "本轮 operation allowlist / denylist 如何冻结？", recommendation: "allowlist: access,check,list,read,copy,write,publish；manual: pull/readback on execution machine；denylist: delete,mount,network_probe,credential_read,runtime,trading,provider_lake_catalog_publish。", alternatives: ["去掉 publish 只写 package target", "去掉 write/copy 只做 check/list/read", "另起 delete/mount gate"], pros_cons: "推荐方案覆盖真实包交换所需最小动作；备选降低风险但不能完整证明交换。", impact_risk: "写入和 publish 可能改变 NAS 状态；list/read 可能暴露路径元数据，必须摘要化。", rollback_switch: "任一操作超出 allowlist 时立即停止；delete/mount/network_probe 不由本门禁放行。", status: accepted, answer: "approve at 2026-06-21T08:47:58+08:00", source: process/checkpoints/CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION-GATE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T08:39:38+08:00"}
+  - {id: DQ-CONCRETE-CR102-04, gate: CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION, decision_type: implementation, question: "目录创建、覆盖、原子写和回滚策略是否按模板执行？", recommendation: "directory_create_policy=create-if-missing-only，scope 限定到 target release 子目录；overwrite_policy=forbid-overwrite；atomic_write_policy=temp-file-then-rename；on_failure=rollback-then-stop；timeout_seconds=300。", alternatives: ["overwrite-with-backup", "手工预创建目录", "source-only 检查不写入"], pros_cons: "推荐方案能最小化污染并保留可回滚路径；备选要么风险更高要么不完成交换。", impact_risk: "目录创建和写入会改变 NAS 状态；覆盖禁止可防止误伤既有包。", rollback_switch: "目标已存在或无法确认空目录时停止，不覆盖；只清理本次 temp 文件，不删除既有正式包。", status: accepted, answer: "approve at 2026-06-21T08:47:58+08:00", source: process/checkpoints/CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION-GATE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T08:39:38+08:00"}
+  - {id: DQ-CONCRETE-CR102-05, gate: CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION, decision_type: security, question: "evidence 如何脱敏并保存？", recommendation: "使用 redacted-hash-count；只保存 status、operation、nas_label、object_label、hash、count、bytes、timestamp、operator_label、rollback_status 到 process/checks/CR102-NAS-REAL-PACKAGE-EXCHANGE-EVIDENCE.md。", alternatives: ["用户手工 evidence", "只记录 pass/fail 无 hash", "保存原始日志"], pros_cons: "推荐方案可审计且不泄露内容；手工 evidence 安全但依赖人工；pass/fail 可审计性弱；原始日志不可接受。", impact_risk: "hash/bytes/count 仍是元数据，必须限定到本 release id；禁止 raw path/raw log/secret/account。", rollback_switch: "evidence 发现 forbidden field 时拒绝写入并要求脱敏；保留本地 process evidence，不写 NAS evidence。", status: accepted, answer: "approve at 2026-06-21T08:47:58+08:00", source: process/checkpoints/CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION-GATE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T08:39:38+08:00"}
+  - {id: DQ-CONCRETE-CR102-06, gate: CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION, decision_type: risk_acceptance, question: "是否接受执行机侧 pull/readback 由用户手工验证带来的残余风险？", recommendation: "接受：agent 不访问执行机路径；本轮研究机侧验证完成后，执行机侧 evidence 由用户补充或后续另起 gate。", alternatives: ["用户提供执行机 mount root 后重出门禁", "本轮不声明执行机验证完成", "取消 pull/readback 目标"], pros_cons: "推荐方案尊重执行机路径差异且避免越权；备选可更完整但需新输入或降低目标。", impact_risk: "本轮不能由 agent 证明执行机真实 pull 成功，只能证明研究机侧发布路径准备完成。", rollback_switch: "用户后续提供执行机 evidence 或 mount root 时，重开 execution-machine verification gate；本轮不自动补跑。", status: accepted, answer: "approve at 2026-06-21T08:47:58+08:00", source: process/checkpoints/CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION-GATE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T08:39:38+08:00"}
+  - {id: DQ-RUNTIME-CR102-01, gate: CR102-FUTURE-RUNTIME-AUTHORIZATION, decision_type: runtime_authorization, question: "是否允许 CR102 从 CP5 design-only 状态进入 future runtime authorization 分支？", recommendation: "允许进入准备授权输入分支，但本轮仍不执行；只建立后续需要用户显式提供的输入清单。", alternatives: ["暂缓，保持 active-cp5-approved-no-execution-authorized", "关闭 CR102 为 blocked", "取消真实 NAS gate"], pros_cons: "推荐方案保留可审计推进路径且不触碰外部系统；暂缓最保守但无进展；关闭/取消会保留真实 NAS 验证缺口。", impact_risk: "影响 CR102 后续是否继续收集 path/mount/permission/operation/evidence 输入。", rollback_switch: "reject 时 CR102 保持 CP5 approved / no-execution；任何真实动作仍需后续具体执行门禁。", status: accepted, answer: "approve at 2026-06-21T07:15:15+08:00", source: process/checkpoints/CR102-FUTURE-RUNTIME-AUTHORIZATION-GATE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T07:15:15+08:00"}
+  - {id: DQ-RUNTIME-CR102-02, gate: CR102-FUTURE-RUNTIME-AUTHORIZATION, decision_type: security, question: "真实 NAS path/export/root/mount/identity 是否可由用户在后续输入中提供？", recommendation: "只允许用户显式提供脱敏 label 或逐项文本；agent 不发现、不列取、不探测、不读取 env、不检查 mount。", alternatives: ["用户现在提供具体值但仍不授权访问", "线下人工确认后回传脱敏摘要", "授权 agent 探测"], pros_cons: "推荐方案避免路径泄漏和越权探测；用户提供值可加速但需重审；线下确认安全但依赖人工；agent 探测风险高。", impact_risk: "影响 path 泄露、凭据读取和 NAS 发现面；没有这些输入，任何运行仍 fail closed。", rollback_switch: "用户提供具体值后只写入授权草案，不得自动访问；要求 agent 探测时另起更高风险门禁。", status: accepted, answer: "approve at 2026-06-21T07:15:15+08:00", source: process/checkpoints/CR102-FUTURE-RUNTIME-AUTHORIZATION-GATE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T07:15:15+08:00"}
+  - {id: DQ-RUNTIME-CR102-03, gate: CR102-FUTURE-RUNTIME-AUTHORIZATION, decision_type: runtime_authorization, question: "是否允许后续授权 check 操作作为最低风险真实 NAS 动作候选？", recommendation: "仅允许 check-only 候选资格；未来可评审 check=true，但必须同时具备 path/mount/identity/object scope/evidence/rollback；本轮 check 仍为 false。", alternatives: ["所有 NAS 操作继续 false", "同时允许 list/read 候选", "允许 copy/pull/write/publish/delete 候选"], pros_cons: "推荐方案保留最小真实验证路径；全部 false 最安全但无法真实验证；读写类风险更高。", impact_risk: "check 也可能触发目录状态、权限或元数据暴露；必须限制为脱敏 pass/fail/hash/count。", rollback_switch: "缺任一输入或用户未再次 approve 时 check 保持 false；list/read/write/publish/delete 拆独立 gate。", status: accepted, answer: "approve at 2026-06-21T07:15:15+08:00", source: process/checkpoints/CR102-FUTURE-RUNTIME-AUTHORIZATION-GATE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T07:15:15+08:00"}
+  - {id: DQ-RUNTIME-CR102-04, gate: CR102-FUTURE-RUNTIME-AUTHORIZATION, decision_type: risk_acceptance, question: "write/copy/publish/pull/delete 是否必须拆成 high-risk gate？", recommendation: "是；任何 write/copy/publish/pull/delete 都不得由本门禁直接放行，必须另起 high-risk runtime gate。", alternatives: ["将 pull/copy 合并进 check gate", "将 publish/write/delete 合并进当前 CR102", "全部取消"], pros_cons: "推荐方案权限最小；合并 pull/copy 可能接触真实包内容；合并 publish/write/delete 可能改变 NAS 状态；取消会关闭交付验证路线。", impact_risk: "publish/write/delete 可能造成真实包覆盖、污染或删除；pull/copy 可能复制敏感内容。", rollback_switch: "用户明确选择某类写/复制操作时，新建独立 DQ 和 rollback/evidence 设计，不复用本门禁 approve。", status: accepted, answer: "approve at 2026-06-21T07:15:15+08:00", source: process/checkpoints/CR102-FUTURE-RUNTIME-AUTHORIZATION-GATE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T07:15:15+08:00"}
+  - {id: DQ-RUNTIME-CR102-05, gate: CR102-FUTURE-RUNTIME-AUTHORIZATION, decision_type: security, question: "evidence 是否继续 redacted-only 且禁止凭据/env/账户/runtime 原文？", recommendation: "是；只允许 status/hash/count/pass-fail 和用户提供的脱敏 label；禁止 token/secret/password/account/raw log/raw path/runtime output。", alternatives: ["用户手工上传脱敏 evidence", "允许本地 checker 生成 evidence", "允许原始日志作为附件"], pros_cons: "推荐方案最小化敏感面；手工脱敏可验证但依赖人工；checker 需要新实现和运行授权；原始日志不可接受。", impact_risk: "影响证据可审计性和敏感信息泄漏风险。", rollback_switch: "evidence 含 forbidden fields 时必须 reject；如需 checker，先走实现设计与运行授权。", status: accepted, answer: "approve at 2026-06-21T07:15:15+08:00", source: process/checkpoints/CR102-FUTURE-RUNTIME-AUTHORIZATION-GATE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T07:15:15+08:00"}
+  - {id: DQ-RUNTIME-CR102-06, gate: CR102-FUTURE-RUNTIME-AUTHORIZATION, decision_type: implementation, question: "是否允许把 CP5 execution plan shell 升级为后续人工 runbook 候选？", recommendation: "允许作为人工 runbook 候选，但当前不写命令、不实现 checker、不执行；后续必须补 timeout、on_failure、rollback、dry-run/手工步骤和操作 allowlist。", alternatives: ["只保留 design-only，不准备 runbook", "直接实现 checker/CLI", "直接执行人工步骤"], pros_cons: "推荐方案为后续执行做准备且不越权；design-only 最保守但后续仍需重新设计；直接实现或执行当前越权风险高。", impact_risk: "影响后续是否能形成可审计执行计划；直接实现或执行可能被误用为 NAS check。", rollback_switch: "若用户要求 checker/CLI 或人工执行，必须另起 CP5/CP6/CP7 或 runtime execution gate，不由本轮 approve 覆盖。", status: accepted, answer: "approve at 2026-06-21T07:15:15+08:00", source: process/checkpoints/CR102-FUTURE-RUNTIME-AUTHORIZATION-GATE-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T07:15:15+08:00"}
+  - {id: DQ-CP5-CR102-01, gate: CP5, decision_type: implementation, question: "是否批准当前 CP5 design-only 设计包？", recommendation: "批准 DESIGN / TEST-PLAN / TASKS / full LLD，后续只允许本地账本和设计收敛。", alternatives: ["修改后重提 CP5", "reject 回 CP3 approved", "只保留 HLD 不进入 CP5"], pros_cons: "推荐方案让后续授权门禁可计算；修改可更精细但延后；reject 保持 CR102 active blocked；HLD-only 缺少执行前设计细节。", impact_risk: "影响 CP5 状态、后续 runtime gate 输入和审计链。", rollback_switch: "发现 matrix/schema/shell 缺口时重提 CP5；reject 时保持 cp3-approved-no-execution。", status: accepted, answer: "approve at 2026-06-21T06:45:46+08:00", source: process/checkpoints/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T06:45:46+08:00"}
+  - {id: DQ-CP5-CR102-02, gate: CP5, decision_type: security, question: "path/export/root/mount/identity 与 permission 是否继续 user-explicit-only？", recommendation: "保持全部 UNSET_BY_USER / not-authorized；agent 不发现、不探测、不读取 env。", alternatives: ["用户在修改中提供路径和身份但仍不授权访问", "暂停等线下确认", "授权 agent 探测"], pros_cons: "推荐方案安全边界最强；用户提供值需重审；线下确认会延后；agent 探测不推荐且越权风险高。", impact_risk: "防止路径泄漏、凭据读取和 NAS 探测。", rollback_switch: "用户后续提供具体值后，新建或重开 runtime_authorization gate。", status: accepted, answer: "approve at 2026-06-21T06:45:46+08:00", source: process/checkpoints/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T06:45:46+08:00"}
+  - {id: DQ-CP5-CR102-03, gate: CP5, decision_type: runtime_authorization, question: "CP5 approve 是否授权任何真实 NAS/env/runtime/trading/publish 动作？", recommendation: "不授权；CP5 approve 只批准设计包，真实动作全部继续 false。", alternatives: ["另起 per-run NAS check gate", "用户手工线下验证后回传脱敏 evidence", "授权 agent 代跑真实 NAS"], pros_cons: "推荐方案符合当前约束；per-run gate 可控但需新输入；手工 evidence 可降低 agent 权限；agent 代跑风险最高。", impact_risk: "防止 CP5 被误读为运行许可。", rollback_switch: "任何真实动作必须新建/重开 runtime_authorization gate，并重新打印授权范围。", status: accepted, answer: "approve at 2026-06-21T06:45:46+08:00", source: process/checkpoints/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T06:45:46+08:00"}
+  - {id: DQ-CP5-CR102-04, gate: CP5, decision_type: risk_acceptance, question: "是否接受 CP5 后 CR102 仍 blocked-for-execution？", recommendation: "接受 PASS_WITH_RISK：设计包 ready，但真实 NAS path/mount/permission/operation 仍未授权。", alternatives: ["阻塞到用户提供真实授权", "关闭 CR102 为 blocked", "取消真实 NAS gate"], pros_cons: "推荐方案保留可审计进展；阻塞会停止设计收敛；关闭/取消会保留真实验证缺口。", impact_risk: "不能声称真实 NAS ready，只能声称 authorization design ready。", rollback_switch: "用户不接受风险时，CR102 停在 CP5 pending 或回 CP3 修改。", status: accepted, answer: "approve at 2026-06-21T06:45:46+08:00", source: process/checkpoints/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T06:45:46+08:00"}
+  - {id: DQ-CP5-CR102-05, gate: CP5, decision_type: follow_up_tracking, question: "future check/publish/pull/copy/delete 等如何分流？", recommendation: "全部保持独立 future runtime gate，不自动启动；publish/delete/write/copy 需 high-risk gate。", alternatives: ["合并 check 到当前 CR102 后续", "合并 publish/pull/copy", "全部取消"], pros_cons: "推荐方案边界最窄；合并 check 仍需授权；合并写类操作风险高；取消会关闭真实验证路线。", impact_risk: "影响 RA-CR101-003 后续台账和 CR089 overlap。", rollback_switch: "用户明确选择某一 future gate 时再创建正式 CR 或更新 CR102。", status: accepted, answer: "approve at 2026-06-21T06:45:46+08:00", source: process/checkpoints/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-21T06:45:46+08:00"}
+  - {id: DQ-CP3-CR102-01, gate: CP3, decision_type: architecture, question: "是否批准 CR102 采用 two-plane authorization design？", recommendation: "批准 authorization ledger + future execution plan shell + evidence schema 分离架构。", alternatives: ["check-only direct design", "merge into CR089", "cancel real NAS gate"], pros_cons: "推荐方案权限最小且可审计；check-only 需要真实授权；merge CR089 会扩大 runtime 风险；cancel 会保留真实 NAS 缺口。", impact_risk: "影响 CP5 设计对象、后续 gate、CR089 边界和验证路径。", rollback_switch: "若用户要求直接 check，回 CP3 修改 DQ 并补 path/mount/permission；若合并 CR089，则 CR102 标记 superseded。", status: accepted, answer: "批准 at 2026-06-20T22:01:10+08:00", source: process/checkpoints/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T22:01:10+08:00"}
+  - {id: DQ-CP3-CR102-02, gate: CP3, decision_type: security, question: "path/export/root/mount/identity 与 permission 是否继续 user-explicit-only？", recommendation: "保持全部 UNSET_BY_USER / not-authorized；agent 不发现、不探测、不读取 env。", alternatives: ["用户在修改中提供路径和身份", "授权 agent 探测", "暂停等人工线下确认"], pros_cons: "推荐方案最安全；用户提供值可推进但需重审；agent 探测越权；线下确认会延后。", impact_risk: "防止 NAS 探测、凭据读取和路径泄漏。", rollback_switch: "用户提供具体值后，重生成 CP3/CP5 授权矩阵；未提供则 execution blocked。", status: accepted, answer: "批准 at 2026-06-20T22:01:10+08:00", source: process/checkpoints/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T22:01:10+08:00"}
+  - {id: DQ-CP3-CR102-03, gate: CP3, decision_type: implementation, question: "CP5 是否只产出设计包，不执行 NAS？", recommendation: "CP5 只产出 authorization matrix、execution plan shell、evidence schema、rollback checklist。", alternatives: ["CP5 直接实现 check 脚本", "CP5 直接执行只读 check", "只写文档关闭"], pros_cons: "推荐方案符合门禁；脚本实现仍可能被误执行；直接 check 越权；文档-only 不能提高 readiness。", impact_risk: "影响后续 Story/LLD/TASKS 和验证方式。", rollback_switch: "若用户要求脚本或 check，必须先明确操作授权和运行环境，再重出 CP5。", status: accepted, answer: "批准 at 2026-06-20T22:01:10+08:00", source: process/checkpoints/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T22:01:10+08:00"}
+  - {id: DQ-CP3-CR102-04, gate: CP3, decision_type: runtime_authorization, question: "CP3 approve 是否授权 NAS/env/runtime/trading/publish 动作？", recommendation: "不授权；所有真实动作继续 false。", alternatives: ["用户另起 per-run NAS check gate", "授权 agent 代跑真实 NAS", "授权 runtime/QMT 联动"], pros_cons: "推荐方案权限最小；per-run gate 可控但需输入；agent 代跑和 runtime 联动风险最高。", impact_risk: "防止 CP3 被误读为外部操作许可。", rollback_switch: "任何真实动作必须新建或重开 runtime_authorization gate，并重新打印授权范围。", status: accepted, answer: "批准 at 2026-06-20T22:01:10+08:00", source: process/checkpoints/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T22:01:10+08:00"}
+  - {id: DQ-CP3-CR102-05, gate: CP3, decision_type: risk_acceptance, question: "是否接受 CR089 overlap 与 CR102 blocked-for-execution 状态？", recommendation: "接受 PASS_WITH_RISK：CR102 只处理 NAS gate 架构，不恢复 CR089；CP3 后仍 blocked-for-execution。", alternatives: ["等 CR089 重评审", "合并 CR102 到 CR089", "取消 CR102"], pros_cons: "推荐方案边界最窄；等待或合并会阻塞/扩大风险；取消会关闭真实 NAS 路线。", impact_risk: "影响 CR tracking、follow-up backlog 和后续真实验证路线。", rollback_switch: "若用户不接受 overlap 风险，则 CR102 停止在 CP3 或 superseded。", status: accepted, answer: "批准 at 2026-06-20T22:01:10+08:00", source: process/checkpoints/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-REVIEW.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T22:01:10+08:00"}
   - {id: DQ-CP8-CR101-01, gate: CP8, decision_type: risk_acceptance, question: "是否按 READY_WITH_RISK 关闭 CR101 当前离线交付？", recommendation: "关闭为 READY_WITH_RISK；范围限于离线 contract / checker / evidence / docs。", alternatives: ["暂缓 CP8，要求补充真实验证", "退回 S04 修改文档"], pros_cons: "推荐方案权限最小且完成架构重对齐；真实验证会引入高权限；退回文档会延后关闭。", impact_risk: "不证明真实 QMT / NAS / MiniQMT / order-write ready。", rollback_switch: "若用户不接受残余风险，停止 CP8 并另起 runtime_authorization CR。", status: accepted, answer: "批准，并推送到远端 at 2026-06-20T10:13:18+08:00", source: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T10:13:18+08:00"}
   - {id: DQ-CP8-CR101-02, gate: CP8, decision_type: runtime_authorization, question: "CP8 approve 是否授权真实 NAS、凭据、QMT/MiniQMT/XtQuant/gateway runtime、simulation/live、交易或 publish？", recommendation: "不授权；CP8 只确认离线交付关闭。", alternatives: ["单独授权某个真实验证 gate", "授权 agent 代跑真实 runtime"], pros_cons: "推荐方案符合当前边界；单独 gate 可控；agent 代跑真实 runtime 风险最高。", impact_risk: "防止把设计 / 离线验证误读为真实运行授权。", rollback_switch: "任何真实动作必须新建 gate 并重新打印授权 / 不授权清单。", status: accepted, answer: "批准，并推送到远端 at 2026-06-20T10:13:18+08:00", source: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T10:13:18+08:00"}
   - {id: DQ-CP8-CR101-03, gate: CP8, decision_type: follow_up_tracking, question: "4 个后续 gate 如何处理？", recommendation: "全部登记为 candidate-not-started，不自动启动。", alternatives: ["立即启动 QMT direct-run validation", "立即启动 MiniQMT gateway validation"], pros_cons: "推荐方案避免越权；立即启动需要额外 runtime 证据和用户授权。", impact_risk: "影响 CR089 / order-write 后续路线，但不阻断 CR101 关闭。", rollback_switch: "用户指定 gate 时，先做冲突预检并分配新 CR。", status: accepted, answer: "批准，并推送到远端 at 2026-06-20T10:13:18+08:00", source: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md, owner_agent: host-orchestrator, updated_at: "2026-06-20T10:13:18+08:00"}
@@ -8586,6 +8728,84 @@ human_gate_decisions:
   - 不恢复或推进 CR046 CP7
   - 不执行 physical move / rename / delete 或 bulk import rewrite
 checkpoints:
+  cr102_nas_real_package_exchange:
+    type: cp5-design-only-readiness
+    status: cp5-approved-execution-blocked
+    change_id: CR-102
+    formal_cr: process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
+    parent_cr: CR-101
+    source_candidate: RA-CR101-003
+    source_decision_id: DQ-CP8-CR101-04
+    cp2_context: process/context/CP2-CR102-NAS-REAL-PACKAGE-EXCHANGE-CONTEXT.yaml
+    cp2_auto_result: process/checks/CP2-CR102-NAS-REAL-PACKAGE-EXCHANGE-SCOPE-PRECHECK.md
+    cp2_auto_status: PASS
+    cp2_manual_review: process/checkpoints/CP2-CR102-NAS-REAL-PACKAGE-EXCHANGE-SCOPE-REVIEW.md
+    cp2_manual_status: approved
+    cp2_launch_message: process/checks/CP2-CR102-HUMAN-GATE-LAUNCH-MESSAGE.md
+    cp3_context: process/context/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-CONTEXT.yaml
+    cp3_hld: docs/qmt/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-HLD.md
+    cp3_discussion_log: process/discussions/CP3-CR102-HLD-DISCUSSION-LOG.md
+    cp3_discussion_checkpoint: process/checks/CP3-CR102-DISCUSSION-CHECKPOINT.json
+    cp3_auto_result: process/checks/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-PRECHECK.md
+    cp3_auto_status: PASS
+    cp3_manual_review: process/checkpoints/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-REVIEW.md
+    cp3_manual_status: approved
+    cp3_approved_at: '2026-06-20T22:01:10+08:00'
+    cp3_launch_message: process/checks/CP3-CR102-HUMAN-GATE-LAUNCH-MESSAGE.md
+    cp5_context: process/context/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-CONTEXT.yaml
+    cp5_feature_design: docs/features/cr102-nas-real-package-exchange-authorization/DESIGN.md
+    cp5_test_plan: docs/features/cr102-nas-real-package-exchange-authorization/TEST-PLAN.md
+    cp5_tasks: docs/features/cr102-nas-real-package-exchange-authorization/TASKS.md
+    cp5_lld: process/stories/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-LLD.md
+    cp5_auto_result: process/checks/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md
+    cp5_auto_status: PASS
+    cp5_manual_review: process/checkpoints/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md
+    cp5_manual_status: approved
+    cp5_approved_at: '2026-06-21T06:45:46+08:00'
+    cp5_launch_message: process/checks/CP5-CR102-HUMAN-GATE-LAUNCH-MESSAGE.md
+    future_runtime_context: process/context/CR102-FUTURE-RUNTIME-AUTHORIZATION-CONTEXT.yaml
+    future_runtime_auto_result: process/checks/CR102-FUTURE-RUNTIME-AUTHORIZATION-PRECHECK.md
+    future_runtime_auto_status: PASS
+    future_runtime_manual_review: process/checkpoints/CR102-FUTURE-RUNTIME-AUTHORIZATION-GATE-REVIEW.md
+    future_runtime_manual_status: approved
+    future_runtime_approved_at: '2026-06-21T07:15:15+08:00'
+    future_runtime_launch_message: process/checks/CR102-FUTURE-RUNTIME-AUTHORIZATION-LAUNCH-MESSAGE.md
+    future_concrete_execution_input_list: process/checks/CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION-INPUT-LIST.md
+    future_concrete_execution_input_status: ready_for_user_input
+    future_concrete_execution_input_prepared_at: '2026-06-21T07:24:28+08:00'
+    filled_authorization_template: process/checks/CR102-NAS-REAL-PACKAGE-EXCHANGE-FILLED-AUTHORIZATION-TEMPLATE.md
+    filled_authorization_template_status: ready_for_user_completion
+    filled_authorization_template_prepared_at: '2026-06-21T08:12:42+08:00'
+    pending_decision_ids: []
+    approved_decision_ids:
+    - DQ-RUNTIME-CR102-01
+    - DQ-RUNTIME-CR102-02
+    - DQ-RUNTIME-CR102-03
+    - DQ-RUNTIME-CR102-04
+    - DQ-RUNTIME-CR102-05
+    - DQ-RUNTIME-CR102-06
+    - DQ-CP5-CR102-01
+    - DQ-CP5-CR102-02
+    - DQ-CP5-CR102-03
+    - DQ-CP5-CR102-04
+    - DQ-CP5-CR102-05
+    - DQ-CP3-CR102-01
+    - DQ-CP3-CR102-02
+    - DQ-CP3-CR102-03
+    - DQ-CP3-CR102-04
+    - DQ-CP3-CR102-05
+    - DQ-CP2-CR102-01
+    - DQ-CP2-CR102-02
+    - DQ-CP2-CR102-03
+    - DQ-CP2-CR102-04
+    - DQ-CP2-CR102-05
+    non_authorized_items:
+    - NAS access/list/read/write/copy/publish/pull/delete/check/mount
+    - credential/env/account read
+    - QMT/MiniQMT/XtQuant/gateway runtime
+    - submit/cancel/buy/sell/simulation/live
+    - provider fetch/lake write/catalog publish
+    - CR089 or CR020 auto-restore
   cr101_cross_platform_strategy_delivery:
     type: cp5-lld-batch-review
     status: cp5-approved-story-execution-ready
@@ -17151,16 +17371,37 @@ orchestrator_session:
   agent_name: host-orchestrator
   thread_id: ''
   workflow_id: local_backtest
-  active_change: ''
+  active_change: 'CR-102'
   status: active
   pending_gate: ''
-  approved_gate: CP8-CR101-DELIVERY-READINESS
-  approved_at: '2026-06-20T10:13:18+08:00'
+  approved_gate: CR102-FUTURE-RUNTIME-AUTHORIZATION
+  approved_at: '2026-06-21T07:15:15+08:00'
   pending_checklist_path: ''
-  launch_message_path: process/checks/CP8-CR101-HUMAN-GATE-LAUNCH-MESSAGE.md
+  launch_message_path: process/checks/CR102-FUTURE-RUNTIME-AUTHORIZATION-LAUNCH-MESSAGE.md
   pending_user_decision: ""
   pending_decision_ids: []
   approved_decision_ids:
+  - DQ-RUNTIME-CR102-01
+  - DQ-RUNTIME-CR102-02
+  - DQ-RUNTIME-CR102-03
+  - DQ-RUNTIME-CR102-04
+  - DQ-RUNTIME-CR102-05
+  - DQ-RUNTIME-CR102-06
+  - DQ-CP5-CR102-01
+  - DQ-CP5-CR102-02
+  - DQ-CP5-CR102-03
+  - DQ-CP5-CR102-04
+  - DQ-CP5-CR102-05
+  - DQ-CP3-CR102-01
+  - DQ-CP3-CR102-02
+  - DQ-CP3-CR102-03
+  - DQ-CP3-CR102-04
+  - DQ-CP3-CR102-05
+  - DQ-CP2-CR102-01
+  - DQ-CP2-CR102-02
+  - DQ-CP2-CR102-03
+  - DQ-CP2-CR102-04
+  - DQ-CP2-CR102-05
   - DQ-CP8-CR101-01
   - DQ-CP8-CR101-02
   - DQ-CP8-CR101-03
@@ -17670,6 +17911,10 @@ orchestrator_session:
   - DQ-CP5-CR046-04
   - DQ-CP5-CR046-05
   pending_non_authorized_items:
+  - CR102 NAS real package exchange 预填授权模板已准备；用户已声明授予所需 NAS 权限，但真实 NAS scope/mount/object/source/target 仍需补齐，且下一道具体执行门禁 approve 前不执行真实 NAS access/list/read/write/copy/publish/pull/delete/check/mount。
+  - CR102 future concrete execution authorization 输入清单已准备；该清单只定义后续用户显式输入字段，不授权真实 NAS access/list/read/write/copy/publish/pull/delete/check/mount，不授权读取凭据/env/账户，不授权 QMT/MiniQMT/XtQuant/gateway runtime，不授权 submit/cancel/simulation/live，不授权 provider/lake/catalog publish。
+  - CR102 future runtime_authorization gate 已 approved；本批准只接受 DQ-RUNTIME-CR102-01..06 推荐方案，允许进入后续授权输入准备和人工 runbook 候选状态，不授权真实 NAS access/list/read/write/copy/publish/pull/delete/check/mount，不授权读取凭据/env/账户，不授权 QMT/MiniQMT/XtQuant/gateway runtime，不授权 submit/cancel/simulation/live，不授权 provider/lake/catalog publish。
+  - CR102 CP5 已 approved；本批准只接受 CP5 design-only 设计包和 PASS_WITH_RISK 风险接受，不授权真实 NAS access/list/read/write/copy/publish/pull/delete/check/mount，不授权读取凭据/env/账户，不授权 QMT/MiniQMT/XtQuant/gateway runtime，不授权 submit/cancel/simulation/live，不授权 provider/lake/catalog publish。
   - CR101 CP8 已 approved 并关闭当前离线交付为 READY_WITH_RISK；关闭不授权真实 NAS、凭据、账户 / 持仓 / 委托 / 成交 / 原始日志、QMT/MiniQMT/XtQuant/gateway runtime、submit/cancel/buy/sell、simulation/live、provider/lake/catalog publish、CR089/CR020/order-write 自动恢复或后续真实验证 gate 启动。
   - CR089 CP2/CP3/CP5 已 approved；批准只接受门禁内推荐方案，不授权 NAS 内容读写列取复制发布、.env/凭据读取、QMT/MiniQMT/XtQuant/gateway 启动、账户原文查询、submit/cancel、simulation/live、CR020 恢复、CR089 active 或 CR046 recovery。
   - CR084 CP2/CP3/CP5 已由用户回复“同意”批准，但未提供或逐字确认 remote URL；当前阻塞在 remote URL missing stop condition。提供 URL 前不执行 git ls-remote、fetch、remote add/set-url/remove、set-upstream、git push、git push -u、default branch、branch rename、tag、force/history rewrite、dirty worktree commit、external process Git/NAS、data/reports、凭据、NAS 内容、provider/lake/catalog、runtime、CR046 recovery、old root retirement、backup 删除或 cleanup。
@@ -17686,7 +17931,7 @@ orchestrator_session:
   - 不删除、重命名或移动旧根 /home/hyde/workspace/local_backtest。
   - 不执行 optional groups、full tests、章节研究 smoke、删除 .venv 或 destructive cleanup。
   - 不恢复或推进 CR046 CP7。
-  resume_instruction: "CR101 CP8 已 approved；下一步仅允许按用户本轮授权提交并推送 Git 远端。真实 NAS / QMT / 凭据 / 账户 / 交易 / provider/lake/catalog publish 或后续真实验证 gate 仍需独立门禁。"
+  resume_instruction: "CR102 NAS real package exchange 预填授权模板已准备，路径 process/checks/CR102-NAS-REAL-PACKAGE-EXCHANGE-FILLED-AUTHORIZATION-TEMPLATE.md；下一步等待用户补齐 USER_REQUIRED 字段，之后准备 CR102 future concrete execution authorization gate 人工审查稿。下一道门禁 approve 前仍不执行 NAS access/list/read/write/copy/publish/pull/delete/check/mount，不读取凭据/env/账户，不启动 QMT/MiniQMT/XtQuant/gateway runtime，不交易或 provider/lake/catalog publish。"
   cr051_cp4_story_planning_dispatch:
     mode: inline-host-orchestrator
     agent_id: ''
@@ -22877,6 +23122,276 @@ agent_lifecycle:
     completed_at: '2026-05-16T19:33:15+08:00'
     closed_at: '2026-05-16T19:33:15+08:00'
 history:
+- at: '2026-06-21T08:12:42+08:00'
+  action: cr102-nas-real-package-exchange-filled-authorization-template-prepared
+  actor: host-orchestrator
+  reason: 用户声明授予所需 NAS 权限并要求尽可能多完成真实 NAS 包交换验证；主进程根据 CR102 输入清单生成预填授权模板，把可默认的 operation/evidence/runtime safety 字段填好，将真实 NAS scope/mount/object/source/target 等保留为 USER_REQUIRED。
+  artifacts:
+  - process/checks/CR102-NAS-REAL-PACKAGE-EXCHANGE-FILLED-AUTHORIZATION-TEMPLATE.md
+  - process/checks/CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION-INPUT-LIST.md
+  - process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
+  - process/STATE.md
+  result:
+    active_change: CR-102
+    filled_template_status: ready_for_user_completion
+    next_gate: CR102 future concrete execution authorization gate draft after user completes USER_REQUIRED fields
+    prefilled_operation_allowlist:
+    - access
+    - check
+    - list
+    - read
+    - copy
+    - pull
+    - write
+    - publish
+    default_operation_denylist:
+    - delete
+    user_required_fields:
+    - nas_label
+    - nas_path_or_export
+    - package_exchange_root
+    - object_scope
+    - mount_required
+    - local_mount_point
+    - network_probe_authorized
+    - authorized_identity_label
+    - credential_source
+    - source_package_path_or_label
+    - target_package_path_or_label
+    - directory_create_scope
+  safety_confirmations:
+    concrete_nas_execution_gate_approved: false
+    credential_or_env_read_authorized: false
+    account_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-21T07:24:28+08:00'
+  action: cr102-future-concrete-execution-authorization-input-list-prepared
+  actor: host-orchestrator
+  reason: 用户要求准备 CR102 future concrete execution authorization gate 输入清单，并继续明确禁止真实 NAS/env/runtime/trading/publish 访问或检查；主进程仅生成本地输入清单，不发起具体执行门禁，不触碰 NAS、凭据、账户或 runtime。
+  artifacts:
+  - process/checks/CR102-FUTURE-CONCRETE-EXECUTION-AUTHORIZATION-INPUT-LIST.md
+  - process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
+  - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-102
+    input_list_status: ready_for_user_input
+    next_gate: future concrete execution authorization gate draft pending user inputs
+    required_user_inputs:
+    - gate_intent
+    - requested_operation_class
+    - nas_scope
+    - mount_access_state
+    - identity_permission_boundary
+    - operation_allowlist_denylist
+    - redacted_evidence_contract
+    - runtime_safety_controls
+  safety_confirmations:
+    nas_operation_authorized: false
+    credential_or_env_read_authorized: false
+    account_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-21T07:15:15+08:00'
+  action: cr102-future-runtime-authorization-gate-approved-preparation-only
+  actor: host-orchestrator
+  reason: 用户回复 approve，按 CR102 future runtime_authorization gate approve 处理；接受 DQ-RUNTIME-CR102-01..06 推荐方案，允许进入后续授权输入准备和人工 runbook 候选状态；本批准不授权真实 NAS、凭据/env/账户、runtime、交易或 provider/lake/catalog publish。
+  artifacts:
+  - process/checkpoints/CR102-FUTURE-RUNTIME-AUTHORIZATION-GATE-REVIEW.md
+  - process/context/CR102-FUTURE-RUNTIME-AUTHORIZATION-CONTEXT.yaml
+  - process/checks/CR102-FUTURE-RUNTIME-AUTHORIZATION-PRECHECK.md
+  - process/checks/CR102-FUTURE-RUNTIME-AUTHORIZATION-LAUNCH-MESSAGE.md
+  - process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
+  - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-102
+    gate_status: cp5_pending
+    human_gate: approved
+    checkpoint: process/checkpoints/CR102-FUTURE-RUNTIME-AUTHORIZATION-GATE-REVIEW.md
+    accepted_decision_ids:
+    - DQ-RUNTIME-CR102-01
+    - DQ-RUNTIME-CR102-02
+    - DQ-RUNTIME-CR102-03
+    - DQ-RUNTIME-CR102-04
+    - DQ-RUNTIME-CR102-05
+    - DQ-RUNTIME-CR102-06
+    next_gate: future concrete execution authorization required
+  safety_confirmations:
+    nas_operation_authorized: false
+    credential_or_env_read_authorized: false
+    account_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-21T06:55:43+08:00'
+  action: cr102-future-runtime-authorization-gate-generated-awaiting-user
+  actor: host-orchestrator
+  reason: 用户要求准备 CR102 future runtime_authorization gate 决策简报，并明确禁止访问 / 列取 / 读取 / 复制 / 写入 / 发布 / 拉取 / 删除 / 检查 / 挂载真实 NAS、读取凭据/env/账户、启动 QMT/MiniQMT/XtQuant/gateway runtime、交易或 provider/lake/catalog publish。主进程生成 context capsule、自动预检、人工审查稿和 launch message；human-gate 校验通过；本门禁 approve 也不直接授权执行。
+  artifacts:
+  - process/context/CR102-FUTURE-RUNTIME-AUTHORIZATION-CONTEXT.yaml
+  - process/checks/CR102-FUTURE-RUNTIME-AUTHORIZATION-PRECHECK.md
+  - process/checkpoints/CR102-FUTURE-RUNTIME-AUTHORIZATION-GATE-REVIEW.md
+  - process/checks/CR102-FUTURE-RUNTIME-AUTHORIZATION-LAUNCH-MESSAGE.md
+  - process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
+  - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-102
+    gate_status: cp5_pending
+    human_gate: awaiting-user
+    checkpoint: process/checkpoints/CR102-FUTURE-RUNTIME-AUTHORIZATION-GATE-REVIEW.md
+    pending_decision_ids:
+    - DQ-RUNTIME-CR102-01
+    - DQ-RUNTIME-CR102-02
+    - DQ-RUNTIME-CR102-03
+    - DQ-RUNTIME-CR102-04
+    - DQ-RUNTIME-CR102-05
+    - DQ-RUNTIME-CR102-06
+    human_gate_check: PASS
+  safety_confirmations:
+    nas_operation_authorized: false
+    credential_or_env_read_authorized: false
+    account_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-21T06:45:46+08:00'
+  action: cr102-cp5-design-only-readiness-approved
+  actor: host-orchestrator
+  reason: 用户回复 approve，按 CR102 CP5 approve 处理；接受 DQ-CP5-CR102-01..05 推荐方案，批准 CP5 design-only authorization matrix / execution plan shell / evidence schema 设计包和 PASS_WITH_RISK 风险接受；本批准不授权真实 NAS、凭据/env/账户、runtime、交易或 provider/lake/catalog publish。
+  artifacts:
+  - process/checkpoints/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md
+  - process/checks/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md
+  - docs/features/cr102-nas-real-package-exchange-authorization/DESIGN.md
+  - docs/features/cr102-nas-real-package-exchange-authorization/TEST-PLAN.md
+  - docs/features/cr102-nas-real-package-exchange-authorization/TASKS.md
+  - process/stories/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-LLD.md
+  - process/context/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-CONTEXT.yaml
+  - process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
+  - process/changes/CR-INDEX.yaml
+  - process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+  - process/STATE.md
+  result:
+    active_change: CR-102
+    gate_status: cp5_pending
+    human_gate: approved
+    checkpoint: process/checkpoints/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md
+    accepted_decision_ids:
+    - DQ-CP5-CR102-01
+    - DQ-CP5-CR102-02
+    - DQ-CP5-CR102-03
+    - DQ-CP5-CR102-04
+    - DQ-CP5-CR102-05
+    next_gate: future runtime_authorization required
+  safety_confirmations:
+    nas_operation_authorized: false
+    credential_or_env_read_authorized: false
+    account_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-21T06:32:36+08:00'
+  action: cr102-cp5-design-only-readiness-generated-awaiting-user
+  actor: host-orchestrator
+  reason: 用户要求准备 CR102 CP5 NAS authorization matrix / execution plan shell / evidence schema 设计门禁，并明确禁止访问 / 列取 / 读取 / 复制 / 写入 / 发布 / 拉取 / 删除 / 检查 / 挂载真实 NAS、读取凭据/env/账户、启动 QMT/MiniQMT/XtQuant/gateway runtime、交易或 provider/lake/catalog publish。主进程生成 CP5 DESIGN、TEST-PLAN、TASKS、LLD、context capsule、自动预检、人工审查稿和门禁发起消息；CP5 approve 仍只接受设计包，不授权执行。
+  artifacts:
+  - docs/features/cr102-nas-real-package-exchange-authorization/DESIGN.md
+  - docs/features/cr102-nas-real-package-exchange-authorization/TEST-PLAN.md
+  - docs/features/cr102-nas-real-package-exchange-authorization/TASKS.md
+  - process/stories/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-LLD.md
+  - process/context/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-CONTEXT.yaml
+  - process/checks/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md
+  - process/checkpoints/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md
+  - process/checks/CP5-CR102-HUMAN-GATE-LAUNCH-MESSAGE.md
+  - process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-102
+    gate_status: cp5_pending
+    human_gate: awaiting-user
+    checkpoint: process/checkpoints/CP5-CR102-NAS-REAL-PACKAGE-EXCHANGE-READINESS.md
+    pending_decision_ids:
+    - DQ-CP5-CR102-01
+    - DQ-CP5-CR102-02
+    - DQ-CP5-CR102-03
+    - DQ-CP5-CR102-04
+    - DQ-CP5-CR102-05
+  safety_confirmations:
+    nas_operation_authorized: false
+    credential_or_env_read_authorized: false
+    account_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-20T22:01:10+08:00'
+  action: cr102-cp3-hld-review-approved
+  actor: host-orchestrator
+  reason: 用户回复“批准”，按 CR102 CP3 approve 处理；接受 DQ-CP3-CR102-01..05 推荐方案，批准 two-plane authorization design 并进入 CP5 design-only readiness pending；本批准不授权真实 NAS、凭据/env/账户、runtime、交易或 provider/lake/catalog publish。
+  artifacts:
+  - process/checkpoints/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-REVIEW.md
+  - docs/qmt/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-HLD.md
+  - process/context/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-CONTEXT.yaml
+  - process/checks/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-PRECHECK.md
+  - process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+  result:
+    active_change: CR-102
+    gate_status: cp5_pending
+    human_gate: approved
+    checkpoint: process/checkpoints/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-REVIEW.md
+    next_gate: CP5 design-only readiness
+    accepted_decision_ids:
+    - DQ-CP3-CR102-01
+    - DQ-CP3-CR102-02
+    - DQ-CP3-CR102-03
+    - DQ-CP3-CR102-04
+    - DQ-CP3-CR102-05
+  safety_confirmations:
+    nas_operation_authorized: false
+    credential_or_env_read_authorized: false
+    account_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
+- at: '2026-06-20T21:49:03+08:00'
+  action: cr102-cp3-hld-review-generated-awaiting-user
+  actor: host-orchestrator
+  reason: 用户要求准备 CR102 CP3 NAS real package exchange 设计评审，并明确禁止访问 / 列取 / 读取 / 复制 / 写入 / 发布 / 拉取 / 删除 / 挂载真实 NAS、读取凭据/env/账户、启动 QMT/MiniQMT/XtQuant/gateway runtime、交易或 provider/lake/catalog publish。主进程生成 CP3 HLD、discussion log、discussion checkpoint、context capsule、自动预检、人工审查稿和门禁发起消息；CP3 approve 仍只接受授权架构，不授权执行。
+  artifacts:
+  - docs/qmt/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-HLD.md
+  - process/discussions/CP3-CR102-HLD-DISCUSSION-LOG.md
+  - process/checks/CP3-CR102-DISCUSSION-CHECKPOINT.json
+  - process/context/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-CONTEXT.yaml
+  - process/checks/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-PRECHECK.md
+  - process/checkpoints/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-REVIEW.md
+  - process/checks/CP3-CR102-HUMAN-GATE-LAUNCH-MESSAGE.md
+  result:
+    active_change: CR-102
+    gate_status: cp3_pending
+    human_gate: awaiting-user
+    checkpoint: process/checkpoints/CP3-CR102-NAS-REAL-PACKAGE-EXCHANGE-HLD-REVIEW.md
+    pending_decision_ids:
+    - DQ-CP3-CR102-01
+    - DQ-CP3-CR102-02
+    - DQ-CP3-CR102-03
+    - DQ-CP3-CR102-04
+    - DQ-CP3-CR102-05
+  safety_confirmations:
+    nas_operation_authorized: false
+    credential_or_env_read_authorized: false
+    account_read_authorized: false
+    qmt_miniqmt_xtquant_gateway_runtime_authorized: false
+    submit_cancel_simulation_live_authorized: false
+    provider_lake_catalog_publish_authorized: false
 - at: '2026-06-20T10:13:18+08:00'
   action: cr101-cp8-approved-closed-current-delivery
   actor: host-orchestrator
