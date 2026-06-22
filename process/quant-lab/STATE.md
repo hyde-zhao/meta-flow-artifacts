@@ -5,11 +5,11 @@ current_phase: story-planning
 current_agent: host-orchestrator
 active_change: ''
 active_story: ''
-iteration: 581
+iteration: 582
 blocked: false
 blocked_reason: ''
-last_action: "用户同意 CR103 CP8 -> CR102 CP8 全部关闭。已为 CR103 和 CR102 生成 CP8 auto/manual checkpoint、release context 和 context capsule，并将两个正式 CR 关闭为 closed-current-delivery / READY_WITH_RISK。CR104 已保持 closed-current-delivery。"
-next_action: "先提交并推送 CR102/CR103/CR104 process artifacts；随后从候选中选择下一目标。推荐默认下一步是不启动 CR105，先做 baseline / CR tracking 清洁检查；若用户明确要进入交易写，则另起 CR105 独立 order-write runtime authorization gate。当前不授权 submit/cancel/buy/sell/simulation/live、账户原文、NAS、凭据或 provider/lake/catalog publish。"
+last_action: "已完成 precheck/ql-rd-000-redesign-baseline baseline 清洁检查和预检报告：process 路由健康，源码与 artifact 双仓库在报告生成前均 clean / ahead 0 / behind 0，CR tracking OK，active formal CR 为 none；CR102/CR103/CR104 均保持 closed-current-delivery / READY_WITH_RISK。报告写入 process/checks/PRECHECK-QL-RD-000-REDESIGN-BASELINE-2026-06-22.md。"
+next_action: "审阅 baseline 预检报告，并决定是否围绕 redesign baseline 新建低风险只读 / ledger / doc / static-scan 类型 CR 或继续保持 idle。不启动 CR105；若用户明确要进入 order-write / submit-cancel / simulation-live，则必须另起高风险 authorization gate。当前不授权 submit/cancel/buy/sell/simulation/live、账户原文、NAS、凭据、新 runtime 或 provider/lake/catalog publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -128,7 +128,7 @@ cr_tracking:
   schema_version: 2
   index_path: process/changes/CR-INDEX.yaml
   current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-  last_consistency_check: '2026-06-22T11:55:02+08:00 CR103 and CR102 CP8 approved by user and closed-current-delivery / READY_WITH_RISK. No active formal CR remains. CR104 remains closed-current-delivery. Closure does not authorize additional NAS access, runtime, credentials, account/raw-log output, submit/cancel/buy/sell, simulation/live or provider/lake/catalog publish.'
+  last_consistency_check: '2026-06-22T12:10:38+08:00 baseline precheck for precheck/ql-rd-000-redesign-baseline completed. Source and artifact repos were clean / ahead 0 / behind 0 before report write; workspace route health OK; cr-tracking OK with no active formal CR. CR102/CR103/CR104 remain closed-current-delivery / READY_WITH_RISK. CR105 is not started and no additional NAS, runtime, credentials, account/raw-log output, submit/cancel/buy/sell, simulation/live or provider/lake/catalog publish is authorized.'
 	  next_action_queue:
 	  - candidate_id: RA-CR101-001
 	    legacy_ids:
