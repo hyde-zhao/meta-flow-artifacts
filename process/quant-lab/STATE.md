@@ -1,15 +1,15 @@
 ---
 project_id: quant-lab
 workflow_mode: production
-current_phase: story-planning
+current_phase: requirement-clarification
 current_agent: host-orchestrator
-active_change: ''
+active_change: 'CR-106'
 active_story: ''
-iteration: 582
+iteration: 583
 blocked: false
 blocked_reason: ''
-last_action: "已完成 precheck/ql-rd-000-redesign-baseline baseline 清洁检查和预检报告：process 路由健康，源码与 artifact 双仓库在报告生成前均 clean / ahead 0 / behind 0，CR tracking OK，active formal CR 为 none；CR102/CR103/CR104 均保持 closed-current-delivery / READY_WITH_RISK。报告写入 process/checks/PRECHECK-QL-RD-000-REDESIGN-BASELINE-2026-06-22.md。"
-next_action: "审阅 baseline 预检报告，并决定是否围绕 redesign baseline 新建低风险只读 / ledger / doc / static-scan 类型 CR 或继续保持 idle。不启动 CR105；若用户明确要进入 order-write / submit-cancel / simulation-live，则必须另起高风险 authorization gate。当前不授权 submit/cancel/buy/sell/simulation/live、账户原文、NAS、凭据、新 runtime 或 provider/lake/catalog publish。"
+last_action: "用户确认 baseline 预检没有问题并要求继续推进整改。已提交并推送 artifact baseline 证据 commit e6dc0b8，随后创建 CR106 Redesign Baseline Hygiene and Code Health Precheck，生成 CP2 context capsule、自动预检、人工审查稿和发起消息。CR106 当前 gate_status=cp2_pending。"
+next_action: "请审查 process/checkpoints/CP2-CR106-REDESIGN-BASELINE-HYGIENE-REVIEW.md。若回复 approve，则只执行 CR106 低风险只读代码健康预检；不启动 CR105，不授权 submit/cancel/buy/sell/simulation/live、账户原文、NAS、凭据、新 runtime 或 provider/lake/catalog publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -124,11 +124,11 @@ artifact_routing:
   health_status: "local-remediation-complete"
   updated_at: "2026-06-17T19:50:00+08:00"
 cr_tracking:
-  status: "no-active-formal-cr"
+  status: "active-formal-cr"
   schema_version: 2
   index_path: process/changes/CR-INDEX.yaml
   current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-  last_consistency_check: '2026-06-22T12:10:38+08:00 baseline precheck for precheck/ql-rd-000-redesign-baseline completed. Source and artifact repos were clean / ahead 0 / behind 0 before report write; workspace route health OK; cr-tracking OK with no active formal CR. CR102/CR103/CR104 remain closed-current-delivery / READY_WITH_RISK. CR105 is not started and no additional NAS, runtime, credentials, account/raw-log output, submit/cancel/buy/sell, simulation/live or provider/lake/catalog publish is authorized.'
+  last_consistency_check: '2026-06-22T12:32:00+08:00 CR106 started after user confirmed baseline precheck has no issue and asked to continue remediation. CR106 scope is low-risk process/static/readonly code health precheck. CR105/order-write/runtime/NAS/credentials/provider publish remain unauthorized.'
 	  next_action_queue:
 	  - candidate_id: RA-CR101-001
 	    legacy_ids:
