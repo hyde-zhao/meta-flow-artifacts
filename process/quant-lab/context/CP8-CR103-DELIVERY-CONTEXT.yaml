@@ -1,0 +1,52 @@
+schema_version: "1.0"
+context_id: "CP8-CR103-DELIVERY-CONTEXT"
+cr_id: "CR-103"
+status: "approved-by-user-command"
+created_at: "2026-06-22T11:55:02+08:00"
+owner: "host-orchestrator"
+read_profile: "compact"
+
+scope:
+  in_scope:
+    - "QMT/MiniQMT non-trading-day offline validation closure."
+    - "Local package checker, fixture regression, endpoint matrix, gateway/session gates and redacted evidence checker."
+    - "Risk acceptance that true trading-day runtime was moved to CR104 and then closed separately."
+  out_of_scope:
+    - "QMT terminal direct-run runtime execution."
+    - "MiniQMT/XtQuant/gateway real runtime execution under CR103."
+    - "env, credential, account, positions, orders, fills or raw log reads."
+    - "submit/cancel, buy/sell, simulation/live, NAS, provider/lake/catalog publish."
+
+quality_summary:
+  cp7_result: "PASS_WITH_RISK"
+  evidence:
+    - "process/checks/CP7-CR103-QMT-MINIQMT-NON-TRADING-DAY-VALIDATION.md"
+    - "docs/features/cr103-qmt-miniqmt-non-trading-day-validation/VERIFICATION.md"
+  verified_paths:
+    - "qmt_interface_smoke package checker PASS"
+    - "QMT/MiniQMT local contract regression: 125 passed"
+    - "endpoint matrix positions transport_unavailable behavior aligned with current readonly endpoint contract"
+  runtime_started: false
+  credential_read_performed: false
+  account_read_performed: false
+  trading_performed: false
+
+release_decision:
+  decision: "READY_WITH_RISK"
+  reason: "Non-trading-day verifiable contracts passed; real trading-day runtime was explicitly moved to CR104 and must not be claimed by CR103."
+  manual_approval_source: "User approved CR103 CP8 closure on 2026-06-22."
+
+non_authorized_items:
+  - "New QMT/MiniQMT/XtQuant/gateway runtime run."
+  - "Credential/env/secret/account original reads."
+  - "Raw account, positions, orders, fills, security code, quantity, cash or logs."
+  - "submit/cancel, buy/sell, order-write, simulation/live."
+  - "NAS operations or provider/lake/catalog publish."
+
+follow_up_summary:
+  - id: "CR-104"
+    status: "closed-current-delivery"
+    summary: "Trading-day MiniQMT/gateway readonly runtime validation closed separately as READY_WITH_RISK."
+  - id: "FU-CR101-001 / proposed CR105"
+    status: "candidate-not-started"
+    summary: "Order-write / simulation / live remains independent high-risk gate."

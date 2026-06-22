@@ -1,0 +1,56 @@
+schema_version: "1.0"
+context_id: "CP8-CR102-DELIVERY-CONTEXT"
+cr_id: "CR-102"
+status: "approved-by-user-command"
+created_at: "2026-06-22T11:55:02+08:00"
+owner: "host-orchestrator"
+read_profile: "compact"
+
+scope:
+  in_scope:
+    - "Close CR102 NAS real package exchange validation."
+    - "Research-machine package exchange PASS."
+    - "Execution-machine manual pull/readback PASS via per-file relative path, sha256 and bytes."
+  out_of_scope:
+    - "Any additional NAS access/list/read/write/copy/publish/pull/delete/check/mount."
+    - "Credential/env/account reads."
+    - "QMT/MiniQMT/XtQuant/gateway runtime."
+    - "submit/cancel, buy/sell, simulation/live."
+    - "provider/lake/catalog publish."
+
+quality_summary:
+  cp7_result: "PASS_WITH_RISK"
+  evidence:
+    - "process/checks/CR102-NAS-REAL-PACKAGE-EXCHANGE-EVIDENCE.md"
+    - "runs/RUN-EXEC-20260621-003.md"
+  verified_paths:
+    - "research-machine source-create -> package-exchange-copy -> release-publish-label"
+    - "three file package exchange scopes: file_count=3, bytes=817, content hash match"
+    - "execution-machine manual per-file sha256/bytes readback PASS"
+  credential_read_performed: false
+  runtime_started: false
+  trading_performed: false
+  provider_lake_catalog_publish_performed: false
+  delete_performed: false
+  mount_performed: false
+  network_probe_performed: false
+
+release_decision:
+  decision: "READY_WITH_RISK"
+  reason: "NAS package exchange validation passed with redacted evidence; CP8 closes existing validation only and does not authorize further NAS or runtime actions."
+  manual_approval_source: "User approved CR102 CP8 closure on 2026-06-22."
+
+non_authorized_items:
+  - "Additional NAS access/list/read/write/copy/publish/pull/delete/check/mount."
+  - "Credential/env/secret/account original reads."
+  - "QMT/MiniQMT/XtQuant/gateway runtime."
+  - "submit/cancel, buy/sell, simulation/live."
+  - "provider/lake/catalog publish."
+
+follow_up_summary:
+  - id: "CR-089"
+    status: "blocked"
+    summary: "Original QMT interface validation gate remains blocked; CR102 closure does not revive it."
+  - id: "FU-CR101-001 / proposed CR105"
+    status: "candidate-not-started"
+    summary: "Order-write / simulation / live requires independent high-risk gate."

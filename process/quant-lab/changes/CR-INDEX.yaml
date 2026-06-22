@@ -1,7 +1,7 @@
 version: 1
 schema_version: 2
-status: "active-formal-cr"
-updated_at: '2026-06-21T13:31:01+08:00'
+status: "no-active-formal-cr"
+updated_at: '2026-06-22T11:55:02+08:00'
 updated_by: "host-orchestrator"
 owner: meta-po
 source: >
@@ -97,7 +97,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: '2026-06-22T11:24:03+08:00 CR104 closed-current-delivery / READY_WITH_RISK after MiniQMT/gateway readonly runtime PASS with zero and one_to_ten redacted position buckets. CR102 and CR103 remain cp8_pending. CR104 closure does not authorize submit/cancel/buy/sell/simulation/live, raw account/log output, NAS, credentials or provider/lake/catalog publish.'
+last_consistency_check: '2026-06-22T11:55:02+08:00 CR103 and CR102 CP8 approved by user and closed-current-delivery / READY_WITH_RISK. No active formal CR remains. CR104 remains closed-current-delivery. Closure does not authorize additional NAS access, runtime, credentials, account/raw-log output, submit/cancel/buy/sell, simulation/live or provider/lake/catalog publish.'
 status_model:
   lifecycle_status_values:
     - candidate
@@ -158,8 +158,8 @@ next_action_queue:
     title: NAS real package exchange validation authorization gate
     source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
     formal_cr_path: "process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md"
-    recommended_action: prepare_cr102_cp8_closure_confirmation
-    gate_status: cp8_pending
+    recommended_action: closed_by_cr102_cp8_nas_exchange_pass
+    gate_status: closed
     non_authorized_scope:
       - additional_nas_access_without_new_gate
       - credential_or_env_read
@@ -216,13 +216,46 @@ index_schema:
 - next_gate
 - next_action
 - last_checked_at
-active_crs:
+active_crs: []
+recent_items:
+  - id: CR-103
+    title: QMT/MiniQMT Non-Trading-Day Validation Experiment
+    status: closed-current-delivery
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    source_tracking: USER-20260621-QMT-MINIQMT-VALIDATION-EXPERIMENT
+    formal_cr_path: process/changes/CR-103-QMT-MINIQMT-NON-TRADING-DAY-VALIDATION-EXPERIMENT-2026-06-21.md
+    parent_cr: CR-101
+    source_checkpoint: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
+    source_decision_id: DQ-CP8-CR101-04
+    priority: 1
+    blocked_by: "closed: user approved CR103 CP8 at 2026-06-22T11:55:02+08:00. Non-trading-day package checker and fixture regression passed; true runtime scope was moved to CR104 and must not be claimed by CR103."
+    impact_surface:
+      - qmt_direct_run_target
+      - miniqmt_gateway_adapter
+      - readonly_gateway
+      - endpoint_matrix
+      - redacted_evidence
+      - credential_boundary
+      - tests/test_cr019_qmt_endpoint_matrix.py
+      - docs/features/cr103-qmt-miniqmt-non-trading-day-validation/VERIFICATION.md
+    conflict_keys:
+      - qmt_runtime
+      - miniqmt_gateway_runtime
+      - runtime_authorization
+      - readonly_query_positions
+      - credential_boundary
+      - no_order_write
+    next_gate: closed
+    next_action: "CR103 当前交付已关闭为 READY_WITH_RISK；真实 readonly runtime 已由 CR104 独立关闭，order-write / simulation/live 仍需 proposed CR105。"
+    last_checked_at: '2026-06-22T11:55:02+08:00'
   - id: CR-102
     title: NAS Real Package Exchange Validation Authorization Gate
-    status: active-real-nas-package-exchange-validated-pass-pending-cp8
-    lifecycle_status: active
+    status: closed-current-delivery
+    lifecycle_status: closed
     readiness_status: ready_with_risk
-    gate_status: cp8_pending
+    gate_status: closed
     source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
     formal_cr_path: process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
     follow_up_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
@@ -230,7 +263,7 @@ active_crs:
     source_checkpoint: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
     source_decision_id: DQ-CP8-CR101-04
     priority: 3
-    blocked_by: "No execution blocker remains for CR102 package exchange validation. Research-machine-side NAS package exchange PASS; execution-machine manual pull/readback PASS via per-file relative path / sha256 / bytes evidence recorded at runs/RUN-EXEC-20260621-003.md. Remaining action is CP8 closure confirmation / risk acceptance. No credential/env/account read, QMT/MiniQMT/XtQuant/gateway runtime, submit/cancel, simulation/live, provider/lake/catalog publish, delete, mount or network probe performed by agent."
+    blocked_by: "closed: user approved CR102 CP8 at 2026-06-22T11:55:02+08:00. Research-machine NAS package exchange PASS and execution-machine manual per-file sha256/bytes readback PASS. Additional NAS, credential, runtime, trading and provider/lake/catalog actions remain unauthorized."
     impact_surface:
       - nas_package_exchange
       - package_publish
@@ -254,42 +287,9 @@ active_crs:
       - no_order_write
       - no_provider_lake_publish
       - CR-089-overlap
-    next_gate: cp8 closure confirmation
-    next_action: "准备 CR102 CP8 收口确认；或由用户明确选择 RA-CR101-001 / RA-CR101-002 / FU-CR101-001 后续 runtime gate。当前不再执行额外 NAS/env/runtime/trading/provider 动作。"
-    last_checked_at: '2026-06-21T12:52:05+08:00'
-  - id: CR-103
-    title: QMT/MiniQMT Non-Trading-Day Validation Experiment
-    status: active-non-trading-day-validation-pass-pending-cp8
-    lifecycle_status: active
-    readiness_status: ready_with_risk
-    gate_status: cp8_pending
-    source_tracking: USER-20260621-QMT-MINIQMT-VALIDATION-EXPERIMENT
-    formal_cr_path: process/changes/CR-103-QMT-MINIQMT-NON-TRADING-DAY-VALIDATION-EXPERIMENT-2026-06-21.md
-    parent_cr: CR-101
-    source_checkpoint: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
-    source_decision_id: DQ-CP8-CR101-04
-    priority: 1
-    blocked_by: "No non-trading-day validation blocker remains. Local package checker PASS and QMT/MiniQMT fixture regression PASS with 125 tests. Remaining runtime validation moved to CR104. No QMT/MiniQMT/XtQuant/gateway runtime, env/credential/account read, submit/cancel/simulation/live performed."
-    impact_surface:
-      - qmt_direct_run_target
-      - miniqmt_gateway_adapter
-      - readonly_gateway
-      - endpoint_matrix
-      - redacted_evidence
-      - credential_boundary
-      - tests/test_cr019_qmt_endpoint_matrix.py
-      - docs/features/cr103-qmt-miniqmt-non-trading-day-validation/VERIFICATION.md
-    conflict_keys:
-      - qmt_runtime
-      - miniqmt_gateway_runtime
-      - runtime_authorization
-      - readonly_query_positions
-      - credential_boundary
-      - no_order_write
-    next_gate: cp8 closure confirmation
-    next_action: "准备 CR103 CP8 收口确认；真实 runtime 转入 CR104。"
-    last_checked_at: '2026-06-21T13:31:01+08:00'
-recent_items:
+    next_gate: closed
+    next_action: "CR102 当前交付已关闭为 READY_WITH_RISK；CR089 仍保持 blocked，任何额外 NAS / runtime / order-write 需独立门禁。"
+    last_checked_at: '2026-06-22T11:55:02+08:00'
   - id: CR-101
     title: Cross-platform Strategy Delivery and Adapter Layer Realignment
     status: closed-current-delivery
@@ -391,8 +391,10 @@ recent_items:
     last_checked_at: '2026-06-22T11:24:03+08:00'
   - id: RA-CR101-003
     title: NAS real package exchange validation authorization gate
-    status: active-runtime-authorization-approved-preparation-only-no-execution
-    lifecycle_status: active
+    status: closed-current-delivery
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
     source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
     formal_cr_path: process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
     legacy_ids:
@@ -401,7 +403,7 @@ recent_items:
     source_checkpoint: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
     source_decision_id: DQ-CP8-CR101-04
     priority: 3
-    blocked_by: "formal CR-102 active; future runtime_authorization gate approved as preparation-only; requires explicit future path/mount/permission authorization before any NAS action"
+    blocked_by: "closed: formal CR-102 completed NAS package exchange validation and CP8 was approved at 2026-06-22T11:55:02+08:00. Additional NAS actions remain unauthorized and require a new gate."
     impact_surface:
     - nas_package_exchange
     - package_publish
@@ -415,9 +417,9 @@ recent_items:
     - package_pull
     - credential_boundary
     - no_runtime_connection
-    next_gate: future concrete execution authorization required
-    next_action: "CR102 filled authorization template prepared; wait for user to complete USER_REQUIRED fields in process/checks/CR102-NAS-REAL-PACKAGE-EXCHANGE-FILLED-AUTHORIZATION-TEMPLATE.md. No concrete execution until next gate approval."
-    last_checked_at: '2026-06-21T08:12:42+08:00'
+    next_gate: closed
+    next_action: "CR102 当前交付已关闭；额外 NAS read/write/publish/pull/delete/check/mount 或 interface validation 需独立门禁。"
+    last_checked_at: '2026-06-22T11:55:02+08:00'
   - id: FU-CR101-001
     title: Order-write / simulation / live design authorization gate
     status: candidate

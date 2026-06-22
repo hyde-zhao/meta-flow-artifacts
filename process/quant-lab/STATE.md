@@ -3,13 +3,13 @@ project_id: quant-lab
 workflow_mode: production
 current_phase: story-planning
 current_agent: host-orchestrator
-active_change: 'CR-103'
+active_change: ''
 active_story: ''
 iteration: 581
 blocked: false
 blocked_reason: ''
-last_action: "用户要求先不启动 CR105，将 CR104 收尾并推送远端。CR104 MiniQMT/gateway readonly runtime 已复用 CR099 authorization_ref 完成 health/capabilities/query_positions_readonly 验证，覆盖 zero 与 one_to_ten 持仓 bucket，redacted evidence checker PASS，forbidden counters 全 0。已生成 CR104 CP8 auto/manual checkpoint、release context 和 context capsule，按用户指令关闭 CR104 为 closed-current-delivery / READY_WITH_RISK。"
-next_action: "提交并推送 CR104 process artifacts。后续如需下单/撤单/交易接口验证，需用户明确启动 CR105 独立 order-write runtime authorization gate；当前不授权 submit/cancel/buy/sell/simulation/live、账户原文、NAS、凭据或 provider/lake/catalog publish。"
+last_action: "用户同意 CR103 CP8 -> CR102 CP8 全部关闭。已为 CR103 和 CR102 生成 CP8 auto/manual checkpoint、release context 和 context capsule，并将两个正式 CR 关闭为 closed-current-delivery / READY_WITH_RISK。CR104 已保持 closed-current-delivery。"
+next_action: "先提交并推送 CR102/CR103/CR104 process artifacts；随后从候选中选择下一目标。推荐默认下一步是不启动 CR105，先做 baseline / CR tracking 清洁检查；若用户明确要进入交易写，则另起 CR105 独立 order-write runtime authorization gate。当前不授权 submit/cancel/buy/sell/simulation/live、账户原文、NAS、凭据或 provider/lake/catalog publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -124,11 +124,11 @@ artifact_routing:
   health_status: "local-remediation-complete"
   updated_at: "2026-06-17T19:50:00+08:00"
 cr_tracking:
-  status: "active-formal-cr"
+  status: "no-active-formal-cr"
   schema_version: 2
   index_path: process/changes/CR-INDEX.yaml
   current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-  last_consistency_check: '2026-06-22T11:24:03+08:00 CR104 closed-current-delivery / READY_WITH_RISK after MiniQMT/gateway readonly runtime PASS with zero and one_to_ten redacted position buckets. CR102 and CR103 remain cp8_pending. CR104 closure does not authorize submit/cancel/buy/sell/simulation/live, raw account/log output, NAS, credentials or provider/lake/catalog publish.'
+  last_consistency_check: '2026-06-22T11:55:02+08:00 CR103 and CR102 CP8 approved by user and closed-current-delivery / READY_WITH_RISK. No active formal CR remains. CR104 remains closed-current-delivery. Closure does not authorize additional NAS access, runtime, credentials, account/raw-log output, submit/cancel/buy/sell, simulation/live or provider/lake/catalog publish.'
 	  next_action_queue:
 	  - candidate_id: RA-CR101-001
 	    legacy_ids:
@@ -151,8 +151,8 @@ cr_tracking:
 	    - NAS-REAL-EXCHANGE-FU
 	    title: NAS real package exchange validation authorization gate
 	    formal_cr_path: process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
-	    recommended_action: prepare_cr102_cp8_closure_confirmation
-	    gate_status: cp8_pending
+	    recommended_action: closed_by_cr102_cp8_nas_exchange_pass
+	    gate_status: closed
 	    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
 	  - candidate_id: FU-CR101-001
 	    legacy_ids:
@@ -167,16 +167,16 @@ cr_tracking:
   active_crs:
   - id: CR-102
     title: NAS Real Package Exchange Validation Authorization Gate
-    status: active-real-nas-package-exchange-validated-pass-pending-cp8
-    lifecycle_status: active
+    status: closed-current-delivery
+    lifecycle_status: closed
     readiness_status: ready_with_risk
-    gate_status: cp8_pending
+    gate_status: closed
     source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
     formal_cr_path: process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
     parent_cr: CR-101
     source_decision_id: DQ-CP8-CR101-04
     priority: 3
-    blocked_by: 'No execution blocker remains for CR102 package exchange validation. Research-machine-side NAS package exchange PASS; execution-machine manual pull/readback PASS via per-file relative path / sha256 / bytes evidence recorded at runs/RUN-EXEC-20260621-003.md. Remaining action is CP8 closure confirmation / risk acceptance. No credential/env/account read, QMT/MiniQMT/XtQuant/gateway runtime, submit/cancel, simulation/live, provider/lake/catalog publish, delete, mount or network probe performed by agent.'
+    blocked_by: 'closed: user approved CR102 CP8 at 2026-06-22T11:55:02+08:00. Research-machine NAS package exchange PASS and execution-machine manual per-file sha256/bytes readback PASS. Additional NAS, credential, runtime, trading and provider/lake/catalog actions remain unauthorized.'
     impact_surface:
     - nas_package_exchange
     - package_publish
@@ -194,21 +194,21 @@ cr_tracking:
     - no_order_write
     - no_provider_lake_publish
     - CR-089-overlap
-    next_gate: future concrete execution authorization required
-    next_action: "请用户在执行机侧用真实 UNC 路径或映射盘根目录重跑只读验证，或改验 release publish 区；回传脱敏结果。当前不再执行额外 NAS/env/runtime/trading/provider 动作。"
-    last_checked_at: '2026-06-21T08:50:29+08:00'
+    next_gate: closed
+    next_action: "CR102 当前交付已关闭为 READY_WITH_RISK；CR089 仍保持 blocked，任何额外 NAS / runtime / order-write 需独立门禁。"
+    last_checked_at: '2026-06-22T11:55:02+08:00'
   - id: CR-103
     title: QMT/MiniQMT Non-Trading-Day Validation Experiment
-    status: active-non-trading-day-validation-pass-pending-cp8
-    lifecycle_status: active
+    status: closed-current-delivery
+    lifecycle_status: closed
     readiness_status: ready_with_risk
-    gate_status: cp8_pending
+    gate_status: closed
     source_tracking: USER-20260621-QMT-MINIQMT-VALIDATION-EXPERIMENT
     formal_cr_path: process/changes/CR-103-QMT-MINIQMT-NON-TRADING-DAY-VALIDATION-EXPERIMENT-2026-06-21.md
     parent_cr: CR-101
     source_decision_id: DQ-CP8-CR101-04
     priority: 1
-    blocked_by: 'No non-trading-day validation blocker remains. Local package checker PASS and QMT/MiniQMT fixture regression PASS with 125 tests. Remaining runtime validation moved to CR104. No QMT/MiniQMT/XtQuant/gateway runtime, env/credential/account read, submit/cancel/simulation/live performed.'
+    blocked_by: 'closed: user approved CR103 CP8 at 2026-06-22T11:55:02+08:00. Non-trading-day package checker and fixture regression passed; true runtime scope was moved to CR104 and must not be claimed by CR103.'
     impact_surface:
     - qmt_direct_run_target
     - miniqmt_gateway_adapter
@@ -223,9 +223,9 @@ cr_tracking:
     - readonly_query_positions
     - credential_boundary
     - no_order_write
-    next_gate: cp8 closure confirmation
-    next_action: 准备 CR103 CP8 收口确认；真实 runtime 转入 CR104。
-    last_checked_at: '2026-06-21T13:31:01+08:00'
+    next_gate: closed
+    next_action: "CR103 当前交付已关闭为 READY_WITH_RISK；真实 readonly runtime 已由 CR104 独立关闭，order-write / simulation/live 仍需 proposed CR105。"
+    last_checked_at: '2026-06-22T11:55:02+08:00'
   - id: CR-101
     title: Cross-Platform Strategy Delivery and Adapter Layer Realignment
     status: closed-current-delivery
