@@ -2,11 +2,11 @@
 checkpoint_id: "CP8"
 checkpoint_name: "CR106 Delivery Readiness"
 type: "auto_then_manual"
-status: "pending"
+status: "approved"
 owner: "host-orchestrator"
 created_at: "2026-06-22T13:10:00+08:00"
-reviewed_by: ""
-reviewed_at: ""
+reviewed_by: "user"
+reviewed_at: "2026-06-22T13:18:00+08:00"
 auto_check_result: "process/checks/CP8-CR106-DELIVERY-READINESS.md"
 target:
   phase: "delivery-readiness"
@@ -104,8 +104,8 @@ target:
 
 ## 人工审查结果
 
-- 结论：`pending`
-- 审查人：
-- 审查时间：
-- 修改意见：
-- 风险接受项：
+- 结论：`approved`
+- 审查人：user
+- 审查时间：2026-06-22T13:18:00+08:00
+- 修改意见：无；用户批准关闭 CR106 当前整改范围。
+- 风险接受项：关闭 CR106 不表示授权 CR105、runtime、交易写、NAS、凭据、账户原文或 provider/lake/catalog publish。

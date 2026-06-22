@@ -1,7 +1,7 @@
 version: 1
 schema_version: 2
-status: "active-formal-cr"
-updated_at: '2026-06-22T12:32:00+08:00'
+status: "no-active-formal-cr"
+updated_at: '2026-06-22T13:18:00+08:00'
 updated_by: "host-orchestrator"
 owner: meta-po
 source: >
@@ -97,7 +97,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: '2026-06-22T12:32:00+08:00 CR106 started after user confirmed baseline precheck has no issue and asked to continue remediation. CR106 is low-risk process/static/readonly code health precheck scope. CR105/order-write/runtime/NAS/credentials/provider publish remain unauthorized.'
+last_consistency_check: '2026-06-22T13:18:00+08:00 CR106 CP8 approved by user and closed-current-delivery / READY. Source-code remediation is not required by current evidence. CR105/order-write/runtime/NAS/credentials/provider publish remain unauthorized.'
 status_model:
   lifecycle_status_values:
     - candidate
@@ -216,40 +216,32 @@ index_schema:
 - next_gate
 - next_action
 - last_checked_at
-active_crs:
-  - id: "CR-106"
+active_crs: []
+recent_items:
+  - id: CR-106
     title: Redesign Baseline Hygiene and Code Health Precheck
-    status: active-governance-remediation-pass-pending-cp8
+    status: closed-current-delivery
     kind: ledger-maintenance
-    lifecycle_status: active
+    lifecycle_status: closed
     readiness_status: ready
-    gate_status: cp8_pending
+    gate_status: closed
     gate_profile: compact
     source_tracking: process/checks/PRECHECK-QL-RD-000-REDESIGN-BASELINE-2026-06-22.md
     formal_cr_path: process/changes/CR-106-REDESIGN-BASELINE-HYGIENE-CODE-HEALTH-PRECHECK-2026-06-22.md
-    parent_cr: ""
-    source_checkpoint: process/checks/PRECHECK-QL-RD-000-REDESIGN-BASELINE-2026-06-22.md
-    source_decision_id: USER-20260622-BASELINE-OK-CONTINUE-REMEDIATION
     priority: 1
-    blocked_by: "CP7 governance remediation verification passed: imports, identity and focused static regression are OK. Awaiting CP8 readiness."
+    blocked_by: "closed: user approved CR106 CP8 at 2026-06-22T13:18:00+08:00. Current evidence shows no source-code remediation required; governance artifacts were backfilled and verified."
     impact_surface:
       - redesign_baseline_hygiene
       - code_health_precheck
-      - process/checks
-      - process/checkpoints
-      - process/context
-      - process/changes/CR-INDEX.yaml
-      - process/STATE.md
+      - docs/design/MODULE-BOUNDARIES.yaml
+      - docs/design/PACKAGE-IDENTITY.yaml
     conflict_keys:
-      - baseline_hygiene
-      - static_readonly_precheck
       - no_runtime_connection
       - no_order_write
       - no_provider_lake_publish
-    next_gate: cp8_delivery_readiness
-    next_action: "生成 CR106 CP8 delivery readiness；建议关闭 CR106。"
-    last_checked_at: '2026-06-22T12:32:00+08:00'
-recent_items:
+    next_gate: closed
+    next_action: "CR106 当前整改范围已关闭；若要进入 redesign scope intake 或 CR105，必须另起独立 CR。"
+    last_checked_at: '2026-06-22T13:18:00+08:00'
   - id: CR-103
     title: QMT/MiniQMT Non-Trading-Day Validation Experiment
     status: closed-current-delivery
@@ -2902,18 +2894,18 @@ route_view:
 items:
   - id: "CR-106"
     title: "Redesign Baseline Hygiene and Code Health Precheck"
-    status: "active-governance-remediation-pass-pending-cp8"
+    status: "closed-current-delivery"
     kind: "ledger-maintenance"
-    lifecycle_status: "active"
+    lifecycle_status: "closed"
     readiness_status: "ready"
-    gate_status: "cp8_pending"
+    gate_status: "closed"
     gate_profile: "compact"
     source_tracking: "process/checks/PRECHECK-QL-RD-000-REDESIGN-BASELINE-2026-06-22.md"
     formal_cr_path: "process/changes/CR-106-REDESIGN-BASELINE-HYGIENE-CODE-HEALTH-PRECHECK-2026-06-22.md"
     blocked_by:
-      - "CP7 remediation verification PASS; awaiting CP8"
+      - "closed by CR106 CP8 approval"
     current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
-    next_action: "Prepare CR106 CP8 delivery readiness; recommend closure."
+    next_action: "CR106 current delivery closed; start separate CR for redesign scope intake or CR105 if explicitly requested."
   - id: CR-103
     title: QMT/MiniQMT Non-Trading-Day Validation Experiment
     status: active-non-trading-day-validation-pass-pending-cp8

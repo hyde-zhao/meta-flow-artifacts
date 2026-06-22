@@ -1,15 +1,15 @@
 ---
 project_id: quant-lab
 workflow_mode: production
-current_phase: requirement-clarification
+current_phase: story-planning
 current_agent: host-orchestrator
-active_change: 'CR-106'
+active_change: ''
 active_story: ''
-iteration: 587
+iteration: 588
 blocked: false
 blocked_reason: ''
-last_action: "CR106 CP8 delivery readiness 已生成。Release Context、CP8 Context Capsule、自动预检、人工审查稿和发起消息已写入；CP8 自动预检结论 READY，建议关闭 CR106 为 closed-current-delivery / READY。"
-next_action: "等待用户审查 process/checkpoints/CP8-CR106-DELIVERY-READINESS.md 并回复 approve / 修改: <具体修改点> / reject。当前不需要源码整改；不启动 CR105，不授权 submit/cancel/buy/sell/simulation/live、账户原文、NAS、凭据、新 runtime 或 provider/lake/catalog publish。"
+last_action: "用户批准 CR106 CP8。已关闭 CR106 为 closed-current-delivery / READY：baseline hygiene、只读代码健康预检和 governance artifact 补齐完成；当前证据显示不需要源码整改。"
+next_action: "当前 active formal CR 应恢复为 none。建议下一步选择是否启动独立 redesign scope intake CR；不启动 CR105，除非用户明确要求 order-write / submit-cancel / simulation-live 高风险门禁。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -124,11 +124,11 @@ artifact_routing:
   health_status: "local-remediation-complete"
   updated_at: "2026-06-17T19:50:00+08:00"
 cr_tracking:
-  status: "active-formal-cr"
+  status: "no-active-formal-cr"
   schema_version: 2
   index_path: process/changes/CR-INDEX.yaml
   current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-  last_consistency_check: '2026-06-22T12:32:00+08:00 CR106 started after user confirmed baseline precheck has no issue and asked to continue remediation. CR106 scope is low-risk process/static/readonly code health precheck. CR105/order-write/runtime/NAS/credentials/provider publish remain unauthorized.'
+  last_consistency_check: '2026-06-22T13:18:00+08:00 CR106 CP8 approved by user and closed-current-delivery / READY. Source-code remediation is not required by current evidence. CR105/order-write/runtime/NAS/credentials/provider publish remain unauthorized.'
 	  next_action_queue:
 	  - candidate_id: RA-CR101-001
 	    legacy_ids:
