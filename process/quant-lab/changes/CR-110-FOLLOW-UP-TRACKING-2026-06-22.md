@@ -3,7 +3,7 @@ source_cr: "CR-110"
 status: "active-follow-up"
 created_at: "2026-06-22T14:47:29+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-22T15:36:41+08:00"
+updated_at: "2026-06-22T16:06:10+08:00"
 checkpoint_source: "CP8"
 cr_index_path: "process/changes/CR-INDEX.yaml"
 ---
@@ -12,7 +12,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 
 ## 目的
 
-本台账记录 CR110 CP8 后续候选分流结果。CR110 已于 2026-06-22T15:04:13+08:00 经用户 approve 关闭为 READY。用户于 2026-06-22T15:15:41+08:00 明确启动 `FU-CR110-001`，已转换为正式 `CR-111`；用户于 2026-06-22T15:23:02+08:00 approve CR111 CP2，并于 2026-06-22T15:36:41+08:00 approve CR111 CP8，CR111 已关闭为 READY。本台账仍不启动源码修改、checker implementation change、runtime、NAS、凭据、交易写或 publish。
+本台账记录 CR110 CP8 后续候选分流结果。CR110 已于 2026-06-22T15:04:13+08:00 经用户 approve 关闭为 READY。用户于 2026-06-22T15:15:41+08:00 明确启动 `FU-CR110-001`，已转换为正式 `CR-111`；用户于 2026-06-22T15:23:02+08:00 approve CR111 CP2，并于 2026-06-22T15:36:41+08:00 approve CR111 CP8，CR111 已关闭为 READY。用户于 2026-06-22T15:49:13+08:00 明确启动 `FU-CR110-002`，已转换为正式 `CR-112`；用户于 2026-06-22T15:55:31+08:00 approve CR112 CP2，并于 2026-06-22T16:06:10+08:00 approve CR112 CP8，CR112 已关闭为 READY。本台账仍不启动源码修改、checker implementation change、runtime、NAS、凭据、交易写或 publish。
 
 ## 结构化候选项
 
@@ -85,16 +85,15 @@ follow_up_items:
   - id: "FU-CR110-002"
     title: "CR Tracking Checker Expectation Notes Candidate"
     kind: "ledger-maintenance"
-    lifecycle_status: "candidate"
-    readiness_status: "n/a"
-    gate_status: "not_started"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
     gate_profile: "compact"
     source_cr: "CR-110"
     source_decision_id: "DQ-CP8-CR110-01"
     priority: 2
-    formal_cr_path: ""
-    blocked_by:
-      - "wait_for_user_selection_after_cr110_cp8"
+    formal_cr_path: "process/changes/CR-112-CR-TRACKING-CHECKER-EXPECTATION-NOTES-GATE-2026-06-22.md"
+    blocked_by: []
     superseded_by: []
     impact_surface:
       - "cr_tracking_checker_expectation_notes"
@@ -113,7 +112,40 @@ follow_up_items:
       credential_read: false
       nas_access: false
       trading_write: false
-    next_action: "仅当用户选择 checker expectation notes 时启动；若需要修改 checker implementation，必须另起实现 CR。"
+    next_action: "已转换为正式 CR112 并经用户 CP8 approve 关闭为 READY；若需要修改 checker implementation，必须另起实现 CR。"
+  - id: "CR-112"
+    legacy_ids:
+      - "FU-CR110-002"
+    title: "CR Tracking Checker Expectation Notes Gate"
+    kind: "ledger-maintenance"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_cr: "CR-110"
+    source_decision_id: "DQ-CP8-CR110-01"
+    priority: 2
+    formal_cr_path: "process/changes/CR-112-CR-TRACKING-CHECKER-EXPECTATION-NOTES-GATE-2026-06-22.md"
+    blocked_by: []
+    superseded_by: []
+    impact_surface:
+      - "cr_tracking_checker_expectation_notes"
+      - "checker_contract_notes"
+      - "no_checker_implementation_change"
+      - "no_runtime_authorization"
+    conflict_keys:
+      security_runtime:
+        - "no_runtime_connection"
+        - "no_order_write"
+        - "no_nas_access"
+        - "no_credential_read"
+        - "no_provider_lake_publish"
+    authorization_required:
+      runtime: false
+      credential_read: false
+      nas_access: false
+      trading_write: false
+    next_action: "CR112 已经用户 CP8 approve 关闭为 READY；若需要修改 checker implementation，必须另起实现 CR。"
 ```
 
 ## 后续 CR / Spike 候选索引
@@ -122,7 +154,8 @@ follow_up_items:
 |---|---|---|---|---:|---|---|---|---|---|---|---|
 | CR-111 | STATE Summary Staleness Cleanup Gate | closed-current-delivery | CR | 1 | state_summary_staleness_policy; no_runtime_connection | `process/changes/CR-111-STATE-SUMMARY-STALENESS-CLEANUP-GATE-2026-06-22.md` | formal_cr=CR-111 closed | closed | 已关闭 | CR111 已关闭为 READY；不得重写历史长表或修改源码 | DQ-CP8-CR110-01 |
 | FU-CR110-001 | STATE Summary Staleness Cleanup Candidate | closed-current-delivery | CR | 1 | state_summary_staleness_policy; no_runtime_connection | `process/changes/CR-111-STATE-SUMMARY-STALENESS-CLEANUP-GATE-2026-06-22.md` | formal_cr=CR-111 closed | closed | 已关闭 | 已启动为 CR111 并关闭为 READY；不得重写历史长表或修改源码 | DQ-CP8-CR110-01 |
-| FU-CR110-002 | CR Tracking Checker Expectation Notes Candidate | candidate | CR | 2 | cr_tracking_checker_expectation_notes; no_checker_implementation_change; no_runtime_connection |  | blocked_by=wait_for_user_selection_after_cr110_cp8 | not_started | 等待用户选择 | 仅当用户明确选择 checker expectation notes 时启动 | DQ-CP8-CR110-01 |
+| FU-CR110-002 | CR Tracking Checker Expectation Notes Candidate | closed-current-delivery | CR | 2 | cr_tracking_checker_expectation_notes; no_checker_implementation_change; no_runtime_connection | `process/changes/CR-112-CR-TRACKING-CHECKER-EXPECTATION-NOTES-GATE-2026-06-22.md` | formal_cr=CR-112 closed | closed | 已关闭 | 已启动为 CR112 并关闭为 READY；若需要修改 checker implementation，必须另起实现 CR | DQ-CP8-CR110-01 |
+| CR-112 | CR Tracking Checker Expectation Notes Gate | closed-current-delivery | CR | 2 | cr_tracking_checker_expectation_notes; no_checker_implementation_change; no_runtime_connection | `process/changes/CR-112-CR-TRACKING-CHECKER-EXPECTATION-NOTES-GATE-2026-06-22.md` | formal_cr=CR-112 closed | closed | 已关闭 | CR112 已关闭为 READY；若需要修改 checker implementation，必须另起实现 CR | DQ-CP8-CR110-01 |
 
 ## 不授权范围
 

@@ -3,7 +3,7 @@ source_cr: "CR-111"
 status: "closed-no-new-candidates"
 created_at: "2026-06-22T15:23:02+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-22T15:36:41+08:00"
+updated_at: "2026-06-22T16:06:10+08:00"
 checkpoint_source: "CP8"
 cr_index_path: "process/changes/CR-INDEX.yaml"
 ---
@@ -12,7 +12,7 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 
 ## 目的
 
-本台账记录 CR111 CP8 收口分流结果。CR111 已于 2026-06-22T15:36:41+08:00 经用户 approve 关闭为 READY。CR111 只做 no-code/no-runtime 的 STATE summary staleness cleanup policy，不新增 CR111 自身后续候选，不启动源码修改、checker implementation change、历史长表批量重写、runtime、NAS、凭据、交易写或 publish。
+本台账记录 CR111 CP8 收口分流结果。CR111 已于 2026-06-22T15:36:41+08:00 经用户 approve 关闭为 READY。CR111 只做 no-code/no-runtime 的 STATE summary staleness cleanup policy，不新增 CR111 自身后续候选，不启动源码修改、checker implementation change、历史长表批量重写、runtime、NAS、凭据、交易写或 publish。用户于 2026-06-22T15:49:13+08:00 启动 CR110 上游候选 `FU-CR110-002`，该候选已转为正式 `CR-112`；用户于 2026-06-22T16:06:10+08:00 approve CR112 CP8，CR112 已关闭为 READY。CR111 自身仍不新增后续候选。
 
 ## 结构化候选项
 
@@ -21,9 +21,10 @@ follow_up_items: []
 upstream_candidates_retained:
   - id: "FU-CR110-002"
     title: "CR Tracking Checker Expectation Notes Candidate"
-    status: "candidate"
+    status: "closed-current-delivery"
     tracking_path: "process/changes/CR-110-FOLLOW-UP-TRACKING-2026-06-22.md"
-    note: "CR111 不启动该候选；如需处理 checker expectation notes，必须由用户明确选择。"
+    formal_cr_path: "process/changes/CR-112-CR-TRACKING-CHECKER-EXPECTATION-NOTES-GATE-2026-06-22.md"
+    note: "该候选由用户在 CR111 关闭后明确启动，已转正式 CR112 并关闭为 READY；CR111 自身仍不新增后续候选。"
 ```
 
 ## 后续 CR / Spike 候选索引
@@ -31,7 +32,7 @@ upstream_candidates_retained:
 | 候选编号 | 标题 | 状态 | 类型 | 优先级 | 影响面 / 冲突键 | 正式 CR 路径 | 相关 active CR / blocked_by / superseded_by | 当前门控 | 阻塞原因 | 下一步 | 来源 |
 |---|---|---|---|---:|---|---|---|---|---|---|---|
 | N/A | CR111 不新增自身后续候选 | n/a | n/a | 0 | n/a |  |  | n/a | n/a | 无 | CP8-CR111 |
-| FU-CR110-002 | CR Tracking Checker Expectation Notes Candidate | candidate | CR | 2 | cr_tracking_checker_expectation_notes; no_checker_implementation_change; no_runtime_connection |  | blocked_by=wait_for_user_selection_after_cr110_cp8 | not_started | 等待用户选择 | 仅当用户明确选择 checker expectation notes 时启动 | CR110 follow-up tracking |
+| FU-CR110-002 | CR Tracking Checker Expectation Notes Candidate | closed-current-delivery | CR | 2 | cr_tracking_checker_expectation_notes; no_checker_implementation_change; no_runtime_connection | `process/changes/CR-112-CR-TRACKING-CHECKER-EXPECTATION-NOTES-GATE-2026-06-22.md` | formal_cr=CR-112 closed | closed | 已关闭 | 已启动为 CR112 并关闭为 READY；若需要修改 checker implementation，必须另起实现 CR | CR110 follow-up tracking |
 
 ## 不授权范围
 
