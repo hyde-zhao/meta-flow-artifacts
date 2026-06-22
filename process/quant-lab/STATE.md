@@ -8,8 +8,8 @@ active_story: ''
 iteration: 588
 blocked: false
 blocked_reason: ''
-last_action: "用户批准 CR106 CP8。已关闭 CR106 为 closed-current-delivery / READY：baseline hygiene、只读代码健康预检和 governance artifact 补齐完成；当前证据显示不需要源码整改。"
-next_action: "当前 active formal CR 应恢复为 none。建议下一步选择是否启动独立 redesign scope intake CR；不启动 CR105，除非用户明确要求 order-write / submit-cancel / simulation-live 高风险门禁。"
+last_action: "用户回复 approve，已关闭 CR107 为 closed-current-delivery / READY：redesign scope intake 和候选项排序完成；默认下一低风险候选为 FU-CR107-001 Redesign Backlog Decision Gate。未授权源码修改、CR105、CR089 恢复、runtime、交易写、NAS、凭据或 publish。"
+next_action: "先提交并推送 artifact 仓库 CR107 收口证据；源码仓库当前 clean/ahead0，可执行 no-op push 确认远端同步。推送后重跑双仓库状态、cr-tracking 和 active formal CR 检查。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:

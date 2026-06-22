@@ -1,0 +1,73 @@
+schema_version: 1
+context_id: RELEASE-CONTEXT-CR107
+created_at: "2026-06-22T13:50:24+08:00"
+created_by: host-orchestrator
+release_artifact_profile: minimal
+release_decision: READY
+target:
+  change_id: CR-107
+  checkpoint: CP8
+scope:
+  summary: "Redesign scope intake and candidate prioritization only."
+  no_code_change: true
+  no_runtime: true
+  no_high_risk_authorization: true
+quality_summary:
+  cp2_status: approved
+  scope_intake_created: true
+  candidate_prioritization_created: true
+  source_code_remediation_required: false
+  blockers: 0
+candidate_routing:
+  recommended_default_next:
+    id: FU-CR107-001
+    title: Redesign Backlog Decision Gate
+    status: candidate
+    rationale: "Lowest-risk continuation after CR107; converts scope intake into a small executable backlog without source-code or runtime authorization."
+  architecture_option:
+    id: FU-CR107-002
+    title: Architecture-only Redesign HLD Gate
+    status: candidate
+    rationale: "Use only if the user wants structure-level redesign before backlog decision."
+  deferred_candidates:
+    - id: CR-026
+      title: Qlib isolated runner optional Spike
+      reason: "Only useful if a Qlib comparator is still required."
+    - id: CR-027
+      title: Minute data feasibility Spike
+      reason: "Requires a concrete trigger that daily evidence cannot explain the execution gap."
+    - id: CR-028
+      title: Level2 rights and microstructure Spike
+      reason: "Requires data rights, schema, replay fixture, quality audit and cost assessment."
+  high_risk_not_started:
+    - id: RA-CR097-001
+      title: Non-empty / trading-day readonly retest
+      reason: "Runtime authorization candidate; not part of CR107."
+    - id: CR-089
+      title: QMT Interface Validation Gate
+      reason: "Remains blocked; not restored by CR107."
+    - id: FU-CR101-001
+      title: Order-write / simulation / live design authorization gate
+      reason: "CR105 direction; explicitly not started."
+non_authorized_items:
+  - source_code_changes
+  - CR105_order_write_submit_cancel_buy_sell
+  - simulation_live
+  - CR089_restoration
+  - qmt_miniqmt_xtquant_gateway_runtime
+  - credential_env_secret_account_raw_log_read
+  - nas_access
+  - provider_fetch_lake_write_catalog_publish
+evidence:
+  formal_cr: process/changes/CR-107-REDESIGN-SCOPE-INTAKE-AND-CANDIDATE-PRIORITIZATION-2026-06-22.md
+  scope_intake: docs/design/REDESIGN-SCOPE-INTAKE-CR107.md
+  cp2_auto: process/checks/CP2-CR107-REDESIGN-SCOPE-INTAKE-PRECHECK.md
+  cp2_manual: process/checkpoints/CP2-CR107-REDESIGN-SCOPE-INTAKE-REVIEW.md
+  cp8_context: process/context/CP8-CR107-DELIVERY-CONTEXT.yaml
+  cp8_auto: process/checks/CP8-CR107-DELIVERY-READINESS.md
+  cp8_manual: process/checkpoints/CP8-CR107-DELIVERY-READINESS.md
+risks:
+  - id: RA-CR107-01
+    status: accepted-on-cp8-approve
+    description: "CR107 does not execute implementation, HLD, runtime validation or full test suites; it only routes the redesign backlog."
+    rollback: "Reopen candidate routing as a new CR if priorities change."
