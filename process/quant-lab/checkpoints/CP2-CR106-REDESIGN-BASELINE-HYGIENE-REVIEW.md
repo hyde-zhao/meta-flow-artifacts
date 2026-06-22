@@ -2,11 +2,11 @@
 checkpoint_id: "CP2"
 checkpoint_name: "CR106 Redesign Baseline Hygiene Scope Review"
 type: "auto_then_manual"
-status: "pending"
+status: "approved"
 owner: "host-orchestrator"
 created_at: "2026-06-22T12:32:00+08:00"
-reviewed_by: ""
-reviewed_at: ""
+reviewed_by: "user"
+reviewed_at: "2026-06-22T12:45:00+08:00"
 auto_check_result: "process/checks/CP2-CR106-REDESIGN-BASELINE-HYGIENE-SCOPE-PRECHECK.md"
 target:
   phase: "requirement-scope-baseline"
@@ -101,8 +101,8 @@ target:
 
 ## 人工审查结果
 
-- 结论：`pending`
-- 审查人：
-- 审查时间：
-- 修改意见：
-- 风险接受项：
+- 结论：`approved`
+- 审查人：user
+- 审查时间：2026-06-22T12:45:00+08:00
+- 修改意见：无；用户通过结构化选择批准推荐方案。
+- 风险接受项：接受 CR106 仅执行低风险 baseline hygiene 与只读代码健康预检；不授权 CR105、runtime、交易写、NAS、凭据、账户原文或 provider/lake/catalog publish。

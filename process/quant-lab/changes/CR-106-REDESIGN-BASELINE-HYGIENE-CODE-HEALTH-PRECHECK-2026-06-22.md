@@ -3,20 +3,20 @@ cr_id: "CR-106"
 cr_type: "process"
 cr_kind: "requirement-change"
 lifecycle_status: "active"
-readiness_status: "not_ready"
-gate_status: "cp2_pending"
+readiness_status: "ready"
+gate_status: "cp8_pending"
 gate_profile: "compact"
-status: "active-cp2-review-pending"
+status: "active-governance-remediation-pass-pending-cp8"
 impact_level: "low"
 workflow_mode_before: "standard"
 workflow_mode_after_change: "fast-lane"
 fast_lane_upgrade_reason: ""
 rollback_to: "precheck baseline clean state before CR106"
-approval_result: "pending-cp2-human-review"
+approval_result: "cp2-approved-user-20260622"
 created_at: "2026-06-22T12:32:00+08:00"
 created_by: "host-orchestrator"
-approved_by: ""
-approved_at: ""
+approved_by: "user"
+approved_at: "2026-06-22T12:45:00+08:00"
 source: "user"
 linked_issue: ""
 parent_cr: ""
@@ -27,7 +27,7 @@ risk_class: "low-process-static-readonly"
 owner: "host-orchestrator"
 revisit_condition: "If readonly code health precheck finds concrete failures, create a scoped remediation CR instead of broad code edits."
 acceptance_criteria: "CP2 approves low-risk scope; CP6/CP7 readonly/static evidence identifies whether code-level remediation is required; no CR105/runtime/trading/NAS/provider/lake/catalog action is executed."
-close_condition: "Baseline hygiene report, code health precheck evidence, CR tracking status and next remediation recommendation are written and CP8 is approved or explicitly deferred."
+close_condition: "Baseline hygiene report, code health precheck evidence, governance artifact remediation evidence and CR tracking status are written; CP8 is approved. CP7 remediation verification passes imports, identity and focused static regression."
 cr_index_path: "process/changes/CR-INDEX.yaml"
 current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
 historical_baseline_status: "active"
@@ -68,8 +68,8 @@ reframe_summary: ""
 | CR 类型 | `process` |
 | Legacy CR kind | `requirement-change` |
 | 生命周期状态 | `active` |
-| 就绪状态 | `not_ready` |
-| 门禁状态 | `cp2_pending` |
+| 就绪状态 | `ready` |
+| 门禁状态 | `cp8_pending` |
 | 门禁模板 | `compact` |
 
 ## 结构化权限策略
@@ -200,8 +200,8 @@ authorization_policy:
 
 ## 处理结论
 
-- 审批结论：`pending-cp2-human-review`
-- [ ] 自动批准（低风险）
+- 审批结论：`cp2-approved-user-20260622`
+- [x] 自动批准（低风险）
 - [x] 待人工确认（中风险）
 - [ ] 待人工审批（高风险）
 

@@ -1,0 +1,42 @@
+schema_version: 1
+release_context_id: RELEASE-CONTEXT-CR106
+created_at: "2026-06-22T13:10:00+08:00"
+created_by: host-orchestrator
+change_id: CR-106
+release_artifact_profile: minimal
+release_decision: READY
+scope:
+  closed:
+    - baseline hygiene precheck accepted
+    - readonly code health precheck executed
+    - module boundary governance artifact added
+    - package identity governance artifact added
+  not_authorized:
+    - CR105 startup
+    - submit/cancel/buy/sell
+    - simulation/live
+    - QMT/MiniQMT/XtQuant/gateway runtime
+    - credentials/env/account/raw-log read
+    - NAS access
+    - provider/lake/catalog publish
+evidence:
+  - process/checks/PRECHECK-QL-RD-000-REDESIGN-BASELINE-2026-06-22.md
+  - process/checks/CP6-CR106-CODE-HEALTH-PRECHECK-DONE.md
+  - process/checks/CP7-CR106-CODE-HEALTH-PRECHECK-VERIFICATION-DONE.md
+  - process/checks/CP6-CR106-GOVERNANCE-ARTIFACT-REMEDIATION-DONE.md
+  - process/checks/CP7-CR106-GOVERNANCE-ARTIFACT-REMEDIATION-VERIFICATION-DONE.md
+  - docs/design/MODULE-BOUNDARIES.yaml
+  - docs/design/PACKAGE-IDENTITY.yaml
+verification_summary:
+  compileall: PASS
+  focused_pytest: "PASS / 33 passed"
+  meta_flow_imports: PASS
+  meta_flow_identity: PASS
+  cr_tracking: PASS
+  source_code_remediation_required: false
+residual_risks:
+  - id: R-CR106-001
+    severity: low
+    summary: "CR106 adds governance artifacts only; it does not validate full test suite or production runtime."
+    handling: accepted_for_current_scope
+next_recommendation: "Close CR106 as READY; if redesign scope work is needed, start a separate redesign scope intake CR. Do not start CR105 unless explicitly requested."

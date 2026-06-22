@@ -5,11 +5,11 @@ current_phase: requirement-clarification
 current_agent: host-orchestrator
 active_change: 'CR-106'
 active_story: ''
-iteration: 583
+iteration: 587
 blocked: false
 blocked_reason: ''
-last_action: "用户确认 baseline 预检没有问题并要求继续推进整改。已提交并推送 artifact baseline 证据 commit e6dc0b8，随后创建 CR106 Redesign Baseline Hygiene and Code Health Precheck，生成 CP2 context capsule、自动预检、人工审查稿和发起消息。CR106 当前 gate_status=cp2_pending。"
-next_action: "请审查 process/checkpoints/CP2-CR106-REDESIGN-BASELINE-HYGIENE-REVIEW.md。若回复 approve，则只执行 CR106 低风险只读代码健康预检；不启动 CR105，不授权 submit/cancel/buy/sell/simulation/live、账户原文、NAS、凭据、新 runtime 或 provider/lake/catalog publish。"
+last_action: "CR106 CP8 delivery readiness 已生成。Release Context、CP8 Context Capsule、自动预检、人工审查稿和发起消息已写入；CP8 自动预检结论 READY，建议关闭 CR106 为 closed-current-delivery / READY。"
+next_action: "等待用户审查 process/checkpoints/CP8-CR106-DELIVERY-READINESS.md 并回复 approve / 修改: <具体修改点> / reject。当前不需要源码整改；不启动 CR105，不授权 submit/cancel/buy/sell/simulation/live、账户原文、NAS、凭据、新 runtime 或 provider/lake/catalog publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
