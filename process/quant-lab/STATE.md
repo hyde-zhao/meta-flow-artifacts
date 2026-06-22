@@ -8,8 +8,8 @@ active_story: ''
 iteration: 588
 blocked: false
 blocked_reason: ''
-last_action: "用户回复 approve，已关闭 CR107 为 closed-current-delivery / READY：redesign scope intake 和候选项排序完成；默认下一低风险候选为 FU-CR107-001 Redesign Backlog Decision Gate。未授权源码修改、CR105、CR089 恢复、runtime、交易写、NAS、凭据或 publish。"
-next_action: "先提交并推送 artifact 仓库 CR107 收口证据；源码仓库当前 clean/ahead0，可执行 no-op push 确认远端同步。推送后重跑双仓库状态、cr-tracking 和 active formal CR 检查。"
+last_action: "用户回复 approve，接受 CR110 CP8：CR110 已关闭为 closed-current-delivery / READY；FU-CR110-001 和 FU-CR110-002 仅保留为 candidate，未启动正式 CR；未授权源码修改、checker implementation change、CR105、CR089 恢复、runtime、交易写、NAS、凭据或 publish。"
+next_action: "当前无 active formal CR。建议先提交并推送 artifact 仓库中的 CR108/CR109/CR110 过程证据；如继续 redesign 治理，需由用户明确选择 FU-CR110-001、FU-CR110-002、FU-CR109-002/003 或其他候选，并先做冲突预检。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -128,7 +128,7 @@ cr_tracking:
   schema_version: 2
   index_path: process/changes/CR-INDEX.yaml
   current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-  last_consistency_check: '2026-06-22T13:18:00+08:00 CR106 CP8 approved by user and closed-current-delivery / READY. Source-code remediation is not required by current evidence. CR105/order-write/runtime/NAS/credentials/provider publish remain unauthorized.'
+  last_consistency_check: '2026-06-22T15:04:13+08:00 CR110 CP8 approved by user and closed-current-delivery / READY. No active formal CR remains. FU-CR110-001 and FU-CR110-002 are candidates only; source code changes, checker implementation changes, CR105/order-write/runtime/NAS/credentials/provider publish remain unauthorized.'
 	  next_action_queue:
 	  - candidate_id: RA-CR101-001
 	    legacy_ids:
