@@ -5,11 +5,11 @@ current_phase: story-planning
 current_agent: host-orchestrator
 active_change: ''
 active_story: ''
-iteration: 588
+iteration: 591
 blocked: false
 blocked_reason: ''
-last_action: "用户回复 approve，接受 CR110 CP8：CR110 已关闭为 closed-current-delivery / READY；FU-CR110-001 和 FU-CR110-002 仅保留为 candidate，未启动正式 CR；未授权源码修改、checker implementation change、CR105、CR089 恢复、runtime、交易写、NAS、凭据或 publish。"
-next_action: "当前无 active formal CR。建议先提交并推送 artifact 仓库中的 CR108/CR109/CR110 过程证据；如继续 redesign 治理，需由用户明确选择 FU-CR110-001、FU-CR110-002、FU-CR109-002/003 或其他候选，并先做冲突预检。"
+last_action: "用户回复 approve，接受 CR111 CP8：CR111 已关闭为 closed-current-delivery / READY；CR111 不新增自身后续候选，FU-CR110-002 仍保留为 candidate；未授权源码修改、checker implementation change、历史长表批量重写、CR105、CR089 恢复、runtime、交易写、NAS、凭据或 publish。"
+next_action: "提交并推送 artifact 仓库中的 CR111 过程证据；推送后重跑双仓库状态检查，目标为源码 clean/ahead0/behind0、artifact clean/ahead0/behind0、cr-tracking OK、active formal CR none。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -128,7 +128,7 @@ cr_tracking:
   schema_version: 2
   index_path: process/changes/CR-INDEX.yaml
   current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-  last_consistency_check: '2026-06-22T15:04:13+08:00 CR110 CP8 approved by user and closed-current-delivery / READY. No active formal CR remains. FU-CR110-001 and FU-CR110-002 are candidates only; source code changes, checker implementation changes, CR105/order-write/runtime/NAS/credentials/provider publish remain unauthorized.'
+  last_consistency_check: '2026-06-22T15:36:41+08:00 User approved CR111 CP8. CR111 is closed-current-delivery / READY; there are no active formal CRs. FU-CR110-002 remains candidate only. Source code changes, checker implementation changes, historical STATE long-table bulk rewrite, CR105/order-write/runtime/NAS/credentials/provider publish remain unauthorized.'
 	  next_action_queue:
 	  - candidate_id: RA-CR101-001
 	    legacy_ids:

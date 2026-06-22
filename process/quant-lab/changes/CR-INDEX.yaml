@@ -1,7 +1,7 @@
 version: 1
 schema_version: 2
 status: "no-active-formal-cr"
-updated_at: '2026-06-22T15:04:13+08:00'
+updated_at: '2026-06-22T15:36:41+08:00'
 updated_by: "host-orchestrator"
 owner: meta-po
 source: >
@@ -97,7 +97,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: '2026-06-22T15:04:13+08:00 User approved CR110 CP8. CR110 is closed-current-delivery / READY; there are no active formal CRs. FU-CR110-001 and FU-CR110-002 remain candidates only. Source code changes, checker implementation changes, CR105/order-write/runtime/NAS/credentials/provider publish remain unauthorized.'
+last_consistency_check: '2026-06-22T15:36:41+08:00 User approved CR111 CP8. CR111 is closed-current-delivery / READY; there are no active formal CRs. FU-CR110-002 remains candidate only. Source code changes, checker implementation changes, historical STATE long-table bulk rewrite, CR105/order-write/runtime/NAS/credentials/provider publish remain unauthorized.'
 status_model:
   lifecycle_status_values:
     - candidate
@@ -218,6 +218,33 @@ index_schema:
 - last_checked_at
 active_crs: []
 recent_items:
+  - id: CR-111
+    title: STATE Summary Staleness Cleanup Gate
+    status: closed-current-delivery
+    kind: ledger-maintenance
+    lifecycle_status: closed
+    readiness_status: ready
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-110-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR110-001
+    formal_cr_path: process/changes/CR-111-STATE-SUMMARY-STALENESS-CLEANUP-GATE-2026-06-22.md
+    priority: 1
+    blocked_by: "closed: user approved CR111 CP8 at 2026-06-22T15:36:41+08:00. CR111 closed READY; FU-CR110-002 remains candidate only. Source-code changes, checker implementation changes, historical STATE long-table bulk rewrite and high-risk runtime remain unauthorized."
+    impact_surface:
+      - state_summary_staleness_policy
+      - process/STATE.md
+      - cr_tracking_contract
+      - no_code_change
+      - no_runtime_authorization
+    conflict_keys:
+      - no_runtime_connection
+      - no_order_write
+      - no_nas_access
+      - no_credential_read
+      - no_provider_lake_publish
+    next_gate: closed
+    next_action: "CR111 closed READY. FU-CR110-002 remains candidate only; start any follow-up only after explicit user selection and conflict precheck."
+    last_checked_at: '2026-06-22T15:36:41+08:00'
   - id: CR-110
     title: State / CR Tracking Contract Normalization Plan
     status: closed-current-delivery
@@ -229,7 +256,7 @@ recent_items:
     source_tracking: process/changes/CR-109-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR109-001
     formal_cr_path: process/changes/CR-110-STATE-CR-TRACKING-CONTRACT-NORMALIZATION-PLAN-2026-06-22.md
     priority: 1
-    blocked_by: "closed: user approved CR110 CP8 at 2026-06-22T15:04:13+08:00. CR110 closed READY; FU-CR110-001 and FU-CR110-002 remain candidates only. Source-code changes, checker implementation changes and high-risk runtime remain unauthorized."
+    blocked_by: "closed: user approved CR110 CP8 at 2026-06-22T15:04:13+08:00. CR110 closed READY; FU-CR110-001 was later selected and converted to active formal CR111; FU-CR110-002 remains candidate only. Source-code changes, checker implementation changes and high-risk runtime remain unauthorized."
     impact_surface:
       - state_active_change_contract
       - cr_tracking_contract
@@ -244,7 +271,7 @@ recent_items:
       - no_credential_read
       - no_provider_lake_publish
     next_gate: closed
-    next_action: "CR110 closed READY. Next default is to keep candidates pending unless the user explicitly selects FU-CR110-001, FU-CR110-002 or another backlog item."
+    next_action: "CR110 closed READY. FU-CR110-001 was selected and converted to active formal CR111; FU-CR110-002 remains candidate only."
     last_checked_at: '2026-06-22T15:04:13+08:00'
   - id: CR-109
     title: Governance / State Contract Cleanup Gate
@@ -3001,6 +3028,22 @@ route_view:
   status: cr044_closed_offline_admission_design_ready
   next_action: CR044 已完成 CP8 approved 并关闭为 offline-admission-design-ready / READY_WITH_RISK；未来真实 Goldminer L3/L4/L5 验证仅作为 CR045-candidate，必须单独决策和逐 run 授权。当前不授权读取凭据、登录、连接、查询账户、下单、撤单或 simulation/live。
 items:
+  - id: "CR-111"
+    legacy_ids:
+      - "FU-CR110-001"
+    title: "STATE Summary Staleness Cleanup Gate"
+    status: "closed-current-delivery"
+    kind: "ledger-maintenance"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "process/changes/CR-110-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR110-001"
+    formal_cr_path: "process/changes/CR-111-STATE-SUMMARY-STALENESS-CLEANUP-GATE-2026-06-22.md"
+    blocked_by:
+      - "closed_by_user_cp8_approval_20260622T153641"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR111 closed READY. FU-CR110-002 remains candidate only; start any follow-up only after explicit user selection and conflict precheck."
   - id: "CR-110"
     legacy_ids:
       - "FU-CR109-001"
@@ -3016,7 +3059,7 @@ items:
     blocked_by:
       - "closed_by_user_cp8_approval_20260622T150413"
     current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
-    next_action: "CR110 closed READY. FU-CR110-001 and FU-CR110-002 remain candidates only; start any follow-up only after explicit user selection and conflict precheck."
+    next_action: "CR110 closed READY. FU-CR110-001 was selected and converted to active formal CR111; FU-CR110-002 remains candidate only and requires explicit user selection plus conflict precheck."
   - id: "CR-109"
     title: "Governance / State Contract Cleanup Gate"
     status: "closed-current-delivery"
@@ -3119,18 +3162,18 @@ items:
     next_action: "Keep as candidate; start only if machine result / event ledger cleanup becomes necessary."
   - id: "FU-CR110-001"
     title: "STATE Summary Staleness Cleanup Candidate"
-    status: "candidate"
+    status: "closed-current-delivery"
     kind: "ledger-maintenance"
-    lifecycle_status: "candidate"
-    readiness_status: "n/a"
-    gate_status: "not_started"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
     gate_profile: "compact"
-    source_tracking: "process/changes/CR-110-FOLLOW-UP-TRACKING-2026-06-22.md"
-    formal_cr_path: ""
+    source_tracking: "process/changes/CR-110-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR110-001"
+    formal_cr_path: "process/changes/CR-111-STATE-SUMMARY-STALENESS-CLEANUP-GATE-2026-06-22.md"
     blocked_by:
-      - "wait_for_user_selection_after_cr110_cp8"
+      - "formal_cr111_closed_by_user_cp8_approval_20260622T153641"
     current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
-    next_action: "Only start if the user explicitly selects STATE summary staleness cleanup after CR110 CP8; do not rewrite historical STATE long tables or modify source code."
+    next_action: "Converted to formal CR111 and closed READY by user CP8 approval."
   - id: "FU-CR110-002"
     title: "CR Tracking Checker Expectation Notes Candidate"
     status: "candidate"
