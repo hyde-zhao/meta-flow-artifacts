@@ -97,7 +97,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: '2026-06-21T13:31:01+08:00 active: CR103 non-trading-day QMT/MiniQMT validation PASS_WITH_RISK with local checker and fixture-only regression; CR104 trading-day runtime validation gate created as blocked/cp2_pending for 2026-06-22. CR102 remains cp8_pending for NAS closure. No QMT/MiniQMT/XtQuant/gateway runtime started; no env/credential/account read; no submit/cancel/simulation/live.'
+last_consistency_check: '2026-06-22T11:24:03+08:00 CR104 closed-current-delivery / READY_WITH_RISK after MiniQMT/gateway readonly runtime PASS with zero and one_to_ten redacted position buckets. CR102 and CR103 remain cp8_pending. CR104 closure does not authorize submit/cancel/buy/sell/simulation/live, raw account/log output, NAS, credentials or provider/lake/catalog publish.'
 status_model:
   lifecycle_status_values:
     - candidate
@@ -128,8 +128,8 @@ next_action_queue:
     title: QMT direct-run validation authorization gate
     source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
     formal_cr_path: "process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md"
-    recommended_action: wait_for_cr104_cp2_runtime_authorization
-    gate_status: cp2_pending
+    recommended_action: closed_by_cr104_cp8_readonly_scope_direct_run_deferred
+    gate_status: closed_current_delivery
     non_authorized_scope:
       - qmt_miniqmt_xtquant_gateway_runtime
       - credential_or_env_read
@@ -143,8 +143,8 @@ next_action_queue:
     title: MiniQMT gateway adapter validation authorization gate
     source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
     formal_cr_path: "process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md"
-    recommended_action: wait_for_cr104_cp2_runtime_authorization
-    gate_status: cp2_pending
+    recommended_action: closed_by_cr104_cp8_readonly_runtime_pass
+    gate_status: closed_current_delivery
     non_authorized_scope:
       - qmt_miniqmt_xtquant_gateway_runtime
       - credential_or_env_read
@@ -329,10 +329,10 @@ recent_items:
     last_checked_at: '2026-06-20T10:13:18+08:00'
   - id: RA-CR101-001
     title: QMT direct-run validation authorization gate
-    status: blocked
-    lifecycle_status: blocked
+    status: deferred-not-covered-by-cr104-closure
+    lifecycle_status: deferred
     readiness_status: not_ready
-    gate_status: cp2_pending
+    gate_status: closed_current_delivery
     gate_profile: runtime
     source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
     formal_cr_path: process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md
@@ -342,7 +342,7 @@ recent_items:
     source_checkpoint: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
     source_decision_id: DQ-CP8-CR101-04
     priority: 1
-    blocked_by: "non-trading-day validation completed in CR103; true QMT terminal direct-run still requires CR104 CP2 runtime authorization and redacted evidence plan"
+    blocked_by: "CR104 closed current readonly MiniQMT/gateway delivery as READY_WITH_RISK. QMT terminal direct-run was not executed in CR104 closure; if still needed, start a separate runtime gate."
     impact_surface:
     - qmt_direct_run_target
     - qmt_terminal_runtime
@@ -354,15 +354,15 @@ recent_items:
     - runtime_authorization
     - credential_boundary
     - no_order_write
-    next_gate: cp2_pending
-    next_action: "等待 2026-06-22 CR104 CP2 runtime authorization；不自动代跑 QMT。"
-    last_checked_at: '2026-06-21T13:31:01+08:00'
+    next_gate: deferred
+    next_action: "如仍需要 QMT terminal direct-run validation，另起独立 runtime gate；CR104 已关闭。"
+    last_checked_at: '2026-06-22T11:24:03+08:00'
   - id: RA-CR101-002
     title: MiniQMT gateway adapter validation authorization gate
-    status: blocked
-    lifecycle_status: blocked
-    readiness_status: not_ready
-    gate_status: cp2_pending
+    status: closed-current-delivery
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
     gate_profile: runtime
     source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
     formal_cr_path: process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md
@@ -372,7 +372,7 @@ recent_items:
     source_checkpoint: process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
     source_decision_id: DQ-CP8-CR101-04
     priority: 2
-    blocked_by: "non-trading-day validation completed in CR103; true MiniQMT/gateway readonly validation still requires CR104 CP2 runtime authorization"
+    blocked_by: "closed: CR104 MiniQMT/gateway readonly validation passed with zero and one_to_ten redacted position buckets; user requested CR104 closure and remote push on 2026-06-22."
     impact_surface:
     - quant_lab_runner_adapter_layer
     - miniqmt_gateway_adapter
@@ -386,9 +386,9 @@ recent_items:
     - readonly_query_positions
     - credential_boundary
     - no_order_write
-    next_gate: cp2_pending
-    next_action: "等待 2026-06-22 CR104 CP2 runtime authorization；只允许 health / capabilities / query_positions readonly。"
-    last_checked_at: '2026-06-21T13:31:01+08:00'
+    next_gate: closed
+    next_action: "CR104 当前 readonly runtime 交付已关闭；order-write / simulation/live 仍需 proposed CR105。"
+    last_checked_at: '2026-06-22T11:24:03+08:00'
   - id: RA-CR101-003
     title: NAS real package exchange validation authorization gate
     status: active-runtime-authorization-approved-preparation-only-no-execution
@@ -2436,16 +2436,16 @@ blocked_crs:
   last_checked_at: '2026-06-19T19:35:00+08:00'
 - id: CR-104
   title: QMT/MiniQMT Trading-Day Runtime Validation Gate
-  status: blocked-awaiting-trading-day-cp2-authorization
-  lifecycle_status: blocked
-  readiness_status: not_ready
-  gate_status: cp2_pending
+  status: closed-current-delivery
+  lifecycle_status: closed
+  readiness_status: ready_with_risk
+  gate_status: closed
   source_tracking: USER-20260621-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION
   formal_cr_path: process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md
   parent_cr: CR-101
   source_decision_id: DQ-CP8-CR101-04
   priority: 1
-  blocked_by: "Awaiting 2026-06-22 trading-day CP2 runtime authorization and user-provided execution host / evidence scope. No QMT/MiniQMT/XtQuant/gateway runtime, env/credential/account read, query_positions, submit/cancel/simulation/live authorized before CP2 approval."
+  blocked_by: "closed: MiniQMT/gateway readonly runtime validation passed via CR099 authorization_ref with zero and one_to_ten redacted position buckets. QMT direct-run deferred; order-write / simulation/live not authorized and requires proposed CR105."
   impact_surface:
   - qmt_direct_run_target
   - qmt_terminal_runtime
@@ -2462,9 +2462,9 @@ blocked_crs:
   - readonly_query_positions
   - credential_boundary
   - no_order_write
-  next_gate: cp2 runtime authorization
-  next_action: "准备 CR104 CP2 runtime_authorization Decision Brief；等待用户在 2026-06-22 交易日提供执行主机、账户模式、证据脱敏范围并 approve。"
-  last_checked_at: '2026-06-21T13:31:01+08:00'
+  next_gate: closed
+  next_action: "CR104 已关闭为 READY_WITH_RISK；如需下单/撤单/交易接口验证，启动 CR105 独立门禁。"
+  last_checked_at: '2026-06-22T11:24:03+08:00'
 follow_up_candidates:
 - id: "CR-026"
   title: Qlib isolated runner optional Spike (narrowed after CR030-039 coverage)

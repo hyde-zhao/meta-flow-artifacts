@@ -5,11 +5,11 @@ current_phase: story-planning
 current_agent: host-orchestrator
 active_change: 'CR-103'
 active_story: ''
-iteration: 580
+iteration: 581
 blocked: false
 blocked_reason: ''
-last_action: "用户要求启动 QMT/MiniQMT 验证实验并另起明日交易日验证 CR。已创建 CR103 非交易日验证实验并完成本地 checker/fixture/dry-run 验证：CR089 package checker PASS，QMT/MiniQMT 合同回归 125 passed；修正 tests/test_cr019_qmt_endpoint_matrix.py 中 positions 无 transport 阻断口径。已创建 CR104 交易日 runtime validation gate，当前 blocked/cp2_pending。"
-next_action: "准备 CR103 CP8 收口确认，或在 2026-06-22 交易日前准备 CR104 CP2 runtime authorization Decision Brief。未获 CR104 CP2 明确批准前，不启动 QMT/MiniQMT/XtQuant/gateway，不读取 env/凭据/账户，不执行 submit/cancel/simulation/live。"
+last_action: "用户要求先不启动 CR105，将 CR104 收尾并推送远端。CR104 MiniQMT/gateway readonly runtime 已复用 CR099 authorization_ref 完成 health/capabilities/query_positions_readonly 验证，覆盖 zero 与 one_to_ten 持仓 bucket，redacted evidence checker PASS，forbidden counters 全 0。已生成 CR104 CP8 auto/manual checkpoint、release context 和 context capsule，按用户指令关闭 CR104 为 closed-current-delivery / READY_WITH_RISK。"
+next_action: "提交并推送 CR104 process artifacts。后续如需下单/撤单/交易接口验证，需用户明确启动 CR105 独立 order-write runtime authorization gate；当前不授权 submit/cancel/buy/sell/simulation/live、账户原文、NAS、凭据或 provider/lake/catalog publish。"
 canonical_project_name: quant-lab
 legacy_project_alias: local_backtest
 root_authority:
@@ -128,23 +128,23 @@ cr_tracking:
   schema_version: 2
   index_path: process/changes/CR-INDEX.yaml
   current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-  last_consistency_check: '2026-06-21T13:31:01+08:00 active: CR103 non-trading-day QMT/MiniQMT validation PASS_WITH_RISK with local checker and fixture-only regression; CR104 trading-day runtime validation gate created as blocked/cp2_pending for 2026-06-22. No QMT/MiniQMT/XtQuant/gateway runtime started; no env/credential/account read; no submit/cancel/simulation/live.'
+  last_consistency_check: '2026-06-22T11:24:03+08:00 CR104 closed-current-delivery / READY_WITH_RISK after MiniQMT/gateway readonly runtime PASS with zero and one_to_ten redacted position buckets. CR102 and CR103 remain cp8_pending. CR104 closure does not authorize submit/cancel/buy/sell/simulation/live, raw account/log output, NAS, credentials or provider/lake/catalog publish.'
 	  next_action_queue:
 	  - candidate_id: RA-CR101-001
 	    legacy_ids:
 	    - QMT-DIRECT-RUN-VALIDATION-FU
 	    title: QMT direct-run validation authorization gate
 	    formal_cr_path: process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md
-	    recommended_action: wait_for_cr104_cp2_runtime_authorization
-	    gate_status: cp2_pending
+	    recommended_action: closed_by_cr104_cp8_readonly_scope_direct_run_deferred
+	    gate_status: closed_current_delivery
 	    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
 	  - candidate_id: RA-CR101-002
 	    legacy_ids:
 	    - MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU
 	    title: MiniQMT gateway adapter validation authorization gate
 	    formal_cr_path: process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md
-	    recommended_action: wait_for_cr104_cp2_runtime_authorization
-	    gate_status: cp2_pending
+	    recommended_action: closed_by_cr104_cp8_readonly_runtime_pass
+	    gate_status: closed_current_delivery
 	    current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
 	  - candidate_id: RA-CR101-003
 	    legacy_ids:
@@ -2004,16 +2004,16 @@ cr_tracking:
     last_checked_at: '2026-06-19T19:35:00+08:00'
   - id: CR-104
     title: QMT/MiniQMT Trading-Day Runtime Validation Gate
-    status: blocked-awaiting-trading-day-cp2-authorization
-    lifecycle_status: blocked
-    readiness_status: not_ready
-    gate_status: cp2_pending
+    status: closed-current-delivery
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
     source_tracking: USER-20260621-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION
     formal_cr_path: process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md
     parent_cr: CR-101
     source_decision_id: DQ-CP8-CR101-04
     priority: 1
-    blocked_by: "Awaiting 2026-06-22 trading-day CP2 runtime authorization and user-provided execution host / evidence scope. No QMT/MiniQMT/XtQuant/gateway runtime, env/credential/account read, query_positions, submit/cancel/simulation/live authorized before CP2 approval."
+    blocked_by: "closed: MiniQMT/gateway readonly runtime validation passed via CR099 authorization_ref with zero and one_to_ten redacted position buckets. QMT direct-run deferred; order-write / simulation/live not authorized and requires proposed CR105."
     impact_surface:
     - qmt_direct_run_target
     - qmt_terminal_runtime
@@ -2030,9 +2030,9 @@ cr_tracking:
     - readonly_query_positions
     - credential_boundary
     - no_order_write
-    next_gate: cp2 runtime authorization
-    next_action: "准备 CR104 CP2 runtime_authorization Decision Brief；等待用户在 2026-06-22 交易日提供执行主机、账户模式、证据脱敏范围并 approve。"
-    last_checked_at: '2026-06-21T13:31:01+08:00'
+    next_gate: closed
+    next_action: "CR104 已关闭为 READY_WITH_RISK；如需下单/撤单/交易接口验证，启动 CR105 独立门禁。"
+    last_checked_at: '2026-06-22T11:24:03+08:00'
   follow_up_candidates:
   - id: CR-026
     title: Qlib isolated runner optional Spike (narrowed after CR030-039 coverage)

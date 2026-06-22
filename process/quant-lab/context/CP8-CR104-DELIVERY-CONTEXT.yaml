@@ -1,0 +1,52 @@
+schema_version: "1.0"
+context_id: "CP8-CR104-DELIVERY-CONTEXT"
+cr_id: "CR-104"
+status: "ready-for-human-review-approved-by-user-command"
+created_at: "2026-06-22T11:24:03+08:00"
+owner: "host-orchestrator"
+read_profile: "compact"
+
+scope:
+  in_scope:
+    - "MiniQMT/gateway readonly runtime validation."
+    - "health / capabilities / query_positions_readonly."
+    - "zero-position and nonzero-position redacted evidence paths."
+  out_of_scope:
+    - "QMT terminal direct-run load validation."
+    - "submit/cancel, buy/sell, order-write, simulation/live."
+    - "raw account, security code, quantity, cash, order, fill or log output."
+    - "NAS, provider/lake/catalog publish, credential/env/account original reads."
+
+quality_summary:
+  cp7_result: "PASS"
+  evidence:
+    - "/home/hyde/.quant-lab/evidence/qmt/cr104/redacted/cr104-miniqmt-readonly-20260621-cr099-reuse-001/evidence.json"
+    - "/home/hyde/.quant-lab/evidence/qmt/cr104/redacted/cr104-miniqmt-readonly-20260622-cr099-reuse-002/evidence.json"
+    - "/home/hyde/.quant-lab/evidence/qmt/cr104/redacted/cr104-miniqmt-readonly-nonzero-20260622-cr099-reuse-003/evidence.json"
+  verified_paths:
+    - "health status ok and session_ready true"
+    - "capabilities status ok and readonly_supported true"
+    - "query_positions_readonly zero bucket"
+    - "query_positions_readonly one_to_ten bucket with redacted item count and digest"
+  forbidden_counters: "all zero"
+  raw_payload_emitted: false
+
+release_decision:
+  decision: "READY_WITH_RISK"
+  reason: "Readonly runtime scope is PASS; CR104 closure keeps QMT direct-run and order-write outside current delivery."
+  manual_approval_source: "User requested CR104 closure and remote push on 2026-06-22."
+
+non_authorized_items:
+  - "QMT terminal direct-run execution under CR104 closure."
+  - "submit/cancel, buy/sell, order-write, simulation/live."
+  - "raw account, funds, positions, orders, fills, security code or logs."
+  - "credential/env/secret/account original reads."
+  - "NAS operations or provider/lake/catalog publish."
+
+follow_up_summary:
+  - id: "FU-CR101-001 / proposed CR105"
+    status: "candidate-not-started"
+    summary: "Simulated account order-write validation requires independent CP2 runtime authorization and implementation."
+  - id: "QMT direct-run retest"
+    status: "deferred"
+    summary: "If still required, start a separate runtime gate; not included in CR104 closure."

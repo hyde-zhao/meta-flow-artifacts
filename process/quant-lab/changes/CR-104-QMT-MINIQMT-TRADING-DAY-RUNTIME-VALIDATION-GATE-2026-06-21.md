@@ -1,21 +1,21 @@
 ---
 cr_id: "CR-104"
 cr_kind: "runtime-authorization"
-lifecycle_status: "active"
+lifecycle_status: "closed"
 readiness_status: "ready_with_risk"
-gate_status: "cp8_pending"
+gate_status: "closed"
 gate_profile: "runtime"
-status: "active-runtime-readonly-smoke-pass-ready-for-cp8"
+status: "closed-current-delivery"
 impact_level: "high"
 workflow_mode_before: "standard"
 workflow_mode_after_change: "standard"
 fast_lane_upgrade_reason: "命中真实 QMT/MiniQMT/XtQuant/gateway runtime、账户只读、交易日 query_positions、simulation/order-write 设计边界，必须使用 standard/runtime gate。"
 rollback_to: "CR103 non-trading-day validation PASS_WITH_RISK; CR101 closed-current-delivery / READY_WITH_RISK"
-approval_result: "runtime-readonly-authorized-by-user-20260621-cr099-ref-reuse"
+approval_result: "cp8-approved-user-20260622-close-readonly-runtime-pass"
 created_at: "2026-06-21T13:31:01+08:00"
 created_by: "host-orchestrator"
-approved_by: ""
-approved_at: ""
+approved_by: "user"
+approved_at: "2026-06-22T11:24:03+08:00"
 source: "user"
 linked_issue: ""
 parent_cr: "CR-101"
@@ -26,7 +26,7 @@ risk_class: "qmt-miniqmt-trading-day-runtime"
 owner: "host-orchestrator"
 revisit_condition: "2026-06-22 交易日且用户明确批准 CP2 runtime scope、执行主机、证据脱敏、停止条件和不授权项。"
 acceptance_criteria: "CP2 仅批准明日交易日验证范围后，才允许进入后续 CP3/CP5；未获 CP2 明确批准前，不启动 QMT/MiniQMT/XtQuant/gateway，不读取 env/凭据/账户，不查询账户/持仓/委托/成交，不 submit/cancel，不 simulation/live。"
-close_condition: "交易日验证 PASS/PASS_WITH_RISK 并 CP8 收口，或用户取消/延期。"
+close_condition: "MiniQMT/gateway readonly runtime 验证已覆盖 zero 与 one_to_ten 持仓 bucket，CP8 由用户要求收尾并推送。"
 cr_index_path: "process/changes/CR-INDEX.yaml"
 current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
 historical_baseline_status: "active"
@@ -46,10 +46,10 @@ reframe_summary: ""
 
 | 范围 | 目标 | 当前状态 |
 |---|---|---|
-| QMT direct-run validation | 证明 QMT terminal 能加载当前 `qmt_terminal_direct` 策略包 target 或最小入口 | pending CP2 |
-| MiniQMT / gateway readonly validation | 证明 health / capabilities / query_positions_readonly 的受控只读链路 | pending CP2 |
-| redacted evidence | 保存 run_id、status、capabilities summary、positions digest / bucket、forbidden counters，不保存原始账户/持仓/日志 | pending CP2 |
-| order-write / simulation / live | 当前只列为后续设计项，不在 CP2 默认授权 | not authorized |
+| QMT direct-run validation | 证明 QMT terminal 能加载当前 `qmt_terminal_direct` 策略包 target 或最小入口 | deferred / not covered by this closure；如仍需要，另起独立 gate |
+| MiniQMT / gateway readonly validation | 证明 health / capabilities / query_positions_readonly 的受控只读链路 | PASS |
+| redacted evidence | 保存 run_id、status、capabilities summary、positions digest / bucket、forbidden counters，不保存原始账户/持仓/日志 | PASS |
+| order-write / simulation / live | 当前只列为后续设计项，不在 CP2 默认授权 | not authorized；需 CR105 |
 
 ## 明日需要用户准备的信息
 
@@ -122,6 +122,40 @@ Today's trial command is documented in `docs/features/cr104-qmt-miniqmt-trading-
 
 本次验证由用户明确要求复用 CR099 会话参数和 `--runtime-authorization-ref cr099-runner-readonly-smoke-20260619-sim` 发起；实际执行只调用 health / capabilities / query_positions_readonly。未启动 QMT/MiniQMT/gateway，未执行 submit/cancel/buy/sell/simulation/live，未访问 NAS，未 provider/lake/catalog publish。剩余风险：本次返回 `position_count_bucket=zero`，证明只读链路与脱敏 schema 成功，但不证明非空持仓脱敏路径。
 
+## Runtime Readonly Retest Result
+
+| Field | Value |
+|---|---|
+| checked_at | `2026-06-22` |
+| run_id | `cr104-miniqmt-readonly-20260622-cr099-reuse-002` |
+| authorization_ref | `cr099-runner-readonly-smoke-20260619-sim` |
+| evidence_path | `/home/hyde/.quant-lab/evidence/qmt/cr104/redacted/cr104-miniqmt-readonly-20260622-cr099-reuse-002/evidence.json` |
+| checker_status | `passed=true`, `errors=[]`, `warnings=[]` |
+| health | `status=ok`, `session_ready=true` |
+| capabilities | `status=ok`, `readonly_supported=true` |
+| query_positions_readonly | `status=ok`, `position_count_bucket=zero`, `items_redacted_count=0`, `raw_payload_emitted=false` |
+| forbidden counters | all `0`; `submit_cancel_calls=0`, `buy_sell_calls=0` |
+| result | `PASS_WITH_RISK` |
+
+本次复测确认 CR099 会话复用下的 MiniQMT/gateway 只读链路仍可用，但持仓仍为空。用户提出的 `ETF300` 约 10000 元买入验证属于 order-write / simulation 范围，不属于 CR104；现有 runtime server 也未暴露 submit/cancel 路由，相关动作必须转入后续 CR105 order-write gate。
+
+## Runtime Nonzero Position Readonly Retest Result
+
+| Field | Value |
+|---|---|
+| checked_at | `2026-06-22` |
+| run_id | `cr104-miniqmt-readonly-nonzero-20260622-cr099-reuse-003` |
+| authorization_ref | `cr099-runner-readonly-smoke-20260619-sim` |
+| evidence_path | `/home/hyde/.quant-lab/evidence/qmt/cr104/redacted/cr104-miniqmt-readonly-nonzero-20260622-cr099-reuse-003/evidence.json` |
+| checker_status | `passed=true`, `errors=[]`, `warnings=[]` |
+| health | `status=ok`, `session_ready=true` |
+| capabilities | `status=ok`, `readonly_supported=true` |
+| query_positions_readonly | `status=ok`, `position_count_bucket=one_to_ten`, `items_redacted_count=1`, `positions_digest_present=true`, `raw_payload_emitted=false` |
+| forbidden counters | all `0`; `account_id_values=0`, `security_code_values=0`, `raw_quantity_values=0`, `raw_cash_values=0`, `order_fields=0`, `fill_fields=0`, `submit_cancel_calls=0`, `buy_sell_calls=0` |
+| result | `PASS` |
+
+本次复测在用户确认已有持仓后执行，证明 CR104 只读链路已覆盖非空持仓脱敏路径：只输出 bucket、digest 和 redacted item count，不输出账户、证券代码、数量、资金、委托、成交或日志原文。CR104 只读范围可进入 CP8 收口；order-write / simulation 仍需后续 CR105 独立门禁和实现。
+
 ## 下一步
 
-CR104 当前状态为 `active-runtime-readonly-smoke-pass-ready-for-cp8`。下一步需要准备 CP8 收口确认，接受本次 zero-position readonly PASS_WITH_RISK，或另起后续 CR 验证非空持仓 / 更高风险操作。当前仍不授权 submit/cancel/buy/sell/simulation/live、账户原文、日志原文、NAS 或 provider/lake/catalog publish。
+CR104 当前状态为 `closed-current-delivery / READY_WITH_RISK`。本次关闭接受 readonly runtime PASS，并明确 QMT direct-run 未覆盖、order-write / simulation/live 未授权。当前仍不授权 submit/cancel/buy/sell/simulation/live、账户原文、日志原文、NAS 或 provider/lake/catalog publish。若需要测试模拟账户下单 / 撤单，应启动 CR105 order-write 独立门禁。
