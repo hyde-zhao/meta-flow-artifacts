@@ -1,0 +1,117 @@
+context_id: CP2-CR126-RUNNER-DEVELOPMENT-READINESS
+cr_id: CR-126
+checkpoint: CP2
+title: Quant-Lab Runner Development Readiness Scope Context
+status: ready
+created_at: '2026-06-23T13:40:14+08:00'
+created_by: host-orchestrator
+read_profile: minimal
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - process/changes/CR-126-QUANT-LAB-RUNNER-DEVELOPMENT-READINESS-RUNNER-ENTRY-DESIGN-2026-06-23.md
+  read_if_needed:
+    - trading/strategy_runner/__init__.py
+    - trading/strategy_runner/package_loader.py
+    - trading/strategy_runner/adapters.py
+    - trading/strategy_runner/readonly_gateway.py
+    - trading/strategy_runner/evidence.py
+    - scripts/check_cr091_strategy_runner_package.py
+    - tests/test_cr091_strategy_runner_contracts.py
+    - tests/test_cr098_runner_readonly_integration.py
+  do_not_read_by_default:
+    - .env
+    - data/
+    - reports/
+    - market_data/
+    - trading/qmt_runtime.py
+    - trading/qmt_gateway_service.py
+    - scripts/collect_cr099_runner_readonly_smoke.py
+    - scripts/run_cr104_qmt_miniqmt_validation.ps1
+scope_summary:
+  goal: "确认 runner development readiness 的最小入口和边界。"
+  mode: "gate-prep-only"
+  code_change_authorized: false
+  runtime_authorized: false
+  external_access_authorized: false
+compressed_runner_plan:
+  current_cr: "CR126 Runner Entry Design / Scope Gate"
+  implementation_cr: "CR127 Runner Core MVP Implementation"
+  rule: "runner 本体不再拆成多个正式 CR；RDS-01/02/03 仅作为 CR127 内部 slice。"
+  optional_external_gates: "CR128+ 仅在用户明确要求触碰 readonly runtime、NAS exchange、provider/lake/catalog、simulation/live 等外部权限域时启动。"
+runner_discovery:
+  entry_candidates:
+    - path: trading/strategy_runner/__init__.py
+      finding: "导出 package loader、adapter、readonly gateway、evidence、package exchange 接口。"
+    - path: scripts/check_cr091_strategy_runner_package.py
+      finding: "离线 package checker 使用 fake readonly gateway；可作为后续 offline runner entry 参考。"
+  adapter_boundary:
+    - path: trading/strategy_runner/package_loader.py
+      finding: "manifest flags 必须为 false；checksum/path/target/adapter contract fail closed。"
+    - path: trading/strategy_runner/adapters.py
+      finding: "AdapterRegistry 分发 multifactor、legacy、strategy_package；order-write capabilities blocked。"
+    - path: trading/strategy_runner/readonly_gateway.py
+      finding: "默认 fake transport；真实 QMT client 缺少 runtime authorization 时 blocked。"
+    - path: trading/strategy_runner/evidence.py
+      finding: "脱敏 evidence summary 聚合 forbidden counters，敏感字段 fail closed。"
+recommended_slice_candidates:
+  - id: RDS-01
+    title: Contract
+    authorization: "CR126 CP6 仅写设计材料；源码实现归入 CR127"
+  - id: RDS-02
+    title: Orchestration
+    authorization: "CR127 内部实现 slice，不单独升级为正式 CR"
+  - id: RDS-03
+    title: Evidence / CLI / Regression
+    authorization: "CR127 内部实现与验证 slice；本 CR 不跑测试"
+  - id: External-Gates
+    title: Runtime / NAS / provider / lake / catalog / simulation / live
+    authorization: "不属于 runner core MVP；仅用户明确要求外部权限域时启动 CR128+"
+forbidden_scope:
+  - runtime_qmt_miniqmt_xtquant_gateway
+  - nas_mount_list_copy_publish_pull
+  - credential_env_token_account_session_read
+  - provider_fetch
+  - lake_write
+  - catalog_publish
+  - source_checker_tests_gitignore_change
+  - git_add_commit_push_remote_write
+  - submit_cancel_buy_sell_simulation_live
+decision_items:
+  - id: DQ-CP2-CR126-01
+    decision_type: scope
+    question: "是否确认 CR126 从历史文档清理切换到 runner development readiness / runner entry design？"
+    recommendation: "确认切换；历史 docs cleanup 只在直接阻塞 runner 开发时另起小 CR，runner 本体后续集中到 CR127。"
+    alternatives:
+      - "继续清理历史文档后再进入 runner。"
+      - "跳过入口设计直接进入源码实现。"
+  - id: DQ-CP2-CR126-02
+    decision_type: architecture
+    question: "runner 入口是否以现有 strategy_runner 的离线 package/adapter/evidence 合同为基线？"
+    recommendation: "以 trading/strategy_runner 离线合同为基线；CR127 集中实现 offline runner core，真实 runtime 保持 CR128+ 独立 gate。"
+    alternatives:
+      - "以 QMT runtime collector 为入口。"
+      - "重新设计全新 runner 包结构。"
+  - id: DQ-CP2-CR126-03
+    decision_type: runtime_authorization
+    question: "CP2 是否授权 runtime、NAS、QMT、凭据、provider/lake/catalog 或交易写操作？"
+    recommendation: "不授权；全部冻结为 CR128+ 可选后续 gate，且默认不启动。"
+    alternatives:
+      - "另起 runtime authorization gate。"
+      - "仅人工手动回填脱敏 runtime 摘要，但不由 agent 执行。"
+read_expansion_log:
+  - reason: "CR126 runner code entry discovery"
+    paths:
+      - trading/strategy_runner/__init__.py
+      - trading/strategy_runner/package_loader.py
+      - trading/strategy_runner/adapters.py
+      - trading/strategy_runner/readonly_gateway.py
+      - trading/strategy_runner/evidence.py
+      - scripts/check_cr091_strategy_runner_package.py
+      - scripts/collect_cr099_runner_readonly_smoke.py
+      - tests/test_cr091_strategy_runner_contracts.py
+      - tests/test_cr098_runner_readonly_integration.py
+      - tests/test_cr099_runner_real_readonly_smoke_contract.py
+      - tests/test_cr104_runtime_validation_scripts.py
+    access: read_only
+    runtime_started: false

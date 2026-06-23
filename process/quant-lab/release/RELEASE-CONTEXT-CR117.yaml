@@ -1,0 +1,54 @@
+schema_version: 1
+release_context_id: RELEASE-CONTEXT-CR117
+cr_id: CR-117
+created_at: "2026-06-22T18:02:18+08:00"
+created_by: host-orchestrator
+approved_at: "2026-06-22T18:21:08+08:00"
+approved_by: user
+release_artifact_profile: minimal
+release_decision: READY
+decision_basis:
+  completed:
+    - CP2 approved no-code/no-runtime context path alias notes scope.
+    - Notes define process path as preferred evidence entry and docs/design as legacy/semantic alias.
+    - No directory, symlink, source, tests, checker implementation or runtime change was performed.
+    - CP8 approved by user; CR117 closed as READY.
+  evidence_refs:
+    - process/checkpoints/CP2-CR117-CONTEXT-PATH-ALIAS-NORMALIZATION-REVIEW.md
+    - process/docs/design/CONTEXT-PATH-ALIAS-NORMALIZATION-NOTES-CR117.md
+    - process/context/CP8-CR117-DELIVERY-CONTEXT.yaml
+    - process/checks/CP8-CR117-DELIVERY-READINESS.md
+    - process/checkpoints/CP8-CR117-DELIVERY-READINESS.md
+quality_summary:
+  automated_checks_planned:
+    - meta-flow check cr-tracking --project-root .
+    - meta-flow check human-gate --checkpoint process/checkpoints/CP8-CR117-DELIVERY-READINESS.md
+    - git -C ../meta-flow-artifacts diff --check
+  runtime_checks: []
+risk_summary:
+  accepted_risks:
+    - id: R-CR117-001
+      description: Historical documents may still contain docs/design aliases; CR117 does not batch rewrite historical evidence.
+      mitigation: New gate / CR / capsule references should prefer process/... paths; future enforcement requires a separate implementation CR.
+not_authorized:
+  - directory changes
+  - symlink changes
+  - file moves or renames
+  - source code changes
+  - tests changes
+  - checker implementation changes
+  - bulk historical STATE rewrite
+  - runtime execution
+  - NAS access
+  - credential reads
+  - trading write
+  - provider fetch
+  - lake write
+  - catalog publish
+follow_up_candidates:
+  - id: FU-CR117-001
+    title: Path Alias Checker Enforcement Candidate
+    status: selected-next-cr
+    requires_authorization: source/tests/checker implementation
+    formal_cr_path: process/changes/CR-118-PATH-ALIAS-CHECKER-ENFORCEMENT-CANDIDATE-2026-06-22.md
+    note: User selected this candidate after CR117 CP8 approval; CR118 starts at CP2 only and does not directly modify source/tests/checker before implementation authorization.

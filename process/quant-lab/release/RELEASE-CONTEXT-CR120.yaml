@@ -1,0 +1,55 @@
+schema_version: 1
+release_context_id: RELEASE-CONTEXT-CR120
+cr_id: CR-120
+status: ready
+created_at: '2026-06-22T20:06:33+08:00'
+owner: host-orchestrator
+readiness:
+  decision: READY
+  blockers: []
+  risks:
+    - id: R-CR120-001
+      status: accepted
+      summary: Current repository legacy checker is not updated; formal enforcement targets the actual meta-flow `check cr-tracking` entrypoint.
+      mitigation: CP5 explicitly selected external meta-flow checker only; future legacy cleanup requires a separate CR if still needed.
+verification:
+  commands:
+    - command: uv run --python 3.11 pytest -q tests/test_cr120_cr_tracking_row_convention.py
+      cwd: /home/hyde/workspace/meta-flow
+      result: PASS
+      evidence: 4 passed
+    - command: uv run --python 3.11 python -m py_compile /home/hyde/workspace/meta-flow/meta_flow/checks/cr_tracking.py /home/hyde/workspace/meta-flow/tests/test_cr120_cr_tracking_row_convention.py
+      cwd: /home/hyde/workspace/quant-lab
+      result: PASS
+      evidence: no output
+    - command: uv run --python 3.11 meta-flow check cr-tracking --project-root .
+      cwd: /home/hyde/workspace/quant-lab
+      result: PASS
+      evidence: active formal CRs include CR-120
+    - command: PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr118_human_gate_path_alias_checker.py tests/test_cr119_human_gate_launch_message_checker.py
+      cwd: /home/hyde/workspace/quant-lab
+      result: PASS
+      evidence: target regression passed
+not_authorized:
+  - runtime
+  - NAS access/list/read/write/copy/publish/pull/delete/check/mount
+  - credential/env/account/raw-log read
+  - submit/cancel/buy/sell
+  - simulation/live
+  - provider fetch
+  - lake write
+  - catalog publish
+  - CR105 / CR089 / QMT / MiniQMT / XtQuant / gateway route activation
+cp8_recommendation:
+  close_cr120: true
+  readiness_status: ready
+  create_follow_up: false
+  keep_runtime_unauthorized: true
+cp8_result:
+  approved_by: user
+  approved_at: '2026-06-23T08:58:36+08:00'
+  decision: READY
+  closed_current_delivery: true
+  added_external_candidate:
+    id: FU-CR120-001
+    reason: User requested merge-induced directory routing regression audit during CP8 approval.

@@ -1,0 +1,91 @@
+schema_version: 1
+context_id: CP5-CR122-MERGE-RESTORED-DOCS-REVERSION-AUTHORIZATION
+cr_id: CR-122
+gate: CP5
+status: ready
+read_profile: minimal
+created_at: '2026-06-23T10:07:48+08:00'
+owner: host-orchestrator
+source_request: USER-20260623-APPROVE-CR122-CP2-EXECUTE-RECOMMENDED
+summary:
+  user_approval: "User approved CR122 CP2 and requested executing the recommended plan."
+  cp2_decision: "Recommended plan selected: selective docs baseline reversion, not replaying precheck CRs."
+  current_state: "CP5 authorization preparation only. No docs content restore, deletion, git rm, git restore, .gitignore/source/checker/tests/commit/push/runtime action has been executed."
+  baseline_policy: "Primary docs baseline is precheck/ql-rd-000-redesign-baseline pre-merge docs at 234b3d3^1 / 47a5eee6ad601ee13e1a193eb86116430ab498bc."
+  preservation_policy: "Preserve only confirmed CR102/CR103/CR104 validation records/results from work/chapter3-factor-gap-remediation-20260608, plus later legitimate CR modifications to baseline docs discovered before CP6."
+must_read:
+  - process/changes/CR-122-MERGE-RESTORED-DOCS-REVERSION-TO-REMEDIATED-BRANCH-BASELINE-2026-06-23.md
+  - process/checkpoints/CP2-CR122-MERGE-RESTORED-DOCS-REVERSION-REVIEW.md
+  - process/checks/CP5-CR122-MERGE-RESTORED-DOCS-REVERSION-AUTHORIZATION-PRECHECK.md
+  - process/checkpoints/CP5-CR122-MERGE-RESTORED-DOCS-REVERSION-AUTHORIZATION-REVIEW.md
+read_if_needed:
+  - process/context/CP2-CR122-MERGE-RESTORED-DOCS-REVERSION-CONTEXT.yaml
+  - process/changes/CR-121-MERGE-INDUCED-DIRECTORY-ROUTING-REGRESSION-HARDENING-2026-06-23.md
+  - process/checkpoints/CP5-CR121-DIRECTORY-ROUTING-REMEDIATION-AUTHORIZATION-REVIEW.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+do_not_read_by_default:
+  - full docs/qmt content
+  - full docs/goldminer content
+  - runtime logs
+  - credentials or env files
+authorization_target:
+  cp6_allowed_after_cp5_approval:
+    docs_content_restore_only: true
+    allowed_paths_policy: "Only paths listed in docs_targets below."
+    restore_user_manual_from_precheck_baseline: true
+    remove_merge_restored_added_docs: true
+    rescan_before_cp6: true
+  still_not_authorized:
+    git_add_commit_push_remote_write: true
+    gitignore_modify: true
+    source_code_modify: true
+    tests_modify: true
+    checker_modify: true
+    runtime: true
+    nas_credentials_trading_provider_lake_catalog_publish: true
+    cr121_index_only_cleanup: true
+docs_targets:
+  restore_to_precheck_baseline:
+    - docs/USER-MANUAL.md
+  restore_to_absent_by_default:
+    - docs/CR025-BACKTRADER-MODULE-REFERENCE.md
+    - docs/CR030-FACTOR-RESEARCH-QUICKSTART.md
+    - docs/QMT-C-S-BRIDGE-RUNBOOK.md
+    - docs/QMT-GATEWAY-INSTALL.md
+    - docs/QMT-INCIDENT-PLAYBOOK.md
+    - docs/QMT-SIMULATION-LIVE-RUNBOOK.md
+    - docs/QMT-TRADING-RUNBOOK.md
+    - docs/goldminer/CR045-BRIDGE-RUNBOOK.md
+    - docs/qmt/CR089-STRATEGY-PACKAGE-NAS-DELIVERY-PLAN.md
+    - docs/qmt/CR091-QMT-STRATEGY-RUNNER-HLD.md
+    - docs/qmt/CR091-QMT-STRATEGY-RUNNER-TEST-PLAN.md
+    - docs/qmt/CR091-RUNNER-RESEARCH-NOTES.md
+    - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-EVIDENCE-TEMPLATE.yaml
+    - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-HLD.md
+    - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-MANUAL-GUIDE.md
+    - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-TEST-PLAN.md
+    - docs/qmt/CR098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-HLD.md
+    - docs/qmt/CR099-QMT-RUNNER-REAL-READONLY-SMOKE-HLD.md
+    - docs/qmt/CR100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-HLD.md
+    - docs/qmt/CR100-NAS-PACKAGE-EXCHANGE-RECOVERY-RUNBOOK.md
+    - docs/qmt/CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-HLD.md
+    - docs/qmt/CR101-VALIDATION-AND-FOLLOW-UP-GATES.md
+    - docs/qmt/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-HLD.md
+    - docs/release/DEPLOY-CHECKLIST.md
+    - docs/release/FEEDBACK.md
+    - docs/release/MIGRATION.md
+    - docs/release/RELEASE-NOTES.md
+    - docs/release/ROLLBACK.md
+  preservation_exceptions:
+    confirmed_docs_validation_record_paths: []
+    candidate_notes:
+      - "Tracked docs scan found docs/qmt/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-HLD.md, classified as HLD, not validation record/result by default."
+      - "No tracked docs paths named CR103/CR104 were found in work/chapter3-factor-gap-remediation-20260608."
+pending_decisions:
+  - DQ-CP5-CR122-01
+  - DQ-CP5-CR122-02
+  - DQ-CP5-CR122-03
+  - DQ-CP5-CR122-04
+  - DQ-CP5-CR122-05
+read_expansion_log: []

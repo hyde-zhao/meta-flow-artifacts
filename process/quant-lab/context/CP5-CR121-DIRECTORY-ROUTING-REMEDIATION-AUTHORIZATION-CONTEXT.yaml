@@ -1,0 +1,81 @@
+schema_version: 1
+context_id: CP5-CR121-DIRECTORY-ROUTING-REMEDIATION-AUTHORIZATION
+cr_id: CR-121
+gate: CP5
+status: approved
+read_profile: minimal
+created_at: '2026-06-23T09:20:34+08:00'
+approved_at: '2026-06-23T09:30:34+08:00'
+approved_by: user
+owner: host-orchestrator
+source_checkpoint:
+  cp2_review: process/checkpoints/CP2-CR121-DIRECTORY-ROUTING-REGRESSION-REVIEW.md
+  cp2_context: process/context/CP2-CR121-DIRECTORY-ROUTING-REGRESSION-CONTEXT.yaml
+summary:
+  user_request: "启动 CR121 CP5 Remediation Authorization，但只做授权门禁准备；裁剪整改子集，区分 audit-only / allowed remediation / forbidden items。"
+  current_state: "CR121 CP5 approved and active-cp5-approved-cp6-authorized. The remediation command has not been executed yet."
+  purpose: "Record approved authorization for a later CP6 index-only remediation slice while keeping .gitignore/source/checker/delete/move/runtime out of scope."
+must_read:
+  - process/changes/CR-121-MERGE-INDUCED-DIRECTORY-ROUTING-REGRESSION-HARDENING-2026-06-23.md
+  - process/checks/CP5-CR121-DIRECTORY-ROUTING-REMEDIATION-AUTHORIZATION-PRECHECK.md
+  - process/checkpoints/CP5-CR121-DIRECTORY-ROUTING-REMEDIATION-AUTHORIZATION-REVIEW.md
+read_if_needed:
+  - process/checks/CR120-DIRECTORY-ROUTING-MERGE-AUDIT-2026-06-23.md
+  - process/checkpoints/CP2-CR121-DIRECTORY-ROUTING-REGRESSION-REVIEW.md
+  - process/changes/CR-120-FOLLOW-UP-TRACKING-2026-06-23.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+do_not_read_by_default:
+  - full historical process/STATE.md audit sections
+  - runtime logs
+  - credentials or env files
+  - full docs/qmt or docs/goldminer content
+proposed_remediation_subset_after_cp5_approval:
+  index_only_untrack_no_delete:
+    - docs/design
+    - docs/features
+    - docs/quality
+    - process
+    - checkpoints
+    - .claude/**
+  audit_only_no_change_in_cr121:
+    - AGENTS.md
+    - docs/qmt/**
+    - docs/goldminer/**
+    - docs/release/*.md
+    - .gitignore
+    - guardrail/checker scripts
+forbidden_even_if_cp5_approved:
+  - file delete/move/overwrite
+  - .gitignore modification
+  - source/test/checker/guardrail code modification
+  - git add/commit/push/remote write/branch/tag/history operations
+  - checkout/reset/clean
+  - runtime/NAS/credentials/trading/provider/lake/catalog/publish
+authorization_boundary:
+  process_artifact_write: true
+  repository_readonly_audit: true
+  cp5_approval_would_authorize_future_cp6_index_only_untrack: true
+  cp5_approval_would_not_execute_any_command_in_this_turn: true
+  source_code_modify: false
+  tests_modify: false
+  checker_implementation_change: false
+  gitignore_modify: false
+  git_index_cleanup_before_cp5_approval: false
+  git_rm_cached_before_cp5_approval: false
+  file_delete_move_overwrite: false
+  runtime: false
+  nas_access: false
+  credential_read: false
+  trading_write: false
+  provider_fetch: false
+  lake_write: false
+  catalog_publish: false
+pending_decisions:
+  - none
+accepted_decisions:
+  - DQ-CP5-CR121-01
+  - DQ-CP5-CR121-02
+  - DQ-CP5-CR121-03
+  - DQ-CP5-CR121-04
+read_expansion_log: []

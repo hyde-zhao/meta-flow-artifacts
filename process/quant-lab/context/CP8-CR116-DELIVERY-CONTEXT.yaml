@@ -1,0 +1,73 @@
+schema_version: 1
+context_id: CP8-CR116-DELIVERY
+cr_id: CR-116
+phase: documentation
+gate: CP8
+status: ready
+created_at: "2026-06-22T17:39:56+08:00"
+created_by: host-orchestrator
+read_profile: minimal
+context_policy:
+  require_capsule_first: true
+  default_read_strategy: "Read this capsule first; expand only for conflict checks, human audit, missing fields or user-requested detail."
+  must_read:
+    - process/changes/CR-116-PENDING-DECISION-QUEUE-CHECKPOINT-ALIGNMENT-AUDIT-2026-06-22.md
+    - process/docs/design/PENDING-DECISION-QUEUE-CHECKPOINT-ALIGNMENT-AUDIT-CR116.md
+    - process/checks/CP8-CR116-DELIVERY-READINESS.md
+    - process/checkpoints/CP8-CR116-DELIVERY-READINESS.md
+    - process/release/RELEASE-CONTEXT-CR116.yaml
+  read_if_needed:
+    - process/checkpoints/CP2-CR116-PENDING-DECISION-QUEUE-CHECKPOINT-ALIGNMENT-REVIEW.md
+    - process/changes/CR-114-FOLLOW-UP-TRACKING-2026-06-22.md
+    - process/changes/CR-INDEX.yaml
+    - process/STATE.md
+  do_not_read_by_default:
+    - source code tree
+    - tests
+    - runtime logs
+    - NAS paths
+    - credentials or environment secrets
+scope:
+  completed:
+    - CP2 approved CR116 no-code/no-runtime audit scope
+    - checkpoint DQ table as human gate truth source
+    - STATE current gate refs refreshed to CR116
+    - follow-up implementation candidates kept separate
+  out_of_scope:
+    - source code changes
+    - tests changes
+    - checker implementation changes
+    - bulk historical STATE rewrite
+    - runtime execution
+    - NAS access
+    - credential reads
+    - trading write
+    - provider fetch
+    - lake write
+    - catalog publish
+authorization_policy:
+  source_code_change: false
+  tests_change: false
+  checker_implementation_change: false
+  bulk_historical_state_rewrite: false
+  runtime: false
+  credential_read: false
+  nas_access: false
+  trading_write: false
+  provider_lake_catalog_publish: false
+release:
+  release_artifact_profile: minimal
+  release_decision: READY
+decision_refs:
+  cp2:
+    - DQ-CP2-CR116-01
+    - DQ-CP2-CR116-02
+    - DQ-CP2-CR116-03
+  cp8:
+    - DQ-CP8-CR116-01
+    - DQ-CP8-CR116-02
+    - DQ-CP8-CR116-03
+read_expansion_log: []
+next_gate:
+  checkpoint: CP8
+  manual_review: process/checkpoints/CP8-CR116-DELIVERY-READINESS.md

@@ -1,0 +1,68 @@
+schema_version: 1
+context_id: CP5-CR119-HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-CONTEXT
+cr_id: CR-119
+checkpoint: CP5
+status: ready
+read_profile: minimal
+created_at: '2026-06-22T19:22:43+08:00'
+owner: host-orchestrator
+summary: >-
+  CR119 CP2 was approved by user. CP5 asks whether to authorize the minimal
+  implementation slice for human gate launch message checking in the local
+  human gate decision brief checker. CP5 approval is required before modifying
+  source code, tests or checker implementation.
+must_read:
+  - process/checkpoints/CP5-CR119-HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-IMPLEMENTATION-REVIEW.md
+  - process/checks/CP5-CR119-HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-PRECHECK.md
+  - process/changes/CR-119-HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-IMPLEMENTATION-CANDIDATE-2026-06-22.md
+read_if_needed:
+  - process/checkpoints/CP2-CR119-HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-REVIEW.md
+  - process/docs/design/HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-IMPLEMENTATION-CANDIDATE-CR119.md
+  - scripts/check_human_gate_decision_brief.py
+  - tests/test_cr118_human_gate_path_alias_checker.py
+do_not_read_by_default:
+  - runtime logs
+  - NAS paths
+  - credential files
+  - full historical process/STATE.md history
+implementation_owner_discovery:
+  source_file:
+    path: scripts/check_human_gate_decision_brief.py
+    status: existing
+    cp5_candidate_owner: true
+  test_files:
+    existing_reference: tests/test_cr118_human_gate_path_alias_checker.py
+    proposed_new: tests/test_cr119_human_gate_launch_message_checker.py
+    cp5_candidate_owner: true
+  known_dirty_worktree_context:
+    - scripts/check_human_gate_decision_brief.py has existing CR118 changes.
+    - tests/test_cr118_human_gate_path_alias_checker.py is an existing CR118 untracked fixture test.
+authorization_after_cp5_approval:
+  source_code_modify:
+    allowed_paths:
+      - scripts/check_human_gate_decision_brief.py
+  tests_modify:
+    allowed_paths:
+      - tests/test_cr119_human_gate_launch_message_checker.py
+  checker_implementation_change: true
+  runtime: false
+  nas_access: false
+  credential_read: false
+  trading_write: false
+  provider_fetch: false
+  lake_write: false
+  catalog_publish: false
+decision_ids:
+  - DQ-CP5-CR119-01
+  - DQ-CP5-CR119-02
+  - DQ-CP5-CR119-03
+  - DQ-CP5-CR119-04
+read_expansion_log:
+  - at: '2026-06-22T19:22:43+08:00'
+    actor: host-orchestrator
+    phase: CP5-preparation
+    capsule_path: process/context/CP5-CR119-HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-CONTEXT.yaml
+    expanded_to:
+      - scripts/check_human_gate_decision_brief.py
+      - tests/test_cr118_human_gate_path_alias_checker.py
+    reason: CP2 approved owner discovery for CP5 implementation target definition; read-only inspection only.

@@ -1,0 +1,107 @@
+schema_version: 1
+context_id: CP2-CR122-MERGE-RESTORED-DOCS-REVERSION
+cr_id: CR-122
+gate: CP2
+status: ready
+read_profile: minimal
+created_at: '2026-06-23T09:44:04+08:00'
+updated_at: '2026-06-23T09:58:42+08:00'
+owner: host-orchestrator
+source_request: USER-20260623-START-CR122
+summary:
+  user_request: "启动 CR122，用户已修正基线规则：以 precheck/ql-rd-000-redesign-baseline 的 docs 为基线；work/chapter3-factor-gap-remediation-20260608 仅保留 CR102/103/104 的验证记录和验证结果；若后续 CR 修改过原基线 docs，必须保留这些合法修改。"
+  current_state: "CP2 scope confirmation and conflict precheck only. No docs content change, deletion, git rm, .gitignore/source/checker/tests/commit/push/runtime action is authorized."
+  baseline: "Primary docs baseline is the pre-merge first-parent baseline on precheck/ql-rd-000-redesign-baseline: 234b3d3^1 / 47a5eee6ad601ee13e1a193eb86116430ab498bc. The current branch tip 234b3d3 is a merge commit and is not the restore truth source by itself."
+  merge_diff_docs: "28 added docs paths and 1 modified docs/USER-MANUAL.md path relative to 234b3d3^1."
+  preservation_rule: "Preserve only CR102/CR103/CR104 validation records/results from work/chapter3-factor-gap-remediation-20260608, plus any later legitimate CR modifications to baseline docs discovered before CP6. Tracked docs search currently found no CR103/CR104-named docs records and only CR102 HLD in docs/qmt, which is not classified as validation result by default."
+must_read:
+  - process/changes/CR-122-MERGE-RESTORED-DOCS-REVERSION-TO-REMEDIATED-BRANCH-BASELINE-2026-06-23.md
+  - process/checks/CP2-CR122-MERGE-RESTORED-DOCS-REVERSION-PRECHECK.md
+  - process/checkpoints/CP2-CR122-MERGE-RESTORED-DOCS-REVERSION-REVIEW.md
+read_if_needed:
+  - process/checks/CR120-DIRECTORY-ROUTING-MERGE-AUDIT-2026-06-23.md
+  - process/changes/CR-121-MERGE-INDUCED-DIRECTORY-ROUTING-REGRESSION-HARDENING-2026-06-23.md
+  - process/checkpoints/CP5-CR121-DIRECTORY-ROUTING-REMEDIATION-AUTHORIZATION-REVIEW.md
+  - process/changes/CR-INDEX.yaml
+  - process/STATE.md
+do_not_read_by_default:
+  - full docs/qmt content
+  - full docs/goldminer content
+  - runtime logs
+  - credentials or env files
+target_restore_baseline:
+  merge_commit: 234b3d3
+  precheck_docs_baseline_branch: precheck/ql-rd-000-redesign-baseline
+  precheck_docs_baseline_commit: "234b3d3^1"
+  precheck_docs_baseline_sha: 47a5eee6ad601ee13e1a193eb86116430ab498bc
+  work_branch_candidate_source: work/chapter3-factor-gap-remediation-20260608
+  work_branch_preserve_policy: "Preserve only CR102/CR103/CR104 validation records and validation results; do not preserve design/runbook/HLD docs unless reclassified by CP2/CP5 decision."
+  post_merge_cr_modification_policy: "Before CP5/CP6 execution, re-scan current branch/worktree for later CR modifications to original baseline docs and preserve those modifications instead of mechanically overwriting them."
+  conflict_policy: "docs content follows the precheck baseline plus approved preservation exceptions and later legitimate CR modifications."
+docs_targets:
+  preserve_from_work_branch_if_verified_as_validation_records_or_results:
+    - "CR102 validation records/results: pending exact path confirmation; tracked docs search found docs/qmt/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-HLD.md but it is an HLD, not a validation result by default."
+    - "CR103 validation records/results: no tracked docs path found by CR103/103 search."
+    - "CR104 validation records/results: no tracked docs path found by CR104/104 search; tracked matches are scripts/tests, not docs."
+  post_merge_baseline_doc_modifications_to_preserve:
+    current_git_commits_after_234b3d3_touching_docs: []
+    note: "git log 234b3d3..HEAD -- docs returned no commits at CP2; this must be rechecked before CP6 because process artifacts and working tree may evolve."
+  added_in_merge_restore_to_absent:
+    - docs/CR025-BACKTRADER-MODULE-REFERENCE.md
+    - docs/CR030-FACTOR-RESEARCH-QUICKSTART.md
+    - docs/QMT-C-S-BRIDGE-RUNBOOK.md
+    - docs/QMT-GATEWAY-INSTALL.md
+    - docs/QMT-INCIDENT-PLAYBOOK.md
+    - docs/QMT-SIMULATION-LIVE-RUNBOOK.md
+    - docs/QMT-TRADING-RUNBOOK.md
+    - docs/goldminer/CR045-BRIDGE-RUNBOOK.md
+    - docs/qmt/CR089-STRATEGY-PACKAGE-NAS-DELIVERY-PLAN.md
+    - docs/qmt/CR091-QMT-STRATEGY-RUNNER-HLD.md
+    - docs/qmt/CR091-QMT-STRATEGY-RUNNER-TEST-PLAN.md
+    - docs/qmt/CR091-RUNNER-RESEARCH-NOTES.md
+    - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-EVIDENCE-TEMPLATE.yaml
+    - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-HLD.md
+    - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-MANUAL-GUIDE.md
+    - docs/qmt/CR092-REAL-QMT-READONLY-RUNTIME-SMOKE-TEST-PLAN.md
+    - docs/qmt/CR098-QMT-RUNNER-READONLY-GATEWAY-INTEGRATION-HLD.md
+    - docs/qmt/CR099-QMT-RUNNER-REAL-READONLY-SMOKE-HLD.md
+    - docs/qmt/CR100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-HLD.md
+    - docs/qmt/CR100-NAS-PACKAGE-EXCHANGE-RECOVERY-RUNBOOK.md
+    - docs/qmt/CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-HLD.md
+    - docs/qmt/CR101-VALIDATION-AND-FOLLOW-UP-GATES.md
+    - docs/qmt/CR102-NAS-REAL-PACKAGE-EXCHANGE-AUTHORIZATION-HLD.md
+    - docs/release/DEPLOY-CHECKLIST.md
+    - docs/release/FEEDBACK.md
+    - docs/release/MIGRATION.md
+    - docs/release/RELEASE-NOTES.md
+    - docs/release/ROLLBACK.md
+  modified_restore_to_parent:
+    - docs/USER-MANUAL.md
+out_of_scope:
+  - docs/design
+  - docs/features
+  - docs/quality
+  - .claude/**
+  - .gitignore
+  - source/checker/tests/scripts
+  - git commit/push/remote write
+  - runtime/NAS/credentials/trading/provider/lake/catalog/publish
+authorization_boundary:
+  process_artifact_write: true
+  repository_readonly_audit: true
+  docs_content_change_before_cp5_approval: false
+  git_rm_before_cp5_approval: false
+  file_delete_before_cp5_approval: false
+  git_restore_before_cp5_approval: false
+  gitignore_modify: false
+  source_code_modify: false
+  tests_modify: false
+  checker_modify: false
+  git_add_commit_push_remote_write: false
+  runtime: false
+pending_decisions:
+  - DQ-CP2-CR122-01
+  - DQ-CP2-CR122-02
+  - DQ-CP2-CR122-03
+  - DQ-CP2-CR122-04
+read_expansion_log: []

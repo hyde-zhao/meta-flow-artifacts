@@ -1,0 +1,64 @@
+schema_version: 1
+context_id: CP2-CR123-STAGED-DOCS-PUBLICATION
+cr_id: CR-123
+title: CR122 Staged Docs Publication Gate - CP2 Scope Context
+status: ready
+created_at: "2026-06-23T10:34:24+08:00"
+updated_at: "2026-06-23T11:04:01+08:00"
+owner: host-orchestrator
+read_profile: minimal
+default_read_policy: capsule_first
+source_refs:
+  - process/changes/CR-123-CR122-STAGED-DOCS-PUBLICATION-GATE-2026-06-23.md
+  - process/checkpoints/CP8-CR122-DELIVERY-READINESS.md
+  - process/checks/CP7-CR122-MERGE-RESTORED-DOCS-REVERSION-VERIFICATION-DONE.md
+scope_summary:
+  goal: "Review whether to publish CR122's staged docs restore as a local commit and include docs/features CRxxx artifact directory remediation in the same CR gate."
+  current_gate: CP2
+  included_paths_profile: "current 29 staged docs paths plus docs/features CRxxx artifact directory triage"
+  execution_slices:
+    - "CP6-A: source repo local commit of the exact current 29 staged docs paths"
+    - "CP6-B: artifact repo docs/features CRxxx directory cleanup, only after CP5 approve and CP6 recheck"
+  excluded_scope:
+    - CR121 index-only cleanup
+    - .gitignore changes
+    - source/checker/tests changes
+    - git push or remote write
+    - runtime/NAS/credentials/trading/provider/lake/catalog/publish
+facts:
+  staged_docs_count: 29
+  unstaged_docs_count: 0
+  staged_docs_match_baseline_ref: "234b3d3^1 -- docs"
+  docs_features_link_target: "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/docs/features"
+  docs_features_cr_directory_count: 10
+  docs_features_delete_candidate_dirs:
+    - "docs/features/CR093-ledger-hygiene"
+    - "docs/features/CR094-warning-cleanup"
+    - "docs/features/CR095-standalone-checker-cli-output-convergence"
+    - "docs/features/cr045-goldminer-bridge"
+    - "docs/features/cr061-package-import-layout"
+    - "docs/features/cr098-runner-readonly-integration"
+    - "docs/features/cr099-runner-real-readonly-smoke"
+  docs_features_priority_review_dirs:
+    - "docs/features/cr102-nas-real-package-exchange-authorization"
+    - "docs/features/cr103-qmt-miniqmt-non-trading-day-validation"
+    - "docs/features/cr104-qmt-miniqmt-trading-day-validation"
+  docs_features_priority_review_files:
+    - "docs/features/cr102-nas-real-package-exchange-authorization/DESIGN.md"
+    - "docs/features/cr102-nas-real-package-exchange-authorization/TASKS.md"
+    - "docs/features/cr102-nas-real-package-exchange-authorization/TEST-PLAN.md"
+    - "docs/features/cr103-qmt-miniqmt-non-trading-day-validation/VERIFICATION.md"
+    - "docs/features/cr104-qmt-miniqmt-trading-day-validation/INPUT-CHECKLIST.md"
+  non_cr123_dirty_tracked:
+    - scripts/check_human_gate_decision_brief.py
+  non_cr123_untracked:
+    - tests/test_cr118_human_gate_path_alias_checker.py
+    - tests/test_cr119_human_gate_launch_message_checker.py
+allowed_future_cp6:
+  local_git_commit: "pending_cp5_approval"
+  artifact_docs_features_cleanup: "pending_cp5_approval"
+  git_add: false
+  git_push: false
+  artifact_delete_before_cp5: false
+  commit_message_recommendation: "CR123: publish CR122 staged docs restore"
+read_expansion_log: []

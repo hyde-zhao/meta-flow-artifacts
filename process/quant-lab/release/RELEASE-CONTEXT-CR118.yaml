@@ -1,0 +1,43 @@
+schema_version: 1
+release_context_id: RELEASE-CONTEXT-CR118
+cr_id: CR-118
+created_at: "2026-06-22T19:00:42+08:00"
+created_by: host-orchestrator
+approved_at: "2026-06-22T19:08:32+08:00"
+approved_by: user
+release_artifact_profile: minimal
+release_decision: READY
+decision_basis:
+  completed:
+    - CP2 approved staged path alias checker enforcement route.
+    - CP5 approved minimal source/tests/checker implementation slice.
+    - Checker implementation and fixture tests completed.
+    - CP6 coding done and CP7 verification done are PASS.
+    - CP8 approved by user; CR118 closed READY.
+  evidence_refs:
+    - process/checkpoints/CP2-CR118-PATH-ALIAS-CHECKER-ENFORCEMENT-REVIEW.md
+    - process/checkpoints/CP5-CR118-PATH-ALIAS-CHECKER-ENFORCEMENT-IMPLEMENTATION-REVIEW.md
+    - process/checks/CP6-CR118-PATH-ALIAS-CHECKER-CODING-DONE.md
+    - process/checks/CP7-CR118-PATH-ALIAS-CHECKER-VERIFICATION-DONE.md
+    - process/stories/STORY-CR118-PATH-ALIAS-CHECKER-IMPLEMENTATION.md
+quality_summary:
+  automated_checks_run:
+    - "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr118_human_gate_path_alias_checker.py"
+    - "uv run --python 3.11 python scripts/check_human_gate_decision_brief.py --checkpoint-file process/checkpoints/CP5-CR118-PATH-ALIAS-CHECKER-ENFORCEMENT-IMPLEMENTATION-REVIEW.md"
+    - "uv run --python 3.11 meta-flow check human-gate --checkpoint process/checkpoints/CP5-CR118-PATH-ALIAS-CHECKER-ENFORCEMENT-IMPLEMENTATION-REVIEW.md"
+  runtime_checks: []
+risk_summary:
+  accepted_risks:
+    - id: R-CR118-001
+      description: Historical documents may still contain docs/design aliases without process/docs/design counterparts.
+      mitigation: CR118 enforces the rule for checker input going forward and does not batch rewrite historical documents.
+not_authorized:
+  - directory or symlink changes
+  - runtime execution
+  - NAS access
+  - credential reads
+  - trading write
+  - provider fetch
+  - lake write
+  - catalog publish
+follow_up_candidates: []

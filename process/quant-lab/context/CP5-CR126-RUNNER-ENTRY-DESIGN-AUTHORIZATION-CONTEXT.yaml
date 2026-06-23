@@ -1,0 +1,98 @@
+context_id: CP5-CR126-RUNNER-ENTRY-DESIGN-AUTHORIZATION
+cr_id: CR-126
+checkpoint: CP5
+title: Quant-Lab Runner Entry Design Authorization Context
+status: ready
+created_at: '2026-06-23T13:40:14+08:00'
+created_by: host-orchestrator
+read_profile: minimal
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - process/changes/CR-126-QUANT-LAB-RUNNER-DEVELOPMENT-READINESS-RUNNER-ENTRY-DESIGN-2026-06-23.md
+    - process/context/CP2-CR126-RUNNER-DEVELOPMENT-READINESS-CONTEXT.yaml
+  read_if_needed:
+    - trading/strategy_runner/package_loader.py
+    - trading/strategy_runner/adapters.py
+    - trading/strategy_runner/readonly_gateway.py
+    - trading/strategy_runner/evidence.py
+    - tests/test_cr091_strategy_runner_contracts.py
+    - tests/test_cr098_runner_readonly_integration.py
+  do_not_read_by_default:
+    - .env
+    - data/
+    - reports/
+    - market_data/
+    - trading/qmt_runtime.py
+    - trading/qmt_gateway_service.py
+    - scripts/collect_cr099_runner_readonly_smoke.py
+    - scripts/run_cr104_qmt_miniqmt_validation.ps1
+authorization_summary:
+  current_gate: "CP5 design/process authorization only"
+  code_change_authorized: false
+  runtime_authorized: false
+  test_execution_authorized: false
+  git_write_authorized: false
+  compressed_runner_plan:
+    current_cr: "CR126 Runner Entry Design / Scope Gate"
+    implementation_cr: "CR127 Runner Core MVP Implementation"
+    rule: "RDS-01/02/03 仅作为 CR127 内部 slice，不自动升级为多个正式 CR。"
+    optional_external_gates: "CR128+ 仅在用户明确要求触碰外部权限域时启动。"
+  allowed_after_approve:
+    - "write Runner Core MVP Design / CR127 Scope under process/docs as explicitly listed by CR126"
+    - "write CR127 internal slice plan under process/changes or process/checks"
+    - "prepare later implementation CR recommendation"
+  still_forbidden_after_approve:
+    - "source/checker/tests/.gitignore modifications"
+    - "runtime/QMT/MiniQMT/XtQuant/gateway execution"
+    - "NAS/package real exchange"
+    - "credential/.env/account/session read"
+    - "provider/lake/catalog/publish"
+    - "submit/cancel/buy/sell/simulation/live"
+    - "git add/commit/push/remote write"
+first_slice_recommendation:
+  - id: RDS-01
+    title: Contract
+    deliverable: "process/design or process/changes design note"
+    reason: "最低风险，直接复用现有只读代码事实。"
+  - id: RDS-02
+    title: Orchestration
+    deliverable: "offline entry design and acceptance checklist"
+    reason: "为后续源码实现提供最小接口目标。"
+  - id: RDS-03
+    title: Evidence / CLI / Regression
+    deliverable: "minimal regression list"
+    reason: "提前锁定后续 implementation CR 的验证范围。"
+deferred_or_separate_gates:
+  - id: CR128+
+    title: Runtime / NAS / provider / lake / catalog / simulation / live external gates
+    disposition: "only if user explicitly requests external permission domain"
+decision_items:
+  - id: DQ-CP5-CR126-01
+    decision_type: implementation
+    question: "CP5 approve 后是否允许进入 CR126 CP6 设计材料阶段？"
+    recommendation: "允许，但仅写 process/docs 设计材料；不改源码、不跑测试、不启动 runtime；CP6 输出应直接服务 CR127。"
+    alternatives:
+      - "只保留本次分析，不进入 CP6。"
+      - "直接启动源码实现 CR。"
+  - id: DQ-CP5-CR126-02
+    decision_type: architecture
+    question: "第一批 development slice 是否作为 CR127 内部 slice 按 RDS-01 -> RDS-02 -> RDS-03 排序？"
+    recommendation: "按该顺序推进，先 contract，再 orchestration，再 evidence/CLI/regression；不拆成多个正式 CR。"
+    alternatives:
+      - "优先做 runtime gate。"
+      - "优先改 CLI/API 源码。"
+  - id: DQ-CP5-CR126-03
+    decision_type: runtime_authorization
+    question: "CP5 approve 是否额外授权 runtime、NAS、QMT、凭据、provider/lake/catalog、commit/push 或源码修改？"
+    recommendation: "不授权；这些项继续冻结，CR128+ 仅在用户明确要求外部权限域时启动。"
+    alternatives:
+      - "另起 runtime authorization gate。"
+      - "另起 CR127 Runner Core MVP Implementation。"
+read_expansion_log:
+  - reason: "CP5 design authorization preparation"
+    paths:
+      - process/changes/CR-126-QUANT-LAB-RUNNER-DEVELOPMENT-READINESS-RUNNER-ENTRY-DESIGN-2026-06-23.md
+      - process/context/CP2-CR126-RUNNER-DEVELOPMENT-READINESS-CONTEXT.yaml
+    access: process_only
+    runtime_started: false

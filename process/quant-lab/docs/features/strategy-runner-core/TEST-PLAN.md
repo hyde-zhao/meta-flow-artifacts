@@ -1,6 +1,6 @@
 ---
 status: "active"
-version: "1.0"
+version: "1.1"
 feature_id: "strategy-runner-core"
 source_cr: "CR-128"
 ---
@@ -12,6 +12,7 @@ source_cr: "CR-128"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-06-23 | host-orchestrator | 定义 CR128 offline runner core 的自动化和边界测试。 |
+| 1.1 | 2026-06-23 | host-orchestrator | 增加 CR133 RunSpec 文件入口和 CLI 测试范围。 |
 
 ## 自动化范围
 
@@ -23,6 +24,8 @@ source_cr: "CR-128"
 | SRC-TC-04 | result 包含 target count、order intent count、evidence status 和 forbidden counters。 | `tests/test_cr128_runner_core_mvp.py` |
 | SRC-TC-05 | public API / script entry 不读取 env、不访问 NAS、不启动 runtime。 | static / monkeypatch tests |
 | SRC-TC-06 | CR091 / CR098 既有合同仍通过。 | `tests/test_cr091_strategy_runner_contracts.py`, `tests/test_cr098_runner_readonly_integration.py` |
+| SRC-TC-07 | JSON/YAML RunSpec 文件入口、spec-relative output 和 CLI JSON 输出。 | `tests/test_cr133_runner_spec_cli.py` |
+| SRC-TC-08 | RunSpec 文件未知字段、外部授权 flag fail-closed。 | `tests/test_cr133_runner_spec_cli.py` |
 
 ## 禁止行为检查
 
@@ -38,5 +41,6 @@ source_cr: "CR-128"
 
 ```bash
 uv run --python 3.11 pytest -q tests/test_cr091_strategy_runner_contracts.py tests/test_cr098_runner_readonly_integration.py tests/test_cr128_runner_core_mvp.py
+uv run --python 3.11 pytest -q tests/test_cr133_runner_spec_cli.py
 uv run --python 3.11 python scripts/check_cr091_strategy_runner_package.py --package-root tests/fixtures/cr091_strategy_runner/cr091_strategy_package --json
 ```

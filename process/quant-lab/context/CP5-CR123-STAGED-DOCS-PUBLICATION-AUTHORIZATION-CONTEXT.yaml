@@ -1,0 +1,67 @@
+schema_version: 1
+context_id: CP5-CR123-STAGED-DOCS-PUBLICATION-AUTHORIZATION
+cr_id: CR-123
+title: CR122 Staged Docs Publication Gate - CP5 Authorization Context
+status: ready
+created_at: "2026-06-23T10:34:24+08:00"
+updated_at: "2026-06-23T11:04:01+08:00"
+owner: host-orchestrator
+read_profile: minimal
+default_read_policy: capsule_first
+source_refs:
+  - process/context/CP2-CR123-STAGED-DOCS-PUBLICATION-CONTEXT.yaml
+  - process/checks/CP2-CR123-STAGED-DOCS-PUBLICATION-PRECHECK.md
+  - process/checkpoints/CP2-CR123-STAGED-DOCS-PUBLICATION-REVIEW.md
+authorization_summary:
+  recommended_cp6_action: "two slices: CP6-A single local git commit of the exact current 29 staged docs paths; CP6-B artifact docs/features CRxxx remediation"
+  recommended_commit_message: "CR123: publish CR122 staged docs restore"
+  cp6_slices:
+    cp6_a_source_repo_publication:
+      action: "single local git commit"
+      allowed_scope: "exact current 29 staged docs paths only"
+      forbidden_scope: "git add, git rm, push, runtime, .gitignore/source/checker/tests"
+    cp6_b_artifact_docs_features_cleanup:
+      action: "delete only the explicitly allowlisted non-priority CRxxx docs/features directories, after CP6 recheck"
+      delete_candidate_dirs:
+        - "docs/features/CR093-ledger-hygiene"
+        - "docs/features/CR094-warning-cleanup"
+        - "docs/features/CR095-standalone-checker-cli-output-convergence"
+        - "docs/features/cr045-goldminer-bridge"
+        - "docs/features/cr061-package-import-layout"
+        - "docs/features/cr098-runner-readonly-integration"
+        - "docs/features/cr099-runner-real-readonly-smoke"
+      priority_review_dirs_not_deleted_by_default:
+        - "docs/features/cr102-nas-real-package-exchange-authorization"
+        - "docs/features/cr103-qmt-miniqmt-non-trading-day-validation"
+        - "docs/features/cr104-qmt-miniqmt-trading-day-validation"
+      required_pre_delete_checks:
+        - "docs/features symlink target equals /home/hyde/workspace/meta-flow-artifacts/process/quant-lab/docs/features"
+        - "artifact repo has no unstaged edits under priority review dirs"
+        - "delete candidate dir list exactly equals the CP5 allowlist"
+      forbidden_scope: "delete priority CR102/CR103/CR104 dirs by default, source repo git rm, CR121 cleanup, runtime"
+  pre_commit_required_checks:
+    - "git diff --cached --name-only exactly equals allowlist"
+    - "git diff --cached --quiet 234b3d3^1 -- docs exits 0"
+    - "git diff --name-only -- docs count remains 0"
+    - "no excluded dirty file is staged"
+  explicitly_forbidden:
+    - git add
+    - git push
+    - remote write
+    - CR121 cleanup
+    - .gitignore/source/checker/tests change
+    - runtime/NAS/credentials/trading/provider/lake/catalog/publish
+dirty_worktree_allowlist:
+  allowed_staged_paths_kind: "docs only, exact 29 current CR122 paths"
+  excluded_unstaged_tracked:
+    - scripts/check_human_gate_decision_brief.py
+  excluded_untracked:
+    - tests/test_cr118_human_gate_path_alias_checker.py
+    - tests/test_cr119_human_gate_launch_message_checker.py
+artifact_docs_features_scope:
+  repository: "/home/hyde/workspace/meta-flow-artifacts"
+  linked_from: "docs/features"
+  tracked_cr_files_count: 37
+  delete_candidate_dirs_count: 7
+  priority_review_dirs_count: 3
+read_expansion_log: []

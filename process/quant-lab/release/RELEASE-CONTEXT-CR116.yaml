@@ -1,0 +1,54 @@
+schema_version: 1
+release_context_id: RELEASE-CONTEXT-CR116
+cr_id: CR-116
+created_at: "2026-06-22T17:39:56+08:00"
+created_by: host-orchestrator
+approved_at: "2026-06-22T17:46:19+08:00"
+approved_by: user
+release_artifact_profile: minimal
+release_decision: READY
+scope_summary:
+  completed:
+    - CP2 approved no-code/no-runtime pending decision queue / checkpoint alignment audit.
+    - Current rule frozen: checkpoint DQ table is human gate truth source.
+    - STATE current gate refs point to CR116 CP8; historical accepted DQ remains audit history.
+    - Follow-up implementation candidates remain separate and not started.
+    - CP8 approved by user; CR116 closed READY.
+  not_authorized:
+    - source code changes
+    - tests changes
+    - checker implementation changes
+    - bulk historical STATE rewrite
+    - runtime execution
+    - NAS access
+    - credential reads
+    - trading write
+    - provider fetch
+    - lake write
+    - catalog publish
+evidence:
+  cr: process/changes/CR-116-PENDING-DECISION-QUEUE-CHECKPOINT-ALIGNMENT-AUDIT-2026-06-22.md
+  audit: process/docs/design/PENDING-DECISION-QUEUE-CHECKPOINT-ALIGNMENT-AUDIT-CR116.md
+  cp2_precheck: process/checks/CP2-CR116-PENDING-DECISION-QUEUE-CHECKPOINT-ALIGNMENT-PRECHECK.md
+  cp2_review: process/checkpoints/CP2-CR116-PENDING-DECISION-QUEUE-CHECKPOINT-ALIGNMENT-REVIEW.md
+  cp8_context: process/context/CP8-CR116-DELIVERY-CONTEXT.yaml
+  cp8_precheck: process/checks/CP8-CR116-DELIVERY-READINESS.md
+  cp8_review: process/checkpoints/CP8-CR116-DELIVERY-READINESS.md
+follow_up_candidates:
+  - id: FU-CR115-001
+    title: Human Gate Launch Message Checker Implementation Candidate
+    status: candidate
+    authorization_required: source/tests/checker implementation
+  - id: FU-CR114-004
+    title: CR Tracking Formal/FU Row Convention Hardening
+    status: candidate
+    authorization_required: source/tests/checker implementation
+  - id: FU-CR114-002
+    title: Context Path Alias Normalization Notes
+    status: candidate
+    authorization_required: no runtime; no symlink changes unless separately approved
+risks:
+  - id: R-CR116-001
+    severity: LOW
+    summary: Legacy STATE still contains historical accepted DQ records in a confusing field name.
+    treatment: Accepted for current no-code closure; machine enforcement deferred to implementation candidate.

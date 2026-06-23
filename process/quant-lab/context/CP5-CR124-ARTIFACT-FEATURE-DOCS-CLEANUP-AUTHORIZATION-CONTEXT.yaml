@@ -1,0 +1,36 @@
+schema_version: 1
+context_id: CP5-CR124-ARTIFACT-FEATURE-DOCS-CLEANUP-AUTHORIZATION
+cr_id: CR-124
+title: Artifact Feature Docs Cleanup Publication Gate - CP5 Authorization Context
+status: ready
+created_at: "2026-06-23T11:41:53+08:00"
+owner: host-orchestrator
+read_profile: minimal
+default_read_policy: capsule_first
+source_refs:
+  - process/context/CP2-CR124-ARTIFACT-FEATURE-DOCS-CLEANUP-CONTEXT.yaml
+  - process/checks/CP2-CR124-ARTIFACT-FEATURE-DOCS-CLEANUP-PRECHECK.md
+authorization_summary:
+  recommended_cp6_action: "stage and commit exactly 31 allowlisted artifact repo feature deletion entries"
+  recommended_commit_message: "CR124: publish artifact feature docs cleanup"
+  pre_commit_required_checks:
+    - "artifact repo status for docs/features contains exactly 31 deletion entries under the 7 allowlisted dirs"
+    - "artifact repo status for docs/features contains no cr102/cr103/cr104 deletion entries"
+    - "stage list exactly equals the 31 deletion entries"
+    - "no process artifacts, source repo files, CR121 cleanup or push are included"
+  explicitly_forbidden:
+    - git push
+    - remote write
+    - CR121 cleanup
+    - CR102/CR103/CR104 deletion
+    - .gitignore/source/checker/tests change
+    - runtime/NAS/credentials/trading/provider/lake/catalog/publish
+dirty_worktree_allowlist:
+  allowed_artifact_staged_paths_kind: "exact 31 feature deletion entries only"
+  excluded_artifact_dirty_kind:
+    - "process artifacts such as STATE, CR index, CR/checkpoint/context files"
+  excluded_source_repo_dirty:
+    - scripts/check_human_gate_decision_brief.py
+    - tests/test_cr118_human_gate_path_alias_checker.py
+    - tests/test_cr119_human_gate_launch_message_checker.py
+read_expansion_log: []

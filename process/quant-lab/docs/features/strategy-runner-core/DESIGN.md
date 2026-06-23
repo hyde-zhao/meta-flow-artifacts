@@ -1,6 +1,6 @@
 ---
 status: "active"
-version: "1.0"
+version: "1.1"
 feature_id: "strategy-runner-core"
 feature_name: "Strategy Runner Core"
 source_cr: "CR-128"
@@ -11,6 +11,7 @@ related_crs:
   - "CR-101"
   - "CR-126"
   - "CR-128"
+  - "CR-133"
 ---
 
 # Feature Design: Strategy Runner Core
@@ -20,6 +21,7 @@ related_crs:
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-06-23 | host-orchestrator | 从 CR091/CR098/CR101/CR126 收敛 offline runner core；将 CR102/103/104 运行时验证碎片移出默认 feature 面。 |
+| 1.1 | 2026-06-23 | host-orchestrator | CR133 增加 offline RunSpec JSON/YAML 文件入口和 `python -m trading.strategy_runner.cli` CLI。 |
 
 ## 摘要
 
@@ -38,7 +40,7 @@ related_crs:
 | 根据 adapter contract 生成 target portfolio 和 order intent draft。 | QMT / MiniQMT / XtQuant / gateway runtime。 |
 | 通过 fake readonly boundary 生成脱敏 evidence summary。 | 真实 account / positions / orders / fills / logs。 |
 | 输出统一 `RunResult`，包含 status、blocked reasons、counts、evidence summary 和 forbidden counters。 | provider fetch、lake write、catalog publish/current pointer。 |
-| CLI / script entry 只运行 offline fixture/package。 | submit/cancel/buy/sell/simulation/live。 |
+| CLI / script entry 只运行 offline fixture/package；支持 JSON/YAML RunSpec 文件入口。 | submit/cancel/buy/sell/simulation/live。 |
 
 ## 模块职责
 
@@ -47,6 +49,7 @@ related_crs:
 | RunSpec | `trading/strategy_runner/run_spec.py` | 定义 runner 输入合同、offline mode、路径与权限 flags。 | `mode=offline`；外部授权 flags 必须 false。 |
 | Runner | `trading/strategy_runner/runner.py` | 编排 package loader、adapter、fake readonly boundary、evidence 和 result。 | 不创建真实 transport，不读取 env，不访问外部系统。 |
 | RunResult | `trading/strategy_runner/result.py` | 稳定输出 status、count、blocked reasons 和 summary。 | 只包含脱敏摘要和计数。 |
+| CLI | `trading/strategy_runner/cli.py` | 从 JSON/YAML RunSpec 文件启动 offline runner。 | 只接收本地 spec；invalid spec fail-closed。 |
 | Existing Package Loader | `trading/strategy_runner/package_loader.py` | manifest / checksum / authorization flags fail-closed。 | 复用现有合同。 |
 | Existing Adapter | `trading/strategy_runner/adapters.py` | multifactor / legacy / strategy_package payload dispatch。 | 未知 payload、order-write capability fail closed。 |
 | Existing Readonly Boundary | `trading/strategy_runner/readonly_gateway.py` | 默认 fake readonly result。 | 真实 client 路径不由 CR128 调用。 |

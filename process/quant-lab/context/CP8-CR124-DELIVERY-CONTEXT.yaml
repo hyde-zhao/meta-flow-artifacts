@@ -1,0 +1,54 @@
+schema_version: 1
+context_id: CP8-CR124-DELIVERY-CONTEXT
+cr_id: CR-124
+status: ready
+created_at: '2026-06-23T11:53:48+08:00'
+owner: host-orchestrator
+read_profile: minimal
+default_read_policy: capsule_first
+full_doc_read_reason: null
+read_expansion_log: []
+source_refs:
+  cr: process/changes/CR-124-ARTIFACT-FEATURE-DOCS-CLEANUP-PUBLICATION-GATE-2026-06-23.md
+  cp6: process/checks/CP6-CR124-ARTIFACT-FEATURE-DOCS-CLEANUP-CODING-DONE.md
+  cp7: process/checks/CP7-CR124-ARTIFACT-FEATURE-DOCS-CLEANUP-VERIFICATION-DONE.md
+  cp2_checkpoint: process/checkpoints/CP2-CR124-ARTIFACT-FEATURE-DOCS-CLEANUP-REVIEW.md
+  cp5_checkpoint: process/checkpoints/CP5-CR124-ARTIFACT-FEATURE-DOCS-CLEANUP-AUTHORIZATION-REVIEW.md
+artifact_commit:
+  repo: /home/hyde/workspace/meta-flow-artifacts
+  commit: 144a7b3
+  message: 'CR124: publish artifact feature docs cleanup'
+  changed_files: 31
+  deletions: 2051
+scope:
+  closed_range:
+    - artifact repo local commit for 31 allowlisted docs/features deletion entries
+  retained_priority_feature_dirs:
+    - docs/features/cr102-nas-real-package-exchange-authorization
+    - docs/features/cr103-qmt-miniqmt-non-trading-day-validation
+    - docs/features/cr104-qmt-miniqmt-trading-day-validation
+  excluded_range:
+    - CR121 cleanup
+    - CR102/CR103/CR104 detailed cleanup
+    - .gitignore changes
+    - source/checker/tests changes
+    - push / remote write
+    - runtime / NAS / credentials / trading / provider / lake / catalog / publish
+verification_summary:
+  cp6_decision: PASS
+  cp7_decision: PASS_WITH_RISK
+  blockers: 0
+  residual_risks:
+    - id: R-CR124-001
+      summary: artifact commit is local only and not pushed
+    - id: R-CR124-002
+      summary: CR121 and CR102/103/104 detailed cleanup are deferred to runner development related CR
+pending_decisions:
+  - DQ-CP8-CR124-01
+  - DQ-CP8-CR124-02
+  - DQ-CP8-CR124-03
+recommended_decision: approve_ready_with_risk
+next_route_on_approve: close_CR124
+next_route_after_close:
+  recommended: start_dev_baseline_readiness_check_or_runner_development_cleanup_gate
+  follow_up_ref: process/changes/CR-124-FOLLOW-UP-TRACKING-2026-06-23.md#FU-CR124-001
