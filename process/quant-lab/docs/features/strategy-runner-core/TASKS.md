@@ -1,6 +1,6 @@
 ---
 status: "active"
-version: "1.1"
+version: "1.4"
 feature_id: "strategy-runner-core"
 source_cr: "CR-128"
 ---
@@ -13,6 +13,9 @@ source_cr: "CR-128"
 |---|---|---|---|
 | 1.0 | 2026-06-23 | host-orchestrator | 将 CR128 runner core MVP 收敛为单 CR 内部任务。 |
 | 1.1 | 2026-06-23 | host-orchestrator | 增加 CR133 RunSpec 文件入口和 offline CLI 开发任务。 |
+| 1.2 | 2026-06-23 | host-orchestrator | 增加 CR134 runner evidence index 输出开发任务。 |
+| 1.3 | 2026-06-23 | host-orchestrator | 增加 CR135 artifact bundle 与 inspect/replay 开发任务。 |
+| 1.4 | 2026-06-23 | host-orchestrator | 增加 CR136 bundle schema / compatibility validation 和 CLI validate 开发任务。 |
 
 | TASK-ID | 顺序 | 任务 | 输出文件 | 验证入口 | 状态 |
 |---|---:|---|---|---|---|
@@ -25,6 +28,15 @@ source_cr: "CR-128"
 | CR133-S1 | 7 | 支持 JSON/YAML RunSpec 文件加载。 | `trading/strategy_runner/run_spec.py` | CR133 tests | done |
 | CR133-S2 | 8 | 增加 offline CLI 模块入口。 | `trading/strategy_runner/cli.py` | `python -m trading.strategy_runner.cli --spec ... --json` | done |
 | CR133-S3 | 9 | 增加 spec/CLI 自动化测试。 | `tests/test_cr133_runner_spec_cli.py` | pytest | done |
+| CR134-S1 | 10 | 定义 lightweight runner evidence index writer。 | `trading/strategy_runner/evidence_index.py` | CR134 tests | done |
+| CR134-S2 | 11 | 在 RunSpec / runner / CLI 增加 evidence index output。 | `trading/strategy_runner/run_spec.py`, `trading/strategy_runner/runner.py`, `trading/strategy_runner/cli.py` | CR134 tests | done |
+| CR134-S3 | 12 | 覆盖 successful write、blocked no-write、CLI 参数场景。 | `tests/test_cr134_runner_evidence_index.py` | pytest | done |
+| CR135-S1 | 13 | 定义 run artifact bundle writer 与 inspect/replay 读取合同。 | `trading/strategy_runner/artifact_bundle.py` | CR135 tests | done |
+| CR135-S2 | 14 | 在 RunSpec / runner / CLI 增加 bundle output 与 inspect 入口。 | `trading/strategy_runner/run_spec.py`, `trading/strategy_runner/runner.py`, `trading/strategy_runner/cli.py` | CR135 tests | done |
+| CR135-S3 | 15 | 覆盖 successful bundle、blocked no-pass-bundle、CLI 和 replay no-rerun 场景。 | `tests/test_cr135_runner_artifact_bundle.py` | pytest | done |
+| CR136-S1 | 16 | 定义 bundle schema / compatibility validation 合同。 | `trading/strategy_runner/artifact_bundle.py` | CR136 tests | done |
+| CR136-S2 | 17 | 让 inspect/replay/CLI validate 共用 fail-closed validation。 | `trading/strategy_runner/artifact_bundle.py`, `trading/strategy_runner/cli.py`, `trading/strategy_runner/__init__.py` | CR136 tests | done |
+| CR136-S3 | 18 | 覆盖 valid bundle、缺文件、hash/size mismatch、schema mismatch、status mismatch、authorization mismatch 和 CLI blocked JSON。 | `tests/test_cr136_runner_bundle_validation.py` | pytest | done |
 
 ## 阻塞项
 

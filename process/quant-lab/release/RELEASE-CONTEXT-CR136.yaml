@@ -1,0 +1,89 @@
+release_context_id: RELEASE-CONTEXT-CR136
+source_cr: CR-136
+status: closed_ready_with_risk
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+created_at: '2026-06-23T18:34:21+08:00'
+created_by: host-orchestrator
+closed_at: '2026-06-23T19:02:11+08:00'
+closed_by: user
+source_gate: CP8
+release_scope:
+  in_scope:
+    - "Offline Strategy Runner artifact bundle schema / compatibility validation"
+    - "Bundle required file, bytes and sha256 validation"
+    - "Manifest / run-result / evidence index consistency checks"
+    - "Authorization boundary consistency checks"
+    - "CLI --validate-bundle"
+    - "Feature docs v1.4 and CP6/CP7 evidence"
+  out_of_scope:
+    - "Runtime / NAS / QMT / MiniQMT / XtQuant / gateway access"
+    - "Credential, account, positions, orders, fills or raw logs read"
+    - "Provider fetch, lake write, catalog publish/current pointer"
+    - "submit/cancel/buy/sell/simulation/live"
+    - "Git add/commit/push or remote write"
+version_decision:
+  current_version: "internal-runner-core+cr135"
+  target_version: "internal-runner-core+cr136"
+  semver_impact: "N/A"
+  compatibility: "compatible with valid CR135 bundles; invalid/corrupt bundles now fail closed"
+  reason: "Adds validation before inspect/replay and CLI validation; valid bundle file shape remains unchanged."
+quality_summary:
+  cp6: "PASS: process/checks/CP6-CR136-RUNNER-BUNDLE-VALIDATION-IMPLEMENTATION-DONE.md"
+  cp7: "PASS: process/checks/CP7-CR136-RUNNER-BUNDLE-VALIDATION-VERIFICATION-DONE.md"
+  blocker_count: 0
+  high_risk_count: 0
+  risk_acceptance_ids:
+    - CP8-CR136-DQ-01
+  unresolved_findings:
+    - id: WARN-CR136-CR-TRACKING
+      severity: LOW
+      status: non-blocking-open
+      summary: "meta-flow check cr-tracking exits OK and reports active formal CRs: CR-136, but still prints warning: CR-INDEX.yaml does not mention active formal CR CR-136."
+affected_surface:
+  - "trading/strategy_runner/artifact_bundle.py"
+  - "trading/strategy_runner/cli.py"
+  - "trading/strategy_runner/__init__.py"
+  - "tests/test_cr136_runner_bundle_validation.py"
+  - "scripts/check_process_artifact_hygiene.py"
+  - "tests/test_cr132_process_artifact_hygiene.py"
+  - "process/docs/features/strategy-runner-core/*"
+  - "process/checks / process/context / process/archive / process/changes / process/state"
+install_validation_summary:
+  applicable: false
+  reason: "CR136 does not add install scripts or external deployment targets."
+verification_summary:
+  commands:
+    - command: "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_cr132_process_artifact_hygiene.py tests/test_cr136_runner_bundle_validation.py tests/test_cr135_runner_artifact_bundle.py tests/test_cr134_runner_evidence_index.py tests/test_cr133_runner_spec_cli.py tests/test_cr128_runner_core_mvp.py"
+      result: "PASS, 42 passed"
+    - command: "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_process_artifact_hygiene.py --json"
+      result: "PASS, unclassified=0"
+    - command: "uv run --python 3.11 meta-flow cr check --project-root /home/hyde/workspace/quant-lab"
+      result: "PASS, CR Lifecycle Check: OK"
+    - command: "uv run --python 3.11 meta-flow state check --project-root /home/hyde/workspace/quant-lab"
+      result: "PASS, State v2 Check: OK"
+release_documents:
+  - path: process/docs/release/RELEASE-NOTES-CR136.md
+    status: ready
+  - path: process/docs/release/DEPLOY-CHECKLIST-CR136.md
+    status: ready
+  - path: process/docs/release/ROLLBACK-CR136.md
+    status: ready
+  - path: process/docs/release/MIGRATION-CR136.md
+    status: ready
+  - path: process/docs/release/FEEDBACK-CR136.md
+    status: ready
+non_authorized_items:
+  - "Read .env, credentials, account/session/raw logs"
+  - "Access, list, read, write, publish, pull or delete NAS"
+  - "Start/connect QMT/MiniQMT/XtQuant/gateway runtime"
+  - "provider fetch, lake write, catalog publish/current pointer"
+  - "submit/cancel/buy/sell/simulation/live"
+  - "git add/commit/push/remote write"
+follow_up_summary:
+  recommended_next: "CR136 is closed READY_WITH_RISK. Next recommended CR after context reset: offline runner run registry; online runtime remains a separate high-risk authorization gate."
+  follow_up_candidates:
+    - id: FU-CR136-001
+      title: "CR tracking warning cleanup"
+      status: candidate
+      trigger: "User wants zero-warning cr-tracking before or after closure."

@@ -1,16 +1,22 @@
 ---
 cr_id: "CR-089"
-status: "blocked-readiness-approved"
+status: "closed-superseded-by-successor-crs"
+lifecycle_status: "closed"
+readiness_status: "ready_with_risk"
+gate_status: "closed"
+gate_profile: "runtime"
 impact_level: "high"
 workflow_mode_before: "standard"
 workflow_mode_after_change: "standard"
 fast_lane_upgrade_reason: "命中 QMT 运行级、NAS package exchange、策略包交付、接口验证、权限与凭据边界；不得使用 fast-lane。"
 rollback_to: "CR046 CP6 framework-first recovery point"
-approval_result: "cp2-cp3-cp5-approved / no-runtime-authorization"
+approval_result: "closed-by-user-20260623 / absorbed-by-CR102-CR103-CR104"
 created_at: "2026-06-17T21:20:00+08:00"
 created_by: "host-orchestrator"
 approved_by: "user"
 approved_at: "2026-06-17T21:34:53+08:00"
+closed_by: "user"
+closed_at: "2026-06-23T17:15:44+08:00"
 source: "user"
 linked_issue: ""
 parent_cr: "CR-046"
@@ -19,10 +25,12 @@ source_decision_id: "USER-20260617-QMT-NAS-STRATEGY-PACKAGE-INTERFACE-VALIDATION
 follow_up_type: "runtime-authorization-gate"
 risk_class: "trading-runtime-boundary"
 owner: "host-orchestrator"
-revisit_condition: "用户选择合并到 CR046、等待 CR046 CP8、拆分无冲突子集、取消本次 QMT 接口验证规划，或在 CP2/CP3/CP5 后另起 runtime authorization"
+revisit_condition: "QMT direct-run、order-write、simulation/live、账户/日志原文、额外 NAS 操作或 provider/lake/catalog publish 需要独立后续门禁。"
 acceptance_criteria: "形成 QMT 接口验证的策略包输出规范、NAS package exchange 交付位置、交易主机取包校验流程、只读接口 smoke 边界和待人工决策清单；不执行真实 NAS / QMT / 凭据 / 账户动作。"
-close_condition: "冲突处理决策完成；若独立启动则 CP2/CP3/CP5/CP7/CP8 按标准门禁完成并由用户确认；若合并则由 CR046 恢复流程吸收。"
+close_condition: "CR089 原始范围已由 CR102 NAS package exchange、CR103 qmt_interface_smoke package/checker 非 runtime 验证、CR104 MiniQMT/gateway readonly runtime smoke 吸收并关闭；用户确认关闭 CR089。"
 cr_index_path: "process/changes/CR-INDEX.yaml"
+summary_ref: "process/changes/summaries/CR-089.summary.json"
+evidence_index_ref: "process/archive/CR-089/evidence-index.json"
 ---
 
 # CR089 QMT Interface Validation Gate
@@ -39,7 +47,20 @@ cr_index_path: "process/changes/CR-INDEX.yaml"
 4. 定义交易主机从 NAS 获取策略包、校验、复制到本地缓存再运行的推荐流程。
 5. 定义首个 `qmt_interface_smoke` 策略包，只用于 package discovery、manifest/sha256 校验和 QMT 只读接口 smoke。
 
-本 CR 当前为 `blocked-readiness-approved`，原因是 CR046 仍是 active formal CR，且影响面与策略包合同、QMT terminal target、MiniQMT runner target、运行授权边界重叠。用户已接受 CR089 CP2/CP3/CP5 全部推荐方案；该批准只允许后续在本地工作区准备 / 整理 `qmt_interface_smoke` 离线策略包骨架、manifest/checksum 说明和人工 smoke guide，不得把本文件解释为 CR089 已 active，也不得据此执行 NAS、凭据、QMT 或账户动作。
+本 CR 已于 2026-06-23T17:15:44+08:00 按用户确认关闭为 `closed-superseded-by-successor-crs / ready_with_risk`。CR089 原始范围已由后续正式 CR 吸收：CR102 覆盖真实 NAS package exchange，CR103 覆盖 `qmt_interface_smoke` 本地包 / checker / 非 runtime 合同，CR104 覆盖 MiniQMT/gateway `query_positions_readonly` runtime smoke 和脱敏 evidence。剩余 QMT direct-run、order-write、simulation/live、账户 / 日志原文、额外 NAS 操作或 provider/lake/catalog publish 不属于 CR089 关闭范围，必须另起独立门禁。
+
+## Closure 覆盖判定
+
+| CR089 原始范围 | 后续覆盖 CR | 覆盖证据 | 关闭判断 |
+|---|---|---|---|
+| 策略包输出规范、manifest、checksum、target docs | CR103 | `process/checks/CP7-CR103-QMT-MINIQMT-NON-TRADING-DAY-VALIDATION.md`；`125 passed`；`qmt_interface_smoke` checker PASS | 覆盖 |
+| NAS package exchange 与交易主机 readback | CR102 | `process/checks/CP8-CR102-DELIVERY-READINESS.md`；`runs/RUN-EXEC-20260621-003.md` 逐文件 sha256 / bytes PASS | 覆盖 |
+| `query_positions` 只读 runtime smoke | CR104 | `process/checks/CP7-CR104-RUNTIME-READONLY-SMOKE-PASS-2026-06-21.md`；zero 与 one_to_ten 持仓 bucket 均 PASS | 覆盖 |
+| 脱敏 evidence 与 forbidden counters | CR104 | redacted evidence checker PASS；forbidden counters 全 0；`raw_payload_emitted=false` | 覆盖 |
+| QMT direct-run | 未覆盖 | CR104 CP8 明确 deferred | 后续独立 gate |
+| order-write / simulation / live | 未覆盖 | CR104 CP8 明确转 proposed CR105 / FU-CR101-001 | 后续 high-risk gate |
+
+Closure 不授权任何新的 NAS、QMT/MiniQMT/XtQuant/gateway、凭据、账户原文、submit/cancel、simulation/live 或 provider/lake/catalog 动作。
 
 ## 冲突预检结论
 

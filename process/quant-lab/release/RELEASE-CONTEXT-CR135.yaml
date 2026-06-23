@@ -1,0 +1,89 @@
+release_context_id: RELEASE-CONTEXT-CR135
+source_cr: CR-135
+status: closed_ready_with_risk
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+created_at: '2026-06-23T17:43:56+08:00'
+created_by: host-orchestrator
+closed_at: '2026-06-23T18:07:24+08:00'
+closed_by: user
+source_gate: CP8
+release_scope:
+  in_scope:
+    - "Offline Strategy Runner artifact bundle writer"
+    - "Bundle inspect / replay read workflow"
+    - "RunSpec bundle_output_path contract"
+    - "CLI --bundle-output and --inspect-bundle"
+    - "Feature docs v1.3 and CP6/CP7 evidence"
+  out_of_scope:
+    - "Runtime / NAS / QMT / MiniQMT / XtQuant / gateway access"
+    - "Credential, account, positions, orders, fills or raw logs read"
+    - "Provider fetch, lake write, catalog publish/current pointer"
+    - "submit/cancel/buy/sell/simulation/live"
+    - "Git add/commit/push or remote write"
+version_decision:
+  current_version: "internal-runner-core"
+  target_version: "internal-runner-core+cr135"
+  semver_impact: "N/A"
+  compatibility: "compatible"
+  reason: "Adds optional RunSpec/CLI bundle output and inspect path; existing runner APIs remain compatible."
+quality_summary:
+  cp6: "PASS: process/checks/CP6-CR135-RUNNER-ARTIFACT-BUNDLE-IMPLEMENTATION-DONE.md"
+  cp7: "PASS: process/checks/CP7-CR135-RUNNER-ARTIFACT-BUNDLE-VERIFICATION-DONE.md"
+  blocker_count: 0
+  high_risk_count: 0
+  risk_acceptance_ids:
+    - CP8-CR135-DQ-01
+  unresolved_findings:
+    - id: WARN-CR135-CR-TRACKING
+      severity: LOW
+      status: non-blocking-open
+      summary: "meta-flow check cr-tracking exits OK and reports active formal CRs: CR-135, but still prints warning: CR-INDEX.yaml does not mention active formal CR CR-135."
+affected_surface:
+  - "trading/strategy_runner/artifact_bundle.py"
+  - "trading/strategy_runner/result.py"
+  - "trading/strategy_runner/run_spec.py"
+  - "trading/strategy_runner/runner.py"
+  - "trading/strategy_runner/cli.py"
+  - "trading/strategy_runner/__init__.py"
+  - "tests/test_cr135_runner_artifact_bundle.py"
+  - "process/docs/features/strategy-runner-core/*"
+  - "process/checks / process/context / process/archive / process/changes / process/state"
+install_validation_summary:
+  applicable: false
+  reason: "CR135 does not add install scripts or external deployment targets."
+verification_summary:
+  commands:
+    - command: "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_cr132_process_artifact_hygiene.py tests/test_cr135_runner_artifact_bundle.py tests/test_cr134_runner_evidence_index.py tests/test_cr133_runner_spec_cli.py tests/test_cr128_runner_core_mvp.py"
+      result: "PASS, 34 passed"
+    - command: "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_process_artifact_hygiene.py --json"
+      result: "PASS, unclassified=0"
+    - command: "uv run --python 3.11 meta-flow cr check --project-root /home/hyde/workspace/quant-lab"
+      result: "PASS, CR Lifecycle Check: OK"
+    - command: "uv run --python 3.11 meta-flow state check --project-root /home/hyde/workspace/quant-lab"
+      result: "PASS, State v2 Check: OK"
+release_documents:
+  - path: process/docs/release/RELEASE-NOTES-CR135.md
+    status: ready
+  - path: process/docs/release/DEPLOY-CHECKLIST-CR135.md
+    status: ready
+  - path: process/docs/release/ROLLBACK-CR135.md
+    status: ready
+  - path: process/docs/release/MIGRATION-CR135.md
+    status: ready
+  - path: process/docs/release/FEEDBACK-CR135.md
+    status: ready
+non_authorized_items:
+  - "Read .env, credentials, account/session/raw logs"
+  - "Access, list, read, write, publish, pull or delete NAS"
+  - "Start/connect QMT/MiniQMT/XtQuant/gateway runtime"
+  - "provider fetch, lake write, catalog publish/current pointer"
+  - "submit/cancel/buy/sell/simulation/live"
+  - "git add/commit/push/remote write"
+follow_up_summary:
+  recommended_next: "CR135 is closed READY_WITH_RISK. Next project step should stay offline-only: choose bundle schema validation, run registry, or batch run; optionally open FU-CR135-001 only if zero-warning CR tracking is required."
+  follow_up_candidates:
+    - id: FU-CR135-001
+      title: "CR tracking warning cleanup"
+      status: candidate
+      trigger: "User wants zero-warning cr-tracking before or after closure."

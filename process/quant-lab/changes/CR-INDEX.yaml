@@ -1,7 +1,7 @@
 version: 1
 schema_version: 2
 status: "no-active-formal-cr"
-updated_at: '2026-06-23T18:18:00+08:00'
+updated_at: '2026-06-23T19:02:11+08:00'
 updated_by: "host-orchestrator"
 owner: meta-po
 source: >
@@ -97,7 +97,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: '2026-06-23T18:18:00+08:00 CR131 closed READY after moving CR-named historical design docs out of default design root, adding archive indexes, updating current design refs and enabling design surface checker/tests. No runtime/NAS/QMT/credentials/provider/lake/catalog/trading/Git remote write was authorized or executed.'
+last_consistency_check: '2026-06-23T19:02:11+08:00 CR136 CP8 approved by user and closed READY_WITH_RISK. WARN-CR136-CR-TRACKING accepted as non-blocking follow-up candidate FU-CR136-001. User explicitly requested Git push and handoff writing; no runtime, NAS, QMT, credential, provider/lake/catalog or trading authorization granted.'
 status_model:
   lifecycle_status_values:
     - candidate
@@ -217,6 +217,68 @@ index_schema:
 - next_action
 - last_checked_at
 active_crs:
+  - id: "CR-136"
+    title: "Runner Bundle Schema / Compatibility Validation"
+    status: "closed-current-delivery"
+    kind: "implementation-gate"
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: USER-20260623-START-CR136
+    formal_cr_path: process/changes/CR-136-RUNNER-BUNDLE-SCHEMA-COMPATIBILITY-VALIDATION-2026-06-23.md
+    parent_cr: CR-135
+    source_decision_id: USER-20260623-START-CR136
+    priority: 1
+    risk_refs:
+    - WARN-CR136-CR-TRACKING
+    blocked_by: "closed by CP8 approval at 2026-06-23T19:02:11+08:00; WARN-CR136-CR-TRACKING accepted as non-blocking follow-up candidate FU-CR136-001. Git push separately authorized by user for current classified source/process changes; no runtime/NAS/QMT/credentials/provider/lake/catalog/trading authorized."
+    impact_surface:
+    - strategy_runner_core
+    - runner_artifact_bundle
+    - runner_bundle_validation
+    - offline_runner_cli
+    - process_docs_features_strategy_runner_core
+    conflict_keys:
+    - strategy-runner-core
+    - runner-artifact-bundle
+    - runner-bundle-validation
+    - offline-runner-cli
+    - no_runtime_authorization
+    next_gate: closed
+    next_action: "CR136 closed READY_WITH_RISK. Next recommended CR after context reset: offline runner run registry; online runtime remains separate high-risk authorization gate."
+    last_checked_at: '2026-06-23T19:02:11+08:00'
+  - id: "CR-135"
+    title: "Runner Execution Artifact Bundle / Replay Workflow"
+    status: "closed-current-delivery"
+    kind: "implementation-gate"
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    risk_refs:
+    - WARN-CR135-CR-TRACKING
+    source_tracking: USER-20260623-START-CR135
+    formal_cr_path: process/changes/CR-135-RUNNER-EXECUTION-ARTIFACT-BUNDLE-REPLAY-WORKFLOW-2026-06-23.md
+    parent_cr: CR-134
+    source_decision_id: USER-20260623-START-CR135
+    priority: 1
+    blocked_by: "closed by CP8 approval at 2026-06-23T18:07:24+08:00; WARN-CR135-CR-TRACKING accepted as non-blocking follow-up candidate FU-CR135-001. No runtime/NAS/QMT/credentials/provider/lake/catalog/trading/Git write authorized."
+    impact_surface:
+    - strategy_runner_core
+    - runner_artifact_bundle
+    - runner_replay_inspect
+    - offline_runner_cli
+    - process_docs_features_strategy_runner_core
+    conflict_keys:
+    - strategy-runner-core
+    - runner-artifact-bundle
+    - runner-replay-inspect
+    - offline-runner-cli
+    - no_runtime_authorization
+    next_gate: closed
+    next_action: "CR135 closed READY_WITH_RISK. Next recommended project step: choose next offline-only runner slice or open FU-CR135-001 only if zero-warning CR tracking is required."
+    last_checked_at: '2026-06-23T18:07:24+08:00'
   - id: "CR-126"
     title: Quant-Lab Runner Development Readiness / Runner Entry Design
     status: "closed-current-delivery"
@@ -3161,35 +3223,6 @@ cancelled_crs:
   next_action: 不启动；不从任何历史 small-live 或研究结果自动放大资金。
   last_checked_at: '2026-06-10T22:20:00+08:00'
 blocked_crs:
-- id: CR-089
-  title: QMT Interface Validation Gate with NAS Strategy Package Exchange
-  status: blocked-readiness-approved
-  lifecycle_status: blocked
-  source_tracking: USER-20260617-QMT-NAS-STRATEGY-PACKAGE-INTERFACE-VALIDATION
-  formal_cr_path: process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md
-  priority: 1
-  blocked_by: CR046 framework-first delivery is now closed-current-delivery / READY_WITH_RISK. User approved CR089 CP2/CP3/CP5 at 2026-06-17T21:34:53+08:00, but CR089 remains blocked-readiness-approved until the user explicitly starts the next CR / runtime authorization; no NAS/QMT/credential/account/trading runtime action is authorized.
-  impact_surface:
-  - QMT interface validation
-  - NAS strategy package exchange
-  - strategy package manifest
-  - trading_pc package intake
-  - readonly query_positions smoke
-  - runtime_authorization
-  - credential_boundary
-  conflict_keys:
-  - strategy_package_contract
-  - qmt_terminal_strategy
-  - adapter_layer_realignment
-  - miniqmt_gateway_adapter
-  - qmt_direct_run_target
-  - trading_runtime_boundary
-  - per_run_authorization
-  - credential_boundary
-  - nas_package_exchange
-  next_gate: blocked pending target/adapter realignment or independent runtime authorization
-  next_action: CR089 仍保持 blocked-readiness-approved。基于 2026-06-19 用户纠正，启动真实 package/interface 路线前应先由 CR091-FU-05 重对齐 manifest target taxonomy、QMT direct-run target 和 quant-lab runner adapter layer；不授权 NAS/QMT/credential/account/trading action。
-  last_checked_at: '2026-06-19T19:35:00+08:00'
 - id: CR-104
   title: QMT/MiniQMT Trading-Day Runtime Validation Gate
   status: closed-current-delivery
@@ -5061,18 +5094,21 @@ items:
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
   - id: CR-089
     title: QMT Interface Validation Gate
-    status: blocked
+    status: closed-superseded-by-successor-crs
     kind: requirement-change
-    lifecycle_status: blocked
+    lifecycle_status: closed
     readiness_status: ready_with_risk
-    gate_status: cp8_pending
+    gate_status: closed
     gate_profile: runtime
     source_tracking: process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md
     formal_cr_path: process/changes/CR-089-QMT-INTERFACE-VALIDATION-GATE-2026-06-17.md
     blocked_by: []
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-    historical_baseline_status: reframed
-    reframed_by: FU-CR091-005
+    historical_baseline_status: closed
+    reframed_by:
+    - CR-102
+    - CR-103
+    - CR-104
   - id: CR-092
     title: Real QMT readonly runtime smoke design gate
     status: closed
