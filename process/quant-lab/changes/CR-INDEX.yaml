@@ -1,7 +1,7 @@
 version: 1
 schema_version: 2
 status: "no-active-formal-cr"
-updated_at: '2026-06-22T16:06:10+08:00'
+updated_at: '2026-06-23T18:18:00+08:00'
 updated_by: "host-orchestrator"
 owner: meta-po
 source: >
@@ -97,7 +97,7 @@ source: >
   old-root delete/rename/move, forbidden path copy/read, credential read, target
   env rebuild, remote Git write, NAS new write, data lake operation, QMT/MiniQMT
   runtime or CR046 recovery was authorized or executed.
-last_consistency_check: '2026-06-22T16:06:10+08:00 User approved CR112 CP8. CR112 is closed-current-delivery / READY; there are no active formal CRs. FU-CR112-001 remains candidate only. Source code changes, checker implementation changes, CR105/order-write/runtime/NAS/credentials/provider publish remain unauthorized.'
+last_consistency_check: '2026-06-23T18:18:00+08:00 CR131 closed READY after moving CR-named historical design docs out of default design root, adding archive indexes, updating current design refs and enabling design surface checker/tests. No runtime/NAS/QMT/credentials/provider/lake/catalog/trading/Git remote write was authorized or executed.'
 status_model:
   lifecycle_status_values:
     - candidate
@@ -216,8 +216,576 @@ index_schema:
 - next_gate
 - next_action
 - last_checked_at
-active_crs: []
+active_crs:
+  - id: "CR-126"
+    title: Quant-Lab Runner Development Readiness / Runner Entry Design
+    status: "closed-current-delivery"
+    lifecycle_status: closed
+    readiness_status: ready
+    gate_status: closed
+    source_tracking: USER-20260623-START-CR126
+    formal_cr_path: process/changes/CR-126-QUANT-LAB-RUNNER-DEVELOPMENT-READINESS-RUNNER-ENTRY-DESIGN-2026-06-23.md
+    parent_cr: CR-125
+    source_decision_id: CP8-CR125-NEXT-ACTION
+    priority: 1
+    blocked_by: "closed by CP8 approval; no CR127 startup, runtime, NAS, QMT, credentials, provider/lake/catalog, .gitignore, source/checker/tests, commit/push or real trading was authorized or executed."
+    impact_surface:
+    - runner_development_readiness
+    - runner_entry_design
+    - strategy_runner_package_loader
+    - strategy_runner_adapter_boundary
+    - readonly_gateway_boundary
+    - evidence_summary_boundary
+    - runtime_authorization_split
+    conflict_keys:
+    - runner_entry_design
+    - no_runtime_authorization
+    - no_external_access
+    - no_source_change
+    - no_git_write
+    - no_provider_lake_catalog
+    next_gate: closed
+    next_action: "CR126 closed READY. User may explicitly start CR127 Runner Core MVP Implementation as a new CR; external permission domains remain separate CR128+ gates."
+    last_checked_at: '2026-06-23'
+  - id: CR-125
+    title: Runner Development Readiness Documentation Cleanup Gate
+    status: closed-current-delivery
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-124-FOLLOW-UP-TRACKING-2026-06-23.md
+    formal_cr_path: process/changes/CR-125-RUNNER-DEVELOPMENT-READINESS-DOCUMENTATION-CLEANUP-GATE-2026-06-23.md
+    parent_cr: CR-124
+    source_decision_id: FU-CR124-001
+    priority: 1
+    blocked_by: "closed: user approved CR125 CP8 at 2026-06-23T13:34:51+08:00. CR102 design-only docs cleanup and CR121 superseded stop-line accepted. No push/commit/runtime/.gitignore/source/checker/tests/git-rm-cached executed."
+    impact_surface:
+      - runner_development_readiness
+      - cr121_remaining_routing_cleanup
+      - cr102_cr103_cr104_feature_docs_review
+      - historical_docs_cleanup_stop_line
+      - no_runtime_authorization
+      - no_source_checker_tests_change
+    conflict_keys:
+      - runner_development_entry
+      - docs_features_cr102_cr103_cr104
+      - cr121_blocked_cleanup
+      - docs_routing_cleanup
+      - no_remote_write
+      - no_runtime_connection
+      - no_source_checker_tests_change
+    next_gate: closed
+    next_action: "CR125 closed READY_WITH_RISK. Next shortest path: start quant-lab runner development readiness / runner entry design CR; do not resume historical docs cleanup."
+    last_checked_at: '2026-06-23T13:34:51+08:00'
+  - id: CR-124
+    title: Artifact Feature Docs Cleanup Publication Gate
+    status: closed-current-delivery
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: USER-20260623-START-CR124
+    formal_cr_path: process/changes/CR-124-ARTIFACT-FEATURE-DOCS-CLEANUP-PUBLICATION-GATE-2026-06-23.md
+    parent_cr: CR-123
+    source_decision_id: FU-CR123-001
+    priority: 1
+    blocked_by: "closed: user approved CR124 CP8 at 2026-06-23T12:06:50+08:00. Artifact local commit 144a7b3 accepted as READY_WITH_RISK; FU-CR124-001 converted to CR125. No push/runtime/.gitignore/source/checker/tests/CR121 cleanup executed."
+    impact_surface:
+      - artifact_docs_features_publication
+      - artifact_local_git_commit
+      - cr123_docs_features_cleanup
+      - artifact_dirty_worktree_allowlist
+      - no_remote_push
+      - cr121_scope_exclusion
+      - no_runtime_authorization
+      - cr102_cr103_cr104_runner_followup
+    conflict_keys:
+      - artifact_local_git_commit
+      - artifact_feature_deletion_allowlist
+      - artifact_dirty_worktree_exclusion
+      - no_git_add
+      - docs_features_delete_allowlist
+      - cr102_cr103_cr104_not_default_delete
+      - no_remote_write
+      - no_runtime_connection
+      - cr121_excluded
+    next_gate: closed
+    next_action: "CR124 closed READY_WITH_RISK; continue with CR125 runner development readiness documentation cleanup gate."
+    last_checked_at: '2026-06-23T12:06:50+08:00'
+  - id: CR-122
+    title: Merge-Restored Docs Reversion to Remediated Branch Baseline
+    status: closed-current-delivery
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: USER-20260623-START-CR122
+    formal_cr_path: process/changes/CR-122-MERGE-RESTORED-DOCS-REVERSION-TO-REMEDIATED-BRANCH-BASELINE-2026-06-23.md
+    parent_cr: CR-121
+    source_decision_id: USER-20260623-START-CR122
+    priority: 1
+    blocked_by: "closed: user approved CR122 CP8 at 2026-06-23T10:22:20+08:00. Docs-only restore executed and CP7 static verification passed; staged docs changes remain local/uncommitted/unpushed. No commit/push/runtime/.gitignore/source/checker/tests/CR121 cleanup executed."
+    impact_surface:
+      - merge_restored_docs
+      - docs_content_reversion
+      - docs_user_manual
+      - docs_qmt
+      - docs_goldminer
+      - docs_release
+      - qmt_top_level_docs
+      - cr121_scope_overlap
+      - no_runtime_authorization
+    conflict_keys:
+      - docs_content_reversion
+      - cr121_overlap
+      - git_rm_pending_cp5
+      - no_delete_before_cp5
+      - no_git_restore_before_cp5
+      - no_runtime_connection
+      - no_credential_read
+      - no_provider_lake_publish
+    next_gate: closed
+    next_action: "CR122 closed READY_WITH_RISK. Recommended next step: choose a separate publication gate for staged docs changes or resume CR121 CP6 index-only cleanup; neither is auto-authorized by CR122 closure."
+    last_checked_at: '2026-06-23T10:22:20+08:00'
+  - id: CR-121
+    title: Merge-Induced Directory Routing Regression Hardening
+    status: superseded
+    kind: requirement-change
+    lifecycle_status: superseded
+    readiness_status: n/a
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-120-FOLLOW-UP-TRACKING-2026-06-23.md#FU-CR120-001
+    formal_cr_path: process/changes/CR-121-MERGE-INDUCED-DIRECTORY-ROUTING-REGRESSION-HARDENING-2026-06-23.md
+    parent_cr: CR-120
+    source_decision_id: USER-20260623-CP8-CR120-APPROVE-DIRECTORY-AUDIT
+    priority: 1
+    blocked_by: "closed_superseded_by_cr125: CR125 CP5 approved; CR121 CP6 index-only cleanup route is not resumed. No code/.gitignore/delete/move/commit/push/runtime/git-rm-cached executed under CR121."
+    impact_surface:
+      - docs_design_symlink
+      - docs_features_symlink
+      - docs_quality_symlink
+      - process_symlink
+      - checkpoints_symlink
+      - tracked_ignored_paths
+      - merge_regression
+      - claude_artifacts
+      - docs_qmt
+      - docs_goldminer
+      - docs_release
+      - gitignore_policy
+      - guardrail_checker_candidate
+    conflict_keys:
+      - repository_governance
+      - git_index_cleanup
+      - docs_routing
+      - no_code_change
+      - no_git_rm_cached
+      - no_file_delete_move
+      - no_runtime_connection
+      - no_nas_access
+      - no_credential_read
+      - no_order_write
+      - no_provider_lake_publish
+    next_gate: closed
+    next_action: "CR121 superseded by CR125; do not resume historical index-only cleanup unless a new CR explicitly reopens directory routing remediation."
+    last_checked_at: '2026-06-23T12:43:37+08:00'
+  - id: CR-120
+    title: CR Tracking Formal/FU Row Convention Hardening
+    status: closed-current-delivery
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-116-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR114-004
+    formal_cr_path: process/changes/CR-120-CR-TRACKING-FORMAL-FU-ROW-CONVENTION-HARDENING-2026-06-22.md
+    parent_cr: CR-116
+    source_decision_id: DQ-CP8-CR116-02
+    priority: 2
+    blocked_by: "closed: user approved CR120 CP8 at 2026-06-23T08:58:36+08:00. Directory routing merge audit is tracked separately as FU-CR120-001 candidate; runtime remains unauthorized."
+    impact_surface:
+      - cr_tracking_checker
+      - follow_up_row_convention
+      - source_code_change
+      - tests_change
+      - no_runtime_authorization
+    conflict_keys:
+      - cr_tracking_checker
+      - follow_up_row_convention
+      - source_code_change
+      - tests_change
+      - no_runtime_connection
+      - no_order_write
+      - no_nas_access
+      - no_credential_read
+      - no_provider_lake_publish
+    next_gate: closed
+    next_action: "CR120 closed READY. FU-CR120-001 candidate may be started separately for directory routing merge regression hardening; no runtime authorization."
+    last_checked_at: '2026-06-23T08:58:36+08:00'
 recent_items:
+  - id: CR-124
+    title: Artifact Feature Docs Cleanup Publication Gate
+    status: active-cp2-cp5-publication-scope-pending
+    kind: requirement-change
+    lifecycle_status: active
+    readiness_status: n/a
+    gate_status: cp5_pending
+    gate_profile: standard
+    source_tracking: USER-20260623-START-CR124
+    formal_cr_path: process/changes/CR-124-ARTIFACT-FEATURE-DOCS-CLEANUP-PUBLICATION-GATE-2026-06-23.md
+    parent_cr: CR-123
+    source_decision_id: FU-CR123-001
+    priority: 1
+    blocked_by: "awaiting_cp2_cp5_review: no artifact commit/push/runtime executed."
+    impact_surface:
+      - artifact_docs_features_publication
+      - artifact_local_git_commit
+      - artifact_dirty_worktree_allowlist
+      - cr121_scope_exclusion
+      - cr102_cr103_cr104_runner_followup
+    conflict_keys:
+      - artifact_local_git_commit
+      - artifact_feature_deletion_allowlist
+      - no_remote_write
+      - no_runtime_connection
+      - cr121_excluded
+    next_gate: CP2/CP5
+  - id: CR-123
+    title: CR122 Staged Docs Publication Gate
+    status: closed-current-delivery
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: USER-20260623-START-CR123
+    formal_cr_path: process/changes/CR-123-CR122-STAGED-DOCS-PUBLICATION-GATE-2026-06-23.md
+    parent_cr: CR-122
+    source_decision_id: FU-CR122-001
+    priority: 1
+    blocked_by: "closed: user approved CR123 CP8 at 2026-06-23T11:41:53+08:00. Main repo commit 940bcd9 completed; artifact feature deletion publication moved to CR124; CR121 and CR102/103/104 detailed cleanup deferred to runner development related CR."
+    impact_surface:
+      - staged_docs_publication
+      - local_git_commit
+      - cr122_staged_docs
+      - dirty_worktree_allowlist
+      - cr121_scope_exclusion
+    conflict_keys:
+      - local_git_commit
+      - staged_index_allowlist
+      - no_remote_write
+      - no_runtime_connection
+    next_gate: closed
+    next_action: "Await CP2/CP5 review; approve authorizes future CP6 local commit only."
+    last_checked_at: '2026-06-23T10:34:24+08:00'
+  - id: CR-122
+    title: Merge-Restored Docs Reversion to Remediated Branch Baseline
+    status: closed-current-delivery
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: USER-20260623-START-CR122
+    formal_cr_path: process/changes/CR-122-MERGE-RESTORED-DOCS-REVERSION-TO-REMEDIATED-BRANCH-BASELINE-2026-06-23.md
+    parent_cr: CR-121
+    source_decision_id: USER-20260623-START-CR122
+    priority: 1
+    blocked_by: "closed: user approved CR122 CP8 at 2026-06-23T10:22:20+08:00. Staged docs changes remain local/uncommitted/unpushed; no commit/push/runtime/.gitignore/code/checker/tests executed."
+    impact_surface:
+      - merge_restored_docs
+      - docs_content_reversion
+      - docs_user_manual
+      - docs_qmt
+      - docs_goldminer
+      - docs_release
+      - cr121_scope_overlap
+    conflict_keys:
+      - docs_content_reversion
+      - cr121_overlap
+      - no_delete_before_cp5
+      - no_runtime_connection
+    next_gate: closed
+    next_action: "CR122 closed READY_WITH_RISK; choose publication gate or CR121 resume next."
+    last_checked_at: '2026-06-23T10:22:20+08:00'
+  - id: CR-121
+    title: Merge-Induced Directory Routing Regression Hardening
+    status: superseded
+    kind: requirement-change
+    lifecycle_status: superseded
+    readiness_status: n/a
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-120-FOLLOW-UP-TRACKING-2026-06-23.md#FU-CR120-001
+    formal_cr_path: process/changes/CR-121-MERGE-INDUCED-DIRECTORY-ROUTING-REGRESSION-HARDENING-2026-06-23.md
+    parent_cr: CR-120
+    source_decision_id: USER-20260623-CP8-CR120-APPROVE-DIRECTORY-AUDIT
+    priority: 1
+    blocked_by: "closed_superseded_by_cr125: CR125 CP5 approved; CR121 CP6 index-only cleanup route is not resumed. No delete/move/.gitignore/code/commit/push/runtime/git-rm-cached executed under CR121."
+    impact_surface:
+      - docs_design_symlink
+      - docs_features_symlink
+      - docs_quality_symlink
+      - process_symlink
+      - checkpoints_symlink
+      - tracked_ignored_paths
+      - merge_regression
+      - docs_qmt
+      - docs_goldminer
+      - docs_release
+    conflict_keys:
+      - repository_governance
+      - git_index_cleanup
+      - docs_routing
+      - no_code_change
+      - no_runtime_connection
+    next_gate: closed
+    next_action: "CR121 superseded by CR125; do not resume historical index-only cleanup unless a new CR explicitly reopens directory routing remediation."
+    last_checked_at: '2026-06-23T12:43:37+08:00'
+  - id: CR-120
+    title: CR Tracking Formal/FU Row Convention Hardening
+    status: closed-current-delivery
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-116-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR114-004
+    formal_cr_path: process/changes/CR-120-CR-TRACKING-FORMAL-FU-ROW-CONVENTION-HARDENING-2026-06-22.md
+    priority: 2
+    blocked_by: "closed: user approved CR120 CP8 at 2026-06-23T08:58:36+08:00. Directory routing merge audit is tracked separately as FU-CR120-001 candidate; runtime remains unauthorized."
+    impact_surface:
+      - cr_tracking_checker
+      - follow_up_row_convention
+      - source_code_change
+      - tests_change
+      - no_runtime_authorization
+    conflict_keys:
+      - cr_tracking_checker
+      - follow_up_row_convention
+      - source_code_change
+      - tests_change
+      - no_runtime_connection
+      - no_order_write
+      - no_nas_access
+      - no_credential_read
+      - no_provider_lake_publish
+    next_gate: closed
+    next_action: "CR120 closed READY. Recommended next candidate: FU-CR120-001 directory routing merge regression hardening."
+    last_checked_at: '2026-06-23T08:58:36+08:00'
+  - id: CR-119
+    title: Human Gate Launch Message Checker Implementation Candidate
+    status: closed-current-delivery
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-115-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR115-001
+    formal_cr_path: process/changes/CR-119-HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-IMPLEMENTATION-CANDIDATE-2026-06-22.md
+    priority: 1
+    blocked_by: "closed: user approved CR119 CP8 at 2026-06-22T19:37:10+08:00. CR119 closed READY; no follow-up was created. Runtime/NAS/credentials/trading/publish remain unauthorized."
+    impact_surface:
+      - human_gate_launch_message_checker
+      - source_code_change_pending_authorization
+      - tests_change_pending_authorization
+      - checker_implementation_change_pending_authorization
+      - no_runtime_authorization
+    conflict_keys:
+      - human_gate_launch_message_checker
+      - source_code_change
+      - tests_change
+      - checker_implementation_change
+      - no_runtime_connection
+      - no_order_write
+      - no_nas_access
+      - no_credential_read
+      - no_provider_lake_publish
+    next_gate: closed
+    next_action: "CR119 closed READY. No active formal CR remains; runtime/NAS/credentials/trading/publish remain unauthorized without a new CR."
+    last_checked_at: '2026-06-22T19:37:10+08:00'
+  - id: CR-118
+    title: Path Alias Checker Enforcement Candidate
+    status: closed-current-delivery
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: process/changes/CR-117-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR117-001
+    formal_cr_path: process/changes/CR-118-PATH-ALIAS-CHECKER-ENFORCEMENT-CANDIDATE-2026-06-22.md
+    priority: 1
+    blocked_by: "closed: user approved CR118 CP8 at 2026-06-22T19:08:32+08:00. CR118 closed READY; no follow-up was created. Runtime/NAS/credentials/trading/publish remain unauthorized."
+    impact_surface:
+      - path_alias_checker
+      - source_code_change_pending_authorization
+      - tests_change_pending_authorization
+      - checker_implementation_change_pending_authorization
+      - no_runtime_authorization
+    conflict_keys:
+      - path_alias_checker
+      - source_code_change
+      - tests_change
+      - checker_implementation_change
+      - no_runtime_connection
+      - no_order_write
+      - no_nas_access
+      - no_credential_read
+      - no_provider_lake_publish
+    next_gate: closed
+    next_action: "CR118 closed READY. No active formal CR remains; follow-up candidates require explicit user selection."
+    last_checked_at: '2026-06-22T19:08:32+08:00'
+  - id: CR-117
+    title: Context Path Alias Normalization Notes
+    status: closed-current-delivery
+    kind: ledger-maintenance
+    lifecycle_status: closed
+    readiness_status: ready
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-116-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR114-002
+    formal_cr_path: process/changes/CR-117-CONTEXT-PATH-ALIAS-NORMALIZATION-NOTES-2026-06-22.md
+    priority: 2
+    blocked_by: "closed: user approved CR117 CP8 at 2026-06-22T18:21:08+08:00. CR117 closed READY; FU-CR117-001 selected and started as CR118 CP2. No source code, tests, checker implementation, directory/symlink or runtime action was authorized by CR117 closure."
+    impact_surface:
+      - context_path_alias
+      - docs_design_alias
+      - process_docs_design_alias
+      - no_code_change_by_default
+      - no_runtime_authorization
+    conflict_keys:
+      - context_path_alias
+      - no_runtime_connection
+      - no_order_write
+      - no_nas_access
+      - no_credential_read
+      - no_provider_lake_publish
+      - no_checker_implementation_change
+      - no_directory_or_symlink_change
+    next_gate: closed
+    next_action: "CR117 closed READY. Downstream CR118 is active at CP2 pending for checker enforcement candidate; implementation remains gated."
+    last_checked_at: '2026-06-22T18:21:08+08:00'
+  - id: CR-116
+    title: Pending Decision Queue / Checkpoint Alignment Audit
+    status: closed-current-delivery
+    kind: ledger-maintenance
+    lifecycle_status: closed
+    readiness_status: ready
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-114-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR114-003
+    formal_cr_path: process/changes/CR-116-PENDING-DECISION-QUEUE-CHECKPOINT-ALIGNMENT-AUDIT-2026-06-22.md
+    priority: 3
+    blocked_by: "closed: user approved CR116 CP8 at 2026-06-22T17:46:19+08:00. CR116 closed READY; downstream FU-CR115-001, FU-CR114-004 and FU-CR114-002 remain candidates only. No source code, tests, checker implementation, bulk historical STATE rewrite or runtime action is authorized."
+    impact_surface:
+      - pending_decision_queue
+      - checkpoint_dq_table
+      - state_summary
+      - no_code_change_by_default
+      - no_runtime_authorization
+    conflict_keys:
+      - pending_decision_queue
+      - checkpoint_dq_table
+      - state_summary
+      - no_runtime_connection
+      - no_order_write
+      - no_nas_access
+      - no_credential_read
+      - no_provider_lake_publish
+      - no_checker_implementation_change
+    next_gate: closed
+    next_action: "CR116 closed READY. No active formal CR remains; downstream candidates require explicit user selection and any implementation item requires independent authorization."
+    last_checked_at: '2026-06-22T17:46:19+08:00'
+  - id: CR-115
+    title: Human Gate Launch Message Checkable Draft Contract
+    status: closed-current-delivery
+    kind: ledger-maintenance
+    lifecycle_status: closed
+    readiness_status: ready
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-114-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR114-001
+    formal_cr_path: process/changes/CR-115-HUMAN-GATE-LAUNCH-MESSAGE-CHECKABLE-DRAFT-CONTRACT-2026-06-22.md
+    priority: 1
+    blocked_by: "closed: user approved CR115 CP8 at 2026-06-22T17:23:57+08:00. CR115 closed READY; FU-CR115-001 remains candidate only. No source code, tests, checker implementation or runtime action is authorized."
+    impact_surface:
+      - human_gate_launch_message
+      - decision_brief_contract
+      - no_code_change_by_default
+      - no_runtime_authorization
+    conflict_keys:
+      - human_gate_launch_message
+      - no_runtime_connection
+      - no_order_write
+      - no_nas_access
+      - no_credential_read
+      - no_provider_lake_publish
+      - no_checker_implementation_change
+    next_gate: closed
+    next_action: "CR115 closed READY. FU-CR115-001 remains candidate only; start only after explicit user selection and independent implementation CR."
+    last_checked_at: '2026-06-22T17:23:57+08:00'
+  - id: CR-114
+    title: Context Capsule / Human Gate Consistency Review
+    status: closed-current-delivery
+    kind: ledger-maintenance
+    lifecycle_status: closed
+    readiness_status: ready
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: process/changes/CR-113-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR113-001
+    formal_cr_path: process/changes/CR-114-CONTEXT-CAPSULE-HUMAN-GATE-CONSISTENCY-REVIEW-2026-06-22.md
+    priority: 1
+    blocked_by: "closed: user approved CR114 CP8 at 2026-06-22T17:05:02+08:00. CR114 closed READY; FU-CR114-001 was selected, converted to CR115, and CR115 later closed READY. No source code, tests, checker implementation or runtime action is authorized."
+    impact_surface:
+      - context_capsule_contract
+      - human_gate_contract
+      - decision_collection_coverage
+      - no_code_change_by_default
+      - no_runtime_authorization
+    conflict_keys:
+      - context_capsule_contract
+      - human_gate_contract
+      - no_runtime_connection
+      - no_order_write
+      - no_nas_access
+      - no_credential_read
+      - no_provider_lake_publish
+      - no_checker_implementation_change
+    next_gate: closed
+    next_action: "CR114 closed READY. Downstream CR115 also closed READY; FU-CR115-001 remains candidate only."
+    last_checked_at: '2026-06-22T17:05:02+08:00'
+  - id: CR-113
+    title: Redesign Remaining Backlog Triage Gate
+    status: closed-current-delivery
+    kind: requirement-change
+    lifecycle_status: closed
+    readiness_status: ready
+    gate_status: closed
+    gate_profile: compact
+    source_tracking: USER-20260622-START-REDESIGN-REMAINING-BACKLOG-TRIAGE
+    formal_cr_path: process/changes/CR-113-REDESIGN-REMAINING-BACKLOG-TRIAGE-GATE-2026-06-22.md
+    priority: 1
+    blocked_by: "closed: user approved CR113 CP8 at 2026-06-22T16:39:47+08:00. CR113 closed READY; FU-CR113-001 remains default next candidate only. No source code, tests, checker implementation or runtime action is authorized."
+    impact_surface:
+      - redesign_remaining_backlog_triage
+      - candidate_prioritization
+      - no_code_change
+      - no_runtime_authorization
+    conflict_keys:
+      - no_runtime_connection
+      - no_order_write
+      - no_nas_access
+      - no_credential_read
+      - no_provider_lake_publish
+      - no_checker_implementation_change
+    next_gate: closed
+    next_action: "CR113 closed READY. FU-CR113-001 remains the default next candidate; start only after explicit user selection and independent formal CR."
+    last_checked_at: '2026-06-22T16:39:47+08:00'
   - id: CR-112
     title: CR Tracking Checker Expectation Notes Gate
     status: closed-current-delivery
@@ -2654,6 +3222,282 @@ blocked_crs:
   next_action: "CR104 已关闭为 READY_WITH_RISK；如需下单/撤单/交易接口验证，启动 CR105 独立门禁。"
   last_checked_at: '2026-06-22T11:24:03+08:00'
 follow_up_candidates:
+- id: "CR-125"
+  title: Runner Development Readiness Documentation Cleanup Gate
+  status: closed-current-delivery
+  lifecycle_status: closed
+  readiness_status: ready_with_risk
+  gate_status: closed
+  source_tracking: process/changes/CR-124-FOLLOW-UP-TRACKING-2026-06-23.md
+  formal_cr_path: process/changes/CR-125-RUNNER-DEVELOPMENT-READINESS-DOCUMENTATION-CLEANUP-GATE-2026-06-23.md
+  priority: 1
+  blocked_by: related_closed_cr=CR-125; source_follow_up_id=FU-CR124-001; cp8_approved; ready_with_risk; no_push_commit_runtime_authorized
+  impact_surface:
+  - runner_development_readiness
+  - cr121_remaining_routing_cleanup
+  - cr102_cr103_cr104_feature_docs_review
+  - historical_docs_cleanup_stop_line
+  - no_runtime_authorization
+  conflict_keys:
+  - runner_development_entry
+  - docs_features_cr102_cr103_cr104
+  - cr121_blocked_cleanup
+  - no_remote_write
+  - no_runtime_connection
+  next_gate: closed
+  next_action: CR125 closed READY_WITH_RISK; next shortest path is runner development readiness / runner entry design.
+  last_checked_at: '2026-06-23T13:34:51+08:00'
+- id: "FU-CR113-001"
+  title: Context Capsule / Human Gate Consistency Review
+  status: closed-current-delivery
+  lifecycle_status: closed
+  source_tracking: process/changes/CR-113-FOLLOW-UP-TRACKING-2026-06-22.md
+  formal_cr_path: process/changes/CR-114-CONTEXT-CAPSULE-HUMAN-GATE-CONSISTENCY-REVIEW-2026-06-22.md
+  priority: 1
+  blocked_by: related_closed_cr=CR-114; downstream_closed_cr=CR-115
+  impact_surface:
+  - context_capsule_contract
+  - human_gate_contract
+  - decision_collection_coverage
+  - no_code_change_by_default
+  - no_runtime_authorization
+  conflict_keys:
+  - context_capsule_contract
+  - human_gate_contract
+  - no_runtime_connection
+  - no_order_write
+  - no_nas_access
+  - no_credential_read
+  - no_provider_lake_publish
+  next_gate: closed
+  next_action: CR114 closed READY；下游 FU-CR114-001 已转为 CR115 并关闭 READY。
+  last_checked_at: '2026-06-22T17:23:57+08:00'
+- id: "FU-CR114-001"
+  title: Human Gate Launch Message Checkable Draft Contract
+  status: closed-current-delivery
+  lifecycle_status: closed
+  source_tracking: process/changes/CR-114-FOLLOW-UP-TRACKING-2026-06-22.md
+  formal_cr_path: process/changes/CR-115-HUMAN-GATE-LAUNCH-MESSAGE-CHECKABLE-DRAFT-CONTRACT-2026-06-22.md
+  priority: 1
+  blocked_by: related_closed_cr=CR-115; downstream_candidate=FU-CR115-001
+  impact_surface:
+  - human_gate_launch_message
+  - decision_brief_contract
+  - no_code_change_by_default
+  - no_runtime_authorization
+  conflict_keys:
+  - human_gate_launch_message
+  - no_runtime_connection
+  - no_order_write
+  next_gate: closed
+  next_action: 用户已明确选择并启动为 CR115；CR115 已关闭 READY。FU-CR115-001 仅为后续候选，不自动启动。
+  last_checked_at: '2026-06-22T17:23:57+08:00'
+- id: "FU-CR115-001"
+  title: Human Gate Launch Message Checker Implementation Candidate
+  status: closed-current-delivery
+  lifecycle_status: closed
+  readiness_status: ready
+  gate_status: closed
+  source_tracking: process/changes/CR-115-FOLLOW-UP-TRACKING-2026-06-22.md
+  formal_cr_path: process/changes/CR-119-HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-IMPLEMENTATION-CANDIDATE-2026-06-22.md
+  priority: 1
+  blocked_by: related_closed_cr=CR-119; no_follow_up_created
+  impact_surface:
+  - human_gate_launch_message_checker
+  - source_code_change
+  - tests_change
+  - checker_implementation_change
+  - no_runtime_authorization
+  conflict_keys:
+  - human_gate_launch_message_checker
+  - source_code_change
+  - tests_change
+  - checker_implementation_change
+  - no_runtime_connection
+  next_gate: closed
+  next_action: CR119 已关闭 READY；不新增 follow-up。
+  last_checked_at: '2026-06-22T19:37:10+08:00'
+- id: "FU-CR114-002"
+  title: Context Path Alias Normalization Notes
+  status: closed-current-delivery
+  lifecycle_status: closed
+  readiness_status: ready
+  gate_status: closed
+  source_tracking: process/changes/CR-114-FOLLOW-UP-TRACKING-2026-06-22.md
+  formal_cr_path: process/changes/CR-117-CONTEXT-PATH-ALIAS-NORMALIZATION-NOTES-2026-06-22.md
+  priority: 2
+  blocked_by: related_closed_cr=CR-117; downstream_active_cr=CR-118
+  impact_surface:
+  - context_path_alias
+  - docs_design_alias
+  - process_docs_design_alias
+  - no_runtime_authorization
+  conflict_keys:
+  - context_path_alias
+  - no_runtime_connection
+  next_gate: closed
+  next_action: 用户已批准 CR117 CP8；CR117 closed READY；下游 FU-CR117-001 已转为 CR118 CP2 pending。
+  last_checked_at: '2026-06-22T18:21:08+08:00'
+- id: "FU-CR117-001"
+  title: Path Alias Checker Enforcement Candidate
+  status: active
+  lifecycle_status: active
+  readiness_status: n/a
+  gate_status: closed
+  source_tracking: process/changes/CR-117-FOLLOW-UP-TRACKING-2026-06-22.md
+  formal_cr_path: process/changes/CR-118-PATH-ALIAS-CHECKER-ENFORCEMENT-CANDIDATE-2026-06-22.md
+  priority: 1
+  blocked_by: related_closed_cr=CR-118
+  impact_surface:
+  - path_alias_checker
+  - source_code_change
+  - tests_change
+  - checker_implementation_change
+  - no_runtime_authorization
+  conflict_keys:
+  - path_alias_checker
+  - source_code_change
+  - tests_change
+  - checker_implementation_change
+  - no_runtime_connection
+  next_gate: closed
+  next_action: 用户已批准 CR118 CP8；CR118 closed READY，当前不新增 follow-up。
+  last_checked_at: '2026-06-22T19:08:32+08:00'
+- id: "FU-CR114-003"
+  title: Pending Decision Queue / Checkpoint Alignment Audit
+  status: closed-current-delivery
+  lifecycle_status: closed
+  readiness_status: ready
+  gate_status: closed
+  source_tracking: process/changes/CR-114-FOLLOW-UP-TRACKING-2026-06-22.md
+  formal_cr_path: process/changes/CR-116-PENDING-DECISION-QUEUE-CHECKPOINT-ALIGNMENT-AUDIT-2026-06-22.md
+  priority: 3
+  blocked_by: related_closed_cr=CR-116; downstream_candidates=FU-CR115-001,FU-CR114-004,FU-CR114-002
+  impact_surface:
+  - pending_decision_queue
+  - checkpoint_dq_table
+  - state_summary
+  - no_runtime_authorization
+  conflict_keys:
+  - pending_decision_queue
+  - no_runtime_connection
+  next_gate: closed
+  next_action: 用户已批准 CR116 CP8，当前候选已完成；下游候选仍为 not-started，不自动启动。
+  last_checked_at: '2026-06-22T17:46:19+08:00'
+- id: "FU-CR114-004"
+  title: CR Tracking Formal/FU Row Convention Hardening
+  status: closed-current-delivery
+  lifecycle_status: closed
+  readiness_status: ready
+  gate_status: closed
+  source_tracking: process/changes/CR-116-FOLLOW-UP-TRACKING-2026-06-22.md
+  formal_cr_path: process/changes/CR-120-CR-TRACKING-FORMAL-FU-ROW-CONVENTION-HARDENING-2026-06-22.md
+  priority: 2
+  blocked_by: related_closed_cr=CR-120; downstream_candidate=FU-CR120-001
+  impact_surface:
+  - cr_tracking_checker
+  - follow_up_row_convention
+  - source_code_change
+  - tests_change
+  conflict_keys:
+  - cr_tracking_checker
+  - source_code_change
+  - tests_change
+  - no_runtime_connection
+  next_gate: closed
+  next_action: 用户已批准 CR120 CP8，当前候选已完成；目录路由候选需独立启动。
+  last_checked_at: '2026-06-23T08:58:36+08:00'
+- id: "FU-CR120-001"
+  title: Merge-Induced Directory Routing Regression Hardening
+  status: closed
+  lifecycle_status: closed
+  readiness_status: n/a
+  gate_status: closed
+  source_tracking: process/changes/CR-120-FOLLOW-UP-TRACKING-2026-06-23.md
+  formal_cr_path: process/changes/CR-121-MERGE-INDUCED-DIRECTORY-ROUTING-REGRESSION-HARDENING-2026-06-23.md
+  priority: 1
+  blocked_by: related_superseded_cr=CR-121; superseded_by_cr125; cp6_not_executed; index_only_cleanup_not_resumed; no_runtime_or_git_rm_cached_executed
+  impact_surface:
+  - docs_design_symlink
+  - docs_features_symlink
+  - docs_quality_symlink
+  - process_symlink
+  - checkpoints_symlink
+  - tracked_ignored_paths
+  - merge_regression
+  - claude_artifacts
+  - docs_qmt
+  - docs_goldminer
+  conflict_keys:
+  - repository_governance
+  - git_index_cleanup
+  - docs_routing
+  - no_runtime_connection
+  next_gate: closed
+  next_action: CR121 superseded by CR125; do not resume index-only remediation unless a new CR explicitly reopens directory routing cleanup.
+  last_checked_at: '2026-06-23T12:43:37+08:00'
+- id: "FU-CR113-002"
+  title: Architecture-only Redesign HLD Gate
+  status: candidate
+  lifecycle_status: candidate
+  source_tracking: process/changes/CR-113-FOLLOW-UP-TRACKING-2026-06-22.md
+  formal_cr_path: ''
+  priority: 2
+  blocked_by: requires_user_selection_architecture_first
+  impact_surface:
+  - architecture_only_redesign
+  - module_boundary
+  - state_contract
+  - context_ledger_routing
+  - no_code_change_by_default
+  conflict_keys:
+  - architecture_only_redesign
+  - no_runtime_connection
+  - no_order_write
+  next_gate: not-started
+  next_action: 仅当用户选择 architecture-first 时启动独立 HLD CR。
+  last_checked_at: '2026-06-22T16:39:47+08:00'
+- id: "FU-CR113-003"
+  title: CP Result JSON / Ledger Gap Analysis
+  status: candidate
+  lifecycle_status: candidate
+  source_tracking: process/changes/CR-113-FOLLOW-UP-TRACKING-2026-06-22.md
+  formal_cr_path: ''
+  priority: 3
+  blocked_by: wait_for_context_human_gate_or_user_selection
+  impact_surface:
+  - cp_result_json
+  - event_ledger_gap_analysis
+  - state_current_json_gap
+  - no_code_change_by_default
+  conflict_keys:
+  - cp_result_json
+  - event_ledger_gap_analysis
+  - no_runtime_connection
+  next_gate: not-started
+  next_action: 保留为治理缺口分析候选；若需要补实现，再单独启动实现 CR。
+  last_checked_at: '2026-06-22T16:39:47+08:00'
+- id: "FU-CR113-004"
+  title: Checker Implementation Alignment Candidate
+  status: candidate
+  lifecycle_status: candidate
+  source_tracking: process/changes/CR-113-FOLLOW-UP-TRACKING-2026-06-22.md
+  formal_cr_path: ''
+  priority: 4
+  blocked_by: requires_implementation_cr_and_source_code_authorization
+  impact_surface:
+  - cr_tracking_checker_implementation
+  - source_code_change
+  - tests_change
+  - no_runtime_authorization
+  conflict_keys:
+  - checker_implementation
+  - source_code_change
+  - tests_change
+  - no_runtime_connection
+  next_gate: not-started
+  next_action: 仅当用户明确选择 checker implementation alignment 时启动独立实现 CR；CR113 不授权该候选。
+  last_checked_at: '2026-06-22T16:39:47+08:00'
 - id: "CR-026"
   title: Qlib isolated runner optional Spike (narrowed after CR030-039 coverage)
   status: candidate
@@ -3054,6 +3898,543 @@ route_view:
   status: cr044_closed_offline_admission_design_ready
   next_action: CR044 已完成 CP8 approved 并关闭为 offline-admission-design-ready / READY_WITH_RISK；未来真实 Goldminer L3/L4/L5 验证仅作为 CR045-candidate，必须单独决策和逐 run 授权。当前不授权读取凭据、登录、连接、查询账户、下单、撤单或 simulation/live。
 items:
+  - id: "CR-131"
+    title: "Design Surface Archive Cleanup"
+    status: "closed-current-delivery"
+    kind: "implementation-gate"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "USER-20260623-START-CR131"
+    formal_cr_path: "process/changes/CR-131-DESIGN-SURFACE-ARCHIVE-CLEANUP-2026-06-23.md"
+    parent_cr: "CR-130"
+    source_decision_id: "USER-20260623-START-CR131"
+    blocked_by:
+      - "related_closed_cr=CR-131"
+      - "cp6_implementation_passed"
+      - "cp7_verification_passed"
+      - "design_docs_archive_only"
+      - "lightweight_checker_authorized"
+      - "no_runtime_nas_qmt_credentials_provider_lake_catalog_trading_git_remote_write_authorized"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR131 closed READY. Default design root now contains current authority entries only; CR-named historical design docs live under process/archive/design-cr-docs."
+  - id: "CR-130"
+    title: "Design Boundary Dedup: Runner Architecture Authority"
+    status: "closed-current-delivery"
+    kind: "implementation-gate"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "USER-20260623-START-CR130"
+    formal_cr_path: "process/changes/CR-130-DESIGN-BOUNDARY-DEDUP-RUNNER-ARCHITECTURE-AUTHORITY-2026-06-23.md"
+    parent_cr: "CR-129"
+    source_decision_id: "USER-20260623-START-CR130"
+    blocked_by:
+      - "related_closed_cr=CR-130"
+      - "cp6_implementation_passed"
+      - "cp7_verification_passed"
+      - "design_docs_boundary_only"
+      - "lightweight_checker_authorized"
+      - "no_runtime_nas_qmt_credentials_provider_lake_catalog_trading_git_remote_write_authorized"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR130 closed READY. runner architecture authority points to strategy-runner-core; any runtime/NAS/QMT/provider/lake/catalog/trading work requires a separate authorization gate."
+  - id: "CR-129"
+    title: "Feature Boundary Dedup: Strategy Runner Core Authority"
+    status: "closed-current-delivery"
+    kind: "implementation-gate"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "USER-20260623-START-CR129"
+    formal_cr_path: "process/changes/CR-129-FEATURE-BOUNDARY-DEDUP-STRATEGY-RUNNER-CORE-AUTHORITY-2026-06-23.md"
+    parent_cr: "CR-128"
+    source_decision_id: "USER-20260623-START-CR129"
+    blocked_by:
+      - "related_closed_cr=CR-129"
+      - "cp6_implementation_passed"
+      - "cp7_verification_passed"
+      - "feature_docs_boundary_only"
+      - "lightweight_checker_authorized"
+      - "no_runtime_nas_qmt_credentials_provider_lake_catalog_trading_git_remote_write_authorized"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR129 closed READY. strategy-runner-core is the offline runner implementation authority; any runtime/NAS/QMT/provider/lake/catalog/trading work requires a separate authorization gate."
+  - id: "CR-128"
+    title: "Runner Core MVP Implementation"
+    status: "closed-current-delivery"
+    kind: "implementation-gate"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "USER-20260623-START-CR128"
+    formal_cr_path: "process/changes/CR-128-RUNNER-CORE-MVP-IMPLEMENTATION-2026-06-23.md"
+    parent_cr: "CR-126"
+    source_decision_id: "USER-20260623-START-CR128"
+    blocked_by:
+      - "related_closed_cr=CR-128"
+      - "cp6_implementation_passed"
+      - "cp7_verification_passed"
+      - "offline_runner_core_only"
+      - "feature_docs_governance_authorized"
+      - "no_runtime_nas_qmt_credentials_provider_lake_catalog_trading_git_remote_write_authorized"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR128 closed READY. Offline runner core MVP is available; any runtime/NAS/QMT/credentials/provider/lake/catalog/trading/Git remote write work requires a separate CR129+ authorization gate."
+  - id: "CR-127"
+    title: "State v2 / Process Retention Policy Landing"
+    status: "closed-current-delivery"
+    kind: "ledger-maintenance"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "USER-20260623-STATE-V2-RETENTION-POLICY"
+    formal_cr_path: "process/changes/CR-127-STATE-V2-PROCESS-RETENTION-POLICY-2026-06-23.md"
+    blocked_by:
+      - "cp8_self_check_passed"
+      - "related_closed_cr=CR-127"
+      - "state_v2_landed"
+      - "retention_policy_landed"
+      - "read_policy_landed"
+      - "no_runtime_nas_qmt_credentials_provider_lake_catalog_git_write_trading_authorized"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR127 closed READY. Current process default machine state is process/state/STATE.current.json; process/STATE.md is compact human summary and legacy full text is archived."
+  - id: "CR-126"
+    title: "Quant-Lab Runner Development Readiness / Runner Entry Design"
+    status: "active-formal-cr"
+    kind: "requirement-change"
+    lifecycle_status: "active"
+    readiness_status: "n/a"
+    gate_status: "cp5_pending"
+    gate_profile: "standard"
+    source_tracking: "USER-20260623-START-CR126"
+    formal_cr_path: "process/changes/CR-126-QUANT-LAB-RUNNER-DEVELOPMENT-READINESS-RUNNER-ENTRY-DESIGN-2026-06-23.md"
+    parent_cr: "CR-125"
+    source_decision_id: "CP8-CR125-NEXT-ACTION"
+    blocked_by:
+      - "pending_user_review"
+      - "related_active_cr=CR-126"
+      - "cp2_cp5_gate_prepared"
+      - "no_runtime_nas_qmt_credentials_provider_lake_catalog_authorized"
+      - "no_gitignore_source_checker_tests_commit_push_authorized"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "Await user review of CP2/CP5 CR126 runner entry design gate; approve authorizes only design/process materials, not source/runtime."
+  - id: "CR-125"
+    title: "Runner Development Readiness Documentation Cleanup Gate"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: "closed"
+    readiness_status: "ready_with_risk"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "process/changes/CR-124-FOLLOW-UP-TRACKING-2026-06-23.md"
+    formal_cr_path: "process/changes/CR-125-RUNNER-DEVELOPMENT-READINESS-DOCUMENTATION-CLEANUP-GATE-2026-06-23.md"
+    parent_cr: "CR-124"
+    source_decision_id: "FU-CR124-001"
+    blocked_by:
+      - "cp8_approved"
+      - "related_closed_cr=CR-125"
+      - "cp6_minimal_docs_cleanup_done"
+      - "cr121_superseded_by_cr125"
+      - "no_push_runtime_gitignore_source_checker_tests_authorized"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR125 closed READY_WITH_RISK. Next shortest path: start quant-lab runner development readiness / runner entry design CR; no push/runtime/source/checker/tests/.gitignore/git-rm-cached."
+  - id: "CR-124"
+    title: "Artifact Feature Docs Cleanup Publication Gate"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: "closed"
+    readiness_status: "ready_with_risk"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "USER-20260623-START-CR124"
+    formal_cr_path: "process/changes/CR-124-ARTIFACT-FEATURE-DOCS-CLEANUP-PUBLICATION-GATE-2026-06-23.md"
+    parent_cr: "CR-123"
+    source_decision_id: "FU-CR123-001"
+    blocked_by:
+      - "closed_by_cp8_approve"
+      - "artifact_local_commit_144a7b3_accepted_ready_with_risk"
+      - "fu_cr124_001_converted_to_cr125"
+      - "no_push_runtime_gitignore_source_checker_tests_cr121_cleanup_authorized"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR124 closed READY_WITH_RISK; continue with CR125."
+  - id: "CR-123"
+    title: "CR122 Staged Docs Publication Gate"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: "closed"
+    readiness_status: "ready_with_risk"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "USER-20260623-START-CR123"
+    formal_cr_path: "process/changes/CR-123-CR122-STAGED-DOCS-PUBLICATION-GATE-2026-06-23.md"
+    parent_cr: "CR-122"
+    source_decision_id: "FU-CR122-001"
+    blocked_by:
+      - "closed_current_delivery"
+      - "cp8_approved_at_2026-06-23T11:41:53+08:00"
+      - "main_repo_commit_940bcd9_completed"
+      - "artifact_feature_deletion_publication_moved_to_CR124"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "Closed READY_WITH_RISK. CR124 handles artifact feature deletion publication; runner development related CR should handle CR121 and CR102/103/104 detailed cleanup."
+  - id: "CR-122"
+    title: "Merge-Restored Docs Reversion to Remediated Branch Baseline"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: "closed"
+    readiness_status: "ready_with_risk"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "USER-20260623-START-CR122"
+    formal_cr_path: "process/changes/CR-122-MERGE-RESTORED-DOCS-REVERSION-TO-REMEDIATED-BRANCH-BASELINE-2026-06-23.md"
+    parent_cr: "CR-121"
+    source_decision_id: "USER-20260623-START-CR122"
+    blocked_by:
+      - "cp2_approved"
+      - "cp5_approved"
+      - "cp6_pass"
+      - "cp7_pass"
+      - "cp8_approved"
+      - "staged_docs_changes_uncommitted_unpushed"
+      - "no_gitignore_source_checker_tests_commit_push_runtime_authorized"
+      - "cr121_cp6_index_cleanup_remains_separate_not_executed"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR122 closed READY_WITH_RISK; user should choose publication gate or CR121 resume next."
+  - id: "CR-121"
+    title: "Merge-Induced Directory Routing Regression Hardening"
+    status: "superseded"
+    kind: "requirement-change"
+    lifecycle_status: "superseded"
+    readiness_status: "n/a"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "process/changes/CR-120-FOLLOW-UP-TRACKING-2026-06-23.md#FU-CR120-001"
+    formal_cr_path: "process/changes/CR-121-MERGE-INDUCED-DIRECTORY-ROUTING-REGRESSION-HARDENING-2026-06-23.md"
+    parent_cr: "CR-120"
+    source_decision_id: "USER-20260623-CP8-CR120-APPROVE-DIRECTORY-AUDIT"
+    blocked_by:
+      - "cp2_approved"
+      - "cp5_approved"
+      - "superseded_by_cr125"
+      - "cp6_not_executed"
+      - "index_only_cleanup_not_resumed"
+      - "no_code_or_gitignore_change_executed"
+      - "no_file_delete_move_overwrite_authorized"
+      - "runtime_nas_credentials_trading_publish_unauthorized"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR121 superseded by CR125; do not resume index-only remediation unless a new CR explicitly reopens directory routing cleanup."
+  - id: "CR-120"
+    title: "CR Tracking Formal/FU Row Convention Hardening"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "process/changes/CR-116-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR114-004"
+    formal_cr_path: "process/changes/CR-120-CR-TRACKING-FORMAL-FU-ROW-CONVENTION-HARDENING-2026-06-22.md"
+    parent_cr: "CR-116"
+    source_decision_id: "DQ-CP8-CR116-02"
+    blocked_by:
+      - "closed_by_user_cp8_approval_20260623T085836"
+      - "runtime_unauthorized"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR120 closed READY. FU-CR120-001 can be started separately for directory routing merge regression hardening; runtime remains unauthorized."
+  - id: "CR-119"
+    title: "Human Gate Launch Message Checker Implementation Candidate"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "process/changes/CR-115-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR115-001"
+    formal_cr_path: "process/changes/CR-119-HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-IMPLEMENTATION-CANDIDATE-2026-06-22.md"
+    parent_cr: "CR-115"
+    source_decision_id: "DQ-CP8-CR115-01"
+    blocked_by:
+      - "closed_by_user_cp8_approval_20260622T193710"
+      - "no_follow_up_created"
+      - "runtime_nas_credentials_trading_publish_unauthorized"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR119 closed READY. No active formal CR remains; runtime/NAS/credentials/trading/publish remain unauthorized without a new CR."
+  - id: "CR-118"
+    title: "Path Alias Checker Enforcement Candidate"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "process/changes/CR-117-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR117-001"
+    formal_cr_path: "process/changes/CR-118-PATH-ALIAS-CHECKER-ENFORCEMENT-CANDIDATE-2026-06-22.md"
+    parent_cr: "CR-117"
+    source_decision_id: "DQ-CP8-CR117-02"
+    blocked_by:
+      - "closed_by_user_cp8_approval_20260622T190832"
+      - "no_follow_up_created"
+      - "no_runtime_nas_credentials_trading_publish_authorization"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR118 closed READY. No active formal CR remains; source/runtime/NAS/credentials/trading/publish remain unauthorized without a new CR."
+  - id: "CR-117"
+    title: "Context Path Alias Normalization Notes"
+    status: "closed-current-delivery"
+    kind: "ledger-maintenance"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "process/changes/CR-116-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR114-002"
+    formal_cr_path: "process/changes/CR-117-CONTEXT-PATH-ALIAS-NORMALIZATION-NOTES-2026-06-22.md"
+    parent_cr: "CR-116"
+    source_decision_id: "DQ-CP8-CR116-02"
+    blocked_by:
+      - "closed_by_user_cp8_approval_20260622T182108"
+      - "downstream_active_cr=CR-118"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR117 closed READY. FU-CR117-001 selected and started as CR118 CP2 pending; source/tests/checker implementation remains unauthorized."
+  - id: "CR-116"
+    title: "Pending Decision Queue / Checkpoint Alignment Audit"
+    status: "closed-current-delivery"
+    kind: "ledger-maintenance"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "process/changes/CR-114-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR114-003"
+    formal_cr_path: "process/changes/CR-116-PENDING-DECISION-QUEUE-CHECKPOINT-ALIGNMENT-AUDIT-2026-06-22.md"
+    parent_cr: "CR-114"
+    source_decision_id: "DQ-CP8-CR114-01"
+    blocked_by:
+      - "closed_by_user_cp8_approval_20260622T174619"
+      - "no_source_code_tests_checker_bulk_state_rewrite_or_runtime_authorization"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR116 closed READY. FU-CR115-001, FU-CR114-004 and FU-CR114-002 remain candidates only; no source/tests/checker/runtime/NAS/credentials/trading/publish authorization."
+  - id: "CR-115"
+    title: "Human Gate Launch Message Checkable Draft Contract"
+    status: "closed-current-delivery"
+    kind: "ledger-maintenance"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "process/changes/CR-114-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR114-001"
+    formal_cr_path: "process/changes/CR-115-HUMAN-GATE-LAUNCH-MESSAGE-CHECKABLE-DRAFT-CONTRACT-2026-06-22.md"
+    parent_cr: "CR-114"
+    source_decision_id: "DQ-CP8-CR114-01"
+    blocked_by:
+      - "closed_by_user_cp8_approval_20260622T172357"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR115 closed READY. FU-CR115-001 remains candidate only; source/tests/checker/runtime/NAS/credentials/trading/publish remain unauthorized."
+  - id: "CR-114"
+    title: "Context Capsule / Human Gate Consistency Review"
+    status: "closed-current-delivery"
+    kind: "ledger-maintenance"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "process/changes/CR-113-FOLLOW-UP-TRACKING-2026-06-22.md#FU-CR113-001"
+    formal_cr_path: "process/changes/CR-114-CONTEXT-CAPSULE-HUMAN-GATE-CONSISTENCY-REVIEW-2026-06-22.md"
+    parent_cr: "CR-113"
+    source_decision_id: "DQ-CP2-CR113-02"
+    blocked_by:
+      - "closed_by_user_cp8_approval_20260622T170502"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR114 closed READY. FU-CR114-001 was selected, converted to CR115, and CR115 later closed READY; source code, tests, checker implementation, runtime, NAS, credentials, trading write and publish remain unauthorized."
+  - id: "CR-113"
+    title: "Redesign Remaining Backlog Triage Gate"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "USER-20260622-START-REDESIGN-REMAINING-BACKLOG-TRIAGE"
+    formal_cr_path: "process/changes/CR-113-REDESIGN-REMAINING-BACKLOG-TRIAGE-GATE-2026-06-22.md"
+    blocked_by:
+      - "closed_by_user_cp8_approval_20260622T163947"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR113 closed READY. FU-CR113-001 remains the default next candidate only; source code, tests, checker implementation, CR105, CR089, runtime, NAS, credentials and publish remain unauthorized."
+  - id: "FU-CR113-001"
+    legacy_ids:
+      - "FU-CR109-002"
+    title: "Context Capsule / Human Gate Consistency Review"
+    status: "closed-current-delivery"
+    kind: "ledger-maintenance"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "process/changes/CR-113-FOLLOW-UP-TRACKING-2026-06-22.md"
+    formal_cr_path: "process/changes/CR-114-CONTEXT-CAPSULE-HUMAN-GATE-CONSISTENCY-REVIEW-2026-06-22.md"
+    blocked_by:
+      - "related_closed_cr=CR-114"
+      - "downstream_closed_cr=CR-115"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "User selected this candidate and completed it through CR114; CR114 is closed READY. Downstream follow-up FU-CR114-001 became CR115 and closed READY."
+  - id: "FU-CR114-001"
+    title: "Human Gate Launch Message Checkable Draft Contract"
+    status: "closed-current-delivery"
+    kind: "ledger-maintenance"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "process/changes/CR-114-FOLLOW-UP-TRACKING-2026-06-22.md"
+    formal_cr_path: "process/changes/CR-115-HUMAN-GATE-LAUNCH-MESSAGE-CHECKABLE-DRAFT-CONTRACT-2026-06-22.md"
+    blocked_by:
+      - "related_closed_cr=CR-115"
+      - "downstream_candidate=FU-CR115-001"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "User selected this candidate; CR115 closed READY. FU-CR115-001 remains candidate only; keep no-code/no-runtime unless a separate implementation CR is approved."
+  - id: "FU-CR115-001"
+    title: "Human Gate Launch Message Checker Implementation Candidate"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "process/changes/CR-115-FOLLOW-UP-TRACKING-2026-06-22.md"
+    formal_cr_path: "process/changes/CR-119-HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-IMPLEMENTATION-CANDIDATE-2026-06-22.md"
+    blocked_by:
+      - "related_closed_cr=CR-119"
+      - "no_follow_up_created"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "User approved CR119 CP8. Candidate closed through CR119 READY; no follow-up created. No runtime/NAS/credentials/trading/publish authorization."
+  - id: "FU-CR114-002"
+    title: "Context Path Alias Normalization Notes"
+    status: "closed-current-delivery"
+    kind: "ledger-maintenance"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "process/changes/CR-114-FOLLOW-UP-TRACKING-2026-06-22.md"
+    formal_cr_path: "process/changes/CR-117-CONTEXT-PATH-ALIAS-NORMALIZATION-NOTES-2026-06-22.md"
+    blocked_by:
+      - "related_closed_cr=CR-117"
+      - "downstream_active_cr=CR-118"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "User selected this candidate and completed CR117 through CP8. Downstream FU-CR117-001 started as CR118 CP2 pending."
+  - id: "FU-CR117-001"
+    title: "Path Alias Checker Enforcement Candidate"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "process/changes/CR-117-FOLLOW-UP-TRACKING-2026-06-22.md"
+    formal_cr_path: "process/changes/CR-118-PATH-ALIAS-CHECKER-ENFORCEMENT-CANDIDATE-2026-06-22.md"
+    blocked_by:
+      - "related_closed_cr=CR-118"
+      - "no_follow_up_created"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR118 closed READY; current follow-up target completed."
+  - id: "FU-CR114-003"
+    title: "Pending Decision Queue / Checkpoint Alignment Audit"
+    status: "closed-current-delivery"
+    kind: "ledger-maintenance"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "compact"
+    source_tracking: "process/changes/CR-114-FOLLOW-UP-TRACKING-2026-06-22.md"
+    formal_cr_path: "process/changes/CR-116-PENDING-DECISION-QUEUE-CHECKPOINT-ALIGNMENT-AUDIT-2026-06-22.md"
+    blocked_by:
+      - "related_closed_cr=CR-116"
+      - "downstream_candidates=FU-CR115-001,FU-CR114-004,FU-CR114-002"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR116 closed READY. Downstream candidates remain not-started and require explicit user selection; no source/runtime authorization."
+  - id: "FU-CR114-004"
+    title: "CR Tracking Formal/FU Row Convention Hardening"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "process/changes/CR-116-FOLLOW-UP-TRACKING-2026-06-22.md"
+    formal_cr_path: "process/changes/CR-120-CR-TRACKING-FORMAL-FU-ROW-CONVENTION-HARDENING-2026-06-22.md"
+    blocked_by:
+      - "related_closed_cr=CR-120"
+      - "downstream_candidate=FU-CR120-001"
+      - "runtime_unauthorized"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "User approved CR120 CP8. Candidate closed through CR120 READY; FU-CR120-001 remains candidate only."
+  - id: "FU-CR120-001"
+    title: "Merge-Induced Directory Routing Regression Hardening"
+    status: "closed"
+    kind: "ledger-maintenance"
+    lifecycle_status: "closed"
+    readiness_status: "n/a"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "process/changes/CR-120-FOLLOW-UP-TRACKING-2026-06-23.md"
+    formal_cr_path: "process/changes/CR-121-MERGE-INDUCED-DIRECTORY-ROUTING-REGRESSION-HARDENING-2026-06-23.md"
+    blocked_by:
+      - "related_superseded_cr=CR-121"
+      - "cp2_approved"
+      - "cp5_approved"
+      - "cp6_not_executed"
+      - "superseded_by_cr125"
+      - "index_only_cleanup_not_resumed"
+      - "runtime_nas_credentials_trading_publish_unauthorized"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "CR121 superseded by CR125; historical index-only remediation remains not executed and must not be resumed without a new CR."
+  - id: "FU-CR113-002"
+    legacy_ids:
+      - "FU-CR108-001"
+      - "FU-CR107-002"
+    title: "Architecture-only Redesign HLD Gate"
+    status: "candidate"
+    kind: "architecture-realignment"
+    lifecycle_status: "candidate"
+    readiness_status: "n/a"
+    gate_status: "not_started"
+    gate_profile: "compact"
+    source_tracking: "process/changes/CR-113-FOLLOW-UP-TRACKING-2026-06-22.md"
+    formal_cr_path: ""
+    blocked_by:
+      - "requires_user_selection_architecture_first"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "Start only if the user chooses architecture-first; requires independent HLD CR."
+  - id: "FU-CR113-003"
+    legacy_ids:
+      - "FU-CR109-003"
+    title: "CP Result JSON / Ledger Gap Analysis"
+    status: "candidate"
+    kind: "ledger-maintenance"
+    lifecycle_status: "candidate"
+    readiness_status: "n/a"
+    gate_status: "not_started"
+    gate_profile: "compact"
+    source_tracking: "process/changes/CR-113-FOLLOW-UP-TRACKING-2026-06-22.md"
+    formal_cr_path: ""
+    blocked_by:
+      - "wait_for_context_human_gate_or_user_selection"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "Keep as governance gap analysis candidate; any implementation follow-up needs a separate CR."
+  - id: "FU-CR113-004"
+    legacy_ids:
+      - "FU-CR112-001"
+    title: "Checker Implementation Alignment Candidate"
+    status: "candidate"
+    kind: "requirement-change"
+    lifecycle_status: "candidate"
+    readiness_status: "n/a"
+    gate_status: "not_started"
+    gate_profile: "standard"
+    source_tracking: "process/changes/CR-113-FOLLOW-UP-TRACKING-2026-06-22.md"
+    formal_cr_path: ""
+    blocked_by:
+      - "requires_implementation_cr_and_source_code_authorization"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    next_action: "Start only after explicit checker implementation alignment selection and independent implementation CR."
   - id: "CR-112"
     legacy_ids:
       - "FU-CR110-002"

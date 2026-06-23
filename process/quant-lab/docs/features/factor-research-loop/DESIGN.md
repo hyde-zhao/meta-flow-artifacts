@@ -14,6 +14,7 @@ change: "CR-031"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-06-07 | meta-po | 新增多因子研究闭环 Feature 设计索引 |
+| 1.1 | 2026-06-23 | host-orchestrator | CR129 增加与 `strategy-runner-core` 的边界说明。 |
 
 ## Feature 摘要
 
@@ -34,6 +35,14 @@ change: "CR-031"
 | FactorPanel / LabelWindow | 因子面板四层值、标签窗口、泄漏 fail-closed | 原始数据生产 | FEAT-02 |
 | Evaluation / Combiner | IC、RankIC、分层收益、多因子组合和报告 | 实盘执行 | FEAT-06 |
 | StrategyAdmissionPackage | 准入证据、blocked reasons、order intent draft 引用 | runtime authorization | FEAT-07 |
+
+## 与 Strategy Runner Core 的边界
+
+| 项 | 边界 |
+|---|---|
+| 本 Feature 负责 | 产出研究侧 factor evaluation、multifactor portfolio plan、experiment manifest、research report catalog 和 StrategyAdmissionPackage。 |
+| `strategy-runner-core` 负责 | 将已形成的本地 strategy package / adapter payload 跑过 offline runner core，并输出 `RunResult` 与脱敏 evidence。 |
+| 禁止误读 | StrategyAdmissionPackage 不等于 runner package pass，不等于 QMT-ready，也不授权 runtime / NAS / provider / lake / catalog / trading。 |
 
 ## 输入 / 输出契约
 
@@ -57,4 +66,3 @@ change: "CR-031"
 - StrategyAdmissionPackage 是准入证据，不是交易授权。
 - CR-030 不从零发明 schema，必须回链已有 `research_input_v1`、实验 17-21 和 CR-011 审计合同。
 - Qlib / Alphalens / Zipline / LEAN 只能 cross-check，不成为 truth。
-

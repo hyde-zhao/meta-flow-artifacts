@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.2"
+version: "1.3"
 source_use_cases: "process/USE-CASES.md"
 source_requirements: "process/REQUIREMENTS.md"
 source_story_backlog: "process/STORY-BACKLOG.md"
@@ -8,9 +8,9 @@ source_hld:
   - "process/HLD.md"
   - "process/HLD-DATA-LAKE.md"
   - "process/HLD-QMT-TRADING.md"
-  - "docs/design/HLD-CR051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK.md"
+  - "process/archive/design-cr-docs/HLD-CR051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK.md"
 source_adr: "process/ARCHITECTURE-DECISION.md"
-change: "CR-051"
+change: "CR-131"
 confirmed_by: ""
 confirmed_at: ""
 ---
@@ -26,6 +26,7 @@ confirmed_at: ""
 | 1.0 | 2026-06-07 | meta-po | 按 CR-031 新增蓝图层索引，覆盖研究回测、生产数据湖、多因子研究、执行语义、QMT gateway、交易治理、安全授权和文档 Runbook 八个 Feature / Epic |
 | 1.1 | 2026-06-13 | meta-po | 按 CR-046 增补 QMT terminal + MiniQMT runner 双目标策略交付框架 Feature、策略包契约、验证框架和不授权边界 |
 | 1.2 | 2026-06-14 | host-orchestrator | 按 CR-051 增补策略研究生命周期、研究归档治理、硬件冷热分层、项目迁移和 `quant-lab` / `local_backtest` 身份边界 |
+| 1.3 | 2026-06-23 | host-orchestrator | CR131 将 CR 命名 design 文档移出默认 surface；source_hld 的 CR051 历史入口改指向 archive。 |
 
 ## 蓝图定位
 

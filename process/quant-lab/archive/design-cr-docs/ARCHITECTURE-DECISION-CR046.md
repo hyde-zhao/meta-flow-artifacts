@@ -2,7 +2,12 @@
 status: "approved-cp3"
 version: "1.0"
 change: "CR-046"
-source_hld: "docs/design/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md"
+retained_as: "legacy_cross_target_adr_cluster"
+superseded_by:
+  offline_runner_implementation_authority: "process/docs/features/strategy-runner-core/DESIGN.md"
+  source_design: "process/archive/design-cr-docs/RUNNER-CORE-MVP-DESIGN-CR126.md"
+  boundary_dedup_cr: "CR-130"
+source_hld: "process/archive/design-cr-docs/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md"
 ---
 
 # Architecture Decisions CR046
@@ -13,6 +18,15 @@ source_hld: "docs/design/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md"
 |---|---|---|---|
 | 1.0 | 2026-06-13 | meta-po | 初版 CR046 ADR，固化双目标策略交付框架、平台无关核心、runner 安装设计、验证分级和后续 CR 切分 |
 | 1.1 | 2026-06-13 | meta-po | 用户通过 CP3，ADR-CR046-001..006 进入 approved-cp3 状态 |
+| 1.2 | 2026-06-23 | host-orchestrator | CR130 增加历史保留 / 权威转移说明；CR046 ADR 不再作为 offline runner implementation authority。 |
+
+## 历史保留 / 权威转移
+
+| 项 | 边界 |
+|---|---|
+| 当前定位 | 本文件保留为 CR046 QMT / MiniQMT 双目标策略交付框架的 legacy ADR cluster。 |
+| 已转移权威 | offline runner implementation authority 归 `process/docs/features/strategy-runner-core/DESIGN.md`；`process/archive/design-cr-docs/RUNNER-CORE-MVP-DESIGN-CR126.md` 只作为 CR128 implementation intake/source design。 |
+| 不授权恢复 | 本文件任何 ADR 都不授权恢复 CR128 之后的 offline runner implementation、真实 runtime、NAS package exchange、provider/lake/catalog 或 trading write。 |
 
 ## ADR-CR046-001 新增 FEAT-09 双目标策略交付框架
 
@@ -34,14 +48,14 @@ source_hld: "docs/design/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md"
 | Consequences | 双目标可复用性增强；需要静态 guardrail 检查。 |
 | Reversal | 若后续用户明确选择 QMT-only，可另起 CR 改写合同。 |
 
-## ADR-CR046-003 MiniQMT Runner 本轮只做安装设计
+## ADR-CR046-003 MiniQMT Runner 本轮只做安装设计（legacy）
 
 | 字段 | 内容 |
 |---|---|
 | Status | Proposed for CP3 |
 | Context | 用户当前没有 MiniQMT 权限，但要求框架包含 runner 组件安装。 |
 | Decision | CR046 只定义 runner 安装目录、uv 管理、依赖隔离、配置模板、start/stop/status/kill switch、日志、upgrade/uninstall/rollback 和 install dry-run 方案。 |
-| Consequences | 可提前冻结安装合同；无真实安装或连接证据。 |
+| Consequences | 可提前冻结安装合同；无真实安装或连接证据。该 ADR 只保留 legacy MiniQMT runner install design，不代表当前 offline runner core implementation authority。 |
 | Reversal | MiniQMT 权限就绪后，CR049 另行授权实机 install / readonly 验证。 |
 
 ## ADR-CR046-004 验证证据分级

@@ -14,6 +14,7 @@ change: "CR-031"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-06-07 | meta-po | 新增 QMT C/S Gateway 与只读运行准入 Feature 设计索引 |
+| 1.1 | 2026-06-23 | host-orchestrator | CR129 增加与 `strategy-runner-core` 的边界说明。 |
 
 ## Feature 摘要
 
@@ -24,6 +25,14 @@ change: "CR-031"
 | 主要代码面 | `trading/qmt_client*.py`、`trading/qmt_gateway*.py`、`trading/qmt_auth.py`、`trading/qmt_redaction.py` |
 | 主要设计来源 | `process/HLD.md` §33/§36、`process/HLD-QMT-TRADING.md`、ADR-067..073、ADR-087..093 |
 | 当前状态 | fixture/static verified，等待用户 MiniQMT 权限后的手工只读实机验证 |
+
+## 与 Strategy Runner Core 的边界
+
+| 项 | 边界 |
+|---|---|
+| 本 Feature 负责 | 真实 QMT / MiniQMT gateway 的只读 runtime admission、HMAC/scope/session/redaction 和 `query_positions` 准入验证。 |
+| `strategy-runner-core` 负责 | CR128 offline runner core，只能使用 fake/default readonly boundary，不构造真实 transport。 |
+| 接入条件 | 任何真实 readonly runtime result 接入 runner evidence，都必须通过后续 CR129+ 授权门禁；不得由 CR128/CR129 默认启用。 |
 | 非授权声明 | 不授权交易、撤单、账户写入、simulation/live、provider/lake/publish 或凭据输出 |
 
 ## Feature 边界与相邻对象
@@ -57,4 +66,3 @@ change: "CR-031"
 - C 侧不得导入 xtquant。
 - `query_positions` 只读通过不等于 simulation、live_readonly 或 small_live 授权。
 - `.env` 只允许本地未跟踪真实值，文档、日志、memory、检查点只能记录脱敏引用。
-

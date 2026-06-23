@@ -3,6 +3,11 @@ status: "draft-cp4"
 version: "1.1"
 feature_id: "FEAT-09"
 feature_name: "QMT / MiniQMT Dual-Target Strategy Delivery Framework"
+retained_as: "legacy_cross_target_framework"
+superseded_by:
+  offline_runner_implementation_authority: "process/docs/features/strategy-runner-core/DESIGN.md"
+  source_cr: "CR-128"
+  boundary_dedup_cr: "CR-129"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld: "docs/design/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md"
 source_adr: "docs/design/ARCHITECTURE-DECISION-CR046.md"
@@ -28,6 +33,7 @@ confirmed_at: ""
 |---|---|---|---|
 | 1.0 | 2026-06-13 | meta-po | 初始 FEAT-09 设计，冻结双目标策略包、target adapter、runner 安装设计、验证证据和后续 CR gate |
 | 1.1 | 2026-06-13 | meta-po | 记录用户确认的策略包传输形态：zip + sha256 + manifest.yaml + 人工/受控文件传输 + QMT 终端人工导入 |
+| 1.2 | 2026-06-23 | host-orchestrator | CR129 边界去重：本 Feature 保留为 legacy cross-target framework；offline runner implementation authority 转移到 `strategy-runner-core`。 |
 
 ## 摘要
 
@@ -38,6 +44,16 @@ confirmed_at: ""
 | 关键取舍 | 优先冻结合同和安全边界，牺牲当前真实运行证据 |
 | 下游 Story | CR046-S01..S07 |
 | LLD 策略 | S01..S05 full-lld；S06..S07 technical-note |
+
+## 与 Strategy Runner Core 的边界
+
+| 项 | 边界 |
+|---|---|
+| 当前定位 | 本 Feature 仅保留为 CR046 历史双目标交付框架和 QMT / MiniQMT target contract 追溯入口。 |
+| 已转移权威 | offline runner implementation authority 归 `process/docs/features/strategy-runner-core/DESIGN.md`，包括 `RunSpec`、package loader 消费、adapter dispatch、fake readonly boundary、evidence summary 和 `RunResult`。 |
+| 本 Feature 仍负责 | QMT terminal target contract、MiniQMT target / install dry-run 设计历史、跨 target validation evidence 分级和后续 runtime gate 输入。 |
+| 本 Feature 不负责 | CR128 之后的 offline runner core 源码、测试、checker、默认 CLI/API、`trading/strategy_runner/*` 实现演进。 |
+| 恢复条件 | 若需要真实 QMT / MiniQMT runtime、NAS package exchange、provider/lake/catalog 或 trading write，必须另起 CR129+ 授权门禁；不得从本 legacy Feature 直接恢复执行。 |
 
 ## 上游依据与输入
 

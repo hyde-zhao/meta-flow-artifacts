@@ -1,10 +1,10 @@
 ---
 status: "draft-current-index"
-version: "1.3"
+version: "1.4"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld: "docs/design/HLD.md"
 source_adr: "docs/design/ARCHITECTURE-DECISION.md"
-change: "CR-053"
+change: "CR-131"
 confirmed_by: ""
 confirmed_at: ""
 ---
@@ -19,6 +19,7 @@ confirmed_at: ""
 | 1.1 | 2026-06-13 | meta-po | 按 CR-046 增补 FEAT-09 双目标策略交付框架，实现设计三件套和 7 个 Story 的 lld_policy |
 | 1.2 | 2026-06-14 | host-orchestrator | 按 CR-051 增补 FEAT-10 策略研究生命周期与 quant-lab 迁移治理，实现设计三件套和 6 个 Story 的 lld_policy |
 | 1.3 | 2026-06-14 | host-orchestrator | 按 CR-053 增补 FEAT-10-CR053 quant-lab migration inventory / dry-run scoped design、5 个 Story 和 CP5 批次 |
+| 1.4 | 2026-06-23 | host-orchestrator | CR131 将 CR 命名 feature design matrix 历史文件移入 archive；默认 design root 保留当前矩阵。 |
 
 ## 适用性判定规则
 
@@ -42,9 +43,9 @@ confirmed_at: ""
 | FEAT-06 | OMS / 风控 / Broker Lake / 阶段激活 | BLUEPRINT、HLD-QMT、ADR-055..061 | required | 状态机、风控、broker facts、真实交易阶段和 kill switch 风险最高 | `docs/features/qmt-trading-governance/*` | CR015、CR016、CR017、CR021..024 candidate | full-lld | 启动 CR-021 simulation、CR-022 live_readonly、CR-023 small_live、CR-024 scale_up 时 |
 | FEAT-07 | 安全、授权与 no-real-operation 治理 | BLUEPRINT、DEPENDENCY-MAP、全部高风险 CR | required | 横切 provider/lake/publish/QMT/credential/authorization，必须有统一测试与文档门禁 | `docs/features/runtime-authorization-safety/*` | CR014、CR019、CR020、CR025、CR030、后续 CR021..024 | full-lld | 任一真实操作授权、凭据路径、日志策略或 CP 人工门禁语义变化时 |
 | FEAT-08 | 文档、Runbook 与发布证据 | README、USER-MANUAL、QMT docs、CP8 | waived / required-by-change | 普通文档刷新可 waived；涉及授权语义、运行手册、真实验证步骤时 required | none by default；按 CR 生成 docs plan | CR015..CR020、CP8 | technical-note / full-lld when safety relevant | 文档新增真实运行步骤、授权声明或 runbook 流程时 |
-| FEAT-09 | QMT / MiniQMT 双目标策略交付框架 | BLUEPRINT v1.1、HLD-CR046、ADR-CR046-001..006 | required | 新增策略核心合同、策略包 schema、QMT terminal target、MiniQMT runner install design、验证证据模型和后续 CR gate；涉及外部交易终端边界与 no-real-operation 安全约束 | `docs/features/qmt-miniqmt-dual-target-framework/*` | CR046-S01..S07 | full-lld for S01..S05；technical-note for S06..S07 | 启动具体策略交付、真实 QMT shadow、MiniQMT install / connection、submit/cancel 或研究框架反向完善时 |
-| FEAT-10 | 策略研究生命周期与项目迁移治理 | BLUEPRINT v1.2、DOMAIN-MAP v1.2、DEPENDENCY-MAP v1.2、HLD-CR051 | required | 新增策略生命周期、taxonomy、archive manifest、硬件冷热分层、项目身份、迁移 inventory 和后续 CR gate；涉及迁移、安全和跨 Feature 合同 | `docs/features/strategy-research-lifecycle/*` | CR051-S01..S06 | full-lld for S01..S04；technical-note for S05..S06 | 启动 CR052 多因子完整证明、真实目录迁移、NAS 操作、项目包名重命名、交易主机 package 消费或 runtime_candidate gate 时 |
-| FEAT-10-CR053 | quant-lab migration inventory / dry-run | HLD-CR053、ADR-CR053-001..007、CR051 archive governance | required | CR053 是 FEAT-10 的迁移 dry-run 增量，新增 root map、repo inventory、path references、transfer/backup plan 和 CR058 输入；涉及 NAS / lake / Windows / Linux 映射和不授权边界 | `docs/features/quant-lab-migration-dry-run/*` | CR053-S01..S05 | full-lld for S01..S04；technical-note for S05 | CR058 真实 repo-local migration、CR060 NAS/archive 实迁、数据湖 root 迁移、交易机 package import 方式变化时 |
+| FEAT-09 | QMT / MiniQMT 双目标策略交付框架 | BLUEPRINT v1.1、archived HLD-CR046、ADR-CR046-001..006 | required | legacy cross-target framework；offline runner implementation authority 已转到 `strategy-runner-core`；涉及外部交易终端边界与 no-real-operation 安全约束 | `docs/features/qmt-miniqmt-dual-target-framework/*` | CR046-S01..S07 | full-lld for S01..S05；technical-note for S06..S07 | 启动具体策略交付、真实 QMT shadow、MiniQMT install / connection、submit/cancel 或研究框架反向完善时 |
+| FEAT-10 | 策略研究生命周期与项目迁移治理 | BLUEPRINT v1.3、DOMAIN-MAP v1.2、DEPENDENCY-MAP v1.2、archived HLD-CR051 | required | 新增策略生命周期、taxonomy、archive manifest、硬件冷热分层、项目身份、迁移 inventory 和后续 CR gate；涉及迁移、安全和跨 Feature 合同 | `docs/features/strategy-research-lifecycle/*` | CR051-S01..S06 | full-lld for S01..S04；technical-note for S05..S06 | 启动 CR052 多因子完整证明、真实目录迁移、NAS 操作、项目包名重命名、交易主机 package 消费或 runtime_candidate gate 时 |
+| FEAT-10-CR053 | quant-lab migration inventory / dry-run | archived HLD-CR053、ADR-CR053-001..007、CR051 archive governance | required | CR053 是 FEAT-10 的迁移 dry-run 增量，新增 root map、repo inventory、path references、transfer/backup plan 和 CR058 输入；涉及 NAS / lake / Windows / Linux 映射和不授权边界 | `docs/features/quant-lab-migration-dry-run/*` | CR053-S01..S05 | full-lld for S01..S04；technical-note for S05 | CR058 真实 repo-local migration、CR060 NAS/archive 实迁、数据湖 root 迁移、交易机 package import 方式变化时 |
 
 ## Story 下游消费表
 

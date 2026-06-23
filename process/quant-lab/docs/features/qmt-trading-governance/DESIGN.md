@@ -14,6 +14,7 @@ change: "CR-031"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-06-07 | meta-po | 新增 QMT 交易治理 Feature 设计索引 |
+| 1.1 | 2026-06-23 | host-orchestrator | CR129 增加与 `strategy-runner-core` 的边界说明。 |
 
 ## Feature 摘要
 
@@ -34,6 +35,14 @@ change: "CR-031"
 | BrokerLakeRecord | 外置 broker facts schema、retention、redaction | 市场数据 lake | FEAT-02 |
 | StageGate | shadow -> simulation -> live_readonly -> small_live -> scale_up | 授权替代品 | FEAT-07 |
 | Reconciliation / KillSwitch | 对账、差异、暂停 / 恢复、人工接管 | 自动放大资金 | FEAT-08 |
+
+## 与 Strategy Runner Core 的边界
+
+| 项 | 边界 |
+|---|---|
+| 本 Feature 负责 | OMS、pre-trade risk、broker adapter stage gate、reconciliation、kill switch 和 simulation/live/small-live 治理。 |
+| `strategy-runner-core` 负责 | 只输出 offline order intent draft、target counts、evidence summary 和 forbidden counters；不进入 OMS 或 broker adapter。 |
+| 禁止误读 | runner core pass 不等于交易准入；submit/cancel/buy/sell/simulation/live 仍需独立高风险授权门禁。 |
 
 ## 输入 / 输出契约
 
@@ -58,4 +67,3 @@ change: "CR-031"
 - CR-015 / CR-016 verified 只是离线 / 文档 / mock 范围，不解禁真实 broker 操作。
 - gateway 存在不等于 OMS 可以提交订单。
 - broker lake 默认不得写仓库 `data/**` / `reports/**`。
-

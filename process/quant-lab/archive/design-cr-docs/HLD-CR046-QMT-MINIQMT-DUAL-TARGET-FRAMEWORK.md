@@ -2,12 +2,17 @@
 status: "approved-cp3"
 version: "1.0"
 change: "CR-046"
+retained_as: "legacy_cross_target_framework"
+superseded_by:
+  offline_runner_implementation_authority: "process/docs/features/strategy-runner-core/DESIGN.md"
+  source_design: "process/archive/design-cr-docs/RUNNER-CORE-MVP-DESIGN-CR126.md"
+  boundary_dedup_cr: "CR-130"
 source_requirements: "process/REQUIREMENTS.md"
 source_use_cases: "process/USE-CASES.md"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_domain_map: "docs/design/DOMAIN-MAP.md"
 source_dependency_map: "docs/design/DEPENDENCY-MAP.md"
-adr: "docs/design/ARCHITECTURE-DECISION-CR046.md"
+adr: "process/archive/design-cr-docs/ARCHITECTURE-DECISION-CR046.md"
 cp2_checkpoint: "process/checkpoints/CP2-CR046-REQUIREMENTS-BASELINE.md"
 ---
 
@@ -19,6 +24,17 @@ cp2_checkpoint: "process/checkpoints/CP2-CR046-REQUIREMENTS-BASELINE.md"
 |---|---|---|---|
 | 1.0 | 2026-06-13 | meta-po | 初版 HLD，定义 framework-first 架构、策略包契约、QMT terminal target、MiniQMT runner target、验证框架和后续 CR 门禁 |
 | 1.1 | 2026-06-13 | meta-po | 用户通过 CP3，接受 FEAT-09、平台无关 StrategyCoreContract、MiniQMT install dry-run 设计、验证证据分级和 CR047/CR051 后置 |
+| 1.2 | 2026-06-23 | host-orchestrator | CR130 边界去重：本 HLD 保留为 legacy cross-target framework；offline runner implementation authority 转移到 `strategy-runner-core`。 |
+
+## 与 Strategy Runner Core 的边界
+
+| 项 | 边界 |
+|---|---|
+| 当前定位 | 本 HLD 保留为 CR046 QMT terminal + MiniQMT 双目标策略交付历史框架。 |
+| 已转移权威 | offline runner implementation authority 归 `process/docs/features/strategy-runner-core/DESIGN.md`；CR128 实现输入可追溯到 `process/archive/design-cr-docs/RUNNER-CORE-MVP-DESIGN-CR126.md`。 |
+| 本 HLD 仍负责 | QMT terminal target、MiniQMT target / install dry-run 历史设计、StrategyPackageContract 历史口径和 cross-target validation evidence 分级。 |
+| 本 HLD 不负责 | CR128 之后的 offline runner core 源码、测试、checker、默认 CLI/API、`trading/strategy_runner/*` 实现演进。 |
+| 恢复条件 | 若需要真实 QMT / MiniQMT runtime、NAS package exchange、provider/lake/catalog 或 trading write，必须另起独立授权门禁；不得从本 legacy HLD 直接恢复执行。 |
 
 ## 问题定义
 

@@ -14,6 +14,7 @@ change: "CR-031"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-06-07 | meta-po | 新增执行语义对齐与可选后端参考 Feature 设计索引 |
+| 1.1 | 2026-06-23 | host-orchestrator | CR129 增加与 `strategy-runner-core` 的边界说明。 |
 
 ## Feature 摘要
 
@@ -34,6 +35,14 @@ change: "CR-031"
 | SemanticDiffReport | 对比 lightweight 与 optional backend 的调仓、现金、成本、滑点、净值差异 | 把 optional backend 作为 production truth | FEAT-01 |
 | OrderIntentDraft | 把研究输出转为可审查草稿 | 真实 OMS order / QMT order | FEAT-06 |
 | ExternalReferenceMatrix | 记录可借鉴、可适配、禁止移植、后续 Spike | 运行外部项目或复制源码 | FEAT-03 / FEAT-07 |
+
+## 与 Strategy Runner Core 的边界
+
+| 项 | 边界 |
+|---|---|
+| 本 Feature 负责 | 解释 lightweight engine 与 optional semantic reference 的执行语义差异，并产出可审查的 target portfolio / order intent draft 语义输入。 |
+| `strategy-runner-core` 负责 | 消费 strategy package / payload，执行 offline adapter dispatch，输出统一 `RunResult`、evidence summary 和 forbidden counters。 |
+| 禁止误读 | 本 Feature 不拥有 runner orchestration、package loading、runtime gateway、NAS exchange、provider/lake/catalog 或 trading execution。 |
 
 ## 输入 / 输出契约
 
@@ -57,4 +66,3 @@ change: "CR-031"
 - Backtrader 是 semantic reference，不是默认框架。
 - semantic diff 解释差异，不证明任一路径为 production truth。
 - optional backend 的依赖、运行、源码移植都必须另行授权。
-

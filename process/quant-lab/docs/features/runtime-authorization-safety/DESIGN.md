@@ -14,6 +14,7 @@ change: "CR-031"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-06-07 | meta-po | 新增运行授权与 no-real-operation 安全治理 Feature 设计索引 |
+| 1.1 | 2026-06-23 | host-orchestrator | CR129 增加与 `strategy-runner-core` 的边界说明。 |
 
 ## Feature 摘要
 
@@ -50,6 +51,14 @@ change: "CR-031"
 | gateway health / capabilities pass | 不代表 simulation/live/account/order/cancel 权限 |
 | StrategyAdmissionPackage pass | 不代表 QMT-ready 或 trade-ready |
 
+## 与 Strategy Runner Core 的边界
+
+| 项 | 边界 |
+|---|---|
+| 本 Feature 负责 | 真实运行授权语义、credential / account / provider / lake / catalog / QMT / broker 的 no-real-operation policy 和脱敏规则。 |
+| `strategy-runner-core` 负责 | 消费这些安全语义，在 CR128 offline runner core 中保持 `not_authorization=true`、`qmt_allowed=false` 和 forbidden counters。 |
+| 禁止误读 | CR128 runner core 是 no-real-operation 的实现样例，不拥有 runtime authorization policy，也不能单独授权真实外部访问。 |
+
 ## 失败路径
 
 | 失败点 | 行为 |
@@ -64,4 +73,3 @@ change: "CR-031"
 - “只读”仍然可能触达真实账户信息，必须受 scope、redaction 和 evidence 边界控制。
 - `approve` 只接受当前门禁的推荐方案，不是对未来真实操作的永久授权。
 - 任何真实 `.env` 内容不得进入 memory、对话、docs、checks、reports 或 git。
-
