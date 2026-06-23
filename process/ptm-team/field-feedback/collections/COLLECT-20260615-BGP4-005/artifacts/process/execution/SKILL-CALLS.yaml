@@ -1,0 +1,145 @@
+# BGP4+ Skill 调用记录
+
+- skill_name: feature-parser
+  input_refs:
+    - input/系统SR.md
+    - input/NGFW-V6R01C03-BGP4+方案设计_v1.0.0.docx
+    - input/BGP4+接口文档.md
+  output_refs:
+    - kym/feature-input/raw-requirements.md
+    - kym/feature-input/directory-structure.md
+  status: completed
+  evidence_summary: >
+    从 3 份输入文档中提取 25 条结构化需求条目（SR-001 ~ SR-012），
+    按特性树 BGP 节点映射到 4 个四级模块和 6 个五级子模块，
+    提取 10 个原子操作（6 个 API 端点），全部节点来源为 feature-tree。
+  completed_at: "2026-06-12T00:00:00.000000+00:00"
+
+- skill_name: kym
+  input_refs:
+    - kym/feature-input/raw-requirements.md
+    - kym/feature-input/directory-structure.md
+    - input/bgp模块的bug.xlsx
+    - input/bgp测试用例.xlsx
+  output_refs:
+    - kym/mission-understanding/mission-statement.md
+  status: completed
+  evidence_summary: >
+    CIDTESTD 8 维度全覆盖访谈完成。用户画像: 网络管理员(优先)/安全工程师/终端用户。
+    特性属性: 新开发/中难度/中重要性。物理设备环境，4类拓扑场景。
+    识别 4 条关键风险（邻居管理/配置管理/路由处理/IPv6特有），
+    同步 BGP 21条历史Bug经验教训至BGP4+。推荐用例规模 100 条。
+  completed_at: "2026-06-12T00:00:00.000000+00:00"
+
+- skill_name: scenario-discovery
+  input_refs:
+    - kym/feature-input/raw-requirements.md
+    - kym/feature-input/directory-structure.md
+    - kym/mission-understanding/mission-statement.md
+    - input/bgp测试用例.xlsx
+    - input/bgp模块的bug.xlsx
+    - wiki: tgfw-product-test-networking-spec
+    - wiki: tgfw-test-network-topology-collection
+  output_refs:
+    - kym/scenarios/confirmed-scenarios.md
+  status: completed
+  evidence_summary: >
+    从 BGP 98 条测试用例提取场景逻辑链，映射为 BGP4+ 24 个部署型场景。
+    使用 5 个 TGFW 标准化拓扑（node2~node5），输出完整的 Scenario Chain、
+    Topology Mapping、Seed-to-Scenario Mapping、Knowledge Reference。
+    识别 BGP4+ 特有扩展 5 项（IPv6 地址族/bgp6* API/OSPFv3 联动/路由引入协议变更/IPv6 约束），
+    解决 3 个 GAP（BFD=不支持、interface/ebgpMultihop=必填、MD5密码=最长32字符）。
+  completed_at: "2026-06-12T00:00:00.000000+00:00"
+
+- skill_name: data-design
+  input_refs:
+    - mfq/integration/logic-cases.md
+    - mfq/m-analysis/ppdcs-annotation.md
+    - kym/feature-input/directory-structure.md
+  output_refs:
+    - ppdcs/ppdcs/BGP-配置管理-BPG配置-LC-BPG-001.md
+    - ppdcs/ppdcs/BGP-配置管理-BPG配置-LC-BPG-002.md
+    - ppdcs/ppdcs/BGP-配置管理-BPG配置-LC-BPG-003.md
+    - ppdcs/ppdcs/BGP-配置管理-BPG配置-LC-BPG-005.md
+    - ppdcs/ppdcs/BGP-协议协商-路由通告-LC-RT-002.md
+    - ppdcs/ppdcs/BGP-管理维护-DFX-LC-DFX-001.md
+    - ppdcs/ppdcs/BGP-配置管理-BPG配置-LC-BPG-004-MD5.md
+  status: completed
+  evidence_summary: >
+    对 7 个 BGP4+ D-Data 逻辑用例执行完整五步等价类+边界值分析。
+    LC-BPG-001: 3 factor (ENABLE/ASN/RID), 24 等价类, 11 data row, 2 GAP。
+    LC-BPG-002: 2 factor (EBGP/IBGP-DIST), 20 等价类, 13 data row。
+    LC-BPG-003: 3 factor (NEIGHBOR-IP/INTERFACE/MULTIHOP), 27 等价类, 15 data row, 4 GAP。
+    LC-BPG-005: 2 factor (IF-TYPE/MTU), 19 等价类, 15 data row, 4 GAP。
+    LC-RT-002: 2 factor (NETWORK-CIDR/MASK), 20 等价类, 17 data row, 2 GAP。
+    LC-DFX-001: 2 factor (LOG-TYPE/PAGE), 22 等价类, 16 data row, 2 GAP。
+    LC-BPG-004-MD5: 1 factor (MD5-PASSWORD), 22 等价类, 16 data row, 3 GAP。
+    全部 LC 通过独立性检查；所有待确认值以 needs-confirmation 透传；
+    process/plan/ 为空时以 logic-cases.md + 用户指定 factor 为设计输入。
+  completed_at: "2026-06-12T00:00:00.000000+00:00"
+
+- skill_name: parameter-design
+  input_refs:
+    - mfq/integration/logic-cases.md
+    - mfq/m-analysis/ppdcs-annotation.md
+    - mfq/m-analysis/test-objects-factors.md
+    - mfq/m-analysis/test-points.md
+    - mfq/q-analysis/quality-test-points.md
+    - mfq/f-analysis/coupling-test-points.md
+  output_refs:
+    - ppdcs/ppdcs/BGP-协议协商-路由通告-LC-RT-001.md
+    - ppdcs/ppdcs/BGP-协议协商-路由计算-LC-RC-001.md
+    - ppdcs/ppdcs/BGP-业务转发-路由转发-LC-FW-001.md
+    - ppdcs/ppdcs/BGP-业务转发-路由转发-LC-FW-003.md
+    - ppdcs/ppdcs/BGP-协议协商-路由计算-LC-CMP-001.md
+    - ppdcs/ppdcs/BGP-协议协商-状态协商-LC-REL-001.md
+    - ppdcs/ppdcs/BGP-配置管理-BPG配置-LC-REL-002.md
+    - ppdcs/ppdcs/BGP-协议协商-状态协商-LC-REL-003.md
+    - ppdcs/ppdcs/BGP-业务转发-路由转发-LC-REL-004.md
+    - ppdcs/ppdcs/BGP-协议协商-路由通告-LC-REL-005.md
+  status: completed
+  evidence_summary: >
+    对 10 个 BGP4+ P-Parameter 逻辑用例执行判定表分析（parameter-design 五步法）。
+    design-plan.md / design-planner-reasoning.md 缺失，以 logic-cases.md + ppdcs-annotation.md
+    为设计输入。每个 LC 产出：factor catalog, topology binding catalog, 规则清单,
+    判定表（含耦合子表）, data row → LC 叠加映射, 覆盖策略。
+    LC-RT-001(3因子/10规则/3判定表/11 data row), LC-RC-001(5因子/7规则/3判定表/10 data row),
+    LC-FW-001(6因子/7规则/1判定表/8 data row), LC-FW-003(4因子/10规则/2判定表/12 data row),
+    LC-CMP-001(5因子/10规则/3判定表/11 data row), LC-REL-001(4因子/4规则/1判定表/4 data row),
+    LC-REL-002(4因子/4规则/1判定表/4 data row), LC-REL-003(4因子/5规则/1判定表/4 data row),
+    LC-REL-004(5因子/9规则/2判定表/8 data row), LC-REL-005(5因子/11规则/4判定表/11 data row)。
+    总计: 83 data row, 覆盖 106 个上游测试点 trace。所有未确认事实以 needs-confirmation 透传。
+  started_at: "2026-06-12T00:00:00.000000+00:00"
+  completed_at: "2026-06-12T00:00:00.000000+00:00"
+
+- skill_name: state-design
+  input_refs:
+    - mfq/integration/logic-cases.md
+    - kym/scenarios/confirmed-scenarios.md
+    - kym/feature-input/directory-structure.md
+  output_refs:
+    - ppdcs/ppdcs/BGP-配置管理-BPG配置-LC-BPG-004.md
+    - ppdcs/ppdcs/BGP-协议协商-状态协商-LC-ST-001.md
+    - ppdcs/ppdcs/BGP-跨模块-HA场景-LC-HA-001.md
+    - ppdcs/ppdcs/BGP-跨模块-HA场景-LC-HA-002.md
+    - ppdcs/ppdcs/BGP-业务转发-路由转发-LC-FW-002.md
+    - ppdcs/pc/BGP-配置管理-BPG配置-LC-BPG-004.md
+    - ppdcs/pc/BGP-协议协商-状态协商-LC-ST-001.md
+    - ppdcs/pc/BGP-跨模块-HA场景-LC-HA-001.md
+    - ppdcs/pc/BGP-跨模块-HA场景-LC-HA-002.md
+    - ppdcs/pc/BGP-业务转发-路由转发-LC-FW-002.md
+  status: completed
+  evidence_summary: >
+    对 5 个 BGP4+ S-State 逻辑用例执行完整状态图分析（Chow's 0/1-switch）。
+    design-plan.md / design-planner-reasoning.md 缺失，以 logic-cases.md + 用户指令为设计输入。
+    LC-BPG-004 (MD5认证): 3状态(无MD5/MD5认证成功/认证失败), 9条迁移, 10个state_path, 16条overlay, 10 PC。
+    LC-ST-001 (邻居状态机): 6状态(Idle~Established), 18条迁移, 21个state_path, 13条overlay, 21 PC。
+    LC-HA-001 (VRRP HA): 3状态, 5条迁移, 8个state_path, 6条overlay, 8 PC + GAP-HA-001~003。
+    LC-HA-002 (非VRRP开销): 2状态, 6条迁移, 11个state_path+4种路由类型, 11 PC + GAP-HA2-001~003。
+    LC-FW-002 (静态↔BGP互备): 3状态, 6条迁移, 7个state_path, 6条overlay, 7 PC + GAP-FW2-001~003。
+    每个 LC 产出: Mermaid stateDiagram-v2, 状态/迁移/路径/守卫/PC派生表, 物理用例。
+    所有未确认事实以 needs-confirmation 透传。
+  gap_notes: >
+    process/plan/design-plan.md, design-planner-reasoning.md 及 mfq/integration/test-data.md 不存在；
+    设计依据来自 logic-cases.md 因子-取值表/动作路径/覆盖测试点 和 confirmed-scenarios.md 场景链/原子操作。
+  completed_at: "2026-06-12T00:00:00.000000+00:00"
