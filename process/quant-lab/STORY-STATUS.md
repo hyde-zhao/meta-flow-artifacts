@@ -1,11 +1,37 @@
 ---
-last_updated: "2026-06-20T10:13:18+08:00"
-current_wave: "CR101-CLOSED"
+last_updated: "2026-06-24T18:58:00+08:00"
+current_wave: "CR138-W4-REVIEW-DOCS-GUARDRAILS"
 current_story: ""
-current_gate: "CR-101 CP8 已 approved；当前离线交付关闭为 READY_WITH_RISK。仍不授权真实 NAS、凭据、QMT/MiniQMT/XtQuant/gateway runtime、simulation/live、交易、provider/lake/catalog publish 或后续真实验证 gate 自动启动。"
+current_gate: "CR-138 CP8 approved；当前 closed-current-delivery / READY_WITH_RISK。不授权 QMT/MiniQMT/XtQuant/gateway runtime、凭据、账户/行情/订单读取、submit/cancel、simulation/live、NAS、provider/lake/catalog 或 Git remote 写入。"
 ---
 
 ## Story 状态汇总
+
+## CR-138：Runner / QMT Gateway Operational Control Plane
+
+| 对象 | 状态 | 证据 | 下一步 |
+|---|---|---|---|
+| Story Plan | cp7-verification-pass-with-risk | `process/STORY-BACKLOG-CR138.md`、`process/DEVELOPMENT-PLAN-CR138.yaml`、`process/checks/CP4-CR138-STORY-DAG-PARALLEL-SAFETY.md`、`process/checks/CP6-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-CODING-DONE.md`、`process/checks/CP7-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-VERIFICATION-DONE.md` | 进入 CP8 delivery readiness 准备。 |
+| Feature Design Matrix | ready-for-cp5-review | `process/docs/design/FEATURE-DESIGN-MATRIX.md` | FEAT-11 / FEAT-12 均已要求 full-lld。 |
+| Feature Design | generated | `process/docs/features/runner-control-plane/*`、`process/docs/features/qmt-gateway-service-layer/*` | 供 CP5 / LLD 消费；不构成实现授权。 |
+| LLD batch | approved | `CR138-RUNNER-QMT-OPERATIONAL-CONTROL-BATCH-A`、`process/checkpoints/CP5-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-LLD-BATCH.md` | 8 个 Story full-lld 已由用户批准并完成本地实现。 |
+| CP6 implementation | PASS | `process/checks/CP6-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-CODING-DONE.md`、8 份 `process/stories/CR138-S*-*-IMPLEMENTATION.md` | 本地 fixture / contract / docs / guardrail 实现完成。 |
+| CP7 verification | PASS_WITH_RISK | `process/checks/CP7-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-VERIFICATION-DONE.md`、`process/docs/quality/VERIFICATION-REPORT-CR138.md` | 仅 fixture / static / docs / hygiene / regression verified；无 runtime 授权。 |
+| CP8 delivery readiness | approved-closed | `process/checks/CP8-CR138-DELIVERY-READINESS.md`、`process/checkpoints/CP8-CR138-DELIVERY-READINESS.md`、`process/release/RELEASE-CONTEXT-CR138.yaml` | 用户已同意关闭；CR138 当前交付关闭为 READY_WITH_RISK。 |
+| 安全边界 | not-authorized | CR138 正式 CR、Development Plan、CP4 自动预检 | 不授权 runtime、QMT、MiniQMT、XtQuant、凭据、账户 / 行情 / 订单读取、submit/cancel、simulation/live、NAS、provider/lake/catalog 或 Git remote 写入。 |
+
+### CR138 Story Plan 队列
+
+| Story ID | 标题 | Wave | 状态 | 设计证据 | lld_policy | Dev Gate | 负责人 | 阻塞 |
+|---|---|---|---|---|---|---|---|---|
+| CR138-S01-shared-contracts-authorization-audit | Shared contracts, authorization, and audit boundary | CR138-W1-SHARED-CONTRACTS | verified-with-risk | `process/stories/CR138-S01-shared-contracts-authorization-audit-IMPLEMENTATION.md` | full-lld | cp7-pass-with-risk | host-orchestrator | 仅 fixture/static verified；不读取凭据、不导入 xtquant。 |
+| CR138-S02-runner-plan-preflight-control | Runner run plan, preflight, and command control | CR138-W2-CONTROL-SHELL | verified-with-risk | `process/stories/CR138-S02-runner-plan-preflight-control-IMPLEMENTATION.md` | full-lld | cp7-pass-with-risk | host-orchestrator | Runner 不直接调用 QMT / MiniQMT / XtQuant。 |
+| CR138-S05-gateway-lifecycle-health-rest-contract | Gateway lifecycle, health, capabilities, REST contract, and change plan | CR138-W2-CONTROL-SHELL | verified-with-risk | `process/stories/CR138-S05-gateway-lifecycle-health-rest-contract-IMPLEMENTATION.md` | full-lld | cp7-pass-with-risk | host-orchestrator | 不启动 gateway、不绑定端口、不连接 QMT；ChangePlan 仅 dry-run。 |
+| CR138-S03-runner-event-signal-rebalance-tracking | Runner event, signal, rebalance, run tracking, and ops summary | CR138-W3-OPERATIONAL-FLOWS | verified-with-risk | `process/stories/CR138-S03-runner-event-signal-rebalance-tracking-IMPLEMENTATION.md` | full-lld | cp7-pass-with-risk | host-orchestrator | 再平衡不提交真实订单；CLI summary 不触发 runtime。 |
+| CR138-S06-gateway-query-calendar-commission-pnl | Gateway query service for calendar, commission, and PnL | CR138-W3-OPERATIONAL-FLOWS | verified-with-risk | `process/stories/CR138-S06-gateway-query-calendar-commission-pnl-IMPLEMENTATION.md` | full-lld | cp7-pass-with-risk | host-orchestrator | 账户级查询仍需后续 runtime_authorization。 |
+| CR138-S07-gateway-subscription-order-report-recovery | Gateway subscription, order report, and recovery boundary | CR138-W3-OPERATIONAL-FLOWS | verified-with-risk | `process/stories/CR138-S07-gateway-subscription-order-report-recovery-IMPLEMENTATION.md` | full-lld | cp7-pass-with-risk | host-orchestrator | market subscription / submit / cancel 缺授权 hard-rejected。 |
+| CR138-S04-runner-evidence-review-incident-lifecycle | Runner evidence, review, incident, and lifecycle change | CR138-W4-REVIEW-DOCS-GUARDRAILS | verified-with-risk | `process/stories/CR138-S04-runner-evidence-review-incident-lifecycle-IMPLEMENTATION.md` | full-lld | cp7-pass-with-risk | host-orchestrator | 不得复制 raw log 或敏感证据。 |
+| CR138-S08-docs-fixtures-cp7-authorization-runbook | Docs, fixtures, CP7 guardrails, and authorization runbook | CR138-W4-REVIEW-DOCS-GUARDRAILS | verified-with-risk | `process/stories/CR138-S08-docs-fixtures-cp7-authorization-runbook-IMPLEMENTATION.md` | full-lld | cp7-pass-with-risk | host-orchestrator | 文档不得构成 runtime 授权。 |
 
 ## CR-101：Cross-Platform Strategy Delivery and Adapter Layer Realignment
 

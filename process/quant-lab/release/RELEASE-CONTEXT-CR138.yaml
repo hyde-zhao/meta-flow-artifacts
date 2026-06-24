@@ -1,0 +1,196 @@
+schema_version: "1.0"
+status: ready_with_risk
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+created_at: "2026-06-24T18:58:00+08:00"
+updated_at: "2026-06-24T18:58:00+08:00"
+source_gate: CP8
+
+release_scope:
+  current_version: "N/A"
+  target_version: "CR138-current-delivery"
+  included_features:
+    - FEAT-11 Runner Control Plane
+    - FEAT-12 QMT Gateway Service Layer
+  included_stories:
+    - CR138-S01-shared-contracts-authorization-audit
+    - CR138-S02-runner-plan-preflight-control
+    - CR138-S03-runner-event-signal-rebalance-tracking
+    - CR138-S04-runner-evidence-review-incident-lifecycle
+    - CR138-S05-gateway-lifecycle-health-rest-contract
+    - CR138-S06-gateway-query-calendar-commission-pnl
+    - CR138-S07-gateway-subscription-order-report-recovery
+    - CR138-S08-docs-fixtures-cp7-authorization-runbook
+  excluded_scope:
+    - real QMT / MiniQMT / XtQuant / gateway runtime
+    - credential / env / secret / account read
+    - account / market / order real query
+    - submit / cancel / buy / sell
+    - simulation / live
+    - NAS access
+    - provider / lake / catalog write or publish
+    - Git remote write
+  user_visible_changes:
+    - Runner / QMT Gateway operational control baseline is closed as fixture/static verified.
+    - Authorization runbook and gateway install boundary docs are available.
+    - Follow-up runtime validation is documented as separately authorized work.
+  internal_changes:
+    - Runner control plane contracts, local control plane, and CLI summary added.
+    - QMT gateway contracts, service-layer fixture, change plan, gates, and query contracts added.
+    - CR138 fixture tests and hygiene checker classification added.
+  breaking_changes: []
+  known_risks:
+    - RISK-CR138-RUNTIME-NOT-VERIFIED
+    - RISK-CR138-RUNTIME-MISREAD
+
+version_decision:
+  current_version: "N/A"
+  target_version: "CR138-current-delivery"
+  change_type: "alpha"
+  compatibility: "compatible"
+  reason: "This is a CR-scoped operational control baseline closure, not a public runtime release."
+
+quality_summary:
+  cp7_results:
+    - path: process/checks/CP7-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-VERIFICATION-DONE.md
+      decision: PASS_WITH_RISK
+      summary: "Fixture/static verification passed; runtime remains not authorized."
+    - path: process/docs/quality/VERIFICATION-REPORT-CR138.md
+      decision: PASS_WITH_RISK
+      summary: "CR138 validation covered local contracts, fixture tests, hygiene, state, and regressions."
+  test_report_path: process/docs/quality/VERIFICATION-REPORT-CR138.md
+  review_path: process/checks/CP7-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-VERIFICATION-DONE.md
+  blocker_count: 0
+  high_count: 0
+  accepted_risk_ids:
+    - RISK-CR138-RUNTIME-NOT-VERIFIED
+    - RISK-CR138-RUNTIME-MISREAD
+  unresolved_findings: []
+
+affected_surface:
+  platforms:
+    - local Python fixture environment
+    - Meta Flow process artifacts
+  components:
+    - trading/runner_control_contracts.py
+    - trading/runner_control_plane.py
+    - trading/runner_control_cli.py
+    - trading/qmt_gateway_contracts.py
+    - trading/qmt_gateway_config.py
+    - trading/qmt_gateway_service.py
+    - trading/qmt_gateway_gates.py
+    - scripts/check_process_artifact_hygiene.py
+    - docs/CR138-RUNNER-QMT-AUTHORIZATION-RUNBOOK.md
+    - docs/QMT-GATEWAY-INSTALL.md
+    - tests/test_cr138_*.py
+  install_scopes:
+    - N/A
+  config_changes:
+    - N/A
+  permission_changes:
+    - "No runtime permission is granted; explicit runtime_authorization remains required."
+  migration_required: false
+  external_interfaces:
+    - "REST-only gateway P0 contract, fixture/static only"
+  state_schema_changes:
+    - N/A
+  command_parameter_changes:
+    - N/A
+
+install_validation_summary:
+  commands:
+    - "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab"
+    - "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_cr138_*.py tests/test_cr132_process_artifact_hygiene.py"
+    - "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_cr019_qmt_gateway_lifecycle.py tests/test_cr020_query_positions_readonly.py tests/test_cr019_qmt_gateway_run_gates.py tests/test_cr137_runner_run_registry.py"
+    - "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_process_artifact_hygiene.py --json"
+    - "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root /home/hyde/workspace/quant-lab"
+    - "PYTHONPYCACHEPREFIX=/tmp/cr138-pycompile uv run --python 3.11 python -m py_compile trading/runner_control_contracts.py trading/runner_control_plane.py trading/runner_control_cli.py trading/qmt_gateway_contracts.py trading/qmt_gateway_config.py trading/qmt_gateway_service.py trading/qmt_gateway_gates.py"
+    - "git diff --check"
+  results:
+    - workspace check PASS
+    - "CR138 fixture/hygiene tests PASS: 48 passed"
+    - "targeted regression PASS: 35 passed"
+    - "hygiene PASS: unclassified=0"
+    - "state check PASS: State v2 Check OK"
+    - py_compile PASS
+    - git diff --check PASS
+  log_paths:
+    - process/docs/quality/VERIFICATION-REPORT-CR138.md
+    - process/evidence/CR138-BATCH.CP7.index.json
+  skipped_with_reason:
+    - "Runtime smoke skipped because user did not authorize real QMT / MiniQMT / XtQuant / gateway runtime."
+    - "Credential/account/market/order reads skipped because user did not authorize them."
+    - "Submit/cancel/simulation/live skipped because trading actions are not authorized."
+
+release_documents:
+  release_notes:
+    path: process/docs/release/RELEASE-NOTES-CR138.md
+    status: ready_with_risk
+    na_reason: ""
+  deploy_checklist:
+    path: process/docs/release/DEPLOY-CHECKLIST-CR138.md
+    status: ready_with_risk
+    na_reason: ""
+  rollback:
+    path: process/docs/release/ROLLBACK-CR138.md
+    status: ready_with_risk
+    na_reason: ""
+  migration:
+    path: process/docs/release/MIGRATION-CR138.md
+    status: ready_with_risk
+    na_reason: ""
+  feedback:
+    path: process/docs/release/FEEDBACK-CR138.md
+    status: ready_with_risk
+    na_reason: ""
+
+non_authorized_items:
+  - id: NA-CR138-001
+    operation: "QMT / MiniQMT / XtQuant / gateway runtime"
+    reason: "CP8 closes fixture/static baseline only."
+    required_authorization: "runtime_authorization with operation=runtime_smoke"
+  - id: NA-CR138-002
+    operation: "credential / account / market / order read"
+    reason: "No real account or market data access was authorized."
+    required_authorization: "runtime_authorization with readonly scope and redacted evidence policy"
+  - id: NA-CR138-003
+    operation: "submit / cancel / simulation / live"
+    reason: "Trading actions remain out of scope."
+    required_authorization: "separate high-risk trading authorization gate"
+  - id: NA-CR138-004
+    operation: "NAS / provider / lake / catalog / Git remote"
+    reason: "Storage, data publication, and remote writes are not part of current closure."
+    required_authorization: "separate scoped authorization"
+
+follow_up_summary:
+  observation_items:
+    - "Keep CP7 no-real-operation counters as a regression guard for later runner/gateway development."
+    - "Do not treat fixture/static verification as runtime readiness."
+  feedback_items:
+    - "If real runtime validation is needed, start with runtime authorization and gateway smoke only."
+  follow_up_candidates:
+    - id: CR138-FU-RT-01
+      title: "Gateway xtquant adapter Spike / readonly integration design"
+      status: candidate
+    - id: CR138-FU-RT-02
+      title: "QMT terminal direct-run validation authorization gate"
+      status: candidate
+    - id: CR138-FU-TRD-01
+      title: "Order-write / simulation / live design authorization gate"
+      status: candidate
+    - id: CR138-FU-GOV-01
+      title: "CR tracking warning cleanup"
+      status: candidate
+  risk_acceptance_items:
+    - RISK-CR138-RUNTIME-NOT-VERIFIED
+    - RISK-CR138-RUNTIME-MISREAD
+
+token_control:
+  default_read_mode: capsule-first
+  copied_long_text: false
+  allowed_payload: "summary, count, risk id, decision id, evidence path"
+  full_doc_read_triggers:
+    - missing_capsule_field
+    - unreadable_evidence_path
+    - conflicting_conclusion
+    - user_requested_deep_review

@@ -1,0 +1,88 @@
+{
+  "checkpoint_id": "CP3-DISCUSSION-CR138",
+  "cr_id": "CR-138",
+  "status": "completed",
+  "created_at": "2026-06-24T14:10:00+08:00",
+  "discussion_log": "process/discussions/CP3-HLD-DISCUSSION-LOG.md",
+  "source_context": "process/context/CP2-CR138-RUNNER-QMT-OPERATIONAL-USE-CASE-CONTEXT.yaml",
+  "selected_architecture_direction": "independent-runner-control-plane-and-qmt-gateway-service-layer",
+  "architecture_gray_areas": [
+    {
+      "id": "AGA-138-01",
+      "status": "resolved",
+      "decision": "Runner Control Plane is independent from offline strategy-runner-core and consumes its artifacts only as input evidence."
+    },
+    {
+      "id": "AGA-138-02",
+      "status": "resolved",
+      "decision": "QMT Gateway is a service layer for lifecycle, capabilities, sessions, subscriptions, execution reports, recovery, audit, and config changes; it is not only a readonly endpoint or QMT terminal target."
+    },
+    {
+      "id": "AGA-138-03",
+      "status": "resolved",
+      "decision": "Runner and Gateway communicate through domain commands/events, authorization records, idempotency keys, and audit ids; Runner must not call xtquant directly."
+    },
+    {
+      "id": "AGA-138-04",
+      "status": "resolved",
+      "decision": "CP3 approval does not automatically authorize runtime, QMT, account, quote, order, submit/cancel, simulation/live, credentials, NAS, provider/lake/catalog, or Git remote write; future validation may request scoped runtime authorization."
+    },
+    {
+      "id": "AGA-138-05",
+      "status": "resolved-with-risk",
+      "decision": "Keep one function-named umbrella HLD for shared event/safety contracts; split Story planning by Runner, Gateway, safety, and OMS boundaries."
+    },
+    {
+      "id": "AGA-138-06",
+      "status": "resolved",
+      "decision": "Gateway P0 is REST-only; SSE/WebSocket, gRPC, and FIX are deferred to later protocol CRs."
+    }
+  ],
+  "advisor_options": [
+    {
+      "option": "A",
+      "name": "Independent Runner Control Plane + QMT Gateway Service Layer",
+      "recommendation": "recommended"
+    },
+    {
+      "option": "B",
+      "name": "Extend offline strategy-runner-core directly into runtime",
+      "recommendation": "not_recommended"
+    },
+    {
+      "option": "C",
+      "name": "Gateway-centered strategy scheduler",
+      "recommendation": "not_recommended"
+    },
+    {
+      "option": "D",
+      "name": "Readonly-only narrowed scope",
+      "recommendation": "conditional_fallback"
+    }
+  ],
+  "decision_items_for_cp3": [
+    "DQ-CP3-CR138-01",
+    "DQ-CP3-CR138-02",
+    "DQ-CP3-CR138-03",
+    "DQ-CP3-CR138-04",
+    "DQ-CP3-CR138-05"
+  ],
+  "runtime_authorized": false,
+  "cp3_runtime_auto_authorized": false,
+  "runtime_authorization_policy": "Scoped runtime authorization may be requested later with action scope, run window, redaction, rollback, and audit constraints.",
+  "forbidden_scope_not_authorized_by_cp3": [
+    "runtime",
+    "qmt",
+    "miniqmt",
+    "xtquant",
+    "credentials",
+    "account_query",
+    "market_subscription",
+    "order_query",
+    "submit_cancel",
+    "simulation_live",
+    "nas",
+    "provider_lake_catalog",
+    "git_remote_write"
+  ]
+}

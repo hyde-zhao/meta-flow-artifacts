@@ -1,6 +1,6 @@
 ---
-status: "draft-current-index"
-version: "1.4"
+status: "ready-for-cp5-review"
+version: "1.5"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld: "docs/design/HLD.md"
 source_adr: "docs/design/ARCHITECTURE-DECISION.md"
@@ -20,6 +20,7 @@ confirmed_at: ""
 | 1.2 | 2026-06-14 | host-orchestrator | 按 CR-051 增补 FEAT-10 策略研究生命周期与 quant-lab 迁移治理，实现设计三件套和 6 个 Story 的 lld_policy |
 | 1.3 | 2026-06-14 | host-orchestrator | 按 CR-053 增补 FEAT-10-CR053 quant-lab migration inventory / dry-run scoped design、5 个 Story 和 CP5 批次 |
 | 1.4 | 2026-06-23 | host-orchestrator | CR131 将 CR 命名 feature design matrix 历史文件移入 archive；默认 design root 保留当前矩阵。 |
+| 1.5 | 2026-06-24 | host-orchestrator | 按 CR138 CP3 approved HLD 增补 FEAT-11 Runner Control Plane 与 FEAT-12 QMT Gateway Service Layer，实现设计三件套和 8 个 Story 的 lld_policy；复用 FEAT-07 / FEAT-06 作为 shared safety / OMS 输入。 |
 
 ## 适用性判定规则
 
@@ -46,6 +47,8 @@ confirmed_at: ""
 | FEAT-09 | QMT / MiniQMT 双目标策略交付框架 | BLUEPRINT v1.1、archived HLD-CR046、ADR-CR046-001..006 | required | legacy cross-target framework；offline runner implementation authority 已转到 `strategy-runner-core`；涉及外部交易终端边界与 no-real-operation 安全约束 | `docs/features/qmt-miniqmt-dual-target-framework/*` | CR046-S01..S07 | full-lld for S01..S05；technical-note for S06..S07 | 启动具体策略交付、真实 QMT shadow、MiniQMT install / connection、submit/cancel 或研究框架反向完善时 |
 | FEAT-10 | 策略研究生命周期与项目迁移治理 | BLUEPRINT v1.3、DOMAIN-MAP v1.2、DEPENDENCY-MAP v1.2、archived HLD-CR051 | required | 新增策略生命周期、taxonomy、archive manifest、硬件冷热分层、项目身份、迁移 inventory 和后续 CR gate；涉及迁移、安全和跨 Feature 合同 | `docs/features/strategy-research-lifecycle/*` | CR051-S01..S06 | full-lld for S01..S04；technical-note for S05..S06 | 启动 CR052 多因子完整证明、真实目录迁移、NAS 操作、项目包名重命名、交易主机 package 消费或 runtime_candidate gate 时 |
 | FEAT-10-CR053 | quant-lab migration inventory / dry-run | archived HLD-CR053、ADR-CR053-001..007、CR051 archive governance | required | CR053 是 FEAT-10 的迁移 dry-run 增量，新增 root map、repo inventory、path references、transfer/backup plan 和 CR058 输入；涉及 NAS / lake / Windows / Linux 映射和不授权边界 | `docs/features/quant-lab-migration-dry-run/*` | CR053-S01..S05 | full-lld for S01..S04；technical-note for S05 | CR058 真实 repo-local migration、CR060 NAS/archive 实迁、数据湖 root 迁移、交易机 package import 方式变化时 |
+| FEAT-11 | Runner Control Plane | CR138 HLD、ADR-CR138-001/003/005/007、BLUEPRINT v1.5、DOMAIN-MAP v1.4 | required | 新增运营控制面，负责 RunPlan、PreflightResult、RunnerCommand、RunState、RunEvidence、ReviewSummary、IncidentRecord 和 StrategyChangePlan；涉及状态机、授权边界、事件幂等、审计和跨 Gateway / OMS 契约 | `docs/features/runner-control-plane/*` | CR138-S01..S04、CR138-S08 | full-lld for S01..S04/S08 | 新增 Runner 运营命令、事件接入、盘前检查、复盘、异常恢复、策略变更或 runtime authorization 消费时 |
+| FEAT-12 | QMT Gateway Service Layer | CR138 HLD、ADR-CR138-002/003/004/005/006/007、BLUEPRINT v1.5、DOMAIN-MAP v1.4 | required | 新增 Gateway 服务层，负责 REST-only P0、GatewayHealth、CapabilitySnapshot、TradingSession、TradingCalendar、CommissionSchedule、PnLSnapshot、MarketSubscription、GatewayCommand、ExecutionReport、AuditRecord 和 ChangePlan；涉及外部接口、查询授权、市场订阅、订单回报、恢复和审计 | `docs/features/qmt-gateway-service-layer/*` | CR138-S01、CR138-S05..S08 | full-lld for S01/S05..S08 | 新增 Gateway endpoint、账户 / 行情 / 订单只读、订阅、order write、恢复、协议扩展或配置变更时 |
 
 ## Story 下游消费表
 
@@ -76,6 +79,14 @@ confirmed_at: ""
 | CR053-S03-path-reference-and-legacy-alias-dry-run | `docs/features/quant-lab-migration-dry-run/DESIGN.md`、`TEST-PLAN.md` | full-lld | path references / legacy alias / manual-review dry-run | Story LLD | CP5 自动预检 + 批量人工确认 |
 | CR053-S04-manifest-transfer-and-backup-plan | `docs/features/quant-lab-migration-dry-run/DESIGN.md`、`TEST-PLAN.md` | full-lld | manifest-first transfer / backup plan / restore rehearsal | Story LLD | CP5 自动预检 + 批量人工确认 |
 | CR053-S05-cr058-migration-input-and-close-gate | `docs/features/quant-lab-migration-dry-run/DESIGN.md`、`TASKS.md` | technical-note | CR058 input / close gate / no-real-migration boundary | Story 技术说明 | CP5 自动预检 + 批量人工确认 |
+| CR138-S01-shared-contracts-authorization-audit | `docs/features/runner-control-plane/DESIGN.md`、`docs/features/qmt-gateway-service-layer/DESIGN.md`、`docs/features/runtime-authorization-safety/DESIGN.md` | full-lld | shared command/event/audit/auth contract / security boundary | Story LLD | CP5 自动预检 + 批量人工确认 |
+| CR138-S02-runner-plan-preflight-control | `docs/features/runner-control-plane/DESIGN.md`、`TEST-PLAN.md` | full-lld | RunPlan / PreflightResult / RunnerCommand / no runtime auth | Story LLD | CP5 自动预检 + 批量人工确认 |
+| CR138-S03-runner-event-signal-rebalance-tracking | `docs/features/runner-control-plane/DESIGN.md`、`docs/features/qmt-trading-governance/DESIGN.md` | full-lld | event ingestion / idempotency / rebalance / run tracker / OMS risk handoff | Story LLD | CP5 自动预检 + 批量人工确认 |
+| CR138-S04-runner-evidence-review-incident-lifecycle | `docs/features/runner-control-plane/DESIGN.md`、`docs/features/runtime-authorization-safety/TEST-PLAN.md` | full-lld | evidence redaction / review / incident / recovery / strategy change plan | Story LLD | CP5 自动预检 + 批量人工确认 |
+| CR138-S05-gateway-lifecycle-health-rest-contract | `docs/features/qmt-gateway-service-layer/DESIGN.md`、`TEST-PLAN.md` | full-lld | lifecycle / health / capabilities / REST-only P0 / session boundary | Story LLD | CP5 自动预检 + 批量人工确认 |
+| CR138-S06-gateway-query-calendar-commission-pnl | `docs/features/qmt-gateway-service-layer/DESIGN.md`、`docs/features/qmt-trading-governance/DESIGN.md`、`docs/features/runtime-authorization-safety/DESIGN.md` | full-lld | TradingCalendar / CommissionSchedule / PnLSnapshot / account readonly auth / redaction | Story LLD | CP5 自动预检 + 批量人工确认 |
+| CR138-S07-gateway-subscription-order-report-recovery | `docs/features/qmt-gateway-service-layer/DESIGN.md`、`docs/features/qmt-trading-governance/DESIGN.md` | full-lld | market subscription / GatewayCommand / ExecutionReport / recovery / hard reject | Story LLD | CP5 自动预检 + 批量人工确认 |
+| CR138-S08-docs-fixtures-cp7-authorization-runbook | `docs/features/runner-control-plane/TASKS.md`、`docs/features/qmt-gateway-service-layer/TASKS.md`、`docs/features/runtime-authorization-safety/TEST-PLAN.md` | full-lld | docs / fixture matrix / no-real-op guardrail / CP7 auth boundary | Story LLD | CP5 自动预检 + 批量人工确认 |
 
 ## 提前确认的关键决策
 
@@ -87,6 +98,9 @@ confirmed_at: ""
 | DQ-FD-CR046-02 | implementation | 策略从研究侧传到交易运行 PC 的默认形态是什么 | 采用 `strategy-package-<strategy_id>-<version>.zip` + `.sha256` + `manifest.yaml`，经人工/受控文件通道传到交易运行 PC，再由 QMT terminal target 人工导入 | Git release / 内网共享目录 / U 盘离线交付 / 自动同步 runner | 推荐方案可审计、可校验、可回滚，并隔离研究环境与交易 PC；自动同步 runner 会引入运行授权风险 | 影响 CR046-S02/S03 的 artifact、checksum、transfer_channel 和 manual_import_steps 字段 | 若 CP5 发现交易 PC 环境约束不同，可把 transfer_channel 设为枚举，但不得自动运行 | approved-by-user-2026-06-13 |
 | DQ-FD-CR051-01 | implementation | 是否为 FEAT-10 生成独立 DESIGN / TEST-PLAN / TASKS，并将 CR051-S01..S06 纳入单一 CP5 批次 | 生成独立三件套；S01..S04 full-lld，S05..S06 technical-note；统一批次 `CR051-STRATEGY-RESEARCH-LIFECYCLE-BATCH-A` | 只保留 HLD；拆成迁移 Feature 与研究 Feature 两个目录 | 推荐方案降低 CP5 下游读取成本，并把迁移 / archive / lifecycle 的安全边界合并审查；只留 HLD 会让 Story LLD 输入分散，拆两个 Feature 会增加当前 CP4 复杂度 | 影响 CR052..CR056 进入条件、项目迁移计划和后续文档刷新 | 若 CP5 发现迁移实施风险高于研究生命周期，可拆出后续 Migration CR；真实迁移仍需独立授权 | resolved-cp4 |
 | DQ-FD-CR053-01 | implementation | 是否为 CR053 生成 FEAT-10 scoped migration dry-run 三件套，并将 CR053-S01..S05 纳入单一 CP5 批次 | 生成 `docs/features/quant-lab-migration-dry-run/*`；S01..S04 full-lld，S05 technical-note；统一批次 `CR053-MIGRATION-INVENTORY-BATCH-A` | 只复用 FEAT-10 CR051 三件套；拆成 NAS / repo / backup 三个 Feature | 推荐方案让 CR053 dry-run 输入独立可审查，同时不污染 CR051 closed baseline；只复用 CR051 会让迁移 dry-run 细节分散；拆三 Feature 对当前范围过重 | 影响 CP5 设计证据、CP6 静态报告和 CR058 输入 | 若 CP5 发现 NAS / 数据湖迁移超出 dry-run，可拆出 CR060+；真实迁移仍需独立授权 | resolved-cp4 |
+| DQ-FD-CR138-01 | implementation | 是否为 FEAT-11 / FEAT-12 生成独立 DESIGN / TEST-PLAN / TASKS，并将 CR138-S01..S08 纳入单一 CP5 批次 | 生成 `docs/features/runner-control-plane/*` 与 `docs/features/qmt-gateway-service-layer/*`；8 个 Story 全部 full-lld；统一批次 `CR138-RUNNER-QMT-OPERATIONAL-CONTROL-BATCH-A` | 只保留 HLD；拆成 Runner / Gateway 两个 CP5 批次 | 推荐方案让 Runner/Gateway 共享合同和授权边界统一确认；只留 HLD 会让 Story LLD 输入分散；拆双批次会增加跨契约漂移 | 影响 CP5 设计证据、Story owner、Wave 和 runtime authorization 边界 | 若 CP5 发现批次过大，可在不改 HLD 的前提下拆成 Runner / Gateway 两个 CP5 子批次 |
+| DQ-FD-CR138-02 | implementation | CR138-S08 文档 / fixtures / guardrail Story 是否需要 full-lld | 推荐 full-lld，因为它承载 no-real-op、runtime_authorization、docs 声明和 CP7 验证矩阵 | technical-note | 推荐方案降低误授权风险；technical-note token 更少但可能遗漏禁止项和验证命令 | 影响 CP7 / CP8 release readiness 和用户 runbook 语义 | 若 CP5 明确只做纯文档索引刷新，可降级为 technical-note |
+| DQ-FD-CR138-03 | runtime_authorization | CP4 / CP5 Story 设计是否授权真实 QMT / 账户 / 行情 / 订单验证 | 推荐不授权；仅记录后续可按需申请 scoped runtime_authorization | CP5 直接授权 readonly；永久不授权 | 推荐方案保持 CP3 决策一致，同时保留后续验证路径；直接授权风险高，永久不授权会阻断必要验证 | 影响 CP6/CP7 验证模式和用户预期 | 任一真实运行前必须另起 runtime_authorization gate |
 
 ## 豁免与 N/A 说明
 
@@ -94,6 +108,15 @@ confirmed_at: ""
 |---|---|---|---|---|---|
 | FEAT-01 | 基线已 verified，本轮只补索引 | STORY-001..013 和已关闭基础回测能力 | accepted | 修改核心 engine / strategies / reports schema 时 | meta-po / meta-se |
 | FEAT-08 | 普通文档刷新可由 CR / CP8 处理 | README、USER-MANUAL、runbook | accepted | 文档新增真实操作步骤或授权语义时 | meta-doc / meta-qa |
+
+## CR138 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| FEAT-11 / FEAT-12 已纳入矩阵 | PASS | §Feature 设计矩阵 |
+| required Feature 三件套已生成 | PASS | `docs/features/runner-control-plane/*`、`docs/features/qmt-gateway-service-layer/*`；FEAT-07 / FEAT-06 复用既有三件套 |
+| CR138 8 个 Story 均有 feature_design_refs 与 lld_policy | PASS | §Story 下游消费表 |
+| CP5 前不授权 runtime | PASS | DQ-FD-CR138-03 |
 
 ## 自检
 

@@ -1,0 +1,150 @@
+context_id: CP3-CR138-RUNNER-QMT-HLD
+cr_id: CR-138
+checkpoint: CP3
+title: Runner and QMT Gateway Operational Control Plane HLD Context
+status: approved
+created_at: '2026-06-24T14:35:00+08:00'
+created_by: host-orchestrator
+approved_at: '2026-06-24T15:30:00+08:00'
+approved_by: user
+next_phase: story-planning
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - process/docs/design/HLD-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md
+    - process/docs/design/ARCHITECTURE-DECISION-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md
+    - process/docs/design/BLUEPRINT.md
+    - process/docs/design/DOMAIN-MAP.md
+    - process/docs/design/DEPENDENCY-MAP.md
+    - process/discussions/CP3-HLD-DISCUSSION-LOG.md
+    - process/checks/CP3-DISCUSSION-CHECKPOINT.json
+  read_if_needed:
+    - process/USE-CASES.md
+    - process/context/CP2-CR138-RUNNER-QMT-OPERATIONAL-USE-CASE-CONTEXT.yaml
+    - process/changes/CR-138-RUNNER-QMT-GATEWAY-OPERATIONAL-USE-CASE-BASELINE-2026-06-24.md
+    - process/HLD-QMT-TRADING.md
+    - process/archive/design-cr-docs/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md
+    - process/docs/features/strategy-runner-core/DESIGN.md
+  do_not_read_by_default:
+    - .env
+    - data/
+    - reports/
+    - market_data/
+    - trading/qmt_runtime.py
+    - trading/qmt_gateway_service.py
+scope_summary:
+  goal: "冻结 Runner Control Plane 与 QMT Gateway Service Layer 的 solution-design / HLD 基线，供 CP3 人工确认和 CP4 Story planning 使用。"
+  mode: "design-only"
+  code_change_authorized: false
+  cp3_runtime_auto_authorized: false
+  runtime_authorization_policy: "按需授权；后续验证如有必要，必须按 action scope、运行窗口、脱敏、回滚和审计范围走独立 runtime_authorization gate。"
+  runtime_authorized: false
+  external_access_authorized: false
+  qmt_authorized: false
+  trading_authorized: false
+design_outputs:
+  hld: process/docs/design/HLD-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md
+  adr: process/docs/design/ARCHITECTURE-DECISION-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md
+  blueprint: process/docs/design/BLUEPRINT.md
+  domain_map: process/docs/design/DOMAIN-MAP.md
+  dependency_map: process/docs/design/DEPENDENCY-MAP.md
+  cp3_discussion_log: process/discussions/CP3-HLD-DISCUSSION-LOG.md
+  cp3_discussion_checkpoint: process/checks/CP3-DISCUSSION-CHECKPOINT.json
+recommended_architecture:
+  selected_option: "A - independent-runner-control-plane-and-qmt-gateway-service-layer"
+  feature_delta:
+    - FEAT-11 Runner Control Plane
+    - FEAT-12 QMT Gateway Service Layer
+  shared_boundaries:
+    - FEAT-07 Safety / Authorization
+    - FEAT-06 OMS / Risk / Order State
+    - FEAT-08 Docs / Runbook
+  story_planning_hint:
+    estimated_story_count: 8
+    estimated_waves: 4
+architecture_gray_areas:
+  - id: AGA-138-01
+    status: resolved
+    decision: "Runner Control Plane 独立于 offline strategy-runner-core。"
+  - id: AGA-138-02
+    status: resolved
+    decision: "QMT Gateway 作为 Service Layer，而非只读 endpoint 或策略 target。"
+  - id: AGA-138-03
+    status: resolved
+    decision: "Runner / Gateway 通过领域命令、事件、授权记录、幂等键和审计 ID 衔接。"
+  - id: AGA-138-04
+    status: resolved
+    decision: "CP3 approval 不自动授权 runtime；后续必要验证可按需申请 runtime_authorization。"
+  - id: AGA-138-05
+    status: resolved-with-risk
+    decision: "保留单份 umbrella HLD，CP4 按 Feature 拆 Story。"
+  - id: AGA-138-06
+    status: resolved
+    decision: "Gateway P0 收敛为 REST-only；SSE/WebSocket、gRPC、FIX 后置。"
+decision_items:
+  - id: DQ-CP3-CR138-01
+    decision_type: architecture
+    question: "是否批准方案 A：独立 Runner Control Plane + QMT Gateway Service Layer？"
+    recommendation: "批准；新增 FEAT-11 / FEAT-12，现有 FEAT-05/06/09/strategy-runner-core 作为输入和相邻边界。"
+    alternatives:
+      - "扩展 offline strategy-runner-core 直接接 Gateway / xtquant。"
+      - "由 Gateway 同时承接策略调度和 QMT 触达。"
+    impact_risk: "决定 CP4 Story owner、模块边界和测试矩阵。"
+    rollback_switch: "若用户缩小范围，可切到 Runner-only 或 Gateway-only。"
+  - id: DQ-CP3-CR138-02
+    decision_type: architecture
+    question: "Gateway P0 协议是否采用 REST-only，SSE/WebSocket、gRPC、FIX 后置？"
+    recommendation: "采用 REST-only P0；用 REST 覆盖查询、命令、订阅管理、状态拉取、事件拉取和审计查询。"
+    alternatives:
+      - "REST + SSE / WebSocket。"
+      - "gRPC-first。"
+    impact_risk: "REST-only 降低 P0 复杂度；不能解决亚秒级实时推送和外部 SDK 流式消费。"
+    rollback_switch: "若后续出现实时 UI、低延迟行情流或上游 OMS/EMS 接入需求，另起 SSE/WebSocket/gRPC/FIX CR。"
+  - id: DQ-CP3-CR138-03
+    decision_type: runtime_authorization
+    question: "是否确认 CP3 approval 不自动授权 runtime，但后续必要验证可以按需申请 runtime_authorization？"
+    recommendation: "确认；CP3 不自动授权任何 runtime/QMT/账户/行情/订单/交易动作，后续验证按 action scope、运行窗口、脱敏、回滚和审计范围单独授权。"
+    alternatives:
+      - "blanket deny：后续也默认不允许 runtime 验证。"
+      - "CP3 直接授权只读 / 行情 / 交易。"
+    impact_risk: "推荐方案同时防止设计通过被误读为运行许可，并保留必要验证路径。"
+    rollback_switch: "任何具体运行前必须重新发起 runtime_authorization gate。"
+  - id: DQ-CP3-CR138-04
+    decision_type: risk_acceptance
+    question: "是否接受本轮单份 umbrella HLD，CP4 再按 Runner/Gateway/Safety/OMS 拆 Story？"
+    recommendation: "接受；当前共享事件契约和授权边界较多，单份 HLD 更利于 CP3 评审。"
+    alternatives:
+      - "立即拆成 Runner HLD 和 Gateway HLD。"
+      - "只保留 Runner 或只保留 Gateway。"
+    impact_risk: "单份 HLD 较长，但 CP4 必须拆 Story 控制复杂度。"
+    rollback_switch: "若 CP3 评审认为范围过大，拆分 HLD 后重发 CP3。"
+  - id: DQ-CP3-CR138-05
+    decision_type: architecture
+    question: "是否确认交易日历、佣金 / 费用模型、收益 / PnL 查询进入 FEAT-12 Reference / Account Query Service，并按本地参考 / 账户只读授权分层？"
+    recommendation: "确认；交易日历优先本地参考数据，佣金优先配置化 FeeSchedule，账户级收益 / 佣金 / 持仓 / 成交查询必须授权并脱敏。"
+    alternatives:
+      - "放在 FEAT-11 Runner Control Plane。"
+      - "延后到 FEAT-06 OMS / Risk。"
+    impact_risk: "推荐方案能支撑 preflight、费用估算和盘后复盘；放 Runner 会诱导越权账户读取，延后会缺核心运营能力。"
+    rollback_switch: "实现阶段若 QMT 不支持对应查询，使用 unavailable_with_reason 或 estimated mode，不伪造 broker facts。"
+forbidden_scope_not_authorized_by_cp3:
+  - runtime_qmt_miniqmt_xtquant_gateway
+  - credential_env_token_account_session_read
+  - account_funds_positions_orders_fills_raw_log_read
+  - market_subscription_runtime
+  - submit_cancel_buy_sell_simulation_live
+  - nas_mount_list_copy_publish_pull
+  - provider_fetch_lake_write_catalog_publish
+  - source_code_dependency_install_script_change
+  - git_add_commit_push_remote_write
+read_expansion_log:
+  - reason: "CP3 HLD 需要引用两份用户指定 QMT 研究报告和既有 QMT / runner 设计边界。"
+    paths:
+      - /home/hyde/workspace/llm-wiki/llm-wiki/work/studies/quant-trading/sources/platforms/qmt/lite-qmt-executor、BulletTrade、EasyXT 源码深度研究报告.md
+      - /home/hyde/workspace/llm-wiki/llm-wiki/work/studies/quant-trading/sources/platforms/qmt/quant-qmt-proxy 与 qmt-bridge 深度研究报告.md
+      - process/HLD-QMT-TRADING.md
+      - process/archive/design-cr-docs/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md
+      - process/docs/features/strategy-runner-core/DESIGN.md
+    access: read_only
+    runtime_started: false

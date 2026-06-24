@@ -1,17 +1,17 @@
 project_id: "local_backtest"
-version: "1.7"
-status: "cr046-closed-current-delivery"
+version: "1.8"
+status: "cr138-ready-for-cp5-review"
 confirmed: true
 confirmed_by: "user"
 confirmed_at: "2026-05-14"
 created_at: "2026-05-14"
 created_by: "meta-se"
-last_updated: "2026-06-18T07:59:20+08:00"
+last_updated: "2026-06-24T16:55:00+08:00"
 source_hld: "process/HLD.md"
 companion_hld: "process/HLD-DATA-LAKE.md"
 source_adr: "process/ARCHITECTURE-DECISION.md"
 story_backlog: "process/STORY-BACKLOG.md"
-active_change: ""
+active_change: "CR-138"
 secondary_change: ""
 cr004_status: "draft-pending-cp4"
 cr004_confirmed: false
@@ -100,6 +100,163 @@ cr051_nas_operation_authorized: false
 cr051_qmt_miniqmt_runtime_authorized: false
 cr051_provider_lake_publish_authorized: false
 cr051_git_push_authorized: false
+
+cr138_status: "story-plan-cp4-pass-pending-lld"
+cr138_confirmed: false
+cr138_formal_cr: "process/changes/CR-138-RUNNER-QMT-GATEWAY-OPERATIONAL-USE-CASE-BASELINE-2026-06-24.md"
+cr138_lld_batches:
+  - "CR138-RUNNER-QMT-OPERATIONAL-CONTROL-BATCH-A"
+cr138_implementation_allowed: false
+cr138_qmt_runtime_authorized: false
+cr138_miniqmt_connection_authorized: false
+cr138_xtquant_runtime_authorized: false
+cr138_gateway_start_authorized: false
+cr138_credential_read_authorized: false
+cr138_account_market_order_read_authorized: false
+cr138_submit_cancel_authorized: false
+cr138_simulation_live_authorized: false
+cr138_nas_authorized: false
+cr138_provider_lake_catalog_authorized: false
+cr138_git_remote_write_authorized: false
+
+cr138_story_planning:
+  change_id: "CR-138"
+  status: "cp4-auto-pass-pending-lld"
+  cp4_check: "process/checks/CP4-CR138-STORY-DAG-PARALLEL-SAFETY.md"
+  feature_design_matrix: "process/docs/design/FEATURE-DESIGN-MATRIX.md"
+  story_backlog: "process/STORY-BACKLOG-CR138.md"
+  story_status: "process/STORY-STATUS-CR138.md"
+  development_plan: "process/DEVELOPMENT-PLAN-CR138.yaml"
+  cp5_batch: "CR138-RUNNER-QMT-OPERATIONAL-CONTROL-BATCH-A"
+  cp5_manual_review: "process/checkpoints/CP5-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-LLD-BATCH.md"
+  lld_policy_summary:
+    full_lld:
+      - "CR138-S01-shared-contracts-authorization-audit"
+      - "CR138-S02-runner-plan-preflight-control"
+      - "CR138-S03-runner-event-signal-rebalance-tracking"
+      - "CR138-S04-runner-evidence-review-incident-lifecycle"
+      - "CR138-S05-gateway-lifecycle-health-rest-contract"
+      - "CR138-S06-gateway-query-calendar-commission-pnl"
+      - "CR138-S07-gateway-subscription-order-report-recovery"
+      - "CR138-S08-docs-fixtures-cp7-authorization-runbook"
+  waves:
+    - wave: "CR138-W1-SHARED-CONTRACTS"
+      parallel_lld: false
+      parallel_dev: false
+      cp5_batch: "CR138-RUNNER-QMT-OPERATIONAL-CONTROL-BATCH-A"
+      stories:
+        - story_id: "CR138-S01-shared-contracts-authorization-audit"
+          title: "Shared contracts, authorization, and audit boundary"
+          status: "lld-ready-for-review"
+          depends_on: []
+          merge_owner: "CR138-S01-shared-contracts-authorization-audit"
+    - wave: "CR138-W2-CONTROL-SHELL"
+      parallel_lld: true
+      parallel_dev: true
+      cp5_batch: "CR138-RUNNER-QMT-OPERATIONAL-CONTROL-BATCH-A"
+      stories:
+        - story_id: "CR138-S02-runner-plan-preflight-control"
+          title: "Runner run plan, preflight, and command control"
+          status: "lld-ready-for-review"
+          depends_on:
+            - "CR138-S01-shared-contracts-authorization-audit"
+          coverage_notes:
+            - "Absorbs CR137 offline batch run recommendation as local RunPlanBatch / BatchPreflightResult."
+          merge_owner: "CR138-S02-runner-plan-preflight-control"
+        - story_id: "CR138-S05-gateway-lifecycle-health-rest-contract"
+          title: "Gateway lifecycle, health, capabilities, REST contract, and change plan"
+          status: "lld-ready-for-review"
+          depends_on:
+            - "CR138-S01-shared-contracts-authorization-audit"
+          merge_owner: "CR138-S05-gateway-lifecycle-health-rest-contract"
+    - wave: "CR138-W3-OPERATIONAL-FLOWS"
+      parallel_lld: true
+      parallel_dev: "limited-by-qmt_gateway_service.py"
+      cp5_batch: "CR138-RUNNER-QMT-OPERATIONAL-CONTROL-BATCH-A"
+      stories:
+        - story_id: "CR138-S03-runner-event-signal-rebalance-tracking"
+          title: "Runner event, signal, rebalance, run tracking, and ops summary"
+          status: "lld-ready-for-review"
+          depends_on:
+            - "CR138-S01-shared-contracts-authorization-audit"
+            - "CR138-S02-runner-plan-preflight-control"
+          coverage_notes:
+            - "Includes local BatchOpsSummary for RunPlanBatch / registry refs; absorbs CR137 offline batch run reporting need."
+          merge_owner: "CR138-S03-runner-event-signal-rebalance-tracking"
+        - story_id: "CR138-S06-gateway-query-calendar-commission-pnl"
+          title: "Gateway query service for calendar, commission, and PnL"
+          status: "lld-ready-for-review"
+          depends_on:
+            - "CR138-S01-shared-contracts-authorization-audit"
+            - "CR138-S05-gateway-lifecycle-health-rest-contract"
+          merge_owner: "CR138-S06-gateway-query-calendar-commission-pnl"
+        - story_id: "CR138-S07-gateway-subscription-order-report-recovery"
+          title: "Gateway subscription, order report, and recovery boundary"
+          status: "lld-ready-for-review"
+          depends_on:
+            - "CR138-S01-shared-contracts-authorization-audit"
+            - "CR138-S05-gateway-lifecycle-health-rest-contract"
+          merge_owner: "CR138-S07-gateway-subscription-order-report-recovery"
+    - wave: "CR138-W4-REVIEW-DOCS-GUARDRAILS"
+      parallel_lld: true
+      parallel_dev: true
+      cp5_batch: "CR138-RUNNER-QMT-OPERATIONAL-CONTROL-BATCH-A"
+      stories:
+        - story_id: "CR138-S04-runner-evidence-review-incident-lifecycle"
+          title: "Runner evidence, review, incident, and lifecycle change"
+          status: "lld-ready-for-review"
+          depends_on:
+            - "CR138-S02-runner-plan-preflight-control"
+            - "CR138-S03-runner-event-signal-rebalance-tracking"
+            - "CR138-S06-gateway-query-calendar-commission-pnl"
+            - "CR138-S07-gateway-subscription-order-report-recovery"
+          merge_owner: "CR138-S04-runner-evidence-review-incident-lifecycle"
+        - story_id: "CR138-S08-docs-fixtures-cp7-authorization-runbook"
+          title: "Docs, fixtures, CP7 guardrails, and authorization runbook"
+          status: "lld-ready-for-review"
+          depends_on:
+            - "CR138-S01-shared-contracts-authorization-audit"
+            - "CR138-S02-runner-plan-preflight-control"
+            - "CR138-S03-runner-event-signal-rebalance-tracking"
+            - "CR138-S04-runner-evidence-review-incident-lifecycle"
+            - "CR138-S05-gateway-lifecycle-health-rest-contract"
+            - "CR138-S06-gateway-query-calendar-commission-pnl"
+            - "CR138-S07-gateway-subscription-order-report-recovery"
+          merge_owner: "CR138-S08-docs-fixtures-cp7-authorization-runbook"
+  dependency_graph:
+    nodes:
+      - "CR138-S01-shared-contracts-authorization-audit"
+      - "CR138-S02-runner-plan-preflight-control"
+      - "CR138-S03-runner-event-signal-rebalance-tracking"
+      - "CR138-S04-runner-evidence-review-incident-lifecycle"
+      - "CR138-S05-gateway-lifecycle-health-rest-contract"
+      - "CR138-S06-gateway-query-calendar-commission-pnl"
+      - "CR138-S07-gateway-subscription-order-report-recovery"
+      - "CR138-S08-docs-fixtures-cp7-authorization-runbook"
+    edges:
+      - ["CR138-S01-shared-contracts-authorization-audit", "CR138-S02-runner-plan-preflight-control"]
+      - ["CR138-S01-shared-contracts-authorization-audit", "CR138-S05-gateway-lifecycle-health-rest-contract"]
+      - ["CR138-S02-runner-plan-preflight-control", "CR138-S03-runner-event-signal-rebalance-tracking"]
+      - ["CR138-S05-gateway-lifecycle-health-rest-contract", "CR138-S06-gateway-query-calendar-commission-pnl"]
+      - ["CR138-S05-gateway-lifecycle-health-rest-contract", "CR138-S07-gateway-subscription-order-report-recovery"]
+      - ["CR138-S03-runner-event-signal-rebalance-tracking", "CR138-S04-runner-evidence-review-incident-lifecycle"]
+      - ["CR138-S06-gateway-query-calendar-commission-pnl", "CR138-S04-runner-evidence-review-incident-lifecycle"]
+      - ["CR138-S07-gateway-subscription-order-report-recovery", "CR138-S04-runner-evidence-review-incident-lifecycle"]
+      - ["CR138-S01-shared-contracts-authorization-audit", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+      - ["CR138-S02-runner-plan-preflight-control", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+      - ["CR138-S03-runner-event-signal-rebalance-tracking", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+      - ["CR138-S04-runner-evidence-review-incident-lifecycle", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+      - ["CR138-S05-gateway-lifecycle-health-rest-contract", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+      - ["CR138-S06-gateway-query-calendar-commission-pnl", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+      - ["CR138-S07-gateway-subscription-order-report-recovery", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+  dag_validation_result:
+    checked_by: "host-orchestrator using story-planning / wave-planner / dag-validator rules"
+    checked_at: "2026-06-24T16:40:00+08:00"
+    cycles: []
+    invalid_references: []
+    parallel_internal_dependencies: 0
+    conclusion: "PASS"
+    note: "CR138 增量 DAG 从 W1 shared contracts 单向流向 Runner / Gateway control shell、operational flows 和 docs / guardrails。LLD 可按 max_parallel_lld=3 分轮起草；开发仍受 CP5、文件所有权、runtime_authorization 和 no-real-operation 边界约束。"
 
 cr051_story_planning:
   change_id: "CR-051"

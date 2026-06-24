@@ -4,7 +4,7 @@ source_cr: "CR-098"
 source_checkpoint: "process/checkpoints/CP8-CR098-DELIVERY-READINESS.md"
 status: "active-follow-up-tracking"
 created_at: "2026-06-19T12:31:24+08:00"
-updated_at: "2026-06-20T10:45:00+08:00"
+updated_at: "2026-06-24T18:58:00+08:00"
 owner: "host-orchestrator"
 ---
 
@@ -42,14 +42,14 @@ follow_up_items:
       - CR097-FU-01
     title: Non-empty / trading-day readonly retest
     kind: runtime-authorization
-    lifecycle_status: candidate
+    lifecycle_status: superseded
     readiness_status: n/a
-    gate_status: not_started
+    gate_status: closed
     gate_profile: runtime
     formal_cr_path: ""
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
     historical_baseline_status: retained
-    next_action: wait_for_user_selection
+    next_action: superseded_by_CR104_nonzero_readonly_retest; no separate follow-up remains
   - id: FU-CR091-005
     legacy_ids:
       - CR091-FU-05

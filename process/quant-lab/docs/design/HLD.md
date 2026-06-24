@@ -1,7 +1,7 @@
 ---
 status: "current-index"
-version: "1.3"
-change: "CR-131"
+version: "1.4"
+change: "CR-138"
 legacy_sources:
   - "process/HLD.md"
   - "process/HLD-DATA-LAKE.md"
@@ -10,6 +10,7 @@ current_change_sources:
   - "process/archive/design-cr-docs/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md"
   - "process/archive/design-cr-docs/RUNNER-CORE-MVP-DESIGN-CR126.md"
   - "process/docs/features/strategy-runner-core/DESIGN.md"
+  - "process/docs/design/HLD-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md"
 ---
 
 # HLD Current Index
@@ -22,6 +23,7 @@ current_change_sources:
 | 1.1 | 2026-06-13 | meta-po | 按 CR-046 增补双目标策略交付框架 HLD 入口 |
 | 1.2 | 2026-06-23 | host-orchestrator | CR130 收口 runner architecture authority：CR046 降级为 legacy cross-target framework，offline runner implementation authority 指向 `strategy-runner-core`。 |
 | 1.3 | 2026-06-23 | host-orchestrator | CR131 将 CR 命名 HLD/设计文档移出默认 design surface，历史入口统一指向 `process/archive/design-cr-docs/`。 |
+| 1.4 | 2026-06-24 | host-orchestrator | CR138 按功能域新增 Runner / QMT Gateway Operational Control Plane HLD 入口，避免长期 HLD 以 CR 命名；该 HLD 作为 FEAT-11 / FEAT-12 solution-design 基线。 |
 
 ## 定位
 
@@ -35,6 +37,7 @@ current_change_sources:
 | `process/HLD-DATA-LAKE.md` | 生产级市场数据湖、P0/P1 dataset、catalog current truth、publish gate、DuckDB readonly candidate、复权双视图、production current truth closure | 数据生产 / 数据事实源 HLD legacy source |
 | `process/HLD-QMT-TRADING.md` | QMT 交易接入、OMS、adapter、broker lake、stage gate、runbook、reconciliation、kill switch、QMT C/S bridge 交易治理侧 | QMT 交易治理 HLD legacy source |
 | `process/archive/design-cr-docs/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md` | QMT terminal + MiniQMT runner 双目标策略交付框架、策略包契约、验证框架、MiniQMT runner 安装设计和后续 CR 门禁 | archived legacy cross-target framework；不再作为 offline runner implementation authority |
+| `process/docs/design/HLD-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md` | Runner Control Plane 与 QMT Gateway Service Layer 的运营控制面 HLD，覆盖 FEAT-11 / FEAT-12、REST-only Gateway P0、按需 runtime 授权、交易日历、佣金和收益查询能力 | 当前 CR138 solution-design 基线；CP3 approved，可作为 CP4 Story planning 输入 |
 
 ## Runner Architecture Authority
 
@@ -44,6 +47,7 @@ current_change_sources:
 | Source design / implementation intake | `process/archive/design-cr-docs/RUNNER-CORE-MVP-DESIGN-CR126.md` | CR126/CR128 runner core MVP 的设计输入；用于追溯实现收口，不替代长期 Feature authority。 |
 | Legacy cross-target HLD | `process/archive/design-cr-docs/HLD-CR046-QMT-MINIQMT-DUAL-TARGET-FRAMEWORK.md` | 保留 CR046 QMT terminal + MiniQMT 双目标策略交付历史框架；不得直接恢复 offline runner implementation。 |
 | Runtime / NAS / provider / trading gates | 后续独立 CR | 真实 QMT/MiniQMT runtime、NAS package exchange、provider/lake/catalog 和 trading write 均需独立授权门禁。 |
+| Runner / QMT Operational Control Plane | `process/docs/design/HLD-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md` | FEAT-11 Runner Control Plane 与 FEAT-12 QMT Gateway Service Layer 的长期 HLD 基线；CP3 approve 不自动授权 runtime，后续验证按需授权。 |
 
 ## 当前架构摘要
 
@@ -56,6 +60,8 @@ current_change_sources:
 | 交易治理 | FEAT-06 | CR-015/016 已有 shadow / dry-run / mock / runbook 边界，后续 CR-021..024 才可能逐级解禁 |
 | 安全授权 | FEAT-07 | 所有真实操作必须有独立授权；文档、健康检查、Story verified 不构成授权 |
 | 双目标策略交付 | FEAT-09 | CR046 保留为 legacy cross-target framework；offline runner implementation authority 已转移到 `strategy-runner-core`；真实 runtime/NAS/QMT 仍需独立门禁 |
+| Runner 运营控制面 | FEAT-11 | 日常 run plan、preflight、事件 / 信号、再平衡、run tracking、证据、复盘、incident、策略生命周期；不直连 QMT / XtQuant |
+| QMT Gateway 服务层 | FEAT-12 | REST-only P0，覆盖 lifecycle、health、capabilities、reference/account query、market subscription management、order command gate、execution report、recovery、audit、change plan；账户级查询和 runtime 动作按需授权 |
 
 ## 消费规则
 

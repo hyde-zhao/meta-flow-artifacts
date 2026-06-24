@@ -1,15 +1,15 @@
 ---
-version: "3.3"
-last_updated: "2026-06-14T13:42:40+08:00"
-status: "cr053-closed-current-delivery"
+version: "3.4"
+last_updated: "2026-06-24T16:45:00+08:00"
+status: "cr138-ready-for-cp5-review"
 confirmed: true
 confirmed_by: "user"
 confirmed_at: "2026-05-14"
 source_hld: "process/HLD.md"
 companion_hld: "process/HLD-DATA-LAKE.md"
 source_adr: "process/ARCHITECTURE-DECISION.md"
-story_count: 152
-wave_count: 70
+story_count: 160
+wave_count: 74
 baseline_story_count: 13
 cr004_story_count: 5
 cr005_story_count: 6
@@ -31,7 +31,8 @@ cr020_story_count: 6
 cr046_story_count: 7
 cr051_story_count: 6
 cr053_story_count: 5
-active_change: "CR-053"
+cr138_story_count: 8
+active_change: "CR-138"
 secondary_change: "CR-020/CR-030 legacy"
 cr004_status: "draft-pending-cp4"
 cr004_confirmed: false
@@ -75,6 +76,7 @@ cr046_status: "story-plan-cp4-pass-pending-lld"
 cr046_lld_batch: "CR046-DUAL-TARGET-FRAMEWORK-BATCH-A"
 cr051_status: "closed-current-delivery"
 cr053_status: "closed-current-delivery"
+cr138_status: "story-plan-cp4-pass-pending-lld"
 cr051_lld_batch: "CR051-STRATEGY-RESEARCH-LIFECYCLE-BATCH-A"
 cr020_status: "fixture-static-verified-pending-manual-windows-qmt-validation"
 cr015_lld_batches:
@@ -97,6 +99,8 @@ cr051_lld_batches:
   - "CR051-STRATEGY-RESEARCH-LIFECYCLE-BATCH-A"
 cr053_lld_batches:
   - "CR053-MIGRATION-INVENTORY-BATCH-A"
+cr138_lld_batches:
+  - "CR138-RUNNER-QMT-OPERATIONAL-CONTROL-BATCH-A"
 created_by: "meta-se"
 ---
 
@@ -142,6 +146,40 @@ created_by: "meta-se"
 | 3.1 | 2026-06-14 | meta-qa / host-orchestrator | 用户明确授权使用 meta-qa 子 Agent 推进 CR053 CP7；qa-cao 完成静态验证，生成 verification / test / review / fixes 质量产物、CP7 context 和 CP7 自动检查，S01-S05 均收敛为 `verified`；下一步进入 CP8 release-readiness / close gate，仍不授权真实迁移、NAS、lake、git push、runtime 或凭据读取 |
 | 3.2 | 2026-06-14 | meta-qa / host-orchestrator | 用户明确授权使用 meta-qa 子 Agent 推进 CR053 CP8；qa-jin 完成 release-readiness，生成 CR053 专属 release context / release docs / follow-up tracking / CP8 自动预检 / 人工检查点 / human gate message；当前等待用户 approve / 修改 / reject，approve 只关闭静态 dry-run 交付，不授权真实迁移、NAS、lake、git push、runtime、凭据读取或自动启动 CR058/CR060+ |
 | 3.3 | 2026-06-14 | host-orchestrator | 用户回复“同意”批准 CR053 CP8；CR053 静态 migration inventory / dry-run 交付关闭为 `closed-current-delivery`，S01-S05 保持 verified；CR058 / CR060+ / data lake migration / trading runtime 仅为后续候选，不自动启动，也不授权真实迁移、NAS、lake、git remote、runtime 或凭据读取 |
+| 3.4 | 2026-06-24 | host-orchestrator | 按 CR138 CP3 approved 口径追加 CR138-S01..S08 与 4 个增量 Wave：共享合同 / 授权 / 审计、Runner Control Plane、QMT Gateway REST-only Service Layer、查询服务、订阅 / 回报 / 恢复、复盘 / 事件 / 变更生命周期、文档 / fixture / CP7 授权 runbook；CP4 自动预检 PASS；本轮只做 Story Plan / CP4，不生成 LLD、不实现、不启动 runtime、不读取凭据、不调用 QMT / MiniQMT / XtQuant、不访问账户 / 行情 / 订单、不 submit/cancel、不 simulation/live、不访问 NAS、不 provider/lake/catalog、不 Git remote 写入 |
+
+## CR-138：Runner / QMT Gateway Operational Control Plane
+
+| 对象 | 状态 | 证据 | 下一步 |
+|---|---|---|---|
+| Feature Design Matrix | ready-for-cp5-review | `process/docs/design/FEATURE-DESIGN-MATRIX.md` | FEAT-11 / FEAT-12 下游 Story 均要求 full-lld。 |
+| Feature Design | generated | `process/docs/features/runner-control-plane/*`、`process/docs/features/qmt-gateway-service-layer/*` | 作为 CP5 LLD 输入，不构成实现授权。 |
+| Story Backlog | cp4-auto-pass-pending-lld | `process/STORY-BACKLOG-CR138.md` | 8 个 Story / 4 个 Wave / 1 个 LLD batch 已规划。 |
+| Development Plan | ready-for-cp5-review | `process/DEVELOPMENT-PLAN-CR138.yaml` | CP5 前不得实现；CP5 后按 merge owner 和 Wave 依赖执行。 |
+| CP4 自动预检 | PASS | `process/checks/CP4-CR138-STORY-DAG-PARALLEL-SAFETY.md` | 阻断项 0；进入全量 LLD 设计证据准备。 |
+| 安全边界 | no-runtime-authorization | CR138 正式 CR / CP4 check / Development Plan | 不授权 runtime、QMT、MiniQMT、XtQuant、凭据、账户 / 行情 / 订单读取、submit/cancel、simulation/live、NAS、provider/lake/catalog 或 Git remote 写入。 |
+
+### CR138 Story Plan 队列
+
+| Story ID | 标题 | Wave | 状态 | LLD 策略 | Dev Gate | 阻塞 |
+|---|---|---|---|---|---|---|
+| CR138-S01-shared-contracts-authorization-audit | Shared contracts, authorization, and audit boundary | CR138-W1-SHARED-CONTRACTS | lld-ready-for-review | full-lld | cp5-required | CP5 前不得实现；不读取凭据、不导入 xtquant。 |
+| CR138-S02-runner-plan-preflight-control | Runner run plan, preflight, and command control | CR138-W2-CONTROL-SHELL | lld-ready-for-review | full-lld | cp5-required | 依赖 S01；包含本地 RunPlanBatch / batch preflight；Runner 不直接调用 QMT / MiniQMT / XtQuant。 |
+| CR138-S05-gateway-lifecycle-health-rest-contract | Gateway lifecycle, health, capabilities, REST contract, and change plan | CR138-W2-CONTROL-SHELL | lld-ready-for-review | full-lld | cp5-required | 依赖 S01；不启动 gateway、不绑定端口、不连接 QMT；ChangePlan 仅 dry-run。 |
+| CR138-S03-runner-event-signal-rebalance-tracking | Runner event, signal, rebalance, run tracking, and ops summary | CR138-W3-OPERATIONAL-FLOWS | lld-ready-for-review | full-lld | cp5-required | 依赖 S01/S02；再平衡不提交真实订单；CLI / batch summary 不触发 runtime。 |
+| CR138-S06-gateway-query-calendar-commission-pnl | Gateway query service for calendar, commission, and PnL | CR138-W3-OPERATIONAL-FLOWS | lld-ready-for-review | full-lld | cp5-required | 依赖 S01/S05；账户级查询需后续 runtime_authorization。 |
+| CR138-S07-gateway-subscription-order-report-recovery | Gateway subscription, order report, and recovery boundary | CR138-W3-OPERATIONAL-FLOWS | lld-ready-for-review | full-lld | cp5-required | 依赖 S01/S05；market subscription / submit / cancel 缺授权 hard-rejected。 |
+| CR138-S04-runner-evidence-review-incident-lifecycle | Runner evidence, review, incident, and lifecycle change | CR138-W4-REVIEW-DOCS-GUARDRAILS | lld-ready-for-review | full-lld | cp5-required | 依赖 S02/S03/S06/S07；不得复制 raw log 或敏感证据。 |
+| CR138-S08-docs-fixtures-cp7-authorization-runbook | Docs, fixtures, CP7 guardrails, and authorization runbook | CR138-W4-REVIEW-DOCS-GUARDRAILS | lld-ready-for-review | full-lld | cp5-required | 依赖 S01..S07；文档不得构成 runtime 授权。 |
+
+### CR138 Wave 进度
+
+| Wave | 总数 | lld-ready | lld-review | dev-ready | in-dev | verified | blocked |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| CR138-W1-SHARED-CONTRACTS | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
+| CR138-W2-CONTROL-SHELL | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
+| CR138-W3-OPERATIONAL-FLOWS | 3 | 3 | 0 | 0 | 0 | 0 | 0 |
+| CR138-W4-REVIEW-DOCS-GUARDRAILS | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
 
 ## Story 列表
 

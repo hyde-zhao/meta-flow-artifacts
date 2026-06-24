@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "story_id": "CR138-BATCH-S01-S08",
+  "cr_id": "CR-138",
+  "stage": "CP7",
+  "return_ref": "process/returns/CR138-BATCH.CP7.return.json",
+  "changed_files": [
+    {
+      "path": "process/docs/quality/VERIFICATION-REPORT-CR138.md",
+      "change_type": "added"
+    },
+    {
+      "path": "process/checks/CP7-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-VERIFICATION-DONE.md",
+      "change_type": "added"
+    },
+    {
+      "path": "process/STORY-STATUS-CR138.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/STORY-STATUS.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/STATE.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/state/STATE.current.json",
+      "change_type": "modified"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab",
+      "result": "pass"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_cr138_*.py tests/test_cr132_process_artifact_hygiene.py",
+      "result": "pass",
+      "summary": "48 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_cr019_qmt_gateway_lifecycle.py tests/test_cr020_query_positions_readonly.py tests/test_cr019_qmt_gateway_run_gates.py tests/test_cr137_runner_run_registry.py",
+      "result": "pass",
+      "summary": "35 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_process_artifact_hygiene.py --json",
+      "result": "pass",
+      "summary": "unclassified=0"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root /home/hyde/workspace/quant-lab",
+      "result": "pass",
+      "summary": "State v2 Check: OK"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr138-pycompile uv run --python 3.11 python -m py_compile trading/runner_control_contracts.py trading/runner_control_plane.py trading/runner_control_cli.py trading/qmt_gateway_contracts.py trading/qmt_gateway_config.py trading/qmt_gateway_service.py trading/qmt_gateway_gates.py",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  ],
+  "tests": [
+    "tests/test_cr138_shared_contracts_authorization_audit.py",
+    "tests/test_cr138_runner_plan_preflight_control.py",
+    "tests/test_cr138_runner_event_signal_rebalance_tracking.py",
+    "tests/test_cr138_runner_evidence_review_incident_lifecycle.py",
+    "tests/test_cr138_gateway_lifecycle_health_rest_contract.py",
+    "tests/test_cr138_gateway_query_calendar_commission_pnl.py",
+    "tests/test_cr138_gateway_subscription_order_report_recovery.py",
+    "tests/test_cr138_docs_fixtures_authorization_runbook.py",
+    "tests/test_cr132_process_artifact_hygiene.py",
+    "tests/test_cr019_qmt_gateway_lifecycle.py",
+    "tests/test_cr020_query_positions_readonly.py",
+    "tests/test_cr019_qmt_gateway_run_gates.py",
+    "tests/test_cr137_runner_run_registry.py"
+  ],
+  "artifacts": [
+    "process/docs/quality/VERIFICATION-REPORT-CR138.md",
+    "process/checks/CP7-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-VERIFICATION-DONE.md",
+    "process/docs/quality/TEST-MATRIX-CR138.md",
+    "process/checks/CP6-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-CODING-DONE.md"
+  ],
+  "risks": [
+    "RISK-CR138-RUNTIME-NOT-VERIFIED",
+    "RISK-CR138-RUNTIME-MISREAD"
+  ],
+  "waivers": [],
+  "design_delta_ref": null
+}

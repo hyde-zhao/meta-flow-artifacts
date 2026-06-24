@@ -1,15 +1,16 @@
 ---
 status: confirmed
-version: "1.15"
+version: "1.16"
 confirmed_by: "user"
-confirmed_at: "2026-06-13T22:03:22+08:00"
+confirmed_at: "2026-06-24T13:20:00+08:00"
+last_confirmed_version: "1.16"
 engagement_mode: production
 scenario_subject_type: target-artifact
-scenario_subject_id: "local-backtest-production-data-lake-and-qmt-trading-layer"
+scenario_subject_id: "local-backtest-production-data-lake-runner-and-qmt-gateway"
 target_artifact_type: tool
 governance_mode: review-gated
 review_policy: strict
-total_use_cases: 32
+total_use_cases: 50
 ---
 
 # 使用场景
@@ -34,6 +35,7 @@ total_use_cases: 32
 | 1.13 | 2026-06-01 | meta-po | 用户批准 CR-025 CP2，并要求 CP3/HLD 中由 meta-se 充分分析本地 Backtrader 项目 `/home/hyde/download/backtrader`，记录可借鉴、可适配、可移植和禁止移植模块 | CR-025 场景基线确认；保留 UC-19 编号，新增 HLD 输入与验证场景，不授权实现或源码级移植 |
 | 1.14 | 2026-06-03 | meta-po | 用户授权进入 CR-030 HLD，回填 CR-030 多因子研究框架借鉴与研究闭环标准化场景，覆盖外部项目静态借鉴、项目自有多因子契约、因子面板 / 标签窗口、单因子评价、多因子组合、实验追踪和策略准入包边界 | CR-030 原文档增量更新；保留 UC-01 至 UC-19 旧基线，新增 UC-20 至 UC-27；CP2 通过仅授权 HLD，不授权实现、依赖变更、外部项目运行、源码迁移、provider/lake/publish、QMT/simulation/live 或凭据读取 |
 | 1.15 | 2026-06-13 | meta-po | 按 CR-046 增量补齐 QMT / MiniQMT 双目标策略交付框架场景，覆盖策略核心合同、QMT 终端策略包、MiniQMT runner 安装设计、验证框架、后续策略交付门禁和研究框架反向约束 | CR-046 原文档增量更新；保留 UC-01 至 UC-27 旧基线，新增 UC-28 至 UC-32；用户已于 2026-06-13T22:03:22+08:00 通过 CP2；不授权具体策略交付、QMT 运行验证、MiniQMT 连接、submit/cancel、simulation/live、provider/lake/publish 或凭据读取 |
+| 1.16 | 2026-06-24 | host-orchestrator | 按 CR-138 增量补齐 Runner 与 QMT Gateway 运营使用场景，并按用户反馈检查 UC-01 至 UC-50 的合并 / 刷新关系；覆盖多因子日常运行、盘前确认、执行跟踪、事件/信号接入、组合再平衡、盘中运维、日志审计、盘后复盘、异常恢复、策略调整/发布/暂停/回滚，以及 Gateway 启动、健康、查询、订阅、下单撤单回报、故障恢复、审计和配置变更 | CR-138 原文档增量更新；保留 UC-01 至 UC-32 旧基线和编号，不破坏历史 CP2 追溯；新增 UC-33 至 UC-50，并新增“CR-138 场景归一化与合并审查”标明旧场景如何被 Runner / Gateway 运营视角吸收、约束或延后；用户已于 2026-06-24T13:20:00+08:00 回复 `approve` 通过 CP2；不授权 runtime、NAS、QMT、MiniQMT、XtQuant、credentials、provider/lake/catalog、submit/cancel、simulation/live 或 Git remote write |
 
 ## 用户画像（Personas）
 
@@ -47,6 +49,7 @@ total_use_cases: 32
 | P-06 | 研究口径与交易价格审计者 | 负责审查研究使用的前复权 / 后复权 / 收益率口径和交易执行使用的原始价格口径是否隔离。 | 让研究结果、报告声明、QMT order intent、成交和对账都能解释各自价格来源，避免把 qfq/hfq 复权价误当真实交易价格。 | 高级 |
 | P-07 | 阶段六多因子模拟盘准入负责人 | 负责把 production current truth、因子库、组合构建、dry-run、QMT bridge 和 admission package 收敛为可审查准入链路。 | 在不误触真实 QMT、不绕过 per-run 授权的前提下，判断阶段六多因子策略是否可申请模拟盘。 | 高级 |
 | P-08 | 研究执行后端评估者 / 回测-模拟一致性负责人 | 负责评估轻量回测主路径、Backtrader optional semantic reference 和后续 QMT simulation 之间的语义差异、接口边界和回归风险。 | 在保持轻量主路径稳定的前提下，将研究输出收敛为可审计 target portfolio / order intent，并把 Backtrader 作为显式选择的执行真实性对照，而不是默认框架或真实交易通道。 | 高级 |
+| P-09 | Runner / QMT Gateway 运营负责人 | 负责把已验证的研究策略组织成日常运行计划，观察 Runner、订单、事件、日志、QMT Gateway 状态和异常恢复，并协调策略发布、暂停、回滚与人工接管。 | 让策略从“离线 bundle / registry 可审计”升级为“运营上知道怎么运行、怎么看、怎么停、怎么恢复”，同时不把 use-case baseline 误读为真实运行授权。 | 高级 |
 
 ## 成功指标（Success Metrics）
 
@@ -101,6 +104,12 @@ total_use_cases: 32
 | SM-47 | 多因子组合构建边界清晰 | 检查 HLD 的 combiner / portfolio plan | 多因子组合必须说明标准化、winsorization、中性化、正交化、权重学习 / 规则权重、约束、benchmark、成本、容量、调仓频率和冻结策略；P0 不引入未批准外部 optimizer |
 | SM-48 | 实验追踪和报告 catalog 可审计 | 检查 `ExperimentManifest` 与 report catalog 设计 | 每个研究 run 必须记录配置哈希、输入 dataset/release、因子版本、标签窗口、评估窗口、成本配置、随机种子、代码版本、报告路径和 allowed / blocked claims，支持复跑与差异解释 |
 | SM-49 | 策略准入包不等于交易授权 | 检查 `StrategyAdmissionPackage`、Stage6 gate 和 QMT handoff | CR-030 只能输出可审计准入证据、blocked reasons 和 `order_intent_draft_v1` 草稿；`qmt_api_call`、`real_order`、`account_query`、`provider_fetch`、`lake_write`、`catalog_publish`、`credential_read` 均为 0，任何 QMT/simulation/live 仍由 CR-020..CR-024 单独授权 |
+| SM-50 | Runner 运营场景完整性 | 检查 CR138 use-case baseline | 至少覆盖多因子日常调仓、盘前确认、执行跟踪、事件型策略、信号接入、组合再平衡、盘中总览、日志审计、盘后复盘、异常恢复、策略调整、运行计划修订、暂停/下线/回滚 13 类 Runner 场景。 |
+| SM-51 | QMT Gateway 运营场景完整性 | 检查 CR138 use-case baseline | 至少覆盖启动、健康/capabilities、账户/持仓/订单/成交查询、行情订阅与缓存、下单撤单、交易事件流、连接异常恢复、审计日志、升级/回滚/配置变更 9 类 Gateway 场景。 |
+| SM-52 | Runner / Gateway 边界清晰 | 检查 UC-33 至 UC-50 和 CR138 Decision Brief | Runner 只负责策略运行控制、计划、事件、订单意图、运维视图和复盘；Gateway 只负责安全稳定触达 QMT / MiniQMT / XtQuant、会话、查询、订阅、订单适配、回报和审计。 |
+| SM-53 | 外部研究报告充分吸收 | 检查 CR138 context、CR 和 UC draft | lite-qmt-executor 的状态机/WAL/恢复、BulletTrade 的 Context/EventBus/OrderQueue/Risk/QMT Guard、EasyXT 的多因子和策略样例、quant-qmt-proxy 的 REST/gRPC/WS 协议分层、qmt-bridge 的生命周期/串行化/调度隔离/WS 广播均映射到场景或后续验证项。 |
+| SM-54 | 运行授权不越界 | 检查 CR138 过程证据和安全计数 | 本 CR 不启动 runtime、不连接 QMT/MiniQMT/XtQuant、不读取凭据、不查询真实账户/资金/持仓/委托/成交、不 submit/cancel、不 simulation/live、不访问 NAS、不执行 provider/lake/catalog。 |
+| SM-55 | 后续拆分输入可消费 | 检查 CP2 通过后的下游 handoff | CP2 approve 后，meta-se 可基于 UC-33..UC-50 进入功能模型和 HLD；不得继续按 CR133..CR137 的离线小 slice 模式直接实现 online runtime。 |
 
 ## 明确排除（Out of Scope）
 
@@ -149,6 +158,11 @@ total_use_cases: 32
 - CR-030 不授权 provider fetch、真实联网补数、真实 lake write、catalog publish、broker lake write、报告覆盖、凭据读取、QMT / MiniQMT / XtQuant、simulation、live_readonly、small_live、scale_up、发单、撤单或账户查询。
 - CR-030 不把因子评价、回测报告、组合方案或 `StrategyAdmissionPackage` 自动解释为可交易、QMT-ready、simulation-ready 或 production truth；真实执行交接必须由 Stage6 gate 和 CR-020..CR-024 单独控制。
 - CR-030 不从零发明 schema；多因子 schema 和校验必须以本项目已有 `research_input_v1`、实验 17-21 `FactorDefinition`、CR-011 factor panel audit、label window gate 与 Stage6 admission gate 为基线，再用外部项目 cross-check。
+- CR-138 不实现 Runner online runtime、QMT Gateway、OMS、风控、行情订阅、订单状态机、审计存储或 UI；本轮只冻结运营 use-case baseline。
+- CR-138 不读取 `.env`、token、secret、账号、账户、资金、持仓、委托、成交、session、cookie、原始 QMT 日志或任何未脱敏生产数据。
+- CR-138 不启动、连接、安装或运行 QMT / MiniQMT / XtQuant / gateway runtime，不绑定端口，不访问 Windows QMT 主机，不执行 smoke、collector、query_positions 或 real readonly validation。
+- CR-138 不授权 submit/cancel、buy/sell、simulation/live、账户查询、撤单、订单回报订阅或任何真实交易动作；这些只能由后续 runtime_authorization CR 逐项授权。
+- CR-138 不 clone、install 或运行外部 GitHub 项目；两份已提供源码深度研究报告作为本轮静态参考输入。若后续需要源码级验证，必须另起 Spike / architecture CR。
 
 ## 边界说明
 
@@ -889,6 +903,447 @@ total_use_cases: 32
 
 ---
 
+### UC-33：Runner 多因子策略日常调仓运行
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-09 Runner / QMT Gateway 运营负责人；P-07 阶段六多因子模拟盘准入负责人 |
+| **触发条件** | 到达多因子策略的日常或定期调仓窗口，需要从研究输出、数据状态和持仓状态生成当天运行计划。 |
+| **输入** | 策略版本、因子配置、股票池、数据 release / lineage、当前组合快照、风险规则、调仓日历、上次 run registry / bundle 摘要、QMT Gateway capabilities 摘要。 |
+| **处理逻辑** | Given 用户准备运行多因子策略, When Runner 读取策略任务和输入快照, Then 生成可审查的 `StrategyRun` / `RunPlan`、目标组合、订单意图草稿、blocked claims、风险检查摘要和证据引用；不得直接提交真实订单。 |
+| **输出/结果** | 调仓计划、目标组合、订单意图草稿、风险检查结果、运行状态、证据索引、是否可进入 shadow / dry-run / simulation gate 的建议。 |
+| **前置条件** | 研究准入包、数据 release、策略版本和风险规则已冻结；真实运行仍需后续 runtime gate。 |
+| **排除情况** | 不在 CR138 中实现调仓算法、读真实持仓、调用 QMT、submit/cancel 或 simulation/live。 |
+
+**处理流程（文字描述）：**
+1. 读取策略版本、调仓日历、数据 release 和上次运行摘要。
+2. 校验输入数据、策略参数、风险规则和 Gateway capabilities 是否满足运行前提。
+3. 生成目标组合和订单意图草稿，标注 blocked / warning / ready。
+4. 写入可审查的运行计划和证据引用，等待人工或后续 gate 决策。
+
+---
+
+### UC-34：Runner 多因子盘前确认
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-09 Runner / QMT Gateway 运营负责人；P-05 QMT 交易接入与运行负责人 |
+| **触发条件** | 交易日前或开盘前，用户需要确认今天是否允许策略进入 shadow / dry-run / simulation / blocked 状态。 |
+| **输入** | 调仓计划、QMT Gateway health / capabilities、交易日历、持仓摘要、可交易性摘要、kill switch 状态、未完成订单摘要、风险阈值。 |
+| **处理逻辑** | Given Runner 已生成 run plan, When 用户执行盘前确认, Then 系统展示数据新鲜度、Gateway 状态、风险检查、未完成单、策略版本差异和推荐运行模式；任一高风险缺口必须 hard block。 |
+| **输出/结果** | 盘前确认报告、运行模式建议、阻断原因、人工确认项、可回退目标。 |
+| **前置条件** | run plan 已生成，Gateway health 可被只读探测或由用户脱敏回填。 |
+| **排除情况** | 不因 health pass 自动授权真实账户查询或交易；不绕过 per-run authorization。 |
+
+**处理流程（文字描述）：**
+1. 汇总当天 run plan、Gateway health、风险规则和 kill switch。
+2. 标注可运行、降级、只读、blocked 四类状态。
+3. 输出人工需要确认的运行模式和风险接受项。
+4. 未获授权时停止在计划层，不触达真实 QMT。
+
+---
+
+### UC-35：Runner 多因子执行跟踪
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-09 Runner / QMT Gateway 运营负责人 |
+| **触发条件** | 后续 runtime gate 允许某个 run plan 进入执行或模拟执行后，用户需要跟踪订单意图到订单状态。 |
+| **输入** | run_id、strategy_id、order_intent_id、Gateway execution reports、订单状态机、部分成交/撤单/拒单事件、风险和 kill switch 事件。 |
+| **处理逻辑** | Given run plan 已被批准进入受控执行路径, When Gateway 返回订单或成交事件, Then Runner 将 order intent 映射为 submitted / partial / filled / cancelled / rejected / unknown 状态，并保持幂等和可追溯。 |
+| **输出/结果** | 执行跟踪视图、订单状态摘要、未完成单列表、异常项、人工接管建议、审计事件引用。 |
+| **前置条件** | 真实执行或模拟执行必须由后续 CR 授权；当前仅定义场景和状态期望。 |
+| **排除情况** | CR138 不提交订单，不订阅真实回报，不读取真实成交。 |
+
+**处理流程（文字描述）：**
+1. 以 `order_intent_id` 为核心关联 run plan 与 Gateway 回报。
+2. 对重复回报、乱序回报、部分成交和拒单执行幂等更新。
+3. 对 unknown / timeout / cancel reject 进入人工接管或恢复流程。
+4. 将最终状态回写到 run summary 和审计索引。
+
+---
+
+### UC-36：Runner 事件型策略触发运行
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-09 Runner / QMT Gateway 运营负责人；P-03 因子研究数据审计者 |
+| **触发条件** | 公告、财报、价格突破、风控预警或人工事件触发策略规则，需要生成建议动作或运行任务。 |
+| **输入** | 事件 payload、事件来源、`available_at`、去重键、策略规则、当前 run / order 状态、风险规则。 |
+| **处理逻辑** | Given 外部或人工事件到达, When Runner 校验事件可用时点和幂等键, Then 生成事件处理结果、建议动作或 blocked reason；事件不得绕过 run plan、风险和授权门禁。 |
+| **输出/结果** | `StrategyEvent`、事件处理日志、建议动作、关联 run_id、blocked / ready 状态。 |
+| **前置条件** | 事件 schema、来源可信度和可用时点规则已定义。 |
+| **排除情况** | 不使用不可审计事件做交易决策；不因事件触发自动真实下单。 |
+
+**处理流程（文字描述）：**
+1. 接收事件并校验来源、时间、schema 和幂等键。
+2. 匹配策略规则并检查是否存在未完成 run 或订单。
+3. 生成建议动作或 blocked reason。
+4. 将事件与 run / order / audit 关联，等待人工或后续 gate。
+
+---
+
+### UC-37：Runner 信号型策略接入执行
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-09 Runner / QMT Gateway 运营负责人 |
+| **触发条件** | 外部信号源、研究服务或人工工具向 Runner 投递买卖、调仓或观察信号。 |
+| **输入** | signal_id、strategy_id、symbol、signal_time、decision_time、信号 payload、幂等键、来源签名或来源标签、当前订单状态。 |
+| **处理逻辑** | Given 信号进入 Runner, When Runner 校验幂等、来源、未完成单和风险前置, Then 信号被转为任务、忽略为重复、合并为现有任务或 blocked；参考 lite-qmt-executor 的“接信号 -> 入队 -> 状态机”，但不直接下单。 |
+| **输出/结果** | 信号接收记录、去重结果、任务状态、order intent draft、blocked reason。 |
+| **前置条件** | 信号 schema、幂等规则和策略 ownership 已定义。 |
+| **排除情况** | 不允许未认证或不可追溯信号直接触发真实 QMT 操作。 |
+
+**处理流程（文字描述）：**
+1. 接收信号并快速返回接收状态。
+2. 按幂等键、strategy_id、symbol 和未完成订单检查重复或冲突。
+3. 生成任务状态机实例或 blocked reason。
+4. 等待运行计划和授权门禁，而不是直接进入 broker I/O。
+
+---
+
+### UC-38：Runner 组合再平衡运行
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-09 Runner / QMT Gateway 运营负责人；P-06 研究口径与交易价格审计者 |
+| **触发条件** | 目标组合与当前组合发生偏离，需要计算净买卖、现金占用、最小交易单位和未完成单处理。 |
+| **输入** | target portfolio、current portfolio、现金和持仓摘要、未完成订单、价格口径、交易成本、风险规则。 |
+| **处理逻辑** | Given 用户请求组合再平衡, When Runner 对比目标组合和当前组合, Then 生成净买卖计划、现金约束、最小交易单位处理、部分成交回补策略和风险 blocked reason；参考 BulletTrade 的 `Context/Portfolio` 与 `order_target_value` 思路。 |
+| **输出/结果** | 再平衡计划、订单意图草稿、现金和持仓差异、待人工确认项、风险摘要。 |
+| **前置条件** | 当前组合来源必须可信且已脱敏；真实账户查询需要后续授权。 |
+| **排除情况** | 不在本 CR 中读取真实账户持仓或发送订单。 |
+
+**处理流程（文字描述）：**
+1. 标准化目标组合和当前组合。
+2. 计算净买卖、现金、整手、价格口径和风险限制。
+3. 合并未完成订单影响，避免重复下单。
+4. 输出可审查的再平衡计划和 blocked claims。
+
+---
+
+### UC-39：Runner 盘中运行总览
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-09 Runner / QMT Gateway 运营负责人 |
+| **触发条件** | 盘中用户需要快速判断所有策略、run、事件、订单、队列和 Gateway 状态是否正常。 |
+| **输入** | active runs、task queue、event queue、order state summary、Gateway health、kill switch、告警、最近日志摘要。 |
+| **处理逻辑** | Given 多个策略或任务处于运行/待运行状态, When 用户打开运行总览, Then Runner 展示 ready/running/degraded/blocked/manual-review 状态、队列长度、异常摘要和下一步动作。 |
+| **输出/结果** | 盘中运行面板数据、告警列表、人工接管项、Gateway 状态摘要。 |
+| **前置条件** | Runner 状态、Gateway 状态和日志索引已可读。 |
+| **排除情况** | 总览只读；不提供绕过门禁的一键真实下单。 |
+
+**处理流程（文字描述）：**
+1. 汇总策略、run、事件、订单和 Gateway 状态。
+2. 计算降级、阻塞和人工接管项。
+3. 按策略和严重度排序展示。
+4. 将操作建议限制为确认、暂停、恢复、查看证据或启动后续授权 gate。
+
+---
+
+### UC-40：Runner 单次 run 日志和证据查询
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-09 Runner / QMT Gateway 运营负责人；P-03 因子研究数据审计者 |
+| **触发条件** | 用户需要解释某次 run 为什么生成某个目标组合、订单意图、blocked reason 或异常状态。 |
+| **输入** | run_id、strategy_id、order_intent_id、bundle path、registry entry、evidence index、结构化日志、审计事件。 |
+| **处理逻辑** | Given 用户查询 run 证据, When Runner 定位 registry / bundle / evidence / log, Then 返回脱敏摘要、输入引用、状态转换、风险检查、Gateway 交互引用和 blocked reason；不得复制完整 target portfolio、raw evidence 或凭据。 |
+| **输出/结果** | run 证据视图、日志摘要、状态轨迹、审计引用、复盘材料。 |
+| **前置条件** | CR134..CR137 的 evidence index / bundle / registry 基线可消费。 |
+| **排除情况** | 不读取原始账户、资金、持仓、委托、成交或未脱敏日志。 |
+
+**处理流程（文字描述）：**
+1. 由 run_id 定位 registry entry 和 bundle / evidence 引用。
+2. 加载脱敏摘要、状态轨迹和风险检查。
+3. 按关联 ID 汇总订单意图、事件和 Gateway 引用。
+4. 输出复盘视图，不泄露原始敏感数据。
+
+---
+
+### UC-41：Runner 盘后复盘
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-09 Runner / QMT Gateway 运营负责人；P-06 研究口径与交易价格审计者 |
+| **触发条件** | 交易日结束后，用户需要复盘策略运行、执行偏差、风控命中、异常和后续修订。 |
+| **输入** | 当日 run summary、订单状态、成交/拒单/撤单摘要、Gateway health timeline、告警、风险命中、策略版本和数据版本。 |
+| **处理逻辑** | Given 当日运行结束, When 用户执行盘后复盘, Then Runner 汇总计划 vs 实际、执行差异、未完成事项、异常恢复、策略参数或风控规则调整建议，并输出后续 CR / issue 候选。 |
+| **输出/结果** | 盘后复盘报告、风险和异常清单、策略调整建议、后续行动项。 |
+| **前置条件** | 当日运行证据和审计索引存在。 |
+| **排除情况** | 不把盘后复盘自动变成策略参数发布或真实交易授权。 |
+
+**处理流程（文字描述）：**
+1. 汇总当天计划、实际状态和异常。
+2. 比对目标组合、订单意图、执行回报和风险检查。
+3. 归类为成功、偏差、异常、待人工处理或后续 CR。
+4. 输出复盘报告和下一步建议。
+
+---
+
+### UC-42：Runner 异常处理与恢复
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-09 Runner / QMT Gateway 运营负责人；P-05 QMT 交易接入与运行负责人 |
+| **触发条件** | Runner 崩溃、进程重启、任务卡住、Gateway 断连、回报乱序、未完成单或 WAL / registry 不一致。 |
+| **输入** | runner state、WAL / snapshot、registry、Gateway health、未完成订单、最近事件、人工接管记录。 |
+| **处理逻辑** | Given 系统发现异常, When Runner 进入恢复流程, Then 先进入 degraded/manual-review，重建任务和订单状态，阻止新任务自动提交，并要求人工确认恢复或回滚；参考 lite 的 WAL 恢复和 BulletTrade 的 guard / cooldown。 |
+| **输出/结果** | 恢复计划、重建状态、无法自动恢复项、人工接管清单、审计事件。 |
+| **前置条件** | 状态快照、registry、日志和 Gateway 状态可读。 |
+| **排除情况** | 不在状态不一致时自动重发订单或自动恢复 live。 |
+
+**处理流程（文字描述）：**
+1. 检测异常并冻结新 run / 新 order intent。
+2. 从 registry、WAL、Gateway 摘要和日志重建状态。
+3. 标记无法确认的 run / order 为 manual-review。
+4. 经人工确认后恢复、回滚、取消或保持 blocked。
+
+---
+
+### UC-43：Runner 策略参数调整、发布、暂停、下线和回滚
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-09 Runner / QMT Gateway 运营负责人；P-07 阶段六多因子模拟盘准入负责人 |
+| **触发条件** | 用户需要调整策略参数、因子版本、风险阈值、运行计划，或暂停、下线、回滚某个策略。 |
+| **输入** | 当前策略版本、候选版本、参数 diff、验证证据、运行计划、暂停/恢复原因、回滚目标、风险接受项。 |
+| **处理逻辑** | Given 用户修改策略配置或生命周期状态, When Runner 生成发布/暂停/回滚计划, Then 必须输出版本差异、验证要求、影响范围、回滚条件和人工确认项；运行中的策略需 drain 或 blocked，不能热替换破坏状态。 |
+| **输出/结果** | 策略变更计划、版本差异、发布/暂停/下线/回滚状态、审计记录。 |
+| **前置条件** | 策略版本和验证证据可追溯；真实运行状态变更需后续授权。 |
+| **排除情况** | 不在本 CR 中实现热重载、发布系统或真实策略运行。 |
+
+**处理流程（文字描述）：**
+1. 生成参数和策略版本 diff。
+2. 判断是否需要重新验证、暂停现有任务或 drain 队列。
+3. 生成发布、暂停、下线或回滚计划。
+4. 记录人工确认和回退条件。
+
+---
+
+### UC-44：QMT Gateway 启动、健康检查与能力探测
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-05 QMT 交易接入与运行负责人；P-09 Runner / QMT Gateway 运营负责人 |
+| **触发条件** | 运维在 Windows QMT 机器启动 Gateway，或 Runner 需要判断 Gateway 是否可用。 |
+| **输入** | Gateway 配置、绑定地址、认证策略、QMT 客户端状态、xtquant 可用性、mode、capabilities、health probe。 |
+| **处理逻辑** | Given Gateway 启动或 Runner 探测, When health / capabilities 被调用, Then 返回 ready / readonly / degraded / unavailable / disabled、可用 endpoint、运行模式、授权状态和恢复建议；参考 qmt-bridge 生命周期与 quant-qmt-proxy capabilities 分层。 |
+| **输出/结果** | Gateway health、capabilities、运行模式、只读/可交易/降级状态、阻断原因。 |
+| **前置条件** | Gateway 真实启动需后续 runtime authorization；CR138 只定义场景。 |
+| **排除情况** | health pass 不等于账户查询、交易或 simulation 授权。 |
+
+**处理流程（文字描述）：**
+1. 启动或探测 Gateway 生命周期。
+2. 检查 QMT 客户端、xtdata / xttrader、认证、绑定地址和模式。
+3. 输出 capabilities 和降级状态。
+4. Runner 只消费状态，不自动升级运行权限。
+
+---
+
+### UC-45：QMT Gateway 账户、持仓、订单和成交查询
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-05 QMT 交易接入与运行负责人；P-09 Runner / QMT Gateway 运营负责人 |
+| **触发条件** | 盘前确认、盘中跟踪、盘后对账或异常恢复需要查询账户、持仓、订单和成交摘要。 |
+| **输入** | session / account profile、query scope、request_id、授权记录、脱敏规则、Gateway health。 |
+| **处理逻辑** | Given 后续授权允许只读查询, When Runner 或运维请求账户/持仓/订单/成交, Then Gateway 返回标准化、脱敏、可审计的摘要，并标记数据时间、来源和风险；未授权时返回 blocked。 |
+| **输出/结果** | account summary、position summary、order summary、trade summary、审计记录。 |
+| **前置条件** | 只读账户查询必须由独立 runtime_authorization CR 批准。 |
+| **排除情况** | CR138 不读取真实账户或持仓；不保存原始敏感数据。 |
+
+**处理流程（文字描述）：**
+1. 校验 request_id、scope、认证和授权记录。
+2. 经 Gateway adapter 执行标准化查询或返回 blocked。
+3. 脱敏并写审计引用。
+4. 提供给 Runner 盘前、盘中、盘后流程消费。
+
+---
+
+### UC-46：QMT Gateway 行情订阅、缓存与回补
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-05 QMT 交易接入与运行负责人；P-09 Runner / QMT Gateway 运营负责人 |
+| **触发条件** | Runner、策略或运维需要 tick / bar / snapshot / history 数据用于事件策略、盘中观察或恢复。 |
+| **输入** | symbols、period、subscription_id、缓存策略、历史查询范围、Gateway capabilities、xtdata 串行化限制。 |
+| **处理逻辑** | Given 用户或 Runner 需要行情, When Gateway 创建订阅或查询缓存, Then 维护订阅注册表、热缓存、恢复状态和标准化行情事件；参考 quant-qmt-proxy 的 SubscriptionHub 和 qmt-bridge 的 WS realtime / xtdata 串行化保护。 |
+| **输出/结果** | subscription record、quote/bar events、cache snapshot、degraded reason、恢复建议。 |
+| **前置条件** | 行情订阅和真实 xtdata 查询需后续授权；CR138 只冻结使用场景。 |
+| **排除情况** | 不把 Level2 或全市场行情能力视为当前已可用；不绕过 xtdata 并发边界。 |
+
+**处理流程（文字描述）：**
+1. 校验订阅 scope、symbols、period 和 capabilities。
+2. 建立或复用底层订阅，更新缓存。
+3. 将事件标准化并推送给 Runner 或客户端。
+4. 订阅失效或 QMT 异常时进入 degraded / recovery。
+
+---
+
+### UC-47：QMT Gateway 下单、撤单和订单回报
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-05 QMT 交易接入与运行负责人 |
+| **触发条件** | 后续高风险 gate 批准后，Runner 或 OMS 需要提交标准化 order intent、撤单或消费订单回报。 |
+| **输入** | OrderIntent、risk decision、account profile、idempotency key、request_id、authorization record、Gateway session、kill switch。 |
+| **处理逻辑** | Given 高风险运行授权存在, When Gateway 接收 PlaceOrder / CancelOrder, Then 先执行认证、授权、风控、幂等和状态机，再调用 QMT adapter，并发布标准化 ExecutionReport；未授权或风险失败 hard block。 |
+| **输出/结果** | OrderAck、ExecutionReport、reject reason、cancel status、审计记录、Runner 状态回链。 |
+| **前置条件** | 必须另起 runtime/high-risk CR，并通过 CP2/CP3/CP5/per-run authorization。 |
+| **排除情况** | CR138 不提交、撤销或模拟任何真实订单。 |
+
+**处理流程（文字描述）：**
+1. 校验授权、账户、运行模式、kill switch 和风控。
+2. 用幂等键创建内部订单状态。
+3. 调用 QMT adapter 或返回 hard reject。
+4. 广播回报并写审计事件。
+
+---
+
+### UC-48：QMT Gateway 连接异常后的降级和恢复
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-05 QMT 交易接入与运行负责人；P-09 Runner / QMT Gateway 运营负责人 |
+| **触发条件** | QMT 客户端断连、xtdata 崩溃、订阅失效、交易回报停滞、Windows 主机异常或 Gateway 健康变差。 |
+| **输入** | health timeline、connection state、subscription registry、未确认订单、Gateway logs、QMT restart / reconnect policy、人工接管记录。 |
+| **处理逻辑** | Given Gateway 发现 QMT 不可用或状态异常, When 进入恢复流程, Then 标记 degraded/cooldown/unavailable，暂停新下单，保留只读或完全阻断，恢复订阅和会话，并要求人工确认未完成订单状态；参考 qmt-bridge 的串行化/独立调度经验和 BulletTrade QMT Guard。 |
+| **输出/结果** | 降级状态、恢复计划、订阅恢复结果、未确认订单清单、人工处理建议。 |
+| **前置条件** | 恢复策略和人工接管流程已设计。 |
+| **排除情况** | 不在状态不明时自动重发订单或自动解除 kill switch。 |
+
+**处理流程（文字描述）：**
+1. 检测异常并更新 GatewayHealth。
+2. 暂停新交易动作或切只读 / unavailable。
+3. 恢复连接、订阅和会话。
+4. 对未确认订单和状态漂移进入人工复核。
+
+---
+
+### UC-49：QMT Gateway 审计、日志和问题定位
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-05 QMT 交易接入与运行负责人；P-09 Runner / QMT Gateway 运营负责人 |
+| **触发条件** | 用户需要按 request_id、run_id、strategy_id、order_intent_id、broker_order_id 或 subscription_id 定位问题。 |
+| **输入** | request_id、run_id、strategy_id、order ids、Gateway audit record、Runner evidence、structured logs、metrics。 |
+| **处理逻辑** | Given 用户查询审计链路, When Gateway 和 Runner 关联日志, Then 返回脱敏的请求、认证、风控、adapter 调用、QMT 回报、Runner 状态和异常处理轨迹；日志必须避免 token、账户号、交易密码、session 或原始敏感内容。 |
+| **输出/结果** | 审计查询结果、链路追踪、错误定位、后续 issue / CR 候选。 |
+| **前置条件** | 结构化日志、审计 ID 和脱敏策略已定义。 |
+| **排除情况** | 不把原始 QMT 日志或未脱敏账户数据复制进 process / reports。 |
+
+**处理流程（文字描述）：**
+1. 用稳定 ID 聚合 Runner 与 Gateway 事件。
+2. 脱敏请求、响应、错误和状态。
+3. 输出问题定位摘要和证据引用。
+4. 将结构性缺陷分流为 issue 或 CR 候选。
+
+---
+
+### UC-50：QMT Gateway 升级、回滚和配置变更
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-05 QMT 交易接入与运行负责人；P-09 Runner / QMT Gateway 运营负责人 |
+| **触发条件** | Gateway 需要升级版本、调整配置、变更认证策略、切换运行模式、更新 endpoint 或回滚到上一稳定版本。 |
+| **输入** | 当前版本、目标版本、配置 diff、auth policy diff、endpoint diff、兼容性检查、回滚目标、维护窗口、风险接受项。 |
+| **处理逻辑** | Given 运维准备变更 Gateway, When 执行配置或版本计划, Then 必须先生成 dry-run / diff / compatibility / rollback plan，明确对 Runner、策略、订阅、会话、审计和权限的影响；真实部署需后续 release/runtime gate。 |
+| **输出/结果** | 变更计划、配置差异、兼容性报告、回滚方案、人工审批项。 |
+| **前置条件** | 运行时变更必须另行授权；配置不得包含明文凭据。 |
+| **排除情况** | CR138 不修改实际 Gateway 配置、不安装升级、不打开端口。 |
+
+**处理流程（文字描述）：**
+1. 读取目标变更摘要和当前运行边界。
+2. 生成配置、协议、endpoint、认证和兼容性 diff。
+3. 输出回滚和验证计划。
+4. 等待后续 release/runtime gate 执行。
+
+---
+
+## CR-138 场景归一化与合并审查
+
+> 本节用于回应 CP2 反馈“再检查其他场景是否需要合并和刷新”。处理原则：不删除已确认历史 UC，不重编号，不用新草案整体替换旧基线；对重叠场景标记“保留 / 吸收 / 约束 / 延后”，供后续 requirement extraction、功能模型和 HLD 消费。
+
+### 归一化结论
+
+| 对象 | 与 CR-138 的关系 | 处理动作 | 后续消费规则 |
+|---|---|---|---|
+| UC-10 QMT foundation shadow / dry-run / mock | QMT 交易链路的 OMS / risk / adapter 前置治理，与 UC-47 下单撤单回报存在交易路径重叠 | 保留为历史治理前置，不并入 UC-47 | HLD 消费 UC-47 时必须引用 UC-10 的 OMS、pre-trade hard block、raw execution price 和 mock / dry-run 边界。 |
+| UC-11 QMT 模拟盘 / 实盘阶段激活 | runtime stage gate 和 per-run authorization 前置，与 UC-34、UC-35、UC-47、UC-48 的运行模式相关 | 保留为运行授权约束，不作为 CR138 operational baseline 的重复场景 | CR138 只描述运营如何使用；任何 simulation/live 执行仍回链 UC-11 和独立 runtime_authorization CR。 |
+| UC-15 阶段六多因子模拟盘准入 | 多因子策略进入运营前的 admission 前置，与 UC-33 多因子调仓和 UC-34 盘前确认相邻 | 保留为准入基线；UC-33/34 只在准入后描述日常运行方式 | 后续 Runner 功能模型必须把 admission package 作为 UC-33/34 输入，而不是在 Runner 内重新定义研究准入。 |
+| UC-16 QMT C/S 模块与 Windows FastAPI 服务桥接 | 旧 Gateway 架构 / 部署桥接场景，与 UC-44..UC-50 的 Gateway 运营场景重叠 | 刷新为架构来源；运营视角由 UC-44..UC-50 承接 | HLD 中 UC-16 提供 C/S 边界和部署约束；UC-44..UC-50 提供启动、查询、订阅、交易回报、恢复、审计和配置变更的用户路径。 |
+| UC-17 FastAPI 完整 QMT 接口与运行门控 | 旧 endpoint matrix / gate 场景，与 UC-45..UC-47 的查询、行情、订单回报重叠 | 刷新为接口能力来源；不再单独作为运营 use-case 主线 | 后续 Gateway HLD 先以 UC-44..UC-50 组织用户路径，再用 UC-17 校验 endpoint 覆盖和 blocked behavior。 |
+| UC-28 双目标策略交付框架 | 策略包与目标适配框架，与 UC-33..UC-43 的 Runner 运营视角相邻 | 保留为交付框架基线；不合并编号 | Runner operational control plane 必须消费 UC-28 的策略核心合同，但 UC-28 不再替代 Runner 日常运行场景。 |
+| UC-29 QMT 终端策略包交付形态 | QMT terminal target 包形态，与 UC-44..UC-50 Gateway 服务化运营不是同一形态 | 保留为独立目标形态 | HLD 必须区分 QMT terminal package 和 QMT Gateway service；不得用 UC-29 覆盖 Gateway 服务生命周期。 |
+| UC-30 MiniQMT Runner 安装设计 | 安装 / 部署边界，与 UC-33..UC-43 Runner 运营、UC-44..UC-50 Gateway 运营相邻 | 保留为部署设计输入；运营使用由 CR138 承接 | UC-30 只回答如何安装 / 配置 / 回滚 runner；UC-33..UC-43 回答用户如何运行和运维策略。 |
+| UC-31 双目标验证框架与证据模型 | 静态验证与证据模板，与 UC-40 日志证据查询、UC-49 Gateway 审计相邻 | 保留为验证框架；审计查询视角由 UC-40 / UC-49 承接 | 后续测试矩阵要同时覆盖 UC-31 的 fixture/schema 和 UC-40/49 的运营审计查询。 |
+| UC-32 交易交付框架反向约束研究框架 | 研究输出字段约束，与 UC-33 的策略运行输入相邻 | 保留为上游输出约束 | UC-33 的 `策略版本 / 数据 release / 目标组合 / order intent draft` 必须从 UC-32 的研究输出合同继承。 |
+| UC-33..UC-43 Runner 运营组 | 内部存在“运行计划、执行、观察、复盘、恢复、变更”连续关系，但触发条件和用户问题不同 | 不合并编号；按活动簇组织 | 后续功能模型可聚合为 Runner Control Plane，但 Story 拆分时应保留不同用户任务和验收路径。 |
+| UC-44..UC-50 QMT Gateway 运营组 | 内部存在服务生命周期、查询、行情、交易回报、恢复、审计、变更连续关系，但风险与授权不同 | 不合并编号；按能力簇组织 | 后续 Gateway HLD 可聚合为 service layer，但只读查询、行情订阅、submit/cancel、审计和配置变更必须分开授权。 |
+
+### Runner 运营活动簇
+
+| 活动簇 | 覆盖 UC | 刷新说明 |
+|---|---|---|
+| 计划与盘前确认 | UC-33、UC-34 | UC-33 生成策略运行计划；UC-34 判断今天是否允许进入 shadow / dry-run / simulation / blocked。二者不合并，因为前者是计划生成，后者是运行授权前的日常检查。 |
+| 执行与触发 | UC-35、UC-36、UC-37、UC-38 | UC-35 跟踪已批准 run 的执行状态；UC-36 是事件规则触发；UC-37 是外部信号接入；UC-38 是目标组合与当前组合的再平衡。四者需要共享状态机，但用户触发方式不同，不合并。 |
+| 观察、证据与复盘 | UC-39、UC-40、UC-41 | UC-39 解决盘中“现在是否正常”；UC-40 解决单次 run “为什么这样”；UC-41 解决盘后“今天怎么收敛和改进”。不合并，但后续 UI / CLI 可共用查询模型。 |
+| 异常恢复与生命周期变更 | UC-42、UC-43 | UC-42 处理系统和运行状态异常；UC-43 处理策略版本、参数、暂停、下线和回滚。二者都需要人工确认和审计，但一个面向运行恢复，一个面向策略生命周期。 |
+
+### QMT Gateway 运营活动簇
+
+| 活动簇 | 覆盖 UC | 刷新说明 |
+|---|---|---|
+| 服务生命周期 | UC-44、UC-48、UC-50 | 启动 / health / capabilities、故障降级恢复、升级回滚配置变更是一条运维主线，但风险阶段不同；后续可共享 GatewayHealth 和 ChangePlan 模型。 |
+| 只读能力 | UC-45、UC-46 | 账户 / 持仓 / 订单 / 成交查询与行情订阅都属于只读或准只读触达，但授权对象不同；后续必须分开 gate。 |
+| 交易动作与回报 | UC-47 | 下单 / 撤单 / 回报是最高风险动作，不能并入只读查询或 health 场景。 |
+| 审计与定位 | UC-49 | 审计跨 UC-44..UC-48，但作为用户问题“如何定位问题”单独保留。 |
+
+### 仍需后续刷新但不在 CR-138 内执行
+
+| 刷新项 | 影响对象 | 原因 | 触发条件 |
+|---|---|---|---|
+| REQUIREMENTS 增量抽取 | `process/REQUIREMENTS.md` | CR138 CP2 已批准，UC-33..UC-50 可作为后续需求增量抽取输入；本轮未直接修改需求文档 | 进入 solution-design / requirement delta 同步时处理 |
+| 功能模型 / 能力地图 | Runner Control Plane、QMT Gateway Service Layer | 需要基于归一化后的活动簇定义 Feature / Epic 边界 | CP2 通过后进入 solution-design / blueprint |
+| TEST-MATRIX 增量 | `process/TEST-MATRIX.md` 或当前项目等价测试矩阵 | 当前仅在 USE-CASES 内写 TS-138-*，尚未生成正式测试矩阵增量 | CP2 通过后由 requirement / scenario expansion 阶段处理 |
+| 旧 UC-16 / UC-17 文案压缩 | UC-16、UC-17 | 二者历史内容较长且含 endpoint 设计细节，但已确认基线不应在 CR138 增量中破坏性重写 | HLD 阶段确认 Gateway service boundary 后，可另起文档清理 CR |
+
+---
+
+## CR-138 Scenario Gray Areas
+
+| 灰区 ID | 问题 | 为什么重要 | 用户选择 / 当前处理 | 状态 |
+|---|---|---|---|---|
+| SGA-138-01 | CR138 是继续补 Runner 离线能力，还是先冻结用户如何运营 Runner 与 QMT Gateway？ | 决定是否继续按 CR133..CR137 小能力切片实现，还是先回到产品场景和功能模型。 | 采用运营 use-case baseline；不继续补离线小功能，不实现 online runtime。 | resolved-by-user |
+| SGA-138-02 | online use-case 是否只覆盖检查 / 准入 / smoke？ | 如果只写检查，会遗漏多因子运行、事件策略、日志运维、发布暂停回滚等真实使用方式。 | 必须覆盖真实运行和日常运维全链路；UC-33..UC-50 已纳入。 | resolved-by-user |
+| SGA-138-03 | Runner 与 QMT Gateway 的职责边界如何划分？ | 边界不清会导致 Runner 直接暴露 xtquant 原语，或 Gateway 承担策略决策。 | Runner 负责策略如何运行；Gateway 负责安全稳定触达 QMT。 | decision-item |
+| SGA-138-04 | CR138 是否授权真实 QMT、账户查询、行情订阅或下单撤单？ | 防止 use-case baseline 被误解为 runtime authorization。 | 不授权；所有真实运行 / 查询 / 交易 / 凭据读取均需后续独立 gate。 | decision-item |
+| SGA-138-05 | 两份外部研究报告如何使用？ | 决定是否需要 clone 外部项目或仅用研究报告作为静态输入。 | 本轮充分参考研究报告，不 clone / install / run 外部项目。 | resolved-by-user |
+| SGA-138-06 | UC-01..UC-50 中是否存在需要合并或刷新的旧场景？ | 防止 UC-16/17/28..31 与 UC-33..50 在后续 HLD 中重复消费或边界混淆。 | 已新增“CR-138 场景归一化与合并审查”；旧确认 UC 保留编号，新运营 UC 承接用户路径。 | resolved-by-user |
+
+## CR-138 Deferred Ideas
+
+| ID | 想法 / 风险 / 扩展场景 | 来源 | 延后原因 | 重启条件 |
+|---|---|---|---|---|
+| DEF-138-01 | Runner 功能模型与能力地图 | UC-33..UC-43 | 需要 CP2 批准 use-case baseline 后再进入蓝图 / HLD。 | 用户 approve CR138 CP2。 |
+| DEF-138-02 | QMT Gateway HLD / protocol boundary | UC-44..UC-50 | 需要先确认 Gateway 运营场景和不授权边界。 | CR138 CP2 通过后启动 solution-design。 |
+| DEF-138-03 | Runtime authorization gate | SGA-138-04 | 真实 QMT / MiniQMT / XtQuant / account query / submit/cancel 高风险。 | 用户明确授权并提供运行边界、时间窗口、账户脱敏策略和回滚条件。 |
+| DEF-138-04 | 外部项目源码级 Spike | SGA-138-05 | 本轮研究报告已足够；源码级 clone/run 会引入依赖和许可证/安全面。 | HLD 发现报告信息不足，且用户批准 clone 到临时目录。 |
+
+## CR-138 验证场景矩阵
+
+| 测试场景 ID | 验证目标 | 输入 / 前置 | 期望结果 | 来源场景 |
+|---|---|---|---|---|
+| TS-138-01 | Runner 运营场景覆盖完整 | `process/USE-CASES.md` v1.16 | UC-33..UC-43 覆盖多因子、事件、信号、再平衡、盘中、日志、复盘、异常、策略变更。 | UC-33..UC-43 |
+| TS-138-02 | QMT Gateway 运营场景覆盖完整 | `process/USE-CASES.md` v1.16 | UC-44..UC-50 覆盖启动、健康、查询、订阅、订单回报、恢复、审计、升级/回滚。 | UC-44..UC-50 |
+| TS-138-03 | Runner / Gateway 边界不混淆 | CR138 Decision Brief、UC-33..UC-50 | Runner 不直接暴露 xtquant 原语；Gateway 不决定策略逻辑或调仓。 | UC-33, UC-44 |
+| TS-138-04 | 不授权真实运行 | CR138 CR、checks、state、git diff | runtime、QMT、MiniQMT、XtQuant、credential、account query、submit/cancel、simulation/live、NAS、provider/lake/catalog 计数均为 0。 | UC-33..UC-50 |
+| TS-138-05 | 外部研究报告被映射到场景 | 两份研究报告、CR138 context | lite / BulletTrade / EasyXT / quant-qmt-proxy / qmt-bridge 的关键启发均有场景或验证矩阵落点。 | UC-33..UC-50 |
+| TS-138-06 | 后续拆分不回到离线小 slice | CR137 handoff、CR138 CP2 | CP2 后下一步为功能模型 / HLD，而不是直接实现 batch run、runtime 或 Gateway。 | UC-33..UC-50 |
+
 ## CR-046 Scenario Gray Areas
 
 | 灰区 ID | 问题 | 为什么重要 | 用户选择 / 当前处理 | 状态 |
@@ -1057,15 +1512,15 @@ total_use_cases: 32
 
 | 维度 ID | 维度名称 | 状态 | 涉及场景 | 备注 |
 |---|---|---|---|---|
-| D1 | 用户维度 | 已补充 | UC-01 至 UC-32 | 覆盖策略研究者、聚宽候选验证者、因子研究数据审计者、生产数据湖负责人、QMT 交易接入 / 运行负责人、研究口径与交易价格审计者、阶段六多因子模拟盘准入负责人、研究执行后端评估者，以及 CR-046 双目标策略交付框架负责人 |
-| D2 | 任务维度 | 已补充 | UC-01 至 UC-32 | 覆盖数据读取、回测、扫描、扩展策略、benchmark 消费、数据准备、生产级因子研究、全 A 数据湖、QMT foundation、阶段激活、复权双视图、publish/rollback、研究重跑、阶段六准入、QMT C/S bridge、Backtrader optional backend、多因子闭环、双目标策略交付框架、QMT terminal target、MiniQMT runner 安装设计、验证框架和研究反向约束 |
-| D3 | 动机维度 | 已补充 | UC-02 至 UC-32 | 动机是提高本地研究效率、减少平台等待、升级探索性因子结论、建设可发布可回滚的 production truth，并在接入 QMT、申请模拟盘、引入可选执行后端、多因子闭环和双目标策略交付前降低假 alpha、口径混淆、凭据泄露、未授权 simulation、运行失控、schema 漏洞和框架不一致风险 |
-| D4 | 时间维度 | 已补充 | UC-02 至 UC-32 | 明确 2019-2025 回测区间、60 组扫描、rolling/年度分段、since-inception、release `as_of_trade_date`、T 日信号 / T+1 执行、qfq `as_of_trade_date`、QMT 阶段推进、连续 5 个真实交易日 dry-run、后置能力触发时序，以及 CR-046 framework-first、CR047 策略交付和 CR049 MiniQMT 权限后置顺序 |
-| D5 | 环境维度 | 已补充 | UC-01 至 UC-32 | 本地 parquet、raw、manifest、quality/catalog、断网消费、外置 lake、catalog current pointer、DuckDB 只读候选、Windows QMT / MiniQMT 节点、FastAPI 本地服务桥接、WSL / Windows 部署边界、外置 broker lake、mock adapter、凭据脱敏边界、Backtrader 未安装环境、本地 Qlib 静态分析路径、QMT terminal package 和 MiniQMT runner 安装边界均已记录 |
-| D6 | 方式维度 | 已补充 | UC-02 至 UC-32 | 命令/脚本/Notebook/API 入口将在 HLD 中细化；CSV、typed result、写湖作业、gate result、factor audit panel、P0 分层、Explicit Publish Gate、research rerun、OMS order intent、shadow / dry-run / mock、Backtrader semantic diff、多因子 schema、策略包 schema、install dry-run 和双目标验证证据方式已记录 |
-| D7 | 异常维度 | 已补充 | UC-01 至 UC-32 | 覆盖 schema 缺失、复权混用、`available_at` 越界、label overlap、lineage 缺失、缺失价格、无成交、数据源失败、quality fail、PIT 不完整、辅助数据缺失、catalog pointer 污染、publish/rollback 失败、DuckDB 越权写入、凭据未授权、QMT 直连绕过、pre-trade fail、unknown 状态、未授权 simulation、Backtrader 未安装、MiniQMT 权限缺失和 fixture pass 被误读为真实运行证据 |
-| D8 | 集成维度 | 已补充 | UC-04 至 UC-32 | 与聚宽验证、策略扩展、`market_data` 写湖、只读 resolver、Backtrader optional backend、Qlib isolated runner、CR-008 `research_input_v1`、CR-010/012/013/014/018 数据湖基线、DuckDB 候选查询层、local_backtest C 侧 client、Windows QMT / XtQuant S 侧 gateway、OMS / adapter / broker lake、lightweight engine、Stage6 admission、QMT terminal target 和 MiniQMT runner target 的边界已记录 |
-| D9 | 数据生命周期维度 | 已补充 | UC-09 至 UC-32 | CR-014/018 覆盖全 A 证券生命周期、代码变更、退市、current pointer、增量刷新、replay、publish release、rollback、权限计数和 claim boundary；CR-015/016/017/019/025/030/046 覆盖 broker event、order state、qfq as-of、admission package、dry-run 记录、bridge request、clean feed、semantic diff、factor panel、label window、StrategyAdmissionPackage、策略包合同和验证证据生命周期 |
+| D1 | 用户维度 | 已补充 | UC-01 至 UC-50 | 覆盖策略研究者、聚宽候选验证者、因子研究数据审计者、生产数据湖负责人、QMT 交易接入 / 运行负责人、研究口径与交易价格审计者、阶段六多因子模拟盘准入负责人、研究执行后端评估者、CR-046 双目标策略交付框架负责人，以及 CR-138 Runner / QMT Gateway 运营负责人 |
+| D2 | 任务维度 | 已补充 | UC-01 至 UC-50 | 覆盖数据读取、回测、扫描、扩展策略、benchmark 消费、数据准备、生产级因子研究、全 A 数据湖、QMT foundation、阶段激活、复权双视图、publish/rollback、研究重跑、阶段六准入、QMT C/S bridge、Backtrader optional backend、多因子闭环、双目标策略交付框架、QMT terminal target、MiniQMT runner 安装设计、验证框架、研究反向约束、Runner 日常运行和 QMT Gateway 运营 |
+| D3 | 动机维度 | 已补充 | UC-02 至 UC-50 | 动机是提高本地研究效率、减少平台等待、升级探索性因子结论、建设可发布可回滚的 production truth，并在接入 QMT、申请模拟盘、引入可选执行后端、多因子闭环、双目标策略交付和 Runner/Gateway 运营前降低假 alpha、口径混淆、凭据泄露、未授权 simulation、运行失控、schema 漏洞、框架不一致和 Gateway 故障恢复风险 |
+| D4 | 时间维度 | 已补充 | UC-02 至 UC-50 | 明确 2019-2025 回测区间、60 组扫描、rolling/年度分段、since-inception、release `as_of_trade_date`、T 日信号 / T+1 执行、qfq `as_of_trade_date`、QMT 阶段推进、连续 5 个真实交易日 dry-run、后置能力触发时序、CR-046 framework-first、CR047 策略交付、CR049 MiniQMT 权限后置，以及 CR-138 的盘前、盘中、盘后、异常恢复、发布/暂停/回滚时序 |
+| D5 | 环境维度 | 已补充 | UC-01 至 UC-50 | 本地 parquet、raw、manifest、quality/catalog、断网消费、外置 lake、catalog current pointer、DuckDB 只读候选、Windows QMT / MiniQMT 节点、FastAPI 本地服务桥接、WSL / Windows 部署边界、外置 broker lake、mock adapter、凭据脱敏边界、Backtrader 未安装环境、本地 Qlib 静态分析路径、QMT terminal package、MiniQMT runner 安装边界、Runner registry/bundle/evidence 和 Gateway service lifecycle 均已记录 |
+| D6 | 方式维度 | 已补充 | UC-02 至 UC-50 | 命令/脚本/Notebook/API 入口将在 HLD 中细化；CSV、typed result、写湖作业、gate result、factor audit panel、P0 分层、Explicit Publish Gate、research rerun、OMS order intent、shadow / dry-run / mock、Backtrader semantic diff、多因子 schema、策略包 schema、install dry-run、双目标验证证据、Runner run plan、事件/信号接入、Gateway health/capabilities、WS/gRPC/REST 事件流方式已记录 |
+| D7 | 异常维度 | 已补充 | UC-01 至 UC-50 | 覆盖 schema 缺失、复权混用、`available_at` 越界、label overlap、lineage 缺失、缺失价格、无成交、数据源失败、quality fail、PIT 不完整、辅助数据缺失、catalog pointer 污染、publish/rollback 失败、DuckDB 越权写入、凭据未授权、QMT 直连绕过、pre-trade fail、unknown 状态、未授权 simulation、Backtrader 未安装、MiniQMT 权限缺失、fixture pass 被误读为真实运行证据、Runner 崩溃、回报乱序、Gateway 断连、xtdata 并发崩溃和订阅失效 |
+| D8 | 集成维度 | 已补充 | UC-04 至 UC-50 | 与聚宽验证、策略扩展、`market_data` 写湖、只读 resolver、Backtrader optional backend、Qlib isolated runner、CR-008 `research_input_v1`、CR-010/012/013/014/018 数据湖基线、DuckDB 候选查询层、local_backtest C 侧 client、Windows QMT / XtQuant S 侧 gateway、OMS / adapter / broker lake、lightweight engine、Stage6 admission、QMT terminal target、MiniQMT runner target、Runner operational control plane 和 QMT Gateway service layer 的边界已记录 |
+| D9 | 数据生命周期维度 | 已补充 | UC-09 至 UC-50 | CR-014/018 覆盖全 A 证券生命周期、代码变更、退市、current pointer、增量刷新、replay、publish release、rollback、权限计数和 claim boundary；CR-015/016/017/019/025/030/046/138 覆盖 broker event、order state、qfq as-of、admission package、dry-run 记录、bridge request、clean feed、semantic diff、factor panel、label window、StrategyAdmissionPackage、策略包合同、验证证据、run registry、Gateway audit record 和事件订阅生命周期 |
 <!-- coverage-checklist: end -->
 
 ## 附录：治理变更记录（可选）
@@ -1081,3 +1536,4 @@ total_use_cases: 32
 | 1.9 | `total_use_cases` / `review_policy` | 14 / strict | 18 / strict | CR-019 将目标扩展到阶段六多因子模拟盘准入和 Windows QMT FastAPI bridge，仍保持 strict review-gated，并将 signed file drop 降级为 fallback |
 | 1.10 | `UC-16` / `SM-29` / `SM-30` | FastAPI bridge / dry-run-only 安全指标 | QMT C/S bridge / 完整 endpoint matrix + 运行门控 | 用户确认 Q40 推荐方案，并补充 QMT 模块必须拆为 local_backtest C 侧 client 与 Windows S 侧 gateway |
 | 1.11 | `status` / `total_use_cases` | confirmed / 18 | draft / 19 | CR-025 启动后追加 Backtrader optional backend hardening 场景；旧已确认基线保留，本增量等待 CP2 人工确认 |
+| 1.16 | `status` / `total_use_cases` / `scenario_subject_id` | confirmed / 32 / local-backtest-production-data-lake-and-qmt-trading-layer | confirmed / 50 / local-backtest-production-data-lake-runner-and-qmt-gateway | CR-138 启动后追加 Runner 与 QMT Gateway 运营 use-case baseline；旧 v1.15 confirmed 基线保留，v1.16 已于 2026-06-24T13:20:00+08:00 经用户 `approve` 通过 CP2 |

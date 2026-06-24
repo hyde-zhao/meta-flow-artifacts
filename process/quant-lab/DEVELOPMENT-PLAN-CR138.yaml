@@ -1,0 +1,390 @@
+schema_version: 1
+change_id: "CR-138"
+title: "CR138 Runner / QMT Gateway Operational Control Plane Development Plan"
+status: "ready-for-cp5-review"
+created_at: "2026-06-24T16:30:00+08:00"
+updated_at: "2026-06-24T16:30:00+08:00"
+owner: "host-orchestrator"
+workflow_phase: "story-planning"
+implementation_allowed: false
+feature_design_matrix: "process/docs/design/FEATURE-DESIGN-MATRIX.md"
+story_backlog: "process/STORY-BACKLOG-CR138.md"
+story_status: "process/STORY-STATUS-CR138.md"
+cp4_auto_result: "process/checks/CP4-CR138-STORY-DAG-PARALLEL-SAFETY.md"
+cp5_checkpoint: "process/checkpoints/CP5-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-LLD-BATCH.md"
+
+authorization_boundary:
+  cp4_does_not_authorize_runtime: true
+  qmt_runtime_allowed: false
+  miniqmt_runtime_allowed: false
+  xtquant_runtime_allowed: false
+  gateway_start_allowed: false
+  port_bind_allowed: false
+  credential_read_allowed: false
+  account_read_allowed: false
+  market_read_allowed: false
+  order_read_allowed: false
+  submit_cancel_allowed: false
+  simulation_live_allowed: false
+  nas_access_allowed: false
+  provider_fetch_allowed: false
+  lake_write_allowed: false
+  catalog_publish_allowed: false
+  git_remote_write_allowed: false
+  future_runtime_validation_policy: "按需 runtime_authorization gate；必须限定 action scope、运行窗口、脱敏、回滚和审计范围。"
+
+feature_slices:
+  - feature_id: "FEAT-11"
+    name: "Runner Control Plane"
+    design_docs:
+      - "process/docs/features/runner-control-plane/DESIGN.md"
+      - "process/docs/features/runner-control-plane/TEST-PLAN.md"
+      - "process/docs/features/runner-control-plane/TASKS.md"
+    stories:
+      - "CR138-S01-shared-contracts-authorization-audit"
+      - "CR138-S02-runner-plan-preflight-control"
+      - "CR138-S03-runner-event-signal-rebalance-tracking"
+      - "CR138-S04-runner-evidence-review-incident-lifecycle"
+      - "CR138-S08-docs-fixtures-cp7-authorization-runbook"
+  - feature_id: "FEAT-12"
+    name: "QMT Gateway Service Layer"
+    design_docs:
+      - "process/docs/features/qmt-gateway-service-layer/DESIGN.md"
+      - "process/docs/features/qmt-gateway-service-layer/TEST-PLAN.md"
+      - "process/docs/features/qmt-gateway-service-layer/TASKS.md"
+    stories:
+      - "CR138-S01-shared-contracts-authorization-audit"
+      - "CR138-S05-gateway-lifecycle-health-rest-contract"
+      - "CR138-S06-gateway-query-calendar-commission-pnl"
+      - "CR138-S07-gateway-subscription-order-report-recovery"
+      - "CR138-S08-docs-fixtures-cp7-authorization-runbook"
+
+lld_design_batch:
+  batch_id: "CR138-RUNNER-QMT-OPERATIONAL-CONTROL-BATCH-A"
+  status: "planned-pending-cp5"
+  cp5_manual_review: "process/checkpoints/CP5-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-LLD-BATCH.md"
+  policy: "8 个 Story 全部 full-lld；LLD 可按 Wave 并行起草，但 CP5 必须等待全部 LLD、clarification queue 和自动预检完成后统一人工确认。"
+  stories:
+    - "CR138-S01-shared-contracts-authorization-audit"
+    - "CR138-S02-runner-plan-preflight-control"
+    - "CR138-S03-runner-event-signal-rebalance-tracking"
+    - "CR138-S04-runner-evidence-review-incident-lifecycle"
+    - "CR138-S05-gateway-lifecycle-health-rest-contract"
+    - "CR138-S06-gateway-query-calendar-commission-pnl"
+    - "CR138-S07-gateway-subscription-order-report-recovery"
+    - "CR138-S08-docs-fixtures-cp7-authorization-runbook"
+
+parallel_policy:
+  max_parallel_lld: 3
+  max_parallel_dev_after_cp5: 2
+  max_parallel_verification_after_cp6: 2
+  same_file_merge_rule: "同一 shared service 文件同时只能有一个 merge_owner；其他 Story 只能基于已合并 contract 继续。"
+  gateway_shared_file_rule: "CR138-S05 先冻结 qmt_gateway_service.py REST route / lifecycle skeleton；CR138-S06 与 CR138-S07 后续实现必须基于 S05 合同分支，并按 S06 后 S07 或单一 gateway merge owner 串行合并。"
+  runner_shared_file_rule: "CR138-S02 先冻结 runner_control_plane.py 控制壳；CR138-S03 / S04 后续实现不得绕过 S02 的 RunPlan、PreflightResult 和 AuthorizationRecord 合同。"
+
+waves:
+  - wave: "CR138-W1-SHARED-CONTRACTS"
+    objective: "冻结 Runner / Gateway / OMS / Safety 共享合同、授权边界与审计字段。"
+    parallel_lld: false
+    parallel_dev_after_cp5: false
+    entry_conditions:
+      - "CR138 CP3 approved"
+      - "FEAT-11 / FEAT-12 feature design triplets generated"
+    stories:
+      - story_id: "CR138-S01-shared-contracts-authorization-audit"
+        title: "Shared contracts, authorization, and audit boundary"
+        priority: "P0"
+        status: "lld-ready-for-review"
+        depends_on: []
+        primary_files:
+          - "trading/runner_control_contracts.py"
+          - "trading/qmt_gateway_contracts.py"
+          - "tests/test_cr138_shared_contracts_authorization_audit.py"
+        merge_owner: "CR138-S01-shared-contracts-authorization-audit"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "pending-cp5"
+        dev_gate:
+          cp5_required: true
+          implementation_allowed_before_cp5: false
+          runtime_authorization_required_for_real_validation: true
+
+  - wave: "CR138-W2-CONTROL-SHELL"
+    objective: "冻结 Runner 控制壳与 Gateway REST-only 生命周期 / capability shell。"
+    parallel_lld: true
+    parallel_dev_after_cp5: true
+    entry_conditions:
+      - "CR138-S01 shared contracts LLD available for downstream review"
+    stories:
+      - story_id: "CR138-S02-runner-plan-preflight-control"
+        title: "Runner run plan, preflight, and command control"
+        priority: "P0"
+        status: "lld-ready-for-review"
+        depends_on:
+          - "CR138-S01-shared-contracts-authorization-audit"
+        primary_files:
+          - "trading/runner_control_plane.py"
+          - "trading/runner_control_cli.py"
+          - "tests/test_cr138_runner_plan_preflight_control.py"
+        coverage_notes:
+          - "Absorbs CR137 offline batch run recommendation as local RunPlanBatch / BatchPreflightResult."
+          - "Batch preflight remains local / fixture-only and does not authorize runtime batch execution."
+        merge_owner: "CR138-S02-runner-plan-preflight-control"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "pending-cp5"
+        dev_gate:
+          cp5_required: true
+          implementation_allowed_before_cp5: false
+      - story_id: "CR138-S05-gateway-lifecycle-health-rest-contract"
+        title: "Gateway lifecycle, health, capabilities, REST contract, and change plan"
+        priority: "P0"
+        status: "lld-ready-for-review"
+        depends_on:
+          - "CR138-S01-shared-contracts-authorization-audit"
+        primary_files:
+          - "trading/qmt_gateway_service.py"
+          - "trading/qmt_gateway_config.py"
+          - "tests/test_cr138_gateway_lifecycle_health_rest_contract.py"
+        coverage_notes:
+          - "Includes GatewayChangePlan dry-run / compatibility / rollback target required."
+          - "Does not authorize real config apply, restart, port bind, or gateway runtime."
+        merge_owner: "CR138-S05-gateway-lifecycle-health-rest-contract"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "pending-cp5"
+        dev_gate:
+          cp5_required: true
+          implementation_allowed_before_cp5: false
+          gateway_start_allowed: false
+          port_bind_allowed: false
+
+  - wave: "CR138-W3-OPERATIONAL-FLOWS"
+    objective: "冻结事件 / 信号 / 再平衡、查询服务、订阅 / 回报 / 恢复边界。"
+    parallel_lld: true
+    parallel_dev_after_cp5: "limited-by-shared-files"
+    entry_conditions:
+      - "CR138-S02 Runner control shell contract available"
+      - "CR138-S05 Gateway REST route / lifecycle contract available"
+    stories:
+      - story_id: "CR138-S03-runner-event-signal-rebalance-tracking"
+        title: "Runner event, signal, rebalance, run tracking, and ops summary"
+        priority: "P0"
+        status: "lld-ready-for-review"
+        depends_on:
+          - "CR138-S01-shared-contracts-authorization-audit"
+          - "CR138-S02-runner-plan-preflight-control"
+        primary_files:
+          - "trading/runner_control_plane.py"
+          - "trading/runner_control_cli.py"
+          - "trading/oms.py"
+          - "trading/pretrade_risk.py"
+          - "tests/test_cr138_runner_event_signal_rebalance_tracking.py"
+        coverage_notes:
+          - "Includes local redacted OpsSummary / CLI Summary for UC-39."
+          - "Includes local BatchOpsSummary for RunPlanBatch / registry refs; absorbs CR137 offline batch run reporting need."
+          - "CLI summary must read only local RunState / redacted refs / no-real-operation counters."
+        merge_owner: "CR138-S03-runner-event-signal-rebalance-tracking"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "pending-cp5"
+        dev_gate:
+          cp5_required: true
+          implementation_allowed_before_cp5: false
+          submit_cancel_allowed: false
+      - story_id: "CR138-S06-gateway-query-calendar-commission-pnl"
+        title: "Gateway query service for calendar, commission, and PnL"
+        priority: "P0"
+        status: "lld-ready-for-review"
+        depends_on:
+          - "CR138-S01-shared-contracts-authorization-audit"
+          - "CR138-S05-gateway-lifecycle-health-rest-contract"
+        primary_files:
+          - "trading/qmt_gateway_service.py"
+          - "trading/reconciliation.py"
+          - "tests/test_cr138_gateway_query_calendar_commission_pnl.py"
+        merge_owner: "CR138-S06-gateway-query-calendar-commission-pnl"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "pending-cp5"
+        dev_gate:
+          cp5_required: true
+          implementation_allowed_before_cp5: false
+          account_read_requires_runtime_authorization: true
+      - story_id: "CR138-S07-gateway-subscription-order-report-recovery"
+        title: "Gateway subscription, order report, and recovery boundary"
+        priority: "P0"
+        status: "lld-ready-for-review"
+        depends_on:
+          - "CR138-S01-shared-contracts-authorization-audit"
+          - "CR138-S05-gateway-lifecycle-health-rest-contract"
+        primary_files:
+          - "trading/qmt_gateway_service.py"
+          - "trading/qmt_gateway_gates.py"
+          - "tests/test_cr138_gateway_subscription_order_report_recovery.py"
+        merge_owner: "CR138-S07-gateway-subscription-order-report-recovery"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "pending-cp5"
+        dev_gate:
+          cp5_required: true
+          implementation_allowed_before_cp5: false
+          market_read_requires_runtime_authorization: true
+          submit_cancel_allowed: false
+
+  - wave: "CR138-W4-REVIEW-DOCS-GUARDRAILS"
+    objective: "冻结复盘 / 事件 / 变更生命周期和文档、fixture、CP7 授权 guardrail。"
+    parallel_lld: true
+    parallel_dev_after_cp5: true
+    entry_conditions:
+      - "CR138-S02/S03/S06/S07 contracts available for evidence and docs consolidation"
+    stories:
+      - story_id: "CR138-S04-runner-evidence-review-incident-lifecycle"
+        title: "Runner evidence, review, incident, and lifecycle change"
+        priority: "P1"
+        status: "lld-ready-for-review"
+        depends_on:
+          - "CR138-S02-runner-plan-preflight-control"
+          - "CR138-S03-runner-event-signal-rebalance-tracking"
+          - "CR138-S06-gateway-query-calendar-commission-pnl"
+          - "CR138-S07-gateway-subscription-order-report-recovery"
+        primary_files:
+          - "trading/runner_control_plane.py"
+          - "trading/strategy_runner/evidence_index.py"
+          - "tests/test_cr138_runner_evidence_review_incident_lifecycle.py"
+        merge_owner: "CR138-S04-runner-evidence-review-incident-lifecycle"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "pending-cp5"
+        dev_gate:
+          cp5_required: true
+          implementation_allowed_before_cp5: false
+          raw_log_copy_allowed: false
+      - story_id: "CR138-S08-docs-fixtures-cp7-authorization-runbook"
+        title: "Docs, fixtures, CP7 guardrails, and authorization runbook"
+        priority: "P1"
+        status: "lld-ready-for-review"
+        depends_on:
+          - "CR138-S01-shared-contracts-authorization-audit"
+          - "CR138-S02-runner-plan-preflight-control"
+          - "CR138-S03-runner-event-signal-rebalance-tracking"
+          - "CR138-S04-runner-evidence-review-incident-lifecycle"
+          - "CR138-S05-gateway-lifecycle-health-rest-contract"
+          - "CR138-S06-gateway-query-calendar-commission-pnl"
+          - "CR138-S07-gateway-subscription-order-report-recovery"
+        primary_files:
+          - "docs/USER-MANUAL.md"
+          - "docs/QMT-C-S-BRIDGE-RUNBOOK.md"
+          - "process/docs/quality/TEST-MATRIX-CR138.md"
+          - "tests/test_cr138_docs_fixtures_authorization_runbook.py"
+        merge_owner: "CR138-S08-docs-fixtures-cp7-authorization-runbook"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "pending-cp5"
+        dev_gate:
+          cp5_required: true
+          implementation_allowed_before_cp5: false
+          docs_as_runtime_authorization_allowed: false
+
+dependency_graph:
+  nodes:
+    - "CR138-S01-shared-contracts-authorization-audit"
+    - "CR138-S02-runner-plan-preflight-control"
+    - "CR138-S03-runner-event-signal-rebalance-tracking"
+    - "CR138-S04-runner-evidence-review-incident-lifecycle"
+    - "CR138-S05-gateway-lifecycle-health-rest-contract"
+    - "CR138-S06-gateway-query-calendar-commission-pnl"
+    - "CR138-S07-gateway-subscription-order-report-recovery"
+    - "CR138-S08-docs-fixtures-cp7-authorization-runbook"
+  edges:
+    - ["CR138-S01-shared-contracts-authorization-audit", "CR138-S02-runner-plan-preflight-control"]
+    - ["CR138-S01-shared-contracts-authorization-audit", "CR138-S05-gateway-lifecycle-health-rest-contract"]
+    - ["CR138-S02-runner-plan-preflight-control", "CR138-S03-runner-event-signal-rebalance-tracking"]
+    - ["CR138-S05-gateway-lifecycle-health-rest-contract", "CR138-S06-gateway-query-calendar-commission-pnl"]
+    - ["CR138-S05-gateway-lifecycle-health-rest-contract", "CR138-S07-gateway-subscription-order-report-recovery"]
+    - ["CR138-S03-runner-event-signal-rebalance-tracking", "CR138-S04-runner-evidence-review-incident-lifecycle"]
+    - ["CR138-S06-gateway-query-calendar-commission-pnl", "CR138-S04-runner-evidence-review-incident-lifecycle"]
+    - ["CR138-S07-gateway-subscription-order-report-recovery", "CR138-S04-runner-evidence-review-incident-lifecycle"]
+    - ["CR138-S01-shared-contracts-authorization-audit", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+    - ["CR138-S02-runner-plan-preflight-control", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+    - ["CR138-S03-runner-event-signal-rebalance-tracking", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+    - ["CR138-S04-runner-evidence-review-incident-lifecycle", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+    - ["CR138-S05-gateway-lifecycle-health-rest-contract", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+    - ["CR138-S06-gateway-query-calendar-commission-pnl", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+    - ["CR138-S07-gateway-subscription-order-report-recovery", "CR138-S08-docs-fixtures-cp7-authorization-runbook"]
+  validation_result:
+    cycles: []
+    invalid_references: []
+    parallel_internal_dependencies: 0
+    conclusion: "PASS"
+
+merge_order:
+  - "CR138-S01-shared-contracts-authorization-audit"
+  - "CR138-S02-runner-plan-preflight-control"
+  - "CR138-S05-gateway-lifecycle-health-rest-contract"
+  - "CR138-S03-runner-event-signal-rebalance-tracking"
+  - "CR138-S06-gateway-query-calendar-commission-pnl"
+  - "CR138-S07-gateway-subscription-order-report-recovery"
+  - "CR138-S04-runner-evidence-review-incident-lifecycle"
+  - "CR138-S08-docs-fixtures-cp7-authorization-runbook"
+
+validation_plan:
+  fixture_static_only:
+    - "uv run --python 3.11 pytest -q tests/test_cr138_shared_contracts_authorization_audit.py"
+    - "uv run --python 3.11 pytest -q tests/test_cr138_runner_plan_preflight_control.py"
+    - "uv run --python 3.11 pytest -q tests/test_cr138_gateway_lifecycle_health_rest_contract.py"
+    - "uv run --python 3.11 pytest -q tests/test_cr138_gateway_query_calendar_commission_pnl.py"
+    - "uv run --python 3.11 pytest -q tests/test_cr138_gateway_subscription_order_report_recovery.py"
+    - "uv run --python 3.11 pytest -q tests/test_cr138_docs_fixtures_authorization_runbook.py"
+    - "uv run --python 3.11 python scripts/check_process_artifact_hygiene.py --json"
+  regression_candidates:
+    - "uv run --python 3.11 pytest -q tests/test_cr020_qmt_gateway_readonly.py tests/test_cr019_qmt_bridge_contracts.py"
+    - "uv run --python 3.11 pytest -q tests/test_cr137_runner_run_registry.py"
+  forbidden_without_new_authorization:
+    - "read .env / credentials / account identifiers"
+    - "start gateway or bind a port"
+    - "import or connect xtquant / MiniQMT / QMT runtime"
+    - "query real account / market / order / fill data"
+    - "submit / cancel / buy / sell / simulation / live"
+    - "NAS access, provider fetch, lake write, catalog publish, Git remote write"
+
+follow_up_cr_reconciliation:
+  audit_ref: "process/checks/CR138-FOLLOW-UP-CR-COVERAGE-AUDIT-2026-06-24.md"
+  absorbed_by_cr138:
+    - candidate_id: "CR137-offline-batch-run"
+      absorbed_into:
+        - "CR138-S02-runner-plan-preflight-control"
+        - "CR138-S03-runner-event-signal-rebalance-tracking"
+      reason: "本地 batch plan / batch summary 属于 Runner Control Plane P0，不再需要单独 CR。"
+  closed_or_superseded_before_cr138:
+    - "CR126 Runner Entry Design / Scope Gate"
+    - "CR128 Runner Core MVP Implementation"
+    - "RA-CR097-001 Non-empty / trading-day readonly retest"
+    - "RA-CR101-002 MiniQMT gateway adapter validation gate"
+    - "RA-CR101-003 NAS real package exchange validation gate"
+  future_scoped_crs:
+    - candidate_id: "CR138-FU-RT-01"
+      title: "Gateway xtquant adapter Spike / readonly integration design"
+      start_after: "CR138 S05/S06/S07 fixture implementation and CP7 PASS"
+      reason_not_in_cr138: "requires runtime / credential / host-window scoped authorization"
+    - candidate_id: "CR138-FU-RT-02"
+      title: "QMT terminal direct-run validation gate"
+      start_after: "user explicitly needs QMT terminal direct-run evidence"
+      reason_not_in_cr138: "separate QMT terminal runtime scope"
+    - candidate_id: "CR138-FU-TRD-01"
+      title: "Order-write / simulation / live design gate"
+      start_after: "readonly adapter and OMS/risk hard-reject contracts are stable"
+      reason_not_in_cr138: "high-risk trading-write authorization"
+  excluded_from_cr138:
+    - candidate_id: "FU-CR137-001"
+      reason: "CR tracking warning cleanup is governance, not Runner/Gateway P0."
+    - candidate_id: "CR063/CR064"
+      reason: "NAS archive / data lake / catalog migration belongs to storage and data governance."

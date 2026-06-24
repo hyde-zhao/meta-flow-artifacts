@@ -1,8 +1,8 @@
 ---
 status: "draft-current-index"
-version: "1.2"
+version: "1.4"
 source_blueprint: "docs/design/BLUEPRINT.md"
-change: "CR-051"
+change: "CR-138"
 ---
 
 # Domain Map
@@ -14,6 +14,8 @@ change: "CR-051"
 | 1.0 | 2026-06-07 | meta-po | 新增领域对象、状态机、术语和核心业务规则索引 |
 | 1.1 | 2026-06-13 | meta-po | 按 CR-046 增补双目标策略交付框架领域对象、状态机和规则 |
 | 1.2 | 2026-06-14 | host-orchestrator | 按 CR-051 增补策略研究生命周期、研究归档、项目身份迁移和硬件冷热分层规则 |
+| 1.3 | 2026-06-24 | host-orchestrator | 按 CR138 增补 Runner Control Plane 与 QMT Gateway Service Layer 运营领域对象、状态机和 fail-closed 规则 |
+| 1.4 | 2026-06-24 | host-orchestrator | 根据用户 CP3 反馈补齐 FEAT-12 查询领域对象：交易日历、交易窗口、佣金 / 费用模型、成本估算、收益 / PnL 快照和收益摘要；runtime policy 改为按需授权 |
 
 ## 术语表
 
@@ -138,3 +140,68 @@ change: "CR-051"
 | RULE-21 | `quant-lab` 是 canonical 项目名；`local_backtest` 是 legacy alias，不批量重写历史审计材料 | FEAT-10 / FEAT-08 | CR-051 migration | alias compatibility review |
 | RULE-22 | CP3 / CP4 / CP5 设计通过不授权目录重命名、NAS 操作、外部 archive 搬迁、远端仓库改名或 git push | FEAT-10 / FEAT-07 | CR-051 | no-real-operation safety review |
 | RULE-23 | market data lake、research archive 和 broker lake 必须保持三类事实域隔离 | FEAT-02 / FEAT-06 / FEAT-10 | CR-051、后续迁移 | dependency / archive manifest review |
+
+## CR138 增量：Runner / QMT Gateway 领域模型
+
+### 术语增量
+
+| Term | 定义 | 来源 | 备注 |
+|---|---|---|---|
+| Runner Control Plane | 负责策略运行计划、盘前确认、执行跟踪、事件/信号接入、再平衡、证据查询、复盘、异常恢复和策略生命周期变更的运营控制面 | CR-138 / UC-33..UC-43 | 不等于 offline `strategy-runner-core` implementation authority |
+| QMT Gateway Service Layer | 负责 QMT / MiniQMT / XtQuant 服务生命周期、查询、订阅、订单命令门、回报、恢复、审计和配置变更的服务层 | CR-138 / UC-44..UC-50 | 不等于 QMT terminal target 或 readonly-only endpoint |
+| GatewayHealth | Gateway 的可用性、会话、capabilities、degraded reason 和恢复状态 | UC-44 / UC-48 | health pass 不等于 runtime authorization |
+| ExecutionReport | Gateway 标准化后的订单状态、成交、拒单、撤单和错误事件 | UC-47 | 不得在无授权时由真实 adapter 产生 |
+| RunnerCommand | Runner 对 Gateway 或 OMS 发出的领域命令意图 | UC-35..UC-38 | 必须带 idempotency_key 和 authorization_ref |
+| Reference / Account Query Service | Gateway 内负责交易日历、佣金 / 费用模型、收益 / PnL、账户、持仓、订单、成交等查询的服务能力 | UC-34 / UC-41 / UC-45 | 交易日历可走本地参考数据；账户级查询必须授权和脱敏 |
+
+### 领域对象增量
+
+| Object ID | 对象 | Owner Feature | 关键字段 / 属性 | 状态 | 规则来源 |
+|---|---|---|---|---|---|
+| OBJ-44 | RunPlan | FEAT-11 | run_id、strategy_id、strategy_version、data_release、target_date、mode_request、authorization_ref | draft / preflight_ready / blocked / approved_for_manual_review | UC-33 / UC-34 |
+| OBJ-45 | PreflightResult | FEAT-11 / FEAT-07 | run_id、admission_status、data_status、gateway_health_ref、auth_status、blocked_reasons | pass / warn / blocked / manual_review | UC-34 |
+| OBJ-46 | RunnerCommand | FEAT-11 | command_id、run_id、strategy_id、command_type、idempotency_key、authorization_ref、audit_id | accepted / duplicate / rejected / blocked | UC-35..UC-38 |
+| OBJ-47 | RunState | FEAT-11 | run_id、state、active_orders、last_event_at、gateway_status、incident_refs | planned / preflight / running / degraded / paused / completed / blocked / manual_takeover | UC-35 / UC-39 / UC-42 |
+| OBJ-48 | RunEvidence | FEAT-11 / FEAT-08 | run_id、evidence_refs、audit_ids、redaction_status、summary | indexed / redacted / unavailable / blocked | UC-40 / UC-49 |
+| OBJ-49 | ReviewSummary | FEAT-11 / FEAT-08 | run_id、trade_date、metrics_summary、incidents、follow_up_candidates | draft / reviewed / follow_up_created | UC-41 |
+| OBJ-50 | StrategyChangePlan | FEAT-11 | strategy_id、change_type、parameter_diff、version_diff、rollback_target、approval_ref | draft / approved / applied_by_followup / blocked | UC-43 |
+| OBJ-51 | GatewayHealth | FEAT-12 | gateway_id、status、capabilities_ref、session_state、degraded_reason、last_heartbeat | not_started / healthy / degraded / cooldown / unavailable / disabled | UC-44 / UC-48 |
+| OBJ-52 | CapabilitySnapshot | FEAT-12 | gateway_id、protocols、query_scopes、market_scopes、order_scopes、runtime_mode | discovered / stale / blocked | UC-44 |
+| OBJ-53 | TradingSession | FEAT-12 | session_id、account_label、run_mode、scope、started_at、expires_at、redaction_status | missing / opening / ready / expired / revoked / blocked | UC-45 / UC-47 |
+| OBJ-54 | ReadonlyQueryResult | FEAT-12 | request_id、scope、account_label、snapshot_time、summary、redaction_status | available / blocked / unavailable / stale | UC-45 |
+| OBJ-55 | MarketSubscription | FEAT-12 | subscription_id、symbols、period、mode、cache_policy、recovery_state | requested / active / degraded / recovering / stopped / blocked | UC-46 |
+| OBJ-56 | GatewayCommand | FEAT-12 / FEAT-06 | command_id、command_type、order_intent_id、scope、idempotency_key、risk_ref | accepted / hard_rejected / sent_by_future_runtime / blocked | UC-47 |
+| OBJ-57 | ExecutionReport | FEAT-12 / FEAT-06 | execution_report_id、order_intent_id、broker_order_ref、state、filled_qty、error_code、audit_id | ack / partial / filled / canceled / rejected / unknown / stale | UC-47 / UC-48 |
+| OBJ-58 | GatewayAuditRecord | FEAT-12 / FEAT-07 | audit_id、request_id、run_id、scope、redaction_status、event_refs | recorded / redacted / blocked | UC-49 |
+| OBJ-59 | GatewayChangePlan | FEAT-12 / FEAT-08 | change_id、config_diff、protocol_diff、auth_diff、compatibility_result、rollback_target | draft / review_ready / approved_by_followup / rejected | UC-50 |
+| OBJ-60 | TradingCalendar | FEAT-12 | market、date_range、trading_days、holidays、source、source_freshness | available / stale / unavailable | UC-34 / UC-45 |
+| OBJ-61 | TradingWindow | FEAT-12 | trade_date、market、pre_open、open_sessions、close_time、after_hours、timezone | open / closed / pre_open / post_close / unknown | UC-33 / UC-34 / UC-45 |
+| OBJ-62 | CommissionSchedule | FEAT-12 / FEAT-06 | account_label、instrument_type、commission_rate、min_fee、stamp_tax、transfer_fee、source、effective_from | configured / broker_confirmed / estimated / unavailable | UC-38 / UC-41 / UC-45 |
+| OBJ-63 | CostEstimate | FEAT-06 / FEAT-12 | order_intent_id、notional、estimated_commission、taxes、slippage_assumption、source | estimated / unavailable / superseded | UC-38 / UC-41 |
+| OBJ-64 | PnLSnapshot | FEAT-12 / FEAT-06 | account_label、run_id、period、realized_pnl、unrealized_pnl、cash_delta、positions_value、source、redaction_status | available / estimated / blocked / stale / unavailable | UC-39 / UC-41 / UC-45 |
+| OBJ-65 | ReturnSummary | FEAT-11 / FEAT-12 | run_id、strategy_id、period、gross_return、net_return、benchmark_ref、cost_ref、pnl_ref | draft / reviewed / blocked | UC-41 |
+
+### 状态机增量
+
+| State Machine ID | 对象 | 状态 | 合法转换 | 非法转换处理 |
+|---|---|---|---|---|
+| SM-16 | RunPlan / PreflightResult | draft -> preflight_ready -> approved_for_manual_review / blocked | admission、data、auth、GatewayHealth 均可检查后转换 | 缺授权或关键输入时 blocked，不生成 runtime action |
+| SM-17 | RunState | planned -> preflight -> running -> degraded/paused/completed/manual_takeover | 只能由 RunnerCommand、GatewayEvent、ExecutionReport 或人工动作推进 | unknown order / stale report 不得静默 completed |
+| SM-18 | GatewayHealth | not_started -> healthy -> degraded/cooldown/unavailable/disabled -> healthy | health probe、heartbeat、recovery plan 或人工确认触发 | degraded 状态不得自动解除 kill switch 或重发订单 |
+| SM-19 | MarketSubscription | requested -> active -> degraded -> recovering -> active/stopped | 授权、capabilities、订阅恢复通过后转换 | 无授权、xtdata 异常或 schema mismatch 时 blocked/degraded |
+| SM-20 | GatewayChangePlan | draft -> review_ready -> approved_by_followup/rejected | diff、compatibility、rollback plan 齐备后进入 review | 缺 rollback target 或含明文凭据时 rejected |
+| SM-21 | Reference / Account Query | requested -> authorized/local_source_selected -> available/estimated/blocked/unavailable | 本地日历可直接选择 local source；账户佣金 / 收益必须先授权 | 缺授权 blocked；QMT 不支持时 unavailable_with_reason，不得伪造 broker facts |
+
+### 业务规则增量
+
+| Rule ID | 规则 | Owner | 影响场景 | 验证入口 |
+|---|---|---|---|---|
+| RULE-24 | Runner Control Plane 不得导入 xtquant、读取凭据或直接查询账户 / 行情 / 订单 | FEAT-11 / FEAT-07 | UC-33..UC-43 | CR138 CP5 static guardrail |
+| RULE-25 | Gateway health、capabilities、endpoint 可见不等于 account / quote / order / trading 授权 | FEAT-12 / FEAT-07 | UC-44..UC-50 | CP3 / docs guardrail |
+| RULE-26 | Runner 与 Gateway 之间所有命令 / 事件必须携带 audit_id 或可追溯 request_id | FEAT-11 / FEAT-12 | UC-35..UC-49 | event schema tests |
+| RULE-27 | 未授权 submit/cancel 时 GatewayCommand 必须 hard_rejected / blocked，adapter_calls=0 | FEAT-12 / FEAT-06 / FEAT-07 | UC-47 | no-real-operation tests |
+| RULE-28 | Gateway 处于 degraded / unavailable 时 Runner 不得自动重发订单或解除 kill switch | FEAT-11 / FEAT-12 / FEAT-06 | UC-42 / UC-48 | recovery scenario tests |
+| RULE-29 | GatewayChangePlan 必须包含 compatibility、auth diff 和 rollback target，且配置不得包含明文凭据 | FEAT-12 / FEAT-08 / FEAT-07 | UC-50 | static validation |
+| RULE-30 | 交易日历优先使用本地参考数据；若需要 QMT / vendor 日历，必须记录来源和 freshness，不得把缺失日历推断为交易日 | FEAT-12 / FEAT-07 | UC-34 / UC-45 | calendar fixture |
+| RULE-31 | 佣金 / 费用模型必须标注 source=broker_confirmed/configured/estimated/unavailable；QMT 不支持时不得伪造 broker confirmed 结果 | FEAT-12 / FEAT-06 | UC-38 / UC-41 / UC-45 | fee model fixture |
+| RULE-32 | 账户级收益 / PnL、资金、持仓、委托、成交查询必须有账户只读授权、脱敏策略和 audit_id；Runner 只消费摘要和引用 | FEAT-11 / FEAT-12 / FEAT-07 | UC-39 / UC-41 / UC-45 | query auth guardrail |

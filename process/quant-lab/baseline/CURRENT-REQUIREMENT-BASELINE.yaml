@@ -3,7 +3,7 @@ baseline_id: CURRENT-REQUIREMENT-BASELINE
 project: quant-lab
 status: active
 created_at: "2026-06-19T20:50:00+08:00"
-updated_at: "2026-06-20T10:45:00+08:00"
+updated_at: "2026-06-24T18:58:00+08:00"
 created_by: host-orchestrator
 source_crs:
   - CR-046
@@ -111,32 +111,58 @@ closed_realignment:
     - process/checkpoints/CP8-CR101-DELIVERY-READINESS.md
 
 next_recommended_candidates:
-  - candidate_id: RA-CR101-001
-    legacy_id: QMT-DIRECT-RUN-VALIDATION-FU
-    title: QMT direct-run validation authorization gate
-    required_pre_start_checks:
-      - conflict_precheck
-      - formal_cr_id_allocation
-      - CP2_scope_risk_runtime_authorization_decision_brief
-  - candidate_id: RA-CR101-002
+  - candidate_id: CR138-FU-RT-01
     legacy_id: MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU
-    title: MiniQMT gateway adapter validation authorization gate
+    title: Gateway xtquant adapter Spike / readonly integration design
+    status: future-scoped-gate
+    replaces:
+      - RA-CR101-002
+    reason: >
+      RA-CR101-002 的只读验证已由 CR104 关闭；CR138 S05/S06/S07 将先实现
+      fixture-only Gateway service layer。若后续需要真实 xtquant adapter，应在
+      CR138 fixture 实现和 CP7 通过后启动新的 scoped runtime_authorization gate。
+    required_pre_start_checks:
+      - conflict_precheck
+      - formal_cr_id_allocation
+      - CR138_fixture_cp7_pass
+      - CP2_scope_risk_runtime_authorization_decision_brief
+  - candidate_id: CR138-FU-RT-02
+    legacy_id: QMT-DIRECT-RUN-VALIDATION-FU
+    title: QMT terminal direct-run validation authorization gate
+    status: optional-future-runtime-gate
+    replaces:
+      - RA-CR101-001
+    reason: >
+      CR104 关闭时未覆盖 QMT terminal direct-run；CR138 当前只覆盖 Runner /
+      Gateway control plane，不证明 QMT terminal 可加载 direct-run target。
     required_pre_start_checks:
       - conflict_precheck
       - formal_cr_id_allocation
       - CP2_scope_risk_runtime_authorization_decision_brief
-  - candidate_id: RA-CR101-003
-    legacy_id: NAS-REAL-EXCHANGE-FU
-    title: NAS real package exchange validation authorization gate
-    required_pre_start_checks:
-      - conflict_precheck
-      - formal_cr_id_allocation
-      - CP2_scope_risk_runtime_authorization_decision_brief
-  - candidate_id: FU-CR101-001
+  - candidate_id: CR138-FU-TRD-01
     legacy_id: ORDER-WRITE-SIMULATION-LIVE-FU
     title: Order-write / simulation / live design authorization gate
+    status: high-risk-future-gate
+    replaces:
+      - FU-CR101-001
+      - CR091-FU-03
+    reason: >
+      CR138 S07 只实现 hard-reject / ExecutionReport / recovery boundary；
+      submit/cancel、buy/sell、simulation/live 必须等 readonly adapter 和
+      OMS/risk 合同稳定后再独立授权。
     required_pre_start_checks:
       - conflict_precheck
       - formal_cr_id_allocation
       - CP2_scope_risk_runtime_authorization_decision_brief
       - high_risk_acceptance_review
+  - candidate_id: CR138-FU-GOV-01
+    legacy_id: FU-CR137-001
+    title: CR tracking warning cleanup
+    status: low-priority-governance-candidate
+    reason: >
+      WARN-CR137-CR-TRACKING 是 CP8 已接受的非阻断治理 warning，不属于 CR138
+      Runner / Gateway 功能实现范围；仅在用户要求零 warning 时启动。
+    required_pre_start_checks:
+      - conflict_precheck
+      - formal_cr_id_allocation
+      - CP2_scope_decision_brief

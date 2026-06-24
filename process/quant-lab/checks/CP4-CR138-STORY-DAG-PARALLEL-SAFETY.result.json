@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR138-STORY-DAG-PARALLEL-SAFETY",
+  "profile": "story-dag-parallel-safety",
+  "story_id": null,
+  "cr_id": "CR-138",
+  "context_ref": "process/checks/CP4-CR138-STORY-DAG-PARALLEL-SAFETY.md",
+  "dispatch_refs": [],
+  "evidence_ref": "process/STORY-BACKLOG-CR138.md",
+  "items": [
+    {
+      "id": "CP4-CR138-01",
+      "category": "traceability",
+      "name": "Story plan is traceable to approved CP3 HLD and ADR",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/HLD-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md",
+        "process/docs/design/ARCHITECTURE-DECISION-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "FEAT-11 / FEAT-12 and all 8 CR138 stories are linked to CP3-approved design boundaries."
+    },
+    {
+      "id": "CP4-CR138-02",
+      "category": "dag",
+      "name": "Story DAG has no cycles or invalid references",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR138.md#依赖-dag",
+        "process/DEVELOPMENT-PLAN-CR138.yaml#dependency_graph"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "DAG flows from S01 contracts to S02/S05 shells, then S03/S06/S07 operational flows, then S04/S08 consolidation. Follow-up audit absorbed CR137 offline batch run into S02/S03 without adding nodes or edges."
+    },
+    {
+      "id": "CP4-CR138-03",
+      "category": "parallel-safety",
+      "name": "Wave and file ownership rules constrain parallel LLD and implementation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR138.yaml#parallel_policy",
+        "process/checks/CP4-CR138-STORY-DAG-PARALLEL-SAFETY.md#file-ownership"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S05 owns gateway REST skeleton; S06/S07 shared gateway changes are limited by merge owner sequencing."
+    },
+    {
+      "id": "CP4-CR138-04",
+      "category": "authorization-boundary",
+      "name": "CP4 does not authorize implementation or real runtime operations",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR138.yaml#authorization_boundary",
+        "process/checks/CP4-CR138-STORY-DAG-PARALLEL-SAFETY.md#no-authorization-boundary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Runtime/QMT/MiniQMT/XtQuant/gateway, credentials, account/market/order reads, submit/cancel, simulation/live, NAS, provider/lake/catalog and Git remote remain unauthorized."
+    },
+    {
+      "id": "CP4-CR138-05",
+      "category": "deliverables",
+      "name": "Required CP4 story planning deliverables exist",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR138.md",
+        "process/DEVELOPMENT-PLAN-CR138.yaml",
+        "process/STORY-STATUS-CR138.md",
+        "process/stories/CR138-S01-shared-contracts-authorization-audit.md",
+        "process/stories/CR138-S08-docs-fixtures-cp7-authorization-runbook.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "8 Story cards, Story Backlog, Story Status, Development Plan and CP4 Markdown check have been generated."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "CP5",
+  "checked_at": "2026-06-24T18:58:00+08:00",
+  "summary": {
+    "story_count": 8,
+    "wave_count": 4,
+    "lld_batch": "CR138-RUNNER-QMT-OPERATIONAL-CONTROL-BATCH-A",
+    "full_lld_count": 8,
+    "technical_note_count": 0,
+    "waived_count": 0,
+    "cycles": 0,
+    "invalid_references": 0,
+    "blocking_findings": 0,
+    "follow_up_audit_ref": "process/checks/CR138-FOLLOW-UP-CR-COVERAGE-AUDIT-2026-06-24.md",
+    "dag_changed_by_follow_up_audit": false
+  }
+}

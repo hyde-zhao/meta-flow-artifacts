@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.3"
+version: "1.5"
 source_use_cases: "process/USE-CASES.md"
 source_requirements: "process/REQUIREMENTS.md"
 source_story_backlog: "process/STORY-BACKLOG.md"
@@ -10,7 +10,7 @@ source_hld:
   - "process/HLD-QMT-TRADING.md"
   - "process/archive/design-cr-docs/HLD-CR051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK.md"
 source_adr: "process/ARCHITECTURE-DECISION.md"
-change: "CR-131"
+change: "CR-138"
 confirmed_by: ""
 confirmed_at: ""
 ---
@@ -27,6 +27,8 @@ confirmed_at: ""
 | 1.1 | 2026-06-13 | meta-po | 按 CR-046 增补 QMT terminal + MiniQMT runner 双目标策略交付框架 Feature、策略包契约、验证框架和不授权边界 |
 | 1.2 | 2026-06-14 | host-orchestrator | 按 CR-051 增补策略研究生命周期、研究归档治理、硬件冷热分层、项目迁移和 `quant-lab` / `local_backtest` 身份边界 |
 | 1.3 | 2026-06-23 | host-orchestrator | CR131 将 CR 命名 design 文档移出默认 surface；source_hld 的 CR051 历史入口改指向 archive。 |
+| 1.4 | 2026-06-24 | host-orchestrator | 按 CR138 增补 Runner Control Plane 与 QMT Gateway Service Layer 运营控制面边界；不覆盖 offline runner core、CR020 readonly gateway 或 CR046 双目标策略交付框架。 |
+| 1.5 | 2026-06-24 | host-orchestrator | 根据用户 CP3 反馈刷新 CR138 蓝图：长期 HLD 改用功能域命名；Gateway P0 收敛 REST-only；补齐交易日历、佣金 / 费用模型、收益 / PnL 查询；runtime policy 改为按需授权。 |
 
 ## 蓝图定位
 
@@ -115,3 +117,57 @@ confirmed_at: ""
 | 跨 Feature 流程写明 Owner 和失败路径 | PASS | §跨 Feature 流程 |
 | 共享能力写明调用方向和降级策略 | PASS | §共享能力 |
 | 运行授权边界未被蓝图放大 | PASS | §蓝图定位、FEAT-07、FEAT-09、FEAT-10、DQ-BP-CR046-01、DQ-BP-CR051-01 |
+
+## CR138 增量：Runner / QMT Gateway Operational Control Plane
+
+> 本节是 `process/docs/design/HLD-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md` 的蓝图索引。它只冻结运营控制面设计；CP3 approve 不自动授权 runtime、QMT / MiniQMT / XtQuant、凭据、账户、行情、订单读取、submit/cancel、simulation/live、NAS、provider/lake/catalog 或 Git remote 写入。后续验证如必要，必须按动作范围走独立 `runtime_authorization` gate。
+
+### 能力地图增量
+
+| Capability ID | 能力域 | 用户价值 | 覆盖 Story / CR | Owner Feature |
+|---|---|---|---|---|
+| CAP-11 | Runner Control Plane | 让运营负责人能生成运行计划、做盘前确认、观察执行、接入事件/信号、再平衡、查证据、复盘、恢复和变更策略生命周期 | CR-138、UC-33..UC-43 | FEAT-11 |
+| CAP-12 | QMT Gateway Service Layer | 让 QMT / MiniQMT / XtQuant 触达被封装为有 health、capabilities、会话、查询、订阅、回报、恢复、审计和配置变更的服务层 | CR-138、UC-44..UC-50 | FEAT-12 |
+
+### Feature / Epic 边界增量
+
+| Feature ID | 名称 | 负责事项 | 不负责事项 | 拥有数据 / 对象 | 只读数据 | 禁止依赖 |
+|---|---|---|---|---|---|---|
+| FEAT-11 | Runner Control Plane | RunPlan、PreflightResult、RunnerCommand、RunState、RunEvidence、ReviewSummary、IncidentRecord、StrategyChangePlan；负责 UC-33..UC-43 的用户运营路径 | QMT / MiniQMT / XtQuant native 调用、真实 account / quote / order query、submit/cancel、gateway lifecycle、策略核心合同定义 | RunPlan、RunnerCommand、RunState、RunEvidence、ReviewSummary、IncidentRecord、StrategyChangePlan | FEAT-03 StrategyAdmissionPackage、FEAT-04 OrderIntentDraft、FEAT-09 StrategyPackageContract、FEAT-12 GatewayHealth / ExecutionReport | xtquant / QMT native API、credential env、broker lake direct write、provider/lake/catalog write |
+| FEAT-12 | QMT Gateway Service Layer | GatewayConfig、GatewayHealth、CapabilitySnapshot、TradingSession、TradingCalendar、ReadonlyQueryResult、CommissionSchedule、PnLSnapshot、MarketSubscription、GatewayCommand、ExecutionReport、GatewayAuditRecord、GatewayChangePlan；负责 UC-44..UC-50 的服务层路径 | 策略信号生成、目标组合计算、策略版本发布决策、研究准入判断、offline runner bundle / registry authority | GatewayConfig、GatewayHealth、CapabilitySnapshot、TradingSession、TradingCalendar、CommissionSchedule、PnLSnapshot、MarketSubscription、ExecutionReport、GatewayAuditRecord、GatewayChangePlan | AuthorizationRecord、OrderIntent、risk decision、RunPlan summary、本地交易日历参考数据 | 策略逻辑、research data lake write、strategy package mutation、未授权 QMT / account / quote / order / submit/cancel |
+
+### 跨 Feature 流程增量
+
+| Flow ID | 触发 | 参与 Feature | 数据写入 Owner | 失败路径 | 验证入口 |
+|---|---|---|---|---|---|
+| FLOW-12 | 盘前运行计划和确认 | FEAT-09 / FEAT-03 / FEAT-02 -> FEAT-11 -> FEAT-07 / FEAT-12 | FEAT-11 | admission、data release、authorization 或 GatewayHealth 任一缺失时 blocked / manual_review | CR138 HLD §7 SIM-138-01 |
+| FLOW-13 | 事件 / 信号到订单意图 | FEAT-11 -> FEAT-04 / FEAT-06 -> FEAT-07 -> FEAT-12 | FEAT-11 / FEAT-06 | 重复信号 idempotent skip；risk fail 或 no auth 时 adapter_calls=0 | CR138 HLD §7 SIM-138-02 |
+| FLOW-14 | 行情订阅与恢复 | FEAT-11 -> FEAT-12 -> FEAT-07 | FEAT-12 | no market authorization 时 blocked；xtdata 异常时 degraded / unavailable；P0 通过 REST 管理和拉取事件 | HLD §7 SIM-138-03 |
+| FLOW-15 | 未确认订单 / Gateway 故障人工接管 | FEAT-12 -> FEAT-06 -> FEAT-11 -> FEAT-08 | FEAT-11 / FEAT-12 | unknown order 不自动成功、不自动重发；kill switch 不自动解除 | HLD §7 SIM-138-04 |
+| FLOW-16 | 交易日历 / 佣金 / 收益查询 | FEAT-11 -> FEAT-12 -> FEAT-07 / FEAT-06 | FEAT-12 / FEAT-06 | 交易日历本地参考缺失时 unavailable；账户佣金 / 收益无授权时 blocked；QMT 不支持时返回 unavailable_with_reason 或 estimated | HLD §11 FLOW-G2 |
+
+### 共享能力增量
+
+| Shared ID | 名称 | 使用方 | Owner | 调用方向 | 降级策略 |
+|---|---|---|---|---|---|
+| SH-11 | Runner / Gateway Audit ID | FEAT-11、FEAT-12、FEAT-06、FEAT-07、FEAT-08 | FEAT-12 / FEAT-07 | request -> command -> execution report -> review | 缺 audit_id 时 blocked，不输出可审计 pass |
+| SH-12 | GatewayHealth / CapabilitySnapshot | FEAT-11、FEAT-12、FEAT-07 | FEAT-12 | gateway -> runner preflight / ops view | health pass 不升级 runtime 授权；缺授权返回 blocked |
+| SH-13 | RunnerCommand / GatewayEvent Contract | FEAT-11、FEAT-12、FEAT-06 | FEAT-11 / FEAT-12 | runner intent -> gateway event stream | schema mismatch fail-closed |
+| SH-14 | Reference / Account Query Contract | FEAT-11、FEAT-12、FEAT-06、FEAT-07 | FEAT-12 | runner preflight / review -> calendar / commission / pnl query -> redacted summary | 缺账户授权时 blocked；QMT 不支持佣金 / 收益时返回 unavailable_with_reason，不伪造 broker facts |
+
+### 待确认边界增量
+
+| Decision ID | 决策类型 | 问题 | 推荐方案 | 备选方案 | 推荐 / 备选优劣 | 影响 / 风险 | 回退 / 切换条件 |
+|---|---|---|---|---|---|---|---|
+| DQ-BP-CR138-01 | architecture | 是否新增 FEAT-11 / FEAT-12，而不是扩展 FEAT-05/06/09 或 offline runner core | 推荐新增 FEAT-11 Runner Control Plane 与 FEAT-12 Gateway Service Layer | 并入 FEAT-05；并入 FEAT-09；扩展 strategy-runner-core | 推荐方案边界清晰；备选文件少但混淆只读准入、策略包和运营 runtime | 影响 CP4 Story 分组和后续 LLD owner | 若用户将 CR138 缩小为 Runner-only 或 Gateway-only，可降级为单 Feature 增量 |
+| DQ-BP-CR138-02 | runtime_authorization | CP3 approval 是否自动授权 runtime / QMT / account / quote / order / trading，以及后续是否可按需授权验证 | 推荐 CP3 不自动授权；后续必要验证按 action scope、运行窗口、脱敏、回滚和审计范围单独授权 | blanket deny；CP3 直接授权只读 / 行情 / 交易 | 推荐方案兼顾安全和验证可行性；blanket deny 会阻断必要验证，CP3 直接授权风险过高 | 防止 CP3 被误解为运行许可，同时保留后续验证路径 | 用户明确授权运行窗口和边界后发起 runtime_authorization gate |
+| DQ-BP-CR138-03 | architecture | 交易日历、佣金 / 费用模型、收益 / PnL 查询是否显式归入 FEAT-12 Query Service | 推荐归入 FEAT-12，并按本地参考数据 / 账户只读授权分层 | 放在 FEAT-11；延后到 OMS/Risk | 推荐方案让 preflight、费用估算、复盘有统一入口；放 Runner 会诱导 Runner 读取账户，延后会缺核心运营能力 | 影响 Gateway query service 和 Runner preflight/review Story | 若实现阶段 QMT 不支持对应查询，保留 unavailable_with_reason 和 estimated 模式 |
+
+### CR138 蓝图自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| 每个新增 Feature 有职责、非职责和数据归属 | PASS | FEAT-11、FEAT-12 边界表 |
+| 跨 Feature 流程写明 Owner 和失败路径 | PASS | FLOW-12..FLOW-16 |
+| 共享能力写明调用方向和降级策略 | PASS | SH-11..SH-14 |
+| 运行授权边界未被放大 | PASS | DQ-BP-CR138-02、HLD §12/§13 |

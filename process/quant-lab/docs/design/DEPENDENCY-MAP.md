@@ -1,8 +1,8 @@
 ---
 status: "draft-current-index"
-version: "1.2"
+version: "1.4"
 source_blueprint: "docs/design/BLUEPRINT.md"
-change: "CR-051"
+change: "CR-138"
 ---
 
 # Dependency Map
@@ -14,6 +14,8 @@ change: "CR-051"
 | 1.0 | 2026-06-07 | meta-po | 新增跨 Feature 允许依赖、禁止依赖和循环风险索引 |
 | 1.1 | 2026-06-13 | meta-po | 按 CR-046 增补 FEAT-09 双目标策略交付框架的允许依赖、禁止依赖和循环风险 |
 | 1.2 | 2026-06-14 | host-orchestrator | 按 CR-051 增补 FEAT-10 策略研究生命周期和项目迁移治理的依赖方向、禁止依赖和循环风险 |
+| 1.3 | 2026-06-24 | host-orchestrator | 按 CR138 增补 FEAT-11 Runner Control Plane 与 FEAT-12 QMT Gateway Service Layer 的允许依赖、禁止依赖和循环风险 |
+| 1.4 | 2026-06-24 | host-orchestrator | 根据用户 CP3 反馈刷新 CR138 依赖边界：Gateway P0 REST-only；交易日历、佣金 / 费用模型、收益 / PnL 查询进入 FEAT-12 Query Service；runtime policy 改为按需授权 |
 
 ## 依赖关系
 
@@ -88,3 +90,51 @@ change: "CR-051"
 | 禁止依赖写明替代路径和违反风险 | PASS | §禁止依赖 |
 | 循环风险已状态化 | PASS | §循环风险 |
 | 未新增运行授权 | PASS | FD-07、FD-10、FD-12..FD-23、CYCLE-02、CYCLE-03、CYCLE-06..CYCLE-10 |
+
+## CR138 增量：Runner / Gateway 依赖边界
+
+### 依赖关系增量
+
+| From | To | 依赖类型 | 允许方向 | 原因 | 验证 / 监控 |
+|---|---|---|---|---|---|
+| FEAT-11 Runner Control Plane | FEAT-09 StrategyPackageContract | read | allowed | Runner 需要读取策略包、target 和验证证据摘要生成 RunPlan | CR138 HLD traceability |
+| FEAT-11 Runner Control Plane | FEAT-03 StrategyAdmissionPackage | read / gate | allowed | 多因子和策略运行必须先消费 admission 结果 | preflight fixture |
+| FEAT-11 Runner Control Plane | FEAT-04 OrderIntentDraft | read / transform | allowed | Runner 只生成或消费 order intent draft，不直接提交订单 | order intent schema tests |
+| FEAT-11 Runner Control Plane | FEAT-06 OMS / Risk | handoff | allowed | 事件 / 信号 / 再平衡结果必须经 OMS / Risk 才能进入 Gateway command gate | risk gate tests |
+| FEAT-11 Runner Control Plane | FEAT-12 QMT Gateway Service Layer | event / query / command intent | allowed-with-authorization | Runner 可消费 GatewayHealth / ExecutionReport / AuditRecord；真实 query/order 需授权 | no-real-op counters |
+| FEAT-12 QMT Gateway Service Layer | FEAT-07 Safety Authorization | runtime guard | allowed | Gateway 所有 account / quote / order / submit / cancel 动作必须先检查 authorization | auth tests |
+| FEAT-12 QMT Gateway Service Layer | FEAT-06 OMS / Risk | execution report / order state | allowed | Gateway 标准化回报后回链 OMS 和 Runner | event replay tests |
+| FEAT-12 QMT Gateway Service Layer | FEAT-06 OMS / Risk | fee / pnl / order-state read | allowed-with-authorization | 佣金估算、收益 / PnL 和账户状态查询必须引用 OMS / Risk / Order State 或授权账户快照，不能由 Gateway 单独解释策略收益 | query contract tests |
+| FEAT-08 Docs / Runbook | FEAT-11 / FEAT-12 | read / summarize | allowed | CP8 和运行手册需要解释运营路径、不授权项和恢复流程 | docs guardrail |
+
+### 禁止依赖增量
+
+| Forbidden ID | From | To | 禁止原因 | 替代路径 | 违反风险 |
+|---|---|---|---|---|---|
+| FD-24 | FEAT-11 Runner Control Plane | xtquant / QMT / MiniQMT native API | Runner 只能表达策略运行意图，不能触达 broker 原语 | FEAT-12 GatewayCommand + FEAT-06 OMS / Risk + FEAT-07 Authorization | 绕过 Gateway、风控和审计 |
+| FD-25 | FEAT-11 Runner Control Plane | credential env / `.env` / account secrets | Runner 运营面不读取凭据或账户敏感信息 | redacted AuthorizationRecord / GatewayHealth | 凭据泄露 |
+| FD-26 | FEAT-12 QMT Gateway Service Layer | strategy signal generation / target portfolio calculation | Gateway 不决定策略逻辑或调仓目标 | FEAT-11 Runner + FEAT-03 / FEAT-04 inputs | Gateway 业务化且难以测试 |
+| FD-27 | FEAT-12 GatewayHealth / CapabilitySnapshot | runtime authorization | 可用性和能力探测不等于真实查询、订阅、下单或撤单许可 | FEAT-07 AuthorizationRecord | 误把 health pass 当运行许可 |
+| FD-28 | FEAT-11 / FEAT-12 CP3 HLD | source code / dependency / install script mutation | CR138 CP3 只做设计，不实现 | CP5 通过后按 Story 执行 | 未经设计证据确认直接实现 |
+| FD-29 | FEAT-12 GatewayAuditRecord | raw QMT logs / account ids / credentials | 审计只保留脱敏摘要和引用，不复制敏感原文 | redaction policy + audit refs | 敏感数据进入 process / reports |
+| FD-30 | FEAT-11 Runner Control Plane | account-level commission / pnl / position / order native query | Runner 只能消费脱敏查询摘要和引用，不能读取账户级事实 | FEAT-12 Reference / Account Query Service + FEAT-07 Authorization | Runner 越权读取账户或把敏感数据写入 evidence |
+| FD-31 | FEAT-12 Query Service | fabricated broker commission / pnl facts | QMT 不支持或无授权时不得伪造 broker confirmed 查询结果 | unavailable_with_reason / estimated mode / configured FeeSchedule | 复盘和收益归因失真 |
+
+### 循环风险增量
+
+| Cycle ID | 涉及对象 | 风险 | 当前处理 |
+|---|---|---|---|
+| CYCLE-11 | FEAT-11 Runner <-> FEAT-12 Gateway | Runner 根据 Gateway 状态自动重发订单，Gateway 回报又触发 Runner 重试 | eliminated：重试必须经 OMS / Risk / Authorization；unknown 状态进入 manual_review |
+| CYCLE-12 | FEAT-12 GatewayHealth <-> FEAT-07 Authorization | health pass 被反向解释为授权 active | eliminated：GatewayHealth 与 AuthorizationRecord 分离 |
+| CYCLE-13 | FEAT-11 Runner <-> FEAT-09 StrategyPackageContract | Runner 运营需求反向修改策略包合同 | accepted-with-guardrail：合同变更必须走 StrategyChangePlan / follow-up CR |
+| CYCLE-14 | FEAT-12 Gateway <-> FEAT-06 OMS | Gateway order report 与 OMS state 互相覆盖状态事实 | eliminated：OMS owns order state；Gateway owns raw standardized ExecutionReport |
+| CYCLE-15 | FEAT-11 Runner <-> FEAT-12 Query Service <-> FEAT-06 OMS | Runner 复盘要求反向驱动账户查询，查询结果又覆盖 OMS / PnL 事实 | eliminated：FEAT-06 owns order / pnl state interpretation；FEAT-12 owns query transport and redaction；FEAT-11 consumes summaries only |
+
+### CR138 依赖自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| FEAT-11 / FEAT-12 允许依赖方向明确 | PASS | CR138 依赖关系增量 |
+| 禁止依赖写明替代路径和违反风险 | PASS | FD-24..FD-31 |
+| 循环风险已状态化 | PASS | CYCLE-11..CYCLE-15 |
+| 未新增自动运行授权 | PASS | FD-27、FD-28、HLD §12/§13 |

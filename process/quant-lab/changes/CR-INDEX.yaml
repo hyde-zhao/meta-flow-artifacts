@@ -1,7 +1,7 @@
 version: 1
 schema_version: 2
-status: "no-active-formal-cr"
-updated_at: '2026-06-24T09:18:51+08:00'
+status: "active-formal-cr"
+updated_at: '2026-06-24T18:58:00+08:00'
 updated_by: "host-orchestrator"
 owner: meta-po
 source: >
@@ -122,29 +122,15 @@ status_model:
     - blocked
 current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
 next_action_queue:
-  - candidate_id: RA-CR101-001
-    legacy_ids:
-      - QMT-DIRECT-RUN-VALIDATION-FU
-    title: QMT direct-run validation authorization gate
-    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
-    formal_cr_path: "process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md"
-    recommended_action: closed_by_cr104_cp8_readonly_scope_direct_run_deferred
-    gate_status: closed_current_delivery
-    non_authorized_scope:
-      - qmt_miniqmt_xtquant_gateway_runtime
-      - credential_or_env_read
-      - account_funds_positions_orders_fills_raw_log_read
-      - submit_cancel_buy_sell
-      - simulation_live
-      - provider_lake_catalog_publish
-  - candidate_id: RA-CR101-002
+  - candidate_id: CR138-FU-RT-01
     legacy_ids:
       - MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU
-    title: MiniQMT gateway adapter validation authorization gate
-    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
-    formal_cr_path: "process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md"
-    recommended_action: closed_by_cr104_cp8_readonly_runtime_pass
-    gate_status: closed_current_delivery
+      - RA-CR101-002
+    title: Gateway xtquant adapter Spike / readonly integration design
+    source_tracking: process/checks/CR138-FOLLOW-UP-CR-COVERAGE-AUDIT-2026-06-24.md
+    formal_cr_path: ""
+    recommended_action: wait_until_CR138_fixture_cp7_pass_then_request_scoped_runtime_authorization
+    gate_status: not_started
     non_authorized_scope:
       - qmt_miniqmt_xtquant_gateway_runtime
       - credential_or_env_read
@@ -152,30 +138,32 @@ next_action_queue:
       - submit_cancel_buy_sell
       - simulation_live
       - provider_lake_catalog_publish
-  - candidate_id: RA-CR101-003
+  - candidate_id: CR138-FU-RT-02
     legacy_ids:
-      - NAS-REAL-EXCHANGE-FU
-    title: NAS real package exchange validation authorization gate
-    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
-    formal_cr_path: "process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md"
-    recommended_action: closed_by_cr102_cp8_nas_exchange_pass
-    gate_status: closed
+      - QMT-DIRECT-RUN-VALIDATION-FU
+      - RA-CR101-001
+    title: QMT terminal direct-run validation authorization gate
+    source_tracking: process/checks/CR138-FOLLOW-UP-CR-COVERAGE-AUDIT-2026-06-24.md
+    formal_cr_path: ""
+    recommended_action: optional_future_gate_only_if_user_still_needs_qmt_terminal_direct_run_evidence
+    gate_status: not_started
     non_authorized_scope:
-      - additional_nas_access_without_new_gate
-      - credential_or_env_read
       - qmt_miniqmt_xtquant_gateway_runtime
+      - credential_or_env_read
+      - account_funds_positions_orders_fills_raw_log_read
       - submit_cancel_buy_sell
       - simulation_live
       - provider_lake_catalog_publish
-  - candidate_id: FU-CR101-001
+  - candidate_id: CR138-FU-TRD-01
     legacy_ids:
       - ORDER-WRITE-SIMULATION-LIVE-FU
       - ORDER-WRITE-FU
       - CR091-FU-03
+      - FU-CR101-001
     title: Order-write / simulation / live design authorization gate
-    source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
+    source_tracking: process/checks/CR138-FOLLOW-UP-CR-COVERAGE-AUDIT-2026-06-24.md
     formal_cr_path: ""
-    recommended_action: wait_for_user_selection_and_high_risk_design_gate
+    recommended_action: wait_until_readonly_adapter_and_oms_risk_contracts_are_stable_then_request_high_risk_gate
     gate_status: not_started
     non_authorized_scope:
       - submit_cancel_buy_sell
@@ -183,6 +171,21 @@ next_action_queue:
       - account_funds_positions_orders_fills_raw_log_read
       - qmt_miniqmt_xtquant_gateway_runtime
       - provider_lake_catalog_publish
+  - candidate_id: CR138-FU-GOV-01
+    legacy_ids:
+      - FU-CR137-001
+      - WARN-CR137-CR-TRACKING
+    title: CR tracking warning cleanup
+    source_tracking: process/checkpoints/CP8-CR137-DELIVERY-READINESS.md
+    formal_cr_path: ""
+    recommended_action: low_priority_governance_only_if_user_requires_zero_warning
+    gate_status: not_started
+    non_authorized_scope:
+      - qmt_miniqmt_xtquant_gateway_runtime
+      - credential_or_env_read
+      - submit_cancel_buy_sell
+      - simulation_live
+      - nas_access
 root_authority:
   status: logical-cutover-complete
   authoritative_root: /home/hyde/workspace/quant-lab
@@ -217,6 +220,107 @@ index_schema:
 - next_action
 - last_checked_at
 active_crs:
+  - id: "CR-138"
+    title: "Runner & QMT Gateway Operational Use-Case Baseline"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
+    gate_profile: standard
+    source_tracking: USER-20260624-START-CR138
+    formal_cr_path: process/changes/CR-138-RUNNER-QMT-GATEWAY-OPERATIONAL-USE-CASE-BASELINE-2026-06-24.md
+    parent_cr: CR-137
+    source_decision_id: USER-20260624-START-CR138
+    priority: 1
+    risk_refs:
+    - RISK-CR138-RUNTIME-MISREAD
+    - RISK-CR138-RUNTIME-NOT-VERIFIED
+    blocked_by: []
+    impact_surface:
+    - scripts/check_process_artifact_hygiene.py
+    - tests/test_cr132_process_artifact_hygiene.py
+    - process/USE-CASES.md
+    - process/context/CP2-CR138-RUNNER-QMT-OPERATIONAL-USE-CASE-CONTEXT.yaml
+    - process/checks/CP2-CR138-RUNNER-QMT-OPERATIONAL-USE-CASE-PRECHECK.md
+    - process/checks/CR138-USE-CASE-NORMALIZATION-AUDIT-2026-06-24.md
+    - process/checkpoints/CP2-CR138-RUNNER-QMT-OPERATIONAL-USE-CASE-REVIEW.md
+    - process/discussions/CP2-SCENARIO-DISCUSSION-LOG.md
+    - process/checks/CP2-DISCUSSION-CHECKPOINT.json
+    - process/docs/design/HLD-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md
+    - process/docs/design/ARCHITECTURE-DECISION-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md
+    - process/docs/design/BLUEPRINT.md
+    - process/docs/design/DOMAIN-MAP.md
+    - process/docs/design/DEPENDENCY-MAP.md
+    - process/context/CP3-CR138-RUNNER-QMT-HLD-CONTEXT.yaml
+    - process/checks/CP3-CR138-HLD-CONSISTENCY.md
+    - process/checkpoints/CP3-CR138-RUNNER-QMT-HLD-REVIEW.md
+    - process/discussions/CP3-HLD-DISCUSSION-LOG.md
+    - process/checks/CP3-DISCUSSION-CHECKPOINT.json
+    - process/checks/CR138-PROCESS-ARTIFACT-HYGIENE-GUARDRAIL-2026-06-24.md
+    - process/docs/design/FEATURE-DESIGN-MATRIX.md
+    - process/docs/features/runner-control-plane/DESIGN.md
+    - process/docs/features/runner-control-plane/TEST-PLAN.md
+    - process/docs/features/runner-control-plane/TASKS.md
+    - process/docs/features/qmt-gateway-service-layer/DESIGN.md
+    - process/docs/features/qmt-gateway-service-layer/TEST-PLAN.md
+    - process/docs/features/qmt-gateway-service-layer/TASKS.md
+    - process/STORY-BACKLOG.md
+    - process/STORY-BACKLOG-CR138.md
+    - process/STORY-STATUS.md
+    - process/STORY-STATUS-CR138.md
+    - process/DEVELOPMENT-PLAN.yaml
+    - process/DEVELOPMENT-PLAN-CR138.yaml
+    - process/checks/CP4-CR138-STORY-DAG-PARALLEL-SAFETY.md
+    - process/checks/CP4-CR138-STORY-DAG-PARALLEL-SAFETY.result.json
+    - process/stories/CR138-S01-shared-contracts-authorization-audit.md
+    - process/stories/CR138-S02-runner-plan-preflight-control.md
+    - process/stories/CR138-S03-runner-event-signal-rebalance-tracking.md
+    - process/stories/CR138-S04-runner-evidence-review-incident-lifecycle.md
+    - process/stories/CR138-S05-gateway-lifecycle-health-rest-contract.md
+    - process/stories/CR138-S06-gateway-query-calendar-commission-pnl.md
+    - process/stories/CR138-S07-gateway-subscription-order-report-recovery.md
+    - process/stories/CR138-S08-docs-fixtures-cp7-authorization-runbook.md
+    - process/stories/CR138-S01-shared-contracts-authorization-audit-LLD.md
+    - process/stories/CR138-S02-runner-plan-preflight-control-LLD.md
+    - process/stories/CR138-S03-runner-event-signal-rebalance-tracking-LLD.md
+    - process/stories/CR138-S04-runner-evidence-review-incident-lifecycle-LLD.md
+    - process/stories/CR138-S05-gateway-lifecycle-health-rest-contract-LLD.md
+    - process/stories/CR138-S06-gateway-query-calendar-commission-pnl-LLD.md
+    - process/stories/CR138-S07-gateway-subscription-order-report-recovery-LLD.md
+    - process/stories/CR138-S08-docs-fixtures-cp7-authorization-runbook-LLD.md
+    - process/checks/CP5-CR138-S01-shared-contracts-authorization-audit-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR138-S02-runner-plan-preflight-control-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR138-S03-runner-event-signal-rebalance-tracking-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR138-S04-runner-evidence-review-incident-lifecycle-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR138-S05-gateway-lifecycle-health-rest-contract-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR138-S06-gateway-query-calendar-commission-pnl-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR138-S07-gateway-subscription-order-report-recovery-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR138-S08-docs-fixtures-cp7-authorization-runbook-LLD-IMPLEMENTABILITY.md
+    - process/checks/CP5-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-LLD-BATCH.result.json
+    - process/context/CP5-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-CONTEXT.yaml
+    - process/checkpoints/CP5-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-LLD-BATCH.md
+    - process/checks/CP5-CR138-HUMAN-GATE-LAUNCH-MESSAGE.md
+    - process/state/CHECKPOINT-LEDGER.ndjson
+    - process/state/READ-EXPANSION-LEDGER.ndjson
+    - process/changes
+    - process/state
+    conflict_keys:
+    - runner-operational-use-case
+    - qmt-gateway-operational-use-case
+    - strategy-runner-core
+    - qmt-gateway-runtime-boundary
+    - scoped_runtime_authorization
+    authz_policy_refs:
+    - NO_CREDENTIAL_READ
+    - NO_RUNTIME
+    - NO_NAS
+    - NO_TRADING
+    - NO_PROVIDER_LAKE_CATALOG
+    - NO_REMOTE_WRITE
+    next_gate: closed
+    next_action: "CR138 closed-current-delivery / READY_WITH_RISK after CP8 approval. Current delivery closes fixture/static Runner Control Plane and QMT Gateway Service Layer baseline only. Future runtime smoke, readonly account/market/order validation, and submit/cancel/simulation/live require separate scoped runtime_authorization gates."
+    last_checked_at: '2026-06-24T18:58:00+08:00'
   - id: "CR-137"
     title: "Offline Runner Run Registry"
     status: "closed-current-delivery"
@@ -243,9 +347,9 @@ active_crs:
     - runner-run-registry
     - runner-artifact-bundle
     - offline-runner-cli
-    - no_runtime_authorization
+    - scoped_runtime_authorization
     next_gate: closed
-    next_action: "CR137 closed READY_WITH_RISK. Next recommended CR: offline batch run; online runtime remains separate high-risk authorization gate."
+    next_action: "CR137 closed READY_WITH_RISK. Former offline batch run recommendation is absorbed by CR138 S02 RunPlanBatch and S03 BatchOpsSummary; online runtime remains separate high-risk authorization gate."
     last_checked_at: '2026-06-24T09:18:51+08:00'
   - id: "CR-136"
     title: "Runner Bundle Schema / Compatibility Validation"
@@ -274,7 +378,7 @@ active_crs:
     - runner-artifact-bundle
     - runner-bundle-validation
     - offline-runner-cli
-    - no_runtime_authorization
+    - scoped_runtime_authorization
     next_gate: closed
     next_action: "CR136 closed READY_WITH_RISK. Next recommended CR after context reset: offline runner run registry; online runtime remains separate high-risk authorization gate."
     last_checked_at: '2026-06-23T19:02:11+08:00'
@@ -305,7 +409,7 @@ active_crs:
     - runner-artifact-bundle
     - runner-replay-inspect
     - offline-runner-cli
-    - no_runtime_authorization
+    - scoped_runtime_authorization
     next_gate: closed
     next_action: "CR135 closed READY_WITH_RISK. Next recommended project step: choose next offline-only runner slice or open FU-CR135-001 only if zero-warning CR tracking is required."
     last_checked_at: '2026-06-23T18:07:24+08:00'
@@ -331,7 +435,7 @@ active_crs:
     - runtime_authorization_split
     conflict_keys:
     - runner_entry_design
-    - no_runtime_authorization
+    - scoped_runtime_authorization
     - no_external_access
     - no_source_change
     - no_git_write
@@ -358,7 +462,7 @@ active_crs:
       - cr121_remaining_routing_cleanup
       - cr102_cr103_cr104_feature_docs_review
       - historical_docs_cleanup_stop_line
-      - no_runtime_authorization
+      - scoped_runtime_authorization
       - no_source_checker_tests_change
     conflict_keys:
       - runner_development_entry
@@ -392,7 +496,7 @@ active_crs:
       - artifact_dirty_worktree_allowlist
       - no_remote_push
       - cr121_scope_exclusion
-      - no_runtime_authorization
+      - scoped_runtime_authorization
       - cr102_cr103_cr104_runner_followup
     conflict_keys:
       - artifact_local_git_commit
@@ -430,7 +534,7 @@ active_crs:
       - docs_release
       - qmt_top_level_docs
       - cr121_scope_overlap
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - docs_content_reversion
       - cr121_overlap
@@ -505,7 +609,7 @@ active_crs:
       - follow_up_row_convention
       - source_code_change
       - tests_change
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - cr_tracking_checker
       - follow_up_row_convention
@@ -656,7 +760,7 @@ recent_items:
       - follow_up_row_convention
       - source_code_change
       - tests_change
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - cr_tracking_checker
       - follow_up_row_convention
@@ -687,7 +791,7 @@ recent_items:
       - source_code_change_pending_authorization
       - tests_change_pending_authorization
       - checker_implementation_change_pending_authorization
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - human_gate_launch_message_checker
       - source_code_change
@@ -718,7 +822,7 @@ recent_items:
       - source_code_change_pending_authorization
       - tests_change_pending_authorization
       - checker_implementation_change_pending_authorization
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - path_alias_checker
       - source_code_change
@@ -749,7 +853,7 @@ recent_items:
       - docs_design_alias
       - process_docs_design_alias
       - no_code_change_by_default
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - context_path_alias
       - no_runtime_connection
@@ -779,7 +883,7 @@ recent_items:
       - checkpoint_dq_table
       - state_summary
       - no_code_change_by_default
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - pending_decision_queue
       - checkpoint_dq_table
@@ -809,7 +913,7 @@ recent_items:
       - human_gate_launch_message
       - decision_brief_contract
       - no_code_change_by_default
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - human_gate_launch_message
       - no_runtime_connection
@@ -838,7 +942,7 @@ recent_items:
       - human_gate_contract
       - decision_collection_coverage
       - no_code_change_by_default
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - context_capsule_contract
       - human_gate_contract
@@ -867,7 +971,7 @@ recent_items:
       - redesign_remaining_backlog_triage
       - candidate_prioritization
       - no_code_change
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - no_runtime_connection
       - no_order_write
@@ -894,7 +998,7 @@ recent_items:
       - cr_tracking_checker_expectation_notes
       - checker_contract_notes
       - no_checker_implementation_change
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - no_runtime_connection
       - no_order_write
@@ -921,7 +1025,7 @@ recent_items:
       - process/STATE.md
       - cr_tracking_contract
       - no_code_change
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - no_runtime_connection
       - no_order_write
@@ -949,7 +1053,7 @@ recent_items:
       - follow_up_row_contract
       - status_enum_contract
       - no_code_change
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - no_runtime_connection
       - no_order_write
@@ -977,7 +1081,7 @@ recent_items:
       - context_capsule_contract
       - human_gate_contract
       - no_code_change
-      - no_runtime_authorization
+      - scoped_runtime_authorization
     conflict_keys:
       - no_runtime_connection
       - no_order_write
@@ -3300,7 +3404,7 @@ follow_up_candidates:
   - cr121_remaining_routing_cleanup
   - cr102_cr103_cr104_feature_docs_review
   - historical_docs_cleanup_stop_line
-  - no_runtime_authorization
+  - scoped_runtime_authorization
   conflict_keys:
   - runner_development_entry
   - docs_features_cr102_cr103_cr104
@@ -3323,7 +3427,7 @@ follow_up_candidates:
   - human_gate_contract
   - decision_collection_coverage
   - no_code_change_by_default
-  - no_runtime_authorization
+  - scoped_runtime_authorization
   conflict_keys:
   - context_capsule_contract
   - human_gate_contract
@@ -3347,7 +3451,7 @@ follow_up_candidates:
   - human_gate_launch_message
   - decision_brief_contract
   - no_code_change_by_default
-  - no_runtime_authorization
+  - scoped_runtime_authorization
   conflict_keys:
   - human_gate_launch_message
   - no_runtime_connection
@@ -3370,7 +3474,7 @@ follow_up_candidates:
   - source_code_change
   - tests_change
   - checker_implementation_change
-  - no_runtime_authorization
+  - scoped_runtime_authorization
   conflict_keys:
   - human_gate_launch_message_checker
   - source_code_change
@@ -3394,7 +3498,7 @@ follow_up_candidates:
   - context_path_alias
   - docs_design_alias
   - process_docs_design_alias
-  - no_runtime_authorization
+  - scoped_runtime_authorization
   conflict_keys:
   - context_path_alias
   - no_runtime_connection
@@ -3416,7 +3520,7 @@ follow_up_candidates:
   - source_code_change
   - tests_change
   - checker_implementation_change
-  - no_runtime_authorization
+  - scoped_runtime_authorization
   conflict_keys:
   - path_alias_checker
   - source_code_change
@@ -3440,7 +3544,7 @@ follow_up_candidates:
   - pending_decision_queue
   - checkpoint_dq_table
   - state_summary
-  - no_runtime_authorization
+  - scoped_runtime_authorization
   conflict_keys:
   - pending_decision_queue
   - no_runtime_connection
@@ -3552,7 +3656,7 @@ follow_up_candidates:
   - cr_tracking_checker_implementation
   - source_code_change
   - tests_change
-  - no_runtime_authorization
+  - scoped_runtime_authorization
   conflict_keys:
   - checker_implementation
   - source_code_change
@@ -3961,6 +4065,21 @@ route_view:
   status: cr044_closed_offline_admission_design_ready
   next_action: CR044 已完成 CP8 approved 并关闭为 offline-admission-design-ready / READY_WITH_RISK；未来真实 Goldminer L3/L4/L5 验证仅作为 CR045-candidate，必须单独决策和逐 run 授权。当前不授权读取凭据、登录、连接、查询账户、下单、撤单或 simulation/live。
 items:
+  - id: "CR-138"
+    title: "Runner & QMT Gateway Operational Use-Case Baseline"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: "closed"
+    readiness_status: "ready_with_risk"
+    gate_status: "closed"
+    gate_profile: "standard"
+    source_tracking: "USER-20260624-START-CR138"
+    formal_cr_path: "process/changes/CR-138-RUNNER-QMT-GATEWAY-OPERATIONAL-USE-CASE-BASELINE-2026-06-24.md"
+    parent_cr: "CR-137"
+    source_decision_id: "USER-20260624-START-CR138"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    blocked_by: []
+    next_action: "CR138 closed-current-delivery / READY_WITH_RISK after CP8 approval. Current delivery closes fixture/static baseline only; future runtime validation remains separate scoped authorization work."
   - id: "CR-131"
     title: "Design Surface Archive Cleanup"
     status: "closed-current-delivery"
@@ -4066,24 +4185,24 @@ items:
     next_action: "CR127 closed READY. Current process default machine state is process/state/STATE.current.json; process/STATE.md is compact human summary and legacy full text is archived."
   - id: "CR-126"
     title: "Quant-Lab Runner Development Readiness / Runner Entry Design"
-    status: "active-formal-cr"
+    status: "closed-current-delivery"
     kind: "requirement-change"
-    lifecycle_status: "active"
-    readiness_status: "n/a"
-    gate_status: "cp5_pending"
+    lifecycle_status: "closed"
+    readiness_status: "ready"
+    gate_status: "closed"
     gate_profile: "standard"
     source_tracking: "USER-20260623-START-CR126"
     formal_cr_path: "process/changes/CR-126-QUANT-LAB-RUNNER-DEVELOPMENT-READINESS-RUNNER-ENTRY-DESIGN-2026-06-23.md"
     parent_cr: "CR-125"
     source_decision_id: "CP8-CR125-NEXT-ACTION"
     blocked_by:
-      - "pending_user_review"
-      - "related_active_cr=CR-126"
-      - "cp2_cp5_gate_prepared"
+      - "closed_by_cp8_approval"
+      - "related_closed_cr=CR-126"
+      - "runner_entry_design_absorbed_by_CR138_runner_control_plane"
       - "no_runtime_nas_qmt_credentials_provider_lake_catalog_authorized"
       - "no_gitignore_source_checker_tests_commit_push_authorized"
     current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
-    next_action: "Await user review of CP2/CP5 CR126 runner entry design gate; approve authorizes only design/process materials, not source/runtime."
+    next_action: "CR126 closed READY. Runner entry/control-plane follow-up is covered by CR138 S02/S03/S04/S08; do not resume CR126 as active."
   - id: "CR-125"
     title: "Runner Development Readiness Documentation Cleanup Gate"
     status: "closed-current-delivery"
@@ -4763,24 +4882,24 @@ items:
     next_action: "CR106 current delivery closed; start separate CR for redesign scope intake or CR105 if explicitly requested."
   - id: CR-103
     title: QMT/MiniQMT Non-Trading-Day Validation Experiment
-    status: active-non-trading-day-validation-pass-pending-cp8
+    status: closed-current-delivery
     kind: runtime-authorization
-    lifecycle_status: active
+    lifecycle_status: closed
     readiness_status: ready_with_risk
-    gate_status: cp8_pending
+    gate_status: closed
     gate_profile: runtime
     source_tracking: USER-20260621-QMT-MINIQMT-VALIDATION-EXPERIMENT
     formal_cr_path: process/changes/CR-103-QMT-MINIQMT-NON-TRADING-DAY-VALIDATION-EXPERIMENT-2026-06-21.md
     blocked_by: []
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-    next_action: prepare_cr103_cp8_closure_or_cr104_cp2_runtime_authorization
+    next_action: CR103 closed READY_WITH_RISK; non-runtime fixture evidence is historical input only and not a CR138 follow-up.
   - id: RA-CR101-001
     title: QMT direct-run validation authorization gate
-    status: blocked
+    status: closed-current-delivery
     kind: runtime-authorization
-    lifecycle_status: blocked
-    readiness_status: not_ready
-    gate_status: cp2_pending
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
     gate_profile: runtime
     source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
     formal_cr_path: process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md
@@ -4788,14 +4907,14 @@ items:
       - QMT-DIRECT-RUN-VALIDATION-FU
     blocked_by: []
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-    next_action: wait_for_cr104_cp2_runtime_authorization
+    next_action: Replaced in active planning by CR138-FU-RT-02; CR104 is closed and optional future direct-run evidence requires a new scoped gate.
   - id: RA-CR101-002
     title: MiniQMT gateway adapter validation authorization gate
-    status: blocked
+    status: closed-current-delivery
     kind: runtime-authorization
-    lifecycle_status: blocked
-    readiness_status: not_ready
-    gate_status: cp2_pending
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
     gate_profile: runtime
     source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
     formal_cr_path: process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md
@@ -4803,14 +4922,14 @@ items:
       - MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU
     blocked_by: []
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-    next_action: wait_for_cr104_cp2_runtime_authorization
+    next_action: Closed by CR104 readonly runtime validation; future adapter implementation planning is replaced by CR138-FU-RT-01 after CR138 fixture CP7.
   - id: RA-CR101-003
     title: NAS real package exchange validation authorization gate
-    status: active-runtime-authorization-approved-preparation-only-no-execution
+    status: closed-current-delivery
     kind: runtime-authorization
-    lifecycle_status: active
-    readiness_status: not_ready
-    gate_status: cp5_pending
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
     gate_profile: runtime
     source_tracking: process/changes/CR-091-FOLLOW-UP-TRACKING-2026-06-18.md
     formal_cr_path: process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
@@ -4818,7 +4937,7 @@ items:
       - NAS-REAL-EXCHANGE-FU
     blocked_by: []
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-    next_action: Future runtime_authorization gate approved as preparation-only. Current default does not authorize NAS access/list/read/write/copy/publish/pull/delete/check/mount.
+    next_action: Closed by CR102 CP8; additional NAS actions are excluded from CR138 and require a separate storage/NAS gate.
   - id: FU-CR101-001
     title: Order-write / simulation / live design authorization gate
     status: candidate
@@ -4834,10 +4953,10 @@ items:
       - ORDER-WRITE-FU
       - CR091-FU-03
     blocked_by:
-      - RA-CR101-001
-      - RA-CR101-002
+      - CR138-FU-RT-01
+      - readonly_adapter_contract_stable
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
-    next_action: not_recommended_until_readonly_validation_gates_are_settled
+    next_action: Replaced in active planning by CR138-FU-TRD-01; S07 only covers hard-reject boundary in current CR138.
   - id: CR-020
     title: QMT Windows Gateway 服务端登录与只读查询接口准入
     status: closed
@@ -5319,18 +5438,18 @@ items:
     current_execution_status: CR101 CP8 approved; current offline delivery closed as READY_WITH_RISK. Follow-up real validation gates remain candidate-not-started and unauthorized.
   - id: RA-CR097-001
     title: Non-empty / trading-day readonly retest
-    status: candidate
-    lifecycle_status: candidate
+    status: superseded
+    lifecycle_status: superseded
     kind: runtime-authorization
-    lifecycle_status: candidate
     readiness_status: n/a
-    gate_status: not_started
+    gate_status: closed
     gate_profile: runtime
     legacy_ids: [CR097-FU-01]
     source_tracking: process/changes/CR-098-FOLLOW-UP-TRACKING-2026-06-19.md
     formal_cr_path: ""
     blocked_by: []
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
+    next_action: "Superseded by CR104 nonzero readonly retest; no separate follow-up remains."
   - id: RA-CR098-001
     title: Runner real readonly smoke per-run authorization
     status: closed

@@ -3,7 +3,7 @@ source_cr: "CR-091"
 status: "open"
 created_at: "2026-06-18T15:58:59+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-21T13:31:01+08:00"
+updated_at: "2026-06-24T18:58:00+08:00"
 checkpoint_source: "CP8"
 cr_index_path: "process/changes/CR-INDEX.yaml"
 ---
@@ -78,43 +78,43 @@ follow_up_items:
       - QMT-DIRECT-RUN-VALIDATION-FU
     title: QMT direct-run validation authorization gate
     kind: runtime-authorization
-    lifecycle_status: blocked
-    readiness_status: not_ready
-    gate_status: cp2_pending
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
     gate_profile: runtime
     formal_cr_path: process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md
     blocked_by: []
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
     historical_baseline_status: n/a
-    next_action: non_trading_day_validation_completed_in_CR103; wait_for_CR104_CP2_runtime_authorization_on_2026_06_22
+    next_action: CR104 is closed; optional future QMT terminal direct-run evidence is tracked as CR138-FU-RT-02.
   - id: RA-CR101-002
     legacy_ids:
       - MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU
     title: MiniQMT gateway adapter validation authorization gate
     kind: runtime-authorization
-    lifecycle_status: blocked
-    readiness_status: not_ready
-    gate_status: cp2_pending
+    lifecycle_status: closed
+    readiness_status: ready_with_risk
+    gate_status: closed
     gate_profile: runtime
     formal_cr_path: process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md
     blocked_by: []
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
     historical_baseline_status: n/a
-    next_action: non_trading_day_validation_completed_in_CR103; wait_for_CR104_CP2_runtime_authorization_on_2026_06_22
+    next_action: CR104 readonly runtime validation is closed; future adapter implementation planning is tracked as CR138-FU-RT-01 after CR138 fixture CP7.
   - id: RA-CR101-003
     legacy_ids:
       - NAS-REAL-EXCHANGE-FU
     title: NAS real package exchange validation authorization gate
     kind: runtime-authorization
-    lifecycle_status: active
+    lifecycle_status: closed
     readiness_status: ready_with_risk
-    gate_status: cp8_pending
+    gate_status: closed
     gate_profile: runtime
     formal_cr_path: process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md
     blocked_by: []
     current_requirement_baseline_path: process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml
     historical_baseline_status: n/a
-    next_action: CR102 real NAS package exchange validated PASS end-to-end; prepare CR102 CP8 closure confirmation.
+    next_action: CR102 is closed; additional NAS work is excluded from CR138 and requires a separate storage/NAS gate.
   - id: FU-CR101-001
     legacy_ids:
       - ORDER-WRITE-SIMULATION-LIVE-FU
@@ -170,9 +170,9 @@ follow_up_items:
 | CR091-FU-01 | Real QMT readonly runtime smoke design gate | closed | CR | 1 | runtime_authorization; per_run_authorization; readonly_query_positions; credential_boundary; redacted_evidence | `process/changes/CR-092-REAL-QMT-READONLY-RUNTIME-SMOKE-DESIGN-GATE-2026-06-18.md` | `CR-092` | closed | CR092 已关闭为 READY_WITH_RISK；真实运行仍未授权 | 后续候选转入 `process/changes/CR-092-FOLLOW-UP-TRACKING-2026-06-18.md` | DQ-CP8-CR091-04 |
 | CR091-FU-02 | NAS package exchange gate | closed | CR | 2 | nas_package_exchange; package_pull; package_publish; credential_boundary | `process/changes/CR-100-NAS-PACKAGE-EXCHANGE-OFFLINE-READINESS-GATE-2026-06-19.md` | `CR-100` | closed | CR100 已关闭为 READY_WITH_RISK；真实 NAS 仍未授权 | 后续真实 NAS publish / pull / copy / 校验需独立 gate | DQ-CP8-CR091-04 |
 | CR091-FU-05 | Cross-platform strategy delivery and adapter layer realignment | closed | CR | 1 | strategy_package_contract; cross_platform_delivery_target; qmt_direct_run_target; quant_lab_runner_adapter_layer; miniqmt_gateway_adapter; goldminer_future_adapter; manifest_schema; evidence_redaction | `process/changes/CR-101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-2026-06-20.md` | `CR-101` | closed | 用户已批准 CR101 CP8；CR101 当前离线交付关闭为 READY_WITH_RISK。真实系统仍未授权或验证。 | 后续 QMT direct-run、MiniQMT gateway、NAS real exchange、order-write / simulation / live 均保留为独立 candidate gate，不自动启动。 | USER-20260619-RUNNER-ADAPTER-AND-CROSS-PLATFORM-DELIVERY / DQ-CP8-CR101-01..05 |
-| RA-CR101-001 | QMT direct-run validation authorization gate | blocked | CR | 1 | qmt_direct_run_target; qmt_terminal_runtime; runtime_authorization; redacted_evidence; credential_boundary | `process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md` | legacy=QMT-DIRECT-RUN-VALIDATION-FU / non-runtime=CR-103 / runtime=CR-104 | cp2_pending | 非交易日可验证内容已由 CR103 完成；真实 QMT terminal direct-run 仍需 CR104 CP2 runtime 授权 | 等待 2026-06-22 CR104 CP2 runtime authorization；不自动代跑 QMT | DQ-CP8-CR101-04 |
-| RA-CR101-002 | MiniQMT gateway adapter validation authorization gate | blocked | CR | 2 | quant_lab_runner_adapter_layer; miniqmt_gateway_adapter; readonly_gateway; runtime_authorization; credential_boundary | `process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md` | legacy=MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU / non-runtime=CR-103 / runtime=CR-104 | cp2_pending | 非交易日可验证内容已由 CR103 完成；真实 MiniQMT/gateway readonly 仍需 CR104 CP2 runtime 授权 | 等待 2026-06-22 CR104 CP2 runtime authorization；只允许 health / capabilities / query_positions readonly | DQ-CP8-CR101-04 |
-| RA-CR101-003 | NAS real package exchange validation authorization gate | active | CR | 3 | nas_package_exchange; package_publish; package_pull; package_copy; credential_boundary | `process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md` | legacy=NAS-REAL-EXCHANGE-FU / formal=CR-102 | cp8_pending | 研究机侧 NAS package exchange 已执行 PASS；执行机侧逐文件 relative path / sha256 / bytes 验证 PASS，已记录 `runs/RUN-EXEC-20260621-003.md`；聚合 hash mismatch 归类为口径 false negative | 准备 CR102 CP8 收口确认；当前不再执行额外 NAS/env/runtime/trading/provider 动作 | DQ-CP8-CR101-04 |
+| RA-CR101-001 | QMT direct-run validation authorization gate | closed-current-delivery | CR | 1 | qmt_direct_run_target; qmt_terminal_runtime; runtime_authorization; redacted_evidence; credential_boundary | `process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md` | legacy=QMT-DIRECT-RUN-VALIDATION-FU / non-runtime=CR-103 / runtime=CR-104 / replaced_by=CR138-FU-RT-02 | closed | CR104 已关闭；QMT terminal direct-run 未在 CR104 中覆盖 | 如仍需要 QMT terminal direct-run evidence，按 CR138-FU-RT-02 新建 scoped runtime gate | DQ-CP8-CR101-04 / CR138 audit |
+| RA-CR101-002 | MiniQMT gateway adapter validation authorization gate | closed-current-delivery | CR | 2 | quant_lab_runner_adapter_layer; miniqmt_gateway_adapter; readonly_gateway; runtime_authorization; credential_boundary | `process/changes/CR-104-QMT-MINIQMT-TRADING-DAY-RUNTIME-VALIDATION-GATE-2026-06-21.md` | legacy=MINIQMT-GATEWAY-ADAPTER-VALIDATION-FU / non-runtime=CR-103 / runtime=CR-104 / replaced_by=CR138-FU-RT-01 | closed | CR104 readonly runtime validation 已关闭；CR138 先实现 fixture-only Gateway service layer | 真实 adapter 实现规划转 CR138-FU-RT-01，需 CR138 fixture CP7 后另行授权 | DQ-CP8-CR101-04 / CR138 audit |
+| RA-CR101-003 | NAS real package exchange validation authorization gate | closed-current-delivery | CR | 3 | nas_package_exchange; package_publish; package_pull; package_copy; credential_boundary | `process/changes/CR-102-NAS-REAL-PACKAGE-EXCHANGE-VALIDATION-AUTHORIZATION-GATE-2026-06-20.md` | legacy=NAS-REAL-EXCHANGE-FU / formal=CR-102 | closed | CR102 已关闭；额外 NAS 动作不属于 CR138 | 从 CR138 后续功能计划排除；额外 NAS 需独立 storage/NAS gate | DQ-CP8-CR101-04 / CR138 audit |
 | FU-CR101-001 | Order-write / simulation / live design authorization gate | candidate | CR | 4 | submit_cancel; order_write; simulation_live; trading_runtime_boundary |  | legacy=ORDER-WRITE-SIMULATION-LIVE-FU / ORDER-WRITE-FU / CR091-FU-03 | 未启动 | 最高风险，应等待 readonly runtime / adapter evidence 稳定后再评审 | 不建议立即启动 | DQ-CP8-CR101-04 |
 | CR091-FU-03 | Order-write / submit-cancel design gate | superseded | CR | 4 | submit_cancel; order_write; simulation_live; trading_runtime_boundary |  | superseded_by=FU-CR101-001 | 未启动 | 已由 CR101 后续 gate 命名规范重解释 | 不作为当前候选主键；保留历史别名 | DQ-CP8-CR091-04 / USER-20260619-RUNNER-ADAPTER-AND-CROSS-PLATFORM-DELIVERY |
 | CR091-FU-04 | Ledger hygiene | closed | CR | 4 | CR019 tracking; CR025 nested active_change; cr_tracking consistency | `process/changes/CR-093-LEDGER-HYGIENE-CR019-CR025-TRACKING-CLEANUP-2026-06-18.md` | `CR-093` | closed | CR093 已关闭为 READY_WITH_RISK；R-CR093-01/02 已由用户接受 | 当前交付已关闭；后续 warning cleanup / checker convergence 需用户另选候选后新建 CR | DQ-CP8-CR091-04 |

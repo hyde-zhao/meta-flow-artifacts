@@ -1,0 +1,173 @@
+context_id: CP2-CR138-RUNNER-QMT-OPERATIONAL-USE-CASE
+cr_id: CR-138
+checkpoint: CP2
+title: Runner and QMT Gateway Operational Use-Case Baseline Context
+status: approved
+created_at: '2026-06-24T12:18:00+08:00'
+created_by: host-orchestrator
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - process/changes/CR-138-RUNNER-QMT-GATEWAY-OPERATIONAL-USE-CASE-BASELINE-2026-06-24.md
+    - process/USE-CASES.md
+    - process/checks/CR138-USE-CASE-NORMALIZATION-AUDIT-2026-06-24.md
+    - process/context/CR137-CLOSURE-TO-RUNNER-QMT-USE-CASE-CONTEXT-RESET-HANDOFF-2026-06-24.md
+  read_if_needed:
+    - process/docs/features/strategy-runner-core/DESIGN.md
+    - process/docs/features/strategy-runner-core/TEST-PLAN.md
+    - process/docs/features/strategy-runner-core/TASKS.md
+    - process/docs/design/BLUEPRINT.md
+    - process/REQUIREMENTS.md
+    - /home/hyde/workspace/llm-wiki/llm-wiki/work/studies/quant-trading/sources/platforms/qmt/lite-qmt-executor、BulletTrade、EasyXT 源码深度研究报告.md
+    - /home/hyde/workspace/llm-wiki/llm-wiki/work/studies/quant-trading/sources/platforms/qmt/quant-qmt-proxy 与 qmt-bridge 深度研究报告.md
+  do_not_read_by_default:
+    - .env
+    - data/
+    - reports/
+    - market_data/
+    - trading/qmt_runtime.py
+    - trading/qmt_gateway_service.py
+    - scripts/collect_cr099_runner_readonly_smoke.py
+    - scripts/run_cr104_qmt_miniqmt_validation.ps1
+scope_summary:
+  goal: "冻结 Runner 与 QMT Gateway 的运营使用场景基线，供后续功能模型 / HLD / Story 拆分使用。"
+  mode: "use-case-baseline-only"
+  code_change_authorized: false
+  runtime_authorized: false
+  external_access_authorized: false
+  qmt_authorized: false
+  trading_authorized: false
+baseline_delta:
+  use_cases_path: process/USE-CASES.md
+  previous_confirmed_version: "1.15"
+  draft_version: "1.16"
+  approved_version: "1.16"
+  approved_at: '2026-06-24T13:20:00+08:00'
+  approved_by: user
+  normalization_audit:
+    path: process/checks/CR138-USE-CASE-NORMALIZATION-AUDIT-2026-06-24.md
+    conclusion: PASS_WITH_RISK
+    summary:
+      - "UC-16/17 保留为 QMT C/S 与 endpoint 架构来源；UC-44..UC-50 承接 Gateway 用户运营路径。"
+      - "UC-28..UC-32 保留为双目标策略交付框架；UC-33..UC-43 承接 Runner 日常运营路径。"
+      - "UC-33..UC-50 不合并编号，后续功能模型按 Runner / Gateway 活动簇聚合。"
+  added_use_cases:
+    - UC-33 Runner 多因子策略日常调仓运行
+    - UC-34 Runner 多因子盘前确认
+    - UC-35 Runner 多因子执行跟踪
+    - UC-36 Runner 事件型策略触发运行
+    - UC-37 Runner 信号型策略接入执行
+    - UC-38 Runner 组合再平衡运行
+    - UC-39 Runner 盘中运行总览
+    - UC-40 Runner 单次 run 日志和证据查询
+    - UC-41 Runner 盘后复盘
+    - UC-42 Runner 异常处理与恢复
+    - UC-43 Runner 策略参数调整、发布、暂停、下线和回滚
+    - UC-44 QMT Gateway 启动、健康检查与能力探测
+    - UC-45 QMT Gateway 账户、持仓、订单和成交查询
+    - UC-46 QMT Gateway 行情订阅、缓存与回补
+    - UC-47 QMT Gateway 下单、撤单和订单回报
+    - UC-48 QMT Gateway 连接异常后的降级和恢复
+    - UC-49 QMT Gateway 审计、日志和问题定位
+    - UC-50 QMT Gateway 升级、回滚和配置变更
+research_report_mapping:
+  lite_qmt_executor:
+    mapped_to:
+      - UC-37
+      - UC-42
+      - TS-138-05
+    notes:
+      - "信号接入 -> 任务状态机 -> QMT broker -> WAL 恢复，映射为 Runner 信号接入与异常恢复。"
+  bullet_trade:
+    mapped_to:
+      - UC-33
+      - UC-35
+      - UC-38
+      - UC-42
+    notes:
+      - "Context/Portfolio、EventBus、订单队列、RiskController 和 QMT Guard 映射为 Runner 控制面和恢复场景。"
+  easyxt:
+    mapped_to:
+      - UC-33
+      - UC-36
+      - UC-37
+      - UC-38
+    notes:
+      - "多因子 live、双均线、条件单、轮询策略和数据源降级映射为策略场景覆盖。"
+  quant_qmt_proxy:
+    mapped_to:
+      - UC-44
+      - UC-46
+      - UC-47
+    notes:
+      - "REST/gRPC/WebSocket、多环境、会话、订阅和事件流映射为 Gateway 服务化接口面。"
+  qmt_bridge:
+    mapped_to:
+      - UC-44
+      - UC-46
+      - UC-48
+      - UC-49
+      - UC-50
+    notes:
+      - "应用工厂、交易管理器、通知、调度器拆分、xtdata 串行化保护和 WS 广播映射为生命周期和故障恢复场景。"
+scenario_confirmation:
+  discussion_log_path: process/discussions/CP2-SCENARIO-DISCUSSION-LOG.md
+  checkpoint_path: process/checks/CP2-DISCUSSION-CHECKPOINT.json
+  interactions:
+    - id: SGQ-001
+      question: "CR138 是否应继续按 RunSpec / bundle / registry 等离线规格推进，还是先冻结真实用户如何运营 Runner 与 QMT Gateway？"
+      user_response_source: "CR137 handoff 记录的用户纠偏与本轮用户要求推进 CR138。"
+      confirmed_understanding: "采用运营 use-case baseline；不继续只补离线小功能，不实现 online runtime。"
+      status: confirmed
+    - id: SGQ-002
+      question: "UC-01..UC-50 中是否还有其他场景需要合并和刷新？"
+      user_response_source: "用户在 CR138 CP2 确认前反馈：你再检查一下 use-cases 文档中的其他场景是否需要合并和刷新。"
+      confirmed_understanding: "执行非破坏性归一化；保留旧确认编号，新增合并/刷新映射和审计，不提前升格 REQUIREMENTS。"
+      status: addressed
+decision_items:
+  - id: DQ-CP2-CR138-01
+    decision_type: scope
+    question: "是否确认 CR138 的目标是 Runner / QMT Gateway 运营 use-case baseline，而不是继续补离线小 slice 或直接实现 online runtime？"
+    recommendation: "确认；以 UC-33..UC-50 为 draft baseline，后续先进入功能模型 / HLD。"
+    alternatives:
+      - "继续补离线 runner batch run / reporting 小能力。"
+      - "直接启动 QMT Gateway / online runtime 设计或实现。"
+    impact_risk: "决定后续是否重回产品场景和功能模型；直接实现会放大授权和架构风险。"
+    rollback_switch: "若用户认为 UC-33..UC-50 范围过大，可缩小为 Runner-only 或 Gateway-only baseline。"
+  - id: DQ-CP2-CR138-02
+    decision_type: architecture
+    question: "是否确认 Runner 与 QMT Gateway 的职责边界？"
+    recommendation: "Runner 负责策略如何运行、观察、调整、复盘；QMT Gateway 负责安全稳定触达 QMT / MiniQMT / XtQuant。"
+    alternatives:
+      - "Runner 直接内嵌 Gateway / xtquant 调用。"
+      - "Gateway 同时承担策略调度和策略逻辑。"
+    impact_risk: "边界不清会造成策略直连 QMT、Gateway 过度业务化和后续测试不可分。"
+    rollback_switch: "HLD 若发现单机 PoC 需要更薄边界，可作为 HLD 决策项重新评估。"
+  - id: DQ-CP2-CR138-03
+    decision_type: runtime_authorization
+    question: "CR138 是否授权 runtime、QMT、MiniQMT、XtQuant、凭据、账户查询、行情订阅、submit/cancel 或 simulation/live？"
+    recommendation: "不授权；全部保持 deny-default，真实运行另起 runtime_authorization CR。"
+    alternatives:
+      - "另起只读 Gateway runtime authorization gate。"
+      - "由用户手动提供脱敏运行证据，不由 agent 执行。"
+    impact_risk: "防止 use-case baseline 被误读为真实运行授权。"
+    rollback_switch: "用户明确给出运行窗口、边界、脱敏和回滚条件后，另起 CR。"
+forbidden_scope:
+  - runtime_qmt_miniqmt_xtquant_gateway
+  - nas_mount_list_copy_publish_pull
+  - credential_env_token_account_session_read
+  - account_funds_positions_orders_fills_raw_log_read
+  - provider_fetch
+  - lake_write
+  - catalog_publish
+  - source_code_or_dependency_change
+  - git_add_commit_push_remote_write
+  - submit_cancel_buy_sell_simulation_live
+read_expansion_log:
+  - reason: "CR138 user explicitly required deep reference to two QMT research reports"
+    paths:
+      - /home/hyde/workspace/llm-wiki/llm-wiki/work/studies/quant-trading/sources/platforms/qmt/lite-qmt-executor、BulletTrade、EasyXT 源码深度研究报告.md
+      - /home/hyde/workspace/llm-wiki/llm-wiki/work/studies/quant-trading/sources/platforms/qmt/quant-qmt-proxy 与 qmt-bridge 深度研究报告.md
+    access: read_only
+    runtime_started: false

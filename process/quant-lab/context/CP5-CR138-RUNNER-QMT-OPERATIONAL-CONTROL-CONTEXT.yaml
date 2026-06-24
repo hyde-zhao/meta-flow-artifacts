@@ -1,0 +1,119 @@
+schema_version: 1
+context_id: "CP5-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-CONTEXT"
+context_type: "cp5-lld"
+status: "ready"
+created_at: "2026-06-24T17:45:00+08:00"
+owner: "host-orchestrator"
+change_id: "CR-138"
+batch_id: "CR138-RUNNER-QMT-OPERATIONAL-CONTROL-BATCH-A"
+read_profile: "compact"
+
+objective:
+  summary: "确认 CR138 Runner Control Plane 与 QMT Gateway Service Layer 的 8 个 Story full LLD 设计证据是否可进入后续受控实现。"
+  next_gate: "CP5 manual review"
+  next_route_if_approved: "story-execution preparation; implementation still requires Story dev gates and does not include runtime authorization"
+
+machine_truth_refs:
+  state: "process/state/STATE.current.json"
+  cp4_result: "process/checks/CP4-CR138-STORY-DAG-PARALLEL-SAFETY.result.json"
+  cp5_result: "process/checks/CP5-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-LLD-BATCH.result.json"
+  checkpoint_ledger: "process/state/CHECKPOINT-LEDGER.ndjson"
+
+must_read:
+  - "process/checkpoints/CP5-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-LLD-BATCH.md"
+  - "process/checks/CP5-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-LLD-BATCH.result.json"
+  - "process/checks/CP4-CR138-STORY-DAG-PARALLEL-SAFETY.md"
+  - "process/checks/CR138-FOLLOW-UP-CR-COVERAGE-AUDIT-2026-06-24.md"
+  - "process/docs/design/FEATURE-DESIGN-MATRIX.md"
+  - "process/DEVELOPMENT-PLAN-CR138.yaml"
+read_if_needed:
+  - "process/docs/design/HLD-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md"
+  - "process/docs/design/ARCHITECTURE-DECISION-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md"
+  - "process/docs/features/runner-control-plane/DESIGN.md"
+  - "process/docs/features/qmt-gateway-service-layer/DESIGN.md"
+  - "process/stories/CR138-S01-shared-contracts-authorization-audit-LLD.md"
+  - "process/stories/CR138-S02-runner-plan-preflight-control-LLD.md"
+  - "process/stories/CR138-S03-runner-event-signal-rebalance-tracking-LLD.md"
+  - "process/stories/CR138-S04-runner-evidence-review-incident-lifecycle-LLD.md"
+  - "process/stories/CR138-S05-gateway-lifecycle-health-rest-contract-LLD.md"
+  - "process/stories/CR138-S06-gateway-query-calendar-commission-pnl-LLD.md"
+  - "process/stories/CR138-S07-gateway-subscription-order-report-recovery-LLD.md"
+  - "process/stories/CR138-S08-docs-fixtures-cp7-authorization-runbook-LLD.md"
+do_not_read_by_default:
+  - "完整历史 CR / closed Story / 旧 CP5 批次"
+  - "完整 transcript"
+  - "非 CR138 的 LLD / QA / release docs"
+
+design_evidence:
+  distribution:
+    full_lld: 8
+    technical_note: 0
+    waived: 0
+  stories:
+    - "CR138-S01-shared-contracts-authorization-audit"
+    - "CR138-S02-runner-plan-preflight-control"
+    - "CR138-S03-runner-event-signal-rebalance-tracking"
+    - "CR138-S04-runner-evidence-review-incident-lifecycle"
+    - "CR138-S05-gateway-lifecycle-health-rest-contract"
+    - "CR138-S06-gateway-query-calendar-commission-pnl"
+    - "CR138-S07-gateway-subscription-order-report-recovery"
+    - "CR138-S08-docs-fixtures-cp7-authorization-runbook"
+  clarification_queue:
+    blocking: 0
+    non_blocking_open: 0
+    spikes: 0
+
+authorization_boundary:
+  implementation_allowed_by_cp5_approval: true
+  runtime_authorization_allowed_by_cp5_approval: false
+  qmt_runtime_allowed: false
+  miniqmt_runtime_allowed: false
+  xtquant_runtime_allowed: false
+  gateway_start_allowed: false
+  credential_read_allowed: false
+  account_market_order_read_allowed: false
+  submit_cancel_allowed: false
+  simulation_live_allowed: false
+  nas_allowed: false
+  provider_lake_catalog_allowed: false
+  git_remote_write_allowed: false
+
+risks_and_decisions:
+  risks:
+    - id: "RISK-CR138-RUNTIME-MISREAD"
+      status: "controlled"
+      summary: "CP5 确认 LLD 容易被误读为真实运行授权；checkpoint 和 launch message 已明确不授权。"
+  user_feedback_updates:
+    - id: "CP5-FB-CR138-00"
+      status: "applied"
+      summary: "CR137 offline batch run follow-up was absorbed into S02 RunPlanBatch / BatchPreflightResult and S03 BatchOpsSummary; no separate CR is kept for this item."
+    - id: "CP5-FB-CR138-01"
+      status: "applied"
+      summary: "S03 LLD v1.2 now covers Runner P0 OpsSummary / CLI Summary / BatchOpsSummary; no separate Story is added."
+    - id: "CP5-FB-CR138-02"
+      status: "applied"
+      summary: "S05 LLD v1.1 now covers GatewayChangePlan dry-run / compatibility / rollback target; real apply/restart remains unauthorized."
+    - id: "CP5-FB-CR138-03"
+      status: "future-gated"
+      summary: "Real QMT adapter / xtquant runtime implementation requires a later scoped runtime_authorization gate after fixture-only implementation and validation."
+    - id: "CP5-FB-CR138-04"
+      status: "out-of-scope"
+      summary: "WebSocket/SSE/gRPC/FIX and multi-instance/institutional deployment capabilities are not supported in this CR138 batch."
+  pending_manual_decisions:
+    - "DQ-CP5-CR138-01"
+    - "DQ-CP5-CR138-02"
+    - "DQ-CP5-CR138-03"
+
+token_control:
+  full_doc_read_policy: "Only read full LLD files when reviewing a specific decision, contradiction, or requested modification."
+  read_expansion_log:
+    - reason: "CP5 full LLD evidence generation and batch result validation required expanding all eight Story LLD files before launching the human gate."
+      refs:
+        - "process/stories/CR138-S01-shared-contracts-authorization-audit-LLD.md"
+        - "process/stories/CR138-S02-runner-plan-preflight-control-LLD.md"
+        - "process/stories/CR138-S03-runner-event-signal-rebalance-tracking-LLD.md"
+        - "process/stories/CR138-S04-runner-evidence-review-incident-lifecycle-LLD.md"
+        - "process/stories/CR138-S05-gateway-lifecycle-health-rest-contract-LLD.md"
+        - "process/stories/CR138-S06-gateway-query-calendar-commission-pnl-LLD.md"
+        - "process/stories/CR138-S07-gateway-subscription-order-report-recovery-LLD.md"
+        - "process/stories/CR138-S08-docs-fixtures-cp7-authorization-runbook-LLD.md"
