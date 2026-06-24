@@ -2,12 +2,12 @@
 
 Project: meta-flow
 Workflow mode: standard
-Phase: delivered
+Phase: init
 Blocked: false
-Active CR: none
+Active CR: CR-036
 Active Story: none
 Pending gate: none
-Next action: CR-035 已完成；下一步可进入 quant-lab 目录执行 meta-flow 安装和目标项目 adoption / remediation bootstrap。CR-033 仍保持 deferred，不启动。
+Next action: Review CP0 bootstrap readiness for CR-036, then launch the first human gate.
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,7 +20,7 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: none
+- active context: process/context/CP0-CR036.context.json
 
 Policy refs:
 - none
@@ -28,6 +28,6 @@ Policy refs:
 Open risks:
 - none
 
-Updated at: 2026-06-21T19:29:39+08:00
+Updated at: 2026-06-24T06:30:49+00:00
 
 <!-- generated-by: meta-flow state render -->
