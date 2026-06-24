@@ -1,6 +1,6 @@
 ---
 status: "active"
-version: "1.4"
+version: "1.5"
 feature_id: "strategy-runner-core"
 source_cr: "CR-128"
 ---
@@ -16,6 +16,7 @@ source_cr: "CR-128"
 | 1.2 | 2026-06-23 | host-orchestrator | 增加 CR134 runner evidence index 输出测试范围。 |
 | 1.3 | 2026-06-23 | host-orchestrator | 增加 CR135 artifact bundle 写入、inspect/replay 和 blocked no-pass-bundle 测试范围。 |
 | 1.4 | 2026-06-23 | host-orchestrator | 增加 CR136 bundle schema / compatibility validation、损坏 bundle fail-closed 和 CLI validate 测试范围。 |
+| 1.5 | 2026-06-23 | host-orchestrator | 增加 CR137 run registry 输出、blocked diagnostic entry、registry append/list/inspect CLI 测试范围。 |
 
 ## 自动化范围
 
@@ -35,6 +36,8 @@ source_cr: "CR-128"
 | SRC-TC-12 | bundle inspect/replay 只读取 bundle，不重新加载 strategy package；blocked run 不写 pass bundle；CLI `--bundle-output` / `--inspect-bundle` 行为一致。 | `tests/test_cr135_runner_artifact_bundle.py` |
 | SRC-TC-13 | valid bundle 校验 manifest schema、required files、bytes/sha256、状态和授权边界一致性。 | `tests/test_cr136_runner_bundle_validation.py` |
 | SRC-TC-14 | missing file、hash/size mismatch、schema mismatch、status mismatch、authorization mismatch 均 fail closed；CLI `--validate-bundle` 对坏 bundle 返回 blocked JSON。 | `tests/test_cr136_runner_bundle_validation.py` |
+| SRC-TC-15 | successful offline bundle run 可追加 `runner-runs.index.json` entry，字段含 run_id、status、bundle path、manifest sha256、package_id、授权边界且不复制完整 result / target portfolio / raw evidence。 | `tests/test_cr137_runner_run_registry.py` |
+| SRC-TC-16 | 已通过 spec 校验但执行 blocked 的 run 可登记 diagnostic entry，`passed=false` 且不链接 pass bundle；registry append/list/inspect API 与 CLI 可用。 | `tests/test_cr137_runner_run_registry.py` |
 
 ## 禁止行为检查
 
@@ -46,6 +49,7 @@ source_cr: "CR-128"
 | provider / lake / catalog | 不导入或调用相关模块。 |
 | submit/cancel/buy/sell/simulation/live | forbidden counters 必须为 0；order intent 仍为 draft。 |
 | corrupt / incompatible bundle | validate / inspect / replay 必须 fail closed，不得声明可 replay。 |
+| registry 泄露完整运行正文或外部事实 | registry 只能包含本地路径、摘要 hash、状态、blocked reasons 和授权边界。 |
 
 ## 验证命令
 
@@ -55,5 +59,6 @@ uv run --python 3.11 pytest -q tests/test_cr133_runner_spec_cli.py
 uv run --python 3.11 pytest -q tests/test_cr134_runner_evidence_index.py
 uv run --python 3.11 pytest -q tests/test_cr135_runner_artifact_bundle.py
 uv run --python 3.11 pytest -q tests/test_cr136_runner_bundle_validation.py
+uv run --python 3.11 pytest -q tests/test_cr137_runner_run_registry.py
 uv run --python 3.11 python scripts/check_cr091_strategy_runner_package.py --package-root tests/fixtures/cr091_strategy_runner/cr091_strategy_package --json
 ```

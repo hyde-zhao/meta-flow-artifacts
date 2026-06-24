@@ -1,6 +1,6 @@
 ---
 status: "active"
-version: "1.4"
+version: "1.5"
 feature_id: "strategy-runner-core"
 source_cr: "CR-128"
 ---
@@ -16,6 +16,7 @@ source_cr: "CR-128"
 | 1.2 | 2026-06-23 | host-orchestrator | 增加 CR134 runner evidence index 输出开发任务。 |
 | 1.3 | 2026-06-23 | host-orchestrator | 增加 CR135 artifact bundle 与 inspect/replay 开发任务。 |
 | 1.4 | 2026-06-23 | host-orchestrator | 增加 CR136 bundle schema / compatibility validation 和 CLI validate 开发任务。 |
+| 1.5 | 2026-06-23 | host-orchestrator | 增加 CR137 offline runner run registry、registry CLI 和专项测试任务。 |
 
 | TASK-ID | 顺序 | 任务 | 输出文件 | 验证入口 | 状态 |
 |---|---:|---|---|---|---|
@@ -37,6 +38,9 @@ source_cr: "CR-128"
 | CR136-S1 | 16 | 定义 bundle schema / compatibility validation 合同。 | `trading/strategy_runner/artifact_bundle.py` | CR136 tests | done |
 | CR136-S2 | 17 | 让 inspect/replay/CLI validate 共用 fail-closed validation。 | `trading/strategy_runner/artifact_bundle.py`, `trading/strategy_runner/cli.py`, `trading/strategy_runner/__init__.py` | CR136 tests | done |
 | CR136-S3 | 18 | 覆盖 valid bundle、缺文件、hash/size mismatch、schema mismatch、status mismatch、authorization mismatch 和 CLI blocked JSON。 | `tests/test_cr136_runner_bundle_validation.py` | pytest | done |
+| CR137-S1 | 19 | 定义 offline run registry 文件合同和 entry 追加 / 读取 / inspect API。 | `trading/strategy_runner/run_registry.py` | CR137 tests | done |
+| CR137-S2 | 20 | 在 RunSpec / runner / CLI 增加 registry output、append bundle、list 和 inspect 入口。 | `trading/strategy_runner/run_spec.py`, `trading/strategy_runner/runner.py`, `trading/strategy_runner/cli.py`, `trading/strategy_runner/__init__.py` | CR137 tests | done |
+| CR137-S3 | 21 | 覆盖 pass bundle entry、blocked diagnostic entry、registry API / CLI 和禁止复制完整运行正文。 | `tests/test_cr137_runner_run_registry.py` | pytest | done |
 
 ## 阻塞项
 

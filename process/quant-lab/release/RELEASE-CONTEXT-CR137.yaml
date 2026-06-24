@@ -1,0 +1,103 @@
+release_context_id: RELEASE-CONTEXT-CR137
+source_cr: CR-137
+status: closed_ready_with_risk
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+created_at: '2026-06-24T09:18:51+08:00'
+created_by: host-orchestrator
+closed_at: '2026-06-24T09:18:51+08:00'
+closed_by: user
+source_gate: CP8
+release_scope:
+  in_scope:
+    - "Offline Strategy Runner run registry"
+    - "Local runner-runs.index.json file contract"
+    - "Successful validated bundle registry entry"
+    - "Blocked diagnostic registry entry without pass bundle link"
+    - "Registry append/list/inspect API and CLI"
+    - "Feature docs v1.5 and CP6/CP7 evidence"
+  out_of_scope:
+    - "Runtime / NAS / QMT / MiniQMT / XtQuant / gateway access"
+    - "Credential, account, positions, orders, fills or raw logs read"
+    - "Provider fetch, lake write, catalog publish/current pointer"
+    - "submit/cancel/buy/sell/simulation/live"
+    - "Git add/commit/push or remote write"
+version_decision:
+  current_version: "internal-runner-core+cr136"
+  target_version: "internal-runner-core+cr137"
+  semver_impact: "N/A"
+  compatibility: "compatible additive local registry capability; existing RunSpec files remain valid"
+  reason: "Adds optional run_registry_output_path and registry CLI/API without changing existing bundle or result contracts."
+quality_summary:
+  cp6: "PASS: process/checks/CP6-CR137-RUNNER-RUN-REGISTRY-IMPLEMENTATION-DONE.md"
+  cp7: "PASS: process/checks/CP7-CR137-RUNNER-RUN-REGISTRY-VERIFICATION-DONE.md"
+  blocker_count: 0
+  high_risk_count: 0
+  risk_acceptance_ids:
+    - CP8-CR137-DQ-01
+  unresolved_findings:
+    - id: WARN-CR137-CR-TRACKING
+      severity: LOW
+      status: non-blocking-open
+      summary: "meta-flow check cr-tracking exits OK and reports active formal CRs: CR-137 before closure, but still prints warning: CR-INDEX.yaml does not mention active formal CR CR-137."
+affected_surface:
+  - "trading/strategy_runner/run_registry.py"
+  - "trading/strategy_runner/run_spec.py"
+  - "trading/strategy_runner/runner.py"
+  - "trading/strategy_runner/cli.py"
+  - "trading/strategy_runner/__init__.py"
+  - "tests/test_cr137_runner_run_registry.py"
+  - "scripts/check_process_artifact_hygiene.py"
+  - "tests/test_cr132_process_artifact_hygiene.py"
+  - "process/docs/features/strategy-runner-core/*"
+  - "process/checks / process/context / process/archive / process/changes / process/state"
+install_validation_summary:
+  applicable: false
+  reason: "CR137 does not add install scripts or external deployment targets."
+verification_summary:
+  commands:
+    - command: "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_cr132_process_artifact_hygiene.py tests/test_cr137_runner_run_registry.py tests/test_cr136_runner_bundle_validation.py tests/test_cr135_runner_artifact_bundle.py tests/test_cr134_runner_evidence_index.py tests/test_cr133_runner_spec_cli.py tests/test_cr128_runner_core_mvp.py"
+      result: "PASS, 50 passed"
+    - command: "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_process_artifact_hygiene.py --json"
+      result: "PASS, unclassified=0, current_cr137_asset=21"
+    - command: "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_feature_runner_boundary.py --json"
+      result: "PASS"
+    - command: "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_design_runner_boundary.py --json"
+      result: "PASS"
+    - command: "uv run --python 3.11 meta-flow cr check --project-root /home/hyde/workspace/quant-lab"
+      result: "PASS, CR Lifecycle Check: OK"
+    - command: "uv run --python 3.11 meta-flow state check --project-root /home/hyde/workspace/quant-lab"
+      result: "PASS, State v2 Check: OK"
+release_documents:
+  - path: process/docs/release/RELEASE-NOTES-CR137.md
+    status: ready
+  - path: process/docs/release/DEPLOY-CHECKLIST-CR137.md
+    status: ready
+  - path: process/docs/release/ROLLBACK-CR137.md
+    status: ready
+  - path: process/docs/release/MIGRATION-CR137.md
+    status: ready
+  - path: process/docs/release/FEEDBACK-CR137.md
+    status: ready
+non_authorized_items:
+  - "Read .env, credentials, account/session/raw logs"
+  - "Access, list, read, write, publish, pull or delete NAS"
+  - "Start/connect QMT/MiniQMT/XtQuant/gateway runtime"
+  - "provider fetch, lake write, catalog publish/current pointer"
+  - "submit/cancel/buy/sell/simulation/live"
+  - "git add/commit/push/remote write"
+follow_up_summary:
+  recommended_next: "CR137 is closed READY_WITH_RISK. Next recommended CR: offline batch run using run registry as the local index base; online runtime remains a separate high-risk authorization gate."
+  follow_up_candidates:
+    - id: FU-CR137-001
+      title: "CR tracking warning cleanup"
+      status: candidate
+      trigger: "User wants zero-warning cr-tracking before continuing."
+    - id: FU-CR137-002
+      title: "Offline Batch Run"
+      status: candidate
+      trigger: "User continues the offline runner roadmap after registry."
+    - id: RA-CR137-001
+      title: "Online readonly runtime authorization gate"
+      status: candidate
+      trigger: "User explicitly requests QMT/MiniQMT/XtQuant/gateway runtime validation."

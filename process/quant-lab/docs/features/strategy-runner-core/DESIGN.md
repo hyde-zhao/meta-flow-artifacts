@@ -1,6 +1,6 @@
 ---
 status: "active"
-version: "1.4"
+version: "1.5"
 feature_id: "strategy-runner-core"
 feature_name: "Strategy Runner Core"
 source_cr: "CR-128"
@@ -15,6 +15,7 @@ related_crs:
   - "CR-134"
   - "CR-135"
   - "CR-136"
+  - "CR-137"
 ---
 
 # Feature Design: Strategy Runner Core
@@ -28,13 +29,14 @@ related_crs:
 | 1.2 | 2026-06-23 | host-orchestrator | CR134 增加 successful offline run 的 lightweight evidence index 输出。 |
 | 1.3 | 2026-06-23 | host-orchestrator | CR135 增加 successful offline run artifact bundle 与 bundle inspect/replay，只读取本地 bundle，不重新执行 strategy package。 |
 | 1.4 | 2026-06-23 | host-orchestrator | CR136 增加 artifact bundle schema / compatibility validation；缺文件、坏 JSON、hash/size 不一致、状态/权限边界不一致均 fail closed。 |
+| 1.5 | 2026-06-23 | host-orchestrator | CR137 增加 offline runner run registry，用本地 `runner-runs.index.json` 记录多次运行摘要、pass bundle 引用和 blocked diagnostic entry。 |
 
 ## 摘要
 
 | 项目 | 内容 |
 |---|---|
-| Feature 目标 | 提供 offline-first strategy runner core，将本地 strategy package 转换为 target portfolio、order intent draft、脱敏 evidence、统一 RunResult、轻量 evidence index、本地 run artifact bundle 和可 fail-closed 校验的 bundle 合同。 |
-| 推荐方案 | `RunSpec` + package loader + adapter registry + fake readonly boundary + evidence summary + `RunResult` + evidence index + artifact bundle + bundle validation。 |
+| Feature 目标 | 提供 offline-first strategy runner core，将本地 strategy package 转换为 target portfolio、order intent draft、脱敏 evidence、统一 RunResult、轻量 evidence index、本地 run artifact bundle、可 fail-closed 校验的 bundle 合同和多次本地运行 registry。 |
+| 推荐方案 | `RunSpec` + package loader + adapter registry + fake readonly boundary + evidence summary + `RunResult` + evidence index + artifact bundle + bundle validation + run registry。 |
 | 默认权限 | `not_authorization=true`、`qmt_allowed=false`；不读 env、不访问 NAS、不启动 runtime、不交易。 |
 | 下游 CR | CR128 实现；外部权限域必须另起 CR129+。 |
 
@@ -50,6 +52,7 @@ related_crs:
 | successful run 可输出 lightweight evidence index，索引引用 `RunResult` 与脱敏 evidence summary 摘要。 | blocked run 写入误导性 pass index；索引复制完整 target portfolio / order details / raw evidence 正文。 |
 | successful run 可输出 run artifact bundle，包含 `run-result.json`、`runner-evidence.index.json`、`run-spec.snapshot.json`、`manifest.json`。 | replay / inspect 重新执行 strategy package、访问外部系统，或 blocked run 写入 misleading pass bundle。 |
 | inspect / replay / validate 会校验 bundle schema、required files、bytes/sha256、run id/status/pass、授权边界和 evidence ref 一致性。 | 对缺文件、坏 JSON、不兼容 schema、hash/size 不一致、状态不一致或授权边界异常的 bundle 继续读取或声明可 replay。 |
+| successful bundle 写入后可追加本地 run registry entry；已通过 spec 校验但执行 blocked 的运行可登记 diagnostic entry，不链接 pass bundle。 | registry 复制完整 result、target portfolio、order intents、raw evidence、凭据、账户或外部系统事实；blocked entry 伪造 pass bundle。 |
 
 ## 模块职责
 
@@ -60,7 +63,8 @@ related_crs:
 | RunResult | `trading/strategy_runner/result.py` | 稳定输出 status、count、blocked reasons 和 summary。 | 只包含脱敏摘要和计数。 |
 | Evidence Index | `trading/strategy_runner/evidence_index.py` | 由 successful `RunResult` 生成轻量 evidence index JSON。 | 只写引用、状态、计数、授权边界和脱敏 evidence summary excerpt；blocked run 不写。 |
 | Artifact Bundle | `trading/strategy_runner/artifact_bundle.py` | 由 successful offline run 生成本地 bundle，并支持 validate / inspect / replay 读取。 | 只读写本地 bundle 文件；replay 不重新运行 strategy package；坏 bundle fail closed；blocked run 不写 pass bundle。 |
-| CLI | `trading/strategy_runner/cli.py` | 从 JSON/YAML RunSpec 文件启动 offline runner，并提供 bundle inspect / validate。 | 只接收本地 spec 或 bundle；invalid spec / corrupt bundle fail-closed。 |
+| Run Registry | `trading/strategy_runner/run_registry.py` | 维护本地 `runner-runs.index.json`，追加 pass bundle 摘要或 blocked diagnostic entry，并支持 list / inspect。 | 只保存 run_id、status、bundle path、manifest sha256、package_id、授权边界和 blocked reasons；不复制完整 result / target portfolio / raw evidence。 |
+| CLI | `trading/strategy_runner/cli.py` | 从 JSON/YAML RunSpec 文件启动 offline runner，并提供 bundle inspect / validate 与 registry append / list / inspect。 | 只接收本地 spec、bundle 或 registry；invalid spec / corrupt bundle / bad registry fail-closed。 |
 | Existing Package Loader | `trading/strategy_runner/package_loader.py` | manifest / checksum / authorization flags fail-closed。 | 复用现有合同。 |
 | Existing Adapter | `trading/strategy_runner/adapters.py` | multifactor / legacy / strategy_package payload dispatch。 | 未知 payload、order-write capability fail closed。 |
 | Existing Readonly Boundary | `trading/strategy_runner/readonly_gateway.py` | 默认 fake readonly result。 | 真实 client 路径不由 CR128 调用。 |
@@ -86,3 +90,5 @@ related_crs:
 | blocked run 留下看似 pass 的 index。 | runner 只在 `result.passed` 时写 evidence index；blocked spec / blocked package 不写 index。 |
 | replay 被误解为重新执行策略包。 | CR135 replay 只读取 bundle 内 `run-result.json`；重新执行必须走新的 runner run。 |
 | 坏 bundle 被当成历史事实继续读取。 | CR136 validate 在 inspect/replay 前检查 schema、required files、bytes/sha256、状态一致性和授权边界；失败返回 blocked / raise ValueError。 |
+| registry 被误解为完整审计仓库或可恢复运行快照。 | CR137 registry 只保存轻量索引；完整可 inspect/replay 对象仍是 validated artifact bundle。 |
+| blocked diagnostic entry 被当成 pass 产物引用。 | blocked entry 必须 `passed=false`，且 `bundle_path` / `manifest_sha256` 为空。 |
