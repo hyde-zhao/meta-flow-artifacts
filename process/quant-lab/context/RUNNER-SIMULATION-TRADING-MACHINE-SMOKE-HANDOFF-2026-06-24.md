@@ -4,30 +4,33 @@ created_at: "2026-06-24T18:03:29+08:00"
 from_agent: "host-orchestrator"
 to_agent: "meta-qa"
 target_phase: "story-execution"
-target_status: "simulation-trading-machine-smoke-ready"
+target_status: "simulation-smoke-passed"
 source_work_package: "RUNNER-MODEL-SIMULATION-LIVE-ENTRY-2026-06-24"
 semantic: "stage-dispatch"
-status: "handoff-created"
+status: "completed"
+result_status: "PASS"
+verification_ref: "process/checks/RUNNER-QMT-SIMULATION-TRADING-MACHINE-SMOKE-VERIFICATION-2026-06-24.md"
+evidence_ref: "process/evidence/RUNNER-QMT-SIMULATION-TRADING-MACHINE-SMOKE-EVIDENCE-2026-06-24.json"
 dispatch:
-  required: false
+  required: true
   semantic: "stage-dispatch"
-  mode: "handoff-only"
+  mode: "subagent"
   platform: "codex"
   agent_role: "meta-qa"
   canonical_role: "meta-qa"
-  codex_agent_name: "meta-qa"
-  reasoning_profile: "default"
-  dispatch_trigger: "simulation-trading-machine-smoke"
+  codex_agent_name: "meta-qa-critical"
+  reasoning_profile: "critical"
+  dispatch_trigger: "risk-review"
   agent_path: ""
-  tool_name: ""
-  agent_id: ""
-  agent_name: ""
-  thread_id: ""
-  spawned_at: ""
+  tool_name: "spawn_agent"
+  agent_id: "019efc4a-3592-7431-aa6e-028ffca4b75f"
+  agent_name: "qa-critical-lv"
+  thread_id: "019efc4a-3592-7431-aa6e-028ffca4b75f"
+  spawned_at: "2026-06-25T08:59:50+08:00"
   resumed_at: ""
-  completed_at: ""
-  evidence: ""
-  fallback_reason: "current request is handoff and push only; no subagent dispatch requested"
+  completed_at: "2026-06-25T09:04:52+08:00"
+  evidence: "spawn_agent"
+  fallback_reason: ""
   approved_by: ""
   approved_at: ""
 question_permission:
@@ -82,7 +85,7 @@ context_policy:
 
 当前目标包按新的 meta-flow 流程推进，不沿用旧 CR 拆分队列。源码层面已完成 runner 从模型盘目标组合进入 QMT 模拟账户真实操作入口的实现切片，并通过本地自动化验证。
 
-当前状态：`simulation-entry-ready`
+当前状态：`simulation-smoke-passed`
 
 下一目标状态：`simulation-smoke-passed`
 
@@ -159,7 +162,18 @@ context_policy:
 
 ## 8. 交接判定
 
-交接状态：`ready-for-simulation-trading-machine-smoke`
+交接状态：`completed`
+
+阶段结论：`PASS`
+
+子 agent 已完成允许边界内的本地准备验证。2026-06-25 09:32:35 +08:00 用户授权后，Host Orchestrator 对已启动的交易机 gateway 做了 health / capabilities 探测；2026-06-25 09:45:26 +08:00 用户重启 gateway 后复测，两次均因 runtime 配置未加载阻塞。2026-06-25 09:53:54 +08:00 用户修正 env 后，WSL 侧确认 gateway health 为 `session_ready=true`、`runtime_status=xtquant-ready`。2026-06-25 10:05:34 +08:00，WSL 侧 HMAC client env 可用，signed positions readonly 通过；signed simulation submit endpoint 使用故意无效 payload 验证 auth/session/endpoint 到达，并在 validation 阶段被拦截，未触达下单 adapter。
+
+2026-06-25 10:31:33 +08:00 首次真实 simulation submit 已 accepted 并返回 `cancel-ref`，但 cancel 被本地 validation 阻断。随后完成 cancel-ref 映射和数字型 XtQuant order id 撤单兼容回修，已同步到 `C:/quant-lab-runtime` 并由用户重启 gateway。2026-06-25 10:38:00 +08:00 signed buy simulation submit/cancel smoke 通过：buy submit accepted，cancel accepted，cancel adapter 返回 `xtquant-simulation-cancel-accepted`。2026-06-25 10:43:00 +08:00 按用户追加授权补测 signed sell simulation submit/cancel smoke，通过：sell submit accepted，cancel accepted，cancel adapter 返回 `xtquant-simulation-cancel-accepted`。
+
+- `process/checks/RUNNER-QMT-SIMULATION-TRADING-MACHINE-SMOKE-VERIFICATION-2026-06-24.md`
+- `process/evidence/RUNNER-QMT-SIMULATION-TRADING-MACHINE-SMOKE-EVIDENCE-2026-06-24.json`
+
+真实交易机 simulation smoke 已覆盖 buy/sell 双向 submit/cancel 并通过，状态推进为 `simulation-smoke-passed`。本交接仍不授权真实资金 `small_live` / `live` submit/cancel，不授权保存或推送真实凭据、账号原文、证券代码原文、原始订单引用或资金明细。
 
 下一阶段推荐目标包名：
 

@@ -1,0 +1,247 @@
+{
+  "evidence_id": "RUNNER-QMT-SIMULATION-TRADING-MACHINE-SMOKE-EVIDENCE-2026-06-24",
+  "created_at": "2026-06-25T09:01:24+08:00",
+  "created_by": "meta-qa-critical",
+  "task_id": "RUNNER-QMT-SIMULATION-TRADING-MACHINE-SMOKE-2026-06-24",
+  "source_status": "simulation-entry-ready",
+  "target_status": "simulation-smoke-passed",
+  "result_status": "PASS",
+  "state_transition_applied": true,
+  "redaction_policy": {
+    "raw_account_saved": false,
+    "raw_symbol_saved": false,
+    "raw_broker_order_ref_saved": false,
+    "secret_or_token_saved": false,
+    "fund_detail_saved": false,
+    "notes": [
+      "Only command summaries, file references, pass counts, and authorization blockers are recorded.",
+      "No runtime QMT environment values, credentials, account identifiers, raw order identifiers, or funding details were read or persisted."
+    ]
+  },
+  "context_files_read": [
+    "process/context/RUNNER-SIMULATION-TRADING-MACHINE-SMOKE-HANDOFF-2026-06-24.md",
+    "process/context/RUNNER-MODEL-SIMULATION-LIVE-ENTRY-WORK-PACKAGE-2026-06-24.md",
+    "process/checks/RUNNER-MODEL-SIMULATION-LIVE-ENTRY-VERIFICATION-2026-06-24.md",
+    "trading/strategy_runner/simulation_activation.py",
+    "trading/qmt_client.py",
+    "trading/qmt_gateway_contracts.py",
+    "trading/qmt_runtime.py",
+    "tests/test_runner_simulation_activation.py",
+    "tests/test_cr020_runtime_manual_validation.py"
+  ],
+  "local_preflight_results": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_runner_simulation_activation.py tests/test_cr020_runtime_manual_validation.py tests/test_cr020_linux_client_rest_transport.py",
+      "result": "PASS",
+      "summary": "21 passed; fake XtQuant, activation, runtime HMAC scope, REST transport, and redaction assertions passed.",
+      "runtime_qmt_touched": false,
+      "network_or_port_bound": false,
+      "credential_read": false
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/runner-qmt-simulation-smoke-pycompile uv run --python 3.11 python -m py_compile trading/qmt_client.py trading/strategy_runner/simulation_activation.py trading/qmt_gateway_contracts.py trading/qmt_runtime.py tests/test_runner_simulation_activation.py tests/test_cr020_runtime_manual_validation.py tests/test_cr020_linux_client_rest_transport.py",
+      "result": "PASS",
+      "summary": "No syntax errors reported.",
+      "runtime_qmt_touched": false,
+      "network_or_port_bound": false,
+      "credential_read": false
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS",
+      "summary": "No whitespace errors reported.",
+      "runtime_qmt_touched": false,
+      "network_or_port_bound": false,
+      "credential_read": false
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_cr020_runtime_manual_validation.py tests/test_cr020_linux_client_rest_transport.py tests/test_runner_simulation_activation.py",
+      "result": "PASS",
+      "summary": "22 passed after numeric XtQuant order_id cancel compatibility fix.",
+      "runtime_qmt_touched": false,
+      "network_or_port_bound": false,
+      "credential_read": false
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/qmt-runtime-fix-pycompile uv run --python 3.11 python -m py_compile trading/qmt_runtime.py trading/qmt_gateway_contracts.py trading/qmt_client.py tests/test_cr020_runtime_manual_validation.py",
+      "result": "PASS",
+      "summary": "No syntax errors reported after cancel compatibility fix.",
+      "runtime_qmt_touched": false,
+      "network_or_port_bound": false,
+      "credential_read": false
+    }
+  ],
+  "runtime_gateway_attempt_results": [
+    {
+      "attempted_at": "2026-06-25T09:32:35+08:00",
+      "base_url": "http://172.30.32.1:18765",
+      "runtime_authorization_ref": "runner-qmt-simulation-smoke-20260625-sim",
+      "health_result": "BLOCKED",
+      "health_summary": "gateway reachable but session_ready=false; blocked_reason=credential_not_configured; runtime_status=missing-miniqmt-path-or-account",
+      "capabilities_result": "PASS",
+      "capabilities_summary": "capabilities endpoint reachable; simulation submit/cancel endpoints are visible as later_gated contract entries",
+      "positions_readonly_executed": false,
+      "simulation_submit_executed": false,
+      "simulation_cancel_executed": false,
+      "stop_reason": "QMT session is not ready; MiniQMT path, account reference, client_id, and client_secret were not configured in the running gateway",
+      "raw_account_saved": false,
+      "raw_symbol_saved": false,
+      "raw_broker_order_ref_saved": false,
+      "secret_or_token_saved": false,
+      "fund_detail_saved": false
+    },
+    {
+      "attempted_at": "2026-06-25T09:45:26+08:00",
+      "base_url": "http://172.30.32.1:18765",
+      "runtime_authorization_ref": "runner-qmt-simulation-smoke-20260625-sim",
+      "health_result": "BLOCKED",
+      "health_summary": "gateway still reachable after restart, but session_ready=false; blocked_reason=credential_not_configured; runtime_status=missing-miniqmt-path-or-account",
+      "capabilities_result": "PASS",
+      "capabilities_summary": "capabilities endpoint reachable; simulation submit/cancel endpoints remain visible as later_gated contract entries",
+      "positions_readonly_executed": false,
+      "simulation_submit_executed": false,
+      "simulation_cancel_executed": false,
+      "stop_reason": "Restart did not load MiniQMT path, account reference, QMT client id, or QMT client secret into the running gateway",
+      "raw_account_saved": false,
+      "raw_symbol_saved": false,
+      "raw_broker_order_ref_saved": false,
+      "secret_or_token_saved": false,
+      "fund_detail_saved": false
+    },
+    {
+      "attempted_at": "2026-06-25T09:53:54+08:00",
+      "base_url": "http://172.30.32.1:18765",
+      "runtime_authorization_ref": "runner-qmt-simulation-smoke-20260625-sim",
+      "health_result": "PASS",
+      "health_summary": "gateway reachable and session_ready=true; runtime_status=xtquant-ready; MiniQMT, account reference, client id/secret, and WSL allowlist are configured",
+      "capabilities_result": "PASS",
+      "capabilities_summary": "capabilities endpoint reachable; simulation submit/cancel endpoints remain visible as later_gated contract entries",
+      "positions_readonly_executed": false,
+      "simulation_submit_executed": false,
+      "simulation_cancel_executed": false,
+      "stop_reason": "C-side HMAC client env is not available from WSL at /mnt/c/Users/hydez/.quant-lab/runtime/qmt/cr138-simulation/client.env, so signed POST requests were not attempted",
+      "raw_account_saved": false,
+      "raw_symbol_saved": false,
+      "raw_broker_order_ref_saved": false,
+      "secret_or_token_saved": false,
+      "fund_detail_saved": false
+    },
+    {
+      "attempted_at": "2026-06-25T10:05:34+08:00",
+      "base_url": "http://172.30.32.1:18765",
+      "runtime_authorization_ref": "runner-qmt-simulation-smoke-20260625-sim",
+      "health_result": "PASS",
+      "health_summary": "gateway reachable and session_ready=true; runtime_status=xtquant-ready",
+      "positions_readonly_result": "PASS",
+      "positions_readonly_summary": "signed positions readonly request returned status=ok, position_count=1, redaction_status=pass, raw_payload_emitted=false, positions_digest=positions:c9a7f8f2926c1ee3",
+      "simulation_submit_validation_result": "PASS_WITH_EXPECTED_BLOCK",
+      "simulation_submit_validation_summary": "signed simulation submit endpoint reached gateway/session/auth and was intentionally blocked by validation before adapter call; counters real_order=0, qmt_operation=0, simulation_or_live_run=0",
+      "simulation_submit_executed": false,
+      "simulation_cancel_executed": false,
+      "stop_reason": "Full simulation submit/cancel was not executed because submit response exposes only a redacted broker_order_ref while cancel requires the raw broker_order_ref; executing submit would not guarantee a safe cancel path.",
+      "raw_account_saved": false,
+      "raw_symbol_saved": false,
+      "raw_broker_order_ref_saved": false,
+      "secret_or_token_saved": false,
+      "fund_detail_saved": false
+    },
+    {
+      "attempted_at": "2026-06-25T10:31:33+08:00",
+      "base_url": "http://172.30.32.1:18765",
+      "runtime_authorization_ref": "runner-qmt-simulation-smoke-20260625-sim",
+      "health_result": "PASS",
+      "health_summary": "gateway reachable and session_ready=true; runtime_status=xtquant-ready",
+      "simulation_submit_result": "PASS",
+      "simulation_submit_summary": "signed simulation submit returned status=ok, accepted=true, adapter_status=xtquant-simulation-submit-accepted, cancel_ref present with cancel-ref prefix",
+      "simulation_cancel_result": "BLOCKED",
+      "simulation_cancel_summary": "signed cancel using cancel-ref returned validation_blocked and did not call cancel adapter; manual MiniQMT order check/cancel requested",
+      "followup_fix": "Changed cancel token prefix from cancel-token to cancel-ref, added module-level cancel_ref store fallback, synced trading/ to C:/quant-lab-runtime, and verified 21 tests plus py_compile/diff checks.",
+      "raw_account_saved": false,
+      "raw_symbol_saved": false,
+      "raw_broker_order_ref_saved": false,
+      "secret_or_token_saved": false,
+      "fund_detail_saved": false
+    },
+    {
+      "attempted_at": "2026-06-25T10:38:00+08:00",
+      "base_url": "http://172.30.32.1:18765",
+      "runtime_authorization_ref": "runner-qmt-simulation-smoke-20260625-sim",
+      "health_result": "PASS",
+      "health_summary": "gateway reachable and session_ready=true; runtime_status=xtquant-ready after C:/quant-lab-runtime trading code sync and gateway restart",
+      "simulation_buy_submit_result": "PASS",
+      "simulation_buy_submit_summary": "signed simulation buy submit returned status=ok, accepted=true, adapter_status=xtquant-simulation-submit-accepted, cancel_ref present with cancel-ref prefix; raw broker order ref was not persisted",
+      "simulation_buy_cancel_result": "PASS",
+      "simulation_buy_cancel_summary": "signed simulation buy cancel using cancel-ref returned status=ok, accepted=true, adapter_status=xtquant-simulation-cancel-accepted; cancel adapter was called and raw broker order ref was not persisted",
+      "positions_readonly_executed": true,
+      "positions_readonly_result": "PASS",
+      "simulation_submit_executed": true,
+      "simulation_cancel_executed": true,
+      "state_transition": "simulation-entry-ready -> simulation-smoke-passed",
+      "raw_account_saved": false,
+      "raw_symbol_saved": false,
+      "raw_broker_order_ref_saved": false,
+      "secret_or_token_saved": false,
+      "fund_detail_saved": false
+    },
+    {
+      "attempted_at": "2026-06-25T10:43:00+08:00",
+      "base_url": "http://172.30.32.1:18765",
+      "runtime_authorization_ref": "runner-qmt-simulation-smoke-20260625-sim",
+      "health_result": "PASS",
+      "health_summary": "gateway reachable and session_ready=true; runtime_status=xtquant-ready",
+      "simulation_sell_submit_result": "PASS",
+      "simulation_sell_submit_summary": "signed simulation sell submit returned status=ok, accepted=true, adapter_status=xtquant-simulation-submit-accepted, cancel_ref present with cancel-ref prefix; raw broker order ref and raw symbol were not persisted",
+      "simulation_sell_cancel_result": "PASS",
+      "simulation_sell_cancel_summary": "signed simulation sell cancel using cancel-ref returned status=ok, accepted=true, adapter_status=xtquant-simulation-cancel-accepted; cancel adapter was called and raw broker order ref was not persisted",
+      "simulation_submit_executed": true,
+      "simulation_cancel_executed": true,
+      "side_coverage": "buy-and-sell",
+      "raw_account_saved": false,
+      "raw_symbol_saved": false,
+      "raw_broker_order_ref_saved": false,
+      "secret_or_token_saved": false,
+      "fund_detail_saved": false
+    }
+  ],
+  "blocked_runtime_steps_not_executed": [
+    "small_live/live submit was not executed.",
+    "small_live/live cancel was not executed.",
+    "credential, account raw value, raw symbol, raw broker order ref, and funding detail persistence was not executed."
+  ],
+  "runtime_blockers": [
+    {
+      "id": "B-004",
+      "status": "resolved",
+      "summary": "QMT gateway runtime configuration was corrected; health returned session_ready=true at 2026-06-25T09:53:54+08:00."
+    },
+    {
+      "id": "B-005",
+      "status": "resolved",
+      "summary": "C-side HMAC client env is available from WSL; signed positions readonly and signed simulation submit validation request were generated successfully."
+    },
+    {
+      "id": "B-006",
+      "status": "resolved",
+      "summary": "Simulation cancel using cancel_ref passed after cancel-ref mapping and numeric XtQuant order_id compatibility fix were synced to C:/quant-lab-runtime and gateway was restarted."
+    }
+  ],
+  "authorization_required": [
+    "Per-run runtime authorization for QMT/MiniQMT/XtQuant gateway startup and local port binding.",
+    "Authorization to read local runtime configuration and credential references without echoing or persisting raw values.",
+    "Authorization to perform health and QMT session readiness checks.",
+    "Authorization to perform readonly positions query with redacted output only.",
+    "Authorization to submit minimal simulation-account buy and sell orders generated from redacted runtime inputs.",
+    "Authorization to cancel the returned redacted simulation broker order references.",
+    "Confirmation that small_live/live submit and cancel remain explicitly forbidden."
+  ],
+  "forbidden_actions_confirmed": [
+    "No small_live/live submit.",
+    "No live cancel.",
+    "No secret, token, account raw value, raw order reference, raw symbol, or funding detail persistence.",
+    "No credential push or publication.",
+    "No widening of simulation scope to live scope."
+  ],
+  "stage_decision": "PASS",
+  "next_route": "completed",
+  "next_required_action": "No further simulation smoke action required for this stage. Do not proceed to small_live/live without a separate high-risk authorization gate."
+}

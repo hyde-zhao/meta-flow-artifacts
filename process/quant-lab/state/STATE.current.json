@@ -1,6 +1,6 @@
 {
   "active_change": null,
-  "active_context_ref": "process/context/CP5-CR138-RUNNER-QMT-OPERATIONAL-CONTROL-CONTEXT.yaml",
+  "active_context_ref": "process/context/RUNNER-SIMULATION-TRADING-MACHINE-SMOKE-HANDOFF-2026-06-24.md",
   "active_story": null,
   "authz_policy_refs": [
     "NO_CREDENTIAL_READ",
@@ -11,10 +11,11 @@
     "NO_REMOTE_WRITE"
   ],
   "blocked": false,
-  "current_phase": "delivered",
+  "blocked_reason": "",
+  "current_phase": "story-execution",
   "next_action": {
-    "text": "CR138 已按用户确认关闭为 closed-current-delivery / READY_WITH_RISK，证据见 process/checkpoints/CP8-CR138-DELIVERY-READINESS.md、process/checks/CP8-CR138-DELIVERY-READINESS.md 和 process/release/RELEASE-CONTEXT-CR138.yaml。后续 runtime smoke、只读账户/行情/订单验证或 submit/cancel/simulation/live 必须作为独立 candidate / runtime_authorization gate 处理；当前仍不授权真实 runtime、QMT、MiniQMT、XtQuant、gateway 启动、端口绑定、凭据读取、账户 / 行情 / 订单真实查询、submit/cancel、simulation/live、NAS、provider/lake/catalog 或 Git remote 写入。",
-    "type": "cr138-closed-current-delivery"
+    "text": "下一步建议启动 RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-2026-06-25；先实现模拟盘多因子策略运行闭环。模拟盘到实盘切换已记录为 deferred-not-implemented，后续人工审批需分析阶段目标影响；不得进入 small_live/live。",
+    "type": "runner-qmt-simulation-multifactor-strategy-runtime-next"
   },
   "open_risks": [
     {
@@ -26,9 +27,14 @@
       "id": "RISK-CR138-RUNTIME-NOT-VERIFIED",
       "summary": "本轮 CP7 未验证真实 QMT / MiniQMT / XtQuant / gateway runtime、凭据、账户、行情、订单、submit/cancel、simulation/live、NAS、provider/lake/catalog 或 Git remote。",
       "status": "accepted-by-scope"
+    },
+    {
+      "id": "RISK-RUNNER-SIMULATION-SMOKE-RUNTIME-AUTHORIZATION",
+      "summary": "RUNNER-QMT-SIMULATION-TRADING-MACHINE-SMOKE-2026-06-24 已获本轮模拟账户 smoke 授权，gateway runtime ready，WSL HMAC client env 可用，positions readonly、simulation buy submit/cancel 和 simulation sell submit/cancel 均通过；未授权 small_live/live。",
+      "status": "closed"
     }
   ],
-  "pending_gate": null,
+  "pending_gate": "",
   "project_id": "quant-lab",
   "routing_ref": "process/.meta-flow-process.yaml",
   "schema_version": 2,
@@ -132,8 +138,28 @@
     {
       "kind": "release-context",
       "path": "process/release/RELEASE-CONTEXT-CR138.yaml"
+    },
+    {
+      "kind": "simulation-smoke-handoff",
+      "path": "process/context/RUNNER-SIMULATION-TRADING-MACHINE-SMOKE-HANDOFF-2026-06-24.md"
+    },
+    {
+      "kind": "simulation-smoke-dispatch-ledger",
+      "path": "process/state/AGENT-DISPATCH-LEDGER.ndjson"
+    },
+    {
+      "kind": "simulation-smoke-verification",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-TRADING-MACHINE-SMOKE-VERIFICATION-2026-06-24.md"
+    },
+    {
+      "kind": "simulation-smoke-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-TRADING-MACHINE-SMOKE-EVIDENCE-2026-06-24.json"
+    },
+    {
+      "kind": "phase-goals",
+      "path": "process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-PHASE-GOALS-2026-06-25.md"
     }
   ],
-  "updated_at": "2026-06-24T18:58:00+08:00",
+  "updated_at": "2026-06-25T10:55:00+08:00",
   "workflow_mode": "standard"
 }
