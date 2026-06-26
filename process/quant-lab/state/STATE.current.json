@@ -1,12 +1,13 @@
 {
   "active_change": null,
-  "active_context_ref": "process/context/RUNNER-SIMULATION-TRADING-MACHINE-SMOKE-HANDOFF-2026-06-24.md",
+  "active_context_ref": "process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-NEXT-PHASE-GOALS-AND-PLAN-2026-06-26.md",
   "active_story": null,
   "authz_policy_refs": [
-    "NO_CREDENTIAL_READ",
-    "NO_RUNTIME",
+    "SIMULATION_RUNTIME_AUTHORIZED_THIS_RUN",
+    "NO_RAW_CREDENTIAL_PERSISTENCE",
+    "NO_RAW_ACCOUNT_SYMBOL_ORDER_PERSISTENCE",
     "NO_NAS",
-    "NO_TRADING",
+    "NO_SMALL_LIVE_OR_LIVE",
     "NO_PROVIDER_LAKE_CATALOG",
     "NO_REMOTE_WRITE"
   ],
@@ -14,24 +15,64 @@
   "blocked_reason": "",
   "current_phase": "story-execution",
   "next_action": {
-    "text": "下一步建议启动 RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-2026-06-25；先实现模拟盘多因子策略运行闭环。模拟盘到实盘切换已记录为 deferred-not-implemented，后续人工审批需分析阶段目标影响；不得进入 small_live/live。",
-    "type": "runner-qmt-simulation-multifactor-strategy-runtime-next"
+    "text": "Phase B simulation readiness is accepted as READY_WITH_RISK, and SIM-OPS-GATE-02 runtime input policy plus SIM-OPS-GATE-03 gateway lifecycle policy are now defined. Do not continue repeated runtime submit/cancel without a new objective and fresh per-run authorization. Next meaningful choices are: keep simulation readiness closed, collect an optional additional trading-day observation with a new authorization, or start a separate small_live/live CR with independent human decisions and runtime authorization.",
+    "type": "runner-qmt-simulation-multifactor-ops-policy-defined"
   },
   "open_risks": [
     {
       "id": "RISK-CR138-RUNTIME-MISREAD",
-      "summary": "CR138 fixture/static verified 可能被误读为 QMT / gateway runtime 或交易授权；当前 CP7 使用 PASS_WITH_RISK 并继续要求后续按需 runtime_authorization。",
-      "status": "controlled"
+      "status": "controlled",
+      "summary": "CR138 fixture/static verified 可能被误读为 QMT / gateway runtime 或交易授权；当前 CP7 使用 PASS_WITH_RISK 并继续要求后续按需 runtime_authorization。"
     },
     {
-      "id": "RISK-CR138-RUNTIME-NOT-VERIFIED",
-      "summary": "本轮 CP7 未验证真实 QMT / MiniQMT / XtQuant / gateway runtime、凭据、账户、行情、订单、submit/cancel、simulation/live、NAS、provider/lake/catalog 或 Git remote。",
-      "status": "accepted-by-scope"
+      "id": "RISK-RUNNER-MULTIFACTOR-REAL-SIMULATION-SESSION-EXPIRED",
+      "status": "closed-after-restart-verification",
+      "summary": "用户重启 Windows QMT gateway 后，CR138 signed positions readonly 与临时最小 spec 的真实 multifactor simulation runtime operator 已通过；旧 session_expired 阻断关闭。"
     },
     {
       "id": "RISK-RUNNER-SIMULATION-SMOKE-RUNTIME-AUTHORIZATION",
-      "summary": "RUNNER-QMT-SIMULATION-TRADING-MACHINE-SMOKE-2026-06-24 已获本轮模拟账户 smoke 授权，gateway runtime ready，WSL HMAC client env 可用，positions readonly、simulation buy submit/cancel 和 simulation sell submit/cancel 均通过；未授权 small_live/live。",
-      "status": "closed"
+      "status": "closed",
+      "summary": "RUNNER-QMT-SIMULATION-TRADING-MACHINE-SMOKE-2026-06-24 已获本轮模拟账户 smoke 授权，gateway runtime ready，WSL HMAC client env 可用，positions readonly、simulation buy submit/cancel 和 simulation sell submit/cancel 均通过；未授权 small_live/live。"
+    },
+    {
+      "id": "RISK-RUNNER-MULTIFACTOR-FORMAL-SPEC-NOT-YET-STABLE",
+      "status": "closed-after-r3-runtime-pass",
+      "summary": "r3 私有 runtime overlay 生成的正式 runtime spec/admission 已通过交易窗口 simulation runtime；长期稳定性窗口仍需继续逐次授权累计。"
+    },
+    {
+      "id": "RISK-RUNNER-MULTIFACTOR-FIXTURE-INSTRUMENT-RUNTIME-SUBMIT-TIMEOUT",
+      "status": "mitigated-by-input-builder-and-runtime-guard",
+      "summary": "已新增私有 runtime input builder 和 operator runtime_symbol_contract_invalid guard；当前 formal fixture spec 不会再触达 gateway。业务验收仍需用户提供私有 runtime overlay 后重新逐次授权。"
+    },
+    {
+      "id": "RISK-RUNNER-MULTIFACTOR-STABILITY-WINDOW-COLLECTING",
+      "status": "closed",
+      "summary": "交易窗口 simulation runtime r6 已通过 P0/P0.5/P1/P2/P3/P4；稳定性窗口当前 completed_runs=5/5，Phase A 已完成。"
+    },
+    {
+      "id": "RISK-RUNNER-MULTIFACTOR-STABILITY-COUNTER-SPEC-REFS",
+      "status": "mitigated",
+      "summary": "r4/r5 operator evidence 内嵌 stability_window.completed_runs 与 Phase A rollup 不一致；已分别用独立 stability summary 记录 3/5 与 4/5，并修复 runtime_inputs.py 使 r6 stability_evidence_refs 只包含历史成功 refs。"
+    },
+    {
+      "id": "RISK-RUNNER-MULTIFACTOR-SIMULATION-READINESS-CLOSURE-PENDING",
+      "status": "closed-ready-with-risk",
+      "summary": "simulation stability window 已达到 5/5；Phase B readiness closure 已生成，结论 READY_WITH_RISK。"
+    },
+    {
+      "id": "RISK-RUNNER-MULTIFACTOR-THREE-TRADING-DAY-OBSERVATION",
+      "status": "accepted-ready-with-risk",
+      "summary": "5/5 runtime count gate 已通过，但 runbook 保留 3 trading days 观察口径；当前证据主要覆盖 2026-06-25 与 2026-06-26。用户已接受 READY_WITH_RISK；补第三个交易日观察仅作为未来升级 READY 的可选后续。"
+    },
+    {
+      "id": "RISK-RUNNER-MULTIFACTOR-RUNTIME-INPUT-OPERABILITY",
+      "status": "policy-defined",
+      "summary": "runtime input overlay 来源、刷新触发、字段边界、私有输出目录和脱敏 evidence 边界已在 SIM-OPS policy 中固化。"
+    },
+    {
+      "id": "RISK-RUNNER-MULTIFACTOR-GATEWAY-LIFECYCLE-DESYNC",
+      "status": "policy-defined",
+      "summary": "Windows gateway 启停、重启、WSL/Windows runtime code sync 和 P0/P0.5 复验规则已在 SIM-OPS policy 中固化。"
     }
   ],
   "pending_gate": "",
@@ -158,8 +199,308 @@
     {
       "kind": "phase-goals",
       "path": "process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-PHASE-GOALS-2026-06-25.md"
+    },
+    {
+      "kind": "runner-start-context",
+      "path": "process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-START-2026-06-25.md"
+    },
+    {
+      "kind": "p0-runtime-profile-safety-identity-check",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P0-RUNTIME-PROFILE-SAFETY-IDENTITY-2026-06-25.md"
+    },
+    {
+      "kind": "p0-runtime-profile-safety-identity-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P0-EVIDENCE-2026-06-25.json"
+    },
+    {
+      "kind": "p1-multifactor-target-portfolio-check",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P1-MULTIFACTOR-TARGET-PORTFOLIO-2026-06-25.md"
+    },
+    {
+      "kind": "p1-multifactor-target-portfolio-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P1-EVIDENCE-2026-06-25.json"
+    },
+    {
+      "kind": "p2-simulation-order-plan-check",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P2-SIMULATION-ORDER-PLAN-2026-06-25.md"
+    },
+    {
+      "kind": "p2-simulation-order-plan-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P2-EVIDENCE-2026-06-25.json"
+    },
+    {
+      "kind": "p3-simulation-execution-engine-check",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P3-SIMULATION-EXECUTION-ENGINE-2026-06-25.md"
+    },
+    {
+      "kind": "p3-simulation-execution-engine-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P3-EVIDENCE-2026-06-25.json"
+    },
+    {
+      "kind": "p4-simulation-reconciliation-check",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P4-RECONCILIATION-2026-06-25.md"
+    },
+    {
+      "kind": "p4-simulation-reconciliation-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P4-EVIDENCE-2026-06-25.json"
+    },
+    {
+      "kind": "p5-operational-runbook-check",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P5-OPERATIONAL-RUNBOOK-2026-06-25.md"
+    },
+    {
+      "kind": "p5-operational-runbook-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P5-EVIDENCE-2026-06-25.json"
+    },
+    {
+      "kind": "p5-operational-runbook",
+      "path": "process/runbooks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-RUNBOOK-2026-06-25.md"
+    },
+    {
+      "kind": "p6-deferred-live-switch-check",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P6-DEFERRED-LIVE-SWITCH-SCENARIO-2026-06-25.md"
+    },
+    {
+      "kind": "p6-deferred-live-switch-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P6-EVIDENCE-2026-06-25.json"
+    },
+    {
+      "kind": "p6-deferred-live-switch-scenario-pack",
+      "path": "process/context/RUNNER-QMT-SIMULATION-TO-LIVE-SWITCH-DEFERRED-SCENARIO-PACK-2026-06-25.md"
+    },
+    {
+      "kind": "real-readonly-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-REAL-READONLY-EVIDENCE-2026-06-25.json"
+    },
+    {
+      "kind": "real-operator-check",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-REAL-OPERATOR-2026-06-25.md"
+    },
+    {
+      "kind": "real-operator-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-REAL-OPERATOR-EVIDENCE-2026-06-25.json"
+    },
+    {
+      "kind": "after-restart-verification",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-AFTER-RESTART-VERIFICATION-2026-06-25.md"
+    },
+    {
+      "kind": "after-restart-readonly-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-AFTER-RESTART-READONLY-EVIDENCE-2026-06-25.json"
+    },
+    {
+      "kind": "after-restart-runtime-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-AFTER-RESTART-RUNTIME-EVIDENCE-2026-06-25.json"
+    },
+    {
+      "kind": "next-session-handoff",
+      "path": "process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-NEXT-SESSION-HANDOFF-2026-06-25.md"
+    },
+    {
+      "kind": "formal-strategy-admission-package",
+      "path": "process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-FORMAL-STRATEGY-ADMISSION-PACKAGE-2026-06-25.json"
+    },
+    {
+      "kind": "formal-operator-spec",
+      "path": "process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-FORMAL-OPERATOR-SPEC-2026-06-25.json"
+    },
+    {
+      "kind": "non-trading-window-completion",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-NON-TRADING-WINDOW-COMPLETION-2026-06-25.md"
+    },
+    {
+      "kind": "formal-preflight-evidence-index",
+      "path": "process/evidence/runner-simulation-formal-2026-06-25/preflight-only/runner-qmt-simulation-multifactor-formal-non-trading-2026-06-25/operator-evidence.index.json"
+    },
+    {
+      "kind": "formal-plan-only-evidence-index",
+      "path": "process/evidence/runner-simulation-formal-2026-06-25/plan-only/runner-qmt-simulation-multifactor-formal-non-trading-2026-06-25/operator-evidence.index.json"
+    },
+    {
+      "kind": "formal-fixture-evidence-index",
+      "path": "process/evidence/runner-simulation-formal-2026-06-25/fixture/runner-qmt-simulation-multifactor-formal-non-trading-2026-06-25/operator-evidence.index.json"
+    },
+    {
+      "kind": "formal-reconcile-only-evidence-index",
+      "path": "process/evidence/runner-simulation-formal-2026-06-25/reconcile-only/runner-qmt-simulation-multifactor-formal-non-trading-2026-06-25/operator-evidence.index.json"
+    },
+    {
+      "kind": "trading-window-acceptance-handoff",
+      "path": "process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-ACCEPTANCE-HANDOFF-2026-06-26.md"
+    },
+    {
+      "kind": "trading-window-acceptance-blocked",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-ACCEPTANCE-2026-06-26.md"
+    },
+    {
+      "kind": "trading-window-r2-revalidation",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-R2-REVALIDATION-2026-06-26.md"
+    },
+    {
+      "kind": "trading-window-r2-readonly-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-READONLY-EVIDENCE-2026-06-26-r2.json"
+    },
+    {
+      "kind": "trading-window-r2-runtime-evidence",
+      "path": "process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r2/operator-evidence.json"
+    },
+    {
+      "kind": "formal-runtime-input-fix",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-FORMAL-RUNTIME-INPUT-FIX-2026-06-26.md"
+    },
+    {
+      "kind": "runtime-input-builder",
+      "path": "trading/strategy_runner/runtime_inputs.py"
+    },
+    {
+      "kind": "runtime-input-builder-cli",
+      "path": "scripts/build_qmt_multifactor_runtime_inputs.py"
+    },
+    {
+      "kind": "private-runtime-r3-overlay",
+      "path": "/home/hyde/.quant-lab/runtime/qmt/cr138-simulation/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3-runtime-overlay.json"
+    },
+    {
+      "kind": "private-runtime-r3-spec",
+      "path": "/home/hyde/.quant-lab/runtime/qmt/cr138-simulation/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3-runtime-spec.json"
+    },
+    {
+      "kind": "private-runtime-r3-admission",
+      "path": "/home/hyde/.quant-lab/runtime/qmt/cr138-simulation/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3-runtime-admission-package.json"
+    },
+    {
+      "kind": "private-runtime-r3-plan-only-evidence",
+      "path": "process/evidence/runner-simulation-runtime-input-fix-2026-06-26/plan-only/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3/operator-evidence.json"
+    },
+    {
+      "kind": "trading-window-r3-runtime-acceptance",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-R3-RUNTIME-ACCEPTANCE-2026-06-26.md"
+    },
+    {
+      "kind": "trading-window-r3-readonly-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-READONLY-EVIDENCE-2026-06-26-r3.json"
+    },
+    {
+      "kind": "trading-window-r3-runtime-evidence",
+      "path": "process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3/operator-evidence.json"
+    },
+    {
+      "kind": "trading-window-r3-runtime-evidence-index",
+      "path": "process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3/operator-evidence.index.json"
+    },
+    {
+      "kind": "next-phase-goals-and-plan",
+      "path": "process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-NEXT-PHASE-GOALS-AND-PLAN-2026-06-26.md"
+    },
+    {
+      "kind": "trading-window-r4-runtime-acceptance",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-R4-RUNTIME-ACCEPTANCE-2026-06-26.md"
+    },
+    {
+      "kind": "trading-window-r4-p0-health-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-P0-HEALTH-EVIDENCE-2026-06-26-r4.json"
+    },
+    {
+      "kind": "trading-window-r4-p0-capabilities-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-P0-CAPABILITIES-EVIDENCE-2026-06-26-r4.json"
+    },
+    {
+      "kind": "trading-window-r4-readonly-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-READONLY-EVIDENCE-2026-06-26-r4.json"
+    },
+    {
+      "kind": "trading-window-r4-runtime-evidence",
+      "path": "process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r4/operator-evidence.json"
+    },
+    {
+      "kind": "trading-window-r4-runtime-evidence-index",
+      "path": "process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r4/operator-evidence.index.json"
+    },
+    {
+      "kind": "trading-window-r4-stability-window-summary",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STABILITY-WINDOW-SUMMARY-2026-06-26-r4.json"
+    },
+    {
+      "kind": "trading-window-r5-runtime-acceptance",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-R5-RUNTIME-ACCEPTANCE-2026-06-26.md"
+    },
+    {
+      "kind": "trading-window-r5-p0-health-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-P0-HEALTH-EVIDENCE-2026-06-26-r5.json"
+    },
+    {
+      "kind": "trading-window-r5-p0-capabilities-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-P0-CAPABILITIES-EVIDENCE-2026-06-26-r5.json"
+    },
+    {
+      "kind": "trading-window-r5-readonly-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-READONLY-EVIDENCE-2026-06-26-r5.json"
+    },
+    {
+      "kind": "trading-window-r5-runtime-evidence",
+      "path": "process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r5/operator-evidence.json"
+    },
+    {
+      "kind": "trading-window-r5-runtime-evidence-index",
+      "path": "process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r5/operator-evidence.index.json"
+    },
+    {
+      "kind": "trading-window-r5-stability-window-summary",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STABILITY-WINDOW-SUMMARY-2026-06-26-r5.json"
+    },
+    {
+      "kind": "trading-window-r6-runtime-acceptance",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-R6-RUNTIME-ACCEPTANCE-2026-06-26.md"
+    },
+    {
+      "kind": "trading-window-r6-p0-health-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-P0-HEALTH-EVIDENCE-2026-06-26-r6.json"
+    },
+    {
+      "kind": "trading-window-r6-p0-capabilities-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-P0-CAPABILITIES-EVIDENCE-2026-06-26-r6.json"
+    },
+    {
+      "kind": "trading-window-r6-readonly-evidence",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-READONLY-EVIDENCE-2026-06-26-r6.json"
+    },
+    {
+      "kind": "trading-window-r6-runtime-evidence",
+      "path": "process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r6/operator-evidence.json"
+    },
+    {
+      "kind": "trading-window-r6-runtime-evidence-index",
+      "path": "process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r6/operator-evidence.index.json"
+    },
+    {
+      "kind": "trading-window-r6-stability-window-summary",
+      "path": "process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STABILITY-WINDOW-SUMMARY-2026-06-26-r6.json"
+    },
+    {
+      "kind": "simulation-readiness-closure",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-SIMULATION-OPERATIONAL-READINESS-CLOSURE-2026-06-26.md"
+    },
+    {
+      "kind": "simulation-readiness-release-context",
+      "path": "process/release/RELEASE-CONTEXT-RUNNER-QMT-SIMULATION-MULTIFACTOR-SIMULATION-READINESS-2026-06-26.yaml"
+    },
+    {
+      "kind": "simulation-readiness-human-decision",
+      "path": "process/checkpoints/RUNNER-QMT-SIMULATION-MULTIFACTOR-SIMULATION-READINESS-HUMAN-DECISION-2026-06-26.md"
+    },
+    {
+      "kind": "simulation-readiness-runbook-addendum",
+      "path": "process/runbooks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-RUNBOOK-2026-06-25.md"
+    },
+    {
+      "kind": "simulation-ops-policy",
+      "path": "process/policies/RUNNER-QMT-SIMULATION-MULTIFACTOR-RUNTIME-INPUT-GATEWAY-LIFECYCLE-POLICY-2026-06-26.md"
+    },
+    {
+      "kind": "simulation-ops-policy-closure",
+      "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-OPS-POLICY-CLOSURE-2026-06-26.md"
     }
   ],
-  "updated_at": "2026-06-25T10:55:00+08:00",
+  "updated_at": "2026-06-26T11:37:00+08:00",
   "workflow_mode": "standard"
 }

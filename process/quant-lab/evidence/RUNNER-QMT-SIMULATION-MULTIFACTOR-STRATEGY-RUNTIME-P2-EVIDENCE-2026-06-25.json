@@ -1,0 +1,68 @@
+{
+  "schema_version": "runner-simulation-order-plan-evidence-v1",
+  "workflow_id": "RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-2026-06-25",
+  "phase_goal": "P2-simulation-order-plan",
+  "created_at": "2026-06-25T11:47:06+08:00",
+  "status": "PASS",
+  "implementation_refs": [
+    "trading/strategy_runner/simulation_order_plan.py",
+    "trading/strategy_runner/__init__.py",
+    "tests/test_runner_multifactor_runtime_pipeline.py"
+  ],
+  "contract_summary": {
+    "target": "convert target portfolio rows into simulation buy/sell order intent plan only",
+    "inputs": [
+      "target_rows",
+      "capital_base",
+      "current_positions",
+      "RiskInputSnapshot",
+      "RiskProfile",
+      "max_turnover_notional"
+    ],
+    "outputs": [
+      "SimulationOrderPlanResult",
+      "SimulationOrderPlanItem",
+      "OrderIntent tuple for downstream execution"
+    ],
+    "fail_closed_reasons": [
+      "required_field_missing",
+      "target_rows_empty",
+      "order_plan_input_invalid",
+      "turnover_limit_exceeded",
+      "pretrade_risk_blocked"
+    ],
+    "no_op_behavior": "target equals current positions returns generated with zero orders",
+    "redaction": "to_dict exposes instrument_ref, quantity bucket, price_ref and notional bucket only; raw symbol, raw price and exact quantity are internal calculation fields",
+    "not_authorization": true
+  },
+  "risk_controls": {
+    "cash": "covered by trading.pretrade_risk.evaluate_many",
+    "lot_size": "covered by lot rounding plus pretrade lot_size rule",
+    "t1_sellable": "covered by pretrade risk for sell intents",
+    "position_available": "covered by pretrade risk for sell intents",
+    "single_symbol_limit": "covered by pretrade risk",
+    "portfolio_limit": "covered by pretrade risk",
+    "turnover_limit": "blocked before execution when max_turnover_notional is exceeded"
+  },
+  "safety_counters": {
+    "credential_read": 0,
+    "qmt_operation": 0,
+    "qmt_api_call": 0,
+    "real_order": 0,
+    "real_cancel": 0,
+    "account_query": 0,
+    "account_write": 0,
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "publish": 0,
+    "simulation_or_live_run": 0
+  },
+  "verification": {
+    "pytest": "29 passed in 0.34s",
+    "py_compile": "PASS"
+  },
+  "runtime_authorization_granted": false,
+  "runtime_qmt_touched": false,
+  "credential_read": false,
+  "small_live_or_live_entered": false
+}

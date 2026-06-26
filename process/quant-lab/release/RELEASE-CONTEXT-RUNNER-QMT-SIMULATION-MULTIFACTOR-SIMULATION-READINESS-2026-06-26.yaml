@@ -1,0 +1,128 @@
+schema_version: release-context-v1
+release_context_id: RUNNER-QMT-SIMULATION-MULTIFACTOR-SIMULATION-READINESS-2026-06-26
+workflow_id: RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-2026-06-25
+created_at: "2026-06-26T11:35:00+08:00"
+owner: host-orchestrator
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+release_scope:
+  in_scope:
+    - "simulation runtime stability window 5/5 evidence rollup"
+    - "simulation operational readiness scope/non-scope definition"
+    - "runbook readiness addendum and follow-up gates"
+  out_of_scope:
+    - "small_live"
+    - "live"
+    - "live gateway route activation"
+    - "credential reads"
+    - "raw account/order/fund detail persistence"
+    - "NAS/provider/lake/catalog/publish/remote Git"
+version_decision:
+  target_version: "simulation-readiness-2026-06-26"
+  change_type: "runtime-readiness-closure"
+  semver_impact: "n/a"
+quality_summary:
+  phase_a_stability_window:
+    status: pass
+    completed_runs: 5
+    required_runs: 5
+    latest_run: runner-qmt-simulation-multifactor-trading-window-2026-06-26-r6
+  runtime_gate_summary:
+    p0_gateway_identity: pass
+    p0_5_signed_positions_readonly: pass
+    p1_target: pass
+    p2_order_plan: pass
+    p3_execution: pass
+    p4_reconciliation: pass
+    submitted_count_per_runtime_run: 1
+    cancelled_count_per_runtime_run: 1
+    rejected_count: 0
+    unknown_count: 0
+    unresolved_count: 0
+    manual_takeover_required: false
+  redaction_summary:
+    raw_account_saved: false
+    raw_symbol_saved: false
+    raw_broker_order_ref_saved: false
+    raw_payload_saved: false
+    secret_or_token_saved: false
+    fund_detail_saved: false
+affected_surface:
+  platform:
+    - "WSL client"
+    - "Windows QMT gateway"
+  components:
+    - "trading.strategy_runner.runtime_inputs"
+    - "trading.strategy_runner.simulation_operator"
+    - "trading.qmt_runtime"
+  configuration:
+    - "private runtime overlay under /home/hyde/.quant-lab/runtime/qmt/cr138-simulation"
+    - "Windows runtime mirror under /mnt/c/quant-lab-runtime"
+  external_interfaces:
+    - "QMT gateway simulation submit/cancel"
+install_validation_summary:
+  status: pass
+  commands:
+    - "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_runner_runtime_inputs.py tests/test_runner_multifactor_simulation_operator.py tests/test_cr020_runtime_manual_validation.py"
+  result: "18 passed"
+release_documents:
+  readiness_closure:
+    path: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-SIMULATION-OPERATIONAL-READINESS-CLOSURE-2026-06-26.md
+    status: generated
+  human_decision:
+    path: process/checkpoints/RUNNER-QMT-SIMULATION-MULTIFACTOR-SIMULATION-READINESS-HUMAN-DECISION-2026-06-26.md
+    status: approved
+  runbook:
+    path: process/runbooks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-RUNBOOK-2026-06-25.md
+    status: updated
+  next_phase_plan:
+    path: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-NEXT-PHASE-GOALS-AND-PLAN-2026-06-26.md
+    status: updated
+  ops_policy:
+    path: process/policies/RUNNER-QMT-SIMULATION-MULTIFACTOR-RUNTIME-INPUT-GATEWAY-LIFECYCLE-POLICY-2026-06-26.md
+    status: generated
+  ops_policy_closure:
+    path: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-OPS-POLICY-CLOSURE-2026-06-26.md
+    status: pass
+non_authorized_items:
+  - "small_live/live"
+  - "live gateway profile/route activation"
+  - "credential reads"
+  - "raw account/order/fund detail output"
+  - "NAS/provider/lake/catalog/publish/remote Git"
+follow_up_summary:
+  risks:
+    - id: RISK-RUNNER-MULTIFACTOR-THREE-TRADING-DAY-OBSERVATION
+      status: accepted_ready_with_risk
+      summary: "5/5 runtime count is complete; the owner accepted the remaining 3-trading-day observation gap as a READY_WITH_RISK condition on 2026-06-26. Current evidence mainly covers 2026-06-25 and 2026-06-26."
+    - id: RISK-RUNNER-MULTIFACTOR-RUNTIME-INPUT-OPERABILITY
+      status: policy_defined
+      summary: "Private overlay source, refresh triggers, allowed fields, private output directory, and redaction boundaries are defined in the ops policy."
+    - id: RISK-RUNNER-MULTIFACTOR-GATEWAY-LIFECYCLE-DESYNC
+      status: policy_defined
+      summary: "Windows gateway start/restart/stop and WSL-Windows runtime code sync rules are defined in the ops policy."
+  next_gate:
+    type: live_switch_or_observation_decision
+    question: "SIM-OPS-GATE-02/03 已固化；若准备 small_live/live，另行启动独立 CR；若只补观察，仍需新的逐次 simulation runtime authorization。"
+human_decisions:
+  - id: SIM-READY-DQ-01
+    type: risk_acceptance
+    status: accepted
+    accepted_decision: READY_WITH_RISK
+    accepted_at: "2026-06-26T11:36:00+08:00"
+    approval_ref: process/checkpoints/RUNNER-QMT-SIMULATION-MULTIFACTOR-SIMULATION-READINESS-HUMAN-DECISION-2026-06-26.md
+    non_authorized_items:
+      - "small_live/live"
+      - "live gateway profile/route activation"
+      - "credential reads"
+      - "raw account/order/fund detail output"
+      - "NAS/provider/lake/catalog/publish/remote Git"
+      - "additional simulation runtime without fresh per-run authorization"
+evidence_refs:
+  - process/policies/RUNNER-QMT-SIMULATION-MULTIFACTOR-RUNTIME-INPUT-GATEWAY-LIFECYCLE-POLICY-2026-06-26.md
+  - process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-OPS-POLICY-CLOSURE-2026-06-26.md
+  - process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-AFTER-RESTART-RUNTIME-EVIDENCE-2026-06-25.json
+  - process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3/operator-evidence.index.json
+  - process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r4/operator-evidence.index.json
+  - process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r5/operator-evidence.index.json
+  - process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r6/operator-evidence.index.json

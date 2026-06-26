@@ -1,0 +1,67 @@
+{
+  "evidence_id": "RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P0-EVIDENCE-2026-06-25",
+  "workflow_id": "RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-2026-06-25",
+  "created_at": "2026-06-25T11:32:04+08:00",
+  "created_by": "host-orchestrator",
+  "phase_goal": "P0-runtime-profile-and-safety-identity",
+  "result_status": "PASS",
+  "target_status_after_p0": "runtime-profile-safety-identity-ready",
+  "implementation_scope": "offline-contract-and-tests",
+  "runtime_authorization_granted": false,
+  "runtime_qmt_touched": false,
+  "credential_read": false,
+  "account_raw_saved": false,
+  "raw_symbol_saved": false,
+  "raw_broker_order_ref_saved": false,
+  "live_or_small_live_authorized": false,
+  "changed_files": [
+    "trading/qmt_gateway_contracts.py",
+    "trading/qmt_client.py",
+    "trading/qmt_runtime.py",
+    "trading/qmt_transport.py",
+    "tests/test_cr020_runtime_manual_validation.py",
+    "tests/test_cr020_linux_client_rest_transport.py"
+  ],
+  "contract_summary": {
+    "client_request": [
+      "QmtClientConfig.expected_runtime_mode",
+      "QmtClientConfig.expected_runtime_profile",
+      "QmtRequest.expected_runtime_mode",
+      "QmtRequest.expected_runtime_profile",
+      "REST request body expected_runtime_mode / expected_runtime_profile"
+    ],
+    "gateway_identity": [
+      "QMT_RUNTIME_MODE -> QmtRuntimeConfig.runtime_mode",
+      "QMT_ACCOUNT_KIND -> QmtRuntimeConfig.account_kind",
+      "QMT_RUNTIME_PROFILE -> QmtRuntimeConfig.runtime_profile"
+    ],
+    "fail_closed": [
+      "simulation transport requires expected_runtime_mode=simulation",
+      "simulation transport requires expected_runtime_profile",
+      "gateway simulation submit/cancel blocks before XtQuant adapter when runtime identity is missing",
+      "gateway simulation submit/cancel blocks before XtQuant adapter when expected profile mismatches gateway profile"
+    ]
+  },
+  "verification": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr020_runtime_manual_validation.py tests/test_cr020_linux_client_rest_transport.py tests/test_runner_simulation_activation.py",
+      "result": "PASS",
+      "summary": "25 passed in 0.27s"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/p0-runtime-profile-pycompile uv run --python 3.11 python -m py_compile trading/qmt_gateway_contracts.py trading/qmt_client.py trading/qmt_runtime.py trading/qmt_transport.py tests/test_cr020_runtime_manual_validation.py tests/test_cr020_linux_client_rest_transport.py tests/test_runner_simulation_activation.py",
+      "result": "PASS",
+      "summary": "No syntax errors reported"
+    }
+  ],
+  "non_authorized_scope": [
+    "small_live/live submit/cancel",
+    "credentials/secrets/tokens",
+    "raw account/order/funding records",
+    "gateway runtime execution",
+    "provider/lake/catalog/publish",
+    "NAS content operation",
+    "remote git write"
+  ],
+  "next_phase_goal": "P1-multifactor-target-portfolio"
+}
