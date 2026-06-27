@@ -1,6 +1,6 @@
 {
   "active_change": null,
-  "active_context_ref": "process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-NEXT-PHASE-GOALS-AND-PLAN-2026-06-26.md",
+  "active_context_ref": "process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STAGE3-RESEARCH-MACHINE-HANDOFF-2026-06-26.md",
   "active_story": null,
   "authz_policy_refs": [
     "SIMULATION_RUNTIME_AUTHORIZED_THIS_RUN",
@@ -15,8 +15,8 @@
   "blocked_reason": "",
   "current_phase": "story-execution",
   "next_action": {
-    "text": "Phase B simulation readiness is accepted as READY_WITH_RISK, and SIM-OPS-GATE-02 runtime input policy plus SIM-OPS-GATE-03 gateway lifecycle policy are now defined. Do not continue repeated runtime submit/cancel without a new objective and fresh per-run authorization. Next meaningful choices are: keep simulation readiness closed, collect an optional additional trading-day observation with a new authorization, or start a separate small_live/live CR with independent human decisions and runtime authorization.",
-    "type": "runner-qmt-simulation-multifactor-ops-policy-defined"
+    "text": "Stage 3 research-machine handoff is prepared and is now the active context. The user will implement Stage 3 on another data-capable research machine: prepare real data inputs, generate research evidence, build the mature admission package, and run runner offline/preflight checks from process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STAGE3-RESEARCH-MACHINE-HANDOFF-2026-06-26.md. On the current machine, do not connect to the data lake, do not run simulation runtime, do not start gateway, and do not start small_live/live.",
+    "type": "stage-3-research-machine-handoff-ready"
   },
   "open_risks": [
     {
@@ -73,6 +73,26 @@
       "id": "RISK-RUNNER-MULTIFACTOR-GATEWAY-LIFECYCLE-DESYNC",
       "status": "policy-defined",
       "summary": "Windows gateway 启停、重启、WSL/Windows runtime code sync 和 P0/P0.5 复验规则已在 SIM-OPS policy 中固化。"
+    },
+    {
+      "id": "RISK-RUNNER-MULTIFACTOR-PROJECT-BLUEPRINT-DRIFT",
+      "status": "mitigated",
+      "summary": "Stage 1 已在当前 quant-lab 项目蓝图三件套上合并五阶段路线和多策略类型适配边界，旧蓝图已归档，避免新增孤立端到端策略研究蓝图。"
+    },
+    {
+      "id": "RISK-RUNNER-MULTIFACTOR-STAGE2-DATA-LAKE-COUPLING",
+      "status": "controlled",
+      "summary": "Stage 2 多因子研究框架升级不连接数据湖；桥接切片已用 no-lake counter validation、typed unavailable、CR030/CR039 bridge 和 Stage 3 handoff 测试固化边界。真实数据湖接入推迟到 Stage 3 由用户在研究机实施。"
+    },
+    {
+      "id": "RISK-RUNNER-MULTIFACTOR-MATURE-STRATEGY-GAP",
+      "status": "open",
+      "summary": "当前可运行对象仍是 fixture / 综合 alpha score 注入包样例；Stage 2 已具备成熟策略生产框架和 handoff，Stage 3 仍需基于研究机数据湖生产真实策略研究、evidence 和准入包。"
+    },
+    {
+      "id": "RISK-RUNNER-MULTIFACTOR-UNIVERSE-SCALE-UP",
+      "status": "open",
+      "summary": "从 2 个 ETF / fixture 扩展到真实股票池会引入 PIT 数据质量、流动性、停牌、ST、涨跌停、容量和调仓复杂度；不得直接扩大 runtime，必须先按 Stage 3 handoff 完成 universe policy、风险过滤和证据追溯。"
     }
   ],
   "pending_gate": "",
@@ -389,8 +409,44 @@
       "path": "process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3/operator-evidence.index.json"
     },
     {
+      "kind": "stage3-research-machine-handoff",
+      "path": "process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STAGE3-RESEARCH-MACHINE-HANDOFF-2026-06-26.md"
+    },
+    {
       "kind": "next-phase-goals-and-plan",
       "path": "process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-NEXT-PHASE-GOALS-AND-PLAN-2026-06-26.md"
+    },
+    {
+      "kind": "project-blueprint",
+      "path": "docs/design/BLUEPRINT.md"
+    },
+    {
+      "kind": "project-domain-map",
+      "path": "docs/design/DOMAIN-MAP.md"
+    },
+    {
+      "kind": "project-dependency-map",
+      "path": "docs/design/DEPENDENCY-MAP.md"
+    },
+    {
+      "kind": "archived-project-blueprint",
+      "path": "process/archive/design-blueprints/BLUEPRINT-before-quant-lab-project-roadmap-2026-06-26.md"
+    },
+    {
+      "kind": "stage2-framework-module",
+      "path": "engine/mature_multifactor_framework.py"
+    },
+    {
+      "kind": "stage2-framework-test",
+      "path": "tests/test_stage2_mature_multifactor_framework.py"
+    },
+    {
+      "kind": "stage2-framework-fixture",
+      "path": "tests/fixtures/stage2_multifactor_framework/mature_multifactor_stage2_fixture.json"
+    },
+    {
+      "kind": "stage2-framework-check",
+      "path": "process/checks/STAGE2-MULTIFACTOR-FRAMEWORK-NO-LAKE-INITIAL-SLICE-2026-06-26.md"
     },
     {
       "kind": "trading-window-r4-runtime-acceptance",
@@ -501,6 +557,6 @@
       "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-OPS-POLICY-CLOSURE-2026-06-26.md"
     }
   ],
-  "updated_at": "2026-06-26T11:37:00+08:00",
+    "updated_at": "2026-06-26T15:30:00+08:00",
   "workflow_mode": "standard"
 }

@@ -1,9 +1,8 @@
 ---
 status: "draft-current-index"
-version: "1.5"
+version: "1.4"
 source_blueprint: "docs/design/BLUEPRINT.md"
 change: "CR-138"
-archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-lab-project-roadmap-2026-06-26.md"
 ---
 
 # Domain Map
@@ -17,7 +16,6 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | 1.2 | 2026-06-14 | host-orchestrator | 按 CR-051 增补策略研究生命周期、研究归档、项目身份迁移和硬件冷热分层规则 |
 | 1.3 | 2026-06-24 | host-orchestrator | 按 CR138 增补 Runner Control Plane 与 QMT Gateway Service Layer 运营领域对象、状态机和 fail-closed 规则 |
 | 1.4 | 2026-06-24 | host-orchestrator | 根据用户 CP3 反馈补齐 FEAT-12 查询领域对象：交易日历、交易窗口、佣金 / 费用模型、成本估算、收益 / PnL 快照和收益摘要；runtime policy 改为按需授权 |
-| 1.5 | 2026-06-26 | host-orchestrator | 按 `quant-lab` 项目级五阶段路线增补策略类型适配、Stage 2 多因子框架升级、Stage 3 成熟策略生产和 Stage 4 模拟盘观察领域对象与规则。 |
 
 ## 术语表
 
@@ -155,13 +153,6 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | ExecutionReport | Gateway 标准化后的订单状态、成交、拒单、撤单和错误事件 | UC-47 | 不得在无授权时由真实 adapter 产生 |
 | RunnerCommand | Runner 对 Gateway 或 OMS 发出的领域命令意图 | UC-35..UC-38 | 必须带 idempotency_key 和 authorization_ref |
 | Reference / Account Query Service | Gateway 内负责交易日历、佣金 / 费用模型、收益 / PnL、账户、持仓、订单、成交等查询的服务能力 | UC-34 / UC-41 / UC-45 | 交易日历可走本地参考数据；账户级查询必须授权和脱敏 |
-| strategy type adapter | 将某一类策略的研究输出归一为 `SignalSet`、`StrategyCandidate` 和可审计证据索引的适配合同 | Stage 1 | 多因子、事件型、机器学习和规则型策略都必须通过该边界接入 |
-| SignalSet | 统一策略信号集合，包含 signal_id、trade_date、universe、score / signal、direction、confidence、available_at 和 lineage | Stage 1 / Stage 2 | 不等于订单，也不等于 target portfolio |
-| StrategyCandidate | 经过研究评价但尚未获得 runtime 授权的策略候选 | Stage 1 / Stage 3 | 可进入 mature admission，不等于 simulation-ready 或 live-ready |
-| EventSpec | 事件型策略的事件定义、披露时点、available_at、响应窗口和过滤规则 | Stage 1 后续扩展 | 当前只冻结适配边界，具体事件策略另起 CR |
-| ModelSpec | 机器学习策略的特征、标签、模型、训练窗口、验证窗口、漂移和泄漏检查定义 | Stage 1 后续扩展 | 当前只冻结适配边界，具体 ML 策略另起 CR |
-| mature multifactor strategy | 满足真实数据 lineage、FactorSpec、UniversePolicy、评价证据、组合风控和 runner offline 证据的多因子策略 | Stage 3 | 不等于 fixture / alpha_score 注入包 |
-| simulation observation | 对成熟策略在模拟盘中的长期运行观察、异常闭环和 small_live 入口条件评估 | Stage 4 | 必须逐次 runtime authorization，不自动升级 live |
 
 ### 领域对象增量
 
@@ -189,16 +180,6 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | OBJ-63 | CostEstimate | FEAT-06 / FEAT-12 | order_intent_id、notional、estimated_commission、taxes、slippage_assumption、source | estimated / unavailable / superseded | UC-38 / UC-41 |
 | OBJ-64 | PnLSnapshot | FEAT-12 / FEAT-06 | account_label、run_id、period、realized_pnl、unrealized_pnl、cash_delta、positions_value、source、redaction_status | available / estimated / blocked / stale / unavailable | UC-39 / UC-41 / UC-45 |
 | OBJ-65 | ReturnSummary | FEAT-11 / FEAT-12 | run_id、strategy_id、period、gross_return、net_return、benchmark_ref、cost_ref、pnl_ref | draft / reviewed / blocked | UC-41 |
-| OBJ-66 | StrategyTypeAdapter | FEAT-13 | adapter_id、strategy_family、input_contract、output_contract、evidence_required、unsupported_reason | draft / validated / blocked / deprecated | Stage 1 |
-| OBJ-67 | SignalSet | FEAT-13 | signal_set_id、strategy_family、trade_date、universe_ref、signal_schema、available_at、lineage_ref | draft / complete / blocked / superseded | Stage 1 / Stage 2 |
-| OBJ-68 | StrategyCandidate | FEAT-13 / FEAT-14 | candidate_id、strategy_family、signal_set_ref、backtest_ref、risk_ref、evidence_index_ref | research_only / admission_ready / blocked / retired | Stage 1 / Stage 3 |
-| OBJ-69 | ResearchEvidenceIndex | FEAT-13 / FEAT-10 | index_id、data_release_ref、run_manifest_ref、metric_refs、lineage_refs、limitations | missing / partial / complete / blocked | Stage 1 / Stage 3 |
-| OBJ-70 | MultifactorFrameworkUpgradePlan | FEAT-03 / FEAT-13 | plan_id、contract_changes、schema_changes、fixture_plan、test_plan、data_lake_dependency | draft / implementation_ready / verified / blocked | Stage 2 |
-| OBJ-71 | UniversePolicy | FEAT-14 / FEAT-03 | universe_id、market_scope、PIT_rule、listing_filter、ST_filter、suspension_filter、limit_filter、liquidity_filter、industry_style_refs | draft / validated / blocked / superseded | Stage 3 |
-| OBJ-72 | PortfolioRiskPolicy | FEAT-14 / FEAT-06 | policy_id、top_n、max_weight、turnover_limit、industry_limit、style_limit、capacity_assumption、fee_slippage_ref、stop_conditions | draft / validated / blocked / superseded | Stage 3 / Stage 4 |
-| OBJ-73 | MatureStrategyDefinition | FEAT-14 | strategy_id、benchmark、holding_period、rebalance_rule、factor_refs、universe_policy_ref、risk_policy_ref、admission_package_ref | draft / admission_ready / simulation_candidate / blocked | Stage 3 |
-| OBJ-74 | SimulationObservationPlan | FEAT-14 / FEAT-11 | observation_id、strategy_id、calendar、run_frequency、metrics、incident_classes、stop_conditions、small_live_entry_criteria | draft / active / paused / completed / blocked | Stage 4 |
-| OBJ-75 | ReadinessDecision | FEAT-14 / FEAT-07 | decision_id、scope、evidence_refs、risk_acceptance_refs、authorized_next_stage、non_authorized_items | not_ready / ready_with_risk / ready / blocked | Stage 3 / Stage 4 / Stage 5 |
 
 ### 状态机增量
 
@@ -210,9 +191,6 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | SM-19 | MarketSubscription | requested -> active -> degraded -> recovering -> active/stopped | 授权、capabilities、订阅恢复通过后转换 | 无授权、xtdata 异常或 schema mismatch 时 blocked/degraded |
 | SM-20 | GatewayChangePlan | draft -> review_ready -> approved_by_followup/rejected | diff、compatibility、rollback plan 齐备后进入 review | 缺 rollback target 或含明文凭据时 rejected |
 | SM-21 | Reference / Account Query | requested -> authorized/local_source_selected -> available/estimated/blocked/unavailable | 本地日历可直接选择 local source；账户佣金 / 收益必须先授权 | 缺授权 blocked；QMT 不支持时 unavailable_with_reason，不得伪造 broker facts |
-| SM-22 | StrategyTypeAdapter -> SignalSet -> StrategyCandidate | adapter_draft -> adapter_validated -> signal_complete -> candidate_admission_ready / blocked | 只有适配合同、信号 lineage、available_at 和 evidence index 齐备后才能进入 mature admission | 缺 adapter 或 evidence 时 blocked，不允许 runner 直接消费策略类型私有输出 |
-| SM-23 | MultifactorFrameworkUpgradePlan | draft -> implementation_ready -> verified -> stage3_ready | Stage 2 只允许用 fixture / schema / static / typed unavailable 验证框架能力 | 尝试连接数据湖、伪造真实 lineage 或把 unavailable 当 pass 时 blocked |
-| SM-24 | MatureStrategyDefinition -> SimulationObservationPlan -> ReadinessDecision | admission_ready -> simulation_candidate -> observation_active -> ready_with_risk / ready / blocked -> small_live_candidate | 必须先完成 Stage 3 真实数据证据和 runner offline/preflight，再逐次授权进入 Stage 4 runtime | simulation pass 不得自动升级 live；异常未闭环时 blocked |
 
 ### 业务规则增量
 
@@ -227,11 +205,3 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | RULE-30 | 交易日历优先使用本地参考数据；若需要 QMT / vendor 日历，必须记录来源和 freshness，不得把缺失日历推断为交易日 | FEAT-12 / FEAT-07 | UC-34 / UC-45 | calendar fixture |
 | RULE-31 | 佣金 / 费用模型必须标注 source=broker_confirmed/configured/estimated/unavailable；QMT 不支持时不得伪造 broker confirmed 结果 | FEAT-12 / FEAT-06 | UC-38 / UC-41 / UC-45 | fee model fixture |
 | RULE-32 | 账户级收益 / PnL、资金、持仓、委托、成交查询必须有账户只读授权、脱敏策略和 audit_id；Runner 只消费摘要和引用 | FEAT-11 / FEAT-12 / FEAT-07 | UC-39 / UC-41 / UC-45 | query auth guardrail |
-| RULE-33 | `quant-lab` 项目蓝图是项目级能力边界入口，不得被替换为单一端到端策略研究蓝图 | FEAT-13 / FEAT-08 | Stage 1 | blueprint review |
-| RULE-34 | 多因子、事件型、机器学习和规则型策略必须通过 StrategyTypeAdapter 输出统一 `SignalSet` / `StrategyCandidate`，不得让 runner 消费策略类型私有对象 | FEAT-13 / FEAT-14 | Stage 1、后续事件 / ML CR | adapter contract tests |
-| RULE-35 | Stage 2 多因子研究框架升级不连接数据湖，不触达 provider / lake / catalog / publish；真实数据缺口必须 typed unavailable | FEAT-03 / FEAT-13 / FEAT-07 | Stage 2 | framework fixture / no-real-op tests |
-| RULE-36 | Stage 3 成熟多因子策略必须记录真实输入字段、计算窗口、available_at、PIT universe、lineage、factor panel、label window、IC / RankIC、分层收益、换手、暴露和风险版本 | FEAT-03 / FEAT-14 | Stage 3 | research evidence review |
-| RULE-37 | Stage 3 可以在研究机连接数据湖，但必须由用户在研究机实施并记录数据 release、run manifest、config hash 和证据索引 | FEAT-02 / FEAT-03 / FEAT-14 / FEAT-07 | Stage 3 | data lineage gate |
-| RULE-38 | Stage 4 模拟盘运行必须逐次 simulation runtime authorization，从 P0 health / identity 开始，不得复用历史授权 | FEAT-11 / FEAT-14 / FEAT-07 | Stage 4 | runtime authorization gate |
-| RULE-39 | Stage 4 日常调整只能在观察计划、风险策略和策略变更计划内进行；超出范围必须新建决策或 CR | FEAT-14 / FEAT-11 / FEAT-07 | Stage 4 | observation review |
-| RULE-40 | Stage 5 small_live / live 必须独立 live switch CR、独立人工门禁和独立 runtime authorization；simulation readiness 不得自动升级为 live readiness | FEAT-14 / FEAT-07 / FEAT-08 | Stage 5 | live gate |

@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.6"
+version: "1.5"
 source_use_cases: "process/USE-CASES.md"
 source_requirements: "process/REQUIREMENTS.md"
 source_story_backlog: "process/STORY-BACKLOG.md"
@@ -13,10 +13,6 @@ source_adr: "process/ARCHITECTURE-DECISION.md"
 change: "CR-138"
 confirmed_by: ""
 confirmed_at: ""
-archived_previous:
-  - "process/archive/design-blueprints/BLUEPRINT-before-quant-lab-project-roadmap-2026-06-26.md"
-  - "process/archive/design-blueprints/DOMAIN-MAP-before-quant-lab-project-roadmap-2026-06-26.md"
-  - "process/archive/design-blueprints/DEPENDENCY-MAP-before-quant-lab-project-roadmap-2026-06-26.md"
 ---
 
 # Blueprint
@@ -33,7 +29,6 @@ archived_previous:
 | 1.3 | 2026-06-23 | host-orchestrator | CR131 将 CR 命名 design 文档移出默认 surface；source_hld 的 CR051 历史入口改指向 archive。 |
 | 1.4 | 2026-06-24 | host-orchestrator | 按 CR138 增补 Runner Control Plane 与 QMT Gateway Service Layer 运营控制面边界；不覆盖 offline runner core、CR020 readonly gateway 或 CR046 双目标策略交付框架。 |
 | 1.5 | 2026-06-24 | host-orchestrator | 根据用户 CP3 反馈刷新 CR138 蓝图：长期 HLD 改用功能域命名；Gateway P0 收敛 REST-only；补齐交易日历、佣金 / 费用模型、收益 / PnL 查询；runtime policy 改为按需授权。 |
-| 1.6 | 2026-06-26 | host-orchestrator | 根据用户阶段目标重定义，将本文明确为 `quant-lab` 项目蓝图而非端到端策略研究蓝图；归档 v1.5；新增项目级五阶段路线、策略类型适配边界和成熟多因子策略生产 / 模拟盘观察门禁。 |
 
 ## 蓝图定位
 
@@ -43,16 +38,6 @@ archived_previous:
 | 当前执行状态 | `process/STATE.md` 中 CR-046 保持 paused at CP6 / ready-for-verification；CR-051 已通过 CP3，正在进行 strategy research lifecycle / quant-lab migration 的 CP4 story-planning |
 | 蓝图作用 | 为长期维护提供能力边界和数据归属索引，不替代 HLD、ADR、LLD 或检查点 |
 | 授权边界 | 本文不授权真实 provider、lake、publish、gateway、QMT、MiniQMT、simulation、live、凭据读取、账户操作、NAS 扫描 / 挂载 / 搬迁、目录重命名、远端仓库改名、git push 或历史文件批量替换 |
-
-### 项目级阶段路线
-
-| 阶段 | 名称 | 目标 | 数据湖边界 | 退出条件 | 后续衔接 |
-|---|---|---|---|---|---|
-| Stage 1 | `quant-lab` 项目蓝图刷新 | 在现有蓝图基础上合并项目级能力边界、策略类型适配和五阶段路线；归档旧蓝图副本 | 不连接数据湖 | `BLUEPRINT` / `DOMAIN-MAP` / `DEPENDENCY-MAP` 已明确多因子、事件型、机器学习和规则策略的统一接入边界 | Stage 2 |
-| Stage 2 | 多因子研究框架升级 | 在蓝图基础上升级 `quant-lab` 中的多因子研究框架，使其支撑 Stage 3 策略生产 | 不连接数据湖；只能使用 fixture、样例输入、schema、静态检查或 typed unavailable | FactorSpec、FactorRunSpec、factor panel、label window、evaluation、portfolio/risk、admission package 和 evidence index 合同齐备 | Stage 3 |
-| Stage 3 | 生产成熟多因子模拟盘策略 | 在研究机上连接数据湖，基于真实数据生产一条可解释、可审计、可扩展到真实股票池的多因子策略 | 可连接数据湖；必须记录数据 release、lineage、PIT universe、available_at 和版本指针 | 真实策略 research evidence、risk evidence、mature StrategyAdmissionPackage 和 runner offline / plan-only / preflight-only 证据通过 | Stage 4 |
-| Stage 4 | 模拟盘运行与观察 | 运行模拟盘并观察策略表现，通过日常调整达到实盘入口条件 | 只消费 Stage 3 发布的策略包、数据版本和运行证据；runtime 必须逐次授权 | 模拟盘观察周期、收益 / 回撤 / 换手 / 暴露 / 异常 / reconciliation 证据满足 small_live 候选门槛 | Stage 5 |
-| Stage 5 | 小额实盘与实盘运行 | 通过独立 live switch CR 进入小额实盘，再按门禁升级实盘 | live 数据、账户、订单和 broker facts 必须独立授权并脱敏 | small_live 通过风险接受、回滚、kill switch、资金限制和人工门禁；scale live 另行审批 | 不自动升级 |
 
 ## 能力地图
 
@@ -68,8 +53,6 @@ archived_previous:
 | CAP-08 | 文档、Runbook 与发布证据 | 让用户能按当前安全边界操作、验证和恢复，同时保留审计证据 | README、docs/USER-MANUAL.md、docs/QMT-*.md、CP8 | FEAT-08 |
 | CAP-09 | 双目标策略交付框架 | 让同一研究策略核心可按合同交付到 QMT 终端策略包和 MiniQMT runner 包，并由统一验证框架审查 | CR-046、CR047-candidate、CR049-candidate、CR051-candidate | FEAT-09 |
 | CAP-10 | 策略研究生命周期与项目迁移治理 | 将 idea、资料、研究项目、运行证据、归档、策略交付候选和 quant-lab 迁移路径纳入统一生命周期与安全边界 | CR-051、CR052..CR056-candidate | FEAT-10 |
-| CAP-13 | 项目级策略类型适配框架 | 让多因子、事件型、机器学习和规则型策略都能通过统一研究、回测、准入、runner 和交付证据链路接入 `quant-lab` | Stage 1、Stage 2、后续事件 / ML CR | FEAT-13 |
-| CAP-14 | 成熟策略生产与模拟盘观察门禁 | 将成熟策略从研究证据升级到 runner 可消费的准入包，再进入长期 simulation observation 和 small_live 候选判断 | Stage 3、Stage 4、Stage 5 | FEAT-14 |
 
 ## Feature / Epic 边界
 
@@ -85,8 +68,6 @@ archived_previous:
 | FEAT-08 | 文档、Runbook 与发布证据 | README、USER-MANUAL、QMT 安装 / 运行手册、incident playbook、release readiness、CP8 用户终验摘要 | 改变业务范围、授权真实操作、修改事实源 | Runbook、UserManualSection、ReleaseNote、RollbackPlan、FeedbackEntry | HLD / ADR / verification report / CP8 | 文档声明超出已验证状态或绕过 gate |
 | FEAT-09 | QMT / MiniQMT 双目标策略交付框架 | 策略核心合同、策略包目录、QMT terminal target、MiniQMT runner target 安装设计、统一验证证据模型、后续策略交付门禁 | 具体策略交付、QMT 终端运行验证、MiniQMT 真实连接、真实安装、submit/cancel、simulation/live | StrategyCoreContract、StrategyPackageContract、QMTTerminalTargetContract、MiniQMTRunnerTargetContract、StrategyValidationEvidence | FEAT-03 StrategyAdmissionPackage、FEAT-04 OrderIntentDraft、FEAT-06 风控边界、FEAT-07 授权记录 | 策略核心直连 QMT / XtQuant、验证框架触发真实运行、安装设计读取凭据或写真实运行目录 |
 | FEAT-10 | 策略研究生命周期与项目迁移治理 | InformationSource、StrategyIdea、ResearchProject、ResearchProtocol、ResearchRun、ValidationEvidence、ResearchArchiveManifest、ProjectIdentity、MigrationInventory、Follow-up CR roadmap | 具体策略实现、真实交易、provider/lake/publish、QMT/MiniQMT runtime、目录实际重命名、NAS 实际扫描 / 挂载 / 搬迁、远端仓库改名或 git push | InformationSource、StrategyIdea、ResearchProject、ResearchProtocol、ResearchRun、ValidationEvidence、ResearchArchiveManifest、StrategyTaxonomyEntry、ProjectIdentity、MigrationInventory | FEAT-02 catalog/data release、FEAT-03 admission package、FEAT-09 StrategyCoreContract / StrategyValidationEvidence | provider SDK、QMT / XtQuant / MiniQMT、broker lake write、真实 NAS 操作、凭据读取、git push / remote rename、批量重写历史 process 证据 |
-| FEAT-13 | 策略类型适配与统一研究合同 | StrategyTypeAdapter、SignalSet、StrategyCandidate、ResearchEvidenceIndex、StrategyTypeTaxonomy；负责把多因子、事件型、机器学习和规则型策略归一到统一研究 / 回测 / 准入合同 | 替代 FEAT-03 的多因子算法实现、替代 FEAT-02 数据事实源、直接驱动 gateway / OMS / live、把某一种策略类型写死为全局唯一模型 | StrategyTypeAdapter、SignalSet、StrategyCandidate、ResearchEvidenceIndex、StrategyTypeTaxonomy | FEAT-02 current truth、FEAT-03 factor outputs、FEAT-10 research lifecycle、FEAT-14 admission / observation gate | provider/lake write、QMT / XtQuant、broker lake、live runtime、策略核心直连交易系统 |
-| FEAT-14 | 成熟策略生产、准入和模拟盘观察门禁 | MatureStrategyDefinition、UniversePolicy、PortfolioRiskPolicy、SimulationObservationPlan、ReadinessDecision；负责 Stage 3 到 Stage 5 的门禁、证据和风险接受边界 | 具体因子计算实现、数据湖生产、gateway lifecycle、真实下单、small_live/live 授权本身 | MatureStrategyDefinition、UniversePolicy、PortfolioRiskPolicy、SimulationObservationPlan、ReadinessDecision | FEAT-03 / FEAT-13 research evidence、FEAT-11 runner evidence、FEAT-12 gateway health、FEAT-07 authorization | 直接读取 raw account / raw order / credential、绕过 runner P0-P4、把 simulation readiness 自动升级为 live readiness |
 
 ## 跨 Feature 流程
 
@@ -103,9 +84,6 @@ archived_previous:
 | FLOW-09 | MiniQMT runner 安装设计审查 | FEAT-09 -> FEAT-07 -> FEAT-08 | FEAT-09 | 本 CR 只允许 install dry-run 设计；真实安装、连接和运行必须进入 CR049 / runtime authorization gate | CR046 验证框架、后续 CR049 |
 | FLOW-10 | 策略想法进入研究闭环 | FEAT-10 -> FEAT-03 -> FEAT-09 -> FEAT-07 | FEAT-10 / FEAT-03 / FEAT-09 | idea、protocol、run、validation 任一证据缺失时只能保持 research-only 或 blocked，不得升级为 delivery_candidate | CR051 CP5/CP7、后续 CR052 |
 | FLOW-11 | 项目身份和仓库结构迁移 | FEAT-10 -> FEAT-08 -> FEAT-07 | FEAT-10 | 仅在 inventory、Git archive、mechanical move plan、legacy alias 验证和用户授权齐备后才允许真实迁移；CP4/CP5 只做设计 | CR051 CP4/CP5、后续迁移授权门禁 |
-| FLOW-17 | 策略类型研究结果归一化 | FEAT-03 / 事件策略后续 Feature / ML 后续 Feature -> FEAT-13 -> FEAT-14 | FEAT-13 | 缺少 StrategyTypeAdapter、SignalSet、StrategyCandidate 或 ResearchEvidenceIndex 时不得进入成熟策略准入 | Stage 1 / Stage 2 design checks |
-| FLOW-18 | 多因子框架升级到策略生产准备 | FEAT-03 -> FEAT-13 -> FEAT-14 | FEAT-03 / FEAT-13 | Stage 2 不连接数据湖；真实数据缺口只能 typed unavailable，不得伪造 lineage 或 PIT universe | Stage 2 framework tests |
-| FLOW-19 | 成熟多因子策略进入模拟盘观察 | FEAT-02 -> FEAT-03 -> FEAT-13 -> FEAT-14 -> FEAT-11 / FEAT-12 -> FEAT-07 | FEAT-14 / FEAT-11 | Stage 3 research evidence 或 mature admission 缺失时 blocked；Stage 4 runtime 必须逐次授权并从 P0 开始 | Stage 3 / Stage 4 readiness checks |
 
 ## 共享能力
 
@@ -121,9 +99,6 @@ archived_previous:
 | SH-08 | Strategy Validation Evidence | FEAT-07、FEAT-08、FEAT-09 | FEAT-09 / FEAT-07 | package validation -> CP gate / docs | 只有 fixture/static/dry-run 证据，不得声称 terminal/runtime verified |
 | SH-09 | Research Archive Manifest / Run Manifest | FEAT-01、FEAT-02、FEAT-03、FEAT-08、FEAT-10 | FEAT-10 | research run -> archive manifest / docs | 缺 commit、data release、config hash、seed 或 artifact ref 时 blocked |
 | SH-10 | Project Identity Alias / Migration Guardrail | 全部 Feature | FEAT-10 / FEAT-07 | project docs / migration plan -> consumers | `quant-lab` 为 canonical；`local_backtest` 作为 legacy alias，不批量重写历史审计 |
-| SH-15 | Strategy Type Adapter Contract | FEAT-03、FEAT-10、FEAT-13、FEAT-14 | FEAT-13 | strategy-specific research output -> SignalSet / StrategyCandidate | adapter 缺字段时 blocked，不进入成熟策略准入 |
-| SH-16 | Mature Strategy Admission Gate | FEAT-03、FEAT-11、FEAT-13、FEAT-14、FEAT-07 | FEAT-14 / FEAT-07 | research evidence -> mature StrategyAdmissionPackage -> runner preflight | 缺 FactorSpec、UniversePolicy、lineage、risk 或 evidence index 时 blocked |
-| SH-17 | Simulation Observation Evidence | FEAT-11、FEAT-12、FEAT-14、FEAT-08 | FEAT-14 / FEAT-11 | simulation run -> observation report -> small_live candidate decision | 未完成观察周期或异常未闭环时不得升级 small_live |
 
 ## 待确认边界
 
@@ -133,9 +108,6 @@ archived_previous:
 | DQ-BP-002 | implementation | 是否立即回写 134 个 Story 的 `feature_design_refs` | 推荐：本轮不批量回写，只在后续变更 Story 中引用矩阵 | 批量回写所有 Story | 推荐方案低风险；批量回写会污染已验证证据且容易引入误差 | 影响 Story 历史审计和 git diff 规模 | 后续新 CR 或重开 Story 时增量回写 |
 | DQ-BP-CR046-01 | architecture | CR046 是否新增独立 FEAT-09 承载双目标策略交付框架，而不把能力并入 FEAT-05 / FEAT-06 | 推荐：新增 FEAT-09，FEAT-05/06 仍保留 gateway 和交易治理边界 | 并入 FEAT-05；并入 FEAT-06 | 推荐方案避免把“策略交付合同”误读为 gateway runtime 或 OMS 授权；并入方案更少 Feature 但边界混淆 | 影响 CR047 策略包和 CR049 runner install 的消费入口 | 若后续只保留 QMT terminal 且放弃 MiniQMT，可将 FEAT-09 降级为 FEAT-05/06 的子能力 |
 | DQ-BP-CR051-01 | architecture | CR051 是否新增 FEAT-10 承载策略研究生命周期和 quant-lab 迁移治理 | 推荐：新增 FEAT-10，FEAT-03 继续负责因子研究和 admission，FEAT-09 继续负责策略交付包 | 并入 FEAT-03；并入 FEAT-08 | 推荐方案能把研究 lifecycle、archive、项目身份和迁移边界集中管理；并入 FEAT-03 会扩大研究算法边界，并入 FEAT-08 会把迁移治理误降级为文档刷新 | 影响 CR052..CR056 的进入门禁和本项目迁移顺序 | 若 CR051 CP5 发现 FEAT-10 只剩文档更新，可降级为 FEAT-08 technical-note；若真实迁移启动，仍需独立 runtime_authorization / migration gate |
-| DQ-BP-20260626-01 | architecture | 当前蓝图是否改为 `quant-lab` 项目蓝图，而不是新增一份端到端策略研究蓝图 | 推荐：在现有 `docs/design/BLUEPRINT.md` 上合并项目级阶段路线和策略类型边界，并归档 v1.5 | 新增独立 strategy lifecycle blueprint；只更新 runner 阶段文档 | 推荐方案避免蓝图分叉，保留 `quant-lab` 项目级唯一入口；独立文档容易变成旁路设计 | 影响后续 Stage 1 恢复入口、Stage 2 框架升级和 Stage 3 策略生产 | 若蓝图膨胀难维护，可在后续 CR 中拆出子文档，但 `BLUEPRINT.md` 仍保留唯一索引 |
-| DQ-BP-20260626-02 | implementation | Stage 2 多因子研究框架升级是否连接数据湖 | 推荐：不连接数据湖，只升级合同、schema、框架、fixture 和测试；真实数据生产留到 Stage 3 | Stage 2 即连接数据湖；Stage 2 只写文档不改框架 | 推荐方案降低数据环境耦合并为研究机实施留接口；直接连湖会扩大运行授权和环境风险；只写文档不能支撑策略生产 | 影响 Stage 2 验证边界和 Stage 3 数据湖接入准备 | 当 Stage 2 合同验证通过且用户转到研究机后，进入 Stage 3 数据湖实施 |
-| DQ-BP-20260626-03 | architecture | 多因子、事件型、机器学习和规则型策略是否统一输出 `SignalSet` / `StrategyCandidate` / `StrategyAdmissionPackage` | 推荐：统一输出合同，策略类型差异留在 adapter 内部 | 每种策略单独 runner 输入；只支持多因子 | 推荐方案支持扩展和统一测试；单独输入会导致 runner、风控和测试矩阵分叉；只支持多因子不满足项目目标 | 影响后续事件型、ML 策略 CR 和测试交付框架 | 若某类策略需要特殊 execution primitive，可扩展 adapter 字段，但不得绕过 mature admission gate |
 
 ## 自检
 
@@ -144,7 +116,7 @@ archived_previous:
 | 每个 Feature / Epic 有职责、非职责和数据归属 | PASS | §Feature / Epic 边界 |
 | 跨 Feature 流程写明 Owner 和失败路径 | PASS | §跨 Feature 流程 |
 | 共享能力写明调用方向和降级策略 | PASS | §共享能力 |
-| 运行授权边界未被蓝图放大 | PASS | §蓝图定位、FEAT-07、FEAT-09、FEAT-10、FEAT-13、FEAT-14、DQ-BP-CR046-01、DQ-BP-CR051-01、DQ-BP-20260626-02 |
+| 运行授权边界未被蓝图放大 | PASS | §蓝图定位、FEAT-07、FEAT-09、FEAT-10、DQ-BP-CR046-01、DQ-BP-CR051-01 |
 
 ## CR138 增量：Runner / QMT Gateway Operational Control Plane
 

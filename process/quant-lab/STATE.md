@@ -7,7 +7,7 @@ Blocked: false
 Active CR: none
 Active Story: none
 Pending gate: none
-Next action: Phase B simulation readiness 已按 `READY_WITH_RISK` 接受，`SIM-OPS-GATE-02` runtime input policy 和 `SIM-OPS-GATE-03` gateway lifecycle policy 已固化。不建议在无新目标下继续重复 runtime submit/cancel。后续有效选择是保持 simulation readiness 关闭、用新的逐次授权补一个可选交易日观察，或启动独立 `small_live` / `live` CR；`small_live` / `live` 仍必须独立 CR、独立人工决策和独立 runtime authorization。
+Next action: Stage 3 研究机交接文档已准备好，当前 active context 切换为 `process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STAGE3-RESEARCH-MACHINE-HANDOFF-2026-06-26.md`。用户将在另一台可以连接数据湖的研究机实施 Stage 3：按 handoff 清单准备真实数据输入、生成 research evidence、构建 mature admission package 和 runner offline preflight。当前机器不连接数据湖，不执行 simulation runtime，不启动 gateway，不进入 `small_live` / `live`。
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,8 +20,17 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-NEXT-PHASE-GOALS-AND-PLAN-2026-06-26.md
+- active context: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STAGE3-RESEARCH-MACHINE-HANDOFF-2026-06-26.md
+- stage3 research machine handoff: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STAGE3-RESEARCH-MACHINE-HANDOFF-2026-06-26.md
 - next phase goals and plan: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-NEXT-PHASE-GOALS-AND-PLAN-2026-06-26.md
+- project blueprint: docs/design/BLUEPRINT.md
+- project domain map: docs/design/DOMAIN-MAP.md
+- project dependency map: docs/design/DEPENDENCY-MAP.md
+- archived project blueprint: process/archive/design-blueprints/BLUEPRINT-before-quant-lab-project-roadmap-2026-06-26.md
+- stage2 framework module: engine/mature_multifactor_framework.py
+- stage2 framework test: tests/test_stage2_mature_multifactor_framework.py
+- stage2 framework fixture: tests/fixtures/stage2_multifactor_framework/mature_multifactor_stage2_fixture.json
+- stage2 framework check: process/checks/STAGE2-MULTIFACTOR-FRAMEWORK-NO-LAKE-INITIAL-SLICE-2026-06-26.md
 - phase goals: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-PHASE-GOALS-2026-06-25.md
 - P0 evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P0-EVIDENCE-2026-06-25.json
 - P1 check: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P1-MULTIFACTOR-TARGET-PORTFOLIO-2026-06-25.md
@@ -119,7 +128,11 @@ Open risks:
 - {'id': 'RISK-RUNNER-MULTIFACTOR-THREE-TRADING-DAY-OBSERVATION', 'summary': '5/5 runtime count gate 已通过，但 runbook 保留 3 trading days 观察口径；当前证据主要覆盖 2026-06-25 与 2026-06-26。用户已接受 READY_WITH_RISK；补第三个交易日观察仅作为未来升级 READY 的可选后续。', 'status': 'accepted-ready-with-risk'}
 - {'id': 'RISK-RUNNER-MULTIFACTOR-RUNTIME-INPUT-OPERABILITY', 'summary': 'runtime input overlay 来源、刷新触发、字段边界、私有输出目录和脱敏 evidence 边界已在 SIM-OPS policy 中固化。', 'status': 'policy-defined'}
 - {'id': 'RISK-RUNNER-MULTIFACTOR-GATEWAY-LIFECYCLE-DESYNC', 'summary': 'Windows gateway 启停、重启、WSL/Windows runtime code sync 和 P0/P0.5 复验规则已在 SIM-OPS policy 中固化。', 'status': 'policy-defined'}
+- {'id': 'RISK-RUNNER-MULTIFACTOR-PROJECT-BLUEPRINT-DRIFT', 'summary': 'Stage 1 已在当前 quant-lab 项目蓝图三件套上合并五阶段路线和多策略类型适配边界，旧蓝图已归档，避免新增孤立端到端策略研究蓝图。', 'status': 'mitigated'}
+- {'id': 'RISK-RUNNER-MULTIFACTOR-STAGE2-DATA-LAKE-COUPLING', 'summary': 'Stage 2 多因子研究框架升级不连接数据湖；桥接切片已用 no-lake counter validation、typed unavailable、CR030/CR039 bridge 和 Stage 3 handoff 测试固化边界。真实数据湖接入推迟到 Stage 3 由用户在研究机实施。', 'status': 'controlled'}
+- {'id': 'RISK-RUNNER-MULTIFACTOR-MATURE-STRATEGY-GAP', 'summary': '当前可运行对象仍是 fixture / 综合 alpha score 注入包样例；Stage 2 已具备成熟策略生产框架和 handoff，Stage 3 仍需基于研究机数据湖生产真实策略研究、evidence 和准入包。', 'status': 'open'}
+- {'id': 'RISK-RUNNER-MULTIFACTOR-UNIVERSE-SCALE-UP', 'summary': '从 2 个 ETF / fixture 扩展到真实股票池会引入 PIT 数据质量、流动性、停牌、ST、涨跌停、容量和调仓复杂度；不得直接扩大 runtime，必须先按 Stage 3 handoff 完成 universe policy、风险过滤和证据追溯。', 'status': 'open'}
 
-Updated at: 2026-06-26T11:37:00+08:00
+Updated at: 2026-06-26T15:30:00+08:00
 
 <!-- generated-by: meta-flow state render -->

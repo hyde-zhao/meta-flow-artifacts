@@ -1,9 +1,8 @@
 ---
 status: "draft-current-index"
-version: "1.5"
+version: "1.4"
 source_blueprint: "docs/design/BLUEPRINT.md"
 change: "CR-138"
-archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quant-lab-project-roadmap-2026-06-26.md"
 ---
 
 # Dependency Map
@@ -17,7 +16,6 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | 1.2 | 2026-06-14 | host-orchestrator | 按 CR-051 增补 FEAT-10 策略研究生命周期和项目迁移治理的依赖方向、禁止依赖和循环风险 |
 | 1.3 | 2026-06-24 | host-orchestrator | 按 CR138 增补 FEAT-11 Runner Control Plane 与 FEAT-12 QMT Gateway Service Layer 的允许依赖、禁止依赖和循环风险 |
 | 1.4 | 2026-06-24 | host-orchestrator | 根据用户 CP3 反馈刷新 CR138 依赖边界：Gateway P0 REST-only；交易日历、佣金 / 费用模型、收益 / PnL 查询进入 FEAT-12 Query Service；runtime policy 改为按需授权 |
-| 1.5 | 2026-06-26 | host-orchestrator | 按项目级五阶段目标增补 FEAT-13 策略类型适配与 FEAT-14 成熟策略生产 / 模拟盘观察门禁依赖；明确 Stage 2 不连接数据湖、Stage 3 可在研究机连接数据湖。 |
 
 ## 依赖关系
 
@@ -40,12 +38,6 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | FEAT-10 策略研究生命周期 | FEAT-09 StrategyCoreContract / StrategyValidationEvidence | read / contract alignment | allowed | 研究生命周期需要知道策略交付合同的最小证据字段 | CR051 CP5 |
 | FEAT-08 文档 Runbook | FEAT-10 策略研究生命周期 | read / summarize | allowed | README / USER-MANUAL 需要说明 quant-lab、archive 和迁移边界 | CP8 |
 | FEAT-07 安全授权 | FEAT-10 项目迁移治理 | guard / review | allowed | 迁移、archive、alias 和运行声明均必须受 no-real-operation 边界约束 | CP4/CP5/CP7 |
-| FEAT-13 策略类型适配 | FEAT-03 多因子研究 | read / normalize | allowed | 多因子研究输出需要归一为 SignalSet / StrategyCandidate 后进入成熟策略门禁 | Stage 2 adapter tests |
-| FEAT-13 策略类型适配 | FEAT-10 策略研究生命周期 | read / taxonomy | allowed | 策略类型、研究协议和运行证据需要继承研究生命周期分类和归档合同 | Stage 1 blueprint review |
-| FEAT-13 策略类型适配 | FEAT-02 数据湖 current truth | read / reference | allowed-by-stage | Stage 1/2 只读取 schema / contract 或 typed unavailable；Stage 3 才允许在研究机读取真实 data release | Stage 2 no-lake guardrail / Stage 3 lineage gate |
-| FEAT-14 成熟策略门禁 | FEAT-13 StrategyCandidate / ResearchEvidenceIndex | read / gate | allowed | mature admission 必须消费统一候选和证据索引，避免策略类型私有路径绕过门禁 | mature admission tests |
-| FEAT-14 成熟策略门禁 | FEAT-11 Runner Control Plane | handoff | allowed-with-authorization | 成熟策略只通过 runner offline / plan-only / preflight 后，才可在逐次授权下进入 simulation runtime | Stage 4 runtime gate |
-| FEAT-14 成熟策略门禁 | FEAT-07 安全授权 | runtime guard / risk acceptance | allowed | Stage 3/4/5 的 readiness 决策、风险接受和不授权项由安全治理约束 | readiness decision review |
 
 ## 禁止依赖
 
@@ -74,11 +66,6 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | FD-21 | CR051 migration Story | NAS 真实扫描 / 挂载 / 搬迁 | CP4/CP5 只做设计，未获运行授权前不得碰真实 NAS | inventory spec + dry-run checklist | 误删、误搬迁或泄露本地数据 |
 | FD-22 | ProjectIdentity rename | 批量重写历史 process / CR / handoff 文件 | legacy alias 是审计事实，历史证据不得机械改写 | 新文档使用 canonical name，旧文档保留 alias | 破坏审计链和历史可追溯性 |
 | FD-23 | Trading PC workflow | full research archive mount | 交易主机只消费 package，不承担研究 archive 或开发职责 | strategy package / runner bundle + checksum | 交易环境膨胀并扩大运行风险面 |
-| FD-32 | FEAT-13 策略类型适配 | runner / gateway / OMS runtime direct call | 策略适配层只做研究输出归一化，不执行 runtime | FEAT-14 mature admission -> FEAT-11 runner gate | 绕过风险准入、授权和 P0-P4 evidence |
-| FD-33 | Stage 2 多因子框架升级 | market data lake runtime / provider / catalog publish | Stage 2 明确不连接数据湖，只升级框架合同和测试 | fixture / schema / typed unavailable / static checks | 数据环境耦合、伪造真实 lineage、扩大授权面 |
-| FD-34 | 事件型 / ML 策略后续实现 | StrategyAdmissionPackage direct write without adapter | 不同策略类型不得绕过统一 SignalSet / StrategyCandidate 合同 | StrategyTypeAdapter -> ResearchEvidenceIndex -> mature admission | 测试交付分叉，runner 输入不可审计 |
-| FD-35 | FEAT-14 mature admission | small_live / live runtime authorization | readiness decision 只能说明入口条件，不自动授权实盘 | independent live switch CR + human gate | 把 simulation 观察误读为实盘许可 |
-| FD-36 | Stage 4 日常调整 | untracked parameter / universe / factor mutation | 模拟盘观察期间的调整必须可追溯到 StrategyChangePlan 或观察计划 | versioned StrategyChangePlan + evidence index | 模拟盘表现不可审计，无法判断是否达到实盘入口 |
 
 ## 循环风险
 
@@ -94,9 +81,6 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | CYCLE-08 | FEAT-10 研究生命周期 <-> FEAT-09 策略交付合同 | delivery_candidate 被反向解释为可运行策略包 | eliminated：delivery_candidate 只进入后续 CR；runtime_candidate 必须独立授权 |
 | CYCLE-09 | ProjectIdentity alias <-> 历史审计证据 | 为了新名 `quant-lab` 批量改写 `local_backtest` 历史证据 | eliminated：新文档用 canonical，历史材料保留 legacy alias |
 | CYCLE-10 | Research archive <-> Market data lake current truth | 研究归档 manifest 被误当作事实源或 publish gate | eliminated：archive 只存指针和脱敏摘要，current truth 仍由 FEAT-02 publish gate 管理 |
-| CYCLE-16 | FEAT-13 策略类型适配 <-> FEAT-03 多因子框架 | 多因子实现需求反向把统一 adapter 写成多因子专用模型 | eliminated：多因子字段留在 adapter implementation，统一合同只承载 SignalSet / StrategyCandidate / evidence |
-| CYCLE-17 | Stage 2 框架升级 <-> FEAT-02 数据湖 | 为了验证框架提前连接数据湖，导致研究框架改动依赖真实数据环境 | eliminated：Stage 2 no-lake；真实数据连接推迟到 Stage 3 |
-| CYCLE-18 | Stage 4 模拟盘观察 <-> Stage 5 live gate | 模拟盘短期 pass 被反向解释为 small_live/live approval | eliminated：ReadinessDecision 必须列 non_authorized_items；Stage 5 独立 CR |
 
 ## 依赖自检
 
@@ -105,7 +89,7 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | 允许依赖方向覆盖主要跨 Feature 调用 | PASS | §依赖关系 |
 | 禁止依赖写明替代路径和违反风险 | PASS | §禁止依赖 |
 | 循环风险已状态化 | PASS | §循环风险 |
-| 未新增运行授权 | PASS | FD-07、FD-10、FD-12..FD-23、FD-32..FD-36、CYCLE-02、CYCLE-03、CYCLE-06..CYCLE-10、CYCLE-16..CYCLE-18 |
+| 未新增运行授权 | PASS | FD-07、FD-10、FD-12..FD-23、CYCLE-02、CYCLE-03、CYCLE-06..CYCLE-10 |
 
 ## CR138 增量：Runner / Gateway 依赖边界
 
