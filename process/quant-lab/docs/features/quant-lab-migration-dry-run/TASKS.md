@@ -1,7 +1,7 @@
 ---
 status: "draft-cp4"
 version: "1.0"
-feature_id: "FEAT-10-CR053"
+feature_id: "FEAT-10-MIGRATION-DRY-RUN"
 change_id: "CR-053"
 source_design: "docs/features/quant-lab-migration-dry-run/DESIGN.md"
 ---
@@ -13,6 +13,8 @@ source_design: "docs/features/quant-lab-migration-dry-run/DESIGN.md"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-06-14 | host-orchestrator | 初版 CR053 任务清单，定义 CP5 设计证据批次和后续 dry-run 报告任务 |
+
+> 命名说明：`CR053` 仅作为历史任务 / Story 审计键保留；长期 Feature ID 为 `FEAT-10-MIGRATION-DRY-RUN`。
 
 ## CP5 设计证据任务
 

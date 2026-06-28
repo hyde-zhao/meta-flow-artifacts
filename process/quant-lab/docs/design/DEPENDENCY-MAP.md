@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.5"
+version: "1.11"
 source_blueprint: "docs/design/BLUEPRINT.md"
 change: "CR-138"
 archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quant-lab-project-roadmap-2026-06-26.md"
@@ -18,6 +18,12 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | 1.3 | 2026-06-24 | host-orchestrator | 按 CR138 增补 FEAT-11 Runner Control Plane 与 FEAT-12 QMT Gateway Service Layer 的允许依赖、禁止依赖和循环风险 |
 | 1.4 | 2026-06-24 | host-orchestrator | 根据用户 CP3 反馈刷新 CR138 依赖边界：Gateway P0 REST-only；交易日历、佣金 / 费用模型、收益 / PnL 查询进入 FEAT-12 Query Service；runtime policy 改为按需授权 |
 | 1.5 | 2026-06-26 | host-orchestrator | 按项目级五阶段目标增补 FEAT-13 策略类型适配与 FEAT-14 成熟策略生产 / 模拟盘观察门禁依赖；明确 Stage 2 不连接数据湖、Stage 3 可在研究机连接数据湖。 |
+| 1.6 | 2026-06-27 | codex | 增补统一因子目录依赖边界：mature runner 与 Chapter 3/5/6/7 只能消费登记因子；未登记因子不得隐式进入 FactorSpec 或成熟策略准入。 |
+| 1.7 | 2026-06-27 | codex | 增补高级多因子模型评估依赖边界：FEAT-03 只读消费 factor panel、labels、universe、tradability 和 policy cycle config，FEAT-14 必须消费 FactorModelValidationReport 后才能 mature admission。 |
+| 1.8 | 2026-06-27 | codex | 收紧 Stage 3 到 Stage 4 依赖：FEAT-14 只能消费评估通过的成熟策略；blocked / insufficient_data 候选不得进入模拟盘观察。 |
+| 1.9 | 2026-06-27 | codex | 增补异象发现 / 研究依赖边界：Chapter5 异象候选只能在 AnomalyResearchReport 和 AnomalyAdmissionDecision 通过后进入因子目录或 Stage 3 候选。 |
+| 1.10 | 2026-06-27 | codex | 增补自动异象发现依赖边界：候选生成只消费受控模板和研究特征面板，Stage 3 只能显式消费通过多重检验的动态目录候选。 |
+| 1.11 | 2026-06-28 | codex | 增补研究引擎稳定模块依赖边界：FEAT-03 主实现只能使用领域名模块；旧 chapter/stage/root 脚本只允许兼容 wrapper 或 legacy archive。 |
 
 ## 依赖关系
 
@@ -46,6 +52,16 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | FEAT-14 成熟策略门禁 | FEAT-13 StrategyCandidate / ResearchEvidenceIndex | read / gate | allowed | mature admission 必须消费统一候选和证据索引，避免策略类型私有路径绕过门禁 | mature admission tests |
 | FEAT-14 成熟策略门禁 | FEAT-11 Runner Control Plane | handoff | allowed-with-authorization | 成熟策略只通过 runner offline / plan-only / preflight 后，才可在逐次授权下进入 simulation runtime | Stage 4 runtime gate |
 | FEAT-14 成熟策略门禁 | FEAT-07 安全授权 | runtime guard / risk acceptance | allowed | Stage 3/4/5 的 readiness 决策、风险接受和不授权项由安全治理约束 | readiness decision review |
+| Mature runner / factor research consumers | FEAT-03 Unified Factor Catalog | read / metadata lookup | allowed | Mature runner、因子复刻、异象研究、稳健性和组合实践只能从统一目录读取 factor_id、状态、来源、计算能力和证据引用，不能各自隐式新增因子身份 | factor registry / CLI tests |
+| FEAT-14 mature admission | FEAT-03 Unified Factor Catalog | read / gate | allowed | MatureStrategyDefinition 和 StrategyAdmissionPackage 必须能追溯 factor_refs 到已登记目录项 | mature runner factor spec source tests |
+| FEAT-03 FactorModelValidationReport | FEAT-02 policy cycle dataset candidate / data release refs | read / reference | allowed | 政策周期覆盖只能引用配置或已发布 / 候选数据说明，FEAT-03 不生产政策周期事实源 | policy cycle contract tests |
+| FEAT-14 mature admission | FEAT-03 FactorModelValidationReport | read / gate | allowed | Mature admission 必须消费高级评估报告状态、核心门禁和 risk_warnings；只有核心门禁无 blocked 且 admission PASS 的策略才能作为 Stage 3 输出，不能只看传统 IC / 分层收益 | mature validation integration tests |
+| FEAT-03 AnomalyResearchReport | FEAT-03 factor panel / labels / model returns / factor catalog | read / evaluate | allowed | 异象研究需要消费已登记因子、标签和既有因子模型收益，执行排序、单调性、控制因子、时间切分和成本审查 | Chapter5 anomaly tests |
+| FEAT-14 mature admission | FEAT-03 AnomalyAdmissionDecision | read / gate | allowed | 只有 alpha_feature_candidate / factor_catalog_candidate 异象才能作为 Stage 3 新因子候选输入，watch / rejected / blocked 不得进入成熟策略 | anomaly admission tests |
+| FEAT-03 AnomalyDiscoveryRun | FEAT-03 ControlledAnomalyTemplate / feature panel / model returns | read / generate / evaluate | allowed | 自动异象发现只能从受控模板生成候选，并记录 candidate_count、搜索空间和多重检验结果 | anomaly discovery tests |
+| FEAT-03 Unified Factor Catalog | FEAT-03 AnomalyAdmissionDecision | explicit dynamic read | allowed | 通过准入的自动异象候选可以作为动态 FactorCatalogEntry extras 显式传入查询 CLI 或 Stage 3 candidate spec 构建，不写静态 registry | factor registry dynamic admission tests |
+| Stage 3 candidate search | FEAT-03 dynamic anomaly FactorCatalogEntry extras | read / candidate input | allowed | Stage 3 搜索只能消费 `stage3_candidate` 动态候选；默认成熟 runner 固定 5 因子不受影响 | Stage 3 candidate spec tests |
+| FEAT-03 research engine stable modules | FEAT-03 shared contracts | import / reuse | allowed | `serialization`、`factor_research_matrices` 和 `admission_contracts` 是研究引擎共享工具，领域模块只消费公共 helper，不反向定义全局状态 | compileall / research tests / script entrypoint guardrail |
 
 ## 禁止依赖
 
@@ -79,6 +95,15 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | FD-34 | 事件型 / ML 策略后续实现 | StrategyAdmissionPackage direct write without adapter | 不同策略类型不得绕过统一 SignalSet / StrategyCandidate 合同 | StrategyTypeAdapter -> ResearchEvidenceIndex -> mature admission | 测试交付分叉，runner 输入不可审计 |
 | FD-35 | FEAT-14 mature admission | small_live / live runtime authorization | readiness decision 只能说明入口条件，不自动授权实盘 | independent live switch CR + human gate | 把 simulation 观察误读为实盘许可 |
 | FD-36 | Stage 4 日常调整 | untracked parameter / universe / factor mutation | 模拟盘观察期间的调整必须可追溯到 StrategyChangePlan 或观察计划 | versioned StrategyChangePlan + evidence index | 模拟盘表现不可审计，无法判断是否达到实盘入口 |
+| FD-37 | Mature runner / factor research consumers | implicit unregistered factor IDs | 因子身份、来源、状态和计算能力必须由统一目录登记，不能在 runner 或研究模块中私有新增 | `engine.factor_registry` + `scripts/list_factors.py` + registry tests | FactorSpec 无法追溯、成熟策略包和研究结果口径漂移 |
+| FD-38 | FEAT-03 factor model validation | policy cycle / shortability / shell-value facts fabrication | 评估缺少政策周期、做空可行性或壳价值输入时必须返回 unavailable / risk warning，不得用推断替代事实 | structured insufficient_data / not_applicable + remediation note | Mature admission 证据失真，实盘可行性被高估 |
+| FD-39 | FEAT-14 mature admission | skipping FactorModelValidationReport | 成熟策略不能只凭 IC、分层收益或组合回测进入 admission pass | FEAT-03 FactorModelValidationReport + gate summary | GRS / 样本外 / 经济显著性 / 偏差控制缺口被隐藏 |
+| FD-40 | Stage 3 blocked / insufficient_data research artifact | Stage 4 simulation observation | Stage 3 的目标是输出评估通过的成熟多因子策略；blocked 候选只能作为诊断和下一轮研究输入 | 修复因子、组合、样本外、经济显著性或数据缺口后重新生成 FactorModelValidationReport 和 mature admission | 模拟盘观察消费失败策略，导致 Stage 4 观察和 small_live 候选判断失真 |
+| FD-41 | Anomaly discovery | pure data-mined factor catalog insertion | 异象发现必须有先验逻辑和经济 / 行为 / 微观结构 / 财务扩展来源；不得把参数搜索胜者直接登记为可计算因子 | AnomalyCandidate -> AnomalyResearchReport -> AnomalyAdmissionDecision -> FactorCatalogEntry | 多重检验污染，Stage 3 使用统计幻觉 |
+| FD-42 | AnomalyResearchReport | Stage 3 factor candidate without Harvey / monotonicity / alpha / split / cost gates | 异象候选必须通过严格研究或明确 watch / blocked；不得只凭样本内收益进入成熟策略 | 完成单变量排序、Harvey t>=3、五分组单调、控制因子 alpha、时间切分、成本和 A 股控制 | 因子模型过拟合，样本外失效 |
+| FD-43 | FEAT-03 automatic anomaly discovery | black-box search / unrecorded candidate count | 自动发现必须使用受控模板并记录搜索空间、多重检验和候选总数；未记录者不得准入 | ControlledAnomalyTemplate + MultipleTestingControl | 多重检验偏差和过拟合被隐藏 |
+| FD-44 | FEAT-03 dynamic anomaly catalog | static registry mutation / catalog publish from discovery run | 发现结果只能显式作为动态 extras 消费，不得自动写静态因子库或 publish 数据 catalog | anomaly_candidate_catalog_entries + no-real-op counters | 一次研究结果被永久化或误发布 |
+| FD-45 | FEAT-03 research engine implementation | new `chapter*` / `stage*` / `cr*` top-level engine main module | 长期实现入口必须是领域名；旧名称必须集中在 `docs/legacy/archive/engine/`，不得留在 `engine/` 顶层 | `scripts/quality/check_script_entrypoints.py` + archived engine module check | 新实现继续扩散历史阶段 / 章节命名，文档、测试和 runner 消费入口再次漂移 |
 
 ## 循环风险
 
@@ -97,6 +122,7 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | CYCLE-16 | FEAT-13 策略类型适配 <-> FEAT-03 多因子框架 | 多因子实现需求反向把统一 adapter 写成多因子专用模型 | eliminated：多因子字段留在 adapter implementation，统一合同只承载 SignalSet / StrategyCandidate / evidence |
 | CYCLE-17 | Stage 2 框架升级 <-> FEAT-02 数据湖 | 为了验证框架提前连接数据湖，导致研究框架改动依赖真实数据环境 | eliminated：Stage 2 no-lake；真实数据连接推迟到 Stage 3 |
 | CYCLE-18 | Stage 4 模拟盘观察 <-> Stage 5 live gate | 模拟盘短期 pass 被反向解释为 small_live/live approval | eliminated：ReadinessDecision 必须列 non_authorized_items；Stage 5 独立 CR |
+| CYCLE-19 | FEAT-03 FactorModelValidationReport <-> FEAT-02 policy cycle data | 研究评估为了补齐政策周期覆盖反向生产或修改数据湖事实 | eliminated：FEAT-03 只读配置 / 数据引用；真实政策周期数据集进入 FEAT-02 独立生产 |
 
 ## 依赖自检
 
@@ -105,7 +131,7 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | 允许依赖方向覆盖主要跨 Feature 调用 | PASS | §依赖关系 |
 | 禁止依赖写明替代路径和违反风险 | PASS | §禁止依赖 |
 | 循环风险已状态化 | PASS | §循环风险 |
-| 未新增运行授权 | PASS | FD-07、FD-10、FD-12..FD-23、FD-32..FD-36、CYCLE-02、CYCLE-03、CYCLE-06..CYCLE-10、CYCLE-16..CYCLE-18 |
+| 未新增运行授权 | PASS | FD-07、FD-10、FD-12..FD-23、FD-32..FD-44、CYCLE-02、CYCLE-03、CYCLE-06..CYCLE-10、CYCLE-16..CYCLE-19 |
 
 ## CR138 增量：Runner / Gateway 依赖边界
 

@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.5"
+version: "1.11"
 source_blueprint: "docs/design/BLUEPRINT.md"
 change: "CR-138"
 archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-lab-project-roadmap-2026-06-26.md"
@@ -18,6 +18,12 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | 1.3 | 2026-06-24 | host-orchestrator | 按 CR138 增补 Runner Control Plane 与 QMT Gateway Service Layer 运营领域对象、状态机和 fail-closed 规则 |
 | 1.4 | 2026-06-24 | host-orchestrator | 根据用户 CP3 反馈补齐 FEAT-12 查询领域对象：交易日历、交易窗口、佣金 / 费用模型、成本估算、收益 / PnL 快照和收益摘要；runtime policy 改为按需授权 |
 | 1.5 | 2026-06-26 | host-orchestrator | 按 `quant-lab` 项目级五阶段路线增补策略类型适配、Stage 2 多因子框架升级、Stage 3 成熟策略生产和 Stage 4 模拟盘观察领域对象与规则。 |
+| 1.6 | 2026-06-27 | codex | 增补统一因子目录领域对象、状态枚举和因子消费规则；mature runner / Chapter 消费必须引用目录登记项。 |
+| 1.7 | 2026-06-27 | codex | 增补高级多因子模型评估领域对象、报告状态、门禁规则和 mature admission 消费约束。 |
+| 1.8 | 2026-06-27 | codex | 收紧 Stage 3 领域目标：MatureStrategyDefinition 只有在高级评估和 mature admission 通过后才能成为 simulation_candidate；blocked 研究运行不得出阶段。 |
+| 1.9 | 2026-06-27 | codex | 增补异象发现与异象研究领域对象、四阶段研究状态机和准入规则；无先验逻辑或未通过严格验证的异象不得升级为因子。 |
+| 1.10 | 2026-06-27 | codex | 增补自动异象发现领域规则：ControlledAnomalyTemplate、搜索空间审计、多重检验控制、动态因子目录接入和 Stage 3 候选消费。 |
+| 1.11 | 2026-06-28 | codex | 增补 ResearchEngineModule、CompatibilityWrapper 和 SharedResearchContract 领域对象；旧 chapter/stage/root 入口只作兼容或归档。 |
 
 ## 术语表
 
@@ -65,6 +71,8 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | OBJ-12 | FactorEvaluationReport | FEAT-03 | IC、RankIC、ICIR、layered_returns、turnover、cost_sensitivity | pass / warn / fail | CR-030 |
 | OBJ-13 | ExperimentManifest | FEAT-03 | config_hash、dataset_release、factor_version、code_version、report_path | recorded / incomplete | CR-030 |
 | OBJ-14 | StrategyAdmissionPackage | FEAT-03 / FEAT-07 | gate_results、blocked_reasons、order_intent_draft_ref、no_real_op_counters | draft / pass / blocked / follow_up_required | CR-019 / CR-030 |
+| OBJ-14A | ResearchEngineModule | FEAT-03 | module_name、domain_role、stable_import_path、compatibility_wrappers、shared_contract_refs | active / compatibility_wrapper / archived | research-engine-stable-modules |
+| OBJ-14B | SharedResearchContract | FEAT-03 | contract_name、provided_helpers、consumer_modules、schema_impact | active / deprecated / blocked | research-engine-stable-modules |
 | OBJ-15 | SemanticDiffReport | FEAT-04 | lightweight_result、optional_backend_result、diff_reason、fallback_status | generated / backend_unavailable / blocked | CR-025 |
 | OBJ-16 | OrderIntentDraft | FEAT-04 / FEAT-06 | strategy_id、target_trade_date、research_adjustment_policy、execution_price_policy | draft / invalid / handed_off | CR-025 / CR-030 |
 | OBJ-17 | PairingToken | FEAT-05 | token_id、scope、nonce、approved_by、expires_at、redaction_status | requested / approved / completed / revoked / expired | CR-019 / CR-020 |
@@ -160,8 +168,13 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | StrategyCandidate | 经过研究评价但尚未获得 runtime 授权的策略候选 | Stage 1 / Stage 3 | 可进入 mature admission，不等于 simulation-ready 或 live-ready |
 | EventSpec | 事件型策略的事件定义、披露时点、available_at、响应窗口和过滤规则 | Stage 1 后续扩展 | 当前只冻结适配边界，具体事件策略另起 CR |
 | ModelSpec | 机器学习策略的特征、标签、模型、训练窗口、验证窗口、漂移和泄漏检查定义 | Stage 1 后续扩展 | 当前只冻结适配边界，具体 ML 策略另起 CR |
-| mature multifactor strategy | 满足真实数据 lineage、FactorSpec、UniversePolicy、评价证据、组合风控和 runner offline 证据的多因子策略 | Stage 3 | 不等于 fixture / alpha_score 注入包 |
+| mature multifactor strategy | 满足真实数据 lineage、FactorSpec、UniversePolicy、高级评估通过、组合风控、mature admission PASS 和 runner offline 证据的多因子策略 | Stage 3 | 不等于 fixture / alpha_score 注入包；blocked / insufficient_data 研究运行只是失败候选或诊断基线 |
 | simulation observation | 对成熟策略在模拟盘中的长期运行观察、异常闭环和 small_live 入口条件评估 | Stage 4 | 必须逐次 runtime authorization，不自动升级 live |
+| factor model validation report | 对多因子模型进行 GRS、因子溢价、经济显著性、时间切分、测试资产多样性、样本外、壳价值、做空可行性、政策周期和稳健性评估的统一报告 | factor-model-validation | Mature admission 必须引用；非核心缺口不得伪造成 pass |
+| validation gate decision | 单个评估门禁的状态、理由、严重性和指标引用 | factor-model-validation | 状态固定为 pass / pass_with_risk / blocked / not_applicable / insufficient_data |
+| anomaly candidate | 由经济理论、行为金融、市场微观结构、财务指标扩展或事件 / 政策假设生成的异象候选 | anomaly-discovery-research | 必须先有先验逻辑，不能只由数据挖掘产生 |
+| anomaly research report | 对异象候选执行单变量排序、分组单调性、控制因子 alpha、时间切分、子样本 / A 股可行性、成本和经济逻辑审查的报告 | anomaly-discovery-research | 通过报告才允许进入 AnomalyAdmissionDecision |
+| anomaly admission decision | 将异象研究结果分为 reject / watch / alpha_feature_candidate / factor_catalog_candidate 的准入决策 | anomaly-discovery-research | 不等于 QMT-ready、simulation-ready 或 Stage 3 策略通过 |
 
 ### 领域对象增量
 
@@ -196,9 +209,24 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | OBJ-70 | MultifactorFrameworkUpgradePlan | FEAT-03 / FEAT-13 | plan_id、contract_changes、schema_changes、fixture_plan、test_plan、data_lake_dependency | draft / implementation_ready / verified / blocked | Stage 2 |
 | OBJ-71 | UniversePolicy | FEAT-14 / FEAT-03 | universe_id、market_scope、PIT_rule、listing_filter、ST_filter、suspension_filter、limit_filter、liquidity_filter、industry_style_refs | draft / validated / blocked / superseded | Stage 3 |
 | OBJ-72 | PortfolioRiskPolicy | FEAT-14 / FEAT-06 | policy_id、top_n、max_weight、turnover_limit、industry_limit、style_limit、capacity_assumption、fee_slippage_ref、stop_conditions | draft / validated / blocked / superseded | Stage 3 / Stage 4 |
-| OBJ-73 | MatureStrategyDefinition | FEAT-14 | strategy_id、benchmark、holding_period、rebalance_rule、factor_refs、universe_policy_ref、risk_policy_ref、admission_package_ref | draft / admission_ready / simulation_candidate / blocked | Stage 3 |
+| OBJ-73 | MatureStrategyDefinition | FEAT-14 | strategy_id、benchmark、holding_period、rebalance_rule、factor_refs、universe_policy_ref、risk_policy_ref、factor_model_validation_report_ref、admission_package_ref、runner_preflight_ref | draft / admission_ready / evaluation_passed / simulation_candidate / blocked | Stage 3 |
 | OBJ-74 | SimulationObservationPlan | FEAT-14 / FEAT-11 | observation_id、strategy_id、calendar、run_frequency、metrics、incident_classes、stop_conditions、small_live_entry_criteria | draft / active / paused / completed / blocked | Stage 4 |
 | OBJ-75 | ReadinessDecision | FEAT-14 / FEAT-07 | decision_id、scope、evidence_refs、risk_acceptance_refs、authorized_next_stage、non_authorized_items | not_ready / ready_with_risk / ready / blocked | Stage 3 / Stage 4 / Stage 5 |
+| OBJ-76 | FactorCatalogEntry | FEAT-03 | factor_id、name、category、family、direction、input_fields、formula、source_refs、status、calculator_status、used_by、evidence_refs、notes | defined / calculable / stage3_active / proxy_only / deprecated / blocked | factor-catalog-cli |
+| OBJ-77 | FactorAvailabilityStatus | FEAT-03 | status、meaning、allowed_transitions、blocked_reason | defined / calculable / stage3_active / proxy_only / deprecated / blocked | factor-catalog-cli |
+| OBJ-78 | FactorUsageRef | FEAT-03 / FEAT-13 / FEAT-14 | factor_id、consumer、purpose、evidence_ref、run_or_chapter_ref | registered / stale / blocked | factor-catalog-cli |
+| OBJ-79 | FactorModelValidationReport | FEAT-03 / FEAT-14 | run_id、schema_version、factor_count、observation_count、overall_status、gate_decisions、risk_warnings、blocked_reasons、evidence_refs、no_real_op_counters | pass / pass_with_risk / blocked / insufficient_data | factor-model-validation |
+| OBJ-80 | ValidationGateDecision | FEAT-03 | gate_id、status、reason、severity、metric_refs | pass / pass_with_risk / blocked / not_applicable / insufficient_data | factor-model-validation |
+| OBJ-81 | PolicyCycleCoverageSpec | FEAT-03 / FEAT-02 | cycle_id、start_date、end_date、source、coverage_ratio、missing_cycles | configured / covered / insufficient_data / blocked | factor-model-validation |
+| OBJ-82 | ShortFeasibilityAssessment | FEAT-03 / FEAT-06 | strategy_type、shortable_coverage、borrow_cost_available、turnover_constraint、constraint_result | not_applicable / pass / pass_with_risk / blocked | factor-model-validation |
+| OBJ-83 | TestAssetDiversityAssessment | FEAT-03 | asset_count、industry_count、date_count、concentration_metrics、diversity_result | pass / pass_with_risk / blocked / insufficient_data | factor-model-validation |
+| OBJ-84 | OutOfSampleSplitSpec | FEAT-03 | split_method、train_period、test_period、purge_gap、metric_delta、reversal_flag | pass / pass_with_risk / blocked / insufficient_data | factor-model-validation |
+| OBJ-85 | AnomalyCandidate | FEAT-03 | anomaly_id、name、source_type、hypothesis、economic_rationale、expected_direction、input_fields、required_factor_ids、formula、prior_logic_ref、a_share_adjustments | proposed / screened / research_ready / rejected / blocked | anomaly-discovery-research |
+| OBJ-86 | AnomalyDiscoveryRun | FEAT-03 | run_id、candidate_ids、generation_sources、screening_policy、multiple_testing_policy、data_release_ref、no_real_op_counters | planned / executed / blocked | anomaly-discovery-research |
+| OBJ-87 | AnomalyResearchReport | FEAT-03 | run_id、anomaly_id、sorting_t_stat、harvey_pass、monotonicity_score、factor_control_alpha_t、time_split_status、subsample_status、net_return_after_cost、turnover_status、a_share_controls、economic_story_status | pass / watch / rejected / blocked | anomaly-discovery-research |
+| OBJ-88 | AnomalyAdmissionDecision | FEAT-03 / FEAT-14 | anomaly_id、decision、reason_codes、research_report_ref、factor_catalog_action、blocked_claims | reject / watch / alpha_feature_candidate / factor_catalog_candidate / blocked | anomaly-discovery-research |
+| OBJ-89 | ControlledAnomalyTemplate | FEAT-03 | candidate_id、input_fields、transform、direction、formula、hypothesis、economic_rationale、prior_logic_ref | active / skipped_missing_fields | automatic-anomaly-discovery |
+| OBJ-90 | MultipleTestingControl | FEAT-03 | candidate_count、raw_p_value、bonferroni_p_value、fdr_bh_q_value、multiple_testing_pass | pass / fail / insufficient_data | automatic-anomaly-discovery |
 
 ### 状态机增量
 
@@ -212,7 +240,9 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | SM-21 | Reference / Account Query | requested -> authorized/local_source_selected -> available/estimated/blocked/unavailable | 本地日历可直接选择 local source；账户佣金 / 收益必须先授权 | 缺授权 blocked；QMT 不支持时 unavailable_with_reason，不得伪造 broker facts |
 | SM-22 | StrategyTypeAdapter -> SignalSet -> StrategyCandidate | adapter_draft -> adapter_validated -> signal_complete -> candidate_admission_ready / blocked | 只有适配合同、信号 lineage、available_at 和 evidence index 齐备后才能进入 mature admission | 缺 adapter 或 evidence 时 blocked，不允许 runner 直接消费策略类型私有输出 |
 | SM-23 | MultifactorFrameworkUpgradePlan | draft -> implementation_ready -> verified -> stage3_ready | Stage 2 只允许用 fixture / schema / static / typed unavailable 验证框架能力 | 尝试连接数据湖、伪造真实 lineage 或把 unavailable 当 pass 时 blocked |
-| SM-24 | MatureStrategyDefinition -> SimulationObservationPlan -> ReadinessDecision | admission_ready -> simulation_candidate -> observation_active -> ready_with_risk / ready / blocked -> small_live_candidate | 必须先完成 Stage 3 真实数据证据和 runner offline/preflight，再逐次授权进入 Stage 4 runtime | simulation pass 不得自动升级 live；异常未闭环时 blocked |
+| SM-24 | MatureStrategyDefinition -> SimulationObservationPlan -> ReadinessDecision | admission_ready -> evaluation_passed -> simulation_candidate -> observation_active -> ready_with_risk / ready / blocked -> small_live_candidate | 必须先完成 mature research 真实数据证据、FactorModelValidationReport 核心门禁通过、mature admission PASS 和 runner offline/preflight，再逐次授权进入 Stage 4 runtime | validation / admission blocked 时不得成为 simulation_candidate；simulation pass 不得自动升级 live；异常未闭环时 blocked |
+| SM-25 | FactorModelValidationReport -> MatureStrategyAdmission | draft -> evaluated -> pass / pass_with_risk / blocked -> admission_consumed | 只有评估输入、gate_decisions、risk_warnings 和 no-real-op counters 齐备后才能被 mature admission 消费 | 核心门禁 blocked 或报告缺失时 admission blocked；非核心缺口必须显式 risk warning / unavailable |
+| SM-26 | AnomalyCandidate -> AnomalyResearchReport -> AnomalyAdmissionDecision | proposed -> screened -> research_ready -> investigated -> alpha_feature_candidate / factor_catalog_candidate / watch / rejected / blocked | 候选必须先完成先验逻辑登记；研究必须覆盖 Harvey t>=3、单调性、控制因子、时间切分、成本、A 股特殊处理和经济逻辑 | 无先验逻辑、数据泄漏、未披露多重检验或核心研究门禁失败时 blocked / rejected，不得写入可计算因子目录 |
 
 ### 业务规则增量
 
@@ -230,8 +260,21 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | RULE-33 | `quant-lab` 项目蓝图是项目级能力边界入口，不得被替换为单一端到端策略研究蓝图 | FEAT-13 / FEAT-08 | Stage 1 | blueprint review |
 | RULE-34 | 多因子、事件型、机器学习和规则型策略必须通过 StrategyTypeAdapter 输出统一 `SignalSet` / `StrategyCandidate`，不得让 runner 消费策略类型私有对象 | FEAT-13 / FEAT-14 | Stage 1、后续事件 / ML CR | adapter contract tests |
 | RULE-35 | Stage 2 多因子研究框架升级不连接数据湖，不触达 provider / lake / catalog / publish；真实数据缺口必须 typed unavailable | FEAT-03 / FEAT-13 / FEAT-07 | Stage 2 | framework fixture / no-real-op tests |
-| RULE-36 | Stage 3 成熟多因子策略必须记录真实输入字段、计算窗口、available_at、PIT universe、lineage、factor panel、label window、IC / RankIC、分层收益、换手、暴露和风险版本 | FEAT-03 / FEAT-14 | Stage 3 | research evidence review |
-| RULE-37 | Stage 3 可以在研究机连接数据湖，但必须由用户在研究机实施并记录数据 release、run manifest、config hash 和证据索引 | FEAT-02 / FEAT-03 / FEAT-14 / FEAT-07 | Stage 3 | data lineage gate |
+| RULE-36 | Stage 3 成熟多因子策略必须记录真实输入字段、计算窗口、available_at、PIT universe、lineage、factor panel、label window、IC / RankIC、分层收益、换手、暴露、风险版本、FactorModelValidationReport 和 mature admission 结果 | FEAT-03 / FEAT-14 | Stage 3 | research evidence review |
+| RULE-37 | Stage 3 可以在研究机连接数据湖，但必须由用户在研究机实施并记录数据 release、run manifest、config hash 和证据索引；只有评估通过且 mature admission PASS 的策略才能作为 Stage 3 输出 | FEAT-02 / FEAT-03 / FEAT-14 / FEAT-07 | Stage 3 | data lineage gate |
 | RULE-38 | Stage 4 模拟盘运行必须逐次 simulation runtime authorization，从 P0 health / identity 开始，不得复用历史授权 | FEAT-11 / FEAT-14 / FEAT-07 | Stage 4 | runtime authorization gate |
 | RULE-39 | Stage 4 日常调整只能在观察计划、风险策略和策略变更计划内进行；超出范围必须新建决策或 CR | FEAT-14 / FEAT-11 / FEAT-07 | Stage 4 | observation review |
 | RULE-40 | Stage 5 small_live / live 必须独立 live switch CR、独立人工门禁和独立 runtime authorization；simulation readiness 不得自动升级为 live readiness | FEAT-14 / FEAT-07 / FEAT-08 | Stage 5 | live gate |
+| RULE-41 | Mature runner、Chapter 3/5/6/7 脚本和成熟策略准入只能消费统一因子目录中的 factor_id；新增因子、mature runner 因子、查询 CLI 或目录 schema 变化必须更新 FactorCatalogEntry 并通过目录测试 | FEAT-03 / FEAT-13 / FEAT-14 | 因子研究、mature multifactor、章节复刻 / 异常代理 | `tests/test_factor_registry.py`、`tests/test_list_factors_cli.py`、`tests/test_stage3_mature_multifactor_research.py` |
+| RULE-42 | Mature admission 必须引用 FactorModelValidationReport；核心门禁为因子溢价显著性、经济显著性、样本外验证和数据偏差审计，任一 blocked 时 admission blocked 且 Stage 3 不得出阶段 | FEAT-03 / FEAT-14 | Mature multifactor、成熟策略准入 | `tests/test_factor_model_validation_report.py`、`tests/test_stage3_factor_model_validation_integration.py` |
+| RULE-43 | GRS、做空可行性、政策周期覆盖、壳价值控制、测试资产多样性、时间分割和稳健性评估缺少必要输入时必须返回 insufficient_data / not_applicable / risk warning，不得推断或伪造外部事实；若缺口影响核心门禁或 Stage 4 可行性，候选保持 blocked | FEAT-03 / FEAT-07 | 因子模型评估、报告审计、后续 Stage4 输入 | `tests/test_factor_model_validation_report.py`、`tests/test_policy_cycle_dataset_contract.py` |
+| RULE-44 | 异象发现必须理论 / 行为 / 微观结构 / 财务扩展 / 事件政策假设驱动；无先验逻辑的纯数据挖掘结果不得进入 AnomalyResearchReport pass | FEAT-03 / FEAT-07 | 异象发现、候选生成 | `tests/test_chapter5_anomalies.py` |
+| RULE-45 | 异象研究初筛必须报告 High-Low 单变量排序、Harvey t>=3、五分组单调性和样本数；低于阈值只能 watch / reject，不得直接升级为 factor_catalog_candidate | FEAT-03 | 异象初筛、Chapter5 复刻 | `tests/test_chapter5_anomalies.py` |
+| RULE-46 | 异象严格验证必须报告控制现有因子后的 alpha、时间切分、子样本 / A 股控制、扣费后收益、换手上限、壳价值控制、做空可行性和政策周期覆盖；缺项必须进入 gap / risk warning | FEAT-03 / FEAT-14 | 异象研究、Stage 3 因子候选 | `tests/test_chapter5_anomalies.py`、`tests/test_stage3_factor_model_validation_integration.py` |
+| RULE-47 | 异象经济逻辑必须给出风险故事或行为故事；只有统计显著但无经济解释的异象必须标记为 statistical_artifact_risk，不得进入 Stage 3 因子候选 | FEAT-03 / FEAT-10 | 异象研究归档、因子准入 | research report review |
+| RULE-48 | 自动异象发现只能从 ControlledAnomalyTemplate 生成候选；模板必须声明公式、输入字段、方向和经济假设，禁止从收益结果反推新公式或阈值 | FEAT-03 | 自动候选生成、搜索空间审计 | `tests/test_anomaly_candidate_generator.py` |
+| RULE-49 | 自动异象发现必须记录本轮 candidate_count 并执行多重检验控制；未通过 Bonferroni 或 BH-FDR 的候选不得成为 `stage3_candidate` | FEAT-03 / FEAT-14 | 自动异象准入、Stage 3 候选搜索 | `tests/test_anomaly_discovery.py` |
+| RULE-50 | 自动异象发现通过项只能作为动态 FactorCatalogEntry extras 显式传入 CLI 或 Stage 3 candidate spec 构建，不得自动写入静态 registry、publish catalog 或触发 QMT / simulation / live | FEAT-03 / FEAT-07 | 因子目录、Stage 3 候选消费、安全边界 | `tests/test_anomaly_discovery.py`、`tests/test_factor_registry.py` |
+| RULE-51 | 新增研究引擎主实现必须使用领域名模块；`engine/chapter*`、`engine/stage*`、`engine/cr*` 顶层文件不得存在，旧命名材料必须集中在 `docs/legacy/archive/engine/` | FEAT-03 / FEAT-08 | 研究引擎维护、测试引用、文档入口 | `tests/test_script_entrypoint_naming.py` |
+| RULE-52 | 新增研究脚本主入口必须放入 `scripts/research/*` 或对应稳定目录；旧 root 实现只能归档到 `scripts/legacy/*` 并由稳定 wrapper 调用 | FEAT-03 / FEAT-07 | CLI 入口、运行手册、归档治理 | `scripts/quality/check_script_entrypoints.py` |
+| RULE-53 | 重复的 JSON 序列化、矩阵转换、gate/admission 状态枚举必须优先复用 `engine.serialization`、`engine.factor_research_matrices` 和 `engine.admission_contracts`；不得在新模块私有复制 | FEAT-03 | 共享合同、报告输出、admission gate | compileall / targeted research tests |

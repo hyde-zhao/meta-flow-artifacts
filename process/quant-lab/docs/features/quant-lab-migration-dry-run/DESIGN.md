@@ -1,10 +1,10 @@
 ---
 status: "draft-cp4"
 version: "1.0"
-feature_id: "FEAT-10-CR053"
+feature_id: "FEAT-10-MIGRATION-DRY-RUN"
 feature_name: "quant-lab Migration Inventory and Dry-run"
-source_hld: "docs/design/HLD-CR053-QUANT-LAB-MIGRATION-INVENTORY-AND-DRY-RUN.md"
-source_adr: "docs/design/ARCHITECTURE-DECISION-CR053.md"
+source_hld: "process/archive/design-cr-docs/HLD-CR053-QUANT-LAB-MIGRATION-INVENTORY-AND-DRY-RUN.md"
+source_adr: "process/archive/design-cr-docs/ARCHITECTURE-DECISION-CR053.md"
 source_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md"
 change_id: "CR-053"
 confirmed_by: ""
@@ -18,6 +18,8 @@ confirmed_at: ""
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-06-14 | host-orchestrator | 初版 CR053 Feature 设计，冻结迁移 inventory / dry-run、NAS 逻辑映射、数据湖 alias、Windows / Linux 主机边界和后续 CR058 输入 |
+
+> 命名说明：本 Feature 的长期入口使用领域名 `quant-lab-migration-dry-run` / `FEAT-10-MIGRATION-DRY-RUN`。`CR053` 仅作为历史 change id、Story id 和审计引用保留。
 
 ## 摘要
 

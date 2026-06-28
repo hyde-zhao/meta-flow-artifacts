@@ -15,8 +15,8 @@
   "blocked_reason": "",
   "current_phase": "story-execution",
   "next_action": {
-    "text": "Stage 3 research-machine handoff is prepared and is now the active context. The user will implement Stage 3 on another data-capable research machine: prepare real data inputs, generate research evidence, build the mature admission package, and run runner offline/preflight checks from process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STAGE3-RESEARCH-MACHINE-HANDOFF-2026-06-26.md. On the current machine, do not connect to the data lake, do not run simulation runtime, do not start gateway, and do not start small_live/live.",
-    "type": "stage-3-research-machine-handoff-ready"
+    "text": "Stage 3 mature multifactor research is complete on the data-capable machine. Use run stage3-mature-mf-20260627-real-lake-v2 Stage 3 package, mature admission package, runner offline preflight, and Stage 4 observation plan as Stage 4 review inputs. Stage 4 still requires separate simulation runtime authorization before any gateway/QMT runtime; small_live/live remain unauthorized.",
+    "type": "stage-4-review-ready"
   },
   "open_risks": [
     {
@@ -86,13 +86,13 @@
     },
     {
       "id": "RISK-RUNNER-MULTIFACTOR-MATURE-STRATEGY-GAP",
-      "status": "open",
-      "summary": "当前可运行对象仍是 fixture / 综合 alpha score 注入包样例；Stage 2 已具备成熟策略生产框架和 handoff，Stage 3 仍需基于研究机数据湖生产真实策略研究、evidence 和准入包。"
+      "status": "closed-stage3-complete",
+      "summary": "Stage 3 has produced a real-data mature multifactor research package from the data lake: run stage3-mature-mf-20260627-real-lake-v2, package status stage3_research_ready_for_stage4_review. Runtime/simulation/live authorization remains separate."
     },
     {
       "id": "RISK-RUNNER-MULTIFACTOR-UNIVERSE-SCALE-UP",
-      "status": "open",
-      "summary": "从 2 个 ETF / fixture 扩展到真实股票池会引入 PIT 数据质量、流动性、停牌、ST、涨跌停、容量和调仓复杂度；不得直接扩大 runtime，必须先按 Stage 3 handoff 完成 universe policy、风险过滤和证据追溯。"
+      "status": "controlled-by-stage3-evidence",
+      "summary": "Stage 3 scaled from fixture to real A-share stock pool with PIT filters, ST/suspension/limit/liquidity/lifecycle filters, risk policy, and evidence refs. Runtime expansion is still gated by Stage 4 authorization."
     }
   ],
   "pending_gate": "",
@@ -449,6 +449,10 @@
       "path": "process/checks/STAGE2-MULTIFACTOR-FRAMEWORK-NO-LAKE-INITIAL-SLICE-2026-06-26.md"
     },
     {
+      "kind": "stage3-research-package-initial-slice-check",
+      "path": "process/checks/STAGE3-MATURE-MULTIFACTOR-RESEARCH-PACKAGE-INITIAL-SLICE-2026-06-27.md"
+    },
+    {
       "kind": "trading-window-r4-runtime-acceptance",
       "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-R4-RUNTIME-ACCEPTANCE-2026-06-26.md"
     },
@@ -555,8 +559,36 @@
     {
       "kind": "simulation-ops-policy-closure",
       "path": "process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-OPS-POLICY-CLOSURE-2026-06-26.md"
+    },
+    {
+      "kind": "stage3-runner-module",
+      "path": "engine/stage3_mature_multifactor_research.py"
+    },
+    {
+      "kind": "stage3-runner-cli",
+      "path": "scripts/run_stage3_mature_multifactor_research.py"
+    },
+    {
+      "kind": "stage3-runner-tests",
+      "path": "tests/test_stage3_mature_multifactor_research.py"
+    },
+    {
+      "kind": "stage3-complete-check",
+      "path": "process/checks/STAGE3-MATURE-MULTIFACTOR-RESEARCH-COMPLETE-2026-06-27.md"
+    },
+    {
+      "kind": "stage3-process-summary",
+      "path": "process/evidence/stage3-mature-multifactor/stage3-mature-mf-20260627-real-lake-v2/stage3-research-summary.json"
+    },
+    {
+      "kind": "stage3-research-package",
+      "path": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/stage3-mature-mf-20260627-real-lake-v2/STAGE3-MATURE-RESEARCH-PACKAGE.json"
+    },
+    {
+      "kind": "stage4-observation-plan",
+      "path": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/stage3-mature-mf-20260627-real-lake-v2/STAGE4-OBSERVATION-PLAN.json"
     }
   ],
-    "updated_at": "2026-06-26T15:30:00+08:00",
+  "updated_at": "2026-06-27T00:00:00+08:00",
   "workflow_mode": "standard"
 }

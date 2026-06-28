@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.6"
+version: "1.12"
 source_use_cases: "process/USE-CASES.md"
 source_requirements: "process/REQUIREMENTS.md"
 source_story_backlog: "process/STORY-BACKLOG.md"
@@ -34,6 +34,12 @@ archived_previous:
 | 1.4 | 2026-06-24 | host-orchestrator | 按 CR138 增补 Runner Control Plane 与 QMT Gateway Service Layer 运营控制面边界；不覆盖 offline runner core、CR020 readonly gateway 或 CR046 双目标策略交付框架。 |
 | 1.5 | 2026-06-24 | host-orchestrator | 根据用户 CP3 反馈刷新 CR138 蓝图：长期 HLD 改用功能域命名；Gateway P0 收敛 REST-only；补齐交易日历、佣金 / 费用模型、收益 / PnL 查询；runtime policy 改为按需授权。 |
 | 1.6 | 2026-06-26 | host-orchestrator | 根据用户阶段目标重定义，将本文明确为 `quant-lab` 项目蓝图而非端到端策略研究蓝图；归档 v1.5；新增项目级五阶段路线、策略类型适配边界和成熟多因子策略生产 / 模拟盘观察门禁。 |
+| 1.7 | 2026-06-27 | codex | 增补统一因子目录与查询 CLI 边界；FEAT-03 拥有 FactorCatalogEntry，FEAT-13 / FEAT-14 和 mature runner 只能消费已登记因子，不隐式新增因子。 |
+| 1.8 | 2026-06-27 | codex | 增补高级多因子模型评估门禁；FEAT-03 拥有 FactorModelValidationReport，mature admission 必须消费 GRS、因子溢价、经济显著性、时间切分、测试资产多样性、样本外、壳价值、做空可行性、政策周期和稳健性评估结果。 |
+| 1.9 | 2026-06-27 | codex | 收紧 Stage 3 阶段目标：Stage 3 必须输出评估通过的成熟多因子策略；blocked / insufficient_data 运行只能作为诊断基线，不得进入 Stage 4。 |
+| 1.10 | 2026-06-27 | codex | 增补异象发现与异象研究闭环；FEAT-03 拥有 AnomalyCandidate、AnomalyResearchReport 和 AnomalyAdmissionDecision，异象必须先完成理论驱动、Harvey 标准、单调性、控制因子、时间切分、A 股可行性和经济逻辑审查后才能升级为因子候选。 |
+| 1.11 | 2026-06-27 | codex | 增补自动异象发现系统；FEAT-03 通过受控模板生成候选、记录搜索空间、执行多重检验控制，并仅将通过准入的候选动态接入因子目录和 Stage 3 候选搜索。 |
+| 1.12 | 2026-06-28 | codex | 增补研究引擎稳定模块边界；FEAT-03 研究实现入口改用领域名模块，旧 chapter/stage/root 脚本只作兼容或归档，不再作为主实现面。 |
 
 ## 蓝图定位
 
@@ -50,8 +56,8 @@ archived_previous:
 |---|---|---|---|---|---|
 | Stage 1 | `quant-lab` 项目蓝图刷新 | 在现有蓝图基础上合并项目级能力边界、策略类型适配和五阶段路线；归档旧蓝图副本 | 不连接数据湖 | `BLUEPRINT` / `DOMAIN-MAP` / `DEPENDENCY-MAP` 已明确多因子、事件型、机器学习和规则策略的统一接入边界 | Stage 2 |
 | Stage 2 | 多因子研究框架升级 | 在蓝图基础上升级 `quant-lab` 中的多因子研究框架，使其支撑 Stage 3 策略生产 | 不连接数据湖；只能使用 fixture、样例输入、schema、静态检查或 typed unavailable | FactorSpec、FactorRunSpec、factor panel、label window、evaluation、portfolio/risk、admission package 和 evidence index 合同齐备 | Stage 3 |
-| Stage 3 | 生产成熟多因子模拟盘策略 | 在研究机上连接数据湖，基于真实数据生产一条可解释、可审计、可扩展到真实股票池的多因子策略 | 可连接数据湖；必须记录数据 release、lineage、PIT universe、available_at 和版本指针 | 真实策略 research evidence、risk evidence、mature StrategyAdmissionPackage 和 runner offline / plan-only / preflight-only 证据通过 | Stage 4 |
-| Stage 4 | 模拟盘运行与观察 | 运行模拟盘并观察策略表现，通过日常调整达到实盘入口条件 | 只消费 Stage 3 发布的策略包、数据版本和运行证据；runtime 必须逐次授权 | 模拟盘观察周期、收益 / 回撤 / 换手 / 暴露 / 异常 / reconciliation 证据满足 small_live 候选门槛 | Stage 5 |
+| Stage 3 | 生产评估通过的成熟多因子策略 | 在研究机上连接数据湖，基于真实数据研究、迭代并输出一条可解释、可审计、可扩展到真实股票池且通过高级评估门禁的多因子策略 | 可连接数据湖；必须记录数据 release、lineage、PIT universe、available_at 和版本指针 | `FactorModelValidationReport` 核心门禁无 blocked、mature StrategyAdmissionPackage 为 PASS、runner offline / plan-only / preflight-only 证据通过、no-real-op 计数为 0；blocked / insufficient_data 运行只能作为诊断基线 | Stage 4 |
+| Stage 4 | 模拟盘运行与观察 | 运行模拟盘并观察策略表现，通过日常调整达到实盘入口条件 | 只消费 Stage 3 已评估通过并发布的策略包、数据版本和运行证据；runtime 必须逐次授权 | 模拟盘观察周期、收益 / 回撤 / 换手 / 暴露 / 异常 / reconciliation 证据满足 small_live 候选门槛 | Stage 5 |
 | Stage 5 | 小额实盘与实盘运行 | 通过独立 live switch CR 进入小额实盘，再按门禁升级实盘 | live 数据、账户、订单和 broker facts 必须独立授权并脱敏 | small_live 通过风险接受、回滚、kill switch、资金限制和人工门禁；scale live 另行审批 | 不自动升级 |
 
 ## 能力地图
@@ -60,7 +66,7 @@ archived_previous:
 |---|---|---|---|---|
 | CAP-01 | 本地离线研究与轻量日频回测 | 在断网或本地缓存条件下完成策略研究、参数扫描、候选报告和偏差披露 | STORY-001..013、CR-006、CR-008、CR-011、CR-025 | FEAT-01 |
 | CAP-02 | 生产级市场数据湖 | 以 raw / manifest / canonical / gold / quality / catalog 形成可审计、可发布、可回滚的 current truth | CR-004、CR-005、CR-007、CR-010、CR-014、CR-017、CR-018 | FEAT-02 |
-| CAP-03 | 多因子研究闭环 | 用本项目自有 FactorSpec / FactorRunSpec / FactorPanel / LabelWindow / report catalog 形成可复跑研究链路 | CR-011、CR-019、CR-030 | FEAT-03 |
+| CAP-03 | 多因子研究闭环 | 用本项目自有 FactorCatalogEntry / AnomalyCandidate / AnomalyDiscoveryRun / FactorSpec / FactorRunSpec / FactorPanel / LabelWindow / FactorModelValidationReport / report catalog 形成可复跑研究链路 | CR-011、CR-019、CR-030、factor-catalog-cli、factor-model-validation、anomaly-discovery-research、automatic-anomaly-discovery | FEAT-03 |
 | CAP-04 | 执行语义对齐与可选后端参考 | 把 lightweight engine、Backtrader optional semantic reference 和 order intent draft 的差异显式化 | CR-025、CR-030 | FEAT-04 |
 | CAP-05 | QMT C/S Gateway 与只读运行准入 | 通过 Linux C 侧 client / CLI 和 Windows S 侧 gateway 打通受控只读查询准备 | CR-019、CR-020 | FEAT-05 |
 | CAP-06 | OMS、风控、Broker Lake 与阶段激活 | 为后续 simulation / live_readonly / small_live / scale_up 提供订单状态、风控、对账和 kill switch 边界 | CR-015、CR-016、CR-017、CR-021..024 candidate | FEAT-06 |
@@ -69,7 +75,7 @@ archived_previous:
 | CAP-09 | 双目标策略交付框架 | 让同一研究策略核心可按合同交付到 QMT 终端策略包和 MiniQMT runner 包，并由统一验证框架审查 | CR-046、CR047-candidate、CR049-candidate、CR051-candidate | FEAT-09 |
 | CAP-10 | 策略研究生命周期与项目迁移治理 | 将 idea、资料、研究项目、运行证据、归档、策略交付候选和 quant-lab 迁移路径纳入统一生命周期与安全边界 | CR-051、CR052..CR056-candidate | FEAT-10 |
 | CAP-13 | 项目级策略类型适配框架 | 让多因子、事件型、机器学习和规则型策略都能通过统一研究、回测、准入、runner 和交付证据链路接入 `quant-lab` | Stage 1、Stage 2、后续事件 / ML CR | FEAT-13 |
-| CAP-14 | 成熟策略生产与模拟盘观察门禁 | 将成熟策略从研究证据升级到 runner 可消费的准入包，再进入长期 simulation observation 和 small_live 候选判断 | Stage 3、Stage 4、Stage 5 | FEAT-14 |
+| CAP-14 | 成熟策略生产与模拟盘观察门禁 | 将成熟策略从研究证据升级为评估通过、runner 可消费的准入包，再进入长期 simulation observation 和 small_live 候选判断 | Stage 3、Stage 4、Stage 5 | FEAT-14 |
 
 ## Feature / Epic 边界
 
@@ -77,7 +83,7 @@ archived_previous:
 |---|---|---|---|---|---|---|
 | FEAT-01 | 本地研究与轻量回测核心 | `engine/`、`strategies/`、回测、扫描、候选、研究报告 metadata、只读 ResearchDataset 消费 | provider 抓取、真实 lake 写入、catalog publish、QMT native 调用、真实交易 | BacktestRun、PortfolioResult、MetricsReport、CandidateReport、BiasAudit | published catalog、quality/readiness、benchmark、factor panel、order intent draft 输入 | `market_data.connectors`、`market_data.runtime`、provider SDK、QMT / XtQuant、credential env |
 | FEAT-02 | 生产级市场数据湖 | `market_data/` 生产链路、lake layout、dataset schema、run / manifest、normalization、validation、quality/readiness、catalog publish、replay、retention、rollback | 策略逻辑、因子评价算法、OMS、QMT 操作、broker lake | MarketDataRun、Manifest、DatasetCandidate、CatalogCurrentTruth、QualityReport、ReadinessReport、ClaimBoundary | CR / HLD / dataset requirements、source registry | `engine` 反向写入、trading、broker lake、QMT gateway |
-| FEAT-03 | 研究数据集与多因子研究闭环 | `research_input_v1`、FactorSpec、FactorRunSpec、FactorPanel、LabelWindow、FactorEvaluationReport、MultiFactorCombiner、ExperimentManifest、ResearchReportCatalog、StrategyAdmissionPackage | 数据事实源写入、外部框架默认运行、真实 QMT / simulation / live、catalog publish | FactorSpec、FactorRunSpec、FactorPanelContract、LabelWindowSpec、ExperimentManifest、StrategyAdmissionPackage | FEAT-02 published data、FEAT-01 lightweight results、FEAT-04 semantic diff | provider、lake write、external project runtime、QMT gateway direct operation |
+| FEAT-03 | 研究数据集与多因子研究闭环 | `research_input_v1`、FactorCatalogEntry、AnomalyCandidate、AnomalyDiscoveryRun、AnomalyResearchReport、AnomalyAdmissionDecision、FactorSpec、FactorRunSpec、FactorPanel、LabelWindow、FactorEvaluationReport、FactorModelValidationReport、MultiFactorCombiner、ExperimentManifest、ResearchReportCatalog、StrategyAdmissionPackage、因子查询 CLI | 数据事实源写入、外部框架默认运行、真实 QMT / simulation / live、catalog publish、mature runner-local 计算迁移、政策周期事实源生产、无先验逻辑的数据挖掘自动准入、黑箱公式搜索 | FactorCatalogEntry、FactorAvailabilityStatus、FactorUsageRef、AnomalyCandidate、AnomalyDiscoveryRun、AnomalyResearchReport、AnomalyAdmissionDecision、FactorSpec、FactorRunSpec、FactorPanelContract、LabelWindowSpec、FactorModelValidationReport、ValidationGateDecision、ExperimentManifest、StrategyAdmissionPackage | FEAT-02 published data / policy cycle dataset candidate、FEAT-01 lightweight results、FEAT-04 semantic diff | provider、lake write、external project runtime、QMT gateway direct operation、未登记因子的隐式消费、伪造政策周期或 broker shortability facts、无经济逻辑异象进入因子目录、未记录搜索空间的自动发现结果进入 Stage 3 |
 | FEAT-04 | 执行语义对齐与可选后端参考 | Backtrader optional semantic reference、clean feed gate、semantic diff schema、target portfolio / `order_intent_draft_v1` 衔接、license / no-copy guardrail | 默认回测主路径替代、源码迁移、真实 broker store、QMT live store、provider / lake / publish | SemanticDiffReport、BackendAvailability、OrderIntentDraft | clean feed、lightweight run output、data quality metadata | default dependency、source copy、real broker/QMT/provider |
 | FEAT-05 | QMT C/S Gateway 与只读运行准入 | Linux C 侧 REST client / Typer CLI、Windows S 侧 gateway lifecycle、pairing/HMAC、allowlist/scope/nonce、QMT login/session ready、`query_positions` readonly endpoint | OMS 下单、simulation/live、账户写入、发单/撤单、broker lake 写入、策略准入判断 | GatewayConfig、PairingToken、HMACScope、QMTLoginSession、QueryPositionsResult | authorization record、redacted `.env` refs、endpoint matrix、stage gate status | C 侧导入 xtquant、gateway 默认公网暴露、无授权真实 QMT 调用 |
 | FEAT-06 | OMS / 风控 / Broker Lake / 阶段激活 | target portfolio 到 order intent、OMS 状态机、pre-trade hard risk、broker lake schema、stage gate、reconciliation、kill switch、incident playbook | 因子生成、市场数据湖写入、gateway lifecycle、凭据存储 | OrderIntent、OMSOrder、BrokerEvent、BrokerLakeRecord、StageGate、AuthorizationRecord、KillSwitchEvent | FEAT-03 admission package、FEAT-05 gateway capabilities、FEAT-02 raw price / metadata | strategies 直连、复权价执行、无授权 adapter 调用 |
@@ -85,8 +91,8 @@ archived_previous:
 | FEAT-08 | 文档、Runbook 与发布证据 | README、USER-MANUAL、QMT 安装 / 运行手册、incident playbook、release readiness、CP8 用户终验摘要 | 改变业务范围、授权真实操作、修改事实源 | Runbook、UserManualSection、ReleaseNote、RollbackPlan、FeedbackEntry | HLD / ADR / verification report / CP8 | 文档声明超出已验证状态或绕过 gate |
 | FEAT-09 | QMT / MiniQMT 双目标策略交付框架 | 策略核心合同、策略包目录、QMT terminal target、MiniQMT runner target 安装设计、统一验证证据模型、后续策略交付门禁 | 具体策略交付、QMT 终端运行验证、MiniQMT 真实连接、真实安装、submit/cancel、simulation/live | StrategyCoreContract、StrategyPackageContract、QMTTerminalTargetContract、MiniQMTRunnerTargetContract、StrategyValidationEvidence | FEAT-03 StrategyAdmissionPackage、FEAT-04 OrderIntentDraft、FEAT-06 风控边界、FEAT-07 授权记录 | 策略核心直连 QMT / XtQuant、验证框架触发真实运行、安装设计读取凭据或写真实运行目录 |
 | FEAT-10 | 策略研究生命周期与项目迁移治理 | InformationSource、StrategyIdea、ResearchProject、ResearchProtocol、ResearchRun、ValidationEvidence、ResearchArchiveManifest、ProjectIdentity、MigrationInventory、Follow-up CR roadmap | 具体策略实现、真实交易、provider/lake/publish、QMT/MiniQMT runtime、目录实际重命名、NAS 实际扫描 / 挂载 / 搬迁、远端仓库改名或 git push | InformationSource、StrategyIdea、ResearchProject、ResearchProtocol、ResearchRun、ValidationEvidence、ResearchArchiveManifest、StrategyTaxonomyEntry、ProjectIdentity、MigrationInventory | FEAT-02 catalog/data release、FEAT-03 admission package、FEAT-09 StrategyCoreContract / StrategyValidationEvidence | provider SDK、QMT / XtQuant / MiniQMT、broker lake write、真实 NAS 操作、凭据读取、git push / remote rename、批量重写历史 process 证据 |
-| FEAT-13 | 策略类型适配与统一研究合同 | StrategyTypeAdapter、SignalSet、StrategyCandidate、ResearchEvidenceIndex、StrategyTypeTaxonomy；负责把多因子、事件型、机器学习和规则型策略归一到统一研究 / 回测 / 准入合同 | 替代 FEAT-03 的多因子算法实现、替代 FEAT-02 数据事实源、直接驱动 gateway / OMS / live、把某一种策略类型写死为全局唯一模型 | StrategyTypeAdapter、SignalSet、StrategyCandidate、ResearchEvidenceIndex、StrategyTypeTaxonomy | FEAT-02 current truth、FEAT-03 factor outputs、FEAT-10 research lifecycle、FEAT-14 admission / observation gate | provider/lake write、QMT / XtQuant、broker lake、live runtime、策略核心直连交易系统 |
-| FEAT-14 | 成熟策略生产、准入和模拟盘观察门禁 | MatureStrategyDefinition、UniversePolicy、PortfolioRiskPolicy、SimulationObservationPlan、ReadinessDecision；负责 Stage 3 到 Stage 5 的门禁、证据和风险接受边界 | 具体因子计算实现、数据湖生产、gateway lifecycle、真实下单、small_live/live 授权本身 | MatureStrategyDefinition、UniversePolicy、PortfolioRiskPolicy、SimulationObservationPlan、ReadinessDecision | FEAT-03 / FEAT-13 research evidence、FEAT-11 runner evidence、FEAT-12 gateway health、FEAT-07 authorization | 直接读取 raw account / raw order / credential、绕过 runner P0-P4、把 simulation readiness 自动升级为 live readiness |
+| FEAT-13 | 策略类型适配与统一研究合同 | StrategyTypeAdapter、SignalSet、StrategyCandidate、ResearchEvidenceIndex、StrategyTypeTaxonomy；负责把多因子、事件型、机器学习和规则型策略归一到统一研究 / 回测 / 准入合同，并只引用 FEAT-03 已登记因子 | 替代 FEAT-03 的多因子算法实现、替代 FEAT-02 数据事实源、直接驱动 gateway / OMS / live、把某一种策略类型写死为全局唯一模型、私有新增因子目录 | StrategyTypeAdapter、SignalSet、StrategyCandidate、ResearchEvidenceIndex、StrategyTypeTaxonomy | FEAT-02 current truth、FEAT-03 factor catalog / factor outputs、FEAT-10 research lifecycle、FEAT-14 admission / observation gate | provider/lake write、QMT / XtQuant、broker lake、live runtime、策略核心直连交易系统、未登记因子 |
+| FEAT-14 | 成熟策略生产、准入和模拟盘观察门禁 | MatureStrategyDefinition、UniversePolicy、PortfolioRiskPolicy、SimulationObservationPlan、ReadinessDecision；负责 Stage 3 到 Stage 5 的门禁、证据和风险接受边界，并校验成熟策略引用的因子已在 FEAT-03 目录登记、FactorModelValidationReport 核心门禁已通过且 mature admission 为 PASS | 具体因子计算实现、数据湖生产、gateway lifecycle、真实下单、small_live/live 授权本身、隐式新增 mature runner 因子、替代 FEAT-03 统计评估、把 blocked 研究运行包装成 Stage 4 输入 | MatureStrategyDefinition、UniversePolicy、PortfolioRiskPolicy、SimulationObservationPlan、ReadinessDecision | FEAT-03 factor catalog / FactorModelValidationReport / research evidence、FEAT-13 research evidence、FEAT-11 runner evidence、FEAT-12 gateway health、FEAT-07 authorization | 直接读取 raw account / raw order / credential、绕过 runner P0-P4、把 simulation readiness 自动升级为 live readiness、未登记因子进入策略包、跳过高级评估门禁、blocked 策略进入模拟盘观察 |
 
 ## 跨 Feature 流程
 
@@ -94,7 +100,7 @@ archived_previous:
 |---|---|---|---|---|---|
 | FLOW-01 | 用户显式授权数据生产 | FEAT-02 -> FEAT-01 / FEAT-03 | FEAT-02 | plan / run / normalize / validate 任一失败时不得 publish；consumer 返回 `required_missing` / `blocked_claims` | `tests/test_cr014_*`、`tests/test_cr018_*` |
 | FLOW-02 | 研究运行需要生产数据 | FEAT-01 -> FEAT-02 | FEAT-02 | FEAT-01 只读 catalog，不自动补数；缺口返回 structured unavailable | `tests/test_cr010_consumer_boundary.py`、`tests/test_cr014_research_consumer_boundary.py` |
-| FLOW-03 | 多因子研究闭环 | FEAT-03 -> FEAT-01 / FEAT-04 | FEAT-03 | factor / label / report 任一 gate 失败时 admission package blocked | `tests/test_cr030_*` |
+| FLOW-03 | 多因子研究闭环 | FEAT-03 -> FEAT-01 / FEAT-04 | FEAT-03 | factor / label / report 任一 gate 失败时 admission package blocked；异象候选未完成先验逻辑、Harvey t>=3、单调性、控制因子、时间切分、成本、经济逻辑和多重检验审查时不得升级为可计算因子；自动发现只能从受控模板生成候选并记录 candidate_count；研究引擎主实现必须使用领域名模块 | `tests/test_cr030_*`、`tests/test_chapter5_anomalies.py`、`tests/test_anomaly_discovery.py`、`tests/test_script_entrypoint_naming.py` |
 | FLOW-04 | 研究输出转执行草稿 | FEAT-03 / FEAT-04 -> FEAT-06 | FEAT-04 / FEAT-06 | `order_intent_draft_v1` 不等于真实 order；缺 execution raw policy 时 blocked | `tests/test_cr025_order_intent_draft_contract.py`、`tests/test_cr030_strategy_admission_package.py` |
 | FLOW-05 | QMT 只读实机验证 | FEAT-05 -> FEAT-07 -> FEAT-08 | FEAT-05 | 缺 MiniQMT 权限、凭据、pairing、scope 或 session ready 时 blocked，不关闭 CR-020 | `tests/test_cr020_*` + 用户脱敏 evidence |
 | FLOW-06 | 后续 simulation / live 路线 | FEAT-03 -> FEAT-06 -> FEAT-05 -> FEAT-07 | FEAT-06 | CR-021..024 未启动 / 未授权时全部 blocked；gateway capabilities 不升级授权 | `tests/test_cr016_*`、后续 CR |
@@ -104,8 +110,8 @@ archived_previous:
 | FLOW-10 | 策略想法进入研究闭环 | FEAT-10 -> FEAT-03 -> FEAT-09 -> FEAT-07 | FEAT-10 / FEAT-03 / FEAT-09 | idea、protocol、run、validation 任一证据缺失时只能保持 research-only 或 blocked，不得升级为 delivery_candidate | CR051 CP5/CP7、后续 CR052 |
 | FLOW-11 | 项目身份和仓库结构迁移 | FEAT-10 -> FEAT-08 -> FEAT-07 | FEAT-10 | 仅在 inventory、Git archive、mechanical move plan、legacy alias 验证和用户授权齐备后才允许真实迁移；CP4/CP5 只做设计 | CR051 CP4/CP5、后续迁移授权门禁 |
 | FLOW-17 | 策略类型研究结果归一化 | FEAT-03 / 事件策略后续 Feature / ML 后续 Feature -> FEAT-13 -> FEAT-14 | FEAT-13 | 缺少 StrategyTypeAdapter、SignalSet、StrategyCandidate 或 ResearchEvidenceIndex 时不得进入成熟策略准入 | Stage 1 / Stage 2 design checks |
-| FLOW-18 | 多因子框架升级到策略生产准备 | FEAT-03 -> FEAT-13 -> FEAT-14 | FEAT-03 / FEAT-13 | Stage 2 不连接数据湖；真实数据缺口只能 typed unavailable，不得伪造 lineage 或 PIT universe | Stage 2 framework tests |
-| FLOW-19 | 成熟多因子策略进入模拟盘观察 | FEAT-02 -> FEAT-03 -> FEAT-13 -> FEAT-14 -> FEAT-11 / FEAT-12 -> FEAT-07 | FEAT-14 / FEAT-11 | Stage 3 research evidence 或 mature admission 缺失时 blocked；Stage 4 runtime 必须逐次授权并从 P0 开始 | Stage 3 / Stage 4 readiness checks |
+| FLOW-18 | 多因子框架升级到策略生产准备 | FEAT-03 -> FEAT-13 -> FEAT-14 | FEAT-03 / FEAT-13 | Stage 2 不连接数据湖；真实数据缺口只能 typed unavailable，不得伪造 lineage、PIT universe、policy cycle coverage 或 shortability facts | Stage 2 framework tests |
+| FLOW-19 | 成熟多因子策略进入模拟盘观察 | FEAT-02 -> FEAT-03 -> FEAT-13 -> FEAT-14 -> FEAT-11 / FEAT-12 -> FEAT-07 | FEAT-14 / FEAT-11 | Stage 3 必须产出评估通过的策略；research evidence、FactorModelValidationReport 或 mature admission 缺失 / blocked 时只能记录为失败候选，不得进入 Stage 4；核心门禁含因子溢价、经济显著性、样本外和数据偏差审计；Stage 4 runtime 必须逐次授权并从 P0 开始 | Stage 3 / Stage 4 readiness checks |
 
 ## 共享能力
 
@@ -122,8 +128,13 @@ archived_previous:
 | SH-09 | Research Archive Manifest / Run Manifest | FEAT-01、FEAT-02、FEAT-03、FEAT-08、FEAT-10 | FEAT-10 | research run -> archive manifest / docs | 缺 commit、data release、config hash、seed 或 artifact ref 时 blocked |
 | SH-10 | Project Identity Alias / Migration Guardrail | 全部 Feature | FEAT-10 / FEAT-07 | project docs / migration plan -> consumers | `quant-lab` 为 canonical；`local_backtest` 作为 legacy alias，不批量重写历史审计 |
 | SH-15 | Strategy Type Adapter Contract | FEAT-03、FEAT-10、FEAT-13、FEAT-14 | FEAT-13 | strategy-specific research output -> SignalSet / StrategyCandidate | adapter 缺字段时 blocked，不进入成熟策略准入 |
-| SH-16 | Mature Strategy Admission Gate | FEAT-03、FEAT-11、FEAT-13、FEAT-14、FEAT-07 | FEAT-14 / FEAT-07 | research evidence -> mature StrategyAdmissionPackage -> runner preflight | 缺 FactorSpec、UniversePolicy、lineage、risk 或 evidence index 时 blocked |
+| SH-16 | Mature Strategy Admission Gate | FEAT-03、FEAT-11、FEAT-13、FEAT-14、FEAT-07 | FEAT-14 / FEAT-07 | research evidence -> FactorModelValidationReport -> mature StrategyAdmissionPackage -> runner preflight | 缺 FactorSpec、UniversePolicy、lineage、risk、evidence index 或评估通过状态时 blocked |
 | SH-17 | Simulation Observation Evidence | FEAT-11、FEAT-12、FEAT-14、FEAT-08 | FEAT-14 / FEAT-11 | simulation run -> observation report -> small_live candidate decision | 未完成观察周期或异常未闭环时不得升级 small_live |
+| SH-18 | Unified Factor Catalog | FEAT-03、FEAT-13、FEAT-14、FEAT-11、FEAT-08 | FEAT-03 | factor registry -> mature runner FactorSpec / factor research modules / CLI query | 未登记因子不得被 mature runner、factor research modules 或成熟策略准入静默消费；缺计算器必须声明 runner-local、proxy-only 或 blocked |
+| SH-19 | Advanced Factor Model Validation | FEAT-03、FEAT-13、FEAT-14、FEAT-10、FEAT-08 | FEAT-03 | factor panel / labels / factor returns / universe / tradability / policy cycle config -> FactorModelValidationReport -> mature admission | 核心门禁 blocked 时 mature admission blocked；Stage 3 不得出阶段；非核心缺口必须进入 risk_warnings 或 unavailable，不得伪造 GRS、做空可行性、政策周期或壳价值控制证据 |
+| SH-20 | Anomaly Discovery / Research Gate | FEAT-03、FEAT-13、FEAT-14、FEAT-10、FEAT-08 | FEAT-03 | theory / behavior / microstructure / financial-extension hypothesis -> AnomalyCandidate -> AnomalyResearchReport -> AnomalyAdmissionDecision -> FactorCatalogEntry candidate | 无先验逻辑、Harvey t<3、分组非单调、控制因子 alpha 不显著、时间切分失败、扣费后不可行、壳价值 / 做空 / 政策周期缺口未披露或经济故事为空时不得升级为 Stage 3 因子 |
+| SH-21 | Automatic Anomaly Discovery | FEAT-03、FEAT-13、FEAT-14 | FEAT-03 | controlled templates + feature panel + model returns -> AnomalyDiscoveryRun -> multiple-testing controlled admission -> dynamic FactorCatalogEntry extras -> Stage 3 candidate FactorSpec | 不允许黑箱公式搜索、不自动 publish catalog、不把一次搜索胜者硬编码为静态因子；未通过多重检验或未记录搜索空间的候选不得进入 Stage 3 搜索 |
+| SH-22 | Research Engine Stable Modules | FEAT-03、FEAT-13、FEAT-14、FEAT-08 | FEAT-03 | stable engine modules / stable scripts -> tests / docs / research runners | `engine/factor_replication.py`、`research_data_readiness.py`、`factor_model_research.py`、`anomaly_research.py`、`factor_robustness.py`、`factor_portfolio_practice.py` 是长期主入口；旧 `engine/chapter*` 已归档到 `docs/legacy/archive/engine/`，旧 root 脚本实现必须归档到 `scripts/legacy/*` |
 
 ## 待确认边界
 

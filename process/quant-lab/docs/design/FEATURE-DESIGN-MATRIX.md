@@ -1,6 +1,6 @@
 ---
 status: "ready-for-cp5-review"
-version: "1.5"
+version: "1.11"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld: "docs/design/HLD.md"
 source_adr: "docs/design/ARCHITECTURE-DECISION.md"
@@ -21,6 +21,12 @@ confirmed_at: ""
 | 1.3 | 2026-06-14 | host-orchestrator | 按 CR-053 增补 FEAT-10-CR053 quant-lab migration inventory / dry-run scoped design、5 个 Story 和 CP5 批次 |
 | 1.4 | 2026-06-23 | host-orchestrator | CR131 将 CR 命名 feature design matrix 历史文件移入 archive；默认 design root 保留当前矩阵。 |
 | 1.5 | 2026-06-24 | host-orchestrator | 按 CR138 CP3 approved HLD 增补 FEAT-11 Runner Control Plane 与 FEAT-12 QMT Gateway Service Layer，实现设计三件套和 8 个 Story 的 lld_policy；复用 FEAT-07 / FEAT-06 作为 shared safety / OMS 输入。 |
+| 1.6 | 2026-06-27 | codex | FEAT-03 增补统一因子目录、查询 CLI 和 mature runner 因子纳管；重访条件增加新增因子、mature runner 因子、查询 CLI 和目录 schema 变化。 |
+| 1.7 | 2026-06-27 | codex | FEAT-03 增补高级多因子模型评估报告、mature admission 门禁和政策周期配置合同；重访条件增加评估 schema、gate policy、样本外 / GRS / 做空 / 壳价值 / 政策周期评估变化。 |
+| 1.8 | 2026-06-27 | codex | FEAT-03 / FEAT-14 收紧 Stage 3 出口：必须输出评估通过的成熟多因子策略；新增 candidate sweep、pass gate 和 blocked 候选不得出阶段的重访条件。 |
+| 1.9 | 2026-06-27 | codex | FEAT-03 增补异象发现 / 研究设计入口；重访条件增加 AnomalyCandidate、Harvey 标准、分组单调性、控制因子 alpha、时间切分、成本和经济逻辑准入变化。 |
+| 1.10 | 2026-06-27 | codex | FEAT-03 增补自动异象发现系统；重访条件增加受控模板、批量 discovery runner、多重检验、动态因子目录接入和 Stage 3 候选消费变化。 |
+| 1.11 | 2026-06-28 | codex | FEAT-03 增补研究引擎稳定模块整改；重访条件增加 engine 主入口命名、旧 engine 入口归档、公共 serialization / matrix / admission contracts 和脚本归档规则变化。 |
 
 ## 适用性判定规则
 
@@ -38,7 +44,7 @@ confirmed_at: ""
 |---|---|---|---|---|---|---|---|---|
 | FEAT-01 | 本地研究与轻量回测核心 | BLUEPRINT、HLD、STORY-001..013 | waived | 基线已 verified，当前不重写已验证 Story；后续新增高风险改造再进入 required | none / legacy evidence | STORY-001..013、CR008、CR011 | waived for baseline；新增跨模块改造用 full-lld | 修改 data loader、backtest engine、portfolio 或 report schema 时 |
 | FEAT-02 | 生产级市场数据湖 | BLUEPRINT、HLD-DATA-LAKE、ADR-013..022/030..035/048..054/062..066 | required | 拥有事实源、publish gate、rollback、external lake root、provider 授权和 schema 状态机 | `docs/features/market-data-lake/*` | CR004..CR005、CR007、CR010、CR014、CR017、CR018 | full-lld | 新增 dataset、publish 规则、DuckDB 事实边界、真实写湖或 rollback 行为时 |
-| FEAT-03 | 研究数据集与多因子研究闭环 | BLUEPRINT、HLD §35、ADR-079..086 | required | 多个 Story 共享 FactorSpec、FactorRunSpec、LabelWindow、ReportCatalog、AdmissionPackage | `docs/features/factor-research-loop/*` | CR011、CR019、CR030 | full-lld | 新增因子 schema、label window、组合器、admission package 字段时 |
+| FEAT-03 | 研究数据集与多因子研究闭环 | BLUEPRINT、HLD §35、ADR-079..086 | required | 多个 Story 共享 FactorCatalogEntry、AnomalyCandidate、AnomalyDiscoveryRun、FactorSpec、FactorRunSpec、LabelWindow、FactorModelValidationReport、ReportCatalog、AdmissionPackage 和研究引擎稳定模块；Stage 3 出口必须由评估通过的成熟策略关闭 | `docs/features/factor-research-loop/*` | CR011、CR019、CR030、factor-catalog-cli、factor-model-validation、anomaly-discovery-research、automatic-anomaly-discovery、research-engine-stable-modules、stage3-pass-candidate | full-lld | 新增因子、mature runner 因子、查询 CLI、目录 schema、engine 主入口命名、旧 engine 入口归档、公共 serialization / matrix / admission contracts、受控异象模板、自动 discovery runner、多重检验策略、动态目录接入、Stage 3 anomaly candidate spec、异象候选 / 研究报告 schema、Harvey 标准、分组单调性、控制因子 alpha、时间切分、成本 / 换手、经济逻辑准入、评估报告 schema、gate policy、GRS、因子溢价、经济显著性、样本外、做空、壳价值、政策周期、label window、组合器、admission package 字段、candidate sweep 或 Stage 3 pass gate 时 |
 | FEAT-04 | 执行语义对齐与可选后端参考 | BLUEPRINT、HLD §34、ADR-074..078 | required | 涉及 optional backend、依赖隔离、license/no-copy、semantic diff 和 order intent draft | `docs/features/execution-semantics-reference/*` | CR025、CR030 | full-lld | 新增 Backtrader / Qlib / external runner 依赖、运行或源码适配时 |
 | FEAT-05 | QMT C/S Gateway 与只读运行准入 | BLUEPRINT、HLD §36、ADR-087..093 | required | 跨 Linux / Windows、HMAC、凭据引用、QMT login/session 和只读真实验证风险高 | `docs/features/qmt-gateway-readonly/*` | CR019、CR020 | full-lld | 恢复 CR-020 真实验证、扩大 endpoint 或引入新 gateway runtime 时 |
 | FEAT-06 | OMS / 风控 / Broker Lake / 阶段激活 | BLUEPRINT、HLD-QMT、ADR-055..061 | required | 状态机、风控、broker facts、真实交易阶段和 kill switch 风险最高 | `docs/features/qmt-trading-governance/*` | CR015、CR016、CR017、CR021..024 candidate | full-lld | 启动 CR-021 simulation、CR-022 live_readonly、CR-023 small_live、CR-024 scale_up 时 |

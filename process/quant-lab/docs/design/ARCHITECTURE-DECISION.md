@@ -36,7 +36,7 @@ current_change_sources:
 | FEAT-02 生产级市场数据湖 | ADR-013..022、ADR-030..035、ADR-048..054、ADR-062..066 | Tushare 写湖、dataset readiness、生产数据湖、publish gate、全 A current truth、DuckDB readonly、复权双视图、rollback |
 | FEAT-03 多因子研究闭环 | ADR-036..043、ADR-079..086 | benchmark/PIT/tradability/execution/adjustment/exposure/capacity/factor audit、FactorSpec、FactorRunSpec、LabelWindow、StrategyAdmissionPackage |
 | FEAT-04 执行语义与可选后端 | ADR-074..078 | Backtrader optional semantic reference、module reference/no-copy、order intent draft、依赖隔离 |
-| FEAT-05 QMT C/S Gateway 与只读准入 | ADR-067..073、ADR-087..093 | Stage6 admission、QMT C/S bridge、HMAC pairing、endpoint matrix、gateway runtime、login/session ready、query_positions readonly |
+| FEAT-05 QMT C/S Gateway 与只读准入 | ADR-067..073、ADR-087..093 | legacy strategy readiness admission、QMT C/S bridge、HMAC pairing、endpoint matrix、gateway runtime、login/session ready、query_positions readonly |
 | FEAT-06 OMS / 风控 / Broker Lake / 阶段激活 | ADR-055..061 | QMT adapter、broker lake、OMS、pre-trade risk、stage gate、reconciliation、kill switch、cross-node deployment |
 | FEAT-07 安全授权治理 | ADR-051、ADR-061、ADR-071..073、ADR-086、ADR-090..093 | 真实操作授权、redaction、HMAC / scope、fallback、no-real-operation、安全边界 |
 | FEAT-08 文档 / Runbook | ADR 派生，不单独编号 | README、USER-MANUAL、QMT runbook 和 CP8 只作为用户操作与审计入口，不提供 runtime authorization |

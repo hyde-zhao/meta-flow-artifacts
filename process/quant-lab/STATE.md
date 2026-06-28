@@ -7,7 +7,7 @@ Blocked: false
 Active CR: none
 Active Story: none
 Pending gate: none
-Next action: Stage 3 研究机交接文档已准备好，当前 active context 切换为 `process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STAGE3-RESEARCH-MACHINE-HANDOFF-2026-06-26.md`。用户将在另一台可以连接数据湖的研究机实施 Stage 3：按 handoff 清单准备真实数据输入、生成 research evidence、构建 mature admission package 和 runner offline preflight。当前机器不连接数据湖，不执行 simulation runtime，不启动 gateway，不进入 `small_live` / `live`。
+Next action: Stage 3 mature multifactor research 已在可连接数据湖的机器完成。后续 Stage 4 使用 `stage3-mature-mf-20260627-real-lake-v2` 的 Stage 3 package、mature admission package、runner offline preflight 和 Stage 4 observation plan 作为审查输入；任何 gateway / QMT / simulation runtime 仍需单独授权，`small_live` / `live` 仍未授权。
 
 Refs:
 - state: process/state/STATE.current.json
@@ -31,6 +31,14 @@ Refs:
 - stage2 framework test: tests/test_stage2_mature_multifactor_framework.py
 - stage2 framework fixture: tests/fixtures/stage2_multifactor_framework/mature_multifactor_stage2_fixture.json
 - stage2 framework check: process/checks/STAGE2-MULTIFACTOR-FRAMEWORK-NO-LAKE-INITIAL-SLICE-2026-06-26.md
+- stage3 research package initial slice check: process/checks/STAGE3-MATURE-MULTIFACTOR-RESEARCH-PACKAGE-INITIAL-SLICE-2026-06-27.md
+- stage3 runner module: engine/stage3_mature_multifactor_research.py
+- stage3 runner CLI: scripts/run_stage3_mature_multifactor_research.py
+- stage3 runner tests: tests/test_stage3_mature_multifactor_research.py
+- stage3 complete check: process/checks/STAGE3-MATURE-MULTIFACTOR-RESEARCH-COMPLETE-2026-06-27.md
+- stage3 process summary: process/evidence/stage3-mature-multifactor/stage3-mature-mf-20260627-real-lake-v2/stage3-research-summary.json
+- stage3 research package: /home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/stage3-mature-mf-20260627-real-lake-v2/STAGE3-MATURE-RESEARCH-PACKAGE.json
+- stage4 observation plan: /home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/stage3-mature-mf-20260627-real-lake-v2/STAGE4-OBSERVATION-PLAN.json
 - phase goals: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-PHASE-GOALS-2026-06-25.md
 - P0 evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P0-EVIDENCE-2026-06-25.json
 - P1 check: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P1-MULTIFACTOR-TARGET-PORTFOLIO-2026-06-25.md
@@ -130,9 +138,9 @@ Open risks:
 - {'id': 'RISK-RUNNER-MULTIFACTOR-GATEWAY-LIFECYCLE-DESYNC', 'summary': 'Windows gateway 启停、重启、WSL/Windows runtime code sync 和 P0/P0.5 复验规则已在 SIM-OPS policy 中固化。', 'status': 'policy-defined'}
 - {'id': 'RISK-RUNNER-MULTIFACTOR-PROJECT-BLUEPRINT-DRIFT', 'summary': 'Stage 1 已在当前 quant-lab 项目蓝图三件套上合并五阶段路线和多策略类型适配边界，旧蓝图已归档，避免新增孤立端到端策略研究蓝图。', 'status': 'mitigated'}
 - {'id': 'RISK-RUNNER-MULTIFACTOR-STAGE2-DATA-LAKE-COUPLING', 'summary': 'Stage 2 多因子研究框架升级不连接数据湖；桥接切片已用 no-lake counter validation、typed unavailable、CR030/CR039 bridge 和 Stage 3 handoff 测试固化边界。真实数据湖接入推迟到 Stage 3 由用户在研究机实施。', 'status': 'controlled'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-MATURE-STRATEGY-GAP', 'summary': '当前可运行对象仍是 fixture / 综合 alpha score 注入包样例；Stage 2 已具备成熟策略生产框架和 handoff，Stage 3 仍需基于研究机数据湖生产真实策略研究、evidence 和准入包。', 'status': 'open'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-UNIVERSE-SCALE-UP', 'summary': '从 2 个 ETF / fixture 扩展到真实股票池会引入 PIT 数据质量、流动性、停牌、ST、涨跌停、容量和调仓复杂度；不得直接扩大 runtime，必须先按 Stage 3 handoff 完成 universe policy、风险过滤和证据追溯。', 'status': 'open'}
+- {'id': 'RISK-RUNNER-MULTIFACTOR-MATURE-STRATEGY-GAP', 'summary': 'Stage 3 已基于真实数据湖生产 mature multifactor research package：run stage3-mature-mf-20260627-real-lake-v2，package status stage3_research_ready_for_stage4_review；runtime / simulation / live 授权仍独立处理。', 'status': 'closed-stage3-complete'}
+- {'id': 'RISK-RUNNER-MULTIFACTOR-UNIVERSE-SCALE-UP', 'summary': 'Stage 3 已从 fixture 扩展到真实 A 股股票池，并固化 PIT、ST、停牌、涨跌停、流动性、上市退市、风控策略和 evidence refs；runtime 扩容仍受 Stage 4 授权控制。', 'status': 'controlled-by-stage3-evidence'}
 
-Updated at: 2026-06-26T15:30:00+08:00
+Updated at: 2026-06-27T00:00:00+08:00
 
 <!-- generated-by: meta-flow state render -->
