@@ -20,7 +20,7 @@
   "cr_type": "refactor",
   "full_ref": "process/changes/CR-140-EXPERIMENTS-REFACTOR-2026-06-28.md",
   "gate_profile": "standard",
-  "gate_status": "cp2_pending",
+  "gate_status": "closed",
   "id": "CR-140",
   "impact_surface": [
     "experiments/run_experiment_turnover_factor.py",
@@ -42,6 +42,7 @@
     "process/context/EXPERIMENTS-REFACTOR-PLAN-2026-06-28.md"
   ],
   "not_authorized": [
+    "real_data_lake_read_validation",
     "real_data_lake_link_or_mount",
     "nas_access",
     "provider_fetch",
@@ -51,7 +52,7 @@
     "simulation_live_or_trading",
     "git_remote_write"
   ],
-  "phase": "phase5-cleanup-ready",
+  "phase": "delivered",
   "phase0_baseline": {
     "command": "uv run --python 3.11 pytest -q --tb=no -p no:cacheprovider",
     "duration_seconds": 49.07,
@@ -130,14 +131,14 @@
     "review_ref": "process/checks/CR140-PLAN-REVIEW-ADJUSTMENTS-2026-06-30.md",
     "target_statement": "整理研究实验层与生产/数据工具层的代码边界，并用离线 fixture 证明 turnover 实验评估侧迁移到 engine 后的重构等价性；本轮不验证真实数据湖、不产生模拟盘/实盘准入、不改变生产 current truth。"
   },
-  "readiness": "not_ready",
+  "readiness": "ready_with_risk",
   "risk_refs": [
     "RISK-CR140-CR139-STATUS-DRIFT",
     "RISK-CR140-PHASE3-LAKE-FIXTURE-EQUIVALENCE"
   ],
   "source_ref": "process/context/EXPERIMENTS-REFACTOR-PLAN-2026-06-28.md",
   "started_at": "2026-06-30T14:03:30+08:00",
-  "status": "active-phase5-cleanup-ready",
+  "status": "closed-current-delivery",
   "title": "experiments/ Directory Refactor and Parallel Factor Stack Reduction",
   "phase3_synthetic_turnover_parity": {
     "completed_at": "2026-06-30T15:28:00+08:00",
@@ -171,5 +172,33 @@
     "unchanged_baseline_failures": 46,
     "additional_passes": 3,
     "additional_pass_reason": "CR140 synthetic turnover adapter tests added in tests/test_cr140_turnover_engine_adapter.py"
-  }
+  },
+  "closed_at": "2026-06-30T16:08:00+08:00",
+  "release_decision": "READY_WITH_RISK",
+  "cp8_ref": "process/checkpoints/CP8-CR140-DELIVERY-READINESS.md",
+  "final_validation_ref": "process/checks/CR140-PHASE5-FINAL-VALIDATION-2026-06-30.md",
+  "final_validation": {
+    "full_pytest": "46 failed, 1431 passed in 43.66s",
+    "new_failures": [],
+    "unchanged_baseline_failures": 46,
+    "entrypoint_guard": "FAIL only on Phase 0 known CR139 root script naming debt; missing_stable_entrypoints=[]",
+    "process_artifact_hygiene": "passed=true; unclassified=0",
+    "cr_tracking": "OK before closure",
+    "source_residual_scan": "no current source/docs component old import/path hits",
+    "git_diff_check": "passed"
+  },
+  "follow_up_candidates": [
+    {
+      "id": "CR140-FU-001",
+      "title": "real lake readonly turnover semantic validation",
+      "status": "candidate-only-not-created",
+      "authorization_required": "separate real lake readonly authorization"
+    },
+    {
+      "id": "CR140-FU-002",
+      "title": "remaining experiments engine convergence",
+      "status": "candidate-only-not-created",
+      "authorization_required": "separate CR and engine extension contract review"
+    }
+  ]
 }

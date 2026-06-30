@@ -3,11 +3,11 @@ cr_id: "CR-140"
 title: "experiments/ 目录重构与并行因子栈消除"
 cr_type: "refactor"
 cr_kind: "requirement-change"
-lifecycle_status: "active"
-readiness_status: "not_ready"
-gate_status: "cp2_pending"
+lifecycle_status: "closed"
+readiness_status: "ready_with_risk"
+gate_status: "closed"
 gate_profile: "standard"
-status: "active-phase5-cleanup-ready"
+status: "closed-current-delivery"
 impact_level: "medium"
 workflow_mode_before: "standard"
 workflow_mode_after_change: "standard"
@@ -16,8 +16,8 @@ rollback_to: "pre-CR140 clean worktree + process/context/EXPERIMENTS-REFACTOR-PL
 approval_result: "phase0-authorized-by-user"
 created_at: "2026-06-30T14:03:30+08:00"
 created_by: "host-orchestrator"
-approved_by: ""
-approved_at: ""
+approved_by: "user-prior-no-risk-auto-continue-authorization"
+approved_at: "2026-06-30T16:08:00+08:00"
 source: "user-request"
 linked_issue: ""
 parent_cr: ""
@@ -276,6 +276,26 @@ Phase 3 baseline comparison：
 - 修复的基线失败：0
 - 保持失败：46，与 Phase 0 failure set 一致。
 - 新增通过：3，来自 `tests/test_cr140_turnover_engine_adapter.py`。
+
+## Phase 5 与 CP8 关闭证据
+
+Phase 5 final validation：
+
+- `process/checks/CR140-PHASE5-FINAL-VALIDATION-2026-06-30.md`
+- source / artifact clean 后最终全量 pytest：`46 failed, 1431 passed in 43.66s`
+- 新增失败：0
+- `experiments/` 顶层只剩实验入口。
+- 当前源码 / 组件文档范围旧 import / 旧路径残留：0。
+- process artifact hygiene：PASS，`unclassified=0`。
+- CR tracking：关闭前 PASS。
+- `git diff --check`：PASS。
+
+CP8 closure：
+
+- `process/checkpoints/CP8-CR140-DELIVERY-READINESS.md`
+- 关闭状态：`closed-current-delivery / READY_WITH_RISK`
+- 未发起人工门禁原因：用户已授权“无风险继续推进，不发起人工门禁”；最终验证未发现新增风险。
+- `READY_WITH_RISK` 风险含义：真实 lake 研究语义未验证，Phase 0 红基线仍存在；不是 CR140 新增回归风险。
 
 ## 计划评审后的目标校正
 

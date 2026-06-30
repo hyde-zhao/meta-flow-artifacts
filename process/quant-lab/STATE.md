@@ -2,16 +2,16 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: phase5-cleanup-ready
+Phase: delivered
 Blocked: false
-Active CR: CR-140 (experiments/ 目录重构与并行因子栈消除)
+Active CR: none
 Active Story: none
 Active batch: none
 Pending gate: CP2
 
 ## Current Decision
 
-CR140 已完成 Phase 3 synthetic turnover parity 与全量基线对比，等待 Phase 5 cleanup：
+CR140 已关闭为 `closed-current-delivery / READY_WITH_RISK`：
 
 - 范围基线：`process/context/EXPERIMENTS-REFACTOR-PLAN-2026-06-28.md`。
 - 启动核查：`git status --short` 为空，`meta-flow workspace check` PASS，process route health 正常。
@@ -24,6 +24,9 @@ CR140 已完成 Phase 3 synthetic turnover parity 与全量基线对比，等待
 - Phase 3 验收措辞限制：只能声明合成 fixture / 注入层上的重构等价，不能声明真实数据研究语义已验证，不能声明 simulation/live/QMT 准入。
 - Phase 3 targeted 验证已通过：`py_compile` PASS，`tests/test_cr140_turnover_engine_adapter.py` + factor statistics/calculators 相关回归 `11 passed in 3.69s`，证据见 `process/checks/CR140-PHASE3-TURNOVER-SYNTHETIC-PARITY-2026-06-30.md`。
 - Phase 3 全量基线对比已通过：source / artifact clean 后 `46 failed, 1431 passed in 43.53s`，新增失败 0；新增通过 3 来自 CR140 adapter 测试，证据见 `process/checks/CR140-PHASE3-BASELINE-COMPARISON-2026-06-30.md`。
+- Phase 5 final validation 已通过：source / artifact clean 后最终全量 pytest `46 failed, 1431 passed in 43.66s`，新增失败 0；当前源码旧路径残留扫描 0 命中；process hygiene PASS；CR tracking 关闭前 PASS；证据见 `process/checks/CR140-PHASE5-FINAL-VALIDATION-2026-06-30.md`。
+- CP8 closure 记录已生成：`process/checkpoints/CP8-CR140-DELIVERY-READINESS.md`。未发起人工门禁原因：用户已授权无新增风险时继续推进并关闭；最终验证未发现新增风险。
+- 关闭后仍不授权真实 lake 只读验证、NAS、provider、lake write、catalog pointer write、QMT/live/runtime、simulation/trading 或 Git remote write。
 
 ## Previous CR139 Decision
 
