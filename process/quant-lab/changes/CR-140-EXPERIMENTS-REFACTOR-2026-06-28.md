@@ -7,7 +7,7 @@ lifecycle_status: "active"
 readiness_status: "not_ready"
 gate_status: "cp2_pending"
 gate_profile: "standard"
-status: "active-phase2-helper-diff-ready"
+status: "active-phase2-helper-consolidation-complete"
 impact_level: "medium"
 workflow_mode_before: "standard"
 workflow_mode_after_change: "standard"
@@ -221,6 +221,18 @@ Phase 1 baseline comparison：
 - 新增失败：0
 - 修复的基线失败：0
 - 保持失败：46，与 Phase 0 failure set 一致。
+
+## Phase 2 helper 收敛证据
+
+Phase 2 已完成 helper 收敛：
+
+- 新增 `engine/experiment_report_helpers.py`
+- 06/07、08、09、10、12 的 Markdown table / value formatting 改为共享 helper 包装，保留各自 `PERCENT_FIELDS`。
+- 06/07、08、09、10、12、13 的 `_resolve_date_range` 本地副本已删除并复用共享实现。
+- 13 的 `_markdown_table` / `_format_value` 因中文 `对比维度` / `PERCENT_DIMENSIONS` / `—` 处理非等价，保留本地实现。
+- `docs/components/EXPERIMENTS.md` 已补实验编号索引。
+
+证据：`process/checks/CR140-PHASE2-HELPER-CONSOLIDATION-2026-06-30.md`。
 
 ## 计划评审后的目标校正
 
