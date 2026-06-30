@@ -220,13 +220,47 @@ index_schema:
 - next_action
 - last_checked_at
 active_crs:
-  - id: "CR-139"
-    title: "Strategy Data Foundation（数据湖整改 parent CR）"
-    status: "active-cp7-pending-wave1-impl"
+  - id: "CR-140"
+    title: "experiments/ 目录重构与并行因子栈消除"
+    status: "active-phase1-migrations-complete"
     kind: "requirement-change"
     lifecycle_status: active
-    readiness_status: "n/a"
-    gate_status: cp7_pending
+    readiness_status: "not_ready"
+    gate_status: cp2_pending
+    gate_profile: standard
+    source_tracking: USER-20260630-START-CR140
+    formal_cr_path: process/changes/CR-140-EXPERIMENTS-REFACTOR-2026-06-28.md
+    parent_cr: ""
+    source_decision_id: USER-20260630-START-CR140
+    priority: 1
+    blocked_by: []
+    conflict_keys:
+    - experiments-directory-refactor
+    - research-reporting-module-location
+    - data-lake-readiness-audit-entrypoint
+    - turnover-factor-engine-adapter
+    - offline-golden-fixture
+    authz_policy_refs:
+    - NO_CREDENTIAL_READ
+    - NO_RUNTIME
+    - NO_NAS
+    - NO_TRADING
+    - NO_PROVIDER_FETCH
+    - NO_REAL_LAKE_LINK_OR_MOUNT
+    - NO_LAKE_WRITE
+    - NO_CATALOG_POINTER_WRITE
+    - NO_REMOTE_WRITE
+    next_gate: Phase1-baseline-compare
+    next_action: "Phase 1 migrations completed and evidenced. Commit source/artifact changes to clear CR132 dirty-workspace hygiene, rerun full pytest against Phase 0 failure set, then enter Phase 2 helper equivalence diff. Phase 3 remains synthetic fixture parity only; real lake readonly validation requires separate authorization."
+    last_checked_at: "2026-06-30T14:48:24+08:00"
+
+  - id: "CR-139"
+    title: "Strategy Data Foundation（数据湖整改 parent CR）"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: closed
+    readiness_status: "ready_with_risk"
+    gate_status: closed
     gate_profile: standard
     source_tracking: USER-20260628-START-CR139
     formal_cr_path: process/changes/CR-139-STRATEGY-DATA-FOUNDATION-2026-06-28.md
@@ -261,9 +295,9 @@ active_crs:
     - NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE
     cp5_w1_approved_by: user
     cp5_w1_approved_at: "2026-06-28T19:20:00+08:00"
-    next_gate: CP6
-    next_action: "CR-139 CP5-W1 approved by user 2026-06-28T19:20:00+08:00 (after changes_requested 6-item revision). Wave1 8 Story LLD evidence complete (6 full-lld + 2 technical-note); S02 MetricSpec 7-class frozen, S06 materialization 7-rule frozen, S05/S06 catalog CP6 hard gate, status synced. Next: Wave1 implementation CP6/CP7 by baseline gate order S01->S02->S03 verified then S04-S08 structural changes; S08 N1 physical migration deferred-until-baseline-verified. Wave2/Wave3 LLD after Wave1 verified. CP5-W1 authorizes code implementation + static/fixture validation only; runtime/NAS/QMT/trading/provider-lake-catalog write/physical partition migration execution/Git remote write still unauthorized (need independent runtime_authorization)."
-    last_checked_at: "2026-06-28T19:20:00+08:00"
+    next_gate: closed
+    next_action: "CR139 Story backlog closed by 2026-06-30 reconciliation: 31 verified + 9 gate-reconciled-complete = 40/40. No CR139 backlog Story remains; future provider catalog, legacy cleanup, NAS, real lake, runtime, or Git operations require a new explicit scope."
+    last_checked_at: "2026-06-30T14:05:00+08:00"
 
   - id: "CR-138"
     title: "Runner & QMT Gateway Operational Use-Case Baseline"
@@ -4110,13 +4144,29 @@ route_view:
   status: cr044_closed_offline_admission_design_ready
   next_action: CR044 已完成 CP8 approved 并关闭为 offline-admission-design-ready / READY_WITH_RISK；未来真实 Goldminer L3/L4/L5 验证仅作为 CR045-candidate，必须单独决策和逐 run 授权。当前不授权读取凭据、登录、连接、查询账户、下单、撤单或 simulation/live。
 items:
-  - id: "CR-139"
-    title: "Strategy Data Foundation（数据湖整改 parent CR）"
-    status: "active-cp7-pending-wave1-impl"
+  - id: "CR-140"
+    title: "experiments/ 目录重构与并行因子栈消除"
+    status: "active-phase1-migrations-complete"
     kind: "requirement-change"
     lifecycle_status: "active"
-    readiness_status: "n/a"
-    gate_status: cp7_pending
+    readiness_status: "not_ready"
+    gate_status: "cp2_pending"
+    gate_profile: "standard"
+    source_tracking: "USER-20260630-START-CR140"
+    formal_cr_path: "process/changes/CR-140-EXPERIMENTS-REFACTOR-2026-06-28.md"
+    parent_cr: ""
+    source_decision_id: "USER-20260630-START-CR140"
+    current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    blocked_by: []
+    next_action: "Phase 1 migrations completed and evidenced. Commit source/artifact changes to clear CR132 dirty-workspace hygiene, rerun full pytest against Phase 0 failure set, then enter Phase 2 helper equivalence diff. Phase 3 remains synthetic fixture parity only; real lake readonly validation requires separate authorization."
+
+  - id: "CR-139"
+    title: "Strategy Data Foundation（数据湖整改 parent CR）"
+    status: "closed-current-delivery"
+    kind: "requirement-change"
+    lifecycle_status: "closed"
+    readiness_status: "ready_with_risk"
+    gate_status: "closed"
     gate_profile: "standard"
     source_tracking: "USER-20260628-START-CR139"
     formal_cr_path: "process/changes/CR-139-STRATEGY-DATA-FOUNDATION-2026-06-28.md"
@@ -4127,7 +4177,7 @@ items:
     source_decision_id: "USER-20260628-START-CR139"
     current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
     blocked_by: []
-    next_action: "CR-139 CP2 approved 2026-06-28T16:05:00+08:00. D8a 6 items included (d1 full design+LLD); D8b 14 items included (d2 existing-contract closure/versioning, no redesign). Wave1 baseline gate: structural changes after T8->T7->C2a. Next: CP3 HLD gate (meta-se). No Story split / LLD / implementation / runtime authorized before CP3."
+    next_action: "CR139 Story backlog closed by 2026-06-30 reconciliation: 31 verified + 9 gate-reconciled-complete = 40/40. No CR139 backlog Story remains; future provider catalog, legacy cleanup, NAS, real lake, runtime, or Git operations require a new explicit scope."
 
   - id: "CR-138"
     title: "Runner & QMT Gateway Operational Use-Case Baseline"

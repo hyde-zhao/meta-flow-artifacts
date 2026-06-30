@@ -2,14 +2,28 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: story-execution
+Phase: phase1-migrations-complete
 Blocked: false
-Active CR: CR-139 (Strategy Data Foundation / 数据湖整改 parent CR)
+Active CR: CR-140 (experiments/ 目录重构与并行因子栈消除)
 Active Story: none
 Active batch: none
-Pending gate: none
+Pending gate: CP2
 
 ## Current Decision
+
+CR140 已登记并进入 Phase 0 基线记录：
+
+- 范围基线：`process/context/EXPERIMENTS-REFACTOR-PLAN-2026-06-28.md`。
+- 启动核查：`git status --short` 为空，`meta-flow workspace check` PASS，process route health 正常。
+- CR139 状态重校：当前摘要显示 CR139 40/40 Story 已闭环；但 CR139 正文 frontmatter 与 CR-INDEX 存在历史状态漂移，本轮只记录风险，不静默重写 CR139 历史。
+- Phase 0 基线已记录：`46 failed, 1428 passed in 49.07s`；失败集合见 `process/checks/CR140-PHASE0-BASELINE-FAILURES.txt`，后续 Phase 只允许失败集合不变或缩小。
+- Phase 0 失败已分类：`process/checks/CR140-PHASE0-BASELINE-FAILURE-CLASSIFICATION-2026-06-30.md`；后续 Phase 必须报告新增失败 / 修复的基线失败 / 保持失败。
+- 用户端到端视角评审已转为计划修订门：`process/checks/CR140-PLAN-REVIEW-ADJUSTMENTS-2026-06-30.md`。
+- CR139 状态收敛已作为范围外附带治理修正单独审计：`process/checks/CR140-CR139-STATUS-RECONCILIATION-AUDIT-2026-06-30.md`。
+- 授权边界：不链接真实数据湖；Phase 3 必须使用合成 lake fixture 或注入层完成 golden fixture；不进行 NAS、provider、真实 lake 写入、catalog pointer 写入、QMT/live/runtime 操作。真实湖只读验证必须单独申请授权。
+- Phase 3 验收措辞限制：只能声明合成 fixture / 注入层上的重构等价，不能声明真实数据研究语义已验证，不能声明 simulation/live/QMT 准入。
+
+## Previous CR139 Decision
 
 CR139 W2/W3 主线已完成并进入 event-driven maintenance：
 
@@ -168,6 +182,11 @@ Open only when a trigger appears:
 
 ## Validation Snapshot
 
+- CR140 Phase 0 baseline: `uv run --python 3.11 pytest -q --tb=no -p no:cacheprovider` -> BASELINE_RED, 46 failed, 1428 passed in 49.07s.
+- CR140 Phase 0 failure classification: 25 CR140-hit, 20 redesign-debt, 1 CR139-debt, 0 unrelated.
+- CR140 plan review adjustments: target wording lowered to research-layer refactor + synthetic-fixture parity only.
+- CR140 Phase 1 migrations: 5 non-experiment files relocated with evidence under `process/checks/CR140-PHASE1-*.md`; no real lake/NAS/provider/catalog/runtime operation executed.
+- CR140 Phase 1 dirty-workspace pytest probe: `48 failed, 1426 passed`; 2 added CR132 hygiene failures are caused by uncommitted Phase 1 source and CR139 reconciliation artifacts. Next step is to commit source/artifact slices and rerun full pytest against Phase 0 failure set before Phase 2.
 - `meta-flow workspace check`: PASS
 - Story reconciliation machine check: PASS, 40 rows, `verified=12`, `gate-reconciled-complete=9`, `lld-pending=19`
 - Backlog-A1/A2 targeted pytest: PASS, 15 passed in 0.62s
@@ -216,6 +235,6 @@ Open only when a trigger appears:
 - S40 CP7 return-check: PASS
 - `git diff --check` for S40 CP5/CP6/CP7 implementation/evidence files: PASS
 
-Updated at: 2026-06-30T21:00:00+08:00
+Updated at: 2026-06-30T14:03:30+08:00
 
 <!-- generated-by: host-orchestrator -->

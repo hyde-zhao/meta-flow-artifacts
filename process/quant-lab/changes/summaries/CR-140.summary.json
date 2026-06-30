@@ -1,0 +1,112 @@
+{
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_FETCH",
+    "NO_REAL_LAKE_LINK_OR_MOUNT",
+    "NO_LAKE_WRITE",
+    "NO_CATALOG_POINTER_WRITE",
+    "NO_REMOTE_WRITE"
+  ],
+  "conflict_keys": [
+    "experiments-directory-refactor",
+    "research-reporting-module-location",
+    "data-lake-readiness-audit-entrypoint",
+    "turnover-factor-engine-adapter",
+    "offline-golden-fixture"
+  ],
+  "cr_type": "refactor",
+  "full_ref": "process/changes/CR-140-EXPERIMENTS-REFACTOR-2026-06-28.md",
+  "gate_profile": "standard",
+  "gate_status": "cp2_pending",
+  "id": "CR-140",
+  "impact_surface": [
+    "experiments/run_experiment_turnover_factor.py",
+    "experiments/run_data_lake_readiness_audit.py",
+    "experiments/lake_input_contract.py",
+    "experiments/training_snapshot_contract.py",
+    "scripts/legacy/cr/cr012_limited_window_lake_repair.py",
+    "experiments/reporting.py",
+    "experiments/production_current_truth_rerun.py",
+    "engine/research_reporting.py",
+    "engine/production_current_truth_rerun.py",
+    "scripts/data_lake/run_data_lake_readiness_audit.py",
+    "scripts/data_lake/repair_market_data.py",
+    "scripts/quality/check_script_entrypoints.py",
+    "docs/components/SCRIPT-ENTRYPOINTS.md",
+    "docs/components/EXPERIMENTS.md",
+    "tests",
+    "tests/fixtures/turnover_golden/",
+    "process/context/EXPERIMENTS-REFACTOR-PLAN-2026-06-28.md"
+  ],
+  "not_authorized": [
+    "real_data_lake_link_or_mount",
+    "nas_access",
+    "provider_fetch",
+    "lake_write",
+    "catalog_pointer_write",
+    "qmt_miniqmt_xtquant_gateway_runtime",
+    "simulation_live_or_trading",
+    "git_remote_write"
+  ],
+  "phase": "phase1-migrations-complete",
+  "phase0_baseline": {
+    "command": "uv run --python 3.11 pytest -q --tb=no -p no:cacheprovider",
+    "duration_seconds": 49.07,
+    "exit_code": 1,
+    "failed": 46,
+    "failure_set_ref": "process/checks/CR140-PHASE0-BASELINE-FAILURES.txt",
+    "passed": 1428,
+    "report_ref": "process/checks/CR140-PHASE0-PYTEST-BASELINE-2026-06-30.md"
+  },
+  "phase1_migrations": {
+    "authorization_boundary": "No real lake, NAS, provider fetch, lake write, catalog pointer write, QMT/live/runtime operation executed.",
+    "completed_at": "2026-06-30T14:48:24+08:00",
+    "evidence_refs": [
+      "process/checks/CR140-PHASE1-1-REPORTING-MIGRATION-2026-06-30.md",
+      "process/checks/CR140-PHASE1-2-PRODUCTION-CURRENT-TRUTH-RERUN-MIGRATION-2026-06-30.md",
+      "process/checks/CR140-PHASE1-CONTRACT-HELPERS-MIGRATION-2026-06-30.md",
+      "process/checks/CR140-PHASE1-3-DATA-LAKE-READINESS-AUDIT-MIGRATION-2026-06-30.md"
+    ],
+    "moved_files": {
+      "engine/experiment_lake_input_contract.py": "from experiments/lake_input_contract.py",
+      "engine/production_current_truth_rerun.py": "from experiments/production_current_truth_rerun.py",
+      "engine/research_reporting.py": "from experiments/reporting.py",
+      "engine/training_snapshot_contract.py": "from experiments/training_snapshot_contract.py",
+      "scripts/data_lake/run_data_lake_readiness_audit.py": "from experiments/run_data_lake_readiness_audit.py"
+    },
+    "verification": {
+      "entrypoint_guard": "FAIL only on Phase 0 known CR139 root script naming debt; missing_stable_entrypoints=[]",
+      "full_pytest_dirty_workspace_probe": "48 failed / 1426 passed before source/artifact commits; 2 added CR132 hygiene failures caused by uncommitted Phase 1 source and CR139 reconciliation artifacts, to be cleared by planned commits before final Phase 1 baseline comparison",
+      "targeted_tests": [
+        "reporting slice: 5 failed / 26 passed; failures all Phase 0 baseline-known",
+        "CR018 production current truth rerun: 11 passed",
+        "CR139 contract helpers: 8 passed",
+        "data lake readiness audit: 11 passed"
+      ]
+    }
+  },
+  "plan_review_adjustments": {
+    "cr139_reconciliation_audit_ref": "process/checks/CR140-CR139-STATUS-RECONCILIATION-AUDIT-2026-06-30.md",
+    "failure_classification_ref": "process/checks/CR140-PHASE0-BASELINE-FAILURE-CLASSIFICATION-2026-06-30.md",
+    "phase1_required_decisions": [
+      "production_current_truth_rerun.py requires destination responsibility decision before move",
+      "lake_input_contract.py and training_snapshot_contract.py must be included in relocation decision or listed as follow-up scope"
+    ],
+    "phase2_required_gate": "diff local helper copies against base helper before deletion; preserve non-equivalent helpers",
+    "phase3_limit": "synthetic fixture / injection-layer parity only; no real-data research semantics or simulation/live/QMT admission claim",
+    "review_ref": "process/checks/CR140-PLAN-REVIEW-ADJUSTMENTS-2026-06-30.md",
+    "target_statement": "整理研究实验层与生产/数据工具层的代码边界，并用离线 fixture 证明 turnover 实验评估侧迁移到 engine 后的重构等价性；本轮不验证真实数据湖、不产生模拟盘/实盘准入、不改变生产 current truth。"
+  },
+  "readiness": "not_ready",
+  "risk_refs": [
+    "RISK-CR140-CR139-STATUS-DRIFT",
+    "RISK-CR140-PHASE3-LAKE-FIXTURE-EQUIVALENCE"
+  ],
+  "source_ref": "process/context/EXPERIMENTS-REFACTOR-PLAN-2026-06-28.md",
+  "started_at": "2026-06-30T14:03:30+08:00",
+  "status": "active-phase1-migrations-complete",
+  "title": "experiments/ Directory Refactor and Parallel Factor Stack Reduction"
+}

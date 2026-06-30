@@ -3,11 +3,11 @@ cr_id: "CR-139"
 title: "Strategy Data Foundation（数据湖整改 parent CR）"
 cr_type: "product-scope"
 cr_kind: "requirement-change"
-lifecycle_status: "active"
-readiness_status: "n/a"
-gate_status: "cp7_pending"
+lifecycle_status: "closed"
+readiness_status: "ready_with_risk"
+gate_status: "closed"
 gate_profile: "standard"
-status: "active-cp7-pending-wave1-impl"
+status: "closed-current-delivery"
 cp2_approved_by: "user"
 cp2_approved_at: "2026-06-28T16:05:00+08:00"
 cp3_approved_by: "user"
@@ -17,7 +17,7 @@ workflow_mode_before: "standard"
 workflow_mode_after_change: "standard"
 fast_lane_upgrade_reason: "命中数据湖架构重写、跨 FEAT-02/03/06/11/12/13/14 文件所有权与依赖方向、多 Story 依赖、实盘/交易审计链安全边界；按规则 43/2 不得使用 fast-lane，必须走 CP2→CP3→CP4/CP5 标准链路。"
 rollback_to: "process/context/DATA-LAKE-REMEDIATION-HANDOFF.md v0.7 五轮评审定稿基线 + CR-018 未过 CP3 的现状"
-approval_result: "pending"
+approval_result: "story-backlog-closed-reconciled"
 cp3_approval_result: "approved"
 created_at: "2026-06-28T00:00:00+08:00"
 created_by: "host-orchestrator"
@@ -94,6 +94,12 @@ authz_policy_refs:
 ---
 
 # CR-139 Strategy Data Foundation（数据湖整改 parent CR）
+
+## 状态收敛记录（2026-06-30）
+
+`process/STATE.md` 与 `process/state/STATE.current.json` 已记录 CR139 40 个 Story 全部闭环：31 个 Story-level `verified`，9 个 `gate-reconciled-complete`，`lld-pending=0`。为启动 CR140 前消除 `cr-tracking` 的多 active CR 阻断，本 frontmatter 状态从 `active-cp7-pending-wave1-impl` 收敛为 `closed-current-delivery`。
+
+本次状态收敛不改写 CR139 历史执行证据，不授权任何新的 lake/catalog/manifest/pointer/NAS/provider/runtime/Git 操作；后续 provider catalog、legacy cleanup、NAS、真实湖读写或运行时活动仍需独立授权。
 
 > 本 CR 是**范围 / 需求类 parent CR**，按 Meta Flow 规则 25/26 必须 CR-first。CR 创建后回 `requirement-clarification`，由 `meta-pm` 执行 CR 触发的增量 use-case-discovery / requirement-extraction / requirement-clarifier 与 SCENARIOS / TEST-MATRIX / STORY-MAP / MVP-SCOPE 更新，过 CP1/CP2；CP2 未通过前不得进行 CR Story 分解、LLD 或实现。来源基线为 `process/context/DATA-LAKE-REMEDIATION-HANDOFF.md` v0.7（经五轮评审定稿，机械统计口径 (a)=6/(b)=7/(c)=12/(d1)=6/(d2)=14，逐项点数 6+7+12+6+14=45）。本 CR 只含判断、范围与决策边界，不含实现。
 
