@@ -7,7 +7,7 @@ lifecycle_status: "active"
 readiness_status: "not_ready"
 gate_status: "cp2_pending"
 gate_profile: "standard"
-status: "active-phase3-synthetic-parity-complete"
+status: "active-phase5-cleanup-ready"
 impact_level: "medium"
 workflow_mode_before: "standard"
 workflow_mode_after_change: "standard"
@@ -267,6 +267,15 @@ Phase 3 声明边界：
 - 禁止声明：真实数据湖研究语义已验证。
 - 禁止声明：simulation/live/QMT 准入已验证。
 - 未访问真实 lake、NAS、provider、catalog pointer、QMT/live/runtime。
+
+Phase 3 baseline comparison：
+
+- `process/checks/CR140-PHASE3-BASELINE-COMPARISON-2026-06-30.md`
+- source / artifact clean 后全量 pytest：`46 failed, 1431 passed in 43.53s`
+- 新增失败：0
+- 修复的基线失败：0
+- 保持失败：46，与 Phase 0 failure set 一致。
+- 新增通过：3，来自 `tests/test_cr140_turnover_engine_adapter.py`。
 
 ## 计划评审后的目标校正
 
