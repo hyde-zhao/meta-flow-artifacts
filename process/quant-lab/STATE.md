@@ -27,6 +27,10 @@ CR140 已关闭为 `closed-current-delivery / READY_WITH_RISK`：
 - Phase 5 final validation 已通过：source / artifact clean 后最终全量 pytest `46 failed, 1431 passed in 43.66s`，新增失败 0；当前源码旧路径残留扫描 0 命中；process hygiene PASS；CR tracking 关闭前 PASS；证据见 `process/checks/CR140-PHASE5-FINAL-VALIDATION-2026-06-30.md`。
 - CP8 closure 记录已生成：`process/checkpoints/CP8-CR140-DELIVERY-READINESS.md`。未发起人工门禁原因：用户已授权无新增风险时继续推进并关闭；最终验证未发现新增风险。
 - 关闭后仍不授权真实 lake 只读验证、NAS、provider、lake write、catalog pointer write、QMT/live/runtime、simulation/trading 或 Git remote write。
+- Post-close 风险补登已完成：`process/checks/CR140-POST-CLOSE-RISK-SUPPLEMENT-2026-06-30.md`。
+- Phase 3 adapter 边界补强 source commit：`a1f9026 test(experiments): cover turnover adapter quantile edges`；targeted `13 passed in 3.75s`，全量 pytest `46 failed, 1433 passed in 44.38s`，新增失败 0。
+- CR140 follow-up tracking 已登记：`process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md`，包含 `FU-CR140-001` 真实 lake readonly semantic validation、`FU-CR140-002` 剩余实验 engine convergence、`FU-CR140-003` 46 条红基线债 triage、`FU-CR140-004` local commits remote persistence gate。
+- 当前 source repo 本地分支相对 origin ahead 7；artifact repo main 相对 origin/main ahead 8（补登提交前），Git remote write 仍未授权，需走 `FU-CR140-004`。
 
 ## Previous CR139 Decision
 

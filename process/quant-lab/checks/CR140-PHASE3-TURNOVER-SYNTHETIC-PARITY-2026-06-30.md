@@ -60,3 +60,28 @@ git diff --check
 - 合成 fixture 覆盖低样本、全常数、mask、单排序、独立双排序、条件双排序和 rolling clip，但不覆盖真实 lake 的所有数据形状。
 - 真实数据湖只读验证是后续候选事项，不属于本轮已授权范围。
 - 本阶段不触发模拟盘、实盘、QMT、live、broker、runtime 或 catalog publish 链路。
+
+## Post-Close Coverage Supplement
+
+2026-06-30 用户风险评审指出：原始 Phase 3 测试显式覆盖了全常数，但低样本与重复值横截面没有独立用例。已补 source commit：
+
+```text
+a1f9026 test(experiments): cover turnover adapter quantile edges
+```
+
+新增测试：
+
+- `test_turnover_sorting_adapter_keeps_low_sample_quantile_as_no_data`
+- `test_turnover_sorting_adapter_matches_legacy_logic_with_repeated_values`
+
+补强后 targeted regression：
+
+```bash
+uv run --python 3.11 pytest -q -p no:cacheprovider tests/test_cr140_turnover_engine_adapter.py tests/test_factor_statistics.py tests/test_factor_calculators.py tests/test_chapter3_factor_replication.py::test_weighted_sort_double_sort_summary_and_newey_west_are_available
+```
+
+结果：`13 passed in 3.75s`。
+
+补强后全量 pytest：`46 failed, 1433 passed in 44.38s`，新增失败 0，失败集合仍与 Phase 0 一致。
+
+详细补登见 `process/checks/CR140-POST-CLOSE-RISK-SUPPLEMENT-2026-06-30.md`。

@@ -303,6 +303,15 @@ CP8 post-close manual review fillback：
 - 用户用 `comm -13` / `comm -23` 双向逐行对比确认最终 46 条失败集合与 Phase 0 完全相等，0 新增 / 0 消失。
 - 人工审查结论：不重开 CR140；补登 CP8 人工审查回填，并明确 46 条基线失败仍是后续债务。
 
+Post-close risk supplement：
+
+- `process/checks/CR140-POST-CLOSE-RISK-SUPPLEMENT-2026-06-30.md`
+- `process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md`
+- source commit：`a1f9026 test(experiments): cover turnover adapter quantile edges`
+- 补登记风险：Phase 1 范围 3 -> 5 扩张、Phase 2 helper wrapper / 等价证据说明、Phase 3 低样本 / 重复值 quantile 边界覆盖、46 条红基线债归属、本地 commits 未 push 风险。
+- 补强验证：targeted `13 passed in 3.75s`；全量 pytest `46 failed, 1433 passed in 44.38s`，新增失败 0。
+- 新增候选：`FU-CR140-001` 真实 lake readonly semantic validation、`FU-CR140-002` 剩余实验 engine convergence、`FU-CR140-003` 红基线债 triage、`FU-CR140-004` remote persistence gate。
+
 ## 计划评审后的目标校正
 
 本轮 CR140 的目标不是证明端到端生产链路可用，而是修正研究层与生产/数据工具层的代码边界，并证明一个高风险实验切 engine 的可复制方法。

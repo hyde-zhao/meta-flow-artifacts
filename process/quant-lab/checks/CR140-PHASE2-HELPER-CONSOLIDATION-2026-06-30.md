@@ -57,3 +57,14 @@
 ## Decision
 
 Phase 2 可以进入提交与全量 baseline comparison。全量 pytest 必须在 source / artifact clean 后执行，避免 CR132 dirty-workspace hygiene 产生临时新增失败。
+
+## Post-Close Clarification
+
+2026-06-30 用户风险评审指出：grep 仍能命中 08/09/10/12 的 `_markdown_table` / `_format_value` / `_resolve_date_range` 名称，容易被误解为旧本地副本未删除。
+
+澄清：
+
+- 08/09/10/12 的 `_markdown_table` / `_format_value` 是 thin wrapper，用于向共享 helper 传入各实验自己的 `PERCENT_FIELDS`；旧本地函数体已删除。
+- 08/09/10/12/13 的 `_resolve_date_range` 来自 `engine.experiment_report_helpers.resolve_date_range` import，不是本地副本。
+- 13 的 `_markdown_table` / `_format_value` 因中文 `对比维度`、`PERCENT_DIMENSIONS` 和 `—` 处理非等价，按本文件 Equivalence Diff 保留。
+- 该澄清记录在 `process/checks/CR140-POST-CLOSE-RISK-SUPPLEMENT-2026-06-30.md`，不改变 Phase 2 结论。

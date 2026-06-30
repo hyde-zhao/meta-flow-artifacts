@@ -136,7 +136,12 @@
     "RISK-CR140-CR139-STATUS-DRIFT",
     "RISK-CR140-PHASE3-LAKE-FIXTURE-EQUIVALENCE",
     "RISK-CR140-BASELINE-RED",
-    "RISK-CR140-CP8-POST-CLOSE-REVIEW-RECORDED"
+    "RISK-CR140-CP8-POST-CLOSE-REVIEW-RECORDED",
+    "RISK-CR140-A-SCOPE-EXPANSION",
+    "RISK-CR140-B-HELPER-EQUIVALENCE-EVIDENCE",
+    "RISK-CR140-C-QUANTILE-EDGE-COVERAGE",
+    "RISK-CR140-D-BASELINE-DEBT-OWNERSHIP",
+    "RISK-CR140-E-LOCAL-COMMITS-NOT-PUSHED"
   ],
   "source_ref": "process/context/EXPERIMENTS-REFACTOR-PLAN-2026-06-28.md",
   "started_at": "2026-06-30T14:03:30+08:00",
@@ -192,16 +197,83 @@
   },
   "follow_up_candidates": [
     {
-      "id": "CR140-FU-001",
-      "title": "real lake readonly turnover semantic validation",
-      "status": "candidate-only-not-created",
-      "authorization_required": "separate real lake readonly authorization"
+      "id": "FU-CR140-001",
+      "title": "Real lake readonly turnover semantic validation",
+      "status": "candidate",
+      "kind": "runtime-authorization",
+      "lifecycle_status": "candidate",
+      "readiness_status": "n/a",
+      "gate_status": "not_started",
+      "gate_profile": "standard",
+      "source_tracking": "process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-001",
+      "formal_cr_path": "",
+      "parent_cr": "CR-140",
+      "source_decision_id": "CP8-CR140-POST-CLOSE-REVIEW",
+      "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
+      "blocked_by": [
+        "requires_explicit_user_selection",
+        "requires_real_lake_readonly_authorization"
+      ],
+      "next_action": "Only start if the user explicitly selects real lake readonly turnover semantic validation; requires separate authorization and does not authorize lake write/catalog pointer/runtime."
     },
     {
-      "id": "CR140-FU-002",
-      "title": "remaining experiments engine convergence",
-      "status": "candidate-only-not-created",
-      "authorization_required": "separate CR and engine extension contract review"
+      "id": "FU-CR140-002",
+      "title": "Remaining experiments engine convergence",
+      "status": "candidate",
+      "kind": "requirement-change",
+      "lifecycle_status": "candidate",
+      "readiness_status": "n/a",
+      "gate_status": "not_started",
+      "gate_profile": "standard",
+      "source_tracking": "process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-002",
+      "formal_cr_path": "",
+      "parent_cr": "CR-140",
+      "source_decision_id": "CP8-CR140-POST-CLOSE-REVIEW",
+      "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
+      "blocked_by": [
+        "requires_explicit_user_selection",
+        "requires_engine_extension_contract_review"
+      ],
+      "next_action": "Only start if the user explicitly selects remaining experiment engine convergence; requires separate refactor CR."
+    },
+    {
+      "id": "FU-CR140-003",
+      "title": "Red baseline debt triage and closure",
+      "status": "candidate",
+      "kind": "requirement-change",
+      "lifecycle_status": "candidate",
+      "readiness_status": "n/a",
+      "gate_status": "not_started",
+      "gate_profile": "standard",
+      "source_tracking": "process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-003",
+      "formal_cr_path": "",
+      "parent_cr": "CR-140",
+      "source_decision_id": "CP8-CR140-POST-CLOSE-REVIEW",
+      "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
+      "blocked_by": [
+        "requires_explicit_user_selection",
+        "requires_dedicated_red_baseline_debt_cr"
+      ],
+      "next_action": "Recommended future CR candidate to classify and close the 46 Phase 0 red baseline failures by CR139 debt / redesign intermediate debt / true code debt."
+    },
+    {
+      "id": "FU-CR140-004",
+      "title": "Local commits remote persistence gate",
+      "status": "candidate",
+      "kind": "requirement-change",
+      "lifecycle_status": "candidate",
+      "readiness_status": "n/a",
+      "gate_status": "not_started",
+      "gate_profile": "compact",
+      "source_tracking": "process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-004",
+      "formal_cr_path": "",
+      "parent_cr": "CR-140",
+      "source_decision_id": "CP8-CR140-POST-CLOSE-REVIEW",
+      "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
+      "blocked_by": [
+        "requires_explicit_git_remote_write_authorization"
+      ],
+      "next_action": "Only start if the user explicitly authorizes Git remote write; this candidate records local commit loss risk and does not execute push."
     }
   ],
   "cp8_post_close_manual_review": {
@@ -223,6 +295,24 @@
     "recorded_deviations": [
       "CP8 original closure skipped manual prompt under user's no-risk auto-continue authorization; post-close review recorded here for audit completeness",
       "46 Phase 0 baseline failures remain existing debt and must not be interpreted as cleared by CR140 READY_WITH_RISK"
+    ]
+  },
+  "post_close_risk_supplement": {
+    "recorded_at": "2026-06-30T16:55:00+08:00",
+    "evidence_ref": "process/checks/CR140-POST-CLOSE-RISK-SUPPLEMENT-2026-06-30.md",
+    "follow_up_tracking_ref": "process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md",
+    "source_commit": "a1f9026",
+    "targeted_pytest": "13 passed in 3.75s",
+    "full_pytest": "46 failed, 1433 passed in 44.38s",
+    "new_failures": [],
+    "unchanged_baseline_failures": 46,
+    "additional_passes_since_phase0": 5,
+    "handled_risks": [
+      "scope expansion 3->5 files recorded",
+      "helper wrapper/equivalence evidence clarified",
+      "low-sample and repeated-value quantile adapter tests added",
+      "46 red baseline failures assigned to FU-CR140-003 candidate",
+      "local unpushed commit risk assigned to FU-CR140-004 candidate"
     ]
   }
 }
