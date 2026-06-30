@@ -66,6 +66,12 @@ CR140 已完成 experiments 目录归位、helper 收敛和 turnover synthetic a
 - 不执行 Git remote write / push；该事项仍属 `FU-CR140-004`，需要单独授权。
 - 不触发 NAS、provider fetch、lake write、catalog pointer write、QMT / MiniQMT / xtquant / gateway runtime、simulation、live 或 trading。
 
+## 范围修订记录
+
+Phase 2 Wave 1 为修复 `test_market_data_does_not_import_engine_family`，包含一次 `market_data` / `engine` 数据契约归属修正：将 data lake schema compatibility / fallback / freeze contract 从 `engine/contracts.py` 下沉到 `market_data/contracts.py`，`engine/contracts.py` 仅保留兼容 re-export。该修正属于 market data 边界治理，不触碰真实 lake、provider、catalog、runtime 或数据写入。
+
+CR141 实际按 5 个 Wave、6 个 source commit 完成红基线清理：`ba6dec9`、`7206cc2`、`a30ee47`、`326f388`、`9ce9db2`、`3b12fd6`。后续总结不得简化为单 commit。
+
 ## 风险边界
 
 | 风险 | 处理方式 |

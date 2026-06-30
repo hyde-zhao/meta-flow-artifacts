@@ -124,6 +124,10 @@ Phase 4 之前被拆分，是因为这不是简单替换函数：engine 已有 `
 - 报告编排、策略构建、成本/容量检查和 fixture orchestration 仍属实验脚本。
 - Stage3 runner-local 因子不提升为 equity core factor。
 
+## Post-review 补充
+
+独立评审指出 `additional_definitions` 的 direction 副作用需要显式说明。已在 source commit `340a71b` 中补充 `compute_equity_factor_matrices` docstring，声明 `additional_definitions` 会参与 factor direction 解析，并影响同名 custom calculator 的 `directional_matrices`。验证见 `process/checks/CR141-CR142-POST-REVIEW-SUPPLEMENT-2026-06-30.md`。
+
 ## 关闭条件
 
 - engine extension contract 缺口已修复并有测试覆盖。
