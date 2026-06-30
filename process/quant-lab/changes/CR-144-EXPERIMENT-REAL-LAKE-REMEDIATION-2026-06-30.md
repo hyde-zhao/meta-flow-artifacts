@@ -44,7 +44,8 @@ not_authorized:
 - Phase 1 完成：补齐 experiment 16/17_21 lake 输入合同；修复 experiment lake PIT key，保留 `trade_date + symbol` 时间序列。
 - Phase 3 完成：真实 lake smoke 已覆盖 turnover、experiment 15、16、17_21、23_29。
 - Phase 4 判定：无需执行 canonical/quality/catalog 写入；阻断差异均通过 source 合同修复解决。
+- Review supplement 完成：修复 `index_members` canonical PIT key 漂移、turnover `--output-root` 单传过程目录派生、`read_panel_as_of` 重复排序列和 experiment 15 不可达 legacy 回退路径；targeted 回归 `30 passed`。
 
 ## 当前结论
 
-E4 真实 lake 研究 smoke 通过。结果只表示 experiment 研究入口可消费当前真实 lake 形状，不表示 production admission、simulation、live、QMT 或交易准入。
+E4 真实 lake 研究 smoke 与评审后合同回归通过。结果只表示 experiment 研究入口可消费当前真实 lake 形状，不表示 production admission、simulation、live、QMT 或交易准入。
