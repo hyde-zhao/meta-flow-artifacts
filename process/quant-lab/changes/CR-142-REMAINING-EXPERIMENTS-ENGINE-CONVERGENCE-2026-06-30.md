@@ -1,15 +1,15 @@
 ---
 id: "CR-142"
 title: "Remaining Experiments Engine Convergence"
-status: "active-phase0-contract-audit"
+status: "closed-current-delivery"
 kind: "requirement-change"
-lifecycle_status: "active"
-readiness_status: "not_ready"
-gate_status: "cp2_pending"
+lifecycle_status: "closed"
+readiness_status: "ready"
+gate_status: "closed"
 gate_profile: "standard"
 created_at: "2026-06-30T19:20:00+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-30T19:20:00+08:00"
+updated_at: "2026-06-30T19:45:00+08:00"
 source_tracking: "process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-002"
 parent_cr: "CR-140"
 source_decision_id: "USER-20260630-CONTINUE-EXPERIMENT-REMEDIATION"
@@ -106,9 +106,27 @@ Phase 4 之前被拆分，是因为这不是简单替换函数：engine 已有 `
 
 现有 engine 已有 `extra_entries` 和 `calculator_registry` 扩展点，但 `compute_equity_factor_matrices` 的方向映射仍只从 core definitions 读取。CR142 的最小安全切片是先让 `additional_definitions` 与 `calculator_registry` 一起进入方向合同，再让实验层通过显式 adapter 复用 engine statistics。
 
+## 实施结果
+
+| 项 | 结果 |
+|---|---|
+| source commit | `8535edd` |
+| engine contract | `compute_equity_factor_matrices` 支持 `additional_definitions`，custom calculator factor 可携带 direction。 |
+| 17_21 adapter | `build_forward_return_matrix` 与 `single_sort_returns` 已接入实验 17_21 的 forward return / group return 评估侧。 |
+| 23_29 downstream | 复用 17_21 helper，targeted regression 通过。 |
+| targeted verification | `13 passed in 0.54s`；`10 passed in 16.13s`；CR132 hygiene `17 passed in 0.10s`。 |
+| full pytest | `1479 passed in 54.20s` |
+| evidence | `process/checks/CR142-PHASE1-4-ENGINE-CONVERGENCE-VALIDATION-2026-06-30.md` |
+
+## 保留边界
+
+- `calculate_ic_timeseries` / `summarize_ic` 暂留实验层，因为 engine 目前没有等价 IC summary 合同。
+- 报告编排、策略构建、成本/容量检查和 fixture orchestration 仍属实验脚本。
+- Stage3 runner-local 因子不提升为 equity core factor。
+
 ## 关闭条件
 
-- engine extension contract 缺口已修复或明确 deferred。
-- 17_21/23_29 不再维护不必要的并行评估统计实现；保留的实验逻辑有理由。
-- 全量 pytest 通过。
+- engine extension contract 缺口已修复并有测试覆盖。
+- 17_21/23_29 可安全迁移的评估侧统计已接入 engine；保留的实验逻辑已声明理由。
+- 全量 pytest `1479 passed in 54.20s`。
 - 不授权范围保持为 0 次执行。

@@ -2,23 +2,36 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: cr142-phase0-contract-audit
+Phase: experiment-remediation-complete
 Blocked: false
-Active CR: CR-142
+Active CR: none
 Active Story: none
 Active batch: none
-Pending gate: CP2
+Pending gate: none
 
 ## Current Decision
 
-CR142 已从 `FU-CR140-002` 正式启动，用于处理剩余 experiments engine convergence：
+CR142 已从 `FU-CR140-002` 正式启动并关闭，用于处理剩余 experiments engine convergence：
 
 - 正式 CR：`process/changes/CR-142-REMAINING-EXPERIMENTS-ENGINE-CONVERGENCE-2026-06-30.md`。
 - 来源台账：`process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-002`。
-- 当前目标：先修复 engine extension contract，使 additional definitions / calculator registry / direction 能一致工作；再让 17_21/23_29 复用 engine statistics 的评估侧统计。
+- 当前结果：engine extension contract 已支持 additional definitions / calculator registry / direction 一致工作；17_21 已复用 engine statistics 的 forward return 和 group sort；23_29 作为下游 targeted regression 通过。
 - Phase 0 证据：`process/checks/CR142-PHASE0-ENGINE-CONTRACT-AUDIT-2026-06-30.md`。
+- Phase 1-4 证据：`process/checks/CR142-PHASE1-4-ENGINE-CONVERGENCE-VALIDATION-2026-06-30.md`。
+- 验证：targeted engine `13 passed in 0.54s`；targeted experiments `10 passed in 16.13s`；CR132 hygiene `17 passed in 0.10s`；最终全量 pytest `1479 passed in 54.20s`。
+- 关闭状态：`closed-current-delivery / ready`。
 - 不授权范围：真实 lake readonly validation、真实 lake link/mount、NAS、provider fetch、lake write、catalog pointer write、QMT/MiniQMT/xtquant/gateway runtime、simulation/live/trading、Git remote write/push。
 - 人工门禁规则：用户已授权“无风险继续推进”；若后续触碰真实 lake/runtime/remote、出现新增 pytest 失败无法解释、或需改变 CR 范围，再发起人工门禁。
+
+## Current Experiment Remediation Decision
+
+本轮 experiment 整改已完成：
+
+- CR140：目录归位、helper 收敛、turnover synthetic adapter parity 已关闭。
+- CR141：46 条红基线债已清零，最终 pytest `1479 passed`。
+- CR142：剩余可安全推进的 experiment engine convergence 已关闭，最终 pytest `1479 passed`。
+- 未授权且未执行：真实 lake readonly validation、NAS、provider、lake write、catalog pointer write、QMT/MiniQMT/xtquant/gateway runtime、simulation/live/trading、Git remote write/push。
+- 后续仍作为 candidate 存在：`FU-CR140-001` 真实 lake readonly turnover semantic validation，必须单独授权；`FU-CR140-004` local commits remote persistence gate，必须单独授权 Git remote write。
 
 ## Previous CR141 Decision
 
