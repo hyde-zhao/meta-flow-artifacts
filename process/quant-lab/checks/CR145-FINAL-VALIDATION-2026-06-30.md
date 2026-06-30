@@ -17,7 +17,10 @@
 | Python compile check | PASS | `uv run --python 3.11 python -m py_compile experiments/*.py tests/*/test_*.py` |
 | Old path/import scan | PASS | No matches for old `experiments/run_experiment_*`, `from experiments.run_experiment_*`, top-level `tests/test_*`, `tests/test_crNNN_*`, `tests/test_experiment_*`, `tests/test_stage*`, or `tests/test_story_*` outside legacy/provenance records |
 | Pre-commit pytest excluding dirty-sensitive process hygiene | PASS | `uv run --python 3.11 pytest -q --ignore=tests/meta_flow/test_process_artifact_hygiene.py`: 1473 passed |
+| Post-commit process hygiene and naming guardrails | PASS | `uv run --python 3.11 pytest -q tests/meta_flow/test_process_artifact_hygiene.py tests/meta_flow/test_test_file_taxonomy.py tests/meta_flow/test_experiment_entrypoint_taxonomy.py`: 20 passed |
+| Post-commit workspace route health | PASS | `uv run --python 3.11 meta-flow workspace check`: `process_link_health: ok`, `artifact_git_dirty: clean` |
+| Post-commit full pytest | PASS | `uv run --python 3.11 pytest -q`: 1490 passed |
 
 ## Exit Criteria
 
-CR145 source/process changes are ready for source and process commits. Dirty-worktree-sensitive process hygiene and full pytest must be rerun after commits.
+CR145 source/process changes are committed and validated. Dirty-worktree-sensitive process hygiene and full pytest passed after commits.

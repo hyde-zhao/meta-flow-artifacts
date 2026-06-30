@@ -1,10 +1,10 @@
 ---
 id: "CR-145"
 title: "Experiment and Test Naming Taxonomy Convergence"
-status: "implemented"
+status: "validated"
 kind: "refactor"
-lifecycle_status: "implemented"
-readiness_status: "ready_for_final_validation"
+lifecycle_status: "validated"
+readiness_status: "complete"
 gate_profile: "standard"
 created_at: "2026-06-30T23:50:00+08:00"
 created_by: "host-orchestrator"
