@@ -58,5 +58,6 @@ Converge `experiments/` run entrypoint names and `tests/` test asset taxonomy ar
 - `experiments/`: renamed all 13 `run_experiment_*` entrypoints to domain-first `run_*_expNN` names, with `run_low_turnover_double_sort.py` kept unnumbered because it is outside the original experiment sequence.
 - `tests/`: moved every top-level `tests/test_*.py` file into domain directories: `backtest`, `data_lake`, `docs_quality`, `experiments`, `market_data`, `meta_flow`, `research`, `runner`, `safety`, `scripts`, and `trading`.
 - Fragmented CR139 data lake tests were merged into four durable capability files: `test_dedup_contracts.py`, `test_lineage_and_run_id.py`, `test_catalog_manifest_pointer.py`, and `test_schema_contracts.py`.
+- P1 small-fragment candidates were merged after self-check into three durable capability files: `tests/runner/test_control_plane_contracts.py`, `tests/trading/test_qmt_gateway_contracts.py`, and `tests/meta_flow/test_human_gate_contracts.py`.
 - Cross-file imports, static guard allowlists, docs, research metadata, hygiene scripts, and hardcoded test paths were updated to the new paths.
 - Added taxonomy guardrails for `experiments/` entrypoints and `tests/` domain/provenance coverage.
