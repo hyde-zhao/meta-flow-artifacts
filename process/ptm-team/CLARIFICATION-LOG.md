@@ -482,3 +482,270 @@ source: ".meta-workflow/process/CLARIFICATION-LOG.md"
 | Q-16 | **RESOLVED (2026-05-09)** | O1：`diagnostic_snapshot` 数组 + 枚举；辅助函数采集，不侵入主逻辑 |
 
 > 所有 BLOCKING / REQUIRED / OPTIONAL 问题已全部关闭。REQUIREMENTS.md 已生成，进入需求确认人工检查点。
+
+---
+
+### ptm-te 第 1 轮澄清（2026-06-24）
+
+#### 本轮已确认事实
+
+| ID | 维度 | 结论 | 状态 |
+|----|------|------|------|
+| PTM-TE-Q01 | 用户角色 | ptm-te 的真实用户是测试工程师。 | RESOLVED |
+| PTM-TE-Q02 | 执行闭环范围 | 端到端执行可以延后，本轮不以完整 tde → te → tae 闭环作为硬前置。 | RESOLVED |
+| PTM-TE-Q03 | 输入物 | ptm-te 的输入是物理用例。 | RESOLVED |
+| PTM-TE-Q04 | 执行授权 | 允许真实执行进行验证。 | RESOLVED |
+| PTM-TE-Q05 | ptm-atomic 缺口处理 | ptm-atomic 能力缺失时，ptm-te 需要具备 ptm-atomic 开发能力，完成缺失能力开发。 | RESOLVED |
+
+#### 本轮识别的剩余歧义项
+
+| ID | 维度 | 问题描述 | 阻断等级 | 状态 |
+|----|------|---------|---------|------|
+| PTM-TE-Q06 | 首批物理用例样本 | 需要确认用于 ptm-te 第一版的物理用例样本来源、格式和最小字段集。 | BLOCKING | 待回答 |
+| PTM-TE-Q07 | 真实执行安全边界 | 需要确认真实执行时哪些操作允许自动执行、哪些必须人工确认，以及失败后是否必须回滚。 | BLOCKING | 待回答 |
+| PTM-TE-Q08 | ptm-atomic 开发边界 | 需要确认 ptm-te 是直接修改 ptm-atomic 仓库并提交代码，还是生成 ptm-atomic 需求/补丁草案并交由其他流程合入。 | BLOCKING | 待回答 |
+| PTM-TE-Q09 | 执行记录消费者 | 需要确认结构化执行记录优先服务人工复盘、ptm-tae 自动化沉淀、ptm-qa 质量分析，还是三者都必须覆盖。 | REQUIRED | 待回答 |
+| PTM-TE-Q10 | 验证环境 | 需要确认真实执行验证使用的环境类型、资源池、设备连接方式和凭据提供边界。 | REQUIRED | 待回答 |
+
+#### 用户回答记录
+
+| Q-ID | 答复内容 | 记录时间 |
+|------|---------|---------|
+| PTM-TE-Q01 | ptm-te 的真实用户是测试工程师。 | 2026-06-24 |
+| PTM-TE-Q02 | 端到端的执行可以延后。 | 2026-06-24 |
+| PTM-TE-Q03 | ptm-te 输入的是物理用例。 | 2026-06-24 |
+| PTM-TE-Q04 | 允许真实执行进行验证。 | 2026-06-24 |
+| PTM-TE-Q05 | ptm-atomic 能力缺失时，ptm-te 需要具备 ptm-atomic 开发的能力，完成开发。 | 2026-06-24 |
+
+#### 本轮结论
+
+- 剩余 BLOCKING 未决项：3 条（PTM-TE-Q06、PTM-TE-Q07、PTM-TE-Q08）
+- 剩余 REQUIRED 未决项：2 条（PTM-TE-Q09、PTM-TE-Q10）
+- ready_for_design：false
+- 下一步：继续 ptm-te 需求澄清，不进入 CR / Story 拆解。
+
+---
+
+### ptm-te 第 2 轮澄清（2026-06-24）
+
+#### 本轮关闭的问题
+
+| ID | 维度 | 结论 | 状态 |
+|----|------|------|------|
+| PTM-TE-Q06 | 首批物理用例样本 | 用户将以 Markdown 表格提供首批物理用例；格式参考 `/home/hyde/projects/tcs/policy_route_new/ppdcs/delivery/IPv4策略路由特性测试用例.md`，该样例格式正确但内容仍需修改。 | RESOLVED |
+| PTM-TE-Q07 | 真实执行安全边界 | 真实执行没有功能边界，ptm-te 需要完成全部执行。失败后的回滚必须纳入设计：对已执行过的 ptm-atomic 原子操作按逆序执行反操作；若反操作依赖缺失的 ptm-atomic 能力，ptm-te 需要提出 ptm-atomic 实现要求。 | RESOLVED |
+| PTM-TE-Q08 | ptm-atomic 开发边界 | 选择 A：ptm-te 本地修改 ptm-atomic 仓库，验证通过后提交 PR，并提供验证通过报告和修改影响分析；审核后合入 ptm-atomic。 | RESOLVED |
+
+#### 物理用例样例格式观察
+
+| 项 | 观察 |
+|----|------|
+| 文件 | `/home/hyde/projects/tcs/policy_route_new/ppdcs/delivery/IPv4策略路由特性测试用例.md` |
+| 形态 | Markdown 表格，标题为“统一 PC 汇总表” |
+| 核心字段 | 三级目录、四级目录、五级目录、用例名称、用例编号、用例级别、组网描述、组网约束、预置条件、测试步骤、预期结果、首次创建版本、最后变更版本、关键词、测试类型、是否自动化 |
+| 步骤形态 | `测试步骤` 字段内包含自然语言步骤、`<br/>` 分隔和 `fw_*` / `tg_*` 风格的 ptm-atomic op 引用 |
+| 对 ptm-te 的含义 | ptm-te 需要解析表格行、拆分步骤、识别 ptm-atomic op 引用、提取参数、生成执行计划、记录执行轨迹和失败回滚栈 |
+
+#### 本轮用户回答记录
+
+| Q-ID | 答复内容 | 记录时间 |
+|------|---------|---------|
+| PTM-TE-Q06 | 首批物理用例会以 Markdown 表格提供；参考 IPv4 策略路由特性测试用例文件格式，内容后续修改。 | 2026-06-24 |
+| PTM-TE-Q07 | 真实执行没有边界，ptm-te 需要完成全部执行；失败后按已执行原子操作逆序反操作回滚，缺失能力向 ptm-atomic 提要求。 | 2026-06-24 |
+| PTM-TE-Q08 | ptm-te 直接本地修改 ptm-atomic，验证通过后提交 PR，提供验证报告和影响分析，审核后合入。 | 2026-06-24 |
+
+#### 本轮识别的剩余歧义项
+
+| ID | 维度 | 问题描述 | 阻断等级 | 状态 |
+|----|------|---------|---------|------|
+| PTM-TE-Q09 | 执行记录消费者 | 需要确认结构化执行记录优先服务人工复盘、ptm-tae 自动化沉淀、ptm-qa 质量分析，还是三者都必须覆盖。 | REQUIRED | 待回答 |
+| PTM-TE-Q10 | 验证环境 | 需要确认真实执行验证使用的环境类型、资源池、设备连接方式和凭据提供边界。 | REQUIRED | 待回答 |
+| PTM-TE-Q11 | ptm-atomic 仓库协作 | 需要确认 ptm-atomic 本地仓库路径、分支策略、PR 目标分支、测试命令和审核人/审核规则。 | REQUIRED | 待回答 |
+| PTM-TE-Q12 | 回滚能力契约 | 需要确认每个会改变环境状态的 ptm-atomic op 是否必须声明反操作；无反操作时 ptm-te 是否允许执行，或必须先补齐反操作。 | BLOCKING | 待回答 |
+
+#### 本轮结论
+
+- 剩余 BLOCKING 未决项：1 条（PTM-TE-Q12）
+- 剩余 REQUIRED 未决项：3 条（PTM-TE-Q09、PTM-TE-Q10、PTM-TE-Q11）
+- ready_for_design：false
+- 下一步：继续 ptm-te 需求澄清；重点确认回滚能力契约和真实验证环境。
+
+---
+
+### ptm-te 第 3 轮澄清（2026-06-24）
+
+#### 本轮关闭的问题
+
+| ID | 维度 | 结论 | 状态 |
+|----|------|------|------|
+| PTM-TE-Q09 | 执行记录消费者 | 执行记录消费者覆盖人工、ptm-tae、ptm-qa，并兼顾未来 ptm-tm、ptm-tse；日志需要同时支持人工阅读和机械读取，可区分操作日志与详细日志。 | RESOLVED |
+| PTM-TE-Q10 | 验证环境 | 真实验证环境由用例中的 topo 信息和环境中维护的物理组网映射完成；当前理解为一个 YAML 文档，描述方式符合 `resource` 中组合合集 / 网络拓扑描述方式。 | RESOLVED |
+| PTM-TE-Q11 | ptm-atomic 仓库协作 | ptm-te 需要完成 PR 提交：开发前拉取 `master`，创建开发分支，完成后推送；由人工发起 merge 请求。 | PARTIAL-RESOLVED |
+
+#### 回滚与日志设计建议来源
+
+| 来源 | 可借鉴实践 | 对 ptm-te 的建议 |
+|------|------------|------------------|
+| Robot Framework teardown | teardown 作为失败后也应执行的清理阶段 | ptm-te 每个真实执行用例必须有 cleanup / rollback 阶段，即使执行步骤失败也要进入回滚判定 |
+| pytest fixture finalizer / yield teardown | 清理动作按后进先出执行，适合资源栈释放 | ptm-te 维护 rollback stack，成功执行一个有副作用 op 后立即登记反操作；失败时按 LIFO 逆序执行 |
+| Playwright fixture / trace | fixture 管理环境准备与销毁，trace 保留失败复盘证据 | ptm-te 将 topo binding、环境准备、执行步骤和证据采集纳入同一个 run context，并保留 trace artifacts |
+| Allure steps / attachments | 报告同时包含步骤、状态、附件、环境信息 | ptm-te 输出双层日志：operation log 面向人工扫描，detail log / event log 面向 ptm-tae、ptm-qa、ptm-tm、ptm-tse 机械消费 |
+
+#### 推荐但待确认的回滚契约
+
+| 规则 ID | 推荐规则 | 状态 |
+|---------|----------|------|
+| PTM-TE-RB-01 | 所有会改变环境状态的 ptm-atomic op 必须声明 `rollback_strategy`。 | proposed |
+| PTM-TE-RB-02 | `rollback_strategy.type` 推荐枚举：`inverse_op`、`restore_snapshot`、`compensating_op`、`manual_required`、`irreversible`。 | proposed |
+| PTM-TE-RB-03 | 默认真实执行只允许 `inverse_op`、`restore_snapshot`、`compensating_op`；`manual_required` 必须人工确认；`irreversible` 默认禁止真实执行。 | proposed |
+| PTM-TE-RB-04 | ptm-te 执行前必须做 rollback-readiness 检查；缺少反操作或快照读取能力时，先进入 ptm-atomic 能力补齐分支。 | proposed |
+| PTM-TE-RB-05 | update 类 op 执行前必须采集旧值快照；delete 类 op 执行前必须采集可恢复对象定义；create 类 op 必须登记 delete 反操作。 | proposed |
+| PTM-TE-RB-06 | 回滚失败不得覆盖原始失败原因；执行报告中必须同时记录 primary_failure 和 rollback_failure。 | proposed |
+
+#### 本轮用户回答记录
+
+| Q-ID | 答复内容 | 记录时间 |
+|------|---------|---------|
+| PTM-TE-Q09 | 执行记录消费者包括人工、ptm-tae、ptm-qa，未来 ptm-tm 和 ptm-tse 也可能消费；需要兼顾人工阅读和机械阅读，可区分操作日志和详细日志。 | 2026-06-24 |
+| PTM-TE-Q10 | 真实验证环境通过用例 topo 信息和环境中维护的物理组网映射完成，当前理解为 YAML 文档，描述方式符合 resource 里的组合合集描述方式。 | 2026-06-24 |
+| PTM-TE-Q11 | ptm-te 需要完成 PR 提交；开发过程中先拉取 master，创建开发分支，完成后推送；由人工发起 merge 请求。 | 2026-06-24 |
+
+#### 本轮识别的剩余歧义项
+
+| ID | 维度 | 问题描述 | 阻断等级 | 状态 |
+|----|------|---------|---------|------|
+| PTM-TE-Q12 | 回滚能力契约 | 是否接受 PTM-TE-RB-01~06 作为 ptm-te / ptm-atomic 的默认回滚契约。 | BLOCKING | 待确认 |
+| PTM-TE-Q13 | ptm-atomic 仓库路径 | 需要确认 ptm-atomic 本地仓库路径、远端名称、PR 目标分支和必跑测试命令。 | REQUIRED | 待回答 |
+| PTM-TE-Q14 | 物理组网映射 YAML | 需要确认物理组网映射 YAML 的实际路径和最小字段；若尚未存在，后续需由 ptm-te 设计草案。 | REQUIRED | 待回答 |
+
+#### 本轮结论
+
+- 剩余 BLOCKING 未决项：1 条（PTM-TE-Q12）
+- 剩余 REQUIRED 未决项：2 条（PTM-TE-Q13、PTM-TE-Q14）
+- ready_for_design：false
+- 下一步：用户确认或修改 PTM-TE-RB-01~06 回滚契约建议。
+
+---
+
+### ptm-te 第 4 轮澄清（2026-06-24）
+
+#### 本轮关闭的问题
+
+| ID | 维度 | 结论 | 状态 |
+|----|------|------|------|
+| PTM-TE-Q12 | 回滚能力契约 | 用户同意 PTM-TE-RB-01~06，作为 ptm-te / ptm-atomic 的默认回滚契约。 | RESOLVED |
+| PTM-TE-Q13 | ptm-atomic 仓库协作 | ptm-atomic 远端仓库为 `git@10.113.53.21:tgfw/tgfw-ptm/ptm-atomic.git`；开发流程为拉取 `master`、创建开发分支、完成后推送；由人工发起 merge 请求。local clone path、remote name 和测试命令可在实现阶段自动探测。 | RESOLVED |
+| PTM-TE-Q14 | 物理组网映射 | 不需要另行设计独立 YAML；采用组网图规范。ptm-te 需要具备物理组网绘制工具，绘制的物理组网与组网集合格式一致，只是更大的物理组网，可映射为组网集合中描述的逻辑组网。 | RESOLVED |
+
+#### 本轮用户回答记录
+
+| Q-ID | 答复内容 | 记录时间 |
+|------|---------|---------|
+| PTM-TE-Q12 | 同意 PTM-TE-RB-01~06 回滚契约。 | 2026-06-24 |
+| PTM-TE-Q13 | ptm-atomic 仓库为 `git@10.113.53.21:tgfw/tgfw-ptm/ptm-atomic.git`；需要由 ptm-te 完成 PR 提交，先拉 master、创建开发分支、完成后推送，由人工发起 merge 请求。 | 2026-06-24 |
+| PTM-TE-Q14 | 不需要另行设计物理组网映射 YAML，使用组网图规范；ptm-te 需要具备物理组网绘制工具，输出格式与组网集合一致，支持更大的物理组网映射到逻辑组网。 | 2026-06-24 |
+
+#### 需求澄清状态汇总
+
+| 类别 | 状态 |
+|------|------|
+| 用户角色 | RESOLVED：真实用户是测试工程师 |
+| 输入物 | RESOLVED：Markdown 表格物理用例 |
+| 执行范围 | RESOLVED：允许真实执行，端到端闭环可延后 |
+| ptm-atomic 缺口 | RESOLVED：ptm-te 本地开发 ptm-atomic，验证后推送 PR 分支 |
+| 回滚契约 | RESOLVED：采用 PTM-TE-RB-01~06 |
+| 日志消费者 | RESOLVED：人工、ptm-tae、ptm-qa，并兼顾 ptm-tm、ptm-tse |
+| 组网环境 | RESOLVED：用例 topo + 物理组网绘制 / 映射，遵循组网集合格式 |
+
+#### 本轮结论
+
+- 剩余 BLOCKING 未决项：0 条
+- 剩余 REQUIRED 未决项：0 条
+- ready_for_design：true
+- 下一步：进入场景发现 / 需求结构化，正式产物应围绕物理用例解析、真实执行、回滚栈、ptm-atomic 缺口开发 PR、双层执行日志和物理组网绘制工具展开。
+
+---
+
+### ptm-te 第 5 轮澄清（2026-06-24）
+
+#### 新增需求
+
+| ID | 维度 | 需求描述 | 状态 |
+|----|------|---------|------|
+| PTM-TE-Q15 | 问题单回归 | ptm-te 需支持从禅道读取问题单，分析问题单，规划问题单回归步骤，形成回归 ptm-atomic 原子操作路径，并执行回归。该过程需要与人工通过对话完成。 | NEW |
+
+#### 初步职责拆分
+
+| 子能力 | 说明 | 参考边界 |
+|--------|------|----------|
+| 禅道问题单读取 | 根据问题单 ID、筛选条件或人工指定列表读取问题单。 | 新增 ptm-te 外部系统读取能力；凭据和权限边界需澄清 |
+| 问题单解析 | 提取模块、版本、严重级别、复现步骤、期望 / 实际结果、修复信息、附件和可追溯锚点。 | 借鉴 `bug-gap-analyzer` 的问题单解析与覆盖盲区定位字段 |
+| 回归范围规划 | 基于问题单影响面和已有物理用例 / trace / ptm-atomic 路径，规划最小回归范围。 | 借鉴 `regression-subset-builder` 的 `affected-and-downstream` 默认策略 |
+| 人工对话确认 | 与测试工程师确认问题理解、回归范围、执行风险、缺失 ptm-atomic 能力和最终执行计划。 | 不允许静默从模糊问题单直接执行真实回归 |
+| 原子操作路径生成 | 将回归步骤落成 ptm-atomic op path，执行前复用 rollback-readiness 检查。 | 与物理用例真实执行共享执行计划、回滚栈和双层日志 |
+| 回归执行与记录 | 完成真实回归，输出人工可读报告和机械可读详细事件日志。 | 覆盖人工、ptm-tae、ptm-qa、ptm-tm、ptm-tse 消费 |
+
+#### 本轮识别的剩余歧义项
+
+| ID | 维度 | 问题描述 | 阻断等级 | 状态 |
+|----|------|---------|---------|------|
+| PTM-TE-Q16 | 禅道读取边界 | 需要确认 ptm-te 从禅道读取问题单的方式：API、导出文件、页面内容、还是由人工粘贴；以及凭据由环境变量、配置文件还是人工会话提供。 | BLOCKING | 待回答 |
+| PTM-TE-Q17 | 问题单字段契约 | 需要确认 ptm-te 可依赖的问题单字段：问题编号、产品 / 模块、版本、复现步骤、实际结果、期望结果、修复版本、关联需求 / 用例 / 提交、附件 / 日志等。 | BLOCKING | 待回答 |
+| PTM-TE-Q18 | 人工对话门禁 | 需要确认问题单回归过程中哪些节点必须人工确认：问题理解、回归范围、原子操作路径、真实执行授权、ptm-atomic 缺口开发、回归结论回写。 | BLOCKING | 待回答 |
+| PTM-TE-Q19 | 回归范围策略 | 需要确认默认回归策略：仅问题单复现路径、影响面 + 下游依赖、风险加权最小集，还是按问题类型选择策略。 | REQUIRED | 待回答 |
+| PTM-TE-Q20 | 禅道回写 | 需要确认 ptm-te 是否需要把回归结果、日志附件、PR 链接或验证报告回写到禅道；若需要，哪些状态变更必须人工触发。 | REQUIRED | 待回答 |
+
+#### 本轮结论
+
+- 新增问题单回归能力后，需求澄清重新打开。
+- 剩余 BLOCKING 未决项：3 条（PTM-TE-Q16、PTM-TE-Q17、PTM-TE-Q18）
+- 剩余 REQUIRED 未决项：2 条（PTM-TE-Q19、PTM-TE-Q20）
+- ready_for_design：false
+- 下一步：继续澄清禅道读取边界、问题单字段契约和人工对话门禁。
+
+---
+
+### ptm-te 第 6 轮澄清（2026-06-25）
+
+#### 本轮关闭的问题
+
+| ID | 维度 | 结论 | 状态 |
+|----|------|------|------|
+| PTM-TE-Q16 | 禅道读取边界 | 通过禅道读取工具读取问题单，初步定位为 CLI 模式。 | RESOLVED |
+| PTM-TE-Q17 | 问题单字段契约 | 主要关注字段为 `id`、bug 标题、重现步骤、开发定位分析、开发修改自测、测试回归；`id` 是 bug 单 key。ptm-te 需要分析标题、重现步骤、开发定位分析、开发修改自测，识别问题组网、重现路径，并从开发定位分析 / 自测修改中提取开发测试建议和扩展测试点。 | RESOLVED |
+| PTM-TE-Q18 | 人工对话门禁 | 问题单回归是高度自由任务，每一步都需要人工确认。 | RESOLVED |
+| PTM-TE-Q19 | 回归范围策略 | 默认按问题单重现步骤回归；扩展测试点必须与用户确认后执行。 | RESOLVED |
+| PTM-TE-Q20 | 禅道回写 | 需要回写禅道的测试回归记录。 | RESOLVED |
+
+#### 本轮用户回答记录
+
+| Q-ID | 答复内容 | 记录时间 |
+|------|---------|---------|
+| PTM-TE-Q16 | 禅道读取使用禅道读取工具，初步定位 CLI 模式。 | 2026-06-25 |
+| PTM-TE-Q17 | 后续起验证项目专门验证；ptm-te 主要关注 id、bug 标题、重现步骤、开发定位分析、开发修改自测、测试回归字段。 | 2026-06-25 |
+| PTM-TE-Q18 | 问题单回归高度自由，每一步都需要人工确认。 | 2026-06-25 |
+| PTM-TE-Q19 | 默认回归按问题单重现步骤回归，扩展测试需要与用户确认。 | 2026-06-25 |
+| PTM-TE-Q20 | 需要回写禅道的回归记录。 | 2026-06-25 |
+
+#### 本轮结论
+
+- 剩余 BLOCKING 未决项：0 条
+- 剩余 REQUIRED 未决项：0 条
+- ready_for_design：true
+- 下一步：编写 ptm-te 问题单回归 use-case 与方案设计草案；正式 CP2 / CP3 前仍需将草案并入产品基线并走检查点确认。
+
+---
+
+### ptm-te 第 7 轮澄清（2026-06-25）
+
+#### 用户纠偏
+
+| ID | 维度 | 纠偏内容 | 状态 |
+|----|------|---------|------|
+| PTM-TE-Q21 | Use Case 覆盖缺口 | 当前输出的用户场景缺少“物理用例执行”和“执行失败后的定位 / 调试”场景。ptm-te 不能只覆盖问题单回归。 | RESOLVED |
+
+#### 处理结论
+
+- `docs/ptm-te/USE-CASES.md` 需要新增物理用例执行和失败定位场景。
+- `docs/ptm-te/DESIGN.md` 需要补充执行与定位模块、关键流程、Use Case traceability 和自审结果。
+- 该纠偏不改变此前问题单回归结论，但扩大 ptm-te scoped draft 的覆盖范围。
