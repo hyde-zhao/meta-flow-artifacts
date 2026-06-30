@@ -7,7 +7,7 @@ lifecycle_status: "active"
 readiness_status: "not_ready"
 gate_status: "cp2_pending"
 gate_profile: "standard"
-status: "active-phase2-helper-consolidation-complete"
+status: "active-phase3-synthetic-turnover-parity-ready"
 impact_level: "medium"
 workflow_mode_before: "standard"
 workflow_mode_after_change: "standard"
@@ -233,6 +233,14 @@ Phase 2 已完成 helper 收敛：
 - `docs/components/EXPERIMENTS.md` 已补实验编号索引。
 
 证据：`process/checks/CR140-PHASE2-HELPER-CONSOLIDATION-2026-06-30.md`。
+
+Phase 2 baseline comparison：
+
+- `process/checks/CR140-PHASE2-BASELINE-COMPARISON-2026-06-30.md`
+- source / artifact clean 后全量 pytest：`46 failed, 1428 passed in 43.27s`
+- 新增失败：0
+- 修复的基线失败：0
+- 保持失败：46，与 Phase 0 failure set 一致。
 
 ## 计划评审后的目标校正
 

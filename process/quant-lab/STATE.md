@@ -2,7 +2,7 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: phase2-helper-consolidation-complete
+Phase: phase3-synthetic-turnover-parity-ready
 Blocked: false
 Active CR: CR-140 (experiments/ 目录重构与并行因子栈消除)
 Active Story: none
@@ -189,6 +189,7 @@ Open only when a trigger appears:
 - CR140 Phase 1 dirty-workspace pytest probe: `48 failed, 1426 passed`; 2 added CR132 hygiene failures are caused by uncommitted Phase 1 source and CR139 reconciliation artifacts. Next step is to commit source/artifact slices and rerun full pytest against Phase 0 failure set before Phase 2.
 - CR140 Phase 1 baseline comparison: source / artifact clean after commits; `uv run --python 3.11 pytest -q --tb=no -p no:cacheprovider` -> 46 failed, 1428 passed in 43.57s;新增失败 0，修复基线失败 0，保持失败 46。
 - CR140 Phase 2 helper consolidation: shared `engine/experiment_report_helpers.py` added; duplicated table/value/date helpers consolidated with percent-field semantics preserved; experiment 13 non-equivalent Chinese dimension formatter retained.
+- CR140 Phase 2 baseline comparison: source / artifact clean; `uv run --python 3.11 pytest -q --tb=no -p no:cacheprovider` -> 46 failed, 1428 passed in 43.27s;新增失败 0，修复基线失败 0，保持失败 46。
 - `meta-flow workspace check`: PASS
 - Story reconciliation machine check: PASS, 40 rows, `verified=12`, `gate-reconciled-complete=9`, `lld-pending=19`
 - Backlog-A1/A2 targeted pytest: PASS, 15 passed in 0.62s
