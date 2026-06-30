@@ -22,6 +22,8 @@
 | Post-commit full pytest | PASS | `uv run --python 3.11 pytest -q`: 1490 passed |
 | Self-check against two-layer test asset policy | PASS | P0 CR139 data lake merges were already complete; P1 runner control plane, QMT gateway contracts, and human gate contract merges were added after self-check |
 | Expanded merge plan schema | PASS | `process/context/CR145-TEST-MERGE-PLAN.csv` now includes `merge_group`, `risk`, `requires_fixture_move`, `provenance_refs`, and explicit `move_only_do_not_merge` decisions |
+| Post-P1 source hygiene and naming guardrails | PASS | `uv run --python 3.11 pytest -q tests/meta_flow/test_process_artifact_hygiene.py tests/meta_flow/test_test_file_taxonomy.py tests/meta_flow/test_experiment_entrypoint_taxonomy.py`: 20 passed |
+| Post-P1 full pytest | PASS | `uv run --python 3.11 pytest -q`: 1490 passed |
 
 ## Exit Criteria
 
