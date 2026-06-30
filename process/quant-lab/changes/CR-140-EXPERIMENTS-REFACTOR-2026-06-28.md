@@ -7,7 +7,7 @@ lifecycle_status: "active"
 readiness_status: "not_ready"
 gate_status: "cp2_pending"
 gate_profile: "standard"
-status: "active-phase1-migrations-complete"
+status: "active-phase2-helper-diff-ready"
 impact_level: "medium"
 workflow_mode_before: "standard"
 workflow_mode_after_change: "standard"
@@ -213,6 +213,14 @@ Phase 1 证据：
 - `process/checks/CR140-PHASE1-3-DATA-LAKE-READINESS-AUDIT-MIGRATION-2026-06-30.md`
 
 Phase 1 全量 pytest 在源码 / artifact 未提交状态下出现 `48 failed, 1426 passed`，其中新增的 2 个失败为 CR132 dirty-workspace hygiene 对本轮未提交 source 变更与 CR139 收敛文件的拦截。按计划先提交 Phase 1 source slices 与 CR140 artifact evidence，再复跑全量 pytest 对比 Phase 0 failure set；不得把 dirty-workspace 失败计入业务回归。
+
+Phase 1 baseline comparison：
+
+- `process/checks/CR140-PHASE1-BASELINE-COMPARISON-2026-06-30.md`
+- source / artifact clean 后全量 pytest：`46 failed, 1428 passed in 43.57s`
+- 新增失败：0
+- 修复的基线失败：0
+- 保持失败：46，与 Phase 0 failure set 一致。
 
 ## 计划评审后的目标校正
 
