@@ -2,14 +2,25 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: delivered
+Phase: cr141-phase0-baseline-ready
 Blocked: false
-Active CR: none
+Active CR: CR-141
 Active Story: none
 Active batch: none
 Pending gate: CP2
 
 ## Current Decision
+
+CR141 已从 `FU-CR140-003` 正式启动，用于处理 CR140 遗留的 46 条红基线债：
+
+- 正式 CR：`process/changes/CR-141-RED-BASELINE-DEBT-TRIAGE-2026-06-30.md`。
+- 来源台账：`process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-003`。
+- 当前目标：冻结 CR141 启动时红基线，先分类 46 条失败，再修复不触碰真实 lake/runtime/remote 的低风险静态、guardrail 或局部代码债；与剩余 experiment engine 化重叠的失败 deferred 到 `FU-CR140-002`。
+- 启动边界：source repo clean 且 ahead 7；artifact repo clean 且 ahead 9；Git remote write 仍未授权。
+- 不授权范围：真实 lake readonly validation、真实 lake link/mount、NAS、provider fetch、lake write、catalog pointer write、QMT/MiniQMT/xtquant/gateway runtime、simulation/live/trading、Git remote write/push。
+- 人工门禁规则：用户已授权“无风险继续推进”；若后续触碰真实 lake/runtime/remote、出现新增 pytest 失败无法解释、或需改变 CR 范围，再发起人工门禁。
+
+## Previous CR140 Decision
 
 CR140 已关闭为 `closed-current-delivery / READY_WITH_RISK`：
 

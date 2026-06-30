@@ -3,7 +3,7 @@ source_cr: "CR-140"
 status: "closed-with-candidates"
 created_at: "2026-06-30T16:48:00+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-30T16:48:00+08:00"
+updated_at: "2026-06-30T17:35:00+08:00"
 checkpoint_source: "CP8-post-close-review"
 cr_index_path: "process/changes/CR-INDEX.yaml"
 ---
@@ -80,17 +80,16 @@ follow_up_items:
   - id: "FU-CR140-003"
     title: "Red baseline debt triage and closure"
     kind: "requirement-change"
-    lifecycle_status: "candidate"
-    readiness_status: "n/a"
-    gate_status: "not_started"
+    lifecycle_status: "active"
+    readiness_status: "not_ready"
+    gate_status: "cp2_pending"
     gate_profile: "standard"
     source_cr: "CR-140"
     source_decision_id: "CP8-CR140-POST-CLOSE-REVIEW"
     priority: 1
-    formal_cr_path: ""
-    blocked_by:
-      - "requires_explicit_user_selection"
-      - "requires_dedicated_red_baseline_debt_cr"
+    formal_cr_path: "process/changes/CR-141-RED-BASELINE-DEBT-TRIAGE-2026-06-30.md"
+    related_active_cr: "CR-141"
+    blocked_by: "related_active_cr=CR-141; formalized_as_CR-141"
     impact_surface:
       - "46_phase0_baseline_failures"
       - "tests/test_script_entrypoint_naming.py"
@@ -111,7 +110,7 @@ follow_up_items:
       runtime: false
       real_lake_readonly: false
       trading_write: false
-    next_action: "建议未来正式化为红基线债收敛 CR，先按 CR139 debt / redesign 中途债 / 真实代码债分类 46 条失败。"
+    next_action: "已正式化为 CR-141；先分类 46 条失败，再修复低风险静态/guardrail 债，E3 重叠项 deferred。"
   - id: "FU-CR140-004"
     title: "Local commits remote persistence gate"
     kind: "requirement-change"
@@ -147,7 +146,7 @@ follow_up_items:
 |---|---|---|---|---:|---|---|---|---|---|---|---|
 | FU-CR140-001 | Real lake readonly turnover semantic validation | candidate | runtime-authorization | 2 | real_lake_read_authorization_required; turnover_factor_real_lake_semantic_validation |  | blocked_by=requires_explicit_user_selection; requires_real_lake_readonly_authorization | not_started | 真实 lake readonly 未授权 | 用户明确选择后启动独立授权 CR | CP8-CR140-POST-CLOSE-REVIEW |
 | FU-CR140-002 | Remaining experiments engine convergence | candidate | requirement-change | 3 | remaining_parallel_experiment_evaluation_logic; engine_extension_contract |  | blocked_by=requires_explicit_user_selection; requires_engine_extension_contract_review | not_started | 需独立重构 CR | 用户明确选择后启动独立 refactor CR | CP8-CR140-POST-CLOSE-REVIEW |
-| FU-CR140-003 | Red baseline debt triage and closure | candidate | requirement-change | 1 | red_baseline_debt; cr139_root_script_naming_debt; market_data_engine_import_boundary; remaining_experiment_suite_failures |  | blocked_by=requires_explicit_user_selection; requires_dedicated_red_baseline_debt_cr | not_started | 46 条红基线债需独立分类和收敛 | 建议未来正式化为红基线债收敛 CR | CP8-CR140-POST-CLOSE-REVIEW |
+| FU-CR140-003 | Red baseline debt triage and closure | active | requirement-change | 1 | red_baseline_debt; cr139_root_script_naming_debt; market_data_engine_import_boundary; remaining_experiment_suite_failures | `process/changes/CR-141-RED-BASELINE-DEBT-TRIAGE-2026-06-30.md` | related_active_cr=CR-141; formalized_as_CR-141 | cp2_pending | 已由用户选择并正式化为 CR-141 | 由 CR-141 先分类 46 条失败，再修复低风险静态/guardrail 债，E3 重叠项 deferred | USER-20260630-CONTINUE-EXPERIMENT-REMEDIATION |
 | FU-CR140-004 | Local commits remote persistence gate | candidate | requirement-change | 2 | git_remote_write_not_authorized; local_commit_loss_risk |  | blocked_by=requires_explicit_git_remote_write_authorization | not_started | Git remote write 未授权 | 用户明确授权后再启动 remote persistence gate；本台账不 push | CP8-CR140-POST-CLOSE-REVIEW |
 
 ## 不授权范围
@@ -174,5 +173,5 @@ follow_up_items:
 |---|---|---|---|---|---|
 | DEF-CR140-01 | 真实数据湖 turnover semantic validation | deferred | 未授权真实 lake readonly | 用户选择 FU-CR140-001 | CP8-CR140 |
 | DEF-CR140-02 | 剩余实验评估栈 engine 化 | deferred | Phase 4 明确拆分后续 CR | 用户选择 FU-CR140-002 | CP8-CR140 |
-| DEF-CR140-03 | 46 条红基线债清零 | deferred | CR140 只承诺不新增失败 | 用户选择 FU-CR140-003 | CP8-CR140-POST-CLOSE-REVIEW |
+| DEF-CR140-03 | 46 条红基线债清零 | active-as-CR-141 | CR140 只承诺不新增失败；用户已选择继续推进 | CR-141 执行分类与低风险收敛 | CP8-CR140-POST-CLOSE-REVIEW / USER-20260630-CONTINUE-EXPERIMENT-REMEDIATION |
 | DEF-CR140-04 | push 本地 CR140 commits | deferred | Git remote write 未授权 | 用户选择 FU-CR140-004 并授权 remote write | CP8-CR140-POST-CLOSE-REVIEW |
