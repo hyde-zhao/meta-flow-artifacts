@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch1a_exact_dedup_candidate_planning",
+  "created_at": "2026-06-29T15:25:49+08:00",
+  "mode": "read_only_exact_dedup_planning",
+  "status": "pass_ready_for_exact_dedup_write_authorization_review",
+  "datasets": [
+    "trade_calendar",
+    "stock_basic"
+  ],
+  "dataset_count": 2,
+  "source_row_count_total": 66118,
+  "retained_row_count_total": 54137,
+  "dropped_exact_duplicate_row_count_total": 11981,
+  "path_collision_count": 0,
+  "target_roots_existing_count": 0,
+  "readiness_checks": {
+    "datasets_count_2": true,
+    "all_source_files_present": true,
+    "source_duplicates_confirmed": true,
+    "candidate_profiles_no_exact_duplicates": true,
+    "dropped_counts_match_source_duplicate_over_unique": true,
+    "target_roots_absent": true,
+    "path_collision_count_zero": true,
+    "no_lake_write_executed": true,
+    "no_catalog_pointer_migration_runtime_nas_credential_git": true
+  },
+  "failed_checks": [],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "evidence_refs": {
+    "detail": "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-PLANNING-2026-06-29T152549+0800.json",
+    "safe5_write_execution_index": "process/evidence/CR139-W2-GATEB-BATCH1A-SAFE5-WRITE-EXECUTION.index.json",
+    "batch1a_remaining_readiness_detail": "process/evidence/CR139-W2-GATEB-BATCH1A-REMAINING-PREWRITE-READINESS-PHYSICAL-ROOT-2026-06-29T150625+0800.json",
+    "write_plan": "process/plans/CR139-W2-GATEB-PER-DATASET-WRITE-PLAN.json",
+    "check": "process/checks/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-PLANNING-2026-06-29.md",
+    "decision_brief": "process/checkpoints/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-DECISION-BRIEF.md"
+  },
+  "write_authorization_recommendation": {
+    "recommended_next_authorization": "authorize Gate B Batch 1A-exact-dedup trade_calendar and stock_basic additive-only dedup candidate writes only",
+    "scope": "write one deduplicated candidate parquet object for each of trade_calendar and stock_basic, using the retained rows defined by this planning evidence",
+    "expected_operation_counts": {
+      "provider_fetch": 0,
+      "lake_write": 2,
+      "catalog_write": 0,
+      "current_pointer_publish": 0,
+      "physical_partition_migration": 0,
+      "credential_read": 0,
+      "nas_operation": 0,
+      "runtime_operation": 0,
+      "git_remote_write": 0
+    },
+    "still_forbidden": [
+      "catalog write",
+      "provider catalog write",
+      "provider-lake-catalog write",
+      "published pointer advance",
+      "physical partition migration",
+      "credential read",
+      "NAS operation",
+      "runtime operation",
+      "QMT/MiniQMT/gateway runtime",
+      "trading/small_live/live",
+      "Git remote write",
+      "rollback deletion"
+    ]
+  },
+  "non_authorized_scope": [
+    "lake write",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "rollback deletion"
+  ]
+}

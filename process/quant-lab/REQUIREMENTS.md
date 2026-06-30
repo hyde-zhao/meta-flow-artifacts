@@ -1,11 +1,12 @@
 ---
 status: confirmed
-version: "1.16"
+version: "1.17"
 confirmed: true
 confirmed_by: "user"
-confirmed_at: "2026-06-13T22:03:22+08:00"
+confirmed_at: "2026-06-28T16:05:00+08:00"
+cp2_cr139_approved_at: "2026-06-28T16:05:00+08:00"
 ready_for_design: true
-source_use_cases: [UC-01, UC-02, UC-03, UC-04, UC-05, UC-06, UC-07, UC-08, UC-09, UC-10, UC-11, UC-12, UC-13, UC-14, UC-15, UC-16, UC-17, UC-18, UC-19, UC-20, UC-21, UC-22, UC-23, UC-24, UC-25, UC-26, UC-27, UC-28, UC-29, UC-30, UC-31, UC-32]
+source_use_cases: [UC-01, UC-02, UC-03, UC-04, UC-05, UC-06, UC-07, UC-08, UC-09, UC-10, UC-11, UC-12, UC-13, UC-14, UC-15, UC-16, UC-17, UC-18, UC-19, UC-20, UC-21, UC-22, UC-23, UC-24, UC-25, UC-26, UC-27, UC-28, UC-29, UC-30, UC-31, UC-32, UC-51, UC-52, UC-53, UC-54, UC-55, UC-56, UC-57]
 review_round: 11
 ---
 
@@ -32,6 +33,7 @@ review_round: 11
 | 1.14 | 2026-06-01 | meta-po | 用户批准 CR-025 CP2，并追加 CP3/HLD 约束：meta-se 必须分析本地 Backtrader 项目 `/home/hyde/download/backtrader`，形成模块级借鉴 / 适配 / 移植候选 / 禁止移植对比；任何源码级移植只能作为 HLD 决策项，不构成 CP2 或 CP3 默认实现授权 | CR-025 需求基线确认；保留 REQ-001 至 REQ-172，修订 REQ-172 并新增 REQ-173；进入 CP3/HLD |
 | 1.15 | 2026-06-03 | meta-po | 用户授权进入 CR-030 HLD，回填多因子研究框架借鉴与研究闭环标准化需求，覆盖外部项目借鉴矩阵、项目自有 schema、FactorSpec / FactorRunSpec、FactorPanel / LabelWindow、评价报告、多因子组合、ExperimentManifest / ReportCatalog、StrategyAdmissionPackage、CR-026 分流和不授权边界 | CR-030 需求基线确认；保留 REQ-001 至 REQ-173，新增 REQ-174 至 REQ-185；进入 CP3/HLD，不授权实现、依赖变更、外部项目运行、源码迁移、provider/lake/publish、QMT/simulation/live 或凭据读取 |
 | 1.16 | 2026-06-13 | meta-po | 按 CR-046 增量补齐 QMT / MiniQMT 双目标策略交付框架需求，覆盖 framework-first 范围、策略核心合同、QMT terminal target、MiniQMT runner 安装设计、验证框架、后续 CR 分流和研究框架反向约束 | CR-046 原文档增量更新；保留 REQ-001 至 REQ-185，新增 REQ-186 至 REQ-200；用户已于 2026-06-13T22:03:22+08:00 通过 CP2；不授权具体策略交付、QMT 运行验证、MiniQMT 连接、submit/cancel、simulation/live、provider/lake/publish 或凭据读取 |
+| 1.17 | 2026-06-28 | meta-pm | 按 CR-139「Strategy Data Foundation」parent CR 增量补齐策略生产数据底座需求，覆盖信息收集→回测→模拟盘→实盘四阶段、四组门禁集、ML feature/label/artifact、run evidence 贯通、配置类事实源版本化、交易审计链、schema 契约冻结与跨源时点一致性；45 项整改清单按 (a)=6/(b)=7/(c)=12/(d1)=6/(d2)=14 机械统计映射到 REQ-201 至 REQ-245；四道 P0 防线 C1/C2/V1/R1；既有合同清单已 grep 核验（闭环非新建） | CR-139 原文档增量更新；保留 REQ-001 至 REQ-200 旧基线和编号，不破坏历史 CP2 追溯；新增 REQ-201 至 REQ-249（REQ-201..245 映射 45 项整改，REQ-246..249 跨切约束/NFR）；D8a/D8b 二轮建议批准为 working basis，正式确认路由 CP2 人工门禁；不授权 runtime/NAS/QMT/trading/provider-lake-catalog 写入/物理分区迁移（Wave1 N1 后置）/Git remote write |
 
 ## 需求上下文
 
@@ -829,6 +831,107 @@ review_round: 11
 - CR-046 不触发 provider fetch、真实 lake write、broker lake write、catalog publish、报告覆盖、真实数据写入或依赖变更；MiniQMT runner 安装只定义设计和 dry-run 计划。
 - CR-046 不把 fixture/schema/static validation pass 声明为 QMT-ready、MiniQMT-ready、simulation-ready、live-ready 或真实可交易证据。
 - CR-046 不在当前 CR 内改造研究框架代码；研究框架完善只登记为 CR051-candidate，启动时重新做冲突预检和 CP2。
+
+## CR-139 Strategy Data Foundation 需求增量（REQ-201..REQ-249）
+
+> 来源：CR-139 parent CR + handoff v0.7 §3 整改清单 45 项（机械统计 (a)=6/(b)=7/(c)=12/(d1)=6/(d2)=14）+ 四组门禁集 + Wave 路线 + D1-D8 决策。保留 REQ-001..REQ-200 旧基线，本节为增量。类别列：a=已设计未实现 / b=设计过期或缺失 / c=范围扩展 / d1=遗漏分析纯新建 / d2=遗漏分析既有合同闭环。D8a/D8b 二轮建议批准为 working basis。
+
+### Block 1：数据湖整改（FEAT-02，REQ-201..REQ-213）
+
+| ID | 需求描述 | 优先级 | 类别 | Feature | Wave | 验收条件 | 来源 |
+|---|---|---|---|---|---|---|---|
+| REQ-201 | N1 run_id 分区键治理：新数据用 `dataset/schema_version/` + current + archive；catalog 元数据加 `triggered_by_cr`；存量 run_id 按 D3 不重命名 | P0 | c | FEAT-02 | 1 收尾 | Given 新数据写入 When 构造路径 Then 使用 dataset/schema_version 分区，不含 run_id 长期分区键；catalog 含 triggered_by_cr；存量 run_id 不主动改名 | UC-52 |
+| REQ-202 | N2 run_id 前缀规约 + unknown 修复：新 run 统一 `run-<purpose>-<window>-<source>-<YYYYMMDD>`；修 unknown bug | P1 | b | FEAT-02 | 2 | Given 新 run 生成 When 命名 Then 符合统一前缀规约；无 unknown run_id | UC-57 |
+| REQ-203 | N3 CR 编号不烧进路径：新规约不放 CR；存量不主动改名 | P1 | b | FEAT-02 | 2 | Given 新路径规约 When 校验 Then 不含 CR 编号；存量路径保留 | UC-57 |
+| REQ-204 | C1 PIT as-of reader（四道 P0 防线之一）：实现 `read_panel_as_of`，读财报/估值按 `available_at <= as_of` 取最新；写时盖戳、读时过滤 | P0 | a | FEAT-02 | 1 | Given 读 financial_pit/market_cap When as_of=T Then 只返回 available_at <= T 的最新记录；构造"未来财报"用例断言读不到 | UC-52 |
+| REQ-205 | C2 分区去重（四道 P0 防线之一）：C2a 重复画像（38 分区哪些 `(symbol,trade_date)` 重复、来自哪些 run）+ C2b 读层去重（按 source_run_id 取最新版本） | P0 | b | FEAT-02 | 1 | Given canonical 38 run_id 分区 When 读层去重 Then `(symbol,trade_date)` 唯一；C2a 画像输出重复键与来源 run | UC-52 |
+| REQ-206 | C3 events schema 全 null 类型修复：修写入侧类型推断，重跑 events | P1 | b | FEAT-02 | 2 | Given events 数据集 When 校验 schema Then 类型非全 null，字段类型正确 | UC-52 |
+| REQ-207 | C4 写入去重保证：写 canonical 前按主键去重或写入后校验唯一 | P1 | b | FEAT-02 | 2 | Given 写 canonical When 主键重复 Then 去重或校验失败阻断 | UC-52 |
+| REQ-208 | M1 catalog/manifest 双真相源定主：catalog 为主、manifest 为派生 | P1 | b | FEAT-02 | 2 收尾 | Given catalog 与 manifest When 一致性校验 Then catalog 为真相源，manifest 派生 | UC-52 |
+| REQ-209 | M2 lineage_checksum 回填：写 canonical 时回填 lineage_checksum（raw→canonical 闭合） | P2 | a | FEAT-02 | 2 收尾 | Given 写 canonical When 完成 Then lineage_checksum 非缺失 | UC-52 |
+| REQ-210 | M3 quality/ 分区整理：按数据集/日期分区；smoke/probe 进 `_scratch/` + 保留策略 | P2 | b | FEAT-02 | 3 | Given quality/ When 整理 Then 按数据集/日期分区，smoke/probe 隔离 | UC-57 |
+| REQ-211 | M4 CR→数据审计链：catalog 加 `triggered_by_cr`、`run_lineage` | P2 | c | FEAT-02 | 3 | Given catalog When 查询 Then 可追溯 triggered_by_cr 与 run_lineage | UC-57 |
+| REQ-212 | T7 整改回归基线 + 黄金值快照（d1 新建）：整改前后跑下游因子/回测黄金值快照对比，归因差异（结构修复 vs 历史数据变化） | P1 | d1 | FEAT-02 | 1 | Given 整改前后 When 跑黄金值对比 Then 输出差异归因报告 | UC-51 |
+| REQ-213 | T8 整改对象自动化清册（d1 新建）：一行命令输出全 dataset 行数/覆盖/重复键/pit/published/lineage | P1 | d1 | FEAT-02 | 1 | Given 执行清册命令 When 扫描全 dataset Then 输出行数/覆盖/重复键/pit_status/published/lineage 缺失情况 | UC-51 |
+
+### Block 2：研究数据集·ML（FEAT-03，REQ-214..REQ-231）
+
+| ID | 需求描述 | 优先级 | 类别 | Feature | Wave | 验收条件 | 来源 |
+|---|---|---|---|---|---|---|---|
+| REQ-214 | R1 统一 published/as-of panel reader（四道 P0 防线之一）：新增 `read_panel(datasets, as_of)`，复用 `read_dataset` published 门禁，输出价格×财务×估值×行业统一 as-of 宽表 | P0 | c | FEAT-02/03 | 1 | Given 多 dataset When read_panel(as_of) Then 输出统一 as-of 宽表且只含 published 数据 | UC-52 |
+| REQ-215 | R2 ML 接入 lake：废除 `--data-dir`/`load_local_frames` 旁路，ML 改用 `read_panel_as_of` | P1 | c | FEAT-03 | 2 | Given ML 实验 When 加载数据 Then 走 read_panel_as_of，无旁路 | UC-53 |
+| REQ-216 | R3 DuckDB 只读 adapter（D4 只读引擎，parquet 仍是存储）：护栏已就位，实现 adapter | P1 | a | FEAT-02 | 2 | Given DuckDB adapter When 只读查询 Then 返回结果且不写持久事实源；parquet 仍是存储 | UC-53 |
+| REQ-217 | R4 列裁剪/谓词下推：DuckDB 接入自然解决；过渡期 reader 支持下推 | P2 | a | FEAT-02 | 3 | Given 查询 When 指定列/谓词 Then 下推生效 | UC-57 |
+| REQ-218 | V2 训练快照概念：ML 只读 published 快照，training cutoff 固定 | P1 | c | FEAT-03 | 2 | Given ML 训练 When 读数据 Then 只读 published 快照，cutoff 固定可复现 | UC-54 |
+| REQ-219 | V3 feature/label/artifact 持久化层（D5 lake `features/` 子层带版本）：新增 `features/` 层带版本 + schema；feature/label/artifact 审计链；保留切换独立 feature store 条件（DEF-139-01） | P1 | c | FEAT-03 | 2 | Given feature 计算 When 持久化 Then 写入版本化 features/ 层，schema 可追溯；切换条件记录 | UC-53 |
+| REQ-220 | V4 schema 演进规则 + 实盘契约冻结（评审 HIGH3，模拟盘前必过）：定义 schema 演进规则 + reader 兼容回退 | P1 | c | FEAT-02/03 | 2 | Given schema 变更 When reader 兼容 Then 按演进规则回退；模拟盘前契约冻结 | UC-57 |
+| REQ-221 | E1 ExperimentManifest 闭环 published release + lineage（既有 `research_manifest.py:152`）：补 dataset snapshot + as_of + split + 产出引用 | P1 | c | FEAT-03/11 | 2 | Given ExperimentManifest When 生成 Then 引用 published dataset snapshot + as_of + split + lineage | UC-53 |
+| REQ-222 | E2 模型 artifact/hash 闭环 dataset snapshot（既有 StrategyAdmissionPackage 承载）：模型 artifact 带 hash 引用 dataset snapshot | P1 | c | FEAT-03 | 2 | Given 模型 artifact When 保存 Then 带 hash 引用 dataset snapshot | UC-53 |
+| REQ-223 | E3 label 泄漏检查统一接入（既有 `factor_model_validation.py:561/376`、`factor_robustness.py:53` 分散）：统一到 data release + cutoff gate | P1 | d2 | FEAT-03 | 2 | Given label 泄漏检查 When 执行 Then 统一接入 data release + cutoff gate | UC-53 |
+| REQ-224 | E4 特征离线/在线一致性校验（d1 新建）：训练特征与实盘特征同 schema 同计算校验 | P1 | d1 | FEAT-03 | 2 | Given 训练/实盘特征 When 校验 Then 同 schema 同计算，不一致阻断 | UC-53 |
+| REQ-225 | E5 训练切分 manifest 冻结（既有 embargo/split 策略）：split cutoff 入既有 ExperimentManifest，与 purge-embargo 统一 | P1 | d2 | FEAT-03 | 2 | Given split When 冻结 Then cutoff 入 ExperimentManifest 与 embargo 统一 | UC-53 |
+| REQ-226 | T2 PIT 正确性回归测试：构造"未来财报"用例，断言 as-of reader 读不到 | P1 | c | FEAT-02 | 2 | Given 未来财报 fixture When as-of read Then 读不到 | UC-57 |
+| REQ-227 | T3 去重正确性测试：断言 `(symbol,trade_date)` 唯一 | P1 | c | FEAT-02 | 2 | Given 重复键 fixture When 去重 read Then 唯一 | UC-57 |
+| REQ-228 | T1 DuckDB 只读边界 e2e 测试：adapter 实现后补 e2e 只读测试 | P2 | a | FEAT-02 | 3 | Given DuckDB adapter When e2e 只读 Then 通过且无写入 | UC-57 |
+| REQ-229 | X1 复权因子 PIT 正确性校验（d1 新建）：除权除息事件按 PIT 应用；复权断点回归测试 | P1 | d1 | FEAT-02 | 2 | Given 除权除息事件 When PIT 应用 Then 复权因子时点正确；断点回归通过 | UC-57 |
+| REQ-230 | X2 跨源交易日历/时区一致性（d1 新建）：跨源（tushare/jqdata/QMT）交易日历对齐校验；时区归一 | P1 | d1 | FEAT-02 | 2 | Given 跨源交易日历 When 对齐 Then 一致；时区归一 | UC-57 |
+| REQ-231 | X4 PIT universe 成分链（既有 `contracts.py:270` survivorship_bias_note 已识别）：index_members snapshot 按时点构建 PIT universe | P1 | d2 | FEAT-14 | 2 | Given index_members When 按时点构建 Then PIT universe 成分链消除固定快照偏差 | UC-57 |
+
+### Block 3：读侧语义（FEAT-02/03，REQ-232..REQ-235）
+
+| ID | 需求描述 | 优先级 | 类别 | Feature | Wave | 验收条件 | 来源 |
+|---|---|---|---|---|---|---|---|
+| REQ-232 | V1 published pointer / read selector（四道 P0 防线之一，a 已设计未实现）：canonical → published + catalog current pointer 固定；reader 只消费已发布 current truth | P0 | a | FEAT-02 | 1 | Given candidate/gold/published When promote Then catalog current pointer 固定；reader 只读 published | UC-52 |
+| REQ-233 | L3 读审计 log + run-id 贯通（d1 新建）：reader 记录读审计 log，与既有 RunEvidenceIndex 同 run-id 贯通 | P1 | d1 | FEAT-02/11 | 2 | Given reader 读 When 完成 Then 读审计 log 与 RunEvidenceIndex 同 run-id 贯通 | UC-55 |
+| REQ-234 | L4 readiness matrix 前置读前强制阻断门禁（既有 `readiness.py:462 build_readiness_matrix`）：前置为读前强制 gate（coverage/新鲜度/PIT），不通过阻断 | P1 | d2 | FEAT-02/14 | 2 | Given 读前 When readiness gate 不通过 Then 阻断 | UC-54 |
+| REQ-235 | X3 decision_time 强制 lookahead 阻断门禁（既有 `readers.py:227` decision_time 部分支持）：加强制 lookahead 阻断 | P1 | d2 | FEAT-02 | 2 | Given 信号时刻 vs available_at When lookahead 违规 Then 阻断 | UC-57 |
+
+### Block 4：配置类事实源（FEAT-02/12/14/03，REQ-236..REQ-239）
+
+| ID | 需求描述 | 优先级 | 类别 | Feature | Wave | 验收条件 | 来源 |
+|---|---|---|---|---|---|---|---|
+| REQ-236 | F1 版本化 benchmark + risk-free curve 事实源 + release 闭环（既有 `benchmarks.py:99/114` BenchmarkCoverage/BenchmarkDefinition）：补版本化 benchmark 与无风险利率曲线 | P1 | d2 | FEAT-02 | 2 | Given benchmark When 版本化 Then 带 version + release 闭环 + risk-free curve | UC-56 |
+| REQ-237 | F2 版本化 commission/费用/滑点模型事实源 + release 闭环（既有 `qmt_gateway_contracts.py:997` CommissionSchedule） | P1 | d2 | FEAT-12 | 2 | Given CommissionSchedule When 版本化 Then 带 version + release 闭环 | UC-56 |
+| REQ-238 | F3 版本化 universe/risk policy 事实源 + release 闭环（既有 `mature_multifactor_framework.py:228` PortfolioRiskPolicy）：补退市/ST/容量约束 | P1 | d2 | FEAT-14 | 2 | Given PortfolioRiskPolicy When 版本化 Then universe/risk policy 带 version + release 闭环 | UC-56 |
+| REQ-239 | F4 版本化政策周期/shortability 事实源 + release 闭环（既有 `factor_model_validation.py:444` policy_cycle_coverage、`config/policy_cycles.yaml`） | P2 | d2 | FEAT-03 | 3 | Given 政策周期 When 版本化 Then 带 version + release 闭环 | UC-56 |
+
+### Block 5：交易审计链（FEAT-06/11/12，REQ-240..REQ-245）
+
+| ID | 需求描述 | 优先级 | 类别 | Feature | Wave | 验收条件 | 来源 |
+|---|---|---|---|---|---|---|---|
+| REQ-240 | T4 BrokerLakeSchema 闭环实盘写 + 审计链（既有 `broker_lake.py:64`）：接通实盘写 + 订单/成交/持仓审计链 | P1 | c | FEAT-06 | 2 | Given BrokerLakeSchema When 实盘写 Then 订单/成交/持仓审计链闭环 | UC-55 |
+| REQ-241 | T5 CommissionSchedule 前置成本门禁（既有 `qmt_gateway_contracts.py:997`）：接通成本/滑点/成交可得性前置 | P1 | d2 | FEAT-12 | 2 | Given 回测/实盘 When 成本门禁 Then 成本/滑点/成交可得性前置 | UC-55 |
+| REQ-242 | T6 数据 run-id 贯穿 RunEvidenceIndex/broker event（既有 `evidence_index.py:19`）：数据 run-id 贯穿 | P1 | d2 | FEAT-02/03/06/11 | 2 | Given 数据→研究→执行 When 贯通 Then 同 run-id 贯穿 RunEvidenceIndex/broker event | UC-55 |
+| REQ-243 | L1 增量刷新计划接通真实日级 append 执行链（既有 `incremental.py:248 plan_incremental_refresh`）：available_at 盖戳 + 幂等写 + 当日去重 | P1 | d2 | FEAT-02 | 2 | Given 日级增量 When append Then 幂等 + 当日去重 + available_at 盖戳 | UC-54 |
+| REQ-244 | L2 published pointer 接通真实前移执行（既有 `publish.py:605 publish_current_pointer`，dry-run only）：每日 promote → current pointer 前移 + 门禁 | P1 | d2 | FEAT-02 | 2 | Given 每日 promote When pointer 前移 Then current pointer 更新 + 门禁通过 | UC-54 |
+| REQ-245 | L5 replay 接通 published as_of 单日快照重放（既有 `replay.py:215 run_replay_from_manifest`、`cli.py cmd_p0_replay`）：接通 published as_of 单日重放 | P2 | d2 | FEAT-02 | 3 | Given published as_of When replay Then 单日快照重放，不触发 provider | UC-55 |
+
+### 跨切约束与非功能需求（REQ-246..REQ-249）
+
+| ID | 需求描述 | 优先级 | 类别 | 验收条件 | 来源 |
+|---|---|---|---|---|---|
+| REQ-246 | 四组门禁集（数据/研究/ML/交易生产）为 CP3 必过门禁（D7）：数据门禁（PIT/去重/快照/join）+ 研究门禁（PIT universe/复权/交易状态/label 泄漏）+ ML 门禁（离线在线一致/split manifest/model hash）+ 交易生产门禁（成本/读审计 run-id/决策时点新鲜度） | P0 | 约束 | Given CP3 When 门禁检查 Then 四组门禁集逐项 PASS 或结构化阻断 | D7 / UC-52..UC-57 |
+| REQ-247 | Wave1 结构性变更基线门（CP2 用户追加约束）：物理分区迁移/候选压缩后置到基线冻结之后；且 Wave1 任何结构性变更（V1 pointer / C1 reader / R1 panel reader / C2b 读层去重 / N1 物理迁移等改变读/写路径或分区结构的变更）必须在 T8 清册 → T7 黄金值基线 → C2a 重复画像三步完成后才允许执行；基线冻结未完成前不得启动结构性变更；结构性变更后必须能对 T7 黄金值做归因对比；不先改物理分区 | P0 | 约束 | Given Wave1 When 推进结构性变更 Then T8/T7/C2a 已完成且 T7 黄金值可归因；之前只允许基线冻结动作 | D3/D6 / UC-52 / CR-139 §5 Wave1 CP2 追加约束 |
+| REQ-248 | 不授权范围声明：CR-139 是范围/需求类 parent CR，CP2 不授权 runtime/NAS/QMT/trading/provider-lake-catalog 写入/物理分区迁移/Git remote write；后续必要验证按 action scope 单独授权 | P0 | 约束 | Given CP2/CP3 通过 When 检查授权 Then 上述操作计数为 0，需独立 runtime_authorization | CR-139 §9 |
+| REQ-249 | 既有合同闭环非新建原则：d2 14 项按"既有合同接通闭环/版本化扩展"处理，不重复设计；涉及对象整改项"问题"含义为"未与 release/run-id/lineage 闭环"而非"对象不存在" | P1 | 约束 | Given d2 项 When 设计路由 Then 走集成闭环 LLD，不刷新设计；不把已有合同写成无 | handoff §1.6 / memory |
+
+### CR-139 风险与假设
+
+| ID | 类型 | 内容 | 关联需求 | 缓解措施 |
+|---|---|---|---|---|
+| RA-201 | RISK | 45 项整改范围广，CP3/CP4/CP5 工作量大 | REQ-201..245 | 按 Wave 分批；MVP 聚焦 Wave1 P0 四道防线 |
+| RA-202 | RISK | 既有合同闭环（d2）若误判为新建会导致重复设计 | REQ-249 | 已 grep 核验 15 类合同存在；REQ-249 约束 |
+| RA-203 | ASSUMPTION | D8a/D8b 二轮建议批准在 CP2 人工门禁正式确认 | REQ-201..245 | working basis 推进；CP2 修改口径则增量回更 |
+| RA-204 | RISK | DuckDB 引入依赖需 CP3/CP5 批准 | REQ-216/228 | CP2 不修改 pyproject.toml；D4 只读引擎定位 |
+| RA-205 | ASSUMPTION | ML feature 层采用 lake `features/` 子层，保留切换独立 store 条件 | REQ-219 | DEF-139-01 记录切换条件 |
+
+### CR-139 里程碑建议
+
+| 里程碑 | 包含需求 | 交付物 | 前置里程碑 |
+|---|---|---|---|
+| M-CR139-1：Wave1 冻结基线 + 信任基础（P0） | REQ-204,205,214,232,212,213 | T8 清册/T7 黄金值/C2a 画像/V1 pointer/C1 PIT/R1 panel/C2b 去重 | — |
+| M-CR139-2：Wave2 接入与规模（P1，解锁 ML+模拟盘） | REQ-215..231,233..238,240..244 | V4 schema 冻结/R2 ML 接入/V3 feature 层/R3 DuckDB/L1L2 增量/E3E4 泄漏/F1F2F3 配置层/T4T5T6 审计链/X1X2X3X4 一致性/L3L4 读审计门禁/T2T3 测试 | M-CR139-1 |
+| M-CR139-3：Wave3 实盘与运维（P2） | REQ-217,228,239,245,210,211 | L5 replay/R4 延迟/T1/M3M4/F4 | M-CR139-2 |
 
 ## 目标平台
 

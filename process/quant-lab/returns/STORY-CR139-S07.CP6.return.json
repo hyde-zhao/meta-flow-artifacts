@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR139-S07.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S07",
+  "status": "implemented",
+  "created_at": "2026-06-28T22:05:41+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR139-S07.CP6.work-packet.json",
+  "dispatch_refs": ["ADE-CR139-W1-META-DEV-INLINE-S07-COMPLETE-2026-06-28T220541+0800"],
+  "implementation_ref": "process/stories/CR139-S07-read-layer-dedup-IMPLEMENTATION.md",
+  "touched_files": [
+    {
+      "path": "market_data/readers.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "tests/test_cr139_read_layer_dedup.py",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "read_dataset and read_canonical now deduplicate prices by (symbol, trade_date) in the read layer, preferring catalog latest_manifest_run_id."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_write_touched": false,
+    "catalog_write_touched": false,
+    "market_data_catalog_py_touched": false,
+    "published_pointer_advance_executed": false,
+    "physical_partition_migration_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_read_layer_dedup.py",
+        "result": "pass",
+        "summary": "6 passed in 0.54s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py tests/test_cr139_duplicate_fingerprint_profiling.py tests/test_cr139_published_pointer.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_panel_reader.py tests/test_cr139_read_layer_dedup.py tests/test_cr014_catalog_publish_gate.py tests/test_cr014_p0_pipeline_contract.py",
+        "result": "pass",
+        "summary": "62 passed in 2.26s"
+      },
+      {
+        "command": "git diff --check -- market_data/readers.py tests/test_cr139_read_layer_dedup.py",
+        "result": "pass",
+        "summary": "no whitespace errors"
+      }
+    ],
+    "tests": [
+      "test_read_dataset_deduplicates_prices_by_catalog_current_run",
+      "test_read_dataset_uses_deterministic_run_id_fallback_when_catalog_current_missing",
+      "test_read_dataset_falls_back_to_partition_run_when_source_run_id_missing",
+      "test_read_dataset_degrades_without_dedup_keys",
+      "test_read_layer_dedup_does_not_migrate_physical_partitions",
+      "test_read_canonical_reuses_read_layer_dedup"
+    ],
+    "skipped": [
+      {
+        "scope": "real lake dedup runtime validation",
+        "reason": "not authorized"
+      },
+      {
+        "scope": "S29 full PIT/dedup correctness regression",
+        "reason": "S29 is Wave2 and pending CP5"
+      }
+    ]
+  },
+  "evidence_refs": [
+    "process/evidence/STORY-CR139-S07.CP6.index.json",
+    "process/stories/CR139-S07-read-layer-dedup-IMPLEMENTATION.md"
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "O-S07-1",
+      "status": "accepted-deterministic-fallback",
+      "summary": "Before N2 run-id naming governance, latest fallback is catalog current first, then source_run_id lexicographic descending."
+    },
+    {
+      "id": "O-S07-4",
+      "status": "not-authorized",
+      "summary": "Real lake scale/runtime validation remains out of scope."
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7"
+}

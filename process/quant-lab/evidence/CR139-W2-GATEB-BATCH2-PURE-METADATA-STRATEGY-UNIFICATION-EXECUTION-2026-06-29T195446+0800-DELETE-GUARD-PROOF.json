@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "pure_metadata_strategy_unification_delete_guard_proof",
+  "created_at": "2026-06-29T19:54:46+08:00",
+  "delete_guard_id": "GATEB-B2-LIQUIDITY-DELETE-GUARD-001",
+  "deleted_objects": [
+    {
+      "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/part-liquidity-capacity.parquet",
+      "deleted": true,
+      "method": "Path.unlink_exact_manifest_object"
+    },
+    {
+      "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine/part-liquidity-capacity-conflict-groups.parquet",
+      "deleted": true,
+      "method": "Path.unlink_exact_manifest_object"
+    }
+  ],
+  "pre_delete_checks": [
+    {
+      "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/part-liquidity-capacity.parquet",
+      "exists": true,
+      "size_bytes": 650227690,
+      "sha256": "07e36c7987713ad3424dd5942c90817b95e8c702f58748c5251f139d346a5a21",
+      "row_count": 17091828,
+      "matches_manifest": true
+    },
+    {
+      "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine/part-liquidity-capacity-conflict-groups.parquet",
+      "exists": true,
+      "size_bytes": 136155,
+      "sha256": "c1680cc06e8e8968418c4ead707f7aa6cffde2deaff16206aea614a4110822ce",
+      "row_count": 3660,
+      "matches_manifest": true
+    }
+  ],
+  "post_delete_checks": {
+    "each_manifest_object_absent": true,
+    "old_run_id_file_count_zero": true,
+    "new_resolved_run_id_directories_exist": true,
+    "catalog_hash_unchanged": true,
+    "published_tree_hash_unchanged": true,
+    "canonical_liquidity_tree_hash_unchanged": true,
+    "canonical_market_cap_tree_hash_unchanged": true
+  },
+  "forbidden_delete_modes_used": [],
+  "result": "pass"
+}

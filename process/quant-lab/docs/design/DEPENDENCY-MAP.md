@@ -1,8 +1,9 @@
 ---
 status: "draft-current-index"
-version: "1.11"
+version: "1.13"
 source_blueprint: "docs/design/BLUEPRINT.md"
-change: "CR-138"
+change: "CR-139"
+companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quant-lab-project-roadmap-2026-06-26.md"
 ---
 
@@ -24,6 +25,8 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | 1.9 | 2026-06-27 | codex | 增补异象发现 / 研究依赖边界：Chapter5 异象候选只能在 AnomalyResearchReport 和 AnomalyAdmissionDecision 通过后进入因子目录或 Stage 3 候选。 |
 | 1.10 | 2026-06-27 | codex | 增补自动异象发现依赖边界：候选生成只消费受控模板和研究特征面板，Stage 3 只能显式消费通过多重检验的动态目录候选。 |
 | 1.11 | 2026-06-28 | codex | 增补研究引擎稳定模块依赖边界：FEAT-03 主实现只能使用领域名模块；旧 chapter/stage/root 脚本只允许兼容 wrapper 或 legacy archive。 |
+| 1.12 | 2026-06-28 | meta-se | 按 CR-139「Strategy Data Foundation」CP3 增补策略生产数据底座依赖方向：reader → published current pointer（非 raw）、ML → panel reader（非 `--data-dir` 旁路）、broker facts/RunEvidenceIndex → 数据 run-id 贯通、配置类事实源 → release 闭环（复用 V1 pointer 语义）；明确禁止反向（engine 不写 lake、reader 不读未发布、DuckDB 不写持久事实源、ML 不旁路）；补禁止依赖 FD-46..52 与循环风险 CYCLE-20..22。AGA-1/3/5 推荐方案 CP3 已确认 A1/C1/E1。 |
+| 1.13 | 2026-06-28 | host-orchestrator | CP3 approved，AGA-1/3/5 确认 A1/C1/E1，pending-cp3 → confirmed-cp3。 |
 
 ## 依赖关系
 
@@ -180,3 +183,51 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | 禁止依赖写明替代路径和违反风险 | PASS | FD-24..FD-31 |
 | 循环风险已状态化 | PASS | CYCLE-11..CYCLE-15 |
 | 未新增自动运行授权 | PASS | FD-27、FD-28、HLD §12/§13 |
+
+## CR-139 增量：策略生产数据底座依赖边界
+
+> 来源：CR-139 companion HLD「Strategy Data Foundation」（写侧/读侧分离）+ REQ-201..249。明确依赖方向：reader 依赖 published current pointer（非 raw）、ML 依赖 panel reader（非旁路）、broker facts/RunEvidenceIndex 依赖数据 run-id 贯通、配置类事实源依赖 release 闭环。不得反向。
+
+### 依赖关系增量
+
+| From | To | 依赖类型 | 允许方向 | 原因 | 验证 / 监控 |
+|---|---|---|---|---|---|
+| FEAT-02 读侧（PIT/panel/dedup/selector/audit） | FEAT-02 写侧 published current pointer | read | allowed | reader 只消费已发布 current truth，不读 candidate/raw | V1/C1/R1 published-gate tests |
+| FEAT-03 ML feature 层 | FEAT-02 读侧 panel reader | read | allowed | ML 接入 `read_panel_as_of`，废除 `--data-dir`/`load_local_frames` 旁路 | R2 no-bypass tests |
+| FEAT-03 feature/label/artifact | FEAT-02 published dataset snapshot | read / reference | allowed | feature/artifact hash 引用 published dataset snapshot，可复现 | E1/E2 snapshot-ref tests |
+| FEAT-06 broker event | FEAT-02 数据 run-id | read / lineage link | allowed | broker event 通过 run-id 与数据/研究审计链贯通 | T6 run-id tests |
+| FEAT-11 RunEvidenceIndex | FEAT-02 读审计 log + 数据 run-id | read / lineage link | allowed | RunEvidenceIndex 闭环 lake run-id 与读审计 | L3/T6 run-id tests |
+| FEAT-12 CommissionSchedule / FEAT-14 universe·risk policy / FEAT-03 policy_cycle | FEAT-02 config_facts release（复用 V1 pointer 语义） | read / release link | allowed | 配置类事实源版本化 + release 闭环，归因可复现 | F1-F4 version+release tests |
+| FEAT-14 PIT universe 成分链 | FEAT-02 index_members snapshot | read | allowed | 按时点构建 PIT universe，消除固定快照偏差 | X4 PIT universe tests |
+| FEAT-02 读侧 DuckDB adapter | FEAT-02 published parquet / catalog | read-only | allowed | DuckDB 只读查询，parquet 仍是存储（D4） | R3 readonly tests |
+| FEAT-02 replay | FEAT-02 published as_of snapshot | read | allowed | replay 按 published as_of 重放单日快照，不触发 provider | L5 replay tests |
+
+### 禁止依赖增量
+
+| Forbidden ID | From | To | 禁止原因 | 替代路径 | 违反风险 |
+|---|---|---|---|---|---|
+| FD-46 | FEAT-01 / FEAT-03 / engine | FEAT-02 写侧 canonical 直写 / raw 直读 | 研究消费只读 published current truth，不得直写 lake 或直读 raw/candidate | 返回 required_missing / 走 published reader | 污染事实源、绕过 publish gate |
+| FD-47 | FEAT-02 读侧 reader | 未发布 candidate / raw | reader 只消费 published current truth；读未发布破坏冻结快照防线 | published gate 阻断返回 unavailable | 调参偷看未来、版本漂移 |
+| FD-48 | FEAT-03 ML 实验 | `--data-dir` / `load_local_frames` 旁路 | ML 必须接入 `read_panel_as_of`，旁路导致训练-实盘漂移 | read_panel_as_of | ML 旁路数据湖、不可复现 |
+| FD-49 | FEAT-02 DuckDB adapter | 持久事实源写入 / `.duckdb` 替代 parquet lake | DuckDB 只读引擎，parquet 仍是存储（D4） | 只读 parquet/catalog | 事实源分叉、依赖膨胀 |
+| FD-50 | FEAT-02 engine / reader | 反向写 canonical / publish pointer | engine 不写 lake；reader 不写 | 写侧 publish gate 唯一入口 | 破坏 publish gate 单一入口 |
+| FD-51 | FEAT-06 broker lake / FEAT-11 run evidence | 伪造 run-id 贯通 / 断链静默成功 | run-id 贯通必须真实链接，断链标注断点 | 标注 broken + 补全 | 伪造审计链、复盘失真 |
+| FD-52 | FEAT-03/12/14 配置类事实源 | 无 version / 无 release 闭环即声明可复现 | 配置类事实源必须带 version + release_id | 缺版本阻断复现声明 | 归因不可复现 |
+| FD-53 | Wave1 结构性变更 | T8/T7/C2a 基线冻结未完成即执行 | Wave1 基线门（REQ-247）：结构性变更必须在清册→黄金值→重复画像之后 | 基线冻结门阻断 | 历史数据变化与结构修复混在一起无法归因 |
+
+### 循环风险增量
+
+| Cycle ID | 涉及对象 | 风险 | 当前处理 |
+|---|---|---|---|
+| CYCLE-20 | FEAT-02 写侧 publish ↔ FEAT-02 读侧 reader | reader 发现缺口反向触发写侧补数/publish，破坏只读消费边界 | eliminated：reader 只返回 structured missing；补数/publish 必须独立授权 |
+| CYCLE-21 | FEAT-03 ML feature 层 ↔ FEAT-02 published snapshot | ML 为补齐 feature 反向修改 published dataset snapshot | eliminated：feature 层只读 published snapshot；feature 缺口返回 unavailable |
+| CYCLE-22 | FEAT-06 broker event ↔ FEAT-02 数据 run-id | broker 侧为对账反向修改数据 run-id 或读审计 | eliminated：broker event 只读消费 run-id；run-id 由 FEAT-02 写侧生成，单向贯通 |
+
+### CR-139 依赖自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| 写侧/读侧依赖方向明确（reader→published、ML→panel、broker→run-id、config→release） | PASS | §依赖关系增量 |
+| 禁止反向依赖写明替代路径与违反风险 | PASS | FD-46..53 |
+| 循环风险已状态化 | PASS | CYCLE-20..22 |
+| 未新增运行授权 / 物理分区迁移授权 | PASS | FD-53、REQ-247/248、Wave1 N1 后置 |

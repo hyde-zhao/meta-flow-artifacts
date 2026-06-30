@@ -1,0 +1,1767 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch2_pure_metadata_resolution_planning",
+  "created_at": "2026-06-29T19:31:15+08:00",
+  "status": "ready_for_explicit_strategy_unification_execution_authorization_with_delete_guard",
+  "mode": "read_only_batch_resolution_planning_no_lake_write",
+  "authorized_scope": "Gate B Batch 2 pure metadata conflict resolution planning for liquidity_capacity and market_cap; no lake write",
+  "datasets": [
+    "liquidity_capacity",
+    "market_cap"
+  ],
+  "newly_scanned_datasets": [
+    "market_cap"
+  ],
+  "reused_evidence": {
+    "liquidity_capacity": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-RESOLUTION-PLANNING.index.json"
+  },
+  "dataset_results": [
+    {
+      "dataset": "liquidity_capacity",
+      "status": "pass_resolution_plan_ready_for_write_authorization_review",
+      "source_root_relative_path": "canonical/liquidity_capacity/1.0",
+      "resolution_rule": {
+        "type": "source_precedence_for_metadata_only_duplicates",
+        "selected_source_run_id": "run-cr034-chapter3-backfill-2000",
+        "superseded_source_run_id": "run-cr034-chapter3-smoke-20000104-20000105",
+        "precondition": "all business columns identical within duplicate key group",
+        "business_columns": [
+          "volume",
+          "amount",
+          "amount_unit",
+          "adv20_amount",
+          "adv20_volume",
+          "turnover_rate",
+          "turnover_rate_f"
+        ],
+        "metadata_columns": [
+          "source",
+          "source_interface",
+          "source_run_id",
+          "available_at",
+          "available_at_rule",
+          "schema_version",
+          "lineage_raw_checksum"
+        ],
+        "rationale": "The selected run is the full year backfill run; the superseded run is a smoke-window run. Business values are identical for all 1,830 duplicate key groups, so source precedence changes lineage selection but not business values."
+      },
+      "counts": {
+        "source_rows": 17095488,
+        "non_conflict_rows": 17091828,
+        "duplicate_key_group_count": 1830,
+        "duplicate_rows": 3660,
+        "selected_rows_to_main": 1830,
+        "superseded_rows_to_quarantine": 1830,
+        "future_resolved_main_row_count": 17093658,
+        "future_resolved_quarantine_row_count": 1830,
+        "future_total_rows_preserved": 17095488,
+        "dropped_row_count": 0
+      },
+      "future_resolved_candidate": {
+        "run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved",
+        "candidate_root_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved",
+        "main_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved/part-liquidity-capacity.parquet",
+        "quarantine_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved/quarantine/part-liquidity-capacity-superseded-smoke.parquet",
+        "target_root_exists_now": false,
+        "write_mode_if_later_authorized": "additive_only_new_resolved_candidate_path_no_in_place_overwrite"
+      },
+      "checks": {
+        "mode_is_read_only": true,
+        "source_row_count_matches_prior_write": true,
+        "duplicate_key_group_count_1830": true,
+        "duplicate_rows_3660": true,
+        "all_groups_size_2": true,
+        "all_groups_business_columns_identical": true,
+        "selected_run_present_once_per_group": true,
+        "superseded_run_present_once_per_group": true,
+        "resolved_target_root_absent": true,
+        "current_quarantine_candidate_left_untouched": true,
+        "operation_counts_zero": true
+      },
+      "failed_checks": [],
+      "failed_group_count": 0,
+      "evidence_ref": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-RESOLUTION-PLANNING.index.json",
+      "strategy_conflict_with_existing_candidate": "already_written_quarantine_only_candidate_must_be_rolled_back_before_resolved_strategy_is_canonical_for_Gate_B",
+      "write_status": "blocked_until_D-GATEB-B2-LIQUIDITY-001"
+    },
+    {
+      "dataset": "market_cap",
+      "status": "pass_metadata_only_precedence_decision_required",
+      "source_root_relative_path": "canonical/market_cap/1.0",
+      "source_file_count": 30,
+      "columns": [
+        "trade_date",
+        "symbol",
+        "market_cap",
+        "float_market_cap",
+        "turnover_rate",
+        "turnover_rate_f",
+        "volume_ratio",
+        "pe",
+        "pe_ttm",
+        "pb",
+        "ps",
+        "ps_ttm",
+        "dv_ratio",
+        "dv_ttm",
+        "total_share",
+        "float_share",
+        "free_share",
+        "market_cap_unit",
+        "source",
+        "source_interface",
+        "source_run_id",
+        "available_at",
+        "available_at_rule",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "business_columns": [
+        "market_cap",
+        "float_market_cap",
+        "turnover_rate",
+        "turnover_rate_f",
+        "volume_ratio",
+        "pe",
+        "pe_ttm",
+        "pb",
+        "ps",
+        "ps_ttm",
+        "dv_ratio",
+        "dv_ttm",
+        "total_share",
+        "float_share",
+        "free_share",
+        "market_cap_unit"
+      ],
+      "metadata_columns": [
+        "source",
+        "source_interface",
+        "source_run_id",
+        "available_at",
+        "available_at_rule",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "conflict_counts_by_column": {
+        "market_cap": 0,
+        "float_market_cap": 0,
+        "turnover_rate": 0,
+        "turnover_rate_f": 0,
+        "volume_ratio": 0,
+        "pe": 0,
+        "pe_ttm": 0,
+        "pb": 0,
+        "ps": 0,
+        "ps_ttm": 0,
+        "dv_ratio": 0,
+        "dv_ttm": 0,
+        "total_share": 0,
+        "float_share": 0,
+        "free_share": 0,
+        "market_cap_unit": 0,
+        "source": 0,
+        "source_interface": 0,
+        "source_run_id": 106776,
+        "available_at": 0,
+        "available_at_rule": 0,
+        "schema_version": 0,
+        "lineage_raw_checksum": 106776
+      },
+      "resolution_rule": {
+        "selected_source_run_id": "run-cr034-chapter3-backfill-2000",
+        "superseded_source_run_id": "run-cr034-chapter3-smoke-20000104-20000105",
+        "precondition": "all business columns identical within duplicate key group",
+        "rationale": "full-year backfill run is preferred over smoke-window run when business values are identical"
+      },
+      "counts": {
+        "source_rows": 17108103,
+        "non_conflict_rows": 16894551,
+        "duplicate_key_group_count": 106776,
+        "duplicate_rows": 213552,
+        "selected_rows_to_main": 106776,
+        "superseded_rows_to_quarantine": 106776,
+        "future_resolved_main_row_count": 17001327,
+        "future_resolved_quarantine_row_count": 106776,
+        "future_total_rows_preserved": 17108103,
+        "dropped_row_count": 0
+      },
+      "future_resolved_candidate": {
+        "run_id": "cr139-w2-market_cap-legacy_lake-20260629-resolved",
+        "candidate_root_relative_path": "candidate/parquet/dataset=market_cap/schema_version=1.0/run_id=cr139-w2-market_cap-legacy_lake-20260629-resolved",
+        "main_relative_path": "candidate/parquet/dataset=market_cap/schema_version=1.0/run_id=cr139-w2-market_cap-legacy_lake-20260629-resolved/part-market-cap.parquet",
+        "quarantine_relative_path": "candidate/parquet/dataset=market_cap/schema_version=1.0/run_id=cr139-w2-market_cap-legacy_lake-20260629-resolved/quarantine/part-market-cap-superseded-smoke.parquet",
+        "target_root_exists_now": false,
+        "write_mode_if_later_authorized": "additive_only_new_resolved_candidate_path_no_in_place_overwrite"
+      },
+      "source_run_id_pair_distribution": [
+        {
+          "source_run_ids": [
+            "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "run-stage3-data-update-20260530-20260626-prices-20260627"
+          ],
+          "group_count": 104946
+        },
+        {
+          "source_run_ids": [
+            "run-cr034-chapter3-backfill-2000",
+            "run-cr034-chapter3-smoke-20000104-20000105"
+          ],
+          "group_count": 1830
+        }
+      ],
+      "checks": {
+        "source_files_present": true,
+        "row_count_matches_metadata": true,
+        "duplicate_groups_present": true,
+        "all_groups_size_2": true,
+        "all_groups_business_columns_identical": true,
+        "selected_run_present_once_per_group": false,
+        "superseded_run_present_once_per_group": false,
+        "resolved_target_root_absent": true,
+        "operation_counts_zero": true,
+        "source_precedence_rule_complete": false
+      },
+      "failed_checks": [
+        "source_precedence_rule_complete"
+      ],
+      "failed_group_count": 0,
+      "failed_groups_sample": [
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-01"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-02"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-03"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-04"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-05"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-08"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-09"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-10"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-11"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-12"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-15"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-16"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-17"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-18"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-22"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-23"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-24"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-25"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-26"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000002.SZ",
+            "trade_date": "2026-06-01"
+          },
+          "issue_codes": [
+            "selected_run_count:0",
+            "superseded_run_count:0"
+          ]
+        }
+      ],
+      "resolution_groups_sample": [
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2000-01-04"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-cr034-chapter3-backfill-2000",
+            "lineage_raw_checksum": "sha256:8615b331c051e711aff6bce4c789562cf34250d77bfa200f3951d47e3c5973e6",
+            "source_file": "canonical/market_cap/1.0/run_id=run-cr034-chapter3-backfill-2000/part-market-cap.parquet",
+            "business_row_hash_sha256": "45d7e60a417d2d2b66a68c1ba01dde5a1b9e15b031bb349b6757cb192140a6d6",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-cr034-chapter3-smoke-20000104-20000105",
+            "lineage_raw_checksum": "sha256:a3b80942a68cd9a8c2f4e3f31211b93936180fd14a5695f186c689bd056fbd95",
+            "source_file": "canonical/market_cap/1.0/run_id=run-cr034-chapter3-smoke-20000104-20000105/part-market-cap.parquet",
+            "business_row_hash_sha256": "45d7e60a417d2d2b66a68c1ba01dde5a1b9e15b031bb349b6757cb192140a6d6",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2000-01-05"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-cr034-chapter3-backfill-2000",
+            "lineage_raw_checksum": "sha256:12b131d4143e38e51cba9cb4a53ca6a1f9b1c8c39a146dc64d86e902e6ca4175",
+            "source_file": "canonical/market_cap/1.0/run_id=run-cr034-chapter3-backfill-2000/part-market-cap.parquet",
+            "business_row_hash_sha256": "6cc64fd226831c73709c648c359b2663d07d346f58010797c3c46426f1de1f3a",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-cr034-chapter3-smoke-20000104-20000105",
+            "lineage_raw_checksum": "sha256:4f4c0300f6f7c0b32b16ad4c781c4d7783a5ed5ae96fa7b15b157dadbfbbff19",
+            "source_file": "canonical/market_cap/1.0/run_id=run-cr034-chapter3-smoke-20000104-20000105/part-market-cap.parquet",
+            "business_row_hash_sha256": "6cc64fd226831c73709c648c359b2663d07d346f58010797c3c46426f1de1f3a",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-01"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "c4e29e56ca1544fe0e8cf41f3cc7b3ef5dce525225b283c05982ba99fbce9446",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "518e34b41ffca9859845e57b11790b514917ce2e851fb5d1fa0ceae76c1d961b",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:a4b19d80c86832df9f8f375a52d9ae18b9308dc873d8d0843ba408601295af50",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "518e34b41ffca9859845e57b11790b514917ce2e851fb5d1fa0ceae76c1d961b",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-02"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "ccdee720e91965dc8311382dc0091bd16985034c9838cbbd5d41395018602d9f",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "f5758d363fa4015cfaf875754170145061176d45475ba0a47678f5e4ff509acc",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:ace1dccc9dcc9a639863735470f50d24fa3f92bcb11c2b38b3fe4d5b92ba099d",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "f5758d363fa4015cfaf875754170145061176d45475ba0a47678f5e4ff509acc",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-03"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "442049454bc450d9e3f3c89228c86600beee9508a977d8389974a6c5afb6221b",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "435ca15864fd5a3318b0639aaa54428658a5f46a3f20b5eedb47f2ed706aa02d",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:4d5633f10434cd432e93fe75d02449b48db394914347615b40c74c84e9172fa4",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "435ca15864fd5a3318b0639aaa54428658a5f46a3f20b5eedb47f2ed706aa02d",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-04"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "553610ec3f038181770ebea8827d8b30f48a2ad63bc783c70ce85f4ebd583edf",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "b2c1194b2c88572f753d0483658e45bf7f4d67273d7d0b5137ebb4109b811e24",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:963a55ea2cfa187278ca676e48066528d38512f8f70705fc474de6fbcabad7e2",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "b2c1194b2c88572f753d0483658e45bf7f4d67273d7d0b5137ebb4109b811e24",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-05"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "9bc2140fc2eec6ce7f8210d0357a6090f7b65e5518fbe2322c5919149f0db345",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "804641d913fb240ab73d095a83905150e1f2e5df1d2df713f141dabe92fd0072",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:42f88d3ed21e2c485396492c62ce3d2a2b59007326caeb27011793167c641c41",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "804641d913fb240ab73d095a83905150e1f2e5df1d2df713f141dabe92fd0072",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-08"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "b905e1bfcaafc680c0a8d4b1ec9d5f1ad04f638fd3fc77a9ff754e899ad56f21",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "bb802dd7ca0c0a7344460f67e9f76a46b9ba1f33d8023c4cbb7161b4d51e50e0",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:a3d8732a5693a7a1d31fe6920995bfc82334bbf37118f6f3cead0bc60aa71cf1",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "bb802dd7ca0c0a7344460f67e9f76a46b9ba1f33d8023c4cbb7161b4d51e50e0",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-09"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "b10f1c2900d95360531f493b6c66d8faa378f998cb422e06546f3ad94cc56c47",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "6e95d2c369e80dd08144e95d5f4e01911d721c1a5a72ea9dee210954437650db",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:d261b210442918b048d19eaf5297508215e3fac6981959c898230e2514d34e86",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "6e95d2c369e80dd08144e95d5f4e01911d721c1a5a72ea9dee210954437650db",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-10"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "f67d5053daae45b3508a83728f69f22e3ab428a569a208b99fea64b99460d19d",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "ab445665ab443b5fc83b5470e34367d915348a8288cf1fbff16caf40d769d60d",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:57d99dbfc9e4a5d6b4483ff9ba4f97aa3cd78aad8469837f01ae5aaaaf18023a",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "ab445665ab443b5fc83b5470e34367d915348a8288cf1fbff16caf40d769d60d",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-11"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "1904d54aef0b78eca89c30ad2ddfd7ef203f6024db9d0c67ba52bfa3b5dbe711",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "0b8f2771698789ff66c0613369f2aececcb6a32b2931b4eeba5d914f1805f8ed",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:5d719f24c647cffc279bc73991c7a38278eba2d4d09723ede5960e1e8e7aa605",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "0b8f2771698789ff66c0613369f2aececcb6a32b2931b4eeba5d914f1805f8ed",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-12"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "5fac430dfb57090628d0dd48a203d9a79f4a4da51ed50338df331ca91adf0554",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "62239797e50474ab29c418726dfc4878e99254440699a1f1f8035b15609b18d2",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:dbf4f2fa05bcd5a9c7330c5718c76b40ed87fde84334c11d65adcb34a240be1c",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "62239797e50474ab29c418726dfc4878e99254440699a1f1f8035b15609b18d2",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-15"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "22d213a800d6ecbcd646b00345f4c6cac2b104f5c10471e8045105d5470d36c3",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "2a9c6175a598094a1d9ac3f9d6b1eb678e1302a97739487832c3bd7095f89584",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:c53777cdc581a1aa0894cbf1f108750c87b1b9488a5641f83bfcbbd52740c217",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "2a9c6175a598094a1d9ac3f9d6b1eb678e1302a97739487832c3bd7095f89584",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-16"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "c56f30d6f6e7c9b24f008cd8b1125de148a807210474ac287bd48dcd44ceead6",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "00fd89ad2ff7c6d38b6639f8ae563a6aac61a5b0f8a631383b646122bcb54e95",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:9010bda927e8989cf17b6e4145cae19e78636bc8f230de2b7bce7d9c57702ed7",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "00fd89ad2ff7c6d38b6639f8ae563a6aac61a5b0f8a631383b646122bcb54e95",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-17"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "57b0a15d31eec23fe73e55c3a856319fcb4953f53d0514acc0a65a7a3049601f",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "b89e9259230cf09df35fa23c00c3550b517a335b9adbcd443c86ecf09ebcdc65",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:abdfbf885e6a4f0cf65f2783d59fc94af81e5851bc35a8ebef85b3cead5eb9b5",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "b89e9259230cf09df35fa23c00c3550b517a335b9adbcd443c86ecf09ebcdc65",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-18"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "39c502441871e7b56bc79d965982183ddcbda6ee5c6d269ab119c1e30d9ecf71",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "0cabd857b3258dc4c7def15bf637358708fdadbc270209131717a006202a184d",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:9314aacf812cd9bdd8b21e7fa7b9d4a4230576f75c4221135a4a9f0777712168",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "0cabd857b3258dc4c7def15bf637358708fdadbc270209131717a006202a184d",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-22"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "dcb45923c59ee701f4490f50b51f24fe5ed396ff883f3fc5766fc435aa78c8fc",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "fec0726a9874f82b7161c8107878160190acc77cfa5b2429470ab119cff1ff29",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:40d2ee0749edd2bcbfe70638403b01d5ed18a40fbcfa96b62f5e4dba3e161d6f",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "fec0726a9874f82b7161c8107878160190acc77cfa5b2429470ab119cff1ff29",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-23"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "1f19ca53bf97d117739e7a2e9c93555f678ee91688764db36d5ee9744fe43901",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "a34acb103474880dd0baa03534b1ff017144d8a06837247d5b78a177254780f0",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:123d27cc6820384ffbcb11f550b7dbd7bd8e490f81adc35887f390622dc9e42f",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "a34acb103474880dd0baa03534b1ff017144d8a06837247d5b78a177254780f0",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-24"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "adf6fbc7a1c8a7fa68f0ee9a580eaddb0a780237c14f3c107f885585fd962ae7",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "0ac11933ef7474d5a02c2c7098fdb187e044ae6154ee0468b95dc2968745edfa",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:dfd2a25abdd38afa1fb8df70548e1bb050bc4bb25697e5fdbc61a1065cace499",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "0ac11933ef7474d5a02c2c7098fdb187e044ae6154ee0468b95dc2968745edfa",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2026-06-25"
+          },
+          "group_row_count": 2,
+          "selected": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "lineage_raw_checksum": "51e2687a667b46450d513ca5c0a13913682ea41ee1d1d4f6fdae3f548d7fb42d",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+            "business_row_hash_sha256": "072e868723bbbce771770a242330b87adbe3818ba2e144d8e9a850a1aa71216b",
+            "future_target": "resolved_candidate_main"
+          },
+          "superseded": {
+            "source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+            "lineage_raw_checksum": "sha256:06267e59ccaa1a909d2b17f515fe31081d3c5420ec0b1f9ca64847921f1c911c",
+            "source_file": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627/part-market-cap.parquet",
+            "business_row_hash_sha256": "072e868723bbbce771770a242330b87adbe3818ba2e144d8e9a850a1aa71216b",
+            "future_target": "resolved_candidate_quarantine_superseded"
+          },
+          "business_columns_identical": true,
+          "business_nunique": {
+            "market_cap": 1,
+            "float_market_cap": 1,
+            "turnover_rate": 1,
+            "turnover_rate_f": 1,
+            "volume_ratio": 1,
+            "pe": 1,
+            "pe_ttm": 1,
+            "pb": 1,
+            "ps": 1,
+            "ps_ttm": 1,
+            "dv_ratio": 1,
+            "dv_ttm": 1,
+            "total_share": 1,
+            "float_share": 1,
+            "free_share": 1,
+            "market_cap_unit": 1
+          },
+          "metadata_nunique": {
+            "source": 1,
+            "source_interface": 1,
+            "source_run_id": 2,
+            "available_at": 1,
+            "available_at_rule": 1,
+            "schema_version": 1,
+            "lineage_raw_checksum": 2
+          },
+          "decision_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical"
+        }
+      ],
+      "resolution_group_count": 106776,
+      "precedence_buckets": [
+        {
+          "source_run_ids": [
+            "run-cr034-chapter3-backfill-2000",
+            "run-cr034-chapter3-smoke-20000104-20000105"
+          ],
+          "group_count": 1830,
+          "recommended_selected_source_run_id": "run-cr034-chapter3-backfill-2000",
+          "recommended_superseded_source_run_id": "run-cr034-chapter3-smoke-20000104-20000105",
+          "decision_status": "covered_by_liquidity_capacity_precedence_pattern",
+          "rationale": "full-year backfill run is preferred over smoke-window run when business values are identical"
+        },
+        {
+          "source_run_ids": [
+            "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "run-stage3-data-update-20260530-20260626-prices-20260627"
+          ],
+          "group_count": 104946,
+          "recommended_selected_source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+          "recommended_superseded_source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+          "decision_status": "human_decision_required_before_write",
+          "rationale": "market_cap is an auxiliary dataset; aux run is source-owner aligned, while prices run duplicated identical market_cap rows. Business values are identical, but source ownership precedence must be approved before candidate write."
+        }
+      ],
+      "required_decisions_before_write": [
+        {
+          "decision_id": "D-GATEB-B2-MARKETCAP-001",
+          "decision_type": "implementation",
+          "question": "For 104,946 market_cap metadata-only duplicate groups from aux vs prices stage3 runs, which source_run_id should feed the resolved main candidate?",
+          "recommended": "select_aux_run_and_quarantine_prices_run",
+          "recommended_selected_source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+          "recommended_superseded_source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+          "alternative": "select_prices_run_and_quarantine_aux_run",
+          "risk": "Business values are identical, so numerical output is unchanged either way; the decision affects lineage ownership and future audit interpretation."
+        }
+      ],
+      "write_status": "blocked_until_D-GATEB-B2-MARKETCAP-001"
+    }
+  ],
+  "batch_checks": {
+    "mode_is_read_only": true,
+    "dataset_count_2": true,
+    "all_dataset_plans_pass": false,
+    "all_future_roots_absent": true,
+    "operation_counts_zero": true,
+    "all_datasets_metadata_only": true,
+    "market_cap_precedence_decision_required": true
+  },
+  "failed_batch_checks": [
+    "market_cap_precedence_decision_required"
+  ],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "future_write_batch_plan": [
+    {
+      "batch_id": "B2-PURE-METADATA-UNIFICATION-EXECUTION",
+      "datasets": [
+        "liquidity_capacity",
+        "market_cap"
+      ],
+      "write_mode": "compound candidate cleanup plus resolved metadata-only candidate writes",
+      "authorization_status": "ready_for_explicit_runtime_authorization_with_delete_guard",
+      "expected_operations": {
+        "candidate_object_delete": 2,
+        "lake_write": 4,
+        "catalog_write": 0,
+        "current_pointer_publish": 0,
+        "physical_partition_migration": 0
+      },
+      "allowed_deletes_if_authorized": "only the two liquidity_capacity objects listed in the prior object manifest for run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+      "objects_per_dataset": [
+        "resolved main parquet",
+        "superseded quarantine parquet"
+      ],
+      "why_first": "This is the fastest accurate route: one explicit gate fixes the already-written liquidity candidate and writes market_cap with the same resolved strategy.",
+      "delete_guard_required": "GATEB-B2-LIQUIDITY-DELETE-GUARD-001"
+    },
+    {
+      "batch_id": "B2-PURE-METADATA-LIQUIDITY-ONLY-RESOLUTION",
+      "datasets": [
+        "liquidity_capacity"
+      ],
+      "write_mode": "rollback old quarantine-only candidate then write resolved candidate",
+      "authorization_status": "available_if_market_cap_decision_is_deferred_but_D-GATEB-B2-LIQUIDITY-001_approved",
+      "expected_operations": {
+        "candidate_object_delete": 2,
+        "lake_write": 2,
+        "catalog_write": 0,
+        "current_pointer_publish": 0,
+        "physical_partition_migration": 0
+      }
+    },
+    {
+      "batch_id": "B2-MOSTLY-EXACT-PLANNING",
+      "datasets": [
+        "adj_factor",
+        "prices"
+      ],
+      "write_mode": "read-only split exact-dedup plus conflict quarantine planning before any write",
+      "authorization_status": "planning_needed_can_run_in_parallel_with_pure_metadata_execution_review",
+      "note": "prices also needs schema-normalization decision before write"
+    },
+    {
+      "batch_id": "B2-PRIMARY-OR-MOSTLY-CONFLICT-SINGLETONS",
+      "datasets": [
+        "events",
+        "trade_status"
+      ],
+      "write_mode": "single-dataset planning/write gates; not batch write until field semantics are reviewed",
+      "authorization_status": "planning_needed_can_run_in_parallel"
+    },
+    {
+      "batch_id": "B2-MIXED-PRICES-LIMIT",
+      "datasets": [
+        "prices_limit"
+      ],
+      "write_mode": "single-dataset split exact-dedup plus quarantine planning/write due mixed conflict scale",
+      "authorization_status": "planning_needed_can_run_in_parallel"
+    }
+  ],
+  "non_authorized_scope": [
+    "lake write",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "rollback deletion",
+    "in-place overwrite of existing candidate paths"
+  ],
+  "required_decisions_before_batch_write": [
+    {
+      "decision_id": "D-GATEB-B2-LIQUIDITY-001",
+      "decision_type": "implementation",
+      "question": "liquidity_capacity already has a quarantine-only candidate, but newer planning recommends resolved main+quarantine. Should the old candidate be rolled back and replaced by resolved strategy, or retained as-is?",
+      "recommended": "option_A_unify_on_resolved_strategy_with_object_manifest_rollback",
+      "recommended_action": {
+        "rollback_existing_candidate_run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+        "delete_only_manifest_objects": [
+          "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/part-liquidity-capacity.parquet",
+          "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine/part-liquidity-capacity-conflict-groups.parquet"
+        ],
+        "write_new_resolved_run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved",
+        "expected_resolved_main_rows": 17093658,
+        "expected_resolved_quarantine_rows": 1830
+      },
+      "alternative": "option_B_keep_existing_quarantine_only_candidate_and_apply_resolved_strategy_only_to_market_cap",
+      "recommended_rationale": "Resolved strategy keeps liquidity_capacity main candidate complete and aligns pure metadata conflict handling with market_cap; fixing now avoids Gate D publish discovering that liquidity_capacity main is missing 1,830 keys.",
+      "risk": "Option A requires explicit rollback deletion authorization for exactly two already-written candidate objects plus new resolved writes. Option B is faster but leaves inconsistent strategies and an incomplete liquidity_capacity main candidate.",
+      "decision_status": "approved_option_A_with_delete_guard_required",
+      "delete_guard": {
+        "guard_id": "GATEB-B2-LIQUIDITY-DELETE-GUARD-001",
+        "applies_to_decision": "D-GATEB-B2-LIQUIDITY-001",
+        "status": "required_before_any_candidate_object_delete",
+        "prior_object_manifest_ref": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-OBJECT-MANIFEST.json",
+        "allowed_delete_mode": "exact_manifest_object_list_only",
+        "forbidden_delete_modes": [
+          "glob",
+          "wildcard",
+          "rm -rf",
+          "directory_delete",
+          "recursive_delete",
+          "dataset_root_delete",
+          "run_id_prefix_delete",
+          "canonical_or_legacy_delete"
+        ],
+        "allowed_objects": [
+          {
+            "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/part-liquidity-capacity.parquet",
+            "expected_sha256": "07e36c7987713ad3424dd5942c90817b95e8c702f58748c5251f139d346a5a21",
+            "expected_size_bytes": 650227690,
+            "expected_row_count": 17091828,
+            "required_path_prefix": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/",
+            "required_run_id_exact": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+            "must_be_under_candidate": true
+          },
+          {
+            "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine/part-liquidity-capacity-conflict-groups.parquet",
+            "expected_sha256": "c1680cc06e8e8968418c4ead707f7aa6cffde2deaff16206aea614a4110822ce",
+            "expected_size_bytes": 136155,
+            "expected_row_count": 3660,
+            "required_path_prefix": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/",
+            "required_run_id_exact": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+            "must_be_under_candidate": true
+          }
+        ],
+        "pre_delete_checks": [
+          "path_is_relative_and_under_candidate_root",
+          "path_contains_exact_old_run_id_and_no_wildcards",
+          "path_does_not_contain_canonical_published_catalog_or_legacy_root",
+          "file_exists",
+          "sha256_matches_prior_manifest",
+          "size_bytes_matches_prior_manifest",
+          "parquet_row_count_matches_prior_manifest",
+          "resolved_target_root_does_not_exist_before_write"
+        ],
+        "post_delete_checks": [
+          "each_manifest_object_absent",
+          "old_run_id_directory_empty_or_absent",
+          "new_resolved_run_id_directory_not_deleted_by_cleanup",
+          "legacy_canonical_tree_hash_unchanged",
+          "catalog_hash_unchanged",
+          "published_tree_hash_unchanged"
+        ],
+        "expected_delete_count": 2,
+        "notes": "Future execution must delete each listed file individually after validation. It must not use glob patterns or rm -rf. Deletion remains unauthorized until a separate runtime authorization explicitly approves this guard."
+      },
+      "execution_risk_control": "Future delete must be exact manifest-object deletion only; no glob/rm-rf/directory delete."
+    },
+    {
+      "decision_id": "D-GATEB-B2-MARKETCAP-001",
+      "decision_type": "implementation",
+      "question": "For 104,946 market_cap metadata-only duplicate groups from aux vs prices stage3 runs, which source_run_id should feed the resolved main candidate?",
+      "recommended": "select_aux_run_and_quarantine_prices_run",
+      "recommended_selected_source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+      "recommended_superseded_source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+      "alternative": "select_prices_run_and_quarantine_aux_run",
+      "risk": "Business values are identical, so numerical output is unchanged either way; the decision affects lineage ownership and audit interpretation.",
+      "decision_status": "approved_by_user_feedback"
+    }
+  ],
+  "recommended_next_step": "Review D-GATEB-B2-MARKETCAP-001. If approved, authorize combined liquidity_capacity + market_cap resolved candidate writes; otherwise write liquidity_capacity alone or keep market_cap blocked.",
+  "strategy_conflict": {
+    "status": "blocking_before_batch_write",
+    "dataset": "liquidity_capacity",
+    "already_written_candidate": {
+      "run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+      "main_rows": 17091828,
+      "quarantine_rows": 3660,
+      "strategy": "full_group_quarantine"
+    },
+    "planned_resolved_candidate": {
+      "run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved",
+      "main_rows": 17093658,
+      "quarantine_rows": 1830,
+      "strategy": "select_one_business_identical_row_to_main_quarantine_superseded_row"
+    },
+    "impact": "If unresolved, W2 would contain two inconsistent liquidity_capacity candidate strategies and the already-written main candidate would be missing 1,830 keys.",
+    "recommended_resolution": "approve D-GATEB-B2-LIQUIDITY-001 option A before any combined pure metadata write"
+  },
+  "recommended_next_authorization": "authorize Gate B Batch 2 pure metadata strategy-unification execution only for liquidity_capacity and market_cap, with exact prior-manifest delete guard for liquidity_capacity old candidate",
+  "approved_decisions": [
+    {
+      "decision_id": "D-GATEB-B2-MARKETCAP-001",
+      "decision_status": "approved_by_user_feedback",
+      "approved_selection": "select_aux_run_and_quarantine_prices_run",
+      "approved_at": "2026-06-29T19:50:11+08:00",
+      "risk_acceptance": "business_values_identical_zero_mismatch; lineage ownership selected as aux"
+    },
+    {
+      "decision_id": "D-GATEB-B2-LIQUIDITY-001",
+      "decision_status": "approved_option_A_with_delete_guard_required",
+      "approved_at": "2026-06-29T19:50:11+08:00",
+      "approved_strategy": "unify_on_resolved_strategy_with_object_manifest_rollback",
+      "delete_guard_ref": "GATEB-B2-LIQUIDITY-DELETE-GUARD-001",
+      "execution_authorization_status": "not_yet_authorized; future authorization must mention exact manifest delete guard"
+    }
+  ],
+  "liquidity_delete_guard": {
+    "guard_id": "GATEB-B2-LIQUIDITY-DELETE-GUARD-001",
+    "applies_to_decision": "D-GATEB-B2-LIQUIDITY-001",
+    "status": "required_before_any_candidate_object_delete",
+    "prior_object_manifest_ref": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-OBJECT-MANIFEST.json",
+    "allowed_delete_mode": "exact_manifest_object_list_only",
+    "forbidden_delete_modes": [
+      "glob",
+      "wildcard",
+      "rm -rf",
+      "directory_delete",
+      "recursive_delete",
+      "dataset_root_delete",
+      "run_id_prefix_delete",
+      "canonical_or_legacy_delete"
+    ],
+    "allowed_objects": [
+      {
+        "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/part-liquidity-capacity.parquet",
+        "expected_sha256": "07e36c7987713ad3424dd5942c90817b95e8c702f58748c5251f139d346a5a21",
+        "expected_size_bytes": 650227690,
+        "expected_row_count": 17091828,
+        "required_path_prefix": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/",
+        "required_run_id_exact": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+        "must_be_under_candidate": true
+      },
+      {
+        "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine/part-liquidity-capacity-conflict-groups.parquet",
+        "expected_sha256": "c1680cc06e8e8968418c4ead707f7aa6cffde2deaff16206aea614a4110822ce",
+        "expected_size_bytes": 136155,
+        "expected_row_count": 3660,
+        "required_path_prefix": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/",
+        "required_run_id_exact": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+        "must_be_under_candidate": true
+      }
+    ],
+    "pre_delete_checks": [
+      "path_is_relative_and_under_candidate_root",
+      "path_contains_exact_old_run_id_and_no_wildcards",
+      "path_does_not_contain_canonical_published_catalog_or_legacy_root",
+      "file_exists",
+      "sha256_matches_prior_manifest",
+      "size_bytes_matches_prior_manifest",
+      "parquet_row_count_matches_prior_manifest",
+      "resolved_target_root_does_not_exist_before_write"
+    ],
+    "post_delete_checks": [
+      "each_manifest_object_absent",
+      "old_run_id_directory_empty_or_absent",
+      "new_resolved_run_id_directory_not_deleted_by_cleanup",
+      "legacy_canonical_tree_hash_unchanged",
+      "catalog_hash_unchanged",
+      "published_tree_hash_unchanged"
+    ],
+    "expected_delete_count": 2,
+    "notes": "Future execution must delete each listed file individually after validation. It must not use glob patterns or rm -rf. Deletion remains unauthorized until a separate runtime authorization explicitly approves this guard."
+  }
+}

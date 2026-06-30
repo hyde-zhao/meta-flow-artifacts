@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S08",
+  "story_ref": "process/stories/CR139-S08-runid-partition-key-governance-LLD.md",
+  "parent_context_ref": "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Implement N1 run_id partition key governance by introducing canonical current/archive path helpers, making normalize_run default to current/archive paths, and making CLI catalog path discovery prefer current while preserving legacy run_id fallback.",
+    "non_goals": [
+      "Do not physically migrate, delete, merge, rename, or rewrite existing run_id partitions",
+      "Do not write or modify market_data/catalog.py, market_data/manifest.py, market_data/publish.py, or data/lake/**",
+      "Do not execute runtime, provider, NAS, QMT, real lake, or published pointer advance operations",
+      "Do not implement publish supersede movement, catalog triggered_by_cr persistence, or manifest lineage persistence beyond mock contract fixtures"
+    ]
+  },
+  "feature_refs": ["FEAT-02"],
+  "feature_contract_summary": "FEAT-02 write-side path governance owns canonical path construction and normalization target paths. S08 moves new canonical output away from long-lived run_id= partitions while retaining explicit legacy compatibility.",
+  "feature_design_summary_ref": "docs/features/market-data-lake/DESIGN.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S08-runid-partition-key-governance-LLD.md"
+  ],
+  "cr_delta": {
+    "summary": "Adds canonical current/archive path contract, normalize_run partition_layout switch, CLI current-first discovery, and fixture-level cross-boundary contract checks.",
+    "affected_contracts": [
+      "LakeLayout canonical path helpers",
+      "normalization.normalize_run partition_layout",
+      "cli canonical path discovery"
+    ]
+  },
+  "dependency_inputs": [
+    "CR139-S07 verified",
+    "process/checks/CP7-CR139-S07-read-layer-dedup-VERIFICATION-DONE.md",
+    "process/evidence/STORY-CR139-S07.CP7.index.json"
+  ],
+  "acceptance": [
+    "canonical_current_root and canonical_archive_root construct canonical/<dataset>/<schema_version>/current|archive without run_id= path segments",
+    "canonical current/archive partition helpers validate unsafe path segments and do not create directories",
+    "normalize_run defaults new data to current_archive paths and preserves legacy_run_id as explicit compatibility mode",
+    "_catalog_canonical_path and _canonical_paths_for_run prefer current paths and fall back to existing run_id= paths",
+    "Mock catalog/manifest contract fixtures keep run_id in metadata and triggered_by_cr in catalog metadata, not physical paths",
+    "Existing run_id= directories are not renamed, deleted, merged, or migrated",
+    "No physical partition migration or forbidden file writes"
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S08-runid-partition-key-governance-LLD.md",
+    "market_data/lake_layout.py",
+    "market_data/normalization.py",
+    "market_data/cli.py",
+    "tests/test_cr139_s08_partition_governance.py",
+    "process/checks/CP7-CR139-S07-read-layer-dedup-VERIFICATION-DONE.md"
+  ],
+  "read_if_needed": [
+    "market_data/readers.py",
+    "tests/test_market_data_normalization_validation_readers.py",
+    "tests/test_cr139_read_layer_dedup.py",
+    "tests/test_cr014_catalog_publish_gate.py",
+    "tests/test_cr014_p0_pipeline_contract.py"
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN-CR139.yaml",
+    "process/STORY-STATUS-CR139.md",
+    "process/changes/*.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "allowed_write_paths": [
+    "market_data/lake_layout.py",
+    "market_data/normalization.py",
+    "market_data/cli.py",
+    "market_data/readers.py",
+    "tests/test_cr139_s08_partition_governance.py",
+    "tests/test_market_data_normalization_validation_readers.py",
+    "process/stories/CR139-S08-runid-partition-key-governance-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S08-runid-partition-key-governance-CODING-DONE.md",
+    "process/returns/STORY-CR139-S08.CP6.return.json",
+    "process/evidence/STORY-CR139-S08.CP6.index.json"
+  ],
+  "forbidden_write_paths": [
+    "market_data/catalog.py",
+    "market_data/manifest.py",
+    "market_data/publish.py",
+    "data/lake/**"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_s08_partition_governance.py",
+    "uv run --python 3.11 pytest -q tests/test_market_data_normalization_validation_readers.py",
+    "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py tests/test_cr139_duplicate_fingerprint_profiling.py tests/test_cr139_published_pointer.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_panel_reader.py tests/test_cr139_read_layer_dedup.py tests/test_cr139_s08_partition_governance.py tests/test_cr014_catalog_publish_gate.py tests/test_cr014_p0_pipeline_contract.py"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_MARKET_DATA_CATALOG_PY_WRITE",
+    "NO_PUBLISHED_POINTER_ADVANCE_EXECUTION",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "budget": {
+    "estimated_tokens": 3600,
+    "estimator": "manual",
+    "max_tokens": 9000
+  },
+  "risk_profile": "standard-code",
+  "lld_policy": "full-lld"
+}

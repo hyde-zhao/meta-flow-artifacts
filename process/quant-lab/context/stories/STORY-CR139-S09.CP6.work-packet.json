@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "created_at": "2026-06-29T09:31:46+08:00",
+  "created_by": "host-orchestrator",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "batch_id": "CR139-W2-DATA-CONTRACTS",
+  "story_id": "CR139-S09",
+  "slug": "schema-evolution-contract-freeze",
+  "story_ref": "process/stories/CR139-S09-schema-evolution-contract-freeze.md",
+  "parent_context_ref": "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Implement the V4 schema evolution contract freeze and reader compatibility/fallback contract for fixture/static metadata.",
+    "non_goals": [
+      "Do not write real lake schema registry or parquet partitions",
+      "Do not write provider catalog or advance published pointers",
+      "Do not broaden later reader Stories S25/S27/S28/S13/S16/S36"
+    ]
+  },
+  "design_evidence_ref": "process/stories/CR139-S09-schema-evolution-contract-freeze-LLD.md",
+  "cp5_result_ref": "process/checks/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH.result.json",
+  "cp5_checkpoint_ref": "process/checkpoints/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH-REVIEW.md",
+  "feature_refs": ["FEAT-02", "FEAT-03", "FEAT-06", "FEAT-11"],
+  "feature_contract_summary": "Freeze schema evolution and downstream read-only consumer contract before ML, simulation, audit, and DuckDB/read-gate work fans out.",
+  "feature_design_summary_ref": "docs/design/FEATURE-DESIGN-MATRIX.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S09-schema-evolution-contract-freeze-LLD.md"
+  ],
+  "cr_delta": {
+    "summary": "Adds SchemaContractFreeze, schema change classification, explicit allowed reader fallbacks, and fail-closed compatibility evaluation.",
+    "affected_contracts": ["engine contracts", "market_data reader compatibility"]
+  },
+  "dependencies": ["CR139-S01", "CR139-S02", "CR139-S03", "CR139-S07"],
+  "dependency_type": "verified-upstream-contracts",
+  "dependency_inputs": [
+    "Wave1 S01/S02/S03 baseline verified",
+    "Wave1 S07 read-layer dedup verified"
+  ],
+  "merge_order": {
+    "batch_order": 1,
+    "readers_py": "S05 -> S06 -> S07 -> S09 -> S25 -> S27 -> S28 -> S13 -> S16 -> S36",
+    "notes": "S09 is the next readers.py owner after verified S05/S06/S07."
+  },
+  "acceptance": [
+    "SchemaContractFreeze exposes contract_version, status, compatible_from, breaking_changes, allowed_reader_fallbacks, frozen_at, and owner_feature.",
+    "evaluate_schema_compatibility classifies compatible additive, fallback, and breaking blocked scenarios.",
+    "Reader fallback uses only explicitly registered fallback rules and preserves reason traceability.",
+    "Fixture/static tests prove no real lake, provider catalog, pointer, credential, or runtime operation occurs."
+  ],
+  "allowed_read_paths": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S09-schema-evolution-contract-freeze-LLD.md",
+    "engine/contracts.py",
+    "market_data/readers.py",
+    "tests/test_cr139_schema_contract_freeze.py"
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S09-schema-evolution-contract-freeze-LLD.md",
+    "engine/contracts.py",
+    "market_data/readers.py",
+    "tests/test_cr139_schema_contract_freeze.py"
+  ],
+  "read_if_needed": [
+    "process/checks/CP5-CR139-S09-schema-evolution-contract-freeze-LLD-IMPLEMENTABILITY.md",
+    "process/evidence/STORY-CR139-S07.CP7.index.json"
+  ],
+  "allowed_write_paths": [
+    "engine/contracts.py",
+    "market_data/readers.py",
+    "tests/test_cr139_schema_contract_freeze.py",
+    "process/stories/CR139-S09-schema-evolution-contract-freeze-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S09-schema-evolution-contract-freeze-CODING-DONE.md",
+    "process/returns/STORY-CR139-S09.CP6.return.json",
+    "process/evidence/STORY-CR139-S09.CP6.index.json"
+  ],
+  "forbidden_write_paths": [
+    "market_data/catalog.py",
+    "market_data/manifest.py",
+    "market_data/lake_layout.py",
+    "market_data/normalization.py",
+    "market_data/publish.py",
+    "market_data/incremental.py",
+    "trading/**",
+    "data/**",
+    ".env",
+    ".env.*"
+  ],
+  "forbidden_actions": [
+    "runtime",
+    "real lake write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance execution",
+    "physical partition migration execution",
+    "credential/secret read",
+    "NAS/QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write"
+  ],
+  "static_fixture_validation_scope": [
+    "schema compatibility classification",
+    "explicit fallback mapping",
+    "breaking schema fail-closed behavior",
+    "no real write monkeypatch checks"
+  ],
+  "verification_commands_planned": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_schema_contract_freeze.py"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_schema_contract_freeze.py"
+  ],
+  "expected_return_packet_ref": "process/returns/STORY-CR139-S09.CP6.return.json",
+  "expected_evidence_index_ref": "process/evidence/STORY-CR139-S09.CP6.index.json",
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "standard-code",
+  "lld_policy": "full-lld"
+}

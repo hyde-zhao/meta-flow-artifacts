@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "batch_id": "CR139-W2-DATA-CONTRACTS",
+  "gate": "Gate B",
+  "batch_step": "Batch 0",
+  "stage": "duplicate_profile_read_only",
+  "status": "decision_required_before_write_batches",
+  "evidence_schema": {
+    "profile_container": "dataset_profiles",
+    "events_profile_container": "dataset_profiles",
+    "events_profile_legacy_top_level_key_present": false,
+    "consumer_requirement": "All downstream consumers must parse dataset profiles uniformly from dataset_profiles[]."
+  },
+  "profile_scope": {
+    "global": [
+      "row_count",
+      "unique_key_count",
+      "duplicate_key_group_count",
+      "duplicate_rows_in_duplicate_groups",
+      "duplicate_row_over_unique_count",
+      "metadata conflict counts for source_run_id/available_at/lineage_raw_checksum"
+    ],
+    "not_global": [
+      "full-row exact duplicate counts across all columns"
+    ],
+    "reason": "Full-row exact duplicate profiling across all columns was not run globally to avoid unreviewed memory spill. The generated profile is sufficient to block unsafe writes and choose whether each dataset needs deterministic dedup, quarantine, or deeper per-dataset profiling."
+  },
+  "profile_refs": [
+    "process/evidence/CR139-W2-GATEB-BATCH0-DUPLICATE-PROFILE-adj_factor-2026-06-29.json",
+    "process/evidence/CR139-W2-GATEB-BATCH0-DUPLICATE-PROFILE-liquidity_capacity-2026-06-29.json",
+    "process/evidence/CR139-W2-GATEB-BATCH0-DUPLICATE-PROFILE-market_cap-2026-06-29.json",
+    "process/evidence/CR139-W2-GATEB-BATCH0-DUPLICATE-PROFILE-prices-2026-06-29.json",
+    "process/evidence/CR139-W2-GATEB-BATCH0-DUPLICATE-PROFILE-prices_limit-2026-06-29.json",
+    "process/evidence/CR139-W2-GATEB-BATCH0-DUPLICATE-PROFILE-trade_status-2026-06-29.json",
+    "process/evidence/CR139-W2-GATEB-BATCH0-DUPLICATE-PROFILE-events-2026-06-29.json"
+  ],
+  "summary": [
+    {
+      "dataset": "adj_factor",
+      "status": "requires_decision",
+      "row_count": 29970830,
+      "duplicate_key_group_count": 11824907,
+      "duplicate_rows_in_duplicate_groups": 23889777,
+      "duplicate_row_over_unique_count": 12064870,
+      "metadata_conflicts": {
+        "available_at_conflicting_key_count": 74960,
+        "lineage_raw_checksum_conflicting_key_count": 81852,
+        "source_run_id_conflicting_key_count": 81852
+      },
+      "recommended_next_decision": "requires_dataset_specific_keep_drop_or_quarantine_rule"
+    },
+    {
+      "dataset": "liquidity_capacity",
+      "status": "requires_decision",
+      "row_count": 17095488,
+      "duplicate_key_group_count": 1830,
+      "duplicate_rows_in_duplicate_groups": 3660,
+      "duplicate_row_over_unique_count": 1830,
+      "metadata_conflicts": {
+        "available_at_conflicting_key_count": 0,
+        "lineage_raw_checksum_conflicting_key_count": 1830,
+        "source_run_id_conflicting_key_count": 1830
+      },
+      "recommended_next_decision": "requires_dataset_specific_keep_drop_or_quarantine_rule"
+    },
+    {
+      "dataset": "market_cap",
+      "status": "requires_decision",
+      "row_count": 17108103,
+      "duplicate_key_group_count": 106776,
+      "duplicate_rows_in_duplicate_groups": 213552,
+      "duplicate_row_over_unique_count": 106776,
+      "metadata_conflicts": {
+        "available_at_conflicting_key_count": 0,
+        "lineage_raw_checksum_conflicting_key_count": 106776,
+        "source_run_id_conflicting_key_count": 106776
+      },
+      "recommended_next_decision": "requires_dataset_specific_keep_drop_or_quarantine_rule"
+    },
+    {
+      "dataset": "prices",
+      "status": "requires_decision",
+      "row_count": 28646730,
+      "duplicate_key_group_count": 11313190,
+      "duplicate_rows_in_duplicate_groups": 22866262,
+      "duplicate_row_over_unique_count": 11553072,
+      "metadata_conflicts": {
+        "available_at_conflicting_key_count": 0,
+        "lineage_raw_checksum_conflicting_key_count": 81788,
+        "source_run_id_conflicting_key_count": 81788
+      },
+      "recommended_next_decision": "requires_dataset_specific_keep_drop_or_quarantine_rule"
+    },
+    {
+      "dataset": "prices_limit",
+      "status": "requires_decision",
+      "row_count": 40962525,
+      "duplicate_key_group_count": 17356374,
+      "duplicate_rows_in_duplicate_groups": 38609095,
+      "duplicate_row_over_unique_count": 21252721,
+      "metadata_conflicts": {
+        "available_at_conflicting_key_count": 74956,
+        "lineage_raw_checksum_conflicting_key_count": 7445795,
+        "source_run_id_conflicting_key_count": 7445795
+      },
+      "recommended_next_decision": "requires_dataset_specific_keep_drop_or_quarantine_rule"
+    },
+    {
+      "dataset": "trade_status",
+      "status": "requires_decision",
+      "row_count": 21569907,
+      "duplicate_key_group_count": 3762192,
+      "duplicate_rows_in_duplicate_groups": 7682591,
+      "duplicate_row_over_unique_count": 3920399,
+      "metadata_conflicts": {
+        "available_at_conflicting_key_count": 74956,
+        "lineage_raw_checksum_conflicting_key_count": 3762192,
+        "source_run_id_conflicting_key_count": 3762192
+      },
+      "recommended_next_decision": "requires_dataset_specific_keep_drop_or_quarantine_rule"
+    },
+    {
+      "dataset": "events",
+      "status": "requires_decision",
+      "row_count": 362887,
+      "duplicate_key_group_count": 11357,
+      "duplicate_rows_in_duplicate_groups": 22717,
+      "duplicate_row_over_unique_count": 11360,
+      "metadata_conflicts": {
+        "lineage_raw_checksum_conflicting_key_count": 11357,
+        "source_run_id_conflicting_key_count": 11357
+      },
+      "recommended_next_decision": "requires_dataset_specific_keep_drop_or_quarantine_rule"
+    }
+  ],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "credential_read": 0
+  },
+  "forbidden_operations_executed": []
+}

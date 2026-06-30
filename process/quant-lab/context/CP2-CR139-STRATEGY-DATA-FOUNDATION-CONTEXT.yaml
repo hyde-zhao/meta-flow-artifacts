@@ -1,0 +1,67 @@
+# CP2 Context Capsule — CR-139 Strategy Data Foundation
+
+capsule_for: CP2 (requirement-clarification / scope baseline)
+cr_id: CR-139
+phase: requirement-clarification
+delegated_to: meta-pm
+read_profile: compact
+created_at: 2026-06-28T00:00:00+08:00
+
+## 目标（本次委托边界）
+基于 `process/context/DATA-LAKE-REMEDIATION-HANDOFF.md` v0.7（五轮评审定稿）与已起草的 CR-139 parent CR，由 meta-pm 执行 CR 触发的增量 use-case-discovery / requirement-extraction / requirement-clarifier / scenario-expansion / story-planning 输入，产出 CP2 范围基线门所需产物，并形成交还摘要。**不得推进跨阶段状态，不得发起 CP2 正式人工检查点**；阶段收敛后写交还摘要，由 host-orchestrator 回收并发起 CP2 Decision Brief。
+
+## must_read（必读，按需扩展）
+- `process/context/DATA-LAKE-REMEDIATION-HANDOFF.md` v0.7 — 整改真相源（§1 现状 / §2 四组门禁 / §3 45 项整改清单 / §5 Wave 路线 / §6 D1-D8 决策 / §1.6 既有合同）
+- `process/changes/CR-139-STRATEGY-DATA-FOUNDATION-2026-06-28.md` — parent CR 审计边界、文档处理决策、不授权范围
+- `process/USE-CASES.md` v1.16（50 UC，已确认）— 增量更新基线，保留 UC-01..UC-50 编号
+- `process/REQUIREMENTS.md` v1.16（REQ-001..200，已确认）— 增量更新基线，保留编号
+- `docs/design/BLUEPRINT.md` v1.12 / `docs/design/FEATURE-DESIGN-MATRIX.md` v1.11 — Feature 边界（FEAT-02/03/06/11/12/13/14），CP3 由 meta-se 刷新
+
+## read_if_needed
+- `process/HLD-DATA-LAKE.md` v0.8（CR018 未过 CP3，将被 companion HLD「Strategy Data Foundation」收口，CP3 由 meta-se 处理）
+- `docs/scenarios/*.md` — 项目既有自由形态场景文档（参考格式，非 SCENARIOS.yaml 真相源）
+- handoff §3 各表的代码触点列（核验既有合同存在性，避免"把已有写成无"——见 memory `verify-existing-code-before-claiming-absent`）
+
+## do_not_read_by_default
+- 完整 HLD-DATA-LAKE.md（已漂移，CP3 由 meta-se 重开 companion）
+- 全部 LLD / Story 卡片（CP2 不拆 Story，规则 25）
+- CR-017 / CR-018 全文（已 superseded-in-scope by CR-139，仅历史追溯）
+
+## 核心已知结论（来自 handoff v0.7，无需重新调研）
+- 整改目标：数据湖支撑多因子 + ML 策略从信息收集→回测→模拟盘→实盘全流程，可信/可复现/可审计。
+- 四组门禁（数据/研究/ML/交易生产）构成信任基础，是 CP3 必过门禁（D7）。
+- 整改清单 45 项，机械统计：(a)=6 已设计未实现 / (b)=7 设计过期 / (c)=12 范围扩展 / (d1)=6 纯新建 / (d2)=14 既有合同闭环。
+- 四道 P0 防线：C1 PIT as-of reader、C2 分区去重、V1 published 快照、R1 panel reader。
+- Wave1 顺序：T8 清册→T7 黄金值→C2a 重复画像→V1 pointer→C1→R1→C2b 读层去重→N1 物理迁移后置（不先改物理分区）。
+- 既有合同已存在（整改为闭环非新建）：ExperimentManifest / StrategyAdmissionPackage / RunEvidenceIndex / BrokerLakeSchema / CommissionSchedule / benchmark contract / PortfolioRiskPolicy / policy_cycle_coverage / incremental·publish·readiness·replay / decision_time / survivorship_bias_note 等，详见 handoff §1.6 与 CR-139 §4.1。
+
+## 待人工决策项（CP2 必须纳入 Decision Brief）
+- **D8a**：(d1) 纯新建 6 项（L3/E4/T7/T8/X1/X2）是否纳入范围？推荐：纳入。二轮建议批准。
+- **D8b**：(d2) 既有合同闭环 14 项（L1/L2/L4/L5/E3/E5/T5/T6/F1/F2/F3/F4/X3/X4）是否纳入范围？推荐：纳入，按"既有合同接通闭环/版本化扩展"处理，不重复设计。二轮建议批准。
+- 其余 D1-D7 已同意（详见 CR-139 §7），CP2 仅做追溯确认。
+
+## CP2 Scenario Gray Areas（规则 44，meta-pm 识别 3-4 个，用户选 1-3 讨论）
+候选（meta-pm 可调整）：
+- GA1 范围广度 vs 落地节奏：45 项全纳入 vs 先 P0/P1 收口、P2 defer 到后续 CR
+- GA2 既有合同闭环边界（d2 14 项）：哪些算纯闭环、哪些需补版本化事实源
+- GA3 ML feature 层归属：lake `features/` 子层 vs 独立 feature store（D5 附条件：保留切换条件）
+- GA4 物理分区迁移时机与存量 38 run_id 分区：Wave1 N1 后置后是否迁移、D3 不重命名策略影响
+
+## 产物路由（production 项目约定：CR-scoped process/ 文件，仿 CR138 模式）
+- `process/USE-CASES.md` v1.17（增量，保留 UC-01..UC-50，新增 UC-51+ strategy-data-foundation 场景）
+- `process/REQUIREMENTS.md` v1.17（增量，保留 REQ-001..200，新增 REQ-201+）
+- `process/SCENARIOS-CR139.yaml`（正向/负向/边界/权限/失败恢复/precheck 场景）
+- `process/TEST-MATRIX-CR139.md`（需求→场景覆盖矩阵）
+- `process/STORY-MAP-CR139.md`（用户活动/任务/Story 候选，CP2 不拆 Story 只给候选边界）
+- `process/MVP-SCOPE-CR139.md`（本轮 MVP 做/不做/后续候选；Wave1 P0 为 MVP 核心）
+- `process/discussions/CP2-SCENARIO-DISCUSSION-LOG.md`（灰区讨论日志）
+- `process/checks/CP2-DISCUSSION-CHECKPOINT.json`（恢复点）
+- `process/discussions/CLARIFICATION-LOG.md`（阶段零调研 + 澄清结论）
+- `process/checks/CP2-CR139-REQUIREMENTS-BASELINE-PRECHECK.md`（CP2 自动预检草稿，由 host-orchestrator 终审）
+- 交还摘要（meta-pm 返回给 host-orchestrator）
+
+## 不授权范围（non-authorized scope）
+CR-139 是范围/需求类 parent CR，CP2 不授权：Story 拆解 / LLD / 实现 / runtime / NAS / QMT / trading / provider-lake-catalog 写入 / 物理分区迁移（Wave1 N1 明确后置到基线冻结之后）/ Git remote write。后续必要验证按 action scope、运行窗口、脱敏、回滚和审计范围单独授权。
+
+## context_policy
+capsule 路径即本文件。meta-pm 默认消费本 capsule + must_read；不得默认读完整 HLD-DATA-LAKE / 全部 LLD / 全部 Story 卡片。需扩展读取时在本 capsule `read_expansion_log[]` 或 STATE `read_expansion_log[]` 写明 `full_doc_read_reason`。

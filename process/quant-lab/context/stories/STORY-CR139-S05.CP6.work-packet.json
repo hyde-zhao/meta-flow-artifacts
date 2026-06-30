@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S05",
+  "story_ref": "process/stories/CR139-S05-pit-as-of-reader.md",
+  "parent_context_ref": "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Implement the C1 PIT as-of reader by adding a single-dataset read_panel_as_of function that preserves the published catalog gate and filters rows by available_at <= as_of.",
+    "non_goals": [
+      "Do not write or modify market_data/catalog.py",
+      "Do not execute runtime, provider, NAS, QMT, real lake, or published pointer advance operations",
+      "Do not implement S06 read_panel aggregation or S07 read-layer dedup"
+    ]
+  },
+  "feature_refs": ["FEAT-02"],
+  "feature_contract_summary": "FEAT-02 read-side PIT guard: published current truth is read first, then PIT records are filtered by explicit available_at and latest visible row per key.",
+  "feature_design_summary_ref": "docs/features/market-data-lake/DESIGN.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S05-pit-as-of-reader.md"
+  ],
+  "cr_delta": {
+    "summary": "Adds read_panel_as_of in readers.py with fixture coverage for future-row filtering, missing available_at, no visible rows, published gate inheritance, and catalog.py write boundary.",
+    "affected_contracts": ["readers.read_panel_as_of", "read_dataset published gate consumption"]
+  },
+  "dependency_inputs": [
+    "CR139-S04 verified",
+    "process/checks/CP7-CR139-S04-published-pointer-read-selector-VERIFICATION-DONE.md",
+    "process/evidence/STORY-CR139-S04.CP7.index.json"
+  ],
+  "acceptance": [
+    "Rows with available_at > as_of are filtered out",
+    "Latest row per key is kept after PIT filtering",
+    "Missing available_at returns required_missing",
+    "No rows visible as of T returns required_missing with empty frame",
+    "Unpublished catalog entries remain unavailable",
+    "No writes or code modifications to market_data/catalog.py"
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S05-pit-as-of-reader.md",
+    "market_data/readers.py",
+    "tests/test_cr139_pit_as_of_reader.py",
+    "process/checks/CP7-CR139-S04-published-pointer-read-selector-VERIFICATION-DONE.md"
+  ],
+  "read_if_needed": [
+    "tests/test_cr014_catalog_publish_gate.py",
+    "tests/test_cr014_p0_pipeline_contract.py",
+    "process/stories/CR139-S04-published-pointer-read-selector.md"
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN-CR139.yaml",
+    "process/STORY-STATUS-CR139.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "allowed_write_paths": [
+    "market_data/readers.py",
+    "tests/test_cr139_pit_as_of_reader.py",
+    "process/stories/CR139-S05-pit-as-of-reader-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S05-pit-as-of-reader-CODING-DONE.md",
+    "process/returns/STORY-CR139-S05.CP6.return.json",
+    "process/evidence/STORY-CR139-S05.CP6.index.json"
+  ],
+  "forbidden_write_paths": [
+    "market_data/catalog.py",
+    "market_data/manifest.py",
+    "market_data/lake_layout.py",
+    "market_data/normalization.py",
+    "market_data/publish.py",
+    "data/lake/**"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_pit_as_of_reader.py",
+    "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py tests/test_cr139_duplicate_fingerprint_profiling.py tests/test_cr139_published_pointer.py tests/test_cr139_pit_as_of_reader.py tests/test_cr014_catalog_publish_gate.py tests/test_cr014_p0_pipeline_contract.py"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_MARKET_DATA_CATALOG_PY_WRITE",
+    "NO_PUBLISHED_POINTER_ADVANCE_EXECUTION",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "budget": {
+    "estimated_tokens": 2600,
+    "estimator": "manual",
+    "max_tokens": 8000
+  },
+  "risk_profile": "standard-code",
+  "lld_policy": "technical-note"
+}

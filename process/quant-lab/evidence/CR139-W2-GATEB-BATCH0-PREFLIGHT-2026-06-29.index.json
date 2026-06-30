@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "batch_id": "CR139-W2-DATA-CONTRACTS",
+  "gate": "Gate B",
+  "batch_step": "Batch 0",
+  "stage": "preflight_only",
+  "status": "blocks_gate_b_write_batches_decision_required",
+  "evidence_ref": "process/evidence/CR139-W2-GATEB-BATCH0-PREFLIGHT-2026-06-29.json",
+  "check_ref": "process/checks/CR139-W2-GATEB-BATCH0-PREFLIGHT-2026-06-29.md",
+  "command": {
+    "command": "uv run --python 3.11 python scripts/cr139_gateb_batch0_preflight.py --lake-root /home/hyde/data/quant-lab/data-lake --out process/evidence/CR139-W2-GATEB-BATCH0-PREFLIGHT-2026-06-29.json --sample-limit 20",
+    "result": "pass",
+    "summary": "preflight-only evidence generated; no lake/catalog/pointer writes"
+  },
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "credential_read": 0
+  },
+  "dedup_preflight": [
+    {
+      "dataset": "adj_factor",
+      "status": "requires_decision",
+      "row_count": 29970830,
+      "unique_key_count": 17905960,
+      "duplicate_row_over_unique_count": 12064870
+    },
+    {
+      "dataset": "liquidity_capacity",
+      "status": "requires_decision",
+      "row_count": 17095488,
+      "unique_key_count": 17093658,
+      "duplicate_row_over_unique_count": 1830
+    },
+    {
+      "dataset": "market_cap",
+      "status": "requires_decision",
+      "row_count": 17108103,
+      "unique_key_count": 17001327,
+      "duplicate_row_over_unique_count": 106776
+    },
+    {
+      "dataset": "prices",
+      "status": "requires_decision",
+      "row_count": 28646730,
+      "unique_key_count": 17093658,
+      "duplicate_row_over_unique_count": 11553072
+    },
+    {
+      "dataset": "prices_limit",
+      "status": "requires_decision",
+      "row_count": 40962525,
+      "unique_key_count": 19709804,
+      "duplicate_row_over_unique_count": 21252721
+    },
+    {
+      "dataset": "trade_status",
+      "status": "requires_decision",
+      "row_count": 21569907,
+      "unique_key_count": 17649508,
+      "duplicate_row_over_unique_count": 3920399
+    }
+  ],
+  "events_repair_preflight": {
+    "status": "blocked",
+    "row_count": 362887,
+    "canonical_missing_columns": [],
+    "extra_columns": [],
+    "trade_date_column_present": false,
+    "trade_date_required_by_current_contract": false,
+    "blocking_error": "duplicate_key",
+    "decision_required": "deduplicate/quarantine events duplicate primary keys or revise events primary-key contract through design delta"
+  },
+  "tests": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_cr139_gateb_batch0_preflight.py",
+      "result": "pass",
+      "summary": "2 passed"
+    }
+  ],
+  "forbidden_operations_executed": []
+}

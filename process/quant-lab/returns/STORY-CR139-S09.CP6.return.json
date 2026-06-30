@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR139-S09.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S09",
+  "status": "implemented",
+  "created_at": "2026-06-29T12:00:00+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR139-S09.CP6.work-packet.json",
+  "implementation_ref": "process/stories/CR139-S09-schema-evolution-contract-freeze-IMPLEMENTATION.md",
+  "touched_files": [
+    {"path": "engine/contracts.py", "change_type": "modified"},
+    {"path": "market_data/readers.py", "change_type": "modified"},
+    {"path": "tests/test_cr139_schema_contract_freeze.py", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "summary": "Added frozen schema compatibility contracts and explicit reader fallback evaluation."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_write_touched": false,
+    "catalog_write_touched": false,
+    "provider_catalog_write_touched": false,
+    "published_pointer_advance_executed": false,
+    "physical_partition_migration_executed": false,
+    "trading_runtime_touched": false,
+    "git_remote_write_touched": false
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_schema_contract_freeze.py tests/test_cr139_runid_naming.py tests/test_cr139_events_schema_repair.py tests/test_cr139_write_dedup_guarantee.py tests/test_cr139_catalog_manifest_source_of_truth.py tests/test_cr139_lineage_checksum_backfill.py tests/test_cr139_incremental_append_pointer_plan.py tests/test_cr139_runid_lineage_penetration.py tests/test_cr139_cr_data_audit_chain.py tests/test_market_data_normalization_validation_readers.py tests/test_cr139_*.py",
+        "result": "pass",
+        "summary": "88 passed in 3.07s"
+      }
+    ],
+    "tests": [
+      "test_schema_contract_blocks_missing_required_without_fallback",
+      "test_schema_contract_allows_explicit_reader_fallback"
+    ],
+    "skipped": [{"scope": "real lake schema registry validation", "reason": "not authorized"}]
+  },
+  "evidence_refs": ["process/evidence/STORY-CR139-S09.CP6.index.json"],
+  "risks": [{"id": "O-S09-1", "status": "not-authorized", "summary": "Runtime validation against real lake schemas remains out of scope."}],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7"
+}

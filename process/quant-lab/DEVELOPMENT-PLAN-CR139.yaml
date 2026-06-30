@@ -1,0 +1,1772 @@
+schema_version: 1
+change_id: CR-139
+title: CR139 Strategy Data Foundation Development Plan
+status: wave1-verified-followup-context-convergence
+created_at: '2026-06-28T18:00:00+08:00'
+updated_at: '2026-06-28T22:21:23+08:00'
+owner: host-orchestrator
+workflow_phase: story-execution
+implementation_allowed: true
+delegated_to: host-orchestrator-inline-fallback
+engagement_mode: production
+scenario_subject_type: target-artifact
+feature_design_matrix: docs/design/FEATURE-DESIGN-MATRIX.md
+source_hld: process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md
+source_adr: process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md
+story_backlog: process/STORY-BACKLOG-CR139.md
+story_status: process/STORY-STATUS-CR139.md
+cp4_auto_check: process/checks/CP4-CR139-STORY-DAG-PARALLEL-SAFETY.md
+cp4_auto_result: process/checks/CP4-CR139-STORY-DAG-PARALLEL-SAFETY.result.json
+cp5_checkpoint: process/checkpoints/CP5-CR139-WAVE1-LLD-BATCH-REVIEW.md
+cp6_context: process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml
+cp6_story_packet: process/context/stories/CR139-W1.CP6.story-packets.json
+wave1_complete_followup_context: process/context/CR139-WAVE1-COMPLETE-FOLLOWUP-CONTEXT.yaml
+cp5_wave1_approval:
+  status: approved
+  approved_by: user
+  approved_at: '2026-06-28T19:20:00+08:00'
+  result_ref: process/checks/CP5-CR139-WAVE1-LLD-BATCH.result.json
+  checkpoint_ref: process/checkpoints/CP5-CR139-WAVE1-LLD-BATCH-REVIEW.md
+implementation_scope:
+  authorized_now:
+  - Wave1 code implementation
+  - Wave1 static/fixture verification
+  wave1_dev_ready: []
+  wave1_verified:
+  - CR139-S01-remediation-object-inventory
+  - CR139-S02-remediation-baseline-golden-values
+  - CR139-S03-duplicate-fingerprint-profiling
+  - CR139-S04-published-pointer-read-selector
+  - CR139-S05-pit-as-of-reader
+  - CR139-S06-unified-panel-reader
+  - CR139-S07-read-layer-dedup
+  - CR139-S08-runid-partition-key-governance
+  wave1_gated_until_baseline_verified: []
+  later_cp5_required:
+  - CR139-W2
+  - CR139-W3
+authorization_boundary:
+  cp4_does_not_authorize_lld_writing: true
+  cp4_does_not_authorize_implementation: true
+  runtime_allowed: false
+  nas_access_allowed: false
+  qmt_runtime_allowed: false
+  trading_allowed: false
+  provider_lake_catalog_write_allowed: false
+  physical_partition_migration_execution_allowed: false
+  published_pointer_advance_execution_allowed: false
+  broker_lake_live_write_allowed: false
+  git_remote_write_allowed: false
+  real_lake_write_allowed: false
+  future_runtime_validation_policy: 按需 runtime_authorization gate；必须限定 action scope、运行窗口、脱敏、回滚和审计范围。Wave1 N1 物理分区迁移执行后置到基线冻结之后（REQ-247/248）。
+baseline_gate:
+  requirement_ref: REQ-247
+  constraint: Wave1 任何结构性变更（V1 pointer / C1 reader / R1 panel reader / C2b 读层去重 / N1 物理迁移等改变读/写路径或分区结构的变更）必须在 T8 清册 → T7 黄金值基线 → C2a 重复画像三步完成后才允许执行；基线冻结未完成前不得启动结构性变更；结构性变更后必须能对 T7 黄金值做归因对比；不先改物理分区。
+  baseline_stories:
+  - CR139-S01-remediation-object-inventory
+  - CR139-S02-remediation-baseline-golden-values
+  - CR139-S03-duplicate-fingerprint-profiling
+  structural_stories_gated:
+  - CR139-S04
+  - CR139-S05
+  - CR139-S06
+  - CR139-S07
+  - CR139-S08
+  - CR139-S09
+  - CR139-S31
+feature_slices:
+- feature_id: FEAT-02
+  name: 生产级市场数据湖（写侧+读侧）
+  design_docs:
+  - docs/features/market-data-lake/DESIGN.md (CP5 后 meta-dev 重写)
+  - docs/features/market-data-lake/TEST-PLAN.md
+  - docs/features/market-data-lake/TASKS.md
+  stories:
+  - CR139-S01
+  - CR139-S02
+  - CR139-S03
+  - CR139-S04
+  - CR139-S05
+  - CR139-S06
+  - CR139-S07
+  - CR139-S08
+  - CR139-S09
+  - CR139-S13
+  - CR139-S14
+  - CR139-S17
+  - CR139-S22
+  - CR139-S23
+  - CR139-S24
+  - CR139-S25
+  - CR139-S27
+  - CR139-S28
+  - CR139-S29
+  - CR139-S30
+  - CR139-S31
+  - CR139-S32
+  - CR139-S33
+  - CR139-S34
+  - CR139-S35
+  - CR139-S36
+  - CR139-S37
+  - CR139-S38
+  - CR139-S39
+- feature_id: FEAT-03
+  name: 研究数据集与多因子研究闭环（ML feature 层）
+  design_docs:
+  - docs/features/factor-research-loop/DESIGN.md (CP5 后 meta-dev 增量)
+  stories:
+  - CR139-S10
+  - CR139-S11
+  - CR139-S12
+  - CR139-S15
+  - CR139-S16
+  - CR139-S40
+- feature_id: FEAT-06
+  name: OMS/风控/Broker Lake/阶段激活（交易审计链）
+  design_docs:
+  - docs/features/qmt-trading-governance/DESIGN.md (CP5 后 meta-dev 增量)
+  stories:
+  - CR139-S20
+- feature_id: FEAT-11
+  name: Runner Control Plane（run evidence 消费）
+  design_docs:
+  - docs/features/runner-control-plane/DESIGN.md (复用)
+  stories:
+  - CR139-S12
+  - CR139-S22
+  - CR139-S27
+- feature_id: FEAT-12
+  name: QMT Gateway Service Layer（commission 配置层）
+  design_docs:
+  - docs/features/qmt-gateway-service-layer/DESIGN.md (复用)
+  stories:
+  - CR139-S18
+  - CR139-S21
+- feature_id: FEAT-14
+  name: universe·risk policy 配置层
+  design_docs:
+  - docs/features/strategy-research-lifecycle/DESIGN.md (复用)
+  stories:
+  - CR139-S19
+  - CR139-S26
+  - CR139-S28
+lld_design_batch:
+  batch_id: CR139-STRATEGY-DATA-FOUNDATION-LLD-BATCH-A
+  status: wave1-approved-w2-w3-pending
+  cp5_manual_review: process/checkpoints/CP5-CR139-STRATEGY-DATA-FOUNDATION-LLD-BATCH.md
+  policy: '40 个 Story 按 lld_policy 分流：17 个 full-lld 写完整 LLD（14 章）；23 个 technical-note 写 Story 卡片 ## 技术说明。LLD 可按 Wave 并行起草，但 CP5 必须等待全部 full LLD、technical-note、clarification queue 和自动预检完成后统一人工确认。Wave1 基线门 S01/S02/S03 优先。'
+  full_lld_stories:
+  - CR139-S01-remediation-object-inventory
+  - CR139-S02-remediation-baseline-golden-values
+  - CR139-S03-duplicate-fingerprint-profiling
+  - CR139-S06-unified-panel-reader
+  - CR139-S07-read-layer-dedup
+  - CR139-S08-runid-partition-key-governance
+  - CR139-S09-schema-evolution-contract-freeze
+  - CR139-S10-ml-lake-onboard-no-bypass
+  - CR139-S11-feature-label-artifact-layer
+  - CR139-S12-experiment-manifest-closure
+  - CR139-S15-label-leak-online-offline-consistency
+  - CR139-S16-training-snapshot-cutoff
+  - CR139-S20-broker-lake-schema-audit-chain
+  - CR139-S23-adjustment-factor-pit
+  - CR139-S24-cross-source-calendar-timezone
+  - CR139-S27-read-audit-log-runid
+  - CR139-S29-pit-dedup-correctness-tests
+  technical_note_stories:
+  - CR139-S04-published-pointer-read-selector
+  - CR139-S05-pit-as-of-reader
+  - CR139-S13-duckdb-readonly-adapter
+  - CR139-S14-incremental-append-pointer-advance
+  - CR139-S17-versioned-benchmark-riskfree
+  - CR139-S18-versioned-commission
+  - CR139-S19-versioned-universe-risk-policy
+  - CR139-S21-commission-cost-pretrade-gate
+  - CR139-S22-runid-lineage-penetration
+  - CR139-S25-decision-time-lookahead-gate
+  - CR139-S26-pit-universe-constituent-chain
+  - CR139-S28-readiness-pre-read-gate
+  - CR139-S30-runid-naming-convention
+  - CR139-S31-events-schema-repair
+  - CR139-S32-write-dedup-guarantee
+  - CR139-S33-catalog-manifest-source-of-truth
+  - CR139-S34-lineage-checksum-backfill
+  - CR139-S35-replay-published-asof
+  - CR139-S36-column-pruning-predicate-pushdown
+  - CR139-S37-duckdb-readonly-e2e-test
+  - CR139-S38-quality-partition-reorg
+  - CR139-S39-cr-data-audit-chain
+  - CR139-S40-versioned-policy-cycle-shortability
+parallel_policy:
+  max_parallel_lld: 3
+  max_parallel_dev: 2
+  max_parallel_qa: 2
+  same_file_merge_rule: 同一文件同时只能有一个 merge_owner；其他 Story 只能基于已合并 contract 继续。readers.py 是冲突最密集文件（10 Story），按 merge_order S05→S06→S07→S09→S25→S27→S28→S13→S16→S36 串行合并。
+  baseline_gate_rule: Wave1 基线门 S01/S02/S03 必须 verified 后 S04/S05/S06/S07/S08/S09/S31 才能开始（REQ-247 硬依赖）。
+  readers_py_merge_order: S05 C1 → S06 R1 → S07 C2b → S09 V4 → S25 X3 → S27 L3 → S28 L4 → S13 R3 → S16 V2 → S36 R4
+  publish_py_merge_order: S04 V1 → S14 L2 → S22 T6
+  catalog_py_merge_order: S04 V1 → S33 M1 → S39 M4
+  normalization_py_merge_order: S08 N1 → S31 C3 → S32 C4 → S34 M2 → S14 L1 → S23 X1 → S22 T6
+  ml_onboarding_order: R1(S06) → V3(S11) → R2(S10)（HLD Gotchas#4：ML 旁路废除须先有可信读路径）
+  cross_boundary_runid_owner: T6(S22) owner=FEAT-02 写侧生成 run-id；T4(S20)/L3(S27) 消费方只读，FD-51 禁止断链静默成功
+waves:
+- wave: CR139-W1-BASELINE-FREEZE
+  objective: 冻结整改基线：T8 清册 → T7 黄金值 → C2a 重复画像（REQ-247 基线门）。
+  priority: P0
+  parallel_lld: true
+  parallel_dev_after_cp5: false
+  entry_conditions:
+  - CR139 CP3 approved (confirmed-cp3 2026-06-28T17:30:00+08:00)
+  - AGA-1/3/5 confirmed A1/C1/E1
+  stories:
+  - story_id: CR139-S01-remediation-object-inventory
+    title: T8 整改对象自动化清册
+    priority: P0
+    status: verified
+    depends_on: []
+    dependency_type: []
+    req_coverage:
+    - REQ-213
+    primary_files:
+    - scripts/lake_inventory.py
+    - market_data/remediation_inventory.py
+    file_ownership: 新清册脚本（独占）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - d1 纯新建对象
+      rationale: T8 是 d1 遗漏分析纯新建，无既有合同，必须 full-lld
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-213 (FEAT-02, d1, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      cp5_status: approved
+      implementation_allowed_before_cp5: false
+      implementation_allowed_now: false
+      cp6_result: process/checks/CP6-CR139-S01-remediation-object-inventory-CODING-DONE.md
+      cp7_result: process/checks/CP7-CR139-S01-remediation-object-inventory-VERIFICATION-DONE.md
+  - story_id: CR139-S02-remediation-baseline-golden-values
+    title: T7 整改回归基线+黄金值快照
+    priority: P0
+    status: verified
+    depends_on:
+    - CR139-S01-remediation-object-inventory
+    dependency_type:
+    - runtime
+    req_coverage:
+    - REQ-212
+    primary_files:
+    - market_data/remediation_baseline.py
+    - tests/golden/
+    file_ownership: 新黄金值机制（独占）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - d1 纯新建对象
+      rationale: T7 是 d1 纯新建基线机制
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-212 (FEAT-02, d1, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      cp5_status: approved
+      implementation_allowed_before_cp5: false
+      implementation_allowed_now: false
+      unlocked_by: CR139-S01 verified
+      cp6_result: process/checks/CP6-CR139-S02-remediation-baseline-golden-values-CODING-DONE.md
+      cp7_result: process/checks/CP7-CR139-S02-remediation-baseline-golden-values-VERIFICATION-DONE.md
+  - story_id: CR139-S03-duplicate-fingerprint-profiling
+    title: C2a 重复画像
+    priority: P0
+    status: verified
+    depends_on:
+    - CR139-S01-remediation-object-inventory
+    - CR139-S02-remediation-baseline-golden-values
+    dependency_type:
+    - runtime
+    req_coverage:
+    - REQ-205
+    req_coverage_note: REQ-205 C2 分 C2a(画像,S03) + C2b(读层去重,S07) 两部分
+    primary_files:
+    - market_data/readers.py
+    file_ownership: readers.py 只读分析函数（重复画像，与 C2b 去重层切片分离）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - b 设计过期 C2 结构性去重
+      rationale: C2 是 b 类结构性去重，MATRIX 标 full-lld
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-205 (FEAT-02 读侧, b, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      cp5_status: approved
+      implementation_allowed_before_cp5: false
+      implementation_allowed_now: false
+      unlocked_by: CR139-S01 and CR139-S02 verified
+      cp6_result: process/checks/CP6-CR139-S03-duplicate-fingerprint-profiling-CODING-DONE.md
+      cp7_result: process/checks/CP7-CR139-S03-duplicate-fingerprint-profiling-VERIFICATION-DONE.md
+- wave: CR139-W1-STRUCTURAL-P0
+  objective: 基线门后四道 P0 防线结构性变更：V1 pointer → C1 PIT → R1 panel → C2b 去重 → N1 分区治理后置。
+  priority: P0
+  parallel_lld: true
+  parallel_dev_after_cp5: limited-by-shared-files
+  entry_conditions:
+  - CR139-W1-BASELINE-FREEZE S01/S02/S03 verified (REQ-247 基线门硬依赖)
+  stories:
+  - story_id: CR139-S04-published-pointer-read-selector
+    title: V1 published pointer / read selector
+    priority: P0
+    status: verified
+    depends_on:
+    - CR139-S01-remediation-object-inventory
+    - CR139-S02-remediation-baseline-golden-values
+    - CR139-S03-duplicate-fingerprint-profiling
+    dependency_type:
+    - contract
+    - runtime
+    req_coverage:
+    - REQ-232
+    primary_files:
+    - market_data/publish.py
+    - market_data/catalog.py
+    - market_data/cli.py
+    file_ownership: publish.py pointer 固定（merge_order 首位）；catalog.py current pointer；cli.py promote 命令
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - a 已设计未实现，消费 HLD-DATA-LAKE §5/§17.4 契约
+      rationale: V1 是 a 类，HLD 已有契约，LLD 消费即可
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-232 (FEAT-02 写/读, a, technical-note)
+    - process/HLD-DATA-LAKE.md §5/§17.4
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      cp5_status: approved
+      implementation_allowed_before_cp5: false
+      implementation_allowed_now: false
+      unlocked_by: CR139-S01/S02/S03 verified
+      published_pointer_advance_execution_allowed: false
+      cp6_result: process/checks/CP6-CR139-S04-published-pointer-read-selector-CODING-DONE.md
+      cp7_result: process/checks/CP7-CR139-S04-published-pointer-read-selector-VERIFICATION-DONE.md
+  - story_id: CR139-S05-pit-as-of-reader
+    title: C1 PIT as-of reader
+    priority: P0
+    status: verified
+    depends_on:
+    - CR139-S04-published-pointer-read-selector
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-204
+    primary_files:
+    - market_data/readers.py
+    - market_data/catalog.py
+    file_ownership: readers.py read_panel_as_of 函数（merge_order 首位）；catalog.py pit_status 字段
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - a 已设计未实现，消费 HLD-DATA-LAKE §17.7.1/§14 契约
+      rationale: C1 是 a 类，消费既有 HLD 契约
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-204 (FEAT-02 读侧, a, technical-note)
+    - process/HLD-DATA-LAKE.md §17.7.1/§14
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      cp5_status: approved
+      implementation_allowed_before_cp5: false
+      implementation_allowed_now: false
+      unlocked_by: CR139-S04 verified
+      hard_gate: No writes to market_data/catalog.py.
+      cp6_result: process/checks/CP6-CR139-S05-pit-as-of-reader-CODING-DONE.md
+      cp7_result: process/checks/CP7-CR139-S05-pit-as-of-reader-VERIFICATION-DONE.md
+  - story_id: CR139-S06-unified-panel-reader
+    title: R1 统一 panel reader
+    priority: P0
+    status: verified
+    depends_on:
+    - CR139-S05-pit-as-of-reader
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-214
+    cross_boundary:
+      owner: FEAT-02 读侧
+      consumer: FEAT-03 ML
+    primary_files:
+    - market_data/readers.py
+    file_ownership: readers.py read_panel 聚合函数（merge_order 第 2 位，基于 S05 C1 契约）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - c 范围扩展，跨模块契约
+      rationale: R1 是 c 类范围扩展，跨 FEAT-02/03 契约
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-214 (FEAT-02 读侧/03, c, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      cp5_status: approved
+      implementation_allowed_before_cp5: false
+      implementation_allowed_now: false
+      unlocked_by: CR139-S05 verified
+      hard_gate: No writes to market_data/catalog.py.
+      cp6_result: process/checks/CP6-CR139-S06-unified-panel-reader-CODING-DONE.md
+      cp7_result: process/checks/CP7-CR139-S06-unified-panel-reader-VERIFICATION-DONE.md
+  - story_id: CR139-S07-read-layer-dedup
+    title: C2b 读层去重
+    priority: P0
+    status: verified
+    depends_on:
+    - CR139-S06-unified-panel-reader
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-205
+    req_coverage_note: REQ-205 C2b 部分（与 S03 C2a 共享 REQ-205）
+    primary_files:
+    - market_data/readers.py
+    file_ownership: readers.py 去重层（merge_order 第 3 位，与 C2a 画像切片分离）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - b 设计过期 C2 结构性去重
+      rationale: C2b 是 b 类结构性去重
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-205 (FEAT-02 读侧, b, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      cp5_status: approved
+      implementation_allowed_before_cp5: false
+      implementation_allowed_now: false
+      unlocked_by: CR139-S06 verified
+      hard_gate: No physical partition migration; read-layer only.
+      cp6_result: process/checks/CP6-CR139-S07-read-layer-dedup-CODING-DONE.md
+      cp7_result: process/checks/CP7-CR139-S07-read-layer-dedup-VERIFICATION-DONE.md
+  - story_id: CR139-S08-runid-partition-key-governance
+    title: N1 run_id 分区键治理（deferred-execution）
+    priority: P0
+    status: verified
+    depends_on:
+    - CR139-S01-remediation-object-inventory
+    - CR139-S02-remediation-baseline-golden-values
+    - CR139-S03-duplicate-fingerprint-profiling
+    - CR139-S07-read-layer-dedup
+    dependency_type:
+    - contract
+    - runtime
+    req_coverage:
+    - REQ-201
+    primary_files:
+    - market_data/lake_layout.py
+    - market_data/cli.py
+    - market_data/normalization.py
+    file_ownership: lake_layout.py 分区路径（merge_order 首位）；cli.py :1871；normalization.py :808
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - c 范围扩展，结构性分区变更
+      rationale: N1 是 c 类范围扩展，改变分区结构
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-201 (FEAT-02 写侧, c, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      cp5_status: approved
+      implementation_allowed_before_cp5: false
+      implementation_allowed_now: false
+      deferred_until: CR139-S01/S02/S03 and CR139-S07 verified (satisfied)
+      deferred_until_baseline_verified: true
+      physical_partition_migration_execution_allowed: false
+      cp6_result: process/checks/CP6-CR139-S08-runid-partition-key-governance-CODING-DONE.md
+      cp7_result: process/checks/CP7-CR139-S08-runid-partition-key-governance-VERIFICATION-DONE.md
+- wave: CR139-W2-ML-SIMULATION
+  objective: 解锁 ML + 模拟盘：V4 schema 冻结 → V3 feature 层 → R2 ML 接入 → E1/E2/E5 ExperimentManifest → R3 DuckDB → L1/L2 增量 → E3/E4 泄漏一致性 → V2 训练快照。
+  priority: P1
+  parallel_lld: true
+  parallel_dev_after_cp5: limited-by-shared-files
+  entry_conditions:
+  - CR139-W1 S01-S08 verified (基线门 + 五道 P0 防线 + N1 路径治理)
+  - V4 schema 契约冻结前置模拟盘前（HIGH3）
+  stories:
+  - story_id: CR139-S09-schema-evolution-contract-freeze
+    title: V4 schema 演进+实盘契约冻结
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S01-remediation-object-inventory
+    - CR139-S02-remediation-baseline-golden-values
+    - CR139-S03-duplicate-fingerprint-profiling
+    - CR139-S07-read-layer-dedup
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-220
+    primary_files:
+    - engine/contracts.py
+    - market_data/readers.py
+    file_ownership: contracts.py schema 演进（merge_order 首位）；readers.py 兼容回退切片（merge_order 第 4 位）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - c 范围扩展，schema 契约冻结 HIGH3
+      rationale: V4 是 c 类，模拟盘前必过
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-220 (FEAT-02/03, c, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S11-feature-label-artifact-layer
+    title: V3 feature/label/artifact 层
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S06-unified-panel-reader
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-219
+    primary_files:
+    - market_data/features/
+    - market_data/lake_layout.py
+    file_ownership: 新 features/ 子层模块（独占）；lake_layout.py features/ 子目录切片（merge_order 第 2 位，S08 N1 后）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - c 范围扩展，feature schema
+      rationale: V3 是 c 类，D5 lake features/ 子层
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-219 (FEAT-03, c, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S10-ml-lake-onboard-no-bypass
+    title: R2 ML 接入 lake 废除旁路
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S06-unified-panel-reader
+    - CR139-S11-feature-label-artifact-layer
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-215
+    primary_files:
+    - experiments/run_experiment_15_*.py
+    - experiments/run_experiment_23_29_*.py
+    file_ownership: experiments/ ML 脚本（独占）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - c 范围扩展，FD-48 硬禁止旁路
+      rationale: R2 是 c 类，依赖 R1→V3→R2 顺序
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-215 (FEAT-03, c, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S12-experiment-manifest-closure
+    title: ExperimentManifest 闭环（E1+E2+E5）
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S04-published-pointer-read-selector
+    - CR139-S11-feature-label-artifact-layer
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-221
+    - REQ-222
+    - REQ-225
+    primary_files:
+    - engine/research_manifest.py
+    - engine/strategy_admission_package.py
+    file_ownership: research_manifest.py（独占）；strategy_admission_package.py（独占）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - c 范围扩展 E1/E2 + d2 既有合同 E5，取最高
+      rationale: 聚合 Story 取 full-lld（含 E1/E2 c full-lld）
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-221/222/225 (FEAT-03/11, c/c/d2)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S13-duckdb-readonly-adapter
+    title: R3 DuckDB 只读 adapter
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S09-schema-evolution-contract-freeze
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-216
+    primary_files:
+    - market_data/duckdb_query.py
+    - pyproject.toml
+    - market_data/readers.py
+    file_ownership: duckdb_query.py（独占）；pyproject.toml 依赖声明（CP5 批准才引入）；readers.py adapter 接入切片（merge_order 第 8 位）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - a 已设计未实现，消费 HLD-DATA-LAKE §17.6/§17.7 契约
+      rationale: R3 是 a 类，D4 只读引擎
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-216 (FEAT-02 读侧, a, technical-note)
+    - process/HLD-DATA-LAKE.md §17.6/§17.7
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+      duckdb_dependency_requires_cp5_approval: true
+  - story_id: CR139-S14-incremental-append-pointer-advance
+    title: L1+L2 日级增量+pointer 前移
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S04-published-pointer-read-selector
+    - CR139-S08-runid-partition-key-governance
+    dependency_type:
+    - contract
+    - runtime
+    req_coverage:
+    - REQ-243
+    - REQ-244
+    primary_files:
+    - market_data/incremental.py
+    - market_data/publish.py
+    - market_data/normalization.py
+    - market_data/cli.py
+    file_ownership: incremental.py（独占）；publish.py pointer 前移（merge_order 第 2 位，S04 V1 后）；normalization.py 增量盖戳（merge_order 第 5 位）；cli.py 增量命令（merge_order 第 3 位）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - d2 既有合同闭环 L1/L2
+      rationale: L1/L2 是 d2，既有 incremental/publish 合同接通闭环
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-243/244 (FEAT-02 写侧, d2, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+      published_pointer_advance_execution_allowed: false
+  - story_id: CR139-S15-label-leak-online-offline-consistency
+    title: E3+E4 label 泄漏+离线在线一致性
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S11-feature-label-artifact-layer
+    - CR139-S12-experiment-manifest-closure
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-223
+    - REQ-224
+    primary_files:
+    - engine/factor_model_validation.py
+    - engine/factor_robustness.py
+    file_ownership: factor_model_validation.py label 泄漏 :561/376（merge_order 首位）；factor_robustness.py :53；新一致性校验模块
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - d1 纯新建 E4 + d2 既有合同 E3，取最高
+      rationale: 聚合 Story 取 full-lld（含 E4 d1 full-lld）
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-223/224 (FEAT-03, d2/d1)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S16-training-snapshot-cutoff
+    title: V2 训练快照+training cutoff
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S04-published-pointer-read-selector
+    - CR139-S10-ml-lake-onboard-no-bypass
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-218
+    primary_files:
+    - market_data/readers.py
+    - experiments/
+    file_ownership: readers.py published-only 切片（merge_order 第 9 位）；ML 脚本
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - c 范围扩展，训练 cutoff 冻结
+      rationale: V2 是 c 类
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-218 (FEAT-03, c, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+- wave: CR139-W2-CONFIG-FACTS
+  objective: 配置类事实源版本化 + release 闭环（AGA-5 E1 复用 V1 pointer 语义）：F1 benchmark / F2 commission / F3 universe·risk policy。
+  priority: P1
+  parallel_lld: true
+  parallel_dev_after_cp5: true
+  entry_conditions:
+  - S04 V1 published pointer 契约冻结（config_facts release 复用 V1 pointer 语义）
+  stories:
+  - story_id: CR139-S17-versioned-benchmark-riskfree
+    title: F1 版本化 benchmark+risk-free curve
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S04-published-pointer-read-selector
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-236
+    primary_files:
+    - market_data/benchmarks.py
+    file_ownership: benchmarks.py :99/114（独占）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - d2 既有合同闭环
+      rationale: F1 是 d2，既有 BenchmarkCoverage/BenchmarkDefinition 合同接通版本化
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-236 (FEAT-02, d2, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S18-versioned-commission
+    title: F2 版本化 commission/费用/滑点
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S04-published-pointer-read-selector
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-237
+    primary_files:
+    - trading/qmt_gateway_contracts.py
+    file_ownership: qmt_gateway_contracts.py :997（merge_order 首位，S21 T5 前）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - d2 既有合同闭环
+      rationale: F2 是 d2，既有 CommissionSchedule 合同接通版本化
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-237 (FEAT-12, d2, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S19-versioned-universe-risk-policy
+    title: F3 版本化 universe/risk policy
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S04-published-pointer-read-selector
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-238
+    primary_files:
+    - engine/mature_multifactor_framework.py
+    file_ownership: mature_multifactor_framework.py :228（独占）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - d2 既有合同闭环
+      rationale: F3 是 d2，既有 PortfolioRiskPolicy 合同接通版本化
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-238 (FEAT-14, d2, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+- wave: CR139-W2-AUDIT-CHAIN
+  objective: 交易审计链：T6 run-id 贯通（owner FEAT-02 写侧）→ T4 BrokerLakeSchema 审计链 + T5 成本前置门禁。
+  priority: P1
+  parallel_lld: true
+  parallel_dev_after_cp5: limited-by-shared-files
+  entry_conditions:
+  - S04 V1 publish 生成 run-id + S14 L1/L2 增量带 run-id
+  stories:
+  - story_id: CR139-S22-runid-lineage-penetration
+    title: T6 数据 run-id 贯通（跨边界）
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S04-published-pointer-read-selector
+    - CR139-S14-incremental-append-pointer-advance
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-242
+    cross_boundary:
+      owner: FEAT-02 写侧（run-id 生成）
+      consumer:
+      - FEAT-11 RunEvidenceIndex
+      - FEAT-06 broker event
+      rule: run-id 单向贯通，消费方只读，FD-51 禁止断链静默成功
+    primary_files:
+    - market_data/publish.py
+    - market_data/manifest.py
+    - trading/strategy_runner/evidence_index.py
+    file_ownership: 生成侧 publish.py/manifest.py（merge_order 第 3/2 位，S04/S14 后）；消费侧 evidence_index.py :19（独占）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - d2 既有合同闭环，跨 4 Feature
+      rationale: T6 是 d2，既有 RunEvidenceIndex 合同接通 run-id 贯通
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-242 (FEAT-02 写侧/11/06, d2, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S20-broker-lake-schema-audit-chain
+    title: T4 BrokerLakeSchema 闭环实盘写+审计链
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S22-runid-lineage-penetration
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-240
+    primary_files:
+    - trading/broker_lake.py
+    file_ownership: broker_lake.py schema registry（独占）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - c 范围扩展，实盘写+审计链
+      rationale: T4 是 c 类，broker lake 实盘写边界
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-240 (FEAT-06, c, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+      broker_lake_live_write_allowed: false
+  - story_id: CR139-S21-commission-cost-pretrade-gate
+    title: T5 CommissionSchedule 前置成本门禁
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S18-versioned-commission
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-241
+    primary_files:
+    - trading/qmt_gateway_contracts.py
+    file_ownership: qmt_gateway_contracts.py :997（merge_order 第 2 位，S18 F2 后）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - d2 既有合同闭环
+      rationale: T5 是 d2，既有 CommissionSchedule 接通成本前置门禁
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-241 (FEAT-12, d2, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+- wave: CR139-W2-CONSISTENCY
+  objective: 跨源与时点一致性：X1 复权 PIT / X2 跨源日历 / X3 lookahead 阻断 / X4 PIT universe 成分链。
+  priority: P1
+  parallel_lld: true
+  parallel_dev_after_cp5: limited-by-shared-files
+  entry_conditions:
+  - S05 C1 PIT reader（X1/X3 依赖）；S09 V4 contracts.py（X4 依赖）；S19 F3 universe policy（X4 依赖）
+  stories:
+  - story_id: CR139-S23-adjustment-factor-pit
+    title: X1 复权因子 PIT 校验
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S05-pit-as-of-reader
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-229
+    primary_files:
+    - market_data/normalization.py
+    file_ownership: normalization.py 复权切片（merge_order 第 6 位）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - d1 纯新建对象
+      rationale: X1 是 d1 纯新建
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-229 (FEAT-02 写侧, d1, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S24-cross-source-calendar-timezone
+    title: X2 跨源交易日历/时区一致性
+    priority: P1
+    status: lld-pending
+    depends_on: []
+    dependency_type: []
+    req_coverage:
+    - REQ-230
+    primary_files:
+    - market_data/trade_calendar.py
+    file_ownership: trade_calendar 模块（独占）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - d1 纯新建对象
+      rationale: X2 是 d1 纯新建
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-230 (FEAT-02 写侧, d1, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S25-decision-time-lookahead-gate
+    title: X3 decision_time lookahead 阻断
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S05-pit-as-of-reader
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-235
+    primary_files:
+    - market_data/readers.py
+    file_ownership: readers.py decision_time 切片 :227/1790（merge_order 第 5 位）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - d2 既有合同闭环
+      rationale: X3 是 d2，既有 decision_time 部分支持加强制阻断
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-235 (FEAT-02 读侧, d2, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S26-pit-universe-constituent-chain
+    title: X4 PIT universe 成分链
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S09-schema-evolution-contract-freeze
+    - CR139-S19-versioned-universe-risk-policy
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-231
+    primary_files:
+    - engine/contracts.py
+    file_ownership: contracts.py :270（merge_order 第 2 位，S09 V4 后）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - d2 既有合同闭环
+      rationale: X4 是 d2，既有 survivorship_bias_note 接通 PIT 成分链
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-231 (FEAT-14, d2, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+- wave: CR139-W2-READ-GATE
+  objective: 读审计 + 读前门禁：L3 读审计 log（owner FEAT-02 读侧）+ L4 readiness 读前强制 gate。
+  priority: P1
+  parallel_lld: true
+  parallel_dev_after_cp5: limited-by-shared-files
+  entry_conditions:
+  - S05 C1 reader hook + S22 T6 run-id 贯通
+  stories:
+  - story_id: CR139-S27-read-audit-log-runid
+    title: L3 读审计 log+run-id 贯通
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S05-pit-as-of-reader
+    - CR139-S22-runid-lineage-penetration
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-233
+    cross_boundary:
+      owner: FEAT-02 读侧（读审计 log）
+      consumer: FEAT-11 RunEvidenceIndex（run-id 关联）
+    primary_files:
+    - market_data/readers.py
+    - market_data/read_audit.py
+    file_ownership: readers.py 读审计 hook 切片（merge_order 第 6 位）；新 read_audit.py 模块（独占）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - d1 纯新建对象
+      rationale: L3 是 d1 纯新建读审计 log
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-233 (FEAT-02 读侧/11, d1, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S28-readiness-pre-read-gate
+    title: L4 readiness 读前强制门禁
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S05-pit-as-of-reader
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-234
+    cross_boundary:
+      owner: FEAT-02 读侧（门禁）
+      consumer: FEAT-14 模拟盘
+    primary_files:
+    - market_data/readiness.py
+    - market_data/readers.py
+    file_ownership: readiness.py :462（独占）；readers.py gate 调用切片（merge_order 第 7 位）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - d2 既有合同闭环
+      rationale: L4 是 d2，既有 build_readiness_matrix 前置为强制 gate
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-234 (FEAT-02 读侧/14, d2, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+- wave: CR139-W2-CORRECTNESS
+  objective: PIT/去重正确性回归测试：T2 未来财报断言 + T3 重复键唯一断言。
+  priority: P1
+  parallel_lld: true
+  parallel_dev_after_cp5: true
+  entry_conditions:
+  - S05 C1 PIT + S07 C2b 去重实现
+  stories:
+  - story_id: CR139-S29-pit-dedup-correctness-tests
+    title: T2+T3 PIT/去重正确性回归测试
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S05-pit-as-of-reader
+    - CR139-S07-read-layer-dedup
+    dependency_type:
+    - runtime
+    req_coverage:
+    - REQ-226
+    - REQ-227
+    primary_files:
+    - tests/test_cr139_pit_correctness.py
+    - tests/test_cr139_dedup_correctness.py
+    file_ownership: 新测试文件（独占）
+    lld_policy:
+      required_level: full-lld
+      trigger_reasons:
+      - c 范围扩展 T2/T3
+      rationale: T2/T3 是 c 类，构造回归测试
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-226/227 (FEAT-02 读侧, c, full-lld)
+    lld_gate:
+      required: true
+      required_level: full-lld
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+- wave: CR139-W2-CLEANUP
+  objective: 收尾：N2/N3 命名规约 + C3 events schema + C4 写入去重 + M1 catalog 定主 + M2 lineage 回填。
+  priority: P1
+  parallel_lld: true
+  parallel_dev_after_cp5: limited-by-shared-files
+  entry_conditions:
+  - S08 N1 分区规约（N2/N3 依赖）；S07 C2b 去重（C4 依赖）；S04 V1 pointer（M1 依赖）
+  stories:
+  - story_id: CR139-S30-runid-naming-convention
+    title: N2+N3 run_id 命名规约统一
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S08-runid-partition-key-governance
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-202
+    - REQ-203
+    primary_files:
+    - market_data/normalization.py
+    - market_data/lake_layout.py
+    file_ownership: run_id 生成处（merge_order 第 3 位，S08 N1 后）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - b 设计过期 命名整理类
+      rationale: N2/N3 是 b 类命名/整理
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-202/203 (FEAT-02 写侧, b, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S31-events-schema-repair
+    title: C3 events schema 修复
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S01-remediation-object-inventory
+    - CR139-S02-remediation-baseline-golden-values
+    - CR139-S03-duplicate-fingerprint-profiling
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-206
+    primary_files:
+    - market_data/normalization.py
+    file_ownership: normalization.py events 分支切片（merge_order 第 2 位，S08 N1 后）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - b 设计过期
+      rationale: C3 是 b 类 schema 修复
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-206 (FEAT-02 写侧, b, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S32-write-dedup-guarantee
+    title: C4 写入去重保证
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S07-read-layer-dedup
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-207
+    primary_files:
+    - market_data/normalization.py
+    - market_data/validation.py
+    file_ownership: normalization.py 写入去重切片（merge_order 第 3 位）；validation.py（独占）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - b 设计过期
+      rationale: C4 是 b 类写入去重
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-207 (FEAT-02 写侧, b, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S33-catalog-manifest-source-of-truth
+    title: M1 catalog/manifest 定主
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S04-published-pointer-read-selector
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-208
+    primary_files:
+    - market_data/catalog.py
+    - market_data/manifest.py
+    file_ownership: catalog.py（merge_order 第 2 位，S04 V1 后）；manifest.py 派生化（与 S34 M2 串行）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - b 设计过期
+      rationale: M1 是 b 类真相源定主
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-208 (FEAT-02 写侧, b, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S34-lineage-checksum-backfill
+    title: M2 lineage_checksum 回填
+    priority: P1
+    status: lld-pending
+    depends_on:
+    - CR139-S33-catalog-manifest-source-of-truth
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-209
+    primary_files:
+    - market_data/manifest.py
+    - market_data/normalization.py
+    file_ownership: manifest.py lineage_checksum（merge_order 第 2 位，S33 M1 后）；normalization.py lineage 回填切片（merge_order 第 4 位）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - a 已设计未实现，消费 HLD-DATA-LAKE §17.7.1 契约
+      rationale: M2 是 a 类
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-209 (FEAT-02 写侧, a, technical-note)
+    - process/HLD-DATA-LAKE.md §17.7.1
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+- wave: CR139-W3-OPS
+  objective: 实盘与运维 P2：L5 replay / R4 列裁剪 / T1 DuckDB e2e / M3 quality 整理 / M4 CR 审计链 / F4 政策周期。
+  priority: P2
+  parallel_lld: true
+  parallel_dev_after_cp5: true
+  entry_conditions:
+  - Wave2 核心完成（S04 V1 / S13 R3 / S08 N1 / S14 L1L2 / S19 F3 / S15 E3E4）
+  stories:
+  - story_id: CR139-S35-replay-published-asof
+    title: L5 replay 接通 published as_of 重放
+    priority: P2
+    status: lld-pending
+    depends_on:
+    - CR139-S04-published-pointer-read-selector
+    - CR139-S14-incremental-append-pointer-advance
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-245
+    primary_files:
+    - market_data/replay.py
+    - market_data/cli.py
+    file_ownership: replay.py :215（独占）；cli.py cmd_p0_replay（merge_order 第 4 位）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - d2 既有合同闭环
+      rationale: L5 是 d2，既有 replay 合同接通 published as_of 重放
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-245 (FEAT-02 读侧, d2, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S36-column-pruning-predicate-pushdown
+    title: R4 列裁剪/谓词下推
+    priority: P2
+    status: lld-pending
+    depends_on:
+    - CR139-S13-duckdb-readonly-adapter
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-217
+    primary_files:
+    - market_data/readers.py
+    file_ownership: readers.py 列裁剪切片（merge_order 第 10 位）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - a 已设计未实现，消费 HLD-DATA-LAKE §17.6 契约
+      rationale: R4 是 a 类
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-217 (FEAT-02 读侧, a, technical-note)
+    - process/HLD-DATA-LAKE.md §17.6
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S37-duckdb-readonly-e2e-test
+    title: T1 DuckDB 只读 e2e 测试
+    priority: P2
+    status: lld-pending
+    depends_on:
+    - CR139-S13-duckdb-readonly-adapter
+    dependency_type:
+    - runtime
+    req_coverage:
+    - REQ-228
+    primary_files:
+    - tests/test_cr014_duckdb_*.py
+    file_ownership: tests/test_cr014_duckdb_*.py（独占）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - a 已设计未实现
+      rationale: T1 是 a 类 e2e 测试
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-228 (FEAT-02 读侧, a, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S38-quality-partition-reorg
+    title: M3 quality/ 分区整理
+    priority: P2
+    status: lld-pending
+    depends_on: []
+    dependency_type: []
+    req_coverage:
+    - REQ-210
+    primary_files:
+    - market_data/quality_writer.py
+    file_ownership: 质量报告写入模块（独占）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - b 设计过期
+      rationale: M3 是 b 类分区整理
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-210 (FEAT-02 写侧, b, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S39-cr-data-audit-chain
+    title: M4 CR→数据审计链
+    priority: P2
+    status: lld-pending
+    depends_on:
+    - CR139-S08-runid-partition-key-governance
+    - CR139-S33-catalog-manifest-source-of-truth
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-211
+    primary_files:
+    - market_data/catalog.py
+    file_ownership: catalog.py triggered_by_cr/run_lineage（merge_order 第 3 位，S04/S33 后）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - c 范围扩展（MATRIX 逐项标 technical-note，审计链字段补全低风险）
+      rationale: M4 是 c 类但 MATRIX 标 technical-note
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-211 (FEAT-02 写侧, c, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+  - story_id: CR139-S40-versioned-policy-cycle-shortability
+    title: F4 版本化政策周期/shortability
+    priority: P2
+    status: lld-pending
+    depends_on:
+    - CR139-S04-published-pointer-read-selector
+    - CR139-S19-versioned-universe-risk-policy
+    dependency_type:
+    - contract
+    req_coverage:
+    - REQ-239
+    primary_files:
+    - engine/factor_model_validation.py
+    - config/policy_cycles.yaml
+    file_ownership: factor_model_validation.py :444（merge_order 第 2 位，S15 E3 后）；policy_cycles.yaml（独占）
+    lld_policy:
+      required_level: technical-note
+      trigger_reasons:
+      - d2 既有合同闭环
+      rationale: F4 是 d2，既有 policy_cycle_coverage 接通版本化
+    feature_design_refs:
+    - docs/design/FEATURE-DESIGN-MATRIX.md v1.13 REQ-239 (FEAT-03, d2, technical-note)
+    lld_gate:
+      required: true
+      required_level: technical-note
+      status: pending-cp5
+    dev_gate:
+      cp5_required: true
+      implementation_allowed_before_cp5: false
+dependency_graph:
+  nodes:
+  - CR139-S01-remediation-object-inventory
+  - CR139-S02-remediation-baseline-golden-values
+  - CR139-S03-duplicate-fingerprint-profiling
+  - CR139-S04-published-pointer-read-selector
+  - CR139-S05-pit-as-of-reader
+  - CR139-S06-unified-panel-reader
+  - CR139-S07-read-layer-dedup
+  - CR139-S08-runid-partition-key-governance
+  - CR139-S09-schema-evolution-contract-freeze
+  - CR139-S10-ml-lake-onboard-no-bypass
+  - CR139-S11-feature-label-artifact-layer
+  - CR139-S12-experiment-manifest-closure
+  - CR139-S13-duckdb-readonly-adapter
+  - CR139-S14-incremental-append-pointer-advance
+  - CR139-S15-label-leak-online-offline-consistency
+  - CR139-S16-training-snapshot-cutoff
+  - CR139-S17-versioned-benchmark-riskfree
+  - CR139-S18-versioned-commission
+  - CR139-S19-versioned-universe-risk-policy
+  - CR139-S20-broker-lake-schema-audit-chain
+  - CR139-S21-commission-cost-pretrade-gate
+  - CR139-S22-runid-lineage-penetration
+  - CR139-S23-adjustment-factor-pit
+  - CR139-S24-cross-source-calendar-timezone
+  - CR139-S25-decision-time-lookahead-gate
+  - CR139-S26-pit-universe-constituent-chain
+  - CR139-S27-read-audit-log-runid
+  - CR139-S28-readiness-pre-read-gate
+  - CR139-S29-pit-dedup-correctness-tests
+  - CR139-S30-runid-naming-convention
+  - CR139-S31-events-schema-repair
+  - CR139-S32-write-dedup-guarantee
+  - CR139-S33-catalog-manifest-source-of-truth
+  - CR139-S34-lineage-checksum-backfill
+  - CR139-S35-replay-published-asof
+  - CR139-S36-column-pruning-predicate-pushdown
+  - CR139-S37-duckdb-readonly-e2e-test
+  - CR139-S38-quality-partition-reorg
+  - CR139-S39-cr-data-audit-chain
+  - CR139-S40-versioned-policy-cycle-shortability
+  edges:
+  - - CR139-S01
+    - CR139-S02
+  - - CR139-S01
+    - CR139-S03
+  - - CR139-S02
+    - CR139-S03
+  - - CR139-S01
+    - CR139-S04
+  - - CR139-S02
+    - CR139-S04
+  - - CR139-S03
+    - CR139-S04
+  - - CR139-S04
+    - CR139-S05
+  - - CR139-S05
+    - CR139-S06
+  - - CR139-S06
+    - CR139-S07
+  - - CR139-S03
+    - CR139-S07
+  - - CR139-S01
+    - CR139-S08
+  - - CR139-S02
+    - CR139-S08
+  - - CR139-S03
+    - CR139-S08
+  - - CR139-S07
+    - CR139-S08
+  - - CR139-S03
+    - CR139-S09
+  - - CR139-S07
+    - CR139-S09
+  - - CR139-S06
+    - CR139-S11
+  - - CR139-S06
+    - CR139-S10
+  - - CR139-S11
+    - CR139-S10
+  - - CR139-S04
+    - CR139-S12
+  - - CR139-S11
+    - CR139-S12
+  - - CR139-S09
+    - CR139-S13
+  - - CR139-S04
+    - CR139-S14
+  - - CR139-S08
+    - CR139-S14
+  - - CR139-S11
+    - CR139-S15
+  - - CR139-S12
+    - CR139-S15
+  - - CR139-S04
+    - CR139-S16
+  - - CR139-S10
+    - CR139-S16
+  - - CR139-S04
+    - CR139-S17
+  - - CR139-S04
+    - CR139-S18
+  - - CR139-S04
+    - CR139-S19
+  - - CR139-S04
+    - CR139-S22
+  - - CR139-S14
+    - CR139-S22
+  - - CR139-S22
+    - CR139-S20
+  - - CR139-S18
+    - CR139-S21
+  - - CR139-S05
+    - CR139-S23
+  - - CR139-S05
+    - CR139-S25
+  - - CR139-S09
+    - CR139-S26
+  - - CR139-S19
+    - CR139-S26
+  - - CR139-S05
+    - CR139-S27
+  - - CR139-S22
+    - CR139-S27
+  - - CR139-S05
+    - CR139-S28
+  - - CR139-S05
+    - CR139-S29
+  - - CR139-S07
+    - CR139-S29
+  - - CR139-S08
+    - CR139-S30
+  - - CR139-S03
+    - CR139-S31
+  - - CR139-S07
+    - CR139-S32
+  - - CR139-S04
+    - CR139-S33
+  - - CR139-S33
+    - CR139-S34
+  - - CR139-S04
+    - CR139-S35
+  - - CR139-S14
+    - CR139-S35
+  - - CR139-S13
+    - CR139-S36
+  - - CR139-S13
+    - CR139-S37
+  - - CR139-S08
+    - CR139-S39
+  - - CR139-S33
+    - CR139-S39
+  - - CR139-S04
+    - CR139-S40
+  - - CR139-S19
+    - CR139-S40
+  validation_result:
+    cycles: []
+    invalid_references: []
+    parallel_internal_dependencies: 0
+    conclusion: PASS
+    baseline_gate_respected: true
+    file_conflict_merge_orders_defined: true
+merge_order:
+  readers_py:
+  - CR139-S05
+  - CR139-S06
+  - CR139-S07
+  - CR139-S09
+  - CR139-S25
+  - CR139-S27
+  - CR139-S28
+  - CR139-S13
+  - CR139-S16
+  - CR139-S36
+  publish_py:
+  - CR139-S04
+  - CR139-S14
+  - CR139-S22
+  catalog_py:
+  - CR139-S04
+  - CR139-S33
+  - CR139-S39
+  normalization_py:
+  - CR139-S08
+  - CR139-S31
+  - CR139-S32
+  - CR139-S34
+  - CR139-S14
+  - CR139-S23
+  - CR139-S22
+  lake_layout_py:
+  - CR139-S08
+  - CR139-S11
+  - CR139-S30
+  cli_py:
+  - CR139-S08
+  - CR139-S04
+  - CR139-S14
+  - CR139-S35
+  qmt_gateway_contracts_py:
+  - CR139-S18
+  - CR139-S21
+  contracts_py:
+  - CR139-S09
+  - CR139-S26
+  factor_model_validation_py:
+  - CR139-S15
+  - CR139-S40
+  manifest_py:
+  - CR139-S33
+  - CR139-S34
+validation_plan:
+  fixture_static_only:
+  - uv run --python 3.11 pytest -q tests/test_cr139_pit_correctness.py
+  - uv run --python 3.11 pytest -q tests/test_cr139_dedup_correctness.py
+  - uv run --python 3.11 pytest -q tests/test_cr014_duckdb_*.py
+  - uv run --python 3.11 python scripts/lake_inventory.py --dry-run
+  - uv run --python 3.11 python scripts/check_process_artifact_hygiene.py --json
+  forbidden_without_new_authorization:
+  - real lake write / physical partition migration execution
+  - published pointer advance execution / broker lake live write
+  - runtime / NAS / QMT / trading / provider-lake-catalog write
+  - Git remote write / real data write / publish / live
+lld_clarification_queue:
+  note: 4 项 LCQ 全部 resolved by host-orchestrator 2026-06-28T17:50:00+08:00，均采纳 meta-se 推荐（blocks_lld=false，低风险实现细节，归 agent 默认处理层）。
+  items:
+  - id: LCQ-139-01
+    story_id: CR139-S03 / CR139-S07
+    question: C2a 画像与 C2b 去重的代码触点都在 readers.py:375/409。C2a 用独立只读分析函数还是脚本？C2b 去重层嵌入 read_dataset 还是独立去重函数？影响 readers.py 切片划分。
+    recommendation: C2a 独立只读分析函数（不改读路径）；C2b 嵌入 read_dataset 出口按 source_run_id 取最新。
+    impact_surface: readers.py 切片边界；S03/S07 文件所有权
+    blocks_lld: false
+    status: resolved
+    answer: 采纳推荐：C2a 独立只读分析函数（不改读路径）；C2b 嵌入 read_dataset 出口按 source_run_id 取最新。readers.py 切片按此划分，S03/S07 所有权明确。
+    answered_by: host-orchestrator
+    answered_at: '2026-06-28T17:50:00+08:00'
+    resolution: 采纳推荐方案，低风险实现细节，归 agent 默认处理层，不升级为用户必须决策（规则 34）
+  - id: LCQ-139-02
+    story_id: CR139-S05/S06/S07/S09/S13/S16/S25/S27/S28/S36
+    question: readers.py 被 10 个 Story 触及。采用单一 merge_owner 串行合并，还是按函数切片并行 + merge_order 串行合并？影响 Wave2 并行度。
+    recommendation: 函数切片 + merge_order 串行合并（S05→S06→S07→S09→S25→S27→S28→S13→S16→S36）。CP5 LLD 时确认每 Story 函数级切片边界。
+    impact_surface: Wave2 并行度；readers.py 合并冲突
+    blocks_lld: false
+    status: resolved
+    answer: 采纳推荐：函数切片 + merge_order 串行合并 S05→S06→S07→S09→S25→S27→S28→S13→S16→S36。CP5 LLD 时确认每 Story 函数级切片边界。Wave2 并行度受限于 readers.py 串行，AGA-1 A1 已知代价。
+    answered_by: host-orchestrator
+    answered_at: '2026-06-28T17:50:00+08:00'
+    resolution: 采纳推荐方案，低风险实现细节，归 agent 默认处理层，不升级为用户必须决策（规则 34）
+  - id: LCQ-139-03
+    story_id: CR139-S22
+    question: T6 run-id 生成侧文件所有权：run-id 生成在 publish.py 还是 normalization.py 还是 manifest.py？影响 T6 与 V1/L1/L2 的 file-conflict 判定。
+    recommendation: run-id 在 publish.py publish 时生成并写入 lineage（manifest.py 记录），与 V1/L2 共享 publish.py，按 V1→L2→T6 merge_order 串行。
+    impact_surface: publish.py / manifest.py 所有权；T6 与 V1/L2 合并顺序
+    blocks_lld: false
+    status: resolved
+    answer: 采纳推荐：run-id 在 publish.py publish 时生成并写入 lineage（manifest.py 记录），与 V1/L2 共享 publish.py，按 V1→L2→T6 merge_order 串行。T6 owner=FEAT-02 写侧 S22，consumer=FEAT-06 S20/FEAT-11 S27。
+    answered_by: host-orchestrator
+    answered_at: '2026-06-28T17:50:00+08:00'
+    resolution: 采纳推荐方案，低风险实现细节，归 agent 默认处理层，不升级为用户必须决策（规则 34）
+  - id: LCQ-139-04
+    story_id: CR139-S08
+    question: N1 deferred-execution 边界：N1 LLD 在 CP5 写还是等基线冻结后？dev_gate 是否标 deferred-until-baseline-verified？
+    recommendation: N1 LLD 在 CP5 写（设计不阻塞）；dev_gate=deferred-until-baseline-verified（实现延迟到 S01/S02/S03 verified 后）；CP4 不授权物理分区迁移执行。
+    impact_surface: N1 LLD/实现时序；基线门交互
+    blocks_lld: false
+    status: resolved
+    answer: 采纳推荐：N1 LLD 在 CP5 写（设计不阻塞）；dev_gate=deferred-until-baseline-verified（实现延迟到 S01/S02/S03 verified 后）；CP4/CP5 不授权物理分区迁移执行，后置到基线冻结之后（REQ-247）。
+    answered_by: host-orchestrator
+    answered_at: '2026-06-28T17:50:00+08:00'
+    resolution: 采纳推荐方案，低风险实现细节，归 agent 默认处理层，不升级为用户必须决策（规则 34）

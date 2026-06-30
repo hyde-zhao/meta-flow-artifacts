@@ -1,0 +1,64 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "modified",
+      "path": "docs/quality/VERIFICATION-REPORT-CR139-W1.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/checks/CP7-CR139-S07-read-layer-dedup-VERIFICATION-DONE.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/STORY-CR139-S07.CP7.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/STORY-CR139-S07.CP7.index.json"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_cr139_read_layer_dedup.py",
+      "result": "pass",
+      "summary": "6 passed in 0.54s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py tests/test_cr139_duplicate_fingerprint_profiling.py tests/test_cr139_published_pointer.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_panel_reader.py tests/test_cr139_read_layer_dedup.py tests/test_cr014_catalog_publish_gate.py tests/test_cr014_p0_pipeline_contract.py",
+      "result": "pass",
+      "summary": "62 passed in 2.26s"
+    },
+    {
+      "command": "git diff --check -- market_data/readers.py tests/test_cr139_read_layer_dedup.py",
+      "result": "pass",
+      "summary": "no whitespace errors"
+    }
+  ],
+  "cr_id": "CR-139",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/STORY-CR139-S07.CP7.return.json",
+  "risks": [
+    {
+      "id": "O-S07-1",
+      "status": "accepted-deterministic-fallback",
+      "summary": "N2 can later refine run ordering after run-id naming governance is verified."
+    },
+    {
+      "id": "O-S07-4",
+      "status": "not-authorized",
+      "summary": "Real lake runtime validation remains out of scope."
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR139-S07",
+  "tests": [
+    "tests/test_cr139_read_layer_dedup.py",
+    "tests/test_cr139_panel_reader.py",
+    "tests/test_cr139_pit_as_of_reader.py",
+    "tests/test_cr014_catalog_publish_gate.py",
+    "tests/test_cr014_p0_pipeline_contract.py"
+  ],
+  "waivers": []
+}

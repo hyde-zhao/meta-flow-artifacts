@@ -1,0 +1,88 @@
+{
+  "discussion_id": "CP2-CR139-SCENARIO-DISCUSSION",
+  "cr_id": "CR-139",
+  "phase": "requirement-clarification",
+  "status": "draft-pending-cp2-human-gate",
+  "interaction_mode": "handoff-trail-plus-return-summary",
+  "interaction_mode_reason": "AskUserQuestion platform tool not provided in this delegation; SGQ evidence sourced from handoff v0.7 five-round review trail (D1-D7 agreed, D8a/D8b round-2 recommended-for-approval); formal confirmation routed to CP2 human gate by host-orchestrator",
+  "delegated_to": "meta-pm",
+  "created_at": "2026-06-28T00:00:00+08:00",
+  "last_updated_at": "2026-06-28T00:00:00+08:00",
+  "source_context": "process/context/CP2-CR139-STRATEGY-DATA-FOUNDATION-CONTEXT.yaml",
+  "gray_areas": [
+    {
+      "id": "SGA-139-01",
+      "question": "范围广度 vs 落地节奏：45 项全纳入 vs 先 P0/P1 收口、P2 defer",
+      "selected": true,
+      "status": "resolved-by-recommendation",
+      "recommendation": "45 项全纳入 CP2 基线，按 Wave1(P0)/Wave2(P1)/Wave3(P2) 分批实现，P2 入 BACKLOG deferred"
+    },
+    {
+      "id": "SGA-139-02",
+      "question": "既有合同闭环边界（d2 14 项）：哪些纯闭环、哪些补版本化事实源",
+      "selected": true,
+      "status": "resolved-by-recommendation",
+      "recommendation": "F1/F2/F3/F4 补版本化事实源 + release 闭环；L1/L2/L4/L5/E3/E5/T5/T6/X3/X4 接通执行/前置/闭环"
+    },
+    {
+      "id": "SGA-139-03",
+      "question": "ML feature 层归属：lake features/ 子层 vs 独立 feature store（D5 附条件）",
+      "selected": false,
+      "status": "open-deferred",
+      "recommendation": "D5 已决 lake features/ 子层带版本；切换独立 feature store 条件写入 DEF-139-01"
+    },
+    {
+      "id": "SGA-139-04",
+      "question": "物理分区迁移时机与存量 38 run_id 分区",
+      "selected": true,
+      "status": "resolved-by-recommendation",
+      "recommendation": "Wave1 N1 物理迁移后置到基线冻结之后；存量按 D3 不重命名；读层去重优先 C2b"
+    }
+  ],
+  "sgq_interactions": [
+    {
+      "id": "SGQ-139-01",
+      "topic": "范围广度与落地节奏",
+      "recommendation": "选项1：45 项全纳入 CP2 基线，按 Wave 分批，P2 deferred",
+      "user_answer_source": "handoff v0.7 五轮评审 + capsule D8a/D8b 二轮建议批准",
+      "confirmation": "meta-pm 以 45 项全纳入、按 Wave 分批、D8a/D8b 建议批准 为 working basis；正式确认路由 CP2 人工门禁",
+      "impact_surface": "范围/复杂度/验证/交付出口/后续门控"
+    },
+    {
+      "id": "SGQ-139-02",
+      "topic": "既有合同闭环 vs 版本化事实源",
+      "recommendation": "选项1：F1-F4 版本化事实源 + release 闭环；其余接通执行/前置/闭环",
+      "user_answer_source": "handoff §3.10 + §3.6/3.7/3.8/3.11 修法列",
+      "confirmation": "meta-pm 按 F1-F4 版本化、其余闭环 路由写入 REQUIREMENTS 增量",
+      "impact_surface": "范围/设计路由/CP3 Feature 归属"
+    }
+  ],
+  "deferred_ideas": [
+    {"id": "DEF-139-01", "source": "SGA-139-03/D5", "content": "ML feature 层切换独立 feature store", "restart_condition": "feature 规模/跨湖查询/在线推理延迟触发"},
+    {"id": "DEF-139-02", "source": "SGA-139-04/Wave1 N1", "content": "物理分区迁移/候选压缩", "restart_condition": "T7 黄金值对比归因完成后"},
+    {"id": "DEF-139-03", "source": "SGA-139-01", "content": "Wave3 P2 项", "restart_condition": "Wave1/Wave2 完成后按需"},
+    {"id": "DEF-139-04", "source": "D3", "content": "存量 run_id 一次性重命名", "restart_condition": "重跑替换不可行且命名冲突阻塞时"}
+  ],
+  "pending_human_decisions": [
+    {
+      "id": "D8a",
+      "type": "scope",
+      "question": "(d1) 纯新建 6 项（L3/E4/T7/T8/X1/X2）是否纳入范围",
+      "recommendation": "纳入，按新建能力处理",
+      "alternatives": ["不纳入，后续 CR", "部分纳入"],
+      "impact": "范围/复杂度/验证/CP3 门禁",
+      "rollback": "CP2 修改口径后 meta-pm 增量回更 REQUIREMENTS/SCENARIOS"
+    },
+    {
+      "id": "D8b",
+      "type": "scope",
+      "question": "(d2) 既有合同闭环 14 项是否纳入范围",
+      "recommendation": "纳入，按既有合同接通闭环/版本化扩展处理，不重复设计",
+      "alternatives": ["不纳入", "部分纳入"],
+      "impact": "范围/设计路由/CP3 Feature 归属",
+      "rollback": "CP2 修改口径后 meta-pm 增量回更"
+    }
+  ],
+  "blocking_open_items": 0,
+  "next_step": "host-orchestrator 运行 CP2 precheck 终审 → 发起 CP2 Decision Brief 人工门禁（含 D8a/D8b 正式确认）"
+}

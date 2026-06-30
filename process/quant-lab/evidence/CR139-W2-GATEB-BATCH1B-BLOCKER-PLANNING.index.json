@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch1b_blocker_planning",
+  "created_at": "2026-06-29T16:18:20+08:00",
+  "status": "pass_with_risk_ready_for_batch1b_write_authorization_review",
+  "mode": "read_only_blocker_planning",
+  "datasets": [
+    "index_members",
+    "index_weights"
+  ],
+  "index_members": {
+    "source_row_count": 295800,
+    "retained_row_count": 283500,
+    "dropped_exact_duplicate_row_count": 12300,
+    "exact_duplicate_group_count": 6300,
+    "candidate_write_mode": "additive_only_exact_full_row_dedup",
+    "candidate_relative_path": "candidate/parquet/dataset=index_members/schema_version=1.0/run_id=cr139-w2-index_members-legacy_lake-20260629-canonical",
+    "planned_run_id": "cr139-w2-index_members-legacy_lake-20260629-canonical"
+  },
+  "index_weights": {
+    "source_row_count": 283800,
+    "retained_row_count": 283800,
+    "dropped_row_count": 0,
+    "candidate_write_mode": "additive_only_copy_preserve_row_level_pit_status",
+    "candidate_relative_path": "candidate/parquet/dataset=index_weights/schema_version=1.0/run_id=cr139-w2-index_weights-legacy_lake-20260629-canonical",
+    "planned_run_id": "cr139-w2-index_weights-legacy_lake-20260629-canonical",
+    "pit_status_distribution": {
+      "pit_available": 283500,
+      "pit_incomplete": 300
+    },
+    "semantics_decision": "preserve mixed row-level pit_status; do not collapse dataset-level truth to fully pit_available"
+  },
+  "planning_checks": {
+    "readiness_blocker_inputs_available": true,
+    "index_members_exact_dedup_plan_generated": true,
+    "index_members_quarantine_not_required_for_exact_copies": true,
+    "index_weights_mixed_pit_distribution_recorded": true,
+    "index_weights_zero_full_row_duplicates_preserved": true,
+    "index_weights_no_membership_substitution_boundary_recorded": true,
+    "write_plan_updated_for_batch1b_blockers": true,
+    "no_lake_write_executed": true,
+    "no_catalog_pointer_migration_runtime_nas_credential_git": true
+  },
+  "failed_checks": [],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "evidence_refs": {
+    "detail": "process/evidence/CR139-W2-GATEB-BATCH1B-BLOCKER-PLANNING-2026-06-29T161820+0800.json",
+    "check": "process/checks/CR139-W2-GATEB-BATCH1B-BLOCKER-PLANNING-2026-06-29.md",
+    "decision_brief": "process/checkpoints/CR139-W2-GATEB-BATCH1B-WRITE-AUTHORIZATION-DECISION-BRIEF.md",
+    "write_plan_json": "process/plans/CR139-W2-GATEB-PER-DATASET-WRITE-PLAN.json",
+    "write_plan_md": "process/plans/CR139-W2-GATEB-PER-DATASET-WRITE-PLAN.md",
+    "readiness_index": "process/evidence/CR139-W2-GATEB-BATCH1B-PREWRITE-READINESS.index.json"
+  },
+  "next_gate": "Gate B Batch 1B write authorization review",
+  "required_next_approval": "authorize Gate B Batch 1B index_members exact-dedup candidate write and index_weights mixed-PIT-preserving candidate copy only",
+  "authorization_effect": "planning_only_no_write_authorized",
+  "non_authorized_scope": [
+    "lake write",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS/QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "rollback deletion"
+  ]
+}

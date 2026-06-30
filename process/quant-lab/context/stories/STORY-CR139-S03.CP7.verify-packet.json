@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_verify_packet",
+  "stage": "CP7",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S03",
+  "story_ref": "process/stories/CR139-S03-duplicate-fingerprint-profiling.md",
+  "parent_context_ref": "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Verify CR139-S03 duplicate fingerprint profiling implementation and static-only safety boundary.",
+    "non_goals": [
+      "No runtime or real lake profiling",
+      "No published pointer advance",
+      "No catalog/lake/provider writes"
+    ]
+  },
+  "feature_refs": ["FEAT-02"],
+  "feature_contract_summary": "Verify FEAT-02 read-side duplicate profile before structural read-layer dedup.",
+  "feature_design_summary_ref": "docs/features/market-data-lake/DESIGN.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S03-duplicate-fingerprint-profiling-LLD.md"
+  ],
+  "cr_delta": {
+    "summary": "Verifies S03 implementation evidence and regression against S01/S02.",
+    "affected_contracts": ["market_data.readers profile-only API"]
+  },
+  "dependency_inputs": [
+    "process/checks/CP6-CR139-S03-duplicate-fingerprint-profiling-CODING-DONE.md",
+    "process/evidence/STORY-CR139-S03.CP6.index.json"
+  ],
+  "acceptance": [
+    "Focused S03 fixture tests pass",
+    "S01/S02/S03 regression passes",
+    "Verification report and CP7 return/evidence exist",
+    "Runtime / real lake profile remains unauthorized and recorded"
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S03-duplicate-fingerprint-profiling-IMPLEMENTATION.md",
+    "process/evidence/STORY-CR139-S03.CP6.index.json",
+    "tests/test_cr139_duplicate_fingerprint_profiling.py"
+  ],
+  "read_if_needed": [
+    "docs/quality/VERIFICATION-REPORT-CR139-W1.md",
+    "process/stories/CR139-S03-duplicate-fingerprint-profiling-LLD.md"
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN-CR139.yaml",
+    "process/STORY-STATUS-CR139.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "allowed_write_paths": [
+    "docs/quality/VERIFICATION-REPORT-CR139-W1.md",
+    "process/checks/CP7-CR139-S03-duplicate-fingerprint-profiling-VERIFICATION-DONE.md",
+    "process/returns/STORY-CR139-S03.CP7.return.json",
+    "process/evidence/STORY-CR139-S03.CP7.index.json"
+  ],
+  "forbidden_write_paths": [
+    "market_data/catalog.py",
+    "market_data/manifest.py",
+    "market_data/lake_layout.py",
+    "market_data/normalization.py",
+    "market_data/publish.py",
+    "data/lake/**"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_duplicate_fingerprint_profiling.py",
+    "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py tests/test_cr139_duplicate_fingerprint_profiling.py"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "budget": {
+    "estimated_tokens": 2200,
+    "estimator": "manual",
+    "max_tokens": 8000
+  },
+  "risk_profile": "standard-code",
+  "lld_policy": "full-lld"
+}

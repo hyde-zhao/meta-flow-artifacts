@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch1b_candidate_write_execution",
+  "created_at": "2026-06-29T16:57:15+08:00",
+  "status": "pass_with_risk_batch1b_candidate_write_verified",
+  "authorized_scope": "authorize Gate B Batch 1B index_members exact-dedup candidate write and index_weights mixed-PIT-preserving candidate copy only",
+  "datasets": [
+    "index_members",
+    "index_weights"
+  ],
+  "completed_datasets": [
+    "index_members",
+    "index_weights"
+  ],
+  "failed_datasets": [],
+  "skipped_datasets": [],
+  "partial_completion": false,
+  "write_order": [
+    {
+      "order": 1,
+      "dataset": "index_members",
+      "status": "verified",
+      "target_relative_path": "candidate/parquet/dataset=index_members/schema_version=1.0/run_id=cr139-w2-index_members-legacy_lake-20260629-canonical/part-index-members.parquet"
+    },
+    {
+      "order": 2,
+      "dataset": "index_weights",
+      "status": "verified",
+      "target_relative_path": "candidate/parquet/dataset=index_weights/schema_version=1.0/run_id=cr139-w2-index_weights-legacy_lake-20260629-canonical/part-index-weights.parquet"
+    }
+  ],
+  "source_row_count_total": 579600,
+  "retained_row_count_total": 567300,
+  "dropped_row_count_total": 12300,
+  "index_weights_pit_incomplete_rows_preserved": 300,
+  "object_count": 2,
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 2,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "checks": {
+    "both_completed": true,
+    "lake_write_count_2": true,
+    "no_partial_completion": true,
+    "all_row_counts_match": true,
+    "all_full_row_hashes_match": true,
+    "index_members_candidate_no_exact_duplicates": true,
+    "index_weights_preserves_300_pit_incomplete": true,
+    "catalog_hash_unchanged": true,
+    "published_tree_hash_unchanged": true,
+    "canonical_trees_unchanged": true,
+    "operation_counts_exact": true,
+    "rollback_not_authorized": true,
+    "all_full_row_hashes_match_initial_validator": false,
+    "index_members_content_equality_revalidated": true
+  },
+  "failed_checks": [],
+  "batch_atomicity_policy": {
+    "policy": "fail_stop_no_automatic_rollback",
+    "automatic_rollback_allowed": false,
+    "rollback_requires_separate_authorization": true,
+    "partial_failure_handling": "stop_remaining_emit_partial_evidence_wait_for_human_decision"
+  },
+  "evidence_refs": {
+    "readiness_index": "process/evidence/CR139-W2-GATEB-BATCH1B-PREWRITE-READINESS.index.json",
+    "planning_index": "process/evidence/CR139-W2-GATEB-BATCH1B-BLOCKER-PLANNING.index.json",
+    "prewrite_snapshot": "process/evidence/CR139-W2-GATEB-BATCH1B-WRITE-EXECUTION-2026-06-29T165715+0800-PREWRITE-SNAPSHOT.json",
+    "postwrite_snapshot": "process/evidence/CR139-W2-GATEB-BATCH1B-WRITE-EXECUTION-2026-06-29T165715+0800-POSTWRITE-SNAPSHOT.json",
+    "object_manifest": "process/evidence/CR139-W2-GATEB-BATCH1B-WRITE-EXECUTION-2026-06-29T165715+0800-OBJECT-MANIFEST.json",
+    "rollback_manifest": "process/evidence/CR139-W2-GATEB-BATCH1B-WRITE-EXECUTION-2026-06-29T165715+0800-ROLLBACK-MANIFEST.json",
+    "zero_pointer_mutation": "process/evidence/CR139-W2-GATEB-BATCH1B-WRITE-EXECUTION-2026-06-29T165715+0800-ZERO-POINTER-MUTATION.json",
+    "write_execution_check": "process/checks/CR139-W2-GATEB-BATCH1B-WRITE-EXECUTION-2026-06-29.md",
+    "content_revalidation": "process/evidence/CR139-W2-GATEB-BATCH1B-WRITE-EXECUTION-REVALIDATION-2026-06-29T165947+0800.json"
+  },
+  "non_authorized_scope": [
+    "Batch 2",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "rollback deletion"
+  ],
+  "next_gate": "Batch 2 consolidated read-only deep profile or W2 integrated quality review after user review",
+  "revalidation_ref": "process/evidence/CR139-W2-GATEB-BATCH1B-WRITE-EXECUTION-REVALIDATION-2026-06-29T165947+0800.json",
+  "revalidation_note": "Initial strict hash mismatch for index_members was due to parquet round-trip dtype/null normalization; revalidation proved dedup candidate content equals written parquet content."
+}

@@ -1,0 +1,239 @@
+schema_version: "1.0"
+capsule_id: "CR139-FOLLOWUP-CP5-IMPLEMENTATION-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "CR139-STRATEGY-DATA-FOUNDATION"
+phase: "story-execution"
+checkpoint: "CP5"
+capsule_type: "cp5-lld"
+status: "ready"
+created_at: "2026-06-28T23:03:51+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-139"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "Agent 必须先读取本 capsule，并且只读取 allowed_reads / must_read；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+
+allowed_reads:
+  - path: "process/state/STATE.current.json"
+    reason: "轻量运行态、当前阶段、活跃 CR、未授权边界和 active_context_ref"
+    required: true
+  - path: "process/context/CR139-WAVE1-COMPLETE-FOLLOWUP-CONTEXT.yaml"
+    reason: "Wave1 verified 后的首个 follow-up capsule，包含 W1 完成证据、推荐 CP5 批次和不授权边界"
+    required: true
+  - path: "process/STORY-STATUS-CR139.md"
+    reason: "40 个 Story 当前状态、依赖、Wave 汇总和 W2/W3 lld-pending 事实"
+    required: true
+  - path: "process/DEVELOPMENT-PLAN-CR139.yaml"
+    reason: "后续 CP5 批次、文件 merge_order、S33/S39 catalog.py 计划和 dev_gate 规则"
+    required: false
+  - path: "process/STORY-BACKLOG-CR139.md"
+    reason: "Story 逐项语义、验收摘要和代码触点；只在需要展开某个 Story 时读取"
+    required: false
+  - path: "docs/design/FEATURE-DESIGN-MATRIX.md"
+    reason: "Feature 级 lld_policy 与 FEAT-02/03/06/11/12/14 归属"
+    required: false
+
+must_read:
+  - path: "process/state/STATE.current.json"
+    reason: "确认 active_change=CR-139、blocked=false、当前阶段和 active context"
+    required: true
+  - path: "process/context/CR139-WAVE1-COMPLETE-FOLLOWUP-CONTEXT.yaml"
+    reason: "承接 Wave1 完成后的后续上下文收敛入口"
+    required: true
+  - path: "process/STORY-STATUS-CR139.md"
+    reason: "确认 Wave1 8/8 verified、Wave2/W3 全部 pending-cp5/lld-pending"
+    required: true
+  - path: "process/context/CR139-FOLLOWUP-PHASES-IMPLEMENTATION-HANDOFF.md"
+    reason: "人类可读交接文档，包含阶段顺序、首批任务、风险和退出条件"
+    required: true
+
+read_if_needed:
+  - path: "process/DEVELOPMENT-PLAN-CR139.yaml"
+    trigger: "需要计算 CP5 batch、DAG、file ownership、merge_order 或具体 Story 依赖时"
+  - path: "process/STORY-BACKLOG-CR139.md"
+    trigger: "需要展开某个 Story 的验收摘要、代码触点、依赖或 Mermaid DAG 时"
+  - path: "docs/design/FEATURE-DESIGN-MATRIX.md"
+    trigger: "需要确认 lld_policy、Feature 归属、是否必须 full-lld 或 Feature design 输入时"
+  - path: "market_data/catalog.py"
+    trigger: "仅在 S33/S39 设计或实现需要盘点 CR014/CR018 public API、兼容 alias 或 triggered_by_cr/run_lineage 时读取"
+  - path: "docs/quality/VERIFICATION-REPORT-CR139-W1.md"
+    trigger: "仅在审计 Wave1 验证命令、fixture 风险或 CP7 回链时读取"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "人类摘要和 legacy fallback；默认使用 STATE.current.json"
+  - path_or_pattern: "process/changes/CR-*.md"
+    reason: "正式 CR 全文仅在审计或范围冲突时读取；默认从 CR ledger / context capsule 消费摘要"
+  - path_or_pattern: "process/stories/*-LLD.md"
+    reason: "后续 CP5 只展开当前 batch 的 Story 证据；不得默认读取全量 LLD"
+  - path_or_pattern: "docs/design/HLD.md"
+    reason: "HLD 全文只在设计冲突或重大架构判断时读取"
+  - path_or_pattern: "docs/quality/VERIFICATION-REPORT-CR139-W1.md"
+    reason: "Wave1 验证报告较长，默认使用本 capsule 和 follow-up context 摘要"
+  - path_or_pattern: "完整 git diff"
+    reason: "实现或审计触发时再限定文件读取；不得作为默认上下文"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "不得作为下游默认输入"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不属于后续 CP5 默认上下文"
+
+key_facts:
+  scope_summary: "CR139 Wave1 S01-S08 已完成 CP6/CP7 verified；后续推进必须先收敛 Wave2/W3 CP5 设计证据批次，再进入任何实现。"
+  accepted_decisions:
+    - id: "CP5-W1-APPROVED"
+      summary: "用户于 2026-06-28T19:20:00+08:00 approve Wave1 8 个 Story 设计证据；Wave1 代码实现与静态/fixture 验证已完成。"
+    - id: "W1-VERIFIED"
+      summary: "S01-S08 verified；S08 只交付路径治理和 fixture 级兼容，不授权物理分区迁移执行。"
+    - id: "FOLLOWUP-CP5-REQUIRED"
+      summary: "Wave2/W3 Story 仍 lld-pending/pending-cp5，不得直接标 dev-ready 或开始实现。"
+    - id: "CATALOG-API-NAMING-FOLLOWUP"
+      summary: "catalog.py 仍存在 CR014/CR018 命名 public/internal API；建议纳入 S33 显式验收项，采用领域命名新 API + 兼容 alias，S39 专注 triggered_by_cr/run_lineage。"
+  active_constraints:
+    - "runtime/NAS/QMT/trading/provider-lake-catalog write/real lake write/published pointer advance execution/physical partition migration execution/Git remote write 均未授权。"
+    - "当前工具面没有 spawn_agent/resume_agent/send_input；后续真实子 agent 调度不可伪造，若不可用只能记录 handoff-only 或用户批准的 inline-fallback。"
+    - "CP5 批次通过前，任何 W2/W3 Story 不得进入 dev_ready。"
+    - "同一文件 merge_order 必须遵守 DEVELOPMENT-PLAN：readers.py S05->S06->S07->S09->S25->S27->S28->S13->S16->S36；publish.py S04->S14->S22；catalog.py S04->S33->S39；normalization.py S08->S31->S32->S34->S14->S23->S22。"
+  downstream_tasks:
+    - id: "TASK-FU-01"
+      owner: "host-orchestrator"
+      summary: "发起后续 CP5 批次选择，推荐先启动 CR139-W2-DATA-CONTRACTS。"
+      exit: "用户确认 CP5 批次或接受默认推荐后，生成 CP5-W2 context / Decision Brief。"
+    - id: "TASK-FU-02"
+      owner: "meta-dev"
+      summary: "为首批 S09/S14/S22/S30/S31/S32/S33/S34/S39 生成或刷新 LLD / technical-note 设计证据。"
+      exit: "全部 batch Story 设计证据 ready-for-review，clarification queue 无阻断项。"
+    - id: "TASK-FU-03"
+      owner: "meta-dev"
+      summary: "在 S33 设计证据中补入 catalog.py CR014/CR018 命名清理验收项：领域命名 API、兼容 alias、测试覆盖、弃用路径。"
+      exit: "S33 明确 public API 兼容策略，S39 明确 triggered_by_cr/run_lineage 不重复承担命名清理。"
+    - id: "TASK-FU-04"
+      owner: "host-orchestrator"
+      summary: "生成 CP5 后续批次人工检查点，收集 pending_human_decisions，明确 approve 不授权 runtime 或真实写入。"
+      exit: "CP5 follow-up batch approved 或 changes_requested/rejected 有明确路由。"
+    - id: "TASK-FU-05"
+      owner: "meta-dev/meta-qa"
+      summary: "CP5 通过后按 DAG/merge_order 执行 CP6/CP7；每个 Story 必须有 return packet、evidence index 和 dispatch evidence。"
+      exit: "对应 Story verified 或 verified-with-risk；未授权 runtime 继续 fail-closed。"
+  traceability:
+    requirements:
+      - "REQ-201..245: CR139 45 项整改"
+      - "REQ-247/248: Wave1 基线门与物理迁移后置边界"
+      - "REQ-208: S33 catalog/manifest source-of-truth"
+      - "REQ-211: S39 CR -> data audit chain"
+    use_cases:
+      - "Strategy Data Foundation / 数据湖整改 parent CR"
+    scenarios:
+      - "生产级市场数据湖可复现、可审计、PIT、安全读写边界"
+      - "多因子 + ML 策略信息收集 -> 回测 -> 模拟盘 -> 实盘的可信数据底座"
+    stories:
+      - "Wave1 verified: CR139-S01..S08"
+      - "Recommended first follow-up batch: S09,S14,S22,S30,S31,S32,S33,S34,S39"
+      - "Remaining later batches: ML/read/consistency, config/audit, W3 ops"
+    features:
+      - "FEAT-02 market-data-lake"
+      - "FEAT-03 factor-research-loop"
+      - "FEAT-06 qmt-trading-governance"
+      - "FEAT-11 runner-control-plane"
+      - "FEAT-12 qmt-gateway-service-layer"
+      - "FEAT-14 universe/risk policy"
+
+risks_and_decisions:
+  pending_human_decisions:
+    - id: "CR139-FU-DQ-01"
+      gate: "CP5-followup"
+      decision_type: "implementation"
+      question: "后续 CP5 是否按推荐先启动 CR139-W2-DATA-CONTRACTS 批次。"
+      recommendation: "先启动 CR139-W2-DATA-CONTRACTS，覆盖 S09/S14/S22/S30/S31/S32/S33/S34/S39。"
+      alternatives:
+        - "先启动 ML/READ/CONSISTENCY 批次，但会在 run-id、schema、catalog/manifest 未定主时放大返工。"
+        - "只启动 S33/S39 catalog 子批次，但会延迟 S09/S14/S22 等共同契约收敛。"
+      status: "ready-for-gate"
+    - id: "CR139-FU-DQ-02"
+      gate: "CP5-followup"
+      decision_type: "implementation"
+      question: "catalog.py 中 CR014/CR018 命名 public API 是否在 S33 内显式整改。"
+      recommendation: "纳入 S33 验收项，新增领域命名 API，保留旧 CR 命名 alias 和测试兼容；S39 只追加 triggered_by_cr/run_lineage 审计链。"
+      alternatives:
+        - "保持 CR014/CR018 名称不动，只在文档记录历史来源。"
+        - "直接删除/重命名旧 API；风险是破坏 tests 和历史合同，不建议。"
+      status: "ready-for-gate"
+    - id: "CR139-FU-DQ-03"
+      gate: "runtime-authorization"
+      decision_type: "runtime_authorization"
+      question: "是否授权物理分区迁移、真实 lake 写入、provider catalog 写入或 published pointer advance 执行。"
+      recommendation: "本轮不授权；需要时另建 runtime_authorization 决策项，限定 action scope、运行窗口、回滚和审计范围。"
+      alternatives:
+        - "仅授权 dry-run / fixture 验证。"
+        - "授权受控真实运行，但必须先过独立 runtime gate。"
+      status: "ready-for-gate"
+  non_authorized_items:
+    - "runtime"
+    - "NAS access"
+    - "QMT/MiniQMT/gateway runtime"
+    - "trading / small_live / live"
+    - "credential / secret read"
+    - "provider-lake-catalog write"
+    - "real lake write"
+    - "published pointer advance execution"
+    - "physical partition migration execution"
+    - "Git remote write"
+  risk_acceptance_items:
+    - id: "RISK-W1-FIXTURE-ONLY"
+      summary: "Wave1 verification is static/fixture scoped; runtime and real lake validation remain unauthorized."
+      status: "controlled"
+    - id: "RISK-CATALOG-API-RENAME"
+      summary: "CR014/CR018 public API names are imported by existing tests and possibly external callers; cleanup must preserve compatibility aliases."
+      status: "pending-cp5-decision"
+  open_questions:
+    - id: "OPEN-CR139-CATALOG-NAMING-01"
+      summary: "S33 design evidence must decide exact domain names for CR014/CR018 catalog helpers and deprecation schedule."
+      blocks_lld: false
+    - id: "OPEN-CR139-RUNTIME-01"
+      summary: "Any real migration or pointer advance requires separate runtime authorization; no current approval exists."
+      blocks_lld: false
+  n_a_or_waived_items:
+    - id: "NA-SUBAGENT-TOOLS"
+      summary: "spawn_agent/resume_agent/send_input are not exposed in current tool surface; this handoff is handoff-only and does not claim subagent execution."
+
+handoff:
+  target_agent: "meta-dev"
+  expected_output:
+    - "CP5 follow-up batch context and Decision Brief input"
+    - "S09/S14/S22/S30/S31/S32/S33/S34/S39 LLD / technical-note evidence"
+    - "S33 catalog.py CR-named API compatibility cleanup plan"
+    - "Clarification queue items for any blocking implementation gray areas"
+  exit_criteria:
+    - "Selected follow-up batch has all design evidence ready-for-review."
+    - "No blocking lld_clarification_queue item remains unanswered."
+    - "CP5 manual checkpoint can be generated with pending decisions and non-authorized items."
+    - "No W2/W3 implementation is started before CP5 approval."
+  blocked_if_missing:
+    - "process/context/CR139-WAVE1-COMPLETE-FOLLOWUP-CONTEXT.yaml"
+    - "process/STORY-STATUS-CR139.md"
+    - "process/DEVELOPMENT-PLAN-CR139.yaml"
+    - "process/STORY-BACKLOG-CR139.md"
+
+read_expansion_log: []
+
+validation:
+  generated_from_sources:
+    - "process/state/STATE.current.json"
+    - "process/context/CR139-WAVE1-COMPLETE-FOLLOWUP-CONTEXT.yaml"
+    - "process/STORY-STATUS-CR139.md"
+    - "process/DEVELOPMENT-PLAN-CR139.yaml"
+    - "process/STORY-BACKLOG-CR139.md"
+    - "docs/design/FEATURE-DESIGN-MATRIX.md"
+    - "docs/quality/VERIFICATION-REPORT-CR139-W1.md"
+    - "market_data/catalog.py symbol scan"
+  missing_sources:
+    - path: "delivery/rules/AGENT-SKILL-CONTRACT.md"
+      reason: "当前仓库未找到该共享契约文件；本 capsule 按 AGENTS.md、context-handoff 与 context-manifest-builder 规则生成。"
+  consistency_status: "warning"
+  notes:
+    - "Warning only: missing shared contract file does not block this context handoff because project-local AGENTS.md and skill rules provide the required capsule/handoff constraints."
+    - "No business code or runtime operation was executed while generating this context."

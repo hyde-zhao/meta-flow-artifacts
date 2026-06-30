@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch2_remaining_decision_plan",
+  "created_at": "2026-06-29T20:57:45+08:00",
+  "status": "pass_with_risk_remaining_decision_plan_ready_write_still_requires_explicit_dataset_authorization",
+  "mode": "read_only_decision_planning_no_lake_write",
+  "authorized_scope": "execute remaining three recommendations as planning gates: events decision plan, prices schema-normalization plan, prices_limit/trade_status single-dataset gate plan; no lake write",
+  "source_refs": {
+    "split_planning_index": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-SPLIT-PLANNING.index.json",
+    "split_planning_detail": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-SPLIT-PLANNING-2026-06-29.json",
+    "adj_factor_write_index": "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION.index.json"
+  },
+  "decisions": {
+    "events": {
+      "source_row_count": 362887,
+      "exact_copy_groups": 0,
+      "exact_copy_rows": 0,
+      "metadata_only_groups": 10583,
+      "metadata_only_rows": 21166,
+      "business_conflict_groups": 774,
+      "business_conflict_rows": 1551,
+      "planned_candidate_shape": {
+        "non_duplicate_row_count": 340170,
+        "main_row_count": 350753,
+        "quarantine_row_count": 12134,
+        "dropped_exact_duplicate_row_count": 0,
+        "business_conflict_groups_without_main_row": 774
+      },
+      "recommended_strategy": "metadata-only groups: resolve by source precedence into main and quarantine superseded rows; business-conflict groups: quarantine full group, no semantic selection in Gate B",
+      "write_mode_if_approved": "events_split_primary_key_candidate_main_plus_quarantine",
+      "write_readiness": "ready_for_explicit_events_write_authorization_after_review",
+      "rationale": "events is small; 774 groups have payload/business differences and should be fully quarantined rather than selected during Gate B. Metadata-only groups can be resolved because business payload is identical.",
+      "next_authorization_candidate": true
+    },
+    "prices": {
+      "source_row_count": 28646730,
+      "exact_copy_groups": 11231402,
+      "exact_copy_rows": 22462804,
+      "metadata_only_groups": 1830,
+      "metadata_only_rows": 3660,
+      "business_conflict_groups": 79958,
+      "business_conflict_rows": 399798,
+      "planned_candidate_shape": {
+        "non_duplicate_row_count": 5780468,
+        "main_row_count": 17013700,
+        "quarantine_row_count": 401628,
+        "dropped_exact_duplicate_row_count": 11231402,
+        "business_conflict_groups_without_main_row": 79958
+      },
+      "schema_variants": [
+        {
+          "file_count": 6,
+          "columns": [
+            "trade_date",
+            "symbol",
+            "open",
+            "high",
+            "low",
+            "close",
+            "adj_factor",
+            "adjusted_open",
+            "adjusted_high",
+            "adjusted_low",
+            "adjusted_close",
+            "adjustment_policy",
+            "source",
+            "source_interface",
+            "source_run_id",
+            "schema_version",
+            "available_at",
+            "lineage_raw_checksum"
+          ],
+          "missing_from_union": [
+            "available_at_rule",
+            "volume",
+            "amount"
+          ]
+        },
+        {
+          "file_count": 327,
+          "columns": [
+            "trade_date",
+            "symbol",
+            "open",
+            "high",
+            "low",
+            "close",
+            "adj_factor",
+            "adjusted_open",
+            "adjusted_high",
+            "adjusted_low",
+            "adjusted_close",
+            "adjustment_policy",
+            "source",
+            "source_interface",
+            "source_run_id",
+            "schema_version",
+            "available_at",
+            "available_at_rule",
+            "lineage_raw_checksum"
+          ],
+          "missing_from_union": [
+            "volume",
+            "amount"
+          ]
+        },
+        {
+          "file_count": 5553,
+          "columns": [
+            "trade_date",
+            "symbol",
+            "open",
+            "high",
+            "low",
+            "close",
+            "volume",
+            "amount",
+            "adj_factor",
+            "adjusted_open",
+            "adjusted_high",
+            "adjusted_low",
+            "adjusted_close",
+            "adjustment_policy",
+            "source",
+            "source_interface",
+            "source_run_id",
+            "schema_version",
+            "available_at",
+            "available_at_rule",
+            "lineage_raw_checksum"
+          ],
+          "missing_from_union": []
+        }
+      ],
+      "recommended_schema_policy": "union_schema_with_null_fill_for_missing_columns",
+      "union_schema_columns": [
+        "adj_factor",
+        "adjusted_close",
+        "adjusted_high",
+        "adjusted_low",
+        "adjusted_open",
+        "adjustment_policy",
+        "amount",
+        "available_at",
+        "available_at_rule",
+        "close",
+        "high",
+        "lineage_raw_checksum",
+        "low",
+        "open",
+        "schema_version",
+        "source",
+        "source_interface",
+        "source_run_id",
+        "symbol",
+        "trade_date",
+        "volume"
+      ],
+      "write_mode_if_approved": "prices_union_schema_exact_dedup_metadata_resolved_business_conflict_quarantine_candidate",
+      "write_readiness": "blocked_until_schema_normalization_decision_and_single_dataset_authorization",
+      "rationale": "prices has three schema variants; write must preserve full union columns and fill missing volume/amount/available_at_rule with null before materialization. 79,958 business-conflict groups remain quarantine unless a later semantic rule is approved.",
+      "next_authorization_candidate": false
+    },
+    "prices_limit": {
+      "source_row_count": 40962525,
+      "exact_copy_groups": 9910579,
+      "exact_copy_rows": 19821158,
+      "metadata_only_groups": 6946008,
+      "metadata_only_rows": 17526841,
+      "business_conflict_groups": 499787,
+      "business_conflict_rows": 1261096,
+      "planned_candidate_shape": {
+        "non_duplicate_row_count": 2353430,
+        "main_row_count": 19210017,
+        "quarantine_row_count": 11841929,
+        "dropped_exact_duplicate_row_count": 9910579,
+        "business_conflict_groups_without_main_row": 499787
+      },
+      "recommended_strategy": "single_dataset_split_write_only; exact-copy dedup, metadata-only resolve by source precedence, business-conflict full-group quarantine",
+      "write_mode_if_approved": "prices_limit_split_candidate_main_plus_quarantine",
+      "write_readiness": "blocked_until_single_dataset_authorization_after_events_or_prices_schema_review",
+      "rationale": "large mixed bucket: 499,787 business-conflict groups and 6,946,008 metadata-only groups. Do not batch-write with prices or trade_status.",
+      "next_authorization_candidate": false
+    },
+    "trade_status": {
+      "source_row_count": 21569907,
+      "exact_copy_groups": 0,
+      "exact_copy_rows": 0,
+      "metadata_only_groups": 70087,
+      "metadata_only_rows": 140512,
+      "business_conflict_groups": 3692105,
+      "business_conflict_rows": 7542079,
+      "planned_candidate_shape": {
+        "non_duplicate_row_count": 13887316,
+        "main_row_count": 13957403,
+        "quarantine_row_count": 7612504,
+        "dropped_exact_duplicate_row_count": 0,
+        "business_conflict_groups_without_main_row": 3692105
+      },
+      "recommended_strategy": "single_dataset_split_write_only; metadata-only resolve by source precedence, business-conflict full-group quarantine",
+      "write_mode_if_approved": "trade_status_split_candidate_main_plus_quarantine",
+      "write_readiness": "blocked_until_single_dataset_authorization; recommend after events because conflict scale is high",
+      "rationale": "3,692,105 business-conflict groups dominate the dataset. It needs separate write evidence and must not be batched with smaller tables.",
+      "next_authorization_candidate": false
+    }
+  },
+  "recommended_execution_sequence": [
+    {
+      "order": 1,
+      "dataset": "events",
+      "mode": "split candidate write after review",
+      "reason": "smallest remaining table; validates primary-key conflict quarantine path before large conflict tables"
+    },
+    {
+      "order": 2,
+      "dataset": "prices",
+      "mode": "schema policy decision then single-dataset write",
+      "reason": "schema variants require union/null-fill approval before write"
+    },
+    {
+      "order": 3,
+      "dataset": "prices_limit",
+      "mode": "single-dataset split write",
+      "reason": "large mixed exact/metadata/business-conflict buckets"
+    },
+    {
+      "order": 4,
+      "dataset": "trade_status",
+      "mode": "single-dataset split write",
+      "reason": "largest business-conflict group count; keep last among remaining conflict-heavy tables"
+    }
+  ],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "non_authorized_scope": [
+    "lake write for events/prices/prices_limit/trade_status",
+    "candidate object delete",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "legacy deletion",
+    "rollback"
+  ],
+  "next_gate": "review decision plan; recommended next explicit write authorization is events only"
+}

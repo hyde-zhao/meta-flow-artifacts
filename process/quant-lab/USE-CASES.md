@@ -1,6 +1,6 @@
 ---
-status: confirmed
-version: "1.16"
+status: draft
+version: "1.17"
 confirmed_by: "user"
 confirmed_at: "2026-06-24T13:20:00+08:00"
 last_confirmed_version: "1.16"
@@ -10,7 +10,7 @@ scenario_subject_id: "local-backtest-production-data-lake-runner-and-qmt-gateway
 target_artifact_type: tool
 governance_mode: review-gated
 review_policy: strict
-total_use_cases: 50
+total_use_cases: 57
 ---
 
 # 使用场景
@@ -36,6 +36,7 @@ total_use_cases: 50
 | 1.14 | 2026-06-03 | meta-po | 用户授权进入 CR-030 HLD，回填 CR-030 多因子研究框架借鉴与研究闭环标准化场景，覆盖外部项目静态借鉴、项目自有多因子契约、因子面板 / 标签窗口、单因子评价、多因子组合、实验追踪和策略准入包边界 | CR-030 原文档增量更新；保留 UC-01 至 UC-19 旧基线，新增 UC-20 至 UC-27；CP2 通过仅授权 HLD，不授权实现、依赖变更、外部项目运行、源码迁移、provider/lake/publish、QMT/simulation/live 或凭据读取 |
 | 1.15 | 2026-06-13 | meta-po | 按 CR-046 增量补齐 QMT / MiniQMT 双目标策略交付框架场景，覆盖策略核心合同、QMT 终端策略包、MiniQMT runner 安装设计、验证框架、后续策略交付门禁和研究框架反向约束 | CR-046 原文档增量更新；保留 UC-01 至 UC-27 旧基线，新增 UC-28 至 UC-32；用户已于 2026-06-13T22:03:22+08:00 通过 CP2；不授权具体策略交付、QMT 运行验证、MiniQMT 连接、submit/cancel、simulation/live、provider/lake/publish 或凭据读取 |
 | 1.16 | 2026-06-24 | host-orchestrator | 按 CR-138 增量补齐 Runner 与 QMT Gateway 运营使用场景，并按用户反馈检查 UC-01 至 UC-50 的合并 / 刷新关系；覆盖多因子日常运行、盘前确认、执行跟踪、事件/信号接入、组合再平衡、盘中运维、日志审计、盘后复盘、异常恢复、策略调整/发布/暂停/回滚，以及 Gateway 启动、健康、查询、订阅、下单撤单回报、故障恢复、审计和配置变更 | CR-138 原文档增量更新；保留 UC-01 至 UC-32 旧基线和编号，不破坏历史 CP2 追溯；新增 UC-33 至 UC-50，并新增“CR-138 场景归一化与合并审查”标明旧场景如何被 Runner / Gateway 运营视角吸收、约束或延后；用户已于 2026-06-24T13:20:00+08:00 回复 `approve` 通过 CP2；不授权 runtime、NAS、QMT、MiniQMT、XtQuant、credentials、provider/lake/catalog、submit/cancel、simulation/live 或 Git remote write |
+| 1.17 | 2026-06-28 | meta-pm | 按 CR-139「Strategy Data Foundation」parent CR 增量补齐策略生产数据底座场景，覆盖信息收集→回测→模拟盘→实盘全流程四阶段、四组门禁集、ML feature/label/artifact 接入、run evidence 贯通、配置类事实源版本化、交易审计链、schema 契约冻结与跨源时点一致性；45 项整改清单按 (a)=6/(b)=7/(c)=12/(d1)=6/(d2)=14 机械统计映射到 UC-51 至 UC-57；既有合同清单已 grep 核验（闭环非新建）（UC-51..57 已按用户反馈重写为 persona 驱动用户场景，整改项改为支撑证据回链 REQ） | CR-139 原文档增量更新；保留 UC-01 至 UC-50 旧基线和编号，不破坏历史 CP2 追溯；新增 UC-51 至 UC-57；D8a/D8b 二轮建议批准为 working basis，正式确认路由 CP2 人工门禁；不授权 runtime/NAS/QMT/trading/provider-lake-catalog 写入/物理分区迁移（Wave1 N1 后置）/Git remote write |
 
 ## 用户画像（Personas）
 
@@ -1507,6 +1508,167 @@ total_use_cases: 50
 | TS-018-05 | 生产口径研究重跑 | published release、阶段三到阶段五核心研究重跑配置 | 报告记录 release_id、benchmark、PIT、可交易性、复权口径、blocked claims 和旧 proxy/fixed-snapshot 对比；未通过时不得推荐进入 QMT | UC-14 |
 | TS-018-06 | QMT 后置 stage gate | 未 publish / 未重跑 / 重跑失败 / 重跑通过四类状态 | 未 publish 或未重跑通过时 simulation/live_readonly/small_live/scale_up 全部 blocked；通过后仅允许进入下一轮 QMT stage gate 审批，不自动授权真实操作 | UC-14 |
 
+---
+
+### UC-51：整改启动前的现状摸底与基线冻结（信息收集阶段）
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-04 生产数据湖负责人 / 数据工程审计者 |
+| **触发条件** | P-04 即将启动 CR-139 数据湖整改，但当前对 lake 的真实家底没有可信清单：catalog 登记了 17 个 dataset，但 `published` 全为 false、`lineage_checksum` 17/17 缺失、prices 下堆积 38 个 run_id 分区、`quality/` 平铺 81 项混入一次性 smoke/probe。P-04 担心一旦开始动结构，"历史数据自然变化"和"整改结构修复"会混在一起，事后无法解释某条因子收益变动到底是数据变了还是修出来的。 |
+| **输入** | 全 dataset 列表（catalog 17 个）、lake root、`catalog.json`、`market_data_manifest.jsonl`、canonical/quality 目录树、下游因子/回测结果冻结基准配置（T7 黄金值对比范围与样本）。 |
+| **用户目标** | 在改动任何读/写路径之前，拿到一份可审计的现状清册和一份整改前黄金值快照，使整改后任何下游结果差异都能归因到"结构修复"或"历史数据变化"二者之一，而不是一笔糊涂账。 |
+| **处理逻辑** | P-04 先执行清册命令，系统扫描全 dataset 输出行数、覆盖区间、`(symbol,trade_date)` 重复键、pit_status、published 状态和 lineage_checksum 缺失情况（支撑：T8 整改对象自动化清册，REQ-213）。清册如实记录 published 全 false、lineage 全缺、38 分区重复画像等缺失状态，不把缺失静默标为可用。随后 P-04 冻结下游因子/回测结果黄金值快照作为整改前基准（支撑：T7 整改回归基线 + 黄金值，REQ-212）。成功路径：清册 + 黄金值双双落盘，P-04 据此批准后续结构性变更启动。异常路径：若清册发现 events schema 全 null 或 unknown run_id 等数据损坏，P-04 先记录为待修项但不在基线阶段改动数据，避免污染基线。整改后 P-04 重跑黄金值对比，系统输出差异归因报告，区分结构修复影响与历史数据变化。边界声明：基线冻结未完成前不得启动任何结构性变更（支撑：Wave1 基线门，REQ-247）；物理分区迁移/候选压缩后置到基线冻结之后。 |
+| **输出/结果** | 一份可审计的整改前现状清册（全 dataset 行数/覆盖/重复键/pit/published/lineage 状态）；一份整改前下游黄金值快照；整改后差异归因报告（结构修复 vs 历史数据变化）。 |
+| **前置条件** | 整改前必须先完成清册与基线冻结（D6 强制）；CP2 阶段不执行真实写入，只定义清册/基线契约。 |
+| **排除情况** | 不在清册阶段修改数据；不把清册缺失项静默标为可用；不跳过基线直接改物理分区（Wave1 N1 物理迁移后置，REQ-247）；不授权 runtime/NAS/QMT/trading/provider-lake-catalog 写入/Git remote write（REQ-248）。 |
+
+**处理流程（文字描述）：**
+1. P-04 执行清册命令，系统扫描全 dataset，输出行数、覆盖区间、重复键、pit_status、published、lineage_checksum 状态，如实标记缺失。
+2. P-04 审阅清册，确认 38 分区重复画像、published 全 false、lineage 全缺、events schema 损坏等现状，记录为待修项但不在基线阶段改动。
+3. P-04 冻结下游因子/回测结果黄金值快照，作为整改前对比基准。
+4. 整改完成后 P-04 重跑黄金值对比，系统输出差异归因报告，区分结构修复影响与历史数据变化。
+5. 只有基线冻结完成后，P-04 才批准启动 V1/C1/R1/C2b 等结构性变更。
+
+---
+
+### UC-52：多因子回测因子收益可疑时的读侧可信度验证（回测阶段）
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-03 因子研究数据审计者；P-04 生产数据湖负责人 |
+| **触发条件** | P-03 跑多因子回测发现某因子在财报发布日前就有显著收益，怀疑存在前视偏差；同时发现同一 `(symbol,trade_date)` 在 canonical 里出现多份、读出来的值随 reader glob 顺序漂移；且当前 candidate/gold/published 三层全空，无法说清回测到底"读的是哪个版本"。P-03 需要一个能证明"读侧没有偷看未来、没有重复污染、读的是冻结快照"的可信读路径，才能继续把因子结论往上推。 |
+| **输入** | as_of 时点、待 join 的 dataset 列表（prices/financial_pit/market_cap/估值/行业）、catalog current pointer、`available_at`/`available_at_rule`、source_run_id、C2a 重复画像输出。 |
+| **用户目标** | 让回测读侧同时满足四道 P0 防线——PIT 强制、去重唯一、冻结快照、多表 as-of join——使因子收益可疑时能定位是前视、重复还是版本漂移，而不是归因到"reader 行为不可控"。 |
+| **处理逻辑** | P-03 先要求看重复画像，系统输出 38 个 run_id 分区里哪些 `(symbol,trade_date)` 重复、来自哪些 run（支撑：C2a 重复画像，REQ-205）。P-03 确认读哪个版本前，P-04 先建立 published pointer 的确定性：canonical → published + catalog current pointer 固定，reader 只消费已发布 current truth，validate pass 不自动成为 current（支撑：V1 published pointer/read selector，REQ-232）。随后 P-03 用 PIT as-of reader 读财报/估值，系统按 `available_at <= as_of` 取最新，构造"未来财报"用例断言读不到，杜绝前视（支撑：C1 PIT as-of reader，REQ-204）。多表 join 时 P-03 调用统一 panel reader，系统复用 `read_dataset` published 门禁输出价格×财务×估值×行业统一 as-of 宽表（支撑：R1 panel reader，REQ-214）。读层去重按 source_run_id 取最新版本，保证 `(symbol,trade_date)` 唯一（支撑：C2b 读层去重，REQ-205）。成功路径：四道防线全过，P-03 拿到可归因的因子收益，可疑收益被定位为前视/重复/版本之一并消除。异常路径：若 events schema 全 null 或写入无去重，系统在写入侧修复类型推断并按主键去重后再放行（支撑：C3 events schema 修复 REQ-206、C4 写入去重保证 REQ-207）；若 catalog/manifest 双真相源冲突，定 catalog 为主、manifest 为派生，并回填 lineage_checksum 闭合 raw→canonical（支撑：M1 定主 REQ-208、M2 lineage 回填 REQ-209）。边界声明：四道 P0 防线为 CP3 必过门禁（支撑：四组门禁集，REQ-246）；Wave1 顺序为 T8→T7→C2a 画像→V1→C1→R1→C2b→N1 后置，结构性变更前基线必须已冻结（REQ-247）；不先改物理分区，存量 run_id 按 D3 不重命名（支撑：N1 分区键治理，REQ-201）。 |
+| **输出/结果** | 一份可定位前视/重复/版本漂移的因子收益归因；PIT as-of panel；去重唯一的 canonical；published current pointer；统一 as-of 宽表；events schema 修复；lineage_checksum 回填；catalog/manifest 主从定界。 |
+| **前置条件** | 四道 P0 防线为 CP3 必过门禁（D7）；Wave1 顺序 T8→T7→C2a 画像→V1→C1→R1→C2b→N1 后置；基线冻结完成后才允许结构性变更（REQ-247）。 |
+| **排除情况** | 不先改物理分区（N1 物理迁移后置到基线冻结后，D3 不重命名存量 run_id）；不用 glob-concat 全量分区替代去重；不把 validate pass 自动视为 published current truth；不授权 runtime/NAS/QMT/trading/provider-lake-catalog 写入/物理分区迁移/Git remote write（REQ-248）。 |
+
+**处理流程（文字描述）：**
+1. P-03 要求查看 38 分区重复画像，系统输出重复键与来源 run（C2a，REQ-205）。
+2. P-04 先建立 published pointer 确定性，reader 只读已发布 current truth（V1，REQ-232）。
+3. P-03 用 PIT as-of reader 读财报/估值，系统按 `available_at <= as_of` 过滤，断言未来财报读不到（C1，REQ-204）。
+4. P-03 调用统一 panel reader 做多表 as-of join（R1，REQ-214）。
+5. 系统读层去重，按 source_run_id 取最新版本（C2b，REQ-205）。
+6. 写入侧修复 events schema 与去重保证（C3/C4，REQ-206/207），catalog/manifest 定主并回填 lineage（M1/M2，REQ-208/209）。
+7. 四道防线全过后，P-03 拿到可归因因子收益，可疑来源被定位并消除。
+
+---
+
+### UC-53：ML 训练-实盘特征偏差排查与 feature 版本化（回测→ML）
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-03 因子研究数据审计者 |
+| **触发条件** | P-03 训练完 ML 模型上线后发现实盘特征与训练特征对不上：训练时走 `--data-dir`/`load_local_frames` 旁路读本地目录，实盘却读 lake，两边 schema 和计算口径漂移；模型 artifact 没有 hash 引用 dataset snapshot，无法说清这个模型是在哪个数据版本上训的；label 泄漏检查分散在多处未统一接入 release/cutoff gate。P-03 需要让 ML 不再旁路数据湖，且 feature/label/artifact 可版本化、可复现、训练-实盘一致。 |
+| **输入** | published panel、feature 计算配置、label window 配置、训练切分 cutoff、模型 artifact、既有 ExperimentManifest（`research_manifest.py:152`）、既有 StrategyAdmissionPackage、既有泄漏审计（`factor_model_validation.py:561/376`、`factor_robustness.py:53`）。 |
+| **用户目标** | 让训练特征与实盘特征同 schema 同计算、模型可按 dataset snapshot 复现、label 泄漏统一把关，使 ML 结论不再因训练-实盘偏差而失真，且 ML 不再绕过数据湖。 |
+| **处理逻辑** | P-03 先废除 ML 旁路，把实验脚本从 `--data-dir`/`load_local_frames` 改为接入 `read_panel_as_of`，使 ML 与回测读同一可信读路径（支撑：R2 ML 接入 lake，REQ-215）。随后 P-03 建立 feature/label/artifact 持久化层，新增 lake `features/` 子层带版本 + schema，feature/label/artifact 审计链可追溯，并保留切换独立 feature store 的条件（支撑：V3 feature/label/artifact 持久化层，REQ-219）。模型 artifact 带 hash 引用 dataset snapshot，由既有 StrategyAdmissionPackage 承载（支撑：E2 模型 hash 闭环，REQ-222）；ExperimentManifest 补 dataset snapshot + as_of + split + 产出引用，与 published release + lineage 闭环（支撑：E1 ExperimentManifest 闭环，REQ-221）；训练切分 cutoff 入既有 ExperimentManifest，与既有 purge-embargo 统一冻结（支撑：E5 split manifest 冻结，REQ-225）。P-03 把分散的 label 泄漏审计统一接入 data release + cutoff gate（支撑：E3 泄漏检查统一，REQ-223，既有合同闭环非新建），并新建训练-实盘特征同 schema 同计算一致性校验，不一致则阻断（支撑：E4 离线/在线一致性，REQ-224，d1 纯新建）。当 pandas concat 全量加载撑不住时，P-03 引入 DuckDB 只读 adapter，parquet 仍是存储、DuckDB 只读查询（支撑：R3 DuckDB 只读 adapter，REQ-216，D4 只读引擎定位）。成功路径：ML 读同一可信 panel、模型可按 snapshot 复现、训练-实盘特征一致、泄漏统一把关。异常路径：一致性校验发现训练-实盘 schema 漂移则阻断上线；DuckDB 依赖需 CP3/CP5 批准才引入，未批准前不修改 `pyproject.toml`。边界声明：V4 schema 契约冻结必须在模拟盘前完成（评审 HIGH3）；feature store 切换 deferred（DEF-139-01）；既有合同（ExperimentManifest/StrategyAdmissionPackage/泄漏审计）按闭环非新建处理（REQ-249）。 |
+| **输出/结果** | ML 接入 lake 无旁路；版本化 feature/label/artifact 层；带 hash 引用 dataset snapshot 的模型 artifact；闭环 published release 的 ExperimentManifest；冻结的 split manifest；统一 gate 的 label 泄漏检查；离线/在线一致性校验；DuckDB 只读 adapter。 |
+| **前置条件** | V4 schema 契约冻结必须在模拟盘前完成（评审 HIGH3）；DuckDB 经 CP3/CP5 批准才引入依赖；既有合同按闭环非新建处理（REQ-249）。 |
+| **排除情况** | 不把 DuckDB 设为主存储（D4 只读引擎，parquet 仍是存储）；feature store 切换 deferred（DEF-139-01）；不复制外部框架对象作为内部 truth；不授权 runtime/NAS/QMT/trading/provider-lake-catalog 写入/Git remote write（REQ-248）。 |
+
+**处理流程（文字描述）：**
+1. P-03 废除 ML 旁路，实验脚本接入 `read_panel_as_of`（R2，REQ-215）。
+2. P-03 建立 lake `features/` 子层，feature/label/artifact 带版本 + schema（V3，REQ-219）。
+3. 模型 artifact 带 hash 引用 dataset snapshot（E2，REQ-222），ExperimentManifest 闭环 published release + lineage（E1，REQ-221），split cutoff 冻结入 ExperimentManifest 与 embargo 统一（E5，REQ-225）。
+4. P-03 把分散 label 泄漏审计统一接入 data release + cutoff gate（E3，REQ-223，既有合同闭环）。
+5. P-03 新建训练-实盘特征同 schema 同计算一致性校验，不一致阻断（E4，REQ-224，d1 新建）。
+6. 全量加载撑不住时引入 DuckDB 只读 adapter（R3，REQ-216，只读引擎）。
+
+---
+
+### UC-54：模拟盘日级推进的数据增量与读前阻断（模拟盘阶段）
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-07 阶段六多因子模拟盘准入负责人；P-04 生产数据湖负责人 |
+| **触发条件** | P-07 推进多因子模拟盘，每个交易日收盘后需要数据湖补上当日增量、把 published pointer 前移到当日、并在次日信号生成前阻断读到旧数据或缺数据。当前增量刷新计划合同（`plan_incremental_refresh`）和 published pointer 合同（`publish_current_pointer`，dry-run only）都已存在但没接通真实日级执行，readiness matrix（`build_readiness_matrix`）也没前置为读前强制 gate。P-07 担心模拟盘读到前一天的旧快照或读到缺口数据，导致信号基于不完整数据生成。 |
+| **输入** | 既有增量刷新计划合同（`incremental.py`）、既有 published pointer 合同（`publish.py:605`，dry-run only）、既有 readiness matrix（`readiness.py:462`）、训练快照概念（V2）、交易日历、available_at 盖戳规则。 |
+| **用户目标** | 让模拟盘每个交易日都能拿到当日增量数据、pointer 前移到当日、读前质量门禁阻断旧/缺数据，且 ML 训练只读 published 快照、cutoff 固定，使日级推进不读到前视或不完整数据。 |
+| **处理逻辑** | 每个交易日收盘后，P-04 触发日级增量，系统把既有 `plan_incremental_refresh` 合同接通真实 append 执行链：`available_at` 盖戳 + 幂等写 + 当日去重，重复运行不污染（支撑：L1 增量接通执行，REQ-243，既有合同闭环非新建）。随后 pointer 前移，系统把既有 `publish_current_pointer`（dry-run only）接通真实前移：每日 promote → current pointer 前移 + 门禁，validate pass 不自动前移（支撑：L2 pointer 接通执行，REQ-244，既有合同闭环）。次日信号生成前，系统把既有 `build_readiness_matrix` 前置为读前强制阻断 gate，按 coverage/新鲜度/PIT 检查，不通过则阻断信号生成（支撑：L4 读前门禁，REQ-234，既有合同闭环）。ML 训练侧 P-07 只读 published 快照，training cutoff 固定可复现（支撑：V2 训练快照，REQ-218）。成功路径：日级增量落盘 → pointer 前移 → 读前门禁通过 → 信号基于当日完整 published 数据生成。异常路径：读前门禁发现 coverage 不足或新鲜度不达标则阻断，P-07 收到结构化 blocked reason 而非读到旧数据。边界声明：V4 schema 契约冻结在模拟盘前必过（评审 HIGH3）；L1/L2/L4 为既有合同闭环（d2），不重复设计（REQ-249）；CP2 阶段不执行真实 pointer 前移或增量写入，只定义契约。 |
+| **输出/结果** | 日级增量 append 执行链（幂等 + 当日去重 + available_at 盖戳）；published pointer 真实前移 + 门禁；读前强制质量阻断 gate；ML 训练快照冻结 + cutoff 固定。 |
+| **前置条件** | V4 schema 契约冻结在模拟盘前必过（HIGH3）；L1/L2/L4 为既有合同闭环（d2），不重复设计（REQ-249）。 |
+| **排除情况** | 不在 CP2 阶段执行真实 pointer 前移或增量写入（授权范围外，REQ-248）；不把 dry-run 合同存在视为已执行；不授权 runtime/NAS/QMT/trading/provider-lake-catalog 写入/Git remote write。 |
+
+**处理流程（文字描述）：**
+1. 每个交易日收盘后，P-04 触发日级增量，系统接通既有 `plan_incremental_refresh` 执行幂等 append + 当日去重 + available_at 盖戳（L1，REQ-243）。
+2. 系统把既有 `publish_current_pointer` 接通真实前移 + 门禁（L2，REQ-244）。
+3. 次日信号生成前，系统把既有 `build_readiness_matrix` 前置为读前强制阻断 gate（L4，REQ-234）。
+4. P-07 的 ML 训练只读 published 快照，cutoff 固定（V2，REQ-218）。
+5. 读前门禁通过后信号基于当日完整 published 数据生成；不通过则 P-07 收到结构化 blocked reason。
+
+---
+
+### UC-55：实盘复盘与信号→数据→执行全程审计链（实盘可审计）
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-06 研究口径与交易价格审计者；P-05 QMT 交易接入与运行负责人 |
+| **触发条件** | P-06 实盘后复盘某笔异常成交，需要从信号回溯到数据、再回溯到执行，但当前 reader 没有读审计 log，数据 run-id 没有贯穿到既有 RunEvidenceIndex 和 broker event，broker lake schema 已存在但没接通实盘写 + 审计链，CommissionSchedule 已存在但没前置到成本门禁。P-06 无法用同一条 run-id 把"信号用了哪个数据版本→订单怎么来的→成交怎么对账"串起来，复盘卡在断链处。 |
+| **输入** | 既有 RunEvidenceIndex（`evidence_index.py:19 from_run_result`）、既有 BrokerLakeSchema（`broker_lake.py:64`）、既有 CommissionSchedule（`qmt_gateway_contracts.py:997`）、既有 replay 合同（`replay.py`、`cli.py cmd_p0_replay`）、reader 读审计 log（新建 L3）。 |
+| **用户目标** | 让信号→数据→执行全程审计链用同一条 run-id 贯通，使实盘异常成交能从信号回溯到数据版本、订单、成交、对账，且成本/滑点/成交可得性在回测和实盘前就已前置把关。 |
+| **处理逻辑** | P-06 先要求 reader 落读审计 log，系统新建 reader 读审计记录并与既有 RunEvidenceIndex 同 run-id 贯通（支撑：L3 读审计 log + run-id 贯通，REQ-233，d1 纯新建）。随后 P-06 把数据 run-id 贯穿既有 RunEvidenceIndex 和 broker event，使数据→研究→执行审计链同 run-id（支撑：T6 run-id 贯穿，REQ-242，既有合同闭环）。broker 侧 P-05 把既有 BrokerLakeSchema 接通实盘写 + 订单/成交/持仓审计链（支撑：T4 broker facts 闭环，REQ-240，c 范围扩展）；既有 CommissionSchedule 前置到回测/实盘成本门禁，成本/滑点/成交可得性不满足则阻断（支撑：T5 成本前置，REQ-241，既有合同闭环）。复盘时 P-06 可用既有 replay 合同按 published as_of 重放单日快照，不触发 provider（支撑：L5 replay 接通，REQ-245，既有合同闭环，P2）。成功路径：P-06 用同一条 run-id 从异常成交回溯到信号用的数据版本、订单意图、成交回报、对账记录，定位异常根因。异常路径：若 run-id 断链或读审计缺失，系统标注断点并要求补全，不伪造贯通。边界声明："可审计"是用户三大目标之一（可信/可复现/可审计），L3 读审计已从 P2 升 P1；实盘写/broker lake 写入授权范围外，CP2 只定义契约（REQ-248）；既有合同（RunEvidenceIndex/BrokerLakeSchema/CommissionSchedule/replay）按闭环非新建处理（REQ-249）。 |
+| **输出/结果** | 读审计 log + run-id 贯通；数据→研究→执行审计链同 run-id；broker facts 闭环实盘写 + 订单/成交/持仓审计链；成本/滑点/成交可得性前置门禁；published as_of 单日快照重放。 |
+| **前置条件** | "可审计"是用户三大目标之一；L3 读审计 P2→P1 升级；实盘写/审计链写入授权范围外，CP2 只定义契约（REQ-248）。 |
+| **排除情况** | 不在 CP2 阶段执行真实 broker lake 写或实盘写（授权范围外，REQ-248）；不把审计链合同存在视为已执行；不授权 runtime/NAS/QMT/trading/provider-lake-catalog 写入/Git remote write。 |
+
+**处理流程（文字描述）：**
+1. P-06 要求 reader 落读审计 log，系统新建并与既有 RunEvidenceIndex 同 run-id 贯通（L3，REQ-233）。
+2. 系统把数据 run-id 贯穿既有 RunEvidenceIndex/broker event（T6，REQ-242）。
+3. P-05 把既有 BrokerLakeSchema 接通实盘写 + 订单/成交/持仓审计链（T4，REQ-240）。
+4. P-05 把既有 CommissionSchedule 前置成本/滑点/成交可得性门禁（T5，REQ-241）。
+5. 复盘时 P-06 用既有 replay 按 published as_of 重放单日快照（L5，REQ-245，P2）。
+6. P-06 用同一条 run-id 从异常成交回溯到数据版本、订单、成交、对账，定位根因。
+
+---
+
+### UC-56：回测归因不可复现时的配置类事实源版本化（配置层）
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-03 因子研究数据审计者；P-04 生产数据湖负责人 |
+| **触发条件** | P-03 回测归因发现同一策略不同时间跑结果对不上，排查发现 benchmark 口径、commission/费用模型、universe/risk policy、政策周期/shortability 的版本在两次运行间不一致——这些配置类事实源的合同（BenchmarkCoverage/BenchmarkDefinition、CommissionSchedule、PortfolioRiskPolicy、policy_cycle_coverage）都已存在，但没有版本化、没有与 release 闭环，导致归因无法复现。P-03 需要这些配置事实源像数据 dataset 一样可版本化、可回溯到某次 release。 |
+| **输入** | 既有 BenchmarkCoverage/BenchmarkDefinition（`benchmarks.py:99/114`）、既有 CommissionSchedule（`qmt_gateway_contracts.py:997`）、既有 PortfolioRiskPolicy（`mature_multifactor_framework.py:228`）、既有 policy_cycle_coverage（`factor_model_validation.py:444`、`config/policy_cycles.yaml`）。 |
+| **用户目标** | 让 benchmark、commission、universe/risk policy、政策周期/shortability 四类配置事实源都带版本、与 release 闭环，使回测归因可复现——任意一次回测都能说清用的是哪个版本的哪类配置。 |
+| **处理逻辑** | P-03 先处理 benchmark：在既有 BenchmarkCoverage/BenchmarkDefinition 基础上补版本化 benchmark 与无风险利率曲线事实源 + release 闭环（支撑：F1 benchmark 版本化，REQ-236，既有合同闭环非新建）。随后 commission/费用/滑点：在既有 CommissionSchedule 基础上补版本化费用模型事实源 + release 闭环（支撑：F2 commission 版本化，REQ-237，既有合同闭环）。universe/risk policy：在既有 PortfolioRiskPolicy 基础上补版本化 universe policy + risk policy 事实源（退市/ST/容量约束）+ release 闭环（支撑：F3 universe/risk policy 版本化，REQ-238，既有合同闭环）。政策周期/shortability：在既有 policy_cycle_coverage 基础上补版本化政策周期 + shortability 事实源 + release 闭环（支撑：F4 政策周期版本化，REQ-239，既有合同闭环，P2）。成功路径：四类配置事实源都带 version + release 闭环，P-03 归因时能回溯到具体版本，回测可复现。异常路径：若某类配置缺版本化字段，归因标注版本不明并阻断复现声明。边界声明：F1-F4 均为既有合同版本化扩展（d2），不重复设计（REQ-249）；配置类事实源层非纯新建（handoff §3.10 已修正口径）；F4 为 P2，入 BACKLOG deferred。 |
+| **输出/结果** | 版本化 benchmark + risk-free curve 事实源；版本化 commission/费用/滑点模型；版本化 universe/risk policy（含退市/ST/容量约束）；版本化政策周期/shortability；四类均与 release 闭环。 |
+| **前置条件** | F1-F4 均为既有合同版本化扩展（d2），不重复设计（REQ-249）；配置类事实源层非纯新建（handoff §3.10）。 |
+| **排除情况** | 不把配置类事实源写成"完全缺失"（已有合同，memory `verify-existing-code-before-claiming-absent` 核验）；F4 为 P2，入 BACKLOG deferred；不授权 runtime/NAS/QMT/trading/provider-lake-catalog 写入/Git remote write（REQ-248）。 |
+
+**处理流程（文字描述）：**
+1. P-03 在既有 benchmark 合同上补版本化 + risk-free curve + release 闭环（F1，REQ-236）。
+2. P-03 在既有 CommissionSchedule 上补版本化费用模型 + release 闭环（F2，REQ-237）。
+3. P-03 在既有 PortfolioRiskPolicy 上补版本化 universe/risk policy + release 闭环（F3，REQ-238）。
+4. P-03 在既有政策周期评估上补版本化政策周期/shortability + release 闭环（F4，REQ-239，P2）。
+5. 四类配置事实源都带 version + release 闭环后，P-03 归因可回溯到具体版本，回测可复现。
+
+---
+
+### UC-57：模拟盘前 schema 契约稳定与跨源时点一致性保障（实盘契约）
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-04 生产数据湖负责人；P-06 研究口径与交易价格审计者 |
+| **触发条件** | P-04 准备推进模拟盘，但担心两件事：(1) schema 版本有字段无演进/兼容策略，runner 读湖时一旦 schema 变更就会崩，且实盘运维尾部才冻结契约已来不及（评审 HIGH3）；(2) 跨源（tushare/jqdata/QMT）交易日历/时区不一致、复权因子本身 PIT 正确性未校验、decision_time 缺强制 lookahead 阻断、universe 用固定成分快照有幸存者偏差。P-04 需要在模拟盘前把 schema 契约冻结、跨源时点对齐，否则模拟盘读到 schema 漂移或时点错位的数据。 |
+| **输入** | schema 版本字段（`contracts.py`）、reader 兼容回退、复权因子、除权除息事件、跨源交易日历、既有 decision_time 过滤（`readers.py:227`）、index_members snapshot、既有 survivorship_bias_note（`contracts.py:270`）、run_id 前缀规约、CR 编号路径规约、quality/ 分区、CR→数据审计链、列裁剪/谓词下推、DuckDB 只读边界测试。 |
+| **用户目标** | 让 schema 契约在模拟盘前冻结且 reader 可兼容回退、复权因子 PIT 正确、跨源交易日历/时区对齐、decision_time 强制阻断 lookahead、universe 按时点构建 PIT 成分链，使模拟盘 runner 不因 schema 漂移崩、不因时点错位读前视数据。 |
+| **处理逻辑** | P-04 先冻结 schema 契约：定义 schema 演进规则 + reader 兼容回退，模拟盘前必过（支撑：V4 schema 演进 + 实盘契约冻结，REQ-220，评审 HIGH3 从 Wave3 移入 Wave2）。复权因子 PIT：除权除息事件按 PIT 应用 + 复权断点回归测试（支撑：X1 复权因子 PIT 校验，REQ-229，d1 纯新建）。跨源一致性：跨源交易日历对齐校验 + 时区归一（支撑：X2 跨源一致性，REQ-230，d1 纯新建）。decision_time：在既有过滤基础上加强制 lookahead 阻断门禁，信号时刻 vs available_at 违规则阻断（支撑：X3 lookahead 阻断，REQ-235，既有合同闭环）。universe：index_members snapshot 按时点构建 PIT 成分链，消除固定快照偏差（支撑：X4 PIT universe 成分链，REQ-231，既有合同闭环）。P-04 同步治理 run_id 前缀（统一 `run-<purpose>-<window>-<source>-<YYYYMMDD>`、修 unknown bug，支撑：N2，REQ-202）和 CR 编号路径（新规约不放 CR、存量不主动改名，支撑：N3，REQ-203）；整理 quality/ 分区、补 CR→数据审计链（支撑：M3，REQ-210；M4，REQ-211，均 P2）；补列裁剪/谓词下推与 DuckDB 只读 e2e 测试（支撑：R4，REQ-217；T1，REQ-228，均 P2）；构造 PIT/去重正确性回归测试（支撑：T2 未来财报断言，REQ-226；T3 唯一性断言，REQ-227）。成功路径：schema 契约冻结 + 跨源时点对齐 + PIT/lookahead 门禁就位，模拟盘 runner 稳定读到时点正确的 published 数据。异常路径：schema 变更触发 reader 兼容回退；lookahead 违规或跨源不一致则阻断信号生成。边界声明：V4 schema 契约冻结在模拟盘前必过（HIGH3）；四组门禁集为 CP3 必过（D7，REQ-246）；CP2 阶段不修改 schema 或 reader（CP5 后）；P2 项（M3/M4/R4/T1/F4）入 BACKLOG deferred。 |
+| **输出/结果** | schema 演进规则 + 实盘契约冻结；复权因子 PIT 校验；跨源交易日历/时区对齐；decision_time 强制 lookahead 阻断；PIT universe 成分链；run_id 前缀规约；quality/ 分区整理；CR→数据审计链；列裁剪/谓词下推；DuckDB 只读 e2e 测试；PIT/去重正确性回归测试。 |
+| **前置条件** | V4 schema 契约冻结在模拟盘前必过（HIGH3）；四组门禁集为 CP3 必过（D7，REQ-246）。 |
+| **排除情况** | 不在 CP2 阶段修改 schema 或 reader（CP5 后）；P2 项（M3/M4/R4/T1）入 BACKLOG deferred；不授权 runtime/NAS/QMT/trading/provider-lake-catalog 写入/Git remote write（REQ-248）。 |
+
+**处理流程（文字描述）：**
+1. P-04 定义 schema 演进规则 + reader 兼容回退，模拟盘前冻结契约（V4，REQ-220）。
+2. P-04 新建复权因子 PIT 校验 + 复权断点回归（X1，REQ-229），新建跨源交易日历/时区对齐（X2，REQ-230）。
+3. P-04 在既有 decision_time 上加强制 lookahead 阻断（X3，REQ-235），index_members 按时点构建 PIT universe 成分链（X4，REQ-231）。
+4. P-04 治理 run_id 前缀 + 修 unknown（N2，REQ-202）、CR 编号不烧进路径（N3，REQ-203）。
+5. P-04 整理 quality/ 分区（M3，REQ-210）、补 CR→数据审计链（M4，REQ-211），均 P2。
+6. P-04 补列裁剪/谓词下推（R4，REQ-217）、DuckDB 只读 e2e 测试（T1，REQ-228），均 P2。
+7. P-04 构造 PIT 正确性回归（T2，REQ-226）、去重正确性测试（T3，REQ-227）。
+8. schema 契约冻结 + 跨源时点对齐 + PIT/lookahead 门禁就位后，模拟盘 runner 稳定读到时点正确的 published 数据。
+
 <!-- coverage-checklist: begin -->
 ## 附录：覆盖自检表
 
@@ -1519,8 +1681,8 @@ total_use_cases: 50
 | D5 | 环境维度 | 已补充 | UC-01 至 UC-50 | 本地 parquet、raw、manifest、quality/catalog、断网消费、外置 lake、catalog current pointer、DuckDB 只读候选、Windows QMT / MiniQMT 节点、FastAPI 本地服务桥接、WSL / Windows 部署边界、外置 broker lake、mock adapter、凭据脱敏边界、Backtrader 未安装环境、本地 Qlib 静态分析路径、QMT terminal package、MiniQMT runner 安装边界、Runner registry/bundle/evidence 和 Gateway service lifecycle 均已记录 |
 | D6 | 方式维度 | 已补充 | UC-02 至 UC-50 | 命令/脚本/Notebook/API 入口将在 HLD 中细化；CSV、typed result、写湖作业、gate result、factor audit panel、P0 分层、Explicit Publish Gate、research rerun、OMS order intent、shadow / dry-run / mock、Backtrader semantic diff、多因子 schema、策略包 schema、install dry-run、双目标验证证据、Runner run plan、事件/信号接入、Gateway health/capabilities、WS/gRPC/REST 事件流方式已记录 |
 | D7 | 异常维度 | 已补充 | UC-01 至 UC-50 | 覆盖 schema 缺失、复权混用、`available_at` 越界、label overlap、lineage 缺失、缺失价格、无成交、数据源失败、quality fail、PIT 不完整、辅助数据缺失、catalog pointer 污染、publish/rollback 失败、DuckDB 越权写入、凭据未授权、QMT 直连绕过、pre-trade fail、unknown 状态、未授权 simulation、Backtrader 未安装、MiniQMT 权限缺失、fixture pass 被误读为真实运行证据、Runner 崩溃、回报乱序、Gateway 断连、xtdata 并发崩溃和订阅失效 |
-| D8 | 集成维度 | 已补充 | UC-04 至 UC-50 | 与聚宽验证、策略扩展、`market_data` 写湖、只读 resolver、Backtrader optional backend、Qlib isolated runner、CR-008 `research_input_v1`、CR-010/012/013/014/018 数据湖基线、DuckDB 候选查询层、local_backtest C 侧 client、Windows QMT / XtQuant S 侧 gateway、OMS / adapter / broker lake、lightweight engine、Stage6 admission、QMT terminal target、MiniQMT runner target、Runner operational control plane 和 QMT Gateway service layer 的边界已记录 |
-| D9 | 数据生命周期维度 | 已补充 | UC-09 至 UC-50 | CR-014/018 覆盖全 A 证券生命周期、代码变更、退市、current pointer、增量刷新、replay、publish release、rollback、权限计数和 claim boundary；CR-015/016/017/019/025/030/046/138 覆盖 broker event、order state、qfq as-of、admission package、dry-run 记录、bridge request、clean feed、semantic diff、factor panel、label window、StrategyAdmissionPackage、策略包合同、验证证据、run registry、Gateway audit record 和事件订阅生命周期 |
+| D8 | 集成维度 | 已补充 | UC-04 至 UC-57 | 与聚宽验证、策略扩展、`market_data` 写湖、只读 resolver、Backtrader optional backend、Qlib isolated runner、CR-008 `research_input_v1`、CR-010/012/013/014/018 数据湖基线、DuckDB 候选查询层、local_backtest C 侧 client、Windows QMT / XtQuant S 侧 gateway、OMS / adapter / broker lake、lightweight engine、Stage6 admission、QMT terminal target、MiniQMT runner target、Runner operational control plane 和 QMT Gateway service layer 的边界已记录；CR-139 UC-51..UC-57 补齐策略生产数据底座与既有 ExperimentManifest/StrategyAdmissionPackage/RunEvidenceIndex/BrokerLakeSchema/CommissionSchedule/benchmark/PortfolioRiskPolicy/policy_cycle 既有合同的闭环集成 |
+| D9 | 数据生命周期维度 | 已补充 | UC-09 至 UC-57 | CR-014/018 覆盖全 A 证券生命周期、代码变更、退市、current pointer、增量刷新、replay、publish release、rollback、权限计数和 claim boundary；CR-015/016/017/019/025/030/046/138 覆盖 broker event、order state、qfq as-of、admission package、dry-run 记录、bridge request、clean feed、semantic diff、factor panel、label window、StrategyAdmissionPackage、策略包合同、验证证据、run registry、Gateway audit record 和事件订阅生命周期；CR-139 UC-51..UC-57 覆盖信息收集→回测→模拟盘→实盘全流程数据生命周期：T8/T7 基线清册、C1/C2/V1/R1 四道 P0 防线、V3 feature/label/artifact 版本化、L1/L2/L4 日级增量+pointer+读前门禁、L3/T4/T5/T6 读审计+交易审计链 run-id 贯通、F1-F4 配置类事实源版本化 release 闭环、V4/X1-X4 schema 冻结+跨源时点一致性 |
 <!-- coverage-checklist: end -->
 
 ## 附录：治理变更记录（可选）
@@ -1537,3 +1699,4 @@ total_use_cases: 50
 | 1.10 | `UC-16` / `SM-29` / `SM-30` | FastAPI bridge / dry-run-only 安全指标 | QMT C/S bridge / 完整 endpoint matrix + 运行门控 | 用户确认 Q40 推荐方案，并补充 QMT 模块必须拆为 local_backtest C 侧 client 与 Windows S 侧 gateway |
 | 1.11 | `status` / `total_use_cases` | confirmed / 18 | draft / 19 | CR-025 启动后追加 Backtrader optional backend hardening 场景；旧已确认基线保留，本增量等待 CP2 人工确认 |
 | 1.16 | `status` / `total_use_cases` / `scenario_subject_id` | confirmed / 32 / local-backtest-production-data-lake-and-qmt-trading-layer | confirmed / 50 / local-backtest-production-data-lake-runner-and-qmt-gateway | CR-138 启动后追加 Runner 与 QMT Gateway 运营 use-case baseline；旧 v1.15 confirmed 基线保留，v1.16 已于 2026-06-24T13:20:00+08:00 经用户 `approve` 通过 CP2 |
+| 1.17 | `status` / `version` / `total_use_cases` | confirmed / 1.16 / 50 | draft / 1.17 / 57 | CR-139「Strategy Data Foundation」parent CR 启动后追加策略生产数据底座场景 UC-51..UC-57，覆盖四阶段全流程、四组门禁、ML feature/label、run evidence、配置类事实源、交易审计链、schema 冻结；旧 v1.16 confirmed 基线保留，本增量待 CP2 人工门禁（D8a/D8b 正式确认） |

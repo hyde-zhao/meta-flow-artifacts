@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "batch_id": "CR139-W2-DATA-CONTRACTS",
+  "gate": "Gate A",
+  "stage": "data_lake_root_alignment_and_no_write_inventory",
+  "status": "pass_with_risk_ready_for_gate_b_batch0_preflight_only",
+  "root_alignment": {
+    "previous_root": "/home/hyde/data/quant-lab/lake",
+    "aligned_root": "/home/hyde/data/quant-lab/data-lake",
+    "nas_final_directory_requirement": "/data-lake",
+    "operation": "local_directory_rename",
+    "operator_authorized_no_backup": true,
+    "nas_operation_executed": false
+  },
+  "inventory_ref": "process/evidence/CR139-W2-GATEA-REAL-LAKE-INVENTORY-DATALAKE-2026-06-29.json",
+  "previous_inventory_ref": "process/evidence/CR139-W2-GATEA-REAL-LAKE-INVENTORY-2026-06-29.json",
+  "check_ref": "process/checks/CR139-W2-GATEA-DATALAKE-ROOT-ALIGNMENT-AND-INVENTORY-2026-06-29.md",
+  "commands": [
+    {
+      "command": "mv /home/hyde/data/quant-lab/lake /home/hyde/data/quant-lab/data-lake",
+      "result": "pass",
+      "summary": "local lake root final segment aligned to data-lake"
+    },
+    {
+      "command": "uv run --python 3.11 python scripts/lake_inventory.py --lake-root /home/hyde/data/quant-lab/data-lake --format json --out process/evidence/CR139-W2-GATEA-REAL-LAKE-INVENTORY-DATALAKE-2026-06-29.json",
+      "result": "pass",
+      "summary": "catalog_dataset_count=17 inventory_entry_count=17 physical_missing_count=0 duplicate_key_total=48899668 lineage_checksum_absent_count=17"
+    }
+  ],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "credential_read": 0
+  },
+  "summary": {
+    "catalog_dataset_count": 17,
+    "inventory_entry_count": 17,
+    "physical_missing_count": 0,
+    "published_true_count": 0,
+    "published_false_count": 17,
+    "lineage_checksum_present_count": 0,
+    "lineage_checksum_absent_count": 17,
+    "duplicate_key_total": 48899668,
+    "pit_status_distribution": {
+      "pit_available": 3,
+      "null": 14
+    }
+  },
+  "comparison_to_previous_gate_a": {
+    "catalog_dataset_count_changed": false,
+    "inventory_entry_count_changed": false,
+    "physical_missing_count_changed": false,
+    "duplicate_key_total_changed": false,
+    "operation_counts_changed": false
+  },
+  "classified_findings": [
+    {
+      "id": "GATEA-FINDING-S30-RUNID-NONCONFORMING",
+      "severity": "medium",
+      "classification": "expected_cr139_s30",
+      "summary": "17/17 catalog paths use non-CR139 W2 run-id naming.",
+      "blocks_gate_b_batch0": false,
+      "routes_to": [
+        "Gate E planning",
+        "Gate C path refresh"
+      ]
+    },
+    {
+      "id": "GATEA-FINDING-S32-DUPLICATE-KEYS",
+      "severity": "high",
+      "classification": "expected_cr139_s32",
+      "summary": "Duplicate keys exist in adj_factor, liquidity_capacity, market_cap, prices, prices_limit and trade_status.",
+      "blocks_gate_b_batch0": false,
+      "blocks_gate_b_write_for_affected_datasets": true,
+      "routes_to": [
+        "Gate B Batch 0 dedup preflight"
+      ]
+    },
+    {
+      "id": "GATEA-FINDING-S31-EVENTS-TRADE-DATE-MISSING",
+      "severity": "medium",
+      "classification": "expected_cr139_s31",
+      "summary": "events inventory columns lack trade_date.",
+      "blocks_gate_b_batch0": false,
+      "blocks_events_write": true,
+      "routes_to": [
+        "Gate B Batch 0 repair candidate review"
+      ]
+    },
+    {
+      "id": "GATEA-FINDING-S34-LINEAGE-CHECKSUM-ABSENT",
+      "severity": "medium",
+      "classification": "expected_cr139_s34",
+      "summary": "17/17 datasets lack lineage checksum.",
+      "blocks_gate_b_batch0": false,
+      "routes_to": [
+        "Gate C metadata backfill"
+      ]
+    },
+    {
+      "id": "GATEA-FINDING-D-CURRENT-TRUTH-UNPUBLISHED",
+      "severity": "high",
+      "classification": "current_truth_not_advanced",
+      "summary": "17/17 datasets are unpublished.",
+      "blocks_gate_b_batch0": false,
+      "routes_to": [
+        "Gate D pointer advance review"
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "id": "RISK-GATEA-NO-EXTERNAL-FENCE",
+      "severity": "medium",
+      "status": "requires_fence_or_risk_acceptance_before_gate_b_write_batches",
+      "summary": "This session performed no data writes after root alignment, but no external lake write fence was mechanically proven."
+    },
+    {
+      "id": "RISK-GATEB-DEDUPE-BUSINESS-DECISION",
+      "severity": "high",
+      "status": "requires_batch0_decision_before_affected_dataset_writes",
+      "summary": "48,899,668 duplicate keys require dataset-specific keep/drop/quarantine decisions before affected datasets can be written."
+    }
+  ],
+  "forbidden_operations_executed": []
+}

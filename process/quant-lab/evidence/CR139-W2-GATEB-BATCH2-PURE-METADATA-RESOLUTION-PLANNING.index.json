@@ -1,0 +1,407 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch2_pure_metadata_resolution_planning",
+  "created_at": "2026-06-29T19:31:15+08:00",
+  "status": "ready_for_explicit_strategy_unification_execution_authorization_with_delete_guard",
+  "mode": "read_only_batch_resolution_planning_no_lake_write",
+  "authorized_scope": "Gate B Batch 2 pure metadata conflict resolution planning for liquidity_capacity and market_cap; no lake write",
+  "datasets": [
+    "liquidity_capacity",
+    "market_cap"
+  ],
+  "dataset_count": 2,
+  "dataset_summaries": [
+    {
+      "dataset": "liquidity_capacity",
+      "status": "pass_resolution_plan_ready_for_write_authorization_review",
+      "counts": {
+        "source_rows": 17095488,
+        "non_conflict_rows": 17091828,
+        "duplicate_key_group_count": 1830,
+        "duplicate_rows": 3660,
+        "selected_rows_to_main": 1830,
+        "superseded_rows_to_quarantine": 1830,
+        "future_resolved_main_row_count": 17093658,
+        "future_resolved_quarantine_row_count": 1830,
+        "future_total_rows_preserved": 17095488,
+        "dropped_row_count": 0
+      },
+      "future_resolved_candidate": {
+        "run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved",
+        "candidate_root_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved",
+        "main_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved/part-liquidity-capacity.parquet",
+        "quarantine_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved/quarantine/part-liquidity-capacity-superseded-smoke.parquet",
+        "target_root_exists_now": false,
+        "write_mode_if_later_authorized": "additive_only_new_resolved_candidate_path_no_in_place_overwrite"
+      },
+      "failed_checks": [],
+      "failed_group_count": 0,
+      "required_decisions_before_write": [],
+      "precedence_buckets": []
+    },
+    {
+      "dataset": "market_cap",
+      "status": "pass_metadata_only_precedence_decision_required",
+      "counts": {
+        "source_rows": 17108103,
+        "non_conflict_rows": 16894551,
+        "duplicate_key_group_count": 106776,
+        "duplicate_rows": 213552,
+        "selected_rows_to_main": 106776,
+        "superseded_rows_to_quarantine": 106776,
+        "future_resolved_main_row_count": 17001327,
+        "future_resolved_quarantine_row_count": 106776,
+        "future_total_rows_preserved": 17108103,
+        "dropped_row_count": 0
+      },
+      "future_resolved_candidate": {
+        "run_id": "cr139-w2-market_cap-legacy_lake-20260629-resolved",
+        "candidate_root_relative_path": "candidate/parquet/dataset=market_cap/schema_version=1.0/run_id=cr139-w2-market_cap-legacy_lake-20260629-resolved",
+        "main_relative_path": "candidate/parquet/dataset=market_cap/schema_version=1.0/run_id=cr139-w2-market_cap-legacy_lake-20260629-resolved/part-market-cap.parquet",
+        "quarantine_relative_path": "candidate/parquet/dataset=market_cap/schema_version=1.0/run_id=cr139-w2-market_cap-legacy_lake-20260629-resolved/quarantine/part-market-cap-superseded-smoke.parquet",
+        "target_root_exists_now": false,
+        "write_mode_if_later_authorized": "additive_only_new_resolved_candidate_path_no_in_place_overwrite"
+      },
+      "failed_checks": [
+        "source_precedence_rule_complete"
+      ],
+      "failed_group_count": 0,
+      "required_decisions_before_write": [
+        {
+          "decision_id": "D-GATEB-B2-MARKETCAP-001",
+          "decision_type": "implementation",
+          "question": "For 104,946 market_cap metadata-only duplicate groups from aux vs prices stage3 runs, which source_run_id should feed the resolved main candidate?",
+          "recommended": "select_aux_run_and_quarantine_prices_run",
+          "recommended_selected_source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+          "recommended_superseded_source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+          "alternative": "select_prices_run_and_quarantine_aux_run",
+          "risk": "Business values are identical, so numerical output is unchanged either way; the decision affects lineage ownership and future audit interpretation."
+        }
+      ],
+      "precedence_buckets": [
+        {
+          "source_run_ids": [
+            "run-cr034-chapter3-backfill-2000",
+            "run-cr034-chapter3-smoke-20000104-20000105"
+          ],
+          "group_count": 1830,
+          "recommended_selected_source_run_id": "run-cr034-chapter3-backfill-2000",
+          "recommended_superseded_source_run_id": "run-cr034-chapter3-smoke-20000104-20000105",
+          "decision_status": "covered_by_liquidity_capacity_precedence_pattern",
+          "rationale": "full-year backfill run is preferred over smoke-window run when business values are identical"
+        },
+        {
+          "source_run_ids": [
+            "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "run-stage3-data-update-20260530-20260626-prices-20260627"
+          ],
+          "group_count": 104946,
+          "recommended_selected_source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+          "recommended_superseded_source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+          "decision_status": "human_decision_required_before_write",
+          "rationale": "market_cap is an auxiliary dataset; aux run is source-owner aligned, while prices run duplicated identical market_cap rows. Business values are identical, but source ownership precedence must be approved before candidate write."
+        }
+      ]
+    }
+  ],
+  "batch_checks": {
+    "mode_is_read_only": true,
+    "dataset_count_2": true,
+    "all_dataset_plans_pass": false,
+    "all_future_roots_absent": true,
+    "operation_counts_zero": true,
+    "all_datasets_metadata_only": true,
+    "market_cap_precedence_decision_required": true
+  },
+  "failed_batch_checks": [
+    "market_cap_precedence_decision_required"
+  ],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "future_write_batch_plan": [
+    {
+      "batch_id": "B2-PURE-METADATA-UNIFICATION-EXECUTION",
+      "datasets": [
+        "liquidity_capacity",
+        "market_cap"
+      ],
+      "write_mode": "compound candidate cleanup plus resolved metadata-only candidate writes",
+      "authorization_status": "ready_for_explicit_runtime_authorization_with_delete_guard",
+      "expected_operations": {
+        "candidate_object_delete": 2,
+        "lake_write": 4,
+        "catalog_write": 0,
+        "current_pointer_publish": 0,
+        "physical_partition_migration": 0
+      },
+      "allowed_deletes_if_authorized": "only the two liquidity_capacity objects listed in the prior object manifest for run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+      "objects_per_dataset": [
+        "resolved main parquet",
+        "superseded quarantine parquet"
+      ],
+      "why_first": "This is the fastest accurate route: one explicit gate fixes the already-written liquidity candidate and writes market_cap with the same resolved strategy.",
+      "delete_guard_required": "GATEB-B2-LIQUIDITY-DELETE-GUARD-001"
+    },
+    {
+      "batch_id": "B2-PURE-METADATA-LIQUIDITY-ONLY-RESOLUTION",
+      "datasets": [
+        "liquidity_capacity"
+      ],
+      "write_mode": "rollback old quarantine-only candidate then write resolved candidate",
+      "authorization_status": "available_if_market_cap_decision_is_deferred_but_D-GATEB-B2-LIQUIDITY-001_approved",
+      "expected_operations": {
+        "candidate_object_delete": 2,
+        "lake_write": 2,
+        "catalog_write": 0,
+        "current_pointer_publish": 0,
+        "physical_partition_migration": 0
+      }
+    },
+    {
+      "batch_id": "B2-MOSTLY-EXACT-PLANNING",
+      "datasets": [
+        "adj_factor",
+        "prices"
+      ],
+      "write_mode": "read-only split exact-dedup plus conflict quarantine planning before any write",
+      "authorization_status": "planning_needed_can_run_in_parallel_with_pure_metadata_execution_review",
+      "note": "prices also needs schema-normalization decision before write"
+    },
+    {
+      "batch_id": "B2-PRIMARY-OR-MOSTLY-CONFLICT-SINGLETONS",
+      "datasets": [
+        "events",
+        "trade_status"
+      ],
+      "write_mode": "single-dataset planning/write gates; not batch write until field semantics are reviewed",
+      "authorization_status": "planning_needed_can_run_in_parallel"
+    },
+    {
+      "batch_id": "B2-MIXED-PRICES-LIMIT",
+      "datasets": [
+        "prices_limit"
+      ],
+      "write_mode": "single-dataset split exact-dedup plus quarantine planning/write due mixed conflict scale",
+      "authorization_status": "planning_needed_can_run_in_parallel"
+    }
+  ],
+  "evidence_refs": {
+    "detail": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING-2026-06-29T193115+0800.json",
+    "check": "process/checks/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING-2026-06-29.md",
+    "write_plan_json": "process/plans/CR139-W2-GATEB-PER-DATASET-WRITE-PLAN.json",
+    "liquidity_capacity_resolution_planning": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-RESOLUTION-PLANNING.index.json"
+  },
+  "decision_required_before_write": true,
+  "recommended_next_authorization": "authorize Gate B Batch 2 pure metadata strategy-unification execution only for liquidity_capacity and market_cap, with exact prior-manifest delete guard for liquidity_capacity old candidate",
+  "non_authorized_scope": [
+    "lake write",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "rollback deletion",
+    "in-place overwrite of existing candidate paths"
+  ],
+  "required_decisions_before_batch_write": [
+    {
+      "decision_id": "D-GATEB-B2-LIQUIDITY-001",
+      "decision_type": "implementation",
+      "question": "liquidity_capacity already has a quarantine-only candidate, but newer planning recommends resolved main+quarantine. Should the old candidate be rolled back and replaced by resolved strategy, or retained as-is?",
+      "recommended": "option_A_unify_on_resolved_strategy_with_object_manifest_rollback",
+      "recommended_action": {
+        "rollback_existing_candidate_run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+        "delete_only_manifest_objects": [
+          "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/part-liquidity-capacity.parquet",
+          "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine/part-liquidity-capacity-conflict-groups.parquet"
+        ],
+        "write_new_resolved_run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved",
+        "expected_resolved_main_rows": 17093658,
+        "expected_resolved_quarantine_rows": 1830
+      },
+      "alternative": "option_B_keep_existing_quarantine_only_candidate_and_apply_resolved_strategy_only_to_market_cap",
+      "recommended_rationale": "Resolved strategy keeps liquidity_capacity main candidate complete and aligns pure metadata conflict handling with market_cap; fixing now avoids Gate D publish discovering that liquidity_capacity main is missing 1,830 keys.",
+      "risk": "Option A requires explicit rollback deletion authorization for exactly two already-written candidate objects plus new resolved writes. Option B is faster but leaves inconsistent strategies and an incomplete liquidity_capacity main candidate.",
+      "decision_status": "approved_option_A_with_delete_guard_required",
+      "delete_guard": {
+        "guard_id": "GATEB-B2-LIQUIDITY-DELETE-GUARD-001",
+        "applies_to_decision": "D-GATEB-B2-LIQUIDITY-001",
+        "status": "required_before_any_candidate_object_delete",
+        "prior_object_manifest_ref": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-OBJECT-MANIFEST.json",
+        "allowed_delete_mode": "exact_manifest_object_list_only",
+        "forbidden_delete_modes": [
+          "glob",
+          "wildcard",
+          "rm -rf",
+          "directory_delete",
+          "recursive_delete",
+          "dataset_root_delete",
+          "run_id_prefix_delete",
+          "canonical_or_legacy_delete"
+        ],
+        "allowed_objects": [
+          {
+            "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/part-liquidity-capacity.parquet",
+            "expected_sha256": "07e36c7987713ad3424dd5942c90817b95e8c702f58748c5251f139d346a5a21",
+            "expected_size_bytes": 650227690,
+            "expected_row_count": 17091828,
+            "required_path_prefix": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/",
+            "required_run_id_exact": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+            "must_be_under_candidate": true
+          },
+          {
+            "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine/part-liquidity-capacity-conflict-groups.parquet",
+            "expected_sha256": "c1680cc06e8e8968418c4ead707f7aa6cffde2deaff16206aea614a4110822ce",
+            "expected_size_bytes": 136155,
+            "expected_row_count": 3660,
+            "required_path_prefix": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/",
+            "required_run_id_exact": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+            "must_be_under_candidate": true
+          }
+        ],
+        "pre_delete_checks": [
+          "path_is_relative_and_under_candidate_root",
+          "path_contains_exact_old_run_id_and_no_wildcards",
+          "path_does_not_contain_canonical_published_catalog_or_legacy_root",
+          "file_exists",
+          "sha256_matches_prior_manifest",
+          "size_bytes_matches_prior_manifest",
+          "parquet_row_count_matches_prior_manifest",
+          "resolved_target_root_does_not_exist_before_write"
+        ],
+        "post_delete_checks": [
+          "each_manifest_object_absent",
+          "old_run_id_directory_empty_or_absent",
+          "new_resolved_run_id_directory_not_deleted_by_cleanup",
+          "legacy_canonical_tree_hash_unchanged",
+          "catalog_hash_unchanged",
+          "published_tree_hash_unchanged"
+        ],
+        "expected_delete_count": 2,
+        "notes": "Future execution must delete each listed file individually after validation. It must not use glob patterns or rm -rf. Deletion remains unauthorized until a separate runtime authorization explicitly approves this guard."
+      },
+      "execution_risk_control": "Future delete must be exact manifest-object deletion only; no glob/rm-rf/directory delete."
+    },
+    {
+      "decision_id": "D-GATEB-B2-MARKETCAP-001",
+      "decision_type": "implementation",
+      "question": "For 104,946 market_cap metadata-only duplicate groups from aux vs prices stage3 runs, which source_run_id should feed the resolved main candidate?",
+      "recommended": "select_aux_run_and_quarantine_prices_run",
+      "recommended_selected_source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+      "recommended_superseded_source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+      "alternative": "select_prices_run_and_quarantine_aux_run",
+      "risk": "Business values are identical, so numerical output is unchanged either way; the decision affects lineage ownership and audit interpretation.",
+      "decision_status": "approved_by_user_feedback"
+    }
+  ],
+  "strategy_conflict": {
+    "status": "blocking_before_batch_write",
+    "dataset": "liquidity_capacity",
+    "already_written_candidate": {
+      "run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+      "main_rows": 17091828,
+      "quarantine_rows": 3660,
+      "strategy": "full_group_quarantine"
+    },
+    "planned_resolved_candidate": {
+      "run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved",
+      "main_rows": 17093658,
+      "quarantine_rows": 1830,
+      "strategy": "select_one_business_identical_row_to_main_quarantine_superseded_row"
+    },
+    "impact": "If unresolved, W2 would contain two inconsistent liquidity_capacity candidate strategies and the already-written main candidate would be missing 1,830 keys.",
+    "recommended_resolution": "approve D-GATEB-B2-LIQUIDITY-001 option A before any combined pure metadata write"
+  },
+  "approved_decisions": [
+    {
+      "decision_id": "D-GATEB-B2-MARKETCAP-001",
+      "decision_status": "approved_by_user_feedback",
+      "approved_selection": "select_aux_run_and_quarantine_prices_run",
+      "approved_at": "2026-06-29T19:50:11+08:00",
+      "risk_acceptance": "business_values_identical_zero_mismatch; lineage ownership selected as aux"
+    },
+    {
+      "decision_id": "D-GATEB-B2-LIQUIDITY-001",
+      "decision_status": "approved_option_A_with_delete_guard_required",
+      "approved_at": "2026-06-29T19:50:11+08:00",
+      "approved_strategy": "unify_on_resolved_strategy_with_object_manifest_rollback",
+      "delete_guard_ref": "GATEB-B2-LIQUIDITY-DELETE-GUARD-001",
+      "execution_authorization_status": "not_yet_authorized; future authorization must mention exact manifest delete guard"
+    }
+  ],
+  "liquidity_delete_guard": {
+    "guard_id": "GATEB-B2-LIQUIDITY-DELETE-GUARD-001",
+    "applies_to_decision": "D-GATEB-B2-LIQUIDITY-001",
+    "status": "required_before_any_candidate_object_delete",
+    "prior_object_manifest_ref": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-OBJECT-MANIFEST.json",
+    "allowed_delete_mode": "exact_manifest_object_list_only",
+    "forbidden_delete_modes": [
+      "glob",
+      "wildcard",
+      "rm -rf",
+      "directory_delete",
+      "recursive_delete",
+      "dataset_root_delete",
+      "run_id_prefix_delete",
+      "canonical_or_legacy_delete"
+    ],
+    "allowed_objects": [
+      {
+        "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/part-liquidity-capacity.parquet",
+        "expected_sha256": "07e36c7987713ad3424dd5942c90817b95e8c702f58748c5251f139d346a5a21",
+        "expected_size_bytes": 650227690,
+        "expected_row_count": 17091828,
+        "required_path_prefix": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/",
+        "required_run_id_exact": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+        "must_be_under_candidate": true
+      },
+      {
+        "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine/part-liquidity-capacity-conflict-groups.parquet",
+        "expected_sha256": "c1680cc06e8e8968418c4ead707f7aa6cffde2deaff16206aea614a4110822ce",
+        "expected_size_bytes": 136155,
+        "expected_row_count": 3660,
+        "required_path_prefix": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/",
+        "required_run_id_exact": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+        "must_be_under_candidate": true
+      }
+    ],
+    "pre_delete_checks": [
+      "path_is_relative_and_under_candidate_root",
+      "path_contains_exact_old_run_id_and_no_wildcards",
+      "path_does_not_contain_canonical_published_catalog_or_legacy_root",
+      "file_exists",
+      "sha256_matches_prior_manifest",
+      "size_bytes_matches_prior_manifest",
+      "parquet_row_count_matches_prior_manifest",
+      "resolved_target_root_does_not_exist_before_write"
+    ],
+    "post_delete_checks": [
+      "each_manifest_object_absent",
+      "old_run_id_directory_empty_or_absent",
+      "new_resolved_run_id_directory_not_deleted_by_cleanup",
+      "legacy_canonical_tree_hash_unchanged",
+      "catalog_hash_unchanged",
+      "published_tree_hash_unchanged"
+    ],
+    "expected_delete_count": 2,
+    "notes": "Future execution must delete each listed file individually after validation. It must not use glob patterns or rm -rf. Deletion remains unauthorized until a separate runtime authorization explicitly approves this guard."
+  }
+}

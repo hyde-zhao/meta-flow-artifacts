@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR139-S05.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S05",
+  "status": "verified",
+  "created_at": "2026-06-28T21:39:21+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR139-S05.CP7.verify-packet.json",
+  "dispatch_refs": ["ADE-CR139-W1-META-QA-INLINE-S05-COMPLETE-2026-06-28T213921+0800"],
+  "verification_report_ref": "docs/quality/VERIFICATION-REPORT-CR139-W1.md#s05-c1-pit-as-of-reader",
+  "touched_files": [
+    {
+      "path": "docs/quality/VERIFICATION-REPORT-CR139-W1.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/checks/CP7-CR139-S05-pit-as-of-reader-VERIFICATION-DONE.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/STORY-CR139-S05.CP7.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/STORY-CR139-S05.CP7.index.json",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_write_touched": false,
+    "catalog_write_touched": false,
+    "market_data_catalog_py_touched": false,
+    "published_pointer_advance_executed": false,
+    "physical_partition_migration_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_pit_as_of_reader.py",
+        "result": "pass",
+        "summary": "5 passed in 0.47s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py tests/test_cr139_duplicate_fingerprint_profiling.py tests/test_cr139_published_pointer.py tests/test_cr139_pit_as_of_reader.py tests/test_cr014_catalog_publish_gate.py tests/test_cr014_p0_pipeline_contract.py",
+        "result": "pass",
+        "summary": "51 passed in 2.39s"
+      }
+    ],
+    "tests": [
+      "tests/test_cr139_pit_as_of_reader.py",
+      "tests/test_cr014_catalog_publish_gate.py",
+      "tests/test_cr014_p0_pipeline_contract.py"
+    ],
+    "skipped": [
+      {
+        "scope": "real lake PIT runtime validation",
+        "reason": "not authorized"
+      }
+    ]
+  },
+  "evidence_refs": [
+    "process/evidence/STORY-CR139-S05.CP7.index.json",
+    "docs/quality/VERIFICATION-REPORT-CR139-W1.md#s05-c1-pit-as-of-reader"
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "O-S05-1",
+      "status": "not-authorized",
+      "summary": "Runtime validation against real lake data remains out of scope."
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "unlock_cr139_s06"
+}

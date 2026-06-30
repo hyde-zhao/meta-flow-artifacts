@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR139-S06.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S06",
+  "status": "implemented",
+  "created_at": "2026-06-28T21:51:44+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR139-S06.CP6.work-packet.json",
+  "dispatch_refs": ["ADE-CR139-W1-META-DEV-INLINE-S06-COMPLETE-2026-06-28T215144+0800"],
+  "implementation_ref": "process/stories/CR139-S06-unified-panel-reader-IMPLEMENTATION.md",
+  "touched_files": [
+    {
+      "path": "market_data/readers.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "tests/test_cr139_panel_reader.py",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "Added readers.read_panel as a multi-dataset as-of panel helper composed from S05 read_panel_as_of."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_write_touched": false,
+    "catalog_write_touched": false,
+    "market_data_catalog_py_touched": false,
+    "published_pointer_advance_executed": false,
+    "physical_partition_migration_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_panel_reader.py",
+        "result": "pass",
+        "summary": "5 passed in 0.26s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py tests/test_cr139_duplicate_fingerprint_profiling.py tests/test_cr139_published_pointer.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_panel_reader.py tests/test_cr014_catalog_publish_gate.py tests/test_cr014_p0_pipeline_contract.py",
+        "result": "pass",
+        "summary": "56 passed in 2.28s"
+      }
+    ],
+    "tests": [
+      "test_read_panel_joins_as_of_datasets_with_prefixed_columns",
+      "test_read_panel_records_unpublished_dataset_without_reading_candidate",
+      "test_read_panel_raises_for_unknown_dataset_without_reader",
+      "test_read_panel_rejects_mixed_adjustment_policy",
+      "test_read_panel_composes_s05_reader_and_does_not_write_catalog"
+    ],
+    "skipped": [
+      {
+        "scope": "real lake panel runtime validation",
+        "reason": "not authorized"
+      }
+    ]
+  },
+  "evidence_refs": [
+    "process/evidence/STORY-CR139-S06.CP6.index.json",
+    "process/stories/CR139-S06-unified-panel-reader-IMPLEMENTATION.md"
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "O-S06-1",
+      "status": "not-authorized",
+      "summary": "Runtime validation against real lake data remains out of scope."
+    },
+    {
+      "id": "O-S06-2",
+      "status": "deferred-to-s07",
+      "summary": "read-layer dedup is not claimed by S06 and remains S07 scope."
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7"
+}

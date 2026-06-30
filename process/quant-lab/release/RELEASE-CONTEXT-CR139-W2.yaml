@@ -1,0 +1,78 @@
+schema_version: 1
+workflow_id: CR139-W2
+created_at: "2026-06-30T07:01:35+08:00"
+owner: host-orchestrator
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+release_scope:
+  in_scope:
+    - Close CR139 Wave2 data-lake current-truth remediation after Gate D pointer advance.
+    - Confirm 17/17 datasets published through CR139 canonical targets.
+    - Record cleanup, NAS sync, provider catalog sync, and W3 governance as separate post-CP8 gates.
+  out_of_scope:
+    - Gate F cleanup execution.
+    - Gate H NAS dry-run or sync.
+    - Gate G provider catalog/provider-lake-catalog sync.
+    - Git remote write.
+    - Runtime/trading/gateway operations.
+quality_summary:
+  w2_current_truth_status: complete
+  active_catalog_sha256: "0ac6c1b8da8b7624f3d0dfbf879f1741254284d1faa03d42a1e01e4188c5c989"
+  active_manifest_sha256: "32887fd7989959ff7e09daba702ea12262b6fba1837a56d1a800e52248ef54d7"
+  active_manifest_line_count: 6386
+  published_dataset_count: 17
+  cr139_canonical_path_count: 17
+  candidate_canonical_path_count: 0
+  lineage_checksum_count: 17
+  reader_supported_available_count: 10
+  pointer_level_only_count: 7
+  gate_d_post_pointer_smoke: PASS
+  gate_d_extended_reader_smoke: PASS
+remaining_followup_gates:
+  gate_f_cleanup:
+    status: preview_complete_execution_not_authorized
+    recommended_order:
+      - F-1 orphan CR139 targets plus candidate tree cleanup.
+      - F-2 legacy canonical retain + mark superseded by default; archive/delete only after explicit dependency review.
+    evidence_ref: process/evidence/CR139-W2-GATEF-CLEANUP-NO-WRITE-PREVIEW-2026-06-29.json
+  gate_h_nas:
+    status: deferred_until_cleanup_decision
+    recommended_order:
+      - NAS dry-run after cleanup decision/execution.
+      - NAS sync only after dry-run review.
+  gate_g_provider_catalog:
+    status: conditional
+    recommendation: execute only if production consumers use provider catalog; otherwise record deferred.
+  wave3_planning:
+    status: recommended_after_w2_closure
+    scope:
+      - Reader support for 7 pointer-level-only datasets, with P0 priority for liquidity_capacity and market_cap.
+      - Retention/archive/delete policy.
+      - Publish guard automation.
+      - Recurring validation.
+    reader_support_priority:
+      P0:
+        - liquidity_capacity
+        - market_cap
+      P1:
+        - industry_classification
+        - prices_limit_code_change_fixes
+        - prices_limit_coverage_exclusions
+      P2_pointer_level_unless_consumer_appears:
+        - bse_code_mapping
+        - lifecycle_code_change
+non_authorized_items:
+  - cleanup/delete
+  - NAS operation
+  - provider catalog write
+  - provider-lake-catalog write
+  - Git remote write
+  - runtime/trading/gateway operations
+  - physical migration
+evidence_refs:
+  - process/checks/CR139-W2-GATED-POST-POINTER-SMOKE-2026-06-29.md
+  - process/evidence/CR139-W2-GATED-POST-POINTER-SMOKE-2026-06-29.json
+  - process/checks/CR139-W2-GATED-EXTENDED-READER-SMOKE-2026-06-29.md
+  - process/evidence/CR139-W2-GATED-EXTENDED-READER-SMOKE-2026-06-29.json
+  - process/checks/CR139-W2-GATEF-CLEANUP-NO-WRITE-PREVIEW-2026-06-29.md
+  - process/evidence/CR139-W2-GATEF-CLEANUP-NO-WRITE-PREVIEW-2026-06-29.json

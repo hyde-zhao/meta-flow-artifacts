@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR139-S33.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S33",
+  "status": "implemented",
+  "created_at": "2026-06-29T12:00:00+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR139-S33.CP6.work-packet.json",
+  "implementation_ref": "process/stories/CR139-S33-catalog-manifest-source-of-truth-IMPLEMENTATION.md",
+  "touched_files": [
+    {"path": "market_data/catalog.py", "change_type": "modified"},
+    {"path": "market_data/manifest.py", "change_type": "modified"},
+    {"path": "tests/test_cr139_catalog_manifest_source_of_truth.py", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "summary": "Added catalog-derived pointer/manifest pair builder and source-of-truth consistency validator."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_write_touched": false,
+    "catalog_write_touched": false,
+    "provider_catalog_write_touched": false,
+    "provider_lake_catalog_write_touched": false,
+    "published_pointer_advance_executed": false
+  },
+  "verification": {
+    "commands_run": [{"command": "W2 + CR139 fixture/static regression", "result": "pass", "summary": "88 passed in 3.07s"}],
+    "tests": ["test_catalog_manifest_are_derived_from_one_source_of_truth"],
+    "skipped": [{"scope": "provider-lake-catalog write", "reason": "not authorized"}]
+  },
+  "evidence_refs": ["process/evidence/STORY-CR139-S33.CP6.index.json"],
+  "risks": [{"id": "O-S33-1", "status": "not-authorized", "summary": "Real catalog reconciliation was not executed."}],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7"
+}

@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR139-S08.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S08",
+  "status": "verified",
+  "created_at": "2026-06-28T22:21:23+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR139-S08.CP7.verify-packet.json",
+  "dispatch_refs": ["ADE-CR139-W1-META-QA-INLINE-S08-COMPLETE-2026-06-28T222123+0800"],
+  "verification_report_ref": "docs/quality/VERIFICATION-REPORT-CR139-W1.md#s08-n1-run-id-partition-key-governance",
+  "touched_files": [
+    {
+      "path": "docs/quality/VERIFICATION-REPORT-CR139-W1.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/checks/CP7-CR139-S08-runid-partition-key-governance-VERIFICATION-DONE.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/STORY-CR139-S08.CP7.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/STORY-CR139-S08.CP7.index.json",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_write_touched": false,
+    "catalog_write_touched": false,
+    "market_data_catalog_py_touched": false,
+    "published_pointer_advance_executed": false,
+    "physical_partition_migration_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_s08_partition_governance.py",
+        "result": "pass",
+        "summary": "10 passed in 0.24s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_market_data_normalization_validation_readers.py",
+        "result": "pass",
+        "summary": "9 passed in 0.35s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py tests/test_cr139_duplicate_fingerprint_profiling.py tests/test_cr139_published_pointer.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_panel_reader.py tests/test_cr139_read_layer_dedup.py tests/test_cr139_s08_partition_governance.py tests/test_cr014_catalog_publish_gate.py tests/test_cr014_p0_pipeline_contract.py",
+        "result": "pass",
+        "summary": "72 passed in 2.26s"
+      },
+      {
+        "command": "git diff --check -- market_data/lake_layout.py market_data/normalization.py market_data/cli.py market_data/readers.py tests/test_cr139_s08_partition_governance.py tests/test_market_data_normalization_validation_readers.py",
+        "result": "pass",
+        "summary": "no whitespace errors"
+      }
+    ],
+    "tests": [
+      "tests/test_cr139_s08_partition_governance.py",
+      "tests/test_market_data_normalization_validation_readers.py",
+      "tests/test_cr139_read_layer_dedup.py",
+      "tests/test_cr014_catalog_publish_gate.py",
+      "tests/test_cr014_p0_pipeline_contract.py"
+    ],
+    "skipped": [
+      {
+        "scope": "physical partition migration execution",
+        "reason": "not authorized"
+      },
+      {
+        "scope": "real lake runtime validation",
+        "reason": "not authorized"
+      },
+      {
+        "scope": "catalog.py / manifest.py / publish.py consumer-story implementation",
+        "reason": "outside S08 write ownership"
+      }
+    ]
+  },
+  "evidence_refs": [
+    "process/evidence/STORY-CR139-S08.CP7.index.json",
+    "docs/quality/VERIFICATION-REPORT-CR139-W1.md#s08-n1-run-id-partition-key-governance"
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "N1-O1",
+      "status": "open-consumer-story",
+      "summary": "Supersede movement current-to-archive remains downstream publish scope."
+    },
+    {
+      "id": "N1-O3",
+      "status": "not-authorized",
+      "summary": "Physical partition migration remains out of scope until separate runtime authorization."
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "wave1_complete_start_followup_context_convergence"
+}

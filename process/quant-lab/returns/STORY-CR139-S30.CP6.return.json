@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR139-S30.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S30",
+  "status": "implemented",
+  "created_at": "2026-06-29T12:00:00+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR139-S30.CP6.work-packet.json",
+  "implementation_ref": "process/stories/CR139-S30-runid-naming-convention-IMPLEMENTATION.md",
+  "touched_files": [
+    {"path": "market_data/lake_layout.py", "change_type": "modified"},
+    {"path": "market_data/normalization.py", "change_type": "modified"},
+    {"path": "tests/test_cr139_runid_naming.py", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "summary": "Added deterministic CR139 W2 run_id naming and legacy run_id path static detection."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_write_touched": false,
+    "catalog_write_touched": false,
+    "published_pointer_advance_executed": false,
+    "physical_partition_migration_executed": false,
+    "git_remote_write_touched": false
+  },
+  "verification": {
+    "commands_run": [{"command": "W2 + CR139 fixture/static regression", "result": "pass", "summary": "88 passed in 3.07s"}],
+    "tests": ["test_cr139_run_id_is_deterministic_and_valid", "test_legacy_run_id_partition_path_is_blocked_by_static_contract"],
+    "skipped": [{"scope": "physical partition migration", "reason": "not authorized"}]
+  },
+  "evidence_refs": ["process/evidence/STORY-CR139-S30.CP6.index.json"],
+  "risks": [{"id": "O-S30-1", "status": "not-authorized", "summary": "Existing physical partitions are not migrated by this CP6 slice."}],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7"
+}

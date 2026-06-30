@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "created_at": "2026-06-30T12:50:00+08:00",
+  "created_by": "host-orchestrator",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "batch_id": "CR139-BACKLOG-A4",
+  "story_id": "CR139-S38",
+  "slug": "quality-partition-reorg",
+  "story_ref": "process/stories/CR139-S38-quality-partition-reorg.md",
+  "design_evidence_ref": "process/stories/CR139-S38-quality-partition-reorg.md#技术说明",
+  "cp5_result_ref": "process/checks/CP5-CR139-S38-quality-partition-reorg-TECHNICAL-NOTE-IMPLEMENTABILITY.md",
+  "dependencies": [],
+  "objective": {
+    "summary": "Implement partitioned quality writer with dataset/date official paths and _scratch isolation for smoke/probe outputs.",
+    "non_goals": ["No migration of existing quality files", "No production lake/catalog/manifest/pointer/NAS/provider/runtime/Git operation"]
+  },
+  "allowed_write_paths": [
+    "market_data/quality_writer.py",
+    "tests/test_cr139_quality_partition_writer.py",
+    "process/stories/CR139-S38-quality-partition-reorg-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S38-quality-partition-reorg-CODING-DONE.md",
+    "process/returns/STORY-CR139-S38.CP6.return.json",
+    "process/evidence/STORY-CR139-S38.CP6.index.json",
+    "process/stories/CR139-S38-quality-partition-reorg.md",
+    "process/STORY-STATUS-CR139.md",
+    "process/STATE.md",
+    "process/state/STATE.current.json"
+  ],
+  "forbidden_actions": ["real lake write", "catalog write", "manifest write", "pointer advance", "NAS/provider/runtime/Git remote"],
+  "verification_commands_planned": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_quality_partition_writer.py tests/test_market_data_normalization_validation_readers.py::test_validate_dataset_outputs_coverage_statuses_thresholds_and_reports"
+  ],
+  "expected_return_packet_ref": "process/returns/STORY-CR139-S38.CP6.return.json",
+  "expected_evidence_index_ref": "process/evidence/STORY-CR139-S38.CP6.index.json"
+}

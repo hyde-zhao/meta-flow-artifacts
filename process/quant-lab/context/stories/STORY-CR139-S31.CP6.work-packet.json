@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "created_at": "2026-06-29T09:31:46+08:00",
+  "created_by": "host-orchestrator",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "batch_id": "CR139-W2-DATA-CONTRACTS",
+  "story_id": "CR139-S31",
+  "slug": "events-schema-repair",
+  "story_ref": "process/stories/CR139-S31-events-schema-repair.md",
+  "parent_context_ref": "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Implement explicit events dataset schema repair in the writer contract so all-null inference does not corrupt canonical typing.",
+    "non_goals": [
+      "Do not rewrite or re-ingest real events lake data",
+      "Do not change unrelated dataset schema families",
+      "Do not start runtime ingestion"
+    ]
+  },
+  "design_evidence_ref": "process/stories/CR139-S31-events-schema-repair.md#技术说明",
+  "cp5_result_ref": "process/checks/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH.result.json",
+  "cp5_checkpoint_ref": "process/checkpoints/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH-REVIEW.md",
+  "feature_refs": ["FEAT-02"],
+  "feature_contract_summary": "FEAT-02 write-side events schema map with explicit types and required fields.",
+  "feature_design_summary_ref": "docs/design/FEATURE-DESIGN-MATRIX.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S31-events-schema-repair.md#技术说明"
+  ],
+  "cr_delta": {
+    "summary": "Adds explicit events canonical schema mapping, all-null handling, and missing field blocking for fixture/static writes.",
+    "affected_contracts": ["market_data normalization events branch"]
+  },
+  "dependencies": ["CR139-S01", "CR139-S02", "CR139-S03"],
+  "dependency_type": "verified-baseline-gate",
+  "dependency_inputs": ["Wave1 S01/S02/S03 baseline verified"],
+  "merge_order": {
+    "batch_order": 3,
+    "normalization_py": "S08 -> S31 -> S32 -> S34 -> S14 -> S23 -> S22",
+    "notes": "Must run after S30 because both packets allow writes to market_data/normalization.py."
+  },
+  "file_lock": {
+    "path": "market_data/normalization.py",
+    "mode": "exclusive",
+    "serial_order": ["CR139-S30", "CR139-S31", "CR139-S32"],
+    "requires_completed_before_start": ["CR139-S30"],
+    "blocks_parallel_with": ["CR139-S30", "CR139-S32", "CR139-S34", "CR139-S14"],
+    "release_condition": "process/returns/STORY-CR139-S31.CP6.return.json and process/evidence/STORY-CR139-S31.CP6.index.json exist"
+  },
+  "acceptance": [
+    "events schema explicitly declares event time, event type, symbol, source, run_id, available_at, and requiredness.",
+    "All-null fields are cast by explicit schema where valid and blocked when required schema is absent.",
+    "Missing required events fields produce deterministic errors.",
+    "Fixture/static tests cover events only and do not touch real lake data."
+  ],
+  "allowed_read_paths": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S31-events-schema-repair.md",
+    "market_data/normalization.py",
+    "tests/test_cr139_events_schema_repair.py"
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S31-events-schema-repair.md",
+    "market_data/normalization.py",
+    "tests/test_cr139_events_schema_repair.py"
+  ],
+  "read_if_needed": [
+    "process/checks/CP5-CR139-S31-events-schema-repair-LLD-IMPLEMENTABILITY.md"
+  ],
+  "allowed_write_paths": [
+    "market_data/normalization.py",
+    "tests/test_cr139_events_schema_repair.py",
+    "process/stories/CR139-S31-events-schema-repair-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S31-events-schema-repair-CODING-DONE.md",
+    "process/returns/STORY-CR139-S31.CP6.return.json",
+    "process/evidence/STORY-CR139-S31.CP6.index.json"
+  ],
+  "forbidden_write_paths": [
+    "engine/contracts.py",
+    "market_data/readers.py",
+    "market_data/catalog.py",
+    "market_data/manifest.py",
+    "market_data/lake_layout.py",
+    "market_data/publish.py",
+    "market_data/incremental.py",
+    "trading/**",
+    "data/**",
+    ".env",
+    ".env.*"
+  ],
+  "forbidden_actions": [
+    "runtime",
+    "real lake write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance execution",
+    "physical partition migration execution",
+    "credential/secret read",
+    "NAS/QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write"
+  ],
+  "static_fixture_validation_scope": [
+    "events explicit schema mapping",
+    "all-null input behavior",
+    "missing required field failure",
+    "events-only fixture coverage"
+  ],
+  "verification_commands_planned": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_events_schema_repair.py"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_events_schema_repair.py"
+  ],
+  "expected_return_packet_ref": "process/returns/STORY-CR139-S31.CP6.return.json",
+  "expected_evidence_index_ref": "process/evidence/STORY-CR139-S31.CP6.index.json",
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "standard-code",
+  "lld_policy": "technical-note"
+}

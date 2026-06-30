@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S03",
+  "story_ref": "process/stories/CR139-S03-duplicate-fingerprint-profiling.md",
+  "parent_context_ref": "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Implement independent read-only duplicate fingerprint profiling for canonical run_id partitions.",
+    "non_goals": [
+      "Do not mutate read_dataset/read_canonical behavior",
+      "Do not write lake/catalog/provider/runtime state",
+      "Do not execute real lake profiling without runtime authorization"
+    ]
+  },
+  "feature_refs": ["FEAT-02"],
+  "feature_contract_summary": "FEAT-02 read-side duplicate profile before structural read-layer dedup.",
+  "feature_design_summary_ref": "docs/features/market-data-lake/DESIGN.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S03-duplicate-fingerprint-profiling-LLD.md"
+  ],
+  "cr_delta": {
+    "summary": "Adds a read-only profile function and report model for C2a duplicate fingerprints.",
+    "affected_contracts": ["market_data.readers profile-only API"]
+  },
+  "dependency_inputs": [
+    "CR139-S01 verified inventory",
+    "CR139-S02 verified golden baseline"
+  ],
+  "acceptance": [
+    "Duplicate `(symbol, trade_date)` keys are listed with contributing run ids",
+    "source_run_id path/data mismatch is flagged",
+    "S01 inventory duplicate count cross-check is available",
+    "safety counters remain zero",
+    "read_dataset/read_canonical/_read_paths/_filter_frame are not called by the profile function"
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S03-duplicate-fingerprint-profiling-LLD.md",
+    "market_data/readers.py",
+    "market_data/remediation_inventory.py",
+    "tests/test_cr139_duplicate_fingerprint_profiling.py"
+  ],
+  "read_if_needed": [
+    "process/stories/CR139-S01-remediation-object-inventory-IMPLEMENTATION.md",
+    "process/stories/CR139-S02-remediation-baseline-golden-values-IMPLEMENTATION.md"
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN-CR139.yaml",
+    "process/STORY-STATUS-CR139.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "allowed_write_paths": [
+    "market_data/readers.py",
+    "tests/test_cr139_duplicate_fingerprint_profiling.py",
+    "process/stories/CR139-S03-duplicate-fingerprint-profiling-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S03-duplicate-fingerprint-profiling-CODING-DONE.md",
+    "process/returns/STORY-CR139-S03.CP6.return.json",
+    "process/evidence/STORY-CR139-S03.CP6.index.json"
+  ],
+  "forbidden_write_paths": [
+    "market_data/catalog.py",
+    "market_data/manifest.py",
+    "market_data/lake_layout.py",
+    "market_data/normalization.py",
+    "market_data/publish.py",
+    "data/lake/**"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_duplicate_fingerprint_profiling.py"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "budget": {
+    "estimated_tokens": 2600,
+    "estimator": "manual",
+    "max_tokens": 8000
+  },
+  "risk_profile": "standard-code",
+  "lld_policy": "full-lld"
+}

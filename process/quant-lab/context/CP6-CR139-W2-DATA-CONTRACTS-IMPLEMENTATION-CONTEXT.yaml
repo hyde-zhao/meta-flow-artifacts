@@ -1,0 +1,349 @@
+schema_version: "1.0"
+capsule_id: "CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "CR139-STRATEGY-DATA-FOUNDATION"
+phase: "story-execution"
+checkpoint: "CP6"
+capsule_type: "cp6-implementation"
+status: "ready-for-cp6-execution-with-guards"
+created_at: "2026-06-29T09:31:46+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-139"
+batch_id: "CR139-W2-DATA-CONTRACTS"
+parent_context_ref: "process/context/CP5-CR139-W2-DATA-CONTRACTS-LLD-CONTEXT.yaml"
+handoff_ref: "process/context/CR139-W2-DATA-CONTRACTS-CP6-PREPARATION-HANDOFF-2026-06-29.md"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 18
+  max_summary_items: 80
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "Agent must read this CP6 context and the relevant Story work packet first. Only expand to full design docs when a packet field is missing, a source conflicts, human audit is requested, deep review is required, or schema validation fails."
+
+source_of_truth:
+  machine_state: "process/state/STATE.current.json"
+  cp5_context: "process/context/CP5-CR139-W2-DATA-CONTRACTS-LLD-CONTEXT.yaml"
+  cp5_result: "process/checks/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH.result.json"
+  cp5_human_gate: "process/checkpoints/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH-REVIEW.md"
+  story_status: "process/STORY-STATUS-CR139.md"
+  development_plan: "process/DEVELOPMENT-PLAN-CR139.yaml"
+  story_backlog: "process/STORY-BACKLOG-CR139.md"
+
+allowed_reads:
+  - path: "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml"
+    reason: "Batch-level CP6 scope, merge order, authorization boundary, and packet index."
+    required: true
+  - path: "process/context/stories/STORY-CR139-Sxx.CP6.work-packet.json"
+    reason: "Story-specific CP6 contract; replace Sxx with the active Story id."
+    required: true
+  - path: "process/state/STATE.current.json"
+    reason: "Confirm active_change=CR-139, current_phase=story-execution, and CP5-approved batch state."
+    required: true
+  - path: "process/checks/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH.result.json"
+    reason: "Machine CP5 PASS result and non-authorized items."
+    required: true
+  - path: "process/checkpoints/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH-REVIEW.md"
+    reason: "Human approval, implementation allowance, and runtime denial boundary."
+    required: true
+  - path: "process/STORY-STATUS-CR139.md"
+    reason: "Story status and Wave1 verified dependency facts."
+    required: true
+  - path: "process/stories/CR139-S09-schema-evolution-contract-freeze-LLD.md"
+    reason: "S09 full LLD implementation source."
+    required: false
+  - path: "process/stories/CR139-S14-incremental-append-pointer-advance.md"
+    reason: "S14 technical note implementation source."
+    required: false
+  - path: "process/stories/CR139-S22-runid-lineage-penetration.md"
+    reason: "S22 technical note implementation source."
+    required: false
+  - path: "process/stories/CR139-S30-runid-naming-convention.md"
+    reason: "S30 technical note implementation source."
+    required: false
+  - path: "process/stories/CR139-S31-events-schema-repair.md"
+    reason: "S31 technical note implementation source."
+    required: false
+  - path: "process/stories/CR139-S32-write-dedup-guarantee.md"
+    reason: "S32 technical note implementation source."
+    required: false
+  - path: "process/stories/CR139-S33-catalog-manifest-source-of-truth.md"
+    reason: "S33 technical note implementation source and CR014/CR018 compatibility supplement."
+    required: false
+  - path: "process/stories/CR139-S34-lineage-checksum-backfill.md"
+    reason: "S34 technical note implementation source."
+    required: false
+  - path: "process/stories/CR139-S39-cr-data-audit-chain.md"
+    reason: "S39 technical note implementation source."
+    required: false
+
+must_read:
+  - path: "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml"
+    reason: "Default CP6 entry point."
+    required: true
+  - path: "process/context/stories/STORY-CR139-Sxx.CP6.work-packet.json"
+    reason: "Story-specific allowed reads/writes, dependencies, and validation commands."
+    required: true
+  - path: "process/state/STATE.current.json"
+    reason: "Machine state and active authorization references."
+    required: true
+
+read_if_needed:
+  - path: "process/DEVELOPMENT-PLAN-CR139.yaml"
+    trigger: "Need to audit merge_order, file ownership, or dependency graph."
+  - path: "process/STORY-BACKLOG-CR139.md"
+    trigger: "Need to audit Story semantics or acceptance wording."
+  - path: "docs/design/FEATURE-DESIGN-MATRIX.md"
+    trigger: "Need to audit feature owner, lld_policy, or REQ traceability."
+  - path: "process/checks/CP5-CR139-Sxx-*-LLD-IMPLEMENTABILITY.md"
+    trigger: "Need to audit a Story-specific CP5 implementability precheck."
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "Human summary only; use STATE.current.json first."
+  - path_or_pattern: "process/changes/CR-*.md"
+    reason: "Full CR documents are audit fallback, not default execution context."
+  - path_or_pattern: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
+    reason: "Full HLD is only for conflict or deep review."
+  - path_or_pattern: "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
+    reason: "Full ADR is only for conflict or deep review."
+  - path_or_pattern: "process/stories/CR139-S10-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S11-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S12-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S13-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S15-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S16-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S17-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S18-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S19-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S20-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S21-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S23-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S24-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S25-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S26-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S27-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S28-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S29-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S35-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S36-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S37-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S38-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "process/stories/CR139-S40-*"
+    reason: "Non-current Story batch."
+  - path_or_pattern: "data/**"
+    reason: "Real lake/data access is not authorized."
+  - path_or_pattern: ".env"
+    reason: "Credential/secret read is not authorized."
+  - path_or_pattern: ".env.*"
+    reason: "Credential/secret read is not authorized."
+  - path_or_pattern: "runtime logs"
+    reason: "Runtime is not authorized."
+  - path_or_pattern: "complete git diff"
+    reason: "Not a default execution input."
+  - path_or_pattern: "complete conversation transcript"
+    reason: "Not a default execution input."
+
+key_facts:
+  scope_summary: "CP6 implementation preparation is ready for the CR139-W2-DATA-CONTRACTS batch: S09, S30, S31, S32, S33, S34, S14, S22, and S39. This is not CP6 PASS; Story-level code, tests, CP6 return packets, evidence indexes, coding-done checks, and implementation records remain future outputs."
+  accepted_decisions:
+    - "CP5 formal result PASS for all 9 design evidence items."
+    - "User approved formal CP5 at 2026-06-29T07:41:03+08:00."
+    - "CP5 approval allows CP6 code implementation and static/fixture verification preparation, but does not authorize runtime or real data operations."
+    - "S33 owns CR014/CR018 catalog naming cleanup with domain-named APIs and compatibility aliases; S39 remains limited to triggered_by_cr/run_lineage audit chain."
+  active_constraints:
+    - "This preparation wrote only the CP6 context and Story work packets; it does not claim CP6 development completion."
+    - "Future implementation must follow hard merge order S09 -> S30 -> S31 -> S32 -> S33 -> S34 -> S14 -> S22 -> S39."
+    - "S30/S31/S32 all touch market_data/normalization.py and must be implemented under an exclusive file lock in the order S30 -> S31 -> S32."
+    - "S14 may implement plan-only pointer advance logic; published pointer advance execution remains forbidden."
+    - "S34 may implement fixture/static lineage_checksum behavior; real backfill remains forbidden."
+  downstream_tasks:
+    - "After explicit user authorization, implement S09 and produce CP6 return/evidence/check files."
+    - "After S09, implement S30 -> S31 -> S32 serially using an exclusive market_data/normalization.py file lock."
+    - "After S30/S31/S32, implement S33 and S34, then S14, S22, and S39."
+    - "Each Story must produce CP6 return packet and evidence index before CP7 verification."
+  traceability:
+    requirements: ["REQ-202", "REQ-203", "REQ-206", "REQ-207", "REQ-208", "REQ-209", "REQ-211", "REQ-220", "REQ-242", "REQ-243", "REQ-244"]
+    stories: ["CR139-S09", "CR139-S30", "CR139-S31", "CR139-S32", "CR139-S33", "CR139-S34", "CR139-S14", "CR139-S22", "CR139-S39"]
+    features: ["FEAT-02", "FEAT-03", "FEAT-06", "FEAT-11"]
+
+execution_order:
+  - story_id: "CR139-S09"
+    slug: "schema-evolution-contract-freeze"
+    status: "dev-ready-after-packet-generation"
+    merge_order: 1
+    dependencies: ["CR139-S01", "CR139-S02", "CR139-S03", "CR139-S07"]
+  - story_id: "CR139-S30"
+    slug: "runid-naming-convention"
+    status: "dev-ready-after-packet-generation"
+    merge_order: 2
+    dependencies: ["CR139-S08"]
+  - story_id: "CR139-S31"
+    slug: "events-schema-repair"
+    status: "blocked-by-s30-normalization-file-lock"
+    merge_order: 3
+    dependencies: ["CR139-S01", "CR139-S02", "CR139-S03"]
+  - story_id: "CR139-S32"
+    slug: "write-dedup-guarantee"
+    status: "blocked-by-s31-normalization-file-lock"
+    merge_order: 4
+    dependencies: ["CR139-S07"]
+  - story_id: "CR139-S33"
+    slug: "catalog-manifest-source-of-truth"
+    status: "blocked-until-s30-s31-s32-serial-complete"
+    merge_order: 5
+    dependencies: ["CR139-S04"]
+  - story_id: "CR139-S34"
+    slug: "lineage-checksum-backfill"
+    status: "blocked-by-s33"
+    merge_order: 6
+    dependencies: ["CR139-S33"]
+  - story_id: "CR139-S14"
+    slug: "incremental-append-pointer-advance"
+    status: "blocked-by-s30-s31-s32-s34-merge-order"
+    merge_order: 7
+    dependencies: ["CR139-S04", "CR139-S08", "CR139-S30", "CR139-S31", "CR139-S32", "CR139-S34"]
+  - story_id: "CR139-S22"
+    slug: "runid-lineage-penetration"
+    status: "blocked-by-s14"
+    merge_order: 8
+    dependencies: ["CR139-S04", "CR139-S14"]
+  - story_id: "CR139-S39"
+    slug: "cr-data-audit-chain"
+    status: "blocked-by-s33-and-audit-chain-order"
+    merge_order: 9
+    dependencies: ["CR139-S08", "CR139-S33"]
+
+file_merge_order:
+  readers_py: "S05 -> S06 -> S07 -> S09 -> S25 -> S27 -> S28 -> S13 -> S16 -> S36"
+  publish_py: "S04 -> S14 -> S22"
+  catalog_py: "S04 -> S33 -> S39"
+  normalization_py: "S08 -> S31 -> S32 -> S34 -> S14 -> S23 -> S22"
+  lake_layout_py: "S08 -> S11 -> S30"
+  manifest_py: "S33 -> S34 -> S22"
+
+scheduling_hard_constraints:
+  cp6_pass_policy: "Do not mark CP6 PASS from this context or work packets alone. CP6 PASS requires Story-level code changes, planned tests where applicable, implementation evidence, CP6 return packet, CP6 evidence index, and coding-done check."
+  first_story: "CR139-S09"
+  story_serial_order:
+    - "CR139-S09"
+    - "CR139-S30"
+    - "CR139-S31"
+    - "CR139-S32"
+    - "CR139-S33"
+    - "CR139-S34"
+    - "CR139-S14"
+    - "CR139-S22"
+    - "CR139-S39"
+  exclusive_file_locks:
+    - path: "market_data/normalization.py"
+      mode: "exclusive"
+      serial_order: ["CR139-S30", "CR139-S31", "CR139-S32", "CR139-S34", "CR139-S14"]
+      reason: "Multiple W2 packets allow writes to normalization.py; scheduling must not run these Stories concurrently."
+    - path: "market_data/catalog.py"
+      mode: "exclusive"
+      serial_order: ["CR139-S33", "CR139-S39"]
+      reason: "S33 owns source-of-truth and CR014/CR018 compatibility aliases; S39 consumes S33 and only adds audit-chain fields."
+    - path: "market_data/manifest.py"
+      mode: "exclusive"
+      serial_order: ["CR139-S33", "CR139-S34", "CR139-S22"]
+      reason: "Manifest source-of-truth, checksum, and lineage mapping must compose serially."
+
+risks_and_decisions:
+  pending_human_decisions: []
+  non_authorized_items:
+    - "runtime"
+    - "real lake write"
+    - "provider catalog write"
+    - "provider-lake-catalog write"
+    - "published pointer advance execution"
+    - "physical partition migration execution"
+    - "credential/secret read"
+    - "NAS/QMT/MiniQMT/gateway runtime"
+    - "trading/small_live/live"
+    - "Git remote write"
+  risk_acceptance_items:
+    - id: "CR139-W2-RISK-STATIC-FIXTURE-ONLY"
+      status: "accepted-by-cp5"
+      summary: "CP6/CP7 may proceed only with code implementation and static/fixture validation unless a later runtime_authorization is approved."
+    - id: "CR139-W2-RISK-FILE-CONFLICT"
+      status: "controlled-by-merge-order"
+      summary: "normalization.py, catalog.py, manifest.py, publish.py, and readers.py require serialized merge order by Story owner."
+  open_questions: []
+  n_a_or_waived_items:
+    - id: "POLICY-FILES-MISSING"
+      status: "n/a-with-reason"
+      summary: "READ-POLICY.json, SOURCE-OF-TRUTH-MAP.yaml, and RETENTION-POLICY.json exist under process/policies. delivery/rules/AGENT-SKILL-CONTRACT.md, process/policies/AUTHZ-POLICY.json, and process/policies/GATE-PROFILES.json are absent; packets retain those expected policy refs and inherit STATE.current authz_policy_refs."
+
+handoff:
+  target_agent: "host-orchestrator-or-meta-dev-after-user-authorization"
+  expected_output:
+    - "process/returns/STORY-CR139-Sxx.CP6.return.json"
+    - "process/evidence/STORY-CR139-Sxx.CP6.index.json"
+    - "process/checks/CP6-CR139-Sxx-*-CODING-DONE.md"
+    - "process/stories/CR139-Sxx-*-IMPLEMENTATION.md where a full implementation summary is needed"
+  exit_criteria:
+    - "All packet JSON files parse successfully."
+    - "No business code is changed during packet generation."
+    - "Each packet has explicit allowed writes, forbidden writes/actions, planned static/fixture validation, return ref, evidence index ref, and authz policy refs."
+  blocked_if_missing:
+    - "CP5 formal PASS result"
+    - "CP5 human approval"
+    - "Story-specific design evidence"
+    - "Explicit denial of runtime and real data operations"
+
+read_expansion_log:
+  - at: "2026-06-29T09:31:46+08:00"
+    actor: "host-orchestrator"
+    expanded_to: "S09 LLD and S14/S22/S30/S31/S32/S33/S34/S39 Story technical-note sections"
+    reason: "Generate Story CP6 work packets with Story-specific objectives, file ownership, acceptance, and validation commands."
+
+validation:
+  generated_from_sources:
+    - "process/context/CR139-W2-DATA-CONTRACTS-CP6-PREPARATION-HANDOFF-2026-06-29.md"
+    - "process/state/STATE.current.json"
+    - "process/context/CP5-CR139-W2-DATA-CONTRACTS-LLD-CONTEXT.yaml"
+    - "process/checks/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH.result.json"
+    - "process/checkpoints/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH-REVIEW.md"
+    - "process/STORY-STATUS-CR139.md"
+    - "process/DEVELOPMENT-PLAN-CR139.yaml"
+    - "process/STORY-BACKLOG-CR139.md"
+    - "process/stories/CR139-S09-schema-evolution-contract-freeze-LLD.md"
+    - "process/stories/CR139-S14-incremental-append-pointer-advance.md"
+    - "process/stories/CR139-S22-runid-lineage-penetration.md"
+    - "process/stories/CR139-S30-runid-naming-convention.md"
+    - "process/stories/CR139-S31-events-schema-repair.md"
+    - "process/stories/CR139-S32-write-dedup-guarantee.md"
+    - "process/stories/CR139-S33-catalog-manifest-source-of-truth.md"
+    - "process/stories/CR139-S34-lineage-checksum-backfill.md"
+    - "process/stories/CR139-S39-cr-data-audit-chain.md"
+  missing_sources:
+    - "delivery/rules/AGENT-SKILL-CONTRACT.md"
+    - "process/policies/AUTHZ-POLICY.json"
+    - "process/policies/GATE-PROFILES.json"
+  consistency_status: "pass"
+  notes:
+    - "Packet generation only; no business code, runtime, lake, provider, credential, QMT/NAS/trading, migration, pointer execution, or Git remote write was performed."
+    - "READY_FOR_CP6_EXECUTION_WITH_GUARDS, not CP6 PASS."

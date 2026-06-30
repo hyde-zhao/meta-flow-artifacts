@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP5",
+  "checkpoint_id": "CP5-CR139-W2-DATA-CONTRACTS-PREPARATION",
+  "cr_id": "CR-139",
+  "batch_id": "CR139-W2-DATA-CONTRACTS",
+  "context_ref": "process/context/CP5-CR139-W2-DATA-CONTRACTS-LLD-CONTEXT.yaml",
+  "preparation_plan_ref": "process/checks/CP5-CR139-W2-DATA-CONTRACTS-DESIGN-EVIDENCE-CONVERGENCE-PLAN.md",
+  "manual_checkpoint_ref": "process/checkpoints/CP5-CR139-W2-DATA-CONTRACTS-LLD-BATCH-REVIEW.md",
+  "created_at": "2026-06-28T23:14:15+08:00",
+  "created_by": "host-orchestrator",
+  "items": [
+    {
+      "id": "CP5-W2-DATA-PREP-01",
+      "category": "scope",
+      "name": "Selected follow-up batch is CR139-W2-DATA-CONTRACTS",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/context/CR139-WAVE1-COMPLETE-FOLLOWUP-CONTEXT.yaml#recommended_cp5_batches",
+        "process/context/CP5-CR139-W2-DATA-CONTRACTS-LLD-CONTEXT.yaml#batch_stories"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Covers S09/S14/S22/S30/S31/S32/S33/S34/S39."
+    },
+    {
+      "id": "CP5-W2-DATA-PREP-02",
+      "category": "evidence",
+      "name": "Design evidence convergence plan exists",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP5-CR139-W2-DATA-CONTRACTS-DESIGN-EVIDENCE-CONVERGENCE-PLAN.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "This preparation result does not claim S09 LLD or technical notes are complete."
+    },
+    {
+      "id": "CP5-W2-DATA-PREP-03",
+      "category": "evidence",
+      "name": "Formal design evidence is not yet complete",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-STATUS-CR139.md#Story 状态汇总"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S09 remains lld-pending and S14/S22/S30/S31/S32/S33/S34/S39 technical-note evidence still needs generation or refresh before formal CP5 approval."
+    },
+    {
+      "id": "CP5-W2-DATA-PREP-04",
+      "category": "implementation",
+      "name": "No W2/W3 Story is dev-ready",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-STATUS-CR139.md#Story 状态汇总"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Batch preparation does not authorize implementation."
+    },
+    {
+      "id": "CP5-W2-DATA-PREP-05",
+      "category": "implementation",
+      "name": "S33 catalog.py CR014/CR018 naming cleanup is registered as acceptance supplement",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/context/CP5-CR139-W2-DATA-CONTRACTS-LLD-CONTEXT.yaml#s33_acceptance_supplement",
+        "process/stories/CR139-S33-catalog-manifest-source-of-truth.md#S33 验收补充"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S33 owns domain naming API plus compatibility aliases; S39 remains audit-chain only."
+    },
+    {
+      "id": "CP5-W2-DATA-PREP-06",
+      "category": "security",
+      "name": "Runtime and real write prohibitions are explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP5-CR139-W2-DATA-CONTRACTS-LLD-CONTEXT.yaml#authorization_boundary",
+        "process/checks/CP5-CR139-W2-DATA-CONTRACTS-DESIGN-EVIDENCE-CONVERGENCE-PLAN.md#不授权项"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "runtime, real lake write, provider catalog write, published pointer advance execution, and physical partition migration execution remain forbidden."
+    }
+  ],
+  "blockers": [
+    {
+      "id": "BLOCK-CP5-W2-DATA-EVIDENCE-PENDING",
+      "severity": "BLOCKER",
+      "summary": "Formal CP5 approval is blocked until S09 full LLD and the eight technical notes are generated/refreshed and per-story implementability prechecks pass.",
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design"
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "BLOCKED",
+  "next_route": "design-evidence-convergence",
+  "non_authorized_items": [
+    "runtime",
+    "real lake write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance execution",
+    "physical partition migration execution",
+    "credential/secret read",
+    "NAS/QMT/trading",
+    "Git remote write"
+  ]
+}

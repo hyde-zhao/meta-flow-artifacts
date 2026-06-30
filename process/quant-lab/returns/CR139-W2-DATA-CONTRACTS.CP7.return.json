@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-139",
+  "story_id": "CR139-W2-DATA-CONTRACTS",
+  "status": "verified_with_risk",
+  "allowed_statuses": [
+    "implemented",
+    "implemented_with_risk",
+    "verified",
+    "verified_with_risk",
+    "partial",
+    "blocked",
+    "needs_design_clarification",
+    "needs_user_decision",
+    "needs_rework",
+    "no_op",
+    "superseded",
+    "waived"
+  ],
+  "touched_files": [
+    {
+      "path": "docs/quality/VERIFICATION-REPORT-CR139-W2-DATA-CONTRACTS.md",
+      "change_type": "added"
+    },
+    {
+      "path": "docs/quality/TEST-REPORT-CR139-W2-DATA-CONTRACTS.md",
+      "change_type": "added"
+    },
+    {
+      "path": "docs/quality/REVIEW-CR139-W2-DATA-CONTRACTS.md",
+      "change_type": "added"
+    },
+    {
+      "path": "process/checks/CP7-CR139-W2-DATA-CONTRACTS-VERIFICATION-DONE.md",
+      "change_type": "added"
+    },
+    {
+      "path": "process/returns/CR139-W2-DATA-CONTRACTS.CP7.return.json",
+      "change_type": "added"
+    },
+    {
+      "path": "process/evidence/CR139-W2-DATA-CONTRACTS.CP7.index.json",
+      "change_type": "added"
+    },
+    {
+      "path": "process/plans/CR139-W2-DATA-LAKE-DRY-RUN-EXECUTION-PLAN.md",
+      "change_type": "added"
+    },
+    {
+      "path": "process/STORY-STATUS-CR139.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/state/STATE.current.json",
+      "change_type": "modified"
+    },
+    {
+      "path": "scripts/lake_inventory.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "scripts/lake_golden_baseline.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "market_data/lake_layout.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "market_data/remediation_baseline.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "tests/test_cr139_s01_inventory.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "tests/test_cr139_s02_golden_baseline.py",
+      "change_type": "modified"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "CLI output behavior hardened: lake_inventory.py and lake_golden_baseline.py reject --out paths inside lake_root. remediation_baseline write helpers accept an optional forbidden_root guard."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_authorization_allowed": false,
+    "forbidden_operations": [
+      "runtime",
+      "real_lake_write",
+      "provider_catalog_write",
+      "provider_lake_catalog_write",
+      "published_pointer_advance_execution",
+      "physical_partition_migration",
+      "credential_read",
+      "nas_runtime",
+      "qmt_runtime",
+      "miniqmt_runtime",
+      "gateway_runtime",
+      "trading_small_live_live",
+      "git_remote_write"
+    ],
+    "forbidden_operations_executed": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_schema_contract_freeze.py tests/test_cr139_runid_naming.py tests/test_cr139_events_schema_repair.py tests/test_cr139_write_dedup_guarantee.py tests/test_cr139_catalog_manifest_source_of_truth.py tests/test_cr139_lineage_checksum_backfill.py tests/test_cr139_incremental_append_pointer_plan.py tests/test_cr139_runid_lineage_penetration.py tests/test_cr139_cr_data_audit_chain.py tests/test_market_data_normalization_validation_readers.py tests/test_cr139_*.py",
+        "result": "pass",
+        "summary": "91 passed in 4.02s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr014_universe_lifecycle_contract.py tests/test_cr014_p0_pipeline_contract.py tests/test_cr014_windowed_real_run_contract.py tests/test_cr014_readiness_claim_boundary.py tests/test_cr014_incremental_replay_retention.py tests/test_cr014_research_consumer_boundary.py tests/test_cr014_duckdb_readonly_boundary.py tests/test_cr014_unsupported_boundary.py tests/test_cr014_catalog_publish_gate.py tests/test_cr018_publish_current_reader_smoke.py tests/test_cr018_pit_tradability_readiness.py tests/test_cr018_production_current_truth_rerun.py tests/test_cr018_adjustment_publish_readiness.py tests/test_cr018_benchmark_group_readiness.py tests/test_cr018_p1_auxiliary_claim_boundary.py tests/test_cr018_readiness_rollback_gate.py tests/test_cr018_release_scope_dataset_groups.py tests/test_cr134_runner_evidence_index.py tests/test_cr030_experiment_manifest_catalog.py tests/test_cr010_data_lake_publish_and_contracts.py",
+        "result": "pass",
+        "summary": "159 passed in 1.34s"
+      },
+      {
+        "command": "uv run --python 3.11 python -m py_compile engine/contracts.py market_data/readers.py market_data/lake_layout.py market_data/normalization.py market_data/catalog.py market_data/manifest.py market_data/incremental.py market_data/publish.py trading/strategy_runner/evidence_index.py market_data/remediation_baseline.py scripts/lake_inventory.py scripts/lake_golden_baseline.py",
+        "result": "pass"
+      },
+      {
+        "command": "git diff --check",
+        "result": "pass"
+      },
+      {
+        "command": "uv run meta-flow story return-check --packet process/context/stories/STORY-CR139-S09.CP6.work-packet.json --return process/returns/STORY-CR139-S09.CP6.return.json",
+        "result": "pass"
+      },
+      {
+        "command": "uv run meta-flow story return-check --packet process/context/stories/STORY-CR139-S30.CP6.work-packet.json --return process/returns/STORY-CR139-S30.CP6.return.json",
+        "result": "pass"
+      },
+      {
+        "command": "uv run meta-flow story return-check --packet process/context/stories/STORY-CR139-S31.CP6.work-packet.json --return process/returns/STORY-CR139-S31.CP6.return.json",
+        "result": "pass"
+      },
+      {
+        "command": "uv run meta-flow story return-check --packet process/context/stories/STORY-CR139-S32.CP6.work-packet.json --return process/returns/STORY-CR139-S32.CP6.return.json",
+        "result": "pass"
+      },
+      {
+        "command": "uv run meta-flow story return-check --packet process/context/stories/STORY-CR139-S33.CP6.work-packet.json --return process/returns/STORY-CR139-S33.CP6.return.json",
+        "result": "pass"
+      },
+      {
+        "command": "uv run meta-flow story return-check --packet process/context/stories/STORY-CR139-S34.CP6.work-packet.json --return process/returns/STORY-CR139-S34.CP6.return.json",
+        "result": "pass"
+      },
+      {
+        "command": "uv run meta-flow story return-check --packet process/context/stories/STORY-CR139-S14.CP6.work-packet.json --return process/returns/STORY-CR139-S14.CP6.return.json",
+        "result": "pass"
+      },
+      {
+        "command": "uv run meta-flow story return-check --packet process/context/stories/STORY-CR139-S22.CP6.work-packet.json --return process/returns/STORY-CR139-S22.CP6.return.json",
+        "result": "pass"
+      },
+      {
+        "command": "uv run meta-flow story return-check --packet process/context/stories/STORY-CR139-S39.CP6.work-packet.json --return process/returns/STORY-CR139-S39.CP6.return.json",
+        "result": "pass"
+      }
+    ],
+    "tests": [
+      "tests/test_cr139_schema_contract_freeze.py",
+      "tests/test_cr139_runid_naming.py",
+      "tests/test_cr139_events_schema_repair.py",
+      "tests/test_cr139_write_dedup_guarantee.py",
+      "tests/test_cr139_catalog_manifest_source_of_truth.py",
+      "tests/test_cr139_lineage_checksum_backfill.py",
+      "tests/test_cr139_incremental_append_pointer_plan.py",
+      "tests/test_cr139_runid_lineage_penetration.py",
+      "tests/test_cr139_cr_data_audit_chain.py",
+      "tests/test_cr139_s01_inventory.py",
+      "tests/test_cr139_s02_golden_baseline.py"
+    ],
+    "skipped": [
+      {
+        "name": "real_lake_mutation",
+        "reason": "not authorized; dry-run plan only"
+      },
+      {
+        "name": "provider_catalog_write",
+        "reason": "not authorized"
+      },
+      {
+        "name": "published_pointer_advance_execution",
+        "reason": "not authorized"
+      },
+      {
+        "name": "physical_partition_migration",
+        "reason": "not authorized"
+      },
+      {
+        "name": "credential_read",
+        "reason": "not authorized"
+      }
+    ]
+  },
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "RISK-CR139-W2-REAL-LAKE-NOT-YET-ENUMERATED",
+      "severity": "medium",
+      "status": "controlled_by_dry_run_plan",
+      "summary": "CP7 did not scan or mutate the real lake. The generated plan requires a no-write inventory dry-run before any write gate."
+    },
+    {
+      "id": "RISK-CR139-W2-CURRENT-TRUTH-MUTATION",
+      "severity": "high",
+      "status": "requires_separate_gate",
+      "summary": "Catalog writes and published pointer advance can change current truth and remain separately gated."
+    },
+    {
+      "id": "RISK-CR139-W2-PHYSICAL-MIGRATION",
+      "severity": "high",
+      "status": "requires_separate_gate",
+      "summary": "Physical partition migration remains unauthorized and requires backup/checksum/rollback proof."
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "review_real_lake_dry_run_plan_then_request_separate_runtime_authorization_gates"
+}

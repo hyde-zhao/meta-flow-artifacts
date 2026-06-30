@@ -1,0 +1,1936 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "batch_id": "CR139-W2-DATA-CONTRACTS",
+  "gate": "Gate B",
+  "stage": "per_dataset_write_plan",
+  "status": "ready_for_review_no_write_executed",
+  "created_at": "2026-06-29T13:54:41+08:00",
+  "approved_decision_ref": "process/checkpoints/CR139-W2-GATEB-BATCH0-DECISION-BRIEF.md",
+  "approved_decisions": [
+    "D-GATEB-001",
+    "D-GATEB-002",
+    "D-GATEB-003",
+    "D-GATEB-004",
+    "D-GATEB-005",
+    "D-GATEB-006",
+    "D-GATEB-007",
+    "D-GATEB-008",
+    "D-GATEB-009",
+    "D-GATEB-010",
+    "D-GATEB-011",
+    {
+      "decision_id": "D-GATEB-B2-MARKETCAP-001",
+      "decision_status": "approved_by_user_feedback",
+      "approved_selection": "select_aux_run_and_quarantine_prices_run",
+      "approved_at": "2026-06-29T19:50:11+08:00",
+      "risk_acceptance": "business_values_identical_zero_mismatch; lineage ownership selected as aux"
+    },
+    {
+      "decision_id": "D-GATEB-B2-LIQUIDITY-001",
+      "decision_status": "approved_option_A_with_delete_guard_required",
+      "approved_at": "2026-06-29T19:50:11+08:00",
+      "approved_strategy": "unify_on_resolved_strategy_with_object_manifest_rollback",
+      "delete_guard_ref": "GATEB-B2-LIQUIDITY-DELETE-GUARD-001",
+      "execution_authorization_status": "not_yet_authorized; future authorization must mention exact manifest delete guard"
+    },
+    {
+      "decision_id": "D-GATEB-B2-REMAINING-SPLIT-PLANNING-001",
+      "decision_status": "authorized_read_only_by_user",
+      "authorized_at": "2026-06-29T20:37:06+08:00",
+      "authorized_scope": "authorize Gate B Batch 2 remaining datasets consolidated read-only split planning only for adj_factor, prices, prices_limit, events, trade_status; no lake write",
+      "execution_result": "pass_with_risk_split_planning_complete_write_decisions_required",
+      "write_authorization_status": "not_authorized"
+    }
+  ],
+  "lake_root": "/home/hyde/data/quant-lab/data-lake",
+  "authorization_scope": {
+    "authorized_now": [
+      "generate_per_dataset_write_plan",
+      "generate_plan_evidence_index",
+      "update_process_state_to_write_plan_review"
+    ],
+    "not_authorized": [
+      "real_lake_write",
+      "catalog_write",
+      "provider_catalog_write",
+      "provider_lake_catalog_write",
+      "published_pointer_advance",
+      "physical_partition_migration",
+      "credential_read",
+      "nas_runtime_or_sync",
+      "qmt_miniqmt_gateway_runtime",
+      "trading_small_live_live",
+      "git_remote_write"
+    ]
+  },
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "source_refs": {
+    "gate_a_inventory_index": "process/evidence/CR139-W2-GATEA-REAL-LAKE-INVENTORY-DATALAKE-2026-06-29.index.json",
+    "gate_b_batch0_preflight_index": "process/evidence/CR139-W2-GATEB-BATCH0-PREFLIGHT-2026-06-29.index.json",
+    "gate_b_batch0_duplicate_profile_index": "process/evidence/CR139-W2-GATEB-BATCH0-DUPLICATE-PROFILE.index.json",
+    "decision_brief": "process/checkpoints/CR139-W2-GATEB-BATCH0-DECISION-BRIEF.md",
+    "dry_run_plan": "process/plans/CR139-W2-DATA-LAKE-DRY-RUN-EXECUTION-PLAN.md",
+    "gate_b_batch1a_remaining_readiness_index": "process/evidence/CR139-W2-GATEB-BATCH1A-REMAINING-PREWRITE-READINESS.index.json",
+    "gate_b_batch1a_safe5_write_execution_index": "process/evidence/CR139-W2-GATEB-BATCH1A-SAFE5-WRITE-EXECUTION.index.json",
+    "gate_b_batch1a_exact_dedup_planning_index": "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-PLANNING.index.json",
+    "gate_b_batch1a_exact_dedup_write_execution_index": "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-WRITE-EXECUTION.index.json",
+    "gate_b_batch2_liquidity_capacity_write_execution_index": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION.index.json",
+    "gate_b_batch2_liquidity_capacity_resolution_planning_index": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-RESOLUTION-PLANNING.index.json",
+    "gate_b_batch2_pure_metadata_resolution_planning_index": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING.index.json",
+    "gate_b_batch2_strategy_unification_review": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING.index.json",
+    "gate_b_batch2_pure_metadata_strategy_unification_execution_index": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION.index.json",
+    "gate_b_batch2_remaining_split_planning_index": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-SPLIT-PLANNING.index.json",
+    "gate_b_batch2_remaining_split_planning_detail": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-SPLIT-PLANNING-2026-06-29.json",
+    "gate_b_batch2_remaining_split_planning_check": "process/checks/CR139-W2-GATEB-BATCH2-REMAINING-SPLIT-PLANNING-2026-06-29.md",
+    "gate_b_batch2_adj_factor_write_execution_index": "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION.index.json",
+    "gate_b_batch2_adj_factor_write_execution_check": "process/checks/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION-2026-06-29.md",
+    "gate_b_batch2_remaining_decision_plan_index": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-DECISION-PLAN.index.json",
+    "gate_b_batch2_events_write_execution_index": "process/evidence/CR139-W2-GATEB-BATCH2-EVENTS-WRITE-EXECUTION.index.json",
+    "gate_b_batch2_events_write_execution_check": "process/checks/CR139-W2-GATEB-BATCH2-EVENTS-WRITE-EXECUTION-2026-06-29.md",
+    "gate_b_batch2_prices_write_execution_index": "process/evidence/CR139-W2-GATEB-BATCH2-PRICES-WRITE-EXECUTION.index.json",
+    "gate_b_batch2_prices_write_execution_check": "process/checks/CR139-W2-GATEB-BATCH2-PRICES-WRITE-EXECUTION-2026-06-29.md",
+    "gate_b_batch2_prices_limit_write_execution_index": "process/evidence/CR139-W2-GATEB-BATCH2-PRICES_LIMIT-WRITE-EXECUTION.index.json",
+    "gate_b_batch2_prices_limit_write_execution_check": "process/checks/CR139-W2-GATEB-BATCH2-PRICES_LIMIT-WRITE-EXECUTION-2026-06-29.md",
+    "gate_b_batch2_trade_status_write_execution_index": "process/evidence/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION.index.json",
+    "gate_b_batch2_trade_status_write_execution_check": "process/checks/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION-2026-06-29.md"
+  },
+  "global_preconditions_before_any_write": [
+    {
+      "id": "GB-PRE-001",
+      "status": "not_satisfied_for_write",
+      "requirement": "Establish a fenced/quiescent window and re-run Gate A inventory on /home/hyde/data/quant-lab/data-lake immediately before the write batch, or record explicit drift risk acceptance."
+    },
+    {
+      "id": "GB-PRE-002",
+      "status": "not_satisfied_for_write",
+      "requirement": "For every dataset to be written, complete a per-dataset full-row exact duplicate profile or record explicit N/A with reason."
+    },
+    {
+      "id": "GB-PRE-003",
+      "status": "planned_only",
+      "requirement": "Write mode must be additive-only to new CR139 run-id candidate paths; in-place overwrite, delete, or append into legacy paths is forbidden."
+    },
+    {
+      "id": "GB-PRE-004",
+      "status": "planned_only",
+      "requirement": "Generate object manifest, pre-write snapshot, post-write snapshot, row/hash evidence, and rollback manifest for each approved write batch."
+    },
+    {
+      "id": "GB-PRE-005",
+      "status": "not_authorized",
+      "requirement": "Gate C catalog/checksum metadata, Gate D pointer advance, and Gate E physical migration remain separate gates and are not part of Gate B write execution."
+    }
+  ],
+  "path_contract": {
+    "run_id_builder": "market_data.lake_layout.build_cr139_run_id(dataset=<dataset>, source=legacy_lake, as_of_date=2026-06-29, purpose=canonical)",
+    "candidate_root_template": "candidate/parquet/dataset=<dataset>/schema_version=1.0/run_id=<cr139_run_id>",
+    "quarantine_shape": "candidate/parquet/dataset=<dataset>/schema_version=1.0/run_id=<cr139_run_id>/quarantine",
+    "legacy_paths": "read_only_inputs_only",
+    "catalog_paths": "not_updated_in_gate_b"
+  },
+  "dedup_sort_policy": {
+    "default_for_metadata_conflicts": "quarantine_not_dedup",
+    "deterministic_dedup_allowed_only_when": [
+      "per_dataset_full_row_exact_duplicate_profile_complete",
+      "duplicate_key_group_is_metadata_compatible",
+      "dataset_owner_approves_sort_key_as_business_truth",
+      "required_sort_fields_are_present"
+    ],
+    "dedup_sort_key": [
+      "source_run_id DESC",
+      "available_at DESC",
+      "lineage_raw_checksum DESC"
+    ],
+    "dedup_sort_rationale": "This ordering is deterministic and prefers the newest source run, then newest availability timestamp, then stable lineage checksum as a tie-breaker. It is not sufficient for metadata-conflicting groups; those remain quarantine by default under D-GATEB-001. If any required sort field is absent, deterministic dedup is not allowed without a new reviewed sort policy.",
+    "forbidden_fallback": "implicit_keep_last_or_file_order"
+  },
+  "batching": [
+    {
+      "batch": "Batch 0",
+      "status": "complete_preflight_only",
+      "datasets": [
+        "adj_factor",
+        "liquidity_capacity",
+        "market_cap",
+        "prices",
+        "prices_limit",
+        "trade_status",
+        "events"
+      ],
+      "write_authorized": false
+    },
+    {
+      "batch": "Batch 1A",
+      "status": "partially_written_candidate_objects_verified",
+      "description": "Small/static datasets with no full-row duplicates. bse_code_mapping and safe-5 have candidate writes verified; trade_calendar and stock_basic moved to Batch 1A-exact-dedup after full-row duplicate discovery.",
+      "datasets": [
+        "bse_code_mapping",
+        "lifecycle_code_change",
+        "hs300_index",
+        "industry_classification",
+        "prices_limit_code_change_fixes",
+        "prices_limit_coverage_exclusions"
+      ],
+      "candidate_writes_verified": [
+        "bse_code_mapping",
+        "lifecycle_code_change",
+        "hs300_index",
+        "industry_classification",
+        "prices_limit_code_change_fixes",
+        "prices_limit_coverage_exclusions"
+      ],
+      "write_authorized": false
+    },
+    {
+      "batch": "Batch 1A-exact-dedup",
+      "status": "candidate_writes_verified",
+      "description": "Small/static datasets with exact full-row duplicates but no duplicate-key metadata conflict. Requires deterministic exact-dedup candidate planning before any write.",
+      "datasets": [
+        "trade_calendar",
+        "stock_basic"
+      ],
+      "write_authorized": false,
+      "dedup_type": "exact_full_row_duplicate_dedup",
+      "requires": "read-only exact-dedup candidate planning gate before write authorization",
+      "planning_ref": "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-PLANNING.index.json",
+      "candidate_writes_verified": [
+        "trade_calendar",
+        "stock_basic"
+      ],
+      "write_execution_ref": "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-WRITE-EXECUTION.index.json"
+    },
+    {
+      "batch": "Batch 1B",
+      "status": "ready_for_write_authorization_after_blocker_planning",
+      "description": "Index membership/weight datasets with special handling: index_members requires exact full-row dedup; index_weights preserves mixed row-level PIT status. Both require explicit write authorization.",
+      "datasets": [
+        "index_members",
+        "index_weights"
+      ],
+      "write_authorized": false,
+      "planning_ref": "process/evidence/CR139-W2-GATEB-BATCH1B-BLOCKER-PLANNING.index.json",
+      "write_authorization_required": true,
+      "write_modes": {
+        "index_members": "additive_only_exact_full_row_dedup",
+        "index_weights": "additive_only_copy_preserve_row_level_pit_status"
+      },
+      "batch_atomicity_policy_for_future_write": {
+        "policy": "fail_stop_no_automatic_rollback",
+        "partial_completion_handling": "stop_remaining_writes_emit_partial_evidence_and_rollback_manifest_wait_for_separate_decision",
+        "automatic_rollback_authorized": false
+      },
+      "gate_d_precondition": "Before any future pointer advance, index_weights pit_incomplete rows must have publish/isolate/repair/waiver decision."
+    },
+    {
+      "batch": "Batch 2",
+      "status": "blocked_pending_dataset_specific_profile_and_decision",
+      "description": "Duplicate-key or events datasets; one dataset per authorization after full-row profile and dedup/quarantine review.",
+      "datasets": [
+        "liquidity_capacity",
+        "market_cap",
+        "events",
+        "trade_status",
+        "adj_factor",
+        "prices",
+        "prices_limit"
+      ],
+      "write_authorized": false
+    }
+  ],
+  "datasets": [
+    {
+      "dataset": "bse_code_mapping",
+      "batch": "Batch 1A",
+      "row_count": 248,
+      "duplicate_key_count": 0,
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 1,
+      "legacy_catalog_path": "canonical/bse_code_mapping/1.0/run_id=run-cr018-price-limit-lifecycle-cleanup-20150101-20260528-20260529",
+      "planned_run_id": "cr139-w2-bse_code_mapping-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=bse_code_mapping/schema_version=1.0/run_id=cr139-w2-bse_code_mapping-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": null,
+      "planned_action": "candidate_write_completed_verified",
+      "write_blockers": [
+        "catalog_write_not_authorized",
+        "published_pointer_not_authorized",
+        "physical_migration_not_authorized"
+      ],
+      "write_status": "candidate_write_verified"
+    },
+    {
+      "dataset": "lifecycle_code_change",
+      "batch": "Batch 1A",
+      "row_count": 250,
+      "duplicate_key_count": 0,
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 1,
+      "legacy_catalog_path": "canonical/lifecycle_code_change/1.0/run_id=run-cr018-price-limit-lifecycle-cleanup-20150101-20260528-20260529",
+      "planned_run_id": "cr139-w2-lifecycle_code_change-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=lifecycle_code_change/schema_version=1.0/run_id=cr139-w2-lifecycle_code_change-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": null,
+      "planned_action": "candidate_write_completed_verified",
+      "write_blockers": [
+        "catalog_write_not_authorized",
+        "published_pointer_not_authorized",
+        "physical_migration_not_authorized"
+      ],
+      "write_status": "candidate_write_verified"
+    },
+    {
+      "dataset": "hs300_index",
+      "batch": "Batch 1A",
+      "row_count": 11511,
+      "duplicate_key_count": 0,
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 1,
+      "legacy_catalog_path": "canonical/hs300_index/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-benchmark-index-daily.parquet",
+      "planned_run_id": "cr139-w2-hs300_index-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=hs300_index/schema_version=1.0/run_id=cr139-w2-hs300_index-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": null,
+      "planned_action": "candidate_write_completed_verified",
+      "write_blockers": [
+        "catalog_write_not_authorized",
+        "published_pointer_not_authorized",
+        "physical_migration_not_authorized"
+      ],
+      "write_status": "candidate_write_verified"
+    },
+    {
+      "dataset": "industry_classification",
+      "batch": "Batch 1A",
+      "row_count": 11049,
+      "duplicate_key_count": 0,
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 1,
+      "legacy_catalog_path": "canonical/industry_classification/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-industry-classification.parquet",
+      "planned_run_id": "cr139-w2-industry_classification-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=industry_classification/schema_version=1.0/run_id=cr139-w2-industry_classification-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": null,
+      "planned_action": "candidate_write_completed_verified",
+      "write_blockers": [
+        "catalog_write_not_authorized",
+        "published_pointer_not_authorized",
+        "physical_migration_not_authorized"
+      ],
+      "write_status": "candidate_write_verified"
+    },
+    {
+      "dataset": "trade_calendar",
+      "batch": "Batch 1A-exact-dedup",
+      "row_count": 10952,
+      "duplicate_key_count": 0,
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 1,
+      "legacy_catalog_path": "canonical/trade_calendar/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627",
+      "planned_run_id": "cr139-w2-trade_calendar-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=trade_calendar/schema_version=1.0/run_id=cr139-w2-trade_calendar-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": null,
+      "planned_action": "dedup_candidate_write_completed_verified",
+      "write_blockers": [
+        "catalog_write_not_authorized",
+        "published_pointer_not_authorized",
+        "physical_migration_not_authorized"
+      ],
+      "exact_full_row_duplicate_group_count": 373,
+      "exact_full_row_duplicate_rows_in_groups": 746,
+      "exact_full_row_duplicate_row_over_unique_count": 373,
+      "unique_full_row_count": 10579,
+      "dedup_type": "exact_full_row_duplicate_dedup",
+      "exact_dedup_planning_status": "ready_for_write_authorization_review",
+      "dedup_retained_row_count": 10579,
+      "dedup_dropped_exact_duplicate_row_count": 373,
+      "dedup_candidate_shape": {
+        "target_root_relative_path": "candidate/parquet/dataset=trade_calendar/schema_version=1.0/run_id=cr139-w2-trade_calendar-legacy_lake-20260629-canonical",
+        "target_file_relative_path": "candidate/parquet/dataset=trade_calendar/schema_version=1.0/run_id=cr139-w2-trade_calendar-legacy_lake-20260629-canonical/part-trade-calendar.parquet",
+        "object_count": 1,
+        "format": "parquet",
+        "write_mode": "additive_only_candidate_path"
+      },
+      "dedup_retain_rule": "sort by _cr139_source_file ASC, _cr139_source_row_number ASC, then drop exact full-row duplicates keeping first",
+      "write_status": "dedup_candidate_write_verified",
+      "write_execution_ref": "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-WRITE-EXECUTION.index.json"
+    },
+    {
+      "dataset": "prices_limit_code_change_fixes",
+      "batch": "Batch 1A",
+      "row_count": 1129,
+      "duplicate_key_count": 0,
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 1,
+      "legacy_catalog_path": "canonical/prices_limit_code_change_fixes/1.0/run_id=run-cr018-price-limit-lifecycle-cleanup-20150101-20260528-20260529",
+      "planned_run_id": "cr139-w2-prices_limit_code_change_fixes-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=prices_limit_code_change_fixes/schema_version=1.0/run_id=cr139-w2-prices_limit_code_change_fixes-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": null,
+      "planned_action": "candidate_write_completed_verified",
+      "write_blockers": [
+        "catalog_write_not_authorized",
+        "published_pointer_not_authorized",
+        "physical_migration_not_authorized"
+      ],
+      "write_status": "candidate_write_verified"
+    },
+    {
+      "dataset": "prices_limit_coverage_exclusions",
+      "batch": "Batch 1A",
+      "row_count": 91018,
+      "duplicate_key_count": 0,
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 1,
+      "legacy_catalog_path": "canonical/prices_limit_coverage_exclusions/1.0/run_id=run-cr018-price-limit-lifecycle-cleanup-20150101-20260528-20260529",
+      "planned_run_id": "cr139-w2-prices_limit_coverage_exclusions-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=prices_limit_coverage_exclusions/schema_version=1.0/run_id=cr139-w2-prices_limit_coverage_exclusions-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": null,
+      "planned_action": "candidate_write_completed_verified",
+      "write_blockers": [
+        "catalog_write_not_authorized",
+        "published_pointer_not_authorized",
+        "physical_migration_not_authorized"
+      ],
+      "write_status": "candidate_write_verified"
+    },
+    {
+      "dataset": "stock_basic",
+      "batch": "Batch 1A-exact-dedup",
+      "row_count": 55166,
+      "duplicate_key_count": 0,
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 1,
+      "legacy_catalog_path": "canonical/stock_basic/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-stock-basic-lifecycle.parquet",
+      "planned_run_id": "cr139-w2-stock_basic-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=stock_basic/schema_version=1.0/run_id=cr139-w2-stock_basic-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": null,
+      "planned_action": "dedup_candidate_write_completed_verified",
+      "write_blockers": [
+        "catalog_write_not_authorized",
+        "published_pointer_not_authorized",
+        "physical_migration_not_authorized"
+      ],
+      "exact_full_row_duplicate_group_count": 6129,
+      "exact_full_row_duplicate_rows_in_groups": 17737,
+      "exact_full_row_duplicate_row_over_unique_count": 11608,
+      "unique_full_row_count": 43558,
+      "dedup_type": "exact_full_row_duplicate_dedup",
+      "exact_dedup_planning_status": "ready_for_write_authorization_review",
+      "dedup_retained_row_count": 43558,
+      "dedup_dropped_exact_duplicate_row_count": 11608,
+      "dedup_candidate_shape": {
+        "target_root_relative_path": "candidate/parquet/dataset=stock_basic/schema_version=1.0/run_id=cr139-w2-stock_basic-legacy_lake-20260629-canonical",
+        "target_file_relative_path": "candidate/parquet/dataset=stock_basic/schema_version=1.0/run_id=cr139-w2-stock_basic-legacy_lake-20260629-canonical/part-stock-basic.parquet",
+        "object_count": 1,
+        "format": "parquet",
+        "write_mode": "additive_only_candidate_path"
+      },
+      "dedup_retain_rule": "sort by _cr139_source_file ASC, _cr139_source_row_number ASC, then drop exact full-row duplicates keeping first",
+      "write_status": "dedup_candidate_write_verified",
+      "write_execution_ref": "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-WRITE-EXECUTION.index.json"
+    },
+    {
+      "dataset": "index_members",
+      "batch": "Batch 1B-exact-dedup",
+      "row_count": 295800,
+      "duplicate_key_count": 0,
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 1,
+      "legacy_catalog_path": "canonical/index_members/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-benchmark-index-members.parquet",
+      "planned_run_id": "cr139-w2-index_members-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=index_members/schema_version=1.0/run_id=cr139-w2-index_members-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": null,
+      "planned_action": "additive_exact_dedup_candidate_write_after_authorization",
+      "write_blockers": [
+        "gate_b_batch1b_write_authorization_required",
+        "catalog_pointer_migration_not_authorized"
+      ],
+      "duplicate_rows_over_unique": 12300,
+      "retained_row_count": 283500,
+      "dedup_retain_rule": "sort by _cr139_source_file ASC, _cr139_source_row_number ASC, then drop exact full-row duplicates keeping first",
+      "planning_ref": "process/evidence/CR139-W2-GATEB-BATCH1B-BLOCKER-PLANNING.index.json",
+      "pit_semantics_review": {
+        "result": "pass_clean_pit_available",
+        "pit_status_distribution": {
+          "pit_available": 295800
+        },
+        "not_pit_blocker": true
+      }
+    },
+    {
+      "dataset": "index_weights",
+      "batch": "Batch 1B-mixed-pit",
+      "row_count": 283800,
+      "duplicate_key_count": 0,
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 1,
+      "legacy_catalog_path": "canonical/index_weights/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-benchmark-index-weights.parquet",
+      "planned_run_id": "cr139-w2-index_weights-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=index_weights/schema_version=1.0/run_id=cr139-w2-index_weights-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": null,
+      "planned_action": "additive_mixed_pit_preserving_candidate_copy_after_authorization",
+      "write_blockers": [
+        "gate_b_batch1b_write_authorization_required",
+        "catalog_pointer_migration_not_authorized"
+      ],
+      "duplicate_rows_over_unique": 0,
+      "retained_row_count": 283800,
+      "pit_status_distribution": {
+        "pit_available": 283500,
+        "pit_incomplete": 300
+      },
+      "semantics_decision": "preserve mixed row-level pit_status; do not collapse dataset-level truth to fully pit_available",
+      "reader_implication": "Downstream readers must treat index_weights as weight observations with row-level PIT metadata. It must not substitute for index_members constituency membership and must not be used to claim complete PIT universe coverage where pit_incomplete rows are present.",
+      "planning_ref": "process/evidence/CR139-W2-GATEB-BATCH1B-BLOCKER-PLANNING.index.json",
+      "pit_incomplete_handling": "preserve_rows_in_candidate_with_row_level_pit_status",
+      "pit_incomplete_row_count": 300,
+      "gate_d_precondition": "Before published pointer advance, decide whether the 300 pit_incomplete rows are publishable, isolated, repaired, or waived.",
+      "candidate_publishability_decision": "not_decided_in_gate_b",
+      "batch_atomicity_policy_for_future_write": "fail_stop_no_automatic_rollback"
+    },
+    {
+      "dataset": "liquidity_capacity",
+      "batch": "Batch 2",
+      "row_count": 17095488,
+      "duplicate_key_count": 1830,
+      "duplicate_key_group_count": 1830,
+      "duplicate_rows_in_duplicate_groups": 3660,
+      "duplicate_row_over_unique_count": 1830,
+      "metadata_conflicts": {
+        "source_run_id_conflicting_key_count": 1830,
+        "lineage_raw_checksum_conflicting_key_count": 1830,
+        "available_at_conflicting_key_count": 0
+      },
+      "dedup_sort_key": [
+        "source_run_id DESC",
+        "available_at DESC",
+        "lineage_raw_checksum DESC"
+      ],
+      "dedup_sort_rationale": "Apply only to duplicate-key groups proven metadata-compatible by per-dataset full-row profile and owner approval; metadata-conflicting groups remain quarantine. The ordering prefers newest source run, newest availability timestamp, then stable lineage checksum as a deterministic tie-breaker.",
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 37,
+      "legacy_catalog_path": "canonical/liquidity_capacity/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627",
+      "planned_run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine",
+      "planned_action": "batch2_quarantine_only_candidate_write_completed_and_verified",
+      "write_blockers": [
+        "fenced_gate_a_rerun_required",
+        "liquidity_capacity_strategy_unification_decision_required",
+        "metadata_conflict_quarantine_required",
+        "per_dataset_full_row_profile_required",
+        "resolved_candidate_write_authorization_required",
+        "rollback_old_quarantine_candidate_authorization_required"
+      ],
+      "batch2_deep_profile_ref": "process/evidence/CR139-W2-GATEB-BATCH2-DEEP-PROFILE.index.json",
+      "duplicate_risk_stratification": {
+        "duplicate_key_over_unique_count": 1830,
+        "full_row_fingerprint_duplicate_over_unique_count": 0,
+        "estimated_non_identical_same_key_conflict_count": 1830,
+        "exact_duplicate_share_of_duplicate_key_excess": 0.0,
+        "estimated_conflict_share_of_duplicate_key_excess": 1.0,
+        "risk_class": "pure_metadata_conflict",
+        "refined_recommended_action": "quarantine_metadata_conflict_key_groups_only",
+        "routing_rationale": "Duplicate-key rows are all non-identical by full-row fingerprint; no exact-copy dedup bucket is available.",
+        "counting_note": "Derived as duplicate-key over-unique minus full-row fingerprint duplicate over-unique. This is a routing estimate for planning; future per-dataset write gates must do exact bucket materialization and pre/post-write content validation.",
+        "schema_normalization_required": false,
+        "conflict_share_of_duplicate_key_excess": 1.0
+      },
+      "conservative_profile_action": "one_dataset_batch2_after_full_row_profile_and_quarantine_review",
+      "refined_planned_action": "quarantine_metadata_conflict_key_groups_only",
+      "candidate_write_status": "resolved_candidate_verified_old_quarantine_candidate_deleted_by_guard",
+      "candidate_write_ref": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION.index.json",
+      "candidate_main_row_count": 17093658,
+      "quarantine_row_count": 1830,
+      "dropped_row_count": 0,
+      "operation_counts_for_write": {
+        "provider_fetch": 0,
+        "lake_write": 2,
+        "catalog_write": 0,
+        "current_pointer_publish": 0,
+        "physical_partition_migration": 0,
+        "credential_read": 0,
+        "nas_operation": 0,
+        "runtime_operation": 0,
+        "git_remote_write": 0
+      },
+      "resolution_planning_status": "pass_resolution_plan_ready_for_write_authorization_review",
+      "resolution_planning_ref": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-RESOLUTION-PLANNING.index.json",
+      "resolved_candidate_proposal": {
+        "run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved",
+        "candidate_root_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved",
+        "main_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved/part-liquidity-capacity.parquet",
+        "quarantine_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved/quarantine/part-liquidity-capacity-superseded-smoke.parquet",
+        "target_root_exists_now": false,
+        "write_mode_if_later_authorized": "additive_only_new_resolved_candidate_path_no_in_place_overwrite",
+        "main_row_count": 17093658,
+        "quarantine_row_count": 1830,
+        "dropped_row_count": 0,
+        "selection_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical",
+        "write_status": "not_authorized"
+      },
+      "required_decisions_before_write": [
+        {
+          "decision_id": "D-GATEB-B2-LIQUIDITY-001",
+          "decision_status": "approved_option_A_with_delete_guard_required",
+          "approved_at": "2026-06-29T19:50:11+08:00",
+          "approved_strategy": "unify_on_resolved_strategy_with_object_manifest_rollback",
+          "delete_guard_ref": "GATEB-B2-LIQUIDITY-DELETE-GUARD-001",
+          "execution_authorization_status": "not_yet_authorized; future authorization must mention exact manifest delete guard"
+        }
+      ],
+      "strategy_conflict": {
+        "status": "blocking_before_batch_write",
+        "dataset": "liquidity_capacity",
+        "already_written_candidate": {
+          "run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+          "main_rows": 17091828,
+          "quarantine_rows": 3660,
+          "strategy": "full_group_quarantine"
+        },
+        "planned_resolved_candidate": {
+          "run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved",
+          "main_rows": 17093658,
+          "quarantine_rows": 1830,
+          "strategy": "select_one_business_identical_row_to_main_quarantine_superseded_row"
+        },
+        "impact": "If unresolved, W2 would contain two inconsistent liquidity_capacity candidate strategies and the already-written main candidate would be missing 1,830 keys.",
+        "recommended_resolution": "approve D-GATEB-B2-LIQUIDITY-001 option A before any combined pure metadata write"
+      },
+      "delete_guard_required": {
+        "guard_id": "GATEB-B2-LIQUIDITY-DELETE-GUARD-001",
+        "applies_to_decision": "D-GATEB-B2-LIQUIDITY-001",
+        "status": "required_before_any_candidate_object_delete",
+        "prior_object_manifest_ref": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-OBJECT-MANIFEST.json",
+        "allowed_delete_mode": "exact_manifest_object_list_only",
+        "forbidden_delete_modes": [
+          "glob",
+          "wildcard",
+          "rm -rf",
+          "directory_delete",
+          "recursive_delete",
+          "dataset_root_delete",
+          "run_id_prefix_delete",
+          "canonical_or_legacy_delete"
+        ],
+        "allowed_objects": [
+          {
+            "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/part-liquidity-capacity.parquet",
+            "expected_sha256": "07e36c7987713ad3424dd5942c90817b95e8c702f58748c5251f139d346a5a21",
+            "expected_size_bytes": 650227690,
+            "expected_row_count": 17091828,
+            "required_path_prefix": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/",
+            "required_run_id_exact": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+            "must_be_under_candidate": true
+          },
+          {
+            "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine/part-liquidity-capacity-conflict-groups.parquet",
+            "expected_sha256": "c1680cc06e8e8968418c4ead707f7aa6cffde2deaff16206aea614a4110822ce",
+            "expected_size_bytes": 136155,
+            "expected_row_count": 3660,
+            "required_path_prefix": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/",
+            "required_run_id_exact": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+            "must_be_under_candidate": true
+          }
+        ],
+        "pre_delete_checks": [
+          "path_is_relative_and_under_candidate_root",
+          "path_contains_exact_old_run_id_and_no_wildcards",
+          "path_does_not_contain_canonical_published_catalog_or_legacy_root",
+          "file_exists",
+          "sha256_matches_prior_manifest",
+          "size_bytes_matches_prior_manifest",
+          "parquet_row_count_matches_prior_manifest",
+          "resolved_target_root_does_not_exist_before_write"
+        ],
+        "post_delete_checks": [
+          "each_manifest_object_absent",
+          "old_run_id_directory_empty_or_absent",
+          "new_resolved_run_id_directory_not_deleted_by_cleanup",
+          "legacy_canonical_tree_hash_unchanged",
+          "catalog_hash_unchanged",
+          "published_tree_hash_unchanged"
+        ],
+        "expected_delete_count": 2,
+        "notes": "Future execution must delete each listed file individually after validation. It must not use glob patterns or rm -rf. Deletion remains unauthorized until a separate runtime authorization explicitly approves this guard."
+      },
+      "resolved_candidate_write_status": "verified"
+    },
+    {
+      "dataset": "market_cap",
+      "batch": "Batch 2",
+      "row_count": 17108103,
+      "duplicate_key_count": 106776,
+      "duplicate_key_group_count": 106776,
+      "duplicate_rows_in_duplicate_groups": 213552,
+      "duplicate_row_over_unique_count": 106776,
+      "metadata_conflicts": {
+        "source_run_id_conflicting_key_count": 106776,
+        "lineage_raw_checksum_conflicting_key_count": 106776,
+        "available_at_conflicting_key_count": 0
+      },
+      "dedup_sort_key": [
+        "source_run_id DESC",
+        "available_at DESC",
+        "lineage_raw_checksum DESC"
+      ],
+      "dedup_sort_rationale": "Apply only to duplicate-key groups proven metadata-compatible by per-dataset full-row profile and owner approval; metadata-conflicting groups remain quarantine. The ordering prefers newest source run, newest availability timestamp, then stable lineage checksum as a deterministic tie-breaker.",
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 37,
+      "legacy_catalog_path": "canonical/market_cap/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-market-cap-2026.parquet",
+      "planned_run_id": "cr139-w2-market_cap-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=market_cap/schema_version=1.0/run_id=cr139-w2-market_cap-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": "candidate/parquet/dataset=market_cap/schema_version=1.0/run_id=cr139-w2-market_cap-legacy_lake-20260629-canonical/quarantine",
+      "planned_action": "one_dataset_batch2_after_full_row_profile_and_quarantine_review",
+      "write_blockers": [
+        "fenced_gate_a_rerun_required",
+        "gate_b_batch2_dataset_authorization_required",
+        "market_cap_aux_vs_prices_precedence_decision_required",
+        "metadata_conflict_quarantine_required",
+        "per_dataset_full_row_profile_required",
+        "resolved_candidate_write_authorization_required"
+      ],
+      "batch2_deep_profile_ref": "process/evidence/CR139-W2-GATEB-BATCH2-DEEP-PROFILE.index.json",
+      "duplicate_risk_stratification": {
+        "duplicate_key_over_unique_count": 106776,
+        "full_row_fingerprint_duplicate_over_unique_count": 0,
+        "estimated_non_identical_same_key_conflict_count": 106776,
+        "exact_duplicate_share_of_duplicate_key_excess": 0.0,
+        "estimated_conflict_share_of_duplicate_key_excess": 1.0,
+        "risk_class": "pure_metadata_conflict",
+        "refined_recommended_action": "quarantine_metadata_conflict_key_groups_only",
+        "routing_rationale": "Duplicate-key rows are all non-identical by full-row fingerprint; no exact-copy dedup bucket is available.",
+        "counting_note": "Derived as duplicate-key over-unique minus full-row fingerprint duplicate over-unique. This is a routing estimate for planning; future per-dataset write gates must do exact bucket materialization and pre/post-write content validation.",
+        "schema_normalization_required": false,
+        "conflict_share_of_duplicate_key_excess": 1.0
+      },
+      "conservative_profile_action": "one_dataset_batch2_after_full_row_profile_and_quarantine_review",
+      "refined_planned_action": "quarantine_metadata_conflict_key_groups_only",
+      "resolution_planning_status": "approved_aux_precedence_pending_explicit_runtime_authorization",
+      "resolution_planning_ref": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING.index.json",
+      "resolved_candidate_proposal": {
+        "run_id": "cr139-w2-market_cap-legacy_lake-20260629-resolved",
+        "candidate_root_relative_path": "candidate/parquet/dataset=market_cap/schema_version=1.0/run_id=cr139-w2-market_cap-legacy_lake-20260629-resolved",
+        "main_relative_path": "candidate/parquet/dataset=market_cap/schema_version=1.0/run_id=cr139-w2-market_cap-legacy_lake-20260629-resolved/part-market-cap.parquet",
+        "quarantine_relative_path": "candidate/parquet/dataset=market_cap/schema_version=1.0/run_id=cr139-w2-market_cap-legacy_lake-20260629-resolved/quarantine/part-market-cap-superseded-smoke.parquet",
+        "target_root_exists_now": false,
+        "write_mode_if_later_authorized": "additive_only_new_resolved_candidate_path_no_in_place_overwrite",
+        "main_row_count": 17001327,
+        "quarantine_row_count": 106776,
+        "dropped_row_count": 0,
+        "selection_rule": "select_backfill_2000_over_smoke_window_when_business_columns_identical",
+        "write_status": "not_authorized"
+      },
+      "required_decisions_before_write": [
+        {
+          "decision_id": "D-GATEB-B2-MARKETCAP-001",
+          "decision_status": "approved_by_user_feedback",
+          "approved_selection": "select_aux_run_and_quarantine_prices_run",
+          "approved_at": "2026-06-29T19:50:11+08:00",
+          "risk_acceptance": "business_values_identical_zero_mismatch; lineage ownership selected as aux"
+        }
+      ],
+      "precedence_buckets": [
+        {
+          "source_run_ids": [
+            "run-cr034-chapter3-backfill-2000",
+            "run-cr034-chapter3-smoke-20000104-20000105"
+          ],
+          "group_count": 1830,
+          "recommended_selected_source_run_id": "run-cr034-chapter3-backfill-2000",
+          "recommended_superseded_source_run_id": "run-cr034-chapter3-smoke-20000104-20000105",
+          "decision_status": "covered_by_liquidity_capacity_precedence_pattern",
+          "rationale": "full-year backfill run is preferred over smoke-window run when business values are identical"
+        },
+        {
+          "source_run_ids": [
+            "run-stage3-data-update-20260530-20260626-aux-20260627",
+            "run-stage3-data-update-20260530-20260626-prices-20260627"
+          ],
+          "group_count": 104946,
+          "recommended_selected_source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+          "recommended_superseded_source_run_id": "run-stage3-data-update-20260530-20260626-prices-20260627",
+          "decision_status": "human_decision_required_before_write",
+          "rationale": "market_cap is an auxiliary dataset; aux run is source-owner aligned, while prices run duplicated identical market_cap rows. Business values are identical, but source ownership precedence must be approved before candidate write."
+        }
+      ],
+      "candidate_write_status": "resolved_candidate_verified",
+      "candidate_write_ref": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION.index.json",
+      "resolved_candidate_write_status": "verified",
+      "candidate_main_row_count": 17001327,
+      "quarantine_row_count": 106776,
+      "dropped_row_count": 0
+    },
+    {
+      "dataset": "events",
+      "batch": "Batch 2",
+      "row_count": 362887,
+      "duplicate_key_count": 11360,
+      "duplicate_key_group_count": 11357,
+      "duplicate_rows_in_duplicate_groups": 22717,
+      "duplicate_row_over_unique_count": 11360,
+      "events_usable_canonical_rows_after_quarantine": 351527,
+      "metadata_conflicts": {
+        "source_run_id_conflicting_key_count": 11357,
+        "lineage_raw_checksum_conflicting_key_count": 11357
+      },
+      "dedup_sort_key": [
+        "source_run_id DESC",
+        "available_at DESC",
+        "lineage_raw_checksum DESC"
+      ],
+      "dedup_sort_rationale": "Apply only to duplicate-key groups proven metadata-compatible by per-dataset full-row profile and owner approval; metadata-conflicting groups remain quarantine. The ordering prefers newest source run, newest availability timestamp, then stable lineage checksum as a deterministic tie-breaker.",
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 1,
+      "legacy_catalog_path": "canonical/events/1.0/run_id=run-stage3-data-update-20260530-20260626-trade-status-20260627/part-events-stock-st.parquet",
+      "planned_run_id": "cr139-w2-events-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=events/schema_version=1.0/run_id=cr139-w2-events-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": "candidate/parquet/dataset=events/schema_version=1.0/run_id=cr139-w2-events-legacy_lake-20260629-canonical/quarantine",
+      "planned_action": "candidate write completed and verified",
+      "write_blockers": [
+        "catalog_pointer_migration_still_unauthorized"
+      ],
+      "batch2_deep_profile_ref": "process/evidence/CR139-W2-GATEB-BATCH2-DEEP-PROFILE.index.json",
+      "duplicate_risk_stratification": {
+        "duplicate_key_over_unique_count": 11360,
+        "full_row_fingerprint_duplicate_over_unique_count": 0,
+        "estimated_non_identical_same_key_conflict_count": 11360,
+        "exact_duplicate_share_of_duplicate_key_excess": 0.0,
+        "estimated_conflict_share_of_duplicate_key_excess": 1.0,
+        "risk_class": "primary_key_conflict_quarantine",
+        "refined_recommended_action": "quarantine_duplicate_primary_key_groups_only",
+        "routing_rationale": "events duplicates are primary-key conflicts with zero full-row duplicate fingerprints; D-GATEB-003 keeps duplicated primary-key groups in quarantine.",
+        "counting_note": "Derived as duplicate-key over-unique minus full-row fingerprint duplicate over-unique. This is a routing estimate for planning; future per-dataset write gates must do exact bucket materialization and pre/post-write content validation.",
+        "schema_normalization_required": false,
+        "conflict_share_of_duplicate_key_excess": 1.0
+      },
+      "conservative_profile_action": "events_quarantine_candidate_after_full_row_profile_and_readiness_review",
+      "refined_planned_action": "quarantine_duplicate_primary_key_groups_only",
+      "batch2_remaining_split_planning_ref": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-SPLIT-PLANNING.index.json",
+      "split_bucket_materialization": {
+        "exact_copy": {
+          "group_count": 0,
+          "row_count": 0,
+          "row_over_unique_count": 0
+        },
+        "metadata_only": {
+          "group_count": 10583,
+          "row_count": 21166,
+          "row_over_unique_count": 10583
+        },
+        "business_conflict": {
+          "group_count": 774,
+          "row_count": 1551,
+          "row_over_unique_count": 777
+        }
+      },
+      "split_planning_candidate_shape": {
+        "non_duplicate_row_count": 340170,
+        "main_row_count": 350753,
+        "quarantine_row_count": 12134,
+        "dropped_exact_duplicate_row_count": 0,
+        "business_conflict_groups_without_main_row": 774
+      },
+      "split_planning_recommended_write_mode": "primary-key-conflict quarantine planning",
+      "split_planning_readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "split_planning_decision_required": [
+        "approve source_run_id precedence for metadata-only groups",
+        "approve full-group quarantine or semantic resolution for business-conflict groups"
+      ],
+      "split_planning_schema_normalization_required": false,
+      "split_planning_top_duplicate_source_run_ids": [
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-2000-2019",
+          "duplicate_row_count": 6953
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-smoke-000001",
+          "duplicate_row_count": 6179
+        },
+        {
+          "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+          "duplicate_row_count": 4407
+        },
+        {
+          "source_run_id": "run-stage3-data-update-20260530-20260626-trade-status-20260627",
+          "duplicate_row_count": 4407
+        },
+        {
+          "source_run_id": "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529",
+          "duplicate_row_count": 771
+        }
+      ],
+      "events_usable_canonical_rows_after_split_planning": 350753,
+      "remaining_decision_plan_ref": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-DECISION-PLAN.index.json",
+      "remaining_decision_recommendation": {
+        "source_row_count": 362887,
+        "exact_copy_groups": 0,
+        "exact_copy_rows": 0,
+        "metadata_only_groups": 10583,
+        "metadata_only_rows": 21166,
+        "business_conflict_groups": 774,
+        "business_conflict_rows": 1551,
+        "planned_candidate_shape": {
+          "non_duplicate_row_count": 340170,
+          "main_row_count": 350753,
+          "quarantine_row_count": 12134,
+          "dropped_exact_duplicate_row_count": 0,
+          "business_conflict_groups_without_main_row": 774
+        },
+        "recommended_strategy": "metadata-only groups: resolve by source precedence into main and quarantine superseded rows; business-conflict groups: quarantine full group, no semantic selection in Gate B",
+        "write_mode_if_approved": "events_split_primary_key_candidate_main_plus_quarantine",
+        "write_readiness": "ready_for_explicit_events_write_authorization_after_review",
+        "rationale": "events is small; 774 groups have payload/business differences and should be fully quarantined rather than selected during Gate B. Metadata-only groups can be resolved because business payload is identical.",
+        "next_authorization_candidate": true
+      },
+      "write_status": "candidate_write_verified",
+      "candidate_write_execution_ref": "process/evidence/CR139-W2-GATEB-BATCH2-EVENTS-WRITE-EXECUTION.index.json",
+      "candidate_write_check_ref": "process/checks/CR139-W2-GATEB-BATCH2-EVENTS-WRITE-EXECUTION-2026-06-29.md",
+      "candidate_row_counts": {
+        "source_row_count": 362887,
+        "main_row_count": 350753,
+        "quarantine_row_count": 12134,
+        "metadata_only_group_count": 10583,
+        "business_conflict_group_count": 774,
+        "business_conflict_quarantine_row_count": 1551,
+        "metadata_superseded_quarantine_row_count": 10583,
+        "main_duplicate_row_over_unique_count": 0
+      }
+    },
+    {
+      "dataset": "trade_status",
+      "batch": "Batch 2",
+      "row_count": 21569907,
+      "duplicate_key_count": 3920399,
+      "duplicate_key_group_count": 3762192,
+      "duplicate_rows_in_duplicate_groups": 7682591,
+      "duplicate_row_over_unique_count": 3920399,
+      "metadata_conflicts": {
+        "source_run_id_conflicting_key_count": 3762192,
+        "lineage_raw_checksum_conflicting_key_count": 3762192,
+        "available_at_conflicting_key_count": 74956
+      },
+      "dedup_sort_key": [
+        "source_run_id DESC",
+        "available_at DESC",
+        "lineage_raw_checksum DESC"
+      ],
+      "dedup_sort_rationale": "Apply only to duplicate-key groups proven metadata-compatible by per-dataset full-row profile and owner approval; metadata-conflicting groups remain quarantine. The ordering prefers newest source run, newest availability timestamp, then stable lineage checksum as a deterministic tie-breaker.",
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 37,
+      "legacy_catalog_path": "canonical/trade_status/1.0/run_id=run-stage3-data-update-20260530-20260626-trade-status-20260627/part-trade-status-2026.parquet",
+      "planned_run_id": "cr139-w2-trade_status-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=trade_status/schema_version=1.0/run_id=cr139-w2-trade_status-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": "candidate/parquet/dataset=trade_status/schema_version=1.0/run_id=cr139-w2-trade_status-legacy_lake-20260629-canonical/quarantine",
+      "planned_action": "candidate write completed and verified",
+      "write_blockers": [
+        "catalog_pointer_migration_still_unauthorized"
+      ],
+      "batch2_deep_profile_ref": "process/evidence/CR139-W2-GATEB-BATCH2-DEEP-PROFILE.index.json",
+      "duplicate_risk_stratification": {
+        "duplicate_key_over_unique_count": 3920399,
+        "full_row_fingerprint_duplicate_over_unique_count": 79870,
+        "estimated_non_identical_same_key_conflict_count": 3840529,
+        "exact_duplicate_share_of_duplicate_key_excess": 0.020373,
+        "estimated_conflict_share_of_duplicate_key_excess": 0.979627,
+        "risk_class": "mostly_metadata_conflict_with_required_exact_bucket_decision",
+        "refined_recommended_action": "quarantine_metadata_conflict_key_groups_and_exact_dedup_proven_exact_copy_bucket",
+        "routing_rationale": "Most duplicate-key excess rows are non-identical conflicts, but the 79,870 exact-copy duplicate rows are a real bucket. Future trade_status write authorization must explicitly either exact-dedup that bucket or quarantine it; recommended default is exact-dedup because exact copies carry no additional information.",
+        "counting_note": "Derived as duplicate-key over-unique minus full-row fingerprint duplicate over-unique. This is a routing estimate for planning; future per-dataset write gates must do exact bucket materialization and pre/post-write content validation.",
+        "schema_normalization_required": false,
+        "conflict_share_of_duplicate_key_excess": 0.979627,
+        "exact_duplicate_bucket_decision_required": true,
+        "recommended_exact_duplicate_bucket_action": "exact_dedup_proven_exact_copy_rows"
+      },
+      "conservative_profile_action": "one_dataset_batch2_after_full_row_profile_and_quarantine_review",
+      "refined_planned_action": "quarantine_metadata_conflict_key_groups_and_exact_dedup_proven_exact_copy_bucket",
+      "exact_duplicate_bucket_decision_required": true,
+      "recommended_exact_duplicate_bucket_action": "exact_dedup_proven_exact_copy_rows",
+      "batch2_remaining_split_planning_ref": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-SPLIT-PLANNING.index.json",
+      "split_bucket_materialization": {
+        "exact_copy": {
+          "group_count": 0,
+          "row_count": 0,
+          "row_over_unique_count": 0
+        },
+        "metadata_only": {
+          "group_count": 70087,
+          "row_count": 140512,
+          "row_over_unique_count": 70425
+        },
+        "business_conflict": {
+          "group_count": 3692105,
+          "row_count": 7542079,
+          "row_over_unique_count": 3849974
+        }
+      },
+      "split_planning_candidate_shape": {
+        "non_duplicate_row_count": 13887316,
+        "main_row_count": 13957403,
+        "quarantine_row_count": 7612504,
+        "dropped_exact_duplicate_row_count": 0,
+        "business_conflict_groups_without_main_row": 3692105
+      },
+      "split_planning_recommended_write_mode": "split exact-dedup plus metadata resolution plus business-conflict quarantine planning",
+      "split_planning_readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "split_planning_decision_required": [
+        "approve source_run_id precedence for metadata-only groups",
+        "approve full-group quarantine or semantic resolution for business-conflict groups"
+      ],
+      "split_planning_schema_normalization_required": false,
+      "split_planning_top_duplicate_source_run_ids": [
+        {
+          "source_run_id": "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529",
+          "duplicate_row_count": 3760167
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-2000-2019",
+          "duplicate_row_count": 3658188
+        },
+        {
+          "source_run_id": "cr010-tushare-only-window-20250211-20260218-trade-status",
+          "duplicate_row_count": 156304
+        },
+        {
+          "source_run_id": "cr010-prod-window-20250211-20260218-trade-status-jqdata",
+          "duplicate_row_count": 74956
+        },
+        {
+          "source_run_id": "run-cr014-s13-trade-status-missing-2026-ytd-231252",
+          "duplicate_row_count": 24284
+        },
+        {
+          "source_run_id": "cr012-limited-window-fetch-20260524T152331Z",
+          "duplicate_row_count": 6842
+        }
+      ],
+      "remaining_decision_plan_ref": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-DECISION-PLAN.index.json",
+      "remaining_decision_recommendation": {
+        "source_row_count": 21569907,
+        "exact_copy_groups": 0,
+        "exact_copy_rows": 0,
+        "metadata_only_groups": 70087,
+        "metadata_only_rows": 140512,
+        "business_conflict_groups": 3692105,
+        "business_conflict_rows": 7542079,
+        "planned_candidate_shape": {
+          "non_duplicate_row_count": 13887316,
+          "main_row_count": 13957403,
+          "quarantine_row_count": 7612504,
+          "dropped_exact_duplicate_row_count": 0,
+          "business_conflict_groups_without_main_row": 3692105
+        },
+        "recommended_strategy": "single_dataset_split_write_only; metadata-only resolve by source precedence, business-conflict full-group quarantine",
+        "write_mode_if_approved": "trade_status_split_candidate_main_plus_quarantine",
+        "write_readiness": "blocked_until_single_dataset_authorization; recommend after events because conflict scale is high",
+        "rationale": "3,692,105 business-conflict groups dominate the dataset. It needs separate write evidence and must not be batched with smaller tables.",
+        "next_authorization_candidate": false
+      },
+      "write_status": "candidate_write_verified",
+      "candidate_write_execution_ref": "process/evidence/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION.index.json",
+      "candidate_write_check_ref": "process/checks/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION-2026-06-29.md",
+      "candidate_row_counts": {
+        "source_row_count": 21569907,
+        "main_row_count": 13957403,
+        "quarantine_row_count": 7612504,
+        "dropped_exact_duplicate_row_count": 0,
+        "metadata_only_group_count": 70087,
+        "business_conflict_group_count": 3692105,
+        "business_conflict_quarantine_row_count": 7542079,
+        "metadata_superseded_quarantine_row_count": 70425,
+        "main_duplicate_row_over_unique_count": 0,
+        "accounted_row_count": 21569907
+      }
+    },
+    {
+      "dataset": "adj_factor",
+      "batch": "Batch 2",
+      "row_count": 29970830,
+      "duplicate_key_count": 12064870,
+      "duplicate_key_group_count": 11824907,
+      "duplicate_rows_in_duplicate_groups": 23889777,
+      "duplicate_row_over_unique_count": 12064870,
+      "metadata_conflicts": {
+        "source_run_id_conflicting_key_count": 81852,
+        "lineage_raw_checksum_conflicting_key_count": 81852,
+        "available_at_conflicting_key_count": 74960
+      },
+      "dedup_sort_key": [
+        "source_run_id DESC",
+        "available_at DESC",
+        "lineage_raw_checksum DESC"
+      ],
+      "dedup_sort_rationale": "Apply only to duplicate-key groups proven metadata-compatible by per-dataset full-row profile and owner approval; metadata-conflicting groups remain quarantine. The ordering prefers newest source run, newest availability timestamp, then stable lineage checksum as a deterministic tie-breaker.",
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 37,
+      "legacy_catalog_path": "canonical/adj_factor/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627",
+      "planned_run_id": "cr139-w2-adj_factor-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=adj_factor/schema_version=1.0/run_id=cr139-w2-adj_factor-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": "candidate/parquet/dataset=adj_factor/schema_version=1.0/run_id=cr139-w2-adj_factor-legacy_lake-20260629-canonical/quarantine",
+      "planned_action": "candidate write completed and verified",
+      "write_blockers": [
+        "catalog_pointer_migration_still_unauthorized"
+      ],
+      "batch2_deep_profile_ref": "process/evidence/CR139-W2-GATEB-BATCH2-DEEP-PROFILE.index.json",
+      "duplicate_risk_stratification": {
+        "duplicate_key_over_unique_count": 12064870,
+        "full_row_fingerprint_duplicate_over_unique_count": 11907842,
+        "estimated_non_identical_same_key_conflict_count": 157028,
+        "exact_duplicate_share_of_duplicate_key_excess": 0.986985,
+        "estimated_conflict_share_of_duplicate_key_excess": 0.013015,
+        "risk_class": "mostly_exact_duplicates_with_small_conflict_bucket",
+        "refined_recommended_action": "exact_dedup_main_bucket_plus_quarantine_conflict_bucket",
+        "routing_rationale": "Most duplicate-key excess rows are exact-copy fingerprints; dedup those exact copies and quarantine only the estimated non-identical conflict bucket.",
+        "counting_note": "Derived as duplicate-key over-unique minus full-row fingerprint duplicate over-unique. This is a routing estimate for planning; future per-dataset write gates must do exact bucket materialization and pre/post-write content validation.",
+        "schema_normalization_required": false,
+        "conflict_share_of_duplicate_key_excess": 0.013015
+      },
+      "conservative_profile_action": "one_dataset_batch2_after_full_row_profile_and_quarantine_review",
+      "refined_planned_action": "exact_dedup_main_bucket_plus_quarantine_conflict_bucket",
+      "batch2_remaining_split_planning_ref": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-SPLIT-PLANNING.index.json",
+      "split_bucket_materialization": {
+        "exact_copy": {
+          "group_count": 11743055,
+          "row_count": 23486110,
+          "row_over_unique_count": 11743055
+        },
+        "metadata_only": {
+          "group_count": 81852,
+          "row_count": 403667,
+          "row_over_unique_count": 321815
+        },
+        "business_conflict": {
+          "group_count": 0,
+          "row_count": 0,
+          "row_over_unique_count": 0
+        }
+      },
+      "split_planning_candidate_shape": {
+        "non_duplicate_row_count": 6081053,
+        "main_row_count": 17905960,
+        "quarantine_row_count": 321815,
+        "dropped_exact_duplicate_row_count": 11743055,
+        "business_conflict_groups_without_main_row": 0
+      },
+      "split_planning_recommended_write_mode": "metadata-only resolved candidate planning",
+      "split_planning_readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "split_planning_decision_required": [
+        "approve exact-copy dedup drop policy",
+        "approve source_run_id precedence for metadata-only groups"
+      ],
+      "split_planning_schema_normalization_required": false,
+      "split_planning_top_duplicate_source_run_ids": [
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2025-001949",
+          "duplicate_row_count": 2643522
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2024-001432",
+          "duplicate_row_count": 2606368
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2023-000913",
+          "duplicate_row_count": 2548960
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2022-000336",
+          "duplicate_row_count": 2417644
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2021-235843",
+          "duplicate_row_count": 2238314
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2020-235353",
+          "duplicate_row_count": 2006602
+        }
+      ],
+      "write_status": "candidate_write_verified",
+      "candidate_write_execution_ref": "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION.index.json",
+      "candidate_write_check_ref": "process/checks/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION-2026-06-29.md",
+      "candidate_row_counts": {
+        "source_row_count": 29970830,
+        "main_row_count": 17905960,
+        "quarantine_row_count": 321815,
+        "dropped_exact_duplicate_row_count": 11743055,
+        "combined_accounted_row_count": 29970830,
+        "main_duplicate_row_over_unique_count": 0,
+        "metadata_only_quarantine_row_count": 321815
+      }
+    },
+    {
+      "dataset": "prices",
+      "batch": "Batch 2",
+      "row_count": 28646730,
+      "duplicate_key_count": 11553072,
+      "duplicate_key_group_count": 11313190,
+      "duplicate_rows_in_duplicate_groups": 22866262,
+      "duplicate_row_over_unique_count": 11553072,
+      "metadata_conflicts": {
+        "source_run_id_conflicting_key_count": 81788,
+        "lineage_raw_checksum_conflicting_key_count": 81788,
+        "available_at_conflicting_key_count": 0
+      },
+      "dedup_sort_key": [
+        "source_run_id DESC",
+        "available_at DESC",
+        "lineage_raw_checksum DESC"
+      ],
+      "dedup_sort_rationale": "Apply only to duplicate-key groups proven metadata-compatible by per-dataset full-row profile and owner approval; metadata-conflicting groups remain quarantine. The ordering prefers newest source run, newest availability timestamp, then stable lineage checksum as a deterministic tie-breaker.",
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 38,
+      "legacy_catalog_path": "canonical/prices/1.0/run_id=run-stage3-data-update-20260530-20260626-prices-20260627",
+      "planned_run_id": "cr139-w2-prices-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=prices/schema_version=1.0/run_id=cr139-w2-prices-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": "candidate/parquet/dataset=prices/schema_version=1.0/run_id=cr139-w2-prices-legacy_lake-20260629-canonical/quarantine",
+      "planned_action": "candidate write completed and verified",
+      "write_blockers": [
+        "catalog_pointer_migration_still_unauthorized"
+      ],
+      "batch2_deep_profile_ref": "process/evidence/CR139-W2-GATEB-BATCH2-DEEP-PROFILE.index.json",
+      "duplicate_risk_stratification": {
+        "duplicate_key_over_unique_count": 11553072,
+        "full_row_fingerprint_duplicate_over_unique_count": 11470750,
+        "estimated_non_identical_same_key_conflict_count": 82322,
+        "exact_duplicate_share_of_duplicate_key_excess": 0.992874,
+        "estimated_conflict_share_of_duplicate_key_excess": 0.007126,
+        "risk_class": "mostly_exact_duplicates_with_small_conflict_bucket",
+        "refined_recommended_action": "exact_dedup_main_bucket_plus_quarantine_conflict_bucket",
+        "routing_rationale": "Most duplicate-key excess rows are exact-copy fingerprints; dedup those exact copies and quarantine only the estimated non-identical conflict bucket.",
+        "counting_note": "Derived as duplicate-key over-unique minus full-row fingerprint duplicate over-unique. This is a routing estimate for planning; future per-dataset write gates must do exact bucket materialization and pre/post-write content validation.",
+        "schema_normalization_required": true,
+        "schema_normalization_decision_required": "choose union schema with null fill, reviewed canonical subset, or design-delta before candidate write",
+        "conflict_share_of_duplicate_key_excess": 0.007126
+      },
+      "conservative_profile_action": "one_dataset_batch2_after_full_row_profile_and_quarantine_review",
+      "refined_planned_action": "exact_dedup_main_bucket_plus_quarantine_conflict_bucket",
+      "schema_normalization_required": true,
+      "batch2_remaining_split_planning_ref": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-SPLIT-PLANNING.index.json",
+      "split_bucket_materialization": {
+        "exact_copy": {
+          "group_count": 11231402,
+          "row_count": 22462804,
+          "row_over_unique_count": 11231402
+        },
+        "metadata_only": {
+          "group_count": 1830,
+          "row_count": 3660,
+          "row_over_unique_count": 1830
+        },
+        "business_conflict": {
+          "group_count": 79958,
+          "row_count": 399798,
+          "row_over_unique_count": 319840
+        }
+      },
+      "split_planning_candidate_shape": {
+        "non_duplicate_row_count": 5780468,
+        "main_row_count": 17013700,
+        "quarantine_row_count": 401628,
+        "dropped_exact_duplicate_row_count": 11231402,
+        "business_conflict_groups_without_main_row": 79958
+      },
+      "split_planning_recommended_write_mode": "split exact-dedup plus metadata resolution plus business-conflict quarantine planning",
+      "split_planning_readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "split_planning_decision_required": [
+        "approve exact-copy dedup drop policy",
+        "approve source_run_id precedence for metadata-only groups",
+        "approve full-group quarantine or semantic resolution for business-conflict groups",
+        "approve prices schema normalization policy before write"
+      ],
+      "split_planning_schema_normalization_required": true,
+      "split_planning_top_duplicate_source_run_ids": [
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2025-001949",
+          "duplicate_row_count": 2627796
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2024-001432",
+          "duplicate_row_count": 2587786
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2023-000913",
+          "duplicate_row_count": 2517468
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2022-000336",
+          "duplicate_row_count": 2358144
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2021-235843",
+          "duplicate_row_count": 2170890
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2020-235353",
+          "duplicate_row_count": 1928262
+        }
+      ],
+      "remaining_decision_plan_ref": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-DECISION-PLAN.index.json",
+      "remaining_decision_recommendation": {
+        "source_row_count": 28646730,
+        "exact_copy_groups": 11231402,
+        "exact_copy_rows": 22462804,
+        "metadata_only_groups": 1830,
+        "metadata_only_rows": 3660,
+        "business_conflict_groups": 79958,
+        "business_conflict_rows": 399798,
+        "planned_candidate_shape": {
+          "non_duplicate_row_count": 5780468,
+          "main_row_count": 17013700,
+          "quarantine_row_count": 401628,
+          "dropped_exact_duplicate_row_count": 11231402,
+          "business_conflict_groups_without_main_row": 79958
+        },
+        "schema_variants": [
+          {
+            "file_count": 6,
+            "columns": [
+              "trade_date",
+              "symbol",
+              "open",
+              "high",
+              "low",
+              "close",
+              "adj_factor",
+              "adjusted_open",
+              "adjusted_high",
+              "adjusted_low",
+              "adjusted_close",
+              "adjustment_policy",
+              "source",
+              "source_interface",
+              "source_run_id",
+              "schema_version",
+              "available_at",
+              "lineage_raw_checksum"
+            ],
+            "missing_from_union": [
+              "available_at_rule",
+              "volume",
+              "amount"
+            ]
+          },
+          {
+            "file_count": 327,
+            "columns": [
+              "trade_date",
+              "symbol",
+              "open",
+              "high",
+              "low",
+              "close",
+              "adj_factor",
+              "adjusted_open",
+              "adjusted_high",
+              "adjusted_low",
+              "adjusted_close",
+              "adjustment_policy",
+              "source",
+              "source_interface",
+              "source_run_id",
+              "schema_version",
+              "available_at",
+              "available_at_rule",
+              "lineage_raw_checksum"
+            ],
+            "missing_from_union": [
+              "volume",
+              "amount"
+            ]
+          },
+          {
+            "file_count": 5553,
+            "columns": [
+              "trade_date",
+              "symbol",
+              "open",
+              "high",
+              "low",
+              "close",
+              "volume",
+              "amount",
+              "adj_factor",
+              "adjusted_open",
+              "adjusted_high",
+              "adjusted_low",
+              "adjusted_close",
+              "adjustment_policy",
+              "source",
+              "source_interface",
+              "source_run_id",
+              "schema_version",
+              "available_at",
+              "available_at_rule",
+              "lineage_raw_checksum"
+            ],
+            "missing_from_union": []
+          }
+        ],
+        "recommended_schema_policy": "union_schema_with_null_fill_for_missing_columns",
+        "union_schema_columns": [
+          "adj_factor",
+          "adjusted_close",
+          "adjusted_high",
+          "adjusted_low",
+          "adjusted_open",
+          "adjustment_policy",
+          "amount",
+          "available_at",
+          "available_at_rule",
+          "close",
+          "high",
+          "lineage_raw_checksum",
+          "low",
+          "open",
+          "schema_version",
+          "source",
+          "source_interface",
+          "source_run_id",
+          "symbol",
+          "trade_date",
+          "volume"
+        ],
+        "write_mode_if_approved": "prices_union_schema_exact_dedup_metadata_resolved_business_conflict_quarantine_candidate",
+        "write_readiness": "blocked_until_schema_normalization_decision_and_single_dataset_authorization",
+        "rationale": "prices has three schema variants; write must preserve full union columns and fill missing volume/amount/available_at_rule with null before materialization. 79,958 business-conflict groups remain quarantine unless a later semantic rule is approved.",
+        "next_authorization_candidate": false
+      },
+      "write_status": "candidate_write_verified",
+      "candidate_write_execution_ref": "process/evidence/CR139-W2-GATEB-BATCH2-PRICES-WRITE-EXECUTION.index.json",
+      "candidate_write_check_ref": "process/checks/CR139-W2-GATEB-BATCH2-PRICES-WRITE-EXECUTION-2026-06-29.md",
+      "candidate_row_counts": {
+        "source_row_count": 28646730,
+        "main_row_count": 17013700,
+        "quarantine_row_count": 401628,
+        "dropped_exact_duplicate_row_count": 11231402,
+        "metadata_only_group_count": 1830,
+        "business_conflict_group_count": 79958,
+        "business_conflict_quarantine_row_count": 399798,
+        "metadata_superseded_quarantine_row_count": 1830,
+        "main_duplicate_row_over_unique_count": 0,
+        "accounted_row_count": 28646730
+      }
+    },
+    {
+      "dataset": "prices_limit",
+      "batch": "Batch 2",
+      "row_count": 40962525,
+      "duplicate_key_count": 21252721,
+      "duplicate_key_group_count": 17356374,
+      "duplicate_rows_in_duplicate_groups": 38609095,
+      "duplicate_row_over_unique_count": 21252721,
+      "metadata_conflicts": {
+        "source_run_id_conflicting_key_count": 7445795,
+        "lineage_raw_checksum_conflicting_key_count": 7445795,
+        "available_at_conflicting_key_count": 74956
+      },
+      "dedup_sort_key": [
+        "source_run_id DESC",
+        "available_at DESC",
+        "lineage_raw_checksum DESC"
+      ],
+      "dedup_sort_rationale": "Apply only to duplicate-key groups proven metadata-compatible by per-dataset full-row profile and owner approval; metadata-conflicting groups remain quarantine. The ordering prefers newest source run, newest availability timestamp, then stable lineage checksum as a deterministic tie-breaker.",
+      "published": false,
+      "lineage_checksum_present": false,
+      "partition_count": 37,
+      "legacy_catalog_path": "canonical/prices_limit/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-prices-limit-2026.parquet",
+      "planned_run_id": "cr139-w2-prices_limit-legacy_lake-20260629-canonical",
+      "candidate_relative_path": "candidate/parquet/dataset=prices_limit/schema_version=1.0/run_id=cr139-w2-prices_limit-legacy_lake-20260629-canonical",
+      "quarantine_relative_path": "candidate/parquet/dataset=prices_limit/schema_version=1.0/run_id=cr139-w2-prices_limit-legacy_lake-20260629-canonical/quarantine",
+      "planned_action": "candidate write completed and verified",
+      "write_blockers": [
+        "catalog_pointer_migration_still_unauthorized"
+      ],
+      "batch2_deep_profile_ref": "process/evidence/CR139-W2-GATEB-BATCH2-DEEP-PROFILE.index.json",
+      "duplicate_risk_stratification": {
+        "duplicate_key_over_unique_count": 21252721,
+        "full_row_fingerprint_duplicate_over_unique_count": 13728564,
+        "estimated_non_identical_same_key_conflict_count": 7524157,
+        "exact_duplicate_share_of_duplicate_key_excess": 0.645967,
+        "estimated_conflict_share_of_duplicate_key_excess": 0.354033,
+        "risk_class": "mixed_exact_duplicates_and_metadata_conflicts",
+        "refined_recommended_action": "exact_dedup_bucket_plus_quarantine_conflict_bucket",
+        "routing_rationale": "Both exact-copy duplicates and non-identical conflict rows are material; split candidate write into retained/deduped data plus quarantine.",
+        "counting_note": "Derived as duplicate-key over-unique minus full-row fingerprint duplicate over-unique. This is a routing estimate for planning; future per-dataset write gates must do exact bucket materialization and pre/post-write content validation.",
+        "schema_normalization_required": false,
+        "conflict_share_of_duplicate_key_excess": 0.354033
+      },
+      "conservative_profile_action": "one_dataset_batch2_after_full_row_profile_and_quarantine_review",
+      "refined_planned_action": "exact_dedup_bucket_plus_quarantine_conflict_bucket",
+      "batch2_remaining_split_planning_ref": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-SPLIT-PLANNING.index.json",
+      "split_bucket_materialization": {
+        "exact_copy": {
+          "group_count": 9910579,
+          "row_count": 19821158,
+          "row_over_unique_count": 9910579
+        },
+        "metadata_only": {
+          "group_count": 6946008,
+          "row_count": 17526841,
+          "row_over_unique_count": 10580833
+        },
+        "business_conflict": {
+          "group_count": 499787,
+          "row_count": 1261096,
+          "row_over_unique_count": 761309
+        }
+      },
+      "split_planning_candidate_shape": {
+        "non_duplicate_row_count": 2353430,
+        "main_row_count": 19210017,
+        "quarantine_row_count": 11841929,
+        "dropped_exact_duplicate_row_count": 9910579,
+        "business_conflict_groups_without_main_row": 499787
+      },
+      "split_planning_recommended_write_mode": "split exact-dedup plus metadata resolution plus business-conflict quarantine planning",
+      "split_planning_readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "split_planning_decision_required": [
+        "approve exact-copy dedup drop policy",
+        "approve source_run_id precedence for metadata-only groups",
+        "approve full-group quarantine or semantic resolution for business-conflict groups"
+      ],
+      "split_planning_schema_normalization_required": false,
+      "split_planning_top_duplicate_source_run_ids": [
+        {
+          "source_run_id": "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529",
+          "duplicate_row_count": 27297388
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-2000-2019",
+          "duplicate_row_count": 7365925
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-w3-2000-2014",
+          "duplicate_row_count": 3704721
+        },
+        {
+          "source_run_id": "cr010-tushare-only-window-20250211-20260218-prices-limit",
+          "duplicate_row_count": 156304
+        },
+        {
+          "source_run_id": "cr010-prod-window-20250211-20260218-prices-limit-jqdata",
+          "duplicate_row_count": 74956
+        },
+        {
+          "source_run_id": "cr012-limited-window-fetch-20260524T152331Z",
+          "duplicate_row_count": 6842
+        }
+      ],
+      "remaining_decision_plan_ref": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-DECISION-PLAN.index.json",
+      "remaining_decision_recommendation": {
+        "source_row_count": 40962525,
+        "exact_copy_groups": 9910579,
+        "exact_copy_rows": 19821158,
+        "metadata_only_groups": 6946008,
+        "metadata_only_rows": 17526841,
+        "business_conflict_groups": 499787,
+        "business_conflict_rows": 1261096,
+        "planned_candidate_shape": {
+          "non_duplicate_row_count": 2353430,
+          "main_row_count": 19210017,
+          "quarantine_row_count": 11841929,
+          "dropped_exact_duplicate_row_count": 9910579,
+          "business_conflict_groups_without_main_row": 499787
+        },
+        "recommended_strategy": "single_dataset_split_write_only; exact-copy dedup, metadata-only resolve by source precedence, business-conflict full-group quarantine",
+        "write_mode_if_approved": "prices_limit_split_candidate_main_plus_quarantine",
+        "write_readiness": "blocked_until_single_dataset_authorization_after_events_or_prices_schema_review",
+        "rationale": "large mixed bucket: 499,787 business-conflict groups and 6,946,008 metadata-only groups. Do not batch-write with prices or trade_status.",
+        "next_authorization_candidate": false
+      },
+      "write_status": "candidate_write_verified",
+      "candidate_write_execution_ref": "process/evidence/CR139-W2-GATEB-BATCH2-PRICES_LIMIT-WRITE-EXECUTION.index.json",
+      "candidate_write_check_ref": "process/checks/CR139-W2-GATEB-BATCH2-PRICES_LIMIT-WRITE-EXECUTION-2026-06-29.md",
+      "candidate_row_counts": {
+        "source_row_count": 40962525,
+        "main_row_count": 19210017,
+        "quarantine_row_count": 11841929,
+        "dropped_exact_duplicate_row_count": 9910579,
+        "metadata_only_group_count": 6946008,
+        "business_conflict_group_count": 499787,
+        "business_conflict_quarantine_row_count": 1261096,
+        "metadata_superseded_quarantine_row_count": 10580833,
+        "main_duplicate_row_over_unique_count": 0,
+        "accounted_row_count": 40962525
+      }
+    }
+  ],
+  "gate_c_gate_d_gate_e_plan_only": {
+    "gate_c_checksum_backfill": "required_before_catalog_or_pointer_readiness; not executed by this plan",
+    "gate_d_publish_pointer": "not advanced in current CR stage; requires independent authorization",
+    "gate_e_path_migration": "not executed; write plan records full_17_dataset_migration versus publish_target_only_plus_waiver decision surface"
+  },
+  "rollback_model_for_future_write": {
+    "allowed_rollback": "delete only objects listed in the Gate B object manifest for the newly written CR139 run-id candidate path",
+    "forbidden_rollback": [
+      "delete legacy canonical objects",
+      "edit catalog pointers",
+      "advance or rewind published pointer",
+      "mutate physical partitions outside the new candidate path"
+    ],
+    "rollback_blocker": "If any written object is absent from the object manifest, the Gate B attempt is failed and must be replanned from Gate A/B evidence."
+  },
+  "next_review_gate": {
+    "gate": "Gate B Batch 1B write authorization review",
+    "recommended_decision": "authorize only index_members exact-dedup candidate write and index_weights mixed-PIT-preserving candidate copy if reviewer accepts blocker planning evidence",
+    "approval_effect": "real lake candidate write only for these two Batch 1B datasets; no catalog/pointer/migration/runtime/NAS/credential/Git/rollback"
+  },
+  "plan_amendments": [
+    {
+      "created_at": "2026-06-29T15:25:49+08:00",
+      "reason": "Batch 1A remaining readiness found exact full-row duplicates in trade_calendar and stock_basic; safe-5 candidate writes verified.",
+      "changes": [
+        "move trade_calendar and stock_basic to Batch 1A-exact-dedup",
+        "mark bse_code_mapping and safe-5 candidate writes verified",
+        "add exact-dedup planning evidence refs"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH1A-REMAINING-PREWRITE-READINESS.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH1A-SAFE5-WRITE-EXECUTION.index.json"
+      ]
+    },
+    {
+      "created_at": "2026-06-29T15:25:49+08:00",
+      "reason": "Read-only exact-dedup planning completed for trade_calendar and stock_basic.",
+      "changes": [
+        "add retained/dropped exact duplicate counts",
+        "add dedup candidate shape",
+        "mark Batch 1A-exact-dedup ready for write authorization review"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-PLANNING.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-PLANNING-2026-06-29T152549+0800.json"
+      ]
+    },
+    {
+      "created_at": "2026-06-29T15:47:23+08:00",
+      "reason": "Exact-dedup candidate writes completed and verified for trade_calendar and stock_basic.",
+      "changes": [
+        "mark Batch 1A-exact-dedup candidate writes verified",
+        "mark trade_calendar/stock_basic write_status dedup_candidate_write_verified"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-WRITE-EXECUTION.index.json"
+      ]
+    },
+    {
+      "created_at": "2026-06-29T16:18:20+08:00",
+      "reason": "Batch 1B readiness found exact full-row duplicates in index_members and mixed row-level PIT status in index_weights.",
+      "changes": [
+        "mark index_members as Batch 1B-exact-dedup with retained/dropped counts",
+        "mark index_weights as Batch 1B-mixed-pit with row-level PIT preservation semantics",
+        "prepare Batch 1B write authorization review but keep writes unauthorized"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH1B-PREWRITE-READINESS.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH1B-BLOCKER-PLANNING.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH1B-BLOCKER-PLANNING-2026-06-29T161820+0800.json"
+      ]
+    },
+    {
+      "created_at": "2026-06-29T16:31:00+08:00",
+      "reason": "Reviewer requested Batch 1B semantic clarifications before write authorization.",
+      "changes": [
+        "clarify index_weights candidate includes 300 pit_incomplete rows and Gate D must decide publish/isolate/repair/waiver before pointer advance",
+        "clarify index_members PIT status is clean pit_available and not the PIT blocker",
+        "add Batch 1B fail-stop/no-automatic-rollback policy"
+      ],
+      "evidence_refs": [
+        "process/checkpoints/CR139-W2-GATEB-BATCH1B-WRITE-AUTHORIZATION-DECISION-BRIEF.md",
+        "process/checks/CR139-W2-GATEB-BATCH1B-PREWRITE-READINESS-2026-06-29.md"
+      ]
+    },
+    {
+      "created_at": "2026-06-29T17:48:12+08:00",
+      "reason": "Batch 2 deep profile review found that 7/7 quarantine is too coarse; duplicate-key over-unique minus full-row fingerprint duplicates must drive per-dataset write strategy.",
+      "changes": [
+        "add duplicate_risk_stratification for all Batch 2 datasets",
+        "reclassify adj_factor/prices/prices_limit as split exact-dedup plus quarantine candidates",
+        "keep liquidity_capacity/market_cap/events as pure conflict quarantine candidates",
+        "mark trade_status as mostly conflict with required exact duplicate bucket decision",
+        "mark prices schema-normalization decision required before write authorization"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-DEEP-PROFILE.index.json"
+      ]
+    },
+    {
+      "created_at": "2026-06-29T18:05:52+08:00",
+      "reason": "Reviewer requested machine-readable conflict_share alias and a required trade_status exact duplicate bucket decision.",
+      "changes": [
+        "add conflict_share_of_duplicate_key_excess alias to all Batch 2 duplicate_risk_stratification objects",
+        "change trade_status action from soft exact bucket review wording to required exact duplicate bucket decision",
+        "recommend exact-dedup for trade_status 79,870 proven exact-copy duplicate rows while quarantining metadata-conflict key groups"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-DEEP-PROFILE.index.json"
+      ]
+    },
+    {
+      "at": "2026-06-29T18:43:03+08:00",
+      "reason": "liquidity_capacity Batch 2 quarantine-only additive candidate write completed and verified after explicit authorization.",
+      "changes": [
+        "mark liquidity_capacity candidate write verified",
+        "record candidate main row count 17,091,828 and quarantine row count 3,660",
+        "keep catalog/pointer/migration unauthorized"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-OBJECT-MANIFEST.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-ZERO-POINTER-MUTATION.json",
+        "process/checks/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29.md"
+      ]
+    },
+    {
+      "at": "2026-06-29T19:22:27+08:00",
+      "reason": "liquidity_capacity metadata-only conflict resolution planning completed read-only after user allowed source precedence resolution.",
+      "changes": [
+        "add resolved candidate proposal with new run_id, leaving current quarantine-only candidate untouched",
+        "select full-year backfill run over smoke-window run for 1,830 business-identical duplicate key groups",
+        "record future resolved main row count 17,093,658 and superseded quarantine row count 1,830"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-RESOLUTION-PLANNING.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-RESOLUTION-PLANNING-2026-06-29T192227+0800.json",
+        "process/checks/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-RESOLUTION-PLANNING-2026-06-29.md"
+      ]
+    },
+    {
+      "at": "2026-06-29T19:31:15+08:00",
+      "reason": "Batch 2 pure metadata conflict batch planning completed read-only for liquidity_capacity and market_cap.",
+      "changes": [
+        "reused liquidity_capacity resolution planning evidence",
+        "added market_cap metadata-only conflict resolution plan",
+        "defined first Batch 2 batch write candidate: liquidity_capacity + market_cap, still not authorized",
+        "summarized subsequent Batch 2 write batches"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING-2026-06-29T193115+0800.json",
+        "process/checks/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING-2026-06-29.md"
+      ]
+    },
+    {
+      "at": "2026-06-29T19:34:43+08:00",
+      "reason": "Refined Batch 2 pure metadata planning after market_cap scan showed two source-pair buckets; aux-vs-prices precedence requires user decision before write.",
+      "changes": [
+        "do not mark liquidity_capacity+market_cap combined write as immediately ready",
+        "add D-GATEB-B2-MARKETCAP-001 for market_cap aux vs prices source precedence",
+        "split future write plan into liquidity-alone option, market_cap decision-gated option, and combined option after approval"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING-2026-06-29T193115+0800.json",
+        "process/checks/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING-2026-06-29.md"
+      ]
+    },
+    {
+      "at": "2026-06-29T19:42:18+08:00",
+      "reason": "Quality review found liquidity_capacity already-written quarantine-only candidate conflicts with newer resolved strategy; batch write must be blocked until strategy unification decision and rollback authorization.",
+      "changes": [
+        "add D-GATEB-B2-LIQUIDITY-001 strategy unification decision",
+        "block combined liquidity_capacity+market_cap write until liquidity rollback/rewrite and market_cap precedence are both approved",
+        "replace future batch plan with compound candidate cleanup + resolved write option"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING.index.json",
+        "process/checks/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING-2026-06-29.md",
+        "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION.index.json"
+      ]
+    },
+    {
+      "at": "2026-06-29T19:50:11+08:00",
+      "reason": "User approved market_cap aux precedence and liquidity option A, with required guard against glob/directory deletion. Added exact prior-manifest delete guard; no execution performed.",
+      "changes": [
+        "mark D-GATEB-B2-MARKETCAP-001 approved",
+        "mark D-GATEB-B2-LIQUIDITY-001 option A approved with delete guard required",
+        "add GATEB-B2-LIQUIDITY-DELETE-GUARD-001 exact-manifest delete requirements",
+        "set pure metadata unification batch ready for explicit runtime authorization, not executed"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-OBJECT-MANIFEST.json",
+        "process/checks/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING-2026-06-29.md"
+      ]
+    },
+    {
+      "at": "2026-06-29T19:54:46+08:00",
+      "reason": "Pure metadata strategy-unification execution completed with exact delete guard and resolved candidate writes for liquidity_capacity and market_cap.",
+      "changes": [
+        "deleted exactly two old liquidity_capacity candidate objects from prior manifest",
+        "wrote liquidity_capacity resolved main/quarantine objects",
+        "wrote market_cap resolved main/quarantine objects",
+        "catalog/pointer/canonical/published unchanged"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION-2026-06-29T195446+0800-DELETE-GUARD-PROOF.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION-2026-06-29T195446+0800-OBJECT-MANIFEST.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION-2026-06-29T195446+0800-ZERO-MUTATION-PROOF.json",
+        "process/checks/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION-2026-06-29.md"
+      ]
+    },
+    {
+      "at": "2026-06-29T20:37:06+08:00",
+      "reason": "Batch 2 remaining consolidated read-only split planning completed for adj_factor, prices, prices_limit, events, and trade_status.",
+      "changes": [
+        "materialized exact-copy, metadata-only, and business-conflict bucket counts for all five remaining Batch 2 datasets",
+        "updated per-dataset planned candidate shapes and write blockers",
+        "identified adj_factor as the only remaining Batch 2 dataset without business-conflict groups",
+        "kept prices blocked on schema-normalization decision before write",
+        "kept all five datasets blocked until explicit per-dataset write authorization; no lake write was authorized or executed"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-SPLIT-PLANNING.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-SPLIT-PLANNING-2026-06-29.json",
+        "process/checks/CR139-W2-GATEB-BATCH2-REMAINING-SPLIT-PLANNING-2026-06-29.md"
+      ]
+    },
+    {
+      "at": "2026-06-29T20:55:54+08:00",
+      "reason": "Batch 2 adj_factor additive-only candidate write completed and verified.",
+      "changes": [
+        "wrote adj_factor main candidate object",
+        "wrote adj_factor metadata-superseded quarantine object",
+        "verified main duplicate keys are zero",
+        "verified catalog/published/canonical tree hashes unchanged",
+        "catalog, pointer, physical migration, rollback, NAS/runtime/credential/Git remain unauthorized"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION-2026-06-29T203800+0800-OBJECT-MANIFEST.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION-2026-06-29T203800+0800-ROLLBACK-MANIFEST.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION-2026-06-29T203800+0800-ZERO-MUTATION-PROOF.json",
+        "process/checks/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION-2026-06-29.md"
+      ]
+    },
+    {
+      "at": "2026-06-29T20:57:45+08:00",
+      "reason": "Remaining Batch 2 decision plan created after adj_factor write closure.",
+      "changes": [
+        "events selected as next explicit write candidate",
+        "prices schema policy recommended as union schema with null fill",
+        "prices_limit and trade_status kept as single-dataset gates"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-DECISION-PLAN.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-DECISION-PLAN-2026-06-29.json",
+        "process/checks/CR139-W2-GATEB-BATCH2-REMAINING-DECISION-PLAN-2026-06-29.md"
+      ]
+    },
+    {
+      "at": "2026-06-29T21:08:08+08:00",
+      "reason": "Batch 2 events additive-only split candidate write completed and verified.",
+      "changes": [
+        "wrote events main candidate object",
+        "wrote events conflict/superseded quarantine object",
+        "verified main duplicate keys are zero",
+        "verified catalog/published/canonical tree hashes unchanged"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-EVENTS-WRITE-EXECUTION.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-EVENTS-WRITE-EXECUTION-2026-06-29T210500+0800-OBJECT-MANIFEST.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-EVENTS-WRITE-EXECUTION-2026-06-29T210500+0800-ROLLBACK-MANIFEST.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-EVENTS-WRITE-EXECUTION-2026-06-29T210500+0800-ZERO-MUTATION-PROOF.json",
+        "process/checks/CR139-W2-GATEB-BATCH2-EVENTS-WRITE-EXECUTION-2026-06-29.md"
+      ]
+    },
+    {
+      "at": "2026-06-29T21:36:24+08:00",
+      "reason": "Remaining Batch 2 candidate writes completed for prices, prices_limit, and trade_status.",
+      "changes": [
+        "prices union-schema/null-fill split candidate written and verified",
+        "prices_limit split candidate written and verified",
+        "trade_status split candidate written and verified",
+        "all Batch 2 Gate B candidate writes are now complete; catalog/pointer/migration remain unauthorized"
+      ],
+      "evidence_refs": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-PRICES-WRITE-EXECUTION.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-PRICES_LIMIT-WRITE-EXECUTION.index.json",
+        "process/evidence/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION.index.json",
+        "process/checks/CR139-W2-GATEB-BATCH2-PRICES-WRITE-EXECUTION-2026-06-29.md",
+        "process/checks/CR139-W2-GATEB-BATCH2-PRICES_LIMIT-WRITE-EXECUTION-2026-06-29.md",
+        "process/checks/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION-2026-06-29.md"
+      ]
+    }
+  ],
+  "liquidity_delete_guard": {
+    "guard_id": "GATEB-B2-LIQUIDITY-DELETE-GUARD-001",
+    "applies_to_decision": "D-GATEB-B2-LIQUIDITY-001",
+    "status": "required_before_any_candidate_object_delete",
+    "prior_object_manifest_ref": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-OBJECT-MANIFEST.json",
+    "allowed_delete_mode": "exact_manifest_object_list_only",
+    "forbidden_delete_modes": [
+      "glob",
+      "wildcard",
+      "rm -rf",
+      "directory_delete",
+      "recursive_delete",
+      "dataset_root_delete",
+      "run_id_prefix_delete",
+      "canonical_or_legacy_delete"
+    ],
+    "allowed_objects": [
+      {
+        "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/part-liquidity-capacity.parquet",
+        "expected_sha256": "07e36c7987713ad3424dd5942c90817b95e8c702f58748c5251f139d346a5a21",
+        "expected_size_bytes": 650227690,
+        "expected_row_count": 17091828,
+        "required_path_prefix": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/",
+        "required_run_id_exact": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+        "must_be_under_candidate": true
+      },
+      {
+        "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine/part-liquidity-capacity-conflict-groups.parquet",
+        "expected_sha256": "c1680cc06e8e8968418c4ead707f7aa6cffde2deaff16206aea614a4110822ce",
+        "expected_size_bytes": 136155,
+        "expected_row_count": 3660,
+        "required_path_prefix": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/",
+        "required_run_id_exact": "cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+        "must_be_under_candidate": true
+      }
+    ],
+    "pre_delete_checks": [
+      "path_is_relative_and_under_candidate_root",
+      "path_contains_exact_old_run_id_and_no_wildcards",
+      "path_does_not_contain_canonical_published_catalog_or_legacy_root",
+      "file_exists",
+      "sha256_matches_prior_manifest",
+      "size_bytes_matches_prior_manifest",
+      "parquet_row_count_matches_prior_manifest",
+      "resolved_target_root_does_not_exist_before_write"
+    ],
+    "post_delete_checks": [
+      "each_manifest_object_absent",
+      "old_run_id_directory_empty_or_absent",
+      "new_resolved_run_id_directory_not_deleted_by_cleanup",
+      "legacy_canonical_tree_hash_unchanged",
+      "catalog_hash_unchanged",
+      "published_tree_hash_unchanged"
+    ],
+    "expected_delete_count": 2,
+    "notes": "Future execution must delete each listed file individually after validation. It must not use glob patterns or rm -rf. Deletion remains unauthorized until a separate runtime authorization explicitly approves this guard."
+  }
+}

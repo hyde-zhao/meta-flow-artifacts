@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "packet_id": "CR139-W1.CP6.story-packets",
+  "created_at": "2026-06-28T20:00:18+08:00",
+  "created_by": "host-orchestrator",
+  "cr_id": "CR-139",
+  "wave_id": "CR139-W1",
+  "context_ref": "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+  "dispatch_mode": "inline-fallback",
+  "inline_fallback": {
+    "approved_by": "user",
+    "approved_at": "2026-06-28T20:00:18+08:00",
+    "reason": "Current Codex tool surface has no spawn_agent/resume_agent/send_input; user requested host-orchestrator to converge Wave1 context and advance CR139 Wave1."
+  },
+  "validation_mode": "static-only",
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "stories": [
+    {
+      "story_id": "CR139-S01",
+      "slug": "remediation-object-inventory",
+      "title": "T8 remediation object inventory",
+      "status": "verified",
+      "depends_on": [],
+      "design_evidence": "process/stories/CR139-S01-remediation-object-inventory-LLD.md",
+      "cp6_result": "process/checks/CP6-CR139-S01-remediation-object-inventory-CODING-DONE.md",
+      "cp7_result": "process/checks/CP7-CR139-S01-remediation-object-inventory-VERIFICATION-DONE.md",
+      "cp6_return": "process/returns/STORY-CR139-S01.CP6.return.json",
+      "cp7_return": "process/returns/STORY-CR139-S01.CP7.return.json",
+      "cp6_evidence": "process/evidence/STORY-CR139-S01.CP6.index.json",
+      "cp7_evidence": "process/evidence/STORY-CR139-S01.CP7.index.json",
+      "allowed_write_paths": [
+        "market_data/remediation_inventory.py",
+        "scripts/lake_inventory.py",
+        "tests/test_cr139_s01_inventory.py",
+        "process/stories/CR139-S01-remediation-object-inventory-IMPLEMENTATION.md",
+        "process/checks/CP6-CR139-S01-remediation-object-inventory-CODING-DONE.md",
+        "process/checks/CP7-CR139-S01-remediation-object-inventory-VERIFICATION-DONE.md",
+        "process/returns/STORY-CR139-S01.CP6.return.json",
+        "process/returns/STORY-CR139-S01.CP7.return.json",
+        "process/evidence/STORY-CR139-S01.CP6.index.json",
+        "process/evidence/STORY-CR139-S01.CP7.index.json"
+      ],
+      "forbidden_write_paths": [
+        "market_data/catalog.py",
+        "market_data/manifest.py",
+        "market_data/readers.py",
+        "market_data/lake_layout.py",
+        "market_data/normalization.py",
+        "market_data/publish.py",
+        "data/lake/**"
+      ],
+      "verification_commands": [
+        "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py"
+      ]
+    },
+    {
+      "story_id": "CR139-S02",
+      "slug": "remediation-baseline-golden-values",
+      "title": "T7 remediation baseline golden values",
+      "status": "verified",
+      "depends_on": ["CR139-S01"],
+      "required_upstream_status": "verified",
+      "upstream_evidence": [
+        "process/checks/CP7-CR139-S01-remediation-object-inventory-VERIFICATION-DONE.md",
+        "process/evidence/STORY-CR139-S01.CP7.index.json"
+      ],
+      "design_evidence": "process/stories/CR139-S02-remediation-baseline-golden-values-LLD.md",
+      "cp6_result": "process/checks/CP6-CR139-S02-remediation-baseline-golden-values-CODING-DONE.md",
+      "cp7_result": "process/checks/CP7-CR139-S02-remediation-baseline-golden-values-VERIFICATION-DONE.md",
+      "cp6_return": "process/returns/STORY-CR139-S02.CP6.return.json",
+      "cp7_return": "process/returns/STORY-CR139-S02.CP7.return.json",
+      "cp6_evidence": "process/evidence/STORY-CR139-S02.CP6.index.json",
+      "cp7_evidence": "process/evidence/STORY-CR139-S02.CP7.index.json",
+      "allowed_write_paths": [
+        "market_data/remediation_baseline.py",
+        "scripts/lake_golden_baseline.py",
+        "tests/test_cr139_s02_golden_baseline.py",
+        "tests/golden/**",
+        "process/stories/CR139-S02-remediation-baseline-golden-values-IMPLEMENTATION.md",
+        "process/checks/CP6-CR139-S02-remediation-baseline-golden-values-CODING-DONE.md",
+        "process/checks/CP7-CR139-S02-remediation-baseline-golden-values-VERIFICATION-DONE.md",
+        "process/returns/STORY-CR139-S02.CP6.return.json",
+        "process/returns/STORY-CR139-S02.CP7.return.json",
+        "process/evidence/STORY-CR139-S02.CP6.index.json",
+        "process/evidence/STORY-CR139-S02.CP7.index.json"
+      ],
+      "forbidden_write_paths": [
+        "market_data/catalog.py",
+        "market_data/manifest.py",
+        "market_data/readers.py",
+        "market_data/lake_layout.py",
+        "market_data/normalization.py",
+        "market_data/publish.py",
+        "data/lake/**"
+      ],
+      "verification_commands": [
+        "uv run --python 3.11 pytest -q tests/test_cr139_s02_golden_baseline.py"
+      ]
+    },
+    {
+      "story_id": "CR139-S03",
+      "slug": "duplicate-fingerprint-profiling",
+      "title": "C2a duplicate fingerprint profiling",
+      "status": "verified",
+      "depends_on": ["CR139-S01", "CR139-S02"],
+      "required_upstream_status": "verified",
+      "upstream_evidence": [
+        "process/checks/CP7-CR139-S01-remediation-object-inventory-VERIFICATION-DONE.md",
+        "process/evidence/STORY-CR139-S01.CP7.index.json",
+        "process/checks/CP7-CR139-S02-remediation-baseline-golden-values-VERIFICATION-DONE.md",
+        "process/evidence/STORY-CR139-S02.CP7.index.json"
+      ],
+      "design_evidence": "process/stories/CR139-S03-duplicate-fingerprint-profiling-LLD.md",
+      "cp6_result": "process/checks/CP6-CR139-S03-duplicate-fingerprint-profiling-CODING-DONE.md",
+      "cp7_result": "process/checks/CP7-CR139-S03-duplicate-fingerprint-profiling-VERIFICATION-DONE.md",
+      "cp6_return": "process/returns/STORY-CR139-S03.CP6.return.json",
+      "cp7_return": "process/returns/STORY-CR139-S03.CP7.return.json",
+      "cp6_evidence": "process/evidence/STORY-CR139-S03.CP6.index.json",
+      "cp7_evidence": "process/evidence/STORY-CR139-S03.CP7.index.json",
+      "allowed_write_paths": [
+        "market_data/readers.py",
+        "tests/test_cr139_duplicate_fingerprint_profiling.py",
+        "process/stories/CR139-S03-duplicate-fingerprint-profiling-IMPLEMENTATION.md",
+        "process/checks/CP6-CR139-S03-duplicate-fingerprint-profiling-CODING-DONE.md",
+        "process/checks/CP7-CR139-S03-duplicate-fingerprint-profiling-VERIFICATION-DONE.md",
+        "process/returns/STORY-CR139-S03.CP6.return.json",
+        "process/returns/STORY-CR139-S03.CP7.return.json",
+        "process/evidence/STORY-CR139-S03.CP6.index.json",
+        "process/evidence/STORY-CR139-S03.CP7.index.json"
+      ],
+      "forbidden_write_paths": [
+        "market_data/catalog.py",
+        "market_data/manifest.py",
+        "market_data/lake_layout.py",
+        "market_data/normalization.py",
+        "market_data/publish.py",
+        "data/lake/**"
+      ],
+      "verification_commands": [
+        "uv run --python 3.11 pytest -q tests/test_cr139_duplicate_fingerprint_profiling.py"
+      ]
+    },
+    {
+      "story_id": "CR139-S04",
+      "slug": "published-pointer-read-selector",
+      "title": "V1 published pointer/read selector",
+      "status": "verified",
+      "depends_on": ["CR139-S01", "CR139-S02", "CR139-S03"],
+      "required_upstream_status": "verified",
+      "upstream_evidence": [
+        "process/checks/CP7-CR139-S01-remediation-object-inventory-VERIFICATION-DONE.md",
+        "process/evidence/STORY-CR139-S01.CP7.index.json",
+        "process/checks/CP7-CR139-S02-remediation-baseline-golden-values-VERIFICATION-DONE.md",
+        "process/evidence/STORY-CR139-S02.CP7.index.json",
+        "process/checks/CP7-CR139-S03-duplicate-fingerprint-profiling-VERIFICATION-DONE.md",
+        "process/evidence/STORY-CR139-S03.CP7.index.json"
+      ],
+      "design_evidence": "process/stories/CR139-S04-published-pointer-read-selector.md",
+      "cp6_result": "process/checks/CP6-CR139-S04-published-pointer-read-selector-CODING-DONE.md",
+      "cp7_result": "process/checks/CP7-CR139-S04-published-pointer-read-selector-VERIFICATION-DONE.md",
+      "cp6_return": "process/returns/STORY-CR139-S04.CP6.return.json",
+      "cp7_return": "process/returns/STORY-CR139-S04.CP7.return.json",
+      "cp6_evidence": "process/evidence/STORY-CR139-S04.CP6.index.json",
+      "cp7_evidence": "process/evidence/STORY-CR139-S04.CP7.index.json",
+      "allowed_write_paths": [
+        "market_data/publish.py",
+        "market_data/catalog.py",
+        "market_data/cli.py",
+        "tests/test_cr139_published_pointer.py",
+        "process/stories/CR139-S04-published-pointer-read-selector-IMPLEMENTATION.md",
+        "process/checks/CP6-CR139-S04-published-pointer-read-selector-CODING-DONE.md",
+        "process/checks/CP7-CR139-S04-published-pointer-read-selector-VERIFICATION-DONE.md",
+        "process/returns/STORY-CR139-S04.CP6.return.json",
+        "process/returns/STORY-CR139-S04.CP7.return.json",
+        "process/evidence/STORY-CR139-S04.CP6.index.json",
+        "process/evidence/STORY-CR139-S04.CP7.index.json"
+      ],
+      "forbidden_write_paths": [
+        "market_data/readers.py",
+        "market_data/manifest.py",
+        "market_data/lake_layout.py",
+        "market_data/normalization.py",
+        "data/lake/**"
+      ],
+      "verification_commands": [
+        "uv run --python 3.11 pytest -q tests/test_cr139_published_pointer.py"
+      ],
+      "hard_gate": "Published pointer advance execution remains unauthorized; tests must use fixture/dry-run only."
+    },
+    {
+      "story_id": "CR139-S05",
+      "slug": "pit-as-of-reader",
+      "title": "C1 PIT as-of reader",
+      "status": "verified",
+      "depends_on": ["CR139-S04"],
+      "required_upstream_status": "verified",
+      "upstream_evidence": [
+        "process/checks/CP7-CR139-S04-published-pointer-read-selector-VERIFICATION-DONE.md",
+        "process/evidence/STORY-CR139-S04.CP7.index.json"
+      ],
+      "design_evidence": "process/stories/CR139-S05-pit-as-of-reader.md",
+      "cp6_result": "process/checks/CP6-CR139-S05-pit-as-of-reader-CODING-DONE.md",
+      "cp7_result": "process/checks/CP7-CR139-S05-pit-as-of-reader-VERIFICATION-DONE.md",
+      "cp6_return": "process/returns/STORY-CR139-S05.CP6.return.json",
+      "cp7_return": "process/returns/STORY-CR139-S05.CP7.return.json",
+      "cp6_evidence": "process/evidence/STORY-CR139-S05.CP6.index.json",
+      "cp7_evidence": "process/evidence/STORY-CR139-S05.CP7.index.json",
+      "allowed_write_paths": [
+        "market_data/readers.py",
+        "tests/test_cr139_pit_as_of_reader.py",
+        "process/stories/CR139-S05-pit-as-of-reader-IMPLEMENTATION.md",
+        "process/checks/CP6-CR139-S05-pit-as-of-reader-CODING-DONE.md",
+        "process/checks/CP7-CR139-S05-pit-as-of-reader-VERIFICATION-DONE.md",
+        "process/returns/STORY-CR139-S05.CP6.return.json",
+        "process/returns/STORY-CR139-S05.CP7.return.json",
+        "process/evidence/STORY-CR139-S05.CP6.index.json",
+        "process/evidence/STORY-CR139-S05.CP7.index.json"
+      ],
+      "forbidden_write_paths": [
+        "market_data/catalog.py",
+        "market_data/manifest.py",
+        "market_data/lake_layout.py",
+        "market_data/normalization.py",
+        "market_data/publish.py",
+        "data/lake/**"
+      ],
+      "verification_commands": [
+        "uv run --python 3.11 pytest -q tests/test_cr139_pit_as_of_reader.py"
+      ],
+      "hard_gate": "No writes to market_data/catalog.py."
+    },
+    {
+      "story_id": "CR139-S06",
+      "slug": "unified-panel-reader",
+      "title": "R1 unified panel reader",
+      "status": "verified",
+      "depends_on": ["CR139-S05"],
+      "required_upstream_status": "verified",
+      "upstream_evidence": [
+        "process/checks/CP7-CR139-S05-pit-as-of-reader-VERIFICATION-DONE.md",
+        "process/evidence/STORY-CR139-S05.CP7.index.json"
+      ],
+      "design_evidence": "process/stories/CR139-S06-unified-panel-reader-LLD.md",
+      "cp6_result": "process/checks/CP6-CR139-S06-unified-panel-reader-CODING-DONE.md",
+      "cp7_result": "process/checks/CP7-CR139-S06-unified-panel-reader-VERIFICATION-DONE.md",
+      "cp6_return": "process/returns/STORY-CR139-S06.CP6.return.json",
+      "cp7_return": "process/returns/STORY-CR139-S06.CP7.return.json",
+      "cp6_evidence": "process/evidence/STORY-CR139-S06.CP6.index.json",
+      "cp7_evidence": "process/evidence/STORY-CR139-S06.CP7.index.json",
+      "allowed_write_paths": [
+        "market_data/readers.py",
+        "tests/test_cr139_panel_reader.py",
+        "process/stories/CR139-S06-unified-panel-reader-IMPLEMENTATION.md",
+        "process/checks/CP6-CR139-S06-unified-panel-reader-CODING-DONE.md",
+        "process/checks/CP7-CR139-S06-unified-panel-reader-VERIFICATION-DONE.md",
+        "process/returns/STORY-CR139-S06.CP6.return.json",
+        "process/returns/STORY-CR139-S06.CP7.return.json",
+        "process/evidence/STORY-CR139-S06.CP6.index.json",
+        "process/evidence/STORY-CR139-S06.CP7.index.json"
+      ],
+      "forbidden_write_paths": [
+        "market_data/catalog.py",
+        "market_data/manifest.py",
+        "market_data/lake_layout.py",
+        "market_data/normalization.py",
+        "market_data/publish.py",
+        "data/lake/**"
+      ],
+      "verification_commands": [
+        "uv run --python 3.11 pytest -q tests/test_cr139_panel_reader.py"
+      ],
+      "hard_gate": "No writes to market_data/catalog.py."
+    },
+    {
+      "story_id": "CR139-S07",
+      "slug": "read-layer-dedup",
+      "title": "C2b read-layer dedup",
+      "status": "verified",
+      "depends_on": ["CR139-S06"],
+      "required_upstream_status": "verified",
+      "upstream_evidence": [
+        "process/checks/CP7-CR139-S06-unified-panel-reader-VERIFICATION-DONE.md",
+        "process/evidence/STORY-CR139-S06.CP7.index.json"
+      ],
+      "design_evidence": "process/stories/CR139-S07-read-layer-dedup-LLD.md",
+      "cp6_result": "process/checks/CP6-CR139-S07-read-layer-dedup-CODING-DONE.md",
+      "cp7_result": "process/checks/CP7-CR139-S07-read-layer-dedup-VERIFICATION-DONE.md",
+      "cp6_return": "process/returns/STORY-CR139-S07.CP6.return.json",
+      "cp7_return": "process/returns/STORY-CR139-S07.CP7.return.json",
+      "cp6_evidence": "process/evidence/STORY-CR139-S07.CP6.index.json",
+      "cp7_evidence": "process/evidence/STORY-CR139-S07.CP7.index.json",
+      "allowed_write_paths": [
+        "market_data/readers.py",
+        "tests/test_cr139_read_layer_dedup.py",
+        "process/stories/CR139-S07-read-layer-dedup-IMPLEMENTATION.md",
+        "process/checks/CP6-CR139-S07-read-layer-dedup-CODING-DONE.md",
+        "process/checks/CP7-CR139-S07-read-layer-dedup-VERIFICATION-DONE.md",
+        "process/returns/STORY-CR139-S07.CP6.return.json",
+        "process/returns/STORY-CR139-S07.CP7.return.json",
+        "process/evidence/STORY-CR139-S07.CP6.index.json",
+        "process/evidence/STORY-CR139-S07.CP7.index.json"
+      ],
+      "forbidden_write_paths": [
+        "market_data/catalog.py",
+        "market_data/manifest.py",
+        "market_data/lake_layout.py",
+        "market_data/normalization.py",
+        "market_data/publish.py",
+        "data/lake/**"
+      ],
+      "verification_commands": [
+        "uv run --python 3.11 pytest -q tests/test_cr139_read_layer_dedup.py"
+      ],
+      "hard_gate": "No physical partition migration; read-layer only."
+    },
+    {
+      "story_id": "CR139-S08",
+      "slug": "runid-partition-key-governance",
+      "title": "N1 run_id partition key governance",
+      "status": "verified",
+      "depends_on": ["CR139-S01", "CR139-S02", "CR139-S03", "CR139-S07"],
+      "required_upstream_status": "verified",
+      "upstream_evidence": [
+        "process/checks/CP7-CR139-S01-remediation-object-inventory-VERIFICATION-DONE.md",
+        "process/checks/CP7-CR139-S02-remediation-baseline-golden-values-VERIFICATION-DONE.md",
+        "process/checks/CP7-CR139-S03-duplicate-fingerprint-profiling-VERIFICATION-DONE.md",
+        "process/checks/CP7-CR139-S07-read-layer-dedup-VERIFICATION-DONE.md",
+        "process/evidence/STORY-CR139-S07.CP7.index.json"
+      ],
+      "design_evidence": "process/stories/CR139-S08-runid-partition-key-governance-LLD.md",
+      "cp6_result": "process/checks/CP6-CR139-S08-runid-partition-key-governance-CODING-DONE.md",
+      "cp7_result": "process/checks/CP7-CR139-S08-runid-partition-key-governance-VERIFICATION-DONE.md",
+      "cp6_return": "process/returns/STORY-CR139-S08.CP6.return.json",
+      "cp7_return": "process/returns/STORY-CR139-S08.CP7.return.json",
+      "cp6_evidence": "process/evidence/STORY-CR139-S08.CP6.index.json",
+      "cp7_evidence": "process/evidence/STORY-CR139-S08.CP7.index.json",
+      "allowed_write_paths": [
+        "market_data/lake_layout.py",
+        "market_data/normalization.py",
+        "market_data/cli.py",
+        "tests/test_cr139_s08_partition_governance.py",
+        "process/stories/CR139-S08-runid-partition-key-governance-IMPLEMENTATION.md",
+        "process/checks/CP6-CR139-S08-runid-partition-key-governance-CODING-DONE.md",
+        "process/checks/CP7-CR139-S08-runid-partition-key-governance-VERIFICATION-DONE.md",
+        "process/returns/STORY-CR139-S08.CP6.return.json",
+        "process/returns/STORY-CR139-S08.CP7.return.json",
+        "process/evidence/STORY-CR139-S08.CP6.index.json",
+        "process/evidence/STORY-CR139-S08.CP7.index.json"
+      ],
+      "forbidden_write_paths": [
+        "market_data/catalog.py",
+        "market_data/manifest.py",
+        "market_data/publish.py",
+        "data/lake/**"
+      ],
+      "verification_commands": [
+        "uv run --python 3.11 pytest -q tests/test_cr139_s08_partition_governance.py",
+        "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py tests/test_cr139_duplicate_fingerprint_profiling.py tests/test_cr139_published_pointer.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_panel_reader.py tests/test_cr139_read_layer_dedup.py tests/test_cr139_s08_partition_governance.py tests/test_cr014_catalog_publish_gate.py tests/test_cr014_p0_pipeline_contract.py"
+      ],
+      "hard_gate": "Physical partition migration execution is not authorized."
+    }
+  ]
+}

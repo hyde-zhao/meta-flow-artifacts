@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch1b_blocker_planning",
+  "created_at": "2026-06-29T16:18:20+08:00",
+  "mode": "read_only_blocker_planning",
+  "status": "pass_with_risk_ready_for_batch1b_write_authorization_review",
+  "lake_root": "/home/hyde/data/quant-lab/data-lake",
+  "source_refs": {
+    "readiness_detail": "process/evidence/CR139-W2-GATEB-BATCH1B-PREWRITE-READINESS-2026-06-29T160713+0800.json",
+    "readiness_index": "process/evidence/CR139-W2-GATEB-BATCH1B-PREWRITE-READINESS.index.json",
+    "write_plan": "process/plans/CR139-W2-GATEB-PER-DATASET-WRITE-PLAN.json"
+  },
+  "datasets": [
+    "index_members",
+    "index_weights"
+  ],
+  "index_members_exact_dedup_plan": {
+    "dataset": "index_members",
+    "planning_result": "ready_for_exact_dedup_candidate_write_review",
+    "candidate_write_mode": "additive_only_exact_full_row_dedup",
+    "source_row_count": 295800,
+    "retained_row_count": 283500,
+    "dropped_exact_duplicate_row_count": 12300,
+    "unique_full_row_count": 283500,
+    "exact_duplicate_group_count": 6300,
+    "dedup_retain_rule": "sort by _cr139_source_file ASC, _cr139_source_row_number ASC, then drop exact full-row duplicates keeping first",
+    "dedup_rationale": "Duplicates are exact full-row copies under the physical canonical root. Retaining the first source-file/source-row occurrence is deterministic and avoids inventing business precedence across identical rows.",
+    "quarantine_recommended": false,
+    "quarantine_rationale": "No quarantine is recommended because dropped rows are exact copies of retained rows across all data columns.",
+    "candidate_relative_path": "candidate/parquet/dataset=index_members/schema_version=1.0/run_id=cr139-w2-index_members-legacy_lake-20260629-canonical",
+    "planned_run_id": "cr139-w2-index_members-legacy_lake-20260629-canonical",
+    "planned_output_file": "part-index-members.parquet",
+    "candidate_shape": "one parquet object under the planned CR139 run-id candidate path, containing retained unique full rows only",
+    "source_file_count": 8,
+    "source_files": [
+      {
+        "relative_path": "canonical/index_members/1.0/run_id=cr010-main-smoke-20260522T161025-index-members/part-b1.parquet",
+        "size_bytes": 9492,
+        "sha256": "8c55076d45a2fd08ce1836d68cf4073acc747ec85ba7e936beaf1053b42ade14"
+      },
+      {
+        "relative_path": "canonical/index_members/1.0/run_id=cr010-tushare-only-window-20250211-20260218-index-members/part-index-members.parquet",
+        "size_bytes": 18392,
+        "sha256": "073a7e253c99abaf06e8761e2df98e53b3cc650400b7d87277002422e719d002"
+      },
+      {
+        "relative_path": "canonical/index_members/1.0/run_id=cr012-limited-window-merged-20260524T152036Z/part-cr012-index_members.parquet",
+        "size_bytes": 18696,
+        "sha256": "24251c73f7443533050d4a2ad2c6adeb006a5774114d22b5fcdba1e75705fd7d"
+      },
+      {
+        "relative_path": "canonical/index_members/1.0/run_id=cr012-limited-window-merged-20260524T152331Z/part-cr012-index_members.parquet",
+        "size_bytes": 18696,
+        "sha256": "24251c73f7443533050d4a2ad2c6adeb006a5774114d22b5fcdba1e75705fd7d"
+      },
+      {
+        "relative_path": "canonical/index_members/1.0/run_id=run-cr010-index-members-probe-20260522/part-index-members-202401.parquet",
+        "size_bytes": 9492,
+        "sha256": "8c55076d45a2fd08ce1836d68cf4073acc747ec85ba7e936beaf1053b42ade14"
+      },
+      {
+        "relative_path": "canonical/index_members/1.0/run_id=run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529/part-benchmark-index-members.parquet",
+        "size_bytes": 511523,
+        "sha256": "a5a955047b73415d5bb65370151a9cd7cda3fd1981955e60b6d74f290d628a44"
+      },
+      {
+        "relative_path": "canonical/index_members/1.0/run_id=run-jqdata-index-members-smoke-20260522/part-jqdata-hs300-20250211.parquet",
+        "size_bytes": 14693,
+        "sha256": "3e87021eeaf23c5fc61ba42d41ba850367e6316386b530457da31dea2b412cda"
+      },
+      {
+        "relative_path": "canonical/index_members/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-benchmark-index-members.parquet",
+        "size_bytes": 15837,
+        "sha256": "11a8192973de7797056b6dbb7843086e019abecb918a2a69ed697daf2151f146"
+      }
+    ],
+    "retained_row_hash_sha256": "b3e60c1117e6da5b8f241138f358b22cd79f75d10a22ad1ad402c1ade5423079",
+    "dropped_by_source_run_id": {
+      "cr010-prod-window-20250211-20260218-index-weights-smoke-v2": 300,
+      "cr010-tushare-only-window-20250211-20260218-index-members": 12000
+    },
+    "dropped_by_source_file": {
+      "canonical/index_members/1.0/run_id=cr012-limited-window-merged-20260524T152036Z/part-cr012-index_members.parquet": 6000,
+      "canonical/index_members/1.0/run_id=cr012-limited-window-merged-20260524T152331Z/part-cr012-index_members.parquet": 6300
+    }
+  },
+  "index_weights_mixed_pit_semantics_plan": {
+    "dataset": "index_weights",
+    "planning_result": "ready_for_mixed_pit_preserving_candidate_write_review",
+    "candidate_write_mode": "additive_only_copy_preserve_row_level_pit_status",
+    "source_row_count": 283800,
+    "retained_row_count": 283800,
+    "dropped_row_count": 0,
+    "full_row_duplicate_row_over_unique_count": 0,
+    "candidate_relative_path": "candidate/parquet/dataset=index_weights/schema_version=1.0/run_id=cr139-w2-index_weights-legacy_lake-20260629-canonical",
+    "planned_run_id": "cr139-w2-index_weights-legacy_lake-20260629-canonical",
+    "planned_output_file": "part-index-weights.parquet",
+    "candidate_shape": "one parquet object under the planned CR139 run-id candidate path, preserving all source rows and row-level pit_status values",
+    "source_file_count": 6,
+    "source_files": [
+      {
+        "relative_path": "canonical/index_weights/1.0/run_id=cr010-aux-smoke-20260522T161235-index-weights/part-b1.parquet",
+        "size_bytes": 15702,
+        "sha256": "c3a3c935973e40b526d1697a25bad4848b68a5f12681fa4e6bb51e32557503d6"
+      },
+      {
+        "relative_path": "canonical/index_weights/1.0/run_id=cr010-prod-window-20250211-20260218-index-weights-smoke/part-jqdata-index-weights-20250211.parquet",
+        "size_bytes": 14776,
+        "sha256": "fc449698b5613af207ffdc417d9a1a6fa0afebacc27d0d7f2a16dd1431223832"
+      },
+      {
+        "relative_path": "canonical/index_weights/1.0/run_id=cr010-prod-window-20250211-20260218-index-weights-smoke-v2/part-jqdata-index-weights-20250211.parquet",
+        "size_bytes": 14797,
+        "sha256": "4041384d5c2767ad83b0d2b422326a391b78689579b42c06c65dcaee62c1729e"
+      },
+      {
+        "relative_path": "canonical/index_weights/1.0/run_id=cr010-tushare-only-window-20250211-20260218-index-weights/part-index-weights.parquet",
+        "size_bytes": 40547,
+        "sha256": "d0d3d58630dce9b85dbeae4c70d8e8112d901ad06a5d77c948aab60c45a4b84f"
+      },
+      {
+        "relative_path": "canonical/index_weights/1.0/run_id=run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529/part-benchmark-index-weights.parquet",
+        "size_bytes": 825045,
+        "sha256": "d32c8b4cf30549b338b3574a921a8ad858f5ab99bcfd7a07452bc488e9b874a1"
+      },
+      {
+        "relative_path": "canonical/index_weights/1.0/run_id=run-stage3-data-update-20260530-20260626-aux-20260627/part-benchmark-index-weights.parquet",
+        "size_bytes": 16154,
+        "sha256": "d8c21a39c726c833d97c2e5d4dd76d7423ece5c21d3c0973fa1fd9880855df91"
+      }
+    ],
+    "row_hash_sha256": "93ab51c5abacbac638b8abcdcc91398970759a127be5249656de48cdbaa67f61",
+    "pit_status_distribution": {
+      "pit_available": 283500,
+      "pit_incomplete": 300
+    },
+    "pit_status_by_source_run_id": {
+      "cr010-aux-smoke-20260522T161235-index-weights": {
+        "pit_incomplete": 300
+      },
+      "cr010-prod-window-20250211-20260218-index-weights-smoke": {
+        "pit_available": 300
+      },
+      "cr010-prod-window-20250211-20260218-index-weights-smoke-v2": {
+        "pit_available": 300
+      },
+      "cr010-tushare-only-window-20250211-20260218-index-weights": {
+        "pit_available": 6000
+      },
+      "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529": {
+        "pit_available": 276600
+      },
+      "run-stage3-data-update-20260530-20260626-aux-20260627": {
+        "pit_available": 300
+      }
+    },
+    "pit_status_by_index_code": {
+      "000852.SH": {
+        "pit_available": 70000
+      },
+      "000905.SH": {
+        "pit_available": 68000
+      },
+      "000985.SH": {
+        "pit_available": 72000
+      },
+      "399300.SZ": {
+        "pit_available": 73500,
+        "pit_incomplete": 300
+      }
+    },
+    "weight_stats": {
+      "non_null_count": 283800,
+      "null_count": 0,
+      "min": 0.0,
+      "max": 7.803
+    },
+    "semantics_decision": "preserve mixed row-level pit_status; do not collapse dataset-level truth to fully pit_available",
+    "reader_implication": "Downstream readers must treat index_weights as weight observations with row-level PIT metadata. It must not substitute for index_members constituency membership and must not be used to claim complete PIT universe coverage where pit_incomplete rows are present.",
+    "write_authorization_condition": "Human reviewer must accept mixed PIT semantics and zero-substitution boundary before candidate write."
+  },
+  "planning_checks": {
+    "readiness_blocker_inputs_available": true,
+    "index_members_exact_dedup_plan_generated": true,
+    "index_members_quarantine_not_required_for_exact_copies": true,
+    "index_weights_mixed_pit_distribution_recorded": true,
+    "index_weights_zero_full_row_duplicates_preserved": true,
+    "index_weights_no_membership_substitution_boundary_recorded": true,
+    "write_plan_updated_for_batch1b_blockers": true,
+    "no_lake_write_executed": true,
+    "no_catalog_pointer_migration_runtime_nas_credential_git": true
+  },
+  "failed_checks": [],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "authorization_effect": "planning_only_no_write_authorized",
+  "ready_for_write_authorization_review": [
+    "index_members",
+    "index_weights"
+  ],
+  "next_gate": "Gate B Batch 1B write authorization review",
+  "required_next_approval": "authorize Gate B Batch 1B index_members exact-dedup candidate write and index_weights mixed-PIT-preserving candidate copy only",
+  "non_authorized_scope": [
+    "lake write",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS/QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "rollback deletion"
+  ]
+}

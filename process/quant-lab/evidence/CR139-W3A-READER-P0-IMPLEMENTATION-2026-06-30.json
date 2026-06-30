@@ -1,0 +1,118 @@
+{
+  "active_catalog": {
+    "after_sha256": "0ac6c1b8da8b7624f3d0dfbf879f1741254284d1faa03d42a1e01e4188c5c989",
+    "before_sha256": "0ac6c1b8da8b7624f3d0dfbf879f1741254284d1faa03d42a1e01e4188c5c989",
+    "path": "/home/hyde/data/quant-lab/data-lake/catalog/catalog.json",
+    "unchanged": true
+  },
+  "active_dataset_metadata_results": [
+    {
+      "candidate_path_leak": false,
+      "canonical_path": "canonical/liquidity_capacity/1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved/part-liquidity-capacity.parquet",
+      "catalog_coverage_denominator": 17093658,
+      "dataset": "liquidity_capacity",
+      "missing_registered_columns": [],
+      "parquet_file_count": 1,
+      "parquet_row_count": 17093658,
+      "passed": true,
+      "path_exists": true,
+      "published": true,
+      "row_count_matches_catalog": true
+    },
+    {
+      "candidate_path_leak": false,
+      "canonical_path": "canonical/market_cap/1.0/run_id=cr139-w2-market_cap-legacy_lake-20260629-resolved/part-market-cap.parquet",
+      "catalog_coverage_denominator": 17001327,
+      "dataset": "market_cap",
+      "missing_registered_columns": [],
+      "parquet_file_count": 1,
+      "parquet_row_count": 17001327,
+      "passed": true,
+      "path_exists": true,
+      "published": true,
+      "row_count_matches_catalog": true
+    }
+  ],
+  "env_root_keys_checked": {
+    "MARKET_DATA_LAKE_ARCHIVE_ROOT": {
+      "present": true
+    },
+    "MARKET_DATA_LAKE_BACKUP_ROOT": {
+      "present": true
+    },
+    "MARKET_DATA_LAKE_RESTORE_ROOT": {
+      "present": true
+    },
+    "MARKET_DATA_LAKE_ROOT": {
+      "present": true
+    }
+  },
+  "fixture_read_dataset_results": [
+    {
+      "dataset": "liquidity_capacity",
+      "issue_codes": [],
+      "row_count": 1,
+      "status": "available",
+      "unknown_dataset": false
+    },
+    {
+      "dataset": "market_cap",
+      "issue_codes": [],
+      "row_count": 1,
+      "status": "available",
+      "unknown_dataset": false
+    }
+  ],
+  "generated_at": "2026-06-30T00:47:12.627152+00:00",
+  "large_table_read_policy": {
+    "active_lake_validation_used": "catalog pointer + parquet metadata row count + schema columns",
+    "full_read_dataset_on_active_lake_executed": false,
+    "functional_reader_validation_used": "small temporary lake fixture with read_dataset()",
+    "reason": "Avoid loading two ~17M-row datasets into memory during contract registration verification."
+  },
+  "operation_counts": {
+    "catalog_write": 0,
+    "credential_print_or_persist": 0,
+    "git_remote": 0,
+    "lake_write": 0,
+    "manifest_append": 0,
+    "nas_operation": 0,
+    "provider_catalog_write": 0,
+    "runtime_operation": 0
+  },
+  "registered_datasets": {
+    "liquidity_capacity": {
+      "column_count": 16,
+      "in_datasets": true,
+      "in_schema_registry": true,
+      "key_columns": [
+        "trade_date",
+        "symbol"
+      ]
+    },
+    "market_cap": {
+      "column_count": 25,
+      "in_datasets": true,
+      "in_schema_registry": true,
+      "key_columns": [
+        "trade_date",
+        "symbol"
+      ]
+    }
+  },
+  "result": "pass_w3a_reader_p0_implementation",
+  "run_id": "CR139-W3A-READER-P0-IMPLEMENTATION-2026-06-30",
+  "schema": "cr139.w3a.reader_p0_implementation_verification.v1",
+  "verification_commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_cr139_w3_reader_p0_support.py",
+      "result": "pass",
+      "tests_passed": 3
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_market_data_tushare_datasets.py",
+      "result": "pass",
+      "tests_passed": 13
+    }
+  ]
+}

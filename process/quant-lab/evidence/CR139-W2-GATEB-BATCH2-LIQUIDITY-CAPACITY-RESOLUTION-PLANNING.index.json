@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch2_liquidity_capacity_resolution_planning",
+  "created_at": "2026-06-29T19:22:27+08:00",
+  "status": "pass_resolution_plan_ready_for_write_authorization_review",
+  "mode": "read_only_resolution_planning_no_lake_write",
+  "authorized_scope": "liquidity_capacity metadata-only conflict resolution planning only; no lake write",
+  "dataset": "liquidity_capacity",
+  "summary": {
+    "resolution_rule": {
+      "type": "source_precedence_for_metadata_only_duplicates",
+      "selected_source_run_id": "run-cr034-chapter3-backfill-2000",
+      "superseded_source_run_id": "run-cr034-chapter3-smoke-20000104-20000105",
+      "precondition": "all business columns identical within duplicate key group",
+      "business_columns": [
+        "volume",
+        "amount",
+        "amount_unit",
+        "adv20_amount",
+        "adv20_volume",
+        "turnover_rate",
+        "turnover_rate_f"
+      ],
+      "metadata_columns": [
+        "source",
+        "source_interface",
+        "source_run_id",
+        "available_at",
+        "available_at_rule",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "rationale": "The selected run is the full year backfill run; the superseded run is a smoke-window run. Business values are identical for all 1,830 duplicate key groups, so source precedence changes lineage selection but not business values."
+    },
+    "counts": {
+      "source_rows": 17095488,
+      "non_conflict_rows": 17091828,
+      "duplicate_key_group_count": 1830,
+      "duplicate_rows": 3660,
+      "selected_rows_to_main": 1830,
+      "superseded_rows_to_quarantine": 1830,
+      "future_resolved_main_row_count": 17093658,
+      "future_resolved_quarantine_row_count": 1830,
+      "future_total_rows_preserved": 17095488,
+      "dropped_row_count": 0
+    },
+    "future_resolved_candidate": {
+      "run_id": "cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved",
+      "candidate_root_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved",
+      "main_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved/part-liquidity-capacity.parquet",
+      "quarantine_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-resolved/quarantine/part-liquidity-capacity-superseded-smoke.parquet",
+      "target_root_exists_now": false,
+      "write_mode_if_later_authorized": "additive_only_new_resolved_candidate_path_no_in_place_overwrite"
+    },
+    "source_run_id_pair_distribution": [
+      {
+        "source_run_ids": [
+          "run-cr034-chapter3-backfill-2000",
+          "run-cr034-chapter3-smoke-20000104-20000105"
+        ],
+        "group_count": 1830
+      }
+    ]
+  },
+  "checks": {
+    "mode_is_read_only": true,
+    "source_row_count_matches_prior_write": true,
+    "duplicate_key_group_count_1830": true,
+    "duplicate_rows_3660": true,
+    "all_groups_size_2": true,
+    "all_groups_business_columns_identical": true,
+    "selected_run_present_once_per_group": true,
+    "superseded_run_present_once_per_group": true,
+    "resolved_target_root_absent": true,
+    "current_quarantine_candidate_left_untouched": true,
+    "operation_counts_zero": true
+  },
+  "failed_checks": [],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "evidence_refs": {
+    "detail": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-RESOLUTION-PLANNING-2026-06-29T192227+0800.json",
+    "prior_write_index": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION.index.json",
+    "batch2_deep_profile_index": "process/evidence/CR139-W2-GATEB-BATCH2-DEEP-PROFILE.index.json",
+    "write_plan_json": "process/plans/CR139-W2-GATEB-PER-DATASET-WRITE-PLAN.json",
+    "check": "process/checks/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-RESOLUTION-PLANNING-2026-06-29.md"
+  },
+  "decision_required_before_write": true,
+  "recommended_next_authorization": "authorize Gate B Batch 2 liquidity_capacity resolved candidate write only, using selected backfill rows for 1,830 metadata-only duplicate keys and quarantining 1,830 superseded smoke rows",
+  "non_authorized_scope": [
+    "lake write",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "rollback deletion",
+    "in-place overwrite of current quarantine candidate"
+  ]
+}

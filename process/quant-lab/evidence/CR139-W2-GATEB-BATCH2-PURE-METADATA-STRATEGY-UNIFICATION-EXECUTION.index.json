@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch2_pure_metadata_strategy_unification_execution",
+  "created_at": "2026-06-29T19:54:46+08:00",
+  "status": "pass_with_risk_pure_metadata_strategy_unification_verified",
+  "authorized_scope": "authorize Gate B Batch 2 pure metadata strategy-unification execution only for liquidity_capacity and market_cap, with GATEB-B2-LIQUIDITY-DELETE-GUARD-001 exact prior-manifest delete guard",
+  "datasets": [
+    "liquidity_capacity",
+    "market_cap"
+  ],
+  "deleted_old_candidate_objects": [
+    {
+      "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/part-liquidity-capacity.parquet",
+      "deleted": true,
+      "method": "Path.unlink_exact_manifest_object"
+    },
+    {
+      "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine/part-liquidity-capacity-conflict-groups.parquet",
+      "deleted": true,
+      "method": "Path.unlink_exact_manifest_object"
+    }
+  ],
+  "dataset_results_summary": [
+    {
+      "dataset": "liquidity_capacity",
+      "source_row_count": 17095488,
+      "duplicate_key_group_count": 1830,
+      "main_row_count": 17093658,
+      "quarantine_row_count": 1830,
+      "combined_row_count": 17095488,
+      "dropped_row_count": 0,
+      "main_duplicate_row_over_unique_count": 0,
+      "quarantine_key_group_count": 0
+    },
+    {
+      "dataset": "market_cap",
+      "source_row_count": 17108103,
+      "duplicate_key_group_count": 106776,
+      "main_row_count": 17001327,
+      "quarantine_row_count": 106776,
+      "combined_row_count": 17108103,
+      "dropped_row_count": 0,
+      "main_duplicate_row_over_unique_count": 0,
+      "quarantine_key_group_count": 0
+    }
+  ],
+  "object_count": 4,
+  "operation_counts": {
+    "provider_fetch": 0,
+    "candidate_object_delete": 2,
+    "lake_write": 4,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "checks": {
+    "delete_guard_prechecks_match_manifest": true,
+    "delete_guard_postchecks_pass": true,
+    "liquidity_rows_expected": true,
+    "market_cap_rows_expected": true,
+    "both_main_candidates_have_no_duplicate_keys": true,
+    "quarantine_counts_match_groups": true,
+    "all_hash_multisets_match": true,
+    "zero_mutation_pass": true,
+    "operation_counts_expected": true,
+    "rollback_not_authorized": true
+  },
+  "failed_checks": [],
+  "evidence_refs": {
+    "planning_index": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-RESOLUTION-PLANNING.index.json",
+    "preexecution_snapshot": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION-2026-06-29T195446+0800-PREEXECUTION-SNAPSHOT.json",
+    "delete_guard_proof": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION-2026-06-29T195446+0800-DELETE-GUARD-PROOF.json",
+    "postexecution_snapshot": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION-2026-06-29T195446+0800-POSTEXECUTION-SNAPSHOT.json",
+    "object_manifest": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION-2026-06-29T195446+0800-OBJECT-MANIFEST.json",
+    "rollback_manifest": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION-2026-06-29T195446+0800-ROLLBACK-MANIFEST.json",
+    "zero_mutation": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION-2026-06-29T195446+0800-ZERO-MUTATION-PROOF.json",
+    "execution_check": "process/checks/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION-2026-06-29.md"
+  },
+  "non_authorized_scope": [
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "legacy deletion",
+    "rollback deletion beyond exact old candidate objects authorized by this gate"
+  ],
+  "next_gate": "review pure metadata strategy-unification evidence; continue read-only planning for adj_factor/prices/prices_limit/events/trade_status"
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "created_at": "2026-06-30T11:05:00+08:00",
+  "created_by": "host-orchestrator",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "batch_id": "CR139-BACKLOG-A1-A2",
+  "story_id": "CR139-S29",
+  "slug": "pit-dedup-correctness-tests",
+  "story_ref": "process/stories/CR139-S29-pit-dedup-correctness-tests.md",
+  "design_evidence_ref": "process/stories/CR139-S29-pit-dedup-correctness-tests-LLD.md",
+  "cp5_result_ref": "process/checks/CP5-CR139-S29-pit-dedup-correctness-tests-LLD-IMPLEMENTABILITY.md",
+  "dependencies": ["CR139-S05", "CR139-S07"],
+  "dependency_type": "verified-baseline-gate",
+  "objective": {
+    "summary": "Implement fixture/static PIT and read-layer dedup correctness tests for the S29 standard.",
+    "non_goals": [
+      "Do not write real lake data",
+      "Do not write active catalog or manifest",
+      "Do not advance published pointers",
+      "Do not touch NAS, provider, runtime, trading, credentials, or Git remote"
+    ]
+  },
+  "acceptance": [
+    "Future financial-report rows with available_at greater than as_of are excluded.",
+    "The latest visible PIT row is selected.",
+    "Read-layer duplicate natural keys are reduced to zero.",
+    "Duplicate resolution deterministically prefers the catalog current run."
+  ],
+  "allowed_read_paths": [
+    "process/stories/CR139-S29-pit-dedup-correctness-tests.md",
+    "process/stories/CR139-S29-pit-dedup-correctness-tests-LLD.md",
+    "market_data/readers.py",
+    "tests/test_cr139_pit_as_of_reader.py",
+    "tests/test_cr139_read_layer_dedup.py"
+  ],
+  "allowed_write_paths": [
+    "tests/test_cr139_pit_correctness.py",
+    "tests/test_cr139_dedup_correctness.py",
+    "process/stories/CR139-S29-pit-dedup-correctness-tests-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S29-pit-dedup-correctness-tests-CODING-DONE.md",
+    "process/returns/STORY-CR139-S29.CP6.return.json",
+    "process/evidence/STORY-CR139-S29.CP6.index.json",
+    "process/stories/CR139-S29-pit-dedup-correctness-tests.md",
+    "process/STORY-STATUS-CR139.md",
+    "process/STATE.md",
+    "process/state/STATE.current.json"
+  ],
+  "forbidden_write_paths": [
+    "market_data/catalog.py",
+    "market_data/manifest.py",
+    "market_data/publish.py",
+    "data/**",
+    ".env",
+    ".env.*"
+  ],
+  "forbidden_actions": [
+    "runtime",
+    "real lake write",
+    "catalog write",
+    "manifest write",
+    "published pointer advance execution",
+    "physical partition migration execution",
+    "credential/secret read",
+    "NAS/provider/QMT/MiniQMT/gateway/trading runtime",
+    "Git remote write"
+  ],
+  "verification_commands_planned": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_pit_correctness.py tests/test_cr139_dedup_correctness.py tests/test_cr139_adjustment_factor_pit.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_read_layer_dedup.py"
+  ],
+  "expected_return_packet_ref": "process/returns/STORY-CR139-S29.CP6.return.json",
+  "expected_evidence_index_ref": "process/evidence/STORY-CR139-S29.CP6.index.json",
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "risk_profile": "standard-code",
+  "lld_policy": "full-lld"
+}

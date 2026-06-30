@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch1a_exact_dedup_candidate_write_execution",
+  "created_at": "2026-06-29T15:47:23+08:00",
+  "status": "pass_exact_dedup_candidate_write_verified",
+  "authorized_scope": "authorize Gate B Batch 1A-exact-dedup trade_calendar and stock_basic additive-only dedup candidate writes only",
+  "datasets": [
+    "trade_calendar",
+    "stock_basic"
+  ],
+  "completed_datasets": [
+    "trade_calendar",
+    "stock_basic"
+  ],
+  "failed_datasets": [],
+  "skipped_datasets": [],
+  "partial_completion": false,
+  "write_order": [
+    {
+      "order": 1,
+      "dataset": "trade_calendar",
+      "status": "verified",
+      "target_relative_path": "candidate/parquet/dataset=trade_calendar/schema_version=1.0/run_id=cr139-w2-trade_calendar-legacy_lake-20260629-canonical/part-trade-calendar.parquet"
+    },
+    {
+      "order": 2,
+      "dataset": "stock_basic",
+      "status": "verified",
+      "target_relative_path": "candidate/parquet/dataset=stock_basic/schema_version=1.0/run_id=cr139-w2-stock_basic-legacy_lake-20260629-canonical/part-stock-basic.parquet"
+    }
+  ],
+  "source_row_count_total": 66118,
+  "retained_row_count_total": 54137,
+  "dropped_exact_duplicate_row_count_total": 11981,
+  "object_count": 2,
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 2,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "checks": {
+    "both_completed": true,
+    "lake_write_count_2": true,
+    "no_partial_completion": true,
+    "all_row_counts_match": true,
+    "all_full_row_hashes_match": true,
+    "candidate_profiles_no_exact_duplicates": true,
+    "catalog_hash_unchanged": true,
+    "published_tree_hash_unchanged": true,
+    "canonical_trees_unchanged": true,
+    "operation_counts_exact": true,
+    "rollback_not_authorized": true
+  },
+  "failed_checks": [],
+  "batch_atomicity_policy": {
+    "policy": "fail_stop_no_automatic_rollback",
+    "automatic_rollback_allowed": false,
+    "rollback_requires_separate_authorization": true
+  },
+  "evidence_refs": {
+    "planning_index": "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-PLANNING.index.json",
+    "prewrite_snapshot": "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-PREWRITE-SNAPSHOT-2026-06-29T154723+0800.json",
+    "postwrite_snapshot": "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-POSTWRITE-SNAPSHOT-2026-06-29T154723+0800.json",
+    "object_manifest": "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-OBJECT-MANIFEST-2026-06-29T154723+0800.json",
+    "rollback_manifest": "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-ROLLBACK-MANIFEST-2026-06-29T154723+0800.json",
+    "zero_pointer_mutation": "process/evidence/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-ZERO-POINTER-MUTATION-2026-06-29T154723+0800.json",
+    "write_execution_check": "process/checks/CR139-W2-GATEB-BATCH1A-EXACT-DEDUP-WRITE-EXECUTION-2026-06-29.md"
+  },
+  "non_authorized_scope": [
+    "Batch 1B",
+    "Batch 2",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "rollback deletion"
+  ],
+  "next_gate": "Batch 1B readiness or Gate C planning review"
+}

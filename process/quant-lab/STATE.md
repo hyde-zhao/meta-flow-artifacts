@@ -4,143 +4,218 @@ Project: quant-lab
 Workflow mode: standard
 Phase: story-execution
 Blocked: false
-Active CR: none
+Active CR: CR-139 (Strategy Data Foundation / 数据湖整改 parent CR)
 Active Story: none
+Active batch: none
 Pending gate: none
-Next action: Stage 3 mature multifactor research 已在可连接数据湖的机器完成。后续 Stage 4 使用 `stage3-mature-mf-20260627-real-lake-v2` 的 Stage 3 package、mature admission package、runner offline preflight 和 Stage 4 observation plan 作为审查输入；任何 gateway / QMT / simulation runtime 仍需单独授权，`small_live` / `live` 仍未授权。
 
-Refs:
-- state: process/state/STATE.current.json
-- CR ledger: process/state/CR-LEDGER.ndjson
-- Story ledger: process/state/STORY-LEDGER.ndjson
-- Checkpoint ledger: process/state/CHECKPOINT-LEDGER.ndjson
-- Handoff ledger: process/state/HANDOFF-LEDGER.ndjson
-- Agent dispatch ledger: process/state/AGENT-DISPATCH-LEDGER.ndjson
-- Gate ledger: process/state/GATE-LEDGER.ndjson
-- Run ledger: process/state/RUN-LEDGER.ndjson
-- Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
-- routing: process/.meta-flow-process.yaml
-- active context: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STAGE3-RESEARCH-MACHINE-HANDOFF-2026-06-26.md
-- stage3 research machine handoff: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STAGE3-RESEARCH-MACHINE-HANDOFF-2026-06-26.md
-- next phase goals and plan: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-NEXT-PHASE-GOALS-AND-PLAN-2026-06-26.md
-- project blueprint: docs/design/BLUEPRINT.md
-- project domain map: docs/design/DOMAIN-MAP.md
-- project dependency map: docs/design/DEPENDENCY-MAP.md
-- archived project blueprint: process/archive/design-blueprints/BLUEPRINT-before-quant-lab-project-roadmap-2026-06-26.md
-- stage2 framework module: engine/mature_multifactor_framework.py
-- stage2 framework test: tests/test_stage2_mature_multifactor_framework.py
-- stage2 framework fixture: tests/fixtures/stage2_multifactor_framework/mature_multifactor_stage2_fixture.json
-- stage2 framework check: process/checks/STAGE2-MULTIFACTOR-FRAMEWORK-NO-LAKE-INITIAL-SLICE-2026-06-26.md
-- stage3 research package initial slice check: process/checks/STAGE3-MATURE-MULTIFACTOR-RESEARCH-PACKAGE-INITIAL-SLICE-2026-06-27.md
-- stage3 runner module: engine/stage3_mature_multifactor_research.py
-- stage3 runner CLI: scripts/run_stage3_mature_multifactor_research.py
-- stage3 runner tests: tests/test_stage3_mature_multifactor_research.py
-- stage3 complete check: process/checks/STAGE3-MATURE-MULTIFACTOR-RESEARCH-COMPLETE-2026-06-27.md
-- stage3 process summary: process/evidence/stage3-mature-multifactor/stage3-mature-mf-20260627-real-lake-v2/stage3-research-summary.json
-- stage3 research package: /home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/stage3-mature-mf-20260627-real-lake-v2/STAGE3-MATURE-RESEARCH-PACKAGE.json
-- stage4 observation plan: /home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/stage3-mature-mf-20260627-real-lake-v2/STAGE4-OBSERVATION-PLAN.json
-- phase goals: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-PHASE-GOALS-2026-06-25.md
-- P0 evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P0-EVIDENCE-2026-06-25.json
-- P1 check: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P1-MULTIFACTOR-TARGET-PORTFOLIO-2026-06-25.md
-- P1 evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P1-EVIDENCE-2026-06-25.json
-- P2 check: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P2-SIMULATION-ORDER-PLAN-2026-06-25.md
-- P2 evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P2-EVIDENCE-2026-06-25.json
-- P3 check: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P3-SIMULATION-EXECUTION-ENGINE-2026-06-25.md
-- P3 evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P3-EVIDENCE-2026-06-25.json
-- P4 check: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P4-RECONCILIATION-2026-06-25.md
-- P4 evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P4-EVIDENCE-2026-06-25.json
-- P5 check: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P5-OPERATIONAL-RUNBOOK-2026-06-25.md
-- P5 evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P5-EVIDENCE-2026-06-25.json
-- P5 runbook: process/runbooks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-RUNBOOK-2026-06-25.md
-- P6 check: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P6-DEFERRED-LIVE-SWITCH-SCENARIO-2026-06-25.md
-- P6 evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-P6-EVIDENCE-2026-06-25.json
-- P6 scenario pack: process/context/RUNNER-QMT-SIMULATION-TO-LIVE-SWITCH-DEFERRED-SCENARIO-PACK-2026-06-25.md
-- real readonly evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-REAL-READONLY-EVIDENCE-2026-06-25.json
-- real operator check: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-REAL-OPERATOR-2026-06-25.md
-- real operator evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-REAL-OPERATOR-EVIDENCE-2026-06-25.json
-- after-restart verification: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-AFTER-RESTART-VERIFICATION-2026-06-25.md
-- after-restart readonly evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-AFTER-RESTART-READONLY-EVIDENCE-2026-06-25.json
-- after-restart runtime evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-AFTER-RESTART-RUNTIME-EVIDENCE-2026-06-25.json
-- next-session handoff: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-NEXT-SESSION-HANDOFF-2026-06-25.md
-- formal strategy admission package: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-FORMAL-STRATEGY-ADMISSION-PACKAGE-2026-06-25.json
-- formal operator spec: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-FORMAL-OPERATOR-SPEC-2026-06-25.json
-- non-trading completion: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-NON-TRADING-WINDOW-COMPLETION-2026-06-25.md
-- formal preflight index: process/evidence/runner-simulation-formal-2026-06-25/preflight-only/runner-qmt-simulation-multifactor-formal-non-trading-2026-06-25/operator-evidence.index.json
-- formal plan-only index: process/evidence/runner-simulation-formal-2026-06-25/plan-only/runner-qmt-simulation-multifactor-formal-non-trading-2026-06-25/operator-evidence.index.json
-- formal fixture index: process/evidence/runner-simulation-formal-2026-06-25/fixture/runner-qmt-simulation-multifactor-formal-non-trading-2026-06-25/operator-evidence.index.json
-- formal reconcile-only index: process/evidence/runner-simulation-formal-2026-06-25/reconcile-only/runner-qmt-simulation-multifactor-formal-non-trading-2026-06-25/operator-evidence.index.json
-- trading-window acceptance handoff: process/context/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-ACCEPTANCE-HANDOFF-2026-06-26.md
-- trading-window acceptance blocked: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-ACCEPTANCE-2026-06-26.md
-- trading-window readonly evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-READONLY-EVIDENCE-2026-06-26.json
-- trading-window runtime evidence: process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r1/operator-evidence.json
-- trading-window r2 revalidation: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-R2-REVALIDATION-2026-06-26.md
-- trading-window r2 readonly evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-READONLY-EVIDENCE-2026-06-26-r2.json
-- trading-window r2 runtime evidence: process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r2/operator-evidence.json
-- formal runtime input fix: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-FORMAL-RUNTIME-INPUT-FIX-2026-06-26.md
-- runtime input builder: trading/strategy_runner/runtime_inputs.py
-- runtime input builder CLI: scripts/build_qmt_multifactor_runtime_inputs.py
-- private runtime r3 overlay: /home/hyde/.quant-lab/runtime/qmt/cr138-simulation/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3-runtime-overlay.json
-- private runtime r3 spec: /home/hyde/.quant-lab/runtime/qmt/cr138-simulation/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3-runtime-spec.json
-- private runtime r3 admission: /home/hyde/.quant-lab/runtime/qmt/cr138-simulation/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3-runtime-admission-package.json
-- private runtime r3 plan-only evidence: process/evidence/runner-simulation-runtime-input-fix-2026-06-26/plan-only/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3/operator-evidence.json
-- trading-window r3 runtime acceptance: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-R3-RUNTIME-ACCEPTANCE-2026-06-26.md
-- trading-window r3 readonly evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-READONLY-EVIDENCE-2026-06-26-r3.json
-- trading-window r3 runtime evidence: process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3/operator-evidence.json
-- trading-window r3 runtime evidence index: process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r3/operator-evidence.index.json
-- trading-window r4 runtime acceptance: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-R4-RUNTIME-ACCEPTANCE-2026-06-26.md
-- trading-window r4 P0 health evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-P0-HEALTH-EVIDENCE-2026-06-26-r4.json
-- trading-window r4 P0 capabilities evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-P0-CAPABILITIES-EVIDENCE-2026-06-26-r4.json
-- trading-window r4 readonly evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-READONLY-EVIDENCE-2026-06-26-r4.json
-- trading-window r4 runtime evidence: process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r4/operator-evidence.json
-- trading-window r4 runtime evidence index: process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r4/operator-evidence.index.json
-- trading-window r4 stability window summary: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STABILITY-WINDOW-SUMMARY-2026-06-26-r4.json
-- trading-window r5 runtime acceptance: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-R5-RUNTIME-ACCEPTANCE-2026-06-26.md
-- trading-window r5 P0 health evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-P0-HEALTH-EVIDENCE-2026-06-26-r5.json
-- trading-window r5 P0 capabilities evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-P0-CAPABILITIES-EVIDENCE-2026-06-26-r5.json
-- trading-window r5 readonly evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-READONLY-EVIDENCE-2026-06-26-r5.json
-- trading-window r5 runtime evidence: process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r5/operator-evidence.json
-- trading-window r5 runtime evidence index: process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r5/operator-evidence.index.json
-- trading-window r5 stability window summary: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STABILITY-WINDOW-SUMMARY-2026-06-26-r5.json
-- trading-window r6 runtime acceptance: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-R6-RUNTIME-ACCEPTANCE-2026-06-26.md
-- trading-window r6 P0 health evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-P0-HEALTH-EVIDENCE-2026-06-26-r6.json
-- trading-window r6 P0 capabilities evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-P0-CAPABILITIES-EVIDENCE-2026-06-26-r6.json
-- trading-window r6 readonly evidence: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-TRADING-WINDOW-READONLY-EVIDENCE-2026-06-26-r6.json
-- trading-window r6 runtime evidence: process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r6/operator-evidence.json
-- trading-window r6 runtime evidence index: process/evidence/runner-simulation-runtime-2026-06-26/runner-qmt-simulation-multifactor-trading-window-2026-06-26-r6/operator-evidence.index.json
-- trading-window r6 stability window summary: process/evidence/RUNNER-QMT-SIMULATION-MULTIFACTOR-STABILITY-WINDOW-SUMMARY-2026-06-26-r6.json
-- simulation readiness closure: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-SIMULATION-OPERATIONAL-READINESS-CLOSURE-2026-06-26.md
-- simulation readiness release context: process/release/RELEASE-CONTEXT-RUNNER-QMT-SIMULATION-MULTIFACTOR-SIMULATION-READINESS-2026-06-26.yaml
-- simulation readiness human decision: process/checkpoints/RUNNER-QMT-SIMULATION-MULTIFACTOR-SIMULATION-READINESS-HUMAN-DECISION-2026-06-26.md
-- simulation readiness runbook addendum: process/runbooks/RUNNER-QMT-SIMULATION-MULTIFACTOR-STRATEGY-RUNTIME-RUNBOOK-2026-06-25.md
-- simulation ops policy: process/policies/RUNNER-QMT-SIMULATION-MULTIFACTOR-RUNTIME-INPUT-GATEWAY-LIFECYCLE-POLICY-2026-06-26.md
-- simulation ops policy closure: process/checks/RUNNER-QMT-SIMULATION-MULTIFACTOR-OPS-POLICY-CLOSURE-2026-06-26.md
+## Current Decision
 
-Policy refs:
-- SIMULATION_RUNTIME_AUTHORIZED_THIS_RUN
-- NO_RAW_CREDENTIAL_PERSISTENCE
-- NO_RAW_ACCOUNT_SYMBOL_ORDER_PERSISTENCE
-- NO_NAS
-- NO_SMALL_LIVE_OR_LIVE
-- NO_PROVIDER_LAKE_CATALOG
-- NO_REMOTE_WRITE
+CR139 W2/W3 主线已完成并进入 event-driven maintenance：
 
-Open risks:
-- {'id': 'RISK-CR138-RUNTIME-MISREAD', 'summary': 'CR138 fixture/static verified 可能被误读为 QMT / gateway runtime 或交易授权；当前 CP7 使用 PASS_WITH_RISK 并继续要求后续按需 runtime_authorization。', 'status': 'controlled'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-REAL-SIMULATION-SESSION-EXPIRED', 'summary': '用户重启 Windows QMT gateway 后，CR138 signed positions readonly 与临时最小 spec 的真实 multifactor simulation runtime operator 已通过；旧 session_expired 阻断关闭。', 'status': 'closed-after-restart-verification'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-FORMAL-SPEC-NOT-YET-STABLE', 'summary': 'r3 私有 runtime overlay 生成的正式 runtime spec/admission 已通过交易窗口 simulation runtime；长期稳定性窗口仍需继续逐次授权累计。', 'status': 'closed-after-r3-runtime-pass'}
-- {'id': 'RISK-RUNNER-SIMULATION-SMOKE-RUNTIME-AUTHORIZATION', 'summary': 'RUNNER-QMT-SIMULATION-TRADING-MACHINE-SMOKE-2026-06-24 已获本轮模拟账户 smoke 授权，gateway runtime ready，WSL HMAC client env 可用，positions readonly、simulation buy submit/cancel 和 simulation sell submit/cancel 均通过；未授权 small_live/live。', 'status': 'closed'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-FIXTURE-INSTRUMENT-RUNTIME-SUBMIT-TIMEOUT', 'summary': '已新增私有 runtime input builder 和 operator runtime_symbol_contract_invalid guard；当前 formal fixture spec 不会再触达 gateway。业务验收仍需用户提供私有 runtime overlay 后重新逐次授权。', 'status': 'mitigated-by-input-builder-and-runtime-guard'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-STABILITY-WINDOW-COLLECTING', 'summary': '交易窗口 simulation runtime r6 已通过 P0/P0.5/P1/P2/P3/P4；稳定性窗口当前 completed_runs=5/5，Phase A 已完成。', 'status': 'closed'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-STABILITY-COUNTER-SPEC-REFS', 'summary': 'r4/r5 operator evidence 内嵌 stability_window.completed_runs 与 Phase A rollup 不一致；已分别用独立 stability summary 记录 3/5 与 4/5，并修复 runtime_inputs.py 使 r6 stability_evidence_refs 只包含历史成功 refs。', 'status': 'mitigated'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-SIMULATION-READINESS-CLOSURE-PENDING', 'summary': 'simulation stability window 已达到 5/5；Phase B readiness closure 已生成，结论 READY_WITH_RISK。', 'status': 'closed-ready-with-risk'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-THREE-TRADING-DAY-OBSERVATION', 'summary': '5/5 runtime count gate 已通过，但 runbook 保留 3 trading days 观察口径；当前证据主要覆盖 2026-06-25 与 2026-06-26。用户已接受 READY_WITH_RISK；补第三个交易日观察仅作为未来升级 READY 的可选后续。', 'status': 'accepted-ready-with-risk'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-RUNTIME-INPUT-OPERABILITY', 'summary': 'runtime input overlay 来源、刷新触发、字段边界、私有输出目录和脱敏 evidence 边界已在 SIM-OPS policy 中固化。', 'status': 'policy-defined'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-GATEWAY-LIFECYCLE-DESYNC', 'summary': 'Windows gateway 启停、重启、WSL/Windows runtime code sync 和 P0/P0.5 复验规则已在 SIM-OPS policy 中固化。', 'status': 'policy-defined'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-PROJECT-BLUEPRINT-DRIFT', 'summary': 'Stage 1 已在当前 quant-lab 项目蓝图三件套上合并五阶段路线和多策略类型适配边界，旧蓝图已归档，避免新增孤立端到端策略研究蓝图。', 'status': 'mitigated'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-STAGE2-DATA-LAKE-COUPLING', 'summary': 'Stage 2 多因子研究框架升级不连接数据湖；桥接切片已用 no-lake counter validation、typed unavailable、CR030/CR039 bridge 和 Stage 3 handoff 测试固化边界。真实数据湖接入推迟到 Stage 3 由用户在研究机实施。', 'status': 'controlled'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-MATURE-STRATEGY-GAP', 'summary': 'Stage 3 已基于真实数据湖生产 mature multifactor research package：run stage3-mature-mf-20260627-real-lake-v2，package status stage3_research_ready_for_stage4_review；runtime / simulation / live 授权仍独立处理。', 'status': 'closed-stage3-complete'}
-- {'id': 'RISK-RUNNER-MULTIFACTOR-UNIVERSE-SCALE-UP', 'summary': 'Stage 3 已从 fixture 扩展到真实 A 股股票池，并固化 PIT、ST、停牌、涨跌停、流动性、上市退市、风控策略和 evidence refs；runtime 扩容仍受 Stage 4 授权控制。', 'status': 'controlled-by-stage3-evidence'}
+- W2 current truth 已关闭：17/17 active catalog records published=true，canonical_path 指向 CR139 canonical target，0 candidate path leak。
+- Gate B/E/C/D 已完成：candidate 写入、canonical copy migration、active catalog/manifest refresh、published pointer advance 和 post-pointer smoke 均有检查证据。
+- Gate F-1 已完成：2 个 orphan CR139 target + 17 个 candidate dataset tree 已按 exact manifest 删除，210 legacy canonical candidates 保留。
+- Gate F-2 已完成 retain/superseded planning：210 legacy records 保留并进入 superseded register，不执行 archive/delete。
+- Gate H 已完成 NAS sync execution：方向 push，delete=false，post-sync dry-run clean，active catalog/manifest 和 local lake hash/size 不变。
+- Gate G provider catalog 继续 deferred：未确认生产 provider catalog consumer。
+- W3 governance 已完成：config hygiene、reader P0/P1 support、retention register、publish guard、recurring validation、provider catalog re-evaluation 均已落地。
+- 2026-06-30 已完成 CR139 40 Story status reconciliation：8 个 independent `verified`，9 个 `gate-reconciled-complete`，23 个保持真 backlog。
+- 2026-06-30 已完成 Backlog-A1/A2 CP7 fixture/static verification：S29/S23 full-lld 设计证据、CP5 自动预检、CP6 implementation、CP7 verification report、return packet 和 evidence index 均已生成，状态为 `verified`。
+- 2026-06-30 已完成 Backlog-A3 CP7 fixture/static verification：S27 read audit 和 S28 readiness pre-read gate 已验证通过，状态为 `verified`。
+- 2026-06-30 已完成 Backlog-A4 S38 CP7 fixture/static verification：quality report writer 分区合同已验证通过，状态为 `verified`；其余 18 个 backlog Story 仍为 `lld-pending`。
+- 2026-06-30 已完成 Backlog-A5 S25 CP7 fixture/static verification：decision_time lookahead gate 已验证通过，状态为 `verified`；其余 17 个 backlog Story 仍为 `lld-pending`。
+- 2026-06-30 已完成 Backlog-A6 S17/S18/S19 CP7 fixture/static verification：config facts versioning 合同字段已验证通过，状态为 `verified`。
+- 2026-06-30 已完成 Backlog-A7 S24/S26 CP7 fixture/static verification：cross-source calendar/timezone 与 PIT universe constituent chain 合同已验证通过，状态为 `verified`。
+- 2026-06-30 已完成 Backlog-A8 S21/S35 CP7 fixture/static verification：commission cost pretrade gate 与 published as_of replay 合同已验证通过，状态为 `verified`。
+- 2026-06-30 已完成 Backlog-A9 S13 CP7 fixture/static verification：DuckDB readonly adapter façade 已验证通过，未新增 DuckDB 依赖，状态为 `verified`；其余 9 个 backlog Story 仍为 `lld-pending`。
+- 2026-06-30 已完成 Backlog-A10 S36/S37 CP7 fixture/static verification：DuckDB projection/predicate pushdown 与 readonly e2e audit 合同已验证通过，未新增 DuckDB 依赖或真实 runtime，状态为 `verified`；其余 7 个 backlog Story 仍为 `lld-pending`。
+- 2026-06-30 已完成 Backlog-A11 S11/S20 CP7 fixture/static verification：versioned feature artifact contract 与 broker lake dry-run audit chain 合同已验证通过，未执行真实 feature lake/broker lake 写或 runtime，状态为 `verified`。
+- 2026-06-30 已完成 Backlog-A12 S10/S12 CP7 fixture/static verification：ML experiment lake/as-of input adapter 与 CR139 experiment manifest closure 合同已验证通过，未执行真实 lake/catalog/manifest/pointer/NAS/provider/runtime/Git 写，状态为 `verified`；其余 3 个 backlog Story 仍为 `lld-pending`。
+- 2026-06-30 已完成 Backlog-A13 S15/S16 CP7 fixture/static verification：label/cutoff gate、offline/online consistency 与 training snapshot cutoff 合同已验证通过，未执行真实 lake/catalog/manifest/pointer/NAS/provider/runtime/Git 写，状态为 `verified`；其余 1 个 backlog Story 仍为 `lld-pending`。
+- 2026-06-30 已完成 Backlog-A14 S40 CP7 fixture/static verification：versioned policy cycle release 与 shortability gate 合同已验证通过，未执行真实 lake/catalog/manifest/pointer/NAS/provider/runtime/Git 写，状态为 `verified`。CR139 40 个 Story 全部闭环。
 
-Updated at: 2026-06-27T00:00:00+08:00
+## Story Status
 
-<!-- generated-by: meta-flow state render -->
+Formal Story status source: `process/STORY-STATUS-CR139.md`.
+
+Current reconciled counts:
+
+| Status | Count | Meaning |
+|---|---:|---|
+| `verified` | 31 | S01-S08 plus S10/S11/S12/S13/S15/S16/S17/S18/S19/S20/S21/S23/S24/S25/S26/S27/S28/S29/S35/S36/S37/S38/S40 have individual CP6 + CP7 return/evidence. |
+| `gate-reconciled-complete` | 9 | S09, S14, S22, S30, S31, S32, S33, S34, S39 are closed by later Gate B/E/C/D/F/H/W3 evidence. |
+| `lld-pending` | 0 | CR139 Story backlog is closed. |
+
+Reconciliation check: `process/checks/CR139-40-STORY-RECONCILIATION-2026-06-30.md`.
+
+## Authorization Boundary
+
+No pending authorization is active.
+
+Future work requires a new explicit gate when it touches one of these boundaries:
+
+- provider catalog / provider-lake-catalog write
+- legacy archive/delete beyond retain/superseded register
+- NAS operation beyond already completed Gate H sync
+- runtime / trading / QMT / MiniQMT / gateway operation
+- credential/secret inspection beyond scoped NAS auth already used by Gate H
+- Git remote write
+- runtime or write activity for any remaining CR139 backlog Story before its design evidence is ready and the operation boundary is safe
+
+## Next Action
+
+Current CR139 backlog action:
+
+- Backlog-A14 S40 CP7 fixture/static verification is complete and has no blocking risk.
+- CR139 Story backlog is closed: 31 Story-level `verified` + 9 `gate-reconciled-complete` = 40/40.
+
+Open only when a trigger appears:
+
+| Trigger | Next gate |
+|---|---|
+| Production consumer requires provider catalog | Gate G provider catalog sync |
+| Legacy archive/delete request | Gate F-2 archive/delete decision and exact-manifest execution |
+| NAS sync request | Gate H scoped authorization |
+| P2 reader consumer appears | W3 reader support extension |
+| Full PIT source for `industry_classification` appears | W3 reader support upgrade / PIT contract review |
+| Continue Backlog-A | No CR139 backlog Story remains. |
+| Business wants to continue later CR139 backlog | No backlog action required; open a new CR or explicit follow-up if scope changes. |
+
+## Required Refs
+
+- Machine state: `process/state/STATE.current.json`
+- Active CR: `process/changes/CR-139-STRATEGY-DATA-FOUNDATION-2026-06-28.md`
+- Story status: `process/STORY-STATUS-CR139.md`
+- Story reconciliation check: `process/checks/CR139-40-STORY-RECONCILIATION-2026-06-30.md`
+- Backlog-A0 gap analysis: `process/checks/CR139-BACKLOG-A0-GAP-ANALYSIS-2026-06-30.md`
+- S29 LLD: `process/stories/CR139-S29-pit-dedup-correctness-tests-LLD.md`
+- S23 LLD: `process/stories/CR139-S23-adjustment-factor-pit-LLD.md`
+- S29 CP5 auto precheck: `process/checks/CP5-CR139-S29-pit-dedup-correctness-tests-LLD-IMPLEMENTABILITY.md`
+- S23 CP5 auto precheck: `process/checks/CP5-CR139-S23-adjustment-factor-pit-LLD-IMPLEMENTABILITY.md`
+- S29 CP6 implementation: `process/stories/CR139-S29-pit-dedup-correctness-tests-IMPLEMENTATION.md`
+- S23 CP6 implementation: `process/stories/CR139-S23-adjustment-factor-pit-IMPLEMENTATION.md`
+- S29 CP6 evidence: `process/evidence/STORY-CR139-S29.CP6.index.json`
+- S23 CP6 evidence: `process/evidence/STORY-CR139-S23.CP6.index.json`
+- S29/S23 CP7 verification report: `docs/quality/VERIFICATION-REPORT-CR139-BACKLOG-A1-A2-S29-S23.md`
+- S29 CP7 evidence: `process/evidence/STORY-CR139-S29.CP7.index.json`
+- S23 CP7 evidence: `process/evidence/STORY-CR139-S23.CP7.index.json`
+- S27 LLD: `process/stories/CR139-S27-read-audit-log-runid-LLD.md`
+- S27 CP5 auto precheck: `process/checks/CP5-CR139-S27-read-audit-log-runid-LLD-IMPLEMENTABILITY.md`
+- S28 technical note: `process/stories/CR139-S28-readiness-pre-read-gate.md#技术说明`
+- S28 CP5 auto precheck: `process/checks/CP5-CR139-S28-readiness-pre-read-gate-TECHNICAL-NOTE-IMPLEMENTABILITY.md`
+- S27 CP6 evidence: `process/evidence/STORY-CR139-S27.CP6.index.json`
+- S28 CP6 evidence: `process/evidence/STORY-CR139-S28.CP6.index.json`
+- S27/S28 CP7 verification report: `docs/quality/VERIFICATION-REPORT-CR139-BACKLOG-A3-S27-S28.md`
+- S27 CP7 evidence: `process/evidence/STORY-CR139-S27.CP7.index.json`
+- S28 CP7 evidence: `process/evidence/STORY-CR139-S28.CP7.index.json`
+- S38 technical note: `process/stories/CR139-S38-quality-partition-reorg.md#技术说明`
+- S38 CP5 auto precheck: `process/checks/CP5-CR139-S38-quality-partition-reorg-TECHNICAL-NOTE-IMPLEMENTABILITY.md`
+- S38 CP6 implementation: `process/stories/CR139-S38-quality-partition-reorg-IMPLEMENTATION.md`
+- S38 CP6 evidence: `process/evidence/STORY-CR139-S38.CP6.index.json`
+- S38 CP7 verification report: `docs/quality/VERIFICATION-REPORT-CR139-BACKLOG-A4-S38.md`
+- S38 CP7 evidence: `process/evidence/STORY-CR139-S38.CP7.index.json`
+- S25 technical note: `process/stories/CR139-S25-decision-time-lookahead-gate.md#技术说明`
+- S25 CP5 auto precheck: `process/checks/CP5-CR139-S25-decision-time-lookahead-gate-TECHNICAL-NOTE-IMPLEMENTABILITY.md`
+- S25 CP6 evidence: `process/evidence/STORY-CR139-S25.CP6.index.json`
+- S25 CP7 verification report: `docs/quality/VERIFICATION-REPORT-CR139-BACKLOG-A5-S25.md`
+- S25 CP7 evidence: `process/evidence/STORY-CR139-S25.CP7.index.json`
+- S17/S18/S19 CP7 verification report: `docs/quality/VERIFICATION-REPORT-CR139-BACKLOG-A6-S17-S18-S19.md`
+- S17 CP7 evidence: `process/evidence/STORY-CR139-S17.CP7.index.json`
+- S18 CP7 evidence: `process/evidence/STORY-CR139-S18.CP7.index.json`
+- S19 CP7 evidence: `process/evidence/STORY-CR139-S19.CP7.index.json`
+- S24 LLD: `process/stories/CR139-S24-cross-source-calendar-timezone-LLD.md`
+- S24 CP5 auto precheck: `process/checks/CP5-CR139-S24-cross-source-calendar-timezone-LLD-IMPLEMENTABILITY.md`
+- S26 technical note: `process/stories/CR139-S26-pit-universe-constituent-chain.md#技术说明`
+- S26 CP5 auto precheck: `process/checks/CP5-CR139-S26-pit-universe-constituent-chain-TECHNICAL-NOTE-IMPLEMENTABILITY.md`
+- S24/S26 CP6 implementation: `process/stories/CR139-S24-S26-consistency-contracts-IMPLEMENTATION.md`
+- S24 CP6 evidence: `process/evidence/STORY-CR139-S24.CP6.index.json`
+- S26 CP6 evidence: `process/evidence/STORY-CR139-S26.CP6.index.json`
+- S24/S26 CP7 verification report: `docs/quality/VERIFICATION-REPORT-CR139-BACKLOG-A7-S24-S26.md`
+- S24 CP7 evidence: `process/evidence/STORY-CR139-S24.CP7.index.json`
+- S26 CP7 evidence: `process/evidence/STORY-CR139-S26.CP7.index.json`
+- S21 technical note: `process/stories/CR139-S21-commission-cost-pretrade-gate.md#技术说明`
+- S21 CP5 auto precheck: `process/checks/CP5-CR139-S21-commission-cost-pretrade-gate-TECHNICAL-NOTE-IMPLEMENTABILITY.md`
+- S35 technical note: `process/stories/CR139-S35-replay-published-asof.md#技术说明`
+- S35 CP5 auto precheck: `process/checks/CP5-CR139-S35-replay-published-asof-TECHNICAL-NOTE-IMPLEMENTABILITY.md`
+- S21/S35 CP6 implementation: `process/stories/CR139-S21-S35-gates-replay-IMPLEMENTATION.md`
+- S21 CP6 evidence: `process/evidence/STORY-CR139-S21.CP6.index.json`
+- S35 CP6 evidence: `process/evidence/STORY-CR139-S35.CP6.index.json`
+- S21/S35 CP7 verification report: `docs/quality/VERIFICATION-REPORT-CR139-BACKLOG-A8-S21-S35.md`
+- S21 CP7 evidence: `process/evidence/STORY-CR139-S21.CP7.index.json`
+- S35 CP7 evidence: `process/evidence/STORY-CR139-S35.CP7.index.json`
+- S13 technical note: `process/stories/CR139-S13-duckdb-readonly-adapter.md#技术说明`
+- S13 CP5 auto precheck: `process/checks/CP5-CR139-S13-duckdb-readonly-adapter-TECHNICAL-NOTE-IMPLEMENTABILITY.md`
+- S13 CP6 implementation: `process/stories/CR139-S13-duckdb-readonly-adapter-IMPLEMENTATION.md`
+- S13 CP6 evidence: `process/evidence/STORY-CR139-S13.CP6.index.json`
+- S13 CP7 verification report: `docs/quality/VERIFICATION-REPORT-CR139-BACKLOG-A9-S13.md`
+- S13 CP7 evidence: `process/evidence/STORY-CR139-S13.CP7.index.json`
+- S10/S12 CP7 verification report: `docs/quality/VERIFICATION-REPORT-CR139-BACKLOG-A12-S10-S12.md`
+- S10 CP7 evidence: `process/evidence/STORY-CR139-S10.CP7.index.json`
+- S12 CP7 evidence: `process/evidence/STORY-CR139-S12.CP7.index.json`
+- S15/S16 CP7 verification report: `docs/quality/VERIFICATION-REPORT-CR139-BACKLOG-A13-S15-S16.md`
+- S15 CP7 evidence: `process/evidence/STORY-CR139-S15.CP7.index.json`
+- S16 CP7 evidence: `process/evidence/STORY-CR139-S16.CP7.index.json`
+- S40 CP7 verification report: `docs/quality/VERIFICATION-REPORT-CR139-BACKLOG-A14-S40.md`
+- S40 CP7 evidence: `process/evidence/STORY-CR139-S40.CP7.index.json`
+- W2 CP8 readiness: `process/checks/CP8-CR139-W2-DELIVERY-READINESS.md`
+- Gate D post-pointer smoke: `process/checks/CR139-W2-GATED-POST-POINTER-SMOKE-2026-06-29.md`
+- Gate F-1 cleanup execution: `process/checks/CR139-W2-GATEF1-CLEANUP-EXECUTION-2026-06-30.md`
+- Gate F-2 legacy retain plan: `process/checks/CR139-W2-GATEF2-LEGACY-RETAIN-SUPERSEDED-PLAN-2026-06-30.md`
+- Gate H NAS sync execution: `process/checks/CR139-W2-GATEH-NAS-SYNC-EXECUTION-2026-06-30.md`
+- W3 publish guard: `process/checks/CR139-W3B-PUBLISH-GUARD-2026-06-30.md`
+- W3 recurring validation: `process/checks/CR139-W3C-RECURRING-VALIDATION-2026-06-30.md`
+
+## Validation Snapshot
+
+- `meta-flow workspace check`: PASS
+- Story reconciliation machine check: PASS, 40 rows, `verified=12`, `gate-reconciled-complete=9`, `lld-pending=19`
+- Backlog-A1/A2 targeted pytest: PASS, 15 passed in 0.62s
+- CP6 return-check: PASS for S29 and S23
+- `git diff --check` for Backlog-A1/A2 CP7 implementation/evidence files: PASS
+- `git diff --check` for Backlog-A3 CP5 design evidence files: PASS
+- Backlog-A3 targeted pytest: PASS, 18 passed in 0.49s
+- `git diff --check` for Backlog-A3 CP6 implementation/evidence files: PASS
+- Backlog-A3 CP7 return-check: PASS for S27 and S28
+- `git diff --check` for Backlog-A3 CP7 verification/evidence files: PASS
+- Backlog-A4 S38 targeted pytest: PASS, 5 passed in 0.51s
+- S38 CP6 return-check: PASS
+- S38 CP7 return-check: PASS
+- `git diff --check` for S38 CP5/CP6/CP7 implementation/evidence files: PASS
+- Backlog-A5 S25 targeted pytest: PASS, 18 passed in 0.60s
+- S25 CP6 return-check: PASS
+- S25 CP7 return-check: PASS
+- `git diff --check` for S25 CP5/CP6/CP7 implementation/evidence files: PASS
+- Backlog-A6 S17/S18/S19 targeted pytest: PASS, 28 passed in 0.70s
+- S17/S18/S19 CP6 return-check: PASS
+- S17/S18/S19 CP7 return-check: PASS
+- `git diff --check` for S17/S18/S19 CP5/CP6/CP7 implementation/evidence files: PASS
+- Backlog-A7 S24/S26 targeted pytest: PASS, 13 passed in 0.56s
+- S24/S26 CP6 return-check: PASS
+- S24/S26 CP7 return-check: PASS
+- `git diff --check` for S24/S26 CP5/CP6/CP7 implementation/evidence files: PASS
+- Backlog-A8 S21/S35 targeted pytest: PASS, 28 passed in 0.58s
+- S21/S35 CP6 return-check: PASS
+- S21/S35 CP7 return-check: PASS
+- `git diff --check` for S21/S35 CP5/CP6/CP7 implementation/evidence files: PASS
+- Backlog-A9 S13 targeted pytest: PASS, 12 passed in 0.47s
+- S13 CP6 return-check: PASS
+- S13 CP7 return-check: PASS
+- `git diff --check` for S13 CP5/CP6/CP7 implementation/evidence files: PASS
+- Backlog-A12 S10/S12 targeted pytest: PASS, 18 passed in 0.45s
+- S10/S12 CP6 return-check: PASS
+- S10/S12 CP7 return-check: PASS
+- `git diff --check` for S10/S12 CP5/CP6/CP7 implementation/evidence files: PASS
+- Environment note: `tests/test_experiment_23_29_ml_factor_suite.py` requires optional `sklearn`; S10 contract-specific tests passed without runtime/write activity.
+- Backlog-A13 S15/S16 targeted pytest: PASS, 20 passed in 1.18s
+- S15/S16 CP6 return-check: PASS
+- S15/S16 CP7 return-check: PASS
+- `git diff --check` for S15/S16 CP5/CP6/CP7 implementation/evidence files: PASS
+- Backlog-A14 S40 targeted pytest: PASS, 11 passed in 1.12s
+- S40 CP6 return-check: PASS
+- S40 CP7 return-check: PASS
+- `git diff --check` for S40 CP5/CP6/CP7 implementation/evidence files: PASS
+
+Updated at: 2026-06-30T21:00:00+08:00
+
+<!-- generated-by: host-orchestrator -->

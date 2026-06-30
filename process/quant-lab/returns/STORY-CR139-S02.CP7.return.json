@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "return_id": "STORY-CR139-S02.CP7",
+  "story_id": "CR139-S02",
+  "cr_id": "CR-139",
+  "stage": "CP7",
+  "status": "PASS",
+  "created_at": "2026-06-28T20:40:58+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+  "dispatch_refs": ["ADE-CR139-W1-META-DEV-INLINE-S02-START-2026-06-28T204058+0800"],
+  "verification_report_ref": "docs/quality/VERIFICATION-REPORT-CR139-W1.md#s02-t7-remediation-baseline-golden-values",
+  "verification_commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_cr139_s02_golden_baseline.py",
+      "status": "PASS",
+      "summary": "8 passed in 0.94s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py",
+      "status": "PASS",
+      "summary": "16 passed in 1.87s"
+    }
+  ],
+  "risks": [
+    {
+      "id": "O-S02-2",
+      "status": "accepted-static-only",
+      "summary": "Real lake freeze performance remains unverified because runtime/lake scan is not authorized."
+    },
+    {
+      "id": "O-S02-3",
+      "status": "controlled",
+      "summary": "Post-structure attribution granularity remains a revisit condition only if ambiguous_rate exceeds 5%."
+    }
+  ],
+  "waivers": [],
+  "next_route": "CR139-S03"
+}

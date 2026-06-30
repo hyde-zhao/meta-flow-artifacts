@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch2_integrated_evidence_review",
+  "created_at": "2026-06-29T22:00:08+08:00",
+  "status": "pass_with_risk_gate_b_batch2_candidate_layer_complete_followups_closed",
+  "decision": "approve_gate_b_candidate_layer_only_followups_closed_do_not_advance_gate_c_d_e_without_separate_authorization",
+  "dataset_count": 7,
+  "object_count": 14,
+  "totals": {
+    "source": 155716470,
+    "main": 102532818,
+    "quarantine": 20298616,
+    "dropped": 32885036,
+    "objects": 14
+  },
+  "dataset_summary": [
+    {
+      "dataset": "liquidity_capacity",
+      "source": 17095488,
+      "main": 17093658,
+      "quarantine": 1830,
+      "dropped": 0,
+      "main_dup": 0,
+      "objects": 2,
+      "evidence": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION.index.json"
+    },
+    {
+      "dataset": "market_cap",
+      "source": 17108103,
+      "main": 17001327,
+      "quarantine": 106776,
+      "dropped": 0,
+      "main_dup": 0,
+      "objects": 2,
+      "evidence": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION.index.json"
+    },
+    {
+      "dataset": "adj_factor",
+      "source": 29970830,
+      "main": 17905960,
+      "quarantine": 321815,
+      "dropped": 11743055,
+      "main_dup": 0,
+      "objects": 2,
+      "evidence": "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION.index.json"
+    },
+    {
+      "dataset": "events",
+      "source": 362887,
+      "main": 350753,
+      "quarantine": 12134,
+      "dropped": 0,
+      "main_dup": 0,
+      "objects": 2,
+      "evidence": "process/evidence/CR139-W2-GATEB-BATCH2-EVENTS-WRITE-EXECUTION.index.json"
+    },
+    {
+      "dataset": "prices",
+      "source": 28646730,
+      "main": 17013700,
+      "quarantine": 401628,
+      "dropped": 11231402,
+      "main_dup": 0,
+      "objects": 2,
+      "evidence": "process/evidence/CR139-W2-GATEB-BATCH2-PRICES-WRITE-EXECUTION.index.json"
+    },
+    {
+      "dataset": "prices_limit",
+      "source": 40962525,
+      "main": 19210017,
+      "quarantine": 11841929,
+      "dropped": 9910579,
+      "main_dup": 0,
+      "objects": 2,
+      "evidence": "process/evidence/CR139-W2-GATEB-BATCH2-PRICES_LIMIT-WRITE-EXECUTION.index.json"
+    },
+    {
+      "dataset": "trade_status",
+      "source": 21569907,
+      "main": 13957403,
+      "quarantine": 7612504,
+      "dropped": 0,
+      "main_dup": 0,
+      "objects": 2,
+      "evidence": "process/evidence/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION.index.json"
+    }
+  ],
+  "mechanical_validation": {
+    "process_route_health": "pass",
+    "manifest_objects_checked": 14,
+    "manifest_objects_match_file_sha_size_rows": 14,
+    "main_candidates_duplicate_key_zero": 7,
+    "zero_mutation_proofs_pass": 6,
+    "event_ledger_check": "pass",
+    "git_diff_check": "pass",
+    "json_parse": "pass",
+    "candidate_layer_coverage": "7/7 batch2 datasets"
+  },
+  "findings": [
+    {
+      "severity": "LOW",
+      "id": "GATEB-B2-REVIEW-001",
+      "summary": "zero-mutation proof canonical field names are not uniform across datasets",
+      "impact": "future machine consumers need schema-aware handling for canonical_*_tree_hash_unchanged fields",
+      "recommendation": "normalize proof schema before Gate C integrated automation, or keep current review adapter aware of field variants"
+    },
+    {
+      "severity": "LOW",
+      "id": "GATEB-B2-REVIEW-002",
+      "summary": "completion ledger operation_counts are scoped to the final three large-table writes, while integrated total is 14 candidate object writes plus 2 guarded old-candidate deletes",
+      "impact": "not a data defect; audit readers must use dataset evidence indexes for totals",
+      "recommendation": "use this integrated review as the authoritative Gate B Batch2 rollup"
+    }
+  ],
+  "blocking_findings": [],
+  "residual_risks": [
+    "Gate C catalog/manifest writes not authorized",
+    "Gate D published pointer advance not authorized",
+    "Gate E physical migration not authorized",
+    "lineage checksum/catalog readiness still requires separate review",
+    "quarantine semantics preserved but not published current truth"
+  ],
+  "evidence_refs": {
+    "pure": "process/evidence/CR139-W2-GATEB-BATCH2-PURE-METADATA-STRATEGY-UNIFICATION-EXECUTION.index.json",
+    "adj_factor": "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION.index.json",
+    "events": "process/evidence/CR139-W2-GATEB-BATCH2-EVENTS-WRITE-EXECUTION.index.json",
+    "prices": "process/evidence/CR139-W2-GATEB-BATCH2-PRICES-WRITE-EXECUTION.index.json",
+    "prices_limit": "process/evidence/CR139-W2-GATEB-BATCH2-PRICES_LIMIT-WRITE-EXECUTION.index.json",
+    "trade_status": "process/evidence/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION.index.json",
+    "completion_check": "process/checks/CR139-W2-GATEB-BATCH2-CANDIDATE-WRITES-COMPLETE-2026-06-29.md",
+    "review": "process/checks/CR139-W2-GATEB-BATCH2-INTEGRATED-EVIDENCE-REVIEW-2026-06-29.md"
+  },
+  "followup_cleanup_refs": [
+    "process/evidence/CR139-W2-GATEB-BATCH2-REVIEW-FOLLOWUP-CLEANUP-2026-06-29.json"
+  ],
+  "review_followups": {
+    "empty_liquidity_old_candidate_directory": "closed_removed_empty_dirs_no_data_objects_deleted",
+    "events_quarantine_count_basis": "closed_documented",
+    "dropped_rows_per_dataset": "already_present_in_dataset_evidence_table",
+    "batch2_rollup_ledger": "closed_appended_authoritative_rollup_event"
+  }
+}

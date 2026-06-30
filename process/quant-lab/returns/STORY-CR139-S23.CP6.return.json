@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR139-S23.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S23",
+  "status": "implemented",
+  "created_at": "2026-06-30T11:05:00+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR139-S23.CP6.work-packet.json",
+  "implementation_ref": "process/stories/CR139-S23-adjustment-factor-pit-IMPLEMENTATION.md",
+  "touched_files": [
+    {"path": "market_data/normalization.py", "change_type": "modified"},
+    {"path": "tests/test_cr139_adjustment_factor_pit.py", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "summary": "Added pure PIT adj_factor selection helpers; default normalize_run write path remains unchanged."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_write_touched": false,
+    "provider_catalog_write_touched": false,
+    "published_pointer_advance_executed": false,
+    "physical_partition_migration_executed": false,
+    "nas_operation_executed": false,
+    "git_remote_write_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_pit_correctness.py tests/test_cr139_dedup_correctness.py tests/test_cr139_adjustment_factor_pit.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_read_layer_dedup.py",
+        "result": "pass",
+        "summary": "15 passed in 0.38s"
+      }
+    ],
+    "tests": [
+      "test_s23_adj_factor_pit_excludes_future_factor_and_applies_visible_factor",
+      "test_s23_adj_factor_breakpoint_regression_uses_latest_visible_factor"
+    ],
+    "skipped": []
+  },
+  "evidence_refs": ["process/evidence/STORY-CR139-S23.CP6.index.json"],
+  "risks": [],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7"
+}

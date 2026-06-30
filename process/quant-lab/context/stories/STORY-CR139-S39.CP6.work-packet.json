@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "created_at": "2026-06-29T09:31:46+08:00",
+  "created_by": "host-orchestrator",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "batch_id": "CR139-W2-DATA-CONTRACTS",
+  "story_id": "CR139-S39",
+  "slug": "cr-data-audit-chain",
+  "story_ref": "process/stories/CR139-S39-cr-data-audit-chain.md",
+  "parent_context_ref": "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Implement catalog-level triggered_by_cr and run_lineage audit chain query fields after S33 catalog source-of-truth.",
+    "non_goals": [
+      "Do not take ownership of CR014/CR018 naming cleanup",
+      "Do not write provider catalog or real catalog state",
+      "Do not fabricate missing run lineage"
+    ]
+  },
+  "design_evidence_ref": "process/stories/CR139-S39-cr-data-audit-chain.md#技术说明",
+  "cp5_result_ref": "process/checks/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH.result.json",
+  "cp5_checkpoint_ref": "process/checkpoints/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH-REVIEW.md",
+  "feature_refs": ["FEAT-02"],
+  "feature_contract_summary": "FEAT-02 catalog audit chain for triggered_by_cr and run_lineage; S33 owns naming/API cleanup.",
+  "feature_design_summary_ref": "docs/design/FEATURE-DESIGN-MATRIX.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S39-cr-data-audit-chain.md#技术说明"
+  ],
+  "cr_delta": {
+    "summary": "Adds catalog query fields and broken-lineage semantics for CR-to-dataset/run traceability.",
+    "affected_contracts": ["market_data catalog audit fields"]
+  },
+  "dependencies": ["CR139-S08", "CR139-S33"],
+  "dependency_type": "verified-upstream-plus-same-batch-serial-dependency",
+  "dependency_inputs": [
+    "Wave1 S08 triggered_by_cr/path governance verified",
+    "CR139-S33 catalog source-of-truth CP6 result and evidence index",
+    "S22 run lineage output if present; missing lineage must remain broken, not fabricated"
+  ],
+  "merge_order": {
+    "batch_order": 9,
+    "catalog_py": "S04 -> S33 -> S39",
+    "notes": "S39 is last in this batch; it only adds audit-chain fields after S33."
+  },
+  "acceptance": [
+    "catalog query can trace triggered_by_cr from CR to dataset/release.",
+    "run_lineage includes data_run_id, source_run_id, publish_run_id, or explicit missing status.",
+    "Missing run lineage records a breakpoint and delegates repair to S22/S30/S14 rather than fabricating values.",
+    "S33 domain API and legacy alias compatibility are not broken.",
+    "Provider catalog writes, real lake writes, real catalog writes, pointer execution, and physical migration remain forbidden."
+  ],
+  "allowed_read_paths": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S39-cr-data-audit-chain.md",
+    "market_data/catalog.py",
+    "tests/test_cr139_cr_data_audit_chain.py"
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S39-cr-data-audit-chain.md",
+    "market_data/catalog.py",
+    "tests/test_cr139_cr_data_audit_chain.py"
+  ],
+  "read_if_needed": [
+    "process/checks/CP5-CR139-S39-cr-data-audit-chain-LLD-IMPLEMENTABILITY.md",
+    "process/evidence/STORY-CR139-S33.CP6.index.json",
+    "process/evidence/STORY-CR139-S22.CP6.index.json"
+  ],
+  "allowed_write_paths": [
+    "market_data/catalog.py",
+    "tests/test_cr139_cr_data_audit_chain.py",
+    "process/stories/CR139-S39-cr-data-audit-chain-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S39-cr-data-audit-chain-CODING-DONE.md",
+    "process/returns/STORY-CR139-S39.CP6.return.json",
+    "process/evidence/STORY-CR139-S39.CP6.index.json"
+  ],
+  "forbidden_write_paths": [
+    "engine/contracts.py",
+    "market_data/readers.py",
+    "market_data/manifest.py",
+    "market_data/lake_layout.py",
+    "market_data/normalization.py",
+    "market_data/publish.py",
+    "market_data/incremental.py",
+    "trading/**",
+    "data/**",
+    ".env",
+    ".env.*"
+  ],
+  "forbidden_actions": [
+    "runtime",
+    "real lake write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance execution",
+    "physical partition migration execution",
+    "credential/secret read",
+    "NAS/QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "CR014/CR018 naming cleanup ownership",
+    "Git remote write"
+  ],
+  "static_fixture_validation_scope": [
+    "CR traceability",
+    "run lineage traceability",
+    "missing lineage broken status",
+    "S33 alias compatibility preservation"
+  ],
+  "verification_commands_planned": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_cr_data_audit_chain.py"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_cr_data_audit_chain.py"
+  ],
+  "expected_return_packet_ref": "process/returns/STORY-CR139-S39.CP6.return.json",
+  "expected_evidence_index_ref": "process/evidence/STORY-CR139-S39.CP6.index.json",
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "standard-code",
+  "lld_policy": "technical-note"
+}

@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR139-S08.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S08",
+  "status": "implemented",
+  "created_at": "2026-06-28T22:21:23+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR139-S08.CP6.work-packet.json",
+  "dispatch_refs": ["ADE-CR139-W1-META-DEV-INLINE-S08-COMPLETE-2026-06-28T222123+0800"],
+  "implementation_ref": "process/stories/CR139-S08-runid-partition-key-governance-IMPLEMENTATION.md",
+  "touched_files": [
+    {
+      "path": "market_data/lake_layout.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "market_data/normalization.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "market_data/cli.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "market_data/readers.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "tests/test_cr139_s08_partition_governance.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/test_market_data_normalization_validation_readers.py",
+      "change_type": "modified"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "LakeLayout adds canonical current/archive helpers; normalize_run defaults to current_archive paths with explicit legacy_run_id compatibility; CLI canonical discovery prefers current paths and falls back to legacy run_id partitions."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_write_touched": false,
+    "catalog_write_touched": false,
+    "market_data_catalog_py_touched": false,
+    "published_pointer_advance_executed": false,
+    "physical_partition_migration_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_s08_partition_governance.py",
+        "result": "pass",
+        "summary": "10 passed in 0.24s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_market_data_normalization_validation_readers.py",
+        "result": "pass",
+        "summary": "9 passed in 0.35s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py tests/test_cr139_duplicate_fingerprint_profiling.py tests/test_cr139_published_pointer.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_panel_reader.py tests/test_cr139_read_layer_dedup.py tests/test_cr139_s08_partition_governance.py tests/test_cr014_catalog_publish_gate.py tests/test_cr014_p0_pipeline_contract.py",
+        "result": "pass",
+        "summary": "72 passed in 2.26s"
+      },
+      {
+        "command": "git diff --check -- market_data/lake_layout.py market_data/normalization.py market_data/cli.py market_data/readers.py tests/test_cr139_s08_partition_governance.py tests/test_market_data_normalization_validation_readers.py",
+        "result": "pass",
+        "summary": "no whitespace errors"
+      }
+    ],
+    "tests": [
+      "test_current_and_archive_roots_do_not_use_run_id",
+      "test_current_and_archive_partition_paths_validate_segments",
+      "test_partition_path_rejects_unsafe_segments",
+      "test_normalization_current_path_default_contract_and_legacy_compatibility",
+      "test_cli_prefers_current_paths_over_legacy_run_id",
+      "test_cli_falls_back_to_legacy_run_id_paths_without_migration",
+      "test_s08_mock_contract_keeps_run_id_in_metadata_not_path"
+    ],
+    "skipped": [
+      {
+        "scope": "physical partition migration execution",
+        "reason": "not authorized"
+      },
+      {
+        "scope": "real lake runtime validation",
+        "reason": "not authorized"
+      },
+      {
+        "scope": "catalog.py triggered_by_cr persistence",
+        "reason": "S39/M4 consumer-story scope"
+      },
+      {
+        "scope": "publish.py current/archive supersede movement",
+        "reason": "S04/S14/S22 consumer-story scope"
+      }
+    ]
+  },
+  "evidence_refs": [
+    "process/evidence/STORY-CR139-S08.CP6.index.json",
+    "process/stories/CR139-S08-runid-partition-key-governance-IMPLEMENTATION.md"
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "N1-O1",
+      "status": "open-consumer-story",
+      "summary": "Supersede movement current-to-archive remains S04/S14/S22 publish scope."
+    },
+    {
+      "id": "N1-O3",
+      "status": "not-authorized",
+      "summary": "Physical partition migration remains blocked pending separate runtime authorization."
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7"
+}

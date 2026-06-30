@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch2_liquidity_capacity_candidate_write_execution",
+  "created_at": "2026-06-29T18:43:03+08:00",
+  "status": "pass_with_risk_liquidity_capacity_candidate_write_verified",
+  "authorized_scope": "authorize Gate B Batch 2 liquidity_capacity quarantine-only additive candidate write only",
+  "dataset": "liquidity_capacity",
+  "completed_datasets": [
+    "liquidity_capacity"
+  ],
+  "failed_datasets": [],
+  "partial_completion": false,
+  "write_order": [
+    {
+      "order": 1,
+      "dataset": "liquidity_capacity",
+      "object_role": "candidate_main_non_conflict_rows",
+      "status": "verified",
+      "target_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/part-liquidity-capacity.parquet"
+    },
+    {
+      "order": 2,
+      "dataset": "liquidity_capacity",
+      "object_role": "quarantine_metadata_conflict_key_groups",
+      "status": "verified",
+      "target_relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine/part-liquidity-capacity-conflict-groups.parquet"
+    }
+  ],
+  "source_row_count": 17095488,
+  "candidate_main_row_count": 17091828,
+  "quarantine_row_count": 3660,
+  "dropped_row_count": 0,
+  "duplicate_key_group_count": 1830,
+  "duplicate_rows_in_duplicate_groups": 3660,
+  "object_count": 2,
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 2,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "checks": {
+    "target_absent_before_write": true,
+    "source_row_count_matches_profile": true,
+    "duplicate_key_groups_match_profile": true,
+    "duplicate_rows_match_profile": true,
+    "candidate_main_row_count_expected": true,
+    "quarantine_row_count_expected": true,
+    "combined_target_equals_source": true,
+    "candidate_main_has_no_duplicate_keys": true,
+    "quarantine_contains_all_duplicate_key_groups": true,
+    "source_constructed_hash_match": true,
+    "source_readback_hash_match": true,
+    "catalog_hash_unchanged": true,
+    "published_tree_hash_unchanged": true,
+    "canonical_liquidity_capacity_tree_hash_unchanged": true,
+    "operation_counts_exact": true,
+    "rollback_not_authorized": true
+  },
+  "failed_checks": [],
+  "quarantine_policy": {
+    "policy": "quarantine_all_metadata_conflict_duplicate_key_groups",
+    "primary_row_selection": "none_in_gate_b",
+    "published_truth_decision_deferred_to_later_gate": true
+  },
+  "evidence_refs": {
+    "batch2_deep_profile_index": "process/evidence/CR139-W2-GATEB-BATCH2-DEEP-PROFILE.index.json",
+    "write_plan_json": "process/plans/CR139-W2-GATEB-PER-DATASET-WRITE-PLAN.json",
+    "prewrite_snapshot": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-PREWRITE-SNAPSHOT.json",
+    "postwrite_snapshot": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-POSTWRITE-SNAPSHOT.json",
+    "object_manifest": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-OBJECT-MANIFEST.json",
+    "rollback_manifest": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-ROLLBACK-MANIFEST.json",
+    "zero_pointer_mutation": "process/evidence/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29T184303+0800-ZERO-POINTER-MUTATION.json",
+    "write_execution_check": "process/checks/CR139-W2-GATEB-BATCH2-LIQUIDITY-CAPACITY-WRITE-EXECUTION-2026-06-29.md"
+  },
+  "non_authorized_scope": [
+    "all other Batch 2 datasets",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "rollback deletion"
+  ],
+  "next_gate": "review liquidity_capacity write evidence; next Batch 2 dataset requires separate authorization"
+}

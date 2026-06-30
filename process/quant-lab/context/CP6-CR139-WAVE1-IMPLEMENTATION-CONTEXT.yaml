@@ -1,0 +1,205 @@
+schema_version: 1
+context_id: CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT
+capsule_type: cp6-implementation
+status: ready
+created_at: "2026-06-28T20:00:18+08:00"
+created_by: host-orchestrator
+cr_id: CR-139
+workflow_id: CR139-STRATEGY-DATA-FOUNDATION
+phase: story-execution
+wave_id: CR139-W1
+active_story: CR139-S01
+pending_gate: CP6
+read_profile: compact
+
+objective:
+  summary: >-
+    Advance CR-139 Wave1 through CP6 implementation and CP7 static/fixture
+    verification. Wave1 is the approved CP5-W1 batch of 8 Story design
+    evidence items. The baseline-freeze chain S01 -> S02 -> S03 must verify
+    before structural stories S04-S08 start.
+  next_step_prompt: "推进阶段: story-execution (CR-139 Wave1 CP6, 实现 S01 T8 清册)"
+
+source_of_truth:
+  machine_state: process/state/STATE.current.json
+  cp5_result: process/checks/CP5-CR139-WAVE1-LLD-BATCH.result.json
+  cp5_human_gate: process/checkpoints/CP5-CR139-WAVE1-LLD-BATCH-REVIEW.md
+  wave_handoff: process/context/CP6-CR139-WAVE1-IMPLEMENTATION-HANDOFF.md
+  story_packet_ref: process/context/stories/CR139-W1.CP6.story-packets.json
+  development_plan: process/DEVELOPMENT-PLAN-CR139.yaml
+  story_status: process/STORY-STATUS-CR139.md
+  parent_cr: process/changes/CR-139-STRATEGY-DATA-FOUNDATION-2026-06-28.md
+
+key_facts:
+  cp2_status: "approved 2026-06-28T16:05:00+08:00"
+  cp3_status: "approved 2026-06-28T17:30:00+08:00"
+  cp4_status: "PASS_WITH_RISK 2026-06-28T17:50:00+08:00"
+  cp5_w1_status: "approved 2026-06-28T19:20:00+08:00"
+  cp5_w1_scope: "8 Story: S01-S08, 6 full-lld + 2 technical-note"
+  validation_mode: static-only
+  implementation_authorized: "Wave1 code implementation + static/fixture verification only"
+  subagent_dispatch_surface: "unavailable in current tool surface"
+  dispatch_mode: inline-fallback
+  inline_fallback_authorization: "User instructed host-orchestrator to converge Wave1 context and advance CR139 Wave1 on 2026-06-28T20:00:18+08:00."
+
+wave1_execution_order:
+  - story_id: CR139-S01
+    slug: remediation-object-inventory
+    title: "T8 整改对象自动化清册"
+    gate_role: baseline-freeze-step-1
+    status: dev-ready
+    depends_on: []
+    cp5_evidence: process/stories/CR139-S01-remediation-object-inventory-LLD.md
+  - story_id: CR139-S02
+    slug: remediation-baseline-golden-values
+    title: "T7 整改回归基线+黄金值快照"
+    gate_role: baseline-freeze-step-2
+    status: blocked-by-dependency
+    depends_on: [CR139-S01]
+    required_upstream_status: verified
+    cp5_evidence: process/stories/CR139-S02-remediation-baseline-golden-values-LLD.md
+  - story_id: CR139-S03
+    slug: duplicate-fingerprint-profiling
+    title: "C2a 重复画像"
+    gate_role: baseline-freeze-step-3
+    status: blocked-by-dependency
+    depends_on: [CR139-S01, CR139-S02]
+    required_upstream_status: verified
+    cp5_evidence: process/stories/CR139-S03-duplicate-fingerprint-profiling-LLD.md
+  - story_id: CR139-S04
+    slug: published-pointer-read-selector
+    title: "V1 published pointer/read selector"
+    gate_role: structural-change
+    status: blocked-by-baseline-freeze
+    depends_on: [CR139-S01, CR139-S02, CR139-S03]
+    required_upstream_status: verified
+    cp5_evidence: process/stories/CR139-S04-published-pointer-read-selector.md
+  - story_id: CR139-S05
+    slug: pit-as-of-reader
+    title: "C1 PIT as-of reader"
+    gate_role: structural-change
+    status: blocked-by-dependency
+    depends_on: [CR139-S04]
+    required_upstream_status: verified
+    cp6_hard_gate: "No writes to market_data/catalog.py; catalog write requires S33 or independent slice."
+    cp5_evidence: process/stories/CR139-S05-pit-as-of-reader.md
+  - story_id: CR139-S06
+    slug: unified-panel-reader
+    title: "R1 统一 panel reader"
+    gate_role: structural-change
+    status: blocked-by-dependency
+    depends_on: [CR139-S05]
+    required_upstream_status: verified
+    cp6_hard_gate: "No writes to market_data/catalog.py; read-only current_pointer/published/pit_status only."
+    cp5_evidence: process/stories/CR139-S06-unified-panel-reader-LLD.md
+  - story_id: CR139-S07
+    slug: read-layer-dedup
+    title: "C2b 读层去重"
+    gate_role: structural-change
+    status: blocked-by-dependency
+    depends_on: [CR139-S06]
+    required_upstream_status: verified
+    cp5_evidence: process/stories/CR139-S07-read-layer-dedup-LLD.md
+  - story_id: CR139-S08
+    slug: runid-partition-key-governance
+    title: "N1 run_id 分区治理"
+    gate_role: deferred-execution
+    status: deferred-until-baseline-and-s07-verified
+    depends_on: [CR139-S01, CR139-S02, CR139-S03, CR139-S07]
+    required_upstream_status: verified
+    cp5_evidence: process/stories/CR139-S08-runid-partition-key-governance-LLD.md
+
+execution_constraints:
+  baseline_gate: "S04-S08 structural changes must not start until S01/S02/S03 are verified."
+  s08_migration: "Physical partition migration execution is not authorized in this Wave1 static/fixture run."
+  readers_merge_order: "S05 -> S06 -> S07"
+  publish_merge_order: "S04"
+  catalog_merge_order: "S04 only in Wave1; S05/S06 are forbidden to write catalog.py."
+  validation_command_pattern: "uv run --python 3.11 pytest -q tests/test_cr139_*.py"
+  per_story_cp6_required: "CP6 result, implementation evidence, CP6 return packet and CP6 evidence index."
+  per_story_cp7_required: "CP7 result, verification report or Story scoped equivalent, CP7 return packet and CP7 evidence index."
+
+authz_policy_refs:
+  - NO_CREDENTIAL_READ
+  - NO_RUNTIME
+  - NO_NAS
+  - NO_TRADING
+  - NO_PROVIDER_LAKE_CATALOG_WRITE
+  - NO_REMOTE_WRITE
+  - NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE
+
+non_authorized_scope:
+  - runtime / NAS / provider / catalog runtime connection or credential read
+  - QMT / MiniQMT / gateway runtime
+  - order submit/cancel, simulation trading, live trading
+  - real data lake writes
+  - published pointer advance execution
+  - physical partition migration execution
+  - broker facts live writes
+  - git remote write / commit / push / branch governance
+  - publish / live / production writes
+
+allowed_reads:
+  - process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml
+  - process/context/stories/CR139-W1.CP6.story-packets.json
+  - process/state/STATE.current.json
+  - process/checks/CP5-CR139-WAVE1-LLD-BATCH.result.json
+  - process/checkpoints/CP5-CR139-WAVE1-LLD-BATCH-REVIEW.md
+  - process/stories/CR139-S01-remediation-object-inventory-LLD.md
+  - process/stories/CR139-S02-remediation-baseline-golden-values-LLD.md
+  - process/stories/CR139-S03-duplicate-fingerprint-profiling-LLD.md
+  - process/stories/CR139-S04-published-pointer-read-selector.md
+  - process/stories/CR139-S05-pit-as-of-reader.md
+  - process/stories/CR139-S06-unified-panel-reader-LLD.md
+  - process/stories/CR139-S07-read-layer-dedup-LLD.md
+  - process/stories/CR139-S08-runid-partition-key-governance-LLD.md
+
+must_read:
+  - process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml
+  - process/context/stories/CR139-W1.CP6.story-packets.json
+  - process/state/STATE.current.json
+
+read_if_needed:
+  - process/changes/CR-139-STRATEGY-DATA-FOUNDATION-2026-06-28.md
+  - process/DEVELOPMENT-PLAN-CR139.yaml
+  - process/STORY-STATUS-CR139.md
+  - process/STORY-BACKLOG-CR139.md
+  - process/context/DATA-LAKE-REMEDIATION-HANDOFF.md
+  - process/REQUIREMENTS.md
+  - process/TEST-MATRIX.md
+  - docs/design/FEATURE-DESIGN-MATRIX.md
+
+do_not_read_by_default:
+  - process/STATE.md
+  - process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md
+  - process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md
+  - process/stories/CR139-S09-*
+  - process/stories/CR139-S1*
+  - process/stories/CR139-S2*
+  - process/stories/CR139-S3*
+  - process/stories/CR139-S40-*
+  - all previous CR017/CR018 LLD drafts
+  - full conversation transcript
+
+risks_and_decisions:
+  - id: CR139-W1-RISK-STATE-DRIFT
+    status: mitigated-by-context-convergence
+    summary: "Pre-convergence DEVELOPMENT-PLAN/STORY-STATUS still showed pending CP5; this capsule is the corrected CP6 Wave1 entry."
+  - id: CR139-W1-RISK-INLINE-FALLBACK
+    status: accepted-for-current-tool-surface
+    summary: "No subagent tools are exposed; host-orchestrator inline fallback is user-authorized and must be recorded in CP6/CP7."
+  - id: CR139-W1-RISK-RUNTIME-NOT-AUTHORIZED
+    status: controlled
+    summary: "Wave1 verification defaults to static/fixture. Runtime or physical migration remains separate authorization."
+
+downstream_tasks:
+  - "Implement and CP6/CP7 verify S01."
+  - "After S01 verified, implement and CP6/CP7 verify S02."
+  - "After S01/S02 verified, implement and CP6/CP7 verify S03."
+  - "Only after S01/S02/S03 verified, implement S04-S08 according to dependencies and hard gates."
+  - "After all Wave1 executable stories are verified or explicitly deferred, generate W2/W3 context convergence."
+
+token_control:
+  full_doc_read_policy: only-on-missing-conflict-audit-or-deep-review
+  max_source_files: 12
+  read_expansion_log_ref: process/state/READ-EXPANSION-LEDGER.ndjson

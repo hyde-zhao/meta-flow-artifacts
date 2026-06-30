@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch2_liquidity_capacity_rollback_manifest",
+  "created_at": "2026-06-29T18:43:03+08:00",
+  "rollback_authorized_now": false,
+  "allowed_only_after_separate_authorization": "delete only objects listed in this manifest for the newly written liquidity_capacity candidate path",
+  "forbidden_rollback": [
+    "delete legacy canonical data",
+    "catalog write",
+    "pointer write",
+    "physical migration",
+    "automatic rollback"
+  ],
+  "objects": [
+    {
+      "dataset": "liquidity_capacity",
+      "order": 1,
+      "role": "candidate_main_non_conflict_rows",
+      "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/part-liquidity-capacity.parquet",
+      "size_bytes": 650227690,
+      "sha256": "07e36c7987713ad3424dd5942c90817b95e8c702f58748c5251f139d346a5a21",
+      "row_count": 17091828,
+      "status": "verified",
+      "write_mode": "additive_only_copy_non_duplicate_key_rows"
+    },
+    {
+      "dataset": "liquidity_capacity",
+      "order": 2,
+      "role": "quarantine_metadata_conflict_key_groups",
+      "relative_path": "candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical/quarantine/part-liquidity-capacity-conflict-groups.parquet",
+      "size_bytes": 136155,
+      "sha256": "c1680cc06e8e8968418c4ead707f7aa6cffde2deaff16206aea614a4110822ce",
+      "row_count": 3660,
+      "status": "verified",
+      "write_mode": "additive_only_quarantine_all_duplicate_key_group_rows"
+    }
+  ]
+}

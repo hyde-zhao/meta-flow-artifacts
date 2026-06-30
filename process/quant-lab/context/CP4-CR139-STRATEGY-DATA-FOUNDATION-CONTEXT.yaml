@@ -1,0 +1,77 @@
+# CP4 Context Capsule — CR-139 Strategy Data Foundation (Story Planning)
+
+capsule_for: CP4 (story-planning / Story DAG & parallel safety)
+cr_id: CR-139
+phase: story-planning
+delegated_to: meta-se
+read_profile: compact
+created_at: 2026-06-28T17:35:00+08:00
+
+## 目标（本次委托边界）
+基于 CR-139 CP3 已确认的设计产物（companion HLD v0.2 + ADR v0.2 + BLUEPRINT v1.14 + FEATURE-DESIGN-MATRIX v1.13 + DOMAIN-MAP v1.13 + DEPENDENCY-MAP v1.13，全部 confirmed-cp3），由 meta-se 执行 CP4 Story 拆解与并行安全门：拆 Story、建 DAG、判定文件所有权与依赖类型、写 Wave 编排，产出 CP4 自动预检。CP4 是自动预检（汇入 CP5 Decision Brief），**不是人工门禁**。CP4 通过后进入 CP5 LLD 设计证据写作（仍由 meta-se/dev 按 lld_policy 写），CP5 全量人工门禁通过后才实现。
+
+## 委托边界
+- 你可以直接产出 Story 拆解、DAG、Wave、CP4 预检。CP4 无人工门禁，无需 AskUserQuestion；如遇实现灰区写入 `STATE.md.parallel_execution.lld_clarification_queue`（规则 39），由 host-orchestrator 统一询问。
+- 你**不得开始 LLD 写作**（CP5 阶段）、**不得拆 Story 后立即实现**（规则 5 Story 开发锁：CP5 通过后才实现）。
+- Story 拆解完成后写交还摘要返回 host-orchestrator，由 host-orchestrator 回收并发起 CP5 LLD 批次。
+
+## must_read（必读）
+- `process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md` v0.2（companion HLD，§5 推荐方案 / §9 架构图 / §10 模块职责 / §12 关键流程含 Wave1 基线门 / §16 分阶段落地 / §17 Feature 级实现设计触发条件 / §19 工作量粗估）
+- `process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md` v0.2（D1-D8 + AGA-1/3/5 confirmed + Wave1 基线门 + V4 冻结）
+- `docs/design/FEATURE-DESIGN-MATRIX.md` v1.13（45 项 REQ 的 Feature 归属 + lld_policy：d1=full-lld / d2=technical-note / a=technical-note）
+- `process/REQUIREMENTS.md` v1.17 REQ-201..249（45 项整改 1:1 映射 + REQ-247 Wave1 基线门 + REQ-248 不授权 + REQ-249 既有合同闭环原则）
+- `process/changes/CR-139-STRATEGY-DATA-FOUNDATION-2026-06-28.md` §5 Wave 路线（Wave1 P0 顺序：T8→T7→C2a→V1→C1→R1→C2b→N1 后置；CP2 追加约束：结构性变更在 T8/T7/C2a 之后）
+- `process/STORY-BACKLOG-CR138.md`（CR138 Story backlog 格式参照：frontmatter / Story 总览表 / Story 详情 / 验收标准 / DAG）
+- `process/STORY-STATUS-CR138.md` + `process/DEVELOPMENT-PLAN-CR138.yaml`（格式参照）
+
+## read_if_needed
+- `process/context/DATA-LAKE-REMEDIATION-HANDOFF.md` v0.7 §3 各整改项代码触点列（用于 Story 文件所有权判定）
+- `docs/design/BLUEPRINT.md` v1.14 Feature 边界（FEAT-02 写侧/读侧分层 AGA-1 A1）
+- `process/STORY-BACKLOG.md`（既有 Story 编号空间，避免冲突）
+
+## do_not_read_by_default
+- 全部已有 LLD / Story 卡片（CP4 只拆新 Story，不消费旧 Story 实现）
+- CR-017/CR-018 全文
+
+## Story 拆解要求
+
+### 拆分原则
+按 Wave1 P0（MVP）优先拆，覆盖全 45 项整改但分 Wave。每个 Story 必须可独立验收、文件所有权不冲突。
+
+**Wave1 P0 Story（MVP，必须先拆，按基线门顺序）**：
+- T8 整改对象自动化清册（d1，full-lld）→ 基线冻结第 1 步
+- T7 整改回归基线 + 黄金值快照（d1，full-lld）→ 基线冻结第 2 步
+- C2a 重复画像（b，technical-note）→ 基线冻结第 3 步
+- 【基线门：以上三步完成后方可执行以下结构性变更】
+- V1 published pointer / read selector（a，technical-note 消费既有 HLD 契约）
+- C1 PIT as-of reader（a，technical-note）
+- R1 panel reader（c，full-lld）
+- C2b 读层去重（b，technical-note）
+- N1 物理迁移后置（c，full-lld，但实现后置到基线冻结之后，可作 Wave1 收尾 Story 标 deferred-execution）
+
+**Wave2 P1 Story（解锁 ML + 模拟盘）**：V4/R2/V3/E1-E5/R3/L1-L2/L3-L4/E3-E4/F1-F3/T4-T6/X1-X4/T2-T3/N1收尾/C3/M1
+**Wave3 P2 Story（实盘运维）**：L5/R4/T1/M3-M4/F4
+
+### 每个 Story 卡片必须包含
+- Story ID（CR139-S01..Snn）、标题、Owner Feature（按 MATRIX v1.13 归属）、lld_policy（d1=full-lld / d2=technical-note / a=technical-note / c=full-lld / b=technical-note）、Wave、依赖（前置 Story ID）、文件所有权（代码触点，来自 handoff §3）、验收标准、状态=lld-pending（等 CP5 LLD）
+
+### DAG 与并行安全
+- 依赖类型标注：runtime（等上游 verified）/ file-conflict（串行）/ contract（等上游契约冻结）
+- Wave1 基线门（REQ-247）作为硬依赖：T8/T7/C2a 必须 verified 后 V1/C1/R1/C2b 才能开始
+- 文件所有权冲突检查：readers.py 被 C1/R1/C2b/E4/X1/X3 多 Story 触及 → 必须串行或拆分所有权
+- 跨边界项 T6 run-id 贯通（FEAT-02 生成 + FEAT-06/11 消费）显式标注 owner/consumer
+
+## 产物路由（CR-scoped process/ 文件，仿 CR138 模式）
+- `process/STORY-BACKLOG-CR139.md`（Story 总览表 + 详情 + 验收标准 + DAG）
+- `process/STORY-STATUS-CR139.md`（Story 状态汇总，全部 lld-pending）
+- `process/DEVELOPMENT-PLAN-CR139.yaml`（Wave 编排 + 依赖 + 并行上限 + 文件所有权）
+- `process/stories/CR139-S01-*.md` ... `CR139-Snn-*.md`（Story 卡片，每 Story 一文件）
+- `process/checks/CP4-CR139-STORY-DAG-PARALLEL-SAFETY.md`（CP4 自动预检：Entry/Checklist/Exit/Deliverables）
+- `process/checks/CP4-CR139-STORY-DAG-PARALLEL-SAFETY.result.json`（机器真相源，如 checker 支持）
+- 交还摘要（meta-se 返回 host-orchestrator）
+
+## 不授权范围（non-authorized scope）
+CP4 不授权：LLD 写作（CP5）/ 实现 / runtime / NAS / QMT / trading / provider-lake-catalog 写入 / 物理分区迁移（Wave1 N1 后置到基线冻结之后）/ Git remote write。CP4 通过仅意味着 Story 可进入 CP5 LLD 写作，不等于授权实现。
+
+## context_policy
+capsule 路径即本文件。meta-se 默认消费 capsule + must_read；不得默认读全部旧 LLD/Story。需扩展读取时写明 `full_doc_read_reason`。

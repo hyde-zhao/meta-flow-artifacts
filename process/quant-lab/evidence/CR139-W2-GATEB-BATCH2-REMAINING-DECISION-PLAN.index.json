@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch2_remaining_decision_plan",
+  "created_at": "2026-06-29T20:57:45+08:00",
+  "status": "pass_with_risk_remaining_decision_plan_ready_write_still_requires_explicit_dataset_authorization",
+  "mode": "read_only_decision_planning_no_lake_write",
+  "datasets": [
+    "events",
+    "prices",
+    "prices_limit",
+    "trade_status"
+  ],
+  "recommended_next_write": "events",
+  "write_still_requires_explicit_authorization": true,
+  "dataset_summary": [
+    {
+      "dataset": "events",
+      "write_readiness": "ready_for_explicit_events_write_authorization_after_review",
+      "next_authorization_candidate": true,
+      "business_conflict_groups": 774,
+      "planned_main_rows": 350753,
+      "planned_quarantine_rows": 12134
+    },
+    {
+      "dataset": "prices",
+      "write_readiness": "blocked_until_schema_normalization_decision_and_single_dataset_authorization",
+      "next_authorization_candidate": false,
+      "business_conflict_groups": 79958,
+      "planned_main_rows": 17013700,
+      "planned_quarantine_rows": 401628
+    },
+    {
+      "dataset": "prices_limit",
+      "write_readiness": "blocked_until_single_dataset_authorization_after_events_or_prices_schema_review",
+      "next_authorization_candidate": false,
+      "business_conflict_groups": 499787,
+      "planned_main_rows": 19210017,
+      "planned_quarantine_rows": 11841929
+    },
+    {
+      "dataset": "trade_status",
+      "write_readiness": "blocked_until_single_dataset_authorization; recommend after events because conflict scale is high",
+      "next_authorization_candidate": false,
+      "business_conflict_groups": 3692105,
+      "planned_main_rows": 13957403,
+      "planned_quarantine_rows": 7612504
+    }
+  ],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "evidence_refs": {
+    "detail": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-DECISION-PLAN-2026-06-29.json",
+    "index": "process/evidence/CR139-W2-GATEB-BATCH2-REMAINING-DECISION-PLAN.index.json",
+    "check": "process/checks/CR139-W2-GATEB-BATCH2-REMAINING-DECISION-PLAN-2026-06-29.md"
+  },
+  "non_authorized_scope": [
+    "lake write for events/prices/prices_limit/trade_status",
+    "candidate object delete",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "legacy deletion",
+    "rollback"
+  ]
+}

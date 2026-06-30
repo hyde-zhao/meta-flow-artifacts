@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch2_trade_status_candidate_write_execution",
+  "created_at": "2026-06-29T21:33:48+08:00",
+  "status": "pass_with_risk_trade_status_candidate_write_verified",
+  "authorized_scope": "Gate B Batch 2 trade_status split candidate write only; exact-copy dedup, metadata-only resolved, business-conflict full quarantine",
+  "dataset": "trade_status",
+  "run_id": "cr139-w2-trade_status-legacy_lake-20260629-canonical",
+  "schema_policy": "single_schema",
+  "schema_info": {
+    "schema_variant_count": 1,
+    "union_columns": [
+      "trade_date",
+      "symbol",
+      "is_tradable",
+      "is_suspended",
+      "is_st",
+      "status_reason",
+      "source",
+      "source_interface",
+      "source_run_id",
+      "available_at",
+      "available_at_rule",
+      "schema_version",
+      "lineage_raw_checksum"
+    ],
+    "schema_variants": [
+      {
+        "file_count": 44,
+        "columns": [
+          "trade_date",
+          "symbol",
+          "is_tradable",
+          "is_suspended",
+          "is_st",
+          "status_reason",
+          "source",
+          "source_interface",
+          "source_run_id",
+          "available_at",
+          "available_at_rule",
+          "schema_version",
+          "lineage_raw_checksum"
+        ],
+        "missing_from_union": []
+      }
+    ]
+  },
+  "dataset_results_summary": {
+    "source_row_count": 21569907,
+    "main_row_count": 13957403,
+    "quarantine_row_count": 7612504,
+    "dropped_exact_duplicate_row_count": 0,
+    "metadata_only_group_count": 70087,
+    "business_conflict_group_count": 3692105,
+    "business_conflict_quarantine_row_count": 7542079,
+    "metadata_superseded_quarantine_row_count": 70425,
+    "main_duplicate_row_over_unique_count": 0,
+    "accounted_row_count": 21569907
+  },
+  "source_precedence": {
+    "rule": "prefer stage3 trade-status lineage, then CR018 backfill, then chapter3 constraints; business-conflict groups are fully quarantined",
+    "business_conflict_groups_quarantined": 3692105
+  },
+  "object_count": 2,
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 2,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "checks": {
+    "target_absent_before_write": true,
+    "source_rows_expected": true,
+    "main_rows_expected": true,
+    "quarantine_rows_expected": true,
+    "dropped_exact_duplicates_expected": true,
+    "metadata_only_groups_expected": true,
+    "business_conflict_groups_expected": true,
+    "main_has_no_duplicate_keys": true,
+    "zero_mutation_pass": true,
+    "rollback_not_authorized": true
+  },
+  "failed_checks": [],
+  "evidence_refs": {
+    "preexecution_snapshot": "process/evidence/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION-2026-06-29T214000+0800-PREEXECUTION-SNAPSHOT.json",
+    "postexecution_snapshot": "process/evidence/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION-2026-06-29T214000+0800-POSTEXECUTION-SNAPSHOT.json",
+    "object_manifest": "process/evidence/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION-2026-06-29T214000+0800-OBJECT-MANIFEST.json",
+    "rollback_manifest": "process/evidence/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION-2026-06-29T214000+0800-ROLLBACK-MANIFEST.json",
+    "zero_mutation": "process/evidence/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION-2026-06-29T214000+0800-ZERO-MUTATION-PROOF.json",
+    "execution_check": "process/checks/CR139-W2-GATEB-BATCH2-TRADE_STATUS-WRITE-EXECUTION-2026-06-29.md"
+  },
+  "non_authorized_scope": [
+    "all other datasets",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "legacy deletion",
+    "rollback deletion"
+  ],
+  "next_gate": "review trade_status write evidence; Gate B candidate writes complete pending integrated review"
+}

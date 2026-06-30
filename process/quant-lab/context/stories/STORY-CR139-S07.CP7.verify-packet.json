@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_verify_packet",
+  "stage": "CP7",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S07",
+  "story_ref": "process/stories/CR139-S07-read-layer-dedup-LLD.md",
+  "parent_context_ref": "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Verify S07 read-layer dedup with fixture-only tests and Wave1 regression through S07.",
+    "non_goals": [
+      "No runtime or real lake validation",
+      "No physical partition migration execution",
+      "No S08 partition governance claim"
+    ]
+  },
+  "feature_refs": ["FEAT-02"],
+  "feature_contract_summary": "read_dataset/read_canonical return prices frames deduplicated by (symbol, trade_date) while preserving read-only published-gate contracts.",
+  "feature_design_summary_ref": "docs/features/market-data-lake/DESIGN.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S07-read-layer-dedup-LLD.md"
+  ],
+  "cr_delta": {
+    "summary": "Verifies S07 implementation evidence and regression against S01-S06 baseline and CR014 publish contracts.",
+    "affected_contracts": ["readers.read_dataset", "readers.read_canonical"]
+  },
+  "dependency_inputs": [
+    "process/checks/CP6-CR139-S07-read-layer-dedup-CODING-DONE.md",
+    "process/evidence/STORY-CR139-S07.CP6.index.json"
+  ],
+  "acceptance": [
+    "S07 focused tests pass",
+    "S01-S07 plus CR014 publish regression passes",
+    "Verification report and CP7 return/evidence exist",
+    "Physical partition migration remains unexecuted"
+  ],
+  "allowed_reads": [
+    "process/stories/CR139-S07-read-layer-dedup-IMPLEMENTATION.md",
+    "process/evidence/STORY-CR139-S07.CP6.index.json",
+    "tests/test_cr139_read_layer_dedup.py",
+    "tests/test_cr139_panel_reader.py",
+    "tests/test_cr139_pit_as_of_reader.py",
+    "tests/test_cr014_catalog_publish_gate.py",
+    "tests/test_cr014_p0_pipeline_contract.py"
+  ],
+  "read_if_needed": [
+    "docs/quality/VERIFICATION-REPORT-CR139-W1.md",
+    "process/stories/CR139-S07-read-layer-dedup-LLD.md"
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN-CR139.yaml",
+    "process/STORY-STATUS-CR139.md",
+    "process/changes/*.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "allowed_write_paths": [
+    "docs/quality/VERIFICATION-REPORT-CR139-W1.md",
+    "process/checks/CP7-CR139-S07-read-layer-dedup-VERIFICATION-DONE.md",
+    "process/returns/STORY-CR139-S07.CP7.return.json",
+    "process/evidence/STORY-CR139-S07.CP7.index.json"
+  ],
+  "forbidden_write_paths": [
+    "market_data/catalog.py",
+    "market_data/manifest.py",
+    "market_data/lake_layout.py",
+    "market_data/normalization.py",
+    "market_data/publish.py",
+    "data/lake/**"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_read_layer_dedup.py",
+    "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py tests/test_cr139_duplicate_fingerprint_profiling.py tests/test_cr139_published_pointer.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_panel_reader.py tests/test_cr139_read_layer_dedup.py tests/test_cr014_catalog_publish_gate.py tests/test_cr014_p0_pipeline_contract.py"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_MARKET_DATA_CATALOG_PY_WRITE",
+    "NO_PUBLISHED_POINTER_ADVANCE_EXECUTION",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "budget": {
+    "estimated_tokens": 2800,
+    "estimator": "manual",
+    "max_tokens": 9000
+  },
+  "risk_profile": "standard-code",
+  "lld_policy": "full-lld"
+}

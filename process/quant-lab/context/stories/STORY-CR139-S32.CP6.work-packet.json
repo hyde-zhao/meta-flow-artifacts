@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "created_at": "2026-06-29T09:31:46+08:00",
+  "created_by": "host-orchestrator",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "batch_id": "CR139-W2-DATA-CONTRACTS",
+  "story_id": "CR139-S32",
+  "slug": "write-dedup-guarantee",
+  "story_ref": "process/stories/CR139-S32-write-dedup-guarantee.md",
+  "parent_context_ref": "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Implement write-side canonical primary-key deduplication or fail-closed blocking before canonical writes.",
+    "non_goals": [
+      "Do not rewrite existing real lake partitions",
+      "Do not broaden read-layer S07 dedup behavior",
+      "Do not silently append duplicate canonical rows"
+    ]
+  },
+  "design_evidence_ref": "process/stories/CR139-S32-write-dedup-guarantee.md#技术说明",
+  "cp5_result_ref": "process/checks/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH.result.json",
+  "cp5_checkpoint_ref": "process/checkpoints/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH-REVIEW.md",
+  "feature_refs": ["FEAT-02"],
+  "feature_contract_summary": "FEAT-02 write-side uniqueness guarantee aligned with S07 read-side dedup semantics.",
+  "feature_design_summary_ref": "docs/design/FEATURE-DESIGN-MATRIX.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S32-write-dedup-guarantee.md#技术说明"
+  ],
+  "cr_delta": {
+    "summary": "Adds deterministic deduplicate-or-fail write policy and validation checks for canonical primary keys.",
+    "affected_contracts": ["market_data normalization canonical writer", "market_data validation"]
+  },
+  "dependencies": ["CR139-S07"],
+  "dependency_type": "verified-upstream-read-dedup-contract",
+  "dependency_inputs": ["Wave1 S07 read-layer dedup verified"],
+  "merge_order": {
+    "batch_order": 4,
+    "normalization_py": "S08 -> S31 -> S32 -> S34 -> S14 -> S23 -> S22",
+    "notes": "Must run after S30 and S31 because all three packets allow writes to market_data/normalization.py."
+  },
+  "file_lock": {
+    "path": "market_data/normalization.py",
+    "mode": "exclusive",
+    "serial_order": ["CR139-S30", "CR139-S31", "CR139-S32"],
+    "requires_completed_before_start": ["CR139-S30", "CR139-S31"],
+    "blocks_parallel_with": ["CR139-S30", "CR139-S31", "CR139-S34", "CR139-S14"],
+    "release_condition": "process/returns/STORY-CR139-S32.CP6.return.json and process/evidence/STORY-CR139-S32.CP6.index.json exist"
+  },
+  "acceptance": [
+    "Write policy allows only deduplicate_deterministic or fail_on_duplicate.",
+    "Identical duplicate rows are deterministically deduplicated where policy allows.",
+    "Conflicting duplicate primary keys fail closed.",
+    "Missing primary key contract fails closed.",
+    "Silent append of duplicates is forbidden."
+  ],
+  "allowed_read_paths": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S32-write-dedup-guarantee.md",
+    "market_data/normalization.py",
+    "market_data/validation.py",
+    "tests/test_cr139_write_dedup_guarantee.py"
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S32-write-dedup-guarantee.md",
+    "market_data/normalization.py",
+    "market_data/validation.py",
+    "tests/test_cr139_write_dedup_guarantee.py"
+  ],
+  "read_if_needed": [
+    "process/checks/CP5-CR139-S32-write-dedup-guarantee-LLD-IMPLEMENTABILITY.md",
+    "process/evidence/STORY-CR139-S07.CP7.index.json"
+  ],
+  "allowed_write_paths": [
+    "market_data/normalization.py",
+    "market_data/validation.py",
+    "tests/test_cr139_write_dedup_guarantee.py",
+    "process/stories/CR139-S32-write-dedup-guarantee-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S32-write-dedup-guarantee-CODING-DONE.md",
+    "process/returns/STORY-CR139-S32.CP6.return.json",
+    "process/evidence/STORY-CR139-S32.CP6.index.json"
+  ],
+  "forbidden_write_paths": [
+    "engine/contracts.py",
+    "market_data/readers.py",
+    "market_data/catalog.py",
+    "market_data/manifest.py",
+    "market_data/lake_layout.py",
+    "market_data/publish.py",
+    "market_data/incremental.py",
+    "trading/**",
+    "data/**",
+    ".env",
+    ".env.*"
+  ],
+  "forbidden_actions": [
+    "runtime",
+    "real lake write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance execution",
+    "physical partition migration execution",
+    "credential/secret read",
+    "NAS/QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write"
+  ],
+  "static_fixture_validation_scope": [
+    "identical duplicate deterministic handling",
+    "conflicting duplicate blocking",
+    "missing key blocking",
+    "no silent append guarantee"
+  ],
+  "verification_commands_planned": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_write_dedup_guarantee.py"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_write_dedup_guarantee.py"
+  ],
+  "expected_return_packet_ref": "process/returns/STORY-CR139-S32.CP6.return.json",
+  "expected_evidence_index_ref": "process/evidence/STORY-CR139-S32.CP6.index.json",
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "standard-code",
+  "lld_policy": "technical-note"
+}

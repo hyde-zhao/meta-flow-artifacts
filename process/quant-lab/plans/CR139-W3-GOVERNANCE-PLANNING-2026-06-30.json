@@ -1,0 +1,162 @@
+{
+  "created_at": "2026-06-30T08:04:00+08:00",
+  "decisions": [
+    {
+      "default": "Implement P0, review P1, waive P2 unless consumer appears.",
+      "id": "W3-DQ-001",
+      "item": "Which pointer-level-only datasets need full reader support?",
+      "type": "scope"
+    },
+    {
+      "default": "No. Default retain + superseded until dependency proof and archive/rollback plan exist.",
+      "id": "W3-DQ-002",
+      "item": "Can any legacy canonical run be deleted?",
+      "type": "risk_acceptance"
+    },
+    {
+      "default": "Yes, dry-run only; no sync/delete without explicit gate.",
+      "id": "W3-DQ-003",
+      "item": "Should recurring validation include NAS dry-run?",
+      "type": "runtime_authorization"
+    },
+    {
+      "default": "Prefer explicit config correction after secret-safe review. Review all 4 root variables and .env.example key consistency; wrappers continue fail-closed.",
+      "id": "W3-DQ-004",
+      "item": "Should .env be edited or should wrappers override stale config?",
+      "type": "implementation"
+    },
+    {
+      "default": "Run read-only extension assessment first, then implement P0 support only after registration/schema/performance scope is known.",
+      "id": "W3-DQ-005",
+      "item": "Should W3-A implement reader P0 immediately or first run reader API extension assessment?",
+      "type": "implementation"
+    }
+  ],
+  "not_authorized": [
+    "provider catalog/provider-lake-catalog write",
+    "NAS sync/delete",
+    "legacy canonical delete/archive",
+    "active catalog or manifest mutation",
+    "runtime/trading/Git remote operation",
+    "credential disclosure"
+  ],
+  "release_slices": [
+    {
+      "id": "W3-A",
+      "scope": [
+        "W3-S05",
+        "W3-S01 read-only extension assessment",
+        "W3-S01 P0"
+      ],
+      "value": "Research users can consume liquidity_capacity and market_cap; operations no longer trip over stale lake root config."
+    },
+    {
+      "id": "W3-B",
+      "scope": [
+        "W3-S02",
+        "W3-S03"
+      ],
+      "value": "Future publish/catalog changes fail closed and historical runs remain traceable."
+    },
+    {
+      "id": "W3-C",
+      "scope": [
+        "W3-S01 P1/P2",
+        "W3-S04"
+      ],
+      "value": "Current truth remains continuously verifiable; pointer-only waivers are explicit; conditional non-PIT reader support is visible rather than counted as default available."
+    },
+    {
+      "id": "W3-D",
+      "scope": [
+        "Gate G deferred record",
+        "production consumer discovery"
+      ],
+      "value": "Provider catalog remains deferred unless a real production consumer appears; if one appears, Gate G becomes a separate explicit write gate."
+    }
+  ],
+  "schema": "cr139.w3.governance_planning.v1",
+  "source": "CR139 W2 CP8 follow-up gates",
+  "status": "planned",
+  "workstreams": [
+    {
+      "datasets": {
+        "P0": [
+          "liquidity_capacity",
+          "market_cap"
+        ],
+        "P1": [
+          "prices_limit_code_change_fixes",
+          "prices_limit_coverage_exclusions"
+        ],
+        "P1_conditional_reader_support": {
+          "industry_classification": {
+            "allow_warn_read_dataset_status": "available",
+            "default_read_dataset_status": "unavailable",
+            "reason": "Current CR139 lake industry_classification rows are non_pit_snapshot; default reader must fail closed to avoid PIT misuse.",
+            "required_evidence": [
+              "default_status",
+              "allow_warn_status",
+              "issue_codes",
+              "frame_row_count_matches_catalog"
+            ]
+          }
+        },
+        "P2_pointer_level_unless_consumer_appears": [
+          "bse_code_mapping",
+          "lifecycle_code_change"
+        ]
+      },
+      "exit_criteria": "Reader API extension assessment PASS; P0 datasets have explicit implementation scope and schema/performance smoke plan; reader smoke covers every dataset that has a real consumer; waived datasets have documented pointer-level-only rationale; conditional readers record default status, allow-warn status, issue codes, and row-count evidence.",
+      "id": "W3-S01",
+      "name": "Reader support expansion",
+      "pre_implementation_assessment": {
+        "mode": "read_only",
+        "required": true,
+        "scope": [
+          "locate read_dataset supported dataset registration path",
+          "verify schema compatibility contract for liquidity_capacity and market_cap",
+          "define row-count and reader smoke strategy",
+          "assess performance risk for 17M-row P0 datasets"
+        ]
+      },
+      "priority": "P0/P1/P2"
+    },
+    {
+      "exit_criteria": "A machine-readable superseded register exists; delete remains blocked unless dependency proof is 0 and rollback/archive plan exists.",
+      "id": "W3-S02",
+      "name": "Legacy retention and superseded register",
+      "priority": "P0"
+    },
+    {
+      "exit_criteria": "A single guard command can fail-closed before pointer advance or active catalog refresh.",
+      "id": "W3-S03",
+      "name": "Publish guard automation",
+      "priority": "P0"
+    },
+    {
+      "exit_criteria": "Validation pack is repeatable and produces stable PASS/WARN/BLOCKED outputs.",
+      "id": "W3-S04",
+      "name": "Recurring validation",
+      "priority": "P1"
+    },
+    {
+      "env_consistency_scope": [
+        ".env secret-safe key/path review",
+        ".env.example key consistency",
+        "guarded wrapper fail-closed behavior"
+      ],
+      "exit_criteria": "All 4 roots point to data-lake-aligned paths; .env and .env.example are key-consistent for lake/archive/backup/restore; guarded wrappers fail closed on stale config and never print secrets.",
+      "finding": ".env still points MARKET_DATA_LAKE_ROOT to old /home/hyde/data/quant-lab/lake during Gate H initial dry-run.",
+      "id": "W3-S05",
+      "name": "Operational config hygiene",
+      "priority": "P0",
+      "root_variables": [
+        "MARKET_DATA_LAKE_ROOT",
+        "MARKET_DATA_LAKE_ARCHIVE_ROOT",
+        "MARKET_DATA_LAKE_BACKUP_ROOT",
+        "MARKET_DATA_LAKE_RESTORE_ROOT"
+      ]
+    }
+  ]
+}

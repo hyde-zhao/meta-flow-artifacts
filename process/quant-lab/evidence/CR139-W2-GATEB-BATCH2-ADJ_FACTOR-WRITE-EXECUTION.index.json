@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch2_adj_factor_candidate_write_execution",
+  "created_at": "2026-06-29T20:53:15+08:00",
+  "status": "pass_with_risk_adj_factor_candidate_write_verified",
+  "authorized_scope": "authorize Gate B Batch 2 adj_factor exact-dedup + metadata-resolved additive-only candidate write only",
+  "dataset": "adj_factor",
+  "run_id": "cr139-w2-adj_factor-legacy_lake-20260629-canonical",
+  "dataset_results_summary": {
+    "source_row_count": 29970830,
+    "main_row_count": 17905960,
+    "quarantine_row_count": 321815,
+    "dropped_exact_duplicate_row_count": 11743055,
+    "combined_accounted_row_count": 29970830,
+    "main_duplicate_row_over_unique_count": 0,
+    "metadata_only_quarantine_row_count": 321815
+  },
+  "source_precedence": {
+    "rule": "prefer dedicated run-cr014-s14-prices-adj-factor lineage over cr010 smoke/prod-window rows for metadata-only groups; tie-break by source_run_id, source file, source row number",
+    "business_conflict_groups": 0
+  },
+  "object_count": 2,
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 2,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "checks": {
+    "target_absent_before_write": true,
+    "main_rows_expected": true,
+    "quarantine_rows_expected": true,
+    "dropped_exact_duplicates_expected": true,
+    "main_has_no_duplicate_keys": true,
+    "zero_mutation_pass": true,
+    "rollback_not_authorized": true
+  },
+  "failed_checks": [],
+  "evidence_refs": {
+    "preexecution_snapshot": "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION-2026-06-29T203800+0800-PREEXECUTION-SNAPSHOT.json",
+    "postexecution_snapshot": "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION-2026-06-29T203800+0800-POSTEXECUTION-SNAPSHOT.json",
+    "object_manifest": "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION-2026-06-29T203800+0800-OBJECT-MANIFEST.json",
+    "rollback_manifest": "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION-2026-06-29T203800+0800-ROLLBACK-MANIFEST.json",
+    "zero_mutation": "process/evidence/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION-2026-06-29T203800+0800-ZERO-MUTATION-PROOF.json",
+    "execution_check": "process/checks/CR139-W2-GATEB-BATCH2-ADJ_FACTOR-WRITE-EXECUTION-2026-06-29.md"
+  },
+  "non_authorized_scope": [
+    "all other datasets",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "legacy deletion",
+    "rollback deletion"
+  ],
+  "next_gate": "review adj_factor write evidence; continue events decision planning"
+}

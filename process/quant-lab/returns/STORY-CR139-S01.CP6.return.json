@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "return_id": "STORY-CR139-S01.CP6",
+  "story_id": "CR139-S01",
+  "cr_id": "CR-139",
+  "stage": "CP6",
+  "status": "PASS",
+  "created_at": "2026-06-28T20:00:18+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+  "dispatch_refs": ["ADE-CR139-W1-META-DEV-INLINE-2026-06-28T200018+0800"],
+  "implementation_ref": "process/stories/CR139-S01-remediation-object-inventory-IMPLEMENTATION.md",
+  "touched_files": [
+    "market_data/remediation_inventory.py",
+    "scripts/lake_inventory.py",
+    "tests/test_cr139_s01_inventory.py"
+  ],
+  "forbidden_touched_files": [],
+  "allowed_write_boundary": "matched story packet allowed_write_paths",
+  "design_contracts": [
+    "InventoryReport schema and JSON rendering",
+    "Catalog/canonical read-only scan",
+    "Duplicate key counting for symbol/trade_date",
+    "Missing physical dataset reporting",
+    "Deterministic output except scanned_at",
+    "Operation counters all zero"
+  ],
+  "verification_commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py",
+      "status": "PASS",
+      "summary": "8 passed in 1.15s"
+    }
+  ],
+  "risks": [
+    {
+      "id": "O-S01-2",
+      "status": "open",
+      "summary": "Real lake performance <=5min needs future runtime/lake authorization."
+    }
+  ],
+  "waivers": [],
+  "design_delta_required": false,
+  "next_route": "CP7"
+}

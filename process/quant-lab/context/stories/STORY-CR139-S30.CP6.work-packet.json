@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "created_at": "2026-06-29T09:31:46+08:00",
+  "created_by": "host-orchestrator",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "batch_id": "CR139-W2-DATA-CONTRACTS",
+  "story_id": "CR139-S30",
+  "slug": "runid-naming-convention",
+  "story_ref": "process/stories/CR139-S30-runid-naming-convention.md",
+  "parent_context_ref": "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Implement the new run_id naming convention and validation helper for new write paths while preserving legacy path compatibility.",
+    "non_goals": [
+      "Do not migrate or rewrite existing physical paths",
+      "Do not perform real lake writes",
+      "Do not remove legacy path compatibility"
+    ]
+  },
+  "design_evidence_ref": "process/stories/CR139-S30-runid-naming-convention.md#技术说明",
+  "cp5_result_ref": "process/checks/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH.result.json",
+  "cp5_checkpoint_ref": "process/checkpoints/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH-REVIEW.md",
+  "feature_refs": ["FEAT-02"],
+  "feature_contract_summary": "FEAT-02 write-side run_id format for new runs: run-<purpose>-<window>-<source>-<YYYYMMDD>; no unknown or CR-numbered new ids.",
+  "feature_design_summary_ref": "docs/design/FEATURE-DESIGN-MATRIX.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S30-runid-naming-convention.md#技术说明"
+  ],
+  "cr_delta": {
+    "summary": "Adds build/validate run_id naming semantics and no-CR-number rule for new write paths.",
+    "affected_contracts": ["market_data normalization run_id generation", "market_data lake layout path validation"]
+  },
+  "dependencies": ["CR139-S08"],
+  "dependency_type": "verified-upstream-contract",
+  "dependency_inputs": ["Wave1 S08 run_id partition key governance verified"],
+  "merge_order": {
+    "batch_order": 2,
+    "normalization_py": "S08 -> S31 -> S32 -> S34 -> S14 -> S23 -> S22",
+    "lake_layout_py": "S08 -> S11 -> S30",
+    "notes": "First W2 normalization.py Story. S31 and S32 must wait until S30 CP6 return/evidence/check files exist."
+  },
+  "file_lock": {
+    "path": "market_data/normalization.py",
+    "mode": "exclusive",
+    "serial_order": ["CR139-S30", "CR139-S31", "CR139-S32"],
+    "blocks_parallel_with": ["CR139-S31", "CR139-S32", "CR139-S34", "CR139-S14"],
+    "release_condition": "process/returns/STORY-CR139-S30.CP6.return.json and process/evidence/STORY-CR139-S30.CP6.index.json exist"
+  },
+  "acceptance": [
+    "New run_id values match ^run-[a-z0-9-]+-[a-z0-9-]+-[a-z0-9-]+-[0-9]{8}$.",
+    "New run_id generation rejects unknown and CR-numbered identifiers.",
+    "lake_layout preserves read-only compatibility for legacy paths.",
+    "Fixture/static tests cover legal names, missing fields, forbidden CR numbering, and legacy path tolerance."
+  ],
+  "allowed_read_paths": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S30-runid-naming-convention.md",
+    "market_data/normalization.py",
+    "market_data/lake_layout.py",
+    "tests/test_cr139_runid_naming.py"
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S30-runid-naming-convention.md",
+    "market_data/normalization.py",
+    "market_data/lake_layout.py",
+    "tests/test_cr139_runid_naming.py"
+  ],
+  "read_if_needed": [
+    "process/checks/CP5-CR139-S30-runid-naming-convention-LLD-IMPLEMENTABILITY.md",
+    "process/evidence/STORY-CR139-S08.CP7.index.json"
+  ],
+  "allowed_write_paths": [
+    "market_data/normalization.py",
+    "market_data/lake_layout.py",
+    "tests/test_cr139_runid_naming.py",
+    "process/stories/CR139-S30-runid-naming-convention-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S30-runid-naming-convention-CODING-DONE.md",
+    "process/returns/STORY-CR139-S30.CP6.return.json",
+    "process/evidence/STORY-CR139-S30.CP6.index.json"
+  ],
+  "forbidden_write_paths": [
+    "market_data/readers.py",
+    "market_data/catalog.py",
+    "market_data/manifest.py",
+    "market_data/publish.py",
+    "market_data/incremental.py",
+    "trading/**",
+    "data/**",
+    ".env",
+    ".env.*"
+  ],
+  "forbidden_actions": [
+    "runtime",
+    "real lake write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance execution",
+    "physical partition migration execution",
+    "credential/secret read",
+    "NAS/QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write"
+  ],
+  "static_fixture_validation_scope": [
+    "valid run_id naming",
+    "unknown run_id rejection",
+    "CR-numbered new path rejection",
+    "legacy path read-only compatibility"
+  ],
+  "verification_commands_planned": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_runid_naming.py"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_runid_naming.py"
+  ],
+  "expected_return_packet_ref": "process/returns/STORY-CR139-S30.CP6.return.json",
+  "expected_evidence_index_ref": "process/evidence/STORY-CR139-S30.CP6.index.json",
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "standard-code",
+  "lld_policy": "technical-note"
+}

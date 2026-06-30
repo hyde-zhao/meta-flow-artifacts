@@ -1,8 +1,9 @@
 ---
 status: "draft-current-index"
-version: "1.11"
+version: "1.13"
 source_blueprint: "docs/design/BLUEPRINT.md"
-change: "CR-138"
+change: "CR-139"
+companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-lab-project-roadmap-2026-06-26.md"
 ---
 
@@ -24,6 +25,8 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | 1.9 | 2026-06-27 | codex | 增补异象发现与异象研究领域对象、四阶段研究状态机和准入规则；无先验逻辑或未通过严格验证的异象不得升级为因子。 |
 | 1.10 | 2026-06-27 | codex | 增补自动异象发现领域规则：ControlledAnomalyTemplate、搜索空间审计、多重检验控制、动态因子目录接入和 Stage 3 候选消费。 |
 | 1.11 | 2026-06-28 | codex | 增补 ResearchEngineModule、CompatibilityWrapper 和 SharedResearchContract 领域对象；旧 chapter/stage/root 入口只作兼容或归档。 |
+| 1.12 | 2026-06-28 | meta-se | 按 CR-139「Strategy Data Foundation」CP3 增补策略生产数据底座领域对象：写侧（PublishedRelease/LineageChecksum/IncrementalAppendPlan/ConfigFactRelease）、读侧（PITAsOfReader/PanelReader/ReadAuditLog/ReadinessGate/DuckDBReadOnlyAdapter）、ML feature 层（FeatureArtifact/FeatureVersionSchema/LabelArtifact/ModelArtifactHash/SplitManifest）、交易审计链（BrokerLakeAuditChain/BrokerEventRunIdLink/RunEvidenceRunIdLink）、配置类事实源（BenchmarkFactSource/CommissionFactSource/UniversePolicyFactSource/RiskPolicyFactSource/PolicyCycleFactSource/PITUniverseConstituentChain）、schema 契约（SchemaEvolutionRule/SchemaContractFreeze）；补状态机 SM-27..31 与业务规则 RULE-54..60。AGA-1/3/5 推荐方案 CP3 已确认 A1/C1/E1。 |
+| 1.13 | 2026-06-28 | host-orchestrator | CP3 approved，AGA-1/3/5 确认 A1/C1/E1，pending-cp3 → confirmed-cp3。 |
 
 ## 术语表
 
@@ -278,3 +281,80 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | RULE-51 | 新增研究引擎主实现必须使用领域名模块；`engine/chapter*`、`engine/stage*`、`engine/cr*` 顶层文件不得存在，旧命名材料必须集中在 `docs/legacy/archive/engine/` | FEAT-03 / FEAT-08 | 研究引擎维护、测试引用、文档入口 | `tests/test_script_entrypoint_naming.py` |
 | RULE-52 | 新增研究脚本主入口必须放入 `scripts/research/*` 或对应稳定目录；旧 root 实现只能归档到 `scripts/legacy/*` 并由稳定 wrapper 调用 | FEAT-03 / FEAT-07 | CLI 入口、运行手册、归档治理 | `scripts/quality/check_script_entrypoints.py` |
 | RULE-53 | 重复的 JSON 序列化、矩阵转换、gate/admission 状态枚举必须优先复用 `engine.serialization`、`engine.factor_research_matrices` 和 `engine.admission_contracts`；不得在新模块私有复制 | FEAT-03 | 共享合同、报告输出、admission gate | compileall / targeted research tests |
+
+## CR-139 增量：策略生产数据底座领域模型
+
+> 来源：CR-139 companion HLD「Strategy Data Foundation」（写侧/读侧分离）+ handoff v0.7 §3 整改 45 项 + REQ-201..249。既有合同闭环非新建（REQ-249）。
+
+### 术语增量
+
+| Term | 定义 | 来源 | 备注 |
+|---|---|---|---|
+| 写侧 / 读侧分离 | 数据湖按写侧（normalize/publish/lineage/质量门禁）与读侧（PIT reader/panel reader/dedup/published selector/读审计）分层 | CR-139 D2 / AGA-1 | 同属 FEAT-02，companion HLD 分章（A1，CP3 已确认） |
+| PIT as-of reader | 读财报/估值按 `available_at <= as_of` 取最新，杜绝前视 | C1 / REQ-204 | 四道 P0 防线之一 |
+| panel reader | 统一 `read_panel(datasets, as_of)`，复用 `read_dataset` published 门禁，输出多表 as-of 宽表 | R1 / REQ-214 | 四道 P0 防线之一 |
+| published current pointer | catalog 指向已发布 current truth 的指针，validate pass 不自动前移 | V1 / REQ-232 | 四道 P0 防线之一 |
+| 读层去重 | 读侧按 source_run_id 取最新版本，保证 `(symbol,trade_date)` 唯一 | C2b / REQ-205 | 四道 P0 防线之一 |
+| 读审计 log | reader 读操作审计记录，与 RunEvidenceIndex 同 run-id 贯通 | L3 / REQ-233 | d1 纯新建 |
+| run-id 贯通 | 数据 run-id 贯穿 reader→RunEvidenceIndex→broker event | T6 / REQ-242 | 跨 FEAT-02/03/06/11 |
+| ML feature 层 | lake `features/` 子层带版本 + schema，feature/label/artifact 审计链 | V3 / REQ-219 / D5 | 保留切换独立 store 条件（DEF-139-01） |
+| 配置类事实源 | benchmark/commission/universe·risk policy/政策周期四类配置的事实源，版本化 + release 闭环 | F1-F4 / REQ-236..239 | 复用 V1 published pointer 语义（AGA-5 E1，CP3 已确认） |
+| schema 契约冻结 | schema 演进规则 + reader 兼容回退，模拟盘前必过 | V4 / REQ-220 / HIGH3 | Wave2 |
+| 整改回归基线 | 整改前后下游因子/回测黄金值快照对比，归因差异 | T7 / REQ-212 | d1 纯新建 |
+| 整改对象清册 | 一行命令输出全 dataset 行数/覆盖/重复键/pit/published/lineage | T8 / REQ-213 | d1 纯新建 |
+
+### 领域对象增量
+
+| Object ID | 对象 | Owner Feature | 关键字段 / 属性 | 状态 | 规则来源 |
+|---|---|---|---|---|---|
+| OBJ-91 | PublishedRelease | FEAT-02 写侧 | release_id、dataset 清单、release_scope、as_of_trade_date、source_run_ids、quality 结果、blocked_claims、rollback_target、approver、approved_at | draft / published / rolled_back | REQ-232 / V1 |
+| OBJ-92 | CatalogCurrentPointer | FEAT-02 写侧 | dataset、schema_version、current_release_id、published_at、lineage_checksum | unpublished / published / rolled_back | REQ-232 / M1 |
+| OBJ-93 | LineageChecksum | FEAT-02 写侧 | raw_run_id、canonical_run_id、checksum、computed_at | missing / filled | REQ-209 / M2 |
+| OBJ-94 | IncrementalAppendPlan | FEAT-02 写侧 | date、dataset、idempotency_key、available_at_stamp、dedup_key、status | planned / appended / skipped_conflict | REQ-243 / L1（既有 `incremental.py:248` 闭环） |
+| OBJ-95 | PITAsOfReader | FEAT-02 读侧 | datasets、as_of、available_at_filter、source_run_id | ready / blocked | REQ-204 / C1 |
+| OBJ-96 | PanelReader | FEAT-02 读侧 | datasets、as_of、published_gate、join_schema、dedup_policy | ready / blocked | REQ-214 / R1 |
+| OBJ-97 | ReadAuditLog | FEAT-02 读侧 | read_id、run_id、dataset、as_of、reader、read_at、published_release_ref | recorded / missing | REQ-233 / L3（d1 新建） |
+| OBJ-98 | ReadinessGate | FEAT-02 读侧 | coverage、freshness、pit_status、block_reason | pass / blocked | REQ-234 / L4（既有 `readiness.py:462` 闭环） |
+| OBJ-99 | DuckDBReadOnlyAdapter | FEAT-02 读侧 | query、predicates、columns、readonly_enforced | available / unavailable | REQ-216 / R3（D4 只读引擎） |
+| OBJ-100 | FeatureArtifact | FEAT-03 | feature_id、version、schema、values_path、lineage_ref、available_at | draft / versioned / deprecated | REQ-219 / V3（D5） |
+| OBJ-101 | FeatureVersionSchema | FEAT-03 | feature_id、schema_version、fields、compute_spec、compatibility | draft / frozen / superseded | REQ-219 / V3 |
+| OBJ-102 | LabelArtifact | FEAT-03 | label_id、horizon、decision_time、available_at、leakage_policy、values_path | draft / frozen / leakage_blocked | REQ-219 / V3 |
+| OBJ-103 | ModelArtifactHash | FEAT-03 | model_id、artifact_hash、dataset_snapshot_ref、split_manifest_ref、code_version | recorded / missing | REQ-222 / E2（既有 StrategyAdmissionPackage 承载） |
+| OBJ-104 | SplitManifest | FEAT-03 | split_id、cutoff、train/test/embargo、purge_policy、frozen_at | draft / frozen | REQ-225 / E5（既有 embargo/split 闭环） |
+| OBJ-105 | ExperimentManifestClosure | FEAT-03/11 | manifest_id、dataset_snapshot、as_of、split、lineage、产出引用 | recorded / incomplete | REQ-221 / E1（既有 `research_manifest.py:152` 闭环） |
+| OBJ-106 | BrokerLakeAuditChain | FEAT-06 | run_id、order/trade/position 事件、audit_link、redaction | planned / written / blocked | REQ-240 / T4（既有 `broker_lake.py` schema 闭环） |
+| OBJ-107 | BrokerEventRunIdLink | FEAT-06 | broker_event_id、data_run_id、research_run_id、link_status | linked / broken | REQ-242 / T6 |
+| OBJ-108 | RunEvidenceRunIdLink | FEAT-11 | evidence_id、data_run_id、read_audit_ref、link_status | linked / broken | REQ-233/242 / L3/T6（既有 `evidence_index.py:19` 闭环） |
+| OBJ-109 | BenchmarkFactSource | FEAT-02 | benchmark_id、version、effective_from、release_id、risk_free_curve_ref | configured / versioned / released | REQ-236 / F1（既有 `benchmarks.py:99/114` 闭环） |
+| OBJ-110 | CommissionFactSource | FEAT-12 | commission_id、version、effective_from、release_id、fee_model、slippage | configured / versioned / released | REQ-237 / F2（既有 `qmt_gateway_contracts.py:997` 闭环） |
+| OBJ-111 | UniversePolicyFactSource | FEAT-14 | universe_id、version、effective_from、release_id、PIT_rule、退市/ST/容量约束 | configured / versioned / released | REQ-238 / F3（既有 `mature_multifactor_framework.py:228` 闭环） |
+| OBJ-112 | RiskPolicyFactSource | FEAT-14 | policy_id、version、effective_from、release_id、top_n、max_weight、turnover_limit | configured / versioned / released | REQ-238 / F3 |
+| OBJ-113 | PolicyCycleFactSource | FEAT-03 | cycle_id、version、effective_from、release_id、coverage、shortability | configured / versioned / released | REQ-239 / F4（既有 `factor_model_validation.py:444` 闭环，P2） |
+| OBJ-114 | PITUniverseConstituentChain | FEAT-14 | as_of、index_members_snapshot、constituent_chain、survivorship_bias_flag | built / missing | REQ-231 / X4（既有 `contracts.py:270` 闭环） |
+| OBJ-115 | ConfigFactRelease | FEAT-02 写侧 | release_id、config_type、version、effective_from、current_pointer | draft / published / rolled_back | REQ-236..239 / F1-F4（AGA-5 E1 复用 V1 pointer 语义） |
+| OBJ-116 | SchemaEvolutionRule | FEAT-02/03 | schema_id、change_type（兼容/破坏）、reader_compat_policy、migration_path | draft / approved | REQ-220 / V4 |
+| OBJ-117 | SchemaContractFreeze | FEAT-02/03 | freeze_id、frozen_at、scope、reader_fallback、unfreeze_condition | draft / frozen / unfrozen | REQ-220 / V4（HIGH3 模拟盘前必过） |
+| OBJ-118 | RemediationBaseline | FEAT-02 | baseline_id、frozen_at、golden_value_snapshot、coverage | frozen / superseded | REQ-212 / T7（d1 新建） |
+| OBJ-119 | RemediationInventory | FEAT-02 | inventory_id、dataset、rows、coverage、dup_keys、pit_status、published、lineage_missing | generated / stale | REQ-213 / T8（d1 新建） |
+
+### 状态机增量
+
+| State Machine ID | 对象 | 状态 | 合法转换 | 非法转换处理 |
+|---|---|---|---|---|
+| SM-27 | DatasetCandidate → PublishedRelease → CatalogCurrentPointer | candidate → validated → published → current_pointer_set → rolled_back | 只能由 validate/publish/rollback 触发 | validate pass 自动前移 current pointer 必须 blocked（RULE-02 强化） |
+| SM-28 | ReadAuditLog → RunEvidenceRunIdLink → BrokerEventRunIdLink | read_recorded → run_id_linked → broker_linked / broken | run-id 贯通逐级链接 | 断链标注断点，不伪造贯通 |
+| SM-29 | FeatureArtifact 版本化 | draft → versioned → frozen → superseded | schema 变更按 SchemaEvolutionRule | 缺 version/schema 阻断持久化 |
+| SM-30 | ConfigFactRelease | draft → published → current_pointer_set → rolled_back | 复用 V1 published pointer 语义 | 配置缺 version 阻断 release |
+| SM-31 | SchemaContractFreeze | draft → frozen（模拟盘前）→ unfrozen（仅破坏性变更+重跑） | 模拟盘前必过 HIGH3 | 未冻结不得进模拟盘 |
+
+### 业务规则增量
+
+| Rule ID | 规则 | Owner | 影响场景 | 验证入口 |
+|---|---|---|---|---|
+| RULE-54 | 读侧只能消费 published current truth；validate pass 不自动前移 current pointer；reader 不得读未发布 candidate | FEAT-02 读侧 | UC-52、四道 P0 防线 | V1/C1/R1 tests |
+| RULE-55 | 读层去重按 source_run_id 取最新版本，保证 `(symbol,trade_date)` 唯一；不用 glob-concat 全量分区替代去重 | FEAT-02 读侧 | UC-52、C2 | C2b dedup tests |
+| RULE-56 | 数据 run-id 必须贯穿 reader 读审计 → RunEvidenceIndex → broker event；断链标注断点，不伪造贯通 | FEAT-02/11/06 | UC-55、可审计目标 | L3/T6 run-id tests |
+| RULE-57 | ML 必须接入 `read_panel_as_of`，废除 `--data-dir`/`load_local_frames` 旁路；feature/label/artifact 必须带版本 + schema + lineage | FEAT-03 | UC-53、R2/V3 | R2/V3 no-bypass tests |
+| RULE-58 | 配置类事实源（benchmark/commission/universe·risk policy/政策周期）必须带 version + effective_from + release_id；缺版本阻断复现声明 | FEAT-02/12/14/03 | UC-56、F1-F4 | F1-F4 version tests |
+| RULE-59 | schema 契约必须在模拟盘前冻结；reader 必须按 SchemaEvolutionRule 兼容回退；未冻结不得进模拟盘 | FEAT-02/03 | UC-57、HIGH3 | V4 freeze tests |
+| RULE-60 | Wave1 任何结构性变更（V1/C1/R1/C2b/N1）必须在 T8 清册 → T7 黄金值基线 → C2a 重复画像三步完成后才允许执行；物理分区迁移后置到基线冻结之后 | FEAT-02 | UC-51/52、REQ-247 | Wave1 baseline gate tests |

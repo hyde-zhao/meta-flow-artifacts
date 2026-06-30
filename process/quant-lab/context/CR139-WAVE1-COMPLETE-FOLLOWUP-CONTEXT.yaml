@@ -1,0 +1,167 @@
+schema_version: 1
+context_type: cr139-wave1-complete-followup-context
+status: ready-for-followup-planning
+created_at: "2026-06-28T22:21:23+08:00"
+created_by: host-orchestrator-inline
+project_id: quant-lab
+cr_id: CR-139
+source_refs:
+  state: process/state/STATE.current.json
+  human_state_summary: process/STATE.md
+  story_status: process/STORY-STATUS-CR139.md
+  development_plan: process/DEVELOPMENT-PLAN-CR139.yaml
+  story_packet: process/context/stories/CR139-W1.CP6.story-packets.json
+  verification_report: docs/quality/VERIFICATION-REPORT-CR139-W1.md
+  wave1_context: process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml
+wave1_completion:
+  decision: verified
+  verified_count: 8
+  stories:
+    - story_id: CR139-S01
+      status: verified
+      cp7_result: process/checks/CP7-CR139-S01-remediation-object-inventory-VERIFICATION-DONE.md
+      cp7_evidence: process/evidence/STORY-CR139-S01.CP7.index.json
+    - story_id: CR139-S02
+      status: verified
+      cp7_result: process/checks/CP7-CR139-S02-remediation-baseline-golden-values-VERIFICATION-DONE.md
+      cp7_evidence: process/evidence/STORY-CR139-S02.CP7.index.json
+    - story_id: CR139-S03
+      status: verified
+      cp7_result: process/checks/CP7-CR139-S03-duplicate-fingerprint-profiling-VERIFICATION-DONE.md
+      cp7_evidence: process/evidence/STORY-CR139-S03.CP7.index.json
+    - story_id: CR139-S04
+      status: verified
+      cp7_result: process/checks/CP7-CR139-S04-published-pointer-read-selector-VERIFICATION-DONE.md
+      cp7_evidence: process/evidence/STORY-CR139-S04.CP7.index.json
+    - story_id: CR139-S05
+      status: verified
+      cp7_result: process/checks/CP7-CR139-S05-pit-as-of-reader-VERIFICATION-DONE.md
+      cp7_evidence: process/evidence/STORY-CR139-S05.CP7.index.json
+    - story_id: CR139-S06
+      status: verified
+      cp7_result: process/checks/CP7-CR139-S06-unified-panel-reader-VERIFICATION-DONE.md
+      cp7_evidence: process/evidence/STORY-CR139-S06.CP7.index.json
+    - story_id: CR139-S07
+      status: verified
+      cp7_result: process/checks/CP7-CR139-S07-read-layer-dedup-VERIFICATION-DONE.md
+      cp7_evidence: process/evidence/STORY-CR139-S07.CP7.index.json
+    - story_id: CR139-S08
+      status: verified
+      cp7_result: process/checks/CP7-CR139-S08-runid-partition-key-governance-VERIFICATION-DONE.md
+      cp7_evidence: process/evidence/STORY-CR139-S08.CP7.index.json
+wave1_validation:
+  focused_s08: "uv run --python 3.11 pytest -q tests/test_cr139_s08_partition_governance.py -> PASS, 10 passed"
+  compatibility: "uv run --python 3.11 pytest -q tests/test_market_data_normalization_validation_readers.py -> PASS, 9 passed"
+  wave1_regression: "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py tests/test_cr139_duplicate_fingerprint_profiling.py tests/test_cr139_published_pointer.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_panel_reader.py tests/test_cr139_read_layer_dedup.py tests/test_cr139_s08_partition_governance.py tests/test_cr014_catalog_publish_gate.py tests/test_cr014_p0_pipeline_contract.py -> PASS, 72 passed"
+authorization_boundary:
+  implementation_allowed_now: false
+  later_story_implementation_requires_cp5: true
+  runtime_allowed: false
+  nas_access_allowed: false
+  qmt_runtime_allowed: false
+  trading_allowed: false
+  provider_lake_catalog_write_allowed: false
+  real_lake_write_allowed: false
+  physical_partition_migration_execution_allowed: false
+  published_pointer_advance_execution_allowed: false
+  git_remote_write_allowed: false
+  notes:
+    - Wave1 S08 only delivered path-governance code and fixture verification.
+    - Physical partition migration remains a separate runtime_authorization gate with action scope, run window, rollback, and audit requirements.
+followup_scope:
+  status: lld-pending
+  rule: "No Wave2/W3 Story is dev-ready until a follow-up CP5 batch is prepared, reviewed, and approved."
+  wave2_story_count: 26
+  wave3_story_count: 6
+  total_followup_story_count: 32
+  immediate_dependency_unlocked_by_wave1:
+    - CR139-S09-schema-evolution-contract-freeze
+    - CR139-S13-duckdb-readonly-adapter
+    - CR139-S14-incremental-append-pointer-advance
+    - CR139-S17-versioned-benchmark-riskfree
+    - CR139-S23-adjustment-factor-pit
+    - CR139-S25-decision-time-lookahead-gate
+    - CR139-S29-pit-dedup-correctness-tests
+    - CR139-S30-runid-naming-convention
+    - CR139-S32-write-dedup-guarantee
+    - CR139-S33-catalog-manifest-source-of-truth
+    - CR139-S39-cr-data-audit-chain
+recommended_cp5_batches:
+  - batch_id: CR139-W2-DATA-CONTRACTS
+    purpose: "Close data-lake contracts made visible by Wave1 before ML/read-gate work fans out."
+    candidate_stories:
+      - CR139-S09-schema-evolution-contract-freeze
+      - CR139-S14-incremental-append-pointer-advance
+      - CR139-S22-runid-lineage-penetration
+      - CR139-S30-runid-naming-convention
+      - CR139-S31-events-schema-repair
+      - CR139-S32-write-dedup-guarantee
+      - CR139-S33-catalog-manifest-source-of-truth
+      - CR139-S34-lineage-checksum-backfill
+      - CR139-S39-cr-data-audit-chain
+    cp5_need: "Prepare/refresh LLD or technical-note evidence, verify file ownership merge_order, and confirm no runtime authorization is implied."
+  - batch_id: CR139-W2-ML-READ-CONSISTENCY
+    purpose: "Prepare ML simulation, PIT/read correctness, and cross-source consistency after core data contracts are stable."
+    candidate_stories:
+      - CR139-S10-ml-lake-onboard-no-bypass
+      - CR139-S11-feature-label-artifact-layer
+      - CR139-S12-experiment-manifest-closure
+      - CR139-S13-duckdb-readonly-adapter
+      - CR139-S15-label-leak-online-offline-consistency
+      - CR139-S16-training-snapshot-cutoff
+      - CR139-S23-adjustment-factor-pit
+      - CR139-S24-cross-source-calendar-timezone
+      - CR139-S25-decision-time-lookahead-gate
+      - CR139-S26-pit-universe-constituent-chain
+      - CR139-S27-read-audit-log-runid
+      - CR139-S28-readiness-pre-read-gate
+      - CR139-S29-pit-dedup-correctness-tests
+    cp5_need: "Confirm dependencies from S06/S07/S08 and split shared readers.py work by merge_order."
+  - batch_id: CR139-W2-CONFIG-AUDIT
+    purpose: "Versioned facts, broker audit-chain, and commission/risk-policy contracts."
+    candidate_stories:
+      - CR139-S17-versioned-benchmark-riskfree
+      - CR139-S18-versioned-commission
+      - CR139-S19-versioned-universe-risk-policy
+      - CR139-S20-broker-lake-schema-audit-chain
+      - CR139-S21-commission-cost-pretrade-gate
+    cp5_need: "Confirm interaction with S22 run-id lineage and no trading/runtime authorization."
+  - batch_id: CR139-W3-OPS
+    purpose: "Lower-priority operational/cleanup stories after W2 contract batches are stable."
+    candidate_stories:
+      - CR139-S35-replay-published-asof
+      - CR139-S36-column-pruning-predicate-pushdown
+      - CR139-S37-duckdb-readonly-e2e-test
+      - CR139-S38-quality-partition-reorg
+      - CR139-S40-versioned-policy-cycle-shortability
+    cp5_need: "Hold until W2 contract and read-path dependencies are clarified; S39 is listed in W2 data-contract batch because it consumes S08/S33."
+critical_followup_edges:
+  - edge: "S08 -> S30/S39"
+    reason: "S08 delivered path governance; run-id naming and CR audit-chain still need metadata/persistence contracts."
+  - edge: "S04 + S08 -> S14"
+    reason: "Incremental append and pointer advance must consume current/archive path governance without authorizing pointer advance execution."
+  - edge: "S06 -> S11 -> S10"
+    reason: "ML lake onboarding cannot bypass trusted panel/feature layer."
+  - edge: "S05 + S07 -> S29"
+    reason: "PIT/dedup correctness tests should validate the read-side contracts delivered by Wave1."
+  - edge: "S22 -> S20/S27"
+    reason: "Broker audit and read audit consume run-id lineage; they should not invent a parallel lineage source."
+must_not_read_by_default:
+  - process/STATE.md
+  - full docs/design/HLD.md
+  - full process/stories/*-LLD.md
+  - full docs/quality/VERIFICATION-REPORT-CR139-W1.md
+  - full git diff
+read_if_needed:
+  - process/STORY-BACKLOG-CR139.md
+  - docs/design/FEATURE-DESIGN-MATRIX.md
+  - process/stories/CR139-S09-schema-evolution-contract-freeze-LLD.md
+  - process/stories/CR139-S14-incremental-append-pointer-advance.md
+  - process/stories/CR139-S22-runid-lineage-penetration.md
+  - process/stories/CR139-S30-runid-naming-convention.md
+  - process/stories/CR139-S39-cr-data-audit-chain.md
+next_actions:
+  - "Do not implement Wave2/W3 yet."
+  - "Prepare the next CP5 batch decision from recommended_cp5_batches, starting with CR139-W2-DATA-CONTRACTS unless user chooses a different batch."
+  - "For any physical partition migration or real lake validation, create a separate runtime_authorization decision item before execution."
+  - "If subagent tools become available, dispatch meta-dev/meta-qa for CP5-W2 context and evidence refresh; otherwise keep inline-fallback explicit."

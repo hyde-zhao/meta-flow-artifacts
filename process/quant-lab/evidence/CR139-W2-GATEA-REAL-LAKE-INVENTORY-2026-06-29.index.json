@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "batch_id": "CR139-W2-DATA-CONTRACTS",
+  "gate": "Gate A",
+  "stage": "real_lake_no_write_inventory_dry_run",
+  "status": "pass_with_risk_review_required_before_gate_b",
+  "inventory_ref": "process/evidence/CR139-W2-GATEA-REAL-LAKE-INVENTORY-2026-06-29.json",
+  "check_ref": "process/checks/CR139-W2-GATEA-NO-WRITE-INVENTORY-DRY-RUN-2026-06-29.md",
+  "command": {
+    "command": "uv run --python 3.11 python scripts/lake_inventory.py --lake-root /home/hyde/data/quant-lab/lake --format json --out process/evidence/CR139-W2-GATEA-REAL-LAKE-INVENTORY-2026-06-29.json",
+    "result": "pass",
+    "summary": "catalog_dataset_count=17 inventory_entry_count=17 physical_missing_count=0 duplicate_key_total=48899668 lineage_checksum_absent_count=17"
+  },
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "credential_read": 0
+  },
+  "summary": {
+    "catalog_dataset_count": 17,
+    "inventory_entry_count": 17,
+    "physical_missing_count": 0,
+    "published_true_count": 0,
+    "published_false_count": 17,
+    "lineage_checksum_present_count": 0,
+    "lineage_checksum_absent_count": 17,
+    "duplicate_key_total": 48899668,
+    "pit_status_distribution": {
+      "pit_available": 3,
+      "null": 14
+    }
+  },
+  "classified_findings": [
+    {
+      "id": "GATEA-FINDING-S30-RUNID-NONCONFORMING",
+      "severity": "medium",
+      "classification": "expected_cr139_s30",
+      "summary": "17/17 catalog paths use non-CR139 W2 run-id naming.",
+      "blocks_gate_b": false,
+      "routes_to": [
+        "Gate E planning",
+        "Gate C path refresh"
+      ]
+    },
+    {
+      "id": "GATEA-FINDING-S32-DUPLICATE-KEYS",
+      "severity": "high",
+      "classification": "expected_cr139_s32",
+      "summary": "Duplicate keys exist in adj_factor, liquidity_capacity, market_cap, prices, prices_limit and trade_status.",
+      "blocks_gate_b": true,
+      "routes_to": [
+        "Gate B dedup preflight"
+      ]
+    },
+    {
+      "id": "GATEA-FINDING-S31-EVENTS-TRADE-DATE-MISSING",
+      "severity": "medium",
+      "classification": "expected_cr139_s31",
+      "summary": "events inventory columns lack trade_date.",
+      "blocks_gate_b": true,
+      "routes_to": [
+        "Gate B repair candidate review"
+      ]
+    },
+    {
+      "id": "GATEA-FINDING-S34-LINEAGE-CHECKSUM-ABSENT",
+      "severity": "medium",
+      "classification": "expected_cr139_s34",
+      "summary": "17/17 datasets lack lineage checksum.",
+      "blocks_gate_b": false,
+      "routes_to": [
+        "Gate C metadata backfill"
+      ]
+    },
+    {
+      "id": "GATEA-FINDING-D-CURRENT-TRUTH-UNPUBLISHED",
+      "severity": "high",
+      "classification": "current_truth_not_advanced",
+      "summary": "17/17 datasets are unpublished.",
+      "blocks_gate_b": false,
+      "routes_to": [
+        "Gate D pointer advance review"
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "id": "RISK-GATEA-ROOT-AUTHENTICITY-CONFIRMATION",
+      "severity": "medium",
+      "status": "blocks_gate_b_until_data_lake_root_reinventory",
+      "summary": "The scan path was /home/hyde/data/quant-lab/lake. Operator clarified that local and NAS lake roots must share final directory name data-lake, so Gate B requires re-running Gate A on /home/hyde/data/quant-lab/data-lake or an approved compatibility mount."
+    },
+    {
+      "id": "RISK-GATEA-NO-EXTERNAL-FENCE",
+      "severity": "medium",
+      "status": "requires_fence_or_reinventory_before_gate_b",
+      "summary": "This session performed no writes, but no external lake write fence was established."
+    }
+  ],
+  "forbidden_operations_executed": []
+}

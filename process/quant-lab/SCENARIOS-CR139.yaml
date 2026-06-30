@@ -1,0 +1,495 @@
+status: draft
+version: "1.0"
+cr_id: "CR-139"
+source_requirements:
+  - process/REQUIREMENTS.md
+source_use_cases:
+  - process/USE-CASES.md
+scenarios:
+  # ===== Wave1 P0 四道防线 + 基线 =====
+  - id: SCN-CR139-001
+    title: "T8 整改对象自动化清册 + T7 黄金值基线冻结"
+    type: positive
+    priority: HIGH
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-212", "REQ-213"]
+      use_cases: ["UC-51"]
+    trigger: "整改开始前冻结现状基线"
+    context: "信息收集阶段，避免历史数据变化与结构修复混淆归因"
+    preconditions:
+      - "lake root 可读"
+      - "catalog.json / manifest.jsonl 存在"
+    steps:
+      - action: "执行 T8 清册命令扫描全 dataset"
+        expected: "输出全 dataset 行数/覆盖/重复键/pit_status/published/lineage 缺失情况"
+      - action: "执行 T7 黄金值快照冻结下游因子/回测基准"
+        expected: "生成可对比归因的黄金值快照"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-002
+    title: "C1 PIT as-of reader 正向读取"
+    type: positive
+    priority: HIGH
+    persona: "P-03"
+    source_refs:
+      requirements: ["REQ-204"]
+      use_cases: ["UC-52"]
+    trigger: "回测需要 PIT 正确的财报/估值数据"
+    context: "回测阶段信任基础，四道 P0 防线之一"
+    preconditions:
+      - "financial_pit / market_cap 带 available_at"
+      - "reader 实现 read_panel_as_of"
+    steps:
+      - action: "以 as_of=T 调用 read_panel_as_of 读 financial_pit"
+        expected: "只返回 available_at <= T 的最新记录"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-003
+    title: "PIT 前视阻断（未来财报读不到）"
+    type: negative
+    priority: HIGH
+    persona: "P-03"
+    source_refs:
+      requirements: ["REQ-204", "REQ-226"]
+      use_cases: ["UC-52", "UC-57"]
+    trigger: "构造未来财报 fixture 验证 as-of reader 不前视"
+    context: "回测/ML 红线"
+    preconditions:
+      - "存在 available_at > as_of 的记录"
+    steps:
+      - action: "以 as_of=T 调用 read_panel_as_of"
+        expected: "读不到 available_at > T 的记录，断言通过"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-004
+    title: "V1 published pointer + R1 panel reader 只读已发布"
+    type: positive
+    priority: HIGH
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-232", "REQ-214"]
+      use_cases: ["UC-52"]
+    trigger: "回测/ML 需要冻结快照与统一 as-of 宽表"
+    context: "四道 P0 防线（冻结快照 + 多表 join）"
+    preconditions:
+      - "canonical → published promote 完成"
+      - "catalog current pointer 固定"
+    steps:
+      - action: "调用 read_panel(datasets, as_of)"
+        expected: "输出价格×财务×估值×行业统一 as-of 宽表，只含 published 数据"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-005
+    title: "未发布 candidate reader 阻断"
+    type: negative
+    priority: HIGH
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-232"]
+      use_cases: ["UC-52"]
+    trigger: "candidate/gold/published 未 promote 时 reader 请求"
+    context: "冻结快照防线"
+    preconditions:
+      - "catalog current pointer 未指向 candidate"
+    steps:
+      - action: "reader 请求未发布 candidate"
+        expected: "返回 catalog_not_published 或等价阻断，不返回 candidate 数据"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-006
+    title: "C2 读层去重保证 (symbol,trade_date) 唯一"
+    type: positive
+    priority: HIGH
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-205"]
+      use_cases: ["UC-52"]
+    trigger: "canonical 38 run_id 分区可能重复"
+    context: "四道 P0 防线（去重唯一）"
+    preconditions:
+      - "C2a 重复画像完成"
+    steps:
+      - action: "读层去重按 source_run_id 取最新版本"
+        expected: "(symbol,trade_date) 在读结果唯一"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-007
+    title: "38 run_id 分区重复键边界去重"
+    type: boundary
+    priority: MEDIUM
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-205"]
+      use_cases: ["UC-52"]
+    trigger: "边界：同一 (symbol,trade_date) 跨多 run 重复"
+    context: "去重边界"
+    preconditions:
+      - "存在跨 run 重复键"
+    steps:
+      - action: "C2a 画像 + C2b 读层去重"
+        expected: "画像输出重复键与来源 run；去重后唯一"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-008
+    title: "未授权 runtime/lake write 计数为 0"
+    type: permission
+    priority: HIGH
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-248"]
+      use_cases: ["UC-51", "UC-52"]
+    trigger: "CP2 阶段验证不授权范围"
+    context: "CR-139 是范围/需求类 parent CR，不授权 runtime/NAS/QMT/trading/provider-lake write/物理分区迁移/Git remote"
+    preconditions:
+      - "CP2/CP3 未通过授权"
+    steps:
+      - action: "检查安全计数"
+        expected: "runtime/lake_write/provider_fetch/physical_partition_migration/remote_write 计数均为 0"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  # ===== Wave2 ML + 模拟盘 =====
+  - id: SCN-CR139-009
+    title: "V3 feature/label/artifact 版本化层"
+    type: positive
+    priority: HIGH
+    persona: "P-03"
+    source_refs:
+      requirements: ["REQ-219"]
+      use_cases: ["UC-53"]
+    trigger: "ML 训练需要版本化 feature/label"
+    context: "ML 门禁组，D5 lake features/ 子层"
+    preconditions:
+      - "published panel 可读"
+    steps:
+      - action: "计算 feature 并持久化到 features/ 子层"
+        expected: "带 version + schema，feature/label/artifact 审计链可追溯"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-010
+    title: "ML 旁路 --data-dir/load_local_frames 废除阻断"
+    type: negative
+    priority: HIGH
+    persona: "P-03"
+    source_refs:
+      requirements: ["REQ-215"]
+      use_cases: ["UC-53"]
+    trigger: "ML 实验尝试旁路 lake"
+    context: "ML 接入 lake"
+    preconditions:
+      - "R2 接入完成"
+    steps:
+      - action: "ML 实验使用 --data-dir/load_local_frames"
+        expected: "阻断或已废除，必须走 read_panel_as_of"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-011
+    title: "ExperimentManifest/model hash/split manifest 闭环 published release"
+    type: positive
+    priority: MEDIUM
+    persona: "P-03"
+    source_refs:
+      requirements: ["REQ-221", "REQ-222", "REQ-225"]
+      use_cases: ["UC-53"]
+    trigger: "ML 可复现需要实验 manifest 闭环"
+    context: "ML 门禁组（既有合同闭环）"
+    preconditions:
+      - "既有 ExperimentManifest / StrategyAdmissionPackage 存在"
+    steps:
+      - action: "生成 ExperimentManifest + 模型 artifact + split"
+        expected: "引用 published dataset snapshot + as_of + split cutoff + model hash，与 purge-embargo 统一"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-012
+    title: "label 泄漏 cutoff gate 阻断"
+    type: negative
+    priority: HIGH
+    persona: "P-03"
+    source_refs:
+      requirements: ["REQ-223", "REQ-224"]
+      use_cases: ["UC-53"]
+    trigger: "label 窗口与特征 cutoff 重叠"
+    context: "ML 门禁组（label 泄漏）"
+    preconditions:
+      - "既有泄漏检查已统一接入"
+    steps:
+      - action: "label overlap 或 cutoff 违规"
+        expected: "统一 gate 阻断；离线/在线一致性校验不一致阻断"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-013
+    title: "L1/L2 日级增量 + published pointer 前移"
+    type: positive
+    priority: MEDIUM
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-243", "REQ-244"]
+      use_cases: ["UC-54"]
+    trigger: "模拟盘日级推进"
+    context: "模拟盘阶段（既有合同闭环）"
+    preconditions:
+      - "既有 plan_incremental_refresh / publish_current_pointer 合同存在"
+    steps:
+      - action: "日级 append + pointer 前移"
+        expected: "幂等写 + 当日去重 + available_at 盖戳；pointer 前移 + 门禁通过"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-014
+    title: "L4 读前质量门禁阻断"
+    type: negative
+    priority: HIGH
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-234"]
+      use_cases: ["UC-54"]
+    trigger: "读前 readiness 不通过"
+    context: "模拟盘阶段（既有 readiness matrix 前置）"
+    preconditions:
+      - "既有 build_readiness_matrix 存在"
+    steps:
+      - action: "读前 readiness gate（coverage/新鲜度/PIT）不通过"
+        expected: "阻断读操作"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-015
+    title: "L3/T6 读审计 + run-id 贯通"
+    type: positive
+    priority: HIGH
+    persona: "P-06"
+    source_refs:
+      requirements: ["REQ-233", "REQ-242"]
+      use_cases: ["UC-55"]
+    trigger: "实盘可审计需要读审计与 run-id 贯通"
+    context: "交易生产门禁组（读审计 run-id 贯通）"
+    preconditions:
+      - "既有 RunEvidenceIndex 存在"
+    steps:
+      - action: "reader 读并记录读审计 log"
+        expected: "读审计 log 与 RunEvidenceIndex/broker event 同 run-id 贯通"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-016
+    title: "T4/T5 broker facts 闭环 + 成本前置门禁"
+    type: positive
+    priority: MEDIUM
+    persona: "P-05"
+    source_refs:
+      requirements: ["REQ-240", "REQ-241"]
+      use_cases: ["UC-55"]
+    trigger: "实盘可审计需要 broker facts 闭环与成本前置"
+    context: "交易生产门禁组（成本/成交可得性）"
+    preconditions:
+      - "既有 BrokerLakeSchema / CommissionSchedule 存在"
+    steps:
+      - action: "实盘写 + 成本门禁前置"
+        expected: "订单/成交/持仓审计链闭环；成本/滑点/成交可得性前置"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-017
+    title: "F1/F2/F3 配置类事实源版本化 + release 闭环"
+    type: positive
+    priority: MEDIUM
+    persona: "P-03"
+    source_refs:
+      requirements: ["REQ-236", "REQ-237", "REQ-238"]
+      use_cases: ["UC-56"]
+    trigger: "回测/归因/模拟盘需要版本化配置事实源"
+    context: "配置类事实源层（既有合同版本化扩展）"
+    preconditions:
+      - "既有 benchmark / CommissionSchedule / PortfolioRiskPolicy 合同存在"
+    steps:
+      - action: "版本化 benchmark/commission/universe-risk-policy + release 闭环"
+        expected: "带 version + release 闭环；benchmark 含 risk-free curve；universe 含退市/ST/容量约束"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-018
+    title: "V4 schema 演进 + 模拟盘前契约冻结"
+    type: boundary
+    priority: HIGH
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-220"]
+      use_cases: ["UC-57"]
+    trigger: "模拟盘前 schema 契约冻结（评审 HIGH3）"
+    context: "实盘契约边界"
+    preconditions:
+      - "V4 schema 演进规则定义"
+    steps:
+      - action: "schema 变更 + reader 兼容回退"
+        expected: "按演进规则回退；模拟盘前契约冻结"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-019
+    title: "X3 decision_time 强制 lookahead 阻断"
+    type: negative
+    priority: HIGH
+    persona: "P-06"
+    source_refs:
+      requirements: ["REQ-235"]
+      use_cases: ["UC-57"]
+    trigger: "实盘信号时刻 vs available_at 违规"
+    context: "交易生产门禁组（决策时点-新鲜度对齐）"
+    preconditions:
+      - "既有 decision_time 部分支持"
+    steps:
+      - action: "available_at > decision_time 违规"
+        expected: "强制 lookahead 阻断门禁阻断"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-020
+    title: "X1/X2/X4 跨源时点一致性"
+    type: positive
+    priority: MEDIUM
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-229", "REQ-230", "REQ-231"]
+      use_cases: ["UC-57"]
+    trigger: "跨源交易日历/复权 PIT/universe 成分链一致性"
+    context: "跨源与时点一致性层"
+    preconditions:
+      - "复权因子/跨源日历/index_members 可用"
+    steps:
+      - action: "复权因子 PIT 校验 + 跨源日历对齐 + PIT universe 成分链构建"
+        expected: "复权断点回归通过；跨源日历一致；PIT universe 消除固定快照偏差"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-021
+    title: "四组门禁集 CP3 前置检查"
+    type: precheck
+    priority: HIGH
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-246"]
+      use_cases: ["UC-52", "UC-53", "UC-55", "UC-57"]
+    trigger: "CP3 前检查四组门禁集是否就绪"
+    context: "D7 四组门禁为 CP3 必过"
+    preconditions:
+      - "数据/研究/ML/交易生产门禁集定义完成"
+    steps:
+      - action: "逐项检查四组门禁集"
+        expected: "逐项 PASS 或结构化阻断；任一未豁免 FAIL 则 CP3 不得通过"
+    evidence_type: review
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-022
+    title: "物理分区迁移后置检查"
+    type: precheck
+    priority: HIGH
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-247"]
+      use_cases: ["UC-52"]
+    trigger: "Wave1 推进前检查物理分区迁移是否后置"
+    context: "D3/D6 不先改物理分区"
+    preconditions:
+      - "T7 黄金值基线冻结"
+    steps:
+      - action: "检查物理分区迁移时机"
+        expected: "物理迁移在 T7 黄金值归因之后；之前只做读层去重"
+    evidence_type: review
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-023
+    title: "增量/pointer 合同未执行降级"
+    type: external-failure
+    priority: MEDIUM
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-243", "REQ-244"]
+      use_cases: ["UC-54"]
+    trigger: "既有 dry-run 合同存在但未接通真实执行"
+    context: "合同存在不等于已执行"
+    preconditions:
+      - "plan_incremental_refresh / publish_current_pointer 为 dry-run"
+    steps:
+      - action: "请求日级增量/pointer 前移但合同未接通执行"
+        expected: "返回 not-executed / dry-run-only 结构化状态，不伪造执行"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+  - id: SCN-CR139-024
+    title: "D3 存量 run_id 不重命名边界"
+    type: boundary
+    priority: MEDIUM
+    persona: "P-04"
+    source_refs:
+      requirements: ["REQ-201"]
+      use_cases: ["UC-52", "UC-57"]
+    trigger: "存量 38 run_id 分区处理"
+    context: "D3 不重命名存量"
+    preconditions:
+      - "存量 run_id 分区存在"
+    steps:
+      - action: "新数据规范化 + 存量不主动改名"
+        expected: "新数据用 dataset/schema_version；存量 run_id 保留，下次重跑替换"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: ""
+
+coverage_summary:
+  total: 24
+  high_priority_positive_and_negative_covered: true
+  types_covered:
+    positive: 11
+    negative: 5
+    boundary: 3
+    permission: 1
+    external-failure: 1
+    precheck: 2
+    empty-data: 0
+  blocks_covered:
+    block1_data_lake: ["SCN-CR139-001", "002", "003", "004", "005", "006", "007", "024"]
+    block2_research_ml: ["SCN-CR139-009", "010", "011", "012", "020"]
+    block3_read_side: ["SCN-CR139-004", "014", "019"]
+    block4_config_fact: ["SCN-CR139-017"]
+    block5_trading_audit: ["SCN-CR139-015", "016", "023"]
+    cross_cutting: ["SCN-CR139-008", "018", "021", "022"]
+  four_p0_defenses_covered:
+    C1_PIT: "SCN-CR139-002,003"
+    C2_dedup: "SCN-CR139-006,007"
+    V1_published: "SCN-CR139-004,005"
+    R1_panel: "SCN-CR139-004"
+  gaps: []

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "prices_limit_rollback_manifest",
+  "created_at": "2026-06-29T21:31:13+08:00",
+  "rollback_not_authorized": true,
+  "allowed_future_rollback_if_authorized": "delete only the two prices_limit candidate objects listed here; do not delete legacy/canonical/catalog/published",
+  "objects": [
+    {
+      "dataset": "prices_limit",
+      "role": "main",
+      "relative_path": "candidate/parquet/dataset=prices_limit/schema_version=1.0/run_id=cr139-w2-prices_limit-legacy_lake-20260629-canonical/part-prices-limit.parquet",
+      "size_bytes": 117729976,
+      "sha256": "0f85e1583e77e3b9769f2f7ae5622e7086955fe7437ac33e1fce885e77bebc72",
+      "row_count": 19210017,
+      "write_mode": "additive_only_split_main"
+    },
+    {
+      "dataset": "prices_limit",
+      "role": "quarantine",
+      "relative_path": "candidate/parquet/dataset=prices_limit/schema_version=1.0/run_id=cr139-w2-prices_limit-legacy_lake-20260629-canonical/quarantine/part-prices-limit-conflict-and-superseded.parquet",
+      "size_bytes": 67212938,
+      "sha256": "5d787eae6c90a90ec9c835b2378fcd06de2efbf9cfbc929944a5a5dced504c05",
+      "row_count": 11841929,
+      "write_mode": "additive_only_business_conflict_and_superseded_quarantine"
+    }
+  ]
+}

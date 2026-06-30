@@ -1,0 +1,68 @@
+# CP3 Context Capsule — CR-139 Strategy Data Foundation (HLD)
+
+capsule_for: CP3 (solution-design / HLD)
+cr_id: CR-139
+phase: solution-design
+delegated_to: meta-se
+read_profile: compact
+created_at: 2026-06-28T16:10:00+08:00
+
+## 目标（本次委托边界）
+基于 CR-139 已批准的 CP2 范围基线（USE-CASES v1.17 UC-51..57 persona 驱动场景 + REQUIREMENTS v1.17 REQ-201..249 + 45 项整改分类锁定），由 meta-se 执行 CP3 HLD 设计：识别架构灰区 → 与用户讨论 → 刷新 BLUEPRINT/DOMAIN-MAP/DEPENDENCY-MAP/FEATURE-DESIGN-MATRIX → 新开 companion HLD「Strategy Data Foundation」→ 四组门禁集落为 CP3 门禁 → 生成 CP3 自动预检 → 交还摘要。**不得推进跨阶段状态，不得发起 CP3 正式人工检查点**；阶段收敛后写交还摘要，由 host-orchestrator 回收并发起 CP3 Decision Brief。
+
+## must_read（必读，按需扩展）
+- `process/context/DATA-LAKE-REMEDIATION-HANDOFF.md` v0.7 — 整改真相源（§1 现状物理结构 + 代码事实 + 既有合同 §1.6 / §2 四组门禁 / §3 45 项整改清单含代码触点 / §5 Wave 路线 / §6 D1-D8 决策）
+- `process/changes/CR-139-STRATEGY-DATA-FOUNDATION-2026-06-28.md` — parent CR 审计边界、§5 设计刷新判断、§5 Wave 路线（含 CP2 追加约束：结构性变更在 T8/T7/C2a 之后）、§9 不授权范围
+- `process/USE-CASES.md` v1.17 UC-51..57（persona 驱动场景，已重写）+ 用户画像 P-01..P-07
+- `process/REQUIREMENTS.md` v1.17 REQ-201..249（45 项整改 1:1 映射 + 4 跨切约束：REQ-246 四组门禁/REQ-247 Wave1 基线门/REQ-248 不授权/REQ-249 既有合同闭环原则）
+- `docs/design/BLUEPRINT.md` v1.12 — Feature 边界表（FEAT-02/03/06/11/12/13/14）、能力地图 CAP-02..14、跨 Feature 流程 FLOW-01
+- `docs/design/FEATURE-DESIGN-MATRIX.md` v1.11 — 现有 Feature 归属与 lld_policy（需补 ML feature/读侧语义/run evidence/配置层归属）
+- `docs/design/DOMAIN-MAP.md` v1.11 / `docs/design/DEPENDENCY-MAP.md` v1.11
+
+## read_if_needed
+- `process/HLD-DATA-LAKE.md` v0.8（CR018 未过 CP3，已 superseded-in-scope by CR-139；companion HLD「Strategy Data Foundation」收口其范围。读其 §5/§14/§17 历史 HLD 章节作为既有契约参照，但不续推）
+- handoff §3 各整改项的代码触点列（C1 readers.py / V1 publish.py / R1 readers.py:2728 等，用于 HLD 模块边界与契约定义）
+- `process/SCENARIOS-CR139.yaml` / `process/TEST-MATRIX-CR139.md`（场景与覆盖矩阵，HLD 需对应）
+
+## do_not_read_by_default
+- 全部 LLD / Story 卡片（CP3 不拆 Story，规则 2 HLD 锁）
+- CR-017/CR-018 全文（已 superseded-in-scope，仅历史追溯）
+- 完整 HLD-DATA-LAKE.md（已漂移，只读关键章节作既有契约参照）
+
+## 核心已知结论（来自 handoff v0.7 + CR-139 CP2，无需重新调研）
+- 整改目标：数据湖支撑多因子+ML 策略四阶段全流程可信/可复现/可审计。
+- 四组门禁（数据/研究/ML/交易生产）是 CP3 必过门禁（D7），需在 HLD 落为门禁设计。
+- 45 项整改分类锁定：(a)=6 已设计未实现 / (b)=7 设计过期 / (c)=12 范围扩展 / (d1)=6 纯新建 / (d2)=14 既有合同闭环。
+- 四道 P0 防线：C1 PIT as-of reader、C2 分区去重、V1 published 快照、R1 panel reader。
+- D2 决策：新开 companion HLD「Strategy Data Foundation」（写侧/读侧分离），收口 HLD-DATA-LAKE.md。
+- D4：DuckDB 只读引擎，parquet 仍是存储；D5：ML feature 层 lake `features/` 子层带版本（附条件保留切换独立 store）。
+- 既有合同已存在（整改为闭环非新建，15 类，handoff §1.6 + CR-139 §4.1）：d2 14 项不重复设计，走集成闭环 LLD。
+- Wave1 基线门（CP2 追加约束）：结构性变更（V1/C1/R1/C2b/N1）必须在 T8 清册→T7 黄金值→C2a 重复画像之后执行（REQ-247）。
+- V4 schema 契约冻结必须前置到模拟盘前（评审 HIGH3，Wave2）。
+
+## CP3 Architecture Gray Areas（规则 45，meta-se 识别关键灰区，advisor lane 用 Option/Pros/Cons/Impact Surface/Recommendation/Assumptions-When-to-switch 表格优先输出）
+候选（meta-se 可调整）：
+- AGA-1 写侧/读侧分离边界：companion HLD 如何切写侧（normalize/publish/lineage）与读侧（PIT reader/panel reader/dedup/published selector），与既有 FEAT-02 写侧职责如何对接
+- AGA-2 published current pointer 与 catalog 主从：V1 pointer、M1 catalog/manifest 双真相源、published 门禁如何统一为单一真相源
+- AGA-3 ML feature 层归属与切换条件：lake `features/` 子层（D5）vs 独立 feature store，版本化 schema 与 artifact hash 闭环如何设计，切换条件如何保留
+- AGA-4 run-id 贯通与读审计（L3/T6）：数据 run-id 如何贯穿 reader→RunEvidenceIndex→broker event，读审计 log 的写入边界与既有 evidence_index 如何对接
+- AGA-5 配置类事实源版本化机制（F1-F4）：benchmark/commission/universe·risk policy/政策周期如何统一版本化事实源 + release 闭环，复用 V1 published pointer 机制还是独立
+- AGA-6 schema 演进与契约冻结（V4）：schema 版本演进规则 + reader 兼容回退 + 模拟盘前冻结如何落为门禁
+
+## 产物路由（production 项目约定：CR-scoped process/ 文件 + docs/design/）
+- `docs/design/BLUEPRINT.md` v1.13（增量，保留 v1.12 旧基线，增补"策略生产数据底座"能力地图 + Feature/数据归属 + 跨 Feature 流程）
+- `docs/design/DOMAIN-MAP.md` v1.12（增量，补 ML feature/读侧/run evidence/配置类事实源领域对象）
+- `docs/design/DEPENDENCY-MAP.md` v1.12（增量，补依赖方向：reader→published pointer、ML→panel reader、broker facts→run-id 贯通）
+- `docs/design/FEATURE-DESIGN-MATRIX.md` v1.12（增量，补 V3/L3/L4/R2/E*/T*/F*/X* 的 Feature 归属与 lld_policy + 重访条件）
+- `process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md` v0.1（新 companion HLD，写侧/读侧分离，14 章节齐全，含 Gotchas）
+- `process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md`（新 ADR，落 D1-D8 决策 + 四组门禁 + Wave1 基线门）
+- `process/discussions/CP3-HLD-DISCUSSION-LOG.md`（架构灰区讨论日志）
+- `process/checks/CP3-DISCUSSION-CHECKPOINT.json`（恢复点）
+- `process/checks/CP3-CR139-HLD-CONSISTENCY.md`（CP3 自动预检草稿，由 meta-se 用 checkpoint-manager 生成，不写人工审查结果）
+- 交还摘要（meta-se 返回给 host-orchestrator）
+
+## 不授权范围（non-authorized scope）
+CP3 不授权：Story 拆解 / LLD / 实现 / runtime / NAS / QMT / trading / provider-lake-catalog 写入 / 物理分区迁移（Wave1 N1 后置到基线冻结之后）/ Git remote write。HLD/蓝图只能 meta-se 改；feature DESIGN 三件套是 meta-dev 在 CP5 后落地（规则 8）。CP3 通过不等于授权实现或运行时。
+
+## context_policy
+capsule 路径即本文件。meta-se 默认消费本 capsule + must_read；不得默认读完整 HLD-DATA-LAKE / 全部 LLD / 全部 Story 卡片。需扩展读取时在本 capsule `read_expansion_log[]` 或 STATE `read_expansion_log[]` 写明 `full_doc_read_reason`。

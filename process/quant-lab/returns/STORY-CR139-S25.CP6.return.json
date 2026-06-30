@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR139-S25.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S25",
+  "status": "implemented",
+  "created_at": "2026-06-30T13:35:00+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR139-S25.CP6.work-packet.json",
+  "implementation_ref": "process/stories/CR139-S25-decision-time-lookahead-gate-IMPLEMENTATION.md",
+  "touched_files": [
+    {"path": "market_data/readers.py", "change_type": "modified"},
+    {"path": "tests/test_cr139_decision_time_lookahead_gate.py", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "summary": "Added optional read_dataset decision_time gate; default behavior remains unchanged."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_write_touched": false,
+    "provider_catalog_write_touched": false,
+    "published_pointer_advance_executed": false,
+    "physical_partition_migration_executed": false,
+    "nas_operation_executed": false,
+    "git_remote_write_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {"command": "uv run --python 3.11 pytest -q tests/test_cr139_decision_time_lookahead_gate.py tests/test_cr139_readiness_pre_read_gate.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_read_layer_dedup.py", "result": "pass", "summary": "18 passed in 0.64s"}
+    ],
+    "tests": [
+      "test_s25_decision_time_gate_allows_available_rows",
+      "test_s25_decision_time_gate_blocks_future_available_at",
+      "test_s25_decision_time_gate_requires_available_at_column",
+      "test_s25_decision_time_gate_blocks_invalid_decision_time"
+    ],
+    "skipped": []
+  },
+  "evidence_refs": [
+    "process/evidence/STORY-CR139-S25.CP6.index.json"
+  ],
+  "risks": [],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7"
+}

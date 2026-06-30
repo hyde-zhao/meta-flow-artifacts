@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "trade_status_rollback_manifest",
+  "created_at": "2026-06-29T21:33:48+08:00",
+  "rollback_not_authorized": true,
+  "allowed_future_rollback_if_authorized": "delete only the two trade_status candidate objects listed here; do not delete legacy/canonical/catalog/published",
+  "objects": [
+    {
+      "dataset": "trade_status",
+      "role": "main",
+      "relative_path": "candidate/parquet/dataset=trade_status/schema_version=1.0/run_id=cr139-w2-trade_status-legacy_lake-20260629-canonical/part-trade-status.parquet",
+      "size_bytes": 35490160,
+      "sha256": "19de5b332398e0f89358bed887ae3df215508c3b6a7d73407d6144c12f03789f",
+      "row_count": 13957403,
+      "write_mode": "additive_only_split_main"
+    },
+    {
+      "dataset": "trade_status",
+      "role": "quarantine",
+      "relative_path": "candidate/parquet/dataset=trade_status/schema_version=1.0/run_id=cr139-w2-trade_status-legacy_lake-20260629-canonical/quarantine/part-trade-status-conflict-and-superseded.parquet",
+      "size_bytes": 17659218,
+      "sha256": "42e5bc36f1fecbaa33db4d8696b748ed29f4b75bde867dfed978e7c14870ce16",
+      "row_count": 7612504,
+      "write_mode": "additive_only_business_conflict_and_superseded_quarantine"
+    }
+  ]
+}

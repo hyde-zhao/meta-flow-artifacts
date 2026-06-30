@@ -1,0 +1,83 @@
+# CP5-W1 Context Capsule — CR-139 Strategy Data Foundation (Wave1 LLD Batch)
+
+capsule_for: CP5-W1 (Wave1 LLD design evidence batch)
+cr_id: CR-139
+phase: story-planning (LLD writing)
+delegated_to: meta-dev
+batch_id: CR139-STRATEGY-DATA-FOUNDATION-LLD-BATCH-W1
+read_profile: compact
+created_at: 2026-06-28T18:00:00+08:00
+
+## 目标（本次委托边界）
+按用户决策"按 Wave 分批 CP5"，先写 **Wave1（8 Story）设计证据**，过 CP5-W1 人工门禁后进入 Wave1 实现（CP6/CP7）；Wave1 verified 后再写 Wave2/Wave3 LLD。
+
+**Wave1 Story 清单**：
+- full-lld（6，写完整 14 章 LLD 到 `process/stories/CR139-Snn-LLD.md`）：S01 T8 清册、S02 T7 黄金值基线、S03 C2a 重复画像、S06 R1 panel reader、S07 C2b 读层去重、S08 N1 run_id 分区治理（deferred-execution）
+- technical-note（2，在 Story 卡片内写 `## 技术说明`）：S04 V1 published pointer/read selector、S05 C1 PIT as-of reader
+
+## 委托边界
+- 你写 LLD/技术说明设计证据，**不实现代码**（规则 5 Story 开发锁：CP5 通过后才实现）。
+- LLD 写作按 Story 并行，但同一 Story 严格按设计证据→实现顺序。本次 max_parallel_lld=3。
+- 遇实现灰区写入 `DEVELOPMENT-PLAN-CR139.yaml` lld_clarification_queue（已 resolved 4 项 LCQ），不要直接问用户。
+- 完成后写交还摘要返回 host-orchestrator。
+
+## must_read（必读）
+- `process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md` v0.2（§5 推荐方案 / §9 架构图 / §10 模块职责 / §12 关键流程含 Wave1 基线门 / §14 风险 / §17 Feature 级实现设计触发条件）
+- `process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md` v0.2（D1-D8 + AGA-1/3/5 confirmed + Wave1 基线门 REQ-247）
+- `process/REQUIREMENTS.md` v1.17（Wave1 相关 REQ：REQ-201 N1 / REQ-204 C1 / REQ-205 C2 / REQ-212 T7 / REQ-213 T8 / REQ-214 R1 / REQ-232 V1 / REQ-247 基线门 / REQ-248 不授权 / REQ-249 既有合同闭环）
+- `process/STORY-BACKLOG-CR139.md`（Wave1 Story 详情 + 验收标准 + DAG + 文件所有权）
+- Wave1 Story 卡片：`process/stories/CR139-S01..S08-*.md`
+- `process/DEVELOPMENT-PLAN-CR139.yaml`（merge_order / 文件所有权 / LCQ resolved 答案）
+- `process/context/DATA-LAKE-REMEDIATION-HANDOFF.md` v0.7 §3（Wave1 整改项代码触点：T8/T7/C2a/V1/C1/R1/C2b/N1）
+
+## read_if_needed
+- `docs/design/BLUEPRINT.md` v1.14（FEAT-02 写侧/读侧分层）
+- `docs/design/FEATURE-DESIGN-MATRIX.md` v1.13（lld_policy 来源）
+- `process/HLD-DATA-LAKE.md` v0.8 §5/§14/§17（既有 HLD 契约，a 类 Story 消费）
+
+## do_not_read_by_default
+- 其他 Wave（W2/W3）Story 卡片
+- 全部已有旧 LLD/Story 实现（CR014-018）
+- CR-017/CR-018 全文
+
+## LLD 写作要求
+
+### full-lld（S01/S02/S03/S06/S07/S08）→ `process/stories/CR139-Snn-<slug>-LLD.md`
+14 章节齐全（参考 lld-designer skill）：
+1. 问题定义与目标（量化验收条件）
+2. 模块拆分与文件影响范围（基于 handoff §3 代码触点 + DEVELOPMENT-PLAN merge_order）
+3. 数据模型 / schema 变更
+4. 接口契约（函数签名、输入输出、与相邻 Story 的契约方向）
+5. 关键流程（含 Wave1 基线门：S01/S02/S03 verified 后 S04-S08 才实现的时序）
+6. 异常处理与失败路径
+7. 测试设计（fixture / 黄金值对比 / PIT 正确性回归）
+8. 实施步骤（最小实现切片）
+9. 风险与应对
+10. 发布与回滚策略
+11. 平台差异检查
+12. 设计契约映射（回链 HLD §10 模块 / ADR / REQ）
+13. Gotchas
+14. open_items / tier / shared_fragments
+
+### technical-note（S04/S05）→ 在 Story 卡片 `process/stories/CR139-S04/S05-*.md` 内追加 `## 技术说明`
+覆盖：文件影响、接口/数据、失败路径、测试入口、风险、偏离记录。a 类（S04 V1 / S05 C1）消费既有 HLD-DATA-LAKE 契约，不重复设计。
+
+### Wave1 基线门时序（REQ-247，必须落入 LLD 流程章节）
+S01 T8 清册 → S02 T7 黄金值 → S03 C2a 画像（基线冻结三步）verified 后，S04 V1 / S05 C1 / S06 R1 / S07 C2b（结构性变更）才能实现；S08 N1 dev_gate=deferred-until-baseline-verified（设计写，实现后置）。
+
+### LCQ resolved 答案（已回填，LLD 必须遵循）
+- LCQ-01：C2a（S03）独立只读分析函数不改读路径；C2b（S07）嵌入 read_dataset 出口按 source_run_id 取最新
+- LCQ-02：readers.py 函数切片 + merge_order 串行 S05→S06→S07→...
+- LCQ-03：run-id 在 publish.py 生成（S08 涉及），manifest.py 记录
+- LCQ-04：N1（S08）LLD 在 CP5 写，dev_gate=deferred-until-baseline-verified
+
+## 产物路由
+- 6 个 full-lld 文件：`process/stories/CR139-S01-remediation-object-inventory-LLD.md` 等
+- 2 个 technical-note：编辑 `process/stories/CR139-S04-*.md` / `CR139-S05-*.md` 追加 `## 技术说明`
+- 交还摘要
+
+## 不授权范围（non-authorized scope）
+CP5-W1 不授权：实现 / runtime / NAS / QMT / trading / provider-lake-catalog 写入 / 物理分区迁移执行（S08 N1 后置到基线冻结后）/ published pointer 前移执行 / 真实 lake 写入 / Git remote write。LLD 是设计证据，不含实现。
+
+## context_policy
+capsule 路径即本文件。meta-dev 默认消费 capsule + must_read；不得默认读其他 Wave Story / 旧 LLD。需扩展读取写明 `full_doc_read_reason`。

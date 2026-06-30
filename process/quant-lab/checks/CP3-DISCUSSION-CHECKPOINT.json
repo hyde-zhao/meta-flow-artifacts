@@ -1,88 +1,76 @@
 {
-  "checkpoint_id": "CP3-DISCUSSION-CR138",
-  "cr_id": "CR-138",
-  "status": "completed",
-  "created_at": "2026-06-24T14:10:00+08:00",
+  "checkpoint_id": "CP3-DISCUSSION-CR139",
+  "cr_id": "CR-139",
+  "phase": "solution-design",
+  "delegated_to": "meta-se",
+  "status": "pending-user-decision",
+  "created_at": "2026-06-28T16:40:00+08:00",
   "discussion_log": "process/discussions/CP3-HLD-DISCUSSION-LOG.md",
-  "source_context": "process/context/CP2-CR138-RUNNER-QMT-OPERATIONAL-USE-CASE-CONTEXT.yaml",
-  "selected_architecture_direction": "independent-runner-control-plane-and-qmt-gateway-service-layer",
-  "architecture_gray_areas": [
+  "source_context": "process/context/CP3-CR139-STRATEGY-DATA-FOUNDATION-CONTEXT.yaml",
+  "previous_cycle": "CP3-DISCUSSION-CR138 (completed; audit trail in CR-138 HLD/ADR)",
+  "gray_areas": [
     {
-      "id": "AGA-138-01",
-      "status": "resolved",
-      "decision": "Runner Control Plane is independent from offline strategy-runner-core and consumes its artifacts only as input evidence."
+      "id": "AGA-1",
+      "title": "写侧/读侧分离边界",
+      "architecture_shaping": true,
+      "recommended": "A1",
+      "options": ["A1", "A2", "A3"],
+      "user_decision": "pending",
+      "impact": ["companion HLD 结构", "FEAT-02 内部职责", "读侧 Story owner", "readers.py 文件段"]
     },
     {
-      "id": "AGA-138-02",
-      "status": "resolved",
-      "decision": "QMT Gateway is a service layer for lifecycle, capabilities, sessions, subscriptions, execution reports, recovery, audit, and config changes; it is not only a readonly endpoint or QMT terminal target."
+      "id": "AGA-2",
+      "title": "published current pointer 与 catalog 主从",
+      "architecture_shaping": false,
+      "recommended": "B1",
+      "options": ["B1", "B2", "B3"],
+      "user_decision": "既定 (REQ-208/M1)",
+      "impact": ["catalog.py", "manifest.py", "publish.py"]
     },
     {
-      "id": "AGA-138-03",
-      "status": "resolved",
-      "decision": "Runner and Gateway communicate through domain commands/events, authorization records, idempotency keys, and audit ids; Runner must not call xtquant directly."
+      "id": "AGA-3",
+      "title": "ML feature 层归属与切换条件",
+      "architecture_shaping": true,
+      "recommended": "C1",
+      "options": ["C1", "C2", "C3"],
+      "user_decision": "pending",
+      "impact": ["FEAT-03 feature 层", "lake_layout.py features/ 子层", "E1/E2/E5 审计链", "DEF-139-01"]
     },
     {
-      "id": "AGA-138-04",
-      "status": "resolved",
-      "decision": "CP3 approval does not automatically authorize runtime, QMT, account, quote, order, submit/cancel, simulation/live, credentials, NAS, provider/lake/catalog, or Git remote write; future validation may request scoped runtime authorization."
+      "id": "AGA-4",
+      "title": "run-id 贯通与读审计",
+      "architecture_shaping": false,
+      "recommended": "D1",
+      "options": ["D1", "D2", "D3"],
+      "user_decision": "既定 (REQ-233/242, 可审计目标)",
+      "impact": ["readers.py 读审计", "evidence_index.py", "broker_lake.py", "FEAT-06/11 事件 schema"]
     },
     {
-      "id": "AGA-138-05",
-      "status": "resolved-with-risk",
-      "decision": "Keep one function-named umbrella HLD for shared event/safety contracts; split Story planning by Runner, Gateway, safety, and OMS boundaries."
+      "id": "AGA-5",
+      "title": "配置类事实源版本化机制",
+      "architecture_shaping": true,
+      "recommended": "E1",
+      "options": ["E1", "E2", "E3"],
+      "user_decision": "pending",
+      "impact": ["FEAT-02/12/14/03 配置层", "publish.py 复用", "config_facts 子层", "F1-F4 release 闭环"]
     },
     {
-      "id": "AGA-138-06",
-      "status": "resolved",
-      "decision": "Gateway P0 is REST-only; SSE/WebSocket, gRPC, and FIX are deferred to later protocol CRs."
+      "id": "AGA-6",
+      "title": "schema 演进与契约冻结",
+      "architecture_shaping": false,
+      "recommended": "F1",
+      "options": ["F1", "F2", "F3"],
+      "user_decision": "既定 (HIGH3/REQ-220)",
+      "impact": ["contracts.py", "readers.py", "V4"]
     }
   ],
-  "advisor_options": [
-    {
-      "option": "A",
-      "name": "Independent Runner Control Plane + QMT Gateway Service Layer",
-      "recommendation": "recommended"
-    },
-    {
-      "option": "B",
-      "name": "Extend offline strategy-runner-core directly into runtime",
-      "recommendation": "not_recommended"
-    },
-    {
-      "option": "C",
-      "name": "Gateway-centered strategy scheduler",
-      "recommendation": "not_recommended"
-    },
-    {
-      "option": "D",
-      "name": "Readonly-only narrowed scope",
-      "recommendation": "conditional_fallback"
-    }
-  ],
-  "decision_items_for_cp3": [
-    "DQ-CP3-CR138-01",
-    "DQ-CP3-CR138-02",
-    "DQ-CP3-CR138-03",
-    "DQ-CP3-CR138-04",
-    "DQ-CP3-CR138-05"
-  ],
+  "pending_user_decisions": ["DQ-CP3-AGA1", "DQ-CP3-AGA3", "DQ-CP3-AGA5"],
   "runtime_authorized": false,
   "cp3_runtime_auto_authorized": false,
-  "runtime_authorization_policy": "Scoped runtime authorization may be requested later with action scope, run window, redaction, rollback, and audit constraints.",
   "forbidden_scope_not_authorized_by_cp3": [
-    "runtime",
-    "qmt",
-    "miniqmt",
-    "xtquant",
-    "credentials",
-    "account_query",
-    "market_subscription",
-    "order_query",
-    "submit_cancel",
-    "simulation_live",
-    "nas",
-    "provider_lake_catalog",
-    "git_remote_write"
-  ]
+    "runtime", "nas", "qmt", "trading", "provider_lake_catalog_write",
+    "physical_partition_migration_before_baseline", "git_remote_write",
+    "real_lake_write", "published_pointer_advance_execution", "broker_lake_write"
+  ],
+  "next_step": "AskUserQuestion 向用户确认 AGA-1/AGA-3/AGA-5，回填后刷新 BLUEPRINT/DOMAIN-MAP/DEPENDENCY-MAP/FEATURE-DESIGN-MATRIX + 新开 companion HLD + ADR + CP3 自动预检"
 }

@@ -1,0 +1,184 @@
+{
+  "checkpoint": "CP4",
+  "cr_id": "CR-139",
+  "title": "CP4 CR139 Story DAG & Parallel Safety Auto-Precheck Result",
+  "type": "auto-precheck",
+  "machine_truth_source": true,
+  "created_at": "2026-06-28T18:30:00+08:00",
+  "delegated_to": "meta-se",
+  "conclusion": "PASS_WITH_RISK",
+  "summary_md": "process/checks/CP4-CR139-STORY-DAG-PARALLEL-SAFETY.md",
+  "check_counts": {
+    "total_checks": 8,
+    "passed": 8,
+    "failed": 0,
+    "waived": 0
+  },
+  "check_groups": [
+    {
+      "group": "1. Story 覆盖 45 项整改",
+      "result": "PASS",
+      "evidence": {
+        "story_count": 40,
+        "req_covered": 45,
+        "req_missing": 0,
+        "req_extra": 0,
+        "wave_distribution": {"W1": 7, "W2": 32, "W3": 6},
+        "aggregations": ["S12=REQ-221/222/225", "S14=REQ-243/244", "S15=REQ-223/224", "S29=REQ-226/227", "S30=REQ-202/203"],
+        "c2_split": "S03 C2a + S07 C2b 共享 REQ-205"
+      }
+    },
+    {
+      "group": "2. DAG 无环与依赖类型",
+      "result": "PASS",
+      "evidence": {
+        "nodes": 40,
+        "edges": 57,
+        "cycles": 0,
+        "invalid_references": 0,
+        "parallel_internal_dependencies": 0,
+        "dependency_types": ["runtime", "contract", "file-conflict"]
+      }
+    },
+    {
+      "group": "3. Wave1 基线门硬依赖（REQ-247）",
+      "result": "PASS",
+      "evidence": {
+        "baseline_stories": ["CR139-S01 T8", "CR139-S02 T7", "CR139-S03 C2a"],
+        "directly_gated": ["CR139-S04 V1", "CR139-S08 N1", "CR139-S09 V4", "CR139-S31 C3"],
+        "transitively_gated_via_S04": ["CR139-S05 C1", "CR139-S06 R1", "CR139-S07 C2b"],
+        "n1_deferred_execution": true,
+        "physical_partition_migration_not_authorized": true
+      }
+    },
+    {
+      "group": "4. 文件所有权无冲突",
+      "result": "PASS",
+      "evidence": {
+        "conflict_files": {
+          "market_data/readers.py": {"stories": 10, "merge_order": ["S05", "S06", "S07", "S09", "S25", "S27", "S28", "S13", "S16", "S36"]},
+          "market_data/publish.py": {"stories": 3, "merge_order": ["S04", "S14", "S22"]},
+          "market_data/catalog.py": {"stories": 3, "merge_order": ["S04", "S33", "S39"]},
+          "market_data/normalization.py": {"stories": 7, "merge_order": ["S08", "S31", "S32", "S34", "S14", "S23", "S22"]},
+          "market_data/lake_layout.py": {"stories": 3, "merge_order": ["S08", "S11", "S30"]},
+          "market_data/cli.py": {"stories": 4, "merge_order": ["S08", "S04", "S14", "S35"]},
+          "trading/qmt_gateway_contracts.py": {"stories": 2, "merge_order": ["S18", "S21"]},
+          "engine/contracts.py": {"stories": 2, "merge_order": ["S09", "S26"]},
+          "engine/factor_model_validation.py": {"stories": 2, "merge_order": ["S15", "S40"]},
+          "market_data/manifest.py": {"stories": 2, "merge_order": ["S33", "S34"]}
+        },
+        "undefined_conflicts": 0,
+        "strategy": "函数切片 + merge_order 串行合并（CR138 模式）"
+      }
+    },
+    {
+      "group": "5. lld_policy 与 MATRIX v1.13 一致",
+      "result": "PASS",
+      "evidence": {
+        "full_lld_count": 17,
+        "technical_note_count": 23,
+        "full_lld_stories": ["S01", "S02", "S03", "S06", "S07", "S08", "S09", "S10", "S11", "S12", "S15", "S16", "S20", "S23", "S24", "S27", "S29"],
+        "aggregation_takes_highest": true,
+        "m4_special_case": "REQ-211 M4 c→technical-note（MATRIX 逐项标，审计链字段补全低风险）",
+        "a_class_consumes_hld_datalake": true
+      }
+    },
+    {
+      "group": "6. 跨边界项 owner/consumer 标注",
+      "result": "PASS",
+      "evidence": {
+        "T6_runid": {"owner": "S22 FEAT-02 写侧", "consumer": ["S20 T4 FEAT-06", "S27 L3 FEAT-11"], "rule": "FD-51 单向贯通"},
+        "R1_panel_reader": {"owner": "S06 FEAT-02 读侧", "consumer": ["S10 R2 FEAT-03", "S11 V3 FEAT-03"]},
+        "L3_read_audit": {"owner": "S27 FEAT-02 读侧", "consumer": "S22 T6 FEAT-11"},
+        "L4_readiness_gate": {"owner": "S28 FEAT-02 读侧", "consumer": "FEAT-14 模拟盘"},
+        "F1_F4_config_facts": {"owner": "S17/S18/S19/S40", "mechanism": "复用 V1 pointer 语义 AGA-5 E1"}
+      }
+    },
+    {
+      "group": "7. 并行上限与 Wave 编排",
+      "result": "PASS",
+      "evidence": {
+        "max_parallel_lld": 3,
+        "max_parallel_dev": 2,
+        "max_parallel_qa": 2,
+        "wave_count": 10,
+        "ml_onboarding_order": "S06 R1 → S11 V3 → S10 R2",
+        "v4_pre_simulation": true,
+        "lld_batch_id": "CR139-STRATEGY-DATA-FOUNDATION-LLD-BATCH-A"
+      }
+    },
+    {
+      "group": "8. 不授权范围声明",
+      "result": "PASS",
+      "evidence": {
+        "lld_writing_authorized": false,
+        "implementation_authorized": false,
+        "runtime_authorized": false,
+        "nas_authorized": false,
+        "qmt_authorized": false,
+        "trading_authorized": false,
+        "provider_lake_catalog_write_authorized": false,
+        "physical_partition_migration_execution_authorized": false,
+        "published_pointer_advance_authorized": false,
+        "broker_lake_live_write_authorized": false,
+        "git_remote_write_authorized": false,
+        "real_lake_write_authorized": false
+      }
+    }
+  ],
+  "cp5_risks": [
+    {
+      "id": "RISK-CP5-01",
+      "risk": "readers.py 10 Story 串行合并降低并行度",
+      "impact": "CP5 LLD 写作和实现阶段 readers.py 是瓶颈文件，实际并行度受单一 merge_owner 限制",
+      "mitigation": "函数切片 + merge_order 契约先行；若 CP5 读写冲突频繁 → 升级 AGA-1 A3（拆 FEAT-02R）"
+    },
+    {
+      "id": "RISK-CP5-02",
+      "risk": "N1 deferred-execution 时序",
+      "impact": "S08 N1 LLD 在 CP5 写但实现延迟到基线冻结后",
+      "mitigation": "CP5 LLD 批次确认 N1 设计不阻塞，实现时序在 Wave1 收尾"
+    },
+    {
+      "id": "RISK-CP5-03",
+      "risk": "DuckDB 依赖引入需 CP5 批准",
+      "impact": "S13 R3 引入 DuckDB 依赖（pyproject.toml）",
+      "mitigation": "D4 只读 parquet 不替代存储；CP5 人工门禁确认依赖引入"
+    },
+    {
+      "id": "RISK-CP5-04",
+      "risk": "lld_clarification_queue 4 项待统一询问",
+      "impact": "LCQ-139-01..04 需 host-orchestrator 统一询问后回填",
+      "mitigation": "全部 blocks_lld=false，CP5 LLD 时确认；写入 DEVELOPMENT-PLAN-CR139.yaml lld_clarification_queue"
+    }
+  ],
+  "lld_clarification_queue": [
+    {"id": "LCQ-139-01", "story_id": "CR139-S03/S07", "blocks_lld": false, "status": "open"},
+    {"id": "LCQ-139-02", "story_id": "CR139-S05/S06/S07/S09/S13/S16/S25/S27/S28/S36", "blocks_lld": false, "status": "open"},
+    {"id": "LCQ-139-03", "story_id": "CR139-S22", "blocks_lld": false, "status": "open"},
+    {"id": "LCQ-139-04", "story_id": "CR139-S08", "blocks_lld": false, "status": "open"}
+  ],
+  "deliverables": [
+    "process/STORY-BACKLOG-CR139.md",
+    "process/STORY-STATUS-CR139.md",
+    "process/DEVELOPMENT-PLAN-CR139.yaml",
+    "process/stories/CR139-S01-*.md ... CR139-S40-*.md (40 cards)",
+    "process/checks/CP4-CR139-STORY-DAG-PARALLEL-SAFETY.md",
+    "process/checks/CP4-CR139-STORY-DAG-PARALLEL-SAFETY.result.json"
+  ],
+  "next_step": "host-orchestrator 回收交还摘要 → 汇入 CP5 Decision Brief → 发起 CP5 LLD 批次（CR139-STRATEGY-DATA-FOUNDATION-LLD-BATCH-A：17 full-lld + 23 technical-note）",
+  "non_authorized_scope": [
+    "LLD 写作（CP5）",
+    "实现",
+    "runtime",
+    "NAS",
+    "QMT",
+    "trading",
+    "provider-lake-catalog 写入",
+    "物理分区迁移执行（Wave1 N1 后置）",
+    "published pointer 前移执行",
+    "broker lake 实盘写",
+    "Git remote write",
+    "真实 lake 写入"
+  ]
+}

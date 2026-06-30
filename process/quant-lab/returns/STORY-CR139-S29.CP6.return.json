@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR139-S29.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S29",
+  "status": "implemented",
+  "created_at": "2026-06-30T11:05:00+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR139-S29.CP6.work-packet.json",
+  "implementation_ref": "process/stories/CR139-S29-pit-dedup-correctness-tests-IMPLEMENTATION.md",
+  "touched_files": [
+    {"path": "tests/test_cr139_pit_correctness.py", "change_type": "created"},
+    {"path": "tests/test_cr139_dedup_correctness.py", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "summary": "Added fixture/static tests for the S29 PIT and read-layer dedup correctness standard."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_write_touched": false,
+    "provider_catalog_write_touched": false,
+    "published_pointer_advance_executed": false,
+    "physical_partition_migration_executed": false,
+    "nas_operation_executed": false,
+    "git_remote_write_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr139_pit_correctness.py tests/test_cr139_dedup_correctness.py tests/test_cr139_adjustment_factor_pit.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_read_layer_dedup.py",
+        "result": "pass",
+        "summary": "15 passed in 0.38s"
+      }
+    ],
+    "tests": [
+      "test_s29_pit_standard_excludes_future_financial_report_rows",
+      "test_s29_dedup_standard_returns_zero_duplicate_natural_keys"
+    ],
+    "skipped": []
+  },
+  "evidence_refs": ["process/evidence/STORY-CR139-S29.CP6.index.json"],
+  "risks": [],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7"
+}

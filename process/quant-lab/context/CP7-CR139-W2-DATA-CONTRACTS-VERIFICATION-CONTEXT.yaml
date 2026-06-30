@@ -1,0 +1,120 @@
+schema_version: 1
+context_type: cp7_verification_context
+created_at: "2026-06-29T12:35:00+08:00"
+created_by: host-orchestrator
+project_id: quant-lab
+cr_id: CR-139
+batch_id: CR139-W2-DATA-CONTRACTS
+stage: CP7
+status: ready-for-fixture-static-verification
+read_profile: compact
+parent_cp6_context_ref: process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml
+
+scope:
+  summary: >
+    Verify CR139-W2-DATA-CONTRACTS CP6 implementation for nine Story contracts
+    using fixture/static checks only. This CP7 context does not authorize runtime,
+    real lake writes, provider catalog/provider-lake-catalog writes, published
+    pointer advance execution, physical partition migration, credential reads,
+    NAS/QMT/MiniQMT/gateway runtime, trading/small_live/live, or Git remote writes.
+  story_ids:
+    - CR139-S09
+    - CR139-S30
+    - CR139-S31
+    - CR139-S32
+    - CR139-S33
+    - CR139-S34
+    - CR139-S14
+    - CR139-S22
+    - CR139-S39
+  validation_mode: static-only
+
+must_read:
+  - process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml
+  - process/STORY-STATUS-CR139.md
+  - process/returns/STORY-CR139-S09.CP6.return.json
+  - process/returns/STORY-CR139-S30.CP6.return.json
+  - process/returns/STORY-CR139-S31.CP6.return.json
+  - process/returns/STORY-CR139-S32.CP6.return.json
+  - process/returns/STORY-CR139-S33.CP6.return.json
+  - process/returns/STORY-CR139-S34.CP6.return.json
+  - process/returns/STORY-CR139-S14.CP6.return.json
+  - process/returns/STORY-CR139-S22.CP6.return.json
+  - process/returns/STORY-CR139-S39.CP6.return.json
+  - process/evidence/STORY-CR139-S09.CP6.index.json
+  - process/evidence/STORY-CR139-S30.CP6.index.json
+  - process/evidence/STORY-CR139-S31.CP6.index.json
+  - process/evidence/STORY-CR139-S32.CP6.index.json
+  - process/evidence/STORY-CR139-S33.CP6.index.json
+  - process/evidence/STORY-CR139-S34.CP6.index.json
+  - process/evidence/STORY-CR139-S14.CP6.index.json
+  - process/evidence/STORY-CR139-S22.CP6.index.json
+  - process/evidence/STORY-CR139-S39.CP6.index.json
+
+verification_objects:
+  code:
+    - engine/contracts.py
+    - market_data/readers.py
+    - market_data/lake_layout.py
+    - market_data/normalization.py
+    - market_data/catalog.py
+    - market_data/manifest.py
+    - market_data/incremental.py
+    - market_data/publish.py
+    - trading/strategy_runner/evidence_index.py
+  tests:
+    - tests/test_cr139_schema_contract_freeze.py
+    - tests/test_cr139_runid_naming.py
+    - tests/test_cr139_events_schema_repair.py
+    - tests/test_cr139_write_dedup_guarantee.py
+    - tests/test_cr139_catalog_manifest_source_of_truth.py
+    - tests/test_cr139_lineage_checksum_backfill.py
+    - tests/test_cr139_incremental_append_pointer_plan.py
+    - tests/test_cr139_runid_lineage_penetration.py
+    - tests/test_cr139_cr_data_audit_chain.py
+  process_outputs:
+    - process/stories/CR139-S09-schema-evolution-contract-freeze-IMPLEMENTATION.md
+    - process/stories/CR139-S30-runid-naming-convention-IMPLEMENTATION.md
+    - process/stories/CR139-S31-events-schema-repair-IMPLEMENTATION.md
+    - process/stories/CR139-S32-write-dedup-guarantee-IMPLEMENTATION.md
+    - process/stories/CR139-S33-catalog-manifest-source-of-truth-IMPLEMENTATION.md
+    - process/stories/CR139-S34-lineage-checksum-backfill-IMPLEMENTATION.md
+    - process/stories/CR139-S14-incremental-append-pointer-advance-IMPLEMENTATION.md
+    - process/stories/CR139-S22-runid-lineage-penetration-IMPLEMENTATION.md
+    - process/stories/CR139-S39-cr-data-audit-chain-IMPLEMENTATION.md
+
+planned_commands:
+  - uv run --python 3.11 pytest -q tests/test_cr139_schema_contract_freeze.py tests/test_cr139_runid_naming.py tests/test_cr139_events_schema_repair.py tests/test_cr139_write_dedup_guarantee.py tests/test_cr139_catalog_manifest_source_of_truth.py tests/test_cr139_lineage_checksum_backfill.py tests/test_cr139_incremental_append_pointer_plan.py tests/test_cr139_runid_lineage_penetration.py tests/test_cr139_cr_data_audit_chain.py tests/test_market_data_normalization_validation_readers.py tests/test_cr139_*.py
+  - uv run --python 3.11 python -m py_compile engine/contracts.py market_data/readers.py market_data/lake_layout.py market_data/normalization.py market_data/catalog.py market_data/manifest.py market_data/incremental.py market_data/publish.py trading/strategy_runner/evidence_index.py
+  - git diff --check
+  - uv run meta-flow story return-check --packet <story-packet> --return <story-return>
+
+forbidden_actions:
+  - runtime
+  - real lake write
+  - provider catalog write
+  - provider-lake-catalog write
+  - published pointer advance execution
+  - physical partition migration execution
+  - credential/secret read
+  - NAS/QMT/MiniQMT/gateway runtime
+  - trading/small_live/live
+  - Git remote write
+
+expected_outputs:
+  verification_report: docs/quality/VERIFICATION-REPORT-CR139-W2-DATA-CONTRACTS.md
+  test_report: docs/quality/TEST-REPORT-CR139-W2-DATA-CONTRACTS.md
+  review_report: docs/quality/REVIEW-CR139-W2-DATA-CONTRACTS.md
+  cp7_check: process/checks/CP7-CR139-W2-DATA-CONTRACTS-VERIFICATION-DONE.md
+  cp7_return: process/returns/CR139-W2-DATA-CONTRACTS.CP7.return.json
+  cp7_evidence: process/evidence/CR139-W2-DATA-CONTRACTS.CP7.index.json
+  dry_run_plan: process/plans/CR139-W2-DATA-LAKE-DRY-RUN-EXECUTION-PLAN.md
+
+decision_policy:
+  pass_allowed_when:
+    - all nine CP6 return packets validate against Story work packets
+    - W2 fixture/static regression passes
+    - py_compile passes for all touched modules
+    - git diff --check passes
+    - no forbidden runtime/write action was executed
+  decision: pending

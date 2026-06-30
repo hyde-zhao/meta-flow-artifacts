@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch1a_remaining_consolidated_prewrite_readiness",
+  "created_at": "2026-06-29T15:06:25+08:00",
+  "status": "fail_not_ready_for_batch1a_write_authorization_review",
+  "mode": "read_only_prewrite_readiness",
+  "source_scope": "physical_canonical_root_recursive_parquet_scan",
+  "source_scope_correction": {
+    "initial_probe_ref": "process/evidence/CR139-W2-GATEB-BATCH1A-REMAINING-PREWRITE-READINESS-2026-06-29T150625+0800.json",
+    "initial_probe_failed_check": "all_row_counts_match_inventory",
+    "root_cause": "initial probe profiled write_plan.legacy_catalog_path/current catalog path, while Gate A inventory row_count is defined by market_data.remediation_inventory.scan_dataset over physical_canonical_root recursively",
+    "correction": "profile source scope changed to inventory physical_canonical_root for each dataset",
+    "corrected_detail_ref": "process/evidence/CR139-W2-GATEB-BATCH1A-REMAINING-PREWRITE-READINESS-PHYSICAL-ROOT-2026-06-29T150625+0800.json"
+  },
+  "datasets": [
+    "lifecycle_code_change",
+    "hs300_index",
+    "industry_classification",
+    "trade_calendar",
+    "prices_limit_code_change_fixes",
+    "prices_limit_coverage_exclusions",
+    "stock_basic"
+  ],
+  "dataset_count": 7,
+  "total_row_count": 181075,
+  "total_source_file_count": 56,
+  "gate_a_drift_count": 0,
+  "path_collision_count": 0,
+  "targets_existing_before_write_count": 0,
+  "full_row_duplicate_over_unique_total": 11981,
+  "readiness_checks": {
+    "workspace_health_checked": true,
+    "gate_a_rerun_completed": true,
+    "gate_a_operation_counts_zero": true,
+    "gate_a_dataset_count_17": true,
+    "gate_a_drift_count_zero": true,
+    "batch1a_remaining_count_7": true,
+    "source_scope_matches_inventory_physical_root": true,
+    "all_source_files_present": true,
+    "all_row_counts_match_inventory": true,
+    "all_full_row_profiles_no_duplicates": false,
+    "all_duplicate_key_count_zero": true,
+    "all_unpublished": true,
+    "all_target_roots_absent": true,
+    "batch_path_collision_matrix_pass": true,
+    "catalog_published_canonical_baseline_hashes_recorded": true,
+    "no_lake_write_executed": true,
+    "no_catalog_pointer_migration_runtime_nas_credential_git": true
+  },
+  "failed_checks": [
+    "all_full_row_profiles_no_duplicates"
+  ],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "evidence_refs": {
+    "detail": "process/evidence/CR139-W2-GATEB-BATCH1A-REMAINING-PREWRITE-READINESS-PHYSICAL-ROOT-2026-06-29T150625+0800.json",
+    "initial_failed_probe_detail": "process/evidence/CR139-W2-GATEB-BATCH1A-REMAINING-PREWRITE-READINESS-2026-06-29T150625+0800.json",
+    "gate_a_rerun": "process/evidence/CR139-W2-GATEB-BATCH1A-REMAINING-PREWRITE-GATEA-2026-06-29T150625+0800.json",
+    "gate_a_compare": "process/evidence/CR139-W2-GATEB-BSE_CODE_MAPPING-PREWRITE-GATEA-2026-06-29T142531+0800.json",
+    "bse_write_execution_index": "process/evidence/CR139-W2-GATEB-BSE_CODE_MAPPING-WRITE-EXECUTION.index.json",
+    "write_plan": "process/plans/CR139-W2-GATEB-PER-DATASET-WRITE-PLAN.json",
+    "readiness_check": "process/checks/CR139-W2-GATEB-BATCH1A-REMAINING-PREWRITE-READINESS-2026-06-29.md"
+  },
+  "batch_atomicity_policy_for_future_write": {
+    "policy": "fail_stop_no_automatic_rollback",
+    "description": "Future Batch 1A consolidated write must record per-dataset write order and completion status. If a partial write occurs, stop remaining writes, generate partial-completion evidence and rollback manifest, and wait for explicit human decision to accept partial state or authorize rollback deletion.",
+    "automatic_rollback_allowed": false,
+    "rollback_requires_separate_authorization": true,
+    "pass_requires_all_datasets_written_and_verified": true
+  },
+  "next_gate": "Gate B Batch 1A readiness decision review",
+  "required_next_approval": "decision required: do not authorize all 7; recommended authorize safe 5 additive-only candidate writes only, and separately decide exact-dedup handling for trade_calendar and stock_basic",
+  "non_authorized_scope": [
+    "lake write",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "rollback deletion"
+  ],
+  "ready_datasets_for_copy_write": [
+    "lifecycle_code_change",
+    "hs300_index",
+    "industry_classification",
+    "prices_limit_code_change_fixes",
+    "prices_limit_coverage_exclusions"
+  ],
+  "blocked_datasets_requiring_exact_dedup_decision": [
+    {
+      "dataset": "trade_calendar",
+      "exact_duplicate_row_over_unique_count": 373,
+      "unique_full_row_count": 10579,
+      "row_count": 10952
+    },
+    {
+      "dataset": "stock_basic",
+      "exact_duplicate_row_over_unique_count": 11608,
+      "unique_full_row_count": 43558,
+      "row_count": 55166
+    }
+  ],
+  "authorization_effect": "does_not_authorize_lake_write"
+}

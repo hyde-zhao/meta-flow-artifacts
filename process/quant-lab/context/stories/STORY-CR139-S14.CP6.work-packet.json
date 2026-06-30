@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "created_at": "2026-06-29T09:31:46+08:00",
+  "created_by": "host-orchestrator",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "batch_id": "CR139-W2-DATA-CONTRACTS",
+  "story_id": "CR139-S14",
+  "slug": "incremental-append-pointer-advance",
+  "story_ref": "process/stories/CR139-S14-incremental-append-pointer-advance.md",
+  "parent_context_ref": "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Implement daily incremental append planning, idempotency, available_at stamping, and pointer advance plan/precheck without executing pointer advancement.",
+    "non_goals": [
+      "Do not execute published pointer advance",
+      "Do not write real lake data",
+      "Do not create a default real execution CLI path"
+    ]
+  },
+  "design_evidence_ref": "process/stories/CR139-S14-incremental-append-pointer-advance.md#技术说明",
+  "cp5_result_ref": "process/checks/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH.result.json",
+  "cp5_checkpoint_ref": "process/checkpoints/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH-REVIEW.md",
+  "feature_refs": ["FEAT-02"],
+  "feature_contract_summary": "FEAT-02 write-side plan-only incremental append and pointer plan contract; execution remains runtime-authorized only.",
+  "feature_design_summary_ref": "docs/design/FEATURE-DESIGN-MATRIX.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S14-incremental-append-pointer-advance.md#技术说明"
+  ],
+  "cr_delta": {
+    "summary": "Adds IncrementalAppendPlan and PointerAdvancePlan semantics with execute_allowed=false by default.",
+    "affected_contracts": ["market_data incremental", "market_data publish pointer plan", "market_data normalization available_at stamping", "market_data CLI plan-only mode"]
+  },
+  "dependencies": ["CR139-S04", "CR139-S08", "CR139-S30", "CR139-S31", "CR139-S32", "CR139-S34"],
+  "dependency_type": "verified-upstream-contracts-plus-same-batch-file-merge-order",
+  "dependency_inputs": [
+    "Wave1 S04 published pointer/read selector verified",
+    "Wave1 S08 run_id partition key governance verified",
+    "S30 run_id naming result or non-conflicting helper contract",
+    "S31 events schema repair result or non-conflicting normalization slice",
+    "S32 write dedup result or non-conflicting normalization slice",
+    "S34 lineage checksum result or non-conflicting normalization/manifest slice"
+  ],
+  "merge_order": {
+    "batch_order": 7,
+    "publish_py": "S04 -> S14 -> S22",
+    "normalization_py": "S08 -> S31 -> S32 -> S34 -> S14 -> S23 -> S22",
+    "notes": "S14 must follow S30/S31/S32/S34 in this batch to avoid normalization.py rework."
+  },
+  "acceptance": [
+    "IncrementalAppendPlan includes dataset, trade_date, run_id, input_fingerprint, expected_partitions, idempotency_key, and available_at.",
+    "Daily append plan is idempotent and deduplicates same-day fixture input.",
+    "PointerAdvancePlan includes from_pointer, to_pointer, precheck_status, evidence_refs, and execute_allowed=false.",
+    "CLI defaults to plan/fixture evidence only and cannot execute without separate runtime_authorization.",
+    "Pointer precheck failure returns blocked plan and does not advance pointer."
+  ],
+  "allowed_read_paths": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S14-incremental-append-pointer-advance.md",
+    "market_data/incremental.py",
+    "market_data/publish.py",
+    "market_data/normalization.py",
+    "market_data/cli.py",
+    "tests/test_cr139_incremental_append_pointer_plan.py"
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S14-incremental-append-pointer-advance.md",
+    "market_data/incremental.py",
+    "market_data/publish.py",
+    "market_data/normalization.py",
+    "market_data/cli.py",
+    "tests/test_cr139_incremental_append_pointer_plan.py"
+  ],
+  "read_if_needed": [
+    "process/checks/CP5-CR139-S14-incremental-append-pointer-advance-LLD-IMPLEMENTABILITY.md",
+    "process/evidence/STORY-CR139-S04.CP7.index.json",
+    "process/evidence/STORY-CR139-S08.CP7.index.json",
+    "process/evidence/STORY-CR139-S30.CP6.index.json",
+    "process/evidence/STORY-CR139-S31.CP6.index.json",
+    "process/evidence/STORY-CR139-S32.CP6.index.json",
+    "process/evidence/STORY-CR139-S34.CP6.index.json"
+  ],
+  "allowed_write_paths": [
+    "market_data/incremental.py",
+    "market_data/publish.py",
+    "market_data/normalization.py",
+    "market_data/cli.py",
+    "tests/test_cr139_incremental_append_pointer_plan.py",
+    "process/stories/CR139-S14-incremental-append-pointer-advance-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S14-incremental-append-pointer-advance-CODING-DONE.md",
+    "process/returns/STORY-CR139-S14.CP6.return.json",
+    "process/evidence/STORY-CR139-S14.CP6.index.json"
+  ],
+  "forbidden_write_paths": [
+    "engine/contracts.py",
+    "market_data/readers.py",
+    "market_data/catalog.py",
+    "market_data/manifest.py",
+    "market_data/lake_layout.py",
+    "trading/**",
+    "data/**",
+    ".env",
+    ".env.*"
+  ],
+  "forbidden_actions": [
+    "runtime",
+    "real lake write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance execution",
+    "physical partition migration execution",
+    "credential/secret read",
+    "NAS/QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write"
+  ],
+  "static_fixture_validation_scope": [
+    "idempotent append plan",
+    "same-day deduplication",
+    "available_at required stamping",
+    "pointer plan blocked state",
+    "execute forbidden/default false"
+  ],
+  "verification_commands_planned": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_incremental_append_pointer_plan.py"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_incremental_append_pointer_plan.py"
+  ],
+  "expected_return_packet_ref": "process/returns/STORY-CR139-S14.CP6.return.json",
+  "expected_evidence_index_ref": "process/evidence/STORY-CR139-S14.CP6.index.json",
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "runtime-high-risk-blocked-by-authz",
+  "lld_policy": "technical-note"
+}

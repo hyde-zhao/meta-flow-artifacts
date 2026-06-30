@@ -1,0 +1,243 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR139-W2-DATA-CONTRACTS-LLD-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "CR139-STRATEGY-DATA-FOUNDATION"
+phase: "story-planning"
+checkpoint: "CP5"
+capsule_type: "cp5-lld-batch-preparation"
+status: "formal-cp5-approved-cp6-preparation-ready"
+created_at: "2026-06-28T23:14:15+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-139"
+batch_id: "CR139-W2-DATA-CONTRACTS"
+batch_objective: "Close core data contract evidence after Wave1 verification before ML/read-gate/config work fans out."
+preparation_gate:
+  status: "approved"
+  approved_by: "user"
+  approved_at: "2026-06-29T07:10:07+08:00"
+  approval_ref: "process/checkpoints/CP5-CR139-W2-DATA-CONTRACTS-LLD-BATCH-REVIEW.md"
+  approval_scope: "design-evidence-writing-only"
+  auto_final_authorization: false
+formal_cp5_gate:
+  status: "approved"
+  approved_by: "user"
+  approved_at: "2026-06-29T07:41:03+08:00"
+  result_ref: "process/checks/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH.result.json"
+  checkpoint_ref: "process/checkpoints/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH-REVIEW.md"
+  launch_message_ref: "process/checks/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-HUMAN-GATE-LAUNCH-MESSAGE.md"
+  decision: "PASS"
+  auto_final_authorization: false
+clarification_queue_evidence:
+  source: "STATE.current.parallel_execution.lld_clarification_queue plus artifact scan"
+  state_ref: "process/state/STATE.current.json#parallel_execution.lld_clarification_queue"
+  artifact_scan_refs:
+    - "process/stories/CR139-S09-schema-evolution-contract-freeze-LLD.md#12.1"
+    - "process/stories/CR139-S14-incremental-append-pointer-advance.md#技术说明"
+    - "process/stories/CR139-S22-runid-lineage-penetration.md#技术说明"
+    - "process/stories/CR139-S30-runid-naming-convention.md#技术说明"
+    - "process/stories/CR139-S31-events-schema-repair.md#技术说明"
+    - "process/stories/CR139-S32-write-dedup-guarantee.md#技术说明"
+    - "process/stories/CR139-S33-catalog-manifest-source-of-truth.md#技术说明"
+    - "process/stories/CR139-S34-lineage-checksum-backfill.md#技术说明"
+    - "process/stories/CR139-S39-cr-data-audit-chain.md#技术说明"
+  blocks_lld_unanswered_count: 0
+  status: "no-blocking-clarifications"
+
+token_control:
+  read_profile: "compact"
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  default_instruction: "Read this capsule first. Do not read complete HLD, all LLDs, complete verification reports, git diff, data directories, credentials, or runtime logs by default."
+
+source_refs:
+  active_state: "process/state/STATE.current.json"
+  human_state_summary: "process/STATE.md"
+  wave1_followup_context: "process/context/CR139-WAVE1-COMPLETE-FOLLOWUP-CONTEXT.yaml"
+  followup_cp5_context: "process/context/CR139-FOLLOWUP-CP5-IMPLEMENTATION-CONTEXT.yaml"
+  followup_handoff: "process/context/CR139-FOLLOWUP-PHASES-IMPLEMENTATION-HANDOFF.md"
+  story_status: "process/STORY-STATUS-CR139.md"
+  development_plan: "process/DEVELOPMENT-PLAN-CR139.yaml"
+  story_backlog: "process/STORY-BACKLOG-CR139.md"
+  cp4_result: "process/checks/CP4-CR139-STORY-DAG-PARALLEL-SAFETY.result.json"
+  cp5_wave1_checkpoint: "process/checkpoints/CP5-CR139-WAVE1-LLD-BATCH-REVIEW.md"
+
+must_read:
+  - path: "process/state/STATE.current.json"
+    reason: "Confirm active_change=CR-139, blocked=false, active context and non-authorized scope."
+  - path: "process/context/CR139-WAVE1-COMPLETE-FOLLOWUP-CONTEXT.yaml"
+    reason: "Source of the recommended first follow-up batch and Wave1 verified facts."
+  - path: "process/STORY-STATUS-CR139.md"
+    reason: "Confirm Wave1 S01-S08 verified and this batch stories are lld-approved with Dev Gate=cp5-approved; cp6-prep-pending."
+  - path: "process/DEVELOPMENT-PLAN-CR139.yaml"
+    reason: "Use merge_order, file ownership, dependency rules, and later_cp5_required flags."
+  - path: "process/STORY-BACKLOG-CR139.md"
+    reason: "Use story semantics, acceptance summaries, dependencies, and code touchpoints."
+
+read_if_needed:
+  - path: "docs/design/FEATURE-DESIGN-MATRIX.md"
+    trigger: "Confirm lld_policy, Feature ownership, or required Feature design references."
+  - path: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
+    trigger: "Resolve conflict between Story card and HLD/ADR contract."
+  - path: "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
+    trigger: "Resolve architecture decision or not-authorized boundary ambiguity."
+  - path: "market_data/catalog.py"
+    trigger: "Only for S33 catalog/manifest source-of-truth design and CR014/CR018 naming cleanup inventory."
+
+do_not_read_by_default:
+  - "process/STATE.md"
+  - "process/changes/CR-*.md"
+  - "process/stories/*-LLD.md"
+  - "docs/quality/VERIFICATION-REPORT-CR139-W1.md"
+  - "complete git diff"
+  - "data/**"
+  - ".env"
+  - "credentials"
+  - "runtime logs"
+
+batch_stories:
+  - story_id: "CR139-S09"
+    slug: "schema-evolution-contract-freeze"
+    title: "V4 schema evolution + simulation contract freeze"
+    evidence_type: "full-lld"
+    current_status: "lld-approved"
+    formal_cp5_status: "approved"
+    dependencies: ["CR139-S01", "CR139-S02", "CR139-S03", "CR139-S07"]
+    file_ownership: ["engine/contracts.py", "market_data/readers.py"]
+    convergence_role: "Freeze schema evolution and reader compatibility before downstream simulation and PIT universe work."
+  - story_id: "CR139-S14"
+    slug: "incremental-append-pointer-advance"
+    title: "L1/L2 daily incremental append + pointer advance contract"
+    evidence_type: "technical-note"
+    current_status: "lld-approved"
+    formal_cp5_status: "approved"
+    dependencies: ["CR139-S04", "CR139-S08"]
+    file_ownership: ["market_data/incremental.py", "market_data/publish.py", "market_data/normalization.py", "market_data/cli.py"]
+    convergence_role: "Design idempotent append and publish pointer plan without authorizing pointer advance execution."
+  - story_id: "CR139-S22"
+    slug: "runid-lineage-penetration"
+    title: "T6 data run-id lineage penetration"
+    evidence_type: "technical-note"
+    current_status: "lld-approved"
+    formal_cp5_status: "approved"
+    dependencies: ["CR139-S04", "CR139-S14"]
+    file_ownership: ["market_data/publish.py", "market_data/manifest.py", "trading/strategy_runner/evidence_index.py"]
+    convergence_role: "Define FEAT-02-owned run-id lineage consumed by RunEvidenceIndex and broker events without reverse dependency."
+  - story_id: "CR139-S30"
+    slug: "runid-naming-convention"
+    title: "N2/N3 run_id naming convention"
+    evidence_type: "technical-note"
+    current_status: "lld-approved"
+    formal_cp5_status: "approved"
+    dependencies: ["CR139-S08"]
+    file_ownership: ["market_data/normalization.py", "market_data/lake_layout.py"]
+    convergence_role: "Freeze new run_id naming and no-CR-number path rule while preserving existing paths."
+  - story_id: "CR139-S31"
+    slug: "events-schema-repair"
+    title: "C3 events schema repair"
+    evidence_type: "technical-note"
+    current_status: "lld-approved"
+    formal_cp5_status: "approved"
+    dependencies: ["CR139-S01", "CR139-S02", "CR139-S03"]
+    file_ownership: ["market_data/normalization.py"]
+    convergence_role: "Repair events schema typing in writer contract without runtime lake rewrite authorization."
+  - story_id: "CR139-S32"
+    slug: "write-dedup-guarantee"
+    title: "C4 write dedup guarantee"
+    evidence_type: "technical-note"
+    current_status: "lld-approved"
+    formal_cp5_status: "approved"
+    dependencies: ["CR139-S07"]
+    file_ownership: ["market_data/normalization.py", "market_data/validation.py"]
+    convergence_role: "Align write-side uniqueness with S07 read-side dedup semantics."
+  - story_id: "CR139-S33"
+    slug: "catalog-manifest-source-of-truth"
+    title: "M1 catalog/manifest source of truth"
+    evidence_type: "technical-note"
+    current_status: "lld-approved"
+    formal_cp5_status: "approved"
+    dependencies: ["CR139-S04"]
+    file_ownership: ["market_data/catalog.py", "market_data/manifest.py"]
+    convergence_role: "Make catalog the source of truth, manifest derived, and absorb CR014/CR018 naming cleanup as acceptance supplement."
+  - story_id: "CR139-S34"
+    slug: "lineage-checksum-backfill"
+    title: "M2 lineage_checksum backfill"
+    evidence_type: "technical-note"
+    current_status: "lld-approved"
+    formal_cp5_status: "approved"
+    dependencies: ["CR139-S33"]
+    file_ownership: ["market_data/manifest.py", "market_data/normalization.py"]
+    convergence_role: "Backfill lineage_checksum after S33 fixes catalog/manifest ownership."
+  - story_id: "CR139-S39"
+    slug: "cr-data-audit-chain"
+    title: "M4 CR to data audit chain"
+    evidence_type: "technical-note"
+    current_status: "lld-approved"
+    formal_cp5_status: "approved"
+    dependencies: ["CR139-S08", "CR139-S33"]
+    file_ownership: ["market_data/catalog.py"]
+    convergence_role: "Add triggered_by_cr/run_lineage audit chain after S33 catalog source-of-truth; not responsible for CR014/CR018 API rename."
+
+merge_order:
+  market_data_readers_py: "S05 -> S06 -> S07 already verified; next S09 before S25/S27/S28/S13/S16/S36."
+  market_data_publish_py: "S04 already verified; next S14 -> S22."
+  market_data_catalog_py: "S04 already verified; next S33 -> S39."
+  market_data_normalization_py: "S08 already verified; next S31 -> S32 -> S34 -> S14 -> S23 -> S22."
+  market_data_manifest_py: "S33 -> S34 -> S22 lineage consumer/update."
+
+s33_acceptance_supplement:
+  id: "S33-AS-CR-NAMING-CLEANUP"
+  scope: "market_data/catalog.py CR014/CR018 naming cleanup"
+  evidence: "rg inventory found CR014_CATALOG_POINTER_REQUIRED_FIELDS, CR018_* constants, build_cr018_* functions, and _cr018_* helpers."
+  required_design_decision: "Introduce domain-named catalog/release/pointer APIs while keeping CR014/CR018 compatibility aliases until dependent tests/callers migrate."
+  required_tests:
+    - "Existing CR014/CR018 tests continue to pass through compatibility aliases."
+    - "New domain-named tests cover source-of-truth and release/pointer metadata behavior."
+    - "No provider catalog write, current pointer advance execution, or real lake write is performed."
+  s39_boundary: "S39 only adds triggered_by_cr and run_lineage audit-chain semantics; it must not become the primary owner for historical CR014/CR018 API renaming."
+
+authorization_boundary:
+  implementation_allowed_by_this_preparation: false
+  runtime_allowed: false
+  real_lake_write_allowed: false
+  provider_catalog_write_allowed: false
+  provider_lake_catalog_write_allowed: false
+  published_pointer_advance_execution_allowed: false
+  physical_partition_migration_execution_allowed: false
+  credential_read_allowed: false
+  nas_access_allowed: false
+  qmt_runtime_allowed: false
+  trading_allowed: false
+  git_remote_write_allowed: false
+  note: "This batch preparation only selects the CP5 evidence convergence scope. Implementation and any runtime action remain gated by a later approved CP5 plus explicit runtime_authorization where applicable."
+
+decision_items:
+  - id: "DQ-CP5-CR139-W2-DATA-01"
+    decision_type: "implementation"
+    question: "Approve CR139-W2-DATA-CONTRACTS as the next CP5 design evidence convergence batch."
+    recommendation: "Approve this batch: S09/S14/S22/S30/S31/S32/S33/S34/S39."
+    alternatives:
+      - "Start ML/read consistency batch first; higher rework risk because S09/S14/S22/S33 contracts are not frozen."
+      - "Start only S33/S39 catalog subset; lower scope but delays schema/run-id/incremental contracts needed by downstream stories."
+  - id: "DQ-CP5-CR139-W2-DATA-02"
+    decision_type: "implementation"
+    question: "Assign catalog.py CR014/CR018 naming cleanup to S33 acceptance."
+    recommendation: "Assign to S33 with domain-named APIs plus compatibility aliases; keep S39 focused on triggered_by_cr/run_lineage."
+    alternatives:
+      - "Leave CR014/CR018 names unchanged and document historical origin."
+      - "Breakingly rename/remove old APIs now; not recommended because tests and historical contracts may import them."
+  - id: "DQ-CP5-CR139-W2-DATA-03"
+    decision_type: "runtime_authorization"
+    question: "Authorize runtime, real lake write, provider catalog write, pointer advance execution, or physical partition migration?"
+    recommendation: "Do not authorize any of these in this CP5 preparation batch."
+    alternatives:
+      - "Authorize fixture/dry-run only after CP5 design evidence is ready."
+      - "Authorize a scoped real operation later through a separate runtime_authorization gate."
+
+exit_criteria_for_formal_cp5:
+  - "S09 full LLD exists and covers 14 required sections."
+  - "S14/S22/S30/S31/S32/S33/S34/S39 Story cards contain complete technical-note evidence."
+  - "S33 includes S33-AS-CR-NAMING-CLEANUP acceptance supplement."
+  - "Per-story CP5 implementability prechecks exist and do not contain unwaived blockers."
+  - "Clarification queue has zero blocks_lld=true unanswered items."
+  - "CP5-CR139-W2-DATA-CONTRACTS Decision Brief is regenerated from actual evidence before formal approval."
+
+read_expansion_log: []

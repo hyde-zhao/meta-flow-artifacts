@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S04",
+  "story_ref": "process/stories/CR139-S04-published-pointer-read-selector.md",
+  "parent_context_ref": "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Implement the V1 published pointer/read selector contract with fixture-only validation.",
+    "non_goals": [
+      "Do not execute real published pointer advance",
+      "Do not modify readers.py",
+      "Do not write real lake/catalog/provider/runtime state outside tmp fixtures"
+    ]
+  },
+  "feature_refs": ["FEAT-02"],
+  "feature_contract_summary": "FEAT-02 write/read boundary: published current pointer is the only read selector for current truth.",
+  "feature_design_summary_ref": "docs/features/market-data-lake/DESIGN.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S04-published-pointer-read-selector.md"
+  ],
+  "cr_delta": {
+    "summary": "Adds an explicit CatalogStore published-only current pointer selector and Story fixture tests.",
+    "affected_contracts": ["CatalogStore published current pointer selection"]
+  },
+  "dependency_inputs": [
+    "CR139-S01 verified",
+    "CR139-S02 verified",
+    "CR139-S03 verified"
+  ],
+  "acceptance": [
+    "Unpublished catalog entry is blocked by published-only selector",
+    "Published entry returns CatalogPointer",
+    "Validate pass does not publish or advance current pointer",
+    "Explicit publish gate dry-run reports pointer change without catalog writes",
+    "read_dataset blocks unpublished entry and reads published entry"
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S04-published-pointer-read-selector.md",
+    "market_data/catalog.py",
+    "market_data/publish.py",
+    "market_data/readers.py",
+    "tests/test_cr139_published_pointer.py"
+  ],
+  "read_if_needed": [
+    "tests/test_cr014_catalog_publish_gate.py",
+    "tests/test_cr014_p0_pipeline_contract.py"
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN-CR139.yaml",
+    "process/STORY-STATUS-CR139.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "allowed_write_paths": [
+    "market_data/catalog.py",
+    "market_data/publish.py",
+    "market_data/cli.py",
+    "tests/test_cr139_published_pointer.py",
+    "process/stories/CR139-S04-published-pointer-read-selector-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S04-published-pointer-read-selector-CODING-DONE.md",
+    "process/returns/STORY-CR139-S04.CP6.return.json",
+    "process/evidence/STORY-CR139-S04.CP6.index.json"
+  ],
+  "forbidden_write_paths": [
+    "market_data/readers.py",
+    "market_data/manifest.py",
+    "market_data/lake_layout.py",
+    "market_data/normalization.py",
+    "data/lake/**"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_published_pointer.py"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_PUBLISHED_POINTER_ADVANCE_EXECUTION",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "budget": {
+    "estimated_tokens": 2600,
+    "estimator": "manual",
+    "max_tokens": 8000
+  },
+  "risk_profile": "standard-code",
+  "lld_policy": "technical-note"
+}

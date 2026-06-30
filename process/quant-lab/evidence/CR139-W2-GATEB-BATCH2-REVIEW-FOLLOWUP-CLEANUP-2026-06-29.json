@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "batch2_integrated_review_followup_cleanup",
+  "created_at": "2026-06-29T22:13:52+08:00",
+  "status": "pass_review_followups_closed",
+  "actions": [
+    {
+      "id": "GATEB-B2-FOLLOWUP-001",
+      "action": "removed_empty_liquidity_capacity_old_candidate_directory_shell",
+      "path": "/home/hyde/data/quant-lab/data-lake/candidate/parquet/dataset=liquidity_capacity/schema_version=1.0/run_id=cr139-w2-liquidity_capacity-legacy_lake-20260629-canonical",
+      "result": "absent_after_rmdir",
+      "data_objects_deleted": 0,
+      "note": "Only empty directories were removed by exact rmdir; rmdir would fail if files existed."
+    },
+    {
+      "id": "GATEB-B2-FOLLOWUP-002",
+      "action": "documented_events_quarantine_counting_basis",
+      "result": "integrated_review_updated",
+      "note": "events quarantine rows count full quarantined rows, not over-unique excess rows."
+    },
+    {
+      "id": "GATEB-B2-FOLLOWUP-003",
+      "action": "confirmed_dropped_rows_already_split_by_dataset",
+      "result": "already_present_in_integrated_review_dataset_table",
+      "note": "adj_factor/prices/prices_limit dropped values are present in Dataset Evidence table."
+    },
+    {
+      "id": "GATEB-B2-FOLLOWUP-004",
+      "action": "appended_authoritative_batch2_rollup_ledger_event",
+      "result": "ledger_updated",
+      "note": "Rollup records integrated candidate object totals and guarded old-candidate delete count."
+    }
+  ],
+  "post_cleanup_checks": {
+    "old_canonical_candidate_dir_absent": true,
+    "resolved_candidate_dir_exists": true,
+    "resolved_candidate_file_count": 2
+  },
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "candidate_object_delete": 0,
+    "candidate_empty_dir_delete": 2,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "non_authorized_scope": [
+    "parquet object deletion",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "legacy deletion",
+    "rollback deletion"
+  ]
+}

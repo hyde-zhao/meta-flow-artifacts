@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "story_id": "CR139-S06",
+  "story_ref": "process/stories/CR139-S06-unified-panel-reader-LLD.md",
+  "parent_context_ref": "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Implement the R1 unified panel reader by adding read_panel, composing S05 read_panel_as_of outputs into a prefixed multi-dataset as-of panel.",
+    "non_goals": [
+      "Do not write or modify market_data/catalog.py",
+      "Do not implement S07 read-layer dedup",
+      "Do not execute runtime, provider, NAS, QMT, real lake, or published pointer advance operations"
+    ]
+  },
+  "feature_refs": ["FEAT-02", "FEAT-03"],
+  "feature_contract_summary": "FEAT-02 owns the read-side panel API; FEAT-03 consumes it read-only. read_panel composes read_dataset published gating and S05 PIT filtering.",
+  "feature_design_summary_ref": "docs/features/market-data-lake/DESIGN.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S06-unified-panel-reader-LLD.md"
+  ],
+  "cr_delta": {
+    "summary": "Adds read_panel and UnknownDatasetError in readers.py with fixture coverage for multi-dataset as-of joins, unpublished dataset handling, unknown dataset errors, and adjustment policy gate.",
+    "affected_contracts": ["readers.read_panel", "readers.read_panel_as_of composition"]
+  },
+  "dependency_inputs": [
+    "CR139-S05 verified",
+    "process/checks/CP7-CR139-S05-pit-as-of-reader-VERIFICATION-DONE.md",
+    "process/evidence/STORY-CR139-S05.CP7.index.json"
+  ],
+  "acceptance": [
+    "read_panel joins prices, financial_pit, market_cap and industry_classification fixture data into a prefixed as-of panel",
+    "Future financial rows with available_at > as_of do not appear",
+    "Unpublished dataset contributes issue and no candidate columns",
+    "Unknown dataset without reader raises UnknownDatasetError",
+    "Mixed adjustment_policy is rejected",
+    "No writes or code modifications to market_data/catalog.py"
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR139-WAVE1-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S06-unified-panel-reader-LLD.md",
+    "market_data/readers.py",
+    "tests/test_cr139_panel_reader.py",
+    "process/checks/CP7-CR139-S05-pit-as-of-reader-VERIFICATION-DONE.md"
+  ],
+  "read_if_needed": [
+    "tests/test_cr139_pit_as_of_reader.py",
+    "tests/test_cr014_catalog_publish_gate.py",
+    "tests/test_cr014_p0_pipeline_contract.py"
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN-CR139.yaml",
+    "process/STORY-STATUS-CR139.md",
+    "process/changes/*.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "allowed_write_paths": [
+    "market_data/readers.py",
+    "tests/test_cr139_panel_reader.py",
+    "process/stories/CR139-S06-unified-panel-reader-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S06-unified-panel-reader-CODING-DONE.md",
+    "process/returns/STORY-CR139-S06.CP6.return.json",
+    "process/evidence/STORY-CR139-S06.CP6.index.json"
+  ],
+  "forbidden_write_paths": [
+    "market_data/catalog.py",
+    "market_data/manifest.py",
+    "market_data/lake_layout.py",
+    "market_data/normalization.py",
+    "market_data/publish.py",
+    "data/lake/**"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_panel_reader.py",
+    "uv run --python 3.11 pytest -q tests/test_cr139_s01_inventory.py tests/test_cr139_s02_golden_baseline.py tests/test_cr139_duplicate_fingerprint_profiling.py tests/test_cr139_published_pointer.py tests/test_cr139_pit_as_of_reader.py tests/test_cr139_panel_reader.py tests/test_cr014_catalog_publish_gate.py tests/test_cr014_p0_pipeline_contract.py"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_MARKET_DATA_CATALOG_PY_WRITE",
+    "NO_PUBLISHED_POINTER_ADVANCE_EXECUTION",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "budget": {
+    "estimated_tokens": 3000,
+    "estimator": "manual",
+    "max_tokens": 9000
+  },
+  "risk_profile": "standard-code",
+  "lld_policy": "full-lld"
+}

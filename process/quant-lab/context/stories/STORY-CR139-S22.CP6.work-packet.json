@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "created_at": "2026-06-29T09:31:46+08:00",
+  "created_by": "host-orchestrator",
+  "project_id": "quant-lab",
+  "cr_id": "CR-139",
+  "batch_id": "CR139-W2-DATA-CONTRACTS",
+  "story_id": "CR139-S22",
+  "slug": "runid-lineage-penetration",
+  "story_ref": "process/stories/CR139-S22-runid-lineage-penetration.md",
+  "parent_context_ref": "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Implement data run-id lineage penetration from FEAT-02 write-side publish/manifest outputs into RunEvidenceIndex read-only consumption.",
+    "non_goals": [
+      "Do not start trading, QMT, gateway, or broker runtime",
+      "Do not allow trading side to generate or repair data run_ids",
+      "Do not execute pointer advancement or provider writes"
+    ]
+  },
+  "design_evidence_ref": "process/stories/CR139-S22-runid-lineage-penetration.md#技术说明",
+  "cp5_result_ref": "process/checks/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH.result.json",
+  "cp5_checkpoint_ref": "process/checkpoints/CP5-CR139-W2-DATA-CONTRACTS-FORMAL-LLD-BATCH-REVIEW.md",
+  "feature_refs": ["FEAT-02", "FEAT-11", "FEAT-06"],
+  "feature_contract_summary": "FEAT-02 writes run lineage; FEAT-11/FEAT-06 consume it read-only and fail closed on broken lineage.",
+  "feature_design_summary_ref": "docs/design/FEATURE-DESIGN-MATRIX.md",
+  "feature_design_refs": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/stories/CR139-S22-runid-lineage-penetration.md#技术说明"
+  ],
+  "cr_delta": {
+    "summary": "Adds data_run_id/source_run_id/publish_run_id/manifest_ref propagation and consumer-side broken lineage reporting.",
+    "affected_contracts": ["market_data publish lineage", "market_data manifest lineage mapping", "RunEvidenceIndex evidence references"]
+  },
+  "dependencies": ["CR139-S04", "CR139-S14"],
+  "dependency_type": "verified-upstream-plus-same-batch-serial-dependency",
+  "dependency_inputs": [
+    "Wave1 S04 published pointer/read selector verified",
+    "CR139-S14 pointer/append plan CP6 result and evidence index",
+    "S33/S34 manifest semantics if manifest lineage mapping changed"
+  ],
+  "merge_order": {
+    "batch_order": 8,
+    "publish_py": "S04 -> S14 -> S22",
+    "manifest_py": "S33 -> S34 -> S22",
+    "normalization_py": "S08 -> S31 -> S32 -> S34 -> S14 -> S23 -> S22",
+    "notes": "FEAT-02 write side remains owner; trading evidence index is read-only consumer."
+  },
+  "acceptance": [
+    "Data-side outputs include data_run_id, source_run_id, publish_run_id, and manifest_ref where applicable.",
+    "RunEvidenceIndex consumes lineage fields as read-only references.",
+    "Broken lineage is represented as lineage_status=broken with a breakpoint, never silently successful.",
+    "No trading runtime, QMT/gateway read, provider write, real lake write, or reverse dependency is introduced."
+  ],
+  "allowed_read_paths": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S22-runid-lineage-penetration.md",
+    "market_data/publish.py",
+    "market_data/manifest.py",
+    "trading/strategy_runner/evidence_index.py",
+    "tests/test_cr139_runid_lineage_penetration.py"
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR139-W2-DATA-CONTRACTS-IMPLEMENTATION-CONTEXT.yaml",
+    "process/stories/CR139-S22-runid-lineage-penetration.md",
+    "market_data/publish.py",
+    "market_data/manifest.py",
+    "trading/strategy_runner/evidence_index.py",
+    "tests/test_cr139_runid_lineage_penetration.py"
+  ],
+  "read_if_needed": [
+    "process/checks/CP5-CR139-S22-runid-lineage-penetration-LLD-IMPLEMENTABILITY.md",
+    "process/evidence/STORY-CR139-S14.CP6.index.json",
+    "process/evidence/STORY-CR139-S33.CP6.index.json",
+    "process/evidence/STORY-CR139-S34.CP6.index.json"
+  ],
+  "allowed_write_paths": [
+    "market_data/publish.py",
+    "market_data/manifest.py",
+    "trading/strategy_runner/evidence_index.py",
+    "tests/test_cr139_runid_lineage_penetration.py",
+    "process/stories/CR139-S22-runid-lineage-penetration-IMPLEMENTATION.md",
+    "process/checks/CP6-CR139-S22-runid-lineage-penetration-CODING-DONE.md",
+    "process/returns/STORY-CR139-S22.CP6.return.json",
+    "process/evidence/STORY-CR139-S22.CP6.index.json"
+  ],
+  "forbidden_write_paths": [
+    "engine/contracts.py",
+    "market_data/readers.py",
+    "market_data/catalog.py",
+    "market_data/lake_layout.py",
+    "market_data/normalization.py",
+    "market_data/incremental.py",
+    "trading/gateway/**",
+    "trading/runtime/**",
+    "data/**",
+    ".env",
+    ".env.*"
+  ],
+  "forbidden_actions": [
+    "runtime",
+    "real lake write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance execution",
+    "physical partition migration execution",
+    "credential/secret read",
+    "NAS/QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "reverse dependency from trading to market_data write path",
+    "Git remote write"
+  ],
+  "static_fixture_validation_scope": [
+    "data-to-research-to-execution run lineage fixture",
+    "broken lineage blocking/status",
+    "RunEvidenceIndex read-only consumption",
+    "no trading runtime access"
+  ],
+  "verification_commands_planned": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_runid_lineage_penetration.py"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr139_runid_lineage_penetration.py"
+  ],
+  "expected_return_packet_ref": "process/returns/STORY-CR139-S22.CP6.return.json",
+  "expected_evidence_index_ref": "process/evidence/STORY-CR139-S22.CP6.index.json",
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_NAS",
+    "NO_TRADING",
+    "NO_PROVIDER_LAKE_CATALOG_WRITE",
+    "NO_REMOTE_WRITE",
+    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+  ],
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "runtime-high-risk-blocked-by-authz",
+  "lld_policy": "technical-note"
+}

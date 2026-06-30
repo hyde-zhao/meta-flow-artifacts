@@ -1,10 +1,15 @@
 ---
 status: "ready-for-cp5-review"
-version: "1.11"
+version: "1.13"
 source_blueprint: "docs/design/BLUEPRINT.md"
-source_hld: "docs/design/HLD.md"
-source_adr: "docs/design/ARCHITECTURE-DECISION.md"
-change: "CR-131"
+source_hld:
+  - "docs/design/HLD.md"
+  - "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
+source_adr:
+  - "docs/design/ARCHITECTURE-DECISION.md"
+  - "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
+change: "CR-139"
+companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 confirmed_by: ""
 confirmed_at: ""
 ---
@@ -27,6 +32,8 @@ confirmed_at: ""
 | 1.9 | 2026-06-27 | codex | FEAT-03 增补异象发现 / 研究设计入口；重访条件增加 AnomalyCandidate、Harvey 标准、分组单调性、控制因子 alpha、时间切分、成本和经济逻辑准入变化。 |
 | 1.10 | 2026-06-27 | codex | FEAT-03 增补自动异象发现系统；重访条件增加受控模板、批量 discovery runner、多重检验、动态因子目录接入和 Stage 3 候选消费变化。 |
 | 1.11 | 2026-06-28 | codex | FEAT-03 增补研究引擎稳定模块整改；重访条件增加 engine 主入口命名、旧 engine 入口归档、公共 serialization / matrix / admission contracts 和脚本归档规则变化。 |
+| 1.12 | 2026-06-28 | meta-se | 按 CR-139「Strategy Data Foundation」CP3 增补策略生产数据底座 Feature 归属与 `lld_policy`：FEAT-02 写侧/读侧分层（V1/C1/C2/R1/R3/R4/L2/L4/L5/M1/M2/N1-N3/C3/C4/T7/T8/X1/X2/X3/V4/F1）、FEAT-03 ML feature 层（V3/R2/E1-E5/F4）、FEAT-06 交易审计链（T4/T6）、FEAT-11 run evidence（L3/T6）、FEAT-12 配置层（F2/T5）、FEAT-14 universe·risk policy（F3/X4）；`lld_policy`：d1 纯新建=full-lld、d2 既有合同闭环=technical-note、a 已设计未实现=technical-note 消费既有 HLD 契约；跨边界项 T6 run-id 贯通归 FEAT-02 写侧生成 + FEAT-06/11 消费。AGA-1/3/5 推荐方案 CP3 已确认 A1/C1/E1。 |
+| 1.13 | 2026-06-28 | host-orchestrator | CP3 approved，AGA-1/3/5 确认 A1/C1/E1，pending-cp3 → confirmed-cp3。 |
 
 ## 适用性判定规则
 
@@ -132,3 +139,107 @@ confirmed_at: ""
 | required Feature 均有产物计划或已生成 | PASS | FEAT-02/03/04/05/06/07 已有索引；FEAT-09、FEAT-10 与 FEAT-10-CR053 已生成 DESIGN / TEST-PLAN / TASKS |
 | 每个 Story 均有 feature_design_refs 与 lld_policy | PASS | CR046-S01..S07、CR051-S01..S06、CR053-S01..S05 均已在 Story 下游消费表登记 |
 | 提前确认的关键决策已进入人工决策队列或 N/A | PASS | DQ-FD-001..002 已在 CR-031 留痕；DQ-FD-CR046-01 与 DQ-FD-CR051-01 已作为 CP4 设计决策记录，CP5 前无新增人工阻断项 |
+
+## CR-139 增量：策略生产数据底座 Feature 归属与 lld_policy
+
+> 来源：CR-139 companion HLD「Strategy Data Foundation」+ handoff v0.7 §3 整改 45 项 + REQ-201..249。Feature 归属按写侧/读侧分离（AGA-1 A1，CP3 已确认）：多数读侧项归 FEAT-02 读侧子域，ML feature 层归 FEAT-03，交易审计链归 FEAT-06/11，配置层归 FEAT-02/12/14/03。跨边界项 T6 run-id 贯通：owner = FEAT-02 写侧（run-id 生成），消费方 = FEAT-11（RunEvidenceIndex）+ FEAT-06（broker event）。
+
+### lld_policy 判定规则（CR-139 专用）
+
+| 整改类别 | lld_policy.required_level | trigger_reasons | rationale |
+|---|---|---|---|
+| (a) 已设计未实现（C1/R3/R4/V1/M2/T1，6 项） | technical-note | 消费既有 HLD-DATA-LAKE 契约 | HLD 已有契约，LLD 消费即可，不刷新设计（handoff §4.2） |
+| (b) 设计过期/缺失（N2/N3/C2/C3/C4/M1/M3，7 项） | full-lld（C2/N1 类结构性）/ technical-note（命名/整理类） | 设计需刷新 | 命名/整理类低风险 technical-note；C2 去重结构性 full-lld |
+| (c) 范围扩展（N1/R1/R2/V2/V3/V4/M4/E1/E2/T4/T2/T3，12 项） | full-lld | cross-module-contract / data-model / external-interface | 范围扩展需完整 LLD |
+| (d1) 遗漏分析纯新建（L3/E4/T7/T8/X1/X2，6 项） | full-lld | 新建对象 / 无既有合同 | 纯新建必须 full-lld |
+| (d2) 既有合同闭环（L1/L2/L4/L5/E3/E5/T5/T6/F1/F2/F3/F4/X3/X4，14 项） | technical-note | 既有合同接通闭环 / 版本化扩展 / 前置门禁 | 不重复设计（REQ-249），走集成闭环 LLD |
+
+### Feature 归属表（REQ-201..245 → Feature → lld_policy）
+
+| REQ / 整改 ID | 整改项 | 类别 | Owner Feature | lld_policy.required_level | 既有合同位置（d2/c 闭环） |
+|---|---|---|---|---|---|
+| REQ-201 | N1 run_id 分区键治理 | c | FEAT-02 写侧 | full-lld | — |
+| REQ-202 | N2 run_id 前缀规约 + unknown 修复 | b | FEAT-02 写侧 | technical-note | — |
+| REQ-203 | N3 CR 编号不烧进路径 | b | FEAT-02 写侧 | technical-note | — |
+| REQ-204 | C1 PIT as-of reader（P0） | a | FEAT-02 读侧 | technical-note | HLD-DATA-LAKE §17.7.1/§14 |
+| REQ-205 | C2 分区去重（P0，C2a 画像 + C2b 读层去重） | b | FEAT-02 读侧 | full-lld | — |
+| REQ-206 | C3 events schema 修复 | b | FEAT-02 写侧 | technical-note | — |
+| REQ-207 | C4 写入去重保证 | b | FEAT-02 写侧 | technical-note | — |
+| REQ-208 | M1 catalog/manifest 定主 | b | FEAT-02 写侧 | technical-note | — |
+| REQ-209 | M2 lineage_checksum 回填 | a | FEAT-02 写侧 | technical-note | HLD-DATA-LAKE §17.7.1 |
+| REQ-210 | M3 quality/ 分区整理 | b | FEAT-02 写侧 | technical-note | — |
+| REQ-211 | M4 CR→数据审计链 | c | FEAT-02 写侧 | technical-note | — |
+| REQ-212 | T7 整改回归基线 + 黄金值（d1） | d1 | FEAT-02 | full-lld | — |
+| REQ-213 | T8 整改对象清册（d1） | d1 | FEAT-02 | full-lld | — |
+| REQ-214 | R1 panel reader（P0） | c | FEAT-02 读侧（FEAT-03 消费） | full-lld | 复用 `readers.py:2728 read_dataset` published 门禁 |
+| REQ-215 | R2 ML 接入 lake 废除旁路 | c | FEAT-03 | full-lld | — |
+| REQ-216 | R3 DuckDB 只读 adapter（D4） | a | FEAT-02 读侧 | technical-note | HLD-DATA-LAKE §17.6/§17.7 |
+| REQ-217 | R4 列裁剪/谓词下推 | a | FEAT-02 读侧 | technical-note | HLD-DATA-LAKE §17.6 |
+| REQ-218 | V2 训练快照概念 | c | FEAT-03 | full-lld | — |
+| REQ-219 | V3 feature/label/artifact 层（D5） | c | FEAT-03 | full-lld | — |
+| REQ-220 | V4 schema 演进 + 实盘契约冻结（HIGH3） | c | FEAT-02/03 | full-lld | — |
+| REQ-221 | E1 ExperimentManifest 闭环 | c | FEAT-03/11 | full-lld | `engine/research_manifest.py:152` |
+| REQ-222 | E2 模型 artifact hash 闭环 | c | FEAT-03 | full-lld | `engine/strategy_admission_package.py:127` |
+| REQ-223 | E3 label 泄漏统一 gate（d2） | d2 | FEAT-03 | technical-note | `factor_model_validation.py:376/561`、`factor_robustness.py:53` |
+| REQ-224 | E4 离线/在线一致性（d1） | d1 | FEAT-03 | full-lld | — |
+| REQ-225 | E5 split manifest 冻结（d2） | d2 | FEAT-03 | technical-note | 既有 embargo/split 策略 |
+| REQ-226 | T2 PIT 正确性回归测试 | c | FEAT-02 读侧 | full-lld | — |
+| REQ-227 | T3 去重正确性测试 | c | FEAT-02 读侧 | full-lld | — |
+| REQ-228 | T1 DuckDB 只读 e2e 测试 | a | FEAT-02 读侧 | technical-note | `tests/test_cr014_duckdb_*.py` |
+| REQ-229 | X1 复权因子 PIT 校验（d1） | d1 | FEAT-02 写侧 | full-lld | — |
+| REQ-230 | X2 跨源交易日历/时区一致性（d1） | d1 | FEAT-02 写侧 | full-lld | — |
+| REQ-231 | X4 PIT universe 成分链（d2） | d2 | FEAT-14 | technical-note | `engine/contracts.py:270` |
+| REQ-232 | V1 published pointer / read selector（P0） | a | FEAT-02 写侧/读侧 | technical-note | HLD-DATA-LAKE §5/§17.4、`publish.py:605` |
+| REQ-233 | L3 读审计 log + run-id 贯通（d1） | d1 | FEAT-02 读侧（+FEAT-11 消费） | full-lld | — |
+| REQ-234 | L4 readiness 读前门禁（d2） | d2 | FEAT-02 读侧（+FEAT-14 消费） | technical-note | `market_data/readiness.py:462` |
+| REQ-235 | X3 decision_time lookahead 阻断（d2） | d2 | FEAT-02 读侧 | technical-note | `market_data/readers.py:227` |
+| REQ-236 | F1 版本化 benchmark + risk-free curve（d2） | d2 | FEAT-02 | technical-note | `market_data/benchmarks.py:99/114` |
+| REQ-237 | F2 版本化 commission/费用/滑点（d2） | d2 | FEAT-12 | technical-note | `trading/qmt_gateway_contracts.py:997` |
+| REQ-238 | F3 版本化 universe/risk policy（d2） | d2 | FEAT-14 | technical-note | `engine/mature_multifactor_framework.py:228` |
+| REQ-239 | F4 版本化政策周期/shortability（d2，P2） | d2 | FEAT-03 | technical-note | `engine/factor_model_validation.py:444`、`config/policy_cycles.yaml` |
+| REQ-240 | T4 BrokerLakeSchema 闭环实盘写 + 审计链 | c | FEAT-06 | full-lld | `trading/broker_lake.py` schema registry |
+| REQ-241 | T5 CommissionSchedule 前置成本门禁（d2） | d2 | FEAT-12 | technical-note | `trading/qmt_gateway_contracts.py:997` |
+| REQ-242 | T6 数据 run-id 贯穿 RunEvidenceIndex/broker event（d2，跨边界） | d2 | FEAT-02 写侧（生成）+ FEAT-11/06（消费） | technical-note | `trading/strategy_runner/evidence_index.py:19` |
+| REQ-243 | L1 增量刷新接通日级 append 执行（d2） | d2 | FEAT-02 写侧 | technical-note | `market_data/incremental.py:248` |
+| REQ-244 | L2 published pointer 接通真实前移（d2） | d2 | FEAT-02 写侧 | technical-note | `market_data/publish.py:605` |
+| REQ-245 | L5 replay 接通 published as_of 重放（d2，P2） | d2 | FEAT-02 读侧 | technical-note | `market_data/replay.py:215`、`cli.py cmd_p0_replay` |
+
+### 跨边界项归属
+
+| 整改 ID | 跨边界范围 | owner | 消费方 | 说明 |
+|---|---|---|---|---|
+| T6 (REQ-242) | FEAT-02/03/06/11 | FEAT-02 写侧（run-id 生成） | FEAT-11 RunEvidenceIndex、FEAT-06 broker event | run-id 单向贯通，消费方只读，不得反向修改 |
+| R1 (REQ-214) | FEAT-02/03 | FEAT-02 读侧 | FEAT-03 ML | panel reader owner 在读侧，FEAT-03 只读消费 |
+| L3 (REQ-233) | FEAT-02/11 | FEAT-02 读侧（读审计 log） | FEAT-11 RunEvidenceIndex | 读审计 log owner 在读侧，FEAT-11 run-id 关联 |
+| L4 (REQ-234) | FEAT-02/14 | FEAT-02 读侧（门禁） | FEAT-14 模拟盘消费 | readiness gate owner 在读侧 |
+| F1-F4 (REQ-236..239) | FEAT-02/12/14/03 | FEAT-02（config_facts release） | FEAT-12/14/03 配置消费 | release 闭环复用 V1 pointer 语义（AGA-5 E1） |
+
+### CR-139 关键决策（AGA 推荐方案，CP3 已确认 A1/C1/E1）
+
+| Decision ID | 决策类型 | 问题 | 推荐方案 | 备选方案 | 优劣摘要 | 影响 / 风险 | 回退 / 切换条件 | 状态 |
+|---|---|---|---|---|---|---|---|---|
+| DQ-FD-CR139-01 (AGA-1) | architecture | 写侧/读侧分离是否分层同属 FEAT-02 | A1 分层同属 FEAT-02 + HLD 分读写章 | A3 拆 FEAT-02R | A1 不增 Feature、可回退；A3 边界最清但增复杂度 | Feature 边界、Story owner | CP5 读写冲突 → 升级 A3 | confirmed-cp3 (A1/C1/E1, CP3 approved 2026-06-28T17:30:00+08:00) |
+| DQ-FD-CR139-02 (AGA-3) | architecture | ML feature 层归属与切换条件 | C1 lake features/ 子层 + DEF-139-01 | C2 独立 feature store（deferred） | C1 不引入依赖；C2 在线 serving 友好但增依赖 | V3 物理归属、依赖 | feature 规模/在线 serving → 切换 C2 | confirmed-cp3 (A1/C1/E1, CP3 approved 2026-06-28T17:30:00+08:00) |
+| DQ-FD-CR139-03 (AGA-5) | architecture | 配置类事实源版本化机制 | E1 复用 V1 pointer 语义 + config_facts 子目录 | E2 各类独立 registry | E1 机制统一；E2 量身定制但四套机制 | F1-F4 release 闭环 | policy_cycle 语义差异过大 → 该类独立 | confirmed-cp3 (A1/C1/E1, CP3 approved 2026-06-28T17:30:00+08:00) |
+
+### 重访条件增量
+
+| Feature | 重访条件（增量） |
+|---|---|
+| FEAT-02 | 新增 dataset/publish 规则、DuckDB 事实边界、读写子域文件所有权冲突、readiness 门禁语义、config_facts release 机制、schema 演进规则、Wave1 基线门顺序变化时 |
+| FEAT-03 | ML feature 层切换独立 store、feature schema 变化、旁路废除回归、policy_cycle 版本化语义、ExperimentManifest/split manifest 字段变化时 |
+| FEAT-06 | broker lake 实盘写授权、run-id 贯通 schema 变化、审计链字段变化时 |
+| FEAT-11 | RunEvidenceIndex run-id 贯通 schema、读审计 log 关联字段变化时 |
+| FEAT-12 | CommissionSchedule 版本化字段、成本门禁前置语义变化时 |
+| FEAT-14 | universe/risk policy 版本化字段、PIT universe 成分链构建规则变化时 |
+
+### CR-139 矩阵自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| REQ-201..245 全部有 Feature 归属 | PASS | §Feature 归属表（机械核对 45 项） |
+| 每个 REQ 有 lld_policy | PASS | §lld_policy 判定规则 + 归属表 |
+| d2 14 项标注既有合同位置（闭环非新建） | PASS | 归属表"既有合同位置"列 + §0 核验 |
+| 跨边界项 T6/R1/L3/L4/F1-F4 归属明确 | PASS | §跨边界项归属 |
+| AGA 推荐方案 CP3 已确认 A1/C1/E1 | PASS | DQ-FD-CR139-01..03 confirmed-cp3 |
+| CP3 前不授权 runtime / 物理分区迁移 | PASS | REQ-247/248、Wave1 N1 后置 |

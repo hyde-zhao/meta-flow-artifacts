@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-139",
+  "workflow_id": "CR139-STRATEGY-DATA-FOUNDATION",
+  "gate": "Gate B",
+  "stage": "safe5_candidate_write_execution",
+  "created_at": "2026-06-29T15:25:49+08:00",
+  "status": "pass_safe5_candidate_write_verified",
+  "authorized_scope": "authorize Gate B Batch 1A safe 5 datasets additive-only candidate writes only: lifecycle_code_change, hs300_index, industry_classification, prices_limit_code_change_fixes, prices_limit_coverage_exclusions",
+  "datasets": [
+    "lifecycle_code_change",
+    "hs300_index",
+    "industry_classification",
+    "prices_limit_code_change_fixes",
+    "prices_limit_coverage_exclusions"
+  ],
+  "completed_datasets": [
+    "lifecycle_code_change",
+    "hs300_index",
+    "industry_classification",
+    "prices_limit_code_change_fixes",
+    "prices_limit_coverage_exclusions"
+  ],
+  "failed_datasets": [],
+  "skipped_datasets": [],
+  "partial_completion": false,
+  "write_order": [
+    {
+      "order": 1,
+      "dataset": "lifecycle_code_change",
+      "status": "verified",
+      "target_relative_path": "candidate/parquet/dataset=lifecycle_code_change/schema_version=1.0/run_id=cr139-w2-lifecycle_code_change-legacy_lake-20260629-canonical/part-lifecycle-code-change.parquet"
+    },
+    {
+      "order": 2,
+      "dataset": "hs300_index",
+      "status": "verified",
+      "target_relative_path": "candidate/parquet/dataset=hs300_index/schema_version=1.0/run_id=cr139-w2-hs300_index-legacy_lake-20260629-canonical/part-hs300-index.parquet"
+    },
+    {
+      "order": 3,
+      "dataset": "industry_classification",
+      "status": "verified",
+      "target_relative_path": "candidate/parquet/dataset=industry_classification/schema_version=1.0/run_id=cr139-w2-industry_classification-legacy_lake-20260629-canonical/part-industry-classification.parquet"
+    },
+    {
+      "order": 4,
+      "dataset": "prices_limit_code_change_fixes",
+      "status": "verified",
+      "target_relative_path": "candidate/parquet/dataset=prices_limit_code_change_fixes/schema_version=1.0/run_id=cr139-w2-prices_limit_code_change_fixes-legacy_lake-20260629-canonical/part-prices-limit-code-change-fixes.parquet"
+    },
+    {
+      "order": 5,
+      "dataset": "prices_limit_coverage_exclusions",
+      "status": "verified",
+      "target_relative_path": "candidate/parquet/dataset=prices_limit_coverage_exclusions/schema_version=1.0/run_id=cr139-w2-prices_limit_coverage_exclusions-legacy_lake-20260629-canonical/part-prices-limit-coverage-exclusions.parquet"
+    }
+  ],
+  "row_count_total": 114957,
+  "object_count": 5,
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 5,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "checks": {
+    "all_five_completed": true,
+    "lake_write_count_5": true,
+    "no_partial_completion": true,
+    "all_row_counts_match": true,
+    "all_full_row_hashes_match": true,
+    "catalog_hash_unchanged": true,
+    "published_tree_hash_unchanged": true,
+    "canonical_trees_unchanged": true,
+    "operation_counts_exact": true,
+    "rollback_not_authorized": true
+  },
+  "failed_checks": [],
+  "batch_atomicity_policy": {
+    "policy": "fail_stop_no_automatic_rollback",
+    "automatic_rollback_allowed": false,
+    "rollback_requires_separate_authorization": true
+  },
+  "evidence_refs": {
+    "readiness_index": "process/evidence/CR139-W2-GATEB-BATCH1A-REMAINING-PREWRITE-READINESS.index.json",
+    "prewrite_snapshot": "process/evidence/CR139-W2-GATEB-BATCH1A-SAFE5-PREWRITE-SNAPSHOT-2026-06-29T152549+0800.json",
+    "postwrite_snapshot": "process/evidence/CR139-W2-GATEB-BATCH1A-SAFE5-POSTWRITE-SNAPSHOT-2026-06-29T152549+0800.json",
+    "object_manifest": "process/evidence/CR139-W2-GATEB-BATCH1A-SAFE5-OBJECT-MANIFEST-2026-06-29T152549+0800.json",
+    "rollback_manifest": "process/evidence/CR139-W2-GATEB-BATCH1A-SAFE5-ROLLBACK-MANIFEST-2026-06-29T152549+0800.json",
+    "zero_pointer_mutation": "process/evidence/CR139-W2-GATEB-BATCH1A-SAFE5-ZERO-POINTER-MUTATION-2026-06-29T152549+0800.json",
+    "write_execution_check": "process/checks/CR139-W2-GATEB-BATCH1A-SAFE5-WRITE-EXECUTION-2026-06-29.md"
+  },
+  "non_authorized_scope": [
+    "trade_calendar",
+    "stock_basic",
+    "Batch 1B",
+    "Batch 2",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "rollback deletion"
+  ],
+  "next_gate": "Batch 1A exact-dedup planning for trade_calendar and stock_basic"
+}

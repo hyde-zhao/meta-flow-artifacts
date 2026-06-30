@@ -1,0 +1,97 @@
+{
+  "active_catalog_before": {
+    "dataset_count": 17,
+    "path": "/home/hyde/data/quant-lab/data-lake/catalog/catalog.json",
+    "published_true_count": 0,
+    "sha256": "3c9e937acb068a2d838d52e67f6990d4415306c17ba04ba4a8038adf7a7810f0"
+  },
+  "active_manifest_before": {
+    "line_count": 6367,
+    "path": "/home/hyde/data/quant-lab/data-lake/manifest/market_data_manifest.jsonl",
+    "sha256": "57c5f86a7e170b99407005f54c6d66f3903fcb30a2fb0f573d8966e96eedae7a"
+  },
+  "check_ref": "process/checks/CR139-W2-GATEC-STAGED-CATALOG-MANIFEST-PREVIEW-2026-06-29.md",
+  "created_at": "2026-06-29T22:29:19+08:00",
+  "diff_ref": "process/evidence/CR139-W2-GATEC-STAGED-ACTIVE-CATALOG-VIRTUAL-DIFF-2026-06-29.diff",
+  "gate": "Gate C",
+  "gate_e_path_strategy_dependency": {
+    "active_refresh_not_authorized_by_staged_write": true,
+    "decision_ref": "D-GATEB-007",
+    "reason": "The virtual diff replaces 17 active canonical_path values from legacy canonical paths with CR139 candidate paths. That is a path semantics decision coupled to Gate E and Gate D, not part of staged metadata write.",
+    "required_before_active_refresh": [
+      "decide full 17-dataset migration versus publish-target-only plus waiver",
+      "choose final physical path namespace for published truth",
+      "review reader exposure and rollback pointer plan",
+      "issue separate Gate C-2 active catalog refresh authorization"
+    ],
+    "schema_name": "cr139.gatec.active_refresh_gate_e_dependency.v1",
+    "status": "active_catalog_refresh_blocked_until_gate_e_path_strategy_decision",
+    "virtual_diff_ref": "process/evidence/CR139-W2-GATEC-STAGED-ACTIVE-CATALOG-VIRTUAL-DIFF-2026-06-29.diff"
+  },
+  "operation_counts": {
+    "active_catalog_changed": false,
+    "current_truth_changed": false,
+    "lake_catalog_write": 0,
+    "lake_manifest_append": 0,
+    "physical_partition_migration": 0,
+    "provider_catalog_write": 0,
+    "provider_lake_catalog_write": 0,
+    "published_pointer_advance": 0
+  },
+  "preview_ref": "process/evidence/CR139-W2-GATEC-STAGED-CATALOG-MANIFEST-PREVIEW-2026-06-29.json",
+  "schema_version": "cr139.gatec.staged_catalog_manifest_preview.index.v1",
+  "staged_write_location_constraint": {
+    "allowed_lake_relative_files": [
+      "catalog/staged/cr139-w2/gatec/staged_candidate_catalog.v1.2026-06-29.json",
+      "catalog/staged/cr139-w2/gatec/staged_candidate_manifest_records.v1.2026-06-29.jsonl"
+    ],
+    "allowed_root": "catalog/staged/cr139-w2/gatec/",
+    "forbidden_lake_relative_files": [
+      "catalog/catalog.json",
+      "manifest/market_data_manifest.jsonl"
+    ],
+    "forbidden_roots": [
+      "catalog/catalog.json",
+      "manifest/market_data_manifest.jsonl",
+      "provider_catalog/",
+      "provider-lake-catalog/",
+      "published/",
+      "canonical/"
+    ],
+    "post_write_hash_must_remain_unchanged": {
+      "catalog/catalog.json": "3c9e937acb068a2d838d52e67f6990d4415306c17ba04ba4a8038adf7a7810f0",
+      "manifest/market_data_manifest.jsonl": "57c5f86a7e170b99407005f54c6d66f3903fcb30a2fb0f573d8966e96eedae7a"
+    },
+    "post_write_required_checks": [
+      "staged catalog JSON parses",
+      "staged manifest JSONL parses 17 records",
+      "17/17 lineage checksums revalidate",
+      "active catalog hash unchanged",
+      "active manifest hash unchanged",
+      "current_truth_visible remains false"
+    ],
+    "schema_name": "cr139.gatec.staged_write_location_constraint.v1",
+    "status": "required_before_staged_write_authorization"
+  },
+  "status": "pass_no_write_preview_generated_with_staged_write_constraints",
+  "summary": {
+    "active_catalog_virtual_diff_ref": "process/evidence/CR139-W2-GATEC-STAGED-ACTIVE-CATALOG-VIRTUAL-DIFF-2026-06-29.diff",
+    "active_metadata_forbidden_files": [
+      "catalog/catalog.json",
+      "manifest/market_data_manifest.jsonl"
+    ],
+    "active_refresh_blocked_until_gate_e_path_strategy": true,
+    "candidate_manifest_record_count": 17,
+    "candidate_object_count": 24,
+    "current_truth_visible": false,
+    "dataset_count": 17,
+    "lineage_checksum_validation_pass_count": 17,
+    "main_object_count": 17,
+    "manifest_validation_pass_count": 17,
+    "quarantine_object_count": 7,
+    "staged_candidate_catalog_record_count": 17,
+    "staged_write_allowed_file_count": 2
+  },
+  "updated_at": "2026-06-29T22:42:00+08:00",
+  "workflow_id": "CR139-W2-DATA-CONTRACTS"
+}

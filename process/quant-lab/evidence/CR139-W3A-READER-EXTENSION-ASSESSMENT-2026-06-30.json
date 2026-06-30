@@ -1,0 +1,189 @@
+{
+  "checked_at": "2026-06-30T08:42:49+08:00",
+  "checks": {
+    "active_catalog_has_p0_datasets": true,
+    "extension_scope_identified": true,
+    "no_lake_write": true,
+    "p0_canonical_paths_exist": true,
+    "p0_reader_currently_unknown": true,
+    "p0_row_counts_match_catalog": true
+  },
+  "dataset_results": [
+    {
+      "candidate_schema_registry_columns": [
+        "trade_date",
+        "symbol",
+        "volume",
+        "amount",
+        "amount_unit",
+        "adv20_amount",
+        "adv20_volume",
+        "turnover_rate",
+        "turnover_rate_f",
+        "source",
+        "source_interface",
+        "source_run_id",
+        "available_at",
+        "available_at_rule",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "canonical_path_exists": true,
+      "catalog_published": true,
+      "coverage_denominator": 17093658,
+      "dataset": "liquidity_capacity",
+      "has_schema_registry_entry": false,
+      "in_contracts_DATASETS": false,
+      "parquet_columns": [
+        "trade_date",
+        "symbol",
+        "volume",
+        "amount",
+        "amount_unit",
+        "adv20_amount",
+        "adv20_volume",
+        "turnover_rate",
+        "turnover_rate_f",
+        "source",
+        "source_interface",
+        "source_run_id",
+        "available_at",
+        "available_at_rule",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "parquet_row_count": 17093658,
+      "read_dataset_issues_before": [
+        {
+          "code": "unknown_dataset",
+          "dataset": "liquidity_capacity"
+        }
+      ],
+      "read_dataset_status_before": "unavailable",
+      "recommended_minimal_contract": {
+        "DATASETS": "append dataset id",
+        "DATASET_SCHEMA_REGISTRY": "add columns from active CR139 canonical parquet",
+        "constants": [
+          "DATASET_LIQUIDITY_CAPACITY"
+        ],
+        "reader_behavior": "reuse generic read_dataset path after DATASETS/schema registration",
+        "tests": [
+          "read_dataset('liquidity_capacity') returns available against CR139 active lake",
+          "row count equals active catalog coverage_denominator",
+          "unknown_dataset no longer emitted",
+          "large-table smoke may use column projection/sample when full materialization is too expensive"
+        ]
+      },
+      "row_count_matches_catalog": true
+    },
+    {
+      "candidate_schema_registry_columns": [
+        "trade_date",
+        "symbol",
+        "market_cap",
+        "float_market_cap",
+        "turnover_rate",
+        "turnover_rate_f",
+        "volume_ratio",
+        "pe",
+        "pe_ttm",
+        "pb",
+        "ps",
+        "ps_ttm",
+        "dv_ratio",
+        "dv_ttm",
+        "total_share",
+        "float_share",
+        "free_share",
+        "market_cap_unit",
+        "source",
+        "source_interface",
+        "source_run_id",
+        "available_at",
+        "available_at_rule",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "canonical_path_exists": true,
+      "catalog_published": true,
+      "coverage_denominator": 17001327,
+      "dataset": "market_cap",
+      "has_schema_registry_entry": false,
+      "in_contracts_DATASETS": false,
+      "parquet_columns": [
+        "trade_date",
+        "symbol",
+        "market_cap",
+        "float_market_cap",
+        "turnover_rate",
+        "turnover_rate_f",
+        "volume_ratio",
+        "pe",
+        "pe_ttm",
+        "pb",
+        "ps",
+        "ps_ttm",
+        "dv_ratio",
+        "dv_ttm",
+        "total_share",
+        "float_share",
+        "free_share",
+        "market_cap_unit",
+        "source",
+        "source_interface",
+        "source_run_id",
+        "available_at",
+        "available_at_rule",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "parquet_row_count": 17001327,
+      "read_dataset_issues_before": [
+        {
+          "code": "unknown_dataset",
+          "dataset": "market_cap"
+        }
+      ],
+      "read_dataset_status_before": "unavailable",
+      "recommended_minimal_contract": {
+        "DATASETS": "append dataset id",
+        "DATASET_SCHEMA_REGISTRY": "add columns from active CR139 canonical parquet",
+        "constants": [
+          "DATASET_MARKET_CAP"
+        ],
+        "reader_behavior": "reuse generic read_dataset path after DATASETS/schema registration",
+        "tests": [
+          "read_dataset('market_cap') returns available against CR139 active lake",
+          "row count equals active catalog coverage_denominator",
+          "unknown_dataset no longer emitted",
+          "large-table smoke may use column projection/sample when full materialization is too expensive"
+        ]
+      },
+      "row_count_matches_catalog": true
+    }
+  ],
+  "failed_checks": [],
+  "mode": "read_only",
+  "operation_counts": {
+    "catalog_write": 0,
+    "credential_read": 0,
+    "git_remote": 0,
+    "lake_write": 0,
+    "manifest_append": 0,
+    "nas_operation": 0,
+    "provider_catalog_write": 0,
+    "runtime_operation": 0
+  },
+  "schema": "cr139.w3a.reader_extension_assessment.v1",
+  "source_locations": {
+    "contracts_file": "market_data/contracts.py",
+    "read_dataset_file": "market_data/readers.py",
+    "read_dataset_line": 3037,
+    "registration_findings": [
+      "read_dataset first checks dataset in market_data.contracts.DATASETS",
+      "schema compatibility and dedup keys use DATASET_SCHEMA_REGISTRY when present",
+      "liquidity_capacity and market_cap are in active catalog but not in DATASETS/schema registry before W3-A"
+    ]
+  },
+  "status": "pass_w3a_reader_extension_assessment"
+}
