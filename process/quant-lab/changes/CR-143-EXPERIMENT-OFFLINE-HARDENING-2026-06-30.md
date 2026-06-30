@@ -1,15 +1,15 @@
 ---
 id: "CR-143"
 title: "Experiment Offline Hardening and Handoff"
-status: "active-implementation"
+status: "closed-current-delivery"
 kind: "requirement-change"
-lifecycle_status: "active"
-readiness_status: "not_ready"
-gate_status: "cp2_pending"
+lifecycle_status: "closed"
+readiness_status: "ready"
+gate_status: "closed"
 gate_profile: "compact"
 created_at: "2026-06-30T21:10:00+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-30T21:10:00+08:00"
+updated_at: "2026-06-30T21:45:00+08:00"
 source_decision_id: "USER-20260630-COMPLETE-EXPERIMENT-OFFLINE-REMEDIATION"
 current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
 authz_policy_refs:
@@ -102,7 +102,19 @@ CR140 已完成 experiments 目录归位、helper 收敛和 turnover synthetic a
 
 ## 实施结果
 
-待 Phase 4 验证后回填。
+| 项 | 结果 |
+|---|---|
+| E2 | source/artifact 当前基线已先推送远端。 |
+| source commit | `0eab0ae` |
+| IC / Rank IC | `engine.factor_statistics` 增加 `calculate_information_coefficient_timeseries`、`summarize_information_coefficient`、`spearman_rank_correlation`。 |
+| 实验 16 | `calculate_ic_timeseries` / `summarize_ic` 保留原函数名，内部调用 engine IC 合同。 |
+| factor ownership | `engine.factor_library` 增加 `factor_ownership_matrix`，实验动态因子保持 `experiment_local`。 |
+| 交接文档 | `process/context/EXPERIMENT-OFFLINE-TO-REAL-LAKE-HANDOFF-2026-06-30.md`；`process/context/STRATEGY-FRAMEWORK-FOLLOWUP-HANDOFF-2026-06-30.md`。 |
+| targeted verification | `20 passed in 4.73s`；`28 passed in 19.85s`。 |
+| full pytest | `1483 passed in 56.12s`。 |
+| process hygiene | PASS；`unclassified=0`。 |
+| cr-tracking | PASS；关闭前 active formal CRs: CR-143。 |
+| evidence | `process/checks/CR143-FINAL-VALIDATION-2026-06-30.md`。 |
 
 ## 关闭条件
 
@@ -112,3 +124,7 @@ CR140 已完成 experiments 目录归位、helper 收敛和 turnover synthetic a
 - 数据湖 PC 交接文档和后续策略框架交接文档已写入。
 - 全量 pytest 通过，process hygiene 和 cr-tracking 通过。
 - 本 CR 结果已推送远端，除非 remote 不可用并记录风险。
+
+## 关闭说明
+
+CR143 关闭为 `closed-current-delivery / READY`。本轮只完成离线 experiment 收尾和交接，不声明真实 lake 语义、模拟盘、实盘或生产策略链路已验证。
