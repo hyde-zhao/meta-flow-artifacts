@@ -1,7 +1,7 @@
 ---
 id: "CR-141"
 title: "Red Baseline Debt Triage and Closure"
-status: "active-phase2-low-risk-fix-ready"
+status: "active-phase2-wave1-complete"
 kind: "requirement-change"
 lifecycle_status: "active"
 readiness_status: "not_ready"
@@ -9,7 +9,7 @@ gate_status: "cp2_pending"
 gate_profile: "standard"
 created_at: "2026-06-30T17:35:00+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-30T17:52:00+08:00"
+updated_at: "2026-06-30T18:15:00+08:00"
 source_tracking: "process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-003"
 parent_cr: "CR-140"
 source_decision_id: "USER-20260630-CONTINUE-EXPERIMENT-REMEDIATION"
@@ -104,6 +104,18 @@ CR140 已完成 experiments 目录归位、helper 收敛和 turnover synthetic a
 | baseline report | `process/checks/CR141-PHASE0-PYTEST-BASELINE-2026-06-30.md` |
 | Phase 1 分类 | `process/checks/CR141-PHASE1-BASELINE-FAILURE-CLASSIFICATION-2026-06-30.md` |
 | 分类结论 | 46 条已分 bucket；`test_experiment_17_21` 和 `test_experiment_23_29` 默认 deferred 到 `FU-CR140-002`，除非后续证明只是独立 fixture drift。 |
+
+## Phase 2 Wave 1 结果
+
+| 项 | 结果 |
+|---|---|
+| source commit | `ba6dec9` |
+| artifact commit | `ed1691e` |
+| targeted verification | `17 passed in 1.36s` |
+| full pytest comparison | `42 failed, 1437 passed in 44.62s` |
+| fixed baseline failures | 4 |
+| new failures | 0 |
+| evidence | `process/checks/CR141-PHASE2-WAVE1-LOW-RISK-FIXES-2026-06-30.md` |
 
 ## 关闭条件
 
