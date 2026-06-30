@@ -7,7 +7,7 @@ lifecycle_status: "active"
 readiness_status: "not_ready"
 gate_status: "cp2_pending"
 gate_profile: "standard"
-status: "active-phase3-synthetic-turnover-parity-ready"
+status: "active-phase3-synthetic-parity-complete"
 impact_level: "medium"
 workflow_mode_before: "standard"
 workflow_mode_after_change: "standard"
@@ -241,6 +241,32 @@ Phase 2 baseline comparison：
 - 新增失败：0
 - 修复的基线失败：0
 - 保持失败：46，与 Phase 0 failure set 一致。
+
+## Phase 3 turnover 离线等价证据
+
+Phase 3 已完成 turnover 因子评估侧 engine adapter：
+
+- `calculate_abnormal_turnover` 委托 `engine.factor_calculators.calculate_abnormal_turnover_21_252`，保留旧实验窗口、min periods 与 `clip(0.01, 10.0)` 语义。
+- `run_experiment_a` 委托 `engine.factor_statistics.single_sort_returns`。
+- `run_experiment_b` 委托 `engine.factor_statistics.independent_double_sort_returns`。
+- `run_experiment_c` 委托 `engine.factor_statistics.conditional_double_sort_returns`。
+- adapter 将 engine 输出列转换回旧实验输出形态，Newey-West t-test 仍保留在实验层。
+- `engine.factor_statistics._quantile_groups` 补齐旧实验对低样本 / 全常数输入不分组的行为。
+
+证据：`process/checks/CR140-PHASE3-TURNOVER-SYNTHETIC-PARITY-2026-06-30.md`。
+
+验证：
+
+- `py_compile` PASS。
+- Phase 3 targeted pytest：`11 passed in 3.69s`。
+- `git diff --check` PASS。
+
+Phase 3 声明边界：
+
+- 允许声明：turnover 新旧实现已在合成 fixture / 注入层上完成重构等价验证。
+- 禁止声明：真实数据湖研究语义已验证。
+- 禁止声明：simulation/live/QMT 准入已验证。
+- 未访问真实 lake、NAS、provider、catalog pointer、QMT/live/runtime。
 
 ## 计划评审后的目标校正
 

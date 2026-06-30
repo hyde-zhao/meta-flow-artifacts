@@ -2,7 +2,7 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: phase3-synthetic-turnover-parity-ready
+Phase: phase3-synthetic-parity-complete
 Blocked: false
 Active CR: CR-140 (experiments/ 目录重构与并行因子栈消除)
 Active Story: none
@@ -11,7 +11,7 @@ Pending gate: CP2
 
 ## Current Decision
 
-CR140 已登记并进入 Phase 0 基线记录：
+CR140 已完成 Phase 3 synthetic turnover parity，等待 Phase 3 全量基线对比：
 
 - 范围基线：`process/context/EXPERIMENTS-REFACTOR-PLAN-2026-06-28.md`。
 - 启动核查：`git status --short` 为空，`meta-flow workspace check` PASS，process route health 正常。
@@ -22,6 +22,7 @@ CR140 已登记并进入 Phase 0 基线记录：
 - CR139 状态收敛已作为范围外附带治理修正单独审计：`process/checks/CR140-CR139-STATUS-RECONCILIATION-AUDIT-2026-06-30.md`。
 - 授权边界：不链接真实数据湖；Phase 3 必须使用合成 lake fixture 或注入层完成 golden fixture；不进行 NAS、provider、真实 lake 写入、catalog pointer 写入、QMT/live/runtime 操作。真实湖只读验证必须单独申请授权。
 - Phase 3 验收措辞限制：只能声明合成 fixture / 注入层上的重构等价，不能声明真实数据研究语义已验证，不能声明 simulation/live/QMT 准入。
+- Phase 3 targeted 验证已通过：`py_compile` PASS，`tests/test_cr140_turnover_engine_adapter.py` + factor statistics/calculators 相关回归 `11 passed in 3.69s`，证据见 `process/checks/CR140-PHASE3-TURNOVER-SYNTHETIC-PARITY-2026-06-30.md`。
 
 ## Previous CR139 Decision
 
