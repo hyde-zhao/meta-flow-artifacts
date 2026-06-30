@@ -1,17 +1,17 @@
 {
   "id": "CR-141",
   "title": "Red Baseline Debt Triage and Closure",
-  "status": "active-phase2-wave3-complete",
-  "phase": "phase2-wave3-complete",
-  "readiness": "not_ready",
-  "gate_status": "cp2_pending",
+  "status": "closed-current-delivery",
+  "phase": "closed",
+  "readiness": "ready",
+  "gate_status": "closed",
   "gate_profile": "standard",
   "cr_type": "requirement-change",
   "source_ref": "process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-003",
   "full_ref": "process/changes/CR-141-RED-BASELINE-DEBT-TRIAGE-2026-06-30.md",
   "parent_cr": "CR-140",
   "started_at": "2026-06-30T17:35:00+08:00",
-  "objective": "Classify the 46 known red baseline pytest failures, fix low-risk non-runtime debt, and defer remaining experiment engine convergence to FU-CR140-002.",
+  "objective": "Classify and close the 46 known red baseline pytest failures without touching real lake, runtime, NAS, provider, trading, or Git remote write boundaries.",
   "authz_policy_refs": [
     "NO_CREDENTIAL_READ",
     "NO_RUNTIME",
@@ -42,8 +42,7 @@
     "Phase 4: final baseline comparison and closure prep"
   ],
   "current_risks": [
-    "Existing 46-failure red baseline blocks clean experiment remediation signal",
-    "Some failures overlap remaining experiment engine convergence and must be deferred instead of duplicated",
+    "Remaining experiment engine convergence is still a separate FU-CR140-002 candidate, but no longer represented by red baseline pytest failures",
     "Local source/artifact commits remain unpushed until FU-CR140-004 is authorized"
   ],
   "evidence_refs": [
@@ -53,7 +52,9 @@
     "process/checks/CR141-PHASE1-BASELINE-FAILURE-CLASSIFICATION-2026-06-30.md",
     "process/checks/CR141-PHASE2-WAVE1-LOW-RISK-FIXES-2026-06-30.md",
     "process/checks/CR141-PHASE2-WAVE2-CR008-CR011-FIXES-2026-06-30.md",
-    "process/checks/CR141-PHASE2-WAVE3-CR013-FIXES-2026-06-30.md"
+    "process/checks/CR141-PHASE2-WAVE3-CR013-FIXES-2026-06-30.md",
+    "process/checks/CR141-PHASE2-WAVE4-RUNTIME-DOCS-FIXES-2026-06-30.md",
+    "process/checks/CR141-PHASE2-WAVE5-REMAINING-FIXES-2026-06-30.md"
   ],
   "phase0_registration": {
     "completed_at": "2026-06-30T17:40:00+08:00",
@@ -63,7 +64,7 @@
       "json_parse": "CR-INDEX.json and STATE.current.json PASS"
     }
   },
-  "updated_at": "2026-06-30T18:55:00+08:00",
+  "updated_at": "2026-06-30T19:10:00+08:00",
   "phase0_baseline": {
     "command": "uv run --python 3.11 pytest -q --tb=no -p no:cacheprovider",
     "exit_code": 1,
@@ -117,5 +118,35 @@
     "fixed_baseline_failures": 13,
     "new_failures": 0,
     "remaining_failures": 16
+  },
+  "phase2_wave4": {
+    "completed_at": "2026-06-30T19:00:00+08:00",
+    "source_commit": "9ce9db2",
+    "evidence_ref": "process/checks/CR141-PHASE2-WAVE4-RUNTIME-DOCS-FIXES-2026-06-30.md",
+    "targeted": "52 passed in 0.28s",
+    "full_pytest": "4 failed, 1475 passed in 44.12s",
+    "fixed_baseline_failures": 12,
+    "new_failures": 0,
+    "remaining_failures": 4
+  },
+  "phase2_wave5": {
+    "completed_at": "2026-06-30T19:10:00+08:00",
+    "source_commit": "3b12fd6",
+    "evidence_ref": "process/checks/CR141-PHASE2-WAVE5-REMAINING-FIXES-2026-06-30.md",
+    "targeted": "4 passed in 12.50s",
+    "hygiene": "17 passed in 0.09s",
+    "full_pytest": "1479 passed in 54.07s",
+    "fixed_baseline_failures": 4,
+    "new_failures": 0,
+    "remaining_failures": 0
+  },
+  "final_validation": {
+    "closed_at": "2026-06-30T19:10:00+08:00",
+    "full_pytest": "1479 passed in 54.07s",
+    "phase0_failed": 46,
+    "final_failed": 0,
+    "fixed_baseline_failures": 46,
+    "new_failures": 0,
+    "release_decision": "READY"
   }
 }

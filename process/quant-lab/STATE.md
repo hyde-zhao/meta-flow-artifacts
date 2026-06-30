@@ -2,25 +2,27 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: cr141-phase2-wave3-complete
+Phase: cr141-closed-current-delivery
 Blocked: false
-Active CR: CR-141
+Active CR: none
 Active Story: none
 Active batch: none
-Pending gate: CP2
+Pending gate: none
 
 ## Current Decision
 
-CR141 已从 `FU-CR140-003` 正式启动，用于处理 CR140 遗留的 46 条红基线债：
+CR141 已从 `FU-CR140-003` 正式启动并关闭，用于处理 CR140 遗留的 46 条红基线债：
 
 - 正式 CR：`process/changes/CR-141-RED-BASELINE-DEBT-TRIAGE-2026-06-30.md`。
 - 来源台账：`process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-003`。
-- 当前目标：Phase 0/1 已完成，红基线冻结为 `46 failed, 1433 passed in 45.46s`，46 条失败已分类；Phase 2 已将失败收敛到 `16 failed, 1463 passed in 44.61s`，新增失败 0；下一步处理不触碰真实 lake/runtime/remote 的 runtime/security 文档边界、Tushare 文档和 STORY-004/013 loader/logging 债；与剩余 experiment engine 化重叠的 ML suite 失败 deferred 到 `FU-CR140-002`，除非确认只是独立 dependency/fixture drift。
+- 当前结果：Phase 0/1 已完成，红基线冻结为 `46 failed, 1433 passed in 45.46s`，46 条失败已分类；Phase 2 Wave 1-5 已将失败全部清零，最终全量 pytest `1479 passed in 54.07s`，新增失败 0；CR141 关闭为 `closed-current-delivery / ready`。
 - Phase 0 / Phase 1 证据：`process/checks/CR141-PHASE0-PYTEST-BASELINE-2026-06-30.md`、`process/checks/CR141-PHASE0-BASELINE-FAILURES.txt`、`process/checks/CR141-PHASE1-BASELINE-FAILURE-CLASSIFICATION-2026-06-30.md`。
 - Phase 2 Wave 1 已完成：source commit `ba6dec9`、artifact commit `ed1691e`；targeted `17 passed in 1.36s`；全量 pytest `42 failed, 1437 passed in 44.62s`；相对 Phase 0 修复 4 条基线失败，新增失败 0；证据 `process/checks/CR141-PHASE2-WAVE1-LOW-RISK-FIXES-2026-06-30.md`。
 - Phase 2 Wave 2 已完成：source commits `7206cc2`, `a30ee47`；targeted `72 passed in 2.37s`；全量 pytest `29 failed, 1450 passed in 44.42s`；相对 Wave 1 修复 13 条基线失败，新增失败 0；证据 `process/checks/CR141-PHASE2-WAVE2-CR008-CR011-FIXES-2026-06-30.md`。
 - Phase 2 Wave 3 已完成：source commit `326f388`；targeted `14 passed in 0.45s`；hygiene `passed=true, unclassified=0`；全量 pytest `16 failed, 1463 passed in 44.61s`；相对 Wave 2 修复 13 条基线失败，新增失败 0；证据 `process/checks/CR141-PHASE2-WAVE3-CR013-FIXES-2026-06-30.md`。
-- 启动边界：source repo clean 且 ahead 7；artifact repo clean 且 ahead 9；Git remote write 仍未授权。
+- Phase 2 Wave 4 已完成：source commit `9ce9db2`；targeted `52 passed in 0.28s`；全量 pytest `4 failed, 1475 passed in 44.12s`；相对 Wave 3 修复 12 条基线失败，新增失败 0；证据 `process/checks/CR141-PHASE2-WAVE4-RUNTIME-DOCS-FIXES-2026-06-30.md`。
+- Phase 2 Wave 5 已完成：source commit `3b12fd6`；targeted `4 passed in 12.50s`；hygiene `17 passed in 0.09s`；最终全量 pytest `1479 passed in 54.07s`；相对 Wave 4 修复最后 4 条基线失败，新增失败 0；证据 `process/checks/CR141-PHASE2-WAVE5-REMAINING-FIXES-2026-06-30.md`。
+- 本地持久化边界：source repo 和 artifact repo 均仅本地提交；Git remote write 仍未授权，后续由 `FU-CR140-004` 单独处理。
 - 不授权范围：真实 lake readonly validation、真实 lake link/mount、NAS、provider fetch、lake write、catalog pointer write、QMT/MiniQMT/xtquant/gateway runtime、simulation/live/trading、Git remote write/push。
 - 人工门禁规则：用户已授权“无风险继续推进”；若后续触碰真实 lake/runtime/remote、出现新增 pytest 失败无法解释、或需改变 CR 范围，再发起人工门禁。
 

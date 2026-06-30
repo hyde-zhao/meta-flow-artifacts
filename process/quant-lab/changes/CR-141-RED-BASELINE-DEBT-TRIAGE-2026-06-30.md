@@ -1,15 +1,15 @@
 ---
 id: "CR-141"
 title: "Red Baseline Debt Triage and Closure"
-status: "active-phase2-wave3-complete"
+status: "closed-current-delivery"
 kind: "requirement-change"
-lifecycle_status: "active"
-readiness_status: "not_ready"
-gate_status: "cp2_pending"
+lifecycle_status: "closed"
+readiness_status: "ready"
+gate_status: "closed"
 gate_profile: "standard"
 created_at: "2026-06-30T17:35:00+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-30T18:55:00+08:00"
+updated_at: "2026-06-30T19:10:00+08:00"
 source_tracking: "process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-003"
 parent_cr: "CR-140"
 source_decision_id: "USER-20260630-CONTINUE-EXPERIMENT-REMEDIATION"
@@ -140,9 +140,40 @@ CR140 已完成 experiments 目录归位、helper 收敛和 turnover synthetic a
 | new failures | 0 |
 | evidence | `process/checks/CR141-PHASE2-WAVE3-CR013-FIXES-2026-06-30.md` |
 
+## Phase 2 Wave 4 结果
+
+| 项 | 结果 |
+|---|---|
+| source commit | `9ce9db2` |
+| targeted verification | `52 passed in 0.28s` |
+| full pytest comparison | `4 failed, 1475 passed in 44.12s` |
+| fixed baseline failures | 12 |
+| new failures | 0 |
+| evidence | `process/checks/CR141-PHASE2-WAVE4-RUNTIME-DOCS-FIXES-2026-06-30.md` |
+
+## Phase 2 Wave 5 结果
+
+| 项 | 结果 |
+|---|---|
+| source commit | `3b12fd6` |
+| targeted verification | `4 passed in 12.50s` |
+| hygiene verification | `17 passed in 0.09s` |
+| final full pytest | `1479 passed in 54.07s` |
+| fixed baseline failures | 4 |
+| new failures | 0 |
+| evidence | `process/checks/CR141-PHASE2-WAVE5-REMAINING-FIXES-2026-06-30.md` |
+
+## Phase 3 / Phase 4 收敛结果
+
+| 项 | 结果 |
+|---|---|
+| Phase 3 剩余失败归属 | 不再存在剩余 pytest 失败；`FU-CR140-002` 仍保留为剩余实验 engine convergence 候选，但不再由红基线失败驱动。 |
+| Phase 4 关闭验证 | 最终全量 pytest `1479 passed in 54.07s`；CR132 hygiene `17 passed in 0.09s`。 |
+| 关闭状态 | `closed-current-delivery / ready` |
+
 ## 关闭条件
 
-- 46 条启动失败全部完成分类。
-- 本 CR 修复项不引入新增 pytest 失败。
-- 剩余失败不再是无归属红基线，必须明确属于已修复、后续 engine 化、真实 lake readonly 授权、runtime 授权或其他独立 CR。
-- 若无法清零，关闭状态只能是 `READY_WITH_RISK`，且风险必须具体到失败 bucket 和后续候选项。
+- 46 条启动失败已全部完成分类。
+- 本 CR 修复项未引入新增 pytest 失败。
+- 46 条启动红基线已全部修复，最终全量 pytest 为 `1479 passed in 54.07s`。
+- 不声明真实 lake 研究语义、runtime、simulation/live/trading 或 QMT 准入已验证；这些授权边界仍需独立 CR。
