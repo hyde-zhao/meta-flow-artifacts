@@ -3,7 +3,7 @@ source_cr: "CR-140"
 status: "closed-with-candidates"
 created_at: "2026-06-30T16:48:00+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-30T19:10:00+08:00"
+updated_at: "2026-06-30T19:20:00+08:00"
 checkpoint_source: "CP8-post-close-review"
 cr_index_path: "process/changes/CR-INDEX.yaml"
 ---
@@ -51,17 +51,16 @@ follow_up_items:
   - id: "FU-CR140-002"
     title: "Remaining experiments engine convergence"
     kind: "requirement-change"
-    lifecycle_status: "candidate"
-    readiness_status: "n/a"
-    gate_status: "not_started"
+    lifecycle_status: "active"
+    readiness_status: "not_ready"
+    gate_status: "cp2_pending"
     gate_profile: "standard"
     source_cr: "CR-140"
     source_decision_id: "CP8-CR140-POST-CLOSE-REVIEW"
     priority: 3
-    formal_cr_path: ""
-    blocked_by:
-      - "requires_explicit_user_selection"
-      - "requires_engine_extension_contract_review"
+    formal_cr_path: "process/changes/CR-142-REMAINING-EXPERIMENTS-ENGINE-CONVERGENCE-2026-06-30.md"
+    related_active_cr: "CR-142"
+    blocked_by: "related_active_cr=CR-142; formalized_as_CR-142"
     impact_surface:
       - "experiments/run_experiment_17_21_factor_suite.py"
       - "experiments/run_experiment_23_29_ml_factor_suite.py"
@@ -76,7 +75,7 @@ follow_up_items:
       real_lake_readonly: false
       runtime: false
       trading_write: false
-    next_action: "仅当用户要求继续收敛剩余实验评估栈时启动独立 refactor CR。"
+    next_action: "已正式化为 CR-142；先修复 engine extension contract，再收敛 17_21/23_29 评估侧统计。"
   - id: "FU-CR140-003"
     title: "Red baseline debt triage and closure"
     kind: "requirement-change"
@@ -146,7 +145,7 @@ follow_up_items:
 | 候选编号 | 标题 | 状态 | 类型 | 优先级 | 影响面 / 冲突键 | 正式 CR 路径 | 相关 active CR / blocked_by / superseded_by | 当前门控 | 阻塞原因 | 下一步 | 来源 |
 |---|---|---|---|---:|---|---|---|---|---|---|---|
 | FU-CR140-001 | Real lake readonly turnover semantic validation | candidate | runtime-authorization | 2 | real_lake_read_authorization_required; turnover_factor_real_lake_semantic_validation |  | blocked_by=requires_explicit_user_selection; requires_real_lake_readonly_authorization | not_started | 真实 lake readonly 未授权 | 用户明确选择后启动独立授权 CR | CP8-CR140-POST-CLOSE-REVIEW |
-| FU-CR140-002 | Remaining experiments engine convergence | candidate | requirement-change | 3 | remaining_parallel_experiment_evaluation_logic; engine_extension_contract |  | blocked_by=requires_explicit_user_selection; requires_engine_extension_contract_review | not_started | 需独立重构 CR | 用户明确选择后启动独立 refactor CR | CP8-CR140-POST-CLOSE-REVIEW |
+| FU-CR140-002 | Remaining experiments engine convergence | active | requirement-change | 3 | remaining_parallel_experiment_evaluation_logic; engine_extension_contract | `process/changes/CR-142-REMAINING-EXPERIMENTS-ENGINE-CONVERGENCE-2026-06-30.md` | related_active_cr=CR-142; formalized_as_CR-142 | cp2_pending | 已由用户选择并正式化为 CR-142 | 先修复 engine extension contract，再收敛 17_21/23_29 评估侧统计 | USER-20260630-CONTINUE-EXPERIMENT-REMEDIATION |
 | FU-CR140-003 | Red baseline debt triage and closure | closed-current-delivery | requirement-change | 1 | red_baseline_debt; cr139_root_script_naming_debt; market_data_engine_import_boundary; remaining_experiment_suite_failures | `process/changes/CR-141-RED-BASELINE-DEBT-TRIAGE-2026-06-30.md` | closed_by=CR-141 | closed | 已由 CR-141 关闭 | 46 条 inherited red baseline failures 已全部修复，最终 pytest 1479 passed | USER-20260630-CONTINUE-EXPERIMENT-REMEDIATION |
 | FU-CR140-004 | Local commits remote persistence gate | candidate | requirement-change | 2 | git_remote_write_not_authorized; local_commit_loss_risk |  | blocked_by=requires_explicit_git_remote_write_authorization | not_started | Git remote write 未授权 | 用户明确授权后再启动 remote persistence gate；本台账不 push | CP8-CR140-POST-CLOSE-REVIEW |
 

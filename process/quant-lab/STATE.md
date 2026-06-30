@@ -2,14 +2,25 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: cr141-closed-current-delivery
+Phase: cr142-phase0-contract-audit
 Blocked: false
-Active CR: none
+Active CR: CR-142
 Active Story: none
 Active batch: none
-Pending gate: none
+Pending gate: CP2
 
 ## Current Decision
+
+CR142 已从 `FU-CR140-002` 正式启动，用于处理剩余 experiments engine convergence：
+
+- 正式 CR：`process/changes/CR-142-REMAINING-EXPERIMENTS-ENGINE-CONVERGENCE-2026-06-30.md`。
+- 来源台账：`process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-002`。
+- 当前目标：先修复 engine extension contract，使 additional definitions / calculator registry / direction 能一致工作；再让 17_21/23_29 复用 engine statistics 的评估侧统计。
+- Phase 0 证据：`process/checks/CR142-PHASE0-ENGINE-CONTRACT-AUDIT-2026-06-30.md`。
+- 不授权范围：真实 lake readonly validation、真实 lake link/mount、NAS、provider fetch、lake write、catalog pointer write、QMT/MiniQMT/xtquant/gateway runtime、simulation/live/trading、Git remote write/push。
+- 人工门禁规则：用户已授权“无风险继续推进”；若后续触碰真实 lake/runtime/remote、出现新增 pytest 失败无法解释、或需改变 CR 范围，再发起人工门禁。
+
+## Previous CR141 Decision
 
 CR141 已从 `FU-CR140-003` 正式启动并关闭，用于处理 CR140 遗留的 46 条红基线债：
 
