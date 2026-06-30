@@ -1,7 +1,7 @@
 ---
 id: "CR-141"
 title: "Red Baseline Debt Triage and Closure"
-status: "active-phase0-baseline-ready"
+status: "active-phase2-low-risk-fix-ready"
 kind: "requirement-change"
 lifecycle_status: "active"
 readiness_status: "not_ready"
@@ -9,7 +9,7 @@ gate_status: "cp2_pending"
 gate_profile: "standard"
 created_at: "2026-06-30T17:35:00+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-30T17:35:00+08:00"
+updated_at: "2026-06-30T17:52:00+08:00"
 source_tracking: "process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-003"
 parent_cr: "CR-140"
 source_decision_id: "USER-20260630-CONTINUE-EXPERIMENT-REMEDIATION"
@@ -94,6 +94,16 @@ CR140 已完成 experiments 目录归位、helper 收敛和 turnover synthetic a
 | artifact worktree | 启动时 clean，仅本地 ahead 9。 |
 | remote write | 未授权，不执行。 |
 | real lake / NAS / provider / runtime | 未授权，不执行。 |
+
+## Phase 0 / Phase 1 结果
+
+| 项 | 结果 |
+|---|---|
+| Phase 0 pytest baseline | `46 failed, 1433 passed in 45.46s` |
+| 失败集合 | `process/checks/CR141-PHASE0-BASELINE-FAILURES.txt` |
+| baseline report | `process/checks/CR141-PHASE0-PYTEST-BASELINE-2026-06-30.md` |
+| Phase 1 分类 | `process/checks/CR141-PHASE1-BASELINE-FAILURE-CLASSIFICATION-2026-06-30.md` |
+| 分类结论 | 46 条已分 bucket；`test_experiment_17_21` 和 `test_experiment_23_29` 默认 deferred 到 `FU-CR140-002`，除非后续证明只是独立 fixture drift。 |
 
 ## 关闭条件
 
