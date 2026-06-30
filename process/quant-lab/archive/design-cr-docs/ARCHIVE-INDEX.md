@@ -14,6 +14,7 @@ owner: "host-orchestrator"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-06-23 | host-orchestrator | CR131 将默认 design root 中的 CR 命名历史设计文档移入本归档区，并保留完整正文。 |
+| 1.1 | 2026-06-30 | host-orchestrator | CR141 继续收敛 CR131 design surface 红基线，将 CR138/CR139 专属 HLD/ADR 从 current design root 归档。 |
 
 ## 定位
 
@@ -29,6 +30,8 @@ owner: "host-orchestrator"
 | `ARCHITECTURE-DECISION-CR046.md` | CR046 QMT / MiniQMT 双目标策略交付 legacy ADR cluster |
 | `ARCHITECTURE-DECISION-CR053.md` | CR053 migration inventory / dry-run ADR |
 | `ARCHITECTURE-DECISION-CR058.md` | CR058 repo-local mechanical migration ADR |
+| `ARCHITECTURE-DECISION-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md` | CR138 Runner & QMT Gateway operational control plane ADR |
+| `ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md` | CR139 Strategy Data Foundation ADR |
 | `CONTEXT-CAPSULE-HUMAN-GATE-CONSISTENCY-CR114.md` | CR114 context / human gate consistency design notes |
 | `CONTEXT-PATH-ALIAS-NORMALIZATION-NOTES-CR117.md` | CR117 path alias normalization notes |
 | `CR-TRACKING-CHECKER-EXPECTATION-NOTES-CR112.md` | CR112 CR tracking checker expectation notes |
@@ -45,6 +48,8 @@ owner: "host-orchestrator"
 | `HLD-CR053-QUANT-LAB-MIGRATION-INVENTORY-AND-DRY-RUN.md` | CR053 migration inventory / dry-run HLD |
 | `HLD-CR058-REPO-LOCAL-MECHANICAL-MIGRATION-RELAYOUT-GATE.md` | CR058 repo-local migration HLD |
 | `HLD-CR093-LEDGER-HYGIENE.md` | CR093 ledger hygiene HLD |
+| `HLD-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md` | CR138 Runner & QMT Gateway operational control plane HLD |
+| `HLD-STRATEGY-DATA-FOUNDATION.md` | CR139 Strategy Data Foundation HLD |
 | `HUMAN-GATE-LAUNCH-MESSAGE-CHECKABLE-DRAFT-CONTRACT-CR115.md` | CR115 human gate launch message draft contract |
 | `HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-IMPLEMENTATION-CANDIDATE-CR119.md` | CR119 human gate launch message checker candidate |
 | `PATH-ALIAS-CHECKER-ENFORCEMENT-CANDIDATE-CR118.md` | CR118 path alias checker enforcement candidate |
