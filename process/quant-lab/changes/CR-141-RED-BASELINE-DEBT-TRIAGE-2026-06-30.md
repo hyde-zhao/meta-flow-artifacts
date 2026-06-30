@@ -1,7 +1,7 @@
 ---
 id: "CR-141"
 title: "Red Baseline Debt Triage and Closure"
-status: "active-phase2-wave2-complete"
+status: "active-phase2-wave3-complete"
 kind: "requirement-change"
 lifecycle_status: "active"
 readiness_status: "not_ready"
@@ -9,7 +9,7 @@ gate_status: "cp2_pending"
 gate_profile: "standard"
 created_at: "2026-06-30T17:35:00+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-30T18:45:00+08:00"
+updated_at: "2026-06-30T18:55:00+08:00"
 source_tracking: "process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-003"
 parent_cr: "CR-140"
 source_decision_id: "USER-20260630-CONTINUE-EXPERIMENT-REMEDIATION"
@@ -127,6 +127,18 @@ CR140 已完成 experiments 目录归位、helper 收敛和 turnover synthetic a
 | fixed baseline failures | 13 |
 | new failures | 0 |
 | evidence | `process/checks/CR141-PHASE2-WAVE2-CR008-CR011-FIXES-2026-06-30.md` |
+
+## Phase 2 Wave 3 结果
+
+| 项 | 结果 |
+|---|---|
+| source commit | `326f388` |
+| targeted verification | `14 passed in 0.45s` |
+| hygiene verification | `passed=true`, `unclassified=0` |
+| full pytest comparison | `16 failed, 1463 passed in 44.61s` |
+| fixed baseline failures | 13 |
+| new failures | 0 |
+| evidence | `process/checks/CR141-PHASE2-WAVE3-CR013-FIXES-2026-06-30.md` |
 
 ## 关闭条件
 
