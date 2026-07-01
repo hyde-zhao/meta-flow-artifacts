@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP2",
+  "checkpoint_id": "CP2-CR149-NAS-CURRENT-TRUTH-SYNC",
+  "story_id": "CR149-NAS-CURRENT-TRUTH-SYNC-GATE",
+  "cr_id": "CR-149",
+  "created_at": "2026-07-01T14:45:00+08:00",
+  "context_ref": "process/context/CP2-CR149-NAS-CURRENT-TRUTH-SYNC-CONTEXT.yaml",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr149-nas-current-truth-sync-gate-precheck"
+  ],
+  "evidence_ref": "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY.index.json",
+  "items": [
+    {
+      "id": "CP2-CR149-NAS-SYNC-01",
+      "category": "runtime-authorization",
+      "name": "A real NAS mismatch exists and is evidenced",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP7-CR149-NAS-MULTINODE-CONSISTENCY.result.json",
+        "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Read-only check found 1 catalog mismatch and 17 missing NAS current canonical paths."
+    },
+    {
+      "id": "CP2-CR149-NAS-SYNC-02",
+      "category": "scope-guard",
+      "name": "Proposed repair is scoped to current-truth objects",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "scripts/data_lake/sync_nas_current_truth.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "The proposed script syncs only catalog/catalog.json plus the 17 catalog current canonical objects; it does not delete, pull or restore."
+    },
+    {
+      "id": "CP2-CR149-NAS-SYNC-03",
+      "category": "scope-guard",
+      "name": "High-risk actions are isolated behind this human gate",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR149-NAS-CURRENT-TRUTH-SYNC.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No NAS write/sync will execute unless the gate is approved."
+    },
+    {
+      "id": "CP2-CR149-NAS-SYNC-04",
+      "category": "verification",
+      "name": "Post-approval verification path is explicit",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR149-NAS-CURRENT-TRUTH-SYNC.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "After approved sync, rerun the read-only consistency script; Phase 1 closes only if 18/18 comparisons match."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR149-NAS-SYNC-GATE-2026-07-01T144500+0800"
+  ],
+  "decision": "PASS",
+  "next_route": "CP2_HUMAN_GATE"
+}

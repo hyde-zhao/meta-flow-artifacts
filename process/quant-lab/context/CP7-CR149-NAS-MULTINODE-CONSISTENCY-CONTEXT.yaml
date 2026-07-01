@@ -1,0 +1,39 @@
+schema_version: "meta-flow.context.v1"
+context_id: "CP7-CR149-NAS-MULTINODE-CONSISTENCY-CONTEXT"
+cr_id: "CR-149"
+created_at: "2026-07-01T14:35:00+08:00"
+created_by: "host-orchestrator"
+read_profile: "compact"
+objective: "Record the approved read-only NAS/shared-node consistency execution result."
+must_read:
+  - "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY.index.json"
+  - "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY-2026-07-01.json"
+  - "process/checkpoints/CP2-CR149-NAS-MULTINODE-CONSISTENCY.md"
+summary:
+  mounted_path_attempted_first: true
+  mounted_path_status: "unavailable_empty_mount"
+  credential_fallback_used: true
+  read_only_transport: "rsync_daemon_checksum_dry_run"
+  compared_object_count: 18
+  catalog_mismatch_count: 1
+  canonical_current_error_count: 17
+  result: "blocked"
+  interpretation: "NAS/shared-node view is stale relative to the local N1 current-truth lake; no automatic repair was executed."
+authorization_boundary:
+  approved_by: "user approve for CP2-CR149-NAS-MULTINODE-CONSISTENCY"
+  authorized:
+    - "mounted-path read-only attempt"
+    - "credential fallback for read-only listing/checksum"
+    - "evidence generation"
+    - "gate ledger audit"
+  not_authorized:
+    - "NAS sync/write/push/pull"
+    - "restore"
+    - "delete/archive"
+    - "real lake write"
+    - "catalog pointer mutation"
+    - "provider fetch"
+    - "historical business-conflict cleanup"
+    - "simulation/live/trading"
+    - "broker write"
+next_route: "CP2-CR149-NAS-CURRENT-TRUTH-SYNC human gate"

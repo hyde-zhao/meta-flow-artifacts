@@ -1,7 +1,7 @@
 ---
 id: "CR-149"
 title: "Governed Lake Readiness Matrix Foundation"
-status: "active-cp2-nas-multinode-gate-pending"
+status: "active-cp2-nas-current-truth-sync-gate-pending"
 kind: "requirement-change"
 lifecycle_status: "active"
 readiness_status: "ready_with_risk"
@@ -17,8 +17,8 @@ workflow_mode_after_change: "standard"
 rollback_to: "pre-CR149 code and artifact state"
 not_authorized:
   - "provider_fetch"
-  - "nas_sync_or_write"
-  - "credential_read"
+  - "nas_sync_or_write_without_cp2_sync_approval"
+  - "credential_read_without_human_gate"
   - "qmt_miniqmt_xtquant_gateway_runtime"
   - "simulation_live_or_trading"
   - "broker_write"
@@ -50,7 +50,7 @@ CR-146 已完成 current-truth 数据湖迁移、fail-closed reader 加固和 ru
 
 ## Out of Scope
 
-1. 真实 lake 写入、catalog pointer mutation、provider fetch、NAS sync/write/restore drill、credential read。
+1. 真实 lake 写入、catalog pointer mutation、provider fetch、NAS sync/write/restore drill or credential read without a human gate.
 2. 历史 business-conflict 语义择优、重写、删除或 quarantine 物理迁移。
 3. N2 历史路径 rename、legacy archive delete。
 4. QMT/MiniQMT/xtquant/gateway runtime、broker write、simulation/live/trading。
@@ -72,10 +72,17 @@ CR-146 已完成 current-truth 数据湖迁移、fail-closed reader 加固和 ru
 | Risk | Rule |
 |---|---|
 | business-conflict cleanup | Not authorized; CR-149 may label quarantine policy only, not select survivor rows. |
-| provider/NAS/credential/lake write | Not authorized; local metadata and fixture tests only. |
+| provider/NAS/credential/lake write | Not authorized unless an explicit human gate grants a scoped runtime action. |
 | catalog pointer mutation | Not authorized; no publish, no pointer switch. |
 | runtime/trading/broker | Not authorized; any runtime or broker action requires separate human gate. |
 
 ## Current Status
 
-CR-149 is active with CP2 pending for NAS/shared-node multi-node consistency. Phase A-G no-risk scope is implemented and recorded in CP6 evidence. Current Phase 1 exit matrix has 7 PASS, 0 FAIL and 1 blocked-human-gate item: real NAS/shared-node published pointer consistency. No human gate is required for local code / tests / process evidence. A human gate is required before any real NAS/provider/runtime operation, catalog pointer mutation, historical conflict cleanup, simulation/live/trading or broker action.
+CR-149 is active with CP2 pending for scoped NAS current-truth sync. Phase A-G no-risk scope is implemented and recorded in CP6 evidence. The approved read-only NAS/shared-node consistency check executed on 2026-07-01: mounted path was unavailable, credential fallback was audited, evidence redaction scan passed, and no sync/write/restore/delete was executed. The check found the NAS/shared-node view stale relative to local N1 current truth: catalog checksum mismatch plus 17 missing `canonical/*/1.0/current/` paths. CR149 Phase 1 remains blocked until a separate CP2 gate approves or rejects scoped local-to-NAS current-truth sync. A human gate is required before any NAS write/sync, provider/runtime operation, catalog pointer mutation, historical conflict cleanup, simulation/live/trading or broker action.
+
+## Runtime Evidence Update
+
+| Date | Evidence | Result | Notes |
+|---|---|---|---|
+| 2026-07-01 | `process/evidence/CR149-NAS-MULTINODE-CONSISTENCY.index.json` | BLOCKED | Read-only rsync checksum dry-run compared 18 objects: catalog mismatch and 17 NAS current canonical paths missing. |
+| 2026-07-01 | `process/checkpoints/CP2-CR149-NAS-CURRENT-TRUTH-SYNC.md` | PENDING | New human gate asks whether to sync local N1 current truth to NAS using scoped object list only. |

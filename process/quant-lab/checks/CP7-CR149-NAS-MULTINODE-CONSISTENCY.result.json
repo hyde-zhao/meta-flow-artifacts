@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR149-NAS-MULTINODE-CONSISTENCY",
+  "story_id": "CR149-NAS-MULTINODE-CONSISTENCY",
+  "cr_id": "CR-149",
+  "created_at": "2026-07-01T14:35:00+08:00",
+  "context_ref": "process/context/CP7-CR149-NAS-MULTINODE-CONSISTENCY-CONTEXT.yaml",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr149-nas-multinode-consistency-execution"
+  ],
+  "evidence_ref": "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY.index.json",
+  "items": [
+    {
+      "id": "CP7-CR149-NAS-01",
+      "category": "runtime-authorization",
+      "name": "Approved CP2 boundary was respected",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR149-NAS-MULTINODE-CONSISTENCY.md",
+        "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY-2026-07-01.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Mounted path was attempted first; credential fallback was used only after the mount was unavailable."
+    },
+    {
+      "id": "CP7-CR149-NAS-02",
+      "category": "security",
+      "name": "Credential fallback was audited and redacted evidence passed",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/state/GATE-LEDGER.ndjson#CR149-NAS-MULTINODE-CREDENTIAL-FALLBACK-2026-07-01",
+        "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Evidence redaction scan passed; the fallback gate event records labels only."
+    },
+    {
+      "id": "CP7-CR149-NAS-03",
+      "category": "verification",
+      "name": "NAS/shared-node consistency check found stale NAS current truth",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY-2026-07-01.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Catalog checksum dry-run reported a mismatch and all 17 catalog current canonical paths were missing on NAS."
+    },
+    {
+      "id": "CP7-CR149-NAS-04",
+      "category": "scope-guard",
+      "name": "No automatic repair was performed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Operation counts show NAS sync/write, lake write, catalog mutation, restore, delete, provider, trading, broker and Git remote writes are all zero."
+    }
+  ],
+  "blockers": [
+    {
+      "id": "BLOCK-CR149-NAS-STALE-CURRENT-TRUTH",
+      "severity": "BLOCKER",
+      "summary": "NAS/shared-node view is stale relative to the local N1 current-truth lake; local catalog points to current/ objects but NAS still exposes run_id= layout.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "CP2-CR149-NAS-CURRENT-TRUTH-SYNC"
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR149-NAS-MULTINODE-EXECUTION-2026-07-01T143500+0800"
+  ],
+  "decision": "BLOCKED",
+  "next_route": "CP2_HUMAN_GATE_FOR_NAS_CURRENT_TRUTH_SYNC"
+}

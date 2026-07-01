@@ -1,0 +1,33 @@
+schema_version: "meta-flow.context.v1"
+context_id: "CP2-CR149-NAS-CURRENT-TRUTH-SYNC-CONTEXT"
+cr_id: "CR-149"
+created_at: "2026-07-01T14:45:00+08:00"
+created_by: "host-orchestrator"
+read_profile: "compact"
+objective: "Prepare a human gate for syncing local N1 current-truth objects to NAS after read-only consistency detected stale NAS state."
+must_read:
+  - "process/checks/CP7-CR149-NAS-MULTINODE-CONSISTENCY.result.json"
+  - "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY.index.json"
+  - "scripts/data_lake/sync_nas_current_truth.py"
+summary:
+  current_state: "CR149 Phase 1 local data lake governance is complete; NAS multi-node exit is blocked by stale NAS state."
+  mismatch_summary:
+    compared_object_count: 18
+    catalog_mismatch_count: 1
+    canonical_current_missing_on_nas_count: 17
+  proposed_action: "Run a scoped local-to-NAS current-truth sync for catalog/catalog.json plus the 17 catalog current canonical parquet objects, then rerun read-only consistency."
+  proposed_script: "scripts/data_lake/sync_nas_current_truth.py"
+  default_mode: "dry-run unless --execute and approval id are supplied"
+authorization_boundary:
+  requires_human_gate:
+    - "NAS write/sync"
+    - "source-of-truth direction decision"
+  not_in_scope:
+    - "delete/archive"
+    - "pull/restore from NAS to local"
+    - "full lake cleanup"
+    - "provider fetch"
+    - "historical business-conflict cleanup"
+    - "catalog pointer mutation on local lake"
+    - "simulation/live/trading"
+    - "broker write"
