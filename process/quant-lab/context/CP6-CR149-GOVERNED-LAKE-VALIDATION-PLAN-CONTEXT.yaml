@@ -1,0 +1,56 @@
+schema_version: context_capsule_v1
+context_id: CP6-CR149-GOVERNED-LAKE-VALIDATION-PLAN
+cr_id: CR-149
+created_at: "2026-07-01T12:33:29+08:00"
+scope: governed lake recurring validation plan contract
+read_profile: compact
+must_read:
+  - market_data/governed_lake.py
+  - tests/data_lake/test_governed_lake_readiness_matrix.py
+  - process/changes/CR-149-GOVERNED-LAKE-READINESS-MATRIX-2026-07-01.md
+allowed_reads:
+  - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
+  - scripts/data_lake/
+do_not_read_by_default:
+  - scripts/legacy/
+  - real NAS credentials or env secrets
+  - provider runtime state
+  - broker or trading runtime state
+boundary:
+  authorized:
+    - local code changes
+    - local fixture tests
+    - metadata-only validation plan generation
+    - process evidence and checkpoint records
+  not_authorized:
+    - provider_fetch
+    - nas_sync_or_write
+    - credential_read
+    - real_lake_write
+    - catalog_pointer_mutation
+    - historical_business_conflict_cleanup
+    - simulation_or_live
+    - broker_write
+implementation_summary:
+  added_objects:
+    - GovernedLakeValidationTask
+    - GovernedLakeValidationPlan
+    - build_governed_lake_validation_plan
+    - validate_governed_lake_validation_plan
+  validation_tasks:
+    total: 7
+    auto_runnable_local_or_metadata_only: 6
+    human_gate_required: 1
+  human_gate_required_task:
+    task_id: nas_multinode_pointer_consistency
+    reason: multi-node NAS/shared-read verification may require credentials, remote host access, or shared storage operations
+validation_summary:
+  focused_tests: "7 passed in 0.04s"
+  related_tests: "42 passed in 1.69s"
+  git_diff_check: PASS
+read_expansion_log:
+  - id: READ-CR149-GOVERNED-LAKE-VALIDATION-PLAN-2026-07-01T123329+0800
+    reason: "Need CR-149 active scope and roadmap Phase 1 exit criteria before adding recurring validation plan."
+    files:
+      - process/changes/CR-149-GOVERNED-LAKE-READINESS-MATRIX-2026-07-01.md
+      - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md

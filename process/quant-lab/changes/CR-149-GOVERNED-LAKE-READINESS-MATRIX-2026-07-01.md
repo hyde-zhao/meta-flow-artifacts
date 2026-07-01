@@ -45,7 +45,8 @@ CR-146 已完成 current-truth 数据湖迁移、fail-closed reader 加固和 ru
 3. 输出 PIT status：`pit_available / not_applicable / unsupported-with-reason`，不得长期保留 `null`。
 4. 输出 run registry row，替代生产排序场景对 `source_run_id` 字典序 fallback 的依赖。
 5. 输出 operation counters，并证明 provider/NAS/lake write/catalog pointer/trading counters 全零。
-6. 增加 fixture tests 和 CP6 evidence。
+6. 输出 recurring validation plan，覆盖 inventory、golden baseline、PIT reader smoke、duplicate profile、readiness matrix、published pointer local consistency 和 NAS multi-node consistency gate。
+7. 增加 fixture tests 和 CP6 evidence。
 
 ## Out of Scope
 
@@ -62,6 +63,7 @@ CR-146 已完成 current-truth 数据湖迁移、fail-closed reader 加固和 ru
 | Phase B | Run registry bridge | Catalog current run metadata can be represented without source_run_id lexical ordering. |
 | Phase C | Fixture validation | Tests prove 17/17 coverage, PIT normalization, quarantine classification and zero side effects. |
 | Phase D | Evidence and routing | CP result, evidence index and remaining high-risk follow-up routing recorded. |
+| Phase E | Recurring validation plan | 7 validation tasks are machine-readable; 6 are local read-only/metadata-only, 1 NAS multi-node task is human-gate-required. |
 
 ## Risk Rules
 
@@ -74,4 +76,4 @@ CR-146 已完成 current-truth 数据湖迁移、fail-closed reader 加固和 ru
 
 ## Current Status
 
-CR-149 is active. The next implementation step is Phase A governed readiness matrix contract. No human gate is required for local code / tests / process evidence. A human gate is required before any real lake write, NAS/provider/runtime operation, catalog pointer mutation, historical conflict cleanup, simulation/live/trading or broker action.
+CR-149 is active. Phase A-D governed readiness matrix contract is implemented and recorded in CP6 evidence. Phase E recurring validation plan is now in progress. No human gate is required for local code / tests / process evidence. A human gate is required before any real lake write, NAS/provider/runtime operation, catalog pointer mutation, historical conflict cleanup, simulation/live/trading or broker action.

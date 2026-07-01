@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR149-GOVERNED-LAKE-VALIDATION-PLAN",
+  "story_id": "CR149-GOVERNED-LAKE-VALIDATION-PLAN",
+  "cr_id": "CR-149",
+  "created_at": "2026-07-01T12:33:29+08:00",
+  "context_ref": "process/context/CP6-CR149-GOVERNED-LAKE-VALIDATION-PLAN-CONTEXT.yaml",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr149-governed-lake-validation-plan-implementation"
+  ],
+  "evidence_ref": "process/evidence/CR149-GOVERNED-LAKE-VALIDATION-PLAN.index.json",
+  "items": [
+    {
+      "id": "CP6-CR149-VALIDATION-PLAN-01",
+      "category": "implementation",
+      "name": "Governed validation plan contract added without runtime side effects",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "market_data/governed_lake.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Adds validation task and validation plan dataclasses, builder and validator."
+    },
+    {
+      "id": "CP6-CR149-VALIDATION-PLAN-02",
+      "category": "scope-guard",
+      "name": "Recurring validation task matrix covers Phase 1 checks and gates NAS multi-node work",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR149-GOVERNED-LAKE-VALIDATION-PLAN-2026-07-01.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "7 tasks: 6 local read-only/metadata-only; NAS multi-node pointer consistency is human-gate-required."
+    },
+    {
+      "id": "CP6-CR149-VALIDATION-PLAN-03",
+      "category": "implementation",
+      "name": "Stable entrypoint and legacy-script guard implemented",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "tests/data_lake/test_governed_lake_readiness_matrix.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Validator rejects scripts/legacy, unstable non-gated entrypoints, auto-task side effects and nonzero operation counters."
+    },
+    {
+      "id": "CP6-CR149-VALIDATION-PLAN-04",
+      "category": "verification",
+      "name": "CR149 validation plan tests and related regression pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 pytest tests/data_lake/test_governed_lake_readiness_matrix.py",
+        "uv run --python 3.11 pytest tests/data_lake/test_governed_lake_readiness_matrix.py tests/data_lake/test_reader_fail_fast_contracts.py tests/data_lake/test_lake_inventory.py tests/data_lake/test_readiness_pre_read_gate.py tests/data_lake/test_catalog_publish_gate.py tests/data_lake/test_publish_current_reader_smoke.py",
+        "uv run --python 3.11 python -m compileall -q market_data/governed_lake.py",
+        "git diff --check"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Focused test: 7 passed in 0.04s. Related regression: 42 passed in 1.69s. compileall PASS. git diff --check PASS."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR149-GOVERNED-LAKE-VALIDATION-PLAN-2026-07-01T123329+0800"
+  ],
+  "decision": "PASS",
+  "next_route": "continue_cr149_phase1_business_conflict_policy_and_exit_matrix"
+}

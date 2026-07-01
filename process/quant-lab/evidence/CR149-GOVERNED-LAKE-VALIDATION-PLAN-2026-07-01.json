@@ -1,0 +1,107 @@
+{
+  "cr_id": "CR-149",
+  "created_at": "2026-07-01T12:33:29+08:00",
+  "mode": "metadata_only_governed_lake_validation_plan",
+  "status": "pass",
+  "schema_version": "governed_lake_validation_plan_v1",
+  "summary": {
+    "task_count": 7,
+    "auto_runnable_count": 6,
+    "gated_count": 1,
+    "validator_issue_count": 0,
+    "stable_entrypoints_only_for_auto_tasks": true,
+    "legacy_script_references": 0,
+    "operation_counts_all_zero": true
+  },
+  "tasks": [
+    {
+      "task_id": "inventory_catalog_physical_existence",
+      "category": "inventory",
+      "command_ref": "scripts/data_lake/run_data_lake_readiness_audit.py",
+      "cadence": "daily",
+      "execution_mode": "read_only_local",
+      "requires_human_gate": false,
+      "dataset_scope": "17/17 governed catalog datasets"
+    },
+    {
+      "task_id": "golden_current_truth_profile",
+      "category": "golden_baseline",
+      "command_ref": "scripts/data_lake/profile_current_truth.py",
+      "cadence": "per_write",
+      "execution_mode": "read_only_local",
+      "requires_human_gate": false,
+      "dataset_scope": "17/17 governed catalog datasets"
+    },
+    {
+      "task_id": "pit_reader_smoke",
+      "category": "pit_reader",
+      "command_ref": "scripts/data_lake/collect_reader_runtime_smoke.py",
+      "cadence": "daily",
+      "execution_mode": "read_only_local",
+      "requires_human_gate": false,
+      "dataset_scope": "17/17 governed catalog datasets"
+    },
+    {
+      "task_id": "duplicate_profile",
+      "category": "duplicate_profile",
+      "command_ref": "scripts/data_lake/profile_duplicate_keys.py",
+      "cadence": "weekly",
+      "execution_mode": "read_only_local",
+      "requires_human_gate": false,
+      "dataset_scope": "business-conflict datasets plus current-truth exact-copy candidates"
+    },
+    {
+      "task_id": "governed_readiness_matrix",
+      "category": "readiness_matrix",
+      "command_ref": "market_data.governed_lake.build_governed_lake_readiness_matrix",
+      "cadence": "per_write",
+      "execution_mode": "metadata_only",
+      "requires_human_gate": false,
+      "dataset_scope": "17/17 governed catalog datasets"
+    },
+    {
+      "task_id": "published_pointer_local_consistency",
+      "category": "published_pointer",
+      "command_ref": "market_data.catalog.CatalogStore.get_published_current_pointer",
+      "cadence": "per_write",
+      "execution_mode": "read_only_local",
+      "requires_human_gate": false,
+      "dataset_scope": "17/17 governed catalog datasets"
+    },
+    {
+      "task_id": "nas_multinode_pointer_consistency",
+      "category": "multi_node_consistency",
+      "command_ref": "human_gate_required:nas_shared_read_consistency_check",
+      "cadence": "gated",
+      "execution_mode": "human_gate_required",
+      "requires_human_gate": true,
+      "dataset_scope": "17/17 governed catalog datasets"
+    }
+  ],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "nas_sync_or_write": 0,
+    "credential_read": 0,
+    "lake_write": 0,
+    "catalog_pointer_mutation": 0,
+    "business_conflict_cleanup": 0,
+    "simulation_or_live": 0,
+    "broker_write": 0
+  },
+  "validation_summary": {
+    "focused": "uv run --python 3.11 pytest tests/data_lake/test_governed_lake_readiness_matrix.py -> 7 passed in 0.04s",
+    "related": "uv run --python 3.11 pytest tests/data_lake/test_governed_lake_readiness_matrix.py tests/data_lake/test_reader_fail_fast_contracts.py tests/data_lake/test_lake_inventory.py tests/data_lake/test_readiness_pre_read_gate.py tests/data_lake/test_catalog_publish_gate.py tests/data_lake/test_publish_current_reader_smoke.py -> 42 passed in 1.69s",
+    "compile": "uv run --python 3.11 python -m compileall -q market_data/governed_lake.py -> PASS",
+    "git_diff_check": "PASS"
+  },
+  "not_authorized": [
+    "provider_fetch",
+    "nas_sync_or_write",
+    "credential_read",
+    "real_lake_write",
+    "catalog_pointer_mutation",
+    "historical_business_conflict_cleanup",
+    "simulation_or_live",
+    "broker_write"
+  ]
+}
