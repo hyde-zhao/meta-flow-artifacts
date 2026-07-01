@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP2",
+  "checkpoint_id": "CP2-CR146-HIGH-RISK-LAKE-ACTIONS",
+  "cr_id": "CR-146",
+  "context_ref": "process/context/CP2-CR146-HIGH-RISK-LAKE-ACTIONS-CONTEXT.yaml",
+  "evidence_ref": "process/evidence/CR146-CR139-FOLLOWUP-GAP-MATRIX-2026-06-30.json",
+  "dispatch_refs": [],
+  "items": [
+    {
+      "id": "CP2-CR146-01",
+      "category": "runtime_validation",
+      "name": "CR139 post-close real lake validation complete",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CR146-CR139-POST-CLOSE-LAKE-VALIDATION-2026-06-30.md",
+        "process/checks/CR146-STABLE-SCRIPT-ENTRYPOINT-RERUN-2026-07-01.md",
+        "process/evidence/CR146-REAL-LAKE-INVENTORY-2026-06-30.json",
+        "process/evidence/CR146-READER-RUNTIME-SMOKE.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "Inventory, golden baseline, duplicate profile, reader/PIT/panel/read-audit smoke completed; duplicate evidence rerun through stable scripts/data_lake entrypoints."
+    },
+    {
+      "id": "CP2-CR146-02",
+      "category": "risk_separation",
+      "name": "High-risk lake actions are separated from no-risk validation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR146-HIGH-RISK-LAKE-ACTIONS.md",
+        "process/evidence/CR146-GATEB-BATCH2-SPLIT-PLANNING.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Business-conflict semantic selection, physical migration and delete/archive/provider/NAS actions are human-gated."
+    },
+    {
+      "id": "CP2-CR146-03",
+      "category": "decision_collection",
+      "name": "Decision Brief includes capsule, coverage and decision table",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR146-HIGH-RISK-LAKE-ACTIONS.md",
+        "process/context/CP2-CR146-HIGH-RISK-LAKE-ACTIONS-CONTEXT.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Human gate checker must pass before user approval is accepted."
+    },
+    {
+      "id": "CP2-CR146-04",
+      "category": "regression",
+      "name": "Targeted data-lake regression passes",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/checks/CR146-CR139-POST-CLOSE-LAKE-VALIDATION-2026-06-30.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "63 targeted data-lake tests passed."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "human_gate_pending",
+  "checked_at": "2026-07-01T00:28:00+08:00"
+}

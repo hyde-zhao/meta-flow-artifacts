@@ -1,5 +1,5 @@
 {
-  "active_change": null,
+  "active_change": "CR-146",
   "active_context_ref": null,
   "active_story": null,
   "authz_policy_refs": [
@@ -16,8 +16,36 @@
   ],
   "blocked": false,
   "blocked_reason": "",
-  "current_phase": "experiment-offline-remediation-complete",
+  "current_phase": "cr139-post-close-lake-completion-human-gate",
   "last_actions": [
+    {
+      "action": "cr146_validation_complete_human_gate_pending",
+      "at": "2026-06-30T23:59:00+08:00",
+      "scope": "CR139 post-close lake validation complete; no new lake write/catalog/pointer/physical migration/provider/NAS/runtime/trading/credential/Git remote action executed. High-risk actions are gated.",
+      "evidence_refs": [
+        "process/checks/CR146-CR139-POST-CLOSE-LAKE-VALIDATION-2026-06-30.md",
+        "process/checkpoints/CP2-CR146-HIGH-RISK-LAKE-ACTIONS.md",
+        "process/evidence/CR146-CR139-FOLLOWUP-GAP-MATRIX-2026-06-30.json"
+      ],
+      "verification": {
+        "inventory": "17 datasets; ~141s; <=5min PASS",
+        "golden_baseline": "17 datasets; ~163s; <=10min PASS",
+        "reader_smoke": "pass; 163.61s",
+        "batch2_split_planning": "pass_with_risk; 4,272,624 business-conflict groups"
+      }
+    },
+    {
+      "action": "cr146_started_from_cr139_followup",
+      "at": "2026-06-30T23:40:00+08:00",
+      "scope": "User authorized CR139 data lake read/write completion; started CR146 action-scope. Provider/NAS/runtime/trading/credential/Git remote remain unauthorized; physical migration/delete/business-conflict semantic selection require human gate.",
+      "evidence_refs": [
+        "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md",
+        "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md"
+      ],
+      "verification": {
+        "cr_tracking_before_start": "PASS after CR144/CR145 state repair"
+      }
+    },
     {
       "action": "cr142_closed_current_delivery_ready",
       "at": "2026-06-30T19:45:00+08:00",
@@ -873,7 +901,7 @@
       }
     }
   ],
-  "next_action": "CR140 Phase 2 completed with full pytest matching Phase 0 failure set. Enter Phase 3: freeze old turnover output on synthetic fixture/injection layer, cut adapter to engine implementation, and compare golden fixture. Do not link or read real lake without separate authorization.",
+  "next_action": "Await user decision for process/checkpoints/CP2-CR146-HIGH-RISK-LAKE-ACTIONS.md. Recommended approve: close CR146 validation delivery as READY_WITH_RISK and keep physical migration/business-conflict/provider/NAS/delete as follow-up candidates.",
   "open_risks": [
     {
       "id": "RISK-CR139-W2-REAL-LAKE-NOT-YET-ENUMERATED",
@@ -941,6 +969,10 @@
   "routing_ref": "process/.meta-flow-process.yaml",
   "schema_version": 2,
   "source_refs": [
+    {
+      "kind": "active-cr",
+      "path": "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md"
+    },
     {
       "kind": "active-cr",
       "path": "process/changes/CR-140-EXPERIMENTS-REFACTOR-2026-06-28.md"

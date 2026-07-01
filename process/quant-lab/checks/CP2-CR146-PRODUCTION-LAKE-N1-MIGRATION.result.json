@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP2",
+  "checkpoint_id": "CP2-CR146-PRODUCTION-LAKE-N1-MIGRATION",
+  "cr_id": "CR-146",
+  "context_ref": "process/context/CP2-CR146-PRODUCTION-LAKE-N1-MIGRATION-CONTEXT.yaml",
+  "evidence_ref": "process/evidence/CR146-PRODUCTION-LAKE-READINESS-MATRIX-2026-07-01.json",
+  "items": [
+    {
+      "id": "CP2-N1-01",
+      "category": "process",
+      "name": "CR tracking has one active formal CR",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "meta-flow check cr-tracking"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR-146 is the active formal CR."
+    },
+    {
+      "id": "CP2-N1-02",
+      "category": "runtime-risk",
+      "name": "N1 plan is copy-first and has zero missing sources",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR146-PRODUCTION-LAKE-PHYSICAL-MIGRATION-PLAN-2026-07-01.json#summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "17 copy-first candidates, 0 source missing, 0 cleanup candidates."
+    },
+    {
+      "id": "CP2-N1-03",
+      "category": "runtime-risk",
+      "name": "Dry-run execution has no errors and zero side-effect counts",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR146-PRODUCTION-LAKE-PHYSICAL-MIGRATION-DRY-RUN-2026-07-01.json#operation_counts"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Dry-run pass; 17 planned copied entries; 0 lake/catalog/pointer/NAS/provider operations."
+    },
+    {
+      "id": "CP2-N1-04",
+      "category": "data-quality",
+      "name": "Catalog current truth has zero duplicate keys",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR146-PRODUCTION-LAKE-CURRENT-TRUTH-PROFILE-2026-07-01.json#summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "17 published datasets, 103264532 current rows, duplicate_key_total=0."
+    },
+    {
+      "id": "CP2-N1-05",
+      "category": "runtime-risk",
+      "name": "Execution script verifies copied targets before catalog switch",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "scripts/data_lake/execute_physical_partition_migration.py",
+        "tests/data_lake/test_physical_partition_migration_execute.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Catalog update is blocked unless copied or pre-existing targets pass size, sha256, and parquet-readable verification."
+    },
+    {
+      "id": "CP2-N1-06",
+      "category": "runtime-risk",
+      "name": "Execution script supports dataset-filtered canary rollout",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "scripts/data_lake/execute_physical_partition_migration.py",
+        "tests/data_lake/test_physical_partition_migration_execute.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "The --datasets filter allows bse_code_mapping canary execution before the remaining 16 datasets without changing the authorization boundary."
+    },
+    {
+      "id": "CP2-N1-07",
+      "category": "regression",
+      "name": "Full data-lake regression covers dedup fail-closed contracts",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 pytest tests/data_lake -q",
+        "tests/data_lake/test_dedup_contracts.py",
+        "tests/data_lake/test_reader_fail_fast_contracts.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Full tests/data_lake regression passed: 342 passed. The former deterministic fallback expectation is updated to the new fail-closed duplicate-dedup contract, and catalog_run_id_not_found_for_duplicate_dedup is covered."
+    },
+    {
+      "id": "CP2-N1-08",
+      "category": "authorization",
+      "name": "High-risk execution is separated into human gate",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR146-PRODUCTION-LAKE-N1-MIGRATION.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "No real copy/catalog update will run until the user approves the N1 decision table."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "human_gate"
+}

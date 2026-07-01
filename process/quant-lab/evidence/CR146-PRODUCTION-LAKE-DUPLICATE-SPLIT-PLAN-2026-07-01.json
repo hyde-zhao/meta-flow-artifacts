@@ -1,0 +1,1101 @@
+{
+  "schema_version": 1,
+  "workflow_id": "data-lake-production-governance",
+  "gate": "duplicate-resolution-planning",
+  "stage": "read_only_split_planning",
+  "created_at": "2026-07-01T08:26:34+08:00",
+  "status": "pass_with_risk_split_planning_complete_write_decisions_required",
+  "mode": "read_only_split_planning_no_lake_write",
+  "authorized_scope": "read-only duplicate split planning; no lake write",
+  "lake_root": "/home/hyde/data/quant-lab/data-lake",
+  "datasets": [
+    "adj_factor",
+    "prices",
+    "prices_limit",
+    "events",
+    "trade_status"
+  ],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "classification_method": {
+    "key": "dataset-specific duplicate key",
+    "exact_copy": "duplicate-key group where business hash and metadata hash both have one distinct value",
+    "metadata_only": "duplicate-key group where business hash has one distinct value and metadata hash has more than one distinct value",
+    "business_conflict": "duplicate-key group where business hash has more than one distinct value",
+    "hash_note": "Hashes use pandas row fingerprints for routing. Future write gates must materialize exact rows and verify pre/post-write content."
+  },
+  "totals": {
+    "dataset_count": 5,
+    "source_row_count": 189950712,
+    "duplicate_key_group_count": 72710457,
+    "duplicate_rows_in_groups": 189950712,
+    "duplicate_row_over_unique_count": 117240255,
+    "exact_copy_group_count": 61327473,
+    "metadata_only_group_count": 7110360,
+    "business_conflict_group_count": 4272624,
+    "planned_main_row_count_if_recommended_actions_approved": 68437833,
+    "planned_quarantine_row_count_if_recommended_actions_approved": 27300370,
+    "planned_dropped_exact_duplicate_row_count": 94212509
+  },
+  "dataset_results": [
+    {
+      "dataset": "adj_factor",
+      "canonical_root": "/home/hyde/data/quant-lab/data-lake/canonical/adj_factor/1.0",
+      "parquet_file_count": 5881,
+      "source_row_count": 47876790,
+      "primary_key": [
+        "symbol",
+        "trade_date"
+      ],
+      "columns_present": [
+        "trade_date",
+        "symbol",
+        "adj_factor",
+        "adjustment_policy",
+        "source",
+        "source_interface",
+        "source_run_id",
+        "available_at",
+        "available_at_rule",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "business_columns": [
+        "adj_factor",
+        "adjustment_policy"
+      ],
+      "metadata_columns": [
+        "source",
+        "source_interface",
+        "source_run_id",
+        "available_at",
+        "available_at_rule",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "schema_variant_count": 2,
+      "schema_normalization_required": false,
+      "top_source_run_ids": [
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2025-001949",
+          "row_count": 3965283
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2024-001432",
+          "row_count": 3909552
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2023-000913",
+          "row_count": 3823440
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2022-000336",
+          "row_count": 3626466
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2021-235843",
+          "row_count": 3357471
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2020-235353",
+          "row_count": 3009903
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2019-234833",
+          "row_count": 2810112
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2018-234359",
+          "row_count": 2698674
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2017-233927",
+          "row_count": 2504829
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2016-233430",
+          "row_count": 2187555
+        }
+      ],
+      "duplicate_rows_top_source_run_ids": [
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2025-001949",
+          "duplicate_row_count": 3965283
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2024-001432",
+          "duplicate_row_count": 3909552
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2023-000913",
+          "duplicate_row_count": 3823440
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2022-000336",
+          "duplicate_row_count": 3626466
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2021-235843",
+          "duplicate_row_count": 3357471
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2020-235353",
+          "duplicate_row_count": 3009903
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2019-234833",
+          "duplicate_row_count": 2810112
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2018-234359",
+          "duplicate_row_count": 2698674
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2017-233927",
+          "duplicate_row_count": 2504829
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2016-233430",
+          "duplicate_row_count": 2187555
+        }
+      ],
+      "duplicate_key_group_count": 17905960,
+      "duplicate_rows_in_groups": 47876790,
+      "duplicate_row_over_unique_count": 29970830,
+      "split_buckets": {
+        "exact_copy": {
+          "group_count": 17824108,
+          "row_count": 47391271,
+          "row_over_unique_count": 29567163
+        },
+        "metadata_only": {
+          "group_count": 81852,
+          "row_count": 485519,
+          "row_over_unique_count": 403667
+        },
+        "business_conflict": {
+          "group_count": 0,
+          "row_count": 0,
+          "row_over_unique_count": 0
+        }
+      },
+      "source_run_id_set_top": [
+        {
+          "source_run_id_set": [
+            "cr010-main-smoke-20260522T161025-prices-adj",
+            "run-cr014-s14-prices-adj-factor-2024-001432"
+          ],
+          "sample_duplicate_key_group_count": 3,
+          "note": "sample-limited source_run_id combination; full routing uses bucket counts, not this sample count"
+        },
+        {
+          "source_run_id_set": [
+            "cr010-prod-window-20250211-20260218-prices-adj-tushare",
+            "run-cr014-s14-prices-adj-factor-2025-001949"
+          ],
+          "sample_duplicate_key_group_count": 3,
+          "note": "sample-limited source_run_id combination; full routing uses bucket counts, not this sample count"
+        }
+      ],
+      "planned_candidate_shape": {
+        "non_duplicate_row_count": 0,
+        "main_row_count": 17905960,
+        "quarantine_row_count": 403667,
+        "dropped_exact_duplicate_row_count": 29567163,
+        "business_conflict_groups_without_main_row": 0
+      },
+      "recommended_write_mode": "metadata-only resolved candidate planning",
+      "readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "decision_required": [
+        "approve exact-copy dedup drop policy",
+        "approve source_run_id precedence for metadata-only groups"
+      ],
+      "recommended_sort_key": [
+        "business columns equality check first",
+        "source_run_id precedence when approved",
+        "_source_file ASC",
+        "_source_row_number ASC"
+      ],
+      "sample_duplicate_groups": [
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2024-01-02"
+          },
+          "row_count": 4,
+          "group_class": "metadata_only",
+          "source_run_ids": [
+            "cr010-main-smoke-20260522T161025-prices-adj",
+            "run-cr014-s14-prices-adj-factor-2024-001432"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2024-01-03"
+          },
+          "row_count": 4,
+          "group_class": "metadata_only",
+          "source_run_ids": [
+            "cr010-main-smoke-20260522T161025-prices-adj",
+            "run-cr014-s14-prices-adj-factor-2024-001432"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2024-01-04"
+          },
+          "row_count": 4,
+          "group_class": "metadata_only",
+          "source_run_ids": [
+            "cr010-main-smoke-20260522T161025-prices-adj",
+            "run-cr014-s14-prices-adj-factor-2024-001432"
+          ]
+        }
+      ]
+    },
+    {
+      "dataset": "prices",
+      "canonical_root": "/home/hyde/data/quant-lab/data-lake/canonical/prices/1.0",
+      "parquet_file_count": 5887,
+      "source_row_count": 45660430,
+      "primary_key": [
+        "symbol",
+        "trade_date"
+      ],
+      "columns_present": [
+        "trade_date",
+        "symbol",
+        "open",
+        "high",
+        "low",
+        "close",
+        "adj_factor",
+        "adjusted_open",
+        "adjusted_high",
+        "adjusted_low",
+        "adjusted_close",
+        "adjustment_policy",
+        "source",
+        "source_interface",
+        "source_run_id",
+        "schema_version",
+        "available_at",
+        "lineage_raw_checksum",
+        "available_at_rule",
+        "volume",
+        "amount"
+      ],
+      "business_columns": [
+        "open",
+        "high",
+        "low",
+        "close",
+        "adj_factor",
+        "adjusted_open",
+        "adjusted_high",
+        "adjusted_low",
+        "adjusted_close",
+        "adjustment_policy",
+        "volume",
+        "amount"
+      ],
+      "metadata_columns": [
+        "source",
+        "source_interface",
+        "source_run_id",
+        "schema_version",
+        "available_at",
+        "lineage_raw_checksum",
+        "available_at_rule"
+      ],
+      "schema_variant_count": 4,
+      "schema_normalization_required": true,
+      "top_source_run_ids": [
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2024-001432",
+          "row_count": 3881676
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2025-001949",
+          "row_count": 3871393
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2023-000913",
+          "row_count": 3776202
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2022-000336",
+          "row_count": 3537216
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2021-235843",
+          "row_count": 3256335
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2020-235353",
+          "row_count": 2892393
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2019-234833",
+          "row_count": 2682531
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2018-234359",
+          "row_count": 2473605
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2017-233927",
+          "row_count": 2263116
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2016-233430",
+          "row_count": 1958592
+        }
+      ],
+      "duplicate_rows_top_source_run_ids": [
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2024-001432",
+          "duplicate_row_count": 3881676
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2025-001949",
+          "duplicate_row_count": 3871393
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2023-000913",
+          "duplicate_row_count": 3776202
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2022-000336",
+          "duplicate_row_count": 3537216
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2021-235843",
+          "duplicate_row_count": 3256335
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2020-235353",
+          "duplicate_row_count": 2892393
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2019-234833",
+          "duplicate_row_count": 2682531
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2018-234359",
+          "duplicate_row_count": 2473605
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2017-233927",
+          "duplicate_row_count": 2263116
+        },
+        {
+          "source_run_id": "run-cr014-s14-prices-adj-factor-2016-233430",
+          "duplicate_row_count": 1958592
+        }
+      ],
+      "duplicate_key_group_count": 17093658,
+      "duplicate_rows_in_groups": 45660430,
+      "duplicate_row_over_unique_count": 28566772,
+      "split_buckets": {
+        "exact_copy": {
+          "group_count": 17011870,
+          "row_count": 45255142,
+          "row_over_unique_count": 28243272
+        },
+        "metadata_only": {
+          "group_count": 1830,
+          "row_count": 5490,
+          "row_over_unique_count": 3660
+        },
+        "business_conflict": {
+          "group_count": 79958,
+          "row_count": 399798,
+          "row_over_unique_count": 319840
+        }
+      },
+      "source_run_id_set_top": [
+        {
+          "source_run_id_set": [
+            "cr006-momentum-symbols-realrun",
+            "run-cr014-s14-prices-adj-factor-2025-001949"
+          ],
+          "sample_duplicate_key_group_count": 6,
+          "note": "sample-limited source_run_id combination; full routing uses bucket counts, not this sample count"
+        }
+      ],
+      "planned_candidate_shape": {
+        "non_duplicate_row_count": 0,
+        "main_row_count": 17013700,
+        "quarantine_row_count": 403458,
+        "dropped_exact_duplicate_row_count": 28243272,
+        "business_conflict_groups_without_main_row": 79958
+      },
+      "recommended_write_mode": "split exact-dedup plus metadata resolution plus business-conflict quarantine planning",
+      "readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "decision_required": [
+        "approve exact-copy dedup drop policy",
+        "approve source_run_id precedence for metadata-only groups",
+        "approve full-group quarantine or semantic resolution for business-conflict groups",
+        "approve prices schema normalization policy before write"
+      ],
+      "recommended_sort_key": [
+        "business columns equality check first",
+        "source_run_id precedence when approved",
+        "_source_file ASC",
+        "_source_row_number ASC"
+      ],
+      "sample_duplicate_groups": [
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2025-01-02"
+          },
+          "row_count": 3,
+          "group_class": "business_conflict",
+          "source_run_ids": [
+            "cr006-momentum-symbols-realrun",
+            "run-cr014-s14-prices-adj-factor-2025-001949"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2025-01-03"
+          },
+          "row_count": 3,
+          "group_class": "business_conflict",
+          "source_run_ids": [
+            "cr006-momentum-symbols-realrun",
+            "run-cr014-s14-prices-adj-factor-2025-001949"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2025-01-06"
+          },
+          "row_count": 3,
+          "group_class": "business_conflict",
+          "source_run_ids": [
+            "cr006-momentum-symbols-realrun",
+            "run-cr014-s14-prices-adj-factor-2025-001949"
+          ]
+        }
+      ]
+    },
+    {
+      "dataset": "prices_limit",
+      "canonical_root": "/home/hyde/data/quant-lab/data-lake/canonical/prices_limit/1.0",
+      "parquet_file_count": 66,
+      "source_row_count": 60172542,
+      "primary_key": [
+        "symbol",
+        "trade_date"
+      ],
+      "columns_present": [
+        "trade_date",
+        "symbol",
+        "limit_up",
+        "limit_down",
+        "source",
+        "source_interface",
+        "source_run_id",
+        "available_at",
+        "available_at_rule",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "business_columns": [
+        "limit_up",
+        "limit_down"
+      ],
+      "metadata_columns": [
+        "source",
+        "source_interface",
+        "source_run_id",
+        "available_at",
+        "available_at_rule",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "schema_variant_count": 1,
+      "schema_normalization_required": false,
+      "top_source_run_ids": [
+        {
+          "source_run_id": "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529",
+          "row_count": 40685058
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-2000-2019",
+          "row_count": 14860428
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-w3-2000-2014",
+          "row_count": 4094615
+        },
+        {
+          "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+          "row_count": 290692
+        },
+        {
+          "source_run_id": "cr010-tushare-only-window-20250211-20260218-prices-limit",
+          "row_count": 156304
+        },
+        {
+          "source_run_id": "cr010-prod-window-20250211-20260218-prices-limit-jqdata",
+          "row_count": 75644
+        },
+        {
+          "source_run_id": "cr012-limited-window-fetch-20260524T152331Z",
+          "row_count": 6842
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-smoke-000001",
+          "row_count": 1830
+        },
+        {
+          "source_run_id": "run-cr018-price-limit-lifecycle-cleanup-20150101-20260528-20260529",
+          "row_count": 1129
+        }
+      ],
+      "duplicate_rows_top_source_run_ids": [
+        {
+          "source_run_id": "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529",
+          "duplicate_row_count": 40685058
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-2000-2019",
+          "duplicate_row_count": 14860428
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-w3-2000-2014",
+          "duplicate_row_count": 4094615
+        },
+        {
+          "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+          "duplicate_row_count": 290692
+        },
+        {
+          "source_run_id": "cr010-tushare-only-window-20250211-20260218-prices-limit",
+          "duplicate_row_count": 156304
+        },
+        {
+          "source_run_id": "cr010-prod-window-20250211-20260218-prices-limit-jqdata",
+          "duplicate_row_count": 75644
+        },
+        {
+          "source_run_id": "cr012-limited-window-fetch-20260524T152331Z",
+          "duplicate_row_count": 6842
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-smoke-000001",
+          "duplicate_row_count": 1830
+        },
+        {
+          "source_run_id": "run-cr018-price-limit-lifecycle-cleanup-20150101-20260528-20260529",
+          "duplicate_row_count": 1129
+        }
+      ],
+      "duplicate_key_group_count": 19709804,
+      "duplicate_rows_in_groups": 60172542,
+      "duplicate_row_over_unique_count": 40462738,
+      "split_buckets": {
+        "exact_copy": {
+          "group_count": 12264009,
+          "row_count": 34438597,
+          "row_over_unique_count": 22174588
+        },
+        "metadata_only": {
+          "group_count": 6946008,
+          "row_count": 24472849,
+          "row_over_unique_count": 17526841
+        },
+        "business_conflict": {
+          "group_count": 499787,
+          "row_count": 1261096,
+          "row_over_unique_count": 761309
+        }
+      },
+      "source_run_id_set_top": [
+        {
+          "source_run_id_set": [
+            "cr010-prod-window-20250211-20260218-prices-limit-jqdata",
+            "cr010-tushare-only-window-20250211-20260218-prices-limit",
+            "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529"
+          ],
+          "sample_duplicate_key_group_count": 6,
+          "note": "sample-limited source_run_id combination; full routing uses bucket counts, not this sample count"
+        }
+      ],
+      "planned_candidate_shape": {
+        "non_duplicate_row_count": 0,
+        "main_row_count": 19210017,
+        "quarantine_row_count": 18787937,
+        "dropped_exact_duplicate_row_count": 22174588,
+        "business_conflict_groups_without_main_row": 499787
+      },
+      "recommended_write_mode": "split exact-dedup plus metadata resolution plus business-conflict quarantine planning",
+      "readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "decision_required": [
+        "approve exact-copy dedup drop policy",
+        "approve source_run_id precedence for metadata-only groups",
+        "approve full-group quarantine or semantic resolution for business-conflict groups"
+      ],
+      "recommended_sort_key": [
+        "business columns equality check first",
+        "source_run_id precedence when approved",
+        "_source_file ASC",
+        "_source_row_number ASC"
+      ],
+      "sample_duplicate_groups": [
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2025-02-11"
+          },
+          "row_count": 6,
+          "group_class": "metadata_only",
+          "source_run_ids": [
+            "cr010-prod-window-20250211-20260218-prices-limit-jqdata",
+            "cr010-tushare-only-window-20250211-20260218-prices-limit",
+            "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000002.SZ",
+            "trade_date": "2025-02-11"
+          },
+          "row_count": 6,
+          "group_class": "metadata_only",
+          "source_run_ids": [
+            "cr010-prod-window-20250211-20260218-prices-limit-jqdata",
+            "cr010-tushare-only-window-20250211-20260218-prices-limit",
+            "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000063.SZ",
+            "trade_date": "2025-02-11"
+          },
+          "row_count": 6,
+          "group_class": "metadata_only",
+          "source_run_ids": [
+            "cr010-prod-window-20250211-20260218-prices-limit-jqdata",
+            "cr010-tushare-only-window-20250211-20260218-prices-limit",
+            "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529"
+          ]
+        }
+      ]
+    },
+    {
+      "dataset": "events",
+      "canonical_root": "/home/hyde/data/quant-lab/data-lake/canonical/events/1.0",
+      "parquet_file_count": 9,
+      "source_row_count": 713640,
+      "primary_key": [
+        "symbol",
+        "event_type",
+        "event_date",
+        "available_at"
+      ],
+      "columns_present": [
+        "symbol",
+        "event_type",
+        "event_date",
+        "available_at",
+        "available_at_rule",
+        "payload",
+        "source",
+        "source_interface",
+        "source_run_id",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "business_columns": [
+        "payload"
+      ],
+      "metadata_columns": [
+        "available_at_rule",
+        "source",
+        "source_interface",
+        "source_run_id",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "schema_variant_count": 1,
+      "schema_normalization_required": false,
+      "top_source_run_ids": [
+        {
+          "source_run_id": "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529",
+          "row_count": 646625
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-2000-2019",
+          "row_count": 47618
+        },
+        {
+          "source_run_id": "run-stage3-data-update-20260530-20260626-trade-status-20260627",
+          "row_count": 8811
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-smoke-000001",
+          "row_count": 6179
+        },
+        {
+          "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+          "row_count": 4407
+        }
+      ],
+      "duplicate_rows_top_source_run_ids": [
+        {
+          "source_run_id": "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529",
+          "duplicate_row_count": 646625
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-2000-2019",
+          "duplicate_row_count": 47618
+        },
+        {
+          "source_run_id": "run-stage3-data-update-20260530-20260626-trade-status-20260627",
+          "duplicate_row_count": 8811
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-smoke-000001",
+          "duplicate_row_count": 6179
+        },
+        {
+          "source_run_id": "run-stage3-data-update-20260530-20260626-aux-20260627",
+          "duplicate_row_count": 4407
+        }
+      ],
+      "duplicate_key_group_count": 351527,
+      "duplicate_rows_in_groups": 713640,
+      "duplicate_row_over_unique_count": 362113,
+      "split_buckets": {
+        "exact_copy": {
+          "group_count": 340170,
+          "row_count": 680340,
+          "row_over_unique_count": 340170
+        },
+        "metadata_only": {
+          "group_count": 10583,
+          "row_count": 31749,
+          "row_over_unique_count": 21166
+        },
+        "business_conflict": {
+          "group_count": 774,
+          "row_count": 1551,
+          "row_over_unique_count": 777
+        }
+      },
+      "source_run_id_set_top": [
+        {
+          "source_run_id_set": [
+            "run-cr034-chapter3-constraints-2000-2019",
+            "run-cr034-chapter3-constraints-smoke-000001"
+          ],
+          "sample_duplicate_key_group_count": 6,
+          "note": "sample-limited source_run_id combination; full routing uses bucket counts, not this sample count"
+        }
+      ],
+      "planned_candidate_shape": {
+        "non_duplicate_row_count": 0,
+        "main_row_count": 350753,
+        "quarantine_row_count": 22717,
+        "dropped_exact_duplicate_row_count": 340170,
+        "business_conflict_groups_without_main_row": 774
+      },
+      "recommended_write_mode": "primary-key-conflict quarantine planning",
+      "readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "decision_required": [
+        "approve exact-copy dedup drop policy",
+        "approve source_run_id precedence for metadata-only groups",
+        "approve full-group quarantine or semantic resolution for business-conflict groups"
+      ],
+      "recommended_sort_key": [
+        "business columns equality check first",
+        "source_run_id precedence when approved",
+        "_source_file ASC",
+        "_source_row_number ASC"
+      ],
+      "sample_duplicate_groups": [
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "event_type": "list",
+            "event_date": "1991-04-03",
+            "available_at": "1991-04-03T09:20:00+08:00"
+          },
+          "row_count": 3,
+          "group_class": "metadata_only",
+          "source_run_ids": [
+            "run-cr034-chapter3-constraints-2000-2019",
+            "run-cr034-chapter3-constraints-smoke-000001"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "event_type": "name_change",
+            "event_date": "1991-04-03",
+            "available_at": "1991-04-03T09:20:00+08:00"
+          },
+          "row_count": 3,
+          "group_class": "metadata_only",
+          "source_run_ids": [
+            "run-cr034-chapter3-constraints-2000-2019",
+            "run-cr034-chapter3-constraints-smoke-000001"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "event_type": "name_change",
+            "event_date": "2006-10-09",
+            "available_at": "2006-10-09T09:20:00+08:00"
+          },
+          "row_count": 3,
+          "group_class": "metadata_only",
+          "source_run_ids": [
+            "run-cr034-chapter3-constraints-2000-2019",
+            "run-cr034-chapter3-constraints-smoke-000001"
+          ]
+        }
+      ]
+    },
+    {
+      "dataset": "trade_status",
+      "canonical_root": "/home/hyde/data/quant-lab/data-lake/canonical/trade_status/1.0",
+      "parquet_file_count": 45,
+      "source_row_count": 35527310,
+      "primary_key": [
+        "symbol",
+        "trade_date"
+      ],
+      "columns_present": [
+        "trade_date",
+        "symbol",
+        "is_tradable",
+        "is_suspended",
+        "is_st",
+        "status_reason",
+        "source",
+        "source_interface",
+        "source_run_id",
+        "available_at",
+        "available_at_rule",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "business_columns": [
+        "is_tradable",
+        "is_suspended",
+        "is_st",
+        "status_reason"
+      ],
+      "metadata_columns": [
+        "source",
+        "source_interface",
+        "source_run_id",
+        "available_at",
+        "available_at_rule",
+        "schema_version",
+        "lineage_raw_checksum"
+      ],
+      "schema_variant_count": 1,
+      "schema_normalization_required": false,
+      "top_source_run_ids": [
+        {
+          "source_run_id": "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529",
+          "row_count": 18930717
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-2000-2019",
+          "row_count": 16119822
+        },
+        {
+          "source_run_id": "run-stage3-data-update-20260530-20260626-trade-status-20260627",
+          "row_count": 209424
+        },
+        {
+          "source_run_id": "cr010-tushare-only-window-20250211-20260218-trade-status",
+          "row_count": 156464
+        },
+        {
+          "source_run_id": "cr010-prod-window-20250211-20260218-trade-status-jqdata",
+          "row_count": 75659
+        },
+        {
+          "source_run_id": "run-cr014-s13-trade-status-missing-2026-ytd-231252",
+          "row_count": 26532
+        },
+        {
+          "source_run_id": "cr012-limited-window-fetch-20260524T152331Z",
+          "row_count": 6842
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-smoke-000001",
+          "row_count": 1850
+        }
+      ],
+      "duplicate_rows_top_source_run_ids": [
+        {
+          "source_run_id": "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529",
+          "duplicate_row_count": 18930717
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-2000-2019",
+          "duplicate_row_count": 16119822
+        },
+        {
+          "source_run_id": "run-stage3-data-update-20260530-20260626-trade-status-20260627",
+          "duplicate_row_count": 209424
+        },
+        {
+          "source_run_id": "cr010-tushare-only-window-20250211-20260218-trade-status",
+          "duplicate_row_count": 156464
+        },
+        {
+          "source_run_id": "cr010-prod-window-20250211-20260218-trade-status-jqdata",
+          "duplicate_row_count": 75659
+        },
+        {
+          "source_run_id": "run-cr014-s13-trade-status-missing-2026-ytd-231252",
+          "duplicate_row_count": 26532
+        },
+        {
+          "source_run_id": "cr012-limited-window-fetch-20260524T152331Z",
+          "duplicate_row_count": 6842
+        },
+        {
+          "source_run_id": "run-cr034-chapter3-constraints-smoke-000001",
+          "duplicate_row_count": 1850
+        }
+      ],
+      "duplicate_key_group_count": 17649508,
+      "duplicate_rows_in_groups": 35527310,
+      "duplicate_row_over_unique_count": 17877802,
+      "split_buckets": {
+        "exact_copy": {
+          "group_count": 13887316,
+          "row_count": 27774632,
+          "row_over_unique_count": 13887316
+        },
+        "metadata_only": {
+          "group_count": 70087,
+          "row_count": 210599,
+          "row_over_unique_count": 140512
+        },
+        "business_conflict": {
+          "group_count": 3692105,
+          "row_count": 7542079,
+          "row_over_unique_count": 3849974
+        }
+      },
+      "source_run_id_set_top": [
+        {
+          "source_run_id_set": [
+            "cr010-prod-window-20250211-20260218-trade-status-jqdata",
+            "cr010-tushare-only-window-20250211-20260218-trade-status",
+            "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529"
+          ],
+          "sample_duplicate_key_group_count": 6,
+          "note": "sample-limited source_run_id combination; full routing uses bucket counts, not this sample count"
+        }
+      ],
+      "planned_candidate_shape": {
+        "non_duplicate_row_count": 0,
+        "main_row_count": 13957403,
+        "quarantine_row_count": 7682591,
+        "dropped_exact_duplicate_row_count": 13887316,
+        "business_conflict_groups_without_main_row": 3692105
+      },
+      "recommended_write_mode": "split exact-dedup plus metadata resolution plus business-conflict quarantine planning",
+      "readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "decision_required": [
+        "approve exact-copy dedup drop policy",
+        "approve source_run_id precedence for metadata-only groups",
+        "approve full-group quarantine or semantic resolution for business-conflict groups"
+      ],
+      "recommended_sort_key": [
+        "business columns equality check first",
+        "source_run_id precedence when approved",
+        "_source_file ASC",
+        "_source_row_number ASC"
+      ],
+      "sample_duplicate_groups": [
+        {
+          "key": {
+            "symbol": "000001.SZ",
+            "trade_date": "2025-02-11"
+          },
+          "row_count": 4,
+          "group_class": "business_conflict",
+          "source_run_ids": [
+            "cr010-prod-window-20250211-20260218-trade-status-jqdata",
+            "cr010-tushare-only-window-20250211-20260218-trade-status",
+            "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000002.SZ",
+            "trade_date": "2025-02-11"
+          },
+          "row_count": 4,
+          "group_class": "business_conflict",
+          "source_run_ids": [
+            "cr010-prod-window-20250211-20260218-trade-status-jqdata",
+            "cr010-tushare-only-window-20250211-20260218-trade-status",
+            "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529"
+          ]
+        },
+        {
+          "key": {
+            "symbol": "000063.SZ",
+            "trade_date": "2025-02-11"
+          },
+          "row_count": 4,
+          "group_class": "business_conflict",
+          "source_run_ids": [
+            "cr010-prod-window-20250211-20260218-trade-status-jqdata",
+            "cr010-tushare-only-window-20250211-20260218-trade-status",
+            "run-cr018-missing-data-backfill-20150101-20260528-p0p1-20260529"
+          ]
+        }
+      ]
+    }
+  ],
+  "non_authorized_scope": [
+    "lake write",
+    "candidate object delete",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "legacy deletion",
+    "rollback"
+  ],
+  "next_gate": "review split planning; authorize one or more explicit per-dataset candidate writes only after decisions are accepted"
+}

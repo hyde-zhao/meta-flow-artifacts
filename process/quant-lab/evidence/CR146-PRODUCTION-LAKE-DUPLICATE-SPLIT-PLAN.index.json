@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "workflow_id": "data-lake-production-governance",
+  "gate": "duplicate-resolution-planning",
+  "stage": "read_only_split_planning",
+  "created_at": "2026-07-01T08:26:34+08:00",
+  "status": "pass_with_risk_split_planning_complete_write_decisions_required",
+  "mode": "read_only_split_planning_no_lake_write",
+  "authorized_scope": "read-only duplicate split planning; no lake write",
+  "datasets": [
+    "adj_factor",
+    "prices",
+    "prices_limit",
+    "events",
+    "trade_status"
+  ],
+  "totals": {
+    "dataset_count": 5,
+    "source_row_count": 189950712,
+    "duplicate_key_group_count": 72710457,
+    "duplicate_rows_in_groups": 189950712,
+    "duplicate_row_over_unique_count": 117240255,
+    "exact_copy_group_count": 61327473,
+    "metadata_only_group_count": 7110360,
+    "business_conflict_group_count": 4272624,
+    "planned_main_row_count_if_recommended_actions_approved": 68437833,
+    "planned_quarantine_row_count_if_recommended_actions_approved": 27300370,
+    "planned_dropped_exact_duplicate_row_count": 94212509
+  },
+  "dataset_summary": [
+    {
+      "dataset": "adj_factor",
+      "source_row_count": 47876790,
+      "duplicate_key_group_count": 17905960,
+      "exact_copy_groups": 17824108,
+      "metadata_only_groups": 81852,
+      "business_conflict_groups": 0,
+      "recommended_write_mode": "metadata-only resolved candidate planning",
+      "readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "decision_required": [
+        "approve exact-copy dedup drop policy",
+        "approve source_run_id precedence for metadata-only groups"
+      ],
+      "schema_normalization_required": false
+    },
+    {
+      "dataset": "prices",
+      "source_row_count": 45660430,
+      "duplicate_key_group_count": 17093658,
+      "exact_copy_groups": 17011870,
+      "metadata_only_groups": 1830,
+      "business_conflict_groups": 79958,
+      "recommended_write_mode": "split exact-dedup plus metadata resolution plus business-conflict quarantine planning",
+      "readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "decision_required": [
+        "approve exact-copy dedup drop policy",
+        "approve source_run_id precedence for metadata-only groups",
+        "approve full-group quarantine or semantic resolution for business-conflict groups",
+        "approve prices schema normalization policy before write"
+      ],
+      "schema_normalization_required": true
+    },
+    {
+      "dataset": "prices_limit",
+      "source_row_count": 60172542,
+      "duplicate_key_group_count": 19709804,
+      "exact_copy_groups": 12264009,
+      "metadata_only_groups": 6946008,
+      "business_conflict_groups": 499787,
+      "recommended_write_mode": "split exact-dedup plus metadata resolution plus business-conflict quarantine planning",
+      "readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "decision_required": [
+        "approve exact-copy dedup drop policy",
+        "approve source_run_id precedence for metadata-only groups",
+        "approve full-group quarantine or semantic resolution for business-conflict groups"
+      ],
+      "schema_normalization_required": false
+    },
+    {
+      "dataset": "events",
+      "source_row_count": 713640,
+      "duplicate_key_group_count": 351527,
+      "exact_copy_groups": 340170,
+      "metadata_only_groups": 10583,
+      "business_conflict_groups": 774,
+      "recommended_write_mode": "primary-key-conflict quarantine planning",
+      "readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "decision_required": [
+        "approve exact-copy dedup drop policy",
+        "approve source_run_id precedence for metadata-only groups",
+        "approve full-group quarantine or semantic resolution for business-conflict groups"
+      ],
+      "schema_normalization_required": false
+    },
+    {
+      "dataset": "trade_status",
+      "source_row_count": 35527310,
+      "duplicate_key_group_count": 17649508,
+      "exact_copy_groups": 13887316,
+      "metadata_only_groups": 70087,
+      "business_conflict_groups": 3692105,
+      "recommended_write_mode": "split exact-dedup plus metadata resolution plus business-conflict quarantine planning",
+      "readiness_verdict": "blocked_until_dataset_write_decisions_approved",
+      "decision_required": [
+        "approve exact-copy dedup drop policy",
+        "approve source_run_id precedence for metadata-only groups",
+        "approve full-group quarantine or semantic resolution for business-conflict groups"
+      ],
+      "schema_normalization_required": false
+    }
+  ],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "lake_write": 0,
+    "catalog_write": 0,
+    "current_pointer_publish": 0,
+    "physical_partition_migration": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "runtime_operation": 0,
+    "git_remote_write": 0
+  },
+  "evidence_refs": {
+    "detail": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/evidence/CR146-PRODUCTION-LAKE-DUPLICATE-SPLIT-PLAN-2026-07-01.json",
+    "index": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/evidence/CR146-PRODUCTION-LAKE-DUPLICATE-SPLIT-PLAN.index.json"
+  },
+  "non_authorized_scope": [
+    "lake write",
+    "candidate object delete",
+    "catalog write",
+    "provider catalog write",
+    "provider-lake-catalog write",
+    "published pointer advance",
+    "physical partition migration",
+    "credential read",
+    "NAS operation",
+    "runtime operation",
+    "QMT/MiniQMT/gateway runtime",
+    "trading/small_live/live",
+    "Git remote write",
+    "legacy deletion",
+    "rollback"
+  ]
+}

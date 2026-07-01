@@ -1,10 +1,11 @@
 ---
 id: "CR-144"
 title: "Experiment Real Lake Remediation"
-status: "ready-for-final-validation"
+status: "closed-current-delivery"
 kind: "requirement-change"
-lifecycle_status: "active"
-readiness_status: "ready_with_risk"
+lifecycle_status: "closed"
+readiness_status: "ready"
+gate_status: "closed"
 gate_profile: "compact"
 created_at: "2026-06-30T23:00:00+08:00"
 created_by: "host-orchestrator"
@@ -17,6 +18,10 @@ not_authorized:
 ---
 
 # CR-144: Experiment Real Lake Remediation
+
+## 状态收敛记录（2026-06-30）
+
+CR144 已通过 `process/checks/CR144-EXPERIMENT-REAL-LAKE-REMEDIATION-VALIDATION-2026-06-30.md` 验证并收敛为 `closed-current-delivery`。本次状态修复只更新 CR 跟踪元数据，不执行 lake、catalog、pointer、NAS、provider、runtime、trading、credential 或 Git remote 操作。
 
 ## 背景
 

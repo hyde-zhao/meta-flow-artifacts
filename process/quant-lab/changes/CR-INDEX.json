@@ -2,6 +2,136 @@
   "generated_at": "2026-06-24T04:36:00+00:00",
   "items": [
     {
+      "id": "CR-146",
+      "title": "CR139 Post-Close Lake Completion",
+      "status": "active",
+      "kind": "runtime-authorization",
+      "lifecycle_status": "active",
+      "readiness_status": "ready_with_risk",
+      "gate_status": "cp2_pending",
+      "gate_profile": "compact",
+      "source_tracking": "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md#RA-CR139-001",
+      "formal_cr_path": "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md",
+      "parent_cr": "CR-139",
+      "source_decision_id": "USER-20260630-CR139-LAKE-RW-AUTH",
+      "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
+      "priority": 1,
+      "blocked_by": [],
+      "impact_surface": [
+        "process/evidence/CR146-*",
+        "process/checks/CR146-*",
+        "market_data real lake read paths",
+        "real lake candidate/canonical/quality writes when low-risk"
+      ],
+      "conflict_keys": [
+        "cr139-post-close-lake-completion",
+        "real-lake-runtime-validation",
+        "catalog-pointer-current-truth",
+        "business-conflict-gate"
+      ],
+      "authz_policy_refs": [
+        "LAKE_READ_AUTHORIZED",
+        "LAKE_WRITE_AUTHORIZED_WITH_ROLLBACK_EVIDENCE",
+        "NO_PROVIDER_FETCH",
+        "NO_NAS_SYNC",
+        "NO_CREDENTIAL_READ",
+        "NO_QMT_RUNTIME",
+        "NO_TRADING",
+        "NO_GIT_REMOTE_WRITE",
+        "HUMAN_GATE_FOR_PHYSICAL_MIGRATION_DELETE_BUSINESS_CONFLICT"
+      ],
+      "next_gate": "CP2 high-risk human gate",
+      "next_action": "Await user decision on CP2-CR146-HIGH-RISK-LAKE-ACTIONS; recommended approve closes CR146 validation delivery with high-risk items deferred.",
+      "last_checked_at": "2026-06-30T23:59:00+08:00"
+    },
+    {
+      "id": "RA-CR139-001",
+      "title": "CR139 post-close real lake runtime validation",
+      "status": "active",
+      "kind": "runtime-authorization",
+      "lifecycle_status": "active",
+      "readiness_status": "ready_with_risk",
+      "gate_status": "cp2_pending",
+      "gate_profile": "compact",
+      "source_tracking": "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md#RA-CR139-001",
+      "formal_cr_path": "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md",
+      "parent_cr": "CR-139",
+      "source_decision_id": "USER-20260630-CR139-LAKE-RW-AUTH",
+      "blocked_by": [],
+      "next_action": "Runtime validation evidence is complete; await high-risk human gate decision for residual migration/delete/business-conflict actions."
+    },
+    {
+      "id": "FU-CR139-001",
+      "title": "GateB Batch2 remaining business-conflict datasets",
+      "status": "candidate",
+      "kind": "runtime-authorization",
+      "lifecycle_status": "candidate",
+      "readiness_status": "not_ready",
+      "gate_status": "cp2_pending",
+      "gate_profile": "standard",
+      "source_tracking": "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR139-001",
+      "formal_cr_path": "",
+      "parent_cr": "CR-139",
+      "source_decision_id": "GATEB-BATCH2",
+      "blocked_by": [
+        "requires_per_dataset_human_gate_for_business_conflict_policy"
+      ],
+      "next_action": "Prepare dataset-specific decision brief before semantic selection or conflict-heavy write."
+    },
+    {
+      "id": "FU-CR139-002",
+      "title": "N1 physical partition migration",
+      "status": "active",
+      "kind": "requirement-change",
+      "lifecycle_status": "active",
+      "readiness_status": "ready_with_risk",
+      "gate_status": "cp2_pending",
+      "gate_profile": "standard",
+      "source_tracking": "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR139-002",
+      "formal_cr_path": "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md",
+      "related_active_cr": "CR-146",
+      "parent_cr": "CR-139",
+      "source_decision_id": "S08-S30-N1",
+      "blocked_by": [
+        "awaiting_cp2_human_approval_for_n1_execution"
+      ],
+      "next_action": "CR-146 has prepared N1 plan/dry-run/post-copy verify/rollback evidence; execute only after CP2-CR146-PRODUCTION-LAKE-N1-MIGRATION approval."
+    },
+    {
+      "id": "FU-CR139-003",
+      "title": "N2 run-id naming governance",
+      "status": "candidate",
+      "kind": "requirement-change",
+      "lifecycle_status": "candidate",
+      "readiness_status": "n/a",
+      "gate_status": "not_started",
+      "gate_profile": "compact",
+      "source_tracking": "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR139-003",
+      "formal_cr_path": "",
+      "parent_cr": "CR-139",
+      "source_decision_id": "S07-S30-N2",
+      "blocked_by": [],
+      "next_action": "Keep as non-blocking governance candidate; do not rename historical paths."
+    },
+    {
+      "id": "RA-CR139-002",
+      "title": "Provider catalog / NAS / legacy archive-delete operations",
+      "status": "candidate",
+      "kind": "runtime-authorization",
+      "lifecycle_status": "candidate",
+      "readiness_status": "not_ready",
+      "gate_status": "cp2_pending",
+      "gate_profile": "runtime",
+      "source_tracking": "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md#RA-CR139-002",
+      "formal_cr_path": "",
+      "parent_cr": "CR-139",
+      "source_decision_id": "CP8-NOT-AUTHORIZED",
+      "blocked_by": [
+        "provider_nas_delete_not_authorized"
+      ],
+      "next_action": "Start only when user explicitly authorizes provider/NAS/delete scope."
+    },
+    {
       "id": "CR-143",
       "title": "Experiment Offline Hardening and Handoff",
       "status": "closed-current-delivery",
@@ -49,6 +179,87 @@
       "next_gate": "closed",
       "next_action": "CR143 closed-current-delivery / READY. E2 and E3 non-lake experiment remediation complete; E4 real lake readonly validation remains separately authorized future work.",
       "last_checked_at": "2026-06-30T21:45:00+08:00"
+    },
+    {
+      "id": "CR-144",
+      "title": "Experiment Real Lake Remediation",
+      "status": "closed-current-delivery",
+      "kind": "requirement-change",
+      "lifecycle_status": "closed",
+      "readiness_status": "ready",
+      "gate_status": "closed",
+      "gate_profile": "compact",
+      "source_tracking": "USER-20260630-EXPERIMENT-REAL-LAKE-REMEDIATION",
+      "formal_cr_path": "process/changes/CR-144-EXPERIMENT-REAL-LAKE-REMEDIATION-2026-06-30.md",
+      "parent_cr": "CR-143",
+      "source_decision_id": "USER-20260630-EXPERIMENT-REAL-LAKE-REMEDIATION",
+      "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
+      "priority": 1,
+      "blocked_by": [],
+      "impact_surface": [
+        "experiments/run_experiment_15_factor_framework.py",
+        "experiments/run_experiment_16_momentum_factor.py",
+        "experiments/run_experiment_17_21_factor_suite.py",
+        "experiments/run_experiment_23_29_ml_factor_suite.py",
+        "market_data/readers.py",
+        "engine/experiment_lake_input_contract.py",
+        "process/checks/CR144-EXPERIMENT-REAL-LAKE-REMEDIATION-VALIDATION-2026-06-30.md"
+      ],
+      "conflict_keys": [
+        "experiment-real-lake-remediation",
+        "cr139-ml-lake-input-contract",
+        "real-lake-read-validation"
+      ],
+      "authz_policy_refs": [
+        "NO_CREDENTIAL_READ",
+        "NO_QMT_RUNTIME",
+        "NO_TRADING",
+        "NO_SIMULATION_LIVE",
+        "NO_PROVIDER_FETCH_WITHOUT_EXPLICIT_COMMAND_BOUNDARY"
+      ],
+      "next_gate": "closed",
+      "next_action": "CR144 closed-current-delivery / READY. Bounded experiment real lake smoke passed; no canonical/quality/catalog/pointer write was needed.",
+      "last_checked_at": "2026-06-30T23:59:00+08:00"
+    },
+    {
+      "id": "CR-145",
+      "title": "Experiment and Test Naming Taxonomy Convergence",
+      "status": "closed-current-delivery",
+      "kind": "requirement-change",
+      "lifecycle_status": "closed",
+      "readiness_status": "ready",
+      "gate_status": "closed",
+      "gate_profile": "standard",
+      "source_tracking": "USER-20260630-EXPERIMENT-TEST-NAMING-TAXONOMY",
+      "formal_cr_path": "process/changes/CR-145-EXPERIMENT-TEST-NAMING-TAXONOMY-2026-06-30.md",
+      "parent_cr": "CR-144",
+      "source_decision_id": "USER-20260630-EXPERIMENT-TEST-NAMING-TAXONOMY",
+      "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
+      "priority": 1,
+      "blocked_by": [],
+      "impact_surface": [
+        "experiments/",
+        "tests/",
+        "tests/PROVENANCE.yaml",
+        "process/context/CR145-EXPERIMENT-TEST-RENAME-MAP.csv",
+        "process/context/CR145-TEST-MERGE-PLAN.csv",
+        "process/checks/CR145-FINAL-VALIDATION-2026-06-30.md"
+      ],
+      "conflict_keys": [
+        "experiment-entrypoint-taxonomy",
+        "test-file-taxonomy",
+        "cr139-data-lake-test-merge"
+      ],
+      "authz_policy_refs": [
+        "NO_REAL_LAKE_WRITE",
+        "NO_PROVIDER_FETCH",
+        "NO_CATALOG_POINTER_WRITE",
+        "NO_QMT_RUNTIME",
+        "NO_TRADING"
+      ],
+      "next_gate": "closed",
+      "next_action": "CR145 closed-current-delivery / READY. Final validation collected 1490 tests and full pytest passed.",
+      "last_checked_at": "2026-06-30T23:59:00+08:00"
     },
     {
       "id": "CR-142",
@@ -758,98 +969,51 @@
     }
   ],
   "schema_version": 1,
-  "updated_at": "2026-06-30T19:10:00+08:00",
+  "updated_at": "2026-06-30T23:59:00+08:00",
   "active_crs": [
     {
-      "id": "CR-142",
-      "title": "Remaining Experiments Engine Convergence",
-      "status": "closed-current-delivery",
-      "kind": "requirement-change",
-      "lifecycle_status": "closed",
-      "readiness_status": "ready",
-      "gate_status": "closed",
-      "gate_profile": "standard",
-      "source_tracking": "process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-002",
-      "formal_cr_path": "process/changes/CR-142-REMAINING-EXPERIMENTS-ENGINE-CONVERGENCE-2026-06-30.md",
-      "parent_cr": "CR-140",
-      "source_decision_id": "USER-20260630-CONTINUE-EXPERIMENT-REMEDIATION",
-      "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
-      "priority": 2,
-      "blocked_by": [],
-      "impact_surface": [
-        "experiments/run_experiment_17_21_factor_suite.py",
-        "experiments/run_experiment_23_29_ml_factor_suite.py",
-        "engine/factor_statistics.py",
-        "engine/factor_registry.py",
-        "engine/factor_calculators.py",
-        "engine/factor_library.py"
-      ],
-      "conflict_keys": [
-        "remaining-experiment-suite-convergence",
-        "engine-extension-contract",
-        "factor-statistics-adapter"
-      ],
-      "authz_policy_refs": [
-        "NO_CREDENTIAL_READ",
-        "NO_RUNTIME",
-        "NO_NAS",
-        "NO_TRADING",
-        "NO_PROVIDER_FETCH",
-        "NO_REAL_LAKE_LINK_OR_MOUNT",
-        "NO_LAKE_WRITE",
-        "NO_CATALOG_POINTER_WRITE",
-        "NO_REMOTE_WRITE"
-      ],
-      "next_gate": "closed",
-      "next_action": "CR142 closed-current-delivery / READY. Engine extension contract and safe 17_21/23_29 statistics convergence complete; final pytest 1479 passed.",
-      "last_checked_at": "2026-06-30T19:45:00+08:00"
-    },
-    {
-      "id": "CR-141",
-      "title": "Red Baseline Debt Triage and Closure",
-      "status": "closed-current-delivery",
-      "kind": "requirement-change",
-      "lifecycle_status": "closed",
-      "readiness_status": "ready",
-      "gate_status": "closed",
-      "gate_profile": "standard",
-      "source_tracking": "process/changes/CR-140-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR140-003",
-      "formal_cr_path": "process/changes/CR-141-RED-BASELINE-DEBT-TRIAGE-2026-06-30.md",
-      "parent_cr": "CR-140",
-      "source_decision_id": "USER-20260630-CONTINUE-EXPERIMENT-REMEDIATION",
+      "id": "CR-146",
+      "title": "CR139 Post-Close Lake Completion",
+      "status": "active",
+      "kind": "runtime-authorization",
+      "lifecycle_status": "active",
+      "readiness_status": "ready_with_risk",
+      "gate_status": "cp2_pending",
+      "gate_profile": "compact",
+      "source_tracking": "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md#RA-CR139-001",
+      "formal_cr_path": "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md",
+      "parent_cr": "CR-139",
+      "source_decision_id": "USER-20260630-CR139-LAKE-RW-AUTH",
       "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
       "priority": 1,
       "blocked_by": [],
       "impact_surface": [
-        "46_phase0_baseline_failures",
-        "tests/test_script_entrypoint_naming.py",
-        "tests/test_market_data_contracts.py",
-        "tests/test_experiment_17_21_factor_suite.py",
-        "tests/test_experiment_23_29_ml_factor_suite.py",
-        "CR139_debt",
-        "redesign_intermediate_debt"
+        "process/evidence/CR146-*",
+        "process/checks/CR146-*",
+        "market_data real lake read paths",
+        "real lake candidate/canonical/quality writes when low-risk"
       ],
       "conflict_keys": [
-        "red-baseline-debt",
-        "cr139-root-script-naming-debt",
-        "market-data-engine-import-boundary",
-        "remaining-experiment-suite-failures"
+        "cr139-post-close-lake-completion",
+        "real-lake-runtime-validation",
+        "catalog-pointer-current-truth",
+        "business-conflict-gate"
       ],
       "authz_policy_refs": [
-        "NO_CREDENTIAL_READ",
-        "NO_RUNTIME",
-        "NO_NAS",
-        "NO_TRADING",
+        "LAKE_READ_AUTHORIZED",
+        "LAKE_WRITE_AUTHORIZED_WITH_ROLLBACK_EVIDENCE",
         "NO_PROVIDER_FETCH",
-        "NO_REAL_LAKE_LINK_OR_MOUNT",
-        "NO_LAKE_WRITE",
-        "NO_CATALOG_POINTER_WRITE",
-        "NO_REMOTE_WRITE"
+        "NO_NAS_SYNC",
+        "NO_CREDENTIAL_READ",
+        "NO_QMT_RUNTIME",
+        "NO_TRADING",
+        "NO_GIT_REMOTE_WRITE",
+        "HUMAN_GATE_FOR_PHYSICAL_MIGRATION_DELETE_BUSINESS_CONFLICT"
       ],
-      "next_gate": "closed",
-      "next_action": "CR141 closed-current-delivery / READY. All 46 inherited baseline failures now pass; final pytest 1479 passed in 54.07s.",
-      "last_checked_at": "2026-06-30T19:10:00+08:00"
+      "next_gate": "CP2 high-risk human gate",
+      "next_action": "Await user decision on CP2-CR146-HIGH-RISK-LAKE-ACTIONS; recommended approve closes CR146 validation delivery with high-risk items deferred.",
+      "last_checked_at": "2026-06-30T23:59:00+08:00"
     }
   ],
-  "status": "closed-with-candidates"
+  "status": "active"
 }

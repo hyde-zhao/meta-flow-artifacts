@@ -1,0 +1,81 @@
+schema_version: 1
+context_id: CP2-CR146-HIGH-RISK-LAKE-ACTIONS-CONTEXT
+created_at: "2026-07-01T00:28:00+08:00"
+owner: host-orchestrator
+cr_id: CR-146
+parent_cr: CR-139
+checkpoint: CP2
+status: ready
+read_profile: compact
+purpose: >
+  Compact context capsule for CR146 high-risk lake action human gate after
+  CR139 post-close real lake runtime validation completed.
+default_read_policy: >
+  Read this capsule first. Expand to full CR, evidence, checkpoint, or Story
+  packets only for human audit, conflict investigation, missing fields, or user
+  requested deep review.
+must_read:
+  - process/checkpoints/CP2-CR146-HIGH-RISK-LAKE-ACTIONS.md
+  - process/checks/CP2-CR146.result.json
+  - process/checks/CR146-CR139-POST-CLOSE-LAKE-VALIDATION-2026-06-30.md
+  - process/checks/CR146-STABLE-SCRIPT-ENTRYPOINT-RERUN-2026-07-01.md
+  - process/evidence/CR146-CR139-FOLLOWUP-GAP-MATRIX-2026-06-30.json
+read_if_needed:
+  - process/evidence/CR146-REAL-LAKE-INVENTORY-2026-06-30.json
+  - process/evidence/CR146-GATEB-BATCH2-SPLIT-PLANNING.index.json
+  - process/evidence/CR146-READER-RUNTIME-SMOKE.index.json
+  - process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md
+do_not_read_by_default:
+  - process/returns/STORY-CR139-*.return.json
+  - process/context/stories/STORY-CR139-*.json
+  - process/stories/*-LLD.md
+  - process/STATE.md
+summary:
+  runtime_validation:
+    inventory: "17 datasets; physical_missing_count=0; about 141s; <=5min PASS"
+    golden_baseline: "17 datasets; snapshot_id=2738da501ed4f3ab361073742e46c3040765b4af6e573b5e9bce78bd0ec86f2b; about 163s; <=10min PASS"
+    reader_smoke: "PASS; elapsed_seconds=163.61"
+    duplicate_split_planning: "189,950,712 rows; business_conflict_group_count=4,272,624; write decisions gated"
+    stable_script_rerun: "duplicate profile and split planning rerun through scripts/data_lake/profile_duplicate_keys.py and scripts/data_lake/plan_duplicate_resolution.py"
+  completed_or_covered:
+    count: 12
+    examples:
+      - S01 real lake inventory
+      - S02 golden baseline
+      - S05 PIT reader runtime
+      - S06 panel reader runtime
+      - S22 runtime lineage
+  completed_with_risk:
+    count: 2
+    reason: "duplicate/read-scale evidence complete, but business-conflict semantic selection is high risk"
+  human_gate_required:
+    count: 1
+    item: "N1 physical partition migration"
+  candidate_non_blocking:
+    count: 1
+    item: "N2 run-id naming governance"
+decisions:
+  - id: DQ-CP2-CR146-01
+    type: risk_acceptance
+    recommendation: "Do not execute N1 physical partition migration."
+  - id: DQ-CP2-CR146-02
+    type: risk_acceptance
+    recommendation: "Do not perform business-conflict semantic selection; keep fail-closed/quarantine."
+  - id: DQ-CP2-CR146-03
+    type: runtime_authorization
+    recommendation: "Do not authorize provider/NAS/delete/archive actions."
+  - id: DQ-CP2-CR146-04
+    type: follow_up_tracking
+    recommendation: "Close CR146 validation delivery as READY_WITH_RISK and keep high-risk items in follow-up tracking."
+not_authorized:
+  - provider_fetch
+  - nas_sync
+  - qmt_miniqmt_xtquant_gateway_runtime
+  - simulation_live_or_trading
+  - credential_read
+  - git_remote_write
+  - physical_partition_migration
+  - legacy_delete_or_archive
+  - business_conflict_semantic_selection
+  - catalog_pointer_republish
+read_expansion_log: []

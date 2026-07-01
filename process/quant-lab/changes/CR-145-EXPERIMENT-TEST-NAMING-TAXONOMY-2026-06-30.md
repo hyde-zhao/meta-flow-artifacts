@@ -1,10 +1,11 @@
 ---
 id: "CR-145"
 title: "Experiment and Test Naming Taxonomy Convergence"
-status: "validated"
-kind: "refactor"
-lifecycle_status: "validated"
-readiness_status: "complete"
+status: "closed-current-delivery"
+kind: "requirement-change"
+lifecycle_status: "closed"
+readiness_status: "ready"
+gate_status: "closed"
 gate_profile: "standard"
 created_at: "2026-06-30T23:50:00+08:00"
 created_by: "host-orchestrator"
@@ -20,6 +21,10 @@ not_authorized:
 ---
 
 # CR-145 Experiment and Test Naming Taxonomy Convergence
+
+## 状态收敛记录（2026-06-30）
+
+CR145 已通过 `process/checks/CR145-FINAL-VALIDATION-2026-06-30.md` 验证并收敛为 `closed-current-delivery`。本次状态修复只更新 CR 跟踪元数据，不执行 source rename、lake、catalog、pointer、NAS、provider、runtime、trading、credential 或 Git remote 操作。
 
 ## Objective
 

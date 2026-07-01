@@ -1,0 +1,211 @@
+{
+  "schema_version": "cr146.gap_matrix.v1",
+  "cr_id": "CR-146",
+  "source_cr": "CR-139",
+  "created_at": "2026-07-01T00:04:10+0800",
+  "status": "pass_with_human_gates_required",
+  "summary": {
+    "completed_or_covered": 12,
+    "completed_with_risk": 2,
+    "human_gate_required": 1,
+    "candidate_non_blocking": 1
+  },
+  "items": [
+    {
+      "story": "S01",
+      "item": "真实 lake 清册扫描性能 <=5min 实测",
+      "status": "completed",
+      "decision": "covered_by_CR146",
+      "evidence": [
+        "process/evidence/CR146-REAL-LAKE-INVENTORY-2026-06-30.json"
+      ],
+      "result": {
+        "dataset_count": 17,
+        "physical_missing_count": 0,
+        "published_true_count": 17,
+        "observed_elapsed_seconds_approx": 141,
+        "threshold_seconds": 300
+      }
+    },
+    {
+      "story": "S02",
+      "item": "真实 lake 黄金值冻结性能 <=10min 实测",
+      "status": "completed",
+      "decision": "covered_by_CR146",
+      "evidence": [
+        "process/evidence/CR146-GOLDEN-BASELINE-2026-06-30/golden-baseline-snapshot.json"
+      ],
+      "result": {
+        "snapshot_id": "2738da501ed4f3ab361073742e46c3040765b4af6e573b5e9bce78bd0ec86f2b",
+        "dataset_count": 17,
+        "observed_elapsed_seconds_approx": 163,
+        "threshold_seconds": 600
+      }
+    },
+    {
+      "story": "S03",
+      "item": "真实 lake 38-run 重复画像实跑",
+      "status": "completed_with_risk",
+      "decision": "profile_complete_business_policy_gated",
+      "evidence": [
+        "process/evidence/CR146-GATEB-BATCH0-DUPLICATE-PROFILE-2026-06-30.json",
+        "process/evidence/CR146-GATEB-BATCH2-SPLIT-PLANNING.index.json"
+      ],
+      "result": {
+        "batch0_profiled_datasets": 7,
+        "batch2_source_row_count": 189950712,
+        "business_conflict_group_count": 4272624
+      }
+    },
+    {
+      "story": "S04",
+      "item": "published pointer 前移 / production catalog publish 执行",
+      "status": "covered_by_prior_gate",
+      "decision": "no_new_write_needed",
+      "evidence": [
+        "process/evidence/CR139-W2-GATED-POINTER-ADVANCE-EXECUTION.index.json",
+        "process/evidence/CR139-W2-GATED-POST-POINTER-SMOKE.index.json"
+      ],
+      "result": {
+        "inventory_published_true_count": 17
+      }
+    },
+    {
+      "story": "S05",
+      "item": "C1 PIT reader 真实 lake runtime 验证",
+      "status": "completed",
+      "decision": "covered_by_CR146",
+      "evidence": [
+        "process/evidence/CR146-READER-RUNTIME-SMOKE-2026-06-30.json"
+      ],
+      "result": {
+        "reader_status": "pass"
+      }
+    },
+    {
+      "story": "S06",
+      "item": "R1 panel reader 真实 lake runtime 验证",
+      "status": "completed",
+      "decision": "covered_by_CR146",
+      "evidence": [
+        "process/evidence/CR146-READER-RUNTIME-SMOKE-2026-06-30.json"
+      ],
+      "result": {
+        "reader_status": "pass"
+      }
+    },
+    {
+      "story": "S07",
+      "item": "读层去重真实 lake 规模验证",
+      "status": "completed_with_risk",
+      "decision": "read_validation_passes_write_policy_gated",
+      "evidence": [
+        "process/evidence/CR146-GATEB-BATCH0-DUPLICATE-PROFILE-2026-06-30.json",
+        "process/evidence/CR146-READER-RUNTIME-SMOKE-2026-06-30.json"
+      ],
+      "result": {
+        "duplicate_key_total": 151173880,
+        "reader_smoke_status": "pass"
+      }
+    },
+    {
+      "story": "S09",
+      "item": "真实 lake schema runtime 验证",
+      "status": "completed",
+      "decision": "covered_by_CR146_and_prior_gate",
+      "evidence": [
+        "process/evidence/CR146-REAL-LAKE-INVENTORY-2026-06-30.json",
+        "process/evidence/CR139-W3B-PUBLISH-GUARD-2026-06-30.json"
+      ]
+    },
+    {
+      "story": "S14",
+      "item": "append 写入 + pointer advance 执行",
+      "status": "covered_by_prior_gate",
+      "decision": "no_new_write_needed",
+      "evidence": [
+        "process/evidence/CR139-W2-GATED-POINTER-ADVANCE-EXECUTION.index.json",
+        "process/evidence/CR139-W2-GATED-POST-POINTER-SMOKE.index.json"
+      ]
+    },
+    {
+      "story": "S22",
+      "item": "runtime lineage 真实验证",
+      "status": "completed",
+      "decision": "covered_by_CR146_and_prior_gate",
+      "evidence": [
+        "process/evidence/CR146-READER-RUNTIME-SMOKE-2026-06-30.json",
+        "process/evidence/CR139-W2-GATEC2-ACTIVE-CATALOG-MANIFEST-WRITE-EXECUTION.index.json"
+      ]
+    },
+    {
+      "story": "S31",
+      "item": "真实 event 数据修复执行",
+      "status": "covered_by_prior_gate",
+      "decision": "no_new_write_needed_business_policy_remains_for_future_semantic_selection",
+      "evidence": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-EVENTS-WRITE-EXECUTION.index.json",
+        "process/evidence/CR146-GATEB-BATCH2-SPLIT-PLANNING.index.json"
+      ]
+    },
+    {
+      "story": "S32",
+      "item": "存量 lake 重复清理执行",
+      "status": "covered_by_prior_gate_with_residual_policy_gate",
+      "decision": "current truth covered; semantic conflict selection gated",
+      "evidence": [
+        "process/evidence/CR139-W2-GATEB-BATCH2-CANDIDATE-WRITES-COMPLETE-2026-06-29.json",
+        "process/evidence/CR146-GATEB-BATCH2-SPLIT-PLANNING.index.json"
+      ]
+    },
+    {
+      "story": "S33",
+      "item": "真实 catalog 对账执行",
+      "status": "covered_by_prior_gate",
+      "decision": "no_new_write_needed",
+      "evidence": [
+        "process/evidence/CR139-W2-GATEC2-ACTIVE-CATALOG-MANIFEST-WRITE-EXECUTION.index.json"
+      ]
+    },
+    {
+      "story": "S34",
+      "item": "历史 lake checksum 回填执行",
+      "status": "covered_by_prior_gate",
+      "decision": "no_new_write_needed",
+      "evidence": [
+        "process/evidence/CR139-W2-GATEC2-ACTIVE-CATALOG-MANIFEST-WRITE-EXECUTION.index.json"
+      ]
+    },
+    {
+      "story": "S39",
+      "item": "真实审计链持久化执行",
+      "status": "covered_by_prior_gate",
+      "decision": "no_new_write_needed",
+      "evidence": [
+        "process/evidence/CR139-W3B-RETENTION-SUPERSEDED-REGISTER-2026-06-30.json",
+        "process/evidence/CR139-W3C-RECURRING-VALIDATION-2026-06-30.json"
+      ]
+    },
+    {
+      "story": "S08/S30",
+      "item": "N1 physical partition migration",
+      "status": "human_gate_required",
+      "decision": "default_no_migration",
+      "evidence": [
+        "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md"
+      ],
+      "result": {
+        "reason": "requires backup/checksum/rollback/quiescent window; no current delivery blocker"
+      }
+    },
+    {
+      "story": "S07/S30",
+      "item": "N2 run-id naming governance",
+      "status": "candidate_non_blocking",
+      "decision": "defer",
+      "evidence": [
+        "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md"
+      ]
+    }
+  ]
+}

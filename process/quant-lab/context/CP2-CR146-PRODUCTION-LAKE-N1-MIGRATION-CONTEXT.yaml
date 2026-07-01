@@ -1,0 +1,50 @@
+context_id: "CP2-CR146-PRODUCTION-LAKE-N1-MIGRATION-CONTEXT"
+created_at: "2026-07-01T08:45:00+08:00"
+read_profile: compact
+source_cr: "CR-146"
+parent_cr: "CR-139"
+objective: "Authorize copy-first N1 physical partition migration for catalog current truth."
+must_read:
+  - path: "process/evidence/CR146-PRODUCTION-LAKE-PHYSICAL-MIGRATION-PLAN-2026-07-01.json"
+    reason: "17 dataset source/target/rollback map."
+  - path: "process/evidence/CR146-PRODUCTION-LAKE-PHYSICAL-MIGRATION-DRY-RUN-2026-07-01.json"
+    reason: "Dry-run execution evidence; zero operations."
+  - path: "process/evidence/CR146-PRODUCTION-LAKE-CURRENT-TRUTH-PROFILE-2026-07-01.json"
+    reason: "Current catalog truth has zero duplicate keys."
+  - path: "process/evidence/CR146-PRODUCTION-LAKE-READINESS-MATRIX-2026-07-01.json"
+    reason: "Dataset readiness and gate boundary."
+read_if_needed:
+  - path: "process/evidence/CR146-PRODUCTION-LAKE-INVENTORY-2026-07-01.json"
+    reason: "Inventory detail."
+  - path: "process/evidence/CR146-PRODUCTION-LAKE-DUPLICATE-SPLIT-PLAN.index.json"
+    reason: "Historical-root duplicate split plan; cleanup/rewrite gate input."
+  - path: "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md"
+    reason: "CR146 scope and risk rules."
+do_not_read_by_default:
+  - ".env"
+  - "NAS credentials"
+  - "scripts/legacy/cr/*"
+authorization_summary:
+  already_authorized_read_only:
+    - "catalog current truth profile"
+    - "inventory/golden/duplicate read-only evidence"
+    - "physical migration dry-run"
+  requested_by_this_gate:
+    - "copy 17 catalog current parquet objects into canonical/<dataset>/1.0/current/"
+    - "update 17 catalog canonical_path entries to current layout"
+  explicitly_not_authorized:
+    - "legacy run_id path delete/archive"
+    - "NAS sync/write/restore drill"
+    - "provider fetch"
+    - "credential read"
+    - "business-conflict semantic selection"
+    - "historical-root cleanup or rewrite"
+    - "trading/runtime/Git remote write"
+evidence_summary:
+  current_truth_duplicate_key_total: 0
+  current_truth_row_count_total: 103264532
+  n1_copy_first_candidate_count: 17
+  n1_source_missing_count: 0
+  dry_run_errors_count: 0
+  dry_run_operation_counts_all_zero: true
+read_expansion_log: []
