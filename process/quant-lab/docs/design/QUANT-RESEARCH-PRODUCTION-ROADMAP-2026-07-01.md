@@ -1,6 +1,6 @@
 ---
 title: "Quant Research Production Roadmap"
-status: "draft-v0.2"
+status: "draft-v0.3"
 owner: "host-orchestrator"
 created_at: "2026-07-01"
 scope: "data lake, research/backtest framework, paper/live operations"
@@ -15,6 +15,7 @@ authorization_boundary: "planning-only; no runtime, broker write, provider fetch
 |---|---|---|---|
 | v0.1 | 2026-07-01 | host-orchestrator | 初版路线图：按数据湖、研究生产、回测框架、paper/live、实盘操作划分阶段目标。 |
 | v0.2 | 2026-07-01 | host-orchestrator | 根据 `process/checks/QUANT-RESEARCH-PRODUCTION-ROADMAP-REVIEW-2026-07-01.md` 补 NAS 多节点一致性、既有资产衔接、量化 exit、fail-closed / pointer 门、日频边界和 Gotchas。 |
+| v0.3 | 2026-07-01 | host-orchestrator | 回写 CR146-CR150 实施进度：本地数据湖 Phase 1 closed with NAS sync deferred，研究/回测 foundation 已闭环，下一 active CR 为 CR150 多因子框架补齐。 |
 
 ## 1. 目标
 
@@ -49,6 +50,30 @@ authorization_boundary: "planning-only; no runtime, broker write, provider fetch
 当前可接受定位：
 
 > 当前数据湖支持 research current truth 与读层验证，但还不是完整 production-grade governed lake。后续应先补数据事实治理，再推进研究生产化和实盘。
+
+### 2.1 当前实施进度（2026-07-01）
+
+| 范围 | CR / Evidence | 当前状态 | 说明 |
+|---|---|---|---|
+| CR139 post-close lake completion | `CR-146` | closed / READY | 已完成真实 lake runtime validation、fail-closed reader 加固、N1 current-truth 物理分区迁移、catalog pointer 切换和历史 cleanup 分流。 |
+| Phase 2 research production foundation | `CR-147` | closed / READY | 已完成 ResearchDatasetSpec、feature/label/training snapshot/experiment/admission 资产收敛；asset map gap=0。 |
+| Phase 3 backtest foundation | `CR-148` | closed / READY | 已完成 BacktestRunSpec、report pack、cost/risk/attribution metadata contract；相关本地测试通过。 |
+| Phase 1 governed lake readiness | `CR-149` | closed-current-delivery / READY_WITH_RISK | 本地 17-dataset readiness、PIT、run registry、business-conflict quarantine policy 和 recurring validation plan 已闭环。NAS current-truth sync 因用户决策后置。 |
+| NAS current-truth scoped sync | `RA-CR149-001` | candidate / deferred | 已有只读 consistency evidence：NAS catalog stale，17 个 NAS `current/` 路径缺失。后续恢复时需单独 approve scoped local-to-NAS sync。 |
+| Multifactor framework completion | `CR-150` | active / no-risk implementation | 当前下一阶段：补齐日频多因子 factor spec → signal set → portfolio construction → backtest spec → report/admission linkage。 |
+
+当前执行锁：
+
+```text
+active formal CR: CR-150 Multifactor Framework Completion
+deferred runtime candidate: RA-CR149-001 NAS current-truth scoped sync
+```
+
+执行边界：
+
+- CR150 可以链接数据湖 metadata contract / catalog refs / readiness / PIT refs。
+- CR150 当前不读取或写入真实 lake，不同步 NAS，不读取 provider，不启动 simulation/live/trading，不写 broker。
+- 若后续需要真实 lake factor panel / label 构建、Feature Store 写入、NAS report 写入或 runtime execution，必须另起人工门禁。
 
 ## 3. 能力蓝图
 
@@ -203,10 +228,10 @@ Phase 1 中的 NAS 目标是**一致性协议和门禁设计**，不等于立即
 | Business-conflict handling | 4,272,624 business-conflict groups 100% 分类为 quarantine / semantic-rule-required / unsupported，不要求清零 |
 | PIT readiness | 17/17 datasets 有 `pit_available / not_applicable / unsupported-with-reason`，不允许长期 `null` |
 | Run registry | 100% 新写入 run 具有 registry record；reader 不再依赖 source_run_id 字典序作为生产排序 |
-| Published pointer | 17/17 published datasets 的 current pointer 可由至少 2 个节点读取并得到一致 checksum / run_id |
-| NAS consistency gate | 形成 write-primary + shared-read 设计，并完成 1 次 dry-run / read-only consistency check |
+| Published pointer | 17/17 published datasets 的本地 current pointer 可读且 checksum / run_id 完整；多节点一致性可 deferred 到 `RA-CR149-001` |
+| NAS consistency gate | 已完成 1 次 read-only consistency check；发现 NAS stale，scoped sync 后置，不阻塞本地 CR150 |
 
-Phase 1 的目标是建立 quarantine policy 和 dataset-level 决策流程，不是把 4,272,624 个冲突全部语义择优或物理清零。
+Phase 1 的目标是建立 quarantine policy 和 dataset-level 决策流程，不是把 4,272,624 个冲突全部语义择优或物理清零。2026-07-01 当前状态为：本地治理目标已完成；NAS shared-view sync 留作 `RA-CR149-001` 后续 runtime authorization，不作为 CR150 本地多因子框架补齐的前置阻断。
 
 ### Phase 2：研究数据集、Feature Store、Label Store、Event Store
 
@@ -481,10 +506,12 @@ Paper trading：
 
 | CR | 名称 | 范围 |
 |---|---|---|
-| CR-147 | Quant Research Production Foundation | 数据湖 readiness、conflict policy、ResearchDatasetSpec、PIT-safe builder、baseline multi-factor backtest、experiment registry |
-| CR-148 | Unified Backtest and Experiment Engine | strategy interface、portfolio simulator、cost/slippage、risk、report、attribution |
-| CR-149 | Paper Trading and Readonly Live | readonly market/account、live signal shadow、paper OMS、daily paper report |
-| CR-150 | Controlled Small-Live Authorization Gate | OMS、broker adapter write contract、pre-trade risk、kill switch、小额实盘门禁 |
+| CR-147 | Quant Research Production Foundation | 已完成：ResearchDatasetSpec、feature/label/training snapshot、experiment/admission 资产收敛 |
+| CR-148 | Unified Backtest and Experiment Foundation | 已完成：BacktestRunSpec、report pack、cost/risk/attribution metadata contract |
+| CR-149 | Governed Lake Readiness Matrix Foundation | 已完成本地 Phase 1 治理；NAS scoped sync deferred 为 `RA-CR149-001` |
+| CR-150 | Multifactor Framework Completion | 当前 active：补齐日频多因子 baseline framework metadata chain |
+| Future CR | Paper Trading and Readonly Live | readonly market/account、live signal shadow、paper OMS、daily paper report |
+| Future CR | Controlled Small-Live Authorization Gate | OMS、broker adapter write contract、pre-trade risk、kill switch、小额实盘门禁 |
 
 ### CR-147 推荐范围
 
