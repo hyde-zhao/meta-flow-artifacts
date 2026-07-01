@@ -1,0 +1,72 @@
+{
+  "cr_id": "CR-147",
+  "created_at": "2026-07-01T12:18:00+08:00",
+  "mode": "offline_contract_foundation_verification_no_runtime",
+  "schema_version": "cr147_phase2_contract_foundation_cp7_verification_v1",
+  "status": "pass",
+  "verified_slices": [
+    {
+      "slice": "contract_bridge",
+      "cp6_result_ref": "process/checks/CP6-CR147-RESEARCH-PRODUCTION-CONTRACTS.result.json",
+      "evidence_ref": "process/evidence/CR147-PHASE2-RESEARCH-PRODUCTION-CONTRACT-AUDIT.index.json",
+      "status": "pass"
+    },
+    {
+      "slice": "asset_map",
+      "cp6_result_ref": "process/checks/CP6-CR147-RESEARCH-PRODUCTION-ASSET-MAP.result.json",
+      "evidence_ref": "process/evidence/CR147-PHASE2-RESEARCH-PRODUCTION-ASSET-MAP.index.json",
+      "status": "pass"
+    },
+    {
+      "slice": "snapshot_registry",
+      "cp6_result_ref": "process/checks/CP6-CR147-RESEARCH-DATASET-SNAPSHOT-REGISTRY.result.json",
+      "evidence_ref": "process/evidence/CR147-PHASE2-RESEARCH-DATASET-SNAPSHOT-REGISTRY.index.json",
+      "status": "pass"
+    },
+    {
+      "slice": "feature_availability_gate",
+      "cp6_result_ref": "process/checks/CP6-CR147-FEATURE-AVAILABILITY-GATE.result.json",
+      "evidence_ref": "process/evidence/CR147-PHASE2-FEATURE-AVAILABILITY-GATE.index.json",
+      "status": "pass"
+    }
+  ],
+  "completion_summary": {
+    "research_dataset_spec_bridge": "complete",
+    "feature_label_artifact_convergence": "complete",
+    "training_snapshot_and_experiment_manifest_convergence": "complete",
+    "snapshot_registry_metadata": "complete",
+    "feature_availability_gate_metadata": "complete",
+    "asset_map_gap_count_after_cr147": 0,
+    "gate_required_gap_count_after_cr147": 0,
+    "runtime_or_lake_write_executed": false,
+    "operation_counts_all_zero": true
+  },
+  "verification": {
+    "cp_result_checks": [
+      "CP6-CR147-RESEARCH-PRODUCTION-CONTRACTS OK",
+      "CP6-CR147-RESEARCH-PRODUCTION-ASSET-MAP OK",
+      "CP6-CR147-RESEARCH-DATASET-SNAPSHOT-REGISTRY OK",
+      "CP6-CR147-FEATURE-AVAILABILITY-GATE OK"
+    ],
+    "event_ledger_check": "OK",
+    "cr_tracking": "OK; active formal CR before closure: CR-147",
+    "git_diff_check_source": "PASS",
+    "git_diff_check_artifacts": "PASS",
+    "pytest": {
+      "command": "uv run --python 3.11 pytest tests/data_lake/test_label_leak_online_offline_consistency.py tests/research/test_research_production_contracts.py tests/data_lake/test_feature_label_artifact_layer.py tests/data_lake/test_training_snapshot_cutoff.py tests/research/test_research_dataset_builder.py",
+      "result": "35 passed in 0.71s"
+    }
+  },
+  "not_authorized": [
+    "provider_fetch",
+    "nas_sync_or_write",
+    "credential_read",
+    "qmt_runtime",
+    "simulation_live_or_trading",
+    "broker_write",
+    "git_remote_write",
+    "real_lake_write",
+    "catalog_pointer_mutation"
+  ],
+  "next_route": "Phase 3 unified backtest and experiment framework foundation; runtime/live/trading/lake writes remain separately gated."
+}

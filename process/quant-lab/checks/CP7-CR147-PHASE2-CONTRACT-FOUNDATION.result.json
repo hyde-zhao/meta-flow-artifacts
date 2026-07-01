@@ -1,0 +1,78 @@
+{
+  "blockers": [],
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR147-PHASE2-CONTRACT-FOUNDATION",
+  "context_ref": "process/context/CP6-CR147-RESEARCH-PRODUCTION-CONTRACTS-CONTEXT.yaml",
+  "cr_id": "CR-147",
+  "created_at": "2026-07-01T12:18:00+08:00",
+  "decision": "PASS",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr147-cp7-verification"
+  ],
+  "evidence_ref": "process/evidence/CR147-PHASE2-CONTRACT-FOUNDATION-CP7-VERIFICATION.index.json",
+  "items": [
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "process/evidence/CR147-PHASE2-CONTRACT-FOUNDATION-CP7-VERIFICATION.index.json"
+      ],
+      "id": "CP7-CR147-01",
+      "name": "CR147 Phase 2 contract foundation slices are complete",
+      "notes": "4 CP6 slices pass: contract bridge, asset map, snapshot registry and feature availability gate.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "gap-analysis",
+      "evidence_refs": [
+        "process/evidence/CR147-PHASE2-FEATURE-AVAILABILITY-GATE.index.json"
+      ],
+      "id": "CP7-CR147-02",
+      "name": "CR147 asset-map metadata gaps are closed for current no-risk scope",
+      "notes": "asset_map_gap_count_after_cr147=0; gate_required_gap_count_after_cr147=0.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "risk-boundary",
+      "evidence_refs": [
+        "process/evidence/CR147-PHASE2-CONTRACT-FOUNDATION-CP7-VERIFICATION-2026-07-01.json#not_authorized"
+      ],
+      "id": "CP7-CR147-03",
+      "name": "No runtime, lake write, catalog mutation, NAS, provider, credential, trading or git remote action executed",
+      "notes": "All CR147 work is local code, fixture tests and process evidence.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "regression",
+      "evidence_refs": [
+        "uv run --python 3.11 pytest tests/data_lake/test_label_leak_online_offline_consistency.py tests/research/test_research_production_contracts.py tests/data_lake/test_feature_label_artifact_layer.py tests/data_lake/test_training_snapshot_cutoff.py tests/research/test_research_dataset_builder.py"
+      ],
+      "id": "CP7-CR147-04",
+      "name": "Related CR147 regression tests pass",
+      "notes": "35 passed in 0.71s.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "close_cr147_current_delivery_and_start_phase3_backtest_foundation",
+  "read_expansion_refs": [
+    "READ-CR147-PHASE2-CONTRACT-CR-SCOPE-2026-07-01T111800+0800"
+  ],
+  "schema_version": 1,
+  "story_id": "CR147-PHASE2-CONTRACT-FOUNDATION",
+  "waivers": []
+}
