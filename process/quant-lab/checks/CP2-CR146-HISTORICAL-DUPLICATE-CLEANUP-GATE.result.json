@@ -1,0 +1,86 @@
+{
+  "blockers": [],
+  "checkpoint": "CP2",
+  "checkpoint_id": "CP2-CR146-HISTORICAL-DUPLICATE-CLEANUP-GATE",
+  "context_ref": "process/context/CP2-CR146-HISTORICAL-DUPLICATE-CLEANUP-GATE-CONTEXT.yaml",
+  "cr_id": "CR-146",
+  "created_at": "2026-07-01T10:34:00+08:00",
+  "decision": "PASS",
+  "evidence_ref": "process/evidence/CR146-PRODUCTION-LAKE-HISTORICAL-DUPLICATE-CLEANUP-PLAN-POST-N1.index.json",
+  "items": [
+    {
+      "category": "process",
+      "evidence_refs": [
+        "meta-flow check cr-tracking"
+      ],
+      "id": "CP2-HIST-01",
+      "name": "CR tracking valid before historical cleanup gate",
+      "notes": "CR-146 is the only active formal CR.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "runtime-risk",
+      "evidence_refs": [
+        "process/evidence/CR146-PRODUCTION-LAKE-CURRENT-TRUTH-PROFILE-FULL-POST-N1-2026-07-01.json#summary"
+      ],
+      "id": "CP2-HIST-02",
+      "name": "Post-N1 current truth remains clean",
+      "notes": "17 published datasets, 103264532 current rows, duplicate_key_total=0.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "runtime-risk",
+      "evidence_refs": [
+        "process/evidence/CR146-PRODUCTION-LAKE-HISTORICAL-DUPLICATE-CLEANUP-PLAN-POST-N1.index.json"
+      ],
+      "id": "CP2-HIST-03",
+      "name": "Historical cleanup split plan is read-only and no lake write was executed",
+      "notes": "operation_counts are zero for provider/lake/catalog/pointer/physical/credential/NAS/runtime/git operations.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "data-quality",
+      "evidence_refs": [
+        "process/evidence/CR146-PRODUCTION-LAKE-HISTORICAL-DUPLICATE-CLEANUP-PLAN-POST-N1.index.json#totals"
+      ],
+      "id": "CP2-HIST-04",
+      "name": "Historical-root duplicate cleanup has material business-conflict risk",
+      "notes": "72710457 duplicate key groups and 4272624 business-conflict groups across 5 datasets; execution requires human gate.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "authorization",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR146-HISTORICAL-DUPLICATE-CLEANUP-GATE.md"
+      ],
+      "id": "CP2-HIST-05",
+      "name": "No automatic cleanup/delete/rewrite authorization is implied",
+      "notes": "The recommended decision is to defer business-conflict semantic selection and only proceed by dataset-level approval.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "human_gate",
+  "read_expansion_refs": [],
+  "schema_version": 1,
+  "waivers": []
+}
