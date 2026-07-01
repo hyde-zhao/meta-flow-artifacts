@@ -65,6 +65,7 @@ CR-146 已完成 current-truth 数据湖迁移、fail-closed reader 加固和 ru
 | Phase D | Evidence and routing | CP result, evidence index and remaining high-risk follow-up routing recorded. |
 | Phase E | Recurring validation plan | 7 validation tasks are machine-readable; 6 are local read-only/metadata-only, 1 NAS multi-node task is human-gate-required. |
 | Phase F | Business-conflict policy | CR146 split-plan counts are represented as dataset-level policy; 4,272,624 business-conflict groups are classified as full-group quarantine by default. |
+| Phase G | Phase 1 exit matrix | 8 Phase 1 criteria are machine-readable; 7 pass and 1 NAS multi-node criterion is blocked-human-gate. |
 
 ## Risk Rules
 
@@ -77,4 +78,4 @@ CR-146 已完成 current-truth 数据湖迁移、fail-closed reader 加固和 ru
 
 ## Current Status
 
-CR-149 is active. Phase A-D governed readiness matrix contract and Phase E recurring validation plan are implemented and recorded in CP6 evidence. Phase F business-conflict policy is now in progress. No human gate is required for local code / tests / process evidence. A human gate is required before any real lake write, NAS/provider/runtime operation, catalog pointer mutation, historical conflict cleanup, simulation/live/trading or broker action.
+CR-149 is active. Phase A-G no-risk scope is implemented and recorded in CP6 evidence. Current Phase 1 exit matrix has 7 PASS, 0 FAIL and 1 blocked-human-gate item: real NAS/shared-node published pointer consistency. No human gate is required for local code / tests / process evidence. A human gate is required before any real NAS/provider/runtime operation, catalog pointer mutation, historical conflict cleanup, simulation/live/trading or broker action.

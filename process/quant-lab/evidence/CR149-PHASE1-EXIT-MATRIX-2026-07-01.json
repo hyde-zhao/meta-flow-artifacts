@@ -1,0 +1,95 @@
+{
+  "cr_id": "CR-149",
+  "created_at": "2026-07-01T12:42:45+08:00",
+  "mode": "metadata_only_phase1_exit_matrix",
+  "status": "pass_with_human_gate_blocked_item",
+  "schema_version": "governed_lake_phase1_exit_matrix_v1",
+  "summary": {
+    "criterion_count": 8,
+    "pass_count": 7,
+    "fail_count": 0,
+    "blocked_human_gate_count": 1,
+    "validator_issue_count": 0,
+    "operation_counts_all_zero": true
+  },
+  "criteria": [
+    {
+      "criterion_id": "readiness_matrix_17_of_17",
+      "status": "pass",
+      "requires_human_gate": false,
+      "evidence_ref": "process/evidence/CR149-GOVERNED-LAKE-READINESS-MATRIX.index.json"
+    },
+    {
+      "criterion_id": "pit_status_classified_17_of_17",
+      "status": "pass",
+      "requires_human_gate": false,
+      "evidence_ref": "process/evidence/CR149-GOVERNED-LAKE-READINESS-MATRIX.index.json"
+    },
+    {
+      "criterion_id": "run_registry_no_source_run_id_lexical_ordering",
+      "status": "pass",
+      "requires_human_gate": false,
+      "evidence_ref": "process/evidence/CR149-GOVERNED-LAKE-READINESS-MATRIX.index.json"
+    },
+    {
+      "criterion_id": "business_conflict_policy_classified",
+      "status": "pass",
+      "requires_human_gate": false,
+      "evidence_ref": "process/evidence/CR149-BUSINESS-CONFLICT-POLICY.index.json"
+    },
+    {
+      "criterion_id": "recurring_validation_plan_defined",
+      "status": "pass",
+      "requires_human_gate": false,
+      "evidence_ref": "process/evidence/CR149-GOVERNED-LAKE-VALIDATION-PLAN.index.json"
+    },
+    {
+      "criterion_id": "published_pointer_local_consistency",
+      "status": "pass",
+      "requires_human_gate": false,
+      "evidence_ref": "process/evidence/CR149-GOVERNED-LAKE-READINESS-MATRIX.index.json"
+    },
+    {
+      "criterion_id": "nas_multinode_consistency_gate",
+      "status": "blocked_human_gate",
+      "requires_human_gate": true,
+      "evidence_ref": "process/evidence/CR149-GOVERNED-LAKE-VALIDATION-PLAN.index.json",
+      "reason": "Real NAS/shared-node read consistency requires explicit human gate before credential or remote node access."
+    },
+    {
+      "criterion_id": "operation_boundary_zero",
+      "status": "pass",
+      "requires_human_gate": false,
+      "evidence_ref": "process/evidence/CR149-GOVERNED-LAKE-VALIDATION-PLAN.index.json"
+    }
+  ],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "nas_sync_or_write": 0,
+    "credential_read": 0,
+    "lake_write": 0,
+    "catalog_pointer_mutation": 0,
+    "business_conflict_cleanup": 0,
+    "simulation_or_live": 0,
+    "broker_write": 0
+  },
+  "validation_summary": {
+    "focused": "uv run --python 3.11 pytest tests/data_lake/test_governed_lake_readiness_matrix.py -> 13 passed in 0.05s",
+    "related": "uv run --python 3.11 pytest tests/data_lake/test_governed_lake_readiness_matrix.py tests/data_lake/test_catalog_publish_gate.py tests/data_lake/test_publish_current_reader_smoke.py tests/data_lake/test_duplicate_profile_gate_b.py tests/data_lake/test_reader_fail_fast_contracts.py -> 38 passed in 0.69s",
+    "full_data_lake": "uv run --python 3.11 pytest tests/data_lake -> 355 passed in 5.56s",
+    "compile": "uv run --python 3.11 python -m compileall -q market_data/governed_lake.py -> PASS",
+    "git_diff_check": "PASS",
+    "cr_tracking": "OK"
+  },
+  "not_authorized": [
+    "nas_sync_or_write",
+    "credential_read",
+    "remote_node_access",
+    "provider_fetch",
+    "real_lake_write",
+    "catalog_pointer_mutation",
+    "historical_business_conflict_cleanup",
+    "simulation_or_live",
+    "broker_write"
+  ]
+}

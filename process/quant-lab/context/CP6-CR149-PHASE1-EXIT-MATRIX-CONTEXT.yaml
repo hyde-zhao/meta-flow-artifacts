@@ -1,0 +1,64 @@
+schema_version: context_capsule_v1
+context_id: CP6-CR149-PHASE1-EXIT-MATRIX
+cr_id: CR-149
+created_at: "2026-07-01T12:42:45+08:00"
+scope: governed lake Phase 1 exit matrix
+read_profile: compact
+must_read:
+  - market_data/governed_lake.py
+  - tests/data_lake/test_governed_lake_readiness_matrix.py
+  - process/evidence/CR149-GOVERNED-LAKE-READINESS-MATRIX.index.json
+  - process/evidence/CR149-GOVERNED-LAKE-VALIDATION-PLAN.index.json
+  - process/evidence/CR149-BUSINESS-CONFLICT-POLICY.index.json
+allowed_reads:
+  - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
+  - process/evidence/CR146-PRODUCTION-LAKE-DUPLICATE-SPLIT-PLAN.index.json
+do_not_read_by_default:
+  - scripts/legacy/
+  - real NAS credentials or env secrets
+  - provider runtime state
+  - broker or trading runtime state
+boundary:
+  authorized:
+    - local code changes
+    - local fixture tests
+    - read existing local catalog metadata
+    - process evidence and checkpoint records
+  not_authorized:
+    - nas_sync_or_write
+    - credential_read
+    - remote_node_access
+    - provider_fetch
+    - real_lake_write
+    - catalog_pointer_mutation
+    - historical_business_conflict_cleanup
+    - simulation_or_live
+    - broker_write
+implementation_summary:
+  added_objects:
+    - GovernedLakePhase1ExitCriterion
+    - GovernedLakePhase1ExitMatrix
+    - build_governed_lake_phase1_exit_matrix
+    - validate_governed_lake_phase1_exit_matrix
+  exit_matrix:
+    criterion_count: 8
+    pass_count: 7
+    fail_count: 0
+    blocked_human_gate_count: 1
+  blocked_human_gate:
+    criterion_id: nas_multinode_consistency_gate
+    reason: real NAS/shared-node read consistency may require credential or remote node access
+validation_summary:
+  focused_tests: "13 passed in 0.05s"
+  related_tests: "38 passed in 0.69s"
+  full_data_lake: "355 passed in 5.56s"
+  git_diff_check: PASS
+  cr_tracking: OK
+read_expansion_log:
+  - id: READ-CR149-PHASE1-EXIT-MATRIX-2026-07-01T124245+0800
+    reason: "Need all CR149 evidence indexes and roadmap Phase 1 criteria to produce final exit matrix."
+    files:
+      - process/evidence/CR149-GOVERNED-LAKE-READINESS-MATRIX.index.json
+      - process/evidence/CR149-GOVERNED-LAKE-VALIDATION-PLAN.index.json
+      - process/evidence/CR149-BUSINESS-CONFLICT-POLICY.index.json
+      - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md

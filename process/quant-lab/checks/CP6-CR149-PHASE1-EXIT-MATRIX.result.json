@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR149-PHASE1-EXIT-MATRIX",
+  "story_id": "CR149-PHASE1-EXIT-MATRIX",
+  "cr_id": "CR-149",
+  "created_at": "2026-07-01T12:42:45+08:00",
+  "context_ref": "process/context/CP6-CR149-PHASE1-EXIT-MATRIX-CONTEXT.yaml",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr149-phase1-exit-matrix-implementation"
+  ],
+  "evidence_ref": "process/evidence/CR149-PHASE1-EXIT-MATRIX.index.json",
+  "items": [
+    {
+      "id": "CP6-CR149-EXIT-MATRIX-01",
+      "category": "implementation",
+      "name": "Phase 1 exit matrix contract added",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "market_data/governed_lake.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Adds Phase 1 exit criterion/matrix dataclasses, builder and validator."
+    },
+    {
+      "id": "CP6-CR149-EXIT-MATRIX-02",
+      "category": "contract",
+      "name": "No-risk Phase 1 data-lake criteria pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR149-PHASE1-EXIT-MATRIX-2026-07-01.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "7 criteria pass: readiness, PIT, run registry, conflict policy, recurring validation, local pointer consistency and zero operation boundary."
+    },
+    {
+      "id": "CP6-CR149-EXIT-MATRIX-03",
+      "category": "runtime-authorization",
+      "name": "NAS multi-node consistency is correctly blocked by human gate",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR149-PHASE1-EXIT-MATRIX-2026-07-01.json#criteria/nas_multinode_consistency_gate"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Real NAS/shared-node published pointer consistency needs explicit gate before credential or remote node access."
+    },
+    {
+      "id": "CP6-CR149-EXIT-MATRIX-04",
+      "category": "verification",
+      "name": "Exit matrix tests and full data_lake regression pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 pytest tests/data_lake/test_governed_lake_readiness_matrix.py",
+        "uv run --python 3.11 pytest tests/data_lake",
+        "git diff --check",
+        "meta-flow check cr-tracking"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Focused test: 13 passed. Full data_lake: 355 passed. CR tracking OK."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR149-PHASE1-EXIT-MATRIX-2026-07-01T124245+0800"
+  ],
+  "decision": "PASS",
+  "next_route": "launch_cp2_for_nas_multinode_consistency_if_user_requires_full_phase1_completion"
+}
