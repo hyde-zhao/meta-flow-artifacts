@@ -3,50 +3,98 @@
     {
       "authz_policy_refs": [
         "NO_PROVIDER_FETCH",
-        "NO_NAS_SYNC_OR_WRITE_WITHOUT_CP2_APPROVAL",
-        "NO_CREDENTIAL_READ_WITHOUT_HUMAN_GATE",
+        "NO_NAS_SYNC_OR_WRITE",
+        "NO_CREDENTIAL_READ",
         "NO_RUNTIME",
         "NO_TRADING",
         "NO_BROKER_WRITE",
         "NO_GIT_REMOTE_WRITE",
         "NO_REAL_LAKE_WRITE_INITIAL_PHASE",
-        "NO_CATALOG_POINTER_WRITE",
-        "NO_BUSINESS_CONFLICT_CLEANUP_WITHOUT_GATE"
+        "NO_CATALOG_POINTER_WRITE"
       ],
       "blocked_by": [],
       "conflict_keys": [
-        "governed-lake-readiness-matrix",
-        "pit-status-matrix",
-        "run-registry-bridge",
-        "business-conflict-quarantine-policy"
+        "multifactor-signal-contract",
+        "factor-weighting-policy",
+        "portfolio-construction-contract",
+        "strategy-admission-link",
+        "backtest-report-link"
       ],
       "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
-      "formal_cr_path": "process/changes/CR-149-GOVERNED-LAKE-READINESS-MATRIX-2026-07-01.md",
+      "formal_cr_path": "process/changes/CR-150-MULTIFACTOR-FRAMEWORK-COMPLETION-2026-07-01.md",
       "gate_profile": "standard",
-      "gate_status": "cp2_pending",
-      "id": "CR-149",
+      "gate_status": "not_started",
+      "id": "CR-150",
       "impact_surface": [
-        "market_data/catalog.py",
-        "market_data/readiness.py",
-        "market_data/*governed*",
-        "tests/data_lake/*"
+        "engine/mature_multifactor_framework.py",
+        "engine/mature_multifactor_research.py",
+        "engine/backtest.py",
+        "engine/strategy_admission_package.py",
+        "tests/research/*",
+        "tests/backtest/*"
       ],
       "kind": "requirement-change",
-      "last_checked_at": "2026-07-01T13:25:00+08:00",
+      "last_checked_at": "2026-07-01T15:20:00+08:00",
       "lifecycle_status": "active",
-      "next_action": "CP2 pending: read-only NAS consistency executed and found stale NAS state; approve is required before scoped local-to-NAS current-truth sync.",
-      "next_gate": "CP2-CR149-NAS-CURRENT-TRUTH-SYNC",
+      "next_action": "Active no-risk implementation: complete daily multifactor framework metadata chain; no runtime/lake/NAS/provider/trading action authorized.",
+      "next_gate": "CP6 local implementation evidence; human gate only before runtime/lake/NAS/provider/trading/catalog write actions",
       "parent_cr": "ROADMAP-QUANT-RESEARCH-PRODUCTION",
       "priority": 1,
-      "readiness_status": "ready_with_risk",
-      "source_decision_id": "USER-20260701-CONTINUE-PRODUCTION-ROADMAP",
-      "source_tracking": "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md#phase-1生产级数据湖治理",
-      "status": "active-cp2-nas-current-truth-sync-gate-pending",
-      "title": "Governed Lake Readiness Matrix Foundation"
+      "readiness_status": "ready",
+      "source_decision_id": "USER-20260701-DEFER-NAS-SYNC-PROCEED-MULTIFACTOR",
+      "source_tracking": "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md#phase-3统一回测与实验框架",
+      "status": "active-no-risk-implementation",
+      "title": "Multifactor Framework Completion"
     }
   ],
-  "generated_at": "2026-07-01T13:25:00+08:00",
+  "generated_at": "2026-07-01T15:20:00+08:00",
   "items": [
+    {
+      "authz_policy_refs": [
+        "NO_PROVIDER_FETCH",
+        "NO_NAS_SYNC_OR_WRITE",
+        "NO_CREDENTIAL_READ",
+        "NO_RUNTIME",
+        "NO_TRADING",
+        "NO_BROKER_WRITE",
+        "NO_GIT_REMOTE_WRITE",
+        "NO_REAL_LAKE_WRITE_INITIAL_PHASE",
+        "NO_CATALOG_POINTER_WRITE"
+      ],
+      "blocked_by": [],
+      "conflict_keys": [
+        "multifactor-signal-contract",
+        "factor-weighting-policy",
+        "portfolio-construction-contract",
+        "strategy-admission-link",
+        "backtest-report-link"
+      ],
+      "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
+      "formal_cr_path": "process/changes/CR-150-MULTIFACTOR-FRAMEWORK-COMPLETION-2026-07-01.md",
+      "gate_profile": "standard",
+      "gate_status": "not_started",
+      "id": "CR-150",
+      "impact_surface": [
+        "engine/mature_multifactor_framework.py",
+        "engine/mature_multifactor_research.py",
+        "engine/backtest.py",
+        "engine/strategy_admission_package.py",
+        "tests/research/*",
+        "tests/backtest/*"
+      ],
+      "kind": "requirement-change",
+      "last_checked_at": "2026-07-01T15:20:00+08:00",
+      "lifecycle_status": "active",
+      "next_action": "Active no-risk implementation: complete daily multifactor framework metadata chain; no runtime/lake/NAS/provider/trading action authorized.",
+      "next_gate": "CP6 local implementation evidence; human gate only before runtime/lake/NAS/provider/trading/catalog write actions",
+      "parent_cr": "ROADMAP-QUANT-RESEARCH-PRODUCTION",
+      "priority": 1,
+      "readiness_status": "ready",
+      "source_decision_id": "USER-20260701-DEFER-NAS-SYNC-PROCEED-MULTIFACTOR",
+      "source_tracking": "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md#phase-3统一回测与实验框架",
+      "status": "active-no-risk-implementation",
+      "title": "Multifactor Framework Completion"
+    },
     {
       "authz_policy_refs": [
         "NO_PROVIDER_FETCH",
@@ -60,7 +108,9 @@
         "NO_CATALOG_POINTER_WRITE",
         "NO_BUSINESS_CONFLICT_CLEANUP_WITHOUT_GATE"
       ],
-      "blocked_by": [],
+      "blocked_by": [
+        "nas_current_truth_sync_deferred_by_user"
+      ],
       "conflict_keys": [
         "governed-lake-readiness-matrix",
         "pit-status-matrix",
@@ -70,7 +120,7 @@
       "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
       "formal_cr_path": "process/changes/CR-149-GOVERNED-LAKE-READINESS-MATRIX-2026-07-01.md",
       "gate_profile": "standard",
-      "gate_status": "cp2_pending",
+      "gate_status": "closed",
       "id": "CR-149",
       "impact_surface": [
         "market_data/catalog.py",
@@ -80,16 +130,34 @@
       ],
       "kind": "requirement-change",
       "last_checked_at": "2026-07-01T13:25:00+08:00",
-      "lifecycle_status": "active",
-      "next_action": "CP2 pending: read-only NAS consistency executed and found stale NAS state; approve is required before scoped local-to-NAS current-truth sync.",
-      "next_gate": "CP2-CR149-NAS-CURRENT-TRUTH-SYNC",
+      "lifecycle_status": "closed",
+      "next_action": "Closed current delivery with NAS sync deferred; RA-CR149-001 tracks scoped NAS current-truth sync as a future runtime authorization candidate.",
+      "next_gate": "RA-CR149-001 candidate if user resumes NAS sync",
       "parent_cr": "ROADMAP-QUANT-RESEARCH-PRODUCTION",
       "priority": 1,
       "readiness_status": "ready_with_risk",
       "source_decision_id": "USER-20260701-CONTINUE-PRODUCTION-ROADMAP",
       "source_tracking": "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md#phase-1生产级数据湖治理",
-      "status": "active-cp2-nas-current-truth-sync-gate-pending",
+      "status": "closed-current-delivery-nas-sync-deferred",
       "title": "Governed Lake Readiness Matrix Foundation"
+    },
+    {
+      "blocked_by": [
+        "deferred_by_user_until_nas_sync_window"
+      ],
+      "formal_cr_path": "",
+      "gate_profile": "runtime",
+      "gate_status": "cp2_pending",
+      "id": "RA-CR149-001",
+      "kind": "runtime-authorization",
+      "lifecycle_status": "candidate",
+      "next_action": "Start only when user explicitly returns to NAS current-truth sync; existing checkpoint remains process/checkpoints/CP2-CR149-NAS-CURRENT-TRUTH-SYNC.md.",
+      "parent_cr": "CR-149",
+      "readiness_status": "not_ready",
+      "source_decision_id": "USER-20260701-DEFER-NAS-SYNC-PROCEED-MULTIFACTOR",
+      "source_tracking": "process/checkpoints/CP2-CR149-NAS-CURRENT-TRUTH-SYNC.md",
+      "status": "candidate",
+      "title": "CR149 NAS current-truth scoped sync"
     },
     {
       "authz_policy_refs": [

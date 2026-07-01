@@ -1,11 +1,11 @@
 ---
 id: "CR-149"
 title: "Governed Lake Readiness Matrix Foundation"
-status: "active-cp2-nas-current-truth-sync-gate-pending"
+status: "closed-current-delivery-nas-sync-deferred"
 kind: "requirement-change"
-lifecycle_status: "active"
+lifecycle_status: "closed"
 readiness_status: "ready_with_risk"
-gate_status: "cp2_pending"
+gate_status: "closed"
 gate_profile: "standard"
 created_at: "2026-07-01T13:25:00+08:00"
 created_by: "host-orchestrator"
@@ -78,11 +78,11 @@ CR-146 已完成 current-truth 数据湖迁移、fail-closed reader 加固和 ru
 
 ## Current Status
 
-CR-149 is active with CP2 pending for scoped NAS current-truth sync. Phase A-G no-risk scope is implemented and recorded in CP6 evidence. The approved read-only NAS/shared-node consistency check executed on 2026-07-01: mounted path was unavailable, credential fallback was audited, evidence redaction scan passed, and no sync/write/restore/delete was executed. The check found the NAS/shared-node view stale relative to local N1 current truth: catalog checksum mismatch plus 17 missing `canonical/*/1.0/current/` paths. CR149 Phase 1 remains blocked until a separate CP2 gate approves or rejects scoped local-to-NAS current-truth sync. A human gate is required before any NAS write/sync, provider/runtime operation, catalog pointer mutation, historical conflict cleanup, simulation/live/trading or broker action.
+CR-149 is closed-current-delivery with NAS sync deferred by user decision on 2026-07-01. Phase A-G no-risk scope is implemented and recorded in CP6 evidence. The approved read-only NAS/shared-node consistency check executed on 2026-07-01: mounted path was unavailable, credential fallback was audited, evidence redaction scan passed, and no sync/write/restore/delete was executed. The check found the NAS/shared-node view stale relative to local N1 current truth: catalog checksum mismatch plus 17 missing `canonical/*/1.0/current/` paths. NAS current-truth sync is intentionally deferred to `RA-CR149-001`; it no longer blocks the next local no-risk roadmap work. A human gate is still required before any NAS write/sync, provider/runtime operation, catalog pointer mutation, historical conflict cleanup, simulation/live/trading or broker action.
 
 ## Runtime Evidence Update
 
 | Date | Evidence | Result | Notes |
 |---|---|---|---|
 | 2026-07-01 | `process/evidence/CR149-NAS-MULTINODE-CONSISTENCY.index.json` | BLOCKED | Read-only rsync checksum dry-run compared 18 objects: catalog mismatch and 17 NAS current canonical paths missing. |
-| 2026-07-01 | `process/checkpoints/CP2-CR149-NAS-CURRENT-TRUTH-SYNC.md` | PENDING | New human gate asks whether to sync local N1 current truth to NAS using scoped object list only. |
+| 2026-07-01 | `process/checkpoints/CP2-CR149-NAS-CURRENT-TRUTH-SYNC.md` | DEFERRED | User chose to postpone NAS sync and proceed with multifactor framework completion first. |
