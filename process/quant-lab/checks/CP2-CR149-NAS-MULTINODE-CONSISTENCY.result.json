@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP2",
+  "checkpoint_id": "CP2-CR149-NAS-MULTINODE-CONSISTENCY",
+  "story_id": "CR149-NAS-MULTINODE-CONSISTENCY-GATE",
+  "cr_id": "CR-149",
+  "created_at": "2026-07-01T12:45:00+08:00",
+  "context_ref": "process/context/CP2-CR149-NAS-MULTINODE-CONSISTENCY-CONTEXT.yaml",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr149-nas-multinode-consistency-gate-precheck"
+  ],
+  "evidence_ref": "process/evidence/CR149-PHASE1-EXIT-MATRIX.index.json",
+  "items": [
+    {
+      "id": "CP2-CR149-NAS-01",
+      "category": "runtime-authorization",
+      "name": "Phase 1 has exactly one blocked human-gate criterion",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR149-PHASE1-EXIT-MATRIX.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Exit matrix records 7 pass, 0 fail, 1 blocked-human-gate: nas_multinode_consistency_gate."
+    },
+    {
+      "id": "CP2-CR149-NAS-02",
+      "category": "scope-guard",
+      "name": "Requested action is read-only consistency verification",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP2-CR149-NAS-MULTINODE-CONSISTENCY-CONTEXT.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No sync, write, restore, delete, catalog mutation, provider, runtime, trading or business-conflict cleanup is included."
+    },
+    {
+      "id": "CP2-CR149-NAS-03",
+      "category": "verification",
+      "name": "Pre-gate data lake regression is green",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR149-PHASE1-EXIT-MATRIX.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CR149 Phase 1 exit matrix evidence records tests/data_lake -> 355 passed."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR149-NAS-MULTINODE-GATE-2026-07-01T124500+0800"
+  ],
+  "decision": "PASS",
+  "next_route": "CP2_HUMAN_GATE"
+}

@@ -1,0 +1,48 @@
+schema_version: context_capsule_v1
+context_id: CP2-CR149-NAS-MULTINODE-CONSISTENCY
+cr_id: CR-149
+created_at: "2026-07-01T12:45:00+08:00"
+scope: NAS/shared-node read-only published pointer consistency authorization
+read_profile: compact
+must_read:
+  - process/evidence/CR149-PHASE1-EXIT-MATRIX.index.json
+  - process/evidence/CR149-GOVERNED-LAKE-READINESS-MATRIX.index.json
+  - process/evidence/CR149-GOVERNED-LAKE-VALIDATION-PLAN.index.json
+  - process/changes/CR-149-GOVERNED-LAKE-READINESS-MATRIX-2026-07-01.md
+allowed_reads:
+  - market_data/governed_lake.py
+  - market_data/catalog.py
+  - scripts/data_lake/
+do_not_read_by_default:
+  - scripts/legacy/
+  - broker or trading runtime state
+  - provider runtime state
+authorization_requested:
+  - read-only NAS/shared-node catalog/published pointer metadata access
+  - read-only credential access only if needed for NAS listing/checksum comparison
+  - local evidence writing under process/evidence
+not_authorized:
+  - nas_sync_or_write
+  - rsync_push_or_pull_with_mutation
+  - restore_drill
+  - delete_or_archive
+  - real_lake_write
+  - catalog_pointer_mutation
+  - provider_fetch
+  - historical_business_conflict_cleanup
+  - simulation_or_live
+  - broker_write
+precheck_summary:
+  phase1_exit_matrix:
+    criterion_count: 8
+    pass_count: 7
+    fail_count: 0
+    blocked_human_gate_count: 1
+    blocked_criterion: nas_multinode_consistency_gate
+  reason_for_gate: "Completing Phase 1 requires at least two nodes/shared views to read matching published pointer run_id/checksum; this may require NAS credentials or remote/shared path access."
+read_expansion_log:
+  - id: READ-CR149-NAS-MULTINODE-GATE-2026-07-01T124500+0800
+    reason: "Need Phase 1 exit matrix and CR149 scope before launching runtime authorization gate."
+    files:
+      - process/evidence/CR149-PHASE1-EXIT-MATRIX.index.json
+      - process/changes/CR-149-GOVERNED-LAKE-READINESS-MATRIX-2026-07-01.md

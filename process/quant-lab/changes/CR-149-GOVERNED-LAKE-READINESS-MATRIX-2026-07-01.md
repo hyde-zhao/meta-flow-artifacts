@@ -1,11 +1,11 @@
 ---
 id: "CR-149"
 title: "Governed Lake Readiness Matrix Foundation"
-status: "active"
+status: "active-cp2-nas-multinode-gate-pending"
 kind: "requirement-change"
 lifecycle_status: "active"
 readiness_status: "ready_with_risk"
-gate_status: "not_started"
+gate_status: "cp2_pending"
 gate_profile: "standard"
 created_at: "2026-07-01T13:25:00+08:00"
 created_by: "host-orchestrator"
@@ -78,4 +78,4 @@ CR-146 已完成 current-truth 数据湖迁移、fail-closed reader 加固和 ru
 
 ## Current Status
 
-CR-149 is active. Phase A-G no-risk scope is implemented and recorded in CP6 evidence. Current Phase 1 exit matrix has 7 PASS, 0 FAIL and 1 blocked-human-gate item: real NAS/shared-node published pointer consistency. No human gate is required for local code / tests / process evidence. A human gate is required before any real NAS/provider/runtime operation, catalog pointer mutation, historical conflict cleanup, simulation/live/trading or broker action.
+CR-149 is active with CP2 pending for NAS/shared-node multi-node consistency. Phase A-G no-risk scope is implemented and recorded in CP6 evidence. Current Phase 1 exit matrix has 7 PASS, 0 FAIL and 1 blocked-human-gate item: real NAS/shared-node published pointer consistency. No human gate is required for local code / tests / process evidence. A human gate is required before any real NAS/provider/runtime operation, catalog pointer mutation, historical conflict cleanup, simulation/live/trading or broker action.
