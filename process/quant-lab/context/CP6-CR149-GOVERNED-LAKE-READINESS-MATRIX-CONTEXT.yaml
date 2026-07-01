@@ -1,0 +1,59 @@
+context_id: "CP6-CR149-GOVERNED-LAKE-READINESS-MATRIX-CONTEXT"
+created_at: "2026-07-01T13:35:00+08:00"
+read_profile: compact
+source_cr: "CR-149"
+parent_cr: "ROADMAP-QUANT-RESEARCH-PRODUCTION"
+objective: "Implement and verify the metadata-only governed lake readiness/PIT/run-registry matrix for 17 catalog datasets without lake writes, NAS operations, provider fetch, catalog pointer mutation, historical cleanup, runtime or trading side effects."
+must_read:
+  - path: "process/changes/CR-149-GOVERNED-LAKE-READINESS-MATRIX-2026-07-01.md"
+    reason: "CR-149 scope, no-risk boundary and Phase A-D target."
+  - path: "market_data/governed_lake.py"
+    reason: "Implemented governed lake readiness matrix, run registry row and validation helpers."
+  - path: "tests/data_lake/test_governed_lake_readiness_matrix.py"
+    reason: "Focused CR-149 fixture tests."
+  - path: "process/evidence/CR149-GOVERNED-LAKE-READINESS-MATRIX.index.json"
+    reason: "Machine evidence summary for CR-149."
+read_if_needed:
+  - path: "market_data/catalog.py"
+    reason: "Existing CatalogEntry and production readiness report source."
+  - path: "market_data/readiness.py"
+    reason: "Existing P0 readiness matrix and pre-read gate source."
+  - path: "process/evidence/CR146-PRODUCTION-LAKE-CURRENT-TRUTH-PROFILE-FULL-POST-N1-2026-07-01.json"
+    reason: "Prior current-truth 17-dataset baseline."
+  - path: "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md"
+    reason: "Phase 1 governed lake exit targets."
+do_not_read_by_default:
+  - ".env"
+  - "NAS credentials"
+  - "broker/account/order runtime logs"
+  - "scripts/legacy/*"
+authorization_summary:
+  authorized:
+    - "metadata-only governed lake readiness matrix implementation"
+    - "offline fixture validation"
+    - "read-only catalog metadata summary"
+    - "process evidence and CR tracking updates"
+  explicitly_not_authorized:
+    - "provider fetch"
+    - "NAS sync/write/restore"
+    - "credential read"
+    - "QMT or broker runtime"
+    - "simulation/live/trading execution"
+    - "real lake write"
+    - "catalog pointer mutation"
+    - "historical business-conflict cleanup"
+    - "git remote write"
+evidence_summary:
+  schema_version: "governed_lake_readiness_matrix_v1"
+  catalog_dataset_count: 17
+  production_ready_count: 12
+  research_ready_count: 1
+  quarantined_count: 4
+  unsupported_count: 0
+  validator_issues: 0
+  pytest: "346 passed"
+read_expansion_log:
+  - id: "READ-CR149-GOVERNED-LAKE-READINESS-MATRIX-2026-07-01T133500+0800"
+    reason: "The CR-149 change file is the scope and authorization source for the low-risk CP6 governed lake readiness matrix contract."
+    paths:
+      - "process/changes/CR-149-GOVERNED-LAKE-READINESS-MATRIX-2026-07-01.md"

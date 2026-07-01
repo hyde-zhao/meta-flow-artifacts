@@ -1,0 +1,77 @@
+---
+id: "CR-149"
+title: "Governed Lake Readiness Matrix Foundation"
+status: "active"
+kind: "requirement-change"
+lifecycle_status: "active"
+readiness_status: "ready_with_risk"
+gate_status: "not_started"
+gate_profile: "standard"
+created_at: "2026-07-01T13:25:00+08:00"
+created_by: "host-orchestrator"
+source_tracking: "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md#phase-1生产级数据湖治理"
+source_decision_id: "USER-20260701-CONTINUE-PRODUCTION-ROADMAP"
+parent_cr: "ROADMAP-QUANT-RESEARCH-PRODUCTION"
+impact_level: "medium"
+workflow_mode_after_change: "standard"
+rollback_to: "pre-CR149 code and artifact state"
+not_authorized:
+  - "provider_fetch"
+  - "nas_sync_or_write"
+  - "credential_read"
+  - "qmt_miniqmt_xtquant_gateway_runtime"
+  - "simulation_live_or_trading"
+  - "broker_write"
+  - "git_remote_write"
+  - "real_lake_write"
+  - "catalog_pointer_mutation"
+  - "historical_business_conflict_semantic_cleanup"
+---
+
+# CR-149: Governed Lake Readiness Matrix Foundation
+
+## 背景
+
+CR-146 已完成 current-truth 数据湖迁移、fail-closed reader 加固和 runtime validation。CR-147/CR-148 已完成研究数据集与回测框架的 metadata-only foundation。路线图 Phase 1 仍要求把 current truth 从“可读”推进为可治理的数据湖：17/17 dataset readiness、PIT 状态、run ordering / registry、quarantine 和 recurring validation 必须有机器可读入口。
+
+## 目标
+
+在不执行真实 lake 写入、不改 catalog pointer、不清理历史 business-conflict 的前提下，收敛现有 catalog/readiness 能力，新增 17-dataset governed lake readiness matrix 合约。
+
+## In Scope
+
+1. 从 `CatalogEntry` / catalog metadata 构建 17-dataset readiness/PIT/run-registry matrix。
+2. 为每个 dataset 输出 `production_ready / research_ready / quarantined / unsupported` 之一。
+3. 输出 PIT status：`pit_available / not_applicable / unsupported-with-reason`，不得长期保留 `null`。
+4. 输出 run registry row，替代生产排序场景对 `source_run_id` 字典序 fallback 的依赖。
+5. 输出 operation counters，并证明 provider/NAS/lake write/catalog pointer/trading counters 全零。
+6. 增加 fixture tests 和 CP6 evidence。
+
+## Out of Scope
+
+1. 真实 lake 写入、catalog pointer mutation、provider fetch、NAS sync/write/restore drill、credential read。
+2. 历史 business-conflict 语义择优、重写、删除或 quarantine 物理迁移。
+3. N2 历史路径 rename、legacy archive delete。
+4. QMT/MiniQMT/xtquant/gateway runtime、broker write、simulation/live/trading。
+
+## Execution Plan
+
+| Phase | 目标 | Exit Criteria |
+|---|---|---|
+| Phase A | Governed readiness contract | 17-dataset matrix dataclasses / builder / validator implemented. |
+| Phase B | Run registry bridge | Catalog current run metadata can be represented without source_run_id lexical ordering. |
+| Phase C | Fixture validation | Tests prove 17/17 coverage, PIT normalization, quarantine classification and zero side effects. |
+| Phase D | Evidence and routing | CP result, evidence index and remaining high-risk follow-up routing recorded. |
+
+## Risk Rules
+
+| Risk | Rule |
+|---|---|
+| business-conflict cleanup | Not authorized; CR-149 may label quarantine policy only, not select survivor rows. |
+| provider/NAS/credential/lake write | Not authorized; local metadata and fixture tests only. |
+| catalog pointer mutation | Not authorized; no publish, no pointer switch. |
+| runtime/trading/broker | Not authorized; any runtime or broker action requires separate human gate. |
+
+## Current Status
+
+CR-149 is active. The next implementation step is Phase A governed readiness matrix contract. No human gate is required for local code / tests / process evidence. A human gate is required before any real lake write, NAS/provider/runtime operation, catalog pointer mutation, historical conflict cleanup, simulation/live/trading or broker action.

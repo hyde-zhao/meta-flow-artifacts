@@ -1,0 +1,87 @@
+{
+  "cr_id": "CR-149",
+  "created_at": "2026-07-01T13:35:00+08:00",
+  "mode": "metadata_only_governed_lake_readiness_matrix",
+  "status": "pass",
+  "contract": {
+    "schema_version": "governed_lake_readiness_matrix_v1",
+    "implemented_objects": [
+      "GovernedLakeReadinessMatrix",
+      "GovernedLakeDatasetReadiness",
+      "GovernedRunRegistryRow",
+      "build_governed_lake_readiness_matrix",
+      "validate_governed_lake_readiness_matrix"
+    ],
+    "dataset_scope": "17/17 catalog datasets",
+    "side_effect_boundary": "metadata-only; no parquet scan, no lake write, no catalog pointer mutation"
+  },
+  "real_catalog_readonly_summary": {
+    "dataset_count": 17,
+    "production_ready_count": 12,
+    "research_ready_count": 1,
+    "quarantined_count": 4,
+    "unsupported_count": 0,
+    "validator_issue_count": 0,
+    "quarantined_datasets": [
+      "events",
+      "prices",
+      "prices_limit",
+      "trade_status"
+    ],
+    "research_ready_datasets": [
+      "industry_classification"
+    ],
+    "pit_available_datasets": [
+      "index_members",
+      "index_weights",
+      "stock_basic"
+    ],
+    "pit_unsupported_with_reason_datasets": [
+      "events",
+      "industry_classification"
+    ],
+    "ordering_policy": "catalog_current_pointer_order_key",
+    "source_run_id_lexical_ordering_allowed": false
+  },
+  "fixture_validation": {
+    "full_17_dataset_matrix_verified": true,
+    "default_business_conflict_quarantine_verified": true,
+    "resolved_current_truth_policy_path_verified": true,
+    "pit_normalization_verified": true,
+    "source_run_id_lexical_ordering_blocked": true,
+    "nonzero_operation_counter_blocked": true
+  },
+  "operation_counts": {
+    "provider_fetch": 0,
+    "nas_sync_or_write": 0,
+    "credential_read": 0,
+    "lake_write": 0,
+    "catalog_pointer_mutation": 0,
+    "business_conflict_cleanup": 0,
+    "simulation_or_live": 0,
+    "broker_write": 0
+  },
+  "validation_summary": {
+    "focused_and_related": "25 passed in 1.63s",
+    "full_data_lake": "346 passed in 5.57s",
+    "git_diff_check": "PASS",
+    "cr_tracking": "OK"
+  },
+  "not_authorized": [
+    "provider_fetch",
+    "nas_sync_or_write",
+    "credential_read",
+    "qmt_runtime",
+    "simulation_live_or_trading",
+    "broker_write",
+    "git_remote_write",
+    "real_lake_write",
+    "catalog_pointer_mutation",
+    "historical_business_conflict_cleanup"
+  ],
+  "remaining_phase1_gates": [
+    "dataset-level human gates for semantic business-conflict cleanup if cleanup is requested",
+    "NAS multi-node consistency read-only or sync gate when user authorizes NAS scope",
+    "published pointer multi-node verification if moving beyond metadata-only contract"
+  ]
+}
