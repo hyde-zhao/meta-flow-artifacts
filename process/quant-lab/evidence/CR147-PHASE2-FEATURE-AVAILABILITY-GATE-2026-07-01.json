@@ -1,0 +1,72 @@
+{
+  "asset_map_summary": {
+    "asset_count": 8,
+    "gap_count_after_availability_gate": 0,
+    "gate_required_gap_count": 0,
+    "operation_counts_all_zero": true
+  },
+  "cr_id": "CR-147",
+  "created_at": "2026-07-01T12:08:00+08:00",
+  "feature_availability_contract": {
+    "decision_time_field": "decision_time",
+    "enforcement_ref": "engine.factor_model_validation.label_cutoff_gate",
+    "feature_available_at_field": "available_at",
+    "feature_set_id": "alpha_core",
+    "label_available_at_field": "label_available_at",
+    "label_horizon_days": 20,
+    "operation_counts": {
+      "account_or_order_operation": 0,
+      "catalog_publish": 0,
+      "credential_read": 0,
+      "dependency_change": 0,
+      "external_project_clone": 0,
+      "external_project_install": 0,
+      "external_project_run": 0,
+      "lake_write": 0,
+      "provider_fetch": 0,
+      "qmt_operation": 0,
+      "reports_overwrite": 0,
+      "simulation_or_live": 0,
+      "source_migration_or_vendor": 0
+    },
+    "primary_keys": [
+      "trade_date",
+      "symbol"
+    ],
+    "required_columns": [
+      "trade_date",
+      "symbol",
+      "decision_time",
+      "available_at",
+      "label_available_at",
+      "momentum_20d",
+      "volatility_20d"
+    ],
+    "schema_version": "feature_availability_contract_v1"
+  },
+  "mode": "offline_metadata_feature_availability_gate_no_runtime",
+  "not_authorized": [
+    "provider_fetch",
+    "nas_sync_or_write",
+    "credential_read",
+    "qmt_runtime",
+    "simulation_live_or_trading",
+    "broker_write",
+    "git_remote_write",
+    "real_lake_write",
+    "catalog_pointer_mutation"
+  ],
+  "schema_version": "cr147_phase2_feature_availability_gate_evidence_v1",
+  "status": "pass",
+  "validation_issues": [],
+  "verification": {
+    "extended_regression_pytest": {
+      "command": "uv run --python 3.11 pytest tests/data_lake/test_label_leak_online_offline_consistency.py tests/research/test_research_production_contracts.py tests/data_lake/test_feature_label_artifact_layer.py tests/data_lake/test_training_snapshot_cutoff.py tests/research/test_research_dataset_builder.py",
+      "result": "35 passed in 0.75s"
+    },
+    "focused_pytest": {
+      "command": "uv run --python 3.11 pytest tests/research/test_research_production_contracts.py",
+      "result": "12 passed in 0.37s"
+    }
+  }
+}

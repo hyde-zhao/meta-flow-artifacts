@@ -1,0 +1,94 @@
+{
+  "blockers": [],
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR147-FEATURE-AVAILABILITY-GATE",
+  "context_ref": "process/context/CP6-CR147-RESEARCH-PRODUCTION-CONTRACTS-CONTEXT.yaml",
+  "cr_id": "CR-147",
+  "created_at": "2026-07-01T12:08:00+08:00",
+  "decision": "PASS",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr147-feature-availability-implementation"
+  ],
+  "evidence_ref": "process/evidence/CR147-PHASE2-FEATURE-AVAILABILITY-GATE.index.json",
+  "items": [
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "engine/research_production_contracts.py"
+      ],
+      "id": "CP6-CR147-AVAIL-01",
+      "name": "Feature availability metadata contract added without runtime side effects",
+      "notes": "Adds FeatureAvailabilityContract, build_feature_availability_contract and validation helpers.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "contract",
+      "evidence_refs": [
+        "engine/factor_model_validation.py",
+        "process/evidence/CR147-PHASE2-FEATURE-AVAILABILITY-GATE.index.json"
+      ],
+      "id": "CP6-CR147-AVAIL-02",
+      "name": "Feature availability contract references existing label cutoff enforcement",
+      "notes": "enforcement_ref=engine.factor_model_validation.label_cutoff_gate; no parallel leakage gate was introduced.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "gap-analysis",
+      "evidence_refs": [
+        "process/evidence/CR147-PHASE2-FEATURE-AVAILABILITY-GATE-2026-07-01.json"
+      ],
+      "id": "CP6-CR147-AVAIL-03",
+      "name": "Asset-map Phase 2 metadata gaps are closed",
+      "notes": "asset_map gap_count_after_availability_gate=0; gate_required_gap_count=0.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "tests/research/test_research_production_contracts.py",
+        "uv run --python 3.11 pytest tests/research/test_research_production_contracts.py"
+      ],
+      "id": "CP6-CR147-AVAIL-04",
+      "name": "CR147 focused contract tests pass",
+      "notes": "12 passed.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "regression",
+      "evidence_refs": [
+        "uv run --python 3.11 pytest tests/data_lake/test_label_leak_online_offline_consistency.py tests/research/test_research_production_contracts.py tests/data_lake/test_feature_label_artifact_layer.py tests/data_lake/test_training_snapshot_cutoff.py tests/research/test_research_dataset_builder.py"
+      ],
+      "id": "CP6-CR147-AVAIL-05",
+      "name": "Related existing leakage/feature/snapshot/research dataset tests pass",
+      "notes": "35 passed.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "continue_cr147_cp7_verification_or_phase3_backtest_foundation",
+  "read_expansion_refs": [
+    "READ-CR147-PHASE2-CONTRACT-CR-SCOPE-2026-07-01T111800+0800"
+  ],
+  "schema_version": 1,
+  "story_id": "CR147-PHASE2-FEATURE-AVAILABILITY-GATE",
+  "waivers": []
+}
