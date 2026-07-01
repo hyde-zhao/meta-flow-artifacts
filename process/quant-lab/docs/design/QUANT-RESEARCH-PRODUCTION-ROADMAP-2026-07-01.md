@@ -1,6 +1,6 @@
 ---
 title: "Quant Research Production Roadmap"
-status: "draft-v0.3"
+status: "draft-v0.4"
 owner: "host-orchestrator"
 created_at: "2026-07-01"
 scope: "data lake, research/backtest framework, paper/live operations"
@@ -16,6 +16,7 @@ authorization_boundary: "planning-only; no runtime, broker write, provider fetch
 | v0.1 | 2026-07-01 | host-orchestrator | 初版路线图：按数据湖、研究生产、回测框架、paper/live、实盘操作划分阶段目标。 |
 | v0.2 | 2026-07-01 | host-orchestrator | 根据 `process/checks/QUANT-RESEARCH-PRODUCTION-ROADMAP-REVIEW-2026-07-01.md` 补 NAS 多节点一致性、既有资产衔接、量化 exit、fail-closed / pointer 门、日频边界和 Gotchas。 |
 | v0.3 | 2026-07-01 | host-orchestrator | 回写 CR146-CR150 实施进度：本地数据湖 Phase 1 closed with NAS sync deferred，研究/回测 foundation 已闭环，下一 active CR 为 CR150 多因子框架补齐。 |
+| v0.4 | 2026-07-01 | host-orchestrator | 刷新 CR150 实施结果：本地 metadata linkage 切片 CP6/CP7 已闭环；补 CP8 前 inline-fallback 风险接受、static-only 验证说明和 asset map / completion map 合并取舍。 |
 
 ## 1. 目标
 
@@ -60,7 +61,7 @@ authorization_boundary: "planning-only; no runtime, broker write, provider fetch
 | Phase 3 backtest foundation | `CR-148` | closed / READY | 已完成 BacktestRunSpec、report pack、cost/risk/attribution metadata contract；相关本地测试通过。 |
 | Phase 1 governed lake readiness | `CR-149` | closed-current-delivery / READY_WITH_RISK | 本地 17-dataset readiness、PIT、run registry、business-conflict quarantine policy 和 recurring validation plan 已闭环。NAS current-truth sync 因用户决策后置。 |
 | NAS current-truth scoped sync | `RA-CR149-001` | candidate / deferred | 已有只读 consistency evidence：NAS catalog stale，17 个 NAS `current/` 路径缺失。后续恢复时需单独 approve scoped local-to-NAS sync。 |
-| Multifactor framework completion | `CR-150` | active / no-risk implementation | 当前下一阶段：补齐日频多因子 factor spec → signal set → portfolio construction → backtest spec → report/admission linkage。 |
+| Multifactor framework completion | `CR-150` | CP7 PASS / CP8 risk acceptance pending | 已完成本地 `MultifactorFrameworkCompletionMap`：factor spec → factor run → factor panel → label window gate → signal set → portfolio policy → BacktestRunSpec → report pack → cost/risk attribution → strategy admission package。下一步是 CP8 release readiness，并由用户显式确认 CP7 inline-fallback waiver。 |
 
 当前执行锁：
 
@@ -71,9 +72,38 @@ deferred runtime candidate: RA-CR149-001 NAS current-truth scoped sync
 
 执行边界：
 
-- CR150 可以链接数据湖 metadata contract / catalog refs / readiness / PIT refs。
+- CR150 已完成本地 metadata-only linkage，可链接数据湖 metadata contract / catalog refs / readiness / PIT refs，但不把这些 refs 解释为真实 lake 执行证据。
 - CR150 当前不读取或写入真实 lake，不同步 NAS，不读取 provider，不启动 simulation/live/trading，不写 broker。
 - 若后续需要真实 lake factor panel / label 构建、Feature Store 写入、NAS report 写入或 runtime execution，必须另起人工门禁。
+
+### 2.2 CR150 实施刷新（2026-07-01）
+
+| 项 | 当前结果 | 证据 |
+|---|---|---|
+| CP2 场景确认 | PASS | `process/checks/CP2-CR150-UC58-60-SCENARIO-CONFIRMATION.result.json` |
+| CP6 implementation | PASS | `process/checks/CP6-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json` |
+| CP7 verification | PASS with CP8 risk acceptance pending | `process/checks/CP7-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json` |
+| Completion map | PASS；10 个节点，`linkage_gaps=[]` | `process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP.index.json` |
+| Hash chain | deterministic | `sha256:de36afe283dffa4a5cd1d7953639e6d1c8ea8ebd1efe73c77b53a7d60aea9e95` |
+| Tests | PASS | `20 passed` for CR150 + related Stage2/Stage3 regression |
+| Operation boundary | PASS | forbidden operation counters all zero |
+
+CR150 当前 implementation surface：
+
+| 对象 | 状态 |
+|---|---|
+| `engine.mature_multifactor_research.build_cr150_multifactor_framework_completion_map` | 已实现 |
+| `engine.mature_multifactor_research.validate_cr150_multifactor_framework_completion_map` | 已实现 |
+| `tests/test_cr150_multifactor_framework_completion.py` | 已新增并通过 |
+| Process evidence / CP6 / CP7 result | 已写入 |
+
+CP8 前必须处理的偏差：
+
+| 风险 / 偏差 | 等级 | 处理要求 |
+|---|---|---|
+| `RISK-CR150-INLINE-VERIFICATION`：CP7 由 Host Orchestrator inline-fallback 代行 meta-qa，缺少用户对 inline-fallback 的显式批准 | medium | CP8 Decision Brief 必须作为 `risk_acceptance` 决策项提交用户确认；用户未确认前不得无条件写 `READY`。建议默认 CP8 结论为 `READY_WITH_RISK` 或 `READY_PENDING_RISK_ACCEPTANCE`。 |
+| CP7 `validation_mode=mixed` 标签不够精确，实际验证均为 pytest / py_compile / JSON / git diff / workspace / cr-tracking 等静态验证 | low | CP8 evidence 中写明 `effective_validation_mode=static-only`，并说明 runtime 部分全部 out_of_scope / not_authorized。 |
+| Phase A asset map 与 Phase B contract completion 合并为单一 `MultifactorFrameworkCompletionMap` | low | CP8 摘要说明这是有意合并：nodes 提供 asset inventory，`linkage_gaps` 提供 gap-count 等价视图。 |
 
 ## 3. 能力蓝图
 
@@ -509,7 +539,7 @@ Paper trading：
 | CR-147 | Quant Research Production Foundation | 已完成：ResearchDatasetSpec、feature/label/training snapshot、experiment/admission 资产收敛 |
 | CR-148 | Unified Backtest and Experiment Foundation | 已完成：BacktestRunSpec、report pack、cost/risk/attribution metadata contract |
 | CR-149 | Governed Lake Readiness Matrix Foundation | 已完成本地 Phase 1 治理；NAS scoped sync deferred 为 `RA-CR149-001` |
-| CR-150 | Multifactor Framework Completion | 当前 active：补齐日频多因子 baseline framework metadata chain |
+| CR-150 | Multifactor Framework Completion | CP7 PASS / CP8 pending：本地 metadata chain 已补齐；CP8 需确认 inline-fallback waiver 风险接受后关闭 |
 | Future CR | Paper Trading and Readonly Live | readonly market/account、live signal shadow、paper OMS、daily paper report |
 | Future CR | Controlled Small-Live Authorization Gate | OMS、broker adapter write contract、pre-trade risk、kill switch、小额实盘门禁 |
 
@@ -561,15 +591,13 @@ Out of scope：
 
 建议顺序：
 
-1. CR146 CP2 approve 后关闭当前 validation delivery。
-2. 启动 CR147。
-3. 先治理 `trade_status` conflict policy。
-4. 再治理 `prices_limit` / `prices`。
-5. 建立 PIT readiness matrix。
-6. 实现 `ResearchDatasetSpec` 和 PIT-safe builder。
-7. 以日频多因子 baseline 打通 research -> backtest -> experiment registry，明确 baseline 是链路验证，不是策略锁定或上线承诺。
-8. 再扩展 ML 和事件驱动。
-9. 最后进入 readonly live / paper / small-live。
+1. 先完成 CR150 CP8：把 `RISK-CR150-INLINE-VERIFICATION` 作为 `risk_acceptance` 决策项提交用户确认。
+2. CP8 evidence 中写明本轮有效验证模式是 `static-only`，runtime / real data / external framework 全部 out of scope。
+3. CP8 摘要说明 asset map 与 completion map 合并的设计取舍。
+4. 用户接受风险后，将 CR150 关闭为 `READY_WITH_RISK` 或按用户确认口径关闭。
+5. 若用户不接受 inline-fallback waiver，则回到 CP7，显式请求 meta-qa 子 agent 或取得 inline-fallback 批准后复验。
+6. CR150 关闭后，再选择下一条路线：真实 lake factor panel / NAS scoped sync / ML pipeline / event-driven pipeline / readonly live / paper。
+7. 任一真实 lake、NAS、provider、runtime、QMT、simulation/live/trading、broker 或 credential 工作都必须另起授权 CR。
 
 核心原则：
 

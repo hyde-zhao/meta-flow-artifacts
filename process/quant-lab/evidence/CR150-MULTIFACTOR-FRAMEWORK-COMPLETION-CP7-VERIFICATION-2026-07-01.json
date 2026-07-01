@@ -1,0 +1,106 @@
+{
+  "schema_version": "verification_evidence_v1",
+  "cr_id": "CR-150",
+  "story_id": "CR150-MULTIFACTOR-FRAMEWORK-COMPLETION",
+  "created_at": "2026-07-01T15:31:58+08:00",
+  "decision": "PASS",
+  "validation_mode": "mixed",
+  "verification_scope": [
+    "local metadata linkage contract",
+    "deterministic hash chain",
+    "missing linkage failure mode",
+    "operation boundary counters",
+    "process evidence and state consistency"
+  ],
+  "out_of_scope": [
+    "real lake read/write",
+    "NAS sync/write",
+    "provider fetch",
+    "QMT/runtime",
+    "simulation/live/trading",
+    "broker/order operation",
+    "credential access",
+    "Git remote write",
+    "external framework execution"
+  ],
+  "object_inventory": [
+    {
+      "object": "engine.mature_multifactor_research.build_cr150_multifactor_framework_completion_map",
+      "type": "code",
+      "verification": "unit/contract tests and py_compile",
+      "status": "PASS"
+    },
+    {
+      "object": "engine.mature_multifactor_research.validate_cr150_multifactor_framework_completion_map",
+      "type": "guardrail",
+      "verification": "positive and negative unit tests",
+      "status": "PASS"
+    },
+    {
+      "object": "tests/test_cr150_multifactor_framework_completion.py",
+      "type": "test",
+      "verification": "pytest",
+      "status": "PASS"
+    },
+    {
+      "object": "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP-2026-07-01.json",
+      "type": "process-evidence",
+      "verification": "json.tool and hash/operation review",
+      "status": "PASS"
+    }
+  ],
+  "trace_matrix": [
+    {
+      "scenario": "UC-58",
+      "requirement": "Use external references only as stage guidance and keep local project as source of truth.",
+      "implementation": "external_basis_refs plus not_authorized boundaries in completion map",
+      "test_or_check": "test_cr150_completion_map_links_multifactor_chain_without_runtime_authorization",
+      "status": "PASS"
+    },
+    {
+      "scenario": "UC-59",
+      "requirement": "Link multifactor research artifacts into a production-style chain without running external frameworks.",
+      "implementation": "CR150 node order and deterministic chain hash",
+      "test_or_check": "completion map node_order and chain_hash assertions",
+      "status": "PASS"
+    },
+    {
+      "scenario": "UC-60",
+      "requirement": "Block promotion when a required linkage node is missing.",
+      "implementation": "validator and linkage_gaps",
+      "test_or_check": "test_cr150_completion_map_blocks_missing_report_pack_linkage",
+      "status": "PASS"
+    }
+  ],
+  "design_contract_checks": [
+    {
+      "contract": "metadata-only local linkage",
+      "source_ref": "process/checks/CP2-CR150-UC58-60-SCENARIO-CONFIRMATION.result.json",
+      "status": "PASS"
+    },
+    {
+      "contract": "ordered chain from factor spec through admission package",
+      "source_ref": "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP-2026-07-01.json",
+      "status": "PASS"
+    },
+    {
+      "contract": "forbidden operation counters all zero",
+      "source_ref": "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP.index.json",
+      "status": "PASS"
+    }
+  ],
+  "verification_results": {
+    "pytest_targeted": "20 passed in 0.66s",
+    "py_compile": "PASS",
+    "git_diff_check": "PASS",
+    "json_validation": "PASS",
+    "workspace_check": "PASS",
+    "cr_tracking": "PASS"
+  },
+  "issues": [],
+  "remaining_risks": [
+    "Runtime, real data and external framework paths remain deferred until a separate explicit authorization CR.",
+    "CP7 used inline host-orchestrator verification because sub-agent spawning was not explicitly requested."
+  ],
+  "stage_decision": "PASS"
+}

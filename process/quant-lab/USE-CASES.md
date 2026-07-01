@@ -1,16 +1,16 @@
 ---
-status: draft
-version: "1.17"
+status: confirmed
+version: "1.18"
 confirmed_by: "user"
-confirmed_at: "2026-06-24T13:20:00+08:00"
-last_confirmed_version: "1.16"
+confirmed_at: "2026-07-01T15:31:58+08:00"
+last_confirmed_version: "1.18"
 engagement_mode: production
 scenario_subject_type: target-artifact
 scenario_subject_id: "local-backtest-production-data-lake-runner-and-qmt-gateway"
 target_artifact_type: tool
 governance_mode: review-gated
 review_policy: strict
-total_use_cases: 57
+total_use_cases: 60
 ---
 
 # 使用场景
@@ -37,6 +37,7 @@ total_use_cases: 57
 | 1.15 | 2026-06-13 | meta-po | 按 CR-046 增量补齐 QMT / MiniQMT 双目标策略交付框架场景，覆盖策略核心合同、QMT 终端策略包、MiniQMT runner 安装设计、验证框架、后续策略交付门禁和研究框架反向约束 | CR-046 原文档增量更新；保留 UC-01 至 UC-27 旧基线，新增 UC-28 至 UC-32；用户已于 2026-06-13T22:03:22+08:00 通过 CP2；不授权具体策略交付、QMT 运行验证、MiniQMT 连接、submit/cancel、simulation/live、provider/lake/publish 或凭据读取 |
 | 1.16 | 2026-06-24 | host-orchestrator | 按 CR-138 增量补齐 Runner 与 QMT Gateway 运营使用场景，并按用户反馈检查 UC-01 至 UC-50 的合并 / 刷新关系；覆盖多因子日常运行、盘前确认、执行跟踪、事件/信号接入、组合再平衡、盘中运维、日志审计、盘后复盘、异常恢复、策略调整/发布/暂停/回滚，以及 Gateway 启动、健康、查询、订阅、下单撤单回报、故障恢复、审计和配置变更 | CR-138 原文档增量更新；保留 UC-01 至 UC-32 旧基线和编号，不破坏历史 CP2 追溯；新增 UC-33 至 UC-50，并新增“CR-138 场景归一化与合并审查”标明旧场景如何被 Runner / Gateway 运营视角吸收、约束或延后；用户已于 2026-06-24T13:20:00+08:00 回复 `approve` 通过 CP2；不授权 runtime、NAS、QMT、MiniQMT、XtQuant、credentials、provider/lake/catalog、submit/cancel、simulation/live 或 Git remote write |
 | 1.17 | 2026-06-28 | meta-pm | 按 CR-139「Strategy Data Foundation」parent CR 增量补齐策略生产数据底座场景，覆盖信息收集→回测→模拟盘→实盘全流程四阶段、四组门禁集、ML feature/label/artifact 接入、run evidence 贯通、配置类事实源版本化、交易审计链、schema 契约冻结与跨源时点一致性；45 项整改清单按 (a)=6/(b)=7/(c)=12/(d1)=6/(d2)=14 机械统计映射到 UC-51 至 UC-57；既有合同清单已 grep 核验（闭环非新建）（UC-51..57 已按用户反馈重写为 persona 驱动用户场景，整改项改为支撑证据回链 REQ） | CR-139 原文档增量更新；保留 UC-01 至 UC-50 旧基线和编号，不破坏历史 CP2 追溯；新增 UC-51 至 UC-57；D8a/D8b 二轮建议批准为 working basis，正式确认路由 CP2 人工门禁；不授权 runtime/NAS/QMT/trading/provider-lake-catalog 写入/物理分区迁移（Wave1 N1 后置）/Git remote write |
+| 1.18 | 2026-07-01 | host-orchestrator | 按用户要求补充多因子、机器学习和事件驱动策略从信息收集、研究、回测、模拟盘到实盘的端到端人读用户场景，并追加开源量化框架与论文方法论参考；用户已于 2026-07-01T15:31:58+08:00 接受 UC-58/UC-59/UC-60、外部依据和当前不授权边界 | CR-150 / ROADMAP-QUANT-RESEARCH-PRODUCTION 场景增量确认；保留 UC-01 至 UC-57 旧基线和编号，不破坏历史 CP2 追溯；新增 UC-58 至 UC-60；本确认只授权 CR150 本地 metadata linkage / 测试 / process evidence，不授权真实 lake/NAS/provider/runtime/QMT/simulation/live/trading/broker/credential/Git remote 或外部框架运行 |
 
 ## 用户画像（Personas）
 
@@ -1669,20 +1670,135 @@ total_use_cases: 57
 7. P-04 构造 PIT 正确性回归（T2，REQ-226）、去重正确性测试（T3，REQ-227）。
 8. schema 契约冻结 + 跨源时点对齐 + PIT/lookahead 门禁就位后，模拟盘 runner 稳定读到时点正确的 published 数据。
 
+## CR-150 / 生产路线外部依据与本项目取舍（已确认）
+
+本节用于解释 UC-58 至 UC-60 的方法论来源。外部资料只作为流程设计参考，不作为默认依赖、默认框架迁移、源码移植、真实运行授权或 broker / QMT / NAS / provider / lake 操作授权。本项目仍以 quant-lab 已有数据湖、`FactorSpec`、`FactorPanelContract`、`SignalSet`、`BacktestRunSpec`、`StrategyAdmissionPackage`、QMT C/S bridge、OMS / 风控 / 授权门禁为真相源。
+
+| 参考对象 | 可借鉴点 | 本项目取舍 |
+|---|---|---|
+| Microsoft Qlib（GitHub: `https://github.com/microsoft/qlib`；论文: `https://arxiv.org/abs/2009.11189`） | AI quant workflow 覆盖 dataset、model training、backtest、evaluation 与 production research。 | ML 场景采用 dataset / feature / label / snapshot / model / backtest / evaluation / admission 链路；不引入 Qlib 作为默认依赖或运行框架。 |
+| Quantopian Alphalens（`https://github.com/quantopian/alphalens`） | alpha factor 分析关注分层收益、IC / RankIC、换手、覆盖率和稳定性。 | 多因子场景补充单因子评价和多因子组合前的可解释诊断；不复制 Alphalens API。 |
+| Quantopian Pyfolio / pyfolio-reloaded（`https://github.com/quantopian/pyfolio`；`https://github.com/stefan-jansen/pyfolio-reloaded`） | portfolio and risk analytics / tear sheet 用于收益、风险、回撤和组合表现分析。 | 回测后必须生成 report pack、risk / attribution / cost metadata；不把图表工具作为生产 truth。 |
+| Zipline / Zipline Reloaded（`https://github.com/quantopian/zipline`；`https://github.com/stefan-jansen/zipline-reloaded`） | 事件驱动 backtest 与 live trading engine 语义为事件策略提供参考。 | 事件驱动场景强调 event replay、order lifecycle 和 backtest/live 语义一致性；不迁移 Zipline 主路径。 |
+| Backtrader（`https://github.com/mementum/backtrader`；`https://www.backtrader.com/`） | strategy、indicator、analyzer、data feed、broker / live / backtest 分层清晰。 | 继续作为 optional semantic reference；不替代 lightweight 主路径，不接真实 broker。 |
+| NautilusTrader（`https://github.com/nautechsystems/nautilus_trader`；`https://nautilustrader.io/`） | 强调 deterministic backtesting、event-driven engine、同一核心覆盖 backtest 与 live。 | 借鉴同语义链路和审计链思想；不迁移 Rust / Python engine。 |
+| QuantConnect LEAN（`https://github.com/quantconnect/lean`） | 覆盖 research、backtesting、live trading 的统一 engine。 | 作为端到端 lifecycle 参考；本项目仍按 A 股数据湖、QMT 和本地授权门禁落地。 |
+| RQAlpha / vn.py（`https://github.com/ricequant/rqalpha`；`https://github.com/vnpy/vnpy`） | 国内 Python 回测 / 交易框架和交易系统实践参考。 | 仅参考 A 股和交易接入分层，不作为默认运行依赖。 |
+| FinRL / FinRL-Trading（`https://github.com/AI4Finance-Foundation/FinRL`；论文: `https://arxiv.org/abs/2011.09607`） | 强调 layered architecture、reproducibility、transaction cost、liquidity 和 risk-aversion。 | ML / RL 场景把成本、流动性、风险和可复现训练纳入准入；不在 CR150 实现 RL。 |
+| Bailey / Lopez de Prado 等 Backtest Overfitting / PBO（`https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2326253`） | 多次试验和参数搜索会放大 false positive，需要控制 backtest overfitting。 | 多因子和 ML 场景必须记录试验空间、参数扫描、稳健性和过拟合风险，不只挑最优回测。 |
+| Advances in Financial Machine Learning / Purged CV / Embargo（`https://philpapers.org/rec/LPEAIF`） | 金融 ML 的标签窗口重叠会造成泄漏，需要 purging / embargo 或等价门禁。 | ML 场景要求 split manifest、label window overlap 检查、leakage gate 和 train / valid / test 版本化。 |
+
+### UC-58：多因子策略端到端生产全流程（已确认）
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-03 因子研究数据审计者；P-07 阶段六多因子模拟盘准入负责人；P-09 Runner / QMT Gateway 运营负责人 |
+| **触发条件** | 用户希望把日频多因子策略从信息收集、因子研究、组合构建、统一回测、报告准入、模拟盘申请到实盘运行形成一条人能读懂、机器可追溯、权限不越界的生产流程。 |
+| **输入** | 因子想法、股票池、dataset readiness / PIT 状态、benchmark、行业 / 市值 / 风格、可交易性、成本假设、`FactorSpec`、`FactorRunSpec`、`FactorPanelContract`、`LabelWindowSpec`、`SignalSet`、portfolio policy、`BacktestRunSpec`、report pack、admission refs、blocked claims、permission counters。 |
+| **处理逻辑** | Given 数据湖和因子契约已经有可引用的 metadata，When 用户推进多因子策略，Then 系统先确认数据和声明边界，再把因子规格、因子面板、标签窗口、单因子评价、多因子权重、组合构建、回测规格、报告和准入包串成单一 metadata chain。研究阶段参考 Alphalens 类因子分析口径记录 IC / RankIC、分层收益、换手、覆盖率和稳定性；回测后参考 Pyfolio 类分析口径记录收益、风险、回撤、成本和归因；参数扫描和因子组合搜索必须记录试验空间和过拟合风险。策略输出只能是 signal / target portfolio / order intent draft，不得直接生成 broker order。 |
+| **输出/结果** | 多因子研究说明、factor spec refs、factor panel refs、label refs、SignalSet、portfolio construction refs、BacktestRunSpec refs、report pack refs、StrategyAdmissionPackage refs、hash chain、forbidden counters 汇总、pass / fail / needs_review 准入结论和 deferred runtime gate。 |
+| **前置条件** | CR150 只能做本地 metadata linkage completion；真实 factor panel 构建、真实 lake 读写、NAS sync、provider fetch、simulation/live/trading、broker write 均需独立人工授权。 |
+| **排除情况** | 不把多因子研究结果自动解释为可交易策略；不允许 strategy 直接调用 broker；不在 CR150 内执行真实数据湖读写、paper、simulation 或 live；不把 Qlib、Backtrader、分钟级、Level2 作为多因子主路径默认能力。 |
+
+**端到端过程（人读版）：**
+
+| 过程 | 用户视角 | 输入 | 输出 |
+|---|---|---|---|
+| 信息收集 | 先确认研究什么因子、数据何时可用、哪些声明被阻断。 | 因子想法、股票池、dataset readiness、PIT、benchmark、可交易性、成本假设。 | 研究问题说明、因子候选清单、数据可用性摘要、blocked claims。 |
+| 因子定义 | 把想法变成可审计因子规格。 | `FactorSpec`、方向、窗口、复权口径、available_at、lineage。 | factor spec refs、factor run refs、config hash、permission counters。 |
+| 因子面板与标签 | 检查因子值、标签和泄漏风险。 | factor run refs、`FactorPanelContract`、`LabelWindowSpec`、PIT / leakage gate。 | factor panel refs、label refs、leakage result、downstream allowed / blocked。 |
+| 因子评价与组合 | 先诊断单因子，再组合成综合信号。 | IC / RankIC、分层收益、换手、覆盖率、权重策略。 | 单因子评价、多因子权重、`SignalSet`、research evidence index。 |
+| 组合构建 | 把 signal 变成目标权重，不直接下单。 | `SignalSet`、风险约束、集中度、换手、黑名单、成本参数。 | portfolio construction refs、target weights、risk policy refs。 |
+| 回测 | 用统一回测框架验证表现和成本后结果。 | target weights、`BacktestRunSpec`、交易日历、成本、benchmark、snapshot refs。 | backtest result、metrics、equity curve、cost / risk / attribution metadata。 |
+| 报告与准入 | 把研究、回测、风险和限制项整理成评审包。 | backtest result、report pack、experiment manifest、admission refs。 | report pack、ExperimentManifest、StrategyAdmissionPackage、准入结论。 |
+| 模拟盘申请 | 只有通过准入的策略才申请 shadow / dry-run / paper。 | admission package、runbook、per-run authorization、kill switch plan。 | 模拟盘申请材料、paper run plan、人工审批项。 |
+| 模拟盘运行 | 观察非真实下单链路表现与异常。 | approved paper config、paper OMS、risk rules、daily schedule。 | paper orders、paper fills、daily paper report、reconciliation。 |
+| 实盘准入 | paper、对账、风控和 kill switch 都通过后再申请小额实盘。 | paper evidence、risk limits、OMS / broker adapter、kill switch drill。 | small-live decision brief、approved limits、rollback plan。 |
+| 实盘运行 | 策略不直接下单，真实订单由 OMS 经风控发出。 | approved artifact、order intent、pre-trade risk、broker adapter。 | broker orders、fills、position / cash reconciliation、post-trade audit。 |
+| 复盘与生命周期 | 根据表现决定继续、暂停、降级或回滚。 | daily reports、drift / decay、risk breach、incident reports。 | continue / pause / rollback decision、new research task、retirement record。 |
+
+---
+
+### UC-59：机器学习策略端到端生产全流程（已确认）
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-03 因子研究数据审计者；P-07 阶段六多因子模拟盘准入负责人；P-09 Runner / QMT Gateway 运营负责人 |
+| **触发条件** | 用户希望把 ML 策略从问题定义、特征标签、训练快照、模型训练、预测信号、回测、模型准入、模拟盘、实盘和漂移复盘形成生产流程。 |
+| **输入** | 预测目标、持有周期、label 定义、股票池、样本区间、FeatureArtifactSpec、LabelArtifactSpec、ResearchDatasetSpec、available_at、label window、train / valid / test split、model config、random seed、BacktestRunSpec、drift baseline、admission refs。 |
+| **处理逻辑** | Given ML 比传统因子更容易发生数据泄漏、过拟合和训练-实盘偏差，When 用户推进 ML 策略，Then 系统按 Qlib / FinRL 类 pipeline 固定 dataset、feature、label、snapshot、model、backtest、evaluation 和 admission 链路；训练切分必须有 split manifest，标签窗口重叠必须经过 purged / embargo 或等价 leakage gate；模型输出必须先转成 signal / target portfolio，再进入回测、risk gate、paper 和 OMS。 |
+| **输出/结果** | ML research brief、feature refs、label refs、training snapshot refs、model artifact、training_config、prediction_schema、model hash、validation metrics、ML SignalSet、backtest report、ML admission result、drift monitoring plan、retrain / rollback decision。 |
+| **前置条件** | ML baseline 不属于 CR150 实现范围；进入实现前需另起 CR，且必须具备 ResearchDatasetSpec、feature / label / snapshot、leakage gate 和本地可复现测试。 |
+| **排除情况** | 不在 CR150 中训练生产模型；不在没有 snapshot / label gate 的情况下声明生产 ML；不把模型分数直接解释为订单；不允许模型绕过 signal、portfolio、OMS 和 risk gate。 |
+
+**端到端过程（人读版）：**
+
+| 过程 | 用户视角 | 输入 | 输出 |
+|---|---|---|---|
+| 问题定义 | 明确模型预测什么、服务什么交易决策。 | 预测目标、持有周期、label 定义、股票池、交易频率。 | ML research brief、label policy、边界声明。 |
+| 特征与标签设计 | 固定可训练特征、标签和样本切分。 | feature specs、label specs、ResearchDatasetSpec、available_at、label window。 | feature refs、label refs、leakage gate result。 |
+| 训练样本冻结 | 在固定 snapshot 上训练，避免口径漂移。 | training snapshot、feature versions、label versions、split seed。 | TrainingSnapshot、dataset hash、feature hash、label hash。 |
+| 模型训练 | 训练模型并记录可复现信息。 | model config、snapshot、算法参数、random seed。 | model artifact、training_config、model hash、validation metrics。 |
+| 预测与信号转换 | 模型预测先转为 signal，不直接下单。 | model artifact、prediction schema、feature snapshot、ranking policy。 | prediction refs、ML SignalSet、confidence / coverage。 |
+| 回测 | 验证 ML signal 成本后是否有效。 | ML SignalSet、BacktestRunSpec、cost / risk constraints。 | backtest report、robustness slices、cost-adjusted metrics。 |
+| 模型准入 | 检查泄漏、过拟合、漂移和不可解释风险。 | training evidence、backtest report、leakage gate、drift baseline。 | ML admission result、drift monitoring plan。 |
+| 模拟盘 | 验证 live 特征与离线特征一致。 | approved ML artifact、live feature builder、paper OMS。 | paper predictions、paper target portfolio、feature diff、daily report。 |
+| 实盘 | 经独立授权后按模型版本运行。 | approved model version、risk limits、OMS、broker adapter。 | audited orders、fills、model version trace、feature snapshot trace。 |
+| 漂移与再训练 | 监控特征、预测分布和表现衰减。 | live predictions、realized labels、drift、performance decay。 | drift report、retrain decision、model rollback / new version record。 |
+
+---
+
+### UC-60：事件驱动策略端到端生产全流程（已确认）
+
+| 字段 | 内容 |
+|---|---|
+| **使用角色** | P-03 因子研究数据审计者；P-08 研究执行后端评估者 / 回测-模拟一致性负责人；P-09 Runner / QMT Gateway 运营负责人 |
+| **触发条件** | 用户希望把公告、财报、行情状态、交易限制或其他事件类信号从事件假设、事件数据治理、事件 replay、回测、准入、模拟盘到实盘形成可审计流程。 |
+| **输入** | 事件类型、事件来源、event_time、available_at、decision_time、revision policy、dedupe policy、event store refs、market data refs、tradability filters、event trigger、portfolio policy、BacktestRunSpec、admission refs。 |
+| **处理逻辑** | Given 事件策略最容易把事件发生时间误当成可交易时间，When 用户推进事件驱动策略，Then 系统必须分离 `event_time`、`available_at` 和 `decision_time`；参考 Zipline / Nautilus / LEAN 类事件驱动框架，先做事件治理和 replay，再生成 event signal / target portfolio / order intent draft，最后通过回测、准入、paper 和 OMS。事件监听器不得直接下单，真实订单只能由 OMS 经 pre-trade risk 和 kill switch 控制。 |
+| **输出/结果** | EventResearchBrief、event snapshot refs、event quality report、event-derived features、Event SignalSet、event replay report、late / missed event analysis、event strategy admission result、paper event triggers、event-to-order trace、post-trade reconciliation。 |
+| **前置条件** | 事件驱动 baseline 不属于 CR150 实现范围；进入实现前需另起 CR，并先确认 event store、available_at、event replay、source reliability 和 runtime authorization gate。 |
+| **排除情况** | 不把 `event_time` 当作可交易时间；不在 CR150 中实现事件驱动 baseline；不接入真实实时事件源、QMT、broker 或 live runtime；不允许事件监听器直接发真实订单。 |
+
+**端到端过程（人读版）：**
+
+| 过程 | 用户视角 | 输入 | 输出 |
+|---|---|---|---|
+| 事件假设定义 | 定义哪些事件影响价格，以及何时才可交易。 | 事件类型、来源、event_time、available_at、decision_time、影响窗口。 | EventResearchBrief、事件可用性规则。 |
+| 事件数据治理 | 检查重复、延迟、修订和可用时点。 | event store refs、source lineage、dedupe / revision policy。 | event snapshot refs、event quality report、blocked event claims。 |
+| 事件特征构建 | 把事件转成研究特征或触发条件。 | event snapshot、market refs、lookback / lookforward window。 | event-derived features、trigger candidates、leakage result。 |
+| 事件研究 | 评估事件前后收益、可交易性和风险。 | event features、label window、benchmark、cost、sample filters。 | event study report、收益窗口统计、样本量、拥挤风险。 |
+| 信号与组合 | 事件触发先转为目标组合，不直接下单。 | event trigger、confidence、cooldown policy、risk constraints。 | Event SignalSet、target portfolio refs、order intent draft refs。 |
+| 回测 / replay | 检查历史事件序列中的表现。 | event replay snapshot、BacktestRunSpec、tradability / cost rules。 | event replay report、metrics、missed / late event analysis。 |
+| 准入 | 确认没有未来事件和不稳定数据源依赖。 | replay report、available_at audit、source reliability、risk report。 | admission result、blocked claims、monitoring requirements。 |
+| 模拟盘 | 观察实时事件到达、信号和组合调整。 | approved event artifact、readonly event feed、paper OMS。 | paper event triggers、paper target changes、daily reconciliation。 |
+| 实盘 | 经独立授权后由 OMS 和风控执行。 | approved artifact、event listener、OMS、pre-trade risk、kill switch。 | audited broker orders、event-to-order trace、post-trade reconciliation。 |
+| 复盘 | 检查事件延迟、误报、漏报和策略拥挤。 | event logs、signal logs、order / fill logs、PnL attribution。 | event quality improvement task、pause / continue / rollback decision。 |
+
+## UC-58 至 UC-60 当前不授权边界（已确认）
+
+本次场景增量只用于确认端到端流程和后续 CR 切分，不授权以下操作：
+
+- 不授权 provider fetch、真实 lake read/write、catalog pointer mutation、NAS sync/write/restore、credential read。
+- 不授权 QMT / MiniQMT / xtquant / gateway runtime、simulation、live、paper runtime、broker write、submit / cancel、账户 / 持仓 / 成交真实查询。
+- 不授权 Git remote write、依赖变更、外部框架 clone / install / run、源码级迁移或替换 lightweight 主路径。
+- 不把 UC-59 / UC-60 纳入 CR150 实现范围；它们只作为后续 ML / event-driven CR 的场景输入。
+- CR150 仍仅限 UC-58 中的多因子 metadata linkage completion：基于 CR147 / CR148 已有契约补齐 factor spec -> factor panel -> signal set -> portfolio -> BacktestRunSpec -> report pack -> admission 的可追溯链接、hash chain 和 forbidden counters 汇总。
+
 <!-- coverage-checklist: begin -->
 ## 附录：覆盖自检表
 
 | 维度 ID | 维度名称 | 状态 | 涉及场景 | 备注 |
 |---|---|---|---|---|
-| D1 | 用户维度 | 已补充 | UC-01 至 UC-50 | 覆盖策略研究者、聚宽候选验证者、因子研究数据审计者、生产数据湖负责人、QMT 交易接入 / 运行负责人、研究口径与交易价格审计者、阶段六多因子模拟盘准入负责人、研究执行后端评估者、CR-046 双目标策略交付框架负责人，以及 CR-138 Runner / QMT Gateway 运营负责人 |
-| D2 | 任务维度 | 已补充 | UC-01 至 UC-50 | 覆盖数据读取、回测、扫描、扩展策略、benchmark 消费、数据准备、生产级因子研究、全 A 数据湖、QMT foundation、阶段激活、复权双视图、publish/rollback、研究重跑、阶段六准入、QMT C/S bridge、Backtrader optional backend、多因子闭环、双目标策略交付框架、QMT terminal target、MiniQMT runner 安装设计、验证框架、研究反向约束、Runner 日常运行和 QMT Gateway 运营 |
-| D3 | 动机维度 | 已补充 | UC-02 至 UC-50 | 动机是提高本地研究效率、减少平台等待、升级探索性因子结论、建设可发布可回滚的 production truth，并在接入 QMT、申请模拟盘、引入可选执行后端、多因子闭环、双目标策略交付和 Runner/Gateway 运营前降低假 alpha、口径混淆、凭据泄露、未授权 simulation、运行失控、schema 漏洞、框架不一致和 Gateway 故障恢复风险 |
-| D4 | 时间维度 | 已补充 | UC-02 至 UC-50 | 明确 2019-2025 回测区间、60 组扫描、rolling/年度分段、since-inception、release `as_of_trade_date`、T 日信号 / T+1 执行、qfq `as_of_trade_date`、QMT 阶段推进、连续 5 个真实交易日 dry-run、后置能力触发时序、CR-046 framework-first、CR047 策略交付、CR049 MiniQMT 权限后置，以及 CR-138 的盘前、盘中、盘后、异常恢复、发布/暂停/回滚时序 |
-| D5 | 环境维度 | 已补充 | UC-01 至 UC-50 | 本地 parquet、raw、manifest、quality/catalog、断网消费、外置 lake、catalog current pointer、DuckDB 只读候选、Windows QMT / MiniQMT 节点、FastAPI 本地服务桥接、WSL / Windows 部署边界、外置 broker lake、mock adapter、凭据脱敏边界、Backtrader 未安装环境、本地 Qlib 静态分析路径、QMT terminal package、MiniQMT runner 安装边界、Runner registry/bundle/evidence 和 Gateway service lifecycle 均已记录 |
-| D6 | 方式维度 | 已补充 | UC-02 至 UC-50 | 命令/脚本/Notebook/API 入口将在 HLD 中细化；CSV、typed result、写湖作业、gate result、factor audit panel、P0 分层、Explicit Publish Gate、research rerun、OMS order intent、shadow / dry-run / mock、Backtrader semantic diff、多因子 schema、策略包 schema、install dry-run、双目标验证证据、Runner run plan、事件/信号接入、Gateway health/capabilities、WS/gRPC/REST 事件流方式已记录 |
-| D7 | 异常维度 | 已补充 | UC-01 至 UC-50 | 覆盖 schema 缺失、复权混用、`available_at` 越界、label overlap、lineage 缺失、缺失价格、无成交、数据源失败、quality fail、PIT 不完整、辅助数据缺失、catalog pointer 污染、publish/rollback 失败、DuckDB 越权写入、凭据未授权、QMT 直连绕过、pre-trade fail、unknown 状态、未授权 simulation、Backtrader 未安装、MiniQMT 权限缺失、fixture pass 被误读为真实运行证据、Runner 崩溃、回报乱序、Gateway 断连、xtdata 并发崩溃和订阅失效 |
-| D8 | 集成维度 | 已补充 | UC-04 至 UC-57 | 与聚宽验证、策略扩展、`market_data` 写湖、只读 resolver、Backtrader optional backend、Qlib isolated runner、CR-008 `research_input_v1`、CR-010/012/013/014/018 数据湖基线、DuckDB 候选查询层、local_backtest C 侧 client、Windows QMT / XtQuant S 侧 gateway、OMS / adapter / broker lake、lightweight engine、Stage6 admission、QMT terminal target、MiniQMT runner target、Runner operational control plane 和 QMT Gateway service layer 的边界已记录；CR-139 UC-51..UC-57 补齐策略生产数据底座与既有 ExperimentManifest/StrategyAdmissionPackage/RunEvidenceIndex/BrokerLakeSchema/CommissionSchedule/benchmark/PortfolioRiskPolicy/policy_cycle 既有合同的闭环集成 |
-| D9 | 数据生命周期维度 | 已补充 | UC-09 至 UC-57 | CR-014/018 覆盖全 A 证券生命周期、代码变更、退市、current pointer、增量刷新、replay、publish release、rollback、权限计数和 claim boundary；CR-015/016/017/019/025/030/046/138 覆盖 broker event、order state、qfq as-of、admission package、dry-run 记录、bridge request、clean feed、semantic diff、factor panel、label window、StrategyAdmissionPackage、策略包合同、验证证据、run registry、Gateway audit record 和事件订阅生命周期；CR-139 UC-51..UC-57 覆盖信息收集→回测→模拟盘→实盘全流程数据生命周期：T8/T7 基线清册、C1/C2/V1/R1 四道 P0 防线、V3 feature/label/artifact 版本化、L1/L2/L4 日级增量+pointer+读前门禁、L3/T4/T5/T6 读审计+交易审计链 run-id 贯通、F1-F4 配置类事实源版本化 release 闭环、V4/X1-X4 schema 冻结+跨源时点一致性 |
+| D1 | 用户维度 | 已补充 | UC-01 至 UC-60 | 覆盖策略研究者、聚宽候选验证者、因子研究数据审计者、生产数据湖负责人、QMT 交易接入 / 运行负责人、研究口径与交易价格审计者、阶段六多因子模拟盘准入负责人、研究执行后端评估者、Runner / QMT Gateway 运营负责人，以及多因子 / ML / 事件驱动端到端生产流程确认者 |
+| D2 | 任务维度 | 已补充 | UC-01 至 UC-60 | 覆盖数据读取、回测、扫描、扩展策略、benchmark 消费、数据准备、生产级因子研究、全 A 数据湖、QMT foundation、阶段激活、复权双视图、publish/rollback、研究重跑、阶段六准入、QMT C/S bridge、Backtrader optional backend、多因子闭环、双目标策略交付框架、Runner / Gateway 运营，以及 UC-58..UC-60 的信息收集、研究、回测、准入、模拟盘、实盘和生命周期管理 |
+| D3 | 动机维度 | 已补充 | UC-02 至 UC-60 | 动机是提高本地研究效率、减少平台等待、升级探索性因子结论、建设可发布可回滚的 production truth，并在接入 QMT、申请模拟盘、引入可选执行后端、多因子 / ML / 事件驱动端到端生产流程前降低假 alpha、口径混淆、过拟合、数据泄漏、凭据泄露、未授权 simulation、运行失控、schema 漏洞、框架不一致和 Gateway 故障恢复风险 |
+| D4 | 时间维度 | 已补充 | UC-02 至 UC-60 | 明确 2019-2025 回测区间、60 组扫描、rolling/年度分段、since-inception、release `as_of_trade_date`、T 日信号 / T+1 执行、qfq `as_of_trade_date`、QMT 阶段推进、连续 5 个真实交易日 dry-run、后置能力触发时序，以及 UC-58..UC-60 的信息收集→研究→回测→准入→模拟盘→实盘→复盘生命周期时序 |
+| D5 | 环境维度 | 已补充 | UC-01 至 UC-60 | 本地 parquet、raw、manifest、quality/catalog、断网消费、外置 lake、catalog current pointer、DuckDB 只读候选、Windows QMT / MiniQMT 节点、FastAPI 本地服务桥接、WSL / Windows 部署边界、外置 broker lake、mock adapter、凭据脱敏边界、Backtrader 未安装环境、本地 Qlib 静态分析路径、Runner registry/bundle/evidence、Gateway service lifecycle，以及外部框架仅作参考不作运行依赖的环境边界均已记录 |
+| D6 | 方式维度 | 已补充 | UC-02 至 UC-60 | 命令/脚本/Notebook/API 入口将在 HLD 中细化；CSV、typed result、写湖作业、gate result、factor audit panel、P0 分层、Explicit Publish Gate、research rerun、OMS order intent、shadow / dry-run / mock、Backtrader semantic diff、多因子 schema、策略包 schema、Runner run plan、事件/信号接入、Gateway health/capabilities、WS/gRPC/REST 事件流，以及 UC-58..UC-60 的 metadata chain / training snapshot / event replay 方式已记录 |
+| D7 | 异常维度 | 已补充 | UC-01 至 UC-60 | 覆盖 schema 缺失、复权混用、`available_at` 越界、label overlap、lineage 缺失、缺失价格、无成交、数据源失败、quality fail、PIT 不完整、辅助数据缺失、catalog pointer 污染、publish/rollback 失败、DuckDB 越权写入、凭据未授权、QMT 直连绕过、pre-trade fail、unknown 状态、未授权 simulation、Backtrader 未安装、MiniQMT 权限缺失、fixture pass 被误读为真实运行证据、Runner 崩溃、Gateway 断连、ML 过拟合 / 漂移、事件迟到 / 修订 / 漏报和 event_time 误用 |
+| D8 | 集成维度 | 已补充 | UC-04 至 UC-60 | 与聚宽验证、策略扩展、`market_data` 写湖、只读 resolver、Backtrader optional backend、Qlib isolated runner、CR-008 `research_input_v1`、CR-010/012/013/014/018 数据湖基线、DuckDB 候选查询层、local_backtest C 侧 client、Windows QMT / XtQuant S 侧 gateway、OMS / adapter / broker lake、lightweight engine、Stage6 admission、Runner operational control plane 和 QMT Gateway service layer 的边界已记录；UC-58..UC-60 进一步补齐与外部最佳实践参考、既有 multifactor / ML / event contracts、BacktestRunSpec、StrategyAdmissionPackage、OMS 和 runtime authorization gate 的集成边界 |
+| D9 | 数据生命周期维度 | 已补充 | UC-09 至 UC-60 | CR-014/018 覆盖全 A 证券生命周期、代码变更、退市、current pointer、增量刷新、replay、publish release、rollback、权限计数和 claim boundary；CR-015/016/017/019/025/030/046/138 覆盖 broker event、order state、qfq as-of、admission package、dry-run 记录、bridge request、clean feed、semantic diff、factor panel、label window、StrategyAdmissionPackage、策略包合同、验证证据、run registry、Gateway audit record 和事件订阅生命周期；CR-139 UC-51..UC-57 覆盖策略生产数据底座；UC-58..UC-60 覆盖多因子、ML 和事件驱动策略从信息收集到研究、回测、准入、模拟盘、实盘、复盘和退役的端到端数据生命周期 |
 <!-- coverage-checklist: end -->
 
 ## 附录：治理变更记录（可选）
@@ -1700,3 +1816,4 @@ total_use_cases: 57
 | 1.11 | `status` / `total_use_cases` | confirmed / 18 | draft / 19 | CR-025 启动后追加 Backtrader optional backend hardening 场景；旧已确认基线保留，本增量等待 CP2 人工确认 |
 | 1.16 | `status` / `total_use_cases` / `scenario_subject_id` | confirmed / 32 / local-backtest-production-data-lake-and-qmt-trading-layer | confirmed / 50 / local-backtest-production-data-lake-runner-and-qmt-gateway | CR-138 启动后追加 Runner 与 QMT Gateway 运营 use-case baseline；旧 v1.15 confirmed 基线保留，v1.16 已于 2026-06-24T13:20:00+08:00 经用户 `approve` 通过 CP2 |
 | 1.17 | `status` / `version` / `total_use_cases` | confirmed / 1.16 / 50 | draft / 1.17 / 57 | CR-139「Strategy Data Foundation」parent CR 启动后追加策略生产数据底座场景 UC-51..UC-57，覆盖四阶段全流程、四组门禁、ML feature/label、run evidence、配置类事实源、交易审计链、schema 冻结；旧 v1.16 confirmed 基线保留，本增量待 CP2 人工门禁（D8a/D8b 正式确认） |
+| 1.18 | `status` / `version` / `total_use_cases` / `last_confirmed_version` | draft / 1.17 / 57 / 1.16 | confirmed / 1.18 / 60 / 1.18 | 按用户要求追加 UC-58..UC-60 与外部依据，覆盖多因子、机器学习、事件驱动策略端到端生产流程；用户于 2026-07-01T15:31:58+08:00 接受三个用户场景、外部依据和当前不授权边界；本确认只授权 CR150 本地 metadata linkage / 测试 / process evidence，不授权 runtime/lake/NAS/provider/QMT/simulation/live/trading/broker/credential/Git remote 或外部框架运行 |

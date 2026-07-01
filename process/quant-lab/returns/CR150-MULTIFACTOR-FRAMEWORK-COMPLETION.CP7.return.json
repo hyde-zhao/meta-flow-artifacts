@@ -1,0 +1,88 @@
+{
+  "schema_version": "story_return_packet_v1",
+  "cr_id": "CR-150",
+  "story_id": "CR150-MULTIFACTOR-FRAMEWORK-COMPLETION",
+  "stage": "CP7",
+  "created_at": "2026-07-01T15:31:58+08:00",
+  "actor": "host-orchestrator-inline-fallback",
+  "decision": "PASS",
+  "validation_mode": "mixed",
+  "touched_files": [
+    "engine/mature_multifactor_research.py",
+    "tests/test_cr150_multifactor_framework_completion.py",
+    "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP-2026-07-01.json",
+    "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP.index.json",
+    "process/checks/CP6-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json"
+  ],
+  "verification_commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr150_multifactor_framework_completion.py tests/research/test_mature_multifactor_framework_stage2.py tests/research/test_mature_multifactor_research_stage3.py",
+      "result": "PASS",
+      "summary": "20 passed in 0.66s"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr150-pycompile uv run --python 3.11 python -m py_compile engine/mature_multifactor_research.py tests/test_cr150_multifactor_framework_completion.py",
+      "result": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    },
+    {
+      "command": "uv run --python 3.11 python -m json.tool process/state/STATE.current.json process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP-2026-07-01.json process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP.index.json process/checks/CP6-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json",
+      "result": "PASS",
+      "summary": "Equivalent files validated individually with json.tool."
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab",
+      "result": "PASS",
+      "summary": "process_link_health ok; artifact_git_dirty dirty due new process evidence."
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab",
+      "result": "PASS",
+      "summary": "active formal CRs: CR-150; blocked formal CRs: none."
+    }
+  ],
+  "risks": [
+    {
+      "id": "RISK-CR150-RUNTIME-NOT-AUTHORIZED",
+      "severity": "high",
+      "status": "controlled",
+      "owner": "host-orchestrator",
+      "summary": "CR150 verification does not authorize real lake, NAS, provider, QMT/runtime, simulation/live/trading, broker, credential, Git remote or external framework execution."
+    },
+    {
+      "id": "RISK-CR150-INLINE-VERIFICATION",
+      "severity": "low",
+      "status": "accepted_for_current_tooling",
+      "owner": "host-orchestrator",
+      "summary": "CP7 executed inline because the active tool policy does not allow spawning sub agents without explicit user request."
+    }
+  ],
+  "waivers": [
+    {
+      "id": "WAIVER-CR150-NO-META-QA-SUBAGENT",
+      "reason": "Current developer tool rule forbids spawning sub agents unless explicitly requested by the user. Host Orchestrator performed inline CP7 verification and recorded the fallback.",
+      "scope": "CR150 CP7 verification only",
+      "revisit_condition": "Use meta-qa when the user explicitly asks for sub-agent verification or when platform policy allows it."
+    },
+    {
+      "id": "WAIVER-CR150-NO-REAL-RUNTIME",
+      "reason": "User authorization explicitly excludes real lake, NAS, provider, QMT/runtime, simulation/live/trading, broker, credential, Git remote and external framework execution.",
+      "scope": "CR150 verification",
+      "revisit_condition": "Open a separate CR with explicit runtime/data authorization."
+    }
+  ],
+  "open_questions": [],
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_hld_update": false,
+    "delta_ref": null
+  },
+  "next_route": {
+    "phase": "CP8 release readiness",
+    "status": "ready",
+    "notes": "CR150 local metadata linkage can proceed to release readiness without runtime authorization expansion."
+  }
+}

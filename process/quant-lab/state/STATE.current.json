@@ -1,23 +1,102 @@
 {
-  "active_change": "CR-146",
+  "active_change": "CR-150",
   "active_context_ref": null,
   "active_story": null,
   "authz_policy_refs": [
     "NO_CREDENTIAL_READ",
     "NO_RUNTIME",
-    "NO_NAS",
+    "NO_NAS_SYNC_OR_WRITE",
     "NO_TRADING",
     "NO_PROVIDER_FETCH",
-    "NO_REAL_LAKE_LINK_OR_MOUNT",
+    "NO_REAL_LAKE_READ_OR_WRITE",
     "NO_LAKE_WRITE",
     "NO_CATALOG_POINTER_WRITE",
-    "NO_REMOTE_WRITE",
-    "NO_PHYSICAL_PARTITION_MIGRATION_BEFORE_BASELINE"
+    "NO_GIT_REMOTE_WRITE",
+    "NO_BROKER_WRITE",
+    "NO_EXTERNAL_FRAMEWORK_RUN"
   ],
   "blocked": false,
   "blocked_reason": "",
-  "current_phase": "cr139-post-close-lake-completion-human-gate",
+  "current_phase": "cr150-multifactor-framework-completion-cp8-release-readiness-ready",
   "last_actions": [
+    {
+      "action": "cr150_local_metadata_linkage_cp7_pass",
+      "at": "2026-07-01T15:31:58+08:00",
+      "scope": "Verified CR150 local metadata-only multifactor completion map, trace matrix for UC-58/UC-59/UC-60, fail-closed missing linkage behavior, process evidence, and no-runtime authorization boundary.",
+      "evidence_refs": [
+        "process/returns/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.CP7.return.json",
+        "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.CP7.index.json",
+        "process/checks/CP7-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json"
+      ],
+      "verification": {
+        "validation_mode": "mixed",
+        "targeted_and_related_regression": "20 passed in 0.66s",
+        "py_compile": "PASS",
+        "git_diff_check": "PASS",
+        "json_ndjson_validation": "PASS",
+        "workspace_check": "PASS",
+        "cr_tracking": "PASS"
+      },
+      "remaining_risks": [
+        "Runtime/data/external framework execution remains deferred to separate explicit CR.",
+        "CP7 used Host Orchestrator inline fallback because sub-agent spawning was not explicitly requested."
+      ]
+    },
+    {
+      "action": "cr150_local_metadata_linkage_cp6_pass",
+      "at": "2026-07-01T15:31:58+08:00",
+      "scope": "Implemented CR150 local metadata-only multifactor completion map linking factor spec, factor run, factor panel, label window gate, signal set, portfolio policy, backtest run spec, report pack, cost/risk attribution, and strategy admission package. No real lake/NAS/provider/QMT/runtime/simulation/live/trading/broker/credential/Git remote/external framework operation was performed.",
+      "evidence_refs": [
+        "engine/mature_multifactor_research.py",
+        "tests/test_cr150_multifactor_framework_completion.py",
+        "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP.index.json",
+        "process/checks/CP6-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json"
+      ],
+      "verification": {
+        "targeted": "2 passed in 0.98s",
+        "related_regression": "20 passed in 0.75s",
+        "py_compile": "PASS",
+        "chain_hash": "sha256:de36afe283dffa4a5cd1d7953639e6d1c8ea8ebd1efe73c77b53a7d60aea9e95"
+      },
+      "not_authorized": [
+        "real_lake_read_or_write",
+        "provider_fetch",
+        "nas_sync_or_write_or_restore",
+        "catalog_pointer_mutation",
+        "credential_read",
+        "qmt_miniqmt_xtquant_gateway_runtime",
+        "simulation_live_paper_or_trading",
+        "broker_write_or_real_account_query",
+        "git_remote_write",
+        "external_framework_clone_install_run"
+      ]
+    },
+    {
+      "action": "cr150_uc58_60_scenario_boundary_approved",
+      "at": "2026-07-01T15:31:58+08:00",
+      "scope": "User accepted UC-58/UC-59/UC-60, external references, and current no-authorization boundary. Approval only authorizes CR150 local metadata linkage, tests, and process evidence.",
+      "evidence_refs": [
+        "process/USE-CASES.md",
+        "process/handoffs/NEXT-SESSION-CR150-UC58-60-CONFIRMATION-AND-LINKAGE-2026-07-01.md",
+        "process/checks/CP2-CR150-UC58-60-SCENARIO-CONFIRMATION.result.json"
+      ],
+      "verification": {
+        "workspace_check": "process_link_health ok",
+        "cr_tracking": "active formal CRs: CR-150; blocked formal CRs: none"
+      },
+      "not_authorized": [
+        "real_lake_read_or_write",
+        "provider_fetch",
+        "nas_sync_or_write_or_restore",
+        "catalog_pointer_mutation",
+        "credential_read",
+        "qmt_miniqmt_xtquant_gateway_runtime",
+        "simulation_live_paper_or_trading",
+        "broker_write_or_real_account_query",
+        "git_remote_write",
+        "external_framework_clone_install_run"
+      ]
+    },
     {
       "action": "cr146_validation_complete_human_gate_pending",
       "at": "2026-06-30T23:59:00+08:00",
@@ -901,7 +980,7 @@
       }
     }
   ],
-  "next_action": "Await user decision for process/checkpoints/CP2-CR146-HIGH-RISK-LAKE-ACTIONS.md. Recommended approve: close CR146 validation delivery as READY_WITH_RISK and keep physical migration/business-conflict/provider/NAS/delete as follow-up candidates.",
+  "next_action": "Proceed with CR150 CP8 release readiness for the local metadata linkage slice only. Do not perform real lake/NAS/provider/QMT/runtime/simulation/live/trading/broker/credential/Git remote/external framework operations.",
   "open_risks": [
     {
       "id": "RISK-CR139-W2-REAL-LAKE-NOT-YET-ENUMERATED",
@@ -964,14 +1043,14 @@
       "summary": "Remaining Batch 2 split planning found business-conflict buckets in prices, prices_limit, events, and trade_status; these datasets require explicit per-dataset quarantine or semantic-resolution decisions before write."
     }
   ],
-  "pending_gate": "CP2",
+  "pending_gate": null,
   "project_id": "quant-lab",
   "routing_ref": "process/.meta-flow-process.yaml",
   "schema_version": 2,
   "source_refs": [
     {
       "kind": "active-cr",
-      "path": "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md"
+      "path": "process/changes/CR-150-MULTIFACTOR-FRAMEWORK-COMPLETION-2026-07-01.md"
     },
     {
       "kind": "active-cr",
@@ -1770,6 +1849,6 @@
       "path": "process/checks/CR140-PHASE2-BASELINE-COMPARISON-2026-06-30.md"
     }
   ],
-  "updated_at": "2026-06-30T16:55:00+08:00",
+  "updated_at": "2026-07-01T15:31:58+08:00",
   "workflow_mode": "standard"
 }

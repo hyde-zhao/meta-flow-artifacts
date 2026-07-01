@@ -1,0 +1,93 @@
+{
+  "schema_version": "cp_result_v1",
+  "checkpoint": "CP6",
+  "cr_id": "CR-150",
+  "story_id": "CR150-MULTIFACTOR-FRAMEWORK-COMPLETION",
+  "event_id": "CP6-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION",
+  "checked_at": "2026-07-01T15:31:58+08:00",
+  "decision": "PASS",
+  "entry_criteria": [
+    {
+      "id": "EC-1",
+      "description": "UC-58/UC-59/UC-60 and external basis accepted by user.",
+      "status": "PASS",
+      "evidence_ref": "process/checks/CP2-CR150-UC58-60-SCENARIO-CONFIRMATION.result.json"
+    },
+    {
+      "id": "EC-2",
+      "description": "CR150 is restricted to local metadata linkage, tests and process evidence.",
+      "status": "PASS",
+      "evidence_ref": "process/USE-CASES.md"
+    }
+  ],
+  "checklist": [
+    {
+      "id": "CL-1",
+      "description": "Completion map links factor spec, factor run, factor panel, label window gate, signal set, portfolio policy, backtest run spec, report pack, cost/risk attribution and admission package.",
+      "status": "PASS",
+      "evidence_ref": "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP-2026-07-01.json"
+    },
+    {
+      "id": "CL-2",
+      "description": "No real lake, NAS, provider, QMT/runtime, simulation/live/trading, broker, credential, Git remote or external framework operation was authorized or counted.",
+      "status": "PASS",
+      "evidence_ref": "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP.index.json"
+    },
+    {
+      "id": "CL-3",
+      "description": "Regression tests cover pass, deterministic chain hash, deferred route boundaries and missing report pack blocking.",
+      "status": "PASS",
+      "evidence_ref": "tests/test_cr150_multifactor_framework_completion.py"
+    }
+  ],
+  "exit_criteria": [
+    {
+      "id": "XC-1",
+      "description": "Implementation is local metadata-only and covered by automated tests.",
+      "status": "PASS"
+    },
+    {
+      "id": "XC-2",
+      "description": "CR150 can proceed to CP7 verification without expanding runtime authorization.",
+      "status": "PASS"
+    }
+  ],
+  "deliverables": [
+    "engine/mature_multifactor_research.py",
+    "tests/test_cr150_multifactor_framework_completion.py",
+    "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP-2026-07-01.json",
+    "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP.index.json"
+  ],
+  "verification": {
+    "commands": [
+      "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr150_multifactor_framework_completion.py",
+      "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr150_multifactor_framework_completion.py tests/research/test_mature_multifactor_framework_stage2.py tests/research/test_mature_multifactor_research_stage3.py",
+      "PYTHONPYCACHEPREFIX=/tmp/cr150-pycompile uv run --python 3.11 python -m py_compile engine/mature_multifactor_research.py tests/test_cr150_multifactor_framework_completion.py"
+    ],
+    "results": [
+      "2 passed in 0.98s",
+      "20 passed in 0.75s",
+      "PASS"
+    ]
+  },
+  "authorized_scope": [
+    "local_metadata_linkage",
+    "local_tests",
+    "process_evidence"
+  ],
+  "not_authorized": [
+    "real_lake_read_or_write",
+    "nas_sync_or_write",
+    "provider_fetch",
+    "qmt_runtime",
+    "simulation_live_or_trading",
+    "broker_or_order_operation",
+    "credential_access",
+    "git_remote_write",
+    "external_framework_execution"
+  ],
+  "next_route": {
+    "phase": "CP7 verification",
+    "action": "run CR150 focused verification and finalize process evidence"
+  }
+}
