@@ -1,0 +1,81 @@
+{
+  "blockers": [],
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR148-BACKTEST-REPORT-PACK",
+  "context_ref": "process/context/CP6-CR148-BACKTEST-REPORT-PACK-CONTEXT.yaml",
+  "cr_id": "CR-148",
+  "created_at": "2026-07-01T13:05:00+08:00",
+  "decision": "PASS",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr148-backtest-report-pack-implementation"
+  ],
+  "evidence_ref": "process/evidence/CR148-PHASE3-BACKTEST-REPORT-PACK.index.json",
+  "items": [
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "engine/backtest_production_contracts.py"
+      ],
+      "id": "CP6-CR148-REPORT-PACK-01",
+      "name": "BacktestReportPack contract added without report file writes",
+      "notes": "Adds BacktestReportPack, stable content hashing and metadata-only validation helpers.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "contract",
+      "evidence_refs": [
+        "process/evidence/CR148-PHASE3-BACKTEST-REPORT-PACK-2026-07-01.json"
+      ],
+      "id": "CP6-CR148-REPORT-PACK-02",
+      "name": "BacktestReportPack closes the Phase C report-pack gap",
+      "notes": "Asset map gap_count moves from 2 to 1; remaining gap is cost/risk attribution contract.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "scope-guard",
+      "evidence_refs": [
+        "tests/research/test_backtest_production_contracts.py"
+      ],
+      "id": "CP6-CR148-REPORT-PACK-03",
+      "name": "Report pack validation blocks mutable refs and report overwrite counters",
+      "notes": "Validation rejects current/latest refs, missing required metrics and nonzero reports_overwrite counter.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "uv run --python 3.11 pytest tests/research/test_backtest_production_contracts.py",
+        "uv run --python 3.11 pytest tests/research/test_backtest_production_contracts.py tests/backtest/test_lightweight_engine_adapter.py tests/backtest/test_backtrader_optional_backend.py tests/backtest/test_strategy_pipeline_contracts.py tests/research/test_mature_multifactor_framework_stage2.py tests/research/test_mature_multifactor_research_stage3.py tests/research/test_strategy_admission_package.py",
+        "git diff --check",
+        "meta-flow check cr-tracking"
+      ],
+      "id": "CP6-CR148-REPORT-PACK-04",
+      "name": "CR148 focused and related regression tests pass",
+      "notes": "Focused test: 8 passed in 0.51s. Regression set: 73 passed in 2.27s. git diff --check PASS. cr-tracking OK.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "continue_cr148_cost_risk_attribution_contract_gap",
+  "read_expansion_refs": [
+    "READ-CR148-PHASE3-BACKTEST-REPORT-PACK-2026-07-01T130500+0800"
+  ],
+  "schema_version": 1,
+  "story_id": "CR148-PHASE3-BACKTEST-REPORT-PACK",
+  "waivers": []
+}

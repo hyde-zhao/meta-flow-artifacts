@@ -1,0 +1,56 @@
+context_id: "CP6-CR148-BACKTEST-REPORT-PACK-CONTEXT"
+created_at: "2026-07-01T13:05:00+08:00"
+read_profile: compact
+source_cr: "CR-148"
+parent_cr: "ROADMAP-QUANT-RESEARCH-PRODUCTION"
+objective: "Implement and verify the Phase C metadata-only BacktestReportPack contract without report file writes, lake writes, NAS operations, trading or broker side effects."
+must_read:
+  - path: "process/changes/CR-148-UNIFIED-BACKTEST-EXPERIMENT-FOUNDATION-2026-07-01.md"
+    reason: "CR-148 scope, no-risk boundary and Phase C target."
+  - path: "engine/backtest_production_contracts.py"
+    reason: "Implemented BacktestReportPack, checksum builder and validation helpers."
+  - path: "engine/reporting.py"
+    reason: "Existing build_backtest_report_row and formula-injection sanitization contract reused by the report pack."
+  - path: "tests/research/test_backtest_production_contracts.py"
+    reason: "Focused CR-148 report-pack and scope guard tests."
+  - path: "process/evidence/CR148-PHASE3-BACKTEST-REPORT-PACK.index.json"
+    reason: "Machine evidence summary for Phase C."
+read_if_needed:
+  - path: "tests/backtest/test_strategy_pipeline_contracts.py"
+    reason: "Existing reporting sanitization regression coverage."
+  - path: "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md"
+    reason: "Phase 3 scope and review-alignment guardrails."
+do_not_read_by_default:
+  - ".env"
+  - "NAS credentials"
+  - "real lake parquet contents"
+  - "broker/account/order runtime logs"
+  - "scripts/legacy/*"
+authorization_summary:
+  authorized:
+    - "metadata-only backtest report-pack contract implementation"
+    - "offline fixture validation"
+    - "process evidence and CR tracking updates"
+  explicitly_not_authorized:
+    - "provider fetch"
+    - "NAS sync/write/restore"
+    - "credential read"
+    - "QMT or broker runtime"
+    - "simulation/live/trading execution"
+    - "real lake write"
+    - "catalog pointer mutation"
+    - "report file overwrite"
+    - "git remote write"
+evidence_summary:
+  schema_version: "backtest_report_pack_v1"
+  sample_report_pack_ref: "report-pack://bt-alpha-core-20260528-v1"
+  sample_content_hash: "sha256:231fb4caaf5a134dbac123a7b5403e0588182cc0f314184bb4ee0f88aeb9255d"
+  asset_map_gap_count_after: 1
+  gate_required_gap_count: 0
+  phase3_exit_scope: "daily_multifactor_baseline_only"
+  pytest: "73 passed"
+read_expansion_log:
+  - id: "READ-CR148-PHASE3-BACKTEST-REPORT-PACK-2026-07-01T130500+0800"
+    reason: "The CR-148 change file is the scope and authorization source for the low-risk CP6 BacktestReportPack contract."
+    paths:
+      - "process/changes/CR-148-UNIFIED-BACKTEST-EXPERIMENT-FOUNDATION-2026-07-01.md"
