@@ -1,0 +1,93 @@
+{
+  "blockers": [],
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR147-RESEARCH-DATASET-SNAPSHOT-REGISTRY",
+  "context_ref": "process/context/CP6-CR147-RESEARCH-PRODUCTION-CONTRACTS-CONTEXT.yaml",
+  "cr_id": "CR-147",
+  "created_at": "2026-07-01T11:52:00+08:00",
+  "decision": "PASS",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr147-snapshot-registry-implementation"
+  ],
+  "evidence_ref": "process/evidence/CR147-PHASE2-RESEARCH-DATASET-SNAPSHOT-REGISTRY.index.json",
+  "items": [
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "engine/research_production_contracts.py"
+      ],
+      "id": "CP6-CR147-SNAPSHOT-01",
+      "name": "Research dataset snapshot registry contract added without runtime side effects",
+      "notes": "Adds ResearchDatasetSnapshotSpec, build_research_dataset_snapshot_spec and validation helpers.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "contract",
+      "evidence_refs": [
+        "process/evidence/CR147-PHASE2-RESEARCH-DATASET-SNAPSHOT-REGISTRY.index.json"
+      ],
+      "id": "CP6-CR147-SNAPSHOT-02",
+      "name": "Research dataset snapshot metadata is stable and lineage-bearing",
+      "notes": "Snapshot contains stable content_hash, feature refs, label refs, source snapshot refs, primary keys and output_ref.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "gap-analysis",
+      "evidence_refs": [
+        "process/evidence/CR147-PHASE2-RESEARCH-DATASET-SNAPSHOT-REGISTRY-2026-07-01.json"
+      ],
+      "id": "CP6-CR147-SNAPSHOT-03",
+      "name": "Asset-map snapshot registry gap is closed",
+      "notes": "asset_map gap_count_after_snapshot_registry=1; no new gate-required gaps.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "tests/research/test_research_production_contracts.py",
+        "uv run --python 3.11 pytest tests/research/test_research_production_contracts.py"
+      ],
+      "id": "CP6-CR147-SNAPSHOT-04",
+      "name": "CR147 focused contract tests pass",
+      "notes": "10 passed.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "regression",
+      "evidence_refs": [
+        "uv run --python 3.11 pytest tests/data_lake/test_feature_label_artifact_layer.py tests/data_lake/test_training_snapshot_cutoff.py tests/research/test_research_dataset_builder.py"
+      ],
+      "id": "CP6-CR147-SNAPSHOT-05",
+      "name": "Related existing feature/snapshot/research dataset tests pass",
+      "notes": "17 passed.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "continue_cr147_phase2_available_at_enforcement_gap",
+  "read_expansion_refs": [
+    "READ-CR147-PHASE2-CONTRACT-CR-SCOPE-2026-07-01T111800+0800"
+  ],
+  "schema_version": 1,
+  "story_id": "CR147-PHASE2-SNAPSHOT-REGISTRY",
+  "waivers": []
+}
