@@ -1,0 +1,81 @@
+{
+  "blockers": [],
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR148-BACKTEST-COST-RISK-ATTRIBUTION",
+  "context_ref": "process/context/CP6-CR148-BACKTEST-COST-RISK-ATTRIBUTION-CONTEXT.yaml",
+  "cr_id": "CR-148",
+  "created_at": "2026-07-01T13:15:00+08:00",
+  "decision": "PASS",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr148-backtest-cost-risk-attribution-implementation"
+  ],
+  "evidence_ref": "process/evidence/CR148-PHASE3-BACKTEST-COST-RISK-ATTRIBUTION.index.json",
+  "items": [
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "engine/backtest_production_contracts.py"
+      ],
+      "id": "CP6-CR148-COST-RISK-01",
+      "name": "BacktestCostRiskAttributionPack contract added without runtime side effects",
+      "notes": "Adds metadata-only cost, risk and attribution refs, stable content hashing and validation helpers.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "contract",
+      "evidence_refs": [
+        "process/evidence/CR148-PHASE3-BACKTEST-COST-RISK-ATTRIBUTION-2026-07-01.json"
+      ],
+      "id": "CP6-CR148-COST-RISK-02",
+      "name": "Cost/risk/attribution contract closes the final Phase 3 foundation asset-map gap",
+      "notes": "Asset map gap_count moves from 1 to 0; gate_required_gap_count remains 0.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "scope-guard",
+      "evidence_refs": [
+        "tests/research/test_backtest_production_contracts.py"
+      ],
+      "id": "CP6-CR148-COST-RISK-03",
+      "name": "Cost/risk validation blocks mutable refs and runtime counters",
+      "notes": "Validation rejects current/latest refs, missing required cost/risk coverage and nonzero simulation_or_live counter.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "uv run --python 3.11 pytest tests/research/test_backtest_production_contracts.py",
+        "uv run --python 3.11 pytest tests/research/test_backtest_production_contracts.py tests/backtest/test_lightweight_engine_adapter.py tests/backtest/test_backtrader_optional_backend.py tests/backtest/test_strategy_pipeline_contracts.py tests/research/test_capacity_cost_sensitivity.py tests/research/test_multifactor_combiner.py tests/research/test_mature_multifactor_framework_stage2.py tests/research/test_mature_multifactor_research_stage3.py tests/research/test_strategy_admission_package.py",
+        "git diff --check",
+        "meta-flow check cr-tracking"
+      ],
+      "id": "CP6-CR148-COST-RISK-04",
+      "name": "CR148 focused and related regression tests pass",
+      "notes": "Focused test: 10 passed in 0.52s. Regression set: 88 passed in 2.44s. git diff --check PASS. cr-tracking OK.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "cr148_phase3_foundation_cp7_review",
+  "read_expansion_refs": [
+    "READ-CR148-PHASE3-BACKTEST-COST-RISK-ATTRIBUTION-2026-07-01T131500+0800"
+  ],
+  "schema_version": 1,
+  "story_id": "CR148-PHASE3-BACKTEST-COST-RISK-ATTRIBUTION",
+  "waivers": []
+}
