@@ -1,0 +1,60 @@
+context_id: "CP6-CR148-BACKTEST-ASSET-MAP-CONTEXT"
+created_at: "2026-07-01T12:45:00+08:00"
+read_profile: compact
+source_cr: "CR-148"
+parent_cr: "ROADMAP-QUANT-RESEARCH-PRODUCTION"
+objective: "Implement and verify the Phase A metadata-only backtest foundation asset map without runtime, lake, NAS, trading or broker side effects."
+must_read:
+  - path: "process/changes/CR-148-UNIFIED-BACKTEST-EXPERIMENT-FOUNDATION-2026-07-01.md"
+    reason: "CR-148 scope, no-risk boundary and Phase A target."
+  - path: "engine/backtest_production_contracts.py"
+    reason: "Implemented backtest foundation asset map and Phase 3 scope guard."
+  - path: "tests/research/test_backtest_production_contracts.py"
+    reason: "Focused CR-148 asset-map tests."
+  - path: "process/evidence/CR148-PHASE3-BACKTEST-FOUNDATION-ASSET-MAP.index.json"
+    reason: "Machine evidence summary for Phase A."
+read_if_needed:
+  - path: "engine/backtest.py"
+    reason: "Existing lightweight backtest asset mapped by CR-148."
+  - path: "engine/mature_multifactor_framework.py"
+    reason: "Existing daily multifactor framework contracts mapped by CR-148."
+  - path: "engine/research_manifest.py"
+    reason: "Existing experiment/report registry mapped by CR-148."
+  - path: "engine/strategy_admission_package.py"
+    reason: "Existing downstream admission package mapped by CR-148."
+  - path: "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md"
+    reason: "Phase 3 scope and review-alignment guardrails."
+do_not_read_by_default:
+  - ".env"
+  - "NAS credentials"
+  - "real lake parquet contents"
+  - "broker/account/order runtime logs"
+  - "scripts/legacy/*"
+authorization_summary:
+  authorized:
+    - "metadata-only backtest foundation contract implementation"
+    - "offline fixture validation"
+    - "process evidence and CR tracking updates"
+  explicitly_not_authorized:
+    - "provider fetch"
+    - "NAS sync/write/restore"
+    - "credential read"
+    - "QMT or broker runtime"
+    - "simulation/live/trading execution"
+    - "real lake write"
+    - "catalog pointer mutation"
+    - "git remote write"
+evidence_summary:
+  asset_count: 6
+  gap_count: 3
+  gate_required_gap_count: 0
+  phase3_exit_scope: "daily_multifactor_baseline_only"
+  deferred_strategy_families:
+    - "machine_learning"
+    - "event_driven"
+  pytest: "50 passed"
+read_expansion_log:
+  - id: "READ-CR148-PHASE3-BACKTEST-CR-SCOPE-2026-07-01T124500+0800"
+    reason: "The CR-148 change file is the scope and authorization source for the low-risk CP6 backtest asset map."
+    paths:
+      - "process/changes/CR-148-UNIFIED-BACKTEST-EXPERIMENT-FOUNDATION-2026-07-01.md"

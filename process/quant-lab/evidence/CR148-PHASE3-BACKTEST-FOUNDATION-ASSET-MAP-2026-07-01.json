@@ -1,0 +1,253 @@
+{
+  "asset_map": {
+    "asset_count": 6,
+    "gap_count": 3,
+    "gate_required_gap_count": 0,
+    "operation_counts": {
+      "account_or_order_operation": 0,
+      "catalog_publish": 0,
+      "credential_read": 0,
+      "dependency_change": 0,
+      "external_project_clone": 0,
+      "external_project_install": 0,
+      "external_project_run": 0,
+      "lake_write": 0,
+      "provider_fetch": 0,
+      "qmt_operation": 0,
+      "reports_overwrite": 0,
+      "simulation_or_live": 0,
+      "source_migration_or_vendor": 0
+    },
+    "schema_version": "backtest_foundation_asset_map_v1",
+    "scope_guard": {
+      "baseline_scope": "daily_multifactor_baseline_only",
+      "deferred_runtime_capabilities": [
+        "minute_data",
+        "level2_data",
+        "qlib_deep_integration",
+        "backtrader_deep_integration",
+        "simulation_live_or_trading",
+        "broker_write"
+      ],
+      "deferred_strategy_families": [
+        "machine_learning",
+        "event_driven"
+      ],
+      "nas_scope": "metadata_contract_only_no_nas_sync",
+      "phase3_exit_strategy_families": [
+        "multifactor"
+      ],
+      "schema_version": "phase3_scope_guard_v1"
+    },
+    "assets": [
+      {
+        "asset_id": "lightweight_backtest_engine",
+        "layer": "backtest_engine",
+        "module": "engine.backtest",
+        "object_names": [
+          "BacktestConfig",
+          "BacktestResult",
+          "run_backtest",
+          "run_backtest_from_loaded_data",
+          "run_backtest_with_backend"
+        ],
+        "role": "Existing lightweight daily backtest orchestrator and optional backend wrapper.",
+        "maturity": "existing_runtime_asset_needs_metadata_foundation_bridge",
+        "current_contracts": [
+          "schedule",
+          "portfolio_result",
+          "metrics",
+          "execution_policy_metadata"
+        ],
+        "required_capabilities": [
+          "backtest_run_spec",
+          "experiment_link",
+          "report_pack_ref"
+        ],
+        "downstream_phase": "Phase 3",
+        "gaps": [
+          {
+            "gap_id": "backtest_run_spec_missing",
+            "severity": "medium",
+            "description": "Backtest execution has config and metadata, but not yet a stable metadata-only BacktestRunSpec.",
+            "phase": "Phase 3",
+            "gate_required": false
+          }
+        ]
+      },
+      {
+        "asset_id": "mature_multifactor_framework",
+        "layer": "strategy_research_framework",
+        "module": "engine.mature_multifactor_framework",
+        "object_names": [
+          "StrategyTypeAdapterContract",
+          "SignalSet",
+          "ResearchEvidenceIndex",
+          "PortfolioRiskPolicy",
+          "Stage3ResearchRunManifest"
+        ],
+        "role": "Existing mature multifactor research contracts for daily baseline research handoff.",
+        "maturity": "existing_contract_ready_for_phase3_bridge",
+        "current_contracts": [
+          "strategy_family",
+          "signal_set",
+          "research_evidence_index",
+          "portfolio_risk_policy"
+        ],
+        "required_capabilities": [
+          "daily_multifactor_baseline",
+          "stage3_manifest",
+          "typed_unavailable_boundaries"
+        ],
+        "downstream_phase": "Phase 3",
+        "gaps": []
+      },
+      {
+        "asset_id": "experiment_manifest_registry",
+        "layer": "experiment_registry",
+        "module": "engine.research_manifest",
+        "object_names": [
+          "ExperimentManifest",
+          "ResearchReportCatalog",
+          "ExperimentManifestClosure"
+        ],
+        "role": "Existing experiment/report registry with internal truth-source and admission readiness contracts.",
+        "maturity": "existing_contract_ready_for_phase3_bridge",
+        "current_contracts": [
+          "config_hash",
+          "dataset_release",
+          "factor_versions",
+          "report_paths",
+          "allowed_blocked_claims"
+        ],
+        "required_capabilities": [
+          "experiment_id",
+          "metrics_ref",
+          "backtest_report_ref",
+          "code_version"
+        ],
+        "downstream_phase": "Phase 3",
+        "gaps": []
+      },
+      {
+        "asset_id": "strategy_admission_package",
+        "layer": "promotion_gate",
+        "module": "engine.strategy_admission_package",
+        "object_names": [
+          "StrategyAdmissionPackage",
+          "OrderIntentDraftRef",
+          "NotAuthorizedCounters"
+        ],
+        "role": "Existing offline admission package that blocks runtime, broker and QMT claims by default.",
+        "maturity": "downstream_phase_existing_contract",
+        "current_contracts": [
+          "manifest_ref",
+          "catalog_ref",
+          "stage6_gate_summary",
+          "not_authorized_counters"
+        ],
+        "required_capabilities": [
+          "promotion_gate_inputs",
+          "runtime_claim_blocking",
+          "no_broker_write"
+        ],
+        "downstream_phase": "Phase 4/5",
+        "gaps": []
+      },
+      {
+        "asset_id": "backtest_report_row",
+        "layer": "report_pack",
+        "module": "engine.reporting",
+        "object_names": [
+          "build_backtest_report_row"
+        ],
+        "role": "Existing report row builder for stable backtest result summaries.",
+        "maturity": "existing_asset_needs_report_pack_contract",
+        "current_contracts": [
+          "metrics",
+          "metadata",
+          "json_ready_row"
+        ],
+        "required_capabilities": [
+          "report_pack_schema",
+          "artifact_refs",
+          "checksum_or_metric_stability"
+        ],
+        "downstream_phase": "Phase 3",
+        "gaps": [
+          {
+            "gap_id": "report_pack_contract_missing",
+            "severity": "medium",
+            "description": "Backtest report rows exist, but Phase 3 still needs a formal report pack contract.",
+            "phase": "Phase 3",
+            "gate_required": false
+          }
+        ]
+      },
+      {
+        "asset_id": "portfolio_and_metrics_core",
+        "layer": "portfolio_metrics",
+        "module": "engine.portfolio|engine.metrics",
+        "object_names": [
+          "run_portfolio",
+          "calculate_metrics",
+          "PortfolioConfig",
+          "PortfolioResult"
+        ],
+        "role": "Existing portfolio path and metrics core consumed by the lightweight backtest engine.",
+        "maturity": "existing_runtime_asset_needs_metadata_refs",
+        "current_contracts": [
+          "portfolio_result",
+          "equity_curve",
+          "drawdown",
+          "returns_metrics"
+        ],
+        "required_capabilities": [
+          "cost_fields",
+          "risk_metrics",
+          "attribution_refs"
+        ],
+        "downstream_phase": "Phase 3",
+        "gaps": [
+          {
+            "gap_id": "cost_risk_attribution_contract_missing",
+            "severity": "medium",
+            "description": "Portfolio and metrics exist, but Phase 3 needs explicit cost, risk and attribution metadata coverage.",
+            "phase": "Phase 3",
+            "gate_required": false
+          }
+        ]
+      }
+    ]
+  },
+  "cr_id": "CR-148",
+  "created_at": "2026-07-01T12:45:00+08:00",
+  "mode": "offline_static_backtest_asset_map_no_runtime",
+  "not_authorized": [
+    "provider_fetch",
+    "nas_sync_or_write",
+    "credential_read",
+    "qmt_runtime",
+    "simulation_live_or_trading",
+    "broker_write",
+    "git_remote_write",
+    "real_lake_write",
+    "catalog_pointer_mutation"
+  ],
+  "review_alignment": {
+    "ml_event_boundary": "deferred_to_phase3_5_or_phase4",
+    "nas_phase_scope": "metadata_contract_only_no_nas_sync",
+    "phase3_exit_scope": "daily_multifactor_baseline_only",
+    "phase_exit_quantification": "asset_map_gap_count=3 and gate_required_gap_count=0 for Phase A only"
+  },
+  "schema_version": "cr148_phase3_backtest_asset_map_evidence_v1",
+  "status": "pass",
+  "validation_issues": [],
+  "verification": {
+    "git_diff_check": "PASS",
+    "pytest": {
+      "command": "uv run --python 3.11 pytest tests/research/test_backtest_production_contracts.py tests/backtest/test_lightweight_engine_adapter.py tests/backtest/test_backtrader_optional_backend.py tests/research/test_mature_multifactor_framework_stage2.py tests/research/test_mature_multifactor_research_stage3.py tests/research/test_strategy_admission_package.py",
+      "result": "50 passed in 0.67s"
+    }
+  }
+}
