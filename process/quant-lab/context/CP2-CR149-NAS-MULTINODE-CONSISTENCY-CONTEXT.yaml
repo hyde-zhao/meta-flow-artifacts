@@ -19,8 +19,30 @@ do_not_read_by_default:
   - provider runtime state
 authorization_requested:
   - read-only NAS/shared-node catalog/published pointer metadata access
-  - read-only credential access only if needed for NAS listing/checksum comparison
+  - mounted-path-first NAS/shared-node read-only access
+  - read-only credential access only if mounted path is unavailable and only if needed for NAS listing/checksum comparison
   - local evidence writing under process/evidence
+execution_constraints:
+  access_order:
+    - mounted_path_without_credential_read
+    - credential_fallback_only_after_mounted_path_unavailable
+  evidence_redaction:
+    allowed_fields:
+      - host_label
+      - module_label
+      - path_label
+      - dataset
+      - run_id
+      - checksum
+      - canonical_or_published_path_digest
+    forbidden_patterns:
+      - password
+      - token
+      - secret
+      - credential_value
+  audit_required:
+    - credential fallback, if used, must append a GATE-LEDGER event with approval_id and redacted credential label
+    - generated evidence must be scanned for forbidden secret markers before Phase 1 exit is updated
 not_authorized:
   - nas_sync_or_write
   - rsync_push_or_pull_with_mutation

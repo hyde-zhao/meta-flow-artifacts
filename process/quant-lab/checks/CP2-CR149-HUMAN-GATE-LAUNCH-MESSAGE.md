@@ -6,8 +6,8 @@ Context Capsule Summary：见 checkpoint 的 `### Context Capsule Summary`，cap
 
 审批者摘要：
 - 本次确认服务的整体目标：确认是否授权完成 Phase 1 唯一剩余风险项，验证至少两个节点/共享视图读取到的 17 个 published pointer run_id/checksum 一致。
-- 推荐动作：approve 授权一次 read-only consistency check；必要时仅读取只读 NAS/shared-node 凭据；输出 evidence。
-- approve 后会发生什么：我会读取本地 pointer 摘要和 NAS/shared-node 只读摘要，比较 17/17 dataset 的 run_id/checksum/path；一致则更新 Phase 1 exit evidence 为 8/8 PASS，不一致则停止并记录 BLOCKED/mismatch。
+- 推荐动作：approve 授权一次 read-only consistency check；先尝试 mounted path，不读凭据；mounted path 不可用时才允许读取只读 NAS/shared-node 凭据；输出脱敏 evidence。
+- approve 后会发生什么：我会读取本地 pointer 摘要，优先用 mounted path 读取 NAS/shared-node 只读摘要；必要时才 credential fallback，并将凭据读取写入 GATE-LEDGER。随后比较 17/17 dataset 的 run_id/checksum/path；生成 evidence 后先扫描 `password|token|secret|credential_value`，通过后才更新 Phase 1 exit evidence 为 8/8 PASS；不一致则停止并记录 BLOCKED/mismatch。
 - approve 不授权什么：不授权 NAS sync/write/pull/push、restore、delete/archive、real lake write、catalog pointer mutation、provider fetch、historical cleanup、simulation/live/trading、broker write 或 Git remote write。
 - 不确认会阻塞什么：会阻塞 CR-149 Phase 1 fully closed；不阻塞当前单机 catalog current truth 和 no-risk governed lake contract 使用。
 
@@ -27,17 +27,17 @@ Decision Collection Coverage：见 checkpoint 的 `### Decision Collection Cover
 | 决策 ID | 决策类型 | 推荐方案 |
 |---|---|---|
 | DQ-CP2-CR149-NAS-01 | runtime_authorization | 授权一次 NAS/shared-node published pointer read-only consistency check。 |
-| DQ-CP2-CR149-NAS-02 | runtime_authorization | 允许仅读取完成只读 listing/checksum 所需的 NAS/shared-node credential/env，禁止打印或写入 secret 原文。 |
+| DQ-CP2-CR149-NAS-02 | runtime_authorization | mounted path first；mounted path 不可用时才允许读取只读 credential/env；credential fallback 必须记 GATE-LEDGER；evidence 必须做 secret-marker scan。 |
 | DQ-CP2-CR149-NAS-03 | risk_acceptance | 若发现 mismatch，不自动修复；只记录 evidence 并另起 sync/restore gate。 |
 
 请审查 `process/checkpoints/CP2-CR149-NAS-MULTINODE-CONSISTENCY.md`。
 
-如果你回复 approve：表示接受上述 3 个 DQ 的推荐方案，我将执行一次只读 NAS/shared-node published pointer consistency check，并把结果写入 `process/evidence/`。
+如果你回复 approve：表示接受上述 3 个 DQ 的推荐方案，我将执行一次只读 NAS/shared-node published pointer consistency check，并把结果写入 `process/evidence/`；执行顺序为 mounted path first，credential fallback only；credential fallback 若发生会写 GATE-LEDGER；evidence 会先扫描 `password|token|secret|credential_value` 后才用于关闭 Phase 1。
 
 如果你回复 reject：我会保持 CR-149 为 no-risk scope complete but Phase 1 blocked-human-gate，不访问 NAS/shared-node，不读取凭据。
 
 修改: <具体修改点>：如需修改，请指出要改的 DQ ID 和边界，例如“不读凭据，只使用已挂载路径”或“先要求我输出手动核验清单”。
 
-不表示授权：approve 不表示授权 NAS sync/write/pull/push、restore、delete/archive、real lake write、catalog pointer mutation、provider fetch、historical cleanup、simulation/live/trading、broker write 或 Git remote write。
+不表示授权：approve 不表示授权直接优先读凭据、不表示授权跳过 evidence secret-marker scan、不表示授权跳过 credential fallback ledger；也不授权 NAS sync/write/pull/push、restore、delete/archive、real lake write、catalog pointer mutation、provider fetch、historical cleanup、simulation/live/trading、broker write 或 Git remote write。
 
 不授权项：NAS sync/write/pull/push、restore drill、delete/archive、real lake write、catalog pointer mutation、provider fetch、historical business-conflict cleanup、simulation/live/trading、broker write、Git remote write。
