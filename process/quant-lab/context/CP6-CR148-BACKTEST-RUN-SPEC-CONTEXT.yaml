@@ -1,0 +1,55 @@
+context_id: "CP6-CR148-BACKTEST-RUN-SPEC-CONTEXT"
+created_at: "2026-07-01T12:55:00+08:00"
+read_profile: compact
+source_cr: "CR-148"
+parent_cr: "ROADMAP-QUANT-RESEARCH-PRODUCTION"
+objective: "Implement and verify the Phase B metadata-only BacktestRunSpec contract without runtime, lake, NAS, trading or broker side effects."
+must_read:
+  - path: "process/changes/CR-148-UNIFIED-BACKTEST-EXPERIMENT-FOUNDATION-2026-07-01.md"
+    reason: "CR-148 scope, no-risk boundary and Phase B target."
+  - path: "engine/backtest_production_contracts.py"
+    reason: "Implemented BacktestRunSpec, stable hash builder and validation helpers."
+  - path: "tests/research/test_backtest_production_contracts.py"
+    reason: "Focused CR-148 run-spec and scope guard tests."
+  - path: "process/evidence/CR148-PHASE3-BACKTEST-RUN-SPEC.index.json"
+    reason: "Machine evidence summary for Phase B."
+read_if_needed:
+  - path: "engine/backtest.py"
+    reason: "BacktestConfig is accepted as metadata input for stable run-spec hashing."
+  - path: "engine/multifactor_contracts.py"
+    reason: "Forbidden operation counters define the metadata-only no-side-effect boundary."
+  - path: "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md"
+    reason: "Phase 3 scope and review-alignment guardrails."
+do_not_read_by_default:
+  - ".env"
+  - "NAS credentials"
+  - "real lake parquet contents"
+  - "broker/account/order runtime logs"
+  - "scripts/legacy/*"
+authorization_summary:
+  authorized:
+    - "metadata-only backtest run specification contract implementation"
+    - "offline fixture validation"
+    - "process evidence and CR tracking updates"
+  explicitly_not_authorized:
+    - "provider fetch"
+    - "NAS sync/write/restore"
+    - "credential read"
+    - "QMT or broker runtime"
+    - "simulation/live/trading execution"
+    - "real lake write"
+    - "catalog pointer mutation"
+    - "git remote write"
+evidence_summary:
+  schema_version: "backtest_run_spec_v1"
+  sample_run_id: "bt-alpha-core-20260528-v1"
+  sample_config_hash: "sha256:2a8b7d17ffc9d4334fc3c6435d96bd6c70a564e258a06a77c255bbabcdaa360a"
+  asset_map_gap_count_after: 2
+  gate_required_gap_count: 0
+  phase3_exit_scope: "daily_multifactor_baseline_only"
+  pytest: "52 passed"
+read_expansion_log:
+  - id: "READ-CR148-PHASE3-BACKTEST-RUN-SPEC-2026-07-01T125500+0800"
+    reason: "The CR-148 change file is the scope and authorization source for the low-risk CP6 BacktestRunSpec contract."
+    paths:
+      - "process/changes/CR-148-UNIFIED-BACKTEST-EXPERIMENT-FOUNDATION-2026-07-01.md"
