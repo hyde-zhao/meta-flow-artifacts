@@ -1,0 +1,115 @@
+{
+  "cr_id": "CR-149",
+  "created_at": "2026-07-01T12:38:30+08:00",
+  "mode": "metadata_only_business_conflict_policy",
+  "status": "pass",
+  "schema_version": "governed_lake_conflict_policy_v1",
+  "source_evidence_ref": "process/evidence/CR146-PRODUCTION-LAKE-DUPLICATE-SPLIT-PLAN.index.json",
+  "summary": {
+    "dataset_count": 5,
+    "business_conflict_dataset_count": 4,
+    "business_conflict_group_count": 4272624,
+    "business_conflict_groups_classified_count": 4272624,
+    "default_action": "full_group_quarantine",
+    "validator_issue_count": 0,
+    "semantic_selection_authorized": false,
+    "cleanup_authorized": false,
+    "operation_counts_all_zero": true
+  },
+  "rows": [
+    {
+      "dataset": "adj_factor",
+      "source_row_count": 47876790,
+      "duplicate_key_group_count": 17905960,
+      "exact_copy_group_count": 17824108,
+      "metadata_only_group_count": 81852,
+      "business_conflict_group_count": 0,
+      "conflict_classification": "exact_or_metadata_only",
+      "default_action": "metadata_precedence_or_exact_dedup_requires_gate",
+      "schema_normalization_required": false,
+      "semantic_selection_authorized": false,
+      "cleanup_authorized": false
+    },
+    {
+      "dataset": "prices",
+      "source_row_count": 45660430,
+      "duplicate_key_group_count": 17093658,
+      "exact_copy_group_count": 17011870,
+      "metadata_only_group_count": 1830,
+      "business_conflict_group_count": 79958,
+      "conflict_classification": "business_conflict",
+      "default_action": "full_group_quarantine",
+      "schema_normalization_required": true,
+      "semantic_selection_authorized": false,
+      "cleanup_authorized": false
+    },
+    {
+      "dataset": "prices_limit",
+      "source_row_count": 60172542,
+      "duplicate_key_group_count": 19709804,
+      "exact_copy_group_count": 12264009,
+      "metadata_only_group_count": 6946008,
+      "business_conflict_group_count": 499787,
+      "conflict_classification": "business_conflict",
+      "default_action": "full_group_quarantine",
+      "schema_normalization_required": false,
+      "semantic_selection_authorized": false,
+      "cleanup_authorized": false
+    },
+    {
+      "dataset": "events",
+      "source_row_count": 713640,
+      "duplicate_key_group_count": 351527,
+      "exact_copy_group_count": 340170,
+      "metadata_only_group_count": 10583,
+      "business_conflict_group_count": 774,
+      "conflict_classification": "business_conflict",
+      "default_action": "full_group_quarantine",
+      "schema_normalization_required": false,
+      "semantic_selection_authorized": false,
+      "cleanup_authorized": false
+    },
+    {
+      "dataset": "trade_status",
+      "source_row_count": 35527310,
+      "duplicate_key_group_count": 17649508,
+      "exact_copy_group_count": 13887316,
+      "metadata_only_group_count": 70087,
+      "business_conflict_group_count": 3692105,
+      "conflict_classification": "business_conflict",
+      "default_action": "full_group_quarantine",
+      "schema_normalization_required": false,
+      "semantic_selection_authorized": false,
+      "cleanup_authorized": false
+    }
+  ],
+  "operation_counts": {
+    "provider_fetch": 0,
+    "nas_sync_or_write": 0,
+    "credential_read": 0,
+    "lake_write": 0,
+    "catalog_pointer_mutation": 0,
+    "business_conflict_cleanup": 0,
+    "simulation_or_live": 0,
+    "broker_write": 0
+  },
+  "validation_summary": {
+    "focused": "uv run --python 3.11 pytest tests/data_lake/test_governed_lake_readiness_matrix.py -> 10 passed in 0.04s",
+    "related": "uv run --python 3.11 pytest tests/data_lake/test_governed_lake_readiness_matrix.py tests/data_lake/test_duplicate_profile_gate_b.py tests/data_lake/test_duplicate_fingerprint_profiling.py tests/data_lake/test_dedup_contracts.py tests/data_lake/test_reader_fail_fast_contracts.py -> 38 passed in 0.86s",
+    "full_data_lake": "uv run --python 3.11 pytest tests/data_lake -> 352 passed in 5.54s",
+    "compile": "uv run --python 3.11 python -m compileall -q market_data/governed_lake.py -> PASS",
+    "git_diff_check": "PASS",
+    "cr_tracking": "OK"
+  },
+  "not_authorized": [
+    "business_conflict_semantic_selection",
+    "business_conflict_cleanup_or_rewrite",
+    "real_lake_write",
+    "catalog_pointer_mutation",
+    "provider_fetch",
+    "nas_sync_or_write",
+    "credential_read",
+    "simulation_or_live",
+    "broker_write"
+  ]
+}

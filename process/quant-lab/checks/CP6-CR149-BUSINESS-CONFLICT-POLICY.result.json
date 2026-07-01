@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR149-BUSINESS-CONFLICT-POLICY",
+  "story_id": "CR149-BUSINESS-CONFLICT-POLICY",
+  "cr_id": "CR-149",
+  "created_at": "2026-07-01T12:38:30+08:00",
+  "context_ref": "process/context/CP6-CR149-BUSINESS-CONFLICT-POLICY-CONTEXT.yaml",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr149-business-conflict-policy-implementation"
+  ],
+  "evidence_ref": "process/evidence/CR149-BUSINESS-CONFLICT-POLICY.index.json",
+  "items": [
+    {
+      "id": "CP6-CR149-CONFLICT-POLICY-01",
+      "category": "implementation",
+      "name": "Business-conflict policy contract added without cleanup or write side effects",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "market_data/governed_lake.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Adds conflict policy row/aggregate dataclasses, builder and validator."
+    },
+    {
+      "id": "CP6-CR149-CONFLICT-POLICY-02",
+      "category": "contract",
+      "name": "4,272,624 business-conflict groups are classified as full-group quarantine",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR149-BUSINESS-CONFLICT-POLICY-2026-07-01.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "prices, prices_limit, events and trade_status default to full_group_quarantine; adj_factor is exact/metadata-only."
+    },
+    {
+      "id": "CP6-CR149-CONFLICT-POLICY-03",
+      "category": "scope-guard",
+      "name": "Semantic selection and cleanup remain forbidden without human gate",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "tests/data_lake/test_governed_lake_readiness_matrix.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Validator rejects semantic_selection_authorized, cleanup_authorized and nonzero business_conflict_cleanup counters."
+    },
+    {
+      "id": "CP6-CR149-CONFLICT-POLICY-04",
+      "category": "verification",
+      "name": "Conflict policy tests and full data_lake regression pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 pytest tests/data_lake/test_governed_lake_readiness_matrix.py",
+        "uv run --python 3.11 pytest tests/data_lake/test_governed_lake_readiness_matrix.py tests/data_lake/test_duplicate_profile_gate_b.py tests/data_lake/test_duplicate_fingerprint_profiling.py tests/data_lake/test_dedup_contracts.py tests/data_lake/test_reader_fail_fast_contracts.py",
+        "uv run --python 3.11 pytest tests/data_lake",
+        "uv run --python 3.11 python -m compileall -q market_data/governed_lake.py",
+        "git diff --check",
+        "meta-flow check cr-tracking"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Focused test: 10 passed. Related regression: 38 passed. Full data_lake: 352 passed."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR149-BUSINESS-CONFLICT-POLICY-2026-07-01T123830+0800"
+  ],
+  "decision": "PASS",
+  "next_route": "continue_cr149_phase1_exit_matrix_and_close_when_only_gated_items_remain"
+}

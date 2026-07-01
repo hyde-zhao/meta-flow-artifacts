@@ -1,0 +1,55 @@
+schema_version: context_capsule_v1
+context_id: CP6-CR149-BUSINESS-CONFLICT-POLICY
+cr_id: CR-149
+created_at: "2026-07-01T12:38:30+08:00"
+scope: governed lake business-conflict policy contract
+read_profile: compact
+must_read:
+  - market_data/governed_lake.py
+  - tests/data_lake/test_governed_lake_readiness_matrix.py
+  - process/evidence/CR146-PRODUCTION-LAKE-DUPLICATE-SPLIT-PLAN.index.json
+  - process/changes/CR-149-GOVERNED-LAKE-READINESS-MATRIX-2026-07-01.md
+allowed_reads:
+  - process/plans/CR139-W2-GATEB-PER-DATASET-WRITE-PLAN.md
+  - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
+do_not_read_by_default:
+  - scripts/legacy/
+  - raw parquet contents
+  - real NAS credentials or env secrets
+boundary:
+  authorized:
+    - local code changes
+    - local fixture tests
+    - read existing CR146 split-plan evidence
+    - process evidence and checkpoint records
+  not_authorized:
+    - business_conflict_semantic_selection
+    - business_conflict_cleanup_or_rewrite
+    - real_lake_write
+    - catalog_pointer_mutation
+    - provider_fetch
+    - nas_sync_or_write
+    - credential_read
+    - simulation_or_live
+    - broker_write
+implementation_summary:
+  added_objects:
+    - GovernedLakeConflictPolicyRow
+    - GovernedLakeConflictPolicy
+    - build_governed_lake_conflict_policy
+    - validate_governed_lake_conflict_policy
+  real_evidence_input: process/evidence/CR146-PRODUCTION-LAKE-DUPLICATE-SPLIT-PLAN.index.json
+  classified_business_conflict_groups: 4272624
+  default_action: full_group_quarantine
+validation_summary:
+  focused_tests: "10 passed in 0.04s"
+  related_tests: "38 passed in 0.86s"
+  full_data_lake: "352 passed in 5.54s"
+  git_diff_check: PASS
+  cr_tracking: OK
+read_expansion_log:
+  - id: READ-CR149-BUSINESS-CONFLICT-POLICY-2026-07-01T123830+0800
+    reason: "Need CR146 split-plan count evidence to classify Phase 1 business-conflict groups without rerunning lake scan."
+    files:
+      - process/evidence/CR146-PRODUCTION-LAKE-DUPLICATE-SPLIT-PLAN.index.json
+      - process/changes/CR-149-GOVERNED-LAKE-READINESS-MATRIX-2026-07-01.md
