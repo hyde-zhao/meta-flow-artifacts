@@ -1,0 +1,93 @@
+{
+  "blockers": [],
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR147-RESEARCH-PRODUCTION-ASSET-MAP",
+  "context_ref": "process/context/CP6-CR147-RESEARCH-PRODUCTION-CONTRACTS-CONTEXT.yaml",
+  "cr_id": "CR-147",
+  "created_at": "2026-07-01T11:34:00+08:00",
+  "decision": "PASS",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr147-asset-map-implementation"
+  ],
+  "evidence_ref": "process/evidence/CR147-PHASE2-RESEARCH-PRODUCTION-ASSET-MAP.index.json",
+  "items": [
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "engine/research_production_contracts.py"
+      ],
+      "id": "CP6-CR147-ASSET-MAP-01",
+      "name": "Research production asset map added without runtime side effects",
+      "notes": "Adds ResearchProductionAssetMap, ResearchProductionAsset, ResearchProductionGap and validation helpers.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "contract",
+      "evidence_refs": [
+        "process/evidence/CR147-PHASE2-RESEARCH-PRODUCTION-ASSET-MAP.index.json"
+      ],
+      "id": "CP6-CR147-ASSET-MAP-02",
+      "name": "Existing research production assets are mapped to roadmap phases",
+      "notes": "7 assets mapped across research dataset, feature/label store, experiment snapshot, experiment registry and downstream promotion gates.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "gap-analysis",
+      "evidence_refs": [
+        "process/evidence/CR147-PHASE2-RESEARCH-PRODUCTION-ASSET-MAP-2026-07-01.json"
+      ],
+      "id": "CP6-CR147-ASSET-MAP-03",
+      "name": "Phase 2 gaps are explicit and do not require immediate manual gates",
+      "notes": "2 medium metadata gaps identified; gate_required_gap_count=0. No lake write, catalog mutation, provider, NAS, credential, runtime, trading, or git remote action.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "tests/research/test_research_production_contracts.py",
+        "uv run --python 3.11 pytest tests/research/test_research_production_contracts.py"
+      ],
+      "id": "CP6-CR147-ASSET-MAP-04",
+      "name": "CR147 focused contract tests pass",
+      "notes": "8 passed.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "regression",
+      "evidence_refs": [
+        "uv run --python 3.11 pytest tests/data_lake/test_feature_label_artifact_layer.py tests/data_lake/test_training_snapshot_cutoff.py tests/research/test_research_dataset_builder.py"
+      ],
+      "id": "CP6-CR147-ASSET-MAP-05",
+      "name": "Related existing feature/snapshot/research dataset tests pass",
+      "notes": "17 passed.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "continue_cr147_phase2_snapshot_registry_gap",
+  "read_expansion_refs": [
+    "READ-CR147-PHASE2-CONTRACT-CR-SCOPE-2026-07-01T111800+0800"
+  ],
+  "schema_version": 1,
+  "story_id": "CR147-PHASE2-ASSET-MAP",
+  "waivers": []
+}

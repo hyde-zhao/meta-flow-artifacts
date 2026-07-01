@@ -1,0 +1,152 @@
+{
+  "asset_map": {
+    "asset_count": 7,
+    "gap_count": 2,
+    "gate_required_gap_count": 0,
+    "operation_counts": {
+      "account_or_order_operation": 0,
+      "catalog_publish": 0,
+      "credential_read": 0,
+      "dependency_change": 0,
+      "external_project_clone": 0,
+      "external_project_install": 0,
+      "external_project_run": 0,
+      "lake_write": 0,
+      "provider_fetch": 0,
+      "qmt_operation": 0,
+      "reports_overwrite": 0,
+      "simulation_or_live": 0,
+      "source_migration_or_vendor": 0
+    },
+    "schema_version": "research_production_asset_map_v1",
+    "assets": [
+      {
+        "asset_id": "research_dataset_builder",
+        "layer": "research_dataset",
+        "module": "engine.research_dataset",
+        "object_names": ["ResearchDatasetRequest", "build_research_dataset"],
+        "role": "PIT-safe research dataset request and fixture builder entry point.",
+        "maturity": "existing_contract_needs_production_metadata_bridge",
+        "current_contracts": ["date_window", "universe", "forward_return_horizon", "research_report_kind"],
+        "required_capabilities": ["snapshot_metadata", "stable_replay_checksum", "feature_label_lineage"],
+        "downstream_phase": "Phase 2",
+        "gaps": [
+          {
+            "gap_id": "research_dataset_snapshot_registry_missing",
+            "severity": "medium",
+            "description": "Dataset outputs need a registry entry with content hash, feature versions and label versions.",
+            "phase": "Phase 2",
+            "gate_required": false
+          }
+        ]
+      },
+      {
+        "asset_id": "feature_label_artifact_contracts",
+        "layer": "feature_label_store",
+        "module": "market_data.features.artifacts",
+        "object_names": ["FeatureArtifactSpec", "LabelArtifactSpec", "FeatureStoreSwitchPolicy"],
+        "role": "Versioned feature and label metadata contract for in-lake feature artifacts.",
+        "maturity": "existing_contract_ready_for_phase2_bridge",
+        "current_contracts": ["feature_set_id", "artifact_version", "as_of_trade_date", "source_view_refs", "lineage_checksum"],
+        "required_capabilities": ["available_at_policy", "primary_key_alignment", "feature_store_switch_gate"],
+        "downstream_phase": "Phase 2",
+        "gaps": [
+          {
+            "gap_id": "feature_available_at_policy_not_enforced_by_builder",
+            "severity": "medium",
+            "description": "Feature metadata exposes enough fields for PIT policy, but dataset building must enforce available_at <= decision_time.",
+            "phase": "Phase 2",
+            "gate_required": false
+          }
+        ]
+      },
+      {
+        "asset_id": "training_snapshot_contract",
+        "layer": "experiment_snapshot",
+        "module": "engine.training_snapshot_contract",
+        "object_names": ["TrainingSnapshotSpec", "validate_training_snapshot_cutoff"],
+        "role": "Training snapshot metadata and cutoff validation.",
+        "maturity": "existing_contract_ready_for_phase2_bridge",
+        "current_contracts": ["published_path", "content_hash", "as_of", "training_cutoff", "split_policy_id"],
+        "required_capabilities": ["cutoff_validation", "published_only_source", "lineage_refs"],
+        "downstream_phase": "Phase 2",
+        "gaps": []
+      },
+      {
+        "asset_id": "experiment_manifest_registry",
+        "layer": "experiment_registry",
+        "module": "engine.research_manifest",
+        "object_names": ["ExperimentManifest", "ResearchReportCatalog", "ExperimentManifestClosure"],
+        "role": "Experiment and report manifest registry with internal truth-source policy.",
+        "maturity": "existing_contract_ready_for_phase2_bridge",
+        "current_contracts": ["config_hash", "dataset_release", "factor_versions", "report_paths", "allowed_blocked_claims"],
+        "required_capabilities": ["experiment_lineage", "report_catalog", "admission_evidence_refs"],
+        "downstream_phase": "Phase 2",
+        "gaps": []
+      },
+      {
+        "asset_id": "strategy_admission_package",
+        "layer": "promotion_gate",
+        "module": "engine.strategy_admission_package",
+        "object_names": ["StrategyAdmissionPackage", "OrderIntentDraftRef"],
+        "role": "Offline promotion/admission package; explicitly not runtime or broker authorization.",
+        "maturity": "downstream_phase_existing_contract",
+        "current_contracts": ["manifest_ref", "catalog_ref", "stage6_gate_summary", "not_authorized_counters"],
+        "required_capabilities": ["promotion_gate_inputs", "runtime_claim_blocking", "order_draft_ref_only"],
+        "downstream_phase": "Phase 4/5",
+        "gaps": []
+      },
+      {
+        "asset_id": "strategy_readiness_admission",
+        "layer": "promotion_gate",
+        "module": "engine.strategy_readiness_admission",
+        "object_names": ["AdmissionPackage", "GateResult", "Stage6GateId"],
+        "role": "Stage6 P0 gate matrix for later strategy promotion.",
+        "maturity": "downstream_phase_existing_contract",
+        "current_contracts": ["10_p0_gates", "blocked_claims", "permission_counters"],
+        "required_capabilities": ["gate_matrix", "missing_evidence_fail_closed", "forbidden_operation_counters"],
+        "downstream_phase": "Phase 4/5",
+        "gaps": []
+      },
+      {
+        "asset_id": "cr147_contract_bridge",
+        "layer": "research_production_foundation",
+        "module": "engine.research_production_contracts",
+        "object_names": ["ResearchDatasetSpec", "ResearchProductionAudit", "ResearchProductionAssetMap"],
+        "role": "CR147 bridge that ties existing assets into a metadata-only research production foundation.",
+        "maturity": "new_phase2_contract_bridge",
+        "current_contracts": ["leakage_policy", "source_of_truth_guard", "snapshot_id_guard", "operation_counts_zero"],
+        "required_capabilities": ["asset_map", "contract_audit", "stable_fingerprint"],
+        "downstream_phase": "Phase 2",
+        "gaps": []
+      }
+    ]
+  },
+  "cr_id": "CR-147",
+  "created_at": "2026-07-01T11:34:00+08:00",
+  "mode": "offline_static_asset_map_no_runtime",
+  "not_authorized": [
+    "provider_fetch",
+    "nas_sync_or_write",
+    "credential_read",
+    "qmt_runtime",
+    "simulation_live_or_trading",
+    "broker_write",
+    "git_remote_write",
+    "real_lake_write",
+    "catalog_pointer_mutation"
+  ],
+  "schema_version": "cr147_phase2_asset_map_evidence_v1",
+  "status": "pass",
+  "validation_issues": [],
+  "verification": {
+    "focused_pytest": {
+      "command": "uv run --python 3.11 pytest tests/research/test_research_production_contracts.py",
+      "result": "8 passed in 0.37s"
+    },
+    "related_regression_pytest": {
+      "command": "uv run --python 3.11 pytest tests/data_lake/test_feature_label_artifact_layer.py tests/data_lake/test_training_snapshot_cutoff.py tests/research/test_research_dataset_builder.py",
+      "result": "17 passed in 0.75s"
+    }
+  }
+}
