@@ -1,7 +1,7 @@
 ---
 id: "CR-146"
 title: "CR139 Post-Close Lake Completion"
-status: "pending-high-risk-human-gate"
+status: "active-production-lake-n1-complete"
 kind: "runtime-authorization"
 lifecycle_status: "active"
 readiness_status: "ready_with_risk"
@@ -51,7 +51,7 @@ CR-139 已关闭为 `closed-current-delivery`，但关闭时保留了真实 lake
 | process/check/evidence write | authorized | write under `process/evidence` and `process/checks` |
 | lake candidate/canonical/quality write | authorized when low-risk | requires pre/post snapshots and rollback manifest |
 | catalog/manifest/pointer write | conditional | allowed only if no unresolved business conflict; otherwise human gate |
-| physical partition migration | blocked | human gate required |
+| physical partition migration | authorized/executed | CP2-CR146-PRODUCTION-LAKE-N1-MIGRATION approved by user on 2026-07-01; N1 copy-first migration executed with canary + remaining batch. |
 | legacy delete/archive movement | blocked | human gate required |
 | provider/NAS/runtime/trading/credential/Git remote | not-authorized | separate explicit authorization required |
 
@@ -63,7 +63,7 @@ CR-139 已关闭为 `closed-current-delivery`，但关闭时保留了真实 lake
 | Phase 1 | Evidence gap matrix | Each user-listed CR139 follow-up item classified as `covered`, `execute-now`, or `human-gate`. |
 | Phase 2 | Bounded real lake validation | Inventory/performance, PIT/panel/schema/lineage/read audit smoke reports written. |
 | Phase 3 | Low-risk write closure | Any no-conflict write either executed with rollback evidence or explicitly marked not needed. |
-| Phase 4 | Human gates | Decision briefs generated for business-conflict datasets, physical migration, provider/NAS/delete if still needed. |
+| Phase 4 | Human gates | Decision briefs generated for business-conflict datasets, physical migration, provider/NAS/delete if still needed. N1 physical migration gate approved and executed. |
 | Phase 5 | Final validation | CR146 check report and cr-tracking PASS; CR146 closed or blocked with exact gate list. |
 
 ## Risk Rules
@@ -78,7 +78,7 @@ CR-139 已关闭为 `closed-current-delivery`，但关闭时保留了真实 lake
 
 ## Current Status
 
-CR146 validation is complete with `PASS_WITH_HUMAN_GATES`.
+CR146 validation is complete with `PASS_WITH_HUMAN_GATES`; N1 physical partition migration is complete with `PASS`.
 
 Evidence:
 
@@ -86,7 +86,25 @@ Evidence:
 - `process/evidence/CR146-CR139-FOLLOWUP-GAP-MATRIX-2026-06-30.json`
 - `process/checkpoints/CP2-CR146-HIGH-RISK-LAKE-ACTIONS.md`
 
-No new lake write, catalog write, pointer advance, physical migration, provider/NAS/runtime/trading/credential/Git remote action was executed by CR146. High-risk actions are pending user decision.
+N1 physical partition migration was executed after user approval `CP2-CR146-N1-APPROVED-20260701`. The executed scope was limited to copy-first current-truth physical migration and catalog canonical_path switch:
+
+- Canary `bse_code_mapping`: copied/verified, catalog switched, initial golden compare without structural attribution returned WARN, catalog pointer was rolled back, then structural attribution `CR139-S08` was applied and the canary was re-applied successfully.
+- Remaining 16 datasets: copied to `current/`, size/sha256/parquet-readable verified, then catalog canonical_path switched.
+- Legacy run_id paths were retained; no legacy delete/archive, NAS sync, provider fetch, credential read, QMT/runtime/trading, or Git remote write was executed.
+
+Post-N1 validation evidence:
+
+- `process/evidence/CR146-PRODUCTION-LAKE-PHYSICAL-MIGRATION-CANARY-REAPPLY-2026-07-01.json`
+- `process/evidence/CR146-PRODUCTION-LAKE-PHYSICAL-MIGRATION-FULL-EXECUTION-2026-07-01.json`
+- `process/evidence/CR146-PRODUCTION-LAKE-CURRENT-TRUTH-PROFILE-FULL-POST-N1-2026-07-01.json`
+- `process/evidence/CR146-PRODUCTION-LAKE-INVENTORY-FULL-POST-N1-2026-07-01.json`
+- `process/evidence/CR146-PRODUCTION-LAKE-READER-RUNTIME-SMOKE-FULL-POST-N1-2026-07-01.json`
+- `process/evidence/CR146-PRODUCTION-LAKE-GOLDEN-BASELINE-FULL-POST-N1-2026-07-01/golden-baseline-snapshot.json`
+- `process/evidence/CR146-PRODUCTION-LAKE-GOLDEN-BASELINE-FULL-POST-N1-DIFF-STRUCTURAL-2026-07-01/golden-diff-report.json`
+
+Post-N1 validation summary: catalog current truth remains 17 published datasets / 103,264,532 rows / duplicate_key_total=0; inventory physical_missing_count=0; reader smoke PASS with 17/17 current paths and 15/15 supported reader datasets available; golden structural attribution PASS with ambiguous_rate=0.0; `uv run --python 3.11 pytest tests/data_lake` passed 342 tests.
+
+Remaining high-risk actions are still pending separate human gates: FU-CR139-001 historical-root/business-conflict cleanup and RA-CR139-002 provider/NAS/delete operations.
 
 ## Process State Repair Notes
 

@@ -3,7 +3,7 @@ source_cr: "CR-139"
 status: "open"
 created_at: "2026-06-30T23:40:00+08:00"
 created_by: "host-orchestrator"
-updated_at: "2026-06-30T23:40:00+08:00"
+updated_at: "2026-07-01T10:18:00+08:00"
 checkpoint_source: "post-close-user-authorization"
 cr_index_path: "process/changes/CR-INDEX.yaml"
 ---
@@ -45,8 +45,8 @@ follow_up_items:
     title: "CR139 post-close real lake runtime validation"
     kind: "runtime-authorization"
     lifecycle_status: "active"
-    readiness_status: "not_ready"
-    gate_status: "cp7_pending"
+    readiness_status: "ready_with_risk"
+    gate_status: "cp2_pending"
     gate_profile: "compact"
     source_cr: "CR-139"
     formal_cr_path: "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md"
@@ -60,7 +60,7 @@ follow_up_items:
       credential_read: false
       nas_access: false
       trading_write: false
-    next_action: "Execute bounded read-only validation and evidence gap matrix."
+    next_action: "Runtime validation evidence is complete; await CR-146 final closure after N1 execution evidence is indexed."
   - id: "FU-CR139-001"
     title: "GateB Batch2 remaining business-conflict datasets"
     kind: "runtime-authorization"
@@ -88,12 +88,12 @@ follow_up_items:
     source_cr: "CR-139"
     formal_cr_path: "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md"
     related_active_cr: "CR-146"
-    blocked_by: "related_active_cr=CR-146; awaiting_cp2_human_approval_for_n1_execution"
+    blocked_by: "related_active_cr=CR-146; n1_execution_complete_awaiting_cr146_final_closure"
     impact_surface:
       - "physical lake partition layout"
       - "catalog current pointers"
       - "legacy/current/archive movement"
-    next_action: "CR-146 has prepared N1 plan/dry-run/post-copy verify/rollback evidence; execute only after CP2-CR146-PRODUCTION-LAKE-N1-MIGRATION approval."
+    next_action: "N1 execution complete under CR-146: canary + remaining 16 datasets copied to current/, size/sha256/parquet-readable verified, catalog pointers switched, current-truth/reader/golden/pytest validation passed. Keep active until CR-146 final closure. Historical-root cleanup remains FU-CR139-001."
   - id: "FU-CR139-003"
     title: "N2 run-id naming governance"
     kind: "requirement-change"
@@ -133,16 +133,16 @@ follow_up_items:
 |---|---:|---|---|
 | 已关闭 / 已覆盖 | 9+ | 否 | S09/S14/S22/S30/S31/S32/S33/S34/S39 已由 Gate B/E/C/D/F/H/W3 回映射闭环；CR144 覆盖 experiment real lake smoke。 |
 | 当前授权执行 | 1 | 否 | RA-CR139-001 由 CR-146 承接，执行 bounded real lake validation。 |
-| 高风险人工门禁 | 3 | 是，仅阻断对应动作 | Batch2 business-conflict semantic policy、N1 physical migration、provider/NAS/delete。 |
+| 高风险人工门禁 | 2 | 是，仅阻断对应动作 | Batch2 business-conflict semantic policy、provider/NAS/delete。N1 physical migration 已由 CR-146 执行完成，待 CR-146 终验关闭。 |
 | 非阻断候选 | 1 | 否 | N2 run-id naming governance。 |
 
 ## 后续候选索引
 
 | 候选编号 | 标题 | 状态 | 类型 | 优先级 | 影响面 / 冲突键 | 正式 CR 路径 | 关联 | 当前门控 | 阻塞原因 | 下一步 | 来源 |
 |---|---|---|---|---:|---|---|---|---|---|---|---|
-| RA-CR139-001 | CR139 post-close real lake runtime validation | active | runtime-authorization | 1 | real lake read/runtime validation | `process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md` | related_active_cr=CR-146 | cp7_pending | 无 | 执行 bounded validation | USER-20260630-CR139-LAKE-RW-AUTH |
+| RA-CR139-001 | CR139 post-close real lake runtime validation | active | runtime-authorization | 1 | real lake read/runtime validation | `process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md` | related_active_cr=CR-146 | cp2_pending | 无 | Runtime validation evidence complete；等待 CR-146 终验关闭 | USER-20260630-CR139-LAKE-RW-AUTH |
 | FU-CR139-001 | GateB Batch2 remaining business-conflict datasets | candidate | runtime-authorization | 2 | prices/prices_limit/events/trade_status |  |  | cp2_pending | 需要逐 dataset 人工门禁；N1 current-truth migration 不关闭 historical-root cleanup/rewrite | N1 后仍保持 open，起草 dataset-level historical cleanup/rewrite Decision Brief | GateB Batch2 |
-| FU-CR139-002 | N1 physical partition migration | active | requirement-change | 3 | physical partition layout | `process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md` | related_active_cr=CR-146 | cp2_pending | 等待 CP2-CR146-N1 人工授权；plan/dry-run/post-copy verify/rollback 已就绪 | approve 后按 canary + remaining 分批执行；执行完成后关闭该候选 | S08/S30 |
+| FU-CR139-002 | N1 physical partition migration | active | requirement-change | 3 | physical partition layout | `process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md` | related_active_cr=CR-146 | cp2_pending | 无 | N1 执行完成，等待 CR-146 终验关闭；FU-CR139-001 历史根 cleanup 仍 open | S08/S30 |
 | FU-CR139-003 | N2 run-id naming governance | candidate | requirement-change | 4 | run-id grammar/catalog metadata |  |  | not_started | 无 | 后置治理 | S07/S30 |
 | RA-CR139-002 | Provider catalog / NAS / legacy archive-delete operations | candidate | runtime-authorization | 5 | provider/NAS/delete |  |  | cp2_pending | 未授权 provider/NAS/delete | 事件触发 | CP8 not-authorized |
 

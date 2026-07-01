@@ -1,0 +1,122 @@
+{
+  "approval_id": "CP2-CR146-N1-APPROVED-20260701",
+  "blockers": [],
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR146-PRODUCTION-LAKE-N1-MIGRATION",
+  "context_ref": "process/context/CP2-CR146-PRODUCTION-LAKE-N1-MIGRATION-CONTEXT.yaml",
+  "cr_id": "CR-146",
+  "created_at": "2026-07-01T10:18:00+08:00",
+  "decision": "PASS",
+  "dispatch_refs": [
+    "inline-host-orchestrator-runtime-execution"
+  ],
+  "evidence_ref": "process/evidence/CR146-PRODUCTION-LAKE-PHYSICAL-MIGRATION-FULL-EXECUTION-2026-07-01.json",
+  "items": [
+    {
+      "category": "runtime-execution",
+      "evidence_refs": [
+        "process/evidence/CR146-PRODUCTION-LAKE-PHYSICAL-MIGRATION-CANARY-REAPPLY-2026-07-01.json",
+        "process/evidence/CR146-PRODUCTION-LAKE-GOLDEN-BASELINE-CANARY-REAPPLY-DIFF-STRUCTURAL-2026-07-01/golden-diff-report.json"
+      ],
+      "id": "CP7-N1-01",
+      "name": "Canary migration re-applied after structural attribution validation",
+      "notes": "bse_code_mapping target pre-existed from first canary, passed size/sha256/parquet-readable verification, catalog switched to current/. Structural compare with CR139-S08 passed ambiguous_rate=0.0.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "runtime-execution",
+      "evidence_refs": [
+        "process/evidence/CR146-PRODUCTION-LAKE-PHYSICAL-MIGRATION-FULL-EXECUTION-2026-07-01.json"
+      ],
+      "id": "CP7-N1-02",
+      "name": "Remaining 16 datasets migrated with post-copy verification before catalog switch",
+      "notes": "16 copied, 16 catalog_updates, 16 post_copy_verifications, 0 errors; no legacy delete/archive, NAS, provider, credential, runtime, trading, or git remote operation.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "data-quality",
+      "evidence_refs": [
+        "process/evidence/CR146-PRODUCTION-LAKE-CURRENT-TRUTH-PROFILE-FULL-POST-N1-2026-07-01.json"
+      ],
+      "id": "CP7-N1-03",
+      "name": "Catalog current truth unchanged except physical current layout",
+      "notes": "17 published datasets, 103264532 rows, duplicate_key_total=0, source_missing_count=0.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "inventory",
+      "evidence_refs": [
+        "process/evidence/CR146-PRODUCTION-LAKE-INVENTORY-FULL-POST-N1-2026-07-01.json"
+      ],
+      "id": "CP7-N1-04",
+      "name": "Post-N1 inventory has no missing physical catalog paths",
+      "notes": "physical_missing_count=0; full-root duplicate_key_total remains historical-root cleanup scope under FU-CR139-001.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "reader-smoke",
+      "evidence_refs": [
+        "scripts/data_lake/collect_reader_runtime_smoke.py",
+        "process/evidence/CR146-PRODUCTION-LAKE-READER-RUNTIME-SMOKE-FULL-POST-N1-2026-07-01.json"
+      ],
+      "id": "CP7-N1-05",
+      "name": "Stable reader runtime smoke covers current layout without legacy scripts",
+      "notes": "17/17 catalog current paths exist, 15/15 supported reader datasets available, 2 catalog-only datasets skipped because no reader contract exists.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "golden-attribution",
+      "evidence_refs": [
+        "process/evidence/CR146-PRODUCTION-LAKE-GOLDEN-BASELINE-FULL-POST-N1-2026-07-01/golden-baseline-snapshot.json",
+        "process/evidence/CR146-PRODUCTION-LAKE-GOLDEN-BASELINE-FULL-POST-N1-DIFF-STRUCTURAL-2026-07-01/golden-diff-report.json"
+      ],
+      "id": "CP7-N1-06",
+      "name": "Golden baseline compare attributes physical-layout deltas to CR139-S08",
+      "notes": "status=PASS, ambiguous_rate=0.0, diff_count=38, all physical-layout row_count/digest changes attributed as structural_fix.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "regression",
+      "evidence_refs": [
+        "uv run --python 3.11 pytest tests/data_lake"
+      ],
+      "id": "CP7-N1-07",
+      "name": "Full tests/data_lake regression passes after N1",
+      "notes": "342 passed in 5.94s.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "continue_to_fu_cr139_001_historical_cleanup_gate_if_requested",
+  "read_expansion_refs": [],
+  "schema_version": 1,
+  "story_id": "CR146-N1-PRODUCTION-LAKE-PHYSICAL-MIGRATION",
+  "waivers": []
+}
