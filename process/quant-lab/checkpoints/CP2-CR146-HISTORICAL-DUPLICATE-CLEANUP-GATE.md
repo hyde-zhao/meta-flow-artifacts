@@ -2,7 +2,7 @@
 checkpoint_id: "CP2-CR146-HISTORICAL-DUPLICATE-CLEANUP-GATE"
 checkpoint_name: "CR146 Historical Duplicate Cleanup Gate"
 type: "auto_then_manual"
-status: "pending_user_decision"
+status: "approved"
 owner: "host-orchestrator"
 created_at: "2026-07-01T10:34:00+08:00"
 source_cr: "CR-146"
@@ -124,10 +124,10 @@ auto_final_authorization: false
 
 ## 人工审查结果
 
-- 结论：`approved | changes_requested | rejected`
-- 审查人：
-- 审查时间：
-- 修改意见：
-- 风险接受项：
+- 结论：`approved`
+- 审查人：user
+- 审查时间：2026-07-01T10:47:00+08:00
+- 修改意见：approve 推荐方案；不立即执行全量 historical-root cleanup，不授权 business-conflict semantic selection / rewrite / delete / archive；允许继续准备 `adj_factor` dataset-level cleanup 门禁草案。
+- 风险接受项：接受 current truth 已 clean、历史根 cleanup 作为低优先级长期债保留；business-conflict 4 个 dataset 后续必须逐 dataset 领域规则 + 抽样验收。
 
 回复 `approve` 表示接受推荐方案：不立即执行全量 historical-root cleanup，不授权任何 rewrite/delete/archive/business-conflict semantic selection；只允许继续准备 `adj_factor` dataset-level cleanup 门禁草案。

@@ -1,0 +1,132 @@
+{
+  "audit": {
+    "asset_refs": {
+      "existing_contracts": [
+        "engine.research_dataset.ResearchDatasetRequest",
+        "market_data.features.artifacts.FeatureArtifactSpec",
+        "engine.training_snapshot_contract.TrainingSnapshotSpec",
+        "engine.research_manifest.ExperimentManifestClosure"
+      ],
+      "feature_artifacts": [
+        "alpha_core"
+      ],
+      "training_snapshot": "snapshot-alpha-core-20260528-v1"
+    },
+    "issues": [],
+    "operation_counts": {
+      "account_or_order_operation": 0,
+      "catalog_publish": 0,
+      "credential_read": 0,
+      "dependency_change": 0,
+      "external_project_clone": 0,
+      "external_project_install": 0,
+      "external_project_run": 0,
+      "lake_write": 0,
+      "provider_fetch": 0,
+      "qmt_operation": 0,
+      "reports_overwrite": 0,
+      "simulation_or_live": 0,
+      "source_migration_or_vendor": 0
+    },
+    "research_dataset_request": {
+      "analysis_mode": "research",
+      "end_date": "2026-05-28",
+      "forward_return_horizon": 20,
+      "report_kind": "research_dataset_spec",
+      "start_date": "2020-01-01",
+      "universe": "csi300"
+    },
+    "schema_version": "research_production_foundation_audit_v1",
+    "spec": {
+      "as_of": "2026-05-28",
+      "end_date": "2026-05-28",
+      "event_filters": {},
+      "feature_artifact_refs": [
+        "alpha_core"
+      ],
+      "features": [
+        "momentum_20d",
+        "volatility_20d"
+      ],
+      "label_artifact_refs": [
+        "forward_return_20d"
+      ],
+      "labels": [
+        "forward_return_20d"
+      ],
+      "leakage_policy": {
+        "decision_time_field": "decision_time",
+        "feature_available_at_field": "available_at",
+        "label_available_at_field": "label_available_at",
+        "label_horizon_days": 20,
+        "require_feature_available_before_decision": true,
+        "require_label_after_decision": true
+      },
+      "output_snapshot_id": "snapshot-alpha-core-20260528-v1",
+      "primary_keys": [
+        "trade_date",
+        "symbol"
+      ],
+      "rebalance_calendar": "trade_calendar",
+      "schema_version": "research_dataset_spec_v1",
+      "source_of_truth": "published_current_truth",
+      "spec_id": "research-dataset-alpha-core-20260528",
+      "start_date": "2020-01-01",
+      "tradability_filters": {
+        "require_tradable": true
+      },
+      "universe": "csi300"
+    },
+    "spec_fingerprint": "sha256:1db919e8c1c97b4de32a5ca7ec303608208b95e15676954787877679296fb72f",
+    "status": "pass"
+  },
+  "cr_id": "CR-147",
+  "created_at": "2026-07-01T11:05:00+08:00",
+  "evidence_refs": [
+    "engine/research_production_contracts.py",
+    "tests/research/test_research_production_contracts.py",
+    "market_data/features/artifacts.py",
+    "engine/training_snapshot_contract.py",
+    "engine/research_manifest.py",
+    "engine/research_dataset.py"
+  ],
+  "mode": "offline_fixture_contract_audit_no_runtime",
+  "not_authorized": [
+    "provider_fetch",
+    "nas_sync_or_write",
+    "credential_read",
+    "qmt_runtime",
+    "simulation_live_or_trading",
+    "broker_write",
+    "git_remote_write",
+    "real_lake_write",
+    "catalog_pointer_mutation"
+  ],
+  "operation_counts": {
+    "account_or_order_operation": 0,
+    "catalog_publish": 0,
+    "credential_read": 0,
+    "dependency_change": 0,
+    "external_project_clone": 0,
+    "external_project_install": 0,
+    "external_project_run": 0,
+    "lake_write": 0,
+    "provider_fetch": 0,
+    "qmt_operation": 0,
+    "reports_overwrite": 0,
+    "simulation_or_live": 0,
+    "source_migration_or_vendor": 0
+  },
+  "schema_version": "cr147_phase2_contract_audit_v1",
+  "status": "pass",
+  "verification": {
+    "focused_pytest": {
+      "command": "uv run --python 3.11 pytest tests/research/test_research_production_contracts.py",
+      "result": "6 passed in 0.52s"
+    },
+    "related_regression_pytest": {
+      "command": "uv run --python 3.11 pytest tests/data_lake/test_feature_label_artifact_layer.py tests/data_lake/test_training_snapshot_cutoff.py tests/research/test_research_dataset_builder.py",
+      "result": "17 passed in 0.96s"
+    }
+  }
+}

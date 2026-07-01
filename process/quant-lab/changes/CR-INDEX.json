@@ -2,50 +2,93 @@
   "active_crs": [
     {
       "authz_policy_refs": [
-        "LAKE_READ_AUTHORIZED",
-        "LAKE_WRITE_AUTHORIZED_WITH_ROLLBACK_EVIDENCE",
         "NO_PROVIDER_FETCH",
-        "NO_NAS_SYNC",
+        "NO_NAS_SYNC_OR_WRITE",
         "NO_CREDENTIAL_READ",
-        "NO_QMT_RUNTIME",
+        "NO_RUNTIME",
         "NO_TRADING",
+        "NO_BROKER_WRITE",
         "NO_GIT_REMOTE_WRITE",
-        "HUMAN_GATE_FOR_PHYSICAL_MIGRATION_DELETE_BUSINESS_CONFLICT"
+        "NO_REAL_LAKE_WRITE_INITIAL_PHASE"
       ],
       "blocked_by": [],
       "conflict_keys": [
-        "cr139-post-close-lake-completion",
-        "real-lake-runtime-validation",
-        "catalog-pointer-current-truth",
-        "business-conflict-gate"
+        "research-dataset-spec",
+        "feature-label-artifact-contract",
+        "training-snapshot-contract",
+        "experiment-registry"
       ],
       "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
-      "formal_cr_path": "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md",
-      "gate_profile": "compact",
+      "formal_cr_path": "process/changes/CR-147-QUANT-RESEARCH-PRODUCTION-FOUNDATION-2026-07-01.md",
+      "gate_profile": "standard",
       "gate_status": "cp2_pending",
-      "id": "CR-146",
+      "id": "CR-147",
       "impact_surface": [
-        "process/evidence/CR146-*",
-        "process/checks/CR146-*",
-        "market_data real lake read paths",
-        "real lake candidate/canonical/quality writes when low-risk"
+        "engine/research_dataset.py",
+        "market_data/features/artifacts.py",
+        "engine/training_snapshot_contract.py",
+        "engine/research_manifest.py",
+        "tests/research/*"
       ],
-      "kind": "runtime-authorization",
-      "last_checked_at": "2026-07-01T10:18:00+08:00",
+      "kind": "requirement-change",
+      "last_checked_at": "2026-07-01T10:47:00+08:00",
       "lifecycle_status": "active",
-      "next_action": "N1 physical migration completed after CP2 approval; continue with FU-CR139-001 historical-root/business-conflict cleanup gate and RA-CR139-002 provider/NAS/delete only if separately authorized.",
-      "next_gate": "FU-CR139-001 dataset-level historical cleanup gate if requested",
-      "parent_cr": "CR-139",
+      "next_action": "Start Phase 2 no-risk contract audit and fixture validation for ResearchDatasetSpec / FeatureArtifactSpec / TrainingSnapshot / ExperimentManifest convergence.",
+      "next_gate": "CP2 low-risk scope confirmation / no high-risk runtime gate required for local code",
+      "parent_cr": "ROADMAP-QUANT-RESEARCH-PRODUCTION",
       "priority": 1,
       "readiness_status": "ready_with_risk",
-      "source_decision_id": "USER-20260630-CR139-LAKE-RW-AUTH",
-      "source_tracking": "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md#RA-CR139-001",
+      "source_decision_id": "USER-20260701-CONTINUE-PRODUCTION-ROADMAP",
+      "source_tracking": "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md#cr-147",
       "status": "active",
-      "title": "CR139 Post-Close Lake Completion"
+      "title": "Quant Research Production Foundation"
     }
   ],
   "generated_at": "2026-06-24T04:36:00+00:00",
   "items": [
+    {
+      "authz_policy_refs": [
+        "NO_PROVIDER_FETCH",
+        "NO_NAS_SYNC_OR_WRITE",
+        "NO_CREDENTIAL_READ",
+        "NO_RUNTIME",
+        "NO_TRADING",
+        "NO_BROKER_WRITE",
+        "NO_GIT_REMOTE_WRITE",
+        "NO_REAL_LAKE_WRITE_INITIAL_PHASE"
+      ],
+      "blocked_by": [],
+      "conflict_keys": [
+        "research-dataset-spec",
+        "feature-label-artifact-contract",
+        "training-snapshot-contract",
+        "experiment-registry"
+      ],
+      "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
+      "formal_cr_path": "process/changes/CR-147-QUANT-RESEARCH-PRODUCTION-FOUNDATION-2026-07-01.md",
+      "gate_profile": "standard",
+      "gate_status": "cp2_pending",
+      "id": "CR-147",
+      "impact_surface": [
+        "engine/research_dataset.py",
+        "market_data/features/artifacts.py",
+        "engine/training_snapshot_contract.py",
+        "engine/research_manifest.py",
+        "tests/research/*"
+      ],
+      "kind": "requirement-change",
+      "last_checked_at": "2026-07-01T10:47:00+08:00",
+      "lifecycle_status": "active",
+      "next_action": "Start Phase 2 no-risk contract audit and fixture validation for ResearchDatasetSpec / FeatureArtifactSpec / TrainingSnapshot / ExperimentManifest convergence.",
+      "next_gate": "CP2 low-risk scope confirmation / no high-risk runtime gate required for local code",
+      "parent_cr": "ROADMAP-QUANT-RESEARCH-PRODUCTION",
+      "priority": 1,
+      "readiness_status": "ready_with_risk",
+      "source_decision_id": "USER-20260701-CONTINUE-PRODUCTION-ROADMAP",
+      "source_tracking": "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md#cr-147",
+      "status": "active",
+      "title": "Quant Research Production Foundation"
+    },
     {
       "authz_policy_refs": [
         "LAKE_READ_AUTHORIZED",
@@ -68,7 +111,7 @@
       "current_requirement_baseline_path": "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
       "formal_cr_path": "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md",
       "gate_profile": "compact",
-      "gate_status": "cp2_pending",
+      "gate_status": "closed",
       "id": "CR-146",
       "impact_surface": [
         "process/evidence/CR146-*",
@@ -77,32 +120,34 @@
         "real lake candidate/canonical/quality writes when low-risk"
       ],
       "kind": "runtime-authorization",
-      "last_checked_at": "2026-07-01T10:18:00+08:00",
-      "lifecycle_status": "active",
-      "next_action": "N1 physical migration completed after CP2 approval; continue with FU-CR139-001 historical-root/business-conflict cleanup gate and RA-CR139-002 provider/NAS/delete only if separately authorized.",
+      "last_checked_at": "2026-07-01T10:47:00+08:00",
+      "lifecycle_status": "closed",
+      "next_action": "CR146 closed-current-delivery / READY. Runtime validation, fail-closed hardening, N1 migration and historical cleanup deferral gate completed.",
       "next_gate": "FU-CR139-001 dataset-level historical cleanup gate if requested",
       "parent_cr": "CR-139",
       "priority": 1,
-      "readiness_status": "ready_with_risk",
+      "readiness_status": "ready",
       "source_decision_id": "USER-20260630-CR139-LAKE-RW-AUTH",
       "source_tracking": "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md#RA-CR139-001",
-      "status": "active",
+      "status": "closed-current-delivery",
       "title": "CR139 Post-Close Lake Completion"
     },
     {
-      "blocked_by": [],
+      "blocked_by": [
+        "closed_by_CR-146"
+      ],
       "formal_cr_path": "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md",
       "gate_profile": "compact",
-      "gate_status": "cp2_pending",
+      "gate_status": "closed",
       "id": "RA-CR139-001",
       "kind": "runtime-authorization",
-      "lifecycle_status": "active",
-      "next_action": "Runtime validation evidence is complete; await CR-146 final closure after N1 execution evidence is indexed.",
+      "lifecycle_status": "closed",
+      "next_action": "Closed by CR-146 runtime validation and post-N1 validation evidence.",
       "parent_cr": "CR-139",
-      "readiness_status": "ready_with_risk",
+      "readiness_status": "ready",
       "source_decision_id": "USER-20260630-CR139-LAKE-RW-AUTH",
       "source_tracking": "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md#RA-CR139-001",
-      "status": "active",
+      "status": "closed-current-delivery",
       "title": "CR139 post-close real lake runtime validation"
     },
     {
@@ -124,20 +169,22 @@
       "title": "GateB Batch2 remaining business-conflict datasets"
     },
     {
-      "blocked_by": [],
+      "blocked_by": [
+        "closed_by_CR-146"
+      ],
       "formal_cr_path": "process/changes/CR-146-CR139-POST-CLOSE-LAKE-COMPLETION-2026-06-30.md",
       "gate_profile": "standard",
-      "gate_status": "cp2_pending",
+      "gate_status": "closed",
       "id": "FU-CR139-002",
       "kind": "requirement-change",
-      "lifecycle_status": "active",
-      "next_action": "N1 execution complete under CR-146; 17 catalog current parquet objects copied to current/, verified, and catalog pointers switched. Keep active until CR-146 final closure. FU-CR139-001 historical-root cleanup remains open.",
+      "lifecycle_status": "closed",
+      "next_action": "Closed by CR-146 N1 execution; 17 catalog current parquet objects copied to current/, verified, and catalog pointers switched. FU-CR139-001 historical-root cleanup remains open.",
       "parent_cr": "CR-139",
-      "readiness_status": "ready_with_risk",
+      "readiness_status": "ready",
       "related_active_cr": "CR-146",
       "source_decision_id": "S08-S30-N1",
       "source_tracking": "process/changes/CR-139-FOLLOW-UP-TRACKING-2026-06-30.md#FU-CR139-002",
-      "status": "active",
+      "status": "closed-current-delivery",
       "title": "N1 physical partition migration"
     },
     {
@@ -1013,5 +1060,5 @@
   ],
   "schema_version": 1,
   "status": "active",
-  "updated_at": "2026-07-01T10:18:00+08:00"
+  "updated_at": "2026-07-01T10:47:00+08:00"
 }

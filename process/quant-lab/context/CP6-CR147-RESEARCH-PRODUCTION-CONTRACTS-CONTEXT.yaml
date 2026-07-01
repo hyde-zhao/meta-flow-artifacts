@@ -1,0 +1,54 @@
+context_id: "CP6-CR147-RESEARCH-PRODUCTION-CONTRACTS-CONTEXT"
+created_at: "2026-07-01T11:18:00+08:00"
+read_profile: compact
+source_cr: "CR-147"
+parent_cr: "CR-146"
+objective: "Implement and verify the Phase 2 metadata-only research production contract bridge without runtime or lake write side effects."
+must_read:
+  - path: "process/changes/CR-147-QUANT-RESEARCH-PRODUCTION-FOUNDATION-2026-07-01.md"
+    reason: "CR-147 scope, authorization boundary, and Phase 2 low-risk implementation target."
+  - path: "engine/research_production_contracts.py"
+    reason: "Implemented contract bridge and offline audit API."
+  - path: "tests/research/test_research_production_contracts.py"
+    reason: "Focused contract and no-runtime regression coverage."
+  - path: "process/evidence/CR147-PHASE2-RESEARCH-PRODUCTION-CONTRACT-AUDIT.index.json"
+    reason: "Machine evidence summary for the offline contract audit."
+read_if_needed:
+  - path: "engine/research_dataset.py"
+    reason: "Existing ResearchDatasetRequest contract consumed by CR-147."
+  - path: "market_data/features/artifacts.py"
+    reason: "Existing FeatureArtifactSpec and LabelArtifactSpec contracts consumed by CR-147."
+  - path: "engine/training_snapshot_contract.py"
+    reason: "Existing TrainingSnapshotSpec cutoff contract consumed by CR-147."
+  - path: "engine/research_manifest.py"
+    reason: "Existing experiment manifest closure contract referenced by CR-147."
+do_not_read_by_default:
+  - ".env"
+  - "NAS credentials"
+  - "scripts/legacy/*"
+  - "real lake parquet contents"
+authorization_summary:
+  authorized:
+    - "metadata-only contract bridge implementation"
+    - "offline fixture validation"
+    - "process evidence and CR tracking updates"
+  explicitly_not_authorized:
+    - "provider fetch"
+    - "NAS sync/write/restore"
+    - "credential read"
+    - "QMT or broker runtime"
+    - "simulation/live/trading execution"
+    - "real lake write"
+    - "catalog pointer mutation"
+    - "git remote write"
+evidence_summary:
+  audit_status: "pass"
+  issue_count: 0
+  operation_counts_all_zero: true
+  focused_pytest: "6 passed"
+  related_regression_pytest: "17 passed"
+read_expansion_log:
+  - id: "READ-CR147-PHASE2-CONTRACT-CR-SCOPE-2026-07-01T111800+0800"
+    reason: "The CR-147 change file is the scope and authorization source for the low-risk CP6 contract bridge."
+    paths:
+      - "process/changes/CR-147-QUANT-RESEARCH-PRODUCTION-FOUNDATION-2026-07-01.md"

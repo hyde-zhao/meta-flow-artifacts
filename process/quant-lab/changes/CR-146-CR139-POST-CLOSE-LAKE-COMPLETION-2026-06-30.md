@@ -1,11 +1,11 @@
 ---
 id: "CR-146"
 title: "CR139 Post-Close Lake Completion"
-status: "active-production-lake-n1-complete"
+status: "closed-current-delivery"
 kind: "runtime-authorization"
-lifecycle_status: "active"
-readiness_status: "ready_with_risk"
-gate_status: "cp2_pending"
+lifecycle_status: "closed"
+readiness_status: "ready"
+gate_status: "closed"
 gate_profile: "compact"
 created_at: "2026-06-30T23:40:00+08:00"
 created_by: "host-orchestrator"
@@ -28,6 +28,18 @@ not_authorized:
 ---
 
 # CR-146: CR139 Post-Close Lake Completion
+
+## Closure Summary
+
+CR-146 is closed as `closed-current-delivery / READY` on 2026-07-01 after:
+
+1. CR139 post-close runtime validation completed.
+2. Reader fail-closed hardening completed and full `tests/data_lake` regression passed.
+3. N1 copy-first current-layout physical migration completed for 17 catalog current datasets.
+4. Post-N1 current truth, inventory, reader smoke, golden attribution and regression validation passed.
+5. Historical-root cleanup was explicitly deferred by approved CP2 gate; FU-CR139-001 remains a candidate for dataset-level gates, with `adj_factor` as the first low-risk draft candidate.
+
+CR-146 does not authorize or execute provider fetch, NAS sync/write/restore drill, credential read, QMT/runtime/trading, Git remote write, legacy delete/archive, business-conflict semantic selection, or historical parquet rewrite.
 
 ## 背景
 

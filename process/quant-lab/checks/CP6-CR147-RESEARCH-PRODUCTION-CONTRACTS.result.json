@@ -1,0 +1,97 @@
+{
+  "blockers": [],
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR147-RESEARCH-PRODUCTION-CONTRACTS",
+  "context_ref": "process/context/CP6-CR147-RESEARCH-PRODUCTION-CONTRACTS-CONTEXT.yaml",
+  "cr_id": "CR-147",
+  "created_at": "2026-07-01T11:05:00+08:00",
+  "decision": "PASS",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr147-contract-implementation"
+  ],
+  "evidence_ref": "process/evidence/CR147-PHASE2-RESEARCH-PRODUCTION-CONTRACT-AUDIT.index.json",
+  "items": [
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "engine/research_production_contracts.py"
+      ],
+      "id": "CP6-CR147-01",
+      "name": "Research production contract bridge added without runtime side effects",
+      "notes": "Adds ResearchDatasetSpec, LeakagePolicy, audit_research_production_contract and request mapping; metadata-only.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "contract",
+      "evidence_refs": [
+        "market_data/features/artifacts.py",
+        "engine/training_snapshot_contract.py",
+        "engine/research_manifest.py",
+        "engine/research_dataset.py"
+      ],
+      "id": "CP6-CR147-02",
+      "name": "Existing assets are converged instead of rebuilt",
+      "notes": "Audit references FeatureArtifactSpec, TrainingSnapshotSpec, ExperimentManifestClosure and ResearchDatasetRequest.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "tests/research/test_research_production_contracts.py",
+        "uv run --python 3.11 pytest tests/research/test_research_production_contracts.py"
+      ],
+      "id": "CP6-CR147-03",
+      "name": "CR147 focused contract tests pass",
+      "notes": "6 passed, including mapping feature artifact label_spec conversion.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "regression",
+      "evidence_refs": [
+        "uv run --python 3.11 pytest tests/data_lake/test_feature_label_artifact_layer.py tests/data_lake/test_training_snapshot_cutoff.py tests/research/test_research_dataset_builder.py"
+      ],
+      "id": "CP6-CR147-04",
+      "name": "Related existing feature/snapshot/research dataset tests pass",
+      "notes": "17 passed.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "evidence",
+      "evidence_refs": [
+        "process/evidence/CR147-PHASE2-RESEARCH-PRODUCTION-CONTRACT-AUDIT-2026-07-01.json",
+        "process/evidence/CR147-PHASE2-RESEARCH-PRODUCTION-CONTRACT-AUDIT.index.json"
+      ],
+      "id": "CP6-CR147-05",
+      "name": "Offline contract audit evidence produced",
+      "notes": "audit_status=pass, issue_count=0, operation_counts_all_zero=true.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "CP7-CR147-contract-verification",
+  "read_expansion_refs": [
+    "READ-CR147-PHASE2-CONTRACT-CR-SCOPE-2026-07-01T111800+0800"
+  ],
+  "schema_version": 1,
+  "story_id": "CR147-PHASE2-FOUNDATION-CONTRACTS",
+  "waivers": []
+}
