@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR153-STORY-DAG-PARALLEL-SAFETY",
+  "profile": "story-dag-parallel-safety",
+  "story_id": null,
+  "cr_id": "CR-153",
+  "checked_at": "2026-07-02T18:20:00+08:00",
+  "context_ref": "process/checks/CP4-CR153-STORY-DAG-PARALLEL-SAFETY.md",
+  "dispatch_refs": [
+    "host-orchestrator-inline:tool-policy-no-explicit-subagent-request"
+  ],
+  "evidence_ref": "process/STORY-BACKLOG-CR153.md",
+  "items": [
+    {
+      "id": "CP4-CR153-01",
+      "category": "traceability",
+      "name": "Story plan is traceable to approved CP3 HLD and ADR",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md",
+        "process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md",
+        "process/STORY-BACKLOG-CR153.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Five stories map to CP3-approved event-specific gate, metadata no-store boundary, existing-anchor extension, fixture-only validation and CR154 dependency."
+    },
+    {
+      "id": "CP4-CR153-02",
+      "category": "dag",
+      "name": "Story DAG has no cycles or invalid references",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR153.md#dependency-dag",
+        "process/DEVELOPMENT-PLAN-CR153.yaml#dependency_graph"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "DAG is S01 time/PIT -> S02 method/test -> S03 bias risk slots -> S04 event gate -> S05 trace/evidence, with S05 also depending on all upstream design decisions."
+    },
+    {
+      "id": "CP4-CR153-03",
+      "category": "parallel-safety",
+      "name": "Wave and file ownership rules constrain parallel LLD and implementation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR153.yaml#parallel_policy",
+        "process/STORY-BACKLOG-CR153.md#file-ownership-summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S01 freezes time/PIT fields before S02/S03 event slots; S02 owns method/test-family/multiple-testing fields, S03 owns bias/CV/universe fields; S04 owns adapter linkage after S01-S03; S05 consolidates exact CR153 evidence wording after S01-S04."
+    },
+    {
+      "id": "CP4-CR153-04",
+      "category": "feature-design-matrix",
+      "name": "Feature Design Matrix records every Story lld_policy.required_level",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md#cr153-cp4-增量event-driven-strategy-e2e-framework",
+        "process/STORY-STATUS-CR153.md",
+        "process/stories/CR153-S01-event-research-time-pit-contracts.md",
+        "process/stories/CR153-S02-event-study-method-test-slots.md",
+        "process/stories/CR153-S03-event-bias-risk-audit-slots.md",
+        "process/stories/CR153-S04-event-admission-gate-adapter.md",
+        "process/stories/CR153-S05-event-trace-evidence-wording.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S01-S04 require full-lld; S05 requires technical-note."
+    },
+    {
+      "id": "CP4-CR153-05",
+      "category": "authorization-boundary",
+      "name": "CP4 does not authorize implementation, real feed, runtime, store/catalog/registry write or real order operations",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR153.yaml#authorization_boundary",
+        "process/STORY-BACKLOG-CR153.md#not-authorized",
+        "process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md#not-authorized"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No source implementation, real event feed/listener, real data validation, event store/catalog/registry write, lake/NAS/provider/QMT/runtime/broker/credential/external framework/Git remote operation is authorized by CP4."
+    },
+    {
+      "id": "CP4-CR153-06",
+      "category": "cp5-attention",
+      "name": "CP5 attention items are explicit",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR153.yaml#lld_design_batch.cp5_attention_items",
+        "process/stories/CR153-S01-event-research-time-pit-contracts.md",
+        "process/stories/CR153-S02-event-study-method-test-slots.md",
+        "process/stories/CR153-S03-event-bias-risk-audit-slots.md",
+        "process/stories/CR153-S04-event-admission-gate-adapter.md",
+        "process/stories/CR153-S05-event-trace-evidence-wording.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "CP5 must freeze time/PIT fail-closed semantics, mandatory multiple-testing/data-snooping slot, S02/S03 field partition, event gate no-runtime claim boundary and exact S05 artifact targets or N/A."
+    },
+    {
+      "id": "CP4-CR153-07",
+      "category": "deferred-scope",
+      "name": "CR154 and later-wave risks remain explicit",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR153.md",
+        "process/DEVELOPMENT-PLAN-CR153.yaml#deferred_later_wave",
+        "process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md#use-case-and-gap-traceability"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Full event CV, survivorship, capacity, impact, regime, reconciliation, event feed/listener and runtime/order capabilities remain deferred."
+    },
+    {
+      "id": "CP4-CR153-08",
+      "category": "deliverables",
+      "name": "Required CP4 story planning deliverables exist",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR153.md",
+        "process/STORY-STATUS-CR153.md",
+        "process/DEVELOPMENT-PLAN-CR153.yaml",
+        "process/stories/CR153-S01-event-research-time-pit-contracts.md",
+        "process/stories/CR153-S02-event-study-method-test-slots.md",
+        "process/stories/CR153-S03-event-bias-risk-audit-slots.md",
+        "process/stories/CR153-S04-event-admission-gate-adapter.md",
+        "process/stories/CR153-S05-event-trace-evidence-wording.md",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Story backlog, Story status, development plan, five Story cards and Feature Design Matrix CR153 increment are ready."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "CP5",
+  "summary": {
+    "story_count": 5,
+    "wave_count": 5,
+    "lld_batch": "CR153-EVENT-DRIVEN-STRATEGY-E2E-BATCH-A",
+    "full_lld_count": 4,
+    "technical_note_count": 1,
+    "waived_count": 0,
+    "cycles": 0,
+    "invalid_references": 0,
+    "parallel_internal_dependencies": 0,
+    "blocking_findings": 0,
+    "implementation_allowed": false,
+    "runtime_operations_authorized": false,
+    "event_store_write_authorized": false,
+    "real_event_feed_authorized": false,
+    "cp5_attention_item_count": 5,
+    "deferred_later_wave_count": 8,
+    "user_acknowledged_cp4_pass": true
+  },
+  "user_acknowledgement": {
+    "status": "acknowledged",
+    "acknowledged_by": "user",
+    "acknowledged_at": "2026-07-02T18:35:00+08:00",
+    "source_message": "同意CP4 PASS",
+    "effect": "Audit acknowledgement of CP4 automatic PASS only; next route remains CP5 design evidence preparation. No implementation or runtime authorization is granted."
+  }
+}

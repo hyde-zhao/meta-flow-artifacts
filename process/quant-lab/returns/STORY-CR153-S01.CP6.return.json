@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR153-S01.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-153",
+  "story_id": "CR153-S01-event-research-time-pit-contracts",
+  "status": "implemented_with_risk",
+  "created_at": "2026-07-02T17:54:56+08:00",
+  "created_by": "meta-dev",
+  "context_ref": "process/context/stories/CR153-S01-event-research-time-pit-contracts.CP6.work-packet.json",
+  "implementation_ref": "process/stories/CR153-S01-event-research-time-pit-contracts-IMPLEMENTATION.md",
+  "source_story_ref": "process/stories/CR153-S01-event-research-time-pit-contracts.md",
+  "source_design_evidence_ref": "process/stories/CR153-S01-event-research-time-pit-contracts-LLD.md",
+  "touched_files": [
+    {
+      "path": "engine/research_production_contracts.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "change_type": "created"
+    },
+    {
+      "path": "process/stories/CR153-S01-event-research-time-pit-contracts-IMPLEMENTATION.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/STORY-CR153-S01.CP6.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR153-S01.CP6.index.json",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "Added metadata-only CR153 event research time/PIT companion contracts in engine.research_production_contracts without changing existing constructor behavior."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_event_feed_touched": false,
+    "real_lake_read_touched": false,
+    "real_lake_write_touched": false,
+    "provider_fetch_executed": false,
+    "nas_operation_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_or_live_executed": false,
+    "broker_operation_executed": false,
+    "event_store_catalog_registry_write_executed": false,
+    "real_order_flow_executed": false,
+    "real_data_validation_executed": false,
+    "external_framework_executed": false,
+    "git_remote_write_executed": false,
+    "forbidden_story_files_touched": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/research/test_event_driven_strategy_e2e_contracts.py",
+        "result": "pass",
+        "summary": "12 passed in 0.54s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py tests/research/test_strategy_admission_statistical_gate.py",
+        "result": "fail",
+        "summary": "No tests ran because tests/research/test_strategy_admission_statistical_gate.py does not exist in the current repository."
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py tests/test_cr151_strategy_admission_statistical_gate.py",
+        "result": "pass",
+        "summary": "15 passed in 0.41s; supplemental run using the repository's actual CR151 statistical gate test path."
+      },
+      {
+        "command": "uv run --python 3.11 python -m py_compile engine/research_production_contracts.py",
+        "result": "pass",
+        "summary": "py_compile passed"
+      },
+      {
+        "command": "git diff --check -- engine/research_production_contracts.py tests/research/test_event_driven_strategy_e2e_contracts.py",
+        "result": "pass",
+        "summary": "No whitespace errors."
+      }
+    ],
+    "tests": [
+      "tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "tests/research/test_ml_strategy_e2e_contracts.py",
+      "tests/test_cr151_strategy_admission_statistical_gate.py"
+    ],
+    "stage_decision": "PASS_WITH_RISK",
+    "skipped": []
+  },
+  "open_questions": [],
+  "risks": [
+    {
+      "risk_id": "R-CR153-S01-001",
+      "severity": "low",
+      "summary": "The work packet references a non-existent regression test path.",
+      "mitigation": "The command was run as-is and failed for missing path; the repository's actual CR151 statistical gate regression path was run and passed.",
+      "owner": "host-orchestrator"
+    }
+  ],
+  "waivers": [],
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_architecture_doc_update": false,
+    "requires_hld_update": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "Implementation follows CP5-approved S01 LLD and does not change long-lived design documents."
+  },
+  "evidence_refs": [
+    "process/evidence/CR153-S01.CP6.index.json"
+  ],
+  "next_stage_recommendation": "ready_for_cp7",
+  "actor": "meta-dev",
+  "decision": "PASS_WITH_RISK",
+  "updated_at": "2026-07-02T17:54:56+08:00"
+}

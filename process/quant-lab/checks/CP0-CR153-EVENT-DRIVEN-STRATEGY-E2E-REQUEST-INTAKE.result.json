@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR153-EVENT-DRIVEN-STRATEGY-E2E-REQUEST-INTAKE",
+  "cr_id": "CR-153",
+  "checked_at": "2026-07-02T16:35:00+08:00",
+  "context_ref": "process/context/CP2-CR153-EVENT-DRIVEN-STRATEGY-E2E-SCOPE-CONTEXT.yaml",
+  "dispatch_refs": [],
+  "evidence_ref": "",
+  "items": [
+    {
+      "id": "CP0-CR153-01",
+      "category": "process-route",
+      "name": "Process route health check passed before CP0 writes",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "process_link_health ok; artifact_git_dirty clean before CR153 writes."
+    },
+    {
+      "id": "CP0-CR153-02",
+      "category": "repository-state",
+      "name": "Required local and remote baseline commits are aligned",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "quant-lab HEAD de464af59600f6ca0b3a6bfb90784a734adedb49",
+        "quant-lab origin/precheck/ql-rd-000-redesign-baseline de464af59600f6ca0b3a6bfb90784a734adedb49",
+        "meta-flow-artifacts HEAD f68bfa792f930ebed9b6d8c30fc2219b8b6713b3",
+        "meta-flow-artifacts origin/main f68bfa792f930ebed9b6d8c30fc2219b8b6713b3"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Both repositories were fetched and local HEAD equals upstream branch HEAD."
+    },
+    {
+      "id": "CP0-CR153-03",
+      "category": "cr-tracking",
+      "name": "No active or blocked formal CR prevents CR153 startup",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab",
+        "process/checks/CR153-RULE41-CONFLICT-PRECHECK-2026-07-02.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "active formal CRs none; blocked formal CRs none; FU-CR152-001 is candidate only; CR-INDEX legacy warnings remain non-blocking hygiene."
+    },
+    {
+      "id": "CP0-CR153-04",
+      "category": "request-intake",
+      "name": "CR153 request and authorization boundary are recorded",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/handoffs/NEXT-SESSION-CR153-EVENT-DRIVEN-STRATEGY-E2E-CP0-CP2-2026-07-02.md",
+        "process/changes/CR-153.md",
+        "process/context/CP2-CR153-EVENT-DRIVEN-STRATEGY-E2E-SCOPE-CONTEXT.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR153 remains local/static/fixture-only and CP2-pending."
+    },
+    {
+      "id": "CP0-CR153-05",
+      "category": "state-refresh",
+      "name": "CR152 closure state is recorded before CR153 activation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/state/STATE.current.json",
+        "process/STATE.md",
+        "process/checks/CP8-CR152-ML-STRATEGY-E2E-RELEASE-READINESS.result.json",
+        "process/release/RELEASE-CONTEXT-CR152.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR152 closed as READY_WITH_RISK; active formal CRs none before CR153 activation."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR153-STARTUP-USER-REQUEST-2026-07-02T163500+0800",
+    "READ-CR153-CP0-STATE-MD-2026-07-02T163500+0800",
+    "READ-CR153-CP0-FORMAL-CR-2026-07-02T163500+0800"
+  ],
+  "decision": "PASS",
+  "next_route": "CP1"
+}

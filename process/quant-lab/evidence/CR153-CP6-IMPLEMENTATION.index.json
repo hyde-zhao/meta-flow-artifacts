@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-153",
+  "stage": "CP6",
+  "story_id": "CR153-S01..S05",
+  "return_refs": [
+    "process/returns/STORY-CR153-S01.CP6.return.json",
+    "process/returns/STORY-CR153-S02.CP6.return.json",
+    "process/returns/STORY-CR153-S03.CP6.return.json",
+    "process/returns/STORY-CR153-S04.CP6.return.json",
+    "process/returns/STORY-CR153-S05.CP6.return.json"
+  ],
+  "story_evidence_refs": [
+    "process/evidence/CR153-S01.CP6.index.json",
+    "process/evidence/CR153-S02.CP6.index.json",
+    "process/evidence/CR153-S03.CP6.index.json",
+    "process/evidence/CR153-S04.CP6.index.json",
+    "process/evidence/CR153-S05.CP6.index.json"
+  ],
+  "implementation_ref": "process/stories/CR153-EVENT-DRIVEN-STRATEGY-E2E-IMPLEMENTATION.md",
+  "changed_files": [
+    {"change_type": "modified", "path": "engine/research_production_contracts.py"},
+    {"change_type": "created", "path": "engine/event_strategy_contracts.py"},
+    {"change_type": "created", "path": "engine/event_strategy_admission_gate.py"},
+    {"change_type": "modified", "path": "engine/strategy_admission_package.py"},
+    {"change_type": "created", "path": "tests/research/test_event_driven_strategy_e2e_contracts.py"},
+    {"change_type": "created", "path": "process/stories/CR153-EVENT-DRIVEN-STRATEGY-E2E-IMPLEMENTATION.md"},
+    {"change_type": "created", "path": "process/stories/CR153-S01-event-research-time-pit-contracts-IMPLEMENTATION.md"},
+    {"change_type": "created", "path": "process/stories/CR153-S02-event-study-method-test-slots-IMPLEMENTATION.md"},
+    {"change_type": "created", "path": "process/stories/CR153-S03-event-bias-risk-audit-slots-IMPLEMENTATION.md"},
+    {"change_type": "created", "path": "process/stories/CR153-S04-event-admission-gate-adapter-IMPLEMENTATION.md"},
+    {"change_type": "created", "path": "process/stories/CR153-S05-event-trace-evidence-wording-IMPLEMENTATION.md"}
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "result": "pass",
+      "summary": "41 passed in 0.57s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py tests/test_cr151_strategy_admission_statistical_gate.py tests/research/test_strategy_admission_package.py",
+      "result": "pass",
+      "summary": "22 passed in 0.56s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/research_production_contracts.py engine/event_strategy_contracts.py engine/event_strategy_admission_gate.py engine/strategy_admission_package.py",
+      "result": "pass",
+      "summary": "py_compile passed"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow story return-check for S01-S05",
+      "result": "pass",
+      "summary": "5/5 Story Return Packet Check: OK"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow story evidence-check for S01-S05",
+      "result": "pass",
+      "summary": "5/5 Evidence Index Check: OK"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "summary": "No whitespace errors"
+    }
+  ],
+  "boundary_check": {
+    "real_event_feed_or_live_listener": 0,
+    "real_lake_or_nas_access": 0,
+    "provider_fetch": 0,
+    "credential_or_session_read": 0,
+    "qmt_miniqmt_xtquant_runtime": 0,
+    "simulation_paper_live_trading_or_broker_operation": 0,
+    "event_store_write": 0,
+    "feature_label_prediction_store_write": 0,
+    "catalog_pointer_or_model_registry_write": 0,
+    "real_order_flow": 0,
+    "real_data_validation": 0,
+    "external_framework_execution": 0,
+    "git_remote_write": 0
+  },
+  "semantic_scope": {
+    "proves": [
+      "local/static/fixture event research and admission contract semantics",
+      "three-time event semantics fail-closed behavior",
+      "event revision PIT gate behavior",
+      "event study method/test-family/multiple-testing slot shape",
+      "bias/CV/universe PIT/deferred reliability audit slot shape",
+      "event-specific admission gate and shared admission package adapter linkage",
+      "metadata-only event-to-signal/target/order-intent trace wording"
+    ],
+    "does_not_prove": [
+      "real event alpha",
+      "real model performance",
+      "real feed quality or coverage",
+      "production readiness",
+      "runtime readiness",
+      "paper/live/trading readiness",
+      "event store/catalog/model registry publication",
+      "registry release",
+      "real order flow"
+    ]
+  },
+  "risks": [
+    {
+      "risk_id": "R-CR153-S01-001",
+      "severity": "low",
+      "summary": "S01 CP6 packet referenced a stale CR151 regression test path; the repository actual CR151 regression path passed."
+    },
+    {
+      "risk_id": "R-CR153-OVERCLAIM-001",
+      "severity": "medium",
+      "summary": "Downstream verification and release wording must not overstate CR153 as runtime/feed/trading/production ready."
+    },
+    {
+      "risk_id": "R-CR154-DEFERRED-001",
+      "severity": "medium",
+      "summary": "Full event CV, survivorship-free universe gate, capacity/impact, regime, reconciliation and real feed/runtime/order governance remain deferred to CR154."
+    }
+  ],
+  "waivers": [],
+  "updated_at": "2026-07-02T22:45:00+08:00"
+}

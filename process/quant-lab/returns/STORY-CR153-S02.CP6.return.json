@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR153-S02.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-153",
+  "story_id": "CR153-S02-event-study-method-test-slots",
+  "status": "implemented",
+  "created_at": "2026-07-02T18:05:45+08:00",
+  "created_by": "meta-dev",
+  "context_ref": "process/context/stories/CR153-S02-event-study-method-test-slots.CP6.work-packet.json",
+  "implementation_ref": "process/stories/CR153-S02-event-study-method-test-slots-IMPLEMENTATION.md",
+  "source_story_ref": "process/stories/CR153-S02-event-study-method-test-slots.md",
+  "source_design_evidence_ref": "process/stories/CR153-S02-event-study-method-test-slots-LLD.md",
+  "predecessor_refs": [
+    "process/returns/STORY-CR153-S01.CP6.return.json",
+    "process/evidence/CR153-S01.CP6.index.json"
+  ],
+  "touched_files": [
+    {
+      "path": "engine/event_strategy_contracts.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/stories/CR153-S02-event-study-method-test-slots-IMPLEMENTATION.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/STORY-CR153-S02.CP6.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR153-S02.CP6.index.json",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "Added metadata-only S02 EventStudyMethodSpec, EventStudyTestReport, EV-GAP-7 multiple-testing/data-snooping slot and validators in engine.event_strategy_contracts."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_event_feed_touched": false,
+    "real_lake_read_touched": false,
+    "real_lake_write_touched": false,
+    "provider_fetch_executed": false,
+    "nas_operation_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_or_live_executed": false,
+    "broker_operation_executed": false,
+    "event_store_catalog_registry_write_executed": false,
+    "real_order_flow_executed": false,
+    "real_data_validation_executed": false,
+    "external_framework_executed": false,
+    "git_remote_write_executed": false,
+    "forbidden_story_files_touched": [],
+    "s03_fields_defined": false
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/research/test_event_driven_strategy_e2e_contracts.py",
+        "result": "pass",
+        "summary": "20 passed in 0.45s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py tests/test_cr151_strategy_admission_statistical_gate.py",
+        "result": "pass",
+        "summary": "15 passed in 0.44s"
+      },
+      {
+        "command": "uv run --python 3.11 python -m py_compile engine/event_strategy_contracts.py",
+        "result": "pass",
+        "summary": "py_compile passed"
+      },
+      {
+        "command": "git diff --check -- engine/event_strategy_contracts.py tests/research/test_event_driven_strategy_e2e_contracts.py",
+        "result": "pass",
+        "summary": "No whitespace errors reported."
+      }
+    ],
+    "tests": [
+      "tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "tests/research/test_ml_strategy_e2e_contracts.py",
+      "tests/test_cr151_strategy_admission_statistical_gate.py"
+    ],
+    "stage_decision": "PASS",
+    "skipped": []
+  },
+  "open_questions": [],
+  "risks": [],
+  "waivers": [],
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_architecture_doc_update": false,
+    "requires_hld_update": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "Implementation follows CP5-approved S02 LLD and does not change long-lived design documents."
+  },
+  "evidence_refs": [
+    "process/evidence/CR153-S02.CP6.index.json"
+  ],
+  "next_stage_recommendation": "ready_for_cp7",
+  "actor": "meta-dev",
+  "decision": "PASS",
+  "updated_at": "2026-07-02T18:05:45+08:00"
+}

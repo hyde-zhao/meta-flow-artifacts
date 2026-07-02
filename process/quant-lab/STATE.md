@@ -11,7 +11,66 @@ Pending gate: none
 
 ## Current Decision
 
-CR152 已通过 CP2 范围基线门、CP3 HLD / Architecture Review、CP5 LLD batch 人工确认、CP6 implementation、CP7 static-fixture-only verification 和 CP8 release readiness，当前已按 `READY_WITH_RISK` 闭环。当前 active formal CRs none，blocked formal CRs none；下一推荐项是 CR153 Event-Driven Strategy E2E Framework Foundation 的规则 41 冲突预检、CP0 受理、CP1 增量场景完备检查和 CP2 范围基线门。
+CR153 Event-Driven Strategy E2E Framework Foundation 已通过规则 41 冲突预检、CP0 受理、CP1 增量 UC-60 场景完备检查、CP2 自动预检 / 人工审查、CP3 HLD / ADR 自动预检和人工审查、CP4 Story DAG / parallel safety 自动预检、CP5 LLD batch 自动预检和 CP5 人工审查、CP6 implementation、CP7 verification 与 CP8 release readiness。用户已于 2026-07-02T23:10:00+08:00 接受 `DEC-CR153-CP8-001`，CR153 当前按 `READY_WITH_RISK` 闭环。当前 active formal CRs none，blocked formal CRs none。CR153 仍不授权任何真实运行 / 数据 / 交易能力。
+
+CR153 当前范围：
+
+- 正式 CR：`process/changes/CR-153.md`。
+- 规则 41 冲突预检：`process/checks/CR153-RULE41-CONFLICT-PRECHECK-2026-07-02.md`，结论 `PASS`。
+- CP0 受理：`process/checks/CP0-CR153-EVENT-DRIVEN-STRATEGY-E2E-REQUEST-INTAKE.result.json`，结论 `PASS`。
+- CP1 增量场景完备检查：`process/checks/CP1-CR153-EVENT-DRIVEN-STRATEGY-E2E-USE-CASE-COMPLETENESS.result.json`，结论 `PASS`。
+- CP2 context capsule：`process/context/CP2-CR153-EVENT-DRIVEN-STRATEGY-E2E-SCOPE-CONTEXT.yaml`。
+- CP2 自动预检：`process/checks/CP2-CR153-EVENT-DRIVEN-STRATEGY-E2E-SCOPE.result.json`，结论 `PASS`。
+- CP2 Scenario Gray Areas / SGQ 证据：`process/discussions/CP2-CR153-SCENARIO-DISCUSSION-LOG.md`；`process/checks/CP2-CR153-DISCUSSION-CHECKPOINT.json`。
+- CP2 人工审查稿：`process/checkpoints/CP2-CR153-EVENT-DRIVEN-STRATEGY-E2E-SCOPE.md`，状态 `approved`。
+- CP2 launch message：`process/checks/CP2-CR153-HUMAN-GATE-LAUNCH-MESSAGE.md`。
+- CP2 已接受 9 项决策：event time semantics、event study method、test family、cluster/endogeneity、gate relation、event-to-order boundary、CV strategy、survivorship slot、method slot-only。
+- CP2 `approve` 只允许进入 CP3 设计，不授权 Story/LLD/实现、真实 lake/NAS/provider/QMT/runtime/simulation/live/trading/broker/credential/external framework、Git remote、catalog/event/model registry 写入、live event listener、真实事件 feed、真实下单或真实数据验证。
+- CP3 context capsule：`process/context/CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-CONTEXT.yaml`。
+- CP3 discussion log：`process/discussions/CP3-CR153-HLD-DISCUSSION-LOG.md`。
+- CP3 discussion checkpoint：`process/checks/CP3-CR153-DISCUSSION-CHECKPOINT.json`，结论 `PASS`。
+- CP3 HLD：`process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md`，状态 `approved`，版本 `0.2`。
+- CP3 ADR：`process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md`，状态 `approved`，版本 `0.2`。
+- CP3 自动预检：`process/checks/CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-CONSISTENCY.result.json`，结论 `PASS`。
+- CP3 评审修订：HLD v0.2 / ADR v0.2 已按评审意见修正 §11，保留 E2E review 原始 EV-GAP-1..9 编号，并显式新增 EV-GAP-7 `multiple_testing_or_data_snooping_slot`；CP2 SGQ 补证状态已更新为 CP2 approved 后闭环。
+- CP3 人工审查稿：`process/checkpoints/CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-REVIEW.md`，状态 `approved`。
+- CP3 launch message：`process/checks/CP3-CR153-HUMAN-GATE-LAUNCH-MESSAGE.md`。
+- CP3 已接受 5 项决策：Event-specific gate + CR151/CR152 adapter、event metadata no-store boundary、扩展现有 anchors、fixture-only validation、CR154 dependency。
+- CP3 `approve` 仅允许进入 CP4 Story planning，不授权 LLD、源码实现、真实 lake/NAS/provider/QMT/runtime/simulation/live/trading/broker/credential/external framework、Git remote、catalog/event/model registry 写入、live event listener、真实事件 feed、真实下单或真实数据验证。
+- CP4 Story backlog：`process/STORY-BACKLOG-CR153.md`。
+- CP4 Story status：`process/STORY-STATUS-CR153.md`。
+- CP4 development plan：`process/DEVELOPMENT-PLAN-CR153.yaml`。
+- CP4 Feature Design Matrix：`process/docs/design/FEATURE-DESIGN-MATRIX.md`，已登记 CR153 Story `lld_policy.required_level`。
+- CP4 Story cards：`process/stories/CR153-S01-event-research-time-pit-contracts.md`、`process/stories/CR153-S02-event-study-method-test-slots.md`、`process/stories/CR153-S03-event-bias-risk-audit-slots.md`、`process/stories/CR153-S04-event-admission-gate-adapter.md`、`process/stories/CR153-S05-event-trace-evidence-wording.md`。
+- CP4 自动预检：`process/checks/CP4-CR153-STORY-DAG-PARALLEL-SAFETY.result.json`，结论 `PASS`。
+- CP4 结果：5 个 Story，S01-S04 为 `full-lld`，S05 为 `technical-note`；DAG 无环，无阻断项；CP4 不设人工门，摘要将进入后续 CP5 Decision Brief。
+- CP4 用户确认：用户于 2026-07-02T18:35:00+08:00 回复 `同意CP4 PASS`；该确认仅作为 CP4 自动 PASS 的审计确认，不新增 CP4 人工门，也不授权实现或 runtime。
+- CP5 context capsule：`process/context/CP5-CR153-EVENT-DRIVEN-STRATEGY-E2E-CONTEXT.yaml`。
+- CP5 subagent dispatch：5 个 meta-dev 子 agent 已并行完成 S01-S04 full LLD 与 S05 technical-note；调度证据写入 `process/state/AGENT-DISPATCH-LEDGER.ndjson`。
+- CP5 设计证据：`process/stories/CR153-S01-event-research-time-pit-contracts-LLD.md`、`process/stories/CR153-S02-event-study-method-test-slots-LLD.md`、`process/stories/CR153-S03-event-bias-risk-audit-slots-LLD.md`、`process/stories/CR153-S04-event-admission-gate-adapter-LLD.md`、`process/stories/CR153-S05-event-trace-evidence-wording.md#技术说明`。
+- CP5 自动预检：`process/checks/CP5-CR153-EVENT-DRIVEN-STRATEGY-E2E-LLD-BATCH.result.json`，结论 `PASS`，阻断项 0。
+- CP5 人工审查稿：`process/checkpoints/CP5-CR153-EVENT-DRIVEN-STRATEGY-E2E-LLD-BATCH.md`，状态 `approved`。
+- CP5 launch message：`process/checks/CP5-CR153-HUMAN-GATE-LAUNCH-MESSAGE.md`。
+- CP5 已接受 5 项决策：LLD 批次作为实现输入、实现顺序 / shared file owner、first-wave fail-closed / slot-only enforcement、no-real-op 安全边界、CR154 deferred risks 与 S05 exact evidence/release wording targets。
+- CP6 implementation summary：`process/stories/CR153-EVENT-DRIVEN-STRATEGY-E2E-IMPLEMENTATION.md`。
+- CP6 自动检查：`process/checks/CP6-CR153-EVENT-DRIVEN-STRATEGY-E2E-IMPLEMENTATION.result.json`，结论 `PASS`。
+- CP6 evidence index：`process/evidence/CR153-CP6-IMPLEMENTATION.index.json`。
+- CP6 Story returns：S01-S05 均已生成 `process/returns/STORY-CR153-S0*.CP6.return.json` 并通过 `meta-flow story return-check`。
+- CP6 Story evidence：S01-S05 均已生成 `process/evidence/CR153-S0*.CP6.index.json` 并通过 `meta-flow story evidence-check`。
+- CP6 验证摘要：事件契约测试 `41 passed`，相关回归测试 `22 passed`，`py_compile` 和 `git diff --check` 通过；禁止操作计数为 0。
+- CP7 verify packets：`process/context/stories/CR153-S01-event-research-time-pit-contracts.CP7.verify-packet.json` through `process/context/stories/CR153-S05-event-trace-evidence-wording.CP7.verify-packet.json`。
+- CP7 自动检查：`process/checks/CP7-CR153-EVENT-DRIVEN-STRATEGY-E2E-VERIFICATION.result.json`，结论 `PASS_WITH_RISK`。
+- CP7 evidence index：`process/evidence/CR153-CP7-VERIFICATION.index.json`。
+- CP7 return：`process/returns/CR153-EVENT-DRIVEN-STRATEGY-E2E.CP7.return.json`。
+- CP7 风险输入：`R-CR153-OVERCLAIM-001` 与 `R-CR154-DEFERRED-001` 必须进入 CP8 风险接受 / deferred scope；`R-CR153-S01-001` 已判定为 non-blocking。
+- CP8 release context：`process/release/RELEASE-CONTEXT-CR153.yaml`，`release_artifact_profile=minimal`，推荐 `READY_WITH_RISK`。
+- CP8 自动检查：`process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.json`，结论 `PASS` / `READY_WITH_RISK`。
+- CP8 人工审查稿：`process/checkpoints/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.md`，状态 `approved`。
+- CP8 launch message：`process/checks/CP8-CR153-HUMAN-GATE-LAUNCH-MESSAGE.md`。
+- 已接受人工决策：`DEC-CR153-CP8-001`，接受 CP7 `PASS_WITH_RISK` 并以 `READY_WITH_RISK` 收尾 CR153。
+- 下一步：无 active formal CR；后续 CR154 或其他 follow-up 必须单独显式启动并重新执行规则 41 预检。CP8 approve 不授权真实 lake/NAS/provider/QMT/runtime/simulation/live/trading/broker/credential/external framework、Git remote、catalog/event/model registry 写入、live event listener、真实事件 feed、真实下单、真实数据验证或真实发布执行。
+
+CR152 已通过 CP2 范围基线门、CP3 HLD / Architecture Review、CP5 LLD batch 人工确认、CP6 implementation、CP7 static-fixture-only verification 和 CP8 release readiness，当前已按 `READY_WITH_RISK` 闭环。`FU-CR152-001` test taxonomy / provenance hygiene 保持 candidate，不占 CR153 执行锁。
 
 CR151 已在 CP8 关闭为 `READY_WITH_RISK`；多因子策略 E2E 的 statistical admission capability 已完成，但统计门当前是 opt-in capability，不改变 CR150 / UC-58 历史默认调用行为。
 
@@ -201,10 +260,10 @@ Future work requires a new explicit gate when it touches one of these boundaries
 
 Current recommended action:
 
-- 启动 CR153 前置工作：先执行规则 41 冲突预检，确认 CR152 已关闭、`FU-CR152-001` 仅为 candidate 且不占执行锁，数据湖/NAS/provider/runtime/broker/credential 等后置项不与 CR153 范围重叠。
-- 若预检通过，进入 CR153 CP0 / CP1 / CP2。CP2 必须确认 event_time / available_at / decision_time 三时间语义、event revision PIT gate、事件研究方法契约、test family、overlap / clustering、endogeneity treatment、Event admission gate 与 CR151/CR152 gate 的关系，以及 event-to-order trace 的非 runtime 边界。
-- CP2 还必须新增三项范围收敛决策：`DQ-CP2-CR153-CV-STRATEGY`（事件 CV 只预留 slot / split audit refs，复用 CR154 横切框架）、`DQ-CP2-CR153-SURVIVORSHIP-SLOT`（EventResearchSpec 预留 `universe_pit_audit` slot，完整 survivorship-free universe gate 归入 CR154）、`DQ-CP2-CR153-METHOD-SLOT-ONLY`（检验族 / overlap / clustering / endogeneity 只定义 slot + `n/a-with-reason`，不实现算法）。
-- CR153 继续保持 local/static/fixture-only：不读取或写入真实 lake，不同步 NAS，不读取 provider/credential，不启动 QMT/runtime/simulation/live/trading/broker/live event listener，不写 catalog/model registry，不执行真实交易或真实事件 feed。
+- 发起 CP5 人工确认：请审查 `process/checkpoints/CP5-CR153-EVENT-DRIVEN-STRATEGY-E2E-LLD-BATCH.md`。
+- 如果用户回复 `approve`，表示接受 5 项 CR153 CP5 推荐方案，并只授权进入本地/static/fixture CP6 implementation。
+- 若用户回复 `修改: <具体修改点>`，按指定决策项或 Story LLD / technical-note 修改后重新发起 CP5 确认。
+- 若用户回复 `reject`，CR153 不进入 CP6，可保持 `cp5_pending_user_review`、缩小范围或回退 CP5 设计证据。
 
 Current CR139 backlog action:
 

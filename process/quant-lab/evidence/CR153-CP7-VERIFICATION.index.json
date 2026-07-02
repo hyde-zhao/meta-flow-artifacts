@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-153",
+  "stage": "CP7",
+  "story_id": "CR153-S01..S05",
+  "return_ref": "process/returns/CR153-EVENT-DRIVEN-STRATEGY-E2E.CP7.return.json",
+  "result_ref": "process/checks/CP7-CR153-EVENT-DRIVEN-STRATEGY-E2E-VERIFICATION.result.json",
+  "summary_ref": "process/checks/CP7-CR153-EVENT-DRIVEN-STRATEGY-E2E-VERIFICATION.result.summary.md",
+  "effective_validation_mode": "static-fixture-only",
+  "cp6_refs": {
+    "result_ref": "process/checks/CP6-CR153-EVENT-DRIVEN-STRATEGY-E2E-IMPLEMENTATION.result.json",
+    "evidence_ref": "process/evidence/CR153-CP6-IMPLEMENTATION.index.json",
+    "implementation_ref": "process/stories/CR153-EVENT-DRIVEN-STRATEGY-E2E-IMPLEMENTATION.md"
+  },
+  "verify_packet_refs": [
+    "process/context/stories/CR153-S01-event-research-time-pit-contracts.CP7.verify-packet.json",
+    "process/context/stories/CR153-S02-event-study-method-test-slots.CP7.verify-packet.json",
+    "process/context/stories/CR153-S03-event-bias-risk-audit-slots.CP7.verify-packet.json",
+    "process/context/stories/CR153-S04-event-admission-gate-adapter.CP7.verify-packet.json",
+    "process/context/stories/CR153-S05-event-trace-evidence-wording.CP7.verify-packet.json"
+  ],
+  "implementation_return_refs": [
+    "process/returns/STORY-CR153-S01.CP6.return.json",
+    "process/returns/STORY-CR153-S02.CP6.return.json",
+    "process/returns/STORY-CR153-S03.CP6.return.json",
+    "process/returns/STORY-CR153-S04.CP6.return.json",
+    "process/returns/STORY-CR153-S05.CP6.return.json"
+  ],
+  "implementation_evidence_refs": [
+    "process/evidence/CR153-S01.CP6.index.json",
+    "process/evidence/CR153-S02.CP6.index.json",
+    "process/evidence/CR153-S03.CP6.index.json",
+    "process/evidence/CR153-S04.CP6.index.json",
+    "process/evidence/CR153-S05.CP6.index.json"
+  ],
+  "changed_files_under_verification": [
+    {
+      "path": "engine/research_production_contracts.py",
+      "role": "S01 event research time/PIT companion contracts"
+    },
+    {
+      "path": "engine/event_strategy_contracts.py",
+      "role": "S02/S03 event study and bias audit contracts"
+    },
+    {
+      "path": "engine/event_strategy_admission_gate.py",
+      "role": "S04 event admission gate"
+    },
+    {
+      "path": "engine/strategy_admission_package.py",
+      "role": "S04 shared admission package adapter"
+    },
+    {
+      "path": "tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "role": "CR153 fixture contract tests"
+    },
+    {
+      "path": "process/stories/CR153-S01-event-research-time-pit-contracts-IMPLEMENTATION.md",
+      "role": "S01 CP6 implementation evidence"
+    },
+    {
+      "path": "process/stories/CR153-S02-event-study-method-test-slots-IMPLEMENTATION.md",
+      "role": "S02 CP6 implementation evidence"
+    },
+    {
+      "path": "process/stories/CR153-S03-event-bias-risk-audit-slots-IMPLEMENTATION.md",
+      "role": "S03 CP6 implementation evidence"
+    },
+    {
+      "path": "process/stories/CR153-S04-event-admission-gate-adapter-IMPLEMENTATION.md",
+      "role": "S04 CP6 implementation evidence"
+    },
+    {
+      "path": "process/stories/CR153-S05-event-trace-evidence-wording-IMPLEMENTATION.md",
+      "role": "S05 CP6 wording evidence"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "result": "pass",
+      "summary": "41 passed in 0.53s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py tests/test_cr151_strategy_admission_statistical_gate.py tests/research/test_strategy_admission_package.py",
+      "result": "pass",
+      "summary": "22 passed in 0.50s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/research_production_contracts.py engine/event_strategy_contracts.py engine/event_strategy_admission_gate.py engine/strategy_admission_package.py",
+      "result": "pass",
+      "summary": "py_compile completed with exit code 0 and no stdout"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "summary": "No whitespace errors"
+    },
+    {
+      "command": "rg static forbidden-operation scan over CR153 changed files",
+      "result": "pass",
+      "summary": "No forbidden imports or real operation calls found; matches are fixture counters, docstrings and explicit no-runtime limitations."
+    },
+    {
+      "command": "find process/checks process/checkpoints process/release docs/release -maxdepth 1 -type f -name '*CR153*'",
+      "result": "pass",
+      "summary": "S05 future CP7 target, CP8 checkpoint, CR153 release context and docs/release CR153 files were not created during CP6."
+    }
+  ],
+  "coverage_trace": [
+    {
+      "story_id": "CR153-S01-event-research-time-pit-contracts",
+      "contract": "event_time_semantics_and_revision_pit",
+      "evidence_refs": [
+        "process/evidence/CR153-S01.CP6.index.json#tests[0]",
+        "tests/research/test_event_driven_strategy_e2e_contracts.py"
+      ],
+      "status": "PASS_WITH_RISK"
+    },
+    {
+      "story_id": "CR153-S02-event-study-method-test-slots",
+      "contract": "event_study_method_test_family_multiple_testing_slots",
+      "evidence_refs": [
+        "process/evidence/CR153-S02.CP6.index.json#tests[0]",
+        "tests/research/test_event_driven_strategy_e2e_contracts.py"
+      ],
+      "status": "PASS"
+    },
+    {
+      "story_id": "CR153-S03-event-bias-risk-audit-slots",
+      "contract": "bias_cv_universe_pit_and_cr154_deferred_slots",
+      "evidence_refs": [
+        "process/evidence/CR153-S03.CP6.index.json#tests[0]",
+        "tests/research/test_event_driven_strategy_e2e_contracts.py"
+      ],
+      "status": "PASS_WITH_RISK"
+    },
+    {
+      "story_id": "CR153-S04-event-admission-gate-adapter",
+      "contract": "event_admission_gate_and_package_adapter",
+      "evidence_refs": [
+        "process/evidence/CR153-S04.CP6.index.json#tests[0]",
+        "tests/research/test_event_driven_strategy_e2e_contracts.py",
+        "tests/research/test_strategy_admission_package.py"
+      ],
+      "status": "PASS_WITH_RISK"
+    },
+    {
+      "story_id": "CR153-S05-event-trace-evidence-wording",
+      "contract": "metadata_only_trace_and_no_overclaim_wording",
+      "evidence_refs": [
+        "process/evidence/CR153-S05.CP6.index.json#semantic_scope",
+        "process/evidence/CR153-S05.CP6.index.json#future_targets"
+      ],
+      "status": "PASS_WITH_RISK"
+    }
+  ],
+  "boundary_check": {
+    "forbidden_operation_counter_total": 0,
+    "real_event_feed_or_live_listener": 0,
+    "real_lake_or_nas_access": 0,
+    "provider_fetch": 0,
+    "credential_or_session_read": 0,
+    "qmt_miniqmt_xtquant_runtime": 0,
+    "simulation_paper_live_trading_or_broker_operation": 0,
+    "event_store_write": 0,
+    "feature_label_prediction_store_write": 0,
+    "catalog_pointer_or_model_registry_write": 0,
+    "real_order_flow": 0,
+    "real_data_validation": 0,
+    "external_framework_execution": 0,
+    "git_remote_write": 0
+  },
+  "s05_future_target_check": {
+    "s05_cp7_result_path": "process/checks/CP7-CR153-S05-event-trace-evidence-wording.result.json",
+    "s05_cp7_result_exists_before_cp7": false,
+    "s05_cp7_summary_exists_before_cp7": false,
+    "cp8_checkpoint_exists_before_cp7": false,
+    "cp8_release_context_exists_before_cp7": false,
+    "docs_release_touched_by_cp6": false,
+    "cp7_current_allowed_outputs_created": [
+      "process/returns/CR153-EVENT-DRIVEN-STRATEGY-E2E.CP7.return.json",
+      "process/evidence/CR153-CP7-VERIFICATION.index.json",
+      "process/checks/CP7-CR153-EVENT-DRIVEN-STRATEGY-E2E-VERIFICATION.result.json",
+      "process/checks/CP7-CR153-EVENT-DRIVEN-STRATEGY-E2E-VERIFICATION.result.summary.md"
+    ]
+  },
+  "semantic_scope": {
+    "full_pytest_claimed": false,
+    "runtime_authorization_allowed": false,
+    "real_event_feed_allowed": false,
+    "real_order_flow_allowed": false,
+    "registry_or_catalog_write_allowed": false,
+    "production_readiness_claimed": false,
+    "paper_live_trading_readiness_claimed": false
+  },
+  "risks": [
+    {
+      "risk_id": "R-CR153-S01-001",
+      "severity": "low",
+      "cp7_decision": "accepted_non_blocking",
+      "summary": "Stale S01 packet path is mitigated by passing actual CR151 regression path in CP6 and CP7."
+    },
+    {
+      "risk_id": "R-CR153-OVERCLAIM-001",
+      "severity": "medium",
+      "cp7_decision": "carry_to_cp8_risk_acceptance",
+      "summary": "CR153 remains contract semantics only; CP8 must avoid runtime/feed/trading/production/registry readiness claims."
+    },
+    {
+      "risk_id": "R-CR154-DEFERRED-001",
+      "severity": "medium",
+      "cp7_decision": "carry_to_cp8_deferred_scope",
+      "summary": "Full event CV, survivorship-free universe gate, capacity/impact, regime, reconciliation and real feed/runtime/order governance stay deferred."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "updated_at": "2026-07-02T18:53:36+08:00"
+}

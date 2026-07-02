@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "story_id": "CR153-S04-event-admission-gate-adapter",
+  "cr_id": "CR-153",
+  "stage": "CP6",
+  "return_ref": "process/returns/STORY-CR153-S04.CP6.return.json",
+  "implementation_ref": "process/stories/CR153-S04-event-admission-gate-adapter-IMPLEMENTATION.md",
+  "context_ref": "process/context/stories/CR153-S04-event-admission-gate-adapter.CP6.work-packet.json",
+  "source_design_evidence_ref": "process/stories/CR153-S04-event-admission-gate-adapter-LLD.md",
+  "changed_files": [
+    {
+      "path": "engine/event_strategy_admission_gate.py",
+      "change_type": "created",
+      "summary": "Added metadata-only EventStrategyAdmissionGate four-state evaluator, mandatory evidence checks, forbidden operation counter fail-closed behavior and stable event_gate_summary output."
+    },
+    {
+      "path": "engine/strategy_admission_package.py",
+      "change_type": "modified",
+      "summary": "Appended event-specific reason code, map_event_gate_status_to_admission_status and attach_event_gate_to_admission_package using event_gate_* fields without overwriting ML/statistical gate fields."
+    },
+    {
+      "path": "tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "change_type": "modified",
+      "summary": "Appended S04 tests after existing S01/S02/S03 sections; shared test file now covers 41 CR153 event-driven contract cases."
+    },
+    {
+      "path": "process/stories/CR153-S04-event-admission-gate-adapter-IMPLEMENTATION.md",
+      "change_type": "created",
+      "summary": "Implementation handoff and verification record."
+    },
+    {
+      "path": "process/returns/STORY-CR153-S04.CP6.return.json",
+      "change_type": "created",
+      "summary": "CP6 Story return packet."
+    },
+    {
+      "path": "process/evidence/CR153-S04.CP6.index.json",
+      "change_type": "created",
+      "summary": "CP6 evidence index."
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "result": "pass",
+      "summary": "41 passed in 0.59s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py tests/test_cr151_strategy_admission_statistical_gate.py tests/research/test_strategy_admission_package.py",
+      "result": "pass",
+      "summary": "22 passed in 0.43s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/event_strategy_admission_gate.py engine/strategy_admission_package.py",
+      "result": "pass",
+      "summary": "py_compile passed without errors"
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "cases": 41,
+      "result": "pass",
+      "covered_contracts": [
+        "S01 event research time/PIT regression",
+        "S02 method/test/multiple-testing regression",
+        "S03 bias/risk audit regression",
+        "S04 EventStrategyAdmissionGate PASS/BLOCKED/FAIL/NEEDS_REVIEW status matrix",
+        "S04 missing PIT/method/test family/multiple-testing/trace evidence fail-closed behavior",
+        "S04 forbidden operation counters nonzero or non-integer BLOCKED behavior",
+        "S04 event_gate_summary stable shape",
+        "S04 package linkage not-runtime/not-feed/not-store boundary",
+        "S04 package linkage preserving ML/statistical gate fields"
+      ]
+    },
+    {
+      "path": "tests/research/test_ml_strategy_e2e_contracts.py",
+      "result": "pass",
+      "covered_contracts": [
+        "CR152 ML companion contract regression"
+      ]
+    },
+    {
+      "path": "tests/test_cr151_strategy_admission_statistical_gate.py",
+      "result": "pass",
+      "covered_contracts": [
+        "CR151 statistical admission gate regression"
+      ]
+    },
+    {
+      "path": "tests/research/test_strategy_admission_package.py",
+      "result": "pass",
+      "covered_contracts": [
+        "Existing StrategyAdmissionPackage regression"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "process/stories/CR153-S04-event-admission-gate-adapter-IMPLEMENTATION.md",
+      "type": "implementation_handoff"
+    },
+    {
+      "path": "process/returns/STORY-CR153-S04.CP6.return.json",
+      "type": "story_return_packet"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_event_feed_touched": false,
+    "real_lake_or_nas_touched": false,
+    "provider_fetch_executed": false,
+    "qmt_runtime_executed": false,
+    "broker_or_order_flow_executed": false,
+    "event_store_catalog_registry_write_executed": false,
+    "model_registry_write_executed": false,
+    "real_data_validation_executed": false,
+    "external_framework_executed": false,
+    "git_remote_write_executed": false
+  },
+  "risks": [
+    {
+      "risk_id": "R-CR153-S04-001",
+      "summary": "Event gate PASS may be misread as runtime/feed/trading readiness by downstream consumers; implementation keeps explicit no-runtime limitations and blocked claim.",
+      "severity": "low"
+    }
+  ],
+  "waivers": [],
+  "design_delta_ref": null
+}

@@ -1,0 +1,133 @@
+{
+  "checkpoint_id": "CP2-CR153-DISCUSSION-CHECKPOINT",
+  "discussion_id": "CP2-CR153-SCENARIO-DISCUSSION",
+  "cr_id": "CR-153",
+  "phase": "requirement-clarification",
+  "status": "PASS",
+  "interaction_mode": "current-review-plus-live-sgq",
+  "created_at": "2026-07-02T16:45:39+08:00",
+  "last_updated_at": "2026-07-02T17:45:00+08:00",
+  "discussion_log": "process/discussions/CP2-CR153-SCENARIO-DISCUSSION-LOG.md",
+  "source_context": "process/context/CP2-CR153-EVENT-DRIVEN-STRATEGY-E2E-SCOPE-CONTEXT.yaml",
+  "user_review_source": "Current CP2 review comment: content supports CP3 and nine recommended decisions are acceptable, but CR153-specific SGQ evidence should be added before final approve. CP2 was subsequently approved by user at 2026-07-02T17:00:00+08:00.",
+  "gray_areas": [
+    {
+      "id": "SGA-CR153-01",
+      "question": "Should three-time event semantics enter the first wave?",
+      "selected": true,
+      "status": "resolved-by-user-review",
+      "recommendation": "Require event_time, available_at and decision_time or N/A-with-reason; available_at > decision_time must fail closed."
+    },
+    {
+      "id": "SGA-CR153-02",
+      "question": "Should event-study methods be slot-only contracts or a full statistics library?",
+      "selected": true,
+      "status": "resolved-by-user-review",
+      "recommendation": "Define estimation window, event window, normal return model, CAR/BHAR and calendar-time slots; do not implement a full statistics library in CR153."
+    },
+    {
+      "id": "SGA-CR153-03",
+      "question": "How should test family, overlapping events, clustering and endogeneity be audited?",
+      "selected": true,
+      "status": "resolved-by-user-review",
+      "recommendation": "Use structured slots, status, refs, sample count, adjusted p-value and n/a-with-reason; unsupported methods must be NEEDS_REVIEW or BLOCKED."
+    },
+    {
+      "id": "SGA-CR153-04",
+      "question": "How should Event admission gate relate to CR151 and CR152 gates?",
+      "selected": true,
+      "status": "resolved-by-user-review",
+      "recommendation": "Create an Event-specific gate plus adapter and reuse four-state admission semantics and package linkage."
+    },
+    {
+      "id": "SGA-CR153-05",
+      "question": "Does event-to-order trace authorize runtime, order or broker access?",
+      "selected": true,
+      "status": "resolved-by-user-review",
+      "recommendation": "No. Define only event -> signal -> target/order-intent trace contract."
+    },
+    {
+      "id": "SGA-CR153-06",
+      "question": "Should CV and survivorship be fully governed in CR153?",
+      "selected": true,
+      "status": "resolved-by-user-review",
+      "recommendation": "CR153 only reserves event CV slot, split audit refs and universe_pit_audit slot; full governance is deferred to CR154."
+    }
+  ],
+  "sgq_interactions": [
+    {
+      "id": "SGQ-CR153-001",
+      "topic": "Three-time event semantics and PIT fail-closed behavior",
+      "recommendation": "Require event_time, available_at and decision_time or N/A-with-reason; strategy decisions may only consume event facts where available_at <= decision_time.",
+      "user_answer_source": "Current CP2 review recommends accepting DQ-CP2-CR153-EVENT-TIME-SEMANTICS.",
+      "confirmation": "CP3 should encode three-time semantics and fail-closed behavior; missing available_at must not silently pass.",
+      "impact_surface": "EventResearchSpec / PIT gate / replay / admission / trace"
+    },
+    {
+      "id": "SGQ-CR153-002",
+      "topic": "Event-study method and test-family slot-only boundary",
+      "recommendation": "Define method and test-family slots, status and refs; do not implement a full event-study statistics library in first wave.",
+      "user_answer_source": "Current CP2 review recommends accepting DQ-CP2-CR153-EVENT-STUDY-METHOD, DQ-CP2-CR153-TEST-FAMILY and DQ-CP2-CR153-METHOD-SLOT-ONLY.",
+      "confirmation": "CP3 may define default enums and fields; Patell/BMP/bootstrap and related algorithms remain deferred.",
+      "impact_surface": "EventStudyMethodSpec / EventStudyTestReport / CP5 story boundaries"
+    },
+    {
+      "id": "SGQ-CR153-003",
+      "topic": "Cluster, overlap and endogeneity audit semantics",
+      "recommendation": "Use structured slots and explicit NEEDS_REVIEW, BLOCKED or n/a-with-reason states.",
+      "user_answer_source": "Current CP2 review recommends accepting DQ-CP2-CR153-CLUSTER-ENDOGENEITY.",
+      "confirmation": "Free-text-only treatment is insufficient for CR153 CP3.",
+      "impact_surface": "Admission fail-closed semantics / risk report / fixture contract"
+    },
+    {
+      "id": "SGQ-CR153-004",
+      "topic": "Event gate relation to CR151 and CR152 gates",
+      "recommendation": "Create Event-specific gate plus adapter and reuse four-state admission semantics.",
+      "user_answer_source": "Current CP2 review recommends accepting DQ-CP2-CR153-GATE-RELATION.",
+      "confirmation": "Do not fold Event-specific statistics into CR151 or CR152 gates.",
+      "impact_surface": "StrategyAdmissionPackage / completion map / CR154 governance"
+    },
+    {
+      "id": "SGQ-CR153-005",
+      "topic": "Event-to-order no-runtime boundary",
+      "recommendation": "Only define event -> signal -> target/order-intent trace; no paper OMS, live listener, broker or real event feed.",
+      "user_answer_source": "Current CP2 review strongly recommends accepting DQ-CP2-CR153-EVENT-TO-ORDER-BOUNDARY.",
+      "confirmation": "Future paper/live/order work requires a separate runtime_authorization or broker gate.",
+      "impact_surface": "Security boundary / runtime authorization / release wording"
+    }
+  ],
+  "deferred_ideas": [
+    {
+      "id": "DEF-CR153-01",
+      "content": "Full event-study statistical algorithms",
+      "restart_condition": "A later Event method CR or CR154 explicitly authorizes concrete algorithms."
+    },
+    {
+      "id": "DEF-CR153-02",
+      "content": "Full walk-forward / purged-embargo event CV and survivorship-free universe gate",
+      "restart_condition": "CR154 starts or a dedicated Event CV / universe PIT CR is approved."
+    },
+    {
+      "id": "DEF-CR153-03",
+      "content": "Paper/live event listener, paper OMS, broker adapter and real order flow",
+      "restart_condition": "A runtime_authorization / broker gate is explicitly approved."
+    }
+  ],
+  "blocking_open_items": 0,
+  "pending_human_decisions": [
+    "DQ-CP2-CR153-EVENT-TIME-SEMANTICS",
+    "DQ-CP2-CR153-EVENT-STUDY-METHOD",
+    "DQ-CP2-CR153-TEST-FAMILY",
+    "DQ-CP2-CR153-CLUSTER-ENDOGENEITY",
+    "DQ-CP2-CR153-GATE-RELATION",
+    "DQ-CP2-CR153-EVENT-TO-ORDER-BOUNDARY",
+    "DQ-CP2-CR153-CV-STRATEGY",
+    "DQ-CP2-CR153-SURVIVORSHIP-SLOT",
+    "DQ-CP2-CR153-METHOD-SLOT-ONLY"
+  ],
+  "cp2_ready": true,
+  "final_human_gate_status": "approved",
+  "final_human_gate_ref": "process/checkpoints/CP2-CR153-EVENT-DRIVEN-STRATEGY-E2E-SCOPE.md",
+  "final_human_gate_approved_at": "2026-07-02T17:00:00+08:00",
+  "next_step": "CP2 evidence closed; continue with CP3 HLD human gate."
+}

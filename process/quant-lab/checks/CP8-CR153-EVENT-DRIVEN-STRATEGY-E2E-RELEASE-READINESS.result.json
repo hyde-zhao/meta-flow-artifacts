@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS",
+  "profile": "minimal",
+  "story_id": "CR153-S01..S05",
+  "cr_id": "CR-153",
+  "checked_at": "2026-07-02T19:05:08+08:00",
+  "context_ref": "process/release/RELEASE-CONTEXT-CR153.yaml",
+  "dispatch_refs": [
+    "ADE-CR153-META-QA-CRITICAL-CP8-START-2026-07-02T225700+0800"
+  ],
+  "evidence_ref": "process/evidence/CR153-CP7-VERIFICATION.index.json",
+  "items": [
+    {
+      "id": "CP8-CR153-01",
+      "category": "entry",
+      "name": "CP7 verification completed with PASS_WITH_RISK and zero blockers",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP7-CR153-EVENT-DRIVEN-STRATEGY-E2E-VERIFICATION.result.json",
+        "process/evidence/CR153-CP7-VERIFICATION.index.json",
+        "process/returns/CR153-EVENT-DRIVEN-STRATEGY-E2E.CP7.return.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "CP7 decision PASS_WITH_RISK; blocking_findings=0; forbidden_operation_count=0."
+    },
+    {
+      "id": "CP8-CR153-02",
+      "category": "release-context",
+      "name": "CR153 release context capsule generated with minimal profile",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR153.yaml"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "release_artifact_profile=minimal because no install/deploy/migration/external interface/runtime authorization/real release action is in scope."
+    },
+    {
+      "id": "CP8-CR153-03",
+      "category": "release-decision",
+      "name": "Release decision uses READY_WITH_RISK and does not claim RELEASED",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR153.yaml#release_decision",
+        "process/checkpoints/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.md#待人工决策清单"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "release_decision=READY_WITH_RISK; decision=PASS for automatic readiness gate. No true publish/live/release execution is authorized or executed."
+    },
+    {
+      "id": "CP8-CR153-04",
+      "category": "authorization-boundary",
+      "name": "No real runtime, data, credential, store, registry, order or remote operation is authorized",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR153.yaml#non_authorized_items",
+        "process/evidence/CR153-CP7-VERIFICATION.index.json#boundary_check",
+        "process/checks/CP7-CR153-EVENT-DRIVEN-STRATEGY-E2E-VERIFICATION.result.json#summary"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CP8 approve would not authorize real feed/listener, lake/NAS/provider, credential, QMT/runtime/trading/broker, store/catalog/registry, order flow, external framework, Git remote or real release execution."
+    },
+    {
+      "id": "CP8-CR153-05",
+      "category": "release-wording",
+      "name": "Release wording preserves static-fixture-only and forbidden readiness claims",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR153.yaml#forbidden_release_claims",
+        "process/evidence/CR153-CP7-VERIFICATION.index.json#semantic_scope"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "Artifacts do not claim real event alpha, real feed quality, production readiness, runtime readiness, trading readiness, registry publication or real order flow."
+    },
+    {
+      "id": "CP8-CR153-06",
+      "category": "risk-acceptance",
+      "name": "DEC-CR153-CP8-001 is present for READY_WITH_RISK human decision",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.md#待人工决策清单",
+        "process/release/RELEASE-CONTEXT-CR153.yaml#follow_up_summary"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Decision covers R-CR153-OVERCLAIM-001 and R-CR154-DEFERRED-001; R-CR153-S01-001 is a non-blocking audit note."
+    },
+    {
+      "id": "CP8-CR153-07",
+      "category": "release-documents",
+      "name": "Minimal profile does not update unversioned docs/release files",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR153.yaml#release_documents",
+        "process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.summary.md"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "CR153 uses scoped CP8 summary/checkpoint; deploy, rollback, migration and feedback docs are N/A because no install/deploy/migration/runtime action exists."
+    },
+    {
+      "id": "CP8-CR153-08",
+      "category": "follow-up-routing",
+      "name": "CR154 deferred governance remains future scope and is not pre-created",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR153.yaml#follow_up_summary",
+        "process/checkpoints/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.md#cp8-后续跟踪分流表"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "Full event CV, survivorship-free universe gate, capacity/impact, regime, reconciliation and real feed/runtime/order governance remain future CR154/later CR scope."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "release_decision": "READY_WITH_RISK",
+  "manual_gate_status": "approved",
+  "accepted_human_decisions": [
+    "DEC-CR153-CP8-001"
+  ],
+  "approved_by": "user",
+  "approved_at": "2026-07-02T23:10:00+08:00",
+  "pending_human_decisions": [],
+  "risk_acceptance": {
+    "decision_id": "DEC-CR153-CP8-001",
+    "decision_type": "risk_acceptance",
+    "status": "accepted_by_user",
+    "risk_ids": [
+      "R-CR153-OVERCLAIM-001",
+      "R-CR154-DEFERRED-001"
+    ],
+    "audit_note_ids": [
+      "R-CR153-S01-001"
+    ],
+    "recommended_outcome": "accept CP7 PASS_WITH_RISK and close CR153 local/static/fixture Event-Driven Strategy E2E framework foundation as READY_WITH_RISK",
+    "reject_route": "CR153_NOT_READY_OR_RETURN_TO_CP7_OR_DESIGN_CLARIFICATION"
+  },
+  "not_authorized": [
+    "true_release_execution_publish_production_deployment_or_live_enablement",
+    "real_event_feed_or_live_listener",
+    "real_lake_nas_provider_access_or_credential_env_session_read",
+    "qmt_miniqmt_xtquant_runtime_simulation_paper_live_trading_broker_operation",
+    "event_store_feature_label_prediction_store_catalog_pointer_model_registry_write",
+    "real_order_flow",
+    "real_data_validation",
+    "external_framework_clone_install_run",
+    "git_remote_write",
+    "production_runtime_trading_readiness_or_registry_publication_claim"
+  ],
+  "forbidden_release_claims": [
+    "full_pytest_passed",
+    "real_event_alpha",
+    "real_model_performance",
+    "real_feed_quality",
+    "production_ready",
+    "runtime_ready",
+    "paper_live_trading_ready",
+    "registry_published",
+    "real_order_flow"
+  ],
+  "next_route": "DELIVERED_READY_WITH_RISK",
+  "risk_refs": [
+    "R-CR153-S01-001",
+    "R-CR153-OVERCLAIM-001",
+    "R-CR154-DEFERRED-001"
+  ],
+  "follow_up_refs": [
+    "CR154",
+    "R-CR153-S01-001"
+  ],
+  "updated_at": "2026-07-02T23:10:00+08:00"
+}

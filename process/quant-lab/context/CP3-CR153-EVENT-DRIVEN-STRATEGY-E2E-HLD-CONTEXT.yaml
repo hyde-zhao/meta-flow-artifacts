@@ -1,0 +1,93 @@
+schema_version: 1
+context_id: CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-CONTEXT
+created_at: "2026-07-02T17:20:00+08:00"
+created_by: host-orchestrator
+project: quant-lab
+active_change: CR-153
+phase: solution-design
+checkpoint: CP3
+gate_profile: standard
+mode: compact
+status: prepared_for_cp3_human_gate
+
+objective:
+  summary: "Design CR153 Event-Driven Strategy E2E Framework Foundation after CP2 approval."
+  cp3_goal: "Approve an HLD/ADR architecture that can later be split into Stories, without implementation or runtime authorization."
+  must_not_do:
+    - "Do not decompose Stories before CP3 approval."
+    - "Do not write LLD or source implementation before later gates."
+    - "Do not connect real lake, NAS, provider, QMT, runtime, simulation, live, trading, broker, credential or external framework."
+    - "Do not write catalog pointer, event store, feature store, label store, model registry, prediction store or Git remote."
+    - "Do not run live event listener, real event feed, real order flow or real data validation."
+
+inputs:
+  cp2_checkpoint: process/checkpoints/CP2-CR153-EVENT-DRIVEN-STRATEGY-E2E-SCOPE.md
+  cp2_result: process/checks/CP2-CR153-EVENT-DRIVEN-STRATEGY-E2E-SCOPE.result.json
+  cp2_discussion_log: process/discussions/CP2-CR153-SCENARIO-DISCUSSION-LOG.md
+  cp2_discussion_checkpoint: process/checks/CP2-CR153-DISCUSSION-CHECKPOINT.json
+  cr: process/changes/CR-153.md
+  cr_summary: process/changes/summaries/CR-153.summary.json
+  use_cases: process/USE-CASES.md
+  roadmap: docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
+  remediation_plan: docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
+  e2e_review: docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
+  cr151_hld: process/docs/design/HLD-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md
+  cr152_hld: process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md
+
+cp2_accepted_decisions:
+  - DQ-CP2-CR153-EVENT-TIME-SEMANTICS
+  - DQ-CP2-CR153-EVENT-STUDY-METHOD
+  - DQ-CP2-CR153-TEST-FAMILY
+  - DQ-CP2-CR153-CLUSTER-ENDOGENEITY
+  - DQ-CP2-CR153-GATE-RELATION
+  - DQ-CP2-CR153-EVENT-TO-ORDER-BOUNDARY
+  - DQ-CP2-CR153-CV-STRATEGY
+  - DQ-CP2-CR153-SURVIVORSHIP-SLOT
+  - DQ-CP2-CR153-METHOD-SLOT-ONLY
+
+architecture_inputs:
+  existing_source_anchors:
+    - engine/research_production_contracts.py::ResearchDatasetSpec
+    - engine/backtest_production_contracts.py::BacktestRunSpec
+    - engine/strategy_admission_package.py::StrategyAdmissionPackage
+    - engine/strategy_admission_statistical_gate.py::StrategyAdmissionStatisticalGate
+    - engine/ml_strategy_admission_gate.py::MLAdmissionGate
+  cp3_required_decisions:
+    - DQ-CP3-CR153-001-EVENT-GATE-ADAPTER
+    - DQ-CP3-CR153-002-EVENT-METADATA-NO-STORE
+    - DQ-CP3-CR153-003-EXTEND-EXISTING-ANCHORS
+    - DQ-CP3-CR153-004-FIXTURE-ONLY-VALIDATION
+    - DQ-CP3-CR153-005-CR154-DEPENDENCY
+
+deliverables:
+  hld: process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md
+  adr: process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md
+  discussion_log: process/discussions/CP3-CR153-HLD-DISCUSSION-LOG.md
+  discussion_checkpoint: process/checks/CP3-CR153-DISCUSSION-CHECKPOINT.json
+  cp3_result: process/checks/CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-CONSISTENCY.result.json
+  cp3_summary: process/checks/CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-CONSISTENCY.result.summary.md
+  cp3_checkpoint: process/checkpoints/CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-REVIEW.md
+  cp3_launch_message: process/checks/CP3-CR153-HUMAN-GATE-LAUNCH-MESSAGE.md
+
+read_profile:
+  must_read:
+    - process/context/CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-CONTEXT.yaml
+    - process/checkpoints/CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-REVIEW.md
+    - process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md
+    - process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md
+  read_if_needed:
+    - process/discussions/CP3-CR153-HLD-DISCUSSION-LOG.md
+    - process/checks/CP3-CR153-DISCUSSION-CHECKPOINT.json
+    - process/checks/CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-CONSISTENCY.result.json
+  do_not_read_by_default:
+    - "Full historical process logs unrelated to CR153."
+    - "Full source diff or implementation files, unless CP3 review requests anchor verification."
+
+authorization_boundary:
+  effective_validation_mode: "design/static/fixture-only"
+  story_decomposition_authorized: false
+  source_implementation_authorized: false
+  runtime_authorized: false
+  real_data_authorized: false
+  registry_or_store_write_authorized: false
+

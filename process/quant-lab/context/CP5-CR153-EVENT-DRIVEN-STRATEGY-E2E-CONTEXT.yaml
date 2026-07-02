@@ -1,0 +1,174 @@
+schema_version: 1
+context_id: "CP5-CR153-EVENT-DRIVEN-STRATEGY-E2E-CONTEXT"
+context_type: "cp5-lld"
+status: "ready-for-design-evidence"
+created_at: "2026-07-02T18:50:00+08:00"
+created_by: "host-orchestrator"
+project: "quant-lab"
+change_id: "CR-153"
+active_phase: "cp5-design-evidence-preparation"
+read_profile: "compact"
+
+objective:
+  summary: "Prepare CP5 design evidence for CR153 Event-Driven Strategy E2E Framework Foundation: four full LLDs and one technical-note, then CP5 auto precheck and human gate draft."
+  next_gate: "CP5"
+  next_gate_type: "manual"
+  implementation_allowed: false
+  runtime_authorization_allowed: false
+
+source_of_truth:
+  cr: "process/changes/CR-153.md"
+  cp3_hld: "process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md"
+  cp3_adr: "process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md"
+  cp3_checkpoint: "process/checkpoints/CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-REVIEW.md"
+  cp4_result: "process/checks/CP4-CR153-STORY-DAG-PARALLEL-SAFETY.result.json"
+  story_backlog: "process/STORY-BACKLOG-CR153.md"
+  story_status: "process/STORY-STATUS-CR153.md"
+  development_plan: "process/DEVELOPMENT-PLAN-CR153.yaml"
+  feature_design_matrix: "process/docs/design/FEATURE-DESIGN-MATRIX.md"
+
+must_read:
+  - "process/context/CP5-CR153-EVENT-DRIVEN-STRATEGY-E2E-CONTEXT.yaml"
+  - "process/checks/CP4-CR153-STORY-DAG-PARALLEL-SAFETY.result.json"
+  - "process/STORY-BACKLOG-CR153.md"
+  - "process/DEVELOPMENT-PLAN-CR153.yaml"
+  - "process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md"
+  - "process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md"
+  - "process/docs/design/FEATURE-DESIGN-MATRIX.md"
+
+allowed_reads:
+  common:
+    - "process/stories/CR153-S01-event-research-time-pit-contracts.md"
+    - "process/stories/CR153-S02-event-study-method-test-slots.md"
+    - "process/stories/CR153-S03-event-bias-risk-audit-slots.md"
+    - "process/stories/CR153-S04-event-admission-gate-adapter.md"
+    - "process/stories/CR153-S05-event-trace-evidence-wording.md"
+    - "process/docs/features/factor-research-loop/DESIGN.md"
+    - "process/docs/features/factor-research-loop/TEST-PLAN.md"
+    - "process/docs/features/factor-research-loop/TASKS.md"
+    - "process/docs/features/runtime-authorization-safety/DESIGN.md"
+    - "engine/research_production_contracts.py"
+    - "engine/backtest_production_contracts.py"
+    - "engine/strategy_admission_statistical_gate.py"
+    - "engine/ml_strategy_admission_gate.py"
+    - "engine/strategy_admission_package.py"
+  read_if_needed:
+    - "tests/research/test_strategy_admission_statistical_gate.py"
+    - "tests/research/test_strategy_admission_package.py"
+    - "tests/research/test_ml_strategy_e2e_contracts.py"
+    - "process/stories/CR152-S01-pit-feature-label-contracts-LLD.md"
+    - "process/stories/CR152-S04-ml-admission-gate-adapter-LLD.md"
+    - "process/stories/CR152-S05-static-evidence-release-wording.md"
+
+do_not_read_by_default:
+  - "process/STATE.md"
+  - "process/changes/CR-*-FOLLOW-UP-TRACKING-*.md"
+  - "process/checks/CP7-*"
+  - "process/checkpoints/CP8-*"
+  - "process/returns/*"
+  - "process/evidence/*"
+  - "data/**"
+  - ".env"
+  - "完整历史 transcript"
+  - "无关 CR 的完整 HLD / LLD / verification report"
+
+story_design_batch:
+  batch_id: "CR153-EVENT-DRIVEN-STRATEGY-E2E-BATCH-A"
+  cp5_checkpoint: "process/checkpoints/CP5-CR153-EVENT-DRIVEN-STRATEGY-E2E-LLD-BATCH.md"
+  cp5_result: "process/checks/CP5-CR153-EVENT-DRIVEN-STRATEGY-E2E-LLD-BATCH.result.json"
+  stories:
+    - story_id: "CR153-S01-event-research-time-pit-contracts"
+      evidence_type: "full-lld"
+      output_path: "process/stories/CR153-S01-event-research-time-pit-contracts-LLD.md"
+      owner_scope: "EventResearchSpec, EventTimeSemantics, EventRevisionPITGate, time/PIT fail-closed behavior."
+    - story_id: "CR153-S02-event-study-method-test-slots"
+      evidence_type: "full-lld"
+      output_path: "process/stories/CR153-S02-event-study-method-test-slots-LLD.md"
+      owner_scope: "EventStudyMethodSpec, event windows, normal return model, test family slots, multiple_testing_or_data_snooping_slot."
+    - story_id: "CR153-S03-event-bias-risk-audit-slots"
+      evidence_type: "full-lld"
+      output_path: "process/stories/CR153-S03-event-bias-risk-audit-slots-LLD.md"
+      owner_scope: "Overlap, cluster, endogeneity, event CV split audit, universe PIT audit and CR154 deferred reliability refs."
+    - story_id: "CR153-S04-event-admission-gate-adapter"
+      evidence_type: "full-lld"
+      output_path: "process/stories/CR153-S04-event-admission-gate-adapter-LLD.md"
+      owner_scope: "EventStrategyAdmissionGate, shared status adapter, StrategyAdmissionPackage linkage, forbidden operation counters."
+    - story_id: "CR153-S05-event-trace-evidence-wording"
+      evidence_type: "technical-note"
+      output_path: "process/stories/CR153-S05-event-trace-evidence-wording.md#技术说明"
+      owner_scope: "Event-to-signal/order-intent trace refs and exact CR153 evidence/release wording targets or explicit N/A."
+
+cp5_attention_items:
+  - id: "CP5-FOCUS-CR153-001"
+    story: "CR153-S01-event-research-time-pit-contracts"
+    requirement: "Make event_available_at, decision_time and revision policy fail-closed behavior exact; availability cannot be inferred."
+  - id: "CP5-FOCUS-CR153-002"
+    story: "CR153-S02-event-study-method-test-slots"
+    requirement: "Keep multiple_testing_or_data_snooping_slot mandatory and explicit; algorithms remain slot-only unless separately authorized."
+  - id: "CP5-FOCUS-CR153-003"
+    story: "CR153-S04-event-admission-gate-adapter"
+    requirement: "Event gate PASS must not imply feed, runtime, paper, live, broker or trading readiness."
+  - id: "CP5-FOCUS-CR153-004"
+    story: "CR153-S05-event-trace-evidence-wording"
+    requirement: "Technical note must enumerate exact CR153 return/evidence/release wording artifacts or mark each artifact family N/A; broad process/returns/*, process/evidence/* or docs/release/* ownership is not sufficient for implementation."
+  - id: "CP5-FOCUS-CR153-005"
+    story: "CR153-S02-event-study-method-test-slots / CR153-S03-event-bias-risk-audit-slots"
+    requirement: "LLDs must define a non-overlapping field partition in engine/event_strategy_contracts.py and the shared test file: S02 owns method/test family/multiple-testing fields only; S03 owns bias/CV/universe PIT audit fields only."
+
+shared_field_partition:
+  shared_module: "engine/event_strategy_contracts.py"
+  shared_test_file: "tests/research/test_event_driven_strategy_e2e_contracts.py"
+  s02_owned_fields:
+    - "EventStudyMethodSpec"
+    - "estimation_window"
+    - "event_window"
+    - "normal_return_model"
+    - "return_horizon"
+    - "CAR / BHAR / calendar-time method slots"
+    - "EventStudyTestReport test family slots"
+    - "multiple_testing_or_data_snooping_slot"
+    - "family_id"
+    - "tested_window_count"
+    - "correction_method"
+    - "adjusted_p_value"
+  s03_owned_fields:
+    - "overlap report slot"
+    - "cluster report slot"
+    - "endogeneity_treatment_slot"
+    - "event CV split audit refs"
+    - "universe_pit_audit"
+    - "capacity / impact / regime / reconciliation deferred refs"
+  rule: "S02 must treat S03 fields as out of scope. S03 must treat S02 fields as read-only inputs. CP5 blocks overlapping field ownership."
+
+authorization_boundary:
+  local_static_fixture_only: true
+  source_implementation_before_cp5_approval: false
+  real_event_feed_allowed: false
+  live_listener_allowed: false
+  real_lake_or_nas_allowed: false
+  provider_fetch_allowed: false
+  credential_read_allowed: false
+  qmt_runtime_allowed: false
+  broker_or_order_flow_allowed: false
+  event_store_catalog_registry_write_allowed: false
+  external_framework_run_allowed: false
+  real_data_validation_allowed: false
+
+downstream_tasks:
+  - "Generate S01-S04 full LLDs and S05 technical-note."
+  - "Run CP5 auto precheck after design evidence exists."
+  - "Generate CP5 human gate draft with Decision Brief and pending decision list."
+  - "Stop at CP5 pending review; do not implement source code."
+
+risks_and_decisions:
+  - "Fixture/static validation must not be represented as real feed, alpha, runtime readiness or trading readiness."
+  - "Event metadata must not be represented as event store/catalog/model registry publication."
+  - "S02/S03 field ownership overlap is a CP5 blocker."
+  - "S05 broad release ownership without exact CR153 artifact targets is a CP5 blocker."
+  - "Full CV, survivorship, capacity, impact, regime and reconciliation remain CR154/deferred."
+
+token_control:
+  max_source_files_per_story: 8
+  full_doc_read_policy: "Only read full upstream docs when the context capsule or Story card is insufficient, a conflict is found, or a CP5 reviewer needs audit detail."
+  read_expansion_log_required: true
+

@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "story_id": "CR153-S01-event-research-time-pit-contracts",
+  "cr_id": "CR-153",
+  "stage": "CP6",
+  "return_ref": "process/returns/STORY-CR153-S01.CP6.return.json",
+  "implementation_ref": "process/stories/CR153-S01-event-research-time-pit-contracts-IMPLEMENTATION.md",
+  "context_ref": "process/context/stories/CR153-S01-event-research-time-pit-contracts.CP6.work-packet.json",
+  "source_design_evidence_ref": "process/stories/CR153-S01-event-research-time-pit-contracts-LLD.md",
+  "changed_files": [
+    {
+      "path": "engine/research_production_contracts.py",
+      "change_type": "modified",
+      "summary": "Added CR153 S01 event time semantics, event research spec, revision PIT gate, validators, mapping normalizer, forbidden counters and exports."
+    },
+    {
+      "path": "tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "change_type": "created",
+      "summary": "Added 12 static fixture tests covering PASS, BLOCKED and NEEDS_REVIEW S01 semantics."
+    },
+    {
+      "path": "process/stories/CR153-S01-event-research-time-pit-contracts-IMPLEMENTATION.md",
+      "change_type": "created",
+      "summary": "Implementation handoff and verification record."
+    },
+    {
+      "path": "process/returns/STORY-CR153-S01.CP6.return.json",
+      "change_type": "created",
+      "summary": "CP6 Story return packet."
+    },
+    {
+      "path": "process/evidence/CR153-S01.CP6.index.json",
+      "change_type": "created",
+      "summary": "CP6 evidence index."
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "result": "pass",
+      "summary": "12 passed in 0.54s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py tests/research/test_strategy_admission_statistical_gate.py",
+      "result": "fail",
+      "summary": "No tests ran because tests/research/test_strategy_admission_statistical_gate.py does not exist in the current repository."
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py tests/test_cr151_strategy_admission_statistical_gate.py",
+      "result": "pass",
+      "summary": "15 passed in 0.41s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/research_production_contracts.py",
+      "result": "pass",
+      "summary": "py_compile passed"
+    },
+    {
+      "command": "git diff --check -- engine/research_production_contracts.py tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "result": "pass",
+      "summary": "No whitespace errors."
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "cases": 12,
+      "result": "pass",
+      "covered_contracts": [
+        "explicit event_occurred_at/event_announced_at/event_available_at/decision_time",
+        "missing event_available_at BLOCKED and no inference",
+        "event_available_at after decision_time BLOCKED",
+        "revision policy missing BLOCKED",
+        "explicit revision N/A reason NEEDS_REVIEW, never PASS",
+        "mutable latest/current refs BLOCKED",
+        "forbidden operation counters nonzero BLOCKED",
+        "mapping normalizer preserves explicit availability"
+      ]
+    },
+    {
+      "path": "tests/research/test_ml_strategy_e2e_contracts.py",
+      "result": "pass",
+      "covered_contracts": [
+        "CR152 ML companion contract regression"
+      ]
+    },
+    {
+      "path": "tests/test_cr151_strategy_admission_statistical_gate.py",
+      "result": "pass",
+      "covered_contracts": [
+        "CR151 statistical gate regression via repository actual path"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "process/stories/CR153-S01-event-research-time-pit-contracts-IMPLEMENTATION.md",
+      "type": "implementation_handoff"
+    },
+    {
+      "path": "process/returns/STORY-CR153-S01.CP6.return.json",
+      "type": "story_return_packet"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_event_feed_touched": false,
+    "real_lake_or_nas_touched": false,
+    "provider_fetch_executed": false,
+    "qmt_runtime_executed": false,
+    "broker_or_order_flow_executed": false,
+    "event_store_catalog_registry_write_executed": false,
+    "external_framework_executed": false,
+    "git_remote_write_executed": false
+  },
+  "risks": [
+    {
+      "risk_id": "R-CR153-S01-001",
+      "summary": "Work packet regression path tests/research/test_strategy_admission_statistical_gate.py is absent; actual CR151 test path was run and passed.",
+      "severity": "low"
+    }
+  ],
+  "waivers": [],
+  "design_delta_ref": null
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "packet_id": "CR153-S01-CP6-WORK-PACKET",
+  "created_at": "2026-07-02T20:35:00+08:00",
+  "created_by": "host-orchestrator",
+  "cr_id": "CR-153",
+  "story_id": "CR153-S01-event-research-time-pit-contracts",
+  "stage": "CP6",
+  "status": "ready-for-implementation",
+  "authorization": {
+    "allowed_scope": "local/static/fixture source implementation and tests only",
+    "forbidden_operations": [
+      "real event feed or live event listener",
+      "real lake / NAS / provider read or write",
+      "QMT / MiniQMT / xtquant runtime, simulation, paper, live, trading or broker operation",
+      "credential, .env, token, account or session read",
+      "event store, feature store, label store, prediction store, catalog pointer or model registry write",
+      "real order flow or real data validation",
+      "external framework clone/install/run",
+      "Git remote write"
+    ]
+  },
+  "must_read": [
+    "process/context/CP5-CR153-EVENT-DRIVEN-STRATEGY-E2E-CONTEXT.yaml",
+    "process/checks/CP5-CR153-EVENT-DRIVEN-STRATEGY-E2E-LLD-BATCH.result.json",
+    "process/stories/CR153-S01-event-research-time-pit-contracts.md",
+    "process/stories/CR153-S01-event-research-time-pit-contracts-LLD.md"
+  ],
+  "read_if_needed": [
+    "process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md",
+    "process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md",
+    "process/DEVELOPMENT-PLAN-CR153.yaml",
+    "engine/research_production_contracts.py",
+    "tests/research/test_ml_strategy_e2e_contracts.py",
+    "tests/research/test_strategy_admission_statistical_gate.py"
+  ],
+  "write_scope": [
+    "engine/research_production_contracts.py",
+    "tests/research/test_event_driven_strategy_e2e_contracts.py",
+    "process/stories/CR153-S01-event-research-time-pit-contracts-IMPLEMENTATION.md",
+    "process/returns/STORY-CR153-S01.CP6.return.json",
+    "process/evidence/CR153-S01.CP6.index.json"
+  ],
+  "do_not_modify": [
+    "engine/event_strategy_contracts.py",
+    "engine/strategy_admission_package.py",
+    "engine/strategy_admission_statistical_gate.py",
+    "engine/ml_strategy_admission_gate.py",
+    "process/stories/CR153-S02-event-study-method-test-slots-LLD.md",
+    "process/stories/CR153-S03-event-bias-risk-audit-slots-LLD.md",
+    "process/stories/CR153-S04-event-admission-gate-adapter-LLD.md",
+    "process/stories/CR153-S05-event-trace-evidence-wording.md"
+  ],
+  "implementation_contract": {
+    "summary": "Implement S01 event research time semantics and PIT/revision gate contract only.",
+    "required_semantics": [
+      "event_occurred_at, event_announced_at, event_available_at and decision_time are explicit independent fields.",
+      "event_available_at must not be inferred from occurred_at or announced_at.",
+      "event_available_at > decision_time is fail-closed BLOCKED.",
+      "missing event_available_at is fail-closed BLOCKED.",
+      "revision policy missing is BLOCKED unless an explicit N/A-with-reason path is provided; explicit N/A is at most NEEDS_REVIEW, never PASS.",
+      "mutable latest/current source references and nonzero forbidden operation counters are BLOCKED.",
+      "S01 must not implement S02 method/test-family/multiple-testing fields or S03 bias/CV/universe PIT fields."
+    ]
+  },
+  "verification_commands": [
+    "uv run --python 3.11 pytest -q tests/research/test_event_driven_strategy_e2e_contracts.py",
+    "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py tests/research/test_strategy_admission_statistical_gate.py",
+    "uv run --python 3.11 python -m py_compile engine/research_production_contracts.py"
+  ],
+  "expected_return": {
+    "return_ref": "process/returns/STORY-CR153-S01.CP6.return.json",
+    "evidence_ref": "process/evidence/CR153-S01.CP6.index.json",
+    "implementation_ref": "process/stories/CR153-S01-event-research-time-pit-contracts-IMPLEMENTATION.md"
+  }
+}

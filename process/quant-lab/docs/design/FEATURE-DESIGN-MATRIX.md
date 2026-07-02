@@ -1,6 +1,6 @@
 ---
 status: "ready-for-cp5-review"
-version: "1.15"
+version: "1.16"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld:
   - "docs/design/HLD.md"
@@ -8,7 +8,7 @@ source_hld:
 source_adr:
   - "docs/design/ARCHITECTURE-DECISION.md"
   - "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
-change: "CR-152"
+change: "CR-153"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 confirmed_by: ""
 confirmed_at: ""
@@ -36,6 +36,7 @@ confirmed_at: ""
 | 1.13 | 2026-06-28 | host-orchestrator | CP3 approved，AGA-1/3/5 确认 A1/C1/E1，pending-cp3 → confirmed-cp3。 |
 | 1.14 | 2026-07-01 | host-orchestrator | CR151 CP3 approved 后增补 Strategy Admission Statistical Gate CP4：FEAT-03 下新增统计准入门 Story 消费、`lld_policy`、DAG/Wave 和 Wave B deferred 边界。 |
 | 1.15 | 2026-07-02 | host-orchestrator | CR152 CP3 approved 后增补 ML Strategy E2E Framework CP4：FEAT-03 下新增 ML first-wave Story 消费、`lld_policy`、DAG/Wave、triple_barrier BLOCKED CP5 约束和 no-registry-write 边界。 |
+| 1.16 | 2026-07-02 | host-orchestrator | CR153 CP3 approved 后增补 Event-Driven Strategy E2E Framework CP4：FEAT-03 下新增事件研究 first-wave Story 消费、`lld_policy`、DAG/Wave、EV-GAP-7 multiple-testing slot、CR154 deferred 边界和 no-feed/no-runtime/no-store 边界。 |
 
 ## 适用性判定规则
 
@@ -170,6 +171,47 @@ confirmed_at: ""
 | CP5 triple_barrier enforcement 约束显式化 | PASS | S01 说明 + Later-Wave 边界 |
 | CP4 不授权实现、真实训练、真实数据、registry write 或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR152.yaml#authorization_boundary` |
 | CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR152.yaml#lld_design_batch` |
+
+## CR153 CP4 增量：Event-Driven Strategy E2E Framework
+
+> 来源：`process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md`、`process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md`、CP3 用户批准。CR153 归属 FEAT-03「研究数据集与多因子研究闭环」的 event-driven strategy first-wave foundation，不新增真实事件 feed、live listener、真实数据验证、event store/catalog/model registry write、production catalog pointer 或 runtime 授权。
+
+### Feature 归属与 lld_policy
+
+| Story ID | Owner Feature | feature_design_refs | lld_policy.required_level | trigger_reasons | CP5 设计证据 | 说明 |
+|---|---|---|---|---|---|---|
+| CR153-S01-event-research-time-pit-contracts | FEAT-03 | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | EventResearchSpec、三时间语义、EventRevisionPITGate、PIT/revision fail-closed | Story LLD | CP5 必须明确 `event_available_at > decision_time` 的 `BLOCKED` 行为；不得从 occurred/announced 推断 available。 |
+| CR153-S02-event-study-method-test-slots | FEAT-03 | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | estimation window、event window、normal return model、test family、EV-GAP-7 multiple-testing/data-snooping slot | Story LLD | `multiple_testing_or_data_snooping_slot` 必须包含 `family_id`、`tested_window_count`、`correction_method`、`adjusted_p_value`、`status`、`report_ref` 或 `n/a_reason`；算法仍 slot-only。CP5 LLD 必须声明 S02 只拥有 method/test family/multiple-testing 字段，不拥有 S03 bias/CV/universe 字段。 |
+| CR153-S03-event-bias-risk-audit-slots | FEAT-03 | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | overlap / cluster / endogeneity、event CV split audit、universe PIT audit、CR154 deferred refs | Story LLD | CR153 只做 machine-visible slot/status/ref/n/a reason；完整 CV/survivorship/capacity/impact/regime/reconciliation 归 CR154。CP5 LLD 必须声明 S03 只拥有 bias/CV/universe PIT audit 字段，不重定义 S02 method/test family/multiple-testing 字段。 |
+| CR153-S04-event-admission-gate-adapter | FEAT-03 / FEAT-07 safety boundary | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md`、`docs/features/runtime-authorization-safety/DESIGN.md` | full-lld | EventStrategyAdmissionGate、CR151/CR152 四态 status adapter、StrategyAdmissionPackage linkage、forbidden operation counters | Story LLD | Event gate PASS 不等于 feed/runtime/paper/live/broker/trading readiness。 |
+| CR153-S05-event-trace-evidence-wording | FEAT-03 / FEAT-08 | `docs/features/factor-research-loop/TEST-PLAN.md`、`TASKS.md` | technical-note | event -> signal -> target/order-intent trace metadata、CP6/CP7/CP8 evidence wording、no-runtime/no-order boundary | Story technical note | 只保留 trace refs 和 fixture/static wording；不得创建真实 order flow、event store、catalog 或 registry 写入。CP5 technical note 必须枚举精确 CR153 artifact target 或逐项 N/A，不得保留宽泛 release/docs owner。 |
+
+### CR153 First-Wave / Later-Wave 边界
+
+| 范围 | 状态 | 处理 |
+|---|---|---|
+| EventResearchSpec and three-time semantics | First wave | CR153 必做。 |
+| EventRevisionPITGate | First wave | CR153 必做；available-after-decision 必须 fail closed。 |
+| EventStudyMethodSpec | First wave | CR153 必做；estimation/event window 和 normal return model 必须结构化。 |
+| EventStudyTestReport slots | First wave | CR153 必做；test family / sample / p-value / adjusted p-value / refs 可机器读取。 |
+| Multiple testing / data snooping slot | First wave | CR153 必做；EV-GAP-7 明确进入 S02，不实现 White/Hansen/PBO/DSR 等算法。 |
+| Overlap / cluster / endogeneity slots | First wave | CR153 必做；status/refs/n/a reason，不实现完整校正算法。 |
+| Event CV and universe PIT audit slots | First wave slot only | CR153 保留 slot 和 split/audit refs；完整治理归 CR154。 |
+| EventStrategyAdmissionGate and adapter | First wave | CR153 必做；复用四态 admission 语义。 |
+| Event-to-signal/order-intent trace | First wave metadata only | CR153 只做 trace refs，不启动 runtime/order flow。 |
+| Full event statistics algorithms | Deferred | Patell / BMP / bootstrap / cluster robust / IV / PSM / matching 等后续 CR。 |
+| Live event feed / listener / paper OMS / broker adapter | Deferred and not authorized | Future runtime/storage authorization gate only。 |
+| Capacity / impact / regime / reconciliation | Deferred | CR154 或后续正式 CR。 |
+
+### CR153 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| CR153 Story 均有 FEAT-03 / FEAT-07 / FEAT-08 归属和 `lld_policy` | PASS | 本节 `Feature 归属与 lld_policy` |
+| 原始 EV-GAP-1..9 编号未被重解释 | PASS | HLD §11；本节保留 CR153 专属 Story，不改 EV-GAP 编号 |
+| EV-GAP-7 multiple testing / data snooping slot 显式化 | PASS | S02 说明 + First-Wave 边界 |
+| CP4 不授权实现、真实 feed/listener、真实数据、event store/catalog/model registry write 或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR153.yaml#authorization_boundary` |
+| CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR153.yaml#lld_design_batch` |
 
 ### CR151 Wave A / Wave B 边界
 

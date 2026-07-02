@@ -1,0 +1,220 @@
+schema_version: "1.0"
+status: ready_with_risk_approved
+release_artifact_profile: minimal
+release_decision: READY_WITH_RISK
+created_at: "2026-07-02T19:05:08+08:00"
+updated_at: "2026-07-02T23:10:00+08:00"
+approved_by: "user"
+approved_at: "2026-07-02T23:10:00+08:00"
+approval_result: "approved; DEC-CR153-CP8-001 accepted"
+source_gate: CP8
+
+release_scope:
+  current_version: "roadmap-draft-v0.5-cr152-ready-with-risk"
+  target_version: "roadmap-draft-v0.5-cr153-ready-with-risk"
+  included_features:
+    - "CR153 local/static/fixture Event-Driven Strategy E2E framework foundation"
+  included_stories:
+    - "CR153-S01 event research time semantics and revision PIT contracts"
+    - "CR153-S02 event study method, test family and multiple-testing slots"
+    - "CR153-S03 event bias, CV, universe PIT and CR154 deferred audit slots"
+    - "CR153-S04 event admission gate and shared admission package adapter"
+    - "CR153-S05 event-to-signal/order-intent trace and static evidence wording"
+  excluded_scope:
+    - "real event feed or live event listener"
+    - "real lake read/write, NAS access/sync/write/restore or provider fetch"
+    - "credential, .env, token, account or session read"
+    - "QMT, MiniQMT, xtquant, gateway, runtime, simulation, paper, live, trading or broker operation"
+    - "event store, feature store, label store, prediction store, catalog pointer or model registry write"
+    - "real order flow or real data validation"
+    - "external framework clone, install or run"
+    - "Git remote write"
+    - "production readiness, runtime readiness, trading readiness or registry publication claim"
+  user_visible_changes:
+    - "Event-driven strategy research now has local/static/fixture contracts for event time semantics, event study method evidence, test-family evidence, multiple-testing visibility and bias audit slots."
+    - "Event-specific admission gate links to the shared admission package with CR151/CR152-compatible four-state semantics while preserving no-runtime/no-trading authorization flags."
+    - "Event-to-signal/target/order-intent trace refs are explicitly metadata-only and do not imply real order flow."
+  internal_changes:
+    - "Added metadata-only event companion contracts under existing research and admission anchors."
+    - "Added 41 CR153 fixture tests and verified 22 CR151/CR152/admission package related regressions."
+    - "Recorded CR154 deferred scope for full event CV, survivorship-free universe gate, capacity/impact, regime, reconciliation and real feed/runtime/order governance."
+  breaking_changes: []
+  known_risks:
+    - "R-CR153-S01-001"
+    - "R-CR153-OVERCLAIM-001"
+    - "R-CR154-DEFERRED-001"
+
+version_decision:
+  current_version: "roadmap-draft-v0.5-cr152-ready-with-risk"
+  target_version: "roadmap-draft-v0.5-cr153-ready-with-risk"
+  change_type: "PATCH"
+  compatibility: "compatible"
+  reason: "CR153 adds local/static/fixture event-driven strategy contract capability and tests without install/deploy changes, external interface changes, runtime authorization, data migration or real release execution."
+
+quality_summary:
+  cp7_results:
+    - path: "process/checks/CP7-CR153-EVENT-DRIVEN-STRATEGY-E2E-VERIFICATION.result.json"
+      decision: "PASS_WITH_RISK"
+      effective_validation_mode: "static-fixture-only"
+      runtime_validation: "N/A; explicitly out_of_scope and not_authorized"
+      full_pytest_claimed: false
+      scoped_tests:
+        cr153_targeted: "41 passed"
+        cr151_cr152_related_regression: "22 passed"
+      wording_status: "current wording compliant; CP8 must preserve local/static/fixture-only and no readiness/publication claims"
+  test_report_path: "N/A - CR153 minimal profile uses CP7 result/evidence and scoped pytest as release readiness evidence"
+  review_path: "N/A - CP7 result/evidence index and static boundary scan are scoped review equivalents"
+  blocker_count: 0
+  high_count: 0
+  accepted_risk_ids:
+    - "DEC-CR153-CP8-001"
+  pending_risk_acceptance_ids: []
+  unresolved_findings:
+    - id: "R-CR153-S01-001"
+      severity: "low"
+      status: "non_blocking_audit_note"
+      summary: "S01 CP6 packet referenced a stale CR151 regression test path; the repository actual CR151 regression path passed in CP6 and CP7."
+      impact: "Audit hygiene note only; does not invalidate CR153 CP7 verification."
+    - id: "R-CR153-OVERCLAIM-001"
+      severity: "medium"
+      status: "accepted_risk"
+      summary: "Downstream release wording must not overstate CR153 as runtime/feed/trading/production ready."
+      impact: "Accepted in CP8; strict no-readiness wording remains required."
+    - id: "R-CR154-DEFERRED-001"
+      severity: "medium"
+      status: "accepted_risk"
+      summary: "Full event CV, survivorship-free universe gate, capacity/impact, regime, reconciliation and real feed/runtime/order governance remain deferred to CR154 or later CRs."
+      impact: "Accepted in CP8; CR153 remains a foundation contract capability, not full event runtime governance."
+
+affected_surface:
+  platforms:
+    - "local Python static/fixture validation only"
+  components:
+    - "engine/research_production_contracts.py"
+    - "engine/event_strategy_contracts.py"
+    - "engine/event_strategy_admission_gate.py"
+    - "engine/strategy_admission_package.py"
+    - "tests/research/test_event_driven_strategy_e2e_contracts.py"
+  install_scopes: []
+  config_changes: []
+  permission_changes: []
+  migration_required: false
+  external_interfaces: []
+  state_schema_changes: []
+  command_parameter_changes: []
+
+install_validation_summary:
+  commands:
+    - "uv run --python 3.11 pytest -q tests/research/test_event_driven_strategy_e2e_contracts.py"
+    - "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py tests/test_cr151_strategy_admission_statistical_gate.py tests/research/test_strategy_admission_package.py"
+    - "uv run --python 3.11 python -m py_compile engine/research_production_contracts.py engine/event_strategy_contracts.py engine/event_strategy_admission_gate.py engine/strategy_admission_package.py"
+    - "git diff --check"
+  results:
+    - "PASS: 41 CR153 targeted fixture tests passed"
+    - "PASS: 22 CR151/CR152/admission package related regression tests passed"
+    - "PASS: py_compile no output"
+    - "PASS: git diff --check no output"
+  log_paths:
+    - "process/evidence/CR153-CP7-VERIFICATION.index.json#commands"
+  skipped_with_reason:
+    - "No install, deployment, migration, package publish, runtime launch, event feed/listener, registry/store/catalog write, real order flow or external interface is in CR153 scope."
+
+release_documents:
+  release_notes:
+    path: "process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.summary.md"
+    status: "scoped-summary"
+    na_reason: "Minimal profile uses CR153 scoped CP8 summary instead of updating unversioned docs/release files."
+  deploy_checklist:
+    path: "N/A"
+    status: "not-applicable"
+    na_reason: "No install, deploy, package publish, runtime launch, external interface or release execution is authorized."
+  rollback:
+    path: "N/A"
+    status: "not-applicable"
+    na_reason: "No runtime write, migration, catalog mutation, deployment, registry publication or external release action is performed."
+  migration:
+    path: "N/A"
+    status: "not-applicable"
+    na_reason: "No state schema migration, template migration, config migration, install path migration, frontmatter migration, command parameter migration or data migration is authorized."
+  feedback:
+    path: "process/checkpoints/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.md#cp8-后续跟踪分流表"
+    status: "scoped-summary"
+    na_reason: "Follow-up is limited to CR154/deferred governance and no-overclaim observation items."
+
+non_authorized_items:
+  - id: "NA-CR153-001"
+    operation: "true release execution, publish, production deployment or live enablement"
+    reason: "CP8 readiness does not execute a real release or production operation."
+    required_authorization: "separate explicit user authorization"
+  - id: "NA-CR153-002"
+    operation: "real event feed, provider subscription, live listener or external data fetch"
+    reason: "CR153 validates local/static/fixture contract semantics only."
+    required_authorization: "separate runtime/data authorization CR"
+  - id: "NA-CR153-003"
+    operation: "real lake/NAS/provider access or credential/.env/session read"
+    reason: "No external data source, NAS path or secret is required for CP8 readiness."
+    required_authorization: "separate high-risk data/credential gate"
+  - id: "NA-CR153-004"
+    operation: "QMT/MiniQMT/xtquant/runtime/simulation/paper/live/trading/broker operation"
+    reason: "Event admission and order-intent trace are metadata-only contracts, not runtime authorization."
+    required_authorization: "separate runtime/trading authorization"
+  - id: "NA-CR153-005"
+    operation: "event store, feature store, label store, prediction store, catalog pointer or model registry write"
+    reason: "CR153 first wave implements contract slots and evidence refs only."
+    required_authorization: "separate data governance and write gate"
+  - id: "NA-CR153-006"
+    operation: "real order flow, real data validation, external framework clone/install/run or Git remote write"
+    reason: "No order/data/external framework/repository write action is in scope."
+    required_authorization: "separate explicit user approval"
+
+forbidden_release_claims:
+  effective_validation_mode: "static-fixture-only"
+  full_pytest_passed: false
+  real_event_alpha: false
+  real_model_performance: false
+  real_feed_quality: false
+  production_ready: false
+  runtime_ready: false
+  paper_live_trading_ready: false
+  registry_published: false
+  real_order_flow: false
+
+follow_up_summary:
+  observation_items:
+    - "If future CRs need real event feed, real runtime, real order flow or registry publication, require new CP2/runtime authorization and do not reuse CR153 CP8 approval."
+    - "CP8 release wording must continue to say local/static/fixture contract capability, not production-ready event alpha."
+  feedback_items:
+    - "R-CR153-S01-001 remains a non-blocking audit note about stale packet path hygiene."
+    - "R-CR153-OVERCLAIM-001 and R-CR154-DEFERRED-001 were accepted in DEC-CR153-CP8-001."
+  follow_up_candidates:
+    - id: "CR154"
+      status: "planned_or_future_cr"
+      summary: "Full event CV, survivorship-free universe gate, capacity/impact, regime, reconciliation and real feed/runtime/order governance."
+      tracking_ref: "future CR154 or later scoped CR; not created by this CP8 task"
+    - id: "R-CR153-S01-001"
+      status: "non_blocking_audit_note"
+      summary: "Stale S01 packet path was mitigated by running actual repository regression path."
+      tracking_ref: "process/evidence/CR153-CP7-VERIFICATION.index.json#risks[0]"
+  risk_acceptance_items:
+    - id: "DEC-CR153-CP8-001"
+      decision_type: "risk_acceptance"
+      status: "accepted_by_user"
+      recommended_release_decision: "READY_WITH_RISK"
+      risk_ids:
+        - "R-CR153-OVERCLAIM-001"
+        - "R-CR154-DEFERRED-001"
+      audit_note_ids:
+        - "R-CR153-S01-001"
+      recommended_outcome: "Accept CP7 PASS_WITH_RISK and close CR153 local/static/fixture Event-Driven Strategy E2E framework foundation as READY_WITH_RISK."
+      reject_route: "CR153_NOT_READY_OR_RETURN_TO_CP7_OR_DESIGN_CLARIFICATION"
+
+token_control:
+  default_read_mode: capsule-first
+  copied_long_text: false
+  allowed_payload: "summary, count, risk id, decision id, evidence path"
+  release_artifact_profile_reason: "minimal because CR153 is local/static/fixture-only contract capability with no install, deploy, migration, external interface, runtime authorization or real release action."
+  full_doc_read_triggers:
+    - missing_capsule_field
+    - unreadable_evidence_path
+    - conflicting_conclusion
+    - user_requested_deep_review

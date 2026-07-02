@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "story_id": "CR153-S02-event-study-method-test-slots",
+  "cr_id": "CR-153",
+  "stage": "CP6",
+  "return_ref": "process/returns/STORY-CR153-S02.CP6.return.json",
+  "implementation_ref": "process/stories/CR153-S02-event-study-method-test-slots-IMPLEMENTATION.md",
+  "context_ref": "process/context/stories/CR153-S02-event-study-method-test-slots.CP6.work-packet.json",
+  "source_design_evidence_ref": "process/stories/CR153-S02-event-study-method-test-slots-LLD.md",
+  "changed_files": [
+    {
+      "path": "engine/event_strategy_contracts.py",
+      "change_type": "created",
+      "summary": "Added metadata-only event study method/test/multiple-testing contracts, JSON-safe serialization, validation issues, forbidden operation counters and fail-closed validators."
+    },
+    {
+      "path": "tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "change_type": "modified",
+      "summary": "Appended S02 fixture tests while preserving existing S01 tests."
+    },
+    {
+      "path": "process/stories/CR153-S02-event-study-method-test-slots-IMPLEMENTATION.md",
+      "change_type": "created",
+      "summary": "Implementation handoff and verification record."
+    },
+    {
+      "path": "process/returns/STORY-CR153-S02.CP6.return.json",
+      "change_type": "created",
+      "summary": "CP6 Story return packet."
+    },
+    {
+      "path": "process/evidence/CR153-S02.CP6.index.json",
+      "change_type": "created",
+      "summary": "CP6 evidence index."
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "result": "pass",
+      "summary": "20 passed in 0.45s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py tests/test_cr151_strategy_admission_statistical_gate.py",
+      "result": "pass",
+      "summary": "15 passed in 0.44s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/event_strategy_contracts.py",
+      "result": "pass",
+      "summary": "py_compile passed"
+    },
+    {
+      "command": "git diff --check -- engine/event_strategy_contracts.py tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "result": "pass",
+      "summary": "No whitespace errors reported."
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/research/test_event_driven_strategy_e2e_contracts.py",
+      "cases": 20,
+      "result": "pass",
+      "covered_contracts": [
+        "S01 event research time/PIT regression",
+        "S02 EventStudyMethodSpec method/window/normal model/return horizon slots",
+        "S02 Patell/BMP/generalized sign/rank/bootstrap test family slots",
+        "S02 EV-GAP-7 multiple-testing/data-snooping slot mandatory fields",
+        "S02 invalid p-value and report_ref/n_a_reason fail-closed behavior",
+        "S02 deferred White Reality Check active implementation claim BLOCKED",
+        "S02 forbidden operation counters nonzero BLOCKED",
+        "S02/S03 field partition"
+      ]
+    },
+    {
+      "path": "tests/research/test_ml_strategy_e2e_contracts.py",
+      "result": "pass",
+      "covered_contracts": [
+        "CR152 ML companion contract regression"
+      ]
+    },
+    {
+      "path": "tests/test_cr151_strategy_admission_statistical_gate.py",
+      "result": "pass",
+      "covered_contracts": [
+        "CR151 statistical admission gate regression"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "process/stories/CR153-S02-event-study-method-test-slots-IMPLEMENTATION.md",
+      "type": "implementation_handoff"
+    },
+    {
+      "path": "process/returns/STORY-CR153-S02.CP6.return.json",
+      "type": "story_return_packet"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_event_feed_touched": false,
+    "real_lake_or_nas_touched": false,
+    "provider_fetch_executed": false,
+    "qmt_runtime_executed": false,
+    "broker_or_order_flow_executed": false,
+    "event_store_catalog_registry_write_executed": false,
+    "real_data_validation_executed": false,
+    "external_framework_executed": false,
+    "git_remote_write_executed": false
+  },
+  "risks": [],
+  "waivers": [],
+  "design_delta_ref": null
+}
