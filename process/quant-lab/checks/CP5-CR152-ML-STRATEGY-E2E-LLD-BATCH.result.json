@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP5",
+  "checkpoint_id": "CP5-CR152-ML-STRATEGY-E2E-LLD-BATCH",
+  "profile": "batch-auto-then-manual",
+  "story_id": null,
+  "cr_id": "CR-152",
+  "checked_at": "2026-07-02T10:37:00+08:00",
+  "context_ref": "process/context/CP5-CR152-ML-STRATEGY-E2E-CONTEXT.yaml",
+  "dispatch_refs": [
+    "host-orchestrator-inline:cp5-design-evidence-prep"
+  ],
+  "evidence_ref": "process/checkpoints/CP5-CR152-ML-STRATEGY-E2E-LLD-BATCH.md",
+  "items": [
+    {
+      "id": "CP5-CR152-01",
+      "category": "design-evidence",
+      "name": "All target Story design evidence exists and is ready for review",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/CR152-S01-pit-feature-label-contracts-LLD.md",
+        "process/stories/CR152-S02-purged-embargo-cv-fixture-contract-LLD.md",
+        "process/stories/CR152-S03-training-model-prediction-metadata-LLD.md",
+        "process/stories/CR152-S04-ml-admission-gate-adapter-LLD.md",
+        "process/stories/CR152-S05-static-evidence-release-wording.md#技术说明"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S01-S04 are full-lld; S05 is technical-note in the Story card."
+    },
+    {
+      "id": "CP5-CR152-02",
+      "category": "traceability",
+      "name": "Design evidence maps to CP3-approved HLD / ADR and Feature Matrix",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md",
+        "process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md",
+        "process/STORY-BACKLOG-CR152.md",
+        "process/DEVELOPMENT-PLAN-CR152.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "PIT/label, purged CV, metadata, ML gate adapter and evidence wording are covered."
+    },
+    {
+      "id": "CP5-CR152-03",
+      "category": "clarification",
+      "name": "Known CP5 focus items are resolved or routed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/CR152-S01-pit-feature-label-contracts-LLD.md#5-数据模型与持久化设计",
+        "process/stories/CR152-S04-ml-admission-gate-adapter-LLD.md#8-技术设计细节"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Active triple_barrier is BLOCKED in first wave; S04 records inline-fallback for CP5 evidence and requires design reopen/meta-se dispatch if implementation finds ambiguity."
+    },
+    {
+      "id": "CP5-CR152-04",
+      "category": "authorization-boundary",
+      "name": "CP5 approval would authorize local static fixture implementation only",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP5-CR152-ML-STRATEGY-E2E-LLD-BATCH.md#不授权项",
+        "process/context/CP5-CR152-ML-STRATEGY-E2E-CONTEXT.yaml#scope_boundary",
+        "process/DEVELOPMENT-PLAN-CR152.yaml#authorization_boundary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Real training, real data validation, registry/store/catalog writes, runtime, lake/NAS/provider/broker/credential/external framework/Git remote remain unauthorized."
+    },
+    {
+      "id": "CP5-CR152-05",
+      "category": "manual-gate",
+      "name": "Manual checkpoint draft and launch message are generated",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP5-CR152-ML-STRATEGY-E2E-LLD-BATCH.md",
+        "process/checks/CP5-CR152-HUMAN-GATE-LAUNCH-MESSAGE.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Human gate is pending user approve / modification / reject."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260702T103700+0800-CR152-S01-FULL-LLD",
+    "RE-20260702T103700+0800-CR152-S02-FULL-LLD",
+    "RE-20260702T103700+0800-CR152-S03-FULL-LLD",
+    "RE-20260702T103700+0800-CR152-S04-FULL-LLD"
+  ],
+  "manual_gate_status": "pending",
+  "pending_human_decisions": [
+    {
+      "decision_id": "DQ-CP5-CR152-001",
+      "decision_type": "implementation",
+      "status": "pending_user",
+      "question": "Confirm CR152 S01-S04 full LLDs and S05 technical-note as implementation inputs?",
+      "recommended_option": "Approve the full CP5 design evidence batch and proceed only to local/static/fixture implementation after approval.",
+      "source_ref": "process/checkpoints/CP5-CR152-ML-STRATEGY-E2E-LLD-BATCH.md#待人工决策清单"
+    },
+    {
+      "decision_id": "DQ-CP5-CR152-002",
+      "decision_type": "implementation",
+      "status": "pending_user",
+      "question": "Accept CR152 implementation sequencing and file ownership?",
+      "recommended_option": "Accept S01 -> S02 -> S03 -> S04 -> S05 sequencing; keep shared files serialized by merge owner.",
+      "source_ref": "process/checkpoints/CP5-CR152-ML-STRATEGY-E2E-LLD-BATCH.md#待人工决策清单"
+    },
+    {
+      "decision_id": "DQ-CP5-CR152-003",
+      "decision_type": "implementation",
+      "status": "pending_user",
+      "question": "Accept exact first-wave enforcement for active triple_barrier / meta_label methods?",
+      "recommended_option": "Return BLOCKED when triple_barrier or meta_label is active in first wave because algorithms are reserved but not implemented.",
+      "source_ref": "process/stories/CR152-S01-pit-feature-label-contracts-LLD.md#5-数据模型与持久化设计"
+    },
+    {
+      "decision_id": "DQ-CP5-CR152-004",
+      "decision_type": "security",
+      "status": "pending_user",
+      "question": "Keep CP5 approval limited to local/static/fixture source implementation and tests?",
+      "recommended_option": "Do not authorize real training, real data validation, registry/store/catalog writes, lake/NAS/provider/QMT/runtime/broker/credential/external framework/Git remote operations.",
+      "source_ref": "process/checkpoints/CP5-CR152-ML-STRATEGY-E2E-LLD-BATCH.md#不授权项"
+    }
+  ],
+  "decision": "PASS",
+  "next_route": "CP5_MANUAL_REVIEW",
+  "summary": {
+    "story_count": 5,
+    "full_lld_count": 4,
+    "technical_note_count": 1,
+    "waived_count": 0,
+    "per_story_auto_pass": 5,
+    "blocking_clarifications": 0,
+    "manual_decision_items": 4,
+    "implementation_allowed": false,
+    "runtime_authorization_allowed": false,
+    "model_registry_write_authorized": false
+  }
+}

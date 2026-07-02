@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_verify_packet",
+  "stage": "CP7",
+  "created_at": "2026-07-02T12:38:36+08:00",
+  "created_by": "host-orchestrator",
+  "project_id": "quant-lab",
+  "cr_id": "CR-152",
+  "batch_id": "CR152-ML-STRATEGY-E2E",
+  "story_id": "CR152-S01..S05",
+  "story_refs": [
+    "process/stories/CR152-S01-pit-feature-label-contracts.md",
+    "process/stories/CR152-S02-purged-embargo-cv-fixture-contract.md",
+    "process/stories/CR152-S03-training-model-prediction-metadata.md",
+    "process/stories/CR152-S04-ml-admission-gate-adapter.md",
+    "process/stories/CR152-S05-static-evidence-release-wording.md"
+  ],
+  "design_evidence_refs": [
+    "process/stories/CR152-S01-pit-feature-label-contracts-LLD.md",
+    "process/stories/CR152-S02-purged-embargo-cv-fixture-contract-LLD.md",
+    "process/stories/CR152-S03-training-model-prediction-metadata-LLD.md",
+    "process/stories/CR152-S04-ml-admission-gate-adapter-LLD.md",
+    "process/stories/CR152-S05-static-evidence-release-wording.md"
+  ],
+  "implementation_result_ref": "process/checks/CP6-CR152-ML-STRATEGY-E2E-IMPLEMENTATION.result.json",
+  "implementation_evidence_ref": "process/evidence/CR152-CP6-IMPLEMENTATION.index.json",
+  "expected_return_packet": "process/returns/CR152-ML-STRATEGY-E2E.CP7.return.json",
+  "expected_evidence_index_ref": "process/evidence/CR152-CP7-VERIFICATION.index.json",
+  "effective_validation_mode": "static-fixture-only",
+  "objective": {
+    "summary": "Verify CR152 ML Strategy E2E first-wave local/static/fixture implementation against CP5-approved design.",
+    "non_goals": [
+      "full pytest pass claim",
+      "real model training",
+      "real data validation",
+      "model registry write",
+      "runtime/trading/broker validation",
+      "lake/NAS/provider/credential access"
+    ]
+  },
+  "acceptance_criteria": [
+    {
+      "id": "AC-CR152-01",
+      "criterion": "PIT feature matrix, label policy and metadata contracts serialize and validate local fixture payloads.",
+      "source_ref": "process/stories/CR152-S01-pit-feature-label-contracts-LLD.md",
+      "status": "covered"
+    },
+    {
+      "id": "AC-CR152-02",
+      "criterion": "Active triple_barrier and meta_label are BLOCKED in first wave.",
+      "source_ref": "process/stories/CR152-S01-pit-feature-label-contracts-LLD.md",
+      "status": "covered"
+    },
+    {
+      "id": "AC-CR152-03",
+      "criterion": "Purged/embargo CV detects overlap and short-gap violations.",
+      "source_ref": "process/stories/CR152-S02-purged-embargo-cv-fixture-contract-LLD.md",
+      "status": "covered"
+    },
+    {
+      "id": "AC-CR152-04",
+      "criterion": "Model metadata remains metadata-only and forbidden registry/store/catalog counters block.",
+      "source_ref": "process/stories/CR152-S03-training-model-prediction-metadata-LLD.md",
+      "status": "covered"
+    },
+    {
+      "id": "AC-CR152-05",
+      "criterion": "ML admission gate adapter maps four-state status and preserves runtime authorization flags.",
+      "source_ref": "process/stories/CR152-S04-ml-admission-gate-adapter-LLD.md",
+      "status": "covered"
+    },
+    {
+      "id": "AC-CR152-06",
+      "criterion": "Evidence and release wording remain contract semantics only and do not claim real model performance or runtime readiness.",
+      "source_ref": "process/stories/CR152-S05-static-evidence-release-wording.md",
+      "status": "covered_with_cp8_followup"
+    }
+  ],
+  "verification_plan": [
+    {
+      "id": "VP-CR152-01",
+      "method": "py_compile",
+      "command_ref": "process/evidence/CR152-CP7-VERIFICATION.index.json#commands[0]",
+      "checks": ["syntax and importability"]
+    },
+    {
+      "id": "VP-CR152-02",
+      "method": "pytest",
+      "command_ref": "process/evidence/CR152-CP7-VERIFICATION.index.json#commands[1]",
+      "checks": ["CR152 fixture contract tests"]
+    },
+    {
+      "id": "VP-CR152-03",
+      "method": "pytest-regression",
+      "command_ref": "process/evidence/CR152-CP7-VERIFICATION.index.json#commands[2]",
+      "checks": ["CR151/CR152 related regression"]
+    },
+    {
+      "id": "VP-CR152-04",
+      "method": "static-boundary-review",
+      "command_ref": "process/evidence/CR152-CP7-VERIFICATION.index.json#boundary_check",
+      "checks": ["no real training", "no registry write", "no runtime", "no credentials"]
+    },
+    {
+      "id": "VP-CR152-05",
+      "method": "scope-out-probe",
+      "command_ref": "process/evidence/CR152-CP7-VERIFICATION.index.json#commands[4]",
+      "checks": ["taxonomy/provenance failure tracked as FU-CR152-001, not CR152 blocker"]
+    }
+  ],
+  "test_refs": [
+    "tests/research/test_ml_strategy_e2e_contracts.py::test_cr152_fixed_window_contracts_pass_static_fixture",
+    "tests/research/test_ml_strategy_e2e_contracts.py::test_cr152_reserved_label_methods_are_blocked_not_needs_review",
+    "tests/research/test_ml_strategy_e2e_contracts.py::test_cr152_purged_embargo_cv_blocks_overlap_and_short_gap",
+    "tests/research/test_ml_strategy_e2e_contracts.py::test_cr152_metadata_contracts_are_metadata_only_and_block_forbidden_counters",
+    "tests/research/test_ml_strategy_e2e_contracts.py::test_cr152_ml_gate_adapter_preserves_runtime_authorization_flags"
+  ],
+  "design_contract_refs": [
+    {
+      "source_ref": "process/stories/CR152-S01-pit-feature-label-contracts-LLD.md",
+      "contract": "MLPITFeatureMatrixContract / MLLabelPolicySpec",
+      "status": "covered"
+    },
+    {
+      "source_ref": "process/stories/CR152-S02-purged-embargo-cv-fixture-contract-LLD.md",
+      "contract": "MLPurgedEmbargoCVPolicy",
+      "status": "covered"
+    },
+    {
+      "source_ref": "process/stories/CR152-S03-training-model-prediction-metadata-LLD.md",
+      "contract": "ML metadata-only companions and forbidden counters",
+      "status": "covered"
+    },
+    {
+      "source_ref": "process/stories/CR152-S04-ml-admission-gate-adapter-LLD.md",
+      "contract": "ML admission gate and adapter linkage",
+      "status": "covered"
+    },
+    {
+      "source_ref": "process/stories/CR152-S05-static-evidence-release-wording.md",
+      "contract": "static evidence and release wording",
+      "status": "covered_with_cp8_followup"
+    }
+  ],
+  "known_scope_out_risks": [
+    {
+      "id": "CR152-CP7-R01-TEST-TAXONOMY-PROVENANCE-HYGIENE",
+      "follow_up_ref": "FU-CR152-001",
+      "blocking": false
+    }
+  ],
+  "allowed_write_paths": [
+    "process/context/stories/CR152-ML-STRATEGY-E2E.CP7.verify-packet.json",
+    "process/evidence/CR152-CP7-VERIFICATION.index.json",
+    "process/returns/CR152-ML-STRATEGY-E2E.CP7.return.json",
+    "process/checks/CP7-CR152-ML-STRATEGY-E2E-VERIFICATION.result.json",
+    "process/checks/CP7-CR152-ML-STRATEGY-E2E-VERIFICATION.result.summary.md",
+    "process/changes/CR-152.md",
+    "process/changes/CR-152-FOLLOW-UP-TRACKING-2026-07-02.md",
+    "process/changes/CR-INDEX.yaml"
+  ],
+  "forbidden_write_paths": [
+    "tests/test_cr150_multifactor_framework_completion.py",
+    "tests/test_cr151_strategy_admission_statistical_gate.py",
+    "tests/PROVENANCE.yaml",
+    "scripts/check_design_surface.py",
+    "scripts/check_process_artifact_hygiene.py"
+  ]
+}

@@ -1,0 +1,230 @@
+schema_version: "1.0"
+status: approved_ready_with_risk
+release_artifact_profile: minimal
+release_decision: READY_WITH_RISK
+created_at: "2026-07-02T13:53:21+08:00"
+updated_at: "2026-07-02T14:31:40+08:00"
+approved_by: "user"
+approved_at: "2026-07-02T14:31:40+08:00"
+approval_result: "CP8 approved; CR152 current delivery closed as READY_WITH_RISK"
+source_gate: CP8
+
+release_scope:
+  current_version: "roadmap-draft-v0.5-cr151-ready-with-risk"
+  target_version: "roadmap-draft-v0.5-cr152-ready-with-risk"
+  included_features:
+    - "CR152 local/static/fixture Machine Learning Strategy E2E first-wave framework foundation"
+  included_stories:
+    - "CR152-S01 PIT feature and label policy contracts"
+    - "CR152-S02 purged and embargo CV fixture contract"
+    - "CR152-S03 training snapshot, model artifact and prediction metadata companions"
+    - "CR152-S04 ML admission gate adapter"
+    - "CR152-S05 static evidence and release wording"
+  excluded_scope:
+    - "real model training"
+    - "real data validation"
+    - "model registry write, publish, promote, upload or set_current"
+    - "feature store, label store, model store or prediction store write"
+    - "catalog pointer mutation"
+    - "real lake read or write"
+    - "NAS sync, write, restore or metadata normalization"
+    - "provider fetch"
+    - "credential or .env read"
+    - "QMT, MiniQMT, xtquant or gateway runtime"
+    - "simulation, paper, live, trading or broker operation"
+    - "Git remote write"
+    - "external framework clone, install or run"
+  user_visible_changes:
+    - "Machine-learning strategy research now has local/static/fixture contracts for PIT feature matrices, label policy, purged/embargo CV, model metadata and ML admission linkage."
+    - "Reserved triple_barrier and meta_label label methods fail closed as BLOCKED in the first wave."
+    - "ML admission gate evidence links to the admission package using CR151-compatible four-state semantics without changing runtime authorization flags."
+  internal_changes:
+    - "Extended existing research production contracts instead of creating parallel contract roots."
+    - "Added metadata-only companions for training/model/prediction artifacts with forbidden operation counters."
+    - "Added local fixture tests for CR152 first-wave scope."
+    - "Added CP7 evidence and FU-CR152-001 follow-up tracking for taxonomy/provenance hygiene."
+  breaking_changes: []
+  known_risks:
+    - "CR152-CP7-R01-TEST-TAXONOMY-PROVENANCE-HYGIENE"
+    - "CR151-CP8-R03-STATE-V2-HYGIENE"
+
+version_decision:
+  current_version: "roadmap-draft-v0.5-cr151-ready-with-risk"
+  target_version: "roadmap-draft-v0.5-cr152-ready-with-risk"
+  change_type: "PATCH"
+  compatibility: "compatible"
+  reason: "CR152 adds local/static/fixture ML strategy framework contracts and tests. It does not authorize production runtime, external interfaces, install path changes, state schema migration, real training, real data validation or data operations."
+
+quality_summary:
+  cp7_results:
+    - path: "process/checks/CP7-CR152-ML-STRATEGY-E2E-VERIFICATION.result.json"
+      decision: "PASS_WITH_RISK"
+      effective_validation_mode: "static-fixture-only"
+      runtime_validation: "N/A; explicitly out_of_scope and not_authorized"
+      full_pytest_claimed: false
+      scoped_tests:
+        cr152_targeted: "5 passed"
+        cr151_cr152_related_regression: "34 passed"
+      wording_status: "current wording compliant; CP8 must preserve static-fixture-only and forbidden readiness claims"
+  test_report_path: "N/A - CR152 CP7 result/evidence and scoped pytest are release readiness evidence for minimal profile"
+  review_path: "N/A - CP7 result/evidence index and static boundary scan are scoped review equivalents"
+  blocker_count: 0
+  high_count: 0
+  accepted_risk_ids:
+    - "CR151-CP8-R03-STATE-V2-HYGIENE"
+    - "CR152-CP7-R01-TEST-TAXONOMY-PROVENANCE-HYGIENE"
+  pending_risk_acceptance_ids: []
+  unresolved_findings:
+    - id: "CR152-CP7-R01-TEST-TAXONOMY-PROVENANCE-HYGIENE"
+      severity: "low"
+      status: "accepted_by_user_as_follow_up_candidate"
+      follow_up_ref: "FU-CR152-001"
+      summary: "Full-suite pytest is not claimed because test taxonomy/provenance hygiene remains outside CR152 owner scope."
+      impact: "Scope-out process/test layout caveat only. It does not invalidate CR152 static-fixture-only verification evidence."
+    - id: "CR151-CP8-R03-STATE-V2-HYGIENE"
+      severity: "medium"
+      status: "accepted_process_caveat"
+      summary: "STATE v2 hygiene remains accepted from CR151 and is not expanded in CR152 CP8."
+      impact: "Process readiness caveat only. It does not invalidate CR152 source implementation or static-fixture evidence."
+
+affected_surface:
+  platforms:
+    - "local Python static/fixture validation only"
+  components:
+    - "engine/research_production_contracts.py"
+    - "engine/training_snapshot_contract.py"
+    - "engine/research_manifest.py"
+    - "engine/ml_strategy_admission_gate.py"
+    - "engine/strategy_admission_package.py"
+    - "tests/research/test_ml_strategy_e2e_contracts.py"
+  install_scopes: []
+  config_changes: []
+  permission_changes: []
+  migration_required: false
+  external_interfaces: []
+  state_schema_changes:
+    - "No CR152 source-level state schema migration. Existing STATE v2 hygiene caveat remains accepted and deferred."
+  command_parameter_changes: []
+
+install_validation_summary:
+  commands:
+    - "uv run --python 3.11 python -m py_compile engine/research_production_contracts.py engine/training_snapshot_contract.py engine/research_manifest.py engine/ml_strategy_admission_gate.py engine/strategy_admission_package.py tests/research/test_ml_strategy_e2e_contracts.py"
+    - "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py"
+    - "uv run --python 3.11 pytest -q tests/research/test_research_production_contracts.py tests/research/test_strategy_admission_package.py tests/test_cr151_strategy_admission_statistical_gate.py tests/research/test_ml_strategy_e2e_contracts.py"
+    - "uv run --python 3.11 pytest -q tests/meta_flow/test_test_file_taxonomy.py"
+    - "git diff --check"
+    - "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab"
+    - "uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab"
+    - "uv run --python 3.11 meta-flow workspace git-status --project-root /home/hyde/workspace/quant-lab"
+  results:
+    - "PASS: py_compile no output"
+    - "PASS: 5 CR152 targeted tests passed"
+    - "PASS: 34 CR151/CR152 related regression tests passed"
+    - "EXPECTED SCOPE-OUT FAIL: taxonomy/provenance hygiene tracked as FU-CR152-001; not counted as CR152 blocker"
+    - "PASS: git diff --check no output"
+    - "PASS: process_link_health ok; artifact_git_dirty dirty due generated CR152 process evidence"
+    - "PASS: active formal CRs = CR-152; blocked formal CRs = none; historical warnings remain"
+    - "PASS: project repo dirty, artifact repo dirty, both ahead=0 and behind=0"
+  log_paths:
+    - "current-session-command-output"
+  skipped_with_reason:
+    - "No install, deployment, package publish, runtime launch, model training, registry write or data operation is in CR152 scope."
+
+release_documents:
+  release_notes:
+    path: "process/checks/CP8-CR152-ML-STRATEGY-E2E-RELEASE-READINESS.result.summary.md"
+    status: "scoped-summary"
+    na_reason: "Minimal profile uses CR152 scoped CP8 summary instead of updating unversioned docs/release files."
+  deploy_checklist:
+    path: "N/A"
+    status: "not-applicable"
+    na_reason: "No install or deployment action is authorized."
+  rollback:
+    path: "N/A"
+    status: "not-applicable"
+    na_reason: "No runtime write, migration, catalog mutation, deployment, registry publication or external release action is performed."
+  migration:
+    path: "N/A"
+    status: "not-applicable"
+    na_reason: "No state schema migration, template migration, config migration, install path migration, frontmatter migration, command parameter migration or data migration is authorized."
+  feedback:
+    path: "process/checkpoints/CP8-CR152-DELIVERY-READINESS.md#cp8-后续跟踪分流表"
+    status: "scoped-summary"
+    na_reason: "Follow-up is limited to FU-CR152-001 and deferred hygiene/governance candidates."
+
+non_authorized_items:
+  - id: "NA-CR152-001"
+    operation: "real model training or real data validation"
+    reason: "CR152 is local/static/fixture-only and validates contract semantics, not model performance."
+    required_authorization: "separate CR and explicit runtime/data authorization"
+  - id: "NA-CR152-002"
+    operation: "model registry write, publish, promote, upload or set_current"
+    reason: "CR152 first wave implements metadata contract only."
+    required_authorization: "separate registry governance decision and runtime/write authorization"
+  - id: "NA-CR152-003"
+    operation: "feature store, label store, model store, prediction store or catalog pointer mutation"
+    reason: "No persistent production store write is in scope."
+    required_authorization: "separate data governance and write gate"
+  - id: "NA-CR152-004"
+    operation: "real lake read/write, NAS operation, provider fetch or credential read"
+    reason: "No external data source or secret is required for CR152 CP8 readiness."
+    required_authorization: "separate high-risk gate"
+  - id: "NA-CR152-005"
+    operation: "QMT, MiniQMT, xtquant, gateway, simulation, paper, live, trading or broker operation"
+    reason: "CP7/CP8 evidence is static-fixture-only and does not prove runtime capability."
+    required_authorization: "separate runtime/trading authorization"
+  - id: "NA-CR152-006"
+    operation: "Git remote write or external framework clone/install/run"
+    reason: "CP8 readiness does not publish, push, install dependencies or execute external frameworks."
+    required_authorization: "separate explicit user approval"
+
+forbidden_release_claims:
+  effective_validation_mode: "static-fixture-only"
+  full_pytest_passed: false
+  real_model_performance: false
+  production_ready: false
+  registry_published: false
+  runtime_ready: false
+  trading_ready: false
+  broker_ready: false
+
+follow_up_summary:
+  observation_items:
+    - "If future CRs need real ML training, real data validation, registry publication or runtime strategy execution, require new CP2/runtime authorization and do not reuse CR152 CP8 approval."
+  feedback_items:
+    - "taxonomy/provenance hygiene remains a separate follow-up candidate and is not part of CR152 readiness approval."
+  follow_up_candidates:
+    - id: "FU-CR152-001"
+      status: "candidate"
+      summary: "Move historical root-level CR150/CR151 tests under tests/research and complete tests/PROVENANCE.yaml coverage, only after explicit user authorization."
+      tracking_ref: "process/changes/CR-152-FOLLOW-UP-TRACKING-2026-07-02.md"
+    - id: "CR151-CP8-R03-STATE-V2-HYGIENE"
+      status: "accepted_process_caveat"
+      summary: "STATE.current.json/STATE.md slimming remains accepted from CR151 and should be handled as separate process hygiene."
+    - id: "CR-INDEX-LEGACY-WARNINGS"
+      status: "candidate"
+      summary: "Historical status/lifecycle mismatch and follow-up index warnings remain governance hygiene, not a CR152 blocker."
+    - id: "CR153"
+      status: "planned"
+      summary: "Event-driven strategy E2E framework foundation after CR152 closure, subject to rule 41 conflict precheck."
+  risk_acceptance_items:
+    - id: "DEC-CR152-CP8-001"
+      decision_type: "risk_acceptance"
+      status: "accepted_by_user"
+      recommended_release_decision: "READY_WITH_RISK"
+      risk_id: "CR152-CP7-R01-TEST-TAXONOMY-PROVENANCE-HYGIENE"
+      approved_by: "user"
+      approved_at: "2026-07-02T14:31:40+08:00"
+      approval_note: "User approved CR152 CP8 READY_WITH_RISK; FU-CR152-001 remains candidate and cleanup is not authorized."
+      reject_route: "CR152_TAXONOMY_PROVENANCE_REWORK_OR_NOT_READY_BEFORE_CP8"
+
+token_control:
+  default_read_mode: capsule-first
+  copied_long_text: false
+  allowed_payload: "summary, count, risk id, decision id, evidence path"
+  release_artifact_profile_reason: "minimal because CR152 has no install, deployment, migration, external interface, runtime authorization or real release action."
+  full_doc_read_triggers:
+    - missing_capsule_field
+    - unreadable_evidence_path
+    - conflicting_conclusion
+    - user_requested_deep_review

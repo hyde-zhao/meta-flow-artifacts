@@ -1,0 +1,87 @@
+schema_version: 1
+context_id: CP3-CR152-ML-STRATEGY-E2E-HLD
+cr_id: CR-152
+stage: CP3
+status: ready
+created_at: "2026-07-02T09:59:41+08:00"
+updated_at: "2026-07-02T10:07:16+08:00"
+owner: host-orchestrator
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  default_reads:
+    - process/changes/summaries/CR-152.summary.json
+    - process/changes/CR-152.md
+    - process/checkpoints/CP2-CR152-ML-STRATEGY-E2E-SCOPE.md
+    - process/context/CP2-CR152-ML-STRATEGY-E2E-SCOPE-CONTEXT.yaml
+    - process/discussions/CP3-CR152-HLD-DISCUSSION-LOG.md
+    - process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md
+    - process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md
+    - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
+  read_if_needed:
+    - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
+    - docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
+    - engine/research_production_contracts.py
+    - engine/backtest_production_contracts.py
+    - engine/strategy_admission_statistical_gate.py
+    - engine/strategy_admission_package.py
+  do_not_read_by_default:
+    - full conversation transcript
+    - all process/stories/*
+    - all process/evidence/*
+    - real lake/NAS/provider credential files
+cp2_approval:
+  approved_by: user
+  approved_at: "2026-07-02T09:59:41+08:00"
+  checkpoint_ref: process/checkpoints/CP2-CR152-ML-STRATEGY-E2E-SCOPE.md
+  accepted_decision_ids:
+    - DQ-CP2-CR152-SCOPE
+    - DQ-CP2-CR152-FIRST-WAVE
+    - DQ-CP2-CR152-SECURITY-AUTHZ
+    - DQ-CP2-CR152-ML-GATE-RELATION
+    - DQ-CP2-CR152-STAT-GATE-OPT-IN
+    - DQ-CP2-CR152-LABEL-POLICY-EXTENSIBILITY
+    - DQ-CP2-CR152-FIXTURE-DATA-CONTRACT
+must_address_in_cp3:
+  - id: CP3-FOCUS-CR152-001
+    topic: model_artifact_metadata_vs_model_registry_write
+    requirement: "CP3 must explicitly separate metadata contract/data structure from registry write/publish behavior. CR152 first wave may define training snapshot and model artifact metadata, but model registry writes remain not authorized."
+    expected_design_output: "HLD/ADR module boundary table and non-authorized path list."
+  - id: CP3-FOCUS-CR152-002
+    topic: extend_existing_contracts_not_parallel_contracts
+    requirement: "CP3 must base TrainingSnapshotSpec / ModelArtifactRef extension on existing engine/research_production_contracts.py and related contracts, not create a parallel ML contract family."
+    expected_design_output: "Contract delta table mapping existing objects to CR152 extensions."
+  - id: CP3-FOCUS-CR152-003
+    topic: cp3_architecture_gray_areas_tracking
+    requirement: "CP2 discussion log N/A is accepted because gray areas became CP2 decisions. If CP3 explores Architecture Gray Areas, it must create CP3 discussion log and discussion checkpoint."
+    expected_design_output: "process/discussions/CP3-CR152-HLD-DISCUSSION-LOG.md and process/checks/CP3-CR152-DISCUSSION-CHECKPOINT.json when applicable; otherwise explicit N/A reason in CP3 auto check."
+scope_boundary:
+  allowed_next_stage: CP3 design only
+  not_authorized:
+    - implementation
+    - story_decomposition_before_cp3_approval
+    - real_model_training
+    - real_data_validation
+    - model_registry_write
+    - catalog_pointer_mutation
+    - real_lake_read_or_write
+    - nas_operation
+    - provider_fetch
+    - credential_or_env_read
+    - qmt_or_trading_runtime
+    - broker_operation
+    - external_framework_clone_install_run
+cp3_artifacts:
+  discussion_log_ref: process/discussions/CP3-CR152-HLD-DISCUSSION-LOG.md
+  discussion_checkpoint_ref: process/checks/CP3-CR152-DISCUSSION-CHECKPOINT.json
+  hld_ref: process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md
+  adr_ref: process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md
+  auto_result_ref: process/checks/CP3-CR152-ML-STRATEGY-E2E-HLD-CONSISTENCY.result.json
+  checkpoint_ref: process/checkpoints/CP3-CR152-ML-STRATEGY-E2E-HLD-REVIEW.md
+  launch_message_ref: process/checks/CP3-CR152-HUMAN-GATE-LAUNCH-MESSAGE.md
+pending_cp3_decisions:
+  - DQ-CP3-CR152-001
+  - DQ-CP3-CR152-002
+  - DQ-CP3-CR152-003
+  - DQ-CP3-CR152-004
+read_expansion_log: []

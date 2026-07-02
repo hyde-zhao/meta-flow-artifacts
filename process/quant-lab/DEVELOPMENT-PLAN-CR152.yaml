@@ -1,0 +1,256 @@
+schema_version: 1
+change_id: "CR-152"
+title: "CR152 ML Strategy E2E Framework Development Plan"
+status: "ready-for-cp5-review"
+created_at: "2026-07-02T10:25:41+08:00"
+updated_at: "2026-07-02T10:25:41+08:00"
+owner: "host-orchestrator"
+workflow_phase: "story-planning"
+implementation_allowed: false
+feature_design_matrix: "process/docs/design/FEATURE-DESIGN-MATRIX.md"
+story_backlog: "process/STORY-BACKLOG-CR152.md"
+story_status: "process/STORY-STATUS-CR152.md"
+cp4_auto_result: "process/checks/CP4-CR152-STORY-DAG-PARALLEL-SAFETY.result.json"
+cp5_checkpoint: "process/checkpoints/CP5-CR152-ML-STRATEGY-E2E-LLD-BATCH.md"
+
+authorization_boundary:
+  cp4_does_not_authorize_implementation: true
+  cp5_required_before_implementation: true
+  credential_read_allowed: false
+  real_model_training_allowed: false
+  real_data_validation_allowed: false
+  real_lake_access_allowed: false
+  nas_access_allowed: false
+  provider_fetch_allowed: false
+  qmt_runtime_allowed: false
+  miniqmt_runtime_allowed: false
+  xtquant_runtime_allowed: false
+  simulation_live_allowed: false
+  broker_access_allowed: false
+  trading_allowed: false
+  external_framework_run_allowed: false
+  catalog_pointer_mutation_allowed: false
+  model_registry_write_allowed: false
+  feature_label_prediction_store_write_allowed: false
+  git_remote_write_allowed: false
+  future_runtime_validation_policy: "Any real-data, training, registry, store or runtime validation requires a separate authorization gate or formal CR."
+
+feature_slices:
+  - feature_id: "FEAT-03"
+    name: "Research Dataset And Multifactor Research Loop"
+    design_docs:
+      - "process/docs/features/factor-research-loop/DESIGN.md"
+      - "process/docs/features/factor-research-loop/TEST-PLAN.md"
+      - "process/docs/features/factor-research-loop/TASKS.md"
+    stories:
+      - "CR152-S01-pit-feature-label-contracts"
+      - "CR152-S02-purged-embargo-cv-fixture-contract"
+      - "CR152-S03-training-model-prediction-metadata"
+      - "CR152-S04-ml-admission-gate-adapter"
+      - "CR152-S05-static-evidence-release-wording"
+
+lld_design_batch:
+  batch_id: "CR152-ML-STRATEGY-E2E-BATCH-A"
+  status: "pending-cp5"
+  cp5_manual_review: "process/checkpoints/CP5-CR152-ML-STRATEGY-E2E-LLD-BATCH.md"
+  policy: "S01-S04 require full-lld; S05 requires technical-note. CP5 must review all design evidence together before implementation."
+  stories:
+    - "CR152-S01-pit-feature-label-contracts"
+    - "CR152-S02-purged-embargo-cv-fixture-contract"
+    - "CR152-S03-training-model-prediction-metadata"
+    - "CR152-S04-ml-admission-gate-adapter"
+    - "CR152-S05-static-evidence-release-wording"
+  cp5_attention_items:
+    - id: "CP5-FOCUS-CR152-001"
+      story: "CR152-S01-pit-feature-label-contracts"
+      requirement: "Make first-wave active triple_barrier enforcement exact; recommended BLOCKED because algorithm is not implemented."
+    - id: "CP5-FOCUS-CR152-002"
+      story: "CR152-S04-ml-admission-gate-adapter"
+      requirement: "If adapter implementation details or contract delta field mapping need architecture deepening, dispatch meta-se or explicitly record inline-fallback approval."
+
+parallel_policy:
+  max_parallel_lld: 2
+  max_parallel_dev_after_cp5: 1
+  max_parallel_verification_after_cp6: 2
+  same_file_merge_rule: "S01 and S02 share engine/research_production_contracts.py and tests/research/test_ml_strategy_e2e_contracts.py; S01 PIT/label fields must freeze before S02 split audit details."
+  metadata_linkage_rule: "S03 depends on S01/S02 because training/model/prediction metadata must link PIT/label/split fingerprints."
+  adapter_rule: "S04 depends on S01-S03 and owns ML gate status/package linkage; any semantic ambiguity returns to CP5 design, not CP6 implementation."
+  evidence_wording_rule: "S05 consolidates evidence/release wording after S01-S04 design decisions are stable."
+
+waves:
+  - wave: "CR152-W1-PIT-LABEL"
+    objective: "Define PIT feature matrix and label policy contracts."
+    parallel_lld: false
+    parallel_dev_after_cp5: false
+    entry_conditions:
+      - "CR152 CP3 approved"
+      - "FEAT-03 CR152 increment recorded in Feature Design Matrix"
+    stories:
+      - story_id: "CR152-S01-pit-feature-label-contracts"
+        title: "PIT feature matrix and label policy contracts"
+        priority: "P0"
+        status: "lld-ready-for-review"
+        depends_on: []
+        primary_files:
+          - "engine/research_production_contracts.py"
+          - "tests/research/test_ml_strategy_e2e_contracts.py"
+        merge_owner: "CR152-S01-pit-feature-label-contracts"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "pending"
+
+  - wave: "CR152-W2-CV-FIXTURE"
+    objective: "Define purged + embargo CV and fixture contract."
+    parallel_lld: false
+    parallel_dev_after_cp5: false
+    entry_conditions:
+      - "S01 PIT and label fields available for review"
+    stories:
+      - story_id: "CR152-S02-purged-embargo-cv-fixture-contract"
+        title: "Purged embargo CV and fixture contract"
+        priority: "P0"
+        status: "lld-ready-for-review"
+        depends_on:
+          - "CR152-S01-pit-feature-label-contracts"
+        primary_files:
+          - "engine/research_production_contracts.py"
+          - "tests/research/test_ml_strategy_e2e_contracts.py"
+        merge_owner: "CR152-S02-purged-embargo-cv-fixture-contract"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "pending"
+
+  - wave: "CR152-W3-ARTIFACT-METADATA"
+    objective: "Define training snapshot, model artifact and prediction metadata linkage."
+    parallel_lld: false
+    parallel_dev_after_cp5: false
+    entry_conditions:
+      - "S01/S02 contract semantics available"
+    stories:
+      - story_id: "CR152-S03-training-model-prediction-metadata"
+        title: "Training, model and prediction metadata"
+        priority: "P0"
+        status: "lld-ready-for-review"
+        depends_on:
+          - "CR152-S01-pit-feature-label-contracts"
+          - "CR152-S02-purged-embargo-cv-fixture-contract"
+        primary_files:
+          - "engine/training_snapshot_contract.py"
+          - "engine/research_manifest.py"
+          - "tests/research/test_ml_strategy_e2e_contracts.py"
+        merge_owner: "CR152-S03-training-model-prediction-metadata"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "pending"
+
+  - wave: "CR152-W4-ML-GATE"
+    objective: "Define ML admission gate and CR151 status/admission adapter."
+    parallel_lld: false
+    parallel_dev_after_cp5: false
+    entry_conditions:
+      - "S01/S02/S03 evidence fields available"
+    stories:
+      - story_id: "CR152-S04-ml-admission-gate-adapter"
+        title: "ML admission gate adapter"
+        priority: "P0"
+        status: "lld-ready-for-review"
+        depends_on:
+          - "CR152-S01-pit-feature-label-contracts"
+          - "CR152-S02-purged-embargo-cv-fixture-contract"
+          - "CR152-S03-training-model-prediction-metadata"
+        primary_files:
+          - "engine/ml_strategy_admission_gate.py"
+          - "engine/strategy_admission_package.py"
+          - "tests/research/test_ml_strategy_e2e_contracts.py"
+        merge_owner: "CR152-S04-ml-admission-gate-adapter"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "pending"
+
+  - wave: "CR152-W5-EVIDENCE"
+    objective: "Consolidate fixture-only evidence and release wording."
+    parallel_lld: true
+    parallel_dev_after_cp5: false
+    entry_conditions:
+      - "S01/S02/S03/S04 design decisions available"
+    stories:
+      - story_id: "CR152-S05-static-evidence-release-wording"
+        title: "Static evidence and release wording"
+        priority: "P1"
+        status: "lld-ready-for-review"
+        depends_on:
+          - "CR152-S01-pit-feature-label-contracts"
+          - "CR152-S02-purged-embargo-cv-fixture-contract"
+          - "CR152-S03-training-model-prediction-metadata"
+          - "CR152-S04-ml-admission-gate-adapter"
+        primary_files:
+          - "process/returns/CR152-*"
+          - "process/evidence/CR152-*"
+          - "docs/release/*"
+        merge_owner: "CR152-S05-static-evidence-release-wording"
+        lld_gate:
+          required: true
+          required_level: "technical-note"
+          status: "pending"
+
+dependency_graph:
+  nodes:
+    - "CR152-S01-pit-feature-label-contracts"
+    - "CR152-S02-purged-embargo-cv-fixture-contract"
+    - "CR152-S03-training-model-prediction-metadata"
+    - "CR152-S04-ml-admission-gate-adapter"
+    - "CR152-S05-static-evidence-release-wording"
+  edges:
+    - ["CR152-S01-pit-feature-label-contracts", "CR152-S02-purged-embargo-cv-fixture-contract"]
+    - ["CR152-S01-pit-feature-label-contracts", "CR152-S03-training-model-prediction-metadata"]
+    - ["CR152-S02-purged-embargo-cv-fixture-contract", "CR152-S03-training-model-prediction-metadata"]
+    - ["CR152-S01-pit-feature-label-contracts", "CR152-S04-ml-admission-gate-adapter"]
+    - ["CR152-S02-purged-embargo-cv-fixture-contract", "CR152-S04-ml-admission-gate-adapter"]
+    - ["CR152-S03-training-model-prediction-metadata", "CR152-S04-ml-admission-gate-adapter"]
+    - ["CR152-S01-pit-feature-label-contracts", "CR152-S05-static-evidence-release-wording"]
+    - ["CR152-S02-purged-embargo-cv-fixture-contract", "CR152-S05-static-evidence-release-wording"]
+    - ["CR152-S03-training-model-prediction-metadata", "CR152-S05-static-evidence-release-wording"]
+    - ["CR152-S04-ml-admission-gate-adapter", "CR152-S05-static-evidence-release-wording"]
+  validation_result:
+    cycles: []
+    invalid_references: []
+    parallel_internal_dependencies: 0
+    conclusion: "PASS"
+
+merge_order:
+  - "CR152-S01-pit-feature-label-contracts"
+  - "CR152-S02-purged-embargo-cv-fixture-contract"
+  - "CR152-S03-training-model-prediction-metadata"
+  - "CR152-S04-ml-admission-gate-adapter"
+  - "CR152-S05-static-evidence-release-wording"
+
+validation_plan:
+  fixture_static_only:
+    - "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py"
+    - "uv run --python 3.11 pytest -q tests/research/test_strategy_admission_statistical_gate.py tests/research/test_strategy_admission_package.py"
+  forbidden_without_new_authorization:
+    - "read .env / credentials"
+    - "real model training"
+    - "real data validation"
+    - "model registry write / publish / promote / upload / set_current"
+    - "feature / label / prediction store write"
+    - "real lake/NAS/provider access"
+    - "QMT / MiniQMT / xtquant runtime"
+    - "simulation / paper / live / trading / broker access"
+    - "external framework clone / install / run"
+    - "catalog pointer mutation or Git remote write"
+
+deferred_later_wave:
+  - "triple-barrier labeling algorithm"
+  - "meta-label training"
+  - "feature importance reports"
+  - "sample uniqueness weighting"
+  - "drift / retrain trigger"
+  - "fractional differentiation"
+  - "class imbalance / threshold tuning"
+  - "MinBTL / MinTRL gate"
+  - "model registry writer or external registry integration"

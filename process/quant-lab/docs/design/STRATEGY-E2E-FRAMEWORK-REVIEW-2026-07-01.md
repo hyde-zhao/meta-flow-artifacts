@@ -19,6 +19,8 @@ methodology: "对照 GitHub 量化实践(Microsoft Qlib、vnpy、QuantConnect Le
 >
 > 当前不授权:真实数据湖读写、NAS sync、provider fetch、QMT/MiniQMT/xtquant runtime、模拟盘、实盘、broker write、凭据读取。
 
+> 2026-07-02 后评审编号映射:本评审 §6 / §9 使用的是 2026-07-01 初始建议编号。实际落地中,多因子统计门已由 CR151 关闭为 `READY_WITH_RISK`;ML 框架基础已由 CR152 关闭为 `READY_WITH_RISK`;事件驱动基础顺延为下一推荐 CR153。本文方法论缺口判断保留,但后续实施计划以 roadmap v0.8 和 remediation plan v0.4 的 CR 编号与状态为准。
+
 ## 0. 执行摘要
 
 ### 0.1 总判断
@@ -287,9 +289,9 @@ methodology: "对照 GitHub 量化实践(Microsoft Qlib、vnpy、QuantConnect Le
 考虑 CR150 只做多因子 linkage completion、不扩边界,落地顺序如下:
 
 1. **CR150 内可做(契约/工件层,不依赖数据湖)**:在 `MultifactorFrameworkCompletionMap` 中**显式登记**这些缺口为 deferred contract 项——即把"多重检验门""walk-forward""容量/冲击""survivorship-free universe""IR/TE/Active Share"作为**待补契约的字段位**写入 map,gap_count 计入。这样不扩大实现边界,但让缺口机器可读、可审计。
-2. **单独 CR(多因子统计门)**:FDR/BH + Newey-West t + PBO/DSR + walk-forward,接入步骤 4/6/7。blocker。
-3. **CR151(ML 框架基础)**:先补 purged k-fold+embargo、triple-barrier、特征重要性;再补 PBO/DSR、fractional diff、样本加权。同时把 ResearchDatasetSpec/BacktestRunSpec 从 JSON 落到 .py frozen dataclass + 验证函数 + 测试。
-4. **CR152(事件驱动基础)**:估计窗/基准模型、检验族、内生性修正、聚类方差。
+2. **CR151(多因子统计门,已关闭 READY_WITH_RISK)**:FDR/BH + Newey-West t + PBO/DSR + walk-forward,接入步骤 4/6/7。blocker 已以本地/static/fixture capability 形式完成。
+3. **CR152(ML 框架基础,已关闭 READY_WITH_RISK)**:已完成 first wave: PIT feature matrix、label policy、purged k-fold+embargo、training snapshot / model artifact metadata、prediction artifact、ML admission gate。triple-barrier/meta-label 仅预留 slot,active 选择 fail-closed；feature importance、fractional diff、样本加权、drift 仍可作为后续 wave。
+4. **CR153(事件驱动基础,下一推荐项)**:估计窗/基准模型、检验族、内生性修正、聚类方差、event revision PIT gate 和 event-to-order trace。
 5. **横切生产 CR**:市场冲击模型族、容量 sizing、分层对账、kill switch 阈值族、Brinson 归因、regime 分析——这三类策略共用,应作为独立横切 CR 而非塞进单个策略 CR。
 
 ---
@@ -326,4 +328,4 @@ UC-58/59/60 三类策略端到端框架在**流程分级门控**(research→admi
 
 但在**统计验证完备性**上为 weak/blocker:三类策略共用主线的**统计验证层**缺失,具体表现为四个横切共性 blocker——多重检验门缺失(C1)、walk-forward/OOS 非一等阶段(C2)、市场冲击模型仅 commission/tax(C3)、容量/流动性感知 sizing 缺失(C4)。这四个 blocker 是框架从"研究编排框架"升级为"生产级量化框架"前必须补齐的硬门槛。
 
-建议:CR150 内先以 deferred contract 字段位登记缺口(不扩边界),随后以独立 CR(多因子统计门)、CR151(ML 基础)、CR152(事件驱动基础)、横切生产 CR 分批补齐。ResearchDatasetSpec/BacktestRunSpec 两个核心 .py 文件需优先从 evidence JSON 落到可执行源码。
+建议:CR150 内先以 deferred contract 字段位登记缺口(不扩边界),随后以 CR151(多因子统计门,已关闭)、CR152(ML 基础,已关闭)、CR153(事件驱动基础,下一推荐项)、横切生产 CR 分批补齐。ResearchDatasetSpec/BacktestRunSpec 两个核心契约在当前源码中已存在,后续应扩展而非重建平行契约。

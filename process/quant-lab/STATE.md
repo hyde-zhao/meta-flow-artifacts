@@ -11,13 +11,71 @@ Pending gate: none
 
 ## Current Decision
 
-CR151 已在 CP8 关闭为 `READY_WITH_RISK`，当前无 active / blocked formal CR。多因子策略 E2E 的 statistical admission capability 已完成，但统计门当前是 opt-in capability，不改变 CR150 / UC-58 历史默认调用行为：
+CR152 已通过 CP2 范围基线门、CP3 HLD / Architecture Review、CP5 LLD batch 人工确认、CP6 implementation、CP7 static-fixture-only verification 和 CP8 release readiness，当前已按 `READY_WITH_RISK` 闭环。当前 active formal CRs none，blocked formal CRs none；下一推荐项是 CR153 Event-Driven Strategy E2E Framework Foundation 的规则 41 冲突预检、CP0 受理、CP1 增量场景完备检查和 CP2 范围基线门。
+
+CR151 已在 CP8 关闭为 `READY_WITH_RISK`；多因子策略 E2E 的 statistical admission capability 已完成，但统计门当前是 opt-in capability，不改变 CR150 / UC-58 历史默认调用行为。
+
+CR152 当前范围：
+
+- 正式 CR：`process/changes/CR-152.md`。
+- CP0 受理：`process/checks/CP0-CR152-ML-STRATEGY-E2E-REQUEST-INTAKE.result.json`，结论 `PASS`。
+- CP1 增量场景完备检查：`process/checks/CP1-CR152-ML-STRATEGY-E2E-USE-CASE-COMPLETENESS.result.json`，结论 `PASS`。
+- CP2 自动预检：`process/checks/CP2-CR152-ML-STRATEGY-E2E-SCOPE.result.json`，结论 `PASS`。
+- CP2 人工审查稿：`process/checkpoints/CP2-CR152-ML-STRATEGY-E2E-SCOPE.md`，状态 `approved`。
+- CP2 launch message：`process/checks/CP2-CR152-HUMAN-GATE-LAUNCH-MESSAGE.md`。
+- CP2 已接受 7 项决策：scope、first-wave implementation、security boundary、ML gate relation、statistical gate opt-in semantics、label policy extensibility、fixture data contract。
+- CP2 `approve` 只允许进入 CP3 设计，不授权 Story/LLD/实现、真实训练、真实数据验证、runtime、lake/NAS/provider/QMT/broker/credential/external framework、Git remote 或 catalog/model registry 写入。
+- CP3 context capsule：`process/context/CP3-CR152-ML-STRATEGY-E2E-HLD-CONTEXT.yaml`。
+- CP3 discussion log：`process/discussions/CP3-CR152-HLD-DISCUSSION-LOG.md`。
+- CP3 discussion checkpoint：`process/checks/CP3-CR152-DISCUSSION-CHECKPOINT.json`，结论 `PASS`。
+- CP3 HLD：`process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md`，状态 `pending_user_review`。
+- CP3 ADR：`process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md`，状态 `pending_user_review`。
+- CP3 自动预检：`process/checks/CP3-CR152-ML-STRATEGY-E2E-HLD-CONSISTENCY.result.json`，结论 `PASS`。
+- CP3 人工审查稿：`process/checkpoints/CP3-CR152-ML-STRATEGY-E2E-HLD-REVIEW.md`，状态 `approved`。
+- CP3 launch message：`process/checks/CP3-CR152-HUMAN-GATE-LAUNCH-MESSAGE.md`。
+- CP3 已接受 4 项决策：ML-specific gate + CR151 四态 adapter、metadata-only model artifact boundary、扩展现有 contracts 而非重建、deterministic fixture-only validation。
+- CP4 Feature Design Matrix：`process/docs/design/FEATURE-DESIGN-MATRIX.md`，已登记 CR152 Story `lld_policy.required_level`。
+- CP4 Story backlog：`process/STORY-BACKLOG-CR152.md`。
+- CP4 Story status：`process/STORY-STATUS-CR152.md`。
+- CP4 development plan：`process/DEVELOPMENT-PLAN-CR152.yaml`。
+- CP4 自动预检：`process/checks/CP4-CR152-STORY-DAG-PARALLEL-SAFETY.result.json`，结论 `PASS`。
+- CP5 context capsule：`process/context/CP5-CR152-ML-STRATEGY-E2E-CONTEXT.yaml`。
+- CP5 设计证据批次：5 个 Story，S01-S04 为 `full-lld`，S05 为 `technical-note`。
+- CP5 设计证据：`process/stories/CR152-S01-pit-feature-label-contracts-LLD.md`、`process/stories/CR152-S02-purged-embargo-cv-fixture-contract-LLD.md`、`process/stories/CR152-S03-training-model-prediction-metadata-LLD.md`、`process/stories/CR152-S04-ml-admission-gate-adapter-LLD.md`、`process/stories/CR152-S05-static-evidence-release-wording.md#技术说明`。
+- CP5 自动预检：`process/checks/CP5-CR152-ML-STRATEGY-E2E-LLD-BATCH.result.json`，结论 `PASS`，阻断项 0。
+- CP5 人工审查稿：`process/checkpoints/CP5-CR152-ML-STRATEGY-E2E-LLD-BATCH.md`，状态 `approved`。
+- CP5 launch message：`process/checks/CP5-CR152-HUMAN-GATE-LAUNCH-MESSAGE.md`。
+- CP5 已接受 4 项决策：LLD 批次作为实现输入、实现顺序 / file owner、active `triple_barrier` / `meta_label` first-wave `BLOCKED` enforcement、no-real-op 安全边界。
+- CP5 已处理关注点：S01 active `triple_barrier` / `meta_label` first-wave enforcement 精确定义为 `BLOCKED`；S03 明确 model artifact metadata contract 与 registry write / publish / promote / upload / set_current 边界；S04 记录 host-orchestrator inline-fallback 用于 CP5 design evidence，若 CP6 发现 adapter / contract delta 字段映射架构歧义，必须回退设计或调度 meta-se。
+- CP5 approve 仅授权本地/static/fixture 源码实现和测试；真实训练、真实数据验证、runtime、lake/NAS/provider/QMT/broker/credential/external framework、Git remote、catalog pointer、model registry/store 写入继续不授权。
+- CP6 实现说明：`process/stories/CR152-ML-STRATEGY-E2E-IMPLEMENTATION.md`。
+- CP6 自动检查：`process/checks/CP6-CR152-ML-STRATEGY-E2E-IMPLEMENTATION.result.json`，结论 `PASS`。
+- CP6 summary：`process/checks/CP6-CR152-ML-STRATEGY-E2E-IMPLEMENTATION.result.summary.md`。
+- CP6 evidence：`process/evidence/CR152-CP6-IMPLEMENTATION.index.json`。
+- CP6 已实现对象：PIT feature matrix / label policy / purged embargo CV contracts、training snapshot / model artifact / prediction metadata companions、ML admission gate、admission package linkage helper、CR152 static fixture tests。
+- CP6 验证：CR152 targeted `5 passed`；CR151/CR152 related regression `34 passed`；`py_compile` PASS；5/5 return-check PASS；5/5 evidence-check PASS。
+- CP6 后不授权范围不变：真实训练、真实数据验证、registry/store/catalog 写入、runtime、lake/NAS/provider/QMT/broker/credential/external framework、Git remote 继续不授权。
+- CP7 verify packet：`process/context/stories/CR152-ML-STRATEGY-E2E.CP7.verify-packet.json`。
+- CP7 自动检查：`process/checks/CP7-CR152-ML-STRATEGY-E2E-VERIFICATION.result.json`，结论 `PASS_WITH_RISK`。
+- CP7 summary：`process/checks/CP7-CR152-ML-STRATEGY-E2E-VERIFICATION.result.summary.md`。
+- CP7 evidence：`process/evidence/CR152-CP7-VERIFICATION.index.json`。
+- CP7 return：`process/returns/CR152-ML-STRATEGY-E2E.CP7.return.json`。
+- CP7 effective_validation_mode：`static-fixture-only`；不声称全量 pytest 通过。
+- CP7 验证：CR152 targeted `5 passed`；CR151/CR152 related regression `34 passed`；`py_compile` PASS；`git diff --check` PASS；return-check PASS；evidence-check PASS；cp result-check PASS。
+- CP7 S05 wording：当前 wording 合规但以 `PASS_WITH_RISK` 延续到 CP8；CP8 release notes 必须显式写明 static-fixture-only，不声明真实模型性能、生产就绪、registry 发布、runtime readiness、trading readiness 或 broker readiness。
+- CP7 剩余风险：`CR152-CP7-R01-TEST-TAXONOMY-PROVENANCE-HYGIENE`，已登记为 `FU-CR152-001` follow-up candidate，并写入 `process/changes/CR-152-FOLLOW-UP-TRACKING-2026-07-02.md`。该风险来自历史 root-level CR150/CR151 tests 和 `tests/PROVENANCE.yaml` 覆盖缺口，属于 CR152 scope 外 hygiene，不阻塞 CP8，但 CP8 必须呈现。
+- CP8 release context：`process/release/RELEASE-CONTEXT-CR152.yaml`；release_decision `READY_WITH_RISK`，manual gate `approved`。
+- CP8 Decision Brief：`process/checkpoints/CP8-CR152-DELIVERY-READINESS.md`；用户已接受 `DEC-CR152-CP8-001`。
+- CP8 launch message：`process/checks/CP8-CR152-HUMAN-GATE-LAUNCH-MESSAGE.md`；human-gate check 已通过。
+- CR152 closed：local/static/fixture-only ML strategy E2E first-wave framework 已闭环；`FU-CR152-001` 继续作为 candidate，不自动启动。
+
+CR151 基线仍作为 CR152 输入：
 
 - 已关闭 CR：`process/changes/CR-151.md`。
 - 发布就绪证据：`process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.json`、`process/release/RELEASE-CONTEXT-CR151.yaml`。
 - 已完成能力：FDR / multiple testing、Newey-West robust factor statistics、walk-forward / OOS、PBO / DSR、fail-closed `StrategyAdmissionStatisticalGate`、admission package linkage、completion-map opt-in linkage。
 - 已接受风险：`CR151-CP8-R03-STATE-V2-HYGIENE`，即 `STATE.current.json` / `STATE.md` slimming 仍需单独治理，不阻塞 CR151 release readiness。
-- 下一推荐项：启动 CR152 Machine Learning Strategy E2E Framework 的 CP0 / CP2；CP2 必须纳入两项决策：ML admission gate 与 CR151 gate 的关系、UC-58 / UC-59 statistical gate 的 opt-in / 默认强制时机。
+- CR152 已吸收的新增 CP2 决策：ML admission gate 与 CR151 gate 的关系、UC-58 / UC-59 statistical gate 的 opt-in / 默认强制时机、label policy 是否预留 `triple_barrier` / `meta_label` 扩展位、fixture data contract 是否足以验证 purged + embargo CV。
 - 并行非阻断治理候选：STATE v2 hygiene、CR-INDEX legacy warning 清理、return / verify packet 关键字段非空工具校验。
 - 不授权范围：真实 lake / NAS / provider / credential / QMT / runtime / simulation / live / trading / broker / external framework / Git remote。
 
@@ -140,6 +198,13 @@ Future work requires a new explicit gate when it touches one of these boundaries
 - runtime or write activity for any remaining CR139 backlog Story before its design evidence is ready and the operation boundary is safe
 
 ## Next Action
+
+Current recommended action:
+
+- 启动 CR153 前置工作：先执行规则 41 冲突预检，确认 CR152 已关闭、`FU-CR152-001` 仅为 candidate 且不占执行锁，数据湖/NAS/provider/runtime/broker/credential 等后置项不与 CR153 范围重叠。
+- 若预检通过，进入 CR153 CP0 / CP1 / CP2。CP2 必须确认 event_time / available_at / decision_time 三时间语义、event revision PIT gate、事件研究方法契约、test family、overlap / clustering、endogeneity treatment、Event admission gate 与 CR151/CR152 gate 的关系，以及 event-to-order trace 的非 runtime 边界。
+- CP2 还必须新增三项范围收敛决策：`DQ-CP2-CR153-CV-STRATEGY`（事件 CV 只预留 slot / split audit refs，复用 CR154 横切框架）、`DQ-CP2-CR153-SURVIVORSHIP-SLOT`（EventResearchSpec 预留 `universe_pit_audit` slot，完整 survivorship-free universe gate 归入 CR154）、`DQ-CP2-CR153-METHOD-SLOT-ONLY`（检验族 / overlap / clustering / endogeneity 只定义 slot + `n/a-with-reason`，不实现算法）。
+- CR153 继续保持 local/static/fixture-only：不读取或写入真实 lake，不同步 NAS，不读取 provider/credential，不启动 QMT/runtime/simulation/live/trading/broker/live event listener，不写 catalog/model registry，不执行真实交易或真实事件 feed。
 
 Current CR139 backlog action:
 

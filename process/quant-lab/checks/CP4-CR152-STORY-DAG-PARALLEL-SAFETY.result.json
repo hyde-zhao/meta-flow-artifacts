@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR152-STORY-DAG-PARALLEL-SAFETY",
+  "profile": "story-dag-parallel-safety",
+  "story_id": null,
+  "cr_id": "CR-152",
+  "checked_at": "2026-07-02T10:25:41+08:00",
+  "context_ref": "process/checks/CP4-CR152-STORY-DAG-PARALLEL-SAFETY.md",
+  "dispatch_refs": [
+    "host-orchestrator-inline:tool-policy-no-explicit-subagent-request"
+  ],
+  "evidence_ref": "process/STORY-BACKLOG-CR152.md",
+  "items": [
+    {
+      "id": "CP4-CR152-01",
+      "category": "traceability",
+      "name": "Story plan is traceable to approved CP3 HLD and ADR",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md",
+        "process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md",
+        "process/STORY-BACKLOG-CR152.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Five stories map to CP3-approved metadata-only ML contract extension, ML-specific gate adapter, no-registry-write boundary and deterministic fixture validation."
+    },
+    {
+      "id": "CP4-CR152-02",
+      "category": "dag",
+      "name": "Story DAG has no cycles or invalid references",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR152.md#dependency-dag",
+        "process/DEVELOPMENT-PLAN-CR152.yaml#dependency_graph"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "DAG is S01 -> S02 -> S03 -> S04 -> S05 with explicit upstream fan-in for S03/S04/S05 and no cycles."
+    },
+    {
+      "id": "CP4-CR152-03",
+      "category": "parallel-safety",
+      "name": "Wave and file ownership rules constrain parallel LLD and implementation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR152.yaml#parallel_policy",
+        "process/STORY-BACKLOG-CR152.md#file-ownership-summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S01/S02 share research_production_contracts and tests; S03 owns metadata anchors; S04 owns adapter; S05 consolidates wording after design decisions stabilize."
+    },
+    {
+      "id": "CP4-CR152-04",
+      "category": "feature-design-matrix",
+      "name": "Feature Design Matrix records every Story lld_policy.required_level",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md#cr152-cp4-增量ml-strategy-e2e-framework",
+        "process/STORY-STATUS-CR152.md",
+        "process/stories/CR152-S01-pit-feature-label-contracts.md",
+        "process/stories/CR152-S02-purged-embargo-cv-fixture-contract.md",
+        "process/stories/CR152-S03-training-model-prediction-metadata.md",
+        "process/stories/CR152-S04-ml-admission-gate-adapter.md",
+        "process/stories/CR152-S05-static-evidence-release-wording.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S01-S04 require full-lld; S05 requires technical-note."
+    },
+    {
+      "id": "CP4-CR152-05",
+      "category": "authorization-boundary",
+      "name": "CP4 does not authorize implementation, training, real data, registry write, runtime or external operations",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR152.yaml#authorization_boundary",
+        "process/STORY-BACKLOG-CR152.md#not-authorized",
+        "process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md#not-authorized"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No source implementation, real training, real data validation, registry/store/catalog write, lake/NAS/provider/QMT/runtime/broker/credential/external framework/Git remote operation is authorized by CP4."
+    },
+    {
+      "id": "CP4-CR152-06",
+      "category": "cp5-attention",
+      "name": "CP5 attention items are explicit",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR152.yaml#lld_design_batch.cp5_attention_items",
+        "process/stories/CR152-S01-pit-feature-label-contracts.md",
+        "process/stories/CR152-S04-ml-admission-gate-adapter.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "CP5 must set active triple_barrier first-wave enforcement, recommended BLOCKED; adapter field mapping ambiguity should trigger meta-se dispatch or explicit inline-fallback approval."
+    },
+    {
+      "id": "CP4-CR152-07",
+      "category": "deliverables",
+      "name": "Required CP4 story planning deliverables exist",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR152.md",
+        "process/STORY-STATUS-CR152.md",
+        "process/DEVELOPMENT-PLAN-CR152.yaml",
+        "process/stories/CR152-S01-pit-feature-label-contracts.md",
+        "process/stories/CR152-S02-purged-embargo-cv-fixture-contract.md",
+        "process/stories/CR152-S03-training-model-prediction-metadata.md",
+        "process/stories/CR152-S04-ml-admission-gate-adapter.md",
+        "process/stories/CR152-S05-static-evidence-release-wording.md",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Story backlog, Story status, development plan, five Story cards and Feature Design Matrix CR152 increment are ready."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "CP5",
+  "summary": {
+    "story_count": 5,
+    "wave_count": 5,
+    "lld_batch": "CR152-ML-STRATEGY-E2E-BATCH-A",
+    "full_lld_count": 4,
+    "technical_note_count": 1,
+    "waived_count": 0,
+    "cycles": 0,
+    "invalid_references": 0,
+    "parallel_internal_dependencies": 0,
+    "blocking_findings": 0,
+    "implementation_allowed": false,
+    "runtime_operations_authorized": false,
+    "model_registry_write_authorized": false,
+    "cp5_attention_item_count": 2
+  }
+}

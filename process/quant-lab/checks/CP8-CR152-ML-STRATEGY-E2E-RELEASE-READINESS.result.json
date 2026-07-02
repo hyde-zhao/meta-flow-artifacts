@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR152-ML-STRATEGY-E2E-RELEASE-READINESS",
+  "profile": "minimal",
+  "story_id": "CR152-S01..S05",
+  "cr_id": "CR-152",
+  "checked_at": "2026-07-02T13:53:21+08:00",
+  "context_ref": "process/release/RELEASE-CONTEXT-CR152.yaml",
+  "dispatch_refs": [
+    "host-orchestrator-inline:cp8-release-readiness"
+  ],
+  "evidence_ref": "process/evidence/CR152-CP7-VERIFICATION.index.json",
+  "items": [
+    {
+      "id": "CP8-CR152-01",
+      "category": "process-route",
+      "name": "Process route health check passed before CP8 writes",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "process_link_health ok; artifact_git_dirty dirty due generated CR152 process evidence."
+    },
+    {
+      "id": "CP8-CR152-02",
+      "category": "cr-tracking",
+      "name": "CR tracking permits CR152 CP8 readiness",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "active formal CRs = CR-152; blocked formal CRs = none. Historical warnings remain but are not CR152 blockers."
+    },
+    {
+      "id": "CP8-CR152-03",
+      "category": "verification",
+      "name": "CP7 verification evidence is complete for static-fixture-only CR152 scope",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP7-CR152-ML-STRATEGY-E2E-VERIFICATION.result.json",
+        "process/evidence/CR152-CP7-VERIFICATION.index.json",
+        "process/returns/CR152-ML-STRATEGY-E2E.CP7.return.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "effective_validation_mode=static-fixture-only; targeted tests 5 passed; related regression 34 passed; full pytest is not claimed."
+    },
+    {
+      "id": "CP8-CR152-04",
+      "category": "authorization-boundary",
+      "name": "CR152 authorization boundary remains unchanged",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR152.yaml#non_authorized_items",
+        "process/evidence/CR152-CP7-VERIFICATION.index.json#boundary_check",
+        "process/checks/CP7-CR152-ML-STRATEGY-E2E-VERIFICATION.result.json#summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No real training/data validation/registry/store/catalog/runtime/lake/NAS/provider/QMT/broker/credential/external framework/Git remote operation is authorized or executed."
+    },
+    {
+      "id": "CP8-CR152-05",
+      "category": "release-wording",
+      "name": "Release wording preserves static-fixture-only and forbidden readiness claims",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR152.yaml#forbidden_release_claims",
+        "process/evidence/CR152-CP7-VERIFICATION.index.json#wording_review"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "CP8 artifacts state static-fixture-only and do not claim full pytest, real model performance, production readiness, registry publication, runtime readiness, trading readiness or broker readiness."
+    },
+    {
+      "id": "CP8-CR152-06",
+      "category": "follow-up-tracking",
+      "name": "FU-CR152-001 is presented as candidate and not promoted to formal CR",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/changes/CR-152-FOLLOW-UP-TRACKING-2026-07-02.md",
+        "process/release/RELEASE-CONTEXT-CR152.yaml#follow_up_summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "FU-CR152-001 remains candidate; no test taxonomy/provenance cleanup is authorized by CP8 readiness."
+    },
+    {
+      "id": "CP8-CR152-07",
+      "category": "release-decision",
+      "name": "Release decision is readiness-only and uses allowed enum",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR152.yaml#release_decision",
+        "process/checkpoints/CP8-CR152-DELIVERY-READINESS.md#待人工决策清单"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "Release_decision is READY_WITH_RISK. RELEASED/FAILED are not used because no independent real release authorization exists."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260702T055711Z0000-0b053c3a",
+    "RE-20260702T055711Z0000-ae71992f",
+    "RE-20260702T055711Z0000-71eb5a55",
+    "RE-20260702T055711Z0000-7c9c23ce"
+  ],
+  "decision": "PASS",
+  "release_decision": "READY_WITH_RISK",
+  "manual_gate_status": "approved",
+  "pending_human_decisions": [],
+  "risk_acceptance": {
+    "decision_id": "DEC-CR152-CP8-001",
+    "risk_id": "CR152-CP7-R01-TEST-TAXONOMY-PROVENANCE-HYGIENE",
+    "status": "accepted_by_user",
+    "severity": "low",
+    "recommended_outcome": "accept scope-out taxonomy/provenance hygiene as follow-up candidate and close CR152 as READY_WITH_RISK",
+    "reject_route": "CR152_TAXONOMY_PROVENANCE_REWORK_OR_NOT_READY_BEFORE_CP8",
+    "approved_by": "user",
+    "approved_at": "2026-07-02T14:31:40+08:00",
+    "approval_note": "User approved CR152 CP8 READY_WITH_RISK with taxonomy/provenance hygiene kept as a scope-out follow-up candidate."
+  },
+  "not_authorized": [
+    "real_model_training",
+    "real_data_validation",
+    "model_registry_write_publish_promote_upload_set_current",
+    "feature_label_model_prediction_store_write",
+    "catalog_pointer_mutation",
+    "real_lake_read_or_write",
+    "nas_sync_write_restore_or_metadata_normalization",
+    "provider_fetch",
+    "credential_or_env_read",
+    "qmt_miniqmt_xtquant_gateway_runtime",
+    "simulation_paper_live_or_trading_runtime",
+    "broker_write_submit_cancel_or_real_account_query",
+    "git_remote_write",
+    "external_framework_clone_install_run",
+    "test_taxonomy_or_provenance_cleanup"
+  ],
+  "forbidden_release_claims": [
+    "full_pytest_passed",
+    "real_model_performance",
+    "production_ready",
+    "registry_published",
+    "runtime_ready",
+    "trading_ready",
+    "broker_ready"
+  ],
+  "next_route": "CR152_CLOSED_READY_WITH_RISK_THEN_HYGIENE_OR_CR153_PRECHECK",
+  "risk_refs": [
+    "CR152-CP7-R01-TEST-TAXONOMY-PROVENANCE-HYGIENE",
+    "CR151-CP8-R03-STATE-V2-HYGIENE"
+  ],
+  "follow_up_refs": [
+    "FU-CR152-001",
+    "CR151-CP8-R03-STATE-V2-HYGIENE",
+    "CR-INDEX-LEGACY-WARNINGS"
+  ],
+  "approved_at": "2026-07-02T14:31:40+08:00",
+  "approved_by": "user",
+  "accepted_risks": [
+    "CR152-CP7-R01-TEST-TAXONOMY-PROVENANCE-HYGIENE"
+  ],
+  "updated_at": "2026-07-02T14:31:40+08:00"
+}

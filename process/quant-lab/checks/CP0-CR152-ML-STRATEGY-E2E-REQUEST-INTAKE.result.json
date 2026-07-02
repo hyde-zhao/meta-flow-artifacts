@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR152-ML-STRATEGY-E2E-REQUEST-INTAKE",
+  "cr_id": "CR-152",
+  "checked_at": "2026-07-02T09:28:27+08:00",
+  "context_ref": "process/context/CP0-CR152.context.json",
+  "dispatch_refs": [],
+  "evidence_ref": "",
+  "items": [
+    {
+      "id": "CP0-CR152-01",
+      "category": "process-route",
+      "name": "Process route health check passed before CP0 writes",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "process_link_health ok; artifact_git_dirty clean before CR152 writes."
+    },
+    {
+      "id": "CP0-CR152-02",
+      "category": "repository-state",
+      "name": "Required local and remote baseline commits are aligned",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "quant-lab HEAD 40f16aae655ebb86d94ad187e9a2e47c3e6e745c",
+        "meta-flow-artifacts HEAD d79215abcfb55134250f99bc39566252b06cf7a8",
+        "git ls-remote https://github.com/hyde-zhao/quant-lab.git refs/heads/precheck/ql-rd-000-redesign-baseline",
+        "git ls-remote https://github.com/hyde-zhao/meta-flow-artifacts.git refs/heads/main"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "SSH fetch failed due connection closed, but HTTPS ls-remote confirmed remote heads match local expected commits."
+    },
+    {
+      "id": "CP0-CR152-03",
+      "category": "cr-tracking",
+      "name": "No active or blocked formal CR prevents CR152 startup",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "active formal CRs none; blocked formal CRs none; CR-INDEX legacy warnings remain non-blocking hygiene."
+    },
+    {
+      "id": "CP0-CR152-04",
+      "category": "baseline-regression",
+      "name": "CR151/CR150 targeted regression remains green",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "uv run --python 3.11 pytest -q tests/research/test_strategy_admission_statistical_gate.py tests/research/test_multifactor_framework_completion.py tests/research/test_strategy_admission_package.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "20 passed in 1.05s."
+    },
+    {
+      "id": "CP0-CR152-05",
+      "category": "state-refresh",
+      "name": "CR151 stale state residue is recorded and CR152 startup state can be written",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/state/STATE.current.json",
+        "process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "STATE v2 hygiene remains an accepted process caveat; CP0 refresh changes active_change semantics from CR-151 to CR-152 and archives stale non-CR152 pending decision as deferred."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR152-CP2-ROADMAP-REMEDIATION-HANDOFF-2026-07-02T092827+0800"
+  ],
+  "decision": "PASS",
+  "next_route": "CP1"
+}
+

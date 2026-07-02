@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3",
+  "checkpoint_id": "CP3-CR152-ML-STRATEGY-E2E-HLD",
+  "cr_id": "CR-152",
+  "checked_at": "2026-07-02T10:07:16+08:00",
+  "context_ref": "process/context/CP3-CR152-ML-STRATEGY-E2E-HLD-CONTEXT.yaml",
+  "dispatch_refs": [
+    "host-orchestrator-inline:tool-policy-no-explicit-subagent-request"
+  ],
+  "evidence_ref": "",
+  "items": [
+    {
+      "id": "CP3-CR152-01",
+      "category": "entry",
+      "name": "CP2 scope baseline is approved before CP3",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR152-ML-STRATEGY-E2E-SCOPE.md",
+        "process/checks/CP2-CR152-ML-STRATEGY-E2E-SCOPE.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "User approved all seven CP2 decisions at 2026-07-02T09:59:41+08:00."
+    },
+    {
+      "id": "CP3-CR152-02",
+      "category": "discussion",
+      "name": "Architecture Gray Areas are recorded before HLD",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/discussions/CP3-CR152-HLD-DISCUSSION-LOG.md",
+        "process/checks/CP3-CR152-DISCUSSION-CHECKPOINT.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Five AGAs recorded: ML gate relation, metadata vs registry write, contract extension, label extensibility and fixture contract."
+    },
+    {
+      "id": "CP3-CR152-03",
+      "category": "hld",
+      "name": "HLD covers problem, goals, options, recommendation, traceability, flows, failures, risks and tentative Story groups",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "HLD recommends metadata-only ML contract extensions, ML-specific gate with shared four-state adapter and deterministic fixture validation."
+    },
+    {
+      "id": "CP3-CR152-04",
+      "category": "adr",
+      "name": "Core ADR decisions include recommendation, alternatives, impact and rollback",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "ADR-CR152-001..004 cover ML-specific gate adapter, metadata-only boundary, contract extension and fixture-only validation."
+    },
+    {
+      "id": "CP3-CR152-05",
+      "category": "contract-convergence",
+      "name": "HLD extends existing contracts rather than rebuilding parallel ML contracts",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md#6-contract-delta-table",
+        "engine/research_production_contracts.py",
+        "engine/training_snapshot_contract.py",
+        "engine/research_manifest.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Contract delta table maps CR152 companions to ResearchDatasetSpec, LeakagePolicy, TrainingSnapshotSpec, ModelArtifactRef, StrategyAdmissionStatisticalGate and StrategyAdmissionPackage."
+    },
+    {
+      "id": "CP3-CR152-06",
+      "category": "authorization",
+      "name": "Metadata contract vs model registry write boundary is explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md#8-metadata-vs-registry-write-boundary",
+        "process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md#adr-cr152-002-metadata-contract-is-not-model-registry-write"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Registry write/publish/promote/upload/sync/mutate/set_current and model/feature/label/prediction store writes remain not authorized."
+    },
+    {
+      "id": "CP3-CR152-07",
+      "category": "authorization",
+      "name": "No runtime, credential, lake, NAS, provider, QMT, broker, trading, external framework, catalog or registry authorization is granted",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP3-CR152-ML-STRATEGY-E2E-HLD-CONTEXT.yaml",
+        "process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md#12-security-and-authorization-boundary",
+        "process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md#not-authorized"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "All CP3 artifacts state design-only, static/fixture-only and no-registry-write boundaries."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "process/context/CP3-CR152-ML-STRATEGY-E2E-HLD-CONTEXT.yaml#context_policy.read_if_needed"
+  ],
+  "manual_gate_status": "approved",
+  "pending_human_decisions": [
+    {
+      "decision_id": "DQ-CP3-CR152-001",
+      "decision_type": "architecture",
+      "status": "accepted_by_user",
+      "question": "Approve ML-specific admission gate with CR151 four-state status and admission package adapter?",
+      "recommended_option": "Define MLAdmissionGateSummary and adapter that maps to PASS / FAIL / NEEDS_REVIEW / BLOCKED and records admission package linkage.",
+      "source_ref": "process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md#adr-cr152-001-ml-specific-admission-gate-with-shared-status-adapter",
+      "resolved_by": "user",
+      "resolved_at": "2026-07-02T10:25:41+08:00",
+      "outcome": "Accepted recommended option."
+    },
+    {
+      "decision_id": "DQ-CP3-CR152-002",
+      "decision_type": "security",
+      "status": "accepted_by_user",
+      "question": "Approve metadata-only model artifact boundary and keep model registry writes out of scope?",
+      "recommended_option": "Allow TrainingSnapshotSpec / ModelArtifactRef metadata contracts only; forbid registry write, publish, promote, upload, set_current, catalog pointer mutation and store writes.",
+      "source_ref": "process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md#adr-cr152-002-metadata-contract-is-not-model-registry-write",
+      "resolved_by": "user",
+      "resolved_at": "2026-07-02T10:25:41+08:00",
+      "outcome": "Accepted recommended option."
+    },
+    {
+      "decision_id": "DQ-CP3-CR152-003",
+      "decision_type": "architecture",
+      "status": "accepted_by_user",
+      "question": "Approve extending/composing existing ResearchDatasetSpec, TrainingSnapshotSpec and ModelArtifactRef anchors instead of creating parallel ML contracts?",
+      "recommended_option": "Use companion objects or narrow extensions anchored to existing contracts; do not rebuild a parallel ML contract family.",
+      "source_ref": "process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md#adr-cr152-003-extend-existing-contracts-do-not-rebuild-parallel-ml-contracts",
+      "resolved_by": "user",
+      "resolved_at": "2026-07-02T10:25:41+08:00",
+      "outcome": "Accepted recommended option."
+    },
+    {
+      "decision_id": "DQ-CP3-CR152-004",
+      "decision_type": "implementation",
+      "status": "accepted_by_user",
+      "question": "Approve deterministic fixture-only validation boundary for CP4/CP5 planning?",
+      "recommended_option": "Use deterministic local fixtures with explicit PIT, leakage, purged/embargo and artifact metadata cases; all forbidden operation counters remain zero.",
+      "source_ref": "process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md#adr-cr152-004-deterministic-fixture-only-validation-boundary",
+      "resolved_by": "user",
+      "resolved_at": "2026-07-02T10:25:41+08:00",
+      "outcome": "Accepted recommended option."
+    }
+  ],
+  "decision": "PASS",
+  "next_route": "CP4",
+  "approved_at": "2026-07-02T10:25:41+08:00",
+  "approved_by": "user",
+  "accepted_human_decisions": [
+    "DQ-CP3-CR152-001",
+    "DQ-CP3-CR152-002",
+    "DQ-CP3-CR152-003",
+    "DQ-CP3-CR152-004"
+  ],
+  "cp4_attention_items": [
+    {
+      "id": "CP4-FOCUS-CR152-001",
+      "summary": "Feature Design Matrix must be produced before CP5 and each Story must have lld_policy.required_level."
+    },
+    {
+      "id": "CP5-FOCUS-CR152-001",
+      "summary": "CP5 LLD must make active triple_barrier first-wave enforcement exact; recommended BLOCKED because the algorithm is not implemented."
+    },
+    {
+      "id": "CP5-FOCUS-CR152-002",
+      "summary": "If adapter implementation detail or contract delta field mapping needs architecture deepening, consider meta-se dispatch or explicit inline-fallback approval."
+    }
+  ]
+}

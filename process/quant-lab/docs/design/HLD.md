@@ -1,7 +1,7 @@
 ---
 status: "current-index"
-version: "1.12"
-change: "CR-151"
+version: "1.13"
+change: "CR-152"
 legacy_sources:
   - "process/HLD.md"
   - "process/HLD-DATA-LAKE.md"
@@ -12,6 +12,7 @@ current_change_sources:
   - "process/docs/features/strategy-runner-core/DESIGN.md"
   - "process/docs/design/HLD-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md"
   - "process/docs/design/HLD-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md"
+  - "process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md"
 ---
 
 # HLD Current Index
@@ -33,6 +34,7 @@ current_change_sources:
 | 1.10 | 2026-06-28 | codex | 登记研究引擎稳定模块整改为 FEAT-03 研究消费层增量；领域名模块成为主实现入口，旧 chapter/stage/root 脚本只作兼容或归档，不新建旁路 HLD。 |
 | 1.11 | 2026-07-01 | host-orchestrator | 登记 CR151 Strategy Admission Statistical Gate companion HLD；多因子统计准入采用独立 metadata-only contract module，Wave A 只覆盖 FDR/稳健统计/walk-forward/PBO-DSR/statistical gate，不授权 runtime。 |
 | 1.12 | 2026-07-01 | host-orchestrator | 同步 CR151 CP3 评审整改：CR151 Wave A 不覆盖 MF-GAP-2 扩展评价统计、MF-GAP-4 regime 分层和 MF-GAP-7 因子相关性聚类（clustering）/ 去重，均后置到 follow-up / CR154。 |
+| 1.13 | 2026-07-02 | host-orchestrator | 登记 CR152 ML Strategy E2E Framework HLD；采用 metadata-only contract extensions、ML-specific gate + CR151 四态 adapter、现有 contract 扩展策略和 deterministic fixture-only validation boundary，不授权 model registry write 或真实训练。 |
 
 ## 定位
 
@@ -58,6 +60,7 @@ current_change_sources:
 | Automatic Anomaly Discovery | `process/HLD.md` 研究消费层，FEAT-03 factor-research-loop；Stage 3 candidate search 显式消费 | 从固定 `ControlledAnomalyTemplate` 生成候选，批量运行 Chapter5 风格排序 / alpha / 时间切分 / 成本 / 经济逻辑评估，附加 Bonferroni 与 BH-FDR 多重检验，输出 discovery run、admission decisions 和动态 FactorCatalogEntry extras | 不做黑箱公式搜索、不写数据湖、不 publish catalog、不把一次运行结果硬编码进静态 registry、不授权 QMT / simulation / live |
 | Research Engine Stable Module Consolidation | `process/HLD.md` 研究消费层，FEAT-03 factor-research-loop；FEAT-13 / FEAT-14 只读消费稳定入口 | 将旧章节式实现收敛为 `factor_replication`、`research_data_readiness`、`factor_model_research`、`anomaly_research`、`factor_robustness`、`factor_portfolio_practice`；抽取 `serialization`、`factor_research_matrices` 和 `admission_contracts`；旧 engine chapter wrapper 归档到 `docs/legacy/archive/engine/`；稳定脚本入口位于 `scripts/research/*` / `scripts/qmt/*` | 不改变研究算法收益逻辑、不批量重写历史 schema / run_id / report artifact、不授权数据湖 / QMT / simulation / live |
 | Strategy Admission Statistical Gate | `process/docs/design/HLD-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md`；FEAT-03 / FEAT-14 研究准入层 | 新增多因子 Wave A 统计准入门：MultipleTestingReport、RobustFactorStatisticsReport、WalkForwardValidationPlan、BacktestOverfitRiskReport、StrategyAdmissionStatisticalGate；复用现有 ResearchDatasetSpec / BacktestRunSpec / StrategyAdmissionPackage，不创建平行契约 | 不读真实 lake/NAS/provider，不运行 QMT/simulation/live/trading，不读 credential，不引入外部框架；capacity/impact、IR/TE/Active Share、PIT universe audit、MF-GAP-2 扩展评价统计、MF-GAP-4 regime 分层和 MF-GAP-7 因子相关性聚类（clustering）/ 去重后置到 follow-up / CR154 |
+| ML Strategy E2E Framework | `process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md`；FEAT-03 / FEAT-14 研究准入层；UC-59 | CR152 first-wave ML foundation：PIT feature matrix、label policy / leakage guard、purged + embargo CV、training snapshot / model artifact metadata、prediction artifact、ML admission gate；通过 adapter 复用 CR151 四态 status 和 admission package linkage | 不执行真实训练或真实数据验证；不写 feature/label/model/prediction store；不写 model registry、不 publish/promote/upload/set_current、不 mutate catalog pointer；不连接 lake/NAS/provider/QMT/runtime/trading/broker/credential/external framework |
 
 ## Runner Architecture Authority
 

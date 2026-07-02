@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "CR152-ML-STRATEGY-E2E.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-152",
+  "story_id": "CR152-S01..S05",
+  "status": "verified_with_risk",
+  "created_at": "2026-07-02T12:38:36+08:00",
+  "updated_at": "2026-07-02T12:38:36+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/checks/CP6-CR152-ML-STRATEGY-E2E-IMPLEMENTATION.result.json",
+  "verification_report_ref": "process/checks/CP7-CR152-ML-STRATEGY-E2E-VERIFICATION.result.summary.md",
+  "cp_result_ref": "process/checks/CP7-CR152-ML-STRATEGY-E2E-VERIFICATION.result.json",
+  "evidence_refs": [
+    "process/evidence/CR152-CP7-VERIFICATION.index.json"
+  ],
+  "dispatch_refs": [
+    "host-orchestrator-inline:tool-policy-no-explicit-subagent-request"
+  ],
+  "touched_files": [
+    {
+      "path": "process/context/stories/CR152-ML-STRATEGY-E2E.CP7.verify-packet.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR152-CP7-VERIFICATION.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/CR152-ML-STRATEGY-E2E.CP7.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR152-ML-STRATEGY-E2E-VERIFICATION.result.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR152-ML-STRATEGY-E2E-VERIFICATION.result.summary.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/changes/CR-INDEX.yaml",
+      "change_type": "updated"
+    },
+    {
+      "path": "process/changes/CR-152-FOLLOW-UP-TRACKING-2026-07-02.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/changes/CR-152.md",
+      "change_type": "updated"
+    }
+  ],
+  "verification": {
+    "effective_validation_mode": "static-fixture-only",
+    "commands_run": [
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr152-cp7-pycompile uv run --python 3.11 python -m py_compile engine/research_production_contracts.py engine/training_snapshot_contract.py engine/research_manifest.py engine/ml_strategy_admission_gate.py engine/strategy_admission_package.py tests/research/test_ml_strategy_e2e_contracts.py",
+        "result": "pass",
+        "summary": "no output"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py",
+        "result": "pass",
+        "summary": "5 passed in 0.86s"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_research_production_contracts.py tests/research/test_strategy_admission_package.py tests/test_cr151_strategy_admission_statistical_gate.py tests/research/test_ml_strategy_e2e_contracts.py",
+        "result": "pass",
+        "summary": "34 passed in 0.95s"
+      },
+      {
+        "command": "git diff --check",
+        "result": "pass",
+        "summary": "no output"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/meta_flow/test_test_file_taxonomy.py",
+        "result": "expected_fail_scope_out",
+        "summary": "2 failed in 0.15s; tracked as FU-CR152-001 and excluded from CR152 CP7 blocking scope"
+      }
+    ],
+    "stage_decision": "PASS_WITH_RISK",
+    "skipped": [
+      {
+        "item": "full pytest release claim",
+        "reason": "tests/meta_flow/test_test_file_taxonomy.py fails on historical scope-out taxonomy/provenance hygiene; CP7 does not claim full-suite pass"
+      },
+      {
+        "item": "runtime/data/provider/NAS/QMT/simulation/live/trading/broker/external-framework/Git-remote validation",
+        "reason": "not authorized by CR152 boundary; static-fixture-only verification"
+      }
+    ]
+  },
+  "boundary_check": {
+    "real_model_training": 0,
+    "real_data_validation": 0,
+    "model_registry_write": 0,
+    "feature_label_model_prediction_store_write": 0,
+    "catalog_pointer_mutation": 0,
+    "real_lake_read_or_write": 0,
+    "nas_operation": 0,
+    "provider_fetch": 0,
+    "credential_or_env_read": 0,
+    "runtime_operation": 0,
+    "broker_operation": 0,
+    "external_framework_operation": 0,
+    "git_remote_write": 0
+  },
+  "findings": [],
+  "risks": [
+    {
+      "id": "CR152-CP7-R01-TEST-TAXONOMY-PROVENANCE-HYGIENE",
+      "severity": "LOW",
+      "status": "follow_up_candidate",
+      "follow_up_ref": "FU-CR152-001",
+      "follow_up_tracking_ref": "process/changes/CR-152-FOLLOW-UP-TRACKING-2026-07-02.md",
+      "summary": "Scope-out tests taxonomy and PROVENANCE.yaml hygiene blocks full pytest claim but does not invalidate CR152 static fixture validation."
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "advance_to_cp8_with_risk_inputs",
+  "actor": "host-orchestrator-inline",
+  "decision": "PASS_WITH_RISK",
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_architecture_doc_update": false,
+    "requires_hld_update": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "CP7 verified implementation against CP5-approved design; no long-lived design delta is required before CP8."
+  }
+}

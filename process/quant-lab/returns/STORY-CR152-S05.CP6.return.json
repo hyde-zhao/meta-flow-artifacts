@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR152-S05.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-152",
+  "story_id": "CR152-S05",
+  "status": "implemented",
+  "created_at": "2026-07-02T11:24:55+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR152-S05.CP6.work-packet.json",
+  "implementation_ref": "process/stories/CR152-ML-STRATEGY-E2E-IMPLEMENTATION.md",
+  "touched_files": [
+    {
+      "path": "process/stories/CR152-ML-STRATEGY-E2E-IMPLEMENTATION.md",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/research/test_ml_strategy_e2e_contracts.py",
+      "change_type": "created"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_read_touched": false,
+    "real_lake_write_touched": false,
+    "provider_fetch_executed": false,
+    "nas_operation_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_or_live_executed": false,
+    "broker_operation_executed": false,
+    "external_framework_executed": false,
+    "git_remote_write_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py",
+        "result": "pass",
+        "summary": "5 passed in 0.90s"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_research_production_contracts.py tests/research/test_strategy_admission_package.py tests/research/test_strategy_admission_statistical_gate.py tests/research/test_ml_strategy_e2e_contracts.py",
+        "result": "pass",
+        "summary": "34 passed in 0.52s"
+      }
+    ],
+    "stage_decision": "PASS",
+    "skipped": []
+  },
+  "evidence_refs": [
+    "process/evidence/CR152-S05.CP6.index.json"
+  ],
+  "risks": [
+    {
+      "risk_id": "CR152-CP6-S05-WORDING",
+      "status": "mitigated",
+      "summary": "Implementation and tests preserve fixture/static-only wording and avoid real model performance, registry publish or runtime readiness claims."
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7",
+  "actor": "host-orchestrator-inline",
+  "decision": "PASS",
+  "updated_at": "2026-07-02T11:24:55+08:00",
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_architecture_doc_update": false,
+    "requires_hld_update": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "S05 implemented process evidence wording only; no long-lived design document delta is required."
+  },
+  "contract_changes": {
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "requires_feature_doc_update": false
+  }
+}

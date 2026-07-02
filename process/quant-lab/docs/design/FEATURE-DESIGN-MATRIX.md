@@ -1,6 +1,6 @@
 ---
 status: "ready-for-cp5-review"
-version: "1.14"
+version: "1.15"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld:
   - "docs/design/HLD.md"
@@ -8,7 +8,7 @@ source_hld:
 source_adr:
   - "docs/design/ARCHITECTURE-DECISION.md"
   - "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
-change: "CR-139"
+change: "CR-152"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 confirmed_by: ""
 confirmed_at: ""
@@ -35,6 +35,7 @@ confirmed_at: ""
 | 1.12 | 2026-06-28 | meta-se | 按 CR-139「Strategy Data Foundation」CP3 增补策略生产数据底座 Feature 归属与 `lld_policy`：FEAT-02 写侧/读侧分层（V1/C1/C2/R1/R3/R4/L2/L4/L5/M1/M2/N1-N3/C3/C4/T7/T8/X1/X2/X3/V4/F1）、FEAT-03 ML feature 层（V3/R2/E1-E5/F4）、FEAT-06 交易审计链（T4/T6）、FEAT-11 run evidence（L3/T6）、FEAT-12 配置层（F2/T5）、FEAT-14 universe·risk policy（F3/X4）；`lld_policy`：d1 纯新建=full-lld、d2 既有合同闭环=technical-note、a 已设计未实现=technical-note 消费既有 HLD 契约；跨边界项 T6 run-id 贯通归 FEAT-02 写侧生成 + FEAT-06/11 消费。AGA-1/3/5 推荐方案 CP3 已确认 A1/C1/E1。 |
 | 1.13 | 2026-06-28 | host-orchestrator | CP3 approved，AGA-1/3/5 确认 A1/C1/E1，pending-cp3 → confirmed-cp3。 |
 | 1.14 | 2026-07-01 | host-orchestrator | CR151 CP3 approved 后增补 Strategy Admission Statistical Gate CP4：FEAT-03 下新增统计准入门 Story 消费、`lld_policy`、DAG/Wave 和 Wave B deferred 边界。 |
+| 1.15 | 2026-07-02 | host-orchestrator | CR152 CP3 approved 后增补 ML Strategy E2E Framework CP4：FEAT-03 下新增 ML first-wave Story 消费、`lld_policy`、DAG/Wave、triple_barrier BLOCKED CP5 约束和 no-registry-write 边界。 |
 
 ## 适用性判定规则
 
@@ -128,6 +129,47 @@ confirmed_at: ""
 | CR151-S02-gate-evaluator-fail-closed-rules | FEAT-03 / FEAT-07 safety boundary | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md` | full-lld | fail-closed admission semantics、四态模型、forbidden operation counters | Story LLD | 覆盖 PASS/FAIL/NEEDS_REVIEW/BLOCKED，mandatory missing 必须 BLOCKED。 |
 | CR151-S03-admission-completion-linkage | FEAT-03 | `docs/features/factor-research-loop/DESIGN.md`、`TASKS.md` | full-lld | 触碰既有 CR150 completion map / StrategyAdmissionPackage linkage | Story LLD | 只做统计 gate ref / blocked reason linkage，不改变 runtime authorization 语义。 |
 | CR151-S04-static-evidence-release-wording | FEAT-03 / FEAT-08 | `docs/features/factor-research-loop/TEST-PLAN.md`、`TASKS.md` | technical-note | CP6/CP7/CP8 evidence wording、static-only release boundary | Story technical note | 收口 evidence index、return packet、release wording 和 no-real-operation 声明。 |
+
+## CR152 CP4 增量：ML Strategy E2E Framework
+
+> 来源：`process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md`、`process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md`、CP3 用户批准。CR152 归属 FEAT-03「研究数据集与多因子研究闭环」的 ML strategy first-wave foundation，不新增真实训练、真实数据验证、model registry write、store write、production catalog pointer 或 runtime 授权。
+
+### Feature 归属与 lld_policy
+
+| Story ID | Owner Feature | feature_design_refs | lld_policy.required_level | trigger_reasons | CP5 设计证据 | 说明 |
+|---|---|---|---|---|---|---|
+| CR152-S01-pit-feature-label-contracts | FEAT-03 | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | PIT feature matrix、label policy、leakage guard、triple_barrier / meta_label reserved slots | Story LLD | CP5 必须明确 first-wave active `triple_barrier` enforcement；推荐直接 `BLOCKED`，因为算法未实现。 |
+| CR152-S02-purged-embargo-cv-fixture-contract | FEAT-03 | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md` | full-lld | purged + embargo CV split policy、fixture schema、fold overlap / embargo failure paths | Story LLD | Fixture 必须可证明最小时间跨度、PIT 模拟和 fail-closed negative cases。 |
+| CR152-S03-training-model-prediction-metadata | FEAT-03 | `docs/features/factor-research-loop/DESIGN.md`、`TASKS.md` | full-lld | `TrainingSnapshotSpec` / `ModelArtifactRef` / prediction artifact metadata、contract delta mapping、no registry write | Story LLD | Metadata/ref/hash/linkage only；不得实现 registry writer、publish、promote、upload、set_current 或 catalog pointer mutation。 |
+| CR152-S04-ml-admission-gate-adapter | FEAT-03 / FEAT-07 safety boundary | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md`、`docs/features/runtime-authorization-safety/DESIGN.md` | full-lld | ML-specific admission gate、CR151 四态 status adapter、StrategyAdmissionPackage linkage、forbidden operation counters | Story LLD | 若 adapter 字段映射需要架构深化，CP5 应考虑 meta-se dispatch 或显式 inline-fallback。 |
+| CR152-S05-static-evidence-release-wording | FEAT-03 / FEAT-08 | `docs/features/factor-research-loop/TEST-PLAN.md`、`TASKS.md` | technical-note | CP6/CP7/CP8 evidence wording、fixture-only claim boundary、no real model performance wording | Story technical note | 收口 evidence index、return packet、release wording 和 no-real-training/no-registry 声明。 |
+
+### CR152 First-Wave / Later-Wave 边界
+
+| 范围 | 状态 | 处理 |
+|---|---|---|
+| PIT feature matrix contract | First wave | CR152 必做。 |
+| Label policy / leakage guard | First wave | CR152 必做；`fixed_window` active，`triple_barrier` / `meta_label` 只预留 slot。 |
+| Purged + embargo CV split policy and split audit | First wave | CR152 必做。 |
+| Training snapshot / model artifact metadata | First wave | CR152 必做；metadata only，不写 registry。 |
+| Prediction artifact metadata | First wave | CR152 必做；metadata only，不写 prediction store。 |
+| ML admission gate + CR151 status adapter | First wave | CR152 必做。 |
+| Triple-barrier labeling algorithm | Deferred | CP5 默认 enforcement：first wave active selection returns `BLOCKED` unless future scope explicitly implements algorithm。 |
+| Meta-label training | Deferred | Future ML wave；不得在 CR152 first wave 声称实现。 |
+| Feature importance（MDI/MDA/SHAP） | Deferred | Later wave / CR154 input。 |
+| Sample uniqueness weighting | Deferred | Later wave。 |
+| Drift / retrain trigger | Deferred | Production monitoring / runtime CR。 |
+| Model registry writer / external registry integration | Deferred and not authorized | Future runtime/storage authorization gate only。 |
+
+### CR152 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| CR152 Story 均有 FEAT-03 / FEAT-07 / FEAT-08 归属和 `lld_policy` | PASS | 本节 `Feature 归属与 lld_policy` |
+| first-wave / later-wave 边界显式化 | PASS | 本节 `CR152 First-Wave / Later-Wave 边界` |
+| CP5 triple_barrier enforcement 约束显式化 | PASS | S01 说明 + Later-Wave 边界 |
+| CP4 不授权实现、真实训练、真实数据、registry write 或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR152.yaml#authorization_boundary` |
+| CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR152.yaml#lld_design_batch` |
 
 ### CR151 Wave A / Wave B 边界
 

@@ -1,0 +1,79 @@
+schema_version: 1
+context_id: CP2-CR152-ML-STRATEGY-E2E-SCOPE
+cr_id: CR-152
+stage: CP2
+status: ready
+created_at: "2026-07-02T09:28:27+08:00"
+owner: host-orchestrator
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  default_reads:
+    - process/changes/summaries/CR-152.summary.json
+    - process/changes/CR-152.md
+    - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
+    - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
+  read_if_needed:
+    - docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
+    - engine/research_production_contracts.py
+    - engine/backtest_production_contracts.py
+    - engine/strategy_admission_statistical_gate.py
+    - engine/strategy_admission_package.py
+  do_not_read_by_default:
+    - full conversation transcript
+    - all process/stories/*
+    - all process/evidence/*
+    - real lake/NAS/provider credential files
+scope_summary:
+  objective: Start the local/static/fixture ML Strategy E2E framework foundation after CR151 statistical admission capability.
+  in_scope:
+    - PIT feature matrix contract
+    - label policy / leakage guard with fixed_window / triple_barrier / meta_label extension slots
+    - purged + embargo CV split policy and split audit contract
+    - training snapshot / model artifact metadata
+    - prediction artifact metadata
+    - ML-specific admission gate using CR151-compatible status semantics through an adapter
+    - deterministic fixture data contract sufficient to verify purged + embargo semantics
+  deferred:
+    - feature importance report
+    - sample uniqueness weighting
+    - drift and retrain trigger
+    - fractional differentiation
+    - class imbalance / threshold tuning
+    - MinBTL / MinTRL gate
+    - real model training
+    - model registry write
+    - paper/live shadow
+  out_of_scope:
+    - real lake read or write
+    - NAS access, sync, restore, chmod, chgrp or metadata normalization
+    - provider fetch
+    - QMT / MiniQMT / xtquant / gateway runtime
+    - simulation / paper / live / trading runtime
+    - broker read/write/submit/cancel/real account query
+    - credential or .env read
+    - external framework clone/install/run
+    - Git remote write
+    - catalog pointer mutation
+    - feature store / label store / model registry / prediction store writes
+decision_refs:
+  - DQ-CP2-CR152-SCOPE
+  - DQ-CP2-CR152-FIRST-WAVE
+  - DQ-CP2-CR152-SECURITY-AUTHZ
+  - DQ-CP2-CR152-ML-GATE-RELATION
+  - DQ-CP2-CR152-STAT-GATE-OPT-IN
+  - DQ-CP2-CR152-LABEL-POLICY-EXTENSIBILITY
+  - DQ-CP2-CR152-FIXTURE-DATA-CONTRACT
+validation_boundary:
+  current_mode: planning-and-scope-only
+  implementation_before_cp2: not_authorized
+  runtime_evidence_claims: not_authorized
+  fixture_claim_limit: fixture/static validation can prove contract semantics only, not real model performance
+read_expansion_log:
+  - id: READ-CR152-CP2-ROADMAP-REMEDIATION-HANDOFF-2026-07-02T092827+0800
+    reason: "User explicitly requested startup context read and CP2 plan review."
+    expanded_to:
+      - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
+      - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
+      - docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
+

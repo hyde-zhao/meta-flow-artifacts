@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR152-ML-STRATEGY-E2E-IMPLEMENTATION",
+  "cr_id": "CR-152",
+  "story_id": "CR152-S01..S05",
+  "context_ref": "process/context/CP5-CR152-ML-STRATEGY-E2E-CONTEXT.yaml",
+  "dispatch_refs": [
+    "host-orchestrator-inline:tool-policy-no-explicit-subagent-request"
+  ],
+  "evidence_ref": "process/evidence/CR152-CP6-IMPLEMENTATION.index.json",
+  "items": [
+    {
+      "id": "CP6-CR152-01",
+      "category": "implementation",
+      "name": "Story return packets present and valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/STORY-CR152-S01.CP6.return.json",
+        "process/returns/STORY-CR152-S02.CP6.return.json",
+        "process/returns/STORY-CR152-S03.CP6.return.json",
+        "process/returns/STORY-CR152-S04.CP6.return.json",
+        "process/returns/STORY-CR152-S05.CP6.return.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "5/5 return-check passed."
+    },
+    {
+      "id": "CP6-CR152-02",
+      "category": "evidence",
+      "name": "Story evidence indexes present and valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR152-S01.CP6.index.json",
+        "process/evidence/CR152-S02.CP6.index.json",
+        "process/evidence/CR152-S03.CP6.index.json",
+        "process/evidence/CR152-S04.CP6.index.json",
+        "process/evidence/CR152-S05.CP6.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "5/5 evidence-check passed."
+    },
+    {
+      "id": "CP6-CR152-03",
+      "category": "contracts",
+      "name": "PIT feature matrix, label policy and purged embargo CV contracts implemented",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/research_production_contracts.py",
+        "tests/research/test_ml_strategy_e2e_contracts.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Contracts extend existing research production anchors; active triple_barrier/meta_label return BLOCKED in first wave."
+    },
+    {
+      "id": "CP6-CR152-04",
+      "category": "contracts",
+      "name": "Training snapshot, model artifact and prediction metadata companions implemented",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/training_snapshot_contract.py",
+        "engine/research_manifest.py",
+        "tests/research/test_ml_strategy_e2e_contracts.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Metadata contracts remain ref/hash/linkage only and use CR152 ML-only forbidden counters for registry, store, catalog pointer, real training and real data validation boundaries."
+    },
+    {
+      "id": "CP6-CR152-05",
+      "category": "integration",
+      "name": "ML admission gate and admission package adapter implemented",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/ml_strategy_admission_gate.py",
+        "engine/strategy_admission_package.py",
+        "tests/research/test_ml_strategy_e2e_contracts.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "ML gate uses CR151-compatible four-state semantics, blocks CR152-specific forbidden counters, and attaches explicit gate_present/gate_required/gate_status/gate_ref linkage without changing runtime authorization flags."
+    },
+    {
+      "id": "CP6-CR152-06",
+      "category": "verification",
+      "name": "Local tests and static compile pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR152-CP6-IMPLEMENTATION.index.json#commands"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "py_compile passed; CR152 targeted tests passed; CR151/CR152 related regression passed; git diff --check passed. Post-review scope hygiene removed non-CR152 test-layout changes from CP6 evidence."
+    },
+    {
+      "id": "CP6-CR152-07",
+      "category": "security",
+      "name": "No forbidden runtime, data, registry, store, credential or external operations executed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR152-CP6-IMPLEMENTATION.index.json#boundary_check"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "All forbidden operation counters remain 0; CR152 remains local/static/fixture-only."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "CP7",
+  "checked_at": "2026-07-02T12:13:33+08:00",
+  "summary": {
+    "story_count": 5,
+    "return_packet_count": 5,
+    "evidence_index_count": 5,
+    "pytest_passed": 34,
+    "full_pytest_summary": null,
+    "forbidden_operation_count": 0,
+    "runtime_authorization_allowed": false,
+    "real_training_allowed": false,
+    "real_data_validation_allowed": false,
+    "model_registry_write_allowed": false
+  },
+  "updated_at": "2026-07-02T12:13:33+08:00"
+}

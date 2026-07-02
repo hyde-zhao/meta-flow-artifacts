@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR152-ML-STRATEGY-E2E-VERIFICATION",
+  "cr_id": "CR-152",
+  "story_id": "CR152-S01..S05",
+  "context_ref": "process/checks/CP6-CR152-ML-STRATEGY-E2E-IMPLEMENTATION.result.json",
+  "dispatch_refs": [
+    "host-orchestrator-inline:tool-policy-no-explicit-subagent-request"
+  ],
+  "return_packet_ref": "process/returns/CR152-ML-STRATEGY-E2E.CP7.return.json",
+  "evidence_ref": "process/evidence/CR152-CP7-VERIFICATION.index.json",
+  "items": [
+    {
+      "id": "CP7-CR152-01",
+      "category": "entry",
+      "name": "CP6 implementation result is PASS and scoped to CR152 owner files",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-CR152-ML-STRATEGY-E2E-IMPLEMENTATION.result.json",
+        "process/evidence/CR152-CP6-IMPLEMENTATION.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CP6 result decision PASS; changed_files no longer include CR150/CR151 test renames, PROVENANCE.yaml or guardrail scripts."
+    },
+    {
+      "id": "CP7-CR152-02",
+      "category": "validation-mode",
+      "name": "effective_validation_mode is static-fixture-only",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR152-CP7-VERIFICATION.index.json#effective_validation_mode"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "No full pytest pass, runtime validation, real training, real data validation, registry write, lake/NAS/provider/trading validation or production readiness is claimed."
+    },
+    {
+      "id": "CP7-CR152-03",
+      "category": "contract-validation",
+      "name": "S01/S02/S03 contracts serialize and validate static fixture behavior",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "tests/research/test_ml_strategy_e2e_contracts.py",
+        "process/evidence/CR152-CP7-VERIFICATION.index.json#commands[1]",
+        "process/evidence/CR152-CP7-VERIFICATION.index.json#commands[2]"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CR152 targeted tests and related regression pass; py_compile passes."
+    },
+    {
+      "id": "CP7-CR152-04",
+      "category": "fail-closed",
+      "name": "active triple_barrier/meta_label returns BLOCKED in first wave",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "tests/research/test_ml_strategy_e2e_contracts.py::test_cr152_reserved_label_methods_are_blocked_not_needs_review",
+        "tests/research/test_ml_strategy_e2e_contracts.py::test_cr152_ml_gate_adapter_preserves_runtime_authorization_flags"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Reserved ML label methods are extension slots only; active use produces BLOCKED, not NEEDS_REVIEW."
+    },
+    {
+      "id": "CP7-CR152-05",
+      "category": "fail-closed",
+      "name": "purged/embargo CV overlap and gap checks fail closed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "tests/research/test_ml_strategy_e2e_contracts.py::test_cr152_purged_embargo_cv_blocks_overlap_and_short_gap"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Static fixture proves purge window below label horizon and embargo gap too small issue codes."
+    },
+    {
+      "id": "CP7-CR152-06",
+      "category": "authorization-boundary",
+      "name": "metadata-only and no-registry-write boundary is enforced",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "tests/research/test_ml_strategy_e2e_contracts.py::test_cr152_metadata_contracts_are_metadata_only_and_block_forbidden_counters",
+        "process/evidence/CR152-CP7-VERIFICATION.index.json#boundary_check"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Forbidden operation counters remain 0 in evidence; nonzero registry/store/catalog counters are blocked in fixtures."
+    },
+    {
+      "id": "CP7-CR152-07",
+      "category": "adapter",
+      "name": "ML gate adapter maps status and preserves runtime authorization flags",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "tests/research/test_ml_strategy_e2e_contracts.py::test_cr152_ml_gate_adapter_preserves_runtime_authorization_flags"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "BLOCKED maps to admission blocked; gate_present/gate_required/gate_status/gate_ref attach without flipping not_qmt/not_simulation/not_live/not_broker flags."
+    },
+    {
+      "id": "CP7-CR152-08",
+      "category": "release-wording",
+      "name": "S05 wording stays contract semantics only",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/evidence/CR152-CP7-VERIFICATION.index.json#wording_review",
+        "process/stories/CR152-S05-static-evidence-release-wording.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "No real model performance, production readiness, runtime readiness, trading readiness or registry publication claim is made. CP8 must preserve this wording."
+    },
+    {
+      "id": "CP7-CR152-09",
+      "category": "scope-out-risk",
+      "name": "Taxonomy/provenance hygiene is tracked outside CR152",
+      "status": "PASS",
+      "severity": "LOW",
+      "evidence_refs": [
+        "process/evidence/CR152-CP7-VERIFICATION.index.json#risks[0]",
+        "process/changes/CR-INDEX.yaml#FU-CR152-001"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "Known taxonomy failure is historical and outside CR152 owner scope; full pytest is not claimed."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP8_INPUT_WITH_RISK",
+  "checked_at": "2026-07-02T12:38:36+08:00",
+  "summary": {
+    "effective_validation_mode": "static-fixture-only",
+    "tests_passed": 34,
+    "cr152_targeted_tests_passed": 5,
+    "related_regression_tests_passed": 34,
+    "full_pytest_claimed": false,
+    "taxonomy_guardrail": "expected_fail_scope_out",
+    "taxonomy_follow_up_ref": "FU-CR152-001",
+    "py_compile": "PASS",
+    "git_diff_check": "PASS",
+    "forbidden_operation_count": 0,
+    "runtime_authorization_allowed": false,
+    "real_training_allowed": false,
+    "real_data_validation_allowed": false,
+    "model_registry_write_allowed": false,
+    "blocking_findings": 0,
+    "risk_ids": [
+      "CR152-CP7-R01-TEST-TAXONOMY-PROVENANCE-HYGIENE"
+    ]
+  },
+  "updated_at": "2026-07-02T12:38:36+08:00"
+}
