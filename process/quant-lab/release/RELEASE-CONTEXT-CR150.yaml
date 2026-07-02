@@ -1,0 +1,172 @@
+schema_version: "1.0"
+status: approved_ready_with_risk
+release_artifact_profile: minimal
+release_decision: READY_WITH_RISK
+created_at: "2026-07-01T19:56:26+08:00"
+updated_at: "2026-07-01T20:18:16+08:00"
+source_gate: CP8
+
+release_scope:
+  current_version: "roadmap-draft-v0.4"
+  target_version: "roadmap-draft-v0.4-cr150-ready-with-risk"
+  included_features:
+    - "CR150 local metadata linkage for multifactor framework completion"
+  included_stories:
+    - "CR150-MULTIFACTOR-FRAMEWORK-COMPLETION"
+  excluded_scope:
+    - "real lake read or write"
+    - "NAS sync, write or restore"
+    - "provider fetch"
+    - "catalog pointer mutation"
+    - "credential read"
+    - "QMT, MiniQMT, xtquant or gateway runtime"
+    - "simulation, paper, live, trading or broker operation"
+    - "Git remote write"
+    - "external framework clone, install or run"
+  user_visible_changes:
+    - "Multifactor framework completion is now represented by a local metadata-only completion map."
+    - "Completion chain covers factor spec through strategy admission package."
+  internal_changes:
+    - "Phase A asset map and Phase B contract completion are intentionally merged into MultifactorFrameworkCompletionMap."
+    - "Map nodes provide asset inventory; linkage_gaps provides a gap-count equivalent view."
+  breaking_changes: []
+  known_risks:
+    - "RISK-CR150-INLINE-VERIFICATION"
+    - "RISK-CR150-RUNTIME-NOT-AUTHORIZED"
+
+version_decision:
+  current_version: "roadmap-draft-v0.4"
+  target_version: "roadmap-draft-v0.4-cr150-ready-with-risk"
+  change_type: "PATCH"
+  compatibility: "compatible"
+  reason: "CR150 adds local metadata linkage and process evidence only; no public API, install path, state schema or runtime behavior is authorized to change."
+
+quality_summary:
+  cp7_results:
+    - path: "process/checks/CP7-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json"
+      decision: "PASS"
+      original_validation_mode: "mixed"
+      effective_validation_mode: "static-only"
+      runtime_validation: "N/A; explicitly out_of_scope and not_authorized"
+  test_report_path: "N/A - CR150 scoped CP7 return/evidence is the test report equivalent"
+  review_path: "N/A - CR150 scoped CP7 result and handoff review findings are the review equivalent"
+  blocker_count: 0
+  high_count: 0
+  accepted_risk_ids:
+    - "RISK-CR150-INLINE-VERIFICATION"
+  pending_risk_acceptance_ids: []
+  unresolved_findings:
+    - id: "RISK-CR150-INLINE-VERIFICATION"
+      severity: "medium"
+      status: "accepted_by_user"
+      summary: "CP7 was performed by Host Orchestrator inline fallback instead of a real meta-qa subagent."
+      traceability_note: "CP7 return recorded this as low / accepted_for_current_tooling because inline fallback was the available verification path at that moment. CP8 upgrades handling to medium / pending_user_risk_acceptance because repository rule 32 requires explicit user approval before inline fallback can substitute for meta-qa at a verification gate."
+      accepted_at: "2026-07-01T20:18:16+08:00"
+
+affected_surface:
+  platforms:
+    - "local Python test/runtime-free verification only"
+  components:
+    - "engine/mature_multifactor_research.py"
+    - "tests/test_cr150_multifactor_framework_completion.py"
+    - "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP.index.json"
+    - "process/checks/CP6-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json"
+    - "process/checks/CP7-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json"
+  install_scopes: []
+  config_changes: []
+  permission_changes: []
+  migration_required: false
+  external_interfaces: []
+  state_schema_changes: []
+  command_parameter_changes: []
+
+install_validation_summary:
+  commands:
+    - "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab"
+    - "uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab"
+    - "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab"
+  results:
+    - "PASS initial before CP8 evidence writes: process_link_health ok; artifact_git_dirty clean"
+    - "PASS: active formal CRs = CR-150; blocked formal CRs = none"
+    - "PASS final after CP8 evidence writes: process_link_health ok; artifact_git_dirty dirty due new CP8 process evidence"
+  log_paths:
+    - "current-session-command-output"
+  skipped_with_reason:
+    - "No install, upgrade, package publish or deployment action is in CR150 scope."
+
+release_documents:
+  release_notes:
+    path: "process/checks/CP8-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.summary.md"
+    status: "scoped-summary"
+    na_reason: "Minimal profile uses CR150 scoped CP8 summary instead of updating unversioned docs/release files."
+  deploy_checklist:
+    path: "N/A"
+    status: "not-applicable"
+    na_reason: "No install or deployment action is authorized."
+  rollback:
+    path: "N/A"
+    status: "not-applicable"
+    na_reason: "No runtime write, migration, catalog mutation or deployment action is performed; code rollback remains normal VCS workflow outside CP8 readiness."
+  migration:
+    path: "N/A"
+    status: "not-applicable"
+    na_reason: "No state schema, template, config, install path, frontmatter, skill output format, command parameter or data structure migration is authorized."
+  feedback:
+    path: "process/checkpoints/CP8-CR150-DELIVERY-READINESS.md#cp8-后续跟踪分流表"
+    status: "scoped-summary"
+    na_reason: "Follow-up is limited to the inline-fallback risk acceptance route."
+
+non_authorized_items:
+  - id: "NA-CR150-001"
+    operation: "real lake read or write"
+    reason: "CR150 is local metadata-only and static verification only."
+    required_authorization: "separate CR and explicit runtime/data authorization"
+  - id: "NA-CR150-002"
+    operation: "NAS sync, write or restore"
+    reason: "NAS operations remain outside CR150 and are not needed for local metadata linkage."
+    required_authorization: "separate human gate"
+  - id: "NA-CR150-003"
+    operation: "provider fetch, catalog pointer mutation or credential read"
+    reason: "No external data source or secret is required for CR150 CP8 readiness."
+    required_authorization: "separate high-risk gate"
+  - id: "NA-CR150-004"
+    operation: "QMT, MiniQMT, xtquant, gateway, simulation, paper, live, trading or broker operation"
+    reason: "CP7/CP8 evidence is static-only and does not prove runtime capability."
+    required_authorization: "separate runtime/trading authorization"
+  - id: "NA-CR150-005"
+    operation: "Git remote write or external framework clone/install/run"
+    reason: "CP8 readiness does not publish, push, install dependencies or execute external frameworks."
+    required_authorization: "separate explicit user approval"
+
+follow_up_summary:
+  observation_items:
+    - "If future CRs need runtime factor panels or strategy runs, require new CP2/runtime authorization and do not reuse CR150 CP8 approval."
+  feedback_items:
+    - "Use meta-qa subagent for future CP7/CP8 verification when explicitly requested or when subagent dispatch is available."
+  follow_up_candidates:
+    - id: "FU-CR150-001"
+      status: "cancelled-not-needed"
+      summary: "Rerun CR150 CP7 through meta-qa/subagent verification before CP8 closure."
+    - id: "RA-CR149-001"
+      status: "ready-for-cp2-review"
+      summary: "Resume previously deferred CR149 NAS current-truth scoped sync approval path because current PC can connect data lake and NAS; no NAS sync is authorized by CR150 CP8."
+      checkpoint_ref: "process/checkpoints/CP2-CR149-NAS-CURRENT-TRUTH-SYNC.md"
+  risk_acceptance_items:
+    - id: "DEC-CR150-CP8-001"
+      decision_type: "risk_acceptance"
+      status: "accepted_by_user"
+      recommended_release_decision: "READY_WITH_RISK"
+      severity_traceability: "CP7 low / accepted_for_current_tooling -> CP8 medium / pending_user_risk_acceptance because explicit user approval is required for inline fallback to substitute for meta-qa."
+      approved_by: "user"
+      approved_at: "2026-07-01T20:18:16+08:00"
+      approval_note: "User requested CP8 be passed first, then a follow-up plan including the previously unsynced NAS CR."
+
+token_control:
+  default_read_mode: capsule-first
+  copied_long_text: false
+  allowed_payload: "summary, count, risk id, decision id, evidence path"
+  full_doc_read_triggers:
+    - missing_capsule_field
+    - unreadable_evidence_path
+    - conflicting_conclusion
+    - user_requested_deep_review

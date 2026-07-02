@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "stage": "CP7",
+  "cr_id": "CR-151",
+  "story_ids": [
+    "CR151-S01-statistical-report-contracts",
+    "CR151-S02-gate-evaluator-fail-closed-rules",
+    "CR151-S03-admission-completion-linkage",
+    "CR151-S04-static-evidence-release-wording"
+  ],
+  "verification_mode": "local-static-fixture",
+  "effective_validation_mode": "static-only",
+  "verification_report_ref": "process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.summary.md",
+  "return_ref": "process/returns/CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.CP7.return.json",
+  "cp7_result_ref": "process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.json",
+  "cp6_evidence_ref": "process/evidence/CR151-CP6-IMPLEMENTATION.index.json",
+  "verify_packet_refs": [
+    "process/context/stories/CR151-S01-statistical-report-contracts.CP7.verify-packet.json",
+    "process/context/stories/CR151-S02-gate-evaluator-fail-closed-rules.CP7.verify-packet.json",
+    "process/context/stories/CR151-S03-admission-completion-linkage.CP7.verify-packet.json",
+    "process/context/stories/CR151-S04-static-evidence-release-wording.CP7.verify-packet.json"
+  ],
+  "design_refs": [
+    "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/CR151-S01-statistical-report-contracts-LLD.md",
+    "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/CR151-S02-gate-evaluator-fail-closed-rules-LLD.md",
+    "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/CR151-S03-admission-completion-linkage-LLD.md",
+    "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/CR151-S04-static-evidence-release-wording.md"
+  ],
+  "verified_files": [
+    "engine/strategy_admission_statistical_gate.py",
+    "engine/strategy_admission_package.py",
+    "engine/mature_multifactor_research.py",
+    "tests/test_cr151_strategy_admission_statistical_gate.py",
+    "tests/test_cr150_multifactor_framework_completion.py",
+    "tests/research/test_strategy_admission_package.py"
+  ],
+  "commands": [
+    {
+      "command": "uv run meta-flow workspace check --project-root .",
+      "result": "pass",
+      "summary": "process_link_health: ok; routing_mode=symlink; artifact target=/home/hyde/workspace/meta-flow-artifacts/process/quant-lab"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_cr151_strategy_admission_statistical_gate.py tests/test_cr150_multifactor_framework_completion.py tests/research/test_strategy_admission_package.py",
+      "result": "pass",
+      "summary": "20 passed in 0.65s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/strategy_admission_statistical_gate.py engine/strategy_admission_package.py engine/mature_multifactor_research.py",
+      "result": "pass",
+      "summary": "no output"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "summary": "no output"
+    },
+    {
+      "command": "uv run --python 3.11 python -c 'from engine.strategy_admission_statistical_gate import MultipleTestingReport, validate_multiple_testing_report; r=MultipleTestingReport(family_id=\"cr151-factor-family\", candidate_count=3, raw_p_values=(0.01,), adjusted_p_values=(0.02,), alpha=0.05, method=\"BH\", rejected_count=4); print(\"issue_codes=\" + \",\".join(issue.code for issue in validate_multiple_testing_report(r)))'",
+      "result": "pass",
+      "summary": "issue_codes=statistical_multiple_testing_raw_p_value_count_mismatch,statistical_multiple_testing_adjusted_p_value_count_mismatch,statistical_multiple_testing_rejected_count_exceeds_candidates"
+    },
+    {
+      "command": "uv run --python 3.11 python -c 'from engine.strategy_admission_statistical_gate import BacktestOverfitRiskReport, MultipleTestingReport, RobustFactorStatisticsReport, WalkForwardValidationPlan, evaluate_strategy_admission_statistical_gate; gate=evaluate_strategy_admission_statistical_gate(multiple_testing_report=MultipleTestingReport(family_id=\"cr151-factor-family\", candidate_count=3, raw_p_values=(0.01,), adjusted_p_values=(0.02,), alpha=0.05, method=\"BH\", rejected_count=1), robust_statistics_report=RobustFactorStatisticsReport(metric_id=\"rank_ic\", sample_count=64, ic_mean=0.035, rank_ic_mean=0.042, robust_t_stat=2.4, p_value=0.02, autocorrelation_lags=(1,5,10)), walk_forward_plan=WalkForwardValidationPlan(folds=3, train_window=\"504d\", validation_window=\"126d\", oos_window=\"63d\", embargo_days=5, fold_metrics=({\"fold_id\":1,\"passed\":True},{\"fold_id\":2,\"passed\":True},{\"fold_id\":3,\"passed\":True})), overfit_risk_report=BacktestOverfitRiskReport(trial_count=12, pbo=0.12, dsr=0.45, observed_sharpe=1.25, skew=0.1, kurtosis=3.1, sample_length=756)); print(\"gate_status=\" + gate.status.value); print(\"issue_codes=\" + \",\".join(issue.code for issue in gate.blocked_reasons))'",
+      "result": "pass",
+      "summary": "gate_status=BLOCKED; issue_codes=statistical_multiple_testing_raw_p_value_count_mismatch,statistical_multiple_testing_adjusted_p_value_count_mismatch"
+    },
+    {
+      "command": "uv run --python 3.11 python -c 'from engine.strategy_admission_statistical_gate import BacktestOverfitRiskReport, MultipleTestingReport, RobustFactorStatisticsReport, WalkForwardValidationPlan, evaluate_strategy_admission_statistical_gate; base=dict(multiple_testing_report=MultipleTestingReport(\"ok\",1,(0.01,),(0.01,),0.05,\"BH\",1), robust_statistics_report=RobustFactorStatisticsReport(\"rank_ic\",64,0.03,0.04,2.4,0.02,(1,5,10)), walk_forward_plan=WalkForwardValidationPlan(3,\"504d\",\"126d\",\"63d\",5,({\"passed\":True},{\"passed\":True},{\"passed\":True})), overfit_risk_report=BacktestOverfitRiskReport(12,0.12,0.45,1.25,0.1,3.1,756)); print(\"status_order=\" + \",\".join(evaluate_strategy_admission_statistical_gate(operation_counts=counts, **base).status.value for counts in ({\"broker_access\":1},{},)))'",
+      "result": "pass",
+      "summary": "status_order=BLOCKED,PASS; forbidden operation counters remain fail-closed before PASS"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow failure route-check --result process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.json --project-root /home/hyde/workspace/quant-lab",
+      "result": "pass",
+      "summary": "Failure Route Check: OK"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow waiver check --result process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.json --project-root /home/hyde/workspace/quant-lab",
+      "result": "pass",
+      "summary": "Waiver Check: OK"
+    }
+  ],
+  "boundary_check": {
+    "credential_read": 0,
+    ".env_read": 0,
+    "real_lake_read": 0,
+    "real_lake_write": 0,
+    "nas_operation": 0,
+    "provider_fetch": 0,
+    "qmt_runtime": 0,
+    "simulation_or_live": 0,
+    "trading_operation": 0,
+    "broker_operation": 0,
+    "external_framework_run": 0,
+    "git_remote_write": 0,
+    "catalog_pointer_mutation": 0
+  },
+  "dangerous_command_scan": {
+    "result": "pass_with_context",
+    "summary": "No CR151-introduced executable runtime/data/credential/NAS/provider/QMT/trading/Git remote operation was found or executed. Static hits in mature_multifactor_research.py are pre-existing IO helpers outside the CR151 completion-map path and were not invoked."
+  },
+  "findings": [
+    {
+      "id": "CR151-CP7-F01",
+      "severity": "BLOCKER",
+      "status": "closed",
+      "title": "Multiple-testing count consistency is not validated, allowing malformed evidence to PASS",
+      "evidence_refs": [
+        "engine/strategy_admission_statistical_gate.py:159",
+        "engine/strategy_admission_statistical_gate.py:242",
+        "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/CR151-S01-statistical-report-contracts-LLD.md:107",
+        "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/CR151-S02-gate-evaluator-fail-closed-rules-LLD.md:96"
+      ],
+      "reproduction": "candidate_count=3 with one raw and one adjusted p-value returns validate_multiple_testing_report(...) == () and aggregate gate status PASS",
+      "route_on_fail": "rework_same_story",
+      "owner": "meta-dev",
+      "recommended_fix": "Validate candidate_count == len(raw_p_values) == len(adjusted_p_values) and rejected_count <= candidate_count; malformed count evidence should produce blocker issues and aggregate BLOCKED before threshold evaluation.",
+      "closed_at": "2026-07-02T07:30:39+08:00",
+      "closure_evidence": [
+        "process/evidence/CR151-CP7-VERIFICATION.index.json#commands[4]",
+        "process/evidence/CR151-CP7-VERIFICATION.index.json#commands[5]",
+        "tests/test_cr151_strategy_admission_statistical_gate.py:99"
+      ],
+      "closure_summary": "Reverification shows count mismatch blocker issue codes and aggregate malformed multiple-testing evidence returns BLOCKED."
+    }
+  ],
+  "risks": [],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP8_INPUT_WITH_RISK",
+  "closed_risks": [
+    {
+      "id": "CR151-CP7-R02",
+      "severity": "LOW",
+      "status": "closed_remediated_before_cp8",
+      "summary": "CP7 verify packets were updated to include acceptance_criteria, non-empty verification_plan, test_refs, design_contract_refs and design_evidence_ref.",
+      "owner": "host-orchestrator",
+      "closed_at": "2026-07-02T08:18:00+08:00",
+      "evidence_refs": [
+        "process/context/stories/CR151-S01-statistical-report-contracts.CP7.verify-packet.json",
+        "process/context/stories/CR151-S02-gate-evaluator-fail-closed-rules.CP7.verify-packet.json",
+        "process/context/stories/CR151-S03-admission-completion-linkage.CP7.verify-packet.json",
+        "process/context/stories/CR151-S04-static-evidence-release-wording.CP7.verify-packet.json"
+      ]
+    },
+    {
+      "id": "CR151-CP7-R01",
+      "severity": "MEDIUM",
+      "status": "closed_remediated_before_cp8",
+      "summary": "Canonical docs/quality/TEST-STRATEGY.md now covers CR151 static-only verification strategy and release boundary.",
+      "owner": "host-orchestrator",
+      "closed_at": "2026-07-02T08:45:00+08:00",
+      "evidence_refs": [
+        "docs/quality/TEST-STRATEGY.md"
+      ]
+    }
+  ],
+  "process_hygiene": {
+    "verify_packet_hygiene": "PASS",
+    "route_check": "PASS",
+    "waiver_check": "PASS",
+    "updated_at": "2026-07-02T08:45:00+08:00",
+    "notes": "R01 and R02 are remediated before CP8; STATE v2 hygiene remains for release readiness caveat.",
+    "test_strategy": "PASS",
+    "open_cp8_caveat_ids": [
+      "CR151-CP8-R03-STATE-V2-HYGIENE"
+    ]
+  }
+}

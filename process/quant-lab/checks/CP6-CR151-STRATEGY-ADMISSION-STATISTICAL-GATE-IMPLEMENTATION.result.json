@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-IMPLEMENTATION",
+  "cr_id": "CR-151",
+  "story_id": "CR151-S01..S04",
+  "context_ref": "process/context/CP5-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-CONTEXT.yaml",
+  "dispatch_refs": [
+    "host-orchestrator-inline:tool-policy-no-explicit-subagent-request"
+  ],
+  "evidence_ref": "process/evidence/CR151-CP6-IMPLEMENTATION.index.json",
+  "items": [
+    {
+      "id": "CP6-CR151-01",
+      "category": "implementation",
+      "name": "Story return packets present and valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/STORY-CR151-S01.CP6.return.json",
+        "process/returns/STORY-CR151-S02.CP6.return.json",
+        "process/returns/STORY-CR151-S03.CP6.return.json",
+        "process/returns/STORY-CR151-S04.CP6.return.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "4/4 return-check passed"
+    },
+    {
+      "id": "CP6-CR151-02",
+      "category": "evidence",
+      "name": "Story evidence indexes present and valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR151-S01.CP6.index.json",
+        "process/evidence/CR151-S02.CP6.index.json",
+        "process/evidence/CR151-S03.CP6.index.json",
+        "process/evidence/CR151-S04.CP6.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "4/4 evidence-check passed"
+    },
+    {
+      "id": "CP6-CR151-03",
+      "category": "contracts",
+      "name": "CR151 statistical gate contracts and evaluator implemented",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/strategy_admission_statistical_gate.py",
+        "tests/test_cr151_strategy_admission_statistical_gate.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Contracts, validators, thresholds and four-state evaluator implemented."
+    },
+    {
+      "id": "CP6-CR151-04",
+      "category": "integration",
+      "name": "Admission package and CR150 completion linkage implemented",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/strategy_admission_package.py",
+        "engine/mature_multifactor_research.py",
+        "tests/test_cr150_multifactor_framework_completion.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Status mapping and optional statistical gate linkage implemented; CR150 default remains unchanged."
+    },
+    {
+      "id": "CP6-CR151-05",
+      "category": "verification",
+      "name": "Local tests and static compile pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR151-CP6-IMPLEMENTATION.index.json#commands"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "20 pytest cases passed after CP7-F01 rework; py_compile passed; git diff --check passed."
+    },
+    {
+      "id": "CP6-CR151-06",
+      "category": "security",
+      "name": "No forbidden runtime or data operations executed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR151-CP6-IMPLEMENTATION.index.json#boundary_check"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "All forbidden operation counters remain 0."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "CP7",
+  "checked_at": "2026-07-02T06:54:09+08:00",
+  "summary": {
+    "story_count": 4,
+    "return_packet_count": 4,
+    "evidence_index_count": 4,
+    "pytest_passed": 20,
+    "forbidden_operation_count": 0,
+    "runtime_authorization_allowed": false,
+    "cp7_rework_integrated": "CR151-CP7-F01 closed; final tests 20 passed."
+  },
+  "updated_at": "2026-07-02T07:45:00+08:00"
+}

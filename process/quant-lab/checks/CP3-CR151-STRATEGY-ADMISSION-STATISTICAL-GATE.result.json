@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3",
+  "checkpoint_id": "CP3-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE",
+  "cr_id": "CR-151",
+  "context_ref": "process/context/CP3-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-CONTEXT.yaml",
+  "dispatch_refs": [],
+  "evidence_ref": "",
+  "items": [
+    {
+      "id": "CP3-CR151-01",
+      "category": "entry",
+      "name": "CP2 scope baseline is approved",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR151-MULTIFACTOR-STRATEGY-E2E-SCOPE.md",
+        "process/checks/CP2-CR151-MULTIFACTOR-STRATEGY-E2E-SCOPE.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "User approved DQ-CP2-CR151-001/002/003."
+    },
+    {
+      "id": "CP3-CR151-02",
+      "category": "discussion",
+      "name": "Architecture Gray Areas are recorded before HLD",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/discussions/CP3-CR151-HLD-DISCUSSION-LOG.md",
+        "process/checks/CP3-CR151-DISCUSSION-CHECKPOINT.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Four AGAs recorded: module boundary, wave boundary, status model, validation boundary."
+    },
+    {
+      "id": "CP3-CR151-03",
+      "category": "hld",
+      "name": "HLD covers problem, options, recommendation, traceability, flows, failures and Story slices",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/HLD-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "HLD uses dedicated metadata-only statistical gate module and Wave A scope; MF-GAP-2 extended evaluation diagnostics, MF-GAP-4 regime split and MF-GAP-7 factor clustering/de-dup are explicitly deferred."
+    },
+    {
+      "id": "CP3-CR151-04",
+      "category": "adr",
+      "name": "Core ADR decisions include recommendation, alternatives, impact and rollback",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/ARCHITECTURE-DECISION-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "ADR-CR151-001..004 cover module boundary, Wave A, status model and validation boundary."
+    },
+    {
+      "id": "CP3-CR151-05",
+      "category": "blueprint",
+      "name": "Blueprint/domain/dependency indexes are available and HLD consumes existing FEAT-03/FEAT-14 boundaries",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "docs/design/BLUEPRINT.md",
+        "docs/design/DOMAIN-MAP.md",
+        "docs/design/DEPENDENCY-MAP.md",
+        "docs/design/HLD.md",
+        "docs/design/ARCHITECTURE-DECISION.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Long-term HLD/ADR indexes were updated; domain/dependency existing FEAT-03/FEAT-14 boundaries remain applicable."
+    },
+    {
+      "id": "CP3-CR151-06",
+      "category": "authorization",
+      "name": "No runtime, credential, lake, NAS, provider, QMT, broker, trading, external framework or Git remote authorization is granted",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP3-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-CONTEXT.yaml",
+        "process/docs/design/HLD-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md#11-risks-and-mitigations",
+        "process/docs/design/ARCHITECTURE-DECISION-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md#not-authorized"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "All CP3 artifacts state static/fixture/design-only boundary."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "process/context/CP3-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-CONTEXT.yaml#read_expansion_log"
+  ],
+  "manual_gate_status": "approved",
+  "pending_human_decisions": [
+    {
+      "decision_id": "DQ-CP3-CR151-001",
+      "decision_type": "architecture",
+      "status": "accepted_by_user",
+      "question": "Approve a dedicated metadata-only statistical gate contract module for CR151?",
+      "recommended_option": "Use a dedicated module, tentatively engine.strategy_admission_statistical_gate, and let existing mature multifactor/admission modules consume refs and summaries.",
+      "source_ref": "process/docs/design/ARCHITECTURE-DECISION-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md#adr-cr151-001-dedicated-statistical-gate-contract-module",
+      "resolved_by": "user",
+      "resolved_at": "2026-07-01T23:24:00+08:00",
+      "outcome": "Accepted recommended option."
+    },
+    {
+      "decision_id": "DQ-CP3-CR151-002",
+      "decision_type": "scope",
+      "status": "accepted_by_user",
+      "question": "Approve Wave A only for CR151 and defer Wave B?",
+      "recommended_option": "Keep CR151 Wave A to multiple testing, minimum robust statistics, walk-forward/OOS, PBO/DSR and aggregate statistical gate; defer capacity/impact, benchmark-relative reporting, PIT universe audit, MF-GAP-2 extended evaluation diagnostics, MF-GAP-4 regime-aware validation and MF-GAP-7 factor correlation clustering/de-duplication to follow-up / CR154.",
+      "source_ref": "process/docs/design/ARCHITECTURE-DECISION-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md#adr-cr151-002-wave-a-only-for-cr151",
+      "resolved_by": "user",
+      "resolved_at": "2026-07-01T23:24:00+08:00",
+      "outcome": "Accepted recommended option."
+    },
+    {
+      "decision_id": "DQ-CP3-CR151-003",
+      "decision_type": "architecture",
+      "status": "accepted_by_user",
+      "question": "Approve PASS/FAIL/NEEDS_REVIEW/BLOCKED fail-closed gate model?",
+      "recommended_option": "Use the four-state model so missing mandatory evidence is BLOCKED, threshold failure is FAIL, borderline evidence is NEEDS_REVIEW and complete passing evidence is PASS.",
+      "source_ref": "process/docs/design/ARCHITECTURE-DECISION-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md#adr-cr151-003-four-state-fail-closed-gate-model",
+      "resolved_by": "user",
+      "resolved_at": "2026-07-01T23:24:00+08:00",
+      "outcome": "Accepted recommended option."
+    },
+    {
+      "decision_id": "DQ-CP3-CR151-004",
+      "decision_type": "security",
+      "status": "accepted_by_user",
+      "question": "Keep CR151 static/fixture-only with no runtime authorization?",
+      "recommended_option": "Keep all real lake, NAS, provider, QMT, runtime, simulation/live/trading, broker, credential, external framework, Git remote and catalog pointer operations not authorized.",
+      "source_ref": "process/docs/design/ARCHITECTURE-DECISION-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md#adr-cr151-004-staticfixture-only-validation-boundary",
+      "resolved_by": "user",
+      "resolved_at": "2026-07-01T23:24:00+08:00",
+      "outcome": "Accepted recommended option."
+    }
+  ],
+  "decision": "PASS",
+  "next_route": "CP4",
+  "approved_at": "2026-07-01T23:24:00+08:00",
+  "approved_by": "user",
+  "accepted_human_decisions": [
+    "DQ-CP3-CR151-001",
+    "DQ-CP3-CR151-002",
+    "DQ-CP3-CR151-003",
+    "DQ-CP3-CR151-004"
+  ]
+}

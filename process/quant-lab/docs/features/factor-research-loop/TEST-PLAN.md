@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.6"
+version: "1.7"
 feature_id: "FEAT-03"
 ---
 
@@ -16,6 +16,7 @@ feature_id: "FEAT-03"
 | 1.4 | 2026-06-27 | codex | 增补异象发现 / 研究测试入口：候选先验逻辑、Harvey 标准、单调性、控制因子、时间切分、成本和经济逻辑门禁。 |
 | 1.5 | 2026-06-27 | codex | 增补自动异象发现测试：受控模板、批量 runner、多重检验、动态因子目录接入和 Stage 3 候选 FactorSpec。 |
 | 1.6 | 2026-06-28 | codex | 增补研究引擎稳定模块和脚本归档测试：测试 import 指向领域名模块，质量检查禁止新增不稳定 engine / root script 主入口。 |
+| 1.7 | 2026-07-01 | host-orchestrator | CR151 增补统计准入门测试入口：FDR、robust stats、walk-forward/OOS、PBO/DSR、fail-closed 状态、CR150 linkage 和 static-only 证据边界。 |
 
 ## 测试矩阵
 
@@ -35,6 +36,10 @@ feature_id: "FEAT-03"
 | 高级多因子模型评估 | GRS、因子溢价、经济显著性、时间切分、测试资产多样性、样本外、壳价值、做空可行性、政策周期和稳健性评估生成统一报告；核心门禁 blocked 时 overall blocked | `tests/test_factor_model_validation_report.py` |
 | 政策周期配置合同 | 内置政策周期配置可加载；覆盖率计算必须显式记录 covered / missing cycles 和 dataset candidates | `tests/test_policy_cycle_dataset_contract.py` |
 | Mature runner 高级评估集成 | Mature runner 生成 `FACTOR-MODEL-VALIDATION-REPORT.json`，evidence refs 和 mature admission package 必须包含报告引用、状态和 gate summary | `tests/test_stage3_factor_model_validation_integration.py`、`tests/test_stage3_mature_multifactor_research.py` |
+| CR151 statistical report contracts | MultipleTestingReport、RobustFactorStatisticsReport、WalkForwardValidationPlan、BacktestOverfitRiskReport 和 StrategyAdmissionStatisticalGate 可 JSON-safe 序列化；字段缺失返回可审计 issue | `tests/test_cr151_strategy_admission_statistical_gate.py` |
+| CR151 fail-closed gate evaluator | PASS / FAIL / NEEDS_REVIEW / BLOCKED 四态均由 fixture 覆盖；mandatory evidence missing 与 forbidden operation counter nonzero 必须 BLOCKED | `tests/test_cr151_strategy_admission_statistical_gate.py` |
+| CR151 linkage to admission package / completion map | statistical gate ref 可接入 StrategyAdmissionPackage 或 CR151 linkage helper；gate missing 产生 `statistical_admission_gate_missing`，不得生成 runtime readiness claim | `tests/test_cr151_strategy_admission_statistical_gate.py`、`tests/test_cr150_multifactor_framework_completion.py` |
+| CR151 static-only evidence boundary | 测试不得读取 `.env`、真实 lake/NAS/provider/QMT/broker、外部框架或 Git remote；no-real-operation counters 为 0 | `tests/test_cr151_strategy_admission_statistical_gate.py`、CP7 evidence scan |
 | Stage 3 pass gate | 只有 FactorModelValidationReport 核心门禁无 blocked、mature admission PASS、runner offline / preflight PASS 且 no-real-op 计数为 0 的候选才能作为 Stage 3 输出；blocked 候选必须保持研究失败 / 诊断状态 | `tests/test_stage3_factor_model_validation_integration.py`、后续 `tests/test_stage3_candidate_pass_gate.py` |
 | 候选搜索 / sweep | 多组因子、权重、样本切分、持仓数、换手和成本参数搜索时，每个候选都必须生成评估报告；只有通过候选可被标记为 stage3_pass_candidate | 后续 `tests/test_stage3_candidate_sweep.py` |
 | FactorPanel / LabelWindow | 四层值、coverage、label window fail-closed | `tests/test_cr030_factor_panel_label_window_gates.py` |
@@ -51,3 +56,4 @@ feature_id: "FEAT-03"
 | 研究报告用于 QMT 后续评审 | 只能提供 evidence / blocked reason / order_intent_draft_ref，不触发 QMT |
 | 外部项目分析更新 | 必须记录 reference / optional Spike / exclude / forbidden migration 分类 |
 | Stage 3 blocked 运行复盘 | 明确 blocked 原因、修复方向和下一轮候选配置；不得把 blocked 运行写入 Stage 4 observation 输入 |
+| CR151 release wording | 明确 `effective_validation_mode=static-only`，statistical PASS 不代表 simulation / paper / live / trading readiness。 |

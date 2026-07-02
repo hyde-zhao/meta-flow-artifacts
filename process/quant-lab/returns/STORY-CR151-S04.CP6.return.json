@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR151-S04.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-151",
+  "story_id": "CR151-S04",
+  "status": "implemented",
+  "created_at": "2026-07-02T06:54:09+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR151-S04.CP6.work-packet.json",
+  "implementation_ref": "process/stories/CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-IMPLEMENTATION.md",
+  "touched_files": [
+    {
+      "path": "process/stories/CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-IMPLEMENTATION.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/STORY-CR151-S04.CP6.return.json",
+      "change_type": "created"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_read_touched": false,
+    "real_lake_write_touched": false,
+    "provider_fetch_executed": false,
+    "nas_operation_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_or_live_executed": false,
+    "broker_operation_executed": false,
+    "external_framework_executed": false,
+    "git_remote_write_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr151_strategy_admission_statistical_gate.py tests/test_cr150_multifactor_framework_completion.py tests/research/test_strategy_admission_package.py",
+        "result": "pass",
+        "summary": "20 passed in 0.62s"
+      },
+      {
+        "command": "uv run --python 3.11 python -m py_compile engine/strategy_admission_statistical_gate.py engine/strategy_admission_package.py engine/mature_multifactor_research.py",
+        "result": "pass",
+        "summary": "py_compile passed"
+      },
+      {
+        "command": "git diff --check",
+        "result": "pass",
+        "summary": "no whitespace errors"
+      }
+    ],
+    "stage_decision": "PASS",
+    "skipped": []
+  },
+  "evidence_refs": [
+    "process/evidence/CR151-S04.CP6.index.json"
+  ],
+  "risks": [],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7",
+  "actor": "host-orchestrator-inline-fallback",
+  "decision": "PASS",
+  "updated_at": "2026-07-02T07:45:00+08:00",
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_architecture_doc_update": false,
+    "requires_hld_update": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "CR151 CP6 implementation followed CP5-approved LLDs; no long-lived design document delta is required for this Story return packet."
+  },
+  "contract_changes": {
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "requires_feature_doc_update": false
+  },
+  "cp7_rework_integrated": {
+    "finding_id": "CR151-CP7-F01",
+    "status": "closed",
+    "summary": "Multiple-testing count consistency validation added after CP7 initial NEEDS_REWORK; final CP7 reverify is PASS_WITH_RISK.",
+    "evidence_ref": "process/evidence/CR151-CP7-VERIFICATION.index.json#findings[0]"
+  }
+}

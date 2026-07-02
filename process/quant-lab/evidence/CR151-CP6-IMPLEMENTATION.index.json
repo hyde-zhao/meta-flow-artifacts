@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "stage": "CP6",
+  "cr_id": "CR-151",
+  "story_ids": [
+    "CR151-S01",
+    "CR151-S02",
+    "CR151-S03",
+    "CR151-S04"
+  ],
+  "implementation_ref": "process/stories/CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-IMPLEMENTATION.md",
+  "return_refs": [
+    "process/returns/STORY-CR151-S01.CP6.return.json",
+    "process/returns/STORY-CR151-S02.CP6.return.json",
+    "process/returns/STORY-CR151-S03.CP6.return.json",
+    "process/returns/STORY-CR151-S04.CP6.return.json"
+  ],
+  "story_evidence_refs": [
+    "process/evidence/CR151-S01.CP6.index.json",
+    "process/evidence/CR151-S02.CP6.index.json",
+    "process/evidence/CR151-S03.CP6.index.json",
+    "process/evidence/CR151-S04.CP6.index.json"
+  ],
+  "changed_files": [
+    {
+      "path": "engine/strategy_admission_statistical_gate.py",
+      "change_type": "created"
+    },
+    {
+      "path": "engine/strategy_admission_package.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "engine/mature_multifactor_research.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "tests/test_cr151_strategy_admission_statistical_gate.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/test_cr150_multifactor_framework_completion.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/stories/CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-IMPLEMENTATION.md",
+      "change_type": "created"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_cr151_strategy_admission_statistical_gate.py tests/test_cr150_multifactor_framework_completion.py tests/research/test_strategy_admission_package.py",
+      "result": "pass",
+      "summary": "20 passed in 0.62s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/strategy_admission_statistical_gate.py engine/strategy_admission_package.py engine/mature_multifactor_research.py",
+      "result": "pass",
+      "summary": "py_compile passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "summary": "no whitespace errors"
+    },
+    {
+      "command": "meta-flow story return-check/evidence-index/evidence-check for CR151-S01..S04",
+      "result": "pass",
+      "summary": "4 return packets and 4 evidence indexes validated"
+    }
+  ],
+  "boundary_check": {
+    "credential_read": 0,
+    "real_lake_read": 0,
+    "real_lake_write": 0,
+    "nas_operation": 0,
+    "provider_fetch": 0,
+    "qmt_runtime": 0,
+    "simulation_or_live": 0,
+    "broker_operation": 0,
+    "external_framework_run": 0,
+    "git_remote_write": 0,
+    "catalog_pointer_mutation": 0
+  },
+  "dispatch_note": "host-orchestrator-inline; subagent tool policy forbids spawning absent explicit user delegation/subagent request.",
+  "risks": [],
+  "waivers": [],
+  "updated_at": "2026-07-02T07:45:00+08:00",
+  "cp7_rework_integrated": {
+    "finding_id": "CR151-CP7-F01",
+    "status": "closed",
+    "evidence_ref": "process/evidence/CR151-CP7-VERIFICATION.index.json"
+  }
+}

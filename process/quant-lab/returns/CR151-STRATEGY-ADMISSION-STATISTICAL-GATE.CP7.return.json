@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-151",
+  "story_id": "CR151-S01..S04",
+  "status": "verified_with_risk",
+  "created_at": "2026-07-02T07:22:17+08:00",
+  "updated_at": "2026-07-02T08:45:00+08:00",
+  "created_by": "meta-qa-critical",
+  "context_ref": "process/checks/CP6-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-IMPLEMENTATION.result.json",
+  "verification_report_ref": "process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.summary.md",
+  "cp_result_ref": "process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.json",
+  "evidence_refs": [
+    "process/evidence/CR151-CP7-VERIFICATION.index.json"
+  ],
+  "dispatch_refs": [
+    "ADE-CR151-META-QA-CRITICAL-CP7-START-2026-07-02T065409+0800",
+    "ADE-CR151-META-QA-CRITICAL-CP7-COMPLETE-2026-07-02T072217+0800",
+    "ADE-CR151-META-QA-CRITICAL-CP7-REVERIFY-COMPLETE-2026-07-02T073039+0800"
+  ],
+  "touched_files": [
+    {
+      "path": "process/evidence/CR151-CP7-VERIFICATION.index.json",
+      "change_type": "updated"
+    },
+    {
+      "path": "process/returns/CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.CP7.return.json",
+      "change_type": "updated"
+    },
+    {
+      "path": "process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.json",
+      "change_type": "updated"
+    },
+    {
+      "path": "process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.summary.md",
+      "change_type": "updated"
+    },
+    {
+      "path": "process/state/AGENT-DISPATCH-LEDGER.ndjson",
+      "change_type": "appended"
+    },
+    {
+      "path": "process/state/CHECKPOINT-LEDGER.ndjson",
+      "change_type": "appended"
+    },
+    {
+      "path": "process/state/RUN-LEDGER.ndjson",
+      "change_type": "appended"
+    }
+  ],
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr151_strategy_admission_statistical_gate.py tests/test_cr150_multifactor_framework_completion.py tests/research/test_strategy_admission_package.py",
+        "result": "pass",
+        "summary": "20 passed in 0.65s"
+      },
+      {
+        "command": "uv run --python 3.11 python -m py_compile engine/strategy_admission_statistical_gate.py engine/strategy_admission_package.py engine/mature_multifactor_research.py",
+        "result": "pass",
+        "summary": "no output"
+      },
+      {
+        "command": "git diff --check",
+        "result": "pass",
+        "summary": "no output"
+      },
+      {
+        "command": "local malformed multiple-testing report probe",
+        "result": "pass",
+        "summary": "Malformed count/length evidence returns blocker issue codes and aggregate BLOCKED"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow failure route-check --result process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.json --project-root /home/hyde/workspace/quant-lab",
+        "result": "pass",
+        "summary": "Failure Route Check: OK"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow waiver check --result process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.json --project-root /home/hyde/workspace/quant-lab",
+        "result": "pass",
+        "summary": "Waiver Check: OK"
+      }
+    ],
+    "stage_decision": "PASS_WITH_RISK",
+    "skipped": [
+      {
+        "item": "runtime/data/provider/NAS/QMT/simulation/live/trading/broker/external-framework/Git-remote validation",
+        "reason": "not authorized by CR151 boundary; static/local fixture verification only"
+      }
+    ]
+  },
+  "boundary_check": {
+    "runtime_touched": false,
+    "credentials_touched": false,
+    ".env_touched": false,
+    "real_lake_touched": false,
+    "nas_touched": false,
+    "provider_touched": false,
+    "qmt_touched": false,
+    "simulation_or_live_touched": false,
+    "trading_or_broker_touched": false,
+    "external_framework_touched": false,
+    "git_remote_touched": false
+  },
+  "findings": [
+    {
+      "id": "CR151-CP7-F01",
+      "severity": "BLOCKER",
+      "status": "closed",
+      "summary": "validate_multiple_testing_report now enforces candidate_count/raw_p_values/adjusted_p_values/rejected_count consistency; malformed evidence aggregates to BLOCKED."
+    }
+  ],
+  "risks": [],
+  "waivers": [],
+  "next_stage_recommendation": "advance_to_cp8_with_risk_inputs",
+  "actor": "meta-qa-critical",
+  "decision": "PASS_WITH_RISK",
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_architecture_doc_update": false,
+    "requires_hld_update": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "CP7 rework changed CR151 implementation to satisfy approved LLD fail-closed behavior; no long-lived design document update is required.",
+    "fix_refs": [
+      "CR151-CP7-F01",
+      "engine/strategy_admission_statistical_gate.py",
+      "tests/test_cr151_strategy_admission_statistical_gate.py"
+    ],
+    "evidence_ref": "process/evidence/CR151-CP7-VERIFICATION.index.json#findings[0]"
+  },
+  "contract_changes": {
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "requires_feature_doc_update": false,
+    "notes": "CP7-F01 rework aligned implementation with existing CP5-approved LLD; no feature/HLD update needed."
+  },
+  "verify_packet_hygiene": {
+    "status": "remediated",
+    "updated_at": "2026-07-02T08:18:00+08:00",
+    "updated_packet_refs": [
+      "process/context/stories/CR151-S01-statistical-report-contracts.CP7.verify-packet.json",
+      "process/context/stories/CR151-S02-gate-evaluator-fail-closed-rules.CP7.verify-packet.json",
+      "process/context/stories/CR151-S03-admission-completion-linkage.CP7.verify-packet.json",
+      "process/context/stories/CR151-S04-static-evidence-release-wording.CP7.verify-packet.json"
+    ],
+    "fields_added": [
+      "acceptance_criteria",
+      "verification_plan",
+      "test_refs",
+      "design_contract_refs",
+      "design_evidence_ref"
+    ],
+    "result": "PASS"
+  },
+  "closed_risks": [
+    "CR151-CP7-R01",
+    "CR151-CP7-R02"
+  ],
+  "test_strategy_hygiene": {
+    "status": "remediated",
+    "updated_at": "2026-07-02T08:45:00+08:00",
+    "ref": "docs/quality/TEST-STRATEGY.md",
+    "closed_risk": "CR151-CP7-R01"
+  }
+}

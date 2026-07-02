@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION",
+  "profile": "minimal",
+  "story_id": "CR150-MULTIFACTOR-FRAMEWORK-COMPLETION",
+  "cr_id": "CR-150",
+  "checked_at": "2026-07-01T19:56:26+08:00",
+  "context_ref": "process/handoffs/NEXT-SESSION-CR150-CP8-RELEASE-READINESS-2026-07-01.md",
+  "dispatch_refs": [
+    "inline-host-orchestrator-cr150-cp8-release-readiness"
+  ],
+  "evidence_ref": "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.CP7.index.json",
+  "items": [
+    {
+      "id": "CP8-CR150-01",
+      "category": "process-route",
+      "name": "Process route health check passed before CP8 writes",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "Initial pre-write check: process_link_health ok; artifact_git_dirty clean. Final post-write check remains PASS with artifact_git_dirty dirty due newly generated CP8 process evidence."
+    },
+    {
+      "id": "CP8-CR150-02",
+      "category": "cr-tracking",
+      "name": "CR tracking permits CR150 CP8 readiness",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "active formal CRs = CR-150; blocked formal CRs = none."
+    },
+    {
+      "id": "CP8-CR150-03",
+      "category": "verification",
+      "name": "CP7 verification evidence is complete for static-only CR150 scope",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP7-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json",
+        "process/returns/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.CP7.return.json",
+        "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.CP7.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "effective_validation_mode=static-only. The CP7 mixed label does not represent runtime, real data, external framework, simulation, live, trading or broker evidence."
+    },
+    {
+      "id": "CP8-CR150-04",
+      "category": "release-scope",
+      "name": "CR150 authorization boundary remains unchanged",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP2-CR150-UC58-60-SCENARIO-CONFIRMATION.result.json",
+        "process/checks/CP6-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json",
+        "process/state/STATE.current.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CR150 does not authorize real lake/NAS/provider/QMT/runtime/simulation/live/trading/broker/credential/Git remote/external framework operations."
+    },
+    {
+      "id": "CP8-CR150-05",
+      "category": "design-tradeoff",
+      "name": "Phase A asset map and Phase B contract completion merge is documented",
+      "status": "PASS",
+      "severity": "LOW",
+      "evidence_refs": [
+        "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md#2.2-CR150-实施刷新",
+        "process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": null,
+      "waiver_ref": null,
+      "notes": "MultifactorFrameworkCompletionMap nodes provide asset inventory and linkage_gaps provides a gap-count equivalent view."
+    },
+    {
+      "id": "CP8-CR150-06",
+      "category": "risk-acceptance",
+      "name": "Inline fallback verification risk is routed to a CP8 human decision",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/returns/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.CP7.return.json#WAIVER-CR150-NO-META-QA-SUBAGENT",
+        "process/checkpoints/CP8-CR150-DELIVERY-READINESS.md#DEC-CR150-CP8-001"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "waive_with_risk_acceptance",
+      "waiver_ref": null,
+      "notes": "User must decide DEC-CR150-CP8-001 before CR150 CP8 can be closed."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR150-CP8-HANDOFF-2026-07-01T195626+0800",
+    "READ-CR150-CP8-STATE-2026-07-01T195626+0800",
+    "READ-CR150-CP8-CP7-RESULT-2026-07-01T195626+0800",
+    "READ-CR150-CP8-CP7-RETURN-2026-07-01T195626+0800",
+    "READ-CR150-CP8-CP7-EVIDENCE-2026-07-01T195626+0800",
+    "READ-CR150-CP8-ROADMAP-2026-07-01T195626+0800"
+  ],
+  "decision": "PASS",
+  "release_decision": "READY_WITH_RISK",
+  "manual_gate_status": "approved",
+  "pending_human_decisions": [],
+  "risk_acceptance": {
+    "decision_id": "DEC-CR150-CP8-001",
+    "risk_id": "RISK-CR150-INLINE-VERIFICATION",
+    "waiver_id": "WAIVER-CR150-NO-META-QA-SUBAGENT",
+    "status": "accepted_by_user",
+    "severity_traceability": "CP7 return recorded low / accepted_for_current_tooling. CP8 treats it as medium / pending_user_risk_acceptance because repository rule 32 requires explicit user approval before inline fallback can substitute for meta-qa at CP7.",
+    "recommended_outcome": "accept waiver and close CR150 as READY_WITH_RISK",
+    "reject_route": "CP7_META_QA_SUBAGENT_VERIFICATION",
+    "approved_by": "user",
+    "approved_at": "2026-07-01T20:18:16+08:00",
+    "approval_note": "User requested CP8 be passed first, then follow-up planning including the previously unsynced NAS CR. CR150 CP8 does not authorize NAS sync."
+  },
+  "not_authorized": [
+    "real_lake_read_or_write",
+    "nas_sync_write_restore",
+    "provider_fetch",
+    "catalog_pointer_mutation",
+    "credential_read",
+    "qmt_miniqmt_xtquant_gateway_runtime",
+    "simulation_paper_live_or_trading_runtime",
+    "broker_write_submit_cancel_or_real_account_query",
+    "git_remote_write",
+    "external_framework_clone_install_run"
+  ],
+  "next_route": "CR150_CLOSED_READY_WITH_RISK_THEN_RA_CR149_001_CP2_PLANNING",
+  "approved_at": "2026-07-01T20:18:16+08:00",
+  "approved_by": "user",
+  "accepted_risks": [
+    "RISK-CR150-INLINE-VERIFICATION"
+  ]
+}

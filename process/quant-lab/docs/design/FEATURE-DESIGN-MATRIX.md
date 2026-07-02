@@ -1,6 +1,6 @@
 ---
 status: "ready-for-cp5-review"
-version: "1.13"
+version: "1.14"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld:
   - "docs/design/HLD.md"
@@ -34,6 +34,7 @@ confirmed_at: ""
 | 1.11 | 2026-06-28 | codex | FEAT-03 增补研究引擎稳定模块整改；重访条件增加 engine 主入口命名、旧 engine 入口归档、公共 serialization / matrix / admission contracts 和脚本归档规则变化。 |
 | 1.12 | 2026-06-28 | meta-se | 按 CR-139「Strategy Data Foundation」CP3 增补策略生产数据底座 Feature 归属与 `lld_policy`：FEAT-02 写侧/读侧分层（V1/C1/C2/R1/R3/R4/L2/L4/L5/M1/M2/N1-N3/C3/C4/T7/T8/X1/X2/X3/V4/F1）、FEAT-03 ML feature 层（V3/R2/E1-E5/F4）、FEAT-06 交易审计链（T4/T6）、FEAT-11 run evidence（L3/T6）、FEAT-12 配置层（F2/T5）、FEAT-14 universe·risk policy（F3/X4）；`lld_policy`：d1 纯新建=full-lld、d2 既有合同闭环=technical-note、a 已设计未实现=technical-note 消费既有 HLD 契约；跨边界项 T6 run-id 贯通归 FEAT-02 写侧生成 + FEAT-06/11 消费。AGA-1/3/5 推荐方案 CP3 已确认 A1/C1/E1。 |
 | 1.13 | 2026-06-28 | host-orchestrator | CP3 approved，AGA-1/3/5 确认 A1/C1/E1，pending-cp3 → confirmed-cp3。 |
+| 1.14 | 2026-07-01 | host-orchestrator | CR151 CP3 approved 后增补 Strategy Admission Statistical Gate CP4：FEAT-03 下新增统计准入门 Story 消费、`lld_policy`、DAG/Wave 和 Wave B deferred 边界。 |
 
 ## 适用性判定规则
 
@@ -114,6 +115,42 @@ confirmed_at: ""
 | DQ-FD-CR138-01 | implementation | 是否为 FEAT-11 / FEAT-12 生成独立 DESIGN / TEST-PLAN / TASKS，并将 CR138-S01..S08 纳入单一 CP5 批次 | 生成 `docs/features/runner-control-plane/*` 与 `docs/features/qmt-gateway-service-layer/*`；8 个 Story 全部 full-lld；统一批次 `CR138-RUNNER-QMT-OPERATIONAL-CONTROL-BATCH-A` | 只保留 HLD；拆成 Runner / Gateway 两个 CP5 批次 | 推荐方案让 Runner/Gateway 共享合同和授权边界统一确认；只留 HLD 会让 Story LLD 输入分散；拆双批次会增加跨契约漂移 | 影响 CP5 设计证据、Story owner、Wave 和 runtime authorization 边界 | 若 CP5 发现批次过大，可在不改 HLD 的前提下拆成 Runner / Gateway 两个 CP5 子批次 |
 | DQ-FD-CR138-02 | implementation | CR138-S08 文档 / fixtures / guardrail Story 是否需要 full-lld | 推荐 full-lld，因为它承载 no-real-op、runtime_authorization、docs 声明和 CP7 验证矩阵 | technical-note | 推荐方案降低误授权风险；technical-note token 更少但可能遗漏禁止项和验证命令 | 影响 CP7 / CP8 release readiness 和用户 runbook 语义 | 若 CP5 明确只做纯文档索引刷新，可降级为 technical-note |
 | DQ-FD-CR138-03 | runtime_authorization | CP4 / CP5 Story 设计是否授权真实 QMT / 账户 / 行情 / 订单验证 | 推荐不授权；仅记录后续可按需申请 scoped runtime_authorization | CP5 直接授权 readonly；永久不授权 | 推荐方案保持 CP3 决策一致，同时保留后续验证路径；直接授权风险高，永久不授权会阻断必要验证 | 影响 CP6/CP7 验证模式和用户预期 | 任一真实运行前必须另起 runtime_authorization gate |
+
+## CR151 CP4 增量：Strategy Admission Statistical Gate
+
+> 来源：`process/docs/design/HLD-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md`、`process/docs/design/ARCHITECTURE-DECISION-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md`、CP3 用户批准。CR151 归属 FEAT-03「研究数据集与多因子研究闭环」的本地/static 统计准入补齐，不新增生产数据湖、NAS、runtime 或交易授权。
+
+### Feature 归属与 lld_policy
+
+| Story ID | Owner Feature | feature_design_refs | lld_policy.required_level | trigger_reasons | CP5 设计证据 | 说明 |
+|---|---|---|---|---|---|---|
+| CR151-S01-statistical-report-contracts | FEAT-03 | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | 新共享 contract module、typed report objects、status enum、JSON-safe serialization | Story LLD | 定义 MultipleTestingReport、RobustFactorStatisticsReport、WalkForwardValidationPlan、BacktestOverfitRiskReport、StrategyAdmissionStatisticalGate 的最小合同。 |
+| CR151-S02-gate-evaluator-fail-closed-rules | FEAT-03 / FEAT-07 safety boundary | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md` | full-lld | fail-closed admission semantics、四态模型、forbidden operation counters | Story LLD | 覆盖 PASS/FAIL/NEEDS_REVIEW/BLOCKED，mandatory missing 必须 BLOCKED。 |
+| CR151-S03-admission-completion-linkage | FEAT-03 | `docs/features/factor-research-loop/DESIGN.md`、`TASKS.md` | full-lld | 触碰既有 CR150 completion map / StrategyAdmissionPackage linkage | Story LLD | 只做统计 gate ref / blocked reason linkage，不改变 runtime authorization 语义。 |
+| CR151-S04-static-evidence-release-wording | FEAT-03 / FEAT-08 | `docs/features/factor-research-loop/TEST-PLAN.md`、`TASKS.md` | technical-note | CP6/CP7/CP8 evidence wording、static-only release boundary | Story technical note | 收口 evidence index、return packet、release wording 和 no-real-operation 声明。 |
+
+### CR151 Wave A / Wave B 边界
+
+| 范围 | 状态 | 处理 |
+|---|---|---|
+| Multiple testing / FDR | Wave A | CR151 必做。 |
+| Robust factor statistics / Newey-West or equivalent robust t/p-value | Wave A | CR151 必做。 |
+| Walk-forward / OOS fold manifest | Wave A | CR151 必做。 |
+| PBO / DSR overfit risk report | Wave A | CR151 必做。 |
+| StrategyAdmissionStatisticalGate aggregate status | Wave A | CR151 必做。 |
+| IC decay by lag、half-life、turnover、liquidity/capacity view、orthogonalization、monotonicity、quantile spread | Deferred | CR154 / follow-up；不得被 Newey-West 字段静默视为覆盖。 |
+| Regime-aware validation / regime-stratified backtest | Deferred | CR154 / follow-up；不得被 walk-forward 字段静默视为覆盖。 |
+| Factor correlation clustering / redundancy de-duplication | Deferred | CR154 / follow-up；不得被 FDR 或 robust stats 静默视为覆盖。 |
+| Capacity / impact、IR/TE/Active Share、PIT universe audit | Deferred | 生产级评价工件，默认不进入 CR151。 |
+
+### CR151 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| CR151 Story 均有 FEAT-03 归属和 `lld_policy` | PASS | 本节 `Feature 归属与 lld_policy` |
+| Wave A / Wave B 边界显式化 | PASS | 本节 `CR151 Wave A / Wave B 边界` |
+| CP4 不授权实现或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR151.yaml#authorization_boundary` |
+| CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR151.yaml#lld_design_batch` |
 
 ## 豁免与 N/A 说明
 

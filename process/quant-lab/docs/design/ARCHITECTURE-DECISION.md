@@ -1,7 +1,7 @@
 ---
 status: "current-index"
-version: "1.5"
-change: "CR-138"
+version: "1.7"
+change: "CR-151"
 legacy_source: "process/ARCHITECTURE-DECISION.md"
 current_change_sources:
   - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-CR046.md"
@@ -9,6 +9,7 @@ current_change_sources:
   - "process/archive/design-cr-docs/RUNNER-CORE-MVP-DESIGN-CR126.md"
   - "process/docs/features/strategy-runner-core/DESIGN.md"
   - "process/docs/design/ARCHITECTURE-DECISION-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md"
+  - "process/docs/design/ARCHITECTURE-DECISION-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md"
 ---
 
 # Architecture Decision Current Index
@@ -23,6 +24,8 @@ current_change_sources:
 | 1.3 | 2026-06-23 | host-orchestrator | CR130 收口 runner architecture authority：CR046 ADR 标注为 legacy cross-target cluster，新增 runner core authority 行。 |
 | 1.4 | 2026-06-23 | host-orchestrator | CR131 将 CR 命名 ADR / runner source design 移出默认 design surface，历史入口统一指向 `process/archive/design-cr-docs/`。 |
 | 1.5 | 2026-06-24 | host-orchestrator | CR138 按功能域新增 Runner / QMT Gateway Operational Control Plane ADR 入口，覆盖 FEAT-11 / FEAT-12、REST-only Gateway P0、按需 runtime 授权和交易日历 / 佣金 / 收益查询服务。 |
+| 1.6 | 2026-07-01 | host-orchestrator | 登记 CR151 统计准入门 ADR：独立 metadata-only statistical gate module、Wave A only、四态 fail-closed gate、static/fixture-only validation boundary。 |
+| 1.7 | 2026-07-01 | host-orchestrator | 同步 CR151 CP3 评审整改：Wave A only 的 ADR 边界显式排除扩展评价统计、regime-aware validation 和 factor clustering / de-dup，均 deferred to follow-up / CR154。 |
 
 ## 定位
 
@@ -45,6 +48,7 @@ current_change_sources:
 | FEAT-12 QMT Gateway Service Layer | ADR-CR138-002、ADR-CR138-004、ADR-CR138-005、ADR-CR138-006、ADR-CR138-007 | Gateway 作为独立服务层；P0 REST-only；按需 runtime 授权；交易日历、佣金和收益查询归入 Query Service；CP4 拆 Gateway Story |
 | Runner Core Authority | archived CR126 source design + CR128 / CR129 closure + `strategy-runner-core` | offline runner implementation authority 归 `process/docs/features/strategy-runner-core/DESIGN.md`；`process/archive/design-cr-docs/RUNNER-CORE-MVP-DESIGN-CR126.md` 只作为 CR128 implementation intake/source design；CR046 ADR 不授权 runtime/NAS/QMT/provider/lake/catalog/trading |
 | FEAT-10 Strategy Research Lifecycle / quant-lab Migration Governance | ADR-CR053-001..005 | NAS 逻辑目录映射、manifest-first 数据传输、warm/cold 备份、真实迁移 CR058 后置、交易主机只读 package exchange |
+| FEAT-03 / FEAT-14 Strategy Admission Statistical Gate | ADR-CR151-001..004 | CR151 多因子统计准入门：dedicated metadata-only module、Wave A only、PASS/FAIL/NEEDS_REVIEW/BLOCKED fail-closed model、static/fixture-only validation；Wave A 不覆盖 MF-GAP-2 扩展评价统计、MF-GAP-4 regime 分层和 MF-GAP-7 因子相关性聚类 / 去重；不授权真实 lake/NAS/provider/QMT/runtime/trading/broker/credential/external framework |
 
 ## 使用规则
 

@@ -1,11 +1,11 @@
 ---
 id: "CR-150"
 title: "Multifactor Framework Completion"
-status: "active-no-risk-implementation"
+status: "closed-ready-with-risk"
 kind: "requirement-change"
-lifecycle_status: "active"
-readiness_status: "ready"
-gate_status: "not_started"
+lifecycle_status: "closed"
+readiness_status: "ready_with_risk"
+gate_status: "closed"
 gate_profile: "standard"
 created_at: "2026-07-01T15:20:00+08:00"
 created_by: "host-orchestrator"
@@ -73,4 +73,8 @@ not_authorized:
 
 ## Current Status
 
-CR-150 is active for no-risk local implementation. No human gate is required for local metadata contracts, tests and process evidence. Any real lake write, NAS/provider/runtime operation, catalog pointer mutation, report overwrite, simulation/live/trading or broker action remains not authorized and requires a separate human gate.
+CR-150 is closed as `READY_WITH_RISK` after CP8 approval on 2026-07-01T20:18:16+08:00. The accepted residual risk is `DEC-CR150-CP8-001`: CP7 used Host Orchestrator inline-fallback as a one-time meta-qa substitute for static-only verification.
+
+The closure only covers no-risk local metadata contracts, tests and process evidence. Any real lake write, NAS/provider/runtime operation, catalog pointer mutation, report overwrite, simulation/live/trading or broker action remains not authorized and requires a separate human gate.
+
+Post-close follow-up: `RA-CR149-001` is re-added to the next planning queue because the current PC can connect data lake and NAS. That follow-up must resume from `process/checkpoints/CP2-CR149-NAS-CURRENT-TRUTH-SYNC.md`; CR150 CP8 approval does not authorize NAS sync execution.

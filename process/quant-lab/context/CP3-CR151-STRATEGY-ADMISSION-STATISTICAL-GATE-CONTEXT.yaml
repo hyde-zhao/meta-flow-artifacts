@@ -1,0 +1,72 @@
+schema_version: 1
+context_id: CP3-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE
+cr_id: CR-151
+phase: solution-design
+status: ready
+created_at: "2026-07-01T22:53:50+08:00"
+read_profile: compact
+objective: "Confirm CR151 architecture for local/static multifactor strategy admission statistical gate before Story planning."
+must_read:
+  - process/checkpoints/CP2-CR151-MULTIFACTOR-STRATEGY-E2E-SCOPE.md
+  - process/discussions/CP3-CR151-HLD-DISCUSSION-LOG.md
+  - process/checks/CP3-CR151-DISCUSSION-CHECKPOINT.json
+  - process/docs/design/HLD-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md
+  - process/docs/design/ARCHITECTURE-DECISION-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md
+read_if_needed:
+  - docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
+  - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
+  - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
+  - engine/research_production_contracts.py
+  - engine/backtest_production_contracts.py
+  - engine/strategy_admission_package.py
+  - engine/mature_multifactor_research.py
+do_not_read_by_default:
+  - real lake files
+  - NAS mount or rsync targets
+  - .env or credential files
+  - provider/QMT/broker/runtime configuration
+approved_cp2_decisions:
+  - DQ-CP2-CR151-001
+  - DQ-CP2-CR151-002
+  - DQ-CP2-CR151-003
+cp3_decision_items:
+  - id: DQ-CP3-CR151-001
+    type: architecture
+    recommendation: "Use a dedicated metadata-only statistical gate contract module."
+  - id: DQ-CP3-CR151-002
+    type: scope
+    recommendation: "Keep CR151 Wave A only; defer capacity/impact, benchmark-relative reporting, PIT audit, MF-GAP-2 extended evaluation diagnostics, MF-GAP-4 regime-aware validation and MF-GAP-7 factor clustering/de-dup to follow-up / CR154."
+  - id: DQ-CP3-CR151-003
+    type: architecture
+    recommendation: "Use PASS/FAIL/NEEDS_REVIEW/BLOCKED fail-closed gate model."
+  - id: DQ-CP3-CR151-004
+    type: security
+    recommendation: "Keep static/fixture-only validation and no-runtime authorization boundary."
+not_authorized:
+  - source implementation before CP3/CP5 approval
+  - Story decomposition before CP3 approval
+  - LLD before CP3 approval
+  - real lake read or write
+  - NAS read/write/sync/chmod/chgrp/metadata normalization
+  - provider fetch
+  - QMT/MiniQMT/xtquant runtime
+  - simulation/paper/live/trading runtime
+  - broker read/write/submit/cancel/account query
+  - credential or .env read
+  - external framework clone/install/run
+  - Git remote write
+  - catalog pointer mutation
+read_expansion_log:
+  - at: "2026-07-01T22:53:50+08:00"
+    actor: host-orchestrator
+    phase: solution-design
+    capsule_path: process/context/CP3-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-CONTEXT.yaml
+    expanded_to:
+      - docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
+      - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
+      - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
+      - engine/research_production_contracts.py
+      - engine/backtest_production_contracts.py
+      - engine/strategy_admission_package.py
+      - engine/mature_multifactor_research.py
+    reason: "CP3 HLD required direct source and design review because CR151 architecture depends on existing contract anchors and a stale E2E review fact correction."

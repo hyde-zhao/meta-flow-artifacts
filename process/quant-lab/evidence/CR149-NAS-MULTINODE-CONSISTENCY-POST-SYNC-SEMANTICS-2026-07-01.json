@@ -1,0 +1,97 @@
+{
+  "schema_version": "cr149.nas_multinode_consistency.semantics.v1",
+  "created_at": "2026-07-01T21:26:14+08:00",
+  "created_by": "host-orchestrator",
+  "cr_id": "CR-149",
+  "candidate_id": "RA-CR149-001",
+  "status": "blocked_strict_metadata_consistency",
+  "interpretation_scope": "rsync-daemon-only post-sync semantics; raw evidence is not modified",
+  "raw_evidence_ref": "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY-POST-SYNC-2026-07-01.json",
+  "execution_check_ref": "process/checks/RA-CR149-001-NAS-CURRENT-TRUTH-SYNC-EXECUTION-2026-07-01.md",
+  "transport": {
+    "remote_transport": "rsync_daemon",
+    "mounted_path_status": "unavailable",
+    "fallback_used": true,
+    "mounted_path_ref": "/mnt/quant-lab-primary",
+    "mounted_lake_candidate_count": 0
+  },
+  "raw_result_preserved": {
+    "strict_checker_status": "blocked",
+    "compared_object_count": 18,
+    "raw_match_count": 0,
+    "raw_mismatch_count": 18,
+    "raw_error_count": 0,
+    "raw_itemize_messages": ".f...p.g... for all 18 compared objects"
+  },
+  "itemize_decoding": {
+    "format": "rsync itemize YXcstpoguax",
+    "observed": ".f...p.g...",
+    "object_type": "file",
+    "checksum": "same",
+    "size": "same",
+    "mtime": "same",
+    "permissions": "differs",
+    "owner": "same",
+    "group": "differs",
+    "acl": "not_reported",
+    "xattrs": "not_reported"
+  },
+  "content_consistency": {
+    "status": "PASS",
+    "basis": "rsync --checksum itemize reports checksum/size/mtime SAME for 18/18 objects; this is rsync internal checksum equality, not a heuristic inference",
+    "compared_object_count": 18,
+    "same_by_rsync_checksum_count": 18,
+    "independent_nas_sha256_available": false,
+    "independent_nas_sha256_deferred_reason": "NAS is rsync-daemon-only in current environment; mount is unavailable, SSH/appliance shell is not authorized, and NAS-to-local pull is not authorized."
+  },
+  "filesystem_metadata_consistency": {
+    "status": "BLOCKED",
+    "basis": "permission/group itemization differs for 18/18 objects under the strict rsync itemization check",
+    "permission_group_mismatch_count": 18,
+    "actual_remote_mode_group_values_available": false,
+    "actual_values_deferred_reason": "Existing raw evidence exposes p/g difference bits only. No new credentialed rsync command, mount, shell, pull, chmod, chgrp or normalization was executed while producing this interpretation layer."
+  },
+  "strict_consistency": {
+    "status": "BLOCKED",
+    "basis": "current guardrail treats any itemized rsync line as mismatch; under that strict filesystem-attribute semantics, 18/18 comparisons remain mismatched"
+  },
+  "root_cause_assessment": {
+    "status": "limited_by_access_path",
+    "most_likely_hypothesis": "NAS rsync daemon or NAS filesystem policy may be overriding or refusing source-side permission/group parity, because the execute step already used rsync -aH --checksum and -a includes perms/group/owner.",
+    "confirmed_root_cause": false,
+    "needs_new_access_authorization_for": [
+      "independent NAS-side sha256",
+      "reader direct-read check",
+      "NAS rsync module configuration inspection outside rsync protocol",
+      "metadata normalization attempt"
+    ]
+  },
+  "operation_counts": {
+    "nas_sync_or_write": 0,
+    "nas_read_only_command": 0,
+    "credential_read": 0,
+    "nas_to_local_pull": 0,
+    "delete": 0,
+    "restore": 0,
+    "chmod_or_chgrp": 0,
+    "provider_fetch": 0,
+    "catalog_pointer_mutation": 0,
+    "simulation_or_live": 0,
+    "broker_write": 0,
+    "git_remote_write": 0
+  },
+  "not_authorized_by_this_interpretation": [
+    "mount_access",
+    "ssh_or_appliance_shell",
+    "nas_to_local_pull",
+    "rsync_write_or_retry",
+    "chmod_or_chgrp",
+    "metadata_normalization",
+    "checker_source_code_semantics_change",
+    "phase_1_definition_of_done_change"
+  ],
+  "next_decision_boundary": {
+    "current_no_risk_work": "record interpretation layer and follow-up tracking only",
+    "future_decision_required_before_closure": "choose whether to keep strict metadata block, reclassify p/g parity out of Phase 1 content exit with follow-up tracking, accept READY_WITH_RISK metadata risk, or authorize a separate runtime gate"
+  }
+}

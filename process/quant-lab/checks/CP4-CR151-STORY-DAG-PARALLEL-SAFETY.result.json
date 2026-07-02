@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR151-STORY-DAG-PARALLEL-SAFETY",
+  "profile": "story-dag-parallel-safety",
+  "story_id": null,
+  "cr_id": "CR-151",
+  "context_ref": "process/checks/CP4-CR151-STORY-DAG-PARALLEL-SAFETY.md",
+  "dispatch_refs": [],
+  "evidence_ref": "process/STORY-BACKLOG-CR151.md",
+  "items": [
+    {
+      "id": "CP4-CR151-01",
+      "category": "traceability",
+      "name": "Story plan is traceable to approved CP3 HLD and ADR",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/HLD-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md",
+        "process/docs/design/ARCHITECTURE-DECISION-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md",
+        "process/STORY-BACKLOG-CR151.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Four stories map to the CP3-approved dedicated metadata-only statistical gate, four-state fail-closed model, Wave A scope and static-only boundary."
+    },
+    {
+      "id": "CP4-CR151-02",
+      "category": "dag",
+      "name": "Story DAG has no cycles or invalid references",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR151.md#dependency-dag",
+        "process/DEVELOPMENT-PLAN-CR151.yaml#dependency_graph"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "DAG is S01 contracts -> S02 evaluator -> S03 linkage -> S04 evidence wording, with S04 also explicitly depending on S01/S02/S03."
+    },
+    {
+      "id": "CP4-CR151-03",
+      "category": "parallel-safety",
+      "name": "Wave and file ownership rules constrain parallel LLD and implementation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR151.yaml#parallel_policy",
+        "process/STORY-BACKLOG-CR151.md#file-ownership-summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S01/S02 share the new statistical gate module and are serialized by merge owner; S03 owns CR150 linkage surfaces; S04 consolidates process evidence after design decisions stabilize."
+    },
+    {
+      "id": "CP4-CR151-04",
+      "category": "authorization-boundary",
+      "name": "CP4 does not authorize implementation or real runtime operations",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR151.yaml#authorization_boundary",
+        "process/STORY-BACKLOG-CR151.md#not-authorized",
+        "process/docs/design/ARCHITECTURE-DECISION-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md#not-authorized"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No source implementation, .env/credential read, real lake/NAS/provider/QMT/runtime/simulation/live/trading/broker/external framework/Git remote/catalog pointer operation is authorized by CP4."
+    },
+    {
+      "id": "CP4-CR151-05",
+      "category": "deferred-scope",
+      "name": "Wave B review gaps remain explicit and not silently covered",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/docs/design/HLD-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md#data-and-status-model",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md#cr151-wave-a--wave-b-boundary",
+        "process/DEVELOPMENT-PLAN-CR151.yaml#deferred_wave_b"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Extended factor diagnostics, regime-aware validation, factor correlation clustering/de-duplication, capacity/impact, IR/TE/Active Share and PIT universe audit are deferred to CR154/follow-up."
+    },
+    {
+      "id": "CP4-CR151-06",
+      "category": "deliverables",
+      "name": "Required CP4 story planning deliverables exist",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR151.md",
+        "process/STORY-STATUS-CR151.md",
+        "process/DEVELOPMENT-PLAN-CR151.yaml",
+        "process/stories/CR151-S01-statistical-report-contracts.md",
+        "process/stories/CR151-S02-gate-evaluator-fail-closed-rules.md",
+        "process/stories/CR151-S03-admission-completion-linkage.md",
+        "process/stories/CR151-S04-static-evidence-release-wording.md",
+        "process/docs/features/factor-research-loop/DESIGN.md",
+        "process/docs/features/factor-research-loop/TEST-PLAN.md",
+        "process/docs/features/factor-research-loop/TASKS.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Story backlog, Story status, development plan, four Story cards, Feature Design Matrix and FEAT-03 design/test/tasks indexes have been updated."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "CP5",
+  "checked_at": "2026-07-01T23:36:00+08:00",
+  "summary": {
+    "story_count": 4,
+    "wave_count": 4,
+    "lld_batch": "CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-BATCH-A",
+    "full_lld_count": 3,
+    "technical_note_count": 1,
+    "waived_count": 0,
+    "cycles": 0,
+    "invalid_references": 0,
+    "parallel_internal_dependencies": 0,
+    "blocking_findings": 0,
+    "implementation_allowed": false,
+    "runtime_operations_authorized": false,
+    "deferred_wave_b_count": 12
+  }
+}

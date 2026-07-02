@@ -1,0 +1,260 @@
+{
+  "acceptance": [
+    {
+      "id": "AC-S03-01",
+      "criterion": "Statistical gate status maps explicitly to existing AdmissionStatus without replacing the enum.",
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "status": "covered"
+    },
+    {
+      "id": "AC-S03-02",
+      "criterion": "Original statistical status is preserved in statistical_gate_summary.status.",
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "status": "covered"
+    },
+    {
+      "id": "AC-S03-03",
+      "criterion": "Runtime authorization flags remain unchanged when attaching statistical gate evidence.",
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "status": "covered"
+    },
+    {
+      "id": "AC-S03-04",
+      "criterion": "CR150 base completion map remains compatible when require_statistical_gate=False.",
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "status": "covered"
+    },
+    {
+      "id": "AC-S03-05",
+      "criterion": "require_statistical_gate=True emits statistical_admission_gate_missing for missing/non-PASS gate evidence.",
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "status": "covered"
+    }
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 29199,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 3776,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 322,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1669,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-151.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 606,
+      "mode": "full",
+      "path": "docs/design/MODULE-BOUNDARIES.yaml",
+      "reason": "module_boundaries",
+      "required": false
+    },
+    {
+      "estimated_tokens": 211,
+      "mode": "full",
+      "path": "docs/design/PACKAGE-IDENTITY.yaml",
+      "reason": "package_identity",
+      "required": false
+    }
+  ],
+  "allowed_write_paths": [],
+  "authz_policy_refs": [],
+  "budget": {
+    "estimated_tokens": 35783,
+    "estimator": "chars_div_4",
+    "max_tokens": 18000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [],
+    "summary": ""
+  },
+  "cr_id": "CR-151",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "dependency_inputs": [],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "expected_return_packet": "process/returns/CR151-S03-admission-completion-linkage.CP7.return.json",
+  "feature_contract_summary": "",
+  "feature_design_refs": [
+    "docs/features/factor-research-loop/DESIGN.md",
+    "docs/features/factor-research-loop/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [],
+  "forbidden_write_paths": [],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "implementation_return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/STORY-CR151-S03.CP6.return.json",
+  "lld_policy": null,
+  "objective": {
+    "non_goals": [],
+    "summary": "Admission and completion linkage"
+  },
+  "packet_type": "story_verify_packet",
+  "parent_context_ref": "process/context/stories/CR151-S03-admission-completion-linkage.base.context.json",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "quant-lab",
+  "read_if_needed": [],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "",
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR151-S03-admission-completion-linkage",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/CR151-S03-admission-completion-linkage-LLD.md",
+  "verification_plan": [
+    {
+      "id": "VP-S03-01",
+      "method": "pytest",
+      "command_ref": "tests/test_cr151_strategy_admission_statistical_gate.py",
+      "checks": [
+        "AdmissionStatus mapping",
+        "package attachment",
+        "runtime flag preservation"
+      ]
+    },
+    {
+      "id": "VP-S03-02",
+      "method": "pytest",
+      "command_ref": "tests/test_cr150_multifactor_framework_completion.py",
+      "checks": [
+        "CR150 base order",
+        "CR151 extended node order",
+        "statistical_admission_gate_missing gap"
+      ]
+    },
+    {
+      "id": "VP-S03-03",
+      "method": "cp7-review",
+      "command_ref": "process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.json",
+      "checks": [
+        "meta-qa confirms S03 linkage positive points"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-S03-01",
+      "criterion": "Statistical gate status maps explicitly to existing AdmissionStatus without replacing the enum.",
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "status": "covered"
+    },
+    {
+      "id": "AC-S03-02",
+      "criterion": "Original statistical status is preserved in statistical_gate_summary.status.",
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "status": "covered"
+    },
+    {
+      "id": "AC-S03-03",
+      "criterion": "Runtime authorization flags remain unchanged when attaching statistical gate evidence.",
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "status": "covered"
+    },
+    {
+      "id": "AC-S03-04",
+      "criterion": "CR150 base completion map remains compatible when require_statistical_gate=False.",
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "status": "covered"
+    },
+    {
+      "id": "AC-S03-05",
+      "criterion": "require_statistical_gate=True emits statistical_admission_gate_missing for missing/non-PASS gate evidence.",
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "status": "covered"
+    }
+  ],
+  "test_refs": [
+    "tests/test_cr151_strategy_admission_statistical_gate.py::test_cr151_statistical_status_maps_to_existing_admission_status",
+    "tests/test_cr151_strategy_admission_statistical_gate.py::test_cr151_attach_statistical_gate_preserves_original_status_and_runtime_flags",
+    "tests/test_cr150_multifactor_framework_completion.py::test_cr151_completion_map_can_require_statistical_gate_without_rewriting_cr150_base_order"
+  ],
+  "design_contract_refs": [
+    {
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "contract": "map_statistical_gate_status_to_admission_status",
+      "status": "covered"
+    },
+    {
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "contract": "attach_statistical_gate_to_admission_package",
+      "status": "covered"
+    },
+    {
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "contract": "build_cr150_multifactor_framework_completion_map",
+      "status": "covered"
+    },
+    {
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "contract": "validate_cr150_multifactor_framework_completion_map",
+      "status": "covered"
+    },
+    {
+      "source_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+      "contract": "_cr150_linkage_gaps",
+      "status": "covered"
+    }
+  ],
+  "design_evidence_ref": "process/stories/CR151-S03-admission-completion-linkage-LLD.md",
+  "updated_at": "2026-07-02T08:05:00+08:00",
+  "verification_plan_status": "populated_post_cp7_review"
+}

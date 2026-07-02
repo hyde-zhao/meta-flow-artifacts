@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.7"
+version: "1.8"
 feature_id: "FEAT-03"
 source_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md"
 source_blueprint: "docs/design/BLUEPRINT.md"
@@ -21,6 +21,7 @@ change: "CR-031"
 | 1.5 | 2026-06-27 | codex | 增补异象发现与异象研究方法：理论驱动候选、Harvey t>=3、五分组单调性、控制因子 alpha、时间切分、A 股可行性和经济逻辑准入。 |
 | 1.6 | 2026-06-27 | codex | 增补自动异象发现系统：受控模板候选生成、批量研究 runner、多重检验、准入报告、动态因子目录接入和 Stage 3 候选消费。 |
 | 1.7 | 2026-06-28 | codex | 增补研究引擎稳定模块整改：chapter/stage/root 旧入口归档到 legacy archive，领域名模块和共享 helper 成为主实现面。 |
+| 1.8 | 2026-07-01 | host-orchestrator | CR151 增补 Strategy Admission Statistical Gate：Wave A 统计准入合同、fail-closed 四态门、CR150 linkage 和 static-only evidence；显式 deferred Wave B 评价工件。 |
 
 ## Feature 摘要
 
@@ -44,6 +45,7 @@ change: "CR-031"
 | FactorPanel / LabelWindow | 因子面板四层值、标签窗口、泄漏 fail-closed | 原始数据生产 | FEAT-02 |
 | Evaluation / Combiner | IC、RankIC、分层收益、多因子组合、高级模型评估和报告 | 实盘执行、broker shortability facts 生产 | FEAT-06 |
 | StrategyAdmissionPackage | 准入证据、FactorModelValidationReport 引用、blocked reasons、order intent draft 引用 | runtime authorization | FEAT-07 / FEAT-14 |
+| StrategyAdmissionStatisticalGate | Wave A 统计准入证据、多重检验、稳健统计、walk-forward/OOS、PBO/DSR 和四态 fail-closed 汇总 | 真实收益证明、生产容量/冲击、regime 建模、交易授权 | FEAT-07 / FEAT-08 |
 
 ## 与 Strategy Runner Core 的边界
 
@@ -106,6 +108,18 @@ change: "CR-031"
 | 政策周期 | 默认只读 `config/policy_cycles.yaml` 配置；真实政策周期数据集生产属于 FEAT-02 后续能力。 |
 | 安全边界 | 报告只读输入面板、标签、组合、universe / tradability 摘要和配置；provider_fetch、lake_write、catalog_publish、qmt_api_call、real_order、credential_read 计数必须为 0。 |
 
+## Strategy Admission Statistical Gate（CR151）
+
+| 层 | 设计 |
+|---|---|
+| 统计准入目标 | 在既有多因子 metadata chain 上补最小可审计统计准入门，避免把链路完整、样本内 Sharpe 或单一 IC 误读为可靠策略。 |
+| 新增合同面 | `engine.strategy_admission_statistical_gate`，包含 `MultipleTestingReport`、`RobustFactorStatisticsReport`、`WalkForwardValidationPlan`、`BacktestOverfitRiskReport` 和 `StrategyAdmissionStatisticalGate`。 |
+| Wave A 必做 | FDR / multiple testing、Newey-West or equivalent robust t/p-value、walk-forward / OOS fold manifest、PBO / DSR、aggregate statistical gate status。 |
+| 状态模型 | `PASS`、`FAIL`、`NEEDS_REVIEW`、`BLOCKED`；mandatory evidence missing 和 forbidden operation counter nonzero 必须 `BLOCKED`。 |
+| Linkage | `engine.mature_multifactor_research` / `StrategyAdmissionPackage` 只消费 statistical gate refs、status 和 blocked reasons，不把 statistical PASS 转成 runtime readiness。 |
+| Evidence | CP6/CP7/CP8 只声明 `effective_validation_mode=static-only`；fixture PASS 不代表真实 lake、NAS、provider、QMT、simulation、live、broker 或 trading 证据。 |
+| Deferred Wave B | IC decay by lag、half-life、turnover、liquidity/capacity view、orthogonalization、monotonicity、quantile spread、regime-aware validation、factor correlation clustering / redundancy de-duplication、capacity / impact、IR/TE/Active Share、PIT universe audit。 |
+
 ## 研究引擎稳定模块
 
 | 层 | 稳定入口 | 兼容 / 归档策略 |
@@ -140,6 +154,8 @@ change: "CR-031"
 | Mature runner 或章节脚本引用未登记因子 | fail-closed，先补 FactorCatalogEntry 和测试，再允许消费 |
 | 新增 chapter / stage / cr 命名的 engine 主实现 | quality guardrail fail；改用领域名模块或 legacy wrapper |
 | FactorModelValidationReport 核心门禁 blocked 或报告缺失 | Mature admission blocked；报告路径必须进入 evidence refs |
+| StrategyAdmissionStatisticalGate mandatory evidence 缺失 | statistical admission `BLOCKED`；不得用 `NEEDS_REVIEW` 隐藏缺失报告 |
+| Statistical gate forbidden operation counter 非 0 | statistical admission `BLOCKED`；CP7/CP8 不得声明 runtime evidence |
 | 高级评估缺少外部事实 | 返回 unavailable / risk warning，不反向写湖、不读取 broker 或 QMT |
 | Stage 3 候选评估未通过 | 保留研究证据和 blocked reasons，回到因子、组合、样本切分、成本、风险约束或数据补齐迭代，不得进入 Stage 4 |
 
@@ -148,3 +164,5 @@ change: "CR-031"
 - StrategyAdmissionPackage 是准入证据，不是交易授权。
 - CR-030 不从零发明 schema，必须回链已有 `research_input_v1`、实验 17-21 和 CR-011 审计合同。
 - Qlib / Alphalens / Zipline / LEAN 只能 cross-check，不成为 truth。
+- CR151 statistical gate PASS 只代表本地 fixture/static 统计准入语义通过，不代表 production turnover、simulation、paper、live 或 QMT-ready。
+- 不得把 MF-GAP-2 扩展评价统计、MF-GAP-4 regime 分层或 MF-GAP-7 因子相关性聚类 / 去重视为 CR151 已完成；这些仍是 CR154 / follow-up。

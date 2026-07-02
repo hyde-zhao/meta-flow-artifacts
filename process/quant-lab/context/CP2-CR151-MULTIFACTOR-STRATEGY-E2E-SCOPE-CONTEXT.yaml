@@ -1,0 +1,61 @@
+schema_version: 1
+context_id: CP2-CR151-MULTIFACTOR-STRATEGY-E2E-SCOPE
+cr_id: CR-151
+stage: CP2
+status: ready
+created_at: "2026-07-01T22:35:03+08:00"
+owner: host-orchestrator
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  default_reads:
+    - process/changes/summaries/CR-151.summary.json
+    - process/changes/CR-151.md
+    - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
+    - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
+  read_if_needed:
+    - docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
+    - engine/research_production_contracts.py
+    - engine/backtest_production_contracts.py
+    - engine/mature_multifactor_research.py
+  do_not_read_by_default:
+    - process/STATE.md
+    - process/changes/CR-INDEX.yaml
+    - process/state/CR-LEDGER.ndjson
+    - process/stories/**
+    - tests/**
+    - lake_or_nas_paths
+scope_summary:
+  objective: Complete the local/static multifactor strategy E2E statistical admission framework before returning to data-lake production closure.
+  in_scope:
+    - FDR / multiple testing admission gate
+    - Newey-West or equivalent robust factor statistics
+    - walk-forward / OOS fold manifest
+    - PBO / DSR overfit risk report
+    - StrategyAdmissionStatisticalGate linkage to existing ResearchDatasetSpec, BacktestRunSpec and StrategyAdmissionPackage
+    - fixture/static-only validation of gate semantics
+  wave_b_candidates:
+    - factor correlation clustering
+    - PIT universe audit
+    - capacity / impact report
+    - IR / tracking error / Active Share
+    - benchmark-relative report
+  out_of_scope:
+    - real lake read or write
+    - NAS access, sync, chmod, chgrp or metadata normalization
+    - provider fetch
+    - QMT / MiniQMT / xtquant runtime
+    - simulation / paper / live / trading runtime
+    - broker read/write/submit/cancel/real account query
+    - credential or .env read
+    - external framework clone/install/run
+    - Git remote write
+decision_refs:
+  - DQ-CP2-CR151-001
+  - DQ-CP2-CR151-002
+  - DQ-CP2-CR151-003
+validation_boundary:
+  current_mode: planning-and-scope-only
+  implementation_before_cp2: not_authorized
+  runtime_evidence_claims: not_authorized
+read_expansion_log: []

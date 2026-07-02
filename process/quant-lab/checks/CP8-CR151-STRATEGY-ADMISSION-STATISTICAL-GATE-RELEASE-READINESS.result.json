@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS",
+  "profile": "minimal",
+  "story_id": "CR151-S01..S04",
+  "cr_id": "CR-151",
+  "checked_at": "2026-07-02T09:05:00+08:00",
+  "context_ref": "process/release/RELEASE-CONTEXT-CR151.yaml",
+  "dispatch_refs": [
+    "host-orchestrator-cr151-cp8-release-readiness"
+  ],
+  "evidence_ref": "process/evidence/CR151-CP7-VERIFICATION.index.json",
+  "items": [
+    {
+      "id": "CP8-CR151-01",
+      "category": "process-route",
+      "name": "Process route health check passed before CP8 writes",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "process_link_health ok; artifact_git_dirty dirty due generated CR151 source and process evidence."
+    },
+    {
+      "id": "CP8-CR151-02",
+      "category": "cr-tracking",
+      "name": "CR tracking permits CR151 CP8 readiness",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "active formal CRs = CR-151; blocked formal CRs = none. Historical CR-INDEX warnings remain but are not CR151 blockers."
+    },
+    {
+      "id": "CP8-CR151-03",
+      "category": "verification",
+      "name": "CP7 verification evidence is complete for static-only CR151 scope",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.json",
+        "process/evidence/CR151-CP7-VERIFICATION.index.json",
+        "process/returns/CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.CP7.return.json",
+        "docs/quality/TEST-STRATEGY.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "effective_validation_mode=static-only; R01/R02 process-evidence gaps are closed before CP8."
+    },
+    {
+      "id": "CP8-CR151-04",
+      "category": "authorization-boundary",
+      "name": "CR151 authorization boundary remains unchanged",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/quality/TEST-STRATEGY.md#non-authorized-items",
+        "process/release/RELEASE-CONTEXT-CR151.yaml#non_authorized_items",
+        "process/evidence/CR151-CP7-VERIFICATION.index.json#boundary_check"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No real lake/NAS/provider/QMT/runtime/simulation/live/trading/broker/credential/external framework/Git remote operation is authorized or executed."
+    },
+    {
+      "id": "CP8-CR151-05",
+      "category": "state-contract",
+      "name": "STATE v2 hygiene remains a process readiness caveat",
+      "status": "WAIVED",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "uv run --python 3.11 meta-flow state check --project-root /home/hyde/workspace/quant-lab",
+        "process/checks/STATE-V2-CONTRACT-HYGIENE-FOLLOW-UP-2026-07-02.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "waive_with_risk_acceptance",
+      "waiver_ref": "WAIVER-CR151-STATE-V2-HYGIENE",
+      "notes": "User accepted DEC-CR151-CP8-001; STATE v2 hygiene remains tracked as follow-up and forces READY_WITH_RISK."
+    }
+  ],
+  "blockers": [],
+  "waivers": [
+    {
+      "waiver_id": "WAIVER-CR151-STATE-V2-HYGIENE",
+      "applies_to": {
+        "checkpoint": "CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS",
+        "check_item_id": "CP8-CR151-05"
+      },
+      "scope": "Allow CR151 local/static/fixture release readiness to close as READY_WITH_RISK while STATE v2 hygiene is tracked as follow-up.",
+      "expires_at": "2026-08-01T00:00:00+08:00",
+      "approval_ref": "DEC-CR151-CP8-001",
+      "forces_release_status": "READY_WITH_RISK",
+      "risk_refs": [
+        "CR151-CP8-R03-STATE-V2-HYGIENE"
+      ],
+      "status": "accepted_by_user",
+      "reason": "STATE v2 hygiene is process debt outside CR151 source implementation; release readiness requires explicit user risk acceptance.",
+      "approved_by": "user",
+      "approved_at": "2026-07-02T09:05:00+08:00"
+    }
+  ],
+  "read_expansion_refs": [
+    "READ-CR151-CP8-RELEASE-CONTEXT-2026-07-02T085000+0800",
+    "READ-CR151-CP8-CP7-RESULT-2026-07-02T085000+0800",
+    "READ-CR151-CP8-CP7-EVIDENCE-2026-07-02T085000+0800",
+    "READ-CR151-CP8-TEST-STRATEGY-2026-07-02T085000+0800"
+  ],
+  "decision": "PASS",
+  "release_decision": "READY_WITH_RISK",
+  "manual_gate_status": "approved",
+  "pending_human_decisions": [],
+  "risk_acceptance": {
+    "decision_id": "DEC-CR151-CP8-001",
+    "risk_id": "CR151-CP8-R03-STATE-V2-HYGIENE",
+    "waiver_id": "WAIVER-CR151-STATE-V2-HYGIENE",
+    "status": "accepted_by_user",
+    "severity": "medium",
+    "recommended_outcome": "accept waiver and close CR151 as READY_WITH_RISK",
+    "reject_route": "STATE_V2_HYGIENE_REWORK_BEFORE_CP8",
+    "approved_by": "user",
+    "approved_at": "2026-07-02T09:05:00+08:00",
+    "approval_note": "User approved CR151 CP8 READY_WITH_RISK with STATE v2 hygiene as process readiness caveat."
+  },
+  "not_authorized": [
+    "real_lake_read_or_write",
+    "nas_sync_write_restore_or_metadata_normalization",
+    "provider_fetch",
+    "catalog_pointer_mutation",
+    "credential_or_env_read",
+    "qmt_miniqmt_xtquant_gateway_runtime",
+    "simulation_paper_live_or_trading_runtime",
+    "broker_write_submit_cancel_or_real_account_query",
+    "git_remote_write",
+    "external_framework_clone_install_run"
+  ],
+  "next_route": "CR151_CLOSED_READY_WITH_RISK_THEN_CR152_PLANNING",
+  "risk_refs": [
+    "CR151-CP8-R03-STATE-V2-HYGIENE"
+  ],
+  "approved_at": "2026-07-02T09:05:00+08:00",
+  "approved_by": "user",
+  "accepted_risks": [
+    "CR151-CP8-R03-STATE-V2-HYGIENE"
+  ]
+}

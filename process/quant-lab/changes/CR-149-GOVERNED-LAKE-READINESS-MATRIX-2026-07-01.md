@@ -6,6 +6,11 @@ kind: "requirement-change"
 lifecycle_status: "closed"
 readiness_status: "ready_with_risk"
 gate_status: "closed"
+ra_cr149_001_status: "sync_executed_strict_metadata_blocked"
+ra_cr149_001_content_consistency_basis: "rsync_checksum_18_of_18_same"
+ra_cr149_001_metadata_status: "permission_group_itemization_blocked_18_of_18"
+ra_cr149_001_follow_up_decision: "DQ-RA-CR149-POSTSYNC-METADATA-01"
+ra_cr149_001_follow_up_tracking: "process/changes/CR-149-FOLLOW-UP-TRACKING-2026-07-01.md"
 gate_profile: "standard"
 created_at: "2026-07-01T13:25:00+08:00"
 created_by: "host-orchestrator"
@@ -78,7 +83,15 @@ CR-146 已完成 current-truth 数据湖迁移、fail-closed reader 加固和 ru
 
 ## Current Status
 
-CR-149 is closed-current-delivery with NAS sync deferred by user decision on 2026-07-01. Phase A-G no-risk scope is implemented and recorded in CP6 evidence. The approved read-only NAS/shared-node consistency check executed on 2026-07-01: mounted path was unavailable, credential fallback was audited, evidence redaction scan passed, and no sync/write/restore/delete was executed. The check found the NAS/shared-node view stale relative to local N1 current truth: catalog checksum mismatch plus 17 missing `canonical/*/1.0/current/` paths. NAS current-truth sync is intentionally deferred to `RA-CR149-001`; it no longer blocks the next local no-risk roadmap work. A human gate is still required before any NAS write/sync, provider/runtime operation, catalog pointer mutation, historical conflict cleanup, simulation/live/trading or broker action.
+CR-149 is closed-current-delivery with NAS sync deferred by user decision on 2026-07-01. Phase A-G no-risk scope is implemented and recorded in CP6 evidence. The approved read-only NAS/shared-node consistency check executed on 2026-07-01: mounted path was unavailable, credential fallback was audited, evidence redaction scan passed, and no sync/write/restore/delete was executed. The check found the NAS/shared-node view stale relative to local N1 current truth: catalog checksum mismatch plus 17 missing `canonical/*/1.0/current/` paths. NAS current-truth sync is tracked as `RA-CR149-001`; it no longer blocks local no-risk roadmap work. A human gate is still required before any NAS write/sync, provider/runtime operation, catalog pointer mutation, historical conflict cleanup, simulation/live/trading or broker action.
+
+Post-CR150 update: after CR150 CP8 approval at 2026-07-01T20:18:16+08:00, user stated the current PC can connect data lake and NAS and requested the previously unsynced NAS CR be added back into the next plan. `RA-CR149-001` is therefore ready for CP2 review from `process/checkpoints/CP2-CR149-NAS-CURRENT-TRUTH-SYNC.md`; this update does not authorize NAS dry-run or sync execution.
+
+RA-CR149-001 execution update: user approved the CP2 sync gate at 2026-07-01T20:55:35+08:00. The scoped dry-run and scoped local-to-NAS current-truth sync both completed within the approved 18-object scope, with redaction checks passing and no delete/restore/pull/provider/catalog pointer mutation. The required post-sync read-only consistency check remains `BLOCKED`: all 18 comparisons returned rsync metadata itemization mismatches (`.f...p.g...`) with 0 errors. Per DQ-03, no automatic retry, delete, rebuild or metadata normalization was executed. Follow-up decision `DQ-RA-CR149-POSTSYNC-METADATA-01` is required.
+
+RA-CR149-001 semantics update: no raw evidence was overwritten. The rsync-daemon-only interpretation layer records content consistency as `PASS` by rsync `--checksum` internal equality for 18/18 objects, while filesystem metadata consistency remains `BLOCKED` because permission/group itemization differs for 18/18 objects. The current access path has no usable mount and no authorized shell/pull path, so independent NAS-side sha256 and direct reader checks are deferred to a separate access authorization gate. NAS p/g parity is tracked as `FU-CR149-002`; it is not silently removed from CR-149 scope.
+
+RA-CR149-001 disposition prep update: local source-of-truth evidence for the approved 18 objects is now pinned in `process/evidence/CR149-LOCAL-SOURCE-TRUTH-MANIFEST-2026-07-01.json` with local path, size, sha256, mode and uid/gid metadata. `process/checks/RA-CR149-001-POSTSYNC-METADATA-DISPOSITION-PREP-2026-07-01.md` records future closure options without launching a human gate or authorizing NAS access, credential read, mount, shell, pull, retry, chmod/chgrp, metadata normalization, checker source-code change or Phase 1 definition-of-done change.
 
 ## Runtime Evidence Update
 
@@ -86,3 +99,8 @@ CR-149 is closed-current-delivery with NAS sync deferred by user decision on 202
 |---|---|---|---|
 | 2026-07-01 | `process/evidence/CR149-NAS-MULTINODE-CONSISTENCY.index.json` | BLOCKED | Read-only rsync checksum dry-run compared 18 objects: catalog mismatch and 17 NAS current canonical paths missing. |
 | 2026-07-01 | `process/checkpoints/CP2-CR149-NAS-CURRENT-TRUTH-SYNC.md` | DEFERRED | User chose to postpone NAS sync and proceed with multifactor framework completion first. |
+| 2026-07-01 | `process/plans/POST-CR150-NEXT-PLAN-2026-07-01.md` | READY_FOR_CP2_REVIEW | After CR150 CP8 approval, user requested adding the previously unsynced NAS CR back into the next plan. |
+| 2026-07-01 | `process/checks/RA-CR149-001-NAS-CURRENT-TRUTH-SYNC-EXECUTION-2026-07-01.md` | BLOCKED_POST_SYNC_METADATA_MISMATCH | CP2-approved scoped sync executed; strict post-sync consistency remains blocked by metadata itemization differences. |
+| 2026-07-01 | `process/evidence/CR149-NAS-MULTINODE-CONSISTENCY-POST-SYNC-SEMANTICS-2026-07-01.json` | CONTENT_PASS_METADATA_BLOCKED | Interpretation layer only: rsync `--checksum` shows content equality for 18/18; p/g metadata parity remains blocked; no raw evidence mutation or NAS operation. |
+| 2026-07-01 | `process/evidence/CR149-LOCAL-SOURCE-TRUTH-MANIFEST-2026-07-01.json` | PASS | Local 18-object source-of-truth manifest records sha256, size, mode and uid/gid for the approved sync objects; no NAS access. |
+| 2026-07-01 | `process/checks/RA-CR149-001-POSTSYNC-METADATA-DISPOSITION-PREP-2026-07-01.md` | PASS_WITH_STRICT_EXIT_BLOCKED | Decision prep complete without launching a human gate; strict metadata exit remains blocked. |

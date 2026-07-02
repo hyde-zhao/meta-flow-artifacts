@@ -1,6 +1,6 @@
 ---
 title: "Quant Research Production Roadmap"
-status: "draft-v0.4"
+status: "draft-v0.7"
 owner: "host-orchestrator"
 created_at: "2026-07-01"
 scope: "data lake, research/backtest framework, paper/live operations"
@@ -17,6 +17,9 @@ authorization_boundary: "planning-only; no runtime, broker write, provider fetch
 | v0.2 | 2026-07-01 | host-orchestrator | 根据 `process/checks/QUANT-RESEARCH-PRODUCTION-ROADMAP-REVIEW-2026-07-01.md` 补 NAS 多节点一致性、既有资产衔接、量化 exit、fail-closed / pointer 门、日频边界和 Gotchas。 |
 | v0.3 | 2026-07-01 | host-orchestrator | 回写 CR146-CR150 实施进度：本地数据湖 Phase 1 closed with NAS sync deferred，研究/回测 foundation 已闭环，下一 active CR 为 CR150 多因子框架补齐。 |
 | v0.4 | 2026-07-01 | host-orchestrator | 刷新 CR150 实施结果：本地 metadata linkage 切片 CP6/CP7 已闭环；补 CP8 前 inline-fallback 风险接受、static-only 验证说明和 asset map / completion map 合并取舍。 |
+| v0.5 | 2026-07-01 | host-orchestrator | 回写用户决策 A：先补齐本地策略框架，数据湖生产闭环后置；刷新 CR150 CP8 READY_WITH_RISK、RA-CR149-001 内容层同步完成但 strict metadata 后置、FU-CR149-002 / FU-CR139-001 deferred；新增三类策略 E2E 整改路线引用。 |
+| v0.6 | 2026-07-01 | host-orchestrator | 补充 CR151 仍需 CP0/CP2 立项门禁说明，避免把 Future CR 计划误读为已 active 的工作流事实。 |
+| v0.7 | 2026-07-02 | host-orchestrator | 回写 CR151 CP8 `READY_WITH_RISK` 闭环；明确 `StrategyAdmissionStatisticalGate` 当前为 opt-in capability；刷新下一步为 CR152 CP0/CP2，并加入 ML gate 关系、统计 gate opt-in 时机和 STATE/CR-INDEX/tool-check hygiene 并行治理建议。 |
 
 ## 1. 目标
 
@@ -59,30 +62,39 @@ authorization_boundary: "planning-only; no runtime, broker write, provider fetch
 | CR139 post-close lake completion | `CR-146` | closed / READY | 已完成真实 lake runtime validation、fail-closed reader 加固、N1 current-truth 物理分区迁移、catalog pointer 切换和历史 cleanup 分流。 |
 | Phase 2 research production foundation | `CR-147` | closed / READY | 已完成 ResearchDatasetSpec、feature/label/training snapshot/experiment/admission 资产收敛；asset map gap=0。 |
 | Phase 3 backtest foundation | `CR-148` | closed / READY | 已完成 BacktestRunSpec、report pack、cost/risk/attribution metadata contract；相关本地测试通过。 |
-| Phase 1 governed lake readiness | `CR-149` | closed-current-delivery / READY_WITH_RISK | 本地 17-dataset readiness、PIT、run registry、business-conflict quarantine policy 和 recurring validation plan 已闭环。NAS current-truth sync 因用户决策后置。 |
-| NAS current-truth scoped sync | `RA-CR149-001` | candidate / deferred | 已有只读 consistency evidence：NAS catalog stale，17 个 NAS `current/` 路径缺失。后续恢复时需单独 approve scoped local-to-NAS sync。 |
-| Multifactor framework completion | `CR-150` | CP7 PASS / CP8 risk acceptance pending | 已完成本地 `MultifactorFrameworkCompletionMap`：factor spec → factor run → factor panel → label window gate → signal set → portfolio policy → BacktestRunSpec → report pack → cost/risk attribution → strategy admission package。下一步是 CP8 release readiness，并由用户显式确认 CP7 inline-fallback waiver。 |
+| Phase 1 governed lake readiness | `CR-149` | closed-current-delivery / READY_WITH_RISK | 本地 17-dataset readiness、PIT、run registry、business-conflict quarantine policy 和 recurring validation plan 已闭环。NAS 内容层已通过 scoped sync 对齐；strict filesystem metadata parity 后置。 |
+| NAS current-truth scoped sync | `RA-CR149-001` | candidate / not_ready / gate=`cp2_pending` | dry-run 与 execute 已完成；post-sync 18/18 内容一致性由 rsync `--checksum` 判定 PASS；strict checker 仍因 permissions / group 差异 BLOCKED。`cp2_pending` 表示未来若要关闭 strict metadata exit 需重开门禁，不表示当前正等待审批。 |
+| NAS metadata parity governance | `FU-CR149-002` | candidate / not_ready / gate=`not_started` | 从 `RA-CR149-001` post-sync 拆出的承接项；只处理 NAS filesystem permissions / group parity 或 checker 语义分层，不重复计算为新的 sync 本体。 |
+| Business-conflict quarantine follow-up | `FU-CR139-001` | deferred candidate | 4 个 dataset（`prices` / `prices_limit` / `events` / `trade_status`）已处于 full-group quarantine / semantic-rule-required 的可治理状态；同时是 CR146 N1 迁移遗留历史根清理尾巴与 CR149 business-conflict policy 的 dataset-level 落地。仅当需要解除 quarantine 或推进生产级 turnover 时启动逐 dataset human gate。 |
+| Multifactor framework completion | `CR-150` | closed / READY_WITH_RISK | 已完成本地 `MultifactorFrameworkCompletionMap`：factor spec → factor run → factor panel → label window gate → signal set → portfolio policy → BacktestRunSpec → report pack → cost/risk attribution → strategy admission package。CP8 已由用户接受 inline-fallback risk acceptance；有效验证模式为 static-only。 |
+| Strategy admission statistical gate | `CR-151` | closed / READY_WITH_RISK | 已完成本地/static/fixture 多因子统计准入能力：FDR/multiple testing、robust factor statistics、walk-forward/OOS、PBO/DSR、fail-closed evaluator、admission package linkage 和 optional completion-map linkage。`CR151-CP8-R03-STATE-V2-HYGIENE` 已由用户接受为 process readiness caveat。 |
 
 当前执行锁：
 
 ```text
-active formal CR: CR-150 Multifactor Framework Completion
-deferred runtime candidate: RA-CR149-001 NAS current-truth scoped sync
+active formal CR: none
+selected route: A - local research / strategy framework completion first
+deferred data-lake candidates: RA-CR149-001, FU-CR149-002, FU-CR139-001, RA-CR139-002, FU-CR140-001
+next recommended CR: CR152 Machine Learning Strategy E2E Framework CP0/CP2
 ```
 
 执行边界：
 
+- 用户已选择先推进本地研究框架补齐；数据湖生产级闭环在策略框架补齐后再恢复。
 - CR150 已完成本地 metadata-only linkage，可链接数据湖 metadata contract / catalog refs / readiness / PIT refs，但不把这些 refs 解释为真实 lake 执行证据。
-- CR150 当前不读取或写入真实 lake，不同步 NAS，不读取 provider，不启动 simulation/live/trading，不写 broker。
-- 若后续需要真实 lake factor panel / label 构建、Feature Store 写入、NAS report 写入或 runtime execution，必须另起人工门禁。
+- RA-CR149-001 内容层同步完成不等于 NAS production shared current truth 全闭环；strict p/g metadata parity 仍由 `FU-CR149-002` 后置跟踪。
+- CR151 提供 statistical admission gate capability，但 `require_statistical_gate=False` 是有意默认值，用于保护 CR150 历史行为；UC-58/UC-59 调用方何时强制 `require_statistical_gate=True` 应在 CR152 CP2 或后续 admission governance 中显式决策。
+- 当前不读取或写入真实 lake，不同步 NAS，不读取 provider，不启动 simulation/live/trading，不写 broker，不读取 credential。
+- 若后续需要真实 lake factor panel / label 构建、Feature Store 写入、NAS report 写入、provider/QMT/runtime execution 或 business-conflict quarantine 解除，必须另起人工门禁。
 
-### 2.2 CR150 实施刷新（2026-07-01）
+### 2.2 CR150 收尾与当前策略框架基线（2026-07-01）
 
 | 项 | 当前结果 | 证据 |
 |---|---|---|
 | CP2 场景确认 | PASS | `process/checks/CP2-CR150-UC58-60-SCENARIO-CONFIRMATION.result.json` |
 | CP6 implementation | PASS | `process/checks/CP6-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json` |
-| CP7 verification | PASS with CP8 risk acceptance pending | `process/checks/CP7-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json` |
+| CP7 verification | PASS with CP8 inline-fallback risk acceptance | `process/checks/CP7-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.result.json` |
+| CP8 release readiness | READY_WITH_RISK | `process/checkpoints/CP8-CR150-MULTIFACTOR-FRAMEWORK-COMPLETION.md` |
 | Completion map | PASS；10 个节点，`linkage_gaps=[]` | `process/evidence/CR150-MULTIFACTOR-FRAMEWORK-COMPLETION-MAP.index.json` |
 | Hash chain | deterministic | `sha256:de36afe283dffa4a5cd1d7953639e6d1c8ea8ebd1efe73c77b53a7d60aea9e95` |
 | Tests | PASS | `20 passed` for CR150 + related Stage2/Stage3 regression |
@@ -97,13 +109,15 @@ CR150 当前 implementation surface：
 | `tests/test_cr150_multifactor_framework_completion.py` | 已新增并通过 |
 | Process evidence / CP6 / CP7 result | 已写入 |
 
-CP8 前必须处理的偏差：
+CP8 已处理的偏差：
 
 | 风险 / 偏差 | 等级 | 处理要求 |
 |---|---|---|
-| `RISK-CR150-INLINE-VERIFICATION`：CP7 由 Host Orchestrator inline-fallback 代行 meta-qa，缺少用户对 inline-fallback 的显式批准 | medium | CP8 Decision Brief 必须作为 `risk_acceptance` 决策项提交用户确认；用户未确认前不得无条件写 `READY`。建议默认 CP8 结论为 `READY_WITH_RISK` 或 `READY_PENDING_RISK_ACCEPTANCE`。 |
-| CP7 `validation_mode=mixed` 标签不够精确，实际验证均为 pytest / py_compile / JSON / git diff / workspace / cr-tracking 等静态验证 | low | CP8 evidence 中写明 `effective_validation_mode=static-only`，并说明 runtime 部分全部 out_of_scope / not_authorized。 |
-| Phase A asset map 与 Phase B contract completion 合并为单一 `MultifactorFrameworkCompletionMap` | low | CP8 摘要说明这是有意合并：nodes 提供 asset inventory，`linkage_gaps` 提供 gap-count 等价视图。 |
+| `RISK-CR150-INLINE-VERIFICATION`：CP7 由 Host Orchestrator inline-fallback 代行 meta-qa | medium | 用户已在 CP8 接受风险，CR150 以 `READY_WITH_RISK` 收尾。 |
+| CP7 `validation_mode=mixed` 标签不够精确，实际验证均为 pytest / py_compile / JSON / git diff / workspace / cr-tracking 等静态验证 | low | CP8 evidence 已写明 `effective_validation_mode=static-only`，runtime 部分全部 out_of_scope / not_authorized。 |
+| Phase A asset map 与 Phase B contract completion 合并为单一 `MultifactorFrameworkCompletionMap` | low | CP8 摘要已说明这是有意合并：nodes 提供 asset inventory，`linkage_gaps` 提供 gap-count 等价视图。 |
+
+`docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md` 对三类策略的统计可靠性提出 blocker 级缺口，其中关于 `ResearchDatasetSpec` / `BacktestRunSpec` “.py 文件不存在”的判断在当前代码基线上已过期：`engine/research_production_contracts.py` 与 `engine/backtest_production_contracts.py` 已存在对应源码与验证入口。后续整改应基于“契约源码已存在但统计验证、walk-forward、PBO/DSR、冲击/容量和 ML/event 专项方法论仍未补齐”的事实继续推进。
 
 ## 3. 能力蓝图
 
@@ -258,10 +272,10 @@ Phase 1 中的 NAS 目标是**一致性协议和门禁设计**，不等于立即
 | Business-conflict handling | 4,272,624 business-conflict groups 100% 分类为 quarantine / semantic-rule-required / unsupported，不要求清零 |
 | PIT readiness | 17/17 datasets 有 `pit_available / not_applicable / unsupported-with-reason`，不允许长期 `null` |
 | Run registry | 100% 新写入 run 具有 registry record；reader 不再依赖 source_run_id 字典序作为生产排序 |
-| Published pointer | 17/17 published datasets 的本地 current pointer 可读且 checksum / run_id 完整；多节点一致性可 deferred 到 `RA-CR149-001` |
-| NAS consistency gate | 已完成 1 次 read-only consistency check；发现 NAS stale，scoped sync 后置，不阻塞本地 CR150 |
+| Published pointer | 17/17 published datasets 的本地 current pointer 可读且 checksum / run_id 完整；NAS 内容层 scoped sync 已执行 |
+| NAS consistency gate | read-only consistency 发现 NAS stale 后，`RA-CR149-001` scoped sync 已完成内容层对齐；post-sync strict checker 因 permissions / group 差异仍 BLOCKED，后续由 `FU-CR149-002` 承接 |
 
-Phase 1 的目标是建立 quarantine policy 和 dataset-level 决策流程，不是把 4,272,624 个冲突全部语义择优或物理清零。2026-07-01 当前状态为：本地治理目标已完成；NAS shared-view sync 留作 `RA-CR149-001` 后续 runtime authorization，不作为 CR150 本地多因子框架补齐的前置阻断。
+Phase 1 的目标是建立 quarantine policy 和 dataset-level 决策流程，不是把 4,272,624 个冲突全部语义择优或物理清零。2026-07-01 当前状态为：本地治理目标已完成；RA-CR149-001 已完成 NAS 内容层同步但 strict filesystem metadata parity 后置；FU-CR139-001 保持为生产级解除 quarantine / 历史根清理触发项，不作为本地策略框架补齐的前置阻断。
 
 ### Phase 2：研究数据集、Feature Store、Label Store、Event Store
 
@@ -538,8 +552,12 @@ Paper trading：
 |---|---|---|
 | CR-147 | Quant Research Production Foundation | 已完成：ResearchDatasetSpec、feature/label/training snapshot、experiment/admission 资产收敛 |
 | CR-148 | Unified Backtest and Experiment Foundation | 已完成：BacktestRunSpec、report pack、cost/risk/attribution metadata contract |
-| CR-149 | Governed Lake Readiness Matrix Foundation | 已完成本地 Phase 1 治理；NAS scoped sync deferred 为 `RA-CR149-001` |
-| CR-150 | Multifactor Framework Completion | CP7 PASS / CP8 pending：本地 metadata chain 已补齐；CP8 需确认 inline-fallback waiver 风险接受后关闭 |
+| CR-149 | Governed Lake Readiness Matrix Foundation | 已完成本地 Phase 1 治理；RA-CR149-001 NAS scoped sync 内容层已完成，strict p/g metadata parity 由 FU-CR149-002 后置 |
+| CR-150 | Multifactor Framework Completion | 已关闭为 READY_WITH_RISK：本地 metadata chain 已补齐，CP8 inline-fallback risk acceptance 已由用户接受 |
+| CR-151 | Strategy Research Admission Statistical Gate | 已关闭为 READY_WITH_RISK：本地/static/fixture 多因子统计准入 capability 已完成；当前 statistical gate 为 opt-in，不改变 UC-58 默认调用行为。 |
+| Future CR-152 | Machine Learning Strategy E2E Framework Foundation | 下一推荐项：基于现有 ResearchDatasetSpec / BacktestRunSpec 扩展 ML 专项契约；CP2 必须决策 ML admission gate 与 CR151 gate 的关系，以及 statistical gate 的 opt-in/强制时机。 |
+| Future CR-153 | Event-Driven Strategy E2E Framework Foundation | 补事件研究方法论契约：estimation window、normal return model、CAR/BHAR、test family、event clustering、PIT revision、endogeneity、event-to-order trace |
+| Future CR-154 | Cross-Strategy Production Reliability Gates | 三类策略共用的 market impact / capacity / walk-forward / attribution / reconciliation / regime gates |
 | Future CR | Paper Trading and Readonly Live | readonly market/account、live signal shadow、paper OMS、daily paper report |
 | Future CR | Controlled Small-Live Authorization Gate | OMS、broker adapter write contract、pre-trade risk、kill switch、小额实盘门禁 |
 
@@ -587,17 +605,21 @@ Out of scope：
 
 ## 7. 近期建议
 
-近期最优先不是 N1 physical migration，也不是实盘。
+用户已选择路线 A：先推进本地研究 / 策略框架补齐，等策略框架具备足够统计可靠性与准入门控后，再恢复数据湖生产级闭环。
 
 建议顺序：
 
-1. 先完成 CR150 CP8：把 `RISK-CR150-INLINE-VERIFICATION` 作为 `risk_acceptance` 决策项提交用户确认。
-2. CP8 evidence 中写明本轮有效验证模式是 `static-only`，runtime / real data / external framework 全部 out of scope。
-3. CP8 摘要说明 asset map 与 completion map 合并的设计取舍。
-4. 用户接受风险后，将 CR150 关闭为 `READY_WITH_RISK` 或按用户确认口径关闭。
-5. 若用户不接受 inline-fallback waiver，则回到 CP7，显式请求 meta-qa 子 agent 或取得 inline-fallback 批准后复验。
-6. CR150 关闭后，再选择下一条路线：真实 lake factor panel / NAS scoped sync / ML pipeline / event-driven pipeline / readonly live / paper。
-7. 任一真实 lake、NAS、provider、runtime、QMT、simulation/live/trading、broker 或 credential 工作都必须另起授权 CR。
+1. 以 Future CR-152 作为下一项推荐正式工作：启动 Machine Learning Strategy E2E Framework 的 CP0 受理和 CP2 范围基线门。
+2. CR152 CP2 必须纳入两项新增决策：
+   - ML admission gate 与 CR151 `StrategyAdmissionStatisticalGate` 的关系：扩展 CR151 gate 增加 ML-specific report，还是新建 ML admission gate 并通过 adapter 复用四态 status 语义。
+   - statistical gate 的 opt-in / 强制时机：UC-58 / UC-59 调用方何时将 `require_statistical_gate=True` 作为默认或强制门。
+3. CR152 保持本地、static/fixture/read-only 边界：不读取或写入真实 lake，不同步 NAS，不读取 provider，不读取 credential，不启动 QMT/runtime/simulation/live/trading/broker，不运行外部框架。
+4. CR152 第一轮聚焦 ML hard prerequisites：PIT feature matrix、label policy / leakage guard、purged + embargo CV、training snapshot / model artifact metadata、prediction artifact、ML admission gate。
+5. CR153（event-driven E2E foundation）放在 CR152 后；CR154 承接 Wave B / 横切生产可靠性工件。
+6. 并行排一个小的 hygiene 治理候选，不阻塞 CR152 主线：`STATE.current.json` / `STATE.md` slimming、CR-INDEX legacy warning 清理、return/verify packet 字段非空工具校验加固。
+7. RA-CR149-001、FU-CR149-002、FU-CR139-001、RA-CR139-002、FU-CR140-001 全部保持 deferred/candidate；只有当策略框架需要生产级多节点数据、解除 quarantine、provider refresh、NAS strict metadata parity 或真实 reader validation 时才恢复。
+8. 若未来选择推进数据湖生产级闭环，优先确认目标是“解除 quarantine / 生产 turnover”还是“NAS shared-view strict parity”；前者触发 FU-CR139-001 逐 dataset human gate，后者触发 FU-CR149-002。
+9. 任一真实 lake、NAS、provider、runtime、QMT、simulation/live/trading、broker 或 credential 工作都必须另起授权 CR。
 
 核心原则：
 
@@ -613,3 +635,4 @@ Out of scope：
 6. **不要让 Strategy 直接产生 broker order。** Strategy 只能输出 signal / target；真实订单必须由 OMS 经 pre-trade risk 和 kill switch 控制。
 7. **不要让事件策略使用 event_time 当作可交易时间。** 事件驱动必须同时记录 event_time、available_at 和 decision_time，否则回测会系统性高估。
 8. **不要把 N1 physical migration 放在数据事实治理之前。** 先治理 conflict policy、PIT contract 和 run registry，再考虑物理迁移。
+9. **不要把 E2E review 的历史事实当作当前源码真相。** `ResearchDatasetSpec` / `BacktestRunSpec` 已在当前源码中存在；后续整改重点是统计验证、容量/冲击、ML/event 方法论和准入工件，而不是重复补已存在的契约文件。

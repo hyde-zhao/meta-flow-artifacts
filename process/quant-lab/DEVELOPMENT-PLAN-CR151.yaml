@@ -1,0 +1,235 @@
+schema_version: 1
+change_id: "CR-151"
+title: "CR151 Strategy Admission Statistical Gate Development Plan"
+status: "cp7-pass-with-risk-ready-for-cp8"
+created_at: "2026-07-01T23:36:00+08:00"
+updated_at: "2026-07-02T07:30:39+08:00"
+owner: "host-orchestrator"
+workflow_phase: "release-readiness"
+implementation_allowed: true
+feature_design_matrix: "process/docs/design/FEATURE-DESIGN-MATRIX.md"
+story_backlog: "process/STORY-BACKLOG-CR151.md"
+story_status: "process/STORY-STATUS-CR151.md"
+cp4_auto_result: "process/checks/CP4-CR151-STORY-DAG-PARALLEL-SAFETY.result.json"
+cp5_checkpoint: "process/checkpoints/CP5-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-LLD-BATCH.md"
+cp6_result: "process/checks/CP6-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-IMPLEMENTATION.result.json"
+cp6_evidence_index: "process/evidence/CR151-CP6-IMPLEMENTATION.index.json"
+cp7_result: "process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.json"
+cp7_evidence_index: "process/evidence/CR151-CP7-VERIFICATION.index.json"
+cp7_decision: "PASS_WITH_RISK"
+cp7_risk_ids:
+  - "CR151-CP7-R01"
+  - "CR151-CP7-R02"
+
+authorization_boundary:
+  cp4_does_not_authorize_implementation: true
+  cp5_authorizes_local_static_fixture_implementation: true
+  cp4_does_not_authorize_runtime: true
+  credential_read_allowed: false
+  real_lake_access_allowed: false
+  nas_access_allowed: false
+  provider_fetch_allowed: false
+  qmt_runtime_allowed: false
+  miniqmt_runtime_allowed: false
+  xtquant_runtime_allowed: false
+  simulation_live_allowed: false
+  broker_access_allowed: false
+  trading_allowed: false
+  external_framework_run_allowed: false
+  catalog_pointer_mutation_allowed: false
+  git_remote_write_allowed: false
+  future_runtime_validation_policy: "Any real-data/runtime validation requires a separate runtime_authorization gate or formal CR."
+
+feature_slices:
+  - feature_id: "FEAT-03"
+    name: "Research Dataset And Multifactor Research Loop"
+    design_docs:
+      - "process/docs/features/factor-research-loop/DESIGN.md"
+      - "process/docs/features/factor-research-loop/TEST-PLAN.md"
+      - "process/docs/features/factor-research-loop/TASKS.md"
+    stories:
+      - "CR151-S01-statistical-report-contracts"
+      - "CR151-S02-gate-evaluator-fail-closed-rules"
+      - "CR151-S03-admission-completion-linkage"
+      - "CR151-S04-static-evidence-release-wording"
+
+lld_design_batch:
+  batch_id: "CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-BATCH-A"
+  status: "implemented-ready-for-cp7"
+  cp5_manual_review: "process/checkpoints/CP5-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-LLD-BATCH.md"
+  policy: "S01-S03 require full-lld; S04 requires technical-note. CP5 must review all design evidence together before implementation."
+  stories:
+    - "CR151-S01-statistical-report-contracts"
+    - "CR151-S02-gate-evaluator-fail-closed-rules"
+    - "CR151-S03-admission-completion-linkage"
+    - "CR151-S04-static-evidence-release-wording"
+
+parallel_policy:
+  max_parallel_lld: 2
+  max_parallel_dev_after_cp5: 1
+  max_parallel_verification_after_cp6: 2
+  same_file_merge_rule: "S01 and S02 share engine/strategy_admission_statistical_gate.py and tests/test_cr151_strategy_admission_statistical_gate.py; S01 contract skeleton must merge before S02 evaluator implementation."
+  cr150_linkage_rule: "S03 owns any change to engine/mature_multifactor_research.py or engine/strategy_admission_package.py; it must not run before S01/S02 status semantics are frozen."
+  evidence_wording_rule: "S04 consolidates evidence/release wording after S01-S03 design decisions are stable."
+
+waves:
+  - wave: "CR151-W1-CONTRACTS"
+    objective: "Define Wave A statistical report contracts and JSON-safe validation issue surfaces."
+    parallel_lld: false
+    parallel_dev_after_cp5: false
+    entry_conditions:
+      - "CR151 CP3 approved"
+      - "FEAT-03 CR151 increment recorded in Feature Design Matrix"
+    stories:
+      - story_id: "CR151-S01-statistical-report-contracts"
+        title: "Statistical report contracts"
+        priority: "P0"
+        status: "implemented"
+        depends_on: []
+        primary_files:
+          - "engine/strategy_admission_statistical_gate.py"
+          - "tests/test_cr151_strategy_admission_statistical_gate.py"
+        merge_owner: "CR151-S01-statistical-report-contracts"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "approved"
+        dev_gate:
+          cp5_required: true
+          implementation_allowed_before_cp5: false
+          cp6_status: "PASS"
+
+  - wave: "CR151-W2-GATE-EVALUATOR"
+    objective: "Implement fail-closed aggregate status semantics over the contracts."
+    parallel_lld: false
+    parallel_dev_after_cp5: false
+    entry_conditions:
+      - "S01 contract LLD available for review"
+    stories:
+      - story_id: "CR151-S02-gate-evaluator-fail-closed-rules"
+        title: "Gate evaluator and fail-closed rules"
+        priority: "P0"
+        status: "implemented"
+        depends_on:
+          - "CR151-S01-statistical-report-contracts"
+        primary_files:
+          - "engine/strategy_admission_statistical_gate.py"
+          - "tests/test_cr151_strategy_admission_statistical_gate.py"
+        merge_owner: "CR151-S02-gate-evaluator-fail-closed-rules"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "approved"
+        dev_gate:
+          cp5_required: true
+          implementation_allowed_before_cp5: false
+          cp6_status: "PASS"
+
+  - wave: "CR151-W3-LINKAGE"
+    objective: "Link the statistical gate into the admission/completion chain without runtime semantics changes."
+    parallel_lld: false
+    parallel_dev_after_cp5: false
+    entry_conditions:
+      - "S01/S02 status semantics frozen"
+    stories:
+      - story_id: "CR151-S03-admission-completion-linkage"
+        title: "Admission and completion linkage"
+        priority: "P0"
+        status: "implemented"
+        depends_on:
+          - "CR151-S01-statistical-report-contracts"
+          - "CR151-S02-gate-evaluator-fail-closed-rules"
+        primary_files:
+          - "engine/mature_multifactor_research.py"
+          - "engine/strategy_admission_package.py"
+          - "tests/test_cr150_multifactor_framework_completion.py"
+          - "tests/test_cr151_strategy_admission_statistical_gate.py"
+        merge_owner: "CR151-S03-admission-completion-linkage"
+        lld_gate:
+          required: true
+          required_level: "full-lld"
+          status: "approved"
+        dev_gate:
+          cp5_required: true
+          implementation_allowed_before_cp5: false
+          cp6_status: "PASS"
+
+  - wave: "CR151-W4-EVIDENCE"
+    objective: "Consolidate static-only evidence and release wording."
+    parallel_lld: true
+    parallel_dev_after_cp5: false
+    entry_conditions:
+      - "S01/S02/S03 design decisions available"
+    stories:
+      - story_id: "CR151-S04-static-evidence-release-wording"
+        title: "Static evidence and release wording"
+        priority: "P1"
+        status: "implemented"
+        depends_on:
+          - "CR151-S01-statistical-report-contracts"
+          - "CR151-S02-gate-evaluator-fail-closed-rules"
+          - "CR151-S03-admission-completion-linkage"
+        primary_files:
+          - "process/returns/CR151-*"
+          - "process/evidence/CR151-*"
+          - "docs/release/*"
+        merge_owner: "CR151-S04-static-evidence-release-wording"
+        lld_gate:
+          required: true
+          required_level: "technical-note"
+          status: "approved"
+        dev_gate:
+          cp5_required: true
+          implementation_allowed_before_cp5: false
+          cp6_status: "PASS"
+
+dependency_graph:
+  nodes:
+    - "CR151-S01-statistical-report-contracts"
+    - "CR151-S02-gate-evaluator-fail-closed-rules"
+    - "CR151-S03-admission-completion-linkage"
+    - "CR151-S04-static-evidence-release-wording"
+  edges:
+    - ["CR151-S01-statistical-report-contracts", "CR151-S02-gate-evaluator-fail-closed-rules"]
+    - ["CR151-S01-statistical-report-contracts", "CR151-S03-admission-completion-linkage"]
+    - ["CR151-S02-gate-evaluator-fail-closed-rules", "CR151-S03-admission-completion-linkage"]
+    - ["CR151-S01-statistical-report-contracts", "CR151-S04-static-evidence-release-wording"]
+    - ["CR151-S02-gate-evaluator-fail-closed-rules", "CR151-S04-static-evidence-release-wording"]
+    - ["CR151-S03-admission-completion-linkage", "CR151-S04-static-evidence-release-wording"]
+  validation_result:
+    cycles: []
+    invalid_references: []
+    parallel_internal_dependencies: 0
+    conclusion: "PASS"
+
+merge_order:
+  - "CR151-S01-statistical-report-contracts"
+  - "CR151-S02-gate-evaluator-fail-closed-rules"
+  - "CR151-S03-admission-completion-linkage"
+  - "CR151-S04-static-evidence-release-wording"
+
+validation_plan:
+  fixture_static_only:
+    - "uv run --python 3.11 pytest -q tests/test_cr151_strategy_admission_statistical_gate.py"
+    - "uv run --python 3.11 pytest -q tests/test_cr150_multifactor_framework_completion.py"
+  forbidden_without_new_authorization:
+    - "read .env / credentials"
+    - "real lake/NAS/provider access"
+    - "QMT / MiniQMT / xtquant runtime"
+    - "simulation / paper / live / trading / broker access"
+    - "external framework clone / install / run"
+    - "catalog pointer mutation or Git remote write"
+
+deferred_wave_b:
+  - "IC decay by lag"
+  - "half-life"
+  - "turnover"
+  - "liquidity/capacity view"
+  - "orthogonalization against known risk factors"
+  - "monotonicity"
+  - "quantile spread"
+  - "regime-aware validation / regime-stratified backtest"
+  - "factor correlation clustering / redundancy de-duplication"
+  - "capacity / impact"
+  - "IR / TE / Active Share"
+  - "PIT universe audit"

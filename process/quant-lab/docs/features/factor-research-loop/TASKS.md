@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.6"
+version: "1.7"
 feature_id: "FEAT-03"
 ---
 
@@ -16,6 +16,7 @@ feature_id: "FEAT-03"
 | 1.4 | 2026-06-27 | codex | 增补异象发现 / 研究任务：候选登记、研究报告、Harvey / 单调性 / alpha / 时间切分 / 成本 / 经济逻辑准入。 |
 | 1.5 | 2026-06-27 | codex | 增补自动异象发现系统任务：受控模板、批量 discovery、多重检验、动态目录接入和 Stage 3 候选消费。 |
 | 1.6 | 2026-06-28 | codex | 增补研究引擎稳定模块整改任务：领域名模块、共享 helper、旧 engine 入口归档、脚本归档和测试引用迁移。 |
+| 1.7 | 2026-07-01 | host-orchestrator | CR151 增补 Strategy Admission Statistical Gate 任务：统计报告合同、fail-closed evaluator、admission/completion linkage 和 static-only evidence wording。 |
 
 | Task ID | 任务 | 输入 | 输出 | 文件范围 | 验证 |
 |---|---|---|---|---|---|
@@ -33,6 +34,10 @@ feature_id: "FEAT-03"
 | FEAT-03-T01F | 生产 Stage 3 通过型候选策略 | 当前 blocked run、数据湖 release、因子目录、评估报告、candidate configs | 通过型 mature multifactor strategy、PASS admission package、候选复盘和下一轮参数记录 | `engine/mature_multifactor_research.py`、后续 candidate sweep 入口 | `tests/test_stage3_factor_model_validation_integration.py`、后续 `tests/test_stage3_candidate_pass_gate.py` |
 | FEAT-03-T01G | 候选搜索 / sweep 管理 | factor subset、weight scheme、rebalance、top_n、cost、risk constraints、train/test split | 每个候选的 validation report、blocked reason、pass candidate shortlist | 后续 `engine/mature_multifactor_candidate_search.py` 或等价领域名入口 | 后续 `tests/test_stage3_candidate_sweep.py` |
 | FEAT-03-T01H | 研究引擎稳定模块整改 | 旧 chapter/stage/root 入口、重复 helper、测试引用 | 领域名模块、`docs/legacy/archive/engine/` 归档、`serialization`、`factor_research_matrices`、`admission_contracts`、稳定脚本入口 | `engine/factor_replication.py`、`engine/research_data_readiness.py`、`engine/factor_model_research.py`、`engine/anomaly_research.py`、`engine/factor_robustness.py`、`engine/factor_portfolio_practice.py`、`docs/legacy/archive/engine/*`、`scripts/research/*`、`scripts/qmt/*` | `tests/test_script_entrypoint_naming.py`、相关 research tests |
+| FEAT-03-T01I | CR151 统计准入报告合同 | CP3-approved CR151 HLD/ADR、E2E review Wave A gaps | MultipleTestingReport、RobustFactorStatisticsReport、WalkForwardValidationPlan、BacktestOverfitRiskReport、StrategyAdmissionStatisticalGate、JSON-safe serialization | `engine/strategy_admission_statistical_gate.py` | `tests/test_cr151_strategy_admission_statistical_gate.py` |
+| FEAT-03-T01J | CR151 fail-closed gate evaluator | T01I contracts、threshold policy、operation counters | PASS / FAIL / NEEDS_REVIEW / BLOCKED 聚合规则、mandatory missing BLOCKED、forbidden operation BLOCKED | `engine/strategy_admission_statistical_gate.py` | `tests/test_cr151_strategy_admission_statistical_gate.py` |
+| FEAT-03-T01K | CR151 admission / completion linkage | CR150 MultifactorFrameworkCompletionMap、StrategyAdmissionPackage | statistical gate ref、blocked reason、`statistical_admission_gate_missing` linkage gap；不改变 runtime readiness | `engine/mature_multifactor_research.py`、`engine/strategy_admission_package.py` | `tests/test_cr151_strategy_admission_statistical_gate.py`、`tests/test_cr150_multifactor_framework_completion.py` |
+| FEAT-03-T01L | CR151 static-only evidence wording | CP6/CP7/CP8 evidence rules、CR150 static-only precedent | return/evidence/release wording、no-real-operation counters、`effective_validation_mode=static-only` | `process/returns/*`、`process/evidence/*`、`docs/release/*` | CP7/CP8 result checks |
 | FEAT-03-T02 | 维护 FactorPanel / LabelWindow gates | CR-011 + CR-030 | fail-closed panel / label policy | `engine/factor_panel_contracts.py` | label window tests |
 | FEAT-03-T03 | 维护评价报告与组合器 | factor panel / benchmark / cost | report 和 portfolio plan | `engine/factor_evaluation.py`、`engine/multifactor_combiner.py` | evaluation / combiner tests |
 | FEAT-03-T04 | 维护 ExperimentManifest / ReportCatalog | run spec / report path | 可复跑 manifest | `engine/research_manifest.py` | manifest catalog tests |
@@ -46,5 +51,7 @@ feature_id: "FEAT-03"
 - 新增异象候选来源、Harvey 阈值、单调性规则、控制因子模型、成本 / 换手阈值、A 股特殊处理或经济逻辑准入规则。
 - 新增或调整 FactorModelValidationReport schema、核心 gate policy、政策周期配置、GRS / 样本外 / 做空 / 壳价值 / 经济显著性评估规则。
 - Stage 3 目标、pass gate、candidate sweep、候选参数空间或 blocked 候选复盘格式变化。
+- StrategyAdmissionStatisticalGate schema、四态 gate policy、CR150 completion map linkage、或 static-only release wording 变化。
+- 将 CR151 deferred Wave B（IC decay、half-life、turnover、capacity/liquidity、orthogonalization、monotonicity、quantile spread、regime-aware validation、factor correlation clustering / redundancy de-duplication）提前时。
 - 将 Qlib / external runner 从 reference 升级为 Spike。
 - admission package 要进入 CR-021 simulation 申请输入。

@@ -2,7 +2,7 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: experiment-remediation-complete
+Phase: delivered
 Blocked: false
 Active CR: none
 Active Story: none
@@ -10,6 +10,18 @@ Active batch: none
 Pending gate: none
 
 ## Current Decision
+
+CR151 已在 CP8 关闭为 `READY_WITH_RISK`，当前无 active / blocked formal CR。多因子策略 E2E 的 statistical admission capability 已完成，但统计门当前是 opt-in capability，不改变 CR150 / UC-58 历史默认调用行为：
+
+- 已关闭 CR：`process/changes/CR-151.md`。
+- 发布就绪证据：`process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.json`、`process/release/RELEASE-CONTEXT-CR151.yaml`。
+- 已完成能力：FDR / multiple testing、Newey-West robust factor statistics、walk-forward / OOS、PBO / DSR、fail-closed `StrategyAdmissionStatisticalGate`、admission package linkage、completion-map opt-in linkage。
+- 已接受风险：`CR151-CP8-R03-STATE-V2-HYGIENE`，即 `STATE.current.json` / `STATE.md` slimming 仍需单独治理，不阻塞 CR151 release readiness。
+- 下一推荐项：启动 CR152 Machine Learning Strategy E2E Framework 的 CP0 / CP2；CP2 必须纳入两项决策：ML admission gate 与 CR151 gate 的关系、UC-58 / UC-59 statistical gate 的 opt-in / 默认强制时机。
+- 并行非阻断治理候选：STATE v2 hygiene、CR-INDEX legacy warning 清理、return / verify packet 关键字段非空工具校验。
+- 不授权范围：真实 lake / NAS / provider / credential / QMT / runtime / simulation / live / trading / broker / external framework / Git remote。
+
+## Previous CR142 Decision
 
 CR142 已从 `FU-CR140-002` 正式启动并关闭，用于处理剩余 experiments engine convergence：
 

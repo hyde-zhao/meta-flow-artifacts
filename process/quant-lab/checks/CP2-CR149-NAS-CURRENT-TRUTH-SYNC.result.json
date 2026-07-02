@@ -67,6 +67,36 @@
       "route_on_fail": "rework_same_story",
       "waiver_ref": null,
       "notes": "After approved sync, rerun the read-only consistency script; Phase 1 closes only if 18/18 comparisons match."
+    },
+    {
+      "id": "CP2-CR149-NAS-SYNC-05",
+      "category": "runtime-authorization",
+      "name": "Env-only NAS rsync credential read is explicitly routed to human approval",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR149-NAS-CURRENT-TRUTH-SYNC.md#DQ-CP2-CR149-NAS-SYNC-01",
+        "process/checks/CP2-CR149-NAS-CURRENT-TRUTH-SYNC-HUMAN-GATE-LAUNCH-MESSAGE.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "DQ-01 now explicitly authorizes env-only read of NAS rsync credentials for this scoped dry-run/execute chain only; credential disclosure, inspection outside env-only rsync use, and persistence in evidence remain not authorized."
+    },
+    {
+      "id": "CP2-CR149-NAS-SYNC-06",
+      "category": "runtime-risk",
+      "name": "Dry-run and execute timeout guard is explicit",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR149-NAS-CURRENT-TRUTH-SYNC.md#DQ-CP2-CR149-NAS-SYNC-01",
+        "process/checks/CP2-CR149-NAS-CURRENT-TRUTH-SYNC-RUNTIME-RISK-REVIEW-2026-07-01.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Dry-run and execute invocations must use a 900s operator timeout guard; timeout is treated as BLOCKED with no automatic retry."
     }
   ],
   "blockers": [],
@@ -75,5 +105,30 @@
     "READ-CR149-NAS-SYNC-GATE-2026-07-01T144500+0800"
   ],
   "decision": "PASS",
-  "next_route": "CP2_HUMAN_GATE"
+  "next_route": "POST_SYNC_METADATA_SEMANTICS_RECORDED_FOLLOW_UP_PENDING",
+  "cr_state": "closed-current-delivery-nas-sync-deferred; deferred RA-CR149-001 restored for CP2 review; active formal CRs=0",
+  "manual_gate_status": "approved",
+  "approved_by": "user",
+  "approved_at": "2026-07-01T20:55:35+08:00",
+  "accepted_decision_ids": [
+    "DQ-CP2-CR149-NAS-SYNC-01",
+    "DQ-CP2-CR149-NAS-SYNC-02",
+    "DQ-CP2-CR149-NAS-SYNC-03"
+  ],
+  "execution_status": "BLOCKED_POST_SYNC_METADATA_MISMATCH",
+  "post_sync_semantics_status": "CONTENT_PASS_BY_RSYNC_CHECKSUM_METADATA_BLOCKED_STRICT_BLOCKED",
+  "post_sync_semantics_notes": "Raw post-sync evidence remains unchanged: strict checker reports 18/18 itemized mismatches. Added interpretation layer records rsync --checksum content equality for 18/18 and p/g metadata mismatch for 18/18 under rsync-daemon-only access; independent NAS-side sha256 and reader direct-read checks are deferred because mount/shell/pull are unavailable or unauthorized.",
+  "post_sync_disposition_prep_status": "PASS_WITH_STRICT_EXIT_BLOCKED",
+  "execution_evidence_refs": {
+    "dry_run": "process/evidence/CR149-NAS-CURRENT-TRUTH-SYNC-DRY-RUN-2026-07-01.json",
+    "execute": "process/evidence/CR149-NAS-CURRENT-TRUTH-SYNC-EXECUTE-2026-07-01.json",
+    "post_sync": "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY-POST-SYNC-2026-07-01.json",
+    "post_sync_semantics": "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY-POST-SYNC-SEMANTICS-2026-07-01.json",
+    "post_sync_semantics_index": "process/evidence/CR149-NAS-MULTINODE-CONSISTENCY-POST-SYNC-SEMANTICS.index.json",
+    "local_source_truth_manifest": "process/evidence/CR149-LOCAL-SOURCE-TRUTH-MANIFEST-2026-07-01.json",
+    "local_source_truth_manifest_index": "process/evidence/CR149-LOCAL-SOURCE-TRUTH-MANIFEST.index.json",
+    "disposition_prep": "process/checks/RA-CR149-001-POSTSYNC-METADATA-DISPOSITION-PREP-2026-07-01.md",
+    "follow_up_tracking": "process/changes/CR-149-FOLLOW-UP-TRACKING-2026-07-01.md",
+    "execution_check": "process/checks/RA-CR149-001-NAS-CURRENT-TRUTH-SYNC-EXECUTION-2026-07-01.md"
+  }
 }

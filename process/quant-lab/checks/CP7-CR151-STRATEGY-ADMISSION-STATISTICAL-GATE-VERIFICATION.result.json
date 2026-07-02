@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION",
+  "cr_id": "CR-151",
+  "story_id": "CR151-S01..S04",
+  "context_ref": "process/checks/CP6-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-IMPLEMENTATION.result.json",
+  "dispatch_refs": [
+    "ADE-CR151-META-QA-CRITICAL-CP7-START-2026-07-02T065409+0800",
+    "ADE-CR151-META-QA-CRITICAL-CP7-COMPLETE-2026-07-02T072217+0800",
+    "ADE-CR151-META-QA-CRITICAL-CP7-REVERIFY-COMPLETE-2026-07-02T073039+0800"
+  ],
+  "return_packet_ref": "process/returns/CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.CP7.return.json",
+  "evidence_ref": "process/evidence/CR151-CP7-VERIFICATION.index.json",
+  "items": [
+    {
+      "id": "CP7-CR151-01",
+      "category": "entry",
+      "name": "CP6 implementation evidence is present and PASS",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-IMPLEMENTATION.result.json",
+        "process/evidence/CR151-CP6-IMPLEMENTATION.index.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CP6 result decision PASS; CP6 evidence records 18 tests, py_compile and git diff --check passing."
+    },
+    {
+      "id": "CP7-CR151-02",
+      "category": "dispatch",
+      "name": "meta-qa-critical dispatch evidence exists and is completed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/state/AGENT-DISPATCH-LEDGER.ndjson#ADE-CR151-META-QA-CRITICAL-CP7-START-2026-07-02T065409+0800",
+        "process/state/AGENT-DISPATCH-LEDGER.ndjson#ADE-CR151-META-QA-CRITICAL-CP7-COMPLETE-2026-07-02T072217+0800",
+        "process/state/AGENT-DISPATCH-LEDGER.ndjson#ADE-CR151-META-QA-CRITICAL-CP7-REVERIFY-COMPLETE-2026-07-02T073039+0800"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "User explicitly invoked meta-qa-critical; dispatch ledger contains start, initial completion and reverify completion evidence."
+    },
+    {
+      "id": "CP7-CR151-03",
+      "category": "functional-contract",
+      "name": "S01 multiple-testing validation helper satisfies LLD count-consistency contract",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/strategy_admission_statistical_gate.py:159",
+        "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/CR151-S01-statistical-report-contracts-LLD.md:107",
+        "process/evidence/CR151-CP7-VERIFICATION.index.json#commands[4]"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Reverify probe returns raw/adjusted count mismatch and rejected_count-exceeds-candidates blocker issue codes."
+    },
+    {
+      "id": "CP7-CR151-04",
+      "category": "fail-closed",
+      "name": "S02 aggregate evaluator blocks malformed mandatory evidence before PASS",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/strategy_admission_statistical_gate.py:242",
+        "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/CR151-S02-gate-evaluator-fail-closed-rules-LLD.md:96",
+        "process/evidence/CR151-CP7-VERIFICATION.index.json#commands[5]",
+        "process/evidence/CR151-CP7-VERIFICATION.index.json#commands[6]"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Malformed multiple-testing evidence now produces aggregate status BLOCKED; forbidden counter probe confirms BLOCKED before PASS."
+    },
+    {
+      "id": "CP7-CR151-05",
+      "category": "regression",
+      "name": "Targeted tests and compile checks pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR151-CP7-VERIFICATION.index.json#commands[1]",
+        "process/evidence/CR151-CP7-VERIFICATION.index.json#commands[2]",
+        "process/evidence/CR151-CP7-VERIFICATION.index.json#commands[3]"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "20 passed; py_compile no output; git diff --check no output."
+    },
+    {
+      "id": "CP7-CR151-06",
+      "category": "authorization-boundary",
+      "name": "No forbidden runtime/data/credential/provider/NAS/QMT/trading/Git remote operation executed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR151-CP7-VERIFICATION.index.json#boundary_check"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Verification remained local/static/fixture-only; forbidden operation counters are 0."
+    },
+    {
+      "id": "CP7-CR151-07",
+      "category": "process-input",
+      "name": "Canonical TEST-STRATEGY process artifact is refreshed for CR151",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "docs/quality/TEST-STRATEGY.md",
+        "process/TEST-STRATEGY.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "CR151-CP7-R01 closed before CP8: canonical docs/quality/TEST-STRATEGY.md now covers CR151 static-only verification strategy and non-authorized runtime/data boundaries."
+    },
+    {
+      "id": "CP7-CR151-08",
+      "category": "process-input",
+      "name": "CP7 verify packets include acceptance criteria, verification plan and trace refs",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/context/stories/CR151-S01-statistical-report-contracts.CP7.verify-packet.json",
+        "process/context/stories/CR151-S02-gate-evaluator-fail-closed-rules.CP7.verify-packet.json",
+        "process/context/stories/CR151-S03-admission-completion-linkage.CP7.verify-packet.json",
+        "process/context/stories/CR151-S04-static-evidence-release-wording.CP7.verify-packet.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "R02 remediated before CP8: all four CR151 CP7 verify packets now include acceptance_criteria, non-empty verification_plan, test_refs, design_contract_refs and design_evidence_ref."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP8_INPUT_WITH_RISK",
+  "checked_at": "2026-07-02T08:45:00+08:00",
+  "summary": {
+    "validation_mode": "static-only",
+    "tests_passed": 20,
+    "py_compile": "PASS",
+    "git_diff_check": "PASS",
+    "forbidden_operation_count": 0,
+    "runtime_authorization_allowed": false,
+    "blocking_findings": 0,
+    "process_risks": 0,
+    "open_process_risk_ids": [],
+    "closed_process_risk_ids": [
+      "CR151-CP7-R01",
+      "CR151-CP7-R02"
+    ],
+    "cp8_readiness_caveat_ids": [
+      "CR151-CP8-R03-STATE-V2-HYGIENE"
+    ],
+    "route_check": "PASS",
+    "waiver_check": "PASS",
+    "test_strategy_ref": "docs/quality/TEST-STRATEGY.md",
+    "post_cp7_hygiene": "CR151-CP7-R01 and CR151-CP7-R02 closed before CP8; CP7 decision remains historical PASS_WITH_RISK, while CP8 open caveat is STATE v2 hygiene only."
+  }
+}
