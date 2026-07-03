@@ -1,0 +1,470 @@
+project_id: atomic-ops-ngfw-install-config-chain
+version: "1.1"
+status: delivered
+created_at: "2026-05-18T14:35:00+0800"
+updated_at: "2026-05-19T10:27:58+0800"
+owner: meta-se
+source_hld: process/HLD.md
+architecture_decision: process/ARCHITECTURE-DECISION.md
+story_backlog: process/STORY-BACKLOG.md
+cp4_check: process/checks/CP4-STORY-DAG-PARALLEL-SAFETY.md
+planning_scope:
+  phase: story-planning
+  lld_generation_allowed: true
+  implementation_allowed: true
+  product_files_modified_in_cp4: false
+  active_change: CR-003
+  gate_order: "CP4 auto PASS -> all target Story LLD design -> all CP5 auto prechecks -> CP5 batch manual confirmation -> story-execution"
+parallel_policy:
+  max_parallel_lld: 3
+  max_parallel_dev: 2
+  max_parallel_qa: 2
+  lld_parallel_rule: "LLD can run in parallel when Story boundaries and LLD output files are unique; CR-003 removes CP4 manual approval as the LLD precondition."
+  dev_parallel_rule: "Development requires CP5 LLD confirmation, dependency gates satisfied, and no primary file conflict."
+  qa_parallel_rule: "Verification can run in parallel only when resources and validation inputs do not conflict."
+dependency_policy:
+  allowed_types:
+    - contract
+    - runtime
+    - file-conflict
+  dag_required: true
+  file_conflict_rule: "No same dev batch may contain overlapping file_ownership.primary entries."
+first_lld_design_batch_recommendation:
+  batch_id: CR-003-LLD-BATCH-WINDOW-001
+  max_parallel_lld: 3
+  cp4_manual_approval_required: false
+  active_change: CR-003
+  stories:
+    - STORY-001
+    - STORY-002
+    - STORY-003
+  rationale: "These are the highest priority contract and base atom catalog Stories; their LLD files are unique and their product primary ownership does not overlap."
+waves:
+  - wave: W1
+    objective: "Freeze core schema/docs contract and define base single-device NGFW atom catalog."
+    parallel_lld: true
+    parallel_dev: false
+    lld_batch_candidate: LLD-BATCH-001
+    stories:
+      - story_id: STORY-001
+        title: "Freeze schema v1.1 contract and field docs"
+        priority: P0
+        assignee: meta-dev
+        depends_on: []
+        dependency_type: []
+        status: verified
+        output_files:
+          - process/stories/STORY-001-freeze-schema-v11-contract-and-field-docs.md
+        implementation_output_files:
+          - schemas/atomic-op.schema.yaml
+          - docs/schema-field-reference.md
+          - docs/error-codes.md
+          - docs/naming-convention.md
+          - atoms/fw/fw_verify_acl_rule.yaml
+        file_ownership:
+          primary:
+            - schemas/atomic-op.schema.yaml
+            - docs/schema-field-reference.md
+            - docs/error-codes.md
+            - docs/naming-convention.md
+          shared:
+            - atoms/fw/fw_verify_acl_rule.yaml
+          merge_owner: STORY-001
+          forbidden:
+            - .input/
+            - delivery/
+        lld_gate:
+          required_inputs:
+            - process/HLD.md
+            - process/ARCHITECTURE-DECISION.md
+            - process/stories/STORY-001-freeze-schema-v11-contract-and-field-docs.md
+          status: ready_by_CR-003
+        dev_gate:
+          lld_confirmed: true
+          dependencies_satisfied: true
+          file_conflict_free: true
+          cp5_confirmed_required: true
+          cp5_confirmed: true
+          implementation_complete: true
+          cp6_status: PASS
+          verification_complete: true
+          cp7_status: PASS
+          verification_evidence: process/checks/CP7-STORY-001-freeze-schema-v11-contract-and-field-docs-VERIFICATION-DONE.md
+          contract_frozen: true
+      - story_id: STORY-002
+        title: "Model NGFW install init login guard atoms"
+        priority: P0
+        assignee: meta-dev
+        depends_on:
+          - STORY-001
+        dependency_type:
+          - contract
+        status: verified
+        output_files:
+          - process/stories/STORY-002-model-ngfw-install-init-login-guard-atoms.md
+        implementation_output_files:
+          - atoms/fw/fw_install_ngfw_image.yaml
+          - atoms/fw/fw_init_ngfw_minimal.yaml
+          - atoms/fw/fw_login_web_management.yaml
+          - atoms/fw/fw_check_login_state.yaml
+          - atoms/fw/fw_verify_ngfw_health.yaml
+          - packages/ngfw_installation.yaml
+        file_ownership:
+          primary:
+            - atoms/fw/fw_install_ngfw_image.yaml
+            - atoms/fw/fw_init_ngfw_minimal.yaml
+            - atoms/fw/fw_login_web_management.yaml
+            - atoms/fw/fw_check_login_state.yaml
+            - atoms/fw/fw_verify_ngfw_health.yaml
+            - packages/ngfw_installation.yaml
+          shared: []
+          merge_owner: STORY-002
+          forbidden:
+            - .input/
+            - delivery/
+            - src/atomic_ops/cli.py
+        lld_gate:
+          required_inputs:
+            - process/HLD.md
+            - process/ARCHITECTURE-DECISION.md
+            - process/stories/STORY-002-model-ngfw-install-init-login-guard-atoms.md
+          upstream_contracts:
+            - STORY-001
+          status: ready_by_CR-003
+        dev_gate:
+          lld_confirmed: true
+          dependencies_satisfied: true
+          dependency_condition: "STORY-001 CP6 PASS and schema v1.1 contract frozen."
+          file_conflict_free: true
+          cp5_confirmed_required: true
+          cp5_confirmed: true
+          implementation_complete: true
+          cp6_status: PASS
+          verification_complete: true
+          cp7_status: PASS
+          verification_evidence: process/checks/CP7-STORY-002-model-ngfw-install-init-login-guard-atoms-VERIFICATION-DONE.md
+      - story_id: STORY-003
+        title: "Model capacity ten domain config and verification atoms"
+        priority: P0
+        assignee: meta-dev
+        depends_on:
+          - STORY-001
+        dependency_type:
+          - contract
+        status: verified
+        output_files:
+          - process/stories/STORY-003-model-capacity-ten-domain-config-and-verification-atoms.md
+        implementation_output_files:
+          - atoms/fw/fw_config_interface.yaml
+          - atoms/fw/fw_verify_interface.yaml
+          - atoms/fw/fw_config_object.yaml
+          - atoms/fw/fw_verify_object.yaml
+          - atoms/fw/fw_config_acl_policy.yaml
+          - atoms/fw/fw_verify_acl_policy.yaml
+          - atoms/fw/fw_config_policy_route.yaml
+          - atoms/fw/fw_verify_policy_route.yaml
+          - atoms/fw/fw_config_static_route.yaml
+          - atoms/fw/fw_verify_static_route.yaml
+          - atoms/fw/fw_config_nat.yaml
+          - atoms/fw/fw_verify_nat.yaml
+          - atoms/fw/fw_config_bandwidth.yaml
+          - atoms/fw/fw_verify_bandwidth.yaml
+          - atoms/fw/fw_config_black_white_list.yaml
+          - atoms/fw/fw_verify_black_white_list.yaml
+          - atoms/fw/fw_config_ssl_vpn.yaml
+          - atoms/fw/fw_verify_ssl_vpn.yaml
+          - atoms/fw/fw_config_dynamic_routing.yaml
+          - atoms/fw/fw_verify_dynamic_routing.yaml
+          - packages/ngfw_capacity_config.yaml
+          - packages/ngfw_verification.yaml
+        file_ownership:
+          primary:
+            - atoms/fw/fw_config_interface.yaml
+            - atoms/fw/fw_verify_interface.yaml
+            - atoms/fw/fw_config_object.yaml
+            - atoms/fw/fw_verify_object.yaml
+            - atoms/fw/fw_config_acl_policy.yaml
+            - atoms/fw/fw_verify_acl_policy.yaml
+            - atoms/fw/fw_config_policy_route.yaml
+            - atoms/fw/fw_verify_policy_route.yaml
+            - atoms/fw/fw_config_static_route.yaml
+            - atoms/fw/fw_verify_static_route.yaml
+            - atoms/fw/fw_config_nat.yaml
+            - atoms/fw/fw_verify_nat.yaml
+            - atoms/fw/fw_config_bandwidth.yaml
+            - atoms/fw/fw_verify_bandwidth.yaml
+            - atoms/fw/fw_config_black_white_list.yaml
+            - atoms/fw/fw_verify_black_white_list.yaml
+            - atoms/fw/fw_config_ssl_vpn.yaml
+            - atoms/fw/fw_verify_ssl_vpn.yaml
+            - atoms/fw/fw_config_dynamic_routing.yaml
+            - atoms/fw/fw_verify_dynamic_routing.yaml
+            - packages/ngfw_capacity_config.yaml
+            - packages/ngfw_verification.yaml
+          shared: []
+          merge_owner: STORY-003
+          forbidden:
+            - .input/
+            - delivery/
+            - src/atomic_ops/cli.py
+        lld_gate:
+          required_inputs:
+            - process/HLD.md
+            - process/ARCHITECTURE-DECISION.md
+            - process/stories/STORY-003-model-capacity-ten-domain-config-and-verification-atoms.md
+          upstream_contracts:
+            - STORY-001
+          status: ready_by_CR-003
+        dev_gate:
+          lld_confirmed: true
+          dependencies_satisfied: true
+          dependency_condition: "STORY-001 CP6 PASS and schema v1.1 contract frozen."
+          file_conflict_free: true
+          cp5_confirmed_required: true
+          cp5_confirmed: true
+          implementation_complete: true
+          cp6_status: PASS
+          verification_complete: true
+          cp7_status: PASS
+          verification_evidence: process/checks/CP7-STORY-003-model-capacity-ten-domain-config-and-verification-atoms-VERIFICATION-DONE.md
+          contract_frozen: true
+  - wave: W2
+    objective: "Add multi-device batch contract and repository security gate checks."
+    parallel_lld: true
+    parallel_dev: false
+    stories:
+      - story_id: STORY-004
+        title: "Model multi-device batch configuration contract"
+        priority: P0
+        assignee: meta-dev
+        depends_on:
+          - STORY-001
+          - STORY-003
+        dependency_type:
+          - contract
+        status: verified
+        output_files:
+          - process/stories/STORY-004-model-multi-device-batch-configuration-contract.md
+        implementation_output_files:
+          - atoms/fw/fw_config_batch_interface.yaml
+          - atoms/fw/fw_config_batch_object.yaml
+          - atoms/fw/fw_config_batch_acl_policy.yaml
+          - atoms/fw/fw_config_batch_policy_route.yaml
+          - atoms/fw/fw_config_batch_static_route.yaml
+          - atoms/fw/fw_config_batch_nat.yaml
+          - atoms/fw/fw_config_batch_bandwidth.yaml
+          - atoms/fw/fw_config_batch_black_white_list.yaml
+          - atoms/fw/fw_config_batch_ssl_vpn.yaml
+          - atoms/fw/fw_config_batch_dynamic_routing.yaml
+          - packages/ngfw_batch_config.yaml
+          - docs/batch-configuration-contract.md
+        file_ownership:
+          primary:
+            - atoms/fw/fw_config_batch_interface.yaml
+            - atoms/fw/fw_config_batch_object.yaml
+            - atoms/fw/fw_config_batch_acl_policy.yaml
+            - atoms/fw/fw_config_batch_policy_route.yaml
+            - atoms/fw/fw_config_batch_static_route.yaml
+            - atoms/fw/fw_config_batch_nat.yaml
+            - atoms/fw/fw_config_batch_bandwidth.yaml
+            - atoms/fw/fw_config_batch_black_white_list.yaml
+            - atoms/fw/fw_config_batch_ssl_vpn.yaml
+            - atoms/fw/fw_config_batch_dynamic_routing.yaml
+            - packages/ngfw_batch_config.yaml
+            - docs/batch-configuration-contract.md
+          shared: []
+          merge_owner: STORY-004
+          forbidden:
+            - .input/
+            - delivery/
+        lld_gate:
+          required_inputs:
+            - process/HLD.md
+            - process/ARCHITECTURE-DECISION.md
+            - process/stories/STORY-004-model-multi-device-batch-configuration-contract.md
+          upstream_contracts:
+            - STORY-001
+            - STORY-003
+          status: ready_by_CR-003
+        dev_gate:
+          lld_confirmed: true
+          dependencies_satisfied: true
+          dependency_condition: "STORY-001 CP6 PASS and STORY-003 CP6 PASS with 10-domain contract frozen."
+          file_conflict_free: true
+          cp5_confirmed_required: true
+          cp5_confirmed: true
+          implementation_complete: true
+          cp6_status: PASS
+          verification_complete: true
+          cp7_status: PASS
+          verification_evidence: process/checks/CP7-STORY-004-model-multi-device-batch-configuration-contract-VERIFICATION-DONE.md
+          contract_frozen: true
+          downstream_stable_facts:
+            - "Exactly 10 batch op_ids are frozen under fw_config_batch_<domain>."
+            - "ngfw_batch_config package scope is frozen with exactly 10 batch operations."
+            - "batch.max_concurrency default is 1 and schema maximum is 5."
+            - "10/10 batch atoms have high-risk gate coverage."
+            - "Batch idempotency key rule is documented."
+            - "Failure isolation uses partial_failed, per_device_results[], failed_devices[], and verification_summary_ref."
+      - story_id: STORY-005
+        title: "Add read-only security gate and validation checks"
+        priority: P0
+        assignee: meta-dev
+        depends_on:
+          - STORY-001
+          - STORY-002
+          - STORY-003
+          - STORY-004
+        dependency_type:
+          - contract
+        status: verified
+        output_files:
+          - process/stories/STORY-005-add-read-only-security-gate-and-validation-checks.md
+        implementation_output_files:
+          - scripts/security_gate_check.py
+          - src/atomic_ops/commands/validate.py
+          - src/atomic_ops/commands/show.py
+          - src/atomic_ops/commands/list_ops.py
+          - src/atomic_ops/cli.py
+        file_ownership:
+          primary:
+            - scripts/security_gate_check.py
+          shared:
+            - src/atomic_ops/commands/validate.py
+            - src/atomic_ops/commands/show.py
+            - src/atomic_ops/commands/list_ops.py
+            - src/atomic_ops/cli.py
+          merge_owner: STORY-005
+          forbidden:
+            - .input/
+            - delivery/
+        lld_gate:
+          required_inputs:
+            - process/HLD.md
+            - process/ARCHITECTURE-DECISION.md
+            - process/stories/STORY-005-add-read-only-security-gate-and-validation-checks.md
+          upstream_contracts:
+            - STORY-001
+            - STORY-002
+            - STORY-003
+            - STORY-004
+          status: ready_by_CR-003
+        dev_gate:
+          lld_confirmed: true
+          dependencies_satisfied: true
+          dependency_condition: "STORY-001, STORY-002, STORY-003, and STORY-004 CP6 PASS; upstream contracts stable; no real device action command added."
+          file_conflict_free: true
+          cp5_confirmed_required: true
+          cp5_confirmed: true
+          implementation_complete: true
+          cp6_status: PASS
+          verification_complete: true
+          cp7_status: PASS
+          verification_evidence: process/checks/CP7-STORY-005-add-read-only-security-gate-and-validation-checks-VERIFICATION-DONE.md
+          security_gate_facts_stable: true
+          downstream_stable_facts:
+            - "security gate command: uv run --python 3.11 python scripts/security_gate_check.py"
+            - "default scan paths: atoms/, packages/, docs/, schemas/, scripts/, src/atomic_ops/"
+            - "exit codes: 0 success, 31 sensitive finding, 32 high-risk gate finding, 33 input/path/YAML/schema error"
+            - "current catalog result: text_files=66, yaml_files=44, sensitive_findings=0, gate_findings=0"
+            - "high-risk catalog result: high_risk_atoms=25, gate_failures=0"
+            - "CLI boundary unchanged: no run/execute/apply/configure real device action command"
+          upstream_contract_evidence:
+            - process/checks/CP6-STORY-001-freeze-schema-v11-contract-and-field-docs-CODING-DONE.md
+            - process/checks/CP6-STORY-002-model-ngfw-install-init-login-guard-atoms-CODING-DONE.md
+            - process/checks/CP6-STORY-003-model-capacity-ten-domain-config-and-verification-atoms-CODING-DONE.md
+            - process/checks/CP6-STORY-004-model-multi-device-batch-configuration-contract-CODING-DONE.md
+  - wave: W3
+    objective: "Update user-facing docs after contracts and checks are stable."
+    parallel_lld: false
+    parallel_dev: false
+    stories:
+      - story_id: STORY-006
+        title: "Update user-facing docs and release guidance"
+        priority: P1
+        assignee: meta-dev
+        depends_on:
+          - STORY-001
+          - STORY-002
+          - STORY-003
+          - STORY-004
+          - STORY-005
+        dependency_type:
+          - runtime
+        status: verified
+        output_files:
+          - process/stories/STORY-006-update-user-facing-docs-and-release-guidance.md
+        implementation_output_files:
+          - README.md
+          - docs/USER-MANUAL.md
+          - docs/engineer-handbook.md
+          - docs/test-case-template.yaml
+          - CHANGELOG.md
+        file_ownership:
+          primary:
+            - README.md
+            - docs/USER-MANUAL.md
+            - docs/engineer-handbook.md
+            - docs/test-case-template.yaml
+            - CHANGELOG.md
+          shared: []
+          merge_owner: STORY-006
+          forbidden:
+            - .input/
+            - delivery/
+        lld_gate:
+          required_inputs:
+            - process/HLD.md
+            - process/ARCHITECTURE-DECISION.md
+            - process/stories/STORY-006-update-user-facing-docs-and-release-guidance.md
+          upstream_contracts:
+            - STORY-001
+            - STORY-002
+            - STORY-003
+            - STORY-004
+            - STORY-005
+          status: ready_by_CR-003
+        dev_gate:
+          lld_confirmed: true
+          dependencies_satisfied: true
+          dependency_condition: "STORY-001..005 CP6 and CP7 PASS; upstream implementation and verification evidence available."
+          file_conflict_free: true
+          cp5_confirmed_required: true
+          cp5_confirmed: true
+          implementation_evidence_available: true
+          implementation_complete: true
+          cp6_status: PASS
+          implementation_evidence: process/checks/CP6-STORY-006-update-user-facing-docs-and-release-guidance-CODING-DONE.md
+          verification_evidence_available: true
+          verification_complete: true
+          cp7_status: PASS
+          verification_evidence: process/checks/CP7-STORY-006-update-user-facing-docs-and-release-guidance-VERIFICATION-DONE.md
+          upstream_verification_evidence:
+            - process/checks/CP7-STORY-001-freeze-schema-v11-contract-and-field-docs-VERIFICATION-DONE.md
+            - process/checks/CP7-STORY-002-model-ngfw-install-init-login-guard-atoms-VERIFICATION-DONE.md
+            - process/checks/CP7-STORY-003-model-capacity-ten-domain-config-and-verification-atoms-VERIFICATION-DONE.md
+            - process/checks/CP7-STORY-004-model-multi-device-batch-configuration-contract-VERIFICATION-DONE.md
+            - process/checks/CP7-STORY-005-add-read-only-security-gate-and-validation-checks-VERIFICATION-DONE.md
+quality_gates:
+  cp4:
+    automatic_check: process/checks/CP4-STORY-DAG-PARALLEL-SAFETY.md
+    manual_checkpoint: checkpoints/CP4-STORY-PLAN-REVIEW.md
+    required_before_lld: false
+    superseded_by: process/changes/CR-003.md
+    note: "CP4 manual checkpoint was withdrawn by CR-003; CP4 auto PASS remains planning evidence."
+  cp5:
+    batch_confirmation_required: true
+    manual_checkpoint: checkpoints/CP5-ALL-STORIES-LLD-BATCH.md
+  cp6:
+    coding_done_required: true
+  cp7:
+    verification_done_required: true
+  cp8:
+    automatic_check: process/checks/CP8-DELIVERY-READINESS.md
+    manual_checkpoint: checkpoints/CP8-DELIVERY-READINESS.md
+    auto_status: PASS
+    manual_status: approved
+    reviewed_by: user
+    reviewed_at: "2026-05-19T10:27:58+0800"
+    user_reply: "通过，继续推进"
+    delivered: true
