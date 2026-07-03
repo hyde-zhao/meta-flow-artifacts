@@ -1,0 +1,240 @@
+{
+  "acceptance": [
+    "Unknown top-level current-state keys produce WARN in audit mode and ERROR in enforce mode.",
+    "Explicit optional keys pending_checklist_path and project_state_ref are allowed and budgeted.",
+    "Field budgets cover next_action, source_refs, open_risks, authz_policy_refs, active_context_ref, pending_checklist_path, and project_state_ref with scalar/list distinctions.",
+    "write_current_state validates before writing and does not partially write on enforce failure.",
+    "state check CLI supports audit/enforce mode or an equivalent tested entry point without breaking existing default behavior.",
+    "No process/quant-lab/**, runtime, production write, publish, live, or credential reads."
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 348,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 261,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/stories/STORY-CR037-S01-current-state-schema-and-budgets.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 322,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 817,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-037.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "path": "process/returns/CR037-S00.CP7.return.json",
+      "mode": "full",
+      "reason": "dependency_return",
+      "required": true,
+      "estimated_tokens": 1600
+    },
+    {
+      "path": "process/evidence/CR037-S00.CP7.index.json",
+      "mode": "full",
+      "reason": "dependency_evidence",
+      "required": true,
+      "estimated_tokens": 1300
+    },
+    {
+      "path": "process/checks/CP7-CR037-S00-VERIFICATION-DONE.result.json",
+      "mode": "full",
+      "reason": "dependency_cp7_result",
+      "required": true,
+      "estimated_tokens": 1800
+    },
+    {
+      "path": "meta_flow/state/current.py",
+      "mode": "full",
+      "reason": "implementation_target",
+      "required": true,
+      "estimated_tokens": 4500
+    },
+    {
+      "path": "tests/test_state_v2.py",
+      "mode": "full",
+      "reason": "test_target",
+      "required": true,
+      "estimated_tokens": 1800
+    }
+  ],
+  "allowed_write_paths": [
+    "meta_flow/state/current.py",
+    "tests/test_state_v2.py",
+    "meta_flow/cli.py",
+    "process/stories/STORY-CR037-S01-current-state-schema-and-budgets-IMPLEMENTATION.md",
+    "process/returns/CR037-S01.CP6.return.json",
+    "process/evidence/CR037-S01.CP6.index.json",
+    "process/checks/CP6-CR037-S01-CODING-DONE.result.json",
+    "process/checks/CP6-CR037-S01-CODING-DONE.result.summary.md"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING"
+  ],
+  "budget": {
+    "estimated_tokens": 11248,
+    "estimator": "chars_div_4",
+    "max_tokens": 16000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [],
+    "summary": "CR037-S01 implements P0 current-state schema and budget enforcement after S00 guardrail verified-with-risk."
+  },
+  "cr_id": "CR-037",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "dependency_inputs": [
+    {
+      "story_id": "CR037-S00",
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "result_ref": "process/checks/CP7-CR037-S00-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT"
+      ]
+    }
+  ],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "expected_return_packet": "process/returns/CR037-S01.CP6.return.json",
+  "feature_contract_summary": "Current State Enforcement: implement allowlist schema, explicit optional keys, per-field budgets, audit/enforce validation, writer enforcement, state check CLI mode, and regression tests without adding a second state schema mechanism.",
+  "feature_design_refs": [
+    "process/docs/features/current-state-enforcement/DESIGN.md",
+    "process/docs/features/current-state-enforcement/TEST-PLAN.md",
+    "process/docs/features/current-state-enforcement/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "FEAT-PG-001"
+  ],
+  "forbidden_write_paths": [
+    "process/quant-lab/**",
+    "delivery/**",
+    "docs/**",
+    ".env",
+    "**/*credential*",
+    "**/*secret*",
+    "**/*token*",
+    "**/*cookie*",
+    "**/*private_key*"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "lld_policy": {
+    "required_level": "full-lld",
+    "evidence_ref": "process/stories/STORY-CR037-S01-current-state-schema-and-budgets-LLD.md"
+  },
+  "objective": {
+    "non_goals": [],
+    "summary": "current-state schema and budgets"
+  },
+  "packet_type": "story_work_packet",
+  "parent_context_ref": "process/context/CP5-CR-037-LLD-CONTEXT.yaml",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "meta-flow",
+  "read_if_needed": [
+    {
+      "path": "process/stories/STORY-CR037-S01-current-state-schema-and-budgets-LLD.md",
+      "mode": "full",
+      "reason": "deep_implementation_contract",
+      "required_when": "field-level contract or test detail is insufficient in packet summary",
+      "estimated_tokens": 4500
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "state-schema-security",
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR037-S01",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/stories/STORY-CR037-S01-current-state-schema-and-budgets.md",
+  "verification_plan": [
+    {
+      "id": "V-S01-01",
+      "type": "unit",
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_state_v2.py",
+      "expected": "PASS"
+    },
+    {
+      "id": "V-S01-02",
+      "type": "state-check-audit",
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root .",
+      "expected": "PASS on current workspace"
+    },
+    {
+      "id": "V-S01-03",
+      "type": "cp6-return",
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S01.CP6.work-packet.json --return process/returns/CR037-S01.CP6.return.json --project-root .",
+      "expected": "PASS after return packet is generated"
+    },
+    {
+      "id": "V-S01-04",
+      "type": "evidence-index",
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S01.CP6.index.json --project-root .",
+      "expected": "PASS"
+    },
+    {
+      "id": "V-S01-05",
+      "type": "boundary",
+      "command": "git diff -- process/quant-lab delivery docs",
+      "expected": "No forbidden-path writes from S01"
+    }
+  ]
+}

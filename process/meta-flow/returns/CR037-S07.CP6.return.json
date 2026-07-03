@@ -1,0 +1,190 @@
+{
+  "artifacts": [
+    {
+      "kind": "implementation_summary",
+      "path": "process/stories/STORY-CR037-S07-feature-capability-registry-and-resolver-IMPLEMENTATION.md"
+    },
+    {
+      "kind": "story_return_packet",
+      "path": "process/returns/CR037-S07.CP6.return.json"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP6-CR037-S07-CODING-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP6-CR037-S07-CODING-DONE.result.summary.md"
+    }
+  ],
+  "authz_boundary": {
+    "dev_agent_process_artifacts_forbidden": true,
+    "host_owned_process_artifacts": true,
+    "no_credential_read": true,
+    "no_external_call": true,
+    "no_production_write": true,
+    "no_publish_or_live": true,
+    "no_quant_lab_write": true,
+    "notes": "S07 used the approved S07+ strategy: dev agent writes source/tests only; Host Orchestrator writes CP6 process artifacts after validation."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "notes": "Touched files are limited to S07 allowed source/test paths. Pre-artifact process diff showed no dev-agent writes to returns/evidence/checks/state/handoffs; process/quant-lab and docs diff is empty.",
+    "unexpected_imports": []
+  },
+  "contract_changes": {
+    "design_delta_ref": "",
+    "design_delta_required": false,
+    "notes": "S07 implements the CP5-approved registry-backed refs contract without changing HLD, ADR, or Feature DESIGN."
+  },
+  "coverage": [
+    {
+      "acceptance": "FEATURE-REGISTRY.yaml v1/v2 remains backward compatible and canonical feature IDs are unique.",
+      "evidence": [
+        "meta_flow/design/feature_registry.py",
+        "tests/test_feature_registry.py",
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-01"
+      ],
+      "result": "PASS"
+    },
+    {
+      "acceptance": "CAPABILITY-REGISTRY.yaml schema/checker validates capability IDs, aliases, deprecated_by, feature_refs, owner/source refs, and credential-like content.",
+      "evidence": [
+        "meta_flow/design/feature_registry.py",
+        "tests/test_feature_registry.py",
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-01"
+      ],
+      "result": "PASS"
+    },
+    {
+      "acceptance": "Resolver returns resolved, unresolved, deprecated, and conflict results with stable code/severity/input_ref/canonical_id fields.",
+      "evidence": [
+        "meta_flow/design/feature_registry.py",
+        "tests/test_feature_registry.py",
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-01"
+      ],
+      "result": "PASS"
+    },
+    {
+      "acceptance": "Unknown feature/capability refs are blocked findings or candidate report entries; resolver never auto-creates canonical IDs.",
+      "evidence": [
+        "meta_flow/design/feature_registry.py",
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-01"
+      ],
+      "result": "PASS"
+    },
+    {
+      "acceptance": "Synthetic downstream consumer tests use registry-backed refs and do not bypass resolver.",
+      "evidence": [
+        "tests/test_feature_registry.py",
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-01"
+      ],
+      "result": "PASS"
+    },
+    {
+      "acceptance": "Fixtures use CAP-PG-* governance placeholder IDs only; quant-lab real capability IDs remain out of scope for S13.",
+      "evidence": [
+        "tests/test_feature_registry.py",
+        "process/evidence/CR037-S07.CP6.index.json#changed_files"
+      ],
+      "result": "PASS"
+    },
+    {
+      "acceptance": "Dev agent did not write CP6 process artifacts; Host Orchestrator owns CP6 return/evidence/result/summary generation.",
+      "evidence": [
+        "process/handoffs/CR037-S07-CP6-IMPLEMENTATION-HANDOFF.md",
+        "process/state/AGENT-DISPATCH-LEDGER.ndjson",
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-05"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "cr_id": "CR-037",
+  "evidence_refs": [
+    "process/evidence/CR037-S07.CP6.index.json",
+    "process/checks/CP6-CR037-S07-CODING-DONE.result.json",
+    "process/checks/CP6-CR037-S07-CODING-DONE.result.summary.md"
+  ],
+  "next_route": "story-verification",
+  "packet_type": "story_return_packet",
+  "read_expansion_refs": [],
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "S07 extends the existing feature registry implementation and does not create a parallel capability namespace."
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "Resolver and checker return stable codes and block unresolved/free-string refs; downstream stories must consume resolver results."
+    },
+    {
+      "id": "R-CR037-YAML-SUBSET",
+      "level": "LOW",
+      "mitigation": "S07 keeps the existing JSON-compatible YAML approach for registry fixtures and files."
+    },
+    {
+      "id": "R-CR037-QA-SUBAGENT-NO-OUTPUT",
+      "level": "MEDIUM",
+      "mitigation": "CP6 process artifacts are Host-owned under the S07+ execution strategy."
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "status": "implemented_with_risk",
+  "story_id": "CR037-S07",
+  "summary": "CR037-S07 CP6 implemented registry-backed feature/capability refs by extending meta_flow/design/feature_registry.py and tests/test_feature_registry.py. Target tests passed, feature CLI help is updated, state enforce passed, forbidden path checks are clean for process/quant-lab and docs, and Host Orchestrator owns CP6 process artifacts by design.",
+  "touched_files": [
+    {
+      "path": "meta_flow/design/feature_registry.py",
+      "role": "feature_capability_registry_checker_and_resolver"
+    },
+    {
+      "path": "tests/test_feature_registry.py",
+      "role": "registry_resolver_contract_tests"
+    }
+  ],
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_feature_registry.py",
+        "id": "VP-S07-01",
+        "result": "PASS",
+        "summary": "15 passed in 0.05s."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow feature --help",
+        "id": "VP-S07-02",
+        "result": "PASS",
+        "summary": "Feature check and resolve commands are visible in help."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root . --mode enforce",
+        "id": "VP-S07-03",
+        "result": "PASS",
+        "summary": "State v2 Check: OK."
+      },
+      {
+        "command": "git diff --check -- meta_flow/design/feature_registry.py meta_flow/cli.py tests/test_feature_registry.py",
+        "id": "VP-S07-04",
+        "result": "PASS",
+        "summary": "No whitespace errors."
+      },
+      {
+        "command": "git diff -- process/returns process/evidence process/checks process/state process/handoffs",
+        "id": "VP-S07-05",
+        "result": "PASS",
+        "summary": "Pre-artifact check produced no output, confirming the child dev agent did not write CP6 process artifacts."
+      },
+      {
+        "command": "git diff -- process/quant-lab docs",
+        "id": "VP-S07-06",
+        "result": "PASS",
+        "summary": "No output; no process/quant-lab or docs diff from S07."
+      }
+    ]
+  },
+  "waivers": []
+}

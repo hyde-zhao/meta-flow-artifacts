@@ -1,0 +1,165 @@
+{
+  "artifacts": [
+    {
+      "kind": "implementation_evidence",
+      "path": "process/stories/STORY-CR037-S02-controlled-update-api-and-writer-refactor-IMPLEMENTATION.md"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP6-CR037-S02-CODING-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP6-CR037-S02-CODING-DONE.result.summary.md"
+    },
+    {
+      "kind": "story_return_packet",
+      "path": "process/returns/CR037-S02.CP6.return.json"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "meta_flow/state/current.py",
+      "role": "implementation"
+    },
+    {
+      "path": "meta_flow/workflow/cr_lifecycle.py",
+      "role": "implementation"
+    },
+    {
+      "path": "tests/test_state_v2.py",
+      "role": "tests"
+    },
+    {
+      "path": "tests/test_cr_lifecycle.py",
+      "role": "tests"
+    },
+    {
+      "path": "process/stories/STORY-CR037-S02-controlled-update-api-and-writer-refactor-IMPLEMENTATION.md",
+      "role": "implementation_evidence"
+    },
+    {
+      "path": "process/returns/CR037-S02.CP6.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S02.CP6.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP6-CR037-S02-CODING-DONE.result.json",
+      "role": "cp6_result"
+    },
+    {
+      "path": "process/checks/CP6-CR037-S02-CODING-DONE.result.summary.md",
+      "role": "cp6_summary"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "result": "PASS",
+      "summary": "28 passed, 7 subtests passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_context_pack.py tests/test_story_context_contract.py tests/test_workspace_routing.py",
+      "result": "PASS",
+      "summary": "18 passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root . --mode enforce",
+      "result": "PASS",
+      "summary": "State v2 Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S02.CP6.work-packet.json --return process/returns/CR037-S02.CP6.return.json --project-root .",
+      "result": "PASS_WITH_WARNING",
+      "summary": "Story Return Packet Check: OK; warning is limited to symlink-resolved return path text differing from expected_return_packet."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S02.CP6.index.json --project-root .",
+      "result": "PASS",
+      "summary": "Evidence Index Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S02-CODING-DONE.result.json --project-root .",
+      "result": "PASS",
+      "summary": "CP Result Check: OK."
+    },
+    {
+      "command": "git diff -- process/quant-lab delivery docs",
+      "result": "PASS",
+      "summary": "No forbidden-path diff output."
+    },
+    {
+      "command": "git diff --check -- meta_flow/state/current.py meta_flow/workflow/cr_lifecycle.py tests/test_state_v2.py tests/test_cr_lifecycle.py process/stories/STORY-CR037-S02-controlled-update-api-and-writer-refactor-IMPLEMENTATION.md process/returns/CR037-S02.CP6.return.json process/evidence/CR037-S02.CP6.index.json process/checks/CP6-CR037-S02-CODING-DONE.result.json process/checks/CP6-CR037-S02-CODING-DONE.result.summary.md",
+      "result": "PASS",
+      "summary": "No whitespace errors."
+    }
+  ],
+  "contract_checks": [
+    {
+      "id": "AC-S02-01",
+      "result": "PASS",
+      "summary": "Patch top-level allowlist rejects unknown keys before write."
+    },
+    {
+      "id": "AC-S02-02",
+      "result": "PASS",
+      "summary": "Dict fields deep-merge; list/scalar/null values replace the whole field; None is not delete."
+    },
+    {
+      "id": "AC-S02-03",
+      "result": "PASS",
+      "summary": "Candidate enforce validation failures do not alter the existing state file."
+    },
+    {
+      "id": "AC-S02-04",
+      "result": "PASS",
+      "summary": "Missing STATE.current.json raises FileNotFoundError and does not create state."
+    },
+    {
+      "id": "AC-S02-05",
+      "result": "PASS",
+      "summary": "cr_lifecycle active change writer calls current.update_current_state()."
+    }
+  ],
+  "cr_id": "CR-037",
+  "design_delta_ref": "",
+  "return_ref": "process/returns/CR037-S02.CP6.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "Existing current-state module remains the single writer API and validation surface.",
+      "status": "open-for-cp7"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "No registry or design-reference files were changed.",
+      "status": "open-for-cp7"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR037-S02",
+  "tests": [
+    {
+      "id": "unit-tests",
+      "result": "PASS",
+      "summary": "28 passed, 7 subtests passed."
+    },
+    {
+      "id": "adjacent-regression",
+      "result": "PASS",
+      "summary": "18 passed."
+    },
+    {
+      "id": "state-enforce",
+      "result": "PASS",
+      "summary": "State v2 Check: OK."
+    }
+  ],
+  "waivers": []
+}

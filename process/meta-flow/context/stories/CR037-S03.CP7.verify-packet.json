@@ -1,0 +1,287 @@
+{
+  "acceptance": [
+    "CP6 return, evidence index, and CP6 result validate and match the S03 work packet.",
+    "AGENT-SKILL-CONTRACT forbids direct STATE.current.json edits of unknown, non-allowlist, or over-budget fields.",
+    "state-router documents legal current-state update entrypoints: current.update_current_state() or host-orchestrator/meta-flow equivalent controlled command.",
+    "Contract text preserves S01/S02 semantics: allowlist, field budget, audit/enforce, dict deep-merge, null is not delete, and failure no-write.",
+    "Heavy state destinations are documented without introducing a second state/context/result/ledger/registry mechanism.",
+    "delivery guardrail passes after generated Python cache cleanup; process/quant-lab and docs remain untouched by S03.",
+    "No runtime, production write, publish, live, external call, credential read, or quant-lab release write is performed."
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 354,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 875,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 322,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 817,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-037.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 2200,
+      "mode": "full",
+      "path": "process/returns/CR037-S03.CP6.return.json",
+      "reason": "implementation_return",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1800,
+      "mode": "full",
+      "path": "process/evidence/CR037-S03.CP6.index.json",
+      "reason": "evidence_index",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1800,
+      "mode": "full",
+      "path": "process/checks/CP6-CR037-S03-CODING-DONE.result.json",
+      "reason": "cp6_result",
+      "required": true
+    },
+    {
+      "estimated_tokens": 6500,
+      "mode": "full",
+      "path": "delivery/rules/AGENT-SKILL-CONTRACT.md",
+      "reason": "implementation_target",
+      "required": true
+    },
+    {
+      "estimated_tokens": 6500,
+      "mode": "full",
+      "path": ".agents/skills/state-router/SKILL.md",
+      "reason": "implementation_target",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1600,
+      "mode": "full",
+      "path": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+      "reason": "dependency_cp7_result",
+      "required": true
+    },
+    {
+      "estimated_tokens": 2200,
+      "mode": "full",
+      "path": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json",
+      "reason": "dependency_cp7_result",
+      "required": true
+    }
+  ],
+  "allowed_write_paths": [
+    "process/returns/CR037-S03.CP7.return.json",
+    "process/evidence/CR037-S03.CP7.index.json",
+    "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.json",
+    "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.summary.md"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING"
+  ],
+  "budget": {
+    "estimated_tokens": 18000,
+    "estimator": "chars_div_4",
+    "max_tokens": 24000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [
+      "AGENT-SKILL-CONTRACT",
+      "state-router current-state update contract"
+    ],
+    "summary": "CR037-S03 CP6 PASS synchronized agent/state-router current-state write contracts after S01/S02 enforcement and writer API were verified-with-risk."
+  },
+  "cr_id": "CR-037",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "dependency_inputs": [
+    {
+      "result_ref": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S01"
+    },
+    {
+      "result_ref": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S02"
+    },
+    {
+      "evidence_ref": "process/evidence/CR037-S03.CP6.index.json",
+      "result_ref": "process/checks/CP6-CR037-S03-CODING-DONE.result.json",
+      "return_ref": "process/returns/CR037-S03.CP6.return.json",
+      "stage": "CP6",
+      "status": "PASS",
+      "story_id": "CR037-S03"
+    }
+  ],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "expected_return_packet": "process/returns/CR037-S03.CP7.return.json",
+  "feature_contract_summary": "Verify Current State Enforcement S03: agent contract and state-router documentation must prohibit direct unknown current-state edits, point to the controlled writer path, and route heavy state to ledgers/results/context/return/evidence/PROJECT.current refs without creating a second mechanism.",
+  "feature_design_refs": [
+    "process/docs/features/current-state-enforcement/DESIGN.md",
+    "process/docs/features/current-state-enforcement/TEST-PLAN.md",
+    "process/docs/features/current-state-enforcement/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "FEAT-PG-001"
+  ],
+  "forbidden_write_paths": [
+    "process/quant-lab/**",
+    "meta_flow/**",
+    "tests/**",
+    "docs/**",
+    "delivery/**",
+    ".env",
+    "**/*credential*",
+    "**/*secret*",
+    "**/*token*",
+    "**/*cookie*",
+    "**/*private_key*"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "implementation_return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/returns/CR037-S03.CP6.return.json",
+  "lld_policy": {
+    "evidence_ref": "process/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync.md#技术说明",
+    "required_level": "technical-note"
+  },
+  "objective": {
+    "non_goals": [],
+    "summary": "agent contract and guardrail sync"
+  },
+  "packet_type": "story_verify_packet",
+  "parent_context_ref": "process/context/stories/CR037-S03.base.context.json",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "meta-flow",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 2200,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync-IMPLEMENTATION.md",
+      "reason": "deep_verification_contract",
+      "required_when": "return/evidence/result are insufficient or inconsistent"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "agent-contract-drift",
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR037-S03",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync.md",
+  "verification_plan": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S03.CP6.work-packet.json --return process/returns/CR037-S03.CP6.return.json --project-root .",
+      "expected": "PASS; known symlink expected_return_packet warning is non-blocking if command exits 0.",
+      "id": "VP-S03-01",
+      "type": "contract-check"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S03.CP6.index.json --project-root .",
+      "expected": "PASS",
+      "id": "VP-S03-02",
+      "type": "contract-check"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S03-CODING-DONE.result.json --project-root .",
+      "expected": "PASS",
+      "id": "VP-S03-03",
+      "type": "checkpoint-check"
+    },
+    {
+      "command": "rg -n \"STATE.current.json|update_current_state|allowlist|field budget|audit|enforce|deep-merge|null|failure no-write|PROJECT.current|重型状态|直接编辑|受控\" delivery/rules/AGENT-SKILL-CONTRACT.md .agents/skills/state-router/SKILL.md",
+      "expected": "Relevant contract wording is present.",
+      "id": "VP-S03-04",
+      "type": "static-contract"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_delivery_guardrails.py",
+      "expected": "PASS",
+      "id": "VP-S03-05",
+      "type": "guardrail"
+    },
+    {
+      "command": "git diff -- process/quant-lab docs",
+      "expected": "No output.",
+      "id": "VP-S03-06",
+      "type": "boundary"
+    },
+    {
+      "command": "git diff --check -- delivery/rules/AGENT-SKILL-CONTRACT.md .agents/skills/state-router/SKILL.md AGENTS.md delivery/rules/AGENTS.md",
+      "expected": "PASS",
+      "id": "VP-S03-07",
+      "type": "diff-check"
+    }
+  ]
+}

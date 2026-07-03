@@ -1,0 +1,191 @@
+{
+  "artifacts": [
+    {
+      "kind": "cp7_result",
+      "path": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json"
+    },
+    {
+      "kind": "cp7_summary",
+      "path": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.summary.md"
+    },
+    {
+      "kind": "cp7_evidence_index",
+      "path": "process/evidence/CR037-S01.CP7.index.json"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "notes": "CP7 wrote only the four user-authorized verification outputs. Verification commands did not perform runtime, production write, publish, live, trading, credential reads, or writes to process/quant-lab/**, meta_flow/**, tests/**, delivery/**, docs/**, or credential-like paths.",
+    "unexpected_imports": []
+  },
+  "contract_changes": {
+    "design_delta_ref": "",
+    "design_delta_required": false,
+    "notes": "CP7 verification introduces no long-lived Feature DESIGN / ADR / HLD changes. S01 remains an implementation Story for current-state v2 schema and budgets."
+  },
+  "cr_id": "CR-037",
+  "evidence_refs": [
+    "process/returns/CR037-S01.CP6.return.json",
+    "process/evidence/CR037-S01.CP6.index.json",
+    "process/checks/CP6-CR037-S01-CODING-DONE.result.json",
+    "process/evidence/CR037-S01.CP7.index.json",
+    "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json"
+  ],
+  "next_route": "CR037-S02",
+  "packet_type": "story_return_packet",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "S01 extends the existing meta_flow/state/current.py current-state v2 validator only. CR037-S02 must continue using this module as the writer API entry point and must not introduce a parallel state/context/result/ledger/registry mechanism.",
+      "owner": "meta-qa",
+      "status": "open-for-downstream"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "S01 added no new Feature or capability registry entries. CR037-S02 must keep refs anchored to approved current-state contracts and existing registries unless an explicit design delta is approved.",
+      "owner": "meta-qa",
+      "status": "open-for-downstream"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "status": "verified_with_risk",
+  "story_id": "CR037-S01",
+  "summary": "CP7 verified CR037-S01 current-state schema and budget enforcement. CP6 return/evidence/result contracts validate, target and adjacent tests pass, state enforce passes, CP5-approved field budgets match exactly, unknown/budget audit/enforce behavior is covered, invalid writer payload does not create STATE.current.json, secret-like values are not emitted in validation messages, and forbidden-path diffs are empty. CR037-S02 may start with downstream second-mechanism and registry-drift risks carried forward.",
+  "touched_files": [
+    {
+      "path": "process/returns/CR037-S01.CP7.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S01.CP7.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+      "role": "cp7_result"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.summary.md",
+      "role": "cp7_summary"
+    }
+  ],
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow workspace check --project-root .",
+        "result": "PASS",
+        "summary": "process_link_health: ok; routing_mode=symlink; expected_project_name=meta-flow; artifact_git_dirty=dirty."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_state_v2.py",
+        "result": "PASS",
+        "summary": "14 passed, 7 subtests passed."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr_lifecycle.py tests/test_context_pack.py tests/test_story_context_contract.py tests/test_workspace_routing.py",
+        "result": "PASS",
+        "summary": "25 passed."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root . --mode enforce",
+        "result": "PASS",
+        "summary": "State v2 Check: OK."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S01.CP6.work-packet.json --return process/returns/CR037-S01.CP6.return.json --project-root .",
+        "result": "PASS_WITH_WARNING",
+        "summary": "Story Return Packet Check: OK; warning is limited to symlink-resolved return path text differing from expected_return_packet."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S01.CP6.index.json --project-root .",
+        "result": "PASS",
+        "summary": "Evidence Index Check: OK."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S01-CODING-DONE.result.json --project-root .",
+        "result": "PASS",
+        "summary": "CP Result Check: OK."
+      },
+      {
+        "command": "git diff --check -- meta_flow/state/current.py tests/test_state_v2.py",
+        "result": "PASS",
+        "summary": "No whitespace errors."
+      },
+      {
+        "command": "git diff -- process/quant-lab delivery docs",
+        "result": "PASS",
+        "summary": "No forbidden-path diff output."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python -c '<contract probe>'",
+        "result": "PASS",
+        "summary": "Budget constants exactly match CP5-approved values; secret-like validation does not emit SUPERSECRET-VALUE; invalid writer payload leaves no STATE.current.json or state directory."
+      },
+      {
+        "command": "rg -n \"hot/warm/cold|roadmap_impact|PROJECT-LEDGER|free capability|自由 capability\" meta_flow/state/current.py tests/test_state_v2.py",
+        "result": "PASS",
+        "summary": "No matches in implementation or tests."
+      },
+      {
+        "command": "rg -n \"rm -rf|sudo|curl |wget |publish| live|trade|trading|PASSWORD|api_key\" meta_flow/state/current.py tests/test_state_v2.py",
+        "result": "PASS",
+        "summary": "No dangerous command, publish/live/trading, or credential-value patterns in implementation or tests."
+      }
+    ],
+    "coverage": [
+      {
+        "id": "AC-S01-01",
+        "result": "PASS",
+        "summary": "Unknown current-state keys WARN in audit mode and ERROR in enforce mode, covered by test_unknown_current_state_key_warns_in_audit_and_errors_in_enforce."
+      },
+      {
+        "id": "AC-S01-02",
+        "result": "PASS",
+        "summary": "CP5-approved budgets are implemented exactly: next_action.text 512, next_action JSON 768, source_refs 24/256/4096, open_risks 16/256/2048, authz_policy_refs 16/128/1024, and active_context_ref/pending_checklist_path/project_state_ref 256."
+      },
+      {
+        "id": "AC-S01-03",
+        "result": "PASS",
+        "summary": "Budget overflow WARNs in audit and ERRORs in enforce, covered by focused tests and contract probe."
+      },
+      {
+        "id": "AC-S01-04",
+        "result": "PASS",
+        "summary": "Writer invalid payload is rejected before file creation; no STATE.current.json or state directory is created in the probe."
+      },
+      {
+        "id": "AC-S01-05",
+        "result": "PASS",
+        "summary": "Secret-like fields are rejected without leaking the secret-like test value in validation messages."
+      },
+      {
+        "id": "AC-S01-06",
+        "result": "PASS_WITH_RISK",
+        "summary": "S01 uses the existing current-state v2 module and adds no registry entries; second-mechanism and registry-drift risks remain open for CR037-S02."
+      }
+    ],
+    "tests": [
+      {
+        "id": "unit-tests",
+        "result": "PASS",
+        "summary": "tests/test_state_v2.py passed with 14 tests and 7 subtests."
+      },
+      {
+        "id": "adjacent-regression",
+        "result": "PASS",
+        "summary": "CR lifecycle, context pack, story context contract, and workspace routing tests passed with 25 tests."
+      },
+      {
+        "id": "state-enforce",
+        "result": "PASS",
+        "summary": "meta-flow state check --mode enforce passed for the current project."
+      }
+    ],
+    "validation_mode": "mixed"
+  },
+  "waivers": []
+}

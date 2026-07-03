@@ -1,0 +1,173 @@
+{
+  "artifacts": [
+    {
+      "kind": "implementation_summary",
+      "path": "process/stories/STORY-CR037-S06-project-scale-and-roadmap-objects-IMPLEMENTATION.md"
+    },
+    {
+      "kind": "story_return_packet",
+      "path": "process/returns/CR037-S06.CP6.return.json"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP6-CR037-S06-CODING-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP6-CR037-S06-CODING-DONE.result.summary.md"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "meta_flow/project/scale.py",
+      "role": "project_scale_schema_checker"
+    },
+    {
+      "path": "meta_flow/project/roadmap.py",
+      "role": "roadmap_milestone_schema_checker"
+    },
+    {
+      "path": "meta_flow/project/state.py",
+      "role": "project_snapshot_loader"
+    },
+    {
+      "path": "meta_flow/cli.py",
+      "role": "project_check_cli"
+    },
+    {
+      "path": "process/project/PROJECT.current.json",
+      "role": "project_current_refs"
+    },
+    {
+      "path": "process/project/PROJECT-SCALE.yaml",
+      "role": "project_scale_baseline"
+    },
+    {
+      "path": "process/project/ROADMAP.yaml",
+      "role": "roadmap_baseline"
+    },
+    {
+      "path": "process/project/MILESTONES.yaml",
+      "role": "milestones_baseline"
+    },
+    {
+      "path": "tests/test_cr037_project_scale_roadmap.py",
+      "role": "contract_tests"
+    },
+    {
+      "path": "process/stories/STORY-CR037-S06-project-scale-and-roadmap-objects-IMPLEMENTATION.md",
+      "role": "implementation_summary"
+    },
+    {
+      "path": "process/returns/CR037-S06.CP6.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S06.CP6.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP6-CR037-S06-CODING-DONE.result.json",
+      "role": "cp6_result"
+    },
+    {
+      "path": "process/checks/CP6-CR037-S06-CODING-DONE.result.summary.md",
+      "role": "cp6_summary"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr037_project_scale_roadmap.py tests/test_cr037_project_current.py tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "id": "VP-S06-01",
+      "result": "PASS",
+      "summary": "49 passed, 19 subtests passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow project check --project-root .",
+      "id": "VP-S06-02",
+      "result": "PASS",
+      "summary": "Project Check: OK; Project Current Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root . --mode enforce",
+      "id": "VP-S06-03",
+      "result": "PASS",
+      "summary": "State v2 Check: OK."
+    },
+    {
+      "command": "git diff -- process/policies/GATE-PROFILES.json process/quant-lab docs",
+      "id": "VP-S06-04",
+      "result": "PASS",
+      "summary": "No output; no GATE-PROFILES, process/quant-lab, or docs diff."
+    },
+    {
+      "command": "git diff --check -- meta_flow/project/__init__.py meta_flow/project/scale.py meta_flow/project/roadmap.py meta_flow/project/state.py meta_flow/cli.py tests/test_cr037_project_scale_roadmap.py process/project/PROJECT-SCALE.yaml process/project/ROADMAP.yaml process/project/MILESTONES.yaml process/project/PROJECT.current.json",
+      "id": "VP-S06-05",
+      "result": "PASS",
+      "summary": "No whitespace errors."
+    }
+  ],
+  "coverage": [
+    {
+      "id": "COV-S06-01",
+      "result": "PASS",
+      "summary": "PROJECT-SCALE.yaml legal scale and gate_profile_bias recommendation are validated."
+    },
+    {
+      "id": "COV-S06-02",
+      "result": "PASS",
+      "summary": "Forbidden authorization semantics are rejected in project scale fixtures."
+    },
+    {
+      "id": "COV-S06-03",
+      "result": "PASS",
+      "summary": "Unknown gate profile bias is rejected through known gate profile validation."
+    },
+    {
+      "id": "COV-S06-04",
+      "result": "PASS",
+      "summary": "ROADMAP.yaml and MILESTONES.yaml schema errors, duplicate IDs, invalid statuses, broken refs, and cross-ref mismatches are covered."
+    },
+    {
+      "id": "COV-S06-05",
+      "result": "PASS",
+      "summary": "PROJECT.current.json refs resolve into a typed project snapshot."
+    },
+    {
+      "id": "COV-S06-06",
+      "result": "PASS",
+      "summary": "No GATE-PROFILES, process/quant-lab, or docs diff is present."
+    }
+  ],
+  "cr_id": "CR-037",
+  "design_delta_ref": "",
+  "return_ref": "process/returns/CR037-S06.CP6.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "S06 reuses process/project and meta-flow project check."
+    },
+    {
+      "id": "R-CR037-QA-SUBAGENT-NO-OUTPUT",
+      "level": "MEDIUM",
+      "mitigation": "Host-orchestrator generated process artifacts after child-agent partial interruption."
+    },
+    {
+      "id": "R-CR037-YAML-SUBSET",
+      "level": "LOW",
+      "mitigation": "Current parser is scoped to generated controlled project baseline YAML."
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR037-S06",
+  "tests": [
+    {
+      "id": "target-tests",
+      "result": "PASS",
+      "summary": "tests/test_cr037_project_scale_roadmap.py, tests/test_cr037_project_current.py, tests/test_state_v2.py, and tests/test_cr_lifecycle.py passed: 49 tests, 19 subtests."
+    }
+  ],
+  "waivers": []
+}

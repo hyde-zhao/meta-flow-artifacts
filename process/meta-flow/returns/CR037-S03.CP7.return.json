@@ -1,0 +1,203 @@
+{
+  "artifacts": [
+    {
+      "kind": "evidence_index",
+      "path": "process/evidence/CR037-S03.CP7.index.json"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.summary.md"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched_by_cp7": [],
+    "notes": "CP7 wrote only the authorized return, evidence index, CP7 result, and summary files. No implementation code, tests, process/quant-lab, docs, delivery content beyond existing S03 target diff, credential-like paths, runtime, production write, publish, live, real external call, trading, or quant-lab release repository write was performed.",
+    "pre_existing_dirty_worktree": [
+      "delivery/rules/AGENT-SKILL-CONTRACT.md",
+      "meta_flow/cli.py",
+      "meta_flow/state/current.py",
+      "meta_flow/state/event_ledger.py",
+      "meta_flow/workflow/cr_lifecycle.py",
+      "tests/test_cr_lifecycle.py",
+      "tests/test_state_v2.py",
+      "meta_flow/state/ledger_compaction.py",
+      "tests/test_cr037_ledger_compaction.py"
+    ],
+    "unexpected_imports": []
+  },
+  "contract_changes": {
+    "design_delta_ref": "",
+    "design_delta_required": false,
+    "notes": "CP7 only verified S03 contract documentation synchronization. No long-lived Feature DESIGN, ADR, HLD, registry, ledger, result, context, state mechanism, runtime checker, installer, or CLI implementation was added or changed by this verification turn."
+  },
+  "cr_id": "CR-037",
+  "decision": "PASS_WITH_RISK",
+  "evidence_refs": [
+    "process/evidence/CR037-S03.CP7.index.json",
+    "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.json",
+    "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.summary.md"
+  ],
+  "host_revalidation": {
+    "actions": [
+      "removed generated Python __pycache__ and .pyc files under meta_flow/** and tests/**",
+      "reran delivery guardrail"
+    ],
+    "commands": [
+      "rm -rf meta_flow/**/__pycache__ tests/**/__pycache__",
+      "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_delivery_guardrails.py"
+    ],
+    "result": "PASS",
+    "validated_at": "2026-07-03T13:50:00+08:00"
+  },
+  "next_route": "verified-with-risk",
+  "packet_type": "story_return_packet",
+  "risks": [
+    {
+      "id": "R-CR037-GUARDRAIL-CACHE-BLOCKER",
+      "level": "LOW",
+      "mitigation": "Host-orchestrator removed generated meta_flow/** and tests/** Python cache files and reran scripts/check_delivery_guardrails.py successfully.",
+      "owner": "host-orchestrator",
+      "routing": "require_user_decision_or_host_cleanup_then_rerun_CP7",
+      "status": "resolved-by-host-orchestrator"
+    },
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "S03 static contract review found the target text routes heavy state to existing STATE.md human summaries, ledgers, CP results, context packs, Story return/evidence, PROJECT.current refs, follow-up tracking, risks, or Design Delta rather than documenting a second mechanism.",
+      "owner": "meta-qa",
+      "routing": "retain_in_CP8_risk_context_until_CR037_closure",
+      "status": "mitigated-in-S03"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "S03 static contract review found no new registry or ownership semantics beyond existing CR037 governance references.",
+      "owner": "meta-qa",
+      "routing": "retain_in_CP8_risk_context_until_CR037_closure",
+      "status": "mitigated-in-S03"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "status": "verified_with_risk",
+  "story_id": "CR037-S03",
+  "summary": "PASS_WITH_RISK: CR037-S03 CP7 verified the Agent / Skill current-state write contract wording and CP6 evidence contracts. The initial guardrail cache blocker was resolved by host-orchestrator cleanup of generated Python cache files, followed by a successful delivery guardrail rerun. S03 did not introduce a second state/context/result/ledger/registry mechanism or registry drift; inherited governance risks remain for CP8 routing.",
+  "touched_files": [
+    {
+      "path": "process/returns/CR037-S03.CP7.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S03.CP7.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.json",
+      "role": "cp7_result"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.summary.md",
+      "role": "cp7_summary"
+    }
+  ],
+  "verification": {
+    "acceptance": {
+      "blocking_failed": 0,
+      "covered": 6,
+      "total": 7
+    },
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S03.CP6.work-packet.json --return process/returns/CR037-S03.CP6.return.json --project-root .",
+        "expected": "PASS; known symlink expected_return_packet warning is non-blocking if command exits 0.",
+        "id": "VP-S03-01",
+        "result": "PASS_WITH_WARNING",
+        "summary": "Exit code 0. Story Return Packet Check: OK. Warning was limited to return path text differing from expected_return_packet."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S03.CP6.index.json --project-root .",
+        "expected": "PASS",
+        "id": "VP-S03-02",
+        "result": "PASS",
+        "summary": "Evidence Index Check: OK."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S03-CODING-DONE.result.json --project-root .",
+        "expected": "PASS",
+        "id": "VP-S03-03",
+        "result": "PASS",
+        "summary": "CP Result Check: OK."
+      },
+      {
+        "command": "rg -n \"STATE.current.json|update_current_state|allowlist|field budget|audit|enforce|deep-merge|null|failure no-write|PROJECT.current|重型状态|直接编辑|受控\" delivery/rules/AGENT-SKILL-CONTRACT.md .agents/skills/state-router/SKILL.md",
+        "expected": "Relevant contract wording is present.",
+        "id": "VP-S03-04",
+        "result": "PASS",
+        "summary": "Both target files contain current-state default entrypoint, controlled update_current_state path, allowlist / field budget / audit / enforce / deep-merge / null replacement / failure no-write semantics, and heavy-state destination wording."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_delivery_guardrails.py",
+        "expected": "PASS",
+        "id": "VP-S03-05",
+        "notes": "Initial QA run was blocked by generated Python cache outside S03 write scope. Host-orchestrator cleaned cache and reran guardrail successfully.",
+        "result": "PASS_AFTER_HOST_REVALIDATION",
+        "status": "PASS",
+        "summary": "Initial QA run failed only on existing meta_flow/**/__pycache__ directories and .pyc files. Host-orchestrator removed generated cache files and reran the guardrail successfully."
+      },
+      {
+        "command": "git diff -- process/quant-lab docs",
+        "expected": "No output.",
+        "id": "VP-S03-06",
+        "result": "PASS",
+        "summary": "No output."
+      },
+      {
+        "command": "git diff --check -- delivery/rules/AGENT-SKILL-CONTRACT.md .agents/skills/state-router/SKILL.md AGENTS.md delivery/rules/AGENTS.md",
+        "expected": "PASS",
+        "id": "VP-S03-07",
+        "result": "PASS",
+        "summary": "No output."
+      }
+    ],
+    "decision": "PASS_WITH_RISK",
+    "quality_review": {
+      "findings": [
+        {
+          "id": "QR-S03-01",
+          "severity": "LOW",
+          "summary": "Initial delivery guardrail failure was caused by generated Python cache files and was resolved by host-orchestrator cleanup plus rerun."
+        }
+      ],
+      "notes": "Scoped quality review found no S03 contract wording rework blocker. docs/quality outputs are N/A because the user restricted CP7 writes to return/evidence/result/summary files.",
+      "result": "PASS_WITH_RISK"
+    },
+    "tests": [
+      {
+        "id": "cp6-contract-checks",
+        "result": "PASS",
+        "summary": "CP6 return, evidence index, and CP6 result all validate."
+      },
+      {
+        "id": "static-contract-wording",
+        "result": "PASS",
+        "summary": "Agent / Skill current-state write contract wording is present in delivery/rules/AGENT-SKILL-CONTRACT.md and .agents/skills/state-router/SKILL.md."
+      },
+      {
+        "id": "delivery-guardrail",
+        "result": "PASS_AFTER_HOST_REVALIDATION",
+        "summary": "scripts/check_delivery_guardrails.py initially failed on generated Python cache under meta_flow/**; host-orchestrator cleaned the cache and reran the guardrail successfully."
+      },
+      {
+        "id": "boundary-diff",
+        "result": "PASS",
+        "summary": "process/quant-lab and docs diff is empty; scoped diff --check for rule/skill files passed."
+      }
+    ]
+  },
+  "waivers": []
+}

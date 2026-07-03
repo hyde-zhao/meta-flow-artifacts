@@ -1,0 +1,197 @@
+{
+  "blockers": [],
+  "checked_at": "2026-07-03T13:40:00+08:00",
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR037-S04-VERIFICATION-DONE",
+  "context_ref": "process/context/stories/CR037-S04.CP7.verify-packet.json",
+  "cp_result_ref": "process/checks/CP7-CR037-S04-VERIFICATION-DONE.result.json",
+  "cr_id": "CR-037",
+  "decision": "PASS_WITH_RISK",
+  "dispatch_refs": [
+    "D-CR037-META-QA-CP7-S04-R3"
+  ],
+  "evidence_ref": "process/evidence/CR037-S04.CP7.index.json",
+  "items": [
+    {
+      "category": "entry",
+      "evidence_refs": [
+        "process/context/stories/CR037-S04.CP7.verify-packet.json",
+        "process/handoffs/CR037-S04-CP7-VERIFICATION-HANDOFF-R2.md",
+        "process/state/STATE.current.json",
+        "process/checks/CP6-CR037-S04-CODING-DONE.result.json",
+        "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json"
+      ],
+      "id": "CP7-S04-01",
+      "name": "CP7 verify packet, retry handoff, CP6 PASS, and S01 dependency are consumable",
+      "notes": "Story is ready-for-verification; CP6 decision is PASS; S01 dependency is PASS_WITH_RISK and its inherited risks are carried.",
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "contract",
+      "evidence_refs": [
+        "process/evidence/CR037-S04.CP7.index.json#commands.VP-S04-01",
+        "process/evidence/CR037-S04.CP7.index.json#commands.VP-S04-02",
+        "process/evidence/CR037-S04.CP7.index.json#commands.VP-S04-03"
+      ],
+      "id": "CP7-S04-02",
+      "name": "CP6 return, evidence index, and CP6 result contracts validate",
+      "notes": "return-check, evidence-check, and cp result-check passed; return-check warning is the expected symlink-resolved expected_return_packet text mismatch.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "meta_flow/state/ledger_compaction.py",
+        "meta_flow/state/event_ledger.py",
+        "meta_flow/cli.py",
+        "meta_flow/state/current.py",
+        "process/evidence/CR037-S04.CP7.index.json#commands.VP-S04-05A",
+        "process/evidence/CR037-S04.CP7.index.json#commands.VP-S04-05B"
+      ],
+      "id": "CP7-S04-03",
+      "name": "Ledger compact and state compact responsibilities are separated",
+      "notes": "state compact help states it renders process/STATE.md and checks state without compacting NDJSON ledgers; ledger compact help states retention/archive compaction, default dry-run, and explicit --apply writes.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "process/evidence/CR037-S04.CP7.index.json#commands.VP-S04-04",
+        "tests/test_cr037_ledger_compaction.py"
+      ],
+      "id": "CP7-S04-04",
+      "name": "Target tests cover dry-run, fixture-only apply, retention, archive summary, marker compatibility, hash abort, and path guard",
+      "notes": "tests/test_cr037_ledger_compaction.py passed with 6 tests. --apply behavior is covered only under pytest tmp_path fixtures.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "syntax",
+      "evidence_refs": [
+        "process/evidence/CR037-S04.CP7.index.json#commands.VP-S04-06"
+      ],
+      "id": "CP7-S04-05",
+      "name": "Python syntax checks pass without repository cache writes",
+      "notes": "py_compile passed with PYTHONPYCACHEPREFIX redirected to /tmp/cr037-s04-cp7-pycompile.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "boundary",
+      "evidence_refs": [
+        "process/evidence/CR037-S04.CP7.index.json#commands.VP-S04-07",
+        "process/evidence/CR037-S04.CP7.index.json#commands.VP-S04-08",
+        "process/returns/CR037-S04.CP7.return.json#boundary_check"
+      ],
+      "id": "CP7-S04-06",
+      "name": "Real ledger safety and forbidden-path boundary are respected",
+      "notes": "git diff -- process/state/*.ndjson is empty; no real ledger compact apply occurred. No process/quant-lab or docs diff is present. Existing delivery/rules diff is outside S04 CP7 touched files.",
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "quality-review",
+      "evidence_refs": [
+        "process/evidence/CR037-S04.CP7.index.json#coverage",
+        "process/evidence/CR037-S04.CP7.index.json#risks"
+      ],
+      "id": "CP7-S04-07",
+      "name": "Scoped quality review finds no S04 rework blocker",
+      "notes": "Acceptance coverage is complete for the packet scope. docs/quality outputs are N/A because this retry is explicitly restricted to four CP7 structure files.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "risk",
+      "evidence_refs": [
+        "process/evidence/CR037-S04.CP7.index.json#risks",
+        "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json#risks"
+      ],
+      "id": "CP7-S04-08",
+      "name": "Inherited CR037 governance risks and fixture-only real apply limitation are explicit",
+      "notes": "R-CR037-SECOND-MECHANISM and R-CR037-REGISTRY-DRIFT remain inherited CP8 risks; real ledger apply was not authorized and is fixture-only in CP7.",
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "handoff",
+      "evidence_refs": [
+        "process/handoffs/CR037-S04-CP7-VERIFICATION-HANDOFF-R2.md",
+        "process/returns/CR037-S04.CP7.return.json",
+        "process/evidence/CR037-S04.CP7.index.json"
+      ],
+      "id": "CP7-S04-09",
+      "name": "CP7 return packet and evidence index are ready for host-orchestrator aggregation",
+      "notes": "Return packet, evidence index, CP7 result, and summary were generated in the allowed paths only.",
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "host-orchestrator-aggregate-cp7",
+  "read_expansion_refs": [],
+  "return_packet_ref": "process/returns/CR037-S04.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "owner": "meta-qa",
+      "routing": "carry_to_CP8",
+      "status": "open-for-downstream"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "owner": "meta-qa",
+      "routing": "carry_to_CP8",
+      "status": "open-for-downstream"
+    },
+    {
+      "id": "R-CR037-REAL-LEDGER-APPLY-NOT-RUN",
+      "level": "LOW",
+      "owner": "meta-qa",
+      "routing": "requires_explicit_runtime_authorization_before_real_apply",
+      "status": "accepted-as-not-authorized-in-cp7"
+    },
+    {
+      "id": "R-CR037-FORBIDDEN-DIFF-ATTRIBUTION",
+      "level": "LOW",
+      "owner": "host-orchestrator",
+      "routing": "do_not_attribute_to_CR037-S04",
+      "status": "open-worktree-context"
+    }
+  ],
+  "schema_version": 1,
+  "story_id": "CR037-S04",
+  "summary": "PASS_WITH_RISK: CR037-S04 CP7 verified ledger compaction policy and CLI without implementation edits or real ledger apply. CP6 contracts validate, target tests pass, CLI help confirms state compact / ledger compact separation and dry-run/apply behavior, syntax and diff checks pass, real process/state ledgers are unchanged, retention defaults match policy, archive summary/index avoid long body copying, marker compatibility is covered, and path guard rejects process/quant-lab and outside-project paths. Inherited CR037 governance risks and non-authorized real apply remain for CP8 routing.",
+  "waivers": []
+}

@@ -1,0 +1,268 @@
+{
+  "acceptance": [
+    "workspace bootstrap/check covers process/project scaffold without breaking existing workspace routing.",
+    "PROJECT.current.json has allowlist schema, forbidden-field checks, relative-ref validation, and 16KB size budget.",
+    "project scaffold defaults to dry-run and apply does not overwrite conflicting existing PROJECT.current.json.",
+    "scaffold apply creates a minimal refs-only PROJECT.current.json and only updates STATE.current.json through controlled project_state_ref writer path.",
+    "STATE.current.json does not embed project governance fields other than project_state_ref.",
+    "tests cover valid project current, unknown/forbidden/over-budget fields, dry-run no-write, apply create/noop, conflict no-overwrite, and current ref contract."
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 393,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 248,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S05-project-scaffold-and-project-current.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 3663,
+      "mode": "full",
+      "path": "process/docs/features/project-state-governance/DESIGN.md",
+      "reason": "feature_design",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1204,
+      "mode": "full",
+      "path": "process/docs/features/project-state-governance/TEST-PLAN.md",
+      "reason": "feature_test_plan",
+      "required": true
+    },
+    {
+      "estimated_tokens": 575,
+      "mode": "full",
+      "path": "process/docs/features/project-state-governance/TASKS.md",
+      "reason": "feature_tasks",
+      "required": true
+    },
+    {
+      "estimated_tokens": 2049,
+      "mode": "full",
+      "path": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+      "reason": "dependency_cp7_result",
+      "required": true
+    },
+    {
+      "estimated_tokens": 2352,
+      "mode": "full",
+      "path": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json",
+      "reason": "dependency_cp7_result",
+      "required": true
+    },
+    {
+      "estimated_tokens": 2984,
+      "mode": "full",
+      "path": "process/docs/quality/CR-037-CP7-VERIFICATION-REPORT.md",
+      "reason": "cp7_rollup",
+      "required": true
+    }
+  ],
+  "allowed_write_paths": [
+    "meta_flow/project/__init__.py",
+    "meta_flow/project/state.py",
+    "meta_flow/project/scaffold.py",
+    "meta_flow/workspace/routing.py",
+    "meta_flow/state/current.py",
+    "meta_flow/cli.py",
+    "process/project/PROJECT.current.json",
+    "tests/test_cr037_project_current.py",
+    "process/stories/STORY-CR037-S05-project-scaffold-and-project-current-IMPLEMENTATION.md",
+    "process/returns/CR037-S05.CP6.return.json",
+    "process/evidence/CR037-S05.CP6.index.json",
+    "process/checks/CP6-CR037-S05-CODING-DONE.result.json",
+    "process/checks/CP6-CR037-S05-CODING-DONE.result.summary.md"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING"
+  ],
+  "budget": {
+    "estimated_tokens": 13468,
+    "estimator": "chars_div_4",
+    "max_tokens": 16000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [
+      "workspace scaffold dirs",
+      "PROJECT.current refs-only schema",
+      "current-state project_state_ref writer contract"
+    ],
+    "summary": "CR037-S05 starts W2 project governance implementation after S01/S02 verified-with-risk. It must create project state outside STATE.current.json and only reference it through project_state_ref."
+  },
+  "cr_id": "CR-037",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md",
+    "process/quant-lab/**"
+  ],
+  "dependency_inputs": [
+    {
+      "result_ref": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S01"
+    },
+    {
+      "result_ref": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S02"
+    }
+  ],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "expected_return_packet": "process/returns/CR037-S05.CP6.return.json",
+  "feature_contract_summary": "Project State Governance S05: add process/project scaffold coverage, refs-only PROJECT.current.json schema/checker with 16KB budget, default dry-run/apply scaffold, and controlled STATE.current.json project_state_ref integration.",
+  "feature_design_refs": [
+    "process/docs/features/project-state-governance/DESIGN.md",
+    "process/docs/features/project-state-governance/TEST-PLAN.md",
+    "process/docs/features/project-state-governance/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "FEAT-PG-003"
+  ],
+  "forbidden_write_paths": [
+    "process/quant-lab/**",
+    "docs/**",
+    "delivery/**",
+    ".env",
+    "**/*credential*",
+    "**/*secret*",
+    "**/*token*",
+    "**/*cookie*",
+    "**/*private_key*"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "lld_policy": "full-lld",
+  "objective": {
+    "non_goals": [],
+    "summary": "project scaffold and PROJECT.current"
+  },
+  "packet_type": "story_work_packet",
+  "parent_context_ref": "process/context/stories/CR037-S05.base.context.json",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "meta-flow",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-HLD.md",
+      "reason": "hld",
+      "trigger": "architecture_boundary_dispute"
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-ARCHITECTURE-DECISION.md",
+      "reason": "adr",
+      "trigger": "adr_trace_needed"
+    },
+    {
+      "estimated_tokens": 4260,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S05-project-scaffold-and-project-current-LLD.md",
+      "reason": "story_lld",
+      "trigger": "full_lld_required_by_policy"
+    },
+    {
+      "estimated_tokens": 4227,
+      "mode": "full",
+      "path": "meta_flow/workspace/routing.py",
+      "reason": "implementation_target",
+      "trigger": "workspace_scaffold_implementation"
+    },
+    {
+      "estimated_tokens": 6684,
+      "mode": "full",
+      "path": "meta_flow/state/current.py",
+      "reason": "current_state_writer_contract",
+      "trigger": "project_state_ref_contract"
+    },
+    {
+      "estimated_tokens": 9093,
+      "mode": "full",
+      "path": "meta_flow/cli.py",
+      "reason": "cli_routing",
+      "trigger": "project_cli_implementation"
+    },
+    {
+      "estimated_tokens": 1882,
+      "mode": "full",
+      "path": "meta_flow/state/event_ledger.py",
+      "reason": "ledger_event_compat_reference",
+      "trigger": "only_if_gate_or_event_ref_needed"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "standard",
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR037-S05",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/stories/STORY-CR037-S05-project-scaffold-and-project-current.md",
+  "verification_plan": [
+    "Run project current unit/contract tests in tests/test_cr037_project_current.py.",
+    "Run state regression tests covering project_state_ref and routing_ref required schema.",
+    "Run workspace routing checks for process/project scaffold coverage.",
+    "Run meta-flow project scaffold/check CLI help and fixture dry-run/apply checks.",
+    "Run meta-flow state check --mode enforce after scaffold current ref write.",
+    "Verify git diff -- process/quant-lab docs is empty and no credentials/runtime/publish/live behavior is introduced."
+  ]
+}

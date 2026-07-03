@@ -1,0 +1,273 @@
+{
+  "acceptance": [
+    "delivery/rules/AGENT-SKILL-CONTRACT.md clearly forbids direct STATE.current.json edits of unknown or non-allowlisted fields.",
+    ".agents/skills/state-router/SKILL.md gives the legal update path through current.update_current_state() or an equivalent host-orchestrator/meta-flow state command, not direct JSON editing.",
+    "Contract text explains heavy state destinations: STATE.md human summary, ledgers, CP result, context pack, Story return/evidence, PROJECT.current refs, or follow-up tracking as applicable.",
+    "Contract text references S01/S02 semantics: allowlist, field budgets, audit/enforce, deep-merge dict patch, no deletion via null, and failure no-write.",
+    "If AGENTS.md or delivery/rules/AGENTS.md is touched, canonical source and delivery rule wording remain aligned and delivery guardrail passes.",
+    "No runtime/production/publish/live/credential/quant-lab release write is performed."
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 400,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 3000,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync.md",
+      "reason": "story_card_and_technical_note",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1600,
+      "mode": "full",
+      "path": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+      "reason": "dependency_cp7_result",
+      "required": true
+    },
+    {
+      "estimated_tokens": 2200,
+      "mode": "full",
+      "path": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json",
+      "reason": "dependency_cp7_result",
+      "required": true
+    },
+    {
+      "estimated_tokens": 6000,
+      "mode": "full",
+      "path": "delivery/rules/AGENT-SKILL-CONTRACT.md",
+      "reason": "implementation_target",
+      "required": true
+    },
+    {
+      "estimated_tokens": 6000,
+      "mode": "full",
+      "path": ".agents/skills/state-router/SKILL.md",
+      "reason": "implementation_target",
+      "required": true
+    },
+    {
+      "estimated_tokens": 9000,
+      "mode": "read_if_needed",
+      "path": "AGENTS.md",
+      "reason": "canonical rule source",
+      "required": false
+    },
+    {
+      "estimated_tokens": 8000,
+      "mode": "read_if_needed",
+      "path": "delivery/rules/AGENTS.md",
+      "reason": "delivery rule sync if canonical wording changes",
+      "required": false
+    },
+    {
+      "estimated_tokens": 2500,
+      "mode": "read_if_needed",
+      "path": "scripts/check_delivery_guardrails.py",
+      "reason": "guardrail command context",
+      "required": false
+    }
+  ],
+  "allowed_write_paths": [
+    "delivery/rules/AGENT-SKILL-CONTRACT.md",
+    ".agents/skills/state-router/SKILL.md",
+    "AGENTS.md",
+    "delivery/rules/AGENTS.md",
+    "process/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync-IMPLEMENTATION.md",
+    "process/returns/CR037-S03.CP6.return.json",
+    "process/evidence/CR037-S03.CP6.index.json",
+    "process/checks/CP6-CR037-S03-CODING-DONE.result.json",
+    "process/checks/CP6-CR037-S03-CODING-DONE.result.summary.md"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING"
+  ],
+  "budget": {
+    "estimated_tokens": 18000,
+    "estimator": "chars_div_4",
+    "max_tokens": 24000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [
+      "AGENT-SKILL-CONTRACT current state writer contract",
+      "state-router write contract"
+    ],
+    "summary": "CR037-S03 documents the legal current-state update path after S01/S02 enforcement and writer API are verified-with-risk."
+  },
+  "cr_id": "CR-037",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/quant-lab/**"
+  ],
+  "dependency_inputs": [
+    {
+      "result_ref": "process/checks/CP7-CR037-S00-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S00"
+    },
+    {
+      "result_ref": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S01"
+    },
+    {
+      "result_ref": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S02"
+    }
+  ],
+  "expected_return_packet": "process/returns/CR037-S03.CP6.return.json",
+  "feature_contract_summary": "Current State Enforcement S03: sync agent/state-router contracts so agents cannot directly edit STATE.current.json unknown fields, must use the controlled update entrypoint, and must place heavy state in ledger/result/context/story evidence or PROJECT.current refs.",
+  "feature_design_refs": [
+    "process/docs/features/current-state-enforcement/DESIGN.md",
+    "process/docs/features/current-state-enforcement/TEST-PLAN.md",
+    "process/docs/features/current-state-enforcement/TASKS.md"
+  ],
+  "feature_refs": [
+    "FEAT-PG-001"
+  ],
+  "forbidden_write_paths": [
+    "process/quant-lab/**",
+    "meta_flow/**",
+    "tests/**",
+    "docs/**",
+    ".env",
+    "**/*credential*",
+    "**/*secret*",
+    "**/*token*",
+    "**/*cookie*",
+    "**/*private_key*"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "lld_policy": {
+    "evidence_ref": "process/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync.md#技术说明",
+    "required_level": "technical-note"
+  },
+  "objective": {
+    "non_goals": [
+      "Do not add runtime checker code unless scope escalation is returned to host-orchestrator.",
+      "Do not change S01/S02 current-state validation or writer semantics.",
+      "Do not read credentials, perform runtime calls, publish, live trade, production write, or modify process/quant-lab/**."
+    ],
+    "summary": "agent contract and guardrail sync"
+  },
+  "packet_type": "story_work_packet",
+  "parent_context_ref": "process/context/CP5-CR-037-LLD-CONTEXT.yaml",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "meta-flow",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 3500,
+      "mode": "full",
+      "path": "process/docs/features/current-state-enforcement/DESIGN.md",
+      "reason": "feature_contract_deep_review",
+      "required_when": "contract wording needs source detail"
+    },
+    {
+      "estimated_tokens": 2200,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S02-controlled-update-api-and-writer-refactor-IMPLEMENTATION.md",
+      "reason": "writer API exact semantics",
+      "required_when": "update_current_state signature or semantics need confirmation"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "agent-contract-drift",
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR037-S03",
+  "story_ref": "process/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync.md",
+  "verification_plan": [
+    {
+      "command": "rg -n \"STATE.current.json|update_current_state|unknown|allowlist|heavy state|ledger|PROJECT.current|no direct\" delivery/rules/AGENT-SKILL-CONTRACT.md .agents/skills/state-router/SKILL.md",
+      "expected": "Relevant contract wording is present in both target files.",
+      "id": "V-S03-01",
+      "type": "static-contract"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_delivery_guardrails.py",
+      "expected": "PASS",
+      "id": "V-S03-02",
+      "type": "guardrail"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S03.CP6.work-packet.json --return process/returns/CR037-S03.CP6.return.json --project-root .",
+      "expected": "PASS after return is generated",
+      "id": "V-S03-03",
+      "type": "contract-check"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S03.CP6.index.json --project-root .",
+      "expected": "PASS after evidence index is generated",
+      "id": "V-S03-04",
+      "type": "evidence-check"
+    },
+    {
+      "command": "git diff -- process/quant-lab meta_flow tests docs",
+      "expected": "No forbidden-path writes from S03",
+      "id": "V-S03-05",
+      "type": "boundary"
+    },
+    {
+      "command": "git diff --check -- delivery/rules/AGENT-SKILL-CONTRACT.md .agents/skills/state-router/SKILL.md AGENTS.md delivery/rules/AGENTS.md",
+      "expected": "PASS",
+      "id": "V-S03-06",
+      "type": "diff-check"
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "artifacts": [
+    {
+      "kind": "implementation_evidence",
+      "path": "process/stories/STORY-CR037-S04-ledger-compaction-policy-and-cli-IMPLEMENTATION.md"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP6-CR037-S04-CODING-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP6-CR037-S04-CODING-DONE.result.summary.md"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "notes": "S04 wrote only allowed code, policy, test, and CP6 evidence paths. No process/quant-lab, docs, delivery, credential-like paths, runtime, production write, publish, live, external-call, or trading actions were used. The working tree currently has an external/non-S04 delivery/rules/AGENT-SKILL-CONTRACT.md diff; S04 touched_files exclude forbidden paths. Ledger apply behavior was exercised only against pytest tmp_path fixtures.",
+    "unexpected_imports": []
+  },
+  "contract_changes": {
+    "design_delta_ref": "",
+    "design_delta_required": false,
+    "notes": "No long-lived Feature DESIGN / ADR / HLD contract changes. S04 implements the CP5-approved ledger compaction CLI and retention/archive contract."
+  },
+  "cr_id": "CR-037",
+  "evidence_refs": [
+    "process/stories/STORY-CR037-S04-ledger-compaction-policy-and-cli-IMPLEMENTATION.md",
+    "process/evidence/CR037-S04.CP6.index.json",
+    "process/checks/CP6-CR037-S04-CODING-DONE.result.json"
+  ],
+  "next_route": "CP7",
+  "packet_type": "story_return_packet",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "S04 adds one focused ledger compaction module and reuses the existing event ledger checker/CLI structure; CP7 should confirm no second ledger/result/registry mechanism was introduced."
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "S04 adds no Feature/capability registry entries and keeps retention policy separate from context/current-state budgets."
+    },
+    {
+      "id": "R-CR037-REAL-LEDGER-APPLY",
+      "level": "LOW",
+      "mitigation": "No real process ledger was compacted in CP6. Apply behavior is validated on temporary fixtures only; real apply requires maintainer authorization."
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "status": "implemented",
+  "story_id": "CR037-S04",
+  "summary": "Implemented independent meta-flow ledger compact CLI with retention policy defaults, dry-run/apply split, archive summary/index, backup and hash rollback guard, compact marker event checker compatibility, path guard, state compact help boundary, and focused regression tests.",
+  "touched_files": [
+    {
+      "path": "meta_flow/state/ledger_compaction.py",
+      "role": "implementation"
+    },
+    {
+      "path": "meta_flow/state/event_ledger.py",
+      "role": "implementation"
+    },
+    {
+      "path": "meta_flow/cli.py",
+      "role": "implementation"
+    },
+    {
+      "path": "meta_flow/state/current.py",
+      "role": "implementation"
+    },
+    {
+      "path": "process/policies/LEDGER-RETENTION.yaml",
+      "role": "policy"
+    },
+    {
+      "path": "tests/test_cr037_ledger_compaction.py",
+      "role": "tests"
+    },
+    {
+      "path": "process/stories/STORY-CR037-S04-ledger-compaction-policy-and-cli-IMPLEMENTATION.md",
+      "role": "implementation_evidence"
+    },
+    {
+      "path": "process/returns/CR037-S04.CP6.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S04.CP6.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP6-CR037-S04-CODING-DONE.result.json",
+      "role": "cp6_result"
+    },
+    {
+      "path": "process/checks/CP6-CR037-S04-CODING-DONE.result.summary.md",
+      "role": "cp6_summary"
+    }
+  ],
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_cr037_ledger_compaction.py",
+        "result": "PASS",
+        "summary": "6 passed."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state compact --help && PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow ledger compact --help",
+        "result": "PASS",
+        "summary": "state compact help says it does not compact NDJSON event ledgers; ledger compact help documents retention/archive dry-run and --apply behavior."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python -m py_compile meta_flow/state/ledger_compaction.py meta_flow/state/event_ledger.py meta_flow/cli.py meta_flow/state/current.py",
+        "result": "PASS",
+        "summary": "Python syntax compilation passed."
+      },
+      {
+        "command": "git diff -- process/quant-lab docs delivery",
+        "result": "PASS_WITH_WARNING",
+        "summary": "Command output shows delivery/rules/AGENT-SKILL-CONTRACT.md diff from outside S04 scope. S04 touched_files and boundary_check contain no process/quant-lab, docs, or delivery paths."
+      },
+      {
+        "command": "git diff --check -- meta_flow/state/ledger_compaction.py meta_flow/state/event_ledger.py meta_flow/cli.py meta_flow/state/current.py tests/test_cr037_ledger_compaction.py",
+        "result": "PASS",
+        "summary": "No whitespace errors."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S04.CP6.work-packet.json --return process/returns/CR037-S04.CP6.return.json --project-root .",
+        "result": "PASS_WITH_WARNING",
+        "summary": "Story Return Packet Check: OK; warning is limited to symlink-resolved return path text differing from expected_return_packet."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S04.CP6.index.json --project-root .",
+        "result": "PASS",
+        "summary": "Evidence Index Check: OK."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S04-CODING-DONE.result.json --project-root .",
+        "result": "PASS",
+        "summary": "CP Result Check: OK."
+      }
+    ],
+    "tests": [
+      {
+        "id": "target-tests",
+        "result": "PASS",
+        "summary": "CLI boundary, policy validation, dry-run no-write, apply archive/index/backup/marker, event checker compatibility, hash mismatch abort, and path guard are covered."
+      }
+    ]
+  },
+  "waivers": []
+}

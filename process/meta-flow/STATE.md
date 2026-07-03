@@ -2,12 +2,12 @@
 
 Project: meta-flow
 Workflow mode: standard
-Phase: init
+Phase: story-execution
 Blocked: false
-Active CR: CR-036
-Active Story: none
-Pending gate: none
-Next action: Review CP0 bootstrap readiness for CR-036, then launch the first human gate.
+Active CR: CR-037
+Active Story: CR037-S08
+Pending gate: CP6
+Next action: CR037-S07 CP7 PASS_WITH_RISK; CR037-S08 is unblocked and ready for CP6 implementation handoff using process/context/stories/CR037-S08.CP6.work-packet.json.
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,7 +20,7 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: process/context/CP0-CR036.context.json
+- active context: process/context/stories/CR037-S08.CP6.work-packet.json
 
 Policy refs:
 - none
@@ -28,6 +28,6 @@ Policy refs:
 Open risks:
 - none
 
-Updated at: 2026-06-24T06:30:49+00:00
+Updated at: 2026-07-03T17:40:18+08:00
 
 <!-- generated-by: meta-flow state render -->

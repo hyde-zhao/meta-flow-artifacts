@@ -1,0 +1,129 @@
+{
+  "blockers": [],
+  "checked_at": "2026-07-03T10:25:09+08:00",
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR037-S02-CODING-DONE",
+  "context_ref": "process/context/stories/CR037-S02.CP6.work-packet.json",
+  "cp_result_ref": "process/checks/CP6-CR037-S02-CODING-DONE.result.json",
+  "cr_id": "CR-037",
+  "decision": "PASS",
+  "dispatch_refs": [
+    "D-CR037-META-DEV-CP6-S02"
+  ],
+  "evidence_ref": "process/evidence/CR037-S02.CP6.index.json",
+  "items": [
+    {
+      "category": "entry",
+      "evidence_refs": [
+        "process/context/stories/CR037-S02.CP6.work-packet.json",
+        "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json"
+      ],
+      "id": "CP6-S02-01",
+      "name": "Story context, CP5 approval, and S01 dependency are consumable",
+      "notes": "Work packet shows S02 CP6 scope and S01 CP7 PASS_WITH_RISK unlocks implementation with two carried risks.",
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "process/evidence/CR037-S02.CP6.index.json#changed_files",
+        "process/evidence/CR037-S02.CP6.index.json#contract_checks"
+      ],
+      "id": "CP6-S02-02",
+      "name": "Controlled current-state update API matches Story scope",
+      "notes": "Implemented update_current_state with patch allowlist, dict deep-merge, list/scalar/null replacement, no-delete semantics, candidate validation before write, and missing-state no-create behavior.",
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "meta_flow/workflow/cr_lifecycle.py",
+        "tests/test_cr_lifecycle.py"
+      ],
+      "id": "CP6-S02-03",
+      "name": "CR lifecycle active-change writer converges on controlled state API",
+      "notes": "_update_current_active_change() now calls current.update_current_state(); lifecycle test wraps the API and verifies state persistence.",
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "process/evidence/CR037-S02.CP6.index.json#commands",
+        "process/evidence/CR037-S02.CP6.index.json#tests"
+      ],
+      "id": "CP6-S02-04",
+      "name": "Required unit, adjacent regression, and state enforce validation passed",
+      "notes": "Target tests passed with 28 tests and 7 subtests; adjacent regression passed with 18 tests; state enforce passed.",
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "boundary",
+      "evidence_refs": [
+        "process/evidence/CR037-S02.CP6.index.json#commands",
+        "process/returns/CR037-S02.CP6.return.json#boundary_check"
+      ],
+      "id": "CP6-S02-05",
+      "name": "Forbidden write and runtime boundaries were respected",
+      "notes": "No process/quant-lab, delivery, docs, credential-like path, runtime, production write, publish, live, or trading actions were used.",
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "risk",
+      "evidence_refs": [
+        "process/evidence/CR037-S02.CP6.index.json#risks"
+      ],
+      "id": "CP6-S02-06",
+      "name": "S01 PASS_WITH_RISK items are carried into CP7 handoff",
+      "notes": "R-CR037-SECOND-MECHANISM and R-CR037-REGISTRY-DRIFT remain open-for-cp7.",
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "handoff",
+      "evidence_refs": [
+        "process/returns/CR037-S02.CP6.return.json",
+        "process/evidence/CR037-S02.CP6.index.json"
+      ],
+      "id": "CP6-S02-07",
+      "name": "Return packet and evidence index are ready for CP7",
+      "notes": "S02 return packet, evidence index, CP6 result, and summary are generated for meta-qa consumption.",
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "CP7",
+  "read_expansion_refs": [
+    "process/stories/STORY-CR037-S02-controlled-update-api-and-writer-refactor-LLD.md#full_doc_read_reason=deep_implementation_contract"
+  ],
+  "return_packet_ref": "process/returns/CR037-S02.CP6.return.json",
+  "schema_version": 1,
+  "story_id": "CR037-S02",
+  "summary": "PASS: CR037-S02 implemented controlled update_current_state API and refactored cr_lifecycle active-change writes to the API. Patch allowlist, deep-merge, list replacement, no-delete semantics, no-write failures, missing state, lifecycle convergence, target tests, adjacent regression, and state enforce all passed.",
+  "waivers": []
+}

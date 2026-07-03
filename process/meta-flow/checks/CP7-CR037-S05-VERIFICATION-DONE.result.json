@@ -1,0 +1,189 @@
+{
+  "blockers": [],
+  "checked_at": "2026-07-03T14:45:00+08:00",
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR037-S05-VERIFICATION-DONE",
+  "context_ref": "process/context/stories/CR037-S05.CP7.verify-packet.json",
+  "cp_result_ref": "process/checks/CP7-CR037-S05-VERIFICATION-DONE.result.json",
+  "cr_id": "CR-037",
+  "decision": "PASS_WITH_RISK",
+  "dispatch_refs": [
+    "D-CR037-META-QA-CP7-S05"
+  ],
+  "evidence_ref": "process/evidence/CR037-S05.CP7.index.json",
+  "items": [
+    {
+      "category": "entry",
+      "evidence_refs": [
+        "process/context/stories/CR037-S05.CP7.verify-packet.json",
+        "process/handoffs/CR037-S05-CP7-VERIFICATION-HANDOFF.md",
+        "process/state/STATE.current.json",
+        "process/checks/CP6-CR037-S05-CODING-DONE.result.json",
+        "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+        "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json"
+      ],
+      "id": "CP7-S05-01",
+      "name": "CP7 verify packet, handoff, CP6 PASS, and S01/S02 dependencies are consumable",
+      "notes": "Story is ready-for-verification; CP6 decision is PASS; S01/S02 dependencies are PASS_WITH_RISK and inherited risks are carried.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "dispatch",
+      "evidence_refs": [
+        "process/state/AGENT-DISPATCH-LEDGER.ndjson",
+        "process/returns/CR037-S05.CP7.return.json#authz_boundary"
+      ],
+      "id": "CP7-S05-02",
+      "name": "Inline-fallback authorization and dispatch evidence are explicit",
+      "notes": "User authorized host-orchestrator inline-fallback after three QA dispatch attempts were interrupted or closed without CP7 outputs.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "contract",
+      "evidence_refs": [
+        "process/evidence/CR037-S05.CP7.index.json#commands.VP-S05-04",
+        "process/evidence/CR037-S05.CP7.index.json#commands.VP-S05-05",
+        "process/evidence/CR037-S05.CP7.index.json#commands.VP-S05-06"
+      ],
+      "id": "CP7-S05-03",
+      "name": "CP6 result, return, and evidence contracts validate",
+      "notes": "cp result-check, return-check, and evidence-check passed; return-check warning is the expected symlink-resolved expected_return_packet text mismatch.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "process/evidence/CR037-S05.CP7.index.json#commands.VP-S05-01",
+        "process/evidence/CR037-S05.CP7.index.json#commands.VP-S05-02",
+        "process/project/PROJECT.current.json"
+      ],
+      "id": "CP7-S05-04",
+      "name": "PROJECT.current refs-only schema and checker satisfy S05 contract",
+      "notes": "Target tests passed and project check reports OK; PROJECT.current.json stores refs-only baseline fields and stays below the 16KB budget.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "state",
+      "evidence_refs": [
+        "process/evidence/CR037-S05.CP7.index.json#commands.VP-S05-03",
+        "process/state/STATE.current.json",
+        "tests/test_state_v2.py"
+      ],
+      "id": "CP7-S05-05",
+      "name": "STATE.current.json references project state without embedding long-lived project governance fields",
+      "notes": "State enforce check passed. The current state contains project_state_ref and required routing_ref, and does not embed roadmap, milestone, scale, capability, or migration payloads.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "cli",
+      "evidence_refs": [
+        "process/evidence/CR037-S05.CP7.index.json#commands.VP-S05-08",
+        "tests/test_cr037_project_current.py"
+      ],
+      "id": "CP7-S05-06",
+      "name": "Project scaffold CLI defaults to dry-run and does not overwrite the existing valid project current",
+      "notes": "Dry-run output returned noop actions for existing process/project and valid PROJECT.current.json; no --apply write was requested in CP7.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "workspace",
+      "evidence_refs": [
+        "process/evidence/CR037-S05.CP7.index.json#commands.VP-S05-09",
+        "meta_flow/workspace/routing.py"
+      ],
+      "id": "CP7-S05-07",
+      "name": "Workspace routing remains healthy with process/project scaffold coverage",
+      "notes": "workspace check reports process_link_health: ok. artifact_git_dirty is expected for active CR-037 process outputs.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "boundary",
+      "evidence_refs": [
+        "process/evidence/CR037-S05.CP7.index.json#commands.VP-S05-07",
+        "process/evidence/CR037-S05.CP7.index.json#commands.VP-S05-10",
+        "process/returns/CR037-S05.CP7.return.json#boundary_check"
+      ],
+      "id": "CP7-S05-08",
+      "name": "Forbidden-path and formatting boundaries are respected",
+      "notes": "No process/quant-lab or docs diff is present; diff --check over S05 touched files passed.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "risk",
+      "evidence_refs": [
+        "process/evidence/CR037-S05.CP7.index.json#risks",
+        "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json#risks"
+      ],
+      "id": "CP7-S05-09",
+      "name": "Inherited CR037 governance risks and inline-fallback execution risk are explicit",
+      "notes": "R-CR037-SECOND-MECHANISM, R-CR037-REGISTRY-DRIFT, and R-CR037-QA-SUBAGENT-NO-OUTPUT remain open for downstream/CP8 tracking.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "host-orchestrator-aggregate-cp7",
+  "read_expansion_refs": [],
+  "return_packet_ref": "process/returns/CR037-S05.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "owner": "host-orchestrator",
+      "routing": "carry_to_CP8",
+      "status": "open-for-downstream"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "owner": "host-orchestrator",
+      "routing": "carry_to_CP8",
+      "status": "open-for-downstream"
+    },
+    {
+      "id": "R-CR037-QA-SUBAGENT-NO-OUTPUT",
+      "level": "MEDIUM",
+      "owner": "host-orchestrator",
+      "routing": "apply_two-interruption_inline_fallback_policy_for_future_CP7_if_repeated",
+      "status": "accepted-by-user-for-inline-fallback"
+    }
+  ],
+  "schema_version": 1,
+  "story_id": "CR037-S05",
+  "summary": "PASS_WITH_RISK: CR037-S05 CP7 inline-fallback verified project scaffold and PROJECT.current governance after three QA dispatch no-output interruptions. Target tests passed, project/state/workspace checks passed, CP6 contracts validate, scaffold dry-run returns noop for existing valid PROJECT.current.json, STATE.current.json keeps project governance as project_state_ref only, routing_ref is required and budgeted, and process/quant-lab plus docs diffs are empty.",
+  "waivers": []
+}

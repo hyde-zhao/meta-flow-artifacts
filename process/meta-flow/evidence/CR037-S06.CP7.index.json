@@ -1,0 +1,157 @@
+{
+  "artifacts": [
+    {
+      "kind": "story_return_packet",
+      "path": "process/returns/CR037-S06.CP7.return.json"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP7-CR037-S06-VERIFICATION-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP7-CR037-S06-VERIFICATION-DONE.result.summary.md"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "process/handoffs/CR037-S06-CP7-VERIFICATION-HANDOFF.md",
+      "role": "handoff"
+    },
+    {
+      "path": "process/returns/CR037-S06.CP7.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S06.CP7.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S06-VERIFICATION-DONE.result.json",
+      "role": "cp7_result"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S06-VERIFICATION-DONE.result.summary.md",
+      "role": "cp7_summary"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr037_project_scale_roadmap.py tests/test_cr037_project_current.py tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "id": "VP-S06-01",
+      "result": "PASS",
+      "summary": "49 passed, 19 subtests passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow project check --project-root .",
+      "id": "VP-S06-02",
+      "result": "PASS",
+      "summary": "Project Check: OK; Project Current Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root . --mode enforce",
+      "id": "VP-S06-03",
+      "result": "PASS",
+      "summary": "State v2 Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S06-CODING-DONE.result.json --project-root .",
+      "id": "VP-S06-04",
+      "result": "PASS",
+      "summary": "CP Result Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S06.CP6.work-packet.json --return process/returns/CR037-S06.CP6.return.json --project-root .",
+      "id": "VP-S06-05",
+      "result": "PASS_WITH_WARNING",
+      "summary": "Story Return Packet Check: OK; warning is limited to symlink-resolved expected_return_packet text."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S06.CP6.index.json --project-root .",
+      "id": "VP-S06-06",
+      "result": "PASS",
+      "summary": "Evidence Index Check: OK."
+    },
+    {
+      "command": "git diff -- process/policies/GATE-PROFILES.json process/quant-lab docs",
+      "id": "VP-S06-07",
+      "result": "PASS",
+      "summary": "No output; no GATE-PROFILES, process/quant-lab, or docs diff."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow context check-story-packet --packet process/context/stories/CR037-S06.CP7.verify-packet.json --project-root .",
+      "id": "VP-S06-08",
+      "result": "PASS",
+      "summary": "Story Context Packet Check: OK."
+    },
+    {
+      "command": "git diff --check -- meta_flow/project/__init__.py meta_flow/project/scale.py meta_flow/project/roadmap.py meta_flow/project/state.py meta_flow/cli.py tests/test_cr037_project_scale_roadmap.py process/project/PROJECT-SCALE.yaml process/project/ROADMAP.yaml process/project/MILESTONES.yaml process/project/PROJECT.current.json process/stories/STORY-CR037-S06-project-scale-and-roadmap-objects-IMPLEMENTATION.md process/returns/CR037-S06.CP6.return.json process/evidence/CR037-S06.CP6.index.json process/checks/CP6-CR037-S06-CODING-DONE.result.json process/checks/CP6-CR037-S06-CODING-DONE.result.summary.md process/context/stories/CR037-S06.CP7.verify-packet.json",
+      "id": "VP-S06-09",
+      "result": "PASS",
+      "summary": "No whitespace errors."
+    }
+  ],
+  "coverage": [
+    {
+      "id": "COV-S06-01",
+      "result": "PASS",
+      "summary": "PROJECT-SCALE.yaml scale, gate_profile_bias, review cadence, reason, and not_authorized are covered by target tests and project check."
+    },
+    {
+      "id": "COV-S06-02",
+      "result": "PASS",
+      "summary": "GATE-PROFILES remains unchanged and gate_profile_bias is validated as recommendation-only."
+    },
+    {
+      "id": "COV-S06-03",
+      "result": "PASS",
+      "summary": "ROADMAP.yaml and MILESTONES.yaml schema, status enums, duplicate IDs, broken refs, and cross-ref mismatch are covered."
+    },
+    {
+      "id": "COV-S06-04",
+      "result": "PASS",
+      "summary": "PROJECT.current.json refs-only scale_ref, roadmap_ref, and milestones_ref are validated through project check and target tests."
+    },
+    {
+      "id": "COV-S06-05",
+      "result": "PASS",
+      "summary": "CP6 return, evidence, result, and CP7 verify packet contracts validate."
+    },
+    {
+      "id": "COV-S06-06",
+      "result": "PASS",
+      "summary": "No process/policies/GATE-PROFILES.json, process/quant-lab, or docs diff is present."
+    }
+  ],
+  "cr_id": "CR-037",
+  "design_delta_ref": "",
+  "return_ref": "process/returns/CR037-S06.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "S06 stays within existing project governance objects and does not introduce a second gate or state mechanism."
+    },
+    {
+      "id": "R-CR037-QA-SUBAGENT-NO-OUTPUT",
+      "level": "MEDIUM",
+      "mitigation": "Inline-fallback was explicitly authorized and recorded in dispatch/handoff evidence."
+    },
+    {
+      "id": "R-CR037-YAML-SUBSET",
+      "level": "LOW",
+      "mitigation": "Current parser scope is covered by tests; richer YAML support remains out of scope."
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR037-S06",
+  "tests": [
+    {
+      "id": "target-tests",
+      "result": "PASS",
+      "summary": "tests/test_cr037_project_scale_roadmap.py, tests/test_cr037_project_current.py, tests/test_state_v2.py, and tests/test_cr_lifecycle.py passed: 49 tests, 19 subtests."
+    }
+  ],
+  "waivers": []
+}

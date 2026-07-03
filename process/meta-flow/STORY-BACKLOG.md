@@ -62,3 +62,24 @@ last_updated: "2026-05-15T00:00:00+08:00"
 | CR004-03 | 安装组件 CLI 与 uv tool 入口 | install | P0 | CR004-W2 | — | `scope-pack install`、`--component rules|agent|full`、user 默认 rules、project 默认 agent、legacy `--content` 兼容 |
 | CR004-04 | use-case 头脑风暴与交付出口路由 | product | P1 | CR004-W2 | — | 一次一问、2-3 方案比选、分段确认；production 先读目标 README/docs，无约定则询问 |
 | CR004-05 | 平台确认协议与文档/guardrail 回归 | qa-doc | P1 | CR004-W3 | CR004-01,CR004-02,CR004-03,CR004-04 | Claude/Codex 结构化优先，Codex exact 文本兜底；README/USER-MANUAL/rules/guardrail 同步 |
+
+## CR-037 Project Governance Remediation Story
+
+> 本节由 `CP3-CR037-DQ-07` 确认命名策略后追加。正式 Story / evidence 使用 `CR037-Sxx`，原 `CR-A..CR-H` 仅作为计划 alias。CP5 已由用户批准，所有 CR-037 Story 已进入 `dev-ready`；后续仍必须逐 Story 通过 CP6 / CP7，且不授权 runtime、production write、publish、live、凭据读取或 quant-lab 发布库写入。
+
+| Story ID | 标题 | 来源 Story | Feature 设计引用 | lld_policy | 优先级 | Wave | depends_on | Alias | 状态 |
+|---|---|---|---|---|---|---|---|---|---|
+| CR037-S00 | second-system guardrail | ST-PG-013 | HLD / ADR / Feature Matrix | technical-note | P0 | CR037-W0 | — | SL-PG-00 | verified-with-risk |
+| CR037-S01 | current-state schema and budgets | ST-PG-001 | current-state-enforcement | full-lld | P0 | CR037-W1 | CR037-S00 | CR-A-S01 | verified-with-risk |
+| CR037-S02 | controlled update API and writer refactor | ST-PG-002 | current-state-enforcement | full-lld | P0 | CR037-W1 | CR037-S01 | CR-A-S02 | verified-with-risk |
+| CR037-S03 | agent contract and guardrail sync | ST-PG-003 | current-state-enforcement | technical-note | P0 | CR037-W1 | CR037-S01,CR037-S02 | CR-A-S03 | verified-with-risk |
+| CR037-S04 | ledger compaction policy and CLI | ST-PG-012 | ledger-compaction | full-lld | P0.5 | CR037-W1A | CR037-S01 | CR-B-S01 | verified-with-risk |
+| CR037-S05 | project scaffold and PROJECT.current | ST-PG-004 | project-state-governance | full-lld | P1 | CR037-W2 | CR037-S01,CR037-S02 | CR-C-S01 | verified-with-risk |
+| CR037-S06 | PROJECT-SCALE and roadmap objects | ST-PG-005 | project-state-governance | full-lld | P1 | CR037-W2 | CR037-S05 | CR-C-S02 | verified-with-risk |
+| CR037-S07 | feature/capability registry and resolver | ST-PG-006 | capability-feature-registry | full-lld | P1 | CR037-W3 | CR037-S05 | CR-D-S01 | verified-with-risk |
+| CR037-S08 | impact surface field split and migration report | ST-PG-007 | impact-surface-normalization | full-lld | P1 | CR037-W3 | CR037-S07 | CR-E-S01 | dev-ready |
+| CR037-S09 | roadmap refresh result schema and checker | ST-PG-008 | roadmap-refresh-governance | full-lld | P1 | CR037-W4 | CR037-S06,CR037-S07 | CR-F-S01 | dev-ready |
+| CR037-S10 | process-only cascade and Gate Ledger event | ST-PG-009 | roadmap-refresh-governance | full-lld | P1 | CR037-W4 | CR037-S09 | CR-F-S02 | dev-ready |
+| CR037-S11 | FU-RF tracking support | ST-PG-010 | roadmap-follow-up-tracking | technical-note | P1 | CR037-W4 | CR037-S09 | CR-G-S01 | dev-ready |
+| CR037-S12 | project stale-check | ST-PG-010 | project-stale-check | full-lld | P1 | CR037-W4 | CR037-S09,CR037-S11 | CR-G-S02 | dev-ready |
+| CR037-S13 | quant-lab migration dry-run and reports | ST-PG-011 | quant-lab-migration-readiness | full-lld | P2 | CR037-W5 | CR037-S01,CR037-S05,CR037-S07,CR037-S08,CR037-S09,CR037-S10,CR037-S11,CR037-S12 | CR-H-S01 | dev-ready |

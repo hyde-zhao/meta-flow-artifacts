@@ -1,0 +1,161 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR-037-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-hld-review"
+status: "ready"
+created_at: "2026-07-02T17:45:07+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-037"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 14
+  max_summary_items: 24
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "Agent 必须先读取本 capsule，并且只读取 allowed_reads / must_read；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+
+allowed_reads:
+  - path: "process/changes/summaries/CR-037.summary.json"
+    reason: "CR-037 CP3 状态、范围和授权边界摘要"
+    required: true
+  - path: "process/checkpoints/CP2-CR-037-REQUIREMENTS-BASELINE.md"
+    reason: "CP2 已批准的产品 / 场景 / 范围基线和决策项"
+    required: true
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-BLUEPRINT.md"
+    reason: "能力地图、Feature 边界和数据归属"
+    required: true
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-DOMAIN-MAP.md"
+    reason: "领域对象和状态语义"
+    required: true
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-DEPENDENCY-MAP.md"
+    reason: "依赖方向和禁止依赖"
+    required: true
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-HLD.md"
+    reason: "CP3 HLD 主审查对象"
+    required: true
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-ARCHITECTURE-DECISION.md"
+    reason: "核心 ADR 决策对象"
+    required: true
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-FEATURE-DESIGN-MATRIX.md"
+    reason: "Feature 设计适用性与 CP5 前置条件"
+    required: true
+  - path: "process/discussions/CP3-CR-037-HLD-DISCUSSION-LOG.md"
+    reason: "Architecture Gray Areas 和 advisor table"
+    required: true
+  - path: "process/checks/CP3-CR-037-DISCUSSION-CHECKPOINT.json"
+    reason: "CP3 discussion checkpoint"
+    required: true
+  - path: "process/checks/CP3-CR-037-HLD-CONSISTENCY.result.json"
+    reason: "CP3 自动预检机器真相源"
+    required: false
+  - path: "process/checkpoints/CP3-CR-037-HLD-REVIEW.md"
+    reason: "CP3 人工审查稿"
+    required: false
+
+must_read:
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-BLUEPRINT.md"
+    reason: "确认能力边界和 Feature 归属"
+    required: true
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-HLD.md"
+    reason: "确认推荐架构和关键流程"
+    required: true
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-ARCHITECTURE-DECISION.md"
+    reason: "确认 ADR-PG-001..006"
+    required: true
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-FEATURE-DESIGN-MATRIX.md"
+    reason: "确认 required Feature 设计策略和 CP5 前置条件"
+    required: true
+
+read_if_needed:
+  - path: "process/docs/product/USE-CASES.md"
+    trigger: "审查 Use Case -> Architecture Traceability 时读取"
+  - path: "process/docs/product/REQUIREMENTS.md"
+    trigger: "审查需求覆盖时读取"
+  - path: "process/docs/product/SCENARIOS.yaml"
+    trigger: "审查场景模拟和验证方式时读取"
+  - path: "process/docs/product/TEST-MATRIX.md"
+    trigger: "审查测试追溯时读取"
+  - path: "process/changes/CR-037.md"
+    trigger: "人工审计完整 CR 正文时读取"
+  - path: "process/changes/CR-036.md"
+    trigger: "审计 CR-036 blocked / unfinished 边界时读取"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/quant-lab/**"
+    reason: "quant-lab 迁移属于 P2；CP3 不读取或修改 quant-lab 发布库 / 过程归档内容"
+  - path_or_pattern: "process/archive/**"
+    reason: "归档证据只在人工审计或证据缺失时读取"
+  - path_or_pattern: "process/STATE.md"
+    reason: "legacy 人类摘要，不作为默认机器上下文；仅字段缺失或人工审计时读取"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "不得作为下游默认输入"
+
+key_facts:
+  cp2_status: "approved"
+  cp3_status: "pending"
+  selected_architecture: "Option A - enforcement-first layered governance"
+  hld_confirmed: false
+  adr_confirmed: false
+  feature_matrix_status: "baseline; per-feature DESIGN / TEST-PLAN / TASKS blocked until CP3 approved"
+  active_constraints:
+    - "CP3 approve 只确认蓝图 / HLD / ADR / Feature Matrix 架构基线。"
+    - "CP3 approve 不授权实现、CP5、runtime、production write、publish、live 或 trading。"
+    - "CP3 approve 不关闭、恢复或完成 CR-036。"
+    - "quant-lab 发布库修改仍需后续独立授权。"
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "CP3-CR037-DQ-01: 是否批准 enforcement-first HLD / Blueprint / ADR 架构基线"
+    - "CP3-CR037-DQ-02: 是否确认 STATE.current.json allowlist 与 PROJECT.current.json 分层架构"
+    - "CP3-CR037-DQ-03: 是否确认 roadmap refresh 使用独立 result/checker 且只写过程归档库"
+    - "CP3-CR037-DQ-04: 是否确认 feature/capability registry refs 与 impact normalization 架构"
+    - "CP3-CR037-DQ-05: 是否确认 FU-RF / SP-RF / RA-RF follow-up 不进入 RELEASE-CONTEXT"
+    - "CP3-CR037-DQ-06: 是否确认 9 个 required Feature 的 per-feature 设计在 CP3 后、CP5 前生成"
+    - "CP3-CR037-DQ-07: 是否确认正式 Story / slice / evidence 命名使用 CR-037 派生编号，CR-A..CR-H 仅作为计划 alias"
+  non_authorized_items:
+    - "不进入实现或 CP5。"
+    - "不执行 runtime、production write、publish、live 或真实交易。"
+    - "不读取凭据、账户、token、cookie 或私钥。"
+    - "不自动修改 quant-lab 发布库代码、测试、正式设计文档或发布文档。"
+    - "不关闭、恢复或完成 CR-036。"
+  risk_acceptance_items:
+    - "CR-036 仍 blocked / unfinished；后续 CP3 / CP5 继续显式暴露。"
+    - "HLD / ADR 当前 confirmed=false；CP3 approve 前不得作为已批准实现输入。"
+  open_questions:
+    - "ledger compact 命令名在 FEAT-PG-002 LLD 前确认。"
+    - "stale-check 命令名在 FEAT-PG-008 LLD 前确认。"
+  n_a_or_waived_items: []
+
+handoff:
+  target_agent: "meta-se"
+  expected_output:
+    - "CP3 approved 后进入 story-planning / Feature per-design 准备。"
+    - "CP3 approved 前不得生成 CP5 或实现计划。"
+  exit_criteria:
+    - "CP3 人工审查结果 approved。"
+    - "无 CP3 blocker 或未回答 must-user decision。"
+  blocked_if_missing:
+    - "CP3 人工审查未 approved。"
+    - "用户要求修改 HLD / ADR / Blueprint / Feature Matrix。"
+
+read_expansion_log: []
+
+validation:
+  generated_from_sources:
+    - "process/checkpoints/CP2-CR-037-REQUIREMENTS-BASELINE.md"
+    - "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-BLUEPRINT.md"
+    - "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-DOMAIN-MAP.md"
+    - "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-DEPENDENCY-MAP.md"
+    - "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-HLD.md"
+    - "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-ARCHITECTURE-DECISION.md"
+    - "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-FEATURE-DESIGN-MATRIX.md"
+    - "process/discussions/CP3-CR-037-HLD-DISCUSSION-LOG.md"
+    - "process/checks/CP3-CR-037-DISCUSSION-CHECKPOINT.json"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "capsule 只用于 CP3 架构确认，不授权实现、runtime 或 quant-lab 发布库写入。"

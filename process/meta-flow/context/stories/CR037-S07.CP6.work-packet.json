@@ -1,0 +1,254 @@
+{
+  "acceptance": [
+    "FEATURE-REGISTRY.yaml v1/v2 remains backward compatible and canonical feature IDs are unique.",
+    "CAPABILITY-REGISTRY.yaml schema/checker exists and validates capability IDs, aliases, deprecated_by, feature_refs, owner/source refs, and credential-like content.",
+    "Resolver returns resolved, unresolved, deprecated, and conflict results with stable code/severity/input_ref/canonical_id fields.",
+    "Unknown feature/capability refs are blocked findings or candidate report entries; resolver never auto-creates canonical IDs.",
+    "Synthetic downstream consumer tests use registry-backed refs and do not bypass resolver.",
+    "Fixtures use CAP-PG-* governance placeholder IDs only; quant-lab real capability IDs remain out of scope for S13.",
+    "Dev agent must not write CP6 process artifacts; Host Orchestrator owns CP6 return/evidence/result/summary generation."
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 420,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 300,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S07-feature-capability-registry-and-resolver.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 5000,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S07-feature-capability-registry-and-resolver-LLD.md",
+      "reason": "story_lld",
+      "required": true
+    },
+    {
+      "estimated_tokens": 4380,
+      "mode": "full",
+      "path": "process/docs/features/capability-feature-registry/DESIGN.md",
+      "reason": "feature_design",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1390,
+      "mode": "full",
+      "path": "process/docs/features/capability-feature-registry/TEST-PLAN.md",
+      "reason": "feature_test_plan",
+      "required": true
+    },
+    {
+      "estimated_tokens": 720,
+      "mode": "full",
+      "path": "process/docs/features/capability-feature-registry/TASKS.md",
+      "reason": "feature_tasks",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1800,
+      "mode": "full",
+      "path": "meta_flow/design/feature_registry.py",
+      "reason": "implementation_target",
+      "required": true
+    },
+    {
+      "estimated_tokens": 2200,
+      "mode": "full",
+      "path": "tests/test_feature_registry.py",
+      "reason": "existing_tests",
+      "required": true
+    },
+    {
+      "estimated_tokens": 820,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-037.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    }
+  ],
+  "allowed_write_paths": [
+    "meta_flow/design/feature_registry.py",
+    "meta_flow/cli.py",
+    "tests/test_feature_registry.py"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "NO_QUANT_LAB_RELEASE_WRITE"
+  ],
+  "budget": {
+    "estimated_tokens": 17230,
+    "estimator": "chars_div_4",
+    "max_tokens": 18000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [
+      "FEATURE-REGISTRY v1/v2 compatibility",
+      "CAPABILITY-REGISTRY schema contract",
+      "feature/capability resolver result contract",
+      "candidate report contract for unresolved refs",
+      "synthetic downstream consumer resolver contract"
+    ],
+    "summary": "CR037-S07 starts registry-backed feature/capability refs after S05 and S06 are verified-with-risk. It must extend the existing feature registry implementation without inventing quant-lab real IDs and without writing CP6 process artifacts from the dev subagent."
+  },
+  "cr_id": "CR-037",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-IMPLEMENTATION.md",
+    "process/quant-lab/**",
+    "docs/**",
+    "process/returns/**",
+    "process/evidence/**",
+    "process/checks/**"
+  ],
+  "dependency_inputs": [
+    {
+      "result_ref": "process/checks/CP7-CR037-S05-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT",
+        "R-CR037-QA-SUBAGENT-NO-OUTPUT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S05"
+    },
+    {
+      "result_ref": "process/checks/CP7-CR037-S06-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-QA-SUBAGENT-NO-OUTPUT",
+        "R-CR037-YAML-SUBSET"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S06"
+    }
+  ],
+  "design_refs": {
+    "feature_design": "process/docs/features/capability-feature-registry/DESIGN.md",
+    "feature_test_plan": "process/docs/features/capability-feature-registry/TEST-PLAN.md",
+    "feature_tasks": "process/docs/features/capability-feature-registry/TASKS.md",
+    "story_lld": "process/stories/STORY-CR037-S07-feature-capability-registry-and-resolver-LLD.md"
+  },
+  "expected_return_packet": "process/returns/CR037-S07.CP6.return.json",
+  "feature_contract_summary": "Capability / Feature Registry S07: extend feature registry v1/v2 compatibility, add CAPABILITY-REGISTRY schema/checker, resolver API, candidate report, and synthetic consumer contract tests. Fixtures must use CAP-PG-* placeholder IDs, not quant-lab real IDs.",
+  "feature_design_refs": [
+    "process/docs/features/capability-feature-registry/DESIGN.md",
+    "process/docs/features/capability-feature-registry/TEST-PLAN.md",
+    "process/docs/features/capability-feature-registry/TASKS.md"
+  ],
+  "feature_refs": [
+    "FEAT-PG-004"
+  ],
+  "forbidden_write_paths": [
+    "process/returns/**",
+    "process/evidence/**",
+    "process/checks/**",
+    "process/state/**",
+    "process/quant-lab/**",
+    "process/docs/**",
+    "docs/**",
+    "delivery/**",
+    ".env",
+    "**/*credential*",
+    "**/*secret*",
+    "**/*token*",
+    "**/*cookie*",
+    "**/*private_key*"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "lld_policy": "full-lld",
+  "objective": {
+    "non_goals": [
+      "Do not initialize quant-lab real capability IDs.",
+      "Do not read or write process/quant-lab.",
+      "Do not write CP6 return/evidence/result/summary from the dev subagent.",
+      "Do not implement S08 impact migration, S09 roadmap refresh, S12 stale-check, or S13 migration.",
+      "Do not introduce a second registry source outside existing feature registry governance."
+    ],
+    "summary": "feature/capability registry and resolver"
+  },
+  "packet_type": "story_work_packet",
+  "parent_context_ref": "process/context/stories/CR037-S07.base.context.json",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "meta-flow",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-HLD.md",
+      "reason": "hld",
+      "trigger": "architecture_boundary_dispute"
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-ARCHITECTURE-DECISION.md",
+      "reason": "adr",
+      "trigger": "adr_trace_needed"
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "meta_flow/design/product_governance.py",
+      "reason": "capability_status_reference",
+      "trigger": "need_to_confirm_no_parallel_capability_status_namespace"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "standard",
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR037-S07",
+  "story_ref": "process/stories/STORY-CR037-S07-feature-capability-registry-and-resolver.md",
+  "verification_plan": [
+    "Run feature registry unit tests covering v1/v2 compatibility, capability schema, resolver statuses, alias conflicts, deprecated mode behavior, candidate report, and sensitive value rejection.",
+    "Run synthetic consumer contract tests proving downstream code consumes resolver results instead of free strings.",
+    "Run existing feature registry tests to prove feature build/check/list/trace behavior remains compatible.",
+    "Run state check --mode enforce after implementation to confirm current state remains valid.",
+    "Verify git diff -- process/quant-lab docs delivery is empty.",
+    "Verify dev agent did not write process/returns, process/evidence, or process/checks CP6 artifacts."
+  ]
+}

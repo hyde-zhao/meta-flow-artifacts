@@ -1,0 +1,189 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR-037-LLD-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow"
+phase: "story-planning"
+checkpoint: "CP5"
+capsule_type: "cp5-lld"
+status: "ready"
+created_at: "2026-07-03T00:00:00+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-037"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 16
+  max_summary_items: 24
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "Agent 必须先读取本 capsule，并且只读取 allowed_reads / must_read；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+
+allowed_reads:
+  - path: "process/state/STATE.current.json"
+    reason: "当前 active CR、phase、pending gate 和不授权边界"
+    required: true
+  - path: "process/checks/CP4-CR-037-STORY-DAG-PARALLEL-SAFETY.result.json"
+    reason: "Story DAG、parallel safety 和 CP5 前置结论"
+    required: true
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-HLD.md"
+    reason: "已批准架构约束、ADR 回写和实施顺序"
+    required: true
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-ARCHITECTURE-DECISION.md"
+    reason: "ADR-PG-001..006 的 Story 级设计约束"
+    required: true
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-FEATURE-DESIGN-MATRIX.md"
+    reason: "Story feature_design_refs、lld_policy 和 CP5 证据策略"
+    required: true
+  - path: "process/STORY-BACKLOG.md"
+    reason: "CR037-S00..S13 Story 列表、依赖、slice alias 和状态"
+    required: true
+  - path: "process/STORY-STATUS.md"
+    reason: "CR037 wave 状态和 S13 长依赖链关注风险"
+    required: true
+  - path: "process/DEVELOPMENT-PLAN.yaml"
+    reason: "CR037-W0..W5 wave 计划与 S13 risk_notes；仅在核对 wave / 依赖时读取"
+    required: false
+  - path: "process/docs/features/current-state-enforcement/DESIGN.md"
+    reason: "FEAT-PG-001 Story LLD 输入"
+    required: false
+  - path: "process/docs/features/ledger-compaction/DESIGN.md"
+    reason: "FEAT-PG-002 Story LLD 输入"
+    required: false
+  - path: "process/docs/features/project-state-governance/DESIGN.md"
+    reason: "FEAT-PG-003 Story LLD 输入"
+    required: false
+  - path: "process/docs/features/capability-feature-registry/DESIGN.md"
+    reason: "FEAT-PG-004 Story LLD 输入"
+    required: false
+  - path: "process/docs/features/impact-surface-normalization/DESIGN.md"
+    reason: "FEAT-PG-005 Story LLD 输入"
+    required: false
+  - path: "process/docs/features/roadmap-refresh-governance/DESIGN.md"
+    reason: "FEAT-PG-006 Story LLD 输入"
+    required: false
+  - path: "process/docs/features/roadmap-follow-up-tracking/DESIGN.md"
+    reason: "FEAT-PG-007 Story technical-note 输入"
+    required: false
+  - path: "process/docs/features/project-stale-check/DESIGN.md"
+    reason: "FEAT-PG-008 Story LLD 输入"
+    required: false
+  - path: "process/docs/features/quant-lab-migration-readiness/DESIGN.md"
+    reason: "FEAT-PG-009 Story LLD 输入"
+    required: false
+
+must_read:
+  - path: "process/state/STATE.current.json"
+    reason: "确认 CR-037 active、CP5 pending、无实现授权"
+    required: true
+  - path: "process/checks/CP4-CR-037-STORY-DAG-PARALLEL-SAFETY.result.json"
+    reason: "确认 CP4 PASS 和 Story 仍仅 lld-ready"
+    required: true
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-FEATURE-DESIGN-MATRIX.md"
+    reason: "确定每个 Story 的 lld_policy 和 Feature 输入"
+    required: true
+  - path: "process/STORY-BACKLOG.md"
+    reason: "确定 Story ID、slug、依赖和正式命名"
+    required: true
+
+read_if_needed:
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-HLD.md"
+    trigger: "Story 需要架构约束、模块边界、ADR 回写或不授权范围时读取"
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-ARCHITECTURE-DECISION.md"
+    trigger: "Story 命中 ADR-PG-001..006 的接口、schema、follow-up 或迁移边界时读取"
+  - path: "process/docs/features/<feature>/DESIGN.md"
+    trigger: "写对应 Story LLD 或 technical-note 时读取"
+  - path: "process/docs/features/<feature>/TEST-PLAN.md"
+    trigger: "设计 Story 测试入口、失败路径或 CP5 自动预检证据时读取"
+  - path: "process/docs/features/<feature>/TASKS.md"
+    trigger: "拆 Story TASK-ID、文件范围和验证入口时读取"
+  - path: "meta_flow/**"
+    trigger: "LLD 需要确认现有模块、CLI、checker、state writer 或 registry 代码位置时读取"
+  - path: "delivery/rules/**"
+    trigger: "LLD 涉及 Agent / Skill contract 或安装交付规则同步时读取"
+  - path: "tests/**"
+    trigger: "LLD 需要定义回归测试入口或现有测试扩展点时读取"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "人类摘要和 legacy fallback，不作为默认机器上下文"
+  - path_or_pattern: "process/quant-lab/**"
+    reason: "P2 迁移样本默认不读；仅 S13 LLD 在 read-only / no release write 边界下按需读取过程侧摘要"
+  - path_or_pattern: "quant-lab release repo"
+    reason: "发布库修改未授权；LLD 阶段不得写入"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档默认不读；只有证据索引审计时读取"
+  - path_or_pattern: "process/stories/*-LLD.md"
+    reason: "CR-037 LLD 正在生成；不得默认读取无关历史 LLD"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "不得作为下游默认输入"
+
+key_facts:
+  scope_summary: "CR-037 目标是修复 meta-flow state enforcement、ledger hygiene、project-scale / roadmap governance、registry-backed refs、impact normalization、roadmap refresh、stale-check 与 quant-lab migration readiness。"
+  accepted_decisions:
+    - "CP2 已批准产品 / 场景 / 范围基线；approve 不授权实现、CP5、runtime、production write、publish、live、凭据读取或 quant-lab 发布库修改。"
+    - "CP3 已批准 enforcement-first 架构、PROJECT.current refs-only、ROADMAP-REFRESH 独立 result/checker、registry-backed refs、FU-RF/SP-RF/RA-RF、9 个 required Feature 和 CR037-Sxx 正式命名。"
+    - "CR-036 保持 blocked / unfinished，冲突检查预期继续暴露。"
+  active_constraints:
+    - "当前仅进入 Story LLD / technical-note 批次，不得实现代码。"
+    - "全部目标 Story 设计证据必须统一进入 CP5，CP5 approved 前不得进入 story-execution。"
+    - "并行 LLD agent 不得直接向用户提问；阻断问题写入设计证据并交由 host-orchestrator 汇总。"
+    - "S13 依赖 8 个上游 Story，LLD 必须定义延期、拆分或 blocked 策略。"
+  downstream_tasks:
+    - "为 CR037-S00..S13 生成 full LLD、technical-note 或 waived 证据。"
+    - "将 technical-note 写回对应 Story 卡片；full-lld 写入 `process/stories/STORY-{id}-{slug}-LLD.md`。"
+    - "所有 LLD 均必须停在设计证据，不得写实现代码或测试代码。"
+    - "完成后由 host-orchestrator 汇总 CP5 自动预检和人工审查稿。"
+  traceability:
+    requirements: ["REQ-PG-001..022", "REQ-PG-NF001..004", "REQ-PG-C001..005"]
+    scenarios: ["TC-PG-001..018"]
+    stories: ["CR037-S00..CR037-S13"]
+    features: ["FEAT-PG-001..009"]
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-FD-002: FEAT-PG-007 是否保持 technical-note，若触及多个 tracking 模块或 release guardrail 则升级 full-lld。"
+    - "DQ-FD-003: ledger compact 命令名，推荐 `meta-flow ledger compact`。"
+    - "DQ-FD-004: stale-check 命令名，推荐 `meta-flow project stale-check`。"
+  non_authorized_items:
+    - "不进入实现、CP6、CP7 或 CP8。"
+    - "不访问凭据、账户、交易网关、runtime、publish、live、production write 或真实交易。"
+    - "不自动修改 quant-lab 发布库代码、tests、正式 docs 或发布文档。"
+  risk_acceptance_items:
+    - "CR-036 remains blocked / unfinished; CR-037 推进期间冲突检查预期仍暴露该风险。"
+    - "S13 long dependency chain is accepted as non-blocking for LLD, but must be resolved or carried into CP5 risk review."
+  open_questions:
+    - "LLD 若发现 blocks_lld=true 的问题，必须标记为 clarification candidate，等待 host-orchestrator 统一 broker。"
+  n_a_or_waived_items:
+    - "本阶段不生成实现证据、测试执行报告或发布文档。"
+
+handoff:
+  target_agent: "meta-dev"
+  expected_output:
+    - "CR037-S00..S13 的 Story 设计证据。"
+    - "full-lld Story 输出 `process/stories/STORY-CR037-*-LLD.md`。"
+    - "technical-note Story 在 Story 卡片追加 `## 技术说明`。"
+  exit_criteria:
+    - "14 个 Story 均有设计证据或明确 blocked / clarification candidate。"
+    - "无静默实现、无未授权 runtime / publish / release repo 写入。"
+    - "写入范围与分配批次不冲突。"
+  blocked_if_missing:
+    - "Story 卡片缺失。"
+    - "Feature DESIGN / TEST-PLAN / TASKS 缺失。"
+    - "HLD / ADR / Feature Matrix 与 Story 要求冲突且无法在 LLD 内收敛。"
+
+read_expansion_log: []
+
+validation:
+  generated_from_sources:
+    - "process/state/STATE.current.json"
+    - "process/checks/CP4-CR-037-STORY-DAG-PARALLEL-SAFETY.result.json"
+    - "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-HLD.md"
+    - "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-ARCHITECTURE-DECISION.md"
+    - "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-FEATURE-DESIGN-MATRIX.md"
+    - "process/STORY-BACKLOG.md"
+    - "process/STORY-STATUS.md"
+    - "process/DEVELOPMENT-PLAN.yaml"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "capsule 只用于 CP5 前 LLD 批次调度，不授权实现。"

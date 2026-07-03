@@ -1,0 +1,221 @@
+{
+  "acceptance": [
+    "workspace bootstrap/check covers process/project scaffold without breaking existing workspace routing.",
+    "PROJECT.current.json has allowlist schema, forbidden-field checks, relative-ref validation, and 16KB size budget.",
+    "project scaffold defaults to dry-run and apply does not overwrite conflicting existing PROJECT.current.json.",
+    "scaffold apply creates a minimal refs-only PROJECT.current.json and only updates STATE.current.json through controlled project_state_ref writer path.",
+    "STATE.current.json does not embed project governance fields other than project_state_ref.",
+    "tests cover valid project current, unknown/forbidden/over-budget fields, dry-run no-write, apply create/noop, conflict no-overwrite, and current ref contract.",
+    "routing_ref remains a required current-state key and is budgeted in the current-state schema."
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 412,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 249,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S05-project-scaffold-and-project-current.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 322,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 817,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-037.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    }
+  ],
+  "allowed_write_paths": [
+    "process/returns/CR037-S05.CP7.return.json",
+    "process/evidence/CR037-S05.CP7.index.json",
+    "process/checks/CP7-CR037-S05-VERIFICATION-DONE.result.json",
+    "process/checks/CP7-CR037-S05-VERIFICATION-DONE.result.summary.md"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING"
+  ],
+  "budget": {
+    "estimated_tokens": 1800,
+    "estimator": "chars_div_4",
+    "max_tokens": 18000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [
+      "workspace scaffold dirs",
+      "PROJECT.current refs-only schema",
+      "current-state project_state_ref writer contract",
+      "current-state routing_ref required schema"
+    ],
+    "summary": "CR037-S05 verifies project scaffold and PROJECT.current governance after CP6 implementation. It must confirm process/project scaffold support, refs-only PROJECT.current.json checks, controlled project_state_ref integration, and no quant-lab/docs writes."
+  },
+  "cr_id": "CR-037",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "dependency_inputs": [
+    {
+      "result_ref": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S01"
+    },
+    {
+      "result_ref": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S02"
+    }
+  ],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "expected_return_packet": "process/returns/CR037-S05.CP7.return.json",
+  "feature_contract_summary": "Project State Governance S05: verify process/project scaffold coverage, refs-only PROJECT.current.json schema/checker with 16KB budget, default dry-run/apply scaffold behavior, and controlled STATE.current.json project_state_ref integration.",
+  "feature_design_refs": [
+    "process/docs/features/project-state-governance/DESIGN.md",
+    "process/docs/features/project-state-governance/TEST-PLAN.md",
+    "process/docs/features/project-state-governance/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "FEAT-PG-003"
+  ],
+  "forbidden_write_paths": [
+    "meta_flow/**",
+    "tests/**",
+    "process/quant-lab/**",
+    "docs/**",
+    "delivery/**",
+    ".env",
+    "**/*credential*",
+    "**/*secret*",
+    "**/*token*",
+    "**/*cookie*",
+    "**/*private_key*"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "implementation_return_ref": "process/returns/CR037-S05.CP6.return.json",
+  "lld_policy": "full-lld",
+  "objective": {
+    "non_goals": [],
+    "summary": "project scaffold and PROJECT.current"
+  },
+  "packet_type": "story_verify_packet",
+  "parent_context_ref": "process/context/stories/CR037-S05.base.context.json",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "meta-flow",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 4260,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S05-project-scaffold-and-project-current-LLD.md",
+      "reason": "story_lld",
+      "trigger": "design_contract_dispute"
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S05-project-scaffold-and-project-current-IMPLEMENTATION.md",
+      "reason": "implementation_summary",
+      "trigger": "cp6_return_or_evidence_incomplete"
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/evidence/CR037-S05.CP6.index.json",
+      "reason": "implementation_evidence_index",
+      "trigger": "evidence_trace_needed"
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/checks/CP6-CR037-S05-CODING-DONE.result.json",
+      "reason": "cp6_result",
+      "trigger": "cp6_decision_trace_needed"
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "tests/test_cr037_project_current.py",
+      "reason": "target_test_contract",
+      "trigger": "test_assertion_review_needed"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "",
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR037-S05",
+  "story_ref": "process/stories/STORY-CR037-S05-project-scaffold-and-project-current.md",
+  "verification_plan": [
+    "Run project current unit/contract tests in tests/test_cr037_project_current.py with state regression tests.",
+    "Run meta-flow project check --project-root . and confirm PROJECT.current.json is refs-only, budgeted, and relative-ref checked.",
+    "Run meta-flow state check --mode enforce and confirm project_state_ref plus required routing_ref schema remain valid.",
+    "Validate CP6 result, return packet, and evidence index.",
+    "Verify git diff -- process/quant-lab docs is empty and no credentials/runtime/publish/live behavior is introduced.",
+    "Write CP7 return, evidence index, result JSON, and human summary only under the allowed CP7 paths."
+  ]
+}

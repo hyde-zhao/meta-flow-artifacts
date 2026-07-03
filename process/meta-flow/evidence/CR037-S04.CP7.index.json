@@ -1,0 +1,174 @@
+{
+  "artifacts": [
+    {
+      "kind": "story_return_packet",
+      "path": "process/returns/CR037-S04.CP7.return.json"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP7-CR037-S04-VERIFICATION-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP7-CR037-S04-VERIFICATION-DONE.result.summary.md"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "process/returns/CR037-S04.CP7.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S04.CP7.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S04-VERIFICATION-DONE.result.json",
+      "role": "cp7_result"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S04-VERIFICATION-DONE.result.summary.md",
+      "role": "cp7_summary"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S04.CP6.work-packet.json --return process/returns/CR037-S04.CP6.return.json --project-root .",
+      "id": "VP-S04-01",
+      "result": "PASS_WITH_WARNING",
+      "summary": "Story Return Packet Check: OK; warning is limited to symlink-resolved return path text differing from expected_return_packet."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S04.CP6.index.json --project-root .",
+      "id": "VP-S04-02",
+      "result": "PASS",
+      "summary": "Evidence Index Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S04-CODING-DONE.result.json --project-root .",
+      "id": "VP-S04-03",
+      "result": "PASS",
+      "summary": "CP Result Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr037_ledger_compaction.py",
+      "id": "VP-S04-04",
+      "result": "PASS",
+      "summary": "6 passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state compact --help",
+      "id": "VP-S04-05A",
+      "result": "PASS",
+      "summary": "state compact help says it renders process/STATE.md, runs state check, and does not compact NDJSON event ledgers."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow ledger compact --help",
+      "id": "VP-S04-05B",
+      "result": "PASS",
+      "summary": "ledger compact help says dry-run is default and --apply writes backup, archive summary, archive index, and compact marker."
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr037-s04-cp7-pycompile PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python -m py_compile meta_flow/state/ledger_compaction.py meta_flow/state/event_ledger.py meta_flow/cli.py meta_flow/state/current.py",
+      "id": "VP-S04-06",
+      "result": "PASS",
+      "summary": "Syntax compilation passed with pyc output redirected outside the repository."
+    },
+    {
+      "command": "git diff -- process/state/*.ndjson",
+      "id": "VP-S04-07",
+      "result": "PASS",
+      "summary": "No diff output; real process/state ledgers were not modified."
+    },
+    {
+      "command": "git diff -- process/quant-lab docs delivery",
+      "id": "VP-S04-08",
+      "result": "PASS_WITH_WARNING",
+      "summary": "No process/quant-lab or docs diff; existing delivery/rules/AGENT-SKILL-CONTRACT.md diff is outside S04 CP7 scope."
+    },
+    {
+      "command": "git diff --check -- meta_flow/state/ledger_compaction.py meta_flow/state/event_ledger.py meta_flow/cli.py meta_flow/state/current.py tests/test_cr037_ledger_compaction.py process/policies/LEDGER-RETENTION.yaml",
+      "id": "VP-S04-09",
+      "result": "PASS",
+      "summary": "No whitespace errors."
+    }
+  ],
+  "coverage": [
+    {
+      "id": "COV-S04-01",
+      "result": "PASS",
+      "summary": "CP6 return, evidence index, and result contracts validate."
+    },
+    {
+      "id": "COV-S04-02",
+      "result": "PASS",
+      "summary": "ledger compact and state compact are separate CLI surfaces; state compact remains state render/check only."
+    },
+    {
+      "id": "COV-S04-03",
+      "result": "PASS",
+      "summary": "ledger compact dry-run default and no-write behavior are covered by CLI help and pytest."
+    },
+    {
+      "id": "COV-S04-04",
+      "result": "PASS",
+      "summary": "apply archive/index/backup/marker behavior is verified only in pytest tmp_path fixtures; real ledgers are unchanged."
+    },
+    {
+      "id": "COV-S04-05",
+      "result": "PASS",
+      "summary": "retention defaults are window_days=90, keep_latest_n_events=500, keep_latest_n_cr=20."
+    },
+    {
+      "id": "COV-S04-06",
+      "result": "PASS",
+      "summary": "archive summary/index include hash/range/count/refs/restore hints and do not copy the long ledger message body in fixture coverage."
+    },
+    {
+      "id": "COV-S04-07",
+      "result": "PASS",
+      "summary": "event checker accepts ledger_compacted marker in checkpoint ledger validation."
+    },
+    {
+      "id": "COV-S04-08",
+      "result": "PASS",
+      "summary": "path guard rejects process/quant-lab and outside-project ledger paths."
+    }
+  ],
+  "cr_id": "CR-037",
+  "design_delta_ref": "",
+  "return_ref": "process/returns/CR037-S04.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "No additional state/result/registry mechanism found in S04 verification; carry inherited CR037 risk to CP8."
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "No Feature/capability registry changes in S04; carry inherited CR037 risk to CP8."
+    },
+    {
+      "id": "R-CR037-REAL-LEDGER-APPLY-NOT-RUN",
+      "level": "LOW",
+      "mitigation": "Real apply was not authorized and not executed; apply coverage is fixture-only."
+    },
+    {
+      "id": "R-CR037-FORBIDDEN-DIFF-ATTRIBUTION",
+      "level": "LOW",
+      "mitigation": "Existing delivery/rules diff is outside S04 CP7 touched files."
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR037-S04",
+  "tests": [
+    {
+      "id": "target-tests",
+      "result": "PASS",
+      "summary": "tests/test_cr037_ledger_compaction.py passed: 6 tests."
+    }
+  ],
+  "waivers": []
+}

@@ -1,0 +1,202 @@
+{
+  "artifacts": [
+    {
+      "kind": "story_return_packet",
+      "path": "process/returns/CR037-S02.CP7.return.json"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.summary.md"
+    }
+  ],
+  "boundary_check": {
+    "allowed_writes": [
+      "process/returns/CR037-S02.CP7.return.json",
+      "process/evidence/CR037-S02.CP7.index.json",
+      "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json",
+      "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.summary.md"
+    ],
+    "forbidden_path_diff": "PASS: git diff -- process/quant-lab delivery docs produced no output.",
+    "result": "PASS"
+  },
+  "changed_files": [
+    {
+      "path": "process/returns/CR037-S02.CP7.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S02.CP7.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json",
+      "role": "cp7_result"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.summary.md",
+      "role": "cp7_summary"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S02.CP6.work-packet.json --return process/returns/CR037-S02.CP6.return.json --project-root .",
+      "expected": "PASS; known symlink expected_return_packet warning is non-blocking if path resolves to the same process artifact.",
+      "id": "VP-S02-01",
+      "result": "PASS_WITH_WARNING",
+      "summary": "Exit code 0. Story Return Packet Check: OK. Warning: return path differs from expected_return_packet: expected process/returns/CR037-S02.CP6.return.json."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S02.CP6.index.json --project-root .",
+      "expected": "PASS",
+      "id": "VP-S02-02",
+      "result": "PASS",
+      "summary": "Evidence Index Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S02-CODING-DONE.result.json --project-root .",
+      "expected": "PASS",
+      "id": "VP-S02-03",
+      "result": "PASS",
+      "summary": "CP Result Check: OK."
+    },
+    {
+      "actual_command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "expected": "PASS; includes update_current_state and lifecycle convergence tests.",
+      "id": "VP-S02-04",
+      "result": "PASS",
+      "summary": "28 passed, 7 subtests passed in 0.10s."
+    },
+    {
+      "actual_command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_context_pack.py tests/test_story_context_contract.py tests/test_workspace_routing.py",
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_context_pack.py tests/test_story_context_contract.py tests/test_workspace_routing.py",
+      "expected": "PASS",
+      "id": "VP-S02-05",
+      "result": "PASS",
+      "summary": "18 passed in 0.09s."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root . --mode enforce",
+      "expected": "PASS",
+      "id": "VP-S02-06",
+      "result": "PASS",
+      "summary": "State v2 Check: OK."
+    },
+    {
+      "command": "git diff -- process/quant-lab delivery docs",
+      "expected": "No output for S02 implementation scope.",
+      "id": "VP-S02-07",
+      "result": "PASS",
+      "summary": "No output."
+    },
+    {
+      "command": "git diff --check",
+      "expected": "PASS",
+      "id": "VP-S02-08",
+      "result": "PASS",
+      "summary": "No output."
+    },
+    {
+      "command": "rg -n \"STATE_CURRENT_REL|STATE\\.current\\.json|write_text|open\\(|replace\\(|update_current_state\" meta_flow/workflow/cr_lifecycle.py meta_flow/state/current.py tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "id": "QA-S02-STATIC-01",
+      "result": "PASS",
+      "summary": "_update_current_active_change() calls current.update_current_state(); remaining cr_lifecycle STATE.current.json references are check/read or unrelated CR artifact writes."
+    },
+    {
+      "command": "rg -n \"hot|warm|cold|roadmap_impact|PROJECT-LEDGER|capability namespace|state/context/result/ledger/registry|publish|live|trading|credential|secret|token|cookie|private_key|private-key|rm -rf|sudo|curl|wget\" meta_flow/state/current.py meta_flow/workflow/cr_lifecycle.py tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "id": "QA-S02-STATIC-02",
+      "result": "PASS",
+      "summary": "Matches are authorization-boundary strings or secret-like negative tests; no credential read, runtime, production write, publish, live, trading, dangerous shell, or second-mechanism implementation was found."
+    }
+  ],
+  "contract_checks": [
+    {
+      "id": "AC-S02-01",
+      "result": "PASS",
+      "summary": "update_current_state() validates patch keys with validate_current_patch(); tests reject an unknown patch key and assert the existing state file text is unchanged."
+    },
+    {
+      "id": "AC-S02-02",
+      "result": "PASS",
+      "summary": "_deep_merge_current_state() recursively merges dict values. Tests verify next_action dict merge preserves existing keys while replacing patched nested keys."
+    },
+    {
+      "id": "AC-S02-03",
+      "result": "PASS",
+      "summary": "Non-dict values replace the field. Tests verify source_refs list replacement and active_context_ref null replacement without delete semantics."
+    },
+    {
+      "id": "AC-S02-04",
+      "result": "PASS",
+      "summary": "update_current_state() validates the full candidate payload before _write_current_state_file(); budget-failure test proves no write occurs."
+    },
+    {
+      "id": "AC-S02-05",
+      "result": "PASS",
+      "summary": "Missing process/state/STATE.current.json raises FileNotFoundError before any directory or file creation; test asserts the state file does not exist afterward."
+    },
+    {
+      "id": "AC-S02-06",
+      "result": "PASS",
+      "summary": "cr_lifecycle._update_current_active_change() calls current.update_current_state() with active_change, active_context_ref, current_phase, next_action, and updated_at; test wraps the API and asserts one call plus persistence."
+    },
+    {
+      "id": "AC-S02-07",
+      "result": "PASS",
+      "summary": "Implementation remains on the existing meta_flow/state/current.py current-state v2 path and does not add a second state/context/result/ledger/registry mechanism."
+    }
+  ],
+  "coverage": {
+    "acceptance_covered": 6,
+    "acceptance_total": 6,
+    "docs_quality_outputs": "N/A: user allowed only CP7 return/evidence/result/summary writes.",
+    "validation_mode": "mixed"
+  },
+  "cr_id": "CR-037",
+  "design_delta_ref": "",
+  "read_expansion_refs": [],
+  "return_ref": "process/returns/CR037-S02.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "Carry to S03/S05. S02 itself verified no second mechanism in the controlled writer API and CR lifecycle active-change path.",
+      "owner": "meta-qa",
+      "routing": "carry_to_CR037-S03_CR037-S05_CP6_CP7",
+      "status": "open-for-downstream"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "Carry to S03/S05. S02 itself changed no registry or design-reference files.",
+      "owner": "meta-qa",
+      "routing": "carry_to_CR037-S03_CR037-S05_CP6_CP7",
+      "status": "open-for-downstream"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR037-S02",
+  "tests": [
+    {
+      "id": "target-unit-tests",
+      "result": "PASS",
+      "summary": "28 passed, 7 subtests passed."
+    },
+    {
+      "id": "adjacent-regression",
+      "result": "PASS",
+      "summary": "18 passed."
+    },
+    {
+      "id": "state-enforce",
+      "result": "PASS",
+      "summary": "State v2 Check: OK."
+    }
+  ],
+  "waivers": []
+}

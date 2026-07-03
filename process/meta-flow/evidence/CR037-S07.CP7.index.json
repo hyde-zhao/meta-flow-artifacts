@@ -1,0 +1,128 @@
+{
+  "artifacts": [
+    {
+      "kind": "story_return_packet",
+      "path": "process/returns/CR037-S07.CP7.return.json"
+    },
+    {
+      "kind": "evidence_index",
+      "path": "process/evidence/CR037-S07.CP7.index.json"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP7-CR037-S07-VERIFICATION-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP7-CR037-S07-VERIFICATION-DONE.result.summary.md"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "process/handoffs/CR037-S07-CP7-VERIFICATION-HANDOFF.md",
+      "role": "handoff"
+    },
+    {
+      "path": "process/returns/CR037-S07.CP7.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S07.CP7.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S07-VERIFICATION-DONE.result.json",
+      "role": "cp7_result"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S07-VERIFICATION-DONE.result.summary.md",
+      "role": "cp7_summary"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_feature_registry.py",
+      "id": "VP-S07-01",
+      "result": "PASS",
+      "summary": "15 passed in 0.04s."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow feature --help",
+      "id": "VP-S07-02",
+      "result": "PASS",
+      "summary": "Feature check and resolve commands are visible in help."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root . --mode enforce",
+      "id": "VP-S07-03",
+      "result": "PASS",
+      "summary": "State v2 Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S07-CODING-DONE.result.json --project-root .",
+      "id": "VP-S07-04",
+      "result": "PASS",
+      "summary": "CP Result Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S07.CP6.work-packet.json --return process/returns/CR037-S07.CP6.return.json --project-root .",
+      "id": "VP-S07-05",
+      "result": "PASS_WITH_WARNING",
+      "summary": "Story Return Packet Check: OK; warning is limited to symlink-resolved expected_return_packet text."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S07.CP6.index.json --project-root .",
+      "id": "VP-S07-06",
+      "result": "PASS",
+      "summary": "Evidence Index Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow context check-story-packet --packet process/context/stories/CR037-S07.CP7.verify-packet.json --project-root .",
+      "id": "VP-S07-07",
+      "result": "PASS",
+      "summary": "Story Context Packet Check: OK."
+    },
+    {
+      "command": "git diff -- process/quant-lab docs",
+      "id": "VP-S07-08",
+      "result": "PASS",
+      "summary": "No output; no process/quant-lab or docs diff."
+    },
+    {
+      "command": "git diff --check -- meta_flow/design/feature_registry.py meta_flow/cli.py tests/test_feature_registry.py",
+      "id": "VP-S07-09",
+      "result": "PASS",
+      "summary": "No whitespace errors."
+    }
+  ],
+  "cr_id": "CR-037",
+  "design_delta_ref": "",
+  "return_ref": "process/returns/CR037-S07.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "S07 extends the existing feature registry path and does not introduce a parallel registry namespace."
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "S07 reduces drift through resolver/checker contracts; downstream S08/S09/S10/S12/S13 must verify they consume resolver results."
+    },
+    {
+      "id": "R-CR037-YAML-SUBSET",
+      "level": "LOW",
+      "mitigation": "S07 keeps the existing JSON-compatible YAML approach; richer YAML remains a future parser concern."
+    },
+    {
+      "id": "R-CR037-QA-SUBAGENT-NO-OUTPUT",
+      "level": "MEDIUM",
+      "mitigation": "User authorized Host inline-fallback for S07 CP7; dispatch ledger records the fallback and S07+ process artifacts remain Host-owned."
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR037-S07",
+  "tests": [],
+  "waivers": []
+}

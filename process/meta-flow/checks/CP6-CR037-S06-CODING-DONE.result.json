@@ -1,0 +1,170 @@
+{
+  "blockers": [],
+  "checked_at": "2026-07-03T15:30:00+08:00",
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR037-S06-CODING-DONE",
+  "context_ref": "process/context/stories/CR037-S06.CP6.work-packet.json",
+  "cp_result_ref": "process/checks/CP6-CR037-S06-CODING-DONE.result.json",
+  "cr_id": "CR-037",
+  "decision": "PASS",
+  "dispatch_refs": [
+    "D-CR037-META-DEV-CP6-S06"
+  ],
+  "evidence_ref": "process/evidence/CR037-S06.CP6.index.json",
+  "items": [
+    {
+      "category": "entry",
+      "evidence_refs": [
+        "process/context/stories/CR037-S06.CP6.work-packet.json",
+        "process/handoffs/CR037-S06-CP6-IMPLEMENTATION-HANDOFF.md",
+        "process/checks/CP7-CR037-S05-VERIFICATION-DONE.result.json"
+      ],
+      "id": "CP6-S06-01",
+      "name": "S06 CP6 work packet, handoff, and S05 dependency are consumable",
+      "notes": "S05 is PASS_WITH_RISK and S06 is the active CP6 story.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "dispatch",
+      "evidence_refs": [
+        "process/state/AGENT-DISPATCH-LEDGER.ndjson",
+        "process/returns/CR037-S06.CP6.return.json#authz_boundary"
+      ],
+      "id": "CP6-S06-02",
+      "name": "Child dev implementation and host inline-fallback artifact completion are explicit",
+      "notes": "Child dev wrote implementation files and tests but missed process artifacts. User-approved fallback pattern allowed host-orchestrator to generate CP6 evidence from verified implementation state.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "meta_flow/project/scale.py",
+        "process/project/PROJECT-SCALE.yaml",
+        "process/evidence/CR037-S06.CP6.index.json#commands.VP-S06-01"
+      ],
+      "id": "CP6-S06-03",
+      "name": "PROJECT-SCALE schema and gate profile bias recommendation are implemented",
+      "notes": "Scale enum, gate_profile_bias recommendation mode, required not_authorized boundaries, and unsafe authorization semantic rejection are covered.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "meta_flow/project/roadmap.py",
+        "process/project/ROADMAP.yaml",
+        "process/project/MILESTONES.yaml",
+        "process/evidence/CR037-S06.CP6.index.json#commands.VP-S06-01"
+      ],
+      "id": "CP6-S06-04",
+      "name": "ROADMAP and MILESTONES baseline schemas and cross-ref validation are implemented",
+      "notes": "Status enums, duplicate IDs, broken refs, and cross-ref mismatches are covered by tests.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "contract",
+      "evidence_refs": [
+        "meta_flow/project/state.py",
+        "process/project/PROJECT.current.json",
+        "process/evidence/CR037-S06.CP6.index.json#commands.VP-S06-02"
+      ],
+      "id": "CP6-S06-05",
+      "name": "PROJECT.current remains refs-only and project check validates all project objects",
+      "notes": "PROJECT.current links scale_ref, roadmap_ref, and milestones_ref without embedding details; project check passes.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "process/evidence/CR037-S06.CP6.index.json#commands.VP-S06-01",
+        "tests/test_cr037_project_scale_roadmap.py"
+      ],
+      "id": "CP6-S06-06",
+      "name": "Target tests and regressions pass",
+      "notes": "49 tests and 19 subtests passed across S06, S05, state, and lifecycle regressions.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "boundary",
+      "evidence_refs": [
+        "process/evidence/CR037-S06.CP6.index.json#commands.VP-S06-04",
+        "process/evidence/CR037-S06.CP6.index.json#commands.VP-S06-05"
+      ],
+      "id": "CP6-S06-07",
+      "name": "Forbidden writes and formatting boundaries are respected",
+      "notes": "No GATE-PROFILES, process/quant-lab, or docs diff is present; diff --check passed.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "risk",
+      "evidence_refs": [
+        "process/evidence/CR037-S06.CP6.index.json#risks"
+      ],
+      "id": "CP6-S06-08",
+      "name": "Residual process-artifact fallback and YAML-subset risks are explicit",
+      "notes": "S06 can enter CP7 with risk because implementation tests pass and artifacts are now complete; fallback and YAML subset risks carry forward.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "story-verification",
+  "read_expansion_refs": [],
+  "return_packet_ref": "process/returns/CR037-S06.CP6.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "owner": "host-orchestrator",
+      "routing": "carry_to_CP8",
+      "status": "open-for-downstream"
+    },
+    {
+      "id": "R-CR037-QA-SUBAGENT-NO-OUTPUT",
+      "level": "MEDIUM",
+      "owner": "host-orchestrator",
+      "routing": "use_host_owned_process_artifacts_for_S07_plus",
+      "status": "accepted-by-user-for-inline-fallback"
+    },
+    {
+      "id": "R-CR037-YAML-SUBSET",
+      "level": "LOW",
+      "owner": "host-orchestrator",
+      "routing": "carry_to_CP8_or_future_parser_cleanup",
+      "status": "accepted-for-controlled-project-baseline"
+    }
+  ],
+  "schema_version": 1,
+  "story_id": "CR037-S06",
+  "summary": "PASS: CR037-S06 CP6 implemented project scale, roadmap, and milestone baseline objects. Target tests, project check, state enforce, forbidden diff, and diff-check pass. CP6 process artifacts were completed by host-orchestrator inline-fallback because the child dev agent produced implementation files but did not write process artifacts before interruption; residual risks are carried in the risks section.",
+  "waivers": []
+}

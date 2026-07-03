@@ -1,0 +1,162 @@
+{
+  "artifacts": [
+    {
+      "kind": "evidence_index",
+      "path": "process/evidence/CR037-S02.CP7.index.json"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.summary.md"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "notes": "CP7 wrote only the authorized return, evidence index, CP7 result, and summary files. No implementation code, tests, process/quant-lab, delivery, docs, credential-like paths, runtime, production write, publish, live, real external call, trading, or quant-lab release repository write was performed.",
+    "unexpected_imports": []
+  },
+  "contract_changes": {
+    "design_delta_ref": "",
+    "design_delta_required": false,
+    "notes": "CP7 only verified the existing S02 implementation. No long-lived Feature DESIGN, ADR, HLD, registry, ledger, result, context, or state mechanism was added or changed."
+  },
+  "cr_id": "CR-037",
+  "evidence_refs": [
+    "process/evidence/CR037-S02.CP7.index.json",
+    "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json",
+    "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.summary.md"
+  ],
+  "next_route": "CR037-S03-and-CR037-S05",
+  "packet_type": "story_return_packet",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "S02 verified that current-state writes remain in meta_flow/state/current.py and cr_lifecycle active-change updates call current.update_current_state(). Carry to S03/S05 to prevent follow-on stories from introducing parallel state/context/result/ledger/registry mechanisms.",
+      "owner": "meta-qa",
+      "routing": "carry_to_CR037-S03_CR037-S05_CP6_CP7",
+      "status": "open-for-downstream"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "S02 verified no registry or design-reference changes. Carry to S03/S05 because downstream consumers of the writer API must keep canonical refs aligned with existing CR037 governance.",
+      "owner": "meta-qa",
+      "routing": "carry_to_CR037-S03_CR037-S05_CP6_CP7",
+      "status": "open-for-downstream"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "status": "verified_with_risk",
+  "story_id": "CR037-S02",
+  "summary": "PASS_WITH_RISK: CR037-S02 CP7 verified the controlled update_current_state() writer contract and CR lifecycle active-change refactor. CP6 return/evidence/result validate, target and adjacent tests pass, state enforce passes, forbidden-path diff and diff --check pass, and the known symlink return path warning is non-blocking. S00/S01 second-mechanism and registry-drift risks remain open for downstream S03/S05.",
+  "touched_files": [
+    {
+      "path": "process/returns/CR037-S02.CP7.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S02.CP7.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json",
+      "role": "cp7_result"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.summary.md",
+      "role": "cp7_summary"
+    }
+  ],
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S02.CP6.work-packet.json --return process/returns/CR037-S02.CP6.return.json --project-root .",
+        "expected": "PASS; known symlink expected_return_packet warning is non-blocking if path resolves to the same process artifact.",
+        "id": "VP-S02-01",
+        "result": "PASS_WITH_WARNING",
+        "summary": "Exit code 0. Story Return Packet Check: OK. Warning was limited to return path text differing from expected_return_packet."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S02.CP6.index.json --project-root .",
+        "expected": "PASS",
+        "id": "VP-S02-02",
+        "result": "PASS",
+        "summary": "Evidence Index Check: OK."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S02-CODING-DONE.result.json --project-root .",
+        "expected": "PASS",
+        "id": "VP-S02-03",
+        "result": "PASS",
+        "summary": "CP Result Check: OK."
+      },
+      {
+        "actual_command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_state_v2.py tests/test_cr_lifecycle.py",
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_state_v2.py tests/test_cr_lifecycle.py",
+        "expected": "PASS; includes update_current_state and lifecycle convergence tests.",
+        "id": "VP-S02-04",
+        "result": "PASS",
+        "summary": "28 passed, 7 subtests passed. PYTEST_ADDOPTS disabled pytest cache to honor CP7 write restrictions."
+      },
+      {
+        "actual_command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_context_pack.py tests/test_story_context_contract.py tests/test_workspace_routing.py",
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_context_pack.py tests/test_story_context_contract.py tests/test_workspace_routing.py",
+        "expected": "PASS",
+        "id": "VP-S02-05",
+        "result": "PASS",
+        "summary": "18 passed. PYTEST_ADDOPTS disabled pytest cache to honor CP7 write restrictions."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root . --mode enforce",
+        "expected": "PASS",
+        "id": "VP-S02-06",
+        "result": "PASS",
+        "summary": "State v2 Check: OK."
+      },
+      {
+        "command": "git diff -- process/quant-lab delivery docs",
+        "expected": "No output for S02 implementation scope.",
+        "id": "VP-S02-07",
+        "result": "PASS",
+        "summary": "No output."
+      },
+      {
+        "command": "git diff --check",
+        "expected": "PASS",
+        "id": "VP-S02-08",
+        "result": "PASS",
+        "summary": "No output."
+      }
+    ],
+    "decision": "PASS_WITH_RISK",
+    "quality_review": {
+      "findings": [],
+      "notes": "Scoped quality review found no rework blocker. docs/quality outputs are N/A because the user restricted CP7 writes to return/evidence/result/summary files.",
+      "result": "PASS"
+    },
+    "tests": [
+      {
+        "id": "target-unit-tests",
+        "result": "PASS",
+        "summary": "tests/test_state_v2.py and tests/test_cr_lifecycle.py passed with 28 tests and 7 subtests."
+      },
+      {
+        "id": "adjacent-regression",
+        "result": "PASS",
+        "summary": "Context pack, Story context contract, and workspace routing tests passed with 18 tests."
+      },
+      {
+        "id": "state-enforce",
+        "result": "PASS",
+        "summary": "Current project STATE.current.json passes enforce validation."
+      }
+    ]
+  },
+  "waivers": []
+}

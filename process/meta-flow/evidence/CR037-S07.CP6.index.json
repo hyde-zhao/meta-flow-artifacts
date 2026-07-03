@@ -1,0 +1,98 @@
+{
+  "artifacts": [
+    {
+      "kind": "implementation_summary",
+      "path": "process/stories/STORY-CR037-S07-feature-capability-registry-and-resolver-IMPLEMENTATION.md"
+    },
+    {
+      "kind": "story_return_packet",
+      "path": "process/returns/CR037-S07.CP6.return.json"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP6-CR037-S07-CODING-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP6-CR037-S07-CODING-DONE.result.summary.md"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "meta_flow/design/feature_registry.py",
+      "role": "feature_capability_registry_checker_and_resolver"
+    },
+    {
+      "path": "tests/test_feature_registry.py",
+      "role": "registry_resolver_contract_tests"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_feature_registry.py",
+      "id": "VP-S07-01",
+      "result": "PASS",
+      "summary": "15 passed in 0.05s."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow feature --help",
+      "id": "VP-S07-02",
+      "result": "PASS",
+      "summary": "Feature check and resolve commands are visible in help."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root . --mode enforce",
+      "id": "VP-S07-03",
+      "result": "PASS",
+      "summary": "State v2 Check: OK."
+    },
+    {
+      "command": "git diff --check -- meta_flow/design/feature_registry.py meta_flow/cli.py tests/test_feature_registry.py",
+      "id": "VP-S07-04",
+      "result": "PASS",
+      "summary": "No whitespace errors."
+    },
+    {
+      "command": "git diff -- process/returns process/evidence process/checks process/state process/handoffs",
+      "id": "VP-S07-05",
+      "result": "PASS",
+      "summary": "Pre-artifact check produced no output, confirming the child dev agent did not write CP6 process artifacts."
+    },
+    {
+      "command": "git diff -- process/quant-lab docs",
+      "id": "VP-S07-06",
+      "result": "PASS",
+      "summary": "No output; no process/quant-lab or docs diff from S07."
+    }
+  ],
+  "cr_id": "CR-037",
+  "design_delta_ref": "",
+  "return_ref": "process/returns/CR037-S07.CP6.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "S07 extends the existing feature registry implementation and does not create a parallel capability namespace."
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "Resolver and checker return stable codes and block unresolved/free-string refs; downstream stories must consume resolver results."
+    },
+    {
+      "id": "R-CR037-YAML-SUBSET",
+      "level": "LOW",
+      "mitigation": "S07 keeps the existing JSON-compatible YAML approach for registry fixtures and files."
+    },
+    {
+      "id": "R-CR037-QA-SUBAGENT-NO-OUTPUT",
+      "level": "MEDIUM",
+      "mitigation": "CP6 process artifacts are Host-owned under the S07+ execution strategy."
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR037-S07",
+  "tests": [],
+  "waivers": []
+}

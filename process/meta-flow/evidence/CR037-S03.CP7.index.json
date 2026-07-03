@@ -1,0 +1,232 @@
+{
+  "artifacts": [
+    {
+      "kind": "story_return_packet",
+      "path": "process/returns/CR037-S03.CP7.return.json"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.summary.md"
+    }
+  ],
+  "boundary_check": {
+    "allowed_writes": [
+      "process/returns/CR037-S03.CP7.return.json",
+      "process/evidence/CR037-S03.CP7.index.json",
+      "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.json",
+      "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.summary.md"
+    ],
+    "forbidden_path_diff": "PASS: git diff -- process/quant-lab docs produced no output.",
+    "pre_existing_dirty_worktree": "Observed before CP7 outputs: delivery/rules/AGENT-SKILL-CONTRACT.md, meta_flow/cli.py, meta_flow/state/current.py, meta_flow/state/event_ledger.py, meta_flow/workflow/cr_lifecycle.py, tests/test_cr_lifecycle.py, tests/test_state_v2.py, meta_flow/state/ledger_compaction.py, tests/test_cr037_ledger_compaction.py.",
+    "result": "PASS_SCOPED"
+  },
+  "changed_files": [
+    {
+      "path": "process/returns/CR037-S03.CP7.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S03.CP7.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.json",
+      "role": "cp7_result"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.summary.md",
+      "role": "cp7_summary"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S03.CP6.work-packet.json --return process/returns/CR037-S03.CP6.return.json --project-root .",
+      "expected": "PASS; known symlink expected_return_packet warning is non-blocking if command exits 0.",
+      "id": "VP-S03-01",
+      "result": "PASS_WITH_WARNING",
+      "summary": "Exit code 0. Story Return Packet Check: OK. Warning: return path differs from expected_return_packet: expected process/returns/CR037-S03.CP6.return.json."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S03.CP6.index.json --project-root .",
+      "expected": "PASS",
+      "id": "VP-S03-02",
+      "result": "PASS",
+      "summary": "Evidence Index Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S03-CODING-DONE.result.json --project-root .",
+      "expected": "PASS",
+      "id": "VP-S03-03",
+      "result": "PASS",
+      "summary": "CP Result Check: OK."
+    },
+    {
+      "command": "rg -n \"STATE.current.json|update_current_state|allowlist|field budget|audit|enforce|deep-merge|null|failure no-write|PROJECT.current|重型状态|直接编辑|受控\" delivery/rules/AGENT-SKILL-CONTRACT.md .agents/skills/state-router/SKILL.md",
+      "expected": "Relevant contract wording is present.",
+      "id": "VP-S03-04",
+      "result": "PASS",
+      "summary": "Target contract wording was found in both delivery/rules/AGENT-SKILL-CONTRACT.md and .agents/skills/state-router/SKILL.md."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_delivery_guardrails.py",
+      "expected": "PASS",
+      "id": "VP-S03-05",
+      "result": "PASS_AFTER_HOST_REVALIDATION",
+      "summary": "Initial run failed because generated meta_flow/** Python cache existed. Host-orchestrator cleaned generated cache files and reran the guardrail successfully."
+    },
+    {
+      "command": "git diff -- process/quant-lab docs",
+      "expected": "No output.",
+      "id": "VP-S03-06",
+      "result": "PASS",
+      "summary": "No output."
+    },
+    {
+      "command": "git diff --check -- delivery/rules/AGENT-SKILL-CONTRACT.md .agents/skills/state-router/SKILL.md AGENTS.md delivery/rules/AGENTS.md",
+      "expected": "PASS",
+      "id": "VP-S03-07",
+      "result": "PASS",
+      "summary": "No output."
+    },
+    {
+      "command": "find meta_flow -type d -name __pycache__ -print",
+      "id": "QA-S03-CACHE-01",
+      "result": "INFO",
+      "summary": "Found existing cache directories under meta_flow/workflow, meta_flow/checks, meta_flow, meta_flow/policies, meta_flow/context_pack, meta_flow/design, meta_flow/state, and meta_flow/workspace."
+    },
+    {
+      "command": "find meta_flow -type f -name '*.pyc' -print",
+      "id": "QA-S03-CACHE-02",
+      "result": "INFO",
+      "summary": "Found existing .pyc files under meta_flow/**/__pycache__, matching the guardrail failure."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S03.CP7.verify-packet.json --return process/returns/CR037-S03.CP7.return.json --project-root .",
+      "id": "QA-S03-OUTPUT-01",
+      "result": "PASS_WITH_WARNING",
+      "summary": "Generated CP7 return packet validates. Warning is the known path text warning for expected_return_packet."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S03.CP7.index.json --project-root .",
+      "id": "QA-S03-OUTPUT-02",
+      "result": "PASS",
+      "summary": "Generated CP7 evidence index validates."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP7-CR037-S03-VERIFICATION-DONE.result.json --project-root .",
+      "id": "QA-S03-OUTPUT-03",
+      "result": "PASS",
+      "summary": "Generated CP7 result JSON validates."
+    }
+  ],
+  "contract_checks": [
+    {
+      "id": "AC-S03-01",
+      "result": "PASS",
+      "summary": "CP6 return, evidence index, and CP6 result validate and match the S03 work packet."
+    },
+    {
+      "id": "AC-S03-02",
+      "result": "PASS",
+      "summary": "AGENT-SKILL-CONTRACT forbids direct edits of unknown, non-allowlist, or over-budget STATE.current.json fields."
+    },
+    {
+      "id": "AC-S03-03",
+      "result": "PASS",
+      "summary": "state-router documents legal current-state update entrypoints as current.update_current_state() or host-orchestrator/meta-flow equivalent controlled commands."
+    },
+    {
+      "id": "AC-S03-04",
+      "result": "PASS",
+      "summary": "Contract text preserves S01/S02 semantics: allowlist, field budget, audit/enforce, dict deep-merge, null replacement-not-deletion, and failure no-write."
+    },
+    {
+      "id": "AC-S03-05",
+      "result": "PASS",
+      "summary": "Heavy state destinations are documented as existing STATE.md human summaries, ledgers, CP results, context packs, Story return/evidence, PROJECT.current refs, project_state_ref, follow-up tracking, risks, or Design Delta without adding a second mechanism."
+    },
+    {
+      "id": "AC-S03-06",
+      "result": "PASS_AFTER_HOST_REVALIDATION",
+      "summary": "Delivery guardrail initially failed on generated Python cache under meta_flow/**. Host-orchestrator cleaned generated cache files and reran the guardrail successfully."
+    },
+    {
+      "id": "AC-S03-07",
+      "result": "PASS",
+      "summary": "No runtime, production write, publish, live, external call, credential read, or quant-lab release write was performed."
+    }
+  ],
+  "coverage": {
+    "acceptance_covered": 6,
+    "acceptance_failed": 1,
+    "acceptance_total": 7,
+    "docs_quality_outputs": "N/A: user allowed only CP7 return/evidence/result/summary writes.",
+    "validation_mode": "mixed"
+  },
+  "cr_id": "CR-037",
+  "guardrail_blocker": {
+    "id": "R-CR037-GUARDRAIL-CACHE-BLOCKER",
+    "failed_command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_delivery_guardrails.py",
+    "reason": "Generated meta_flow/**/__pycache__ directories and .pyc files existed during the initial QA run.",
+    "required_resolution": "Resolved by host-orchestrator cache cleanup and successful guardrail rerun.",
+    "status": "blocking"
+  },
+  "read_expansion_refs": [],
+  "return_ref": "process/returns/CR037-S03.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-GUARDRAIL-CACHE-BLOCKER",
+      "level": "HIGH",
+      "mitigation": "Host-orchestrator cleaned generated cache files and reran guardrail successfully.",
+      "owner": "host-orchestrator",
+      "routing": "require_user_decision_or_host_cleanup_then_rerun_CP7",
+      "status": "blocking"
+    },
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "S03 contract wording did not introduce a second state/context/result/ledger/registry mechanism.",
+      "owner": "meta-qa",
+      "routing": "retain_in_CP8_risk_context_until_CR037_closure",
+      "status": "mitigated-in-S03"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "S03 contract wording did not introduce new registry or ownership semantics.",
+      "owner": "meta-qa",
+      "routing": "retain_in_CP8_risk_context_until_CR037_closure",
+      "status": "mitigated-in-S03"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR037-S03",
+  "tests": [
+    {
+      "id": "cp6-contract-checks",
+      "result": "PASS",
+      "summary": "CP6 return, evidence index, and CP6 result validate."
+    },
+    {
+      "id": "static-contract-wording",
+      "result": "PASS",
+      "summary": "Required contract wording is present in the two S03 target files."
+    },
+    {
+      "id": "delivery-guardrail",
+      "result": "PASS_AFTER_HOST_REVALIDATION",
+      "summary": "Guardrail initially failed on generated Python cache under meta_flow/**; host-orchestrator cleaned cache files and reran guardrail successfully."
+    },
+    {
+      "id": "boundary-diff",
+      "result": "PASS",
+      "summary": "process/quant-lab and docs diff is empty; scoped diff --check passed."
+    }
+  ],
+  "waivers": []
+}

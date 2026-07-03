@@ -4,11 +4,14 @@ confirmed: true
 confirmed_by: "meta-po-delegated"
 confirmed_at: "2026-04-23T11:47:36+08:00"
 created_at: "2026-04-23T11:37:06+08:00"
-last_updated: "2026-05-15T00:00:00+08:00"
+last_updated: "2026-07-03T00:00:00+08:00"
 change_notes:
   - change_id: CR-004
     date: "2026-05-15"
     summary: "追加 Codex agent 生命周期、最小上下文 handoff、Story Package 确认、安装组件 CLI、平台确认协议和交付出口路由修订 wave；不覆盖 W1-W6 已验证基线。"
+  - change_id: CR-037
+    date: "2026-07-03"
+    summary: "追加 CR037-W0..W5 Story waves；记录 S13 作为 P2 迁移验证切片的长依赖链风险，CP5 已批准；实施期继续跟踪 S13 长依赖链，上游未 verified / dev_gate 未满足时只能 blocked 或缩窄为 inventory/report。"
 waves:
   - wave: W1
     parallel: true
@@ -16,7 +19,7 @@ waves:
       - story_id: UCD-01
         title: use-case-discovery 核心增强
         priority: P0
-        assignee: meta-dev
+        assignee: meta-qa
         depends_on: []
         status: verified
         output_files:
@@ -217,3 +220,147 @@ waves:
           - process/DEVELOPMENT-PLAN.yaml
           - scripts/check_delivery_guardrails.py
           - delivery/agents/meta-qa.md
+  - wave: CR037-W0
+    parallel: false
+    change_id: CR-037
+    stories:
+      - story_id: CR037-S00
+        title: second-system guardrail
+        priority: P0
+        assignee: meta-dev
+        depends_on: []
+        status: verified-with-risk
+        feature_design_refs:
+          - process/docs/design/META-FLOW-PROJECT-GOVERNANCE-HLD.md
+          - process/docs/design/META-FLOW-PROJECT-GOVERNANCE-ARCHITECTURE-DECISION.md
+        lld_policy: technical-note
+  - wave: CR037-W1
+    parallel: false
+    change_id: CR-037
+    stories:
+      - story_id: CR037-S01
+        title: current-state schema and budgets
+        priority: P0
+        assignee: meta-dev
+        depends_on: [CR037-S00]
+        status: verified-with-risk
+        feature_design_refs: [process/docs/features/current-state-enforcement/DESIGN.md]
+        lld_policy: full-lld
+      - story_id: CR037-S02
+        title: controlled update API and writer refactor
+        priority: P0
+        assignee: meta-dev
+        depends_on: [CR037-S01]
+        status: verified-with-risk
+        feature_design_refs: [process/docs/features/current-state-enforcement/DESIGN.md]
+        lld_policy: full-lld
+      - story_id: CR037-S03
+        title: agent contract and guardrail sync
+        priority: P0
+        assignee: meta-dev
+        depends_on: [CR037-S01, CR037-S02]
+        status: verified-with-risk
+        feature_design_refs: [process/docs/features/current-state-enforcement/DESIGN.md]
+        lld_policy: technical-note
+  - wave: CR037-W1A
+    parallel: false
+    change_id: CR-037
+    stories:
+      - story_id: CR037-S04
+        title: ledger compaction policy and CLI
+        priority: P0.5
+        assignee: meta-dev
+        depends_on: [CR037-S01]
+        status: verified-with-risk
+        feature_design_refs: [process/docs/features/ledger-compaction/DESIGN.md]
+        lld_policy: full-lld
+  - wave: CR037-W2
+    parallel: false
+    change_id: CR-037
+    stories:
+      - story_id: CR037-S05
+        title: project scaffold and PROJECT.current
+        priority: P1
+        assignee: meta-dev
+        depends_on: [CR037-S01, CR037-S02]
+        status: verified-with-risk
+        feature_design_refs: [process/docs/features/project-state-governance/DESIGN.md]
+        lld_policy: full-lld
+      - story_id: CR037-S06
+        title: PROJECT-SCALE and roadmap objects
+        priority: P1
+        assignee: meta-dev
+        depends_on: [CR037-S05]
+        status: verified-with-risk
+        feature_design_refs: [process/docs/features/project-state-governance/DESIGN.md]
+        lld_policy: full-lld
+  - wave: CR037-W3
+    parallel: false
+    change_id: CR-037
+    stories:
+      - story_id: CR037-S07
+        title: feature/capability registry and resolver
+        priority: P1
+        assignee: meta-dev
+        depends_on: [CR037-S05]
+        status: verified-with-risk
+        feature_design_refs: [process/docs/features/capability-feature-registry/DESIGN.md]
+        lld_policy: full-lld
+      - story_id: CR037-S08
+        title: impact surface field split and migration report
+        priority: P1
+        assignee: meta-dev
+        depends_on: [CR037-S07]
+        status: dev-ready
+        feature_design_refs: [process/docs/features/impact-surface-normalization/DESIGN.md]
+        lld_policy: full-lld
+  - wave: CR037-W4
+    parallel: false
+    change_id: CR-037
+    stories:
+      - story_id: CR037-S09
+        title: roadmap refresh result schema and checker
+        priority: P1
+        assignee: meta-dev
+        depends_on: [CR037-S06, CR037-S07]
+        status: dev-ready
+        feature_design_refs: [process/docs/features/roadmap-refresh-governance/DESIGN.md]
+        lld_policy: full-lld
+      - story_id: CR037-S10
+        title: process-only cascade and Gate Ledger event
+        priority: P1
+        assignee: meta-dev
+        depends_on: [CR037-S09]
+        status: dev-ready
+        feature_design_refs: [process/docs/features/roadmap-refresh-governance/DESIGN.md]
+        lld_policy: full-lld
+      - story_id: CR037-S11
+        title: FU-RF tracking support
+        priority: P1
+        assignee: meta-dev
+        depends_on: [CR037-S09]
+        status: dev-ready
+        feature_design_refs: [process/docs/features/roadmap-follow-up-tracking/DESIGN.md]
+        lld_policy: technical-note
+      - story_id: CR037-S12
+        title: project stale-check
+        priority: P1
+        assignee: meta-dev
+        depends_on: [CR037-S09, CR037-S11]
+        status: dev-ready
+        feature_design_refs: [process/docs/features/project-stale-check/DESIGN.md]
+        lld_policy: full-lld
+  - wave: CR037-W5
+    parallel: false
+    change_id: CR-037
+    stories:
+      - story_id: CR037-S13
+        title: quant-lab migration dry-run and reports
+        priority: P2
+        assignee: meta-dev
+        depends_on: [CR037-S01, CR037-S05, CR037-S07, CR037-S08, CR037-S09, CR037-S10, CR037-S11, CR037-S12]
+        status: dev-ready
+        feature_design_refs: [process/docs/features/quant-lab-migration-readiness/DESIGN.md]
+        lld_policy: full-lld
+        risk_notes:
+          - "S13 depends on 8 upstream P0/P1 stories. Implementation must keep real migration blocked until upstream stories are verified / dev_gate-ready; if dependencies slip, S13 may narrow to read-only inventory/report only."

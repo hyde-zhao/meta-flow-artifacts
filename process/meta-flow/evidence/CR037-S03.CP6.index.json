@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "index_type": "story_evidence_index",
+  "stage": "CP6",
+  "story_id": "CR037-S03",
+  "cr_id": "CR-037",
+  "created_at": "2026-07-03T10:46:01+08:00",
+  "owner": "meta-dev",
+  "context_ref": "process/context/stories/CR037-S03.CP6.work-packet.json",
+  "return_ref": "process/returns/CR037-S03.CP6.return.json",
+  "return_packet_ref": "process/returns/CR037-S03.CP6.return.json",
+  "implementation_ref": "process/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync-IMPLEMENTATION.md",
+  "cp_result_ref": "process/checks/CP6-CR037-S03-CODING-DONE.result.json",
+  "changed_files": [
+    "delivery/rules/AGENT-SKILL-CONTRACT.md",
+    ".agents/skills/state-router/SKILL.md",
+    "process/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync-IMPLEMENTATION.md",
+    "process/returns/CR037-S03.CP6.return.json",
+    "process/evidence/CR037-S03.CP6.index.json",
+    "process/checks/CP6-CR037-S03-CODING-DONE.result.json",
+    "process/checks/CP6-CR037-S03-CODING-DONE.result.summary.md"
+  ],
+  "contract_evidence": [
+    {
+      "id": "S03-EVID-CONTRACT-01",
+      "artifact_ref": "delivery/rules/AGENT-SKILL-CONTRACT.md#current-state-write-contract",
+      "summary": "Shared contract forbids direct STATE.current.json edits of unknown / non-allowlist / over-budget fields and points to controlled writer semantics."
+    },
+    {
+      "id": "S03-EVID-CONTRACT-02",
+      "artifact_ref": ".agents/skills/state-router/SKILL.md#current-state-更新契约",
+      "summary": "state-router Skill requires current.update_current_state() or equivalent host-orchestrator/meta-flow state controlled command and documents no direct JSON editing."
+    },
+    {
+      "id": "S03-EVID-CONTRACT-03",
+      "artifact_ref": "process/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync-IMPLEMENTATION.md#设计契约映射",
+      "summary": "Implementation evidence maps each Story technical-note contract to the changed artifacts and verification commands."
+    }
+  ],
+  "commands": [
+    {
+      "id": "V-S03-01",
+      "command": "rg -n \"STATE.current.json|update_current_state|unknown|allowlist|heavy state|ledger|PROJECT.current|no direct\" delivery/rules/AGENT-SKILL-CONTRACT.md .agents/skills/state-router/SKILL.md",
+      "status": "PASS",
+      "summary": "Static contract wording check."
+    },
+    {
+      "id": "V-S03-02",
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_delivery_guardrails.py",
+      "status": "FAIL_PREEXISTING_DIRTY_WORKTREE",
+      "summary": "Delivery guardrail failed on pre-existing meta_flow/** __pycache__ files outside S03 write scope."
+    },
+    {
+      "id": "V-S03-03",
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S03.CP6.work-packet.json --return process/returns/CR037-S03.CP6.return.json --project-root .",
+      "status": "PASS_WITH_WARNING",
+      "summary": "Story return contract check exited 0; warning is the known symlink-resolved expected_return_packet path text warning."
+    },
+    {
+      "id": "V-S03-04",
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S03.CP6.index.json --project-root .",
+      "status": "PASS",
+      "summary": "Evidence index contract check."
+    },
+    {
+      "id": "V-S03-05",
+      "command": "git diff -- process/quant-lab meta_flow tests docs",
+      "status": "FAIL_PREEXISTING_DIRTY_WORKTREE",
+      "summary": "Forbidden-path diff shows pre-existing S01/S02/S04 diffs; S03 touched files are limited to allowed paths."
+    },
+    {
+      "id": "V-S03-06",
+      "command": "git diff --check -- delivery/rules/AGENT-SKILL-CONTRACT.md .agents/skills/state-router/SKILL.md AGENTS.md delivery/rules/AGENTS.md",
+      "status": "PASS",
+      "summary": "Whitespace diff check for touched / conditionally synced rule files."
+    },
+    {
+      "id": "V-S03-07",
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S03-CODING-DONE.result.json --project-root .",
+      "status": "PASS",
+      "summary": "CP6 result contract check."
+    }
+  ],
+  "verification_commands": [],
+  "boundary_evidence": {
+    "forbidden_path_writes": [],
+    "authorization_summary": "No runtime, production write, publish, live, real external call, credential read, or quant-lab release write was performed."
+  },
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "status": "carried-forward",
+      "summary": "CP7 should verify S03 did not document a second state/context/result/ledger/registry mechanism."
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "status": "carried-forward",
+      "summary": "CP7 should verify S03 did not introduce new registry or ownership semantics."
+    }
+  ],
+  "risk_refs": [
+    "R-CR037-SECOND-MECHANISM",
+    "R-CR037-REGISTRY-DRIFT"
+  ],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "notes": "Command statuses are finalized in CP6 result after validation commands run."
+}

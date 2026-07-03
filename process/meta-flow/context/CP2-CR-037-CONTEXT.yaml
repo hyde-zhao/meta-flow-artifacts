@@ -1,0 +1,188 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR-037-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-product-baseline"
+status: "ready"
+created_at: "2026-07-02T17:27:19+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-037"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 14
+  max_summary_items: 24
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "Agent 必须先读取本 capsule，并且只读取 allowed_reads / must_read；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+
+allowed_reads:
+  - path: "process/changes/CR-037.md"
+    reason: "CR-037 范围、状态、批准焦点和不授权边界"
+    required: true
+  - path: "process/changes/CR-036.md"
+    reason: "CR-036 paused / blocked / unfinished 边界"
+    required: true
+  - path: "process/changes/summaries/CR-037.summary.json"
+    reason: "CP2 brief 输入摘要"
+    required: true
+  - path: "process/docs/product/USE-CASES.md"
+    reason: "CR-037 用户场景基线"
+    required: true
+  - path: "process/docs/product/REQUIREMENTS.md"
+    reason: "CR-037 需求基线"
+    required: true
+  - path: "process/docs/product/SCENARIOS.yaml"
+    reason: "工程验证场景"
+    required: true
+  - path: "process/docs/product/TEST-MATRIX.md"
+    reason: "场景 / 需求 / Story / 测试追溯矩阵"
+    required: true
+  - path: "process/docs/product/STORY-MAP.md"
+    reason: "用户故事地图与发布切片"
+    required: true
+  - path: "process/docs/product/MVP-SCOPE.md"
+    reason: "In Scope / Out of Scope / Deferred 范围基线"
+    required: true
+  - path: "process/discussions/CP2-CR-037-SCENARIO-DISCUSSION-LOG.md"
+    reason: "Scenario Gray Areas 和用户可见确认记录"
+    required: true
+  - path: "process/checks/CP2-CR-037-DISCUSSION-CHECKPOINT.json"
+    reason: "CP2 讨论恢复点"
+    required: true
+  - path: "process/checks/CP2-CR-037-REQUIREMENTS-BASELINE.result.json"
+    reason: "CP2 自动预检机器真相源"
+    required: false
+  - path: "process/checkpoints/CP2-CR-037-REQUIREMENTS-BASELINE.md"
+    reason: "CP2 人工审查稿"
+    required: false
+  - path: "process/state/AGENT-DISPATCH-LEDGER.ndjson"
+    reason: "meta-pm baseline 与 CP2 只读复核调度证据"
+    required: false
+
+must_read:
+  - path: "process/changes/CR-037.md"
+    reason: "确认 CR-037 CP2 审批焦点和不授权边界"
+    required: true
+  - path: "process/docs/product/USE-CASES.md"
+    reason: "确认 UC-PG-001..007 场景基线"
+    required: true
+  - path: "process/docs/product/REQUIREMENTS.md"
+    reason: "确认 REQ-PG-* 需求基线"
+    required: true
+  - path: "process/docs/product/SCENARIOS.yaml"
+    reason: "确认 TC-PG-* 工程验证场景"
+    required: true
+  - path: "process/docs/product/TEST-MATRIX.md"
+    reason: "确认追溯矩阵"
+    required: true
+  - path: "process/docs/product/STORY-MAP.md"
+    reason: "确认 ST-PG-* 和 release slice 顺序"
+    required: true
+  - path: "process/docs/product/MVP-SCOPE.md"
+    reason: "确认 scope / out of scope / deferred"
+    required: true
+
+read_if_needed:
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-BLUEPRINT.md"
+    trigger: "审查 CP2 approve 后进入 CP3 的设计输入时读取"
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-HLD.md"
+    trigger: "审查 CP3 待确认设计基线时读取"
+  - path: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-FEATURE-DESIGN-MATRIX.md"
+    trigger: "审查 CP5 前置条件或 per-feature 设计证据状态时读取"
+  - path: "process/changes/CR-INDEX.json"
+    trigger: "审计 CR-036 / CR-037 状态或冲突检查时读取"
+  - path: "process/checks/CP0-CR-037-BOOTSTRAP.result.json"
+    trigger: "审计 CP0 通过证据时读取"
+  - path: "process/archive/CR-037/evidence-index.json"
+    trigger: "审计完整证据索引时读取"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/quant-lab/**"
+    reason: "quant-lab 迁移属于 P2；CP2 不读取或修改 quant-lab 发布库 / 过程归档内容"
+  - path_or_pattern: "process/archive/**"
+    reason: "归档证据只在人工审计或证据缺失时读取"
+  - path_or_pattern: "process/STATE.md"
+    reason: "legacy 人类摘要，不作为默认机器上下文；仅字段缺失或人工审计时读取"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "不得作为下游默认输入"
+
+key_facts:
+  scope_summary: "CR-037 是本次整改的唯一正式实施 CR；CR-036 只是被用户授权暂停的前置未完成 CR。"
+  active_cr_state:
+    active_change: "CR-037"
+    current_phase: "requirement-clarification"
+    gate_status: "cp2_pending"
+    previous_blocker: "CR-036"
+  accepted_decisions:
+    - "用户已接受八轮收敛后的 CR-037 实施方案和长期可跟踪文档基线。"
+    - "用户已授权暂停未完成的 CR-036 并激活 CR-037。"
+    - "用户已确认 CP2 输入状态语义同步整改通过，可生成 CP2 自动预检和人工审查稿。"
+  active_constraints:
+    - "CP2 只确认产品 / 场景 / 范围基线。"
+    - "CP2 approve 不代表进入实现、CP5、runtime、production write、publish、live 或 trading。"
+    - "CP2 approve 不关闭、恢复或完成 CR-036。"
+    - "不得自动修改 quant-lab 发布库代码、测试、正式设计文档或发布文档。"
+  traceability:
+    use_cases: ["UC-PG-001", "UC-PG-002", "UC-PG-003", "UC-PG-004", "UC-PG-005", "UC-PG-006", "UC-PG-007"]
+    scenarios: ["TC-PG-001..TC-PG-018"]
+    stories: ["ST-PG-001..ST-PG-013"]
+    scope_items: ["IN-PG-001..IN-PG-011", "OUT-PG-001..OUT-PG-006", "DEF-PG-001..DEF-PG-004"]
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "CP2-CR037-DQ-01: 是否批准 CR-037 产品 / 场景 / 范围基线进入 CP3"
+    - "CP2-CR037-DQ-02: 是否接受 CR-036 暂停但未完成的冲突边界"
+    - "CP2-CR037-DQ-03: 是否确认 CP2 不授权实现、runtime、生产写入或 quant-lab 发布库修改"
+    - "CP2-CR037-DQ-04: 是否确认 P0 state enforcement 主路线为 allowlist + field budget + audit/enforce 灰度，并阻断新建第二套机制"
+    - "CP2-CR037-DQ-05: 是否确认 roadmap refresh cascade 只自动写过程归档库机器状态，quant-lab 发布库只输出 stale finding / follow-up"
+    - "CP2-CR037-DQ-06: 是否确认 feature_refs / capability_refs 必须引用标准 registry，缺失 ID 不得由迁移过程自动创造"
+    - "CP2-CR037-DQ-07: 是否确认 P2 quant-lab migration 是验证切片，不授权发布库代码 / 测试 / 正式文档修改"
+  non_authorized_items:
+    - "不将 CR-036 暂停视为完成或关闭。"
+    - "不自动关闭、恢复或完成 CR-036。"
+    - "不自动修改 quant-lab 发布库代码、测试、正式设计文档或发布文档。"
+    - "不读取凭据、账户、token、cookie 或私钥。"
+    - "不执行真实交易、live、publish、production write 或外部服务真实调用。"
+    - "不进入实现或 CP5。"
+  risk_acceptance_items:
+    - "CR conflict checker 仍会把 blocked / unfinished 的 CR-036 计入未完成正式 CR 集合；CP2 brief 必须显式保留该风险。"
+  open_questions: []
+  n_a_or_waived_items:
+    - "RELEASE-SLICES.md 与 BACKLOG.md 未单独生成；当前 release slice 和 deferred backlog 分别由 STORY-MAP.md 与 MVP-SCOPE.md 承载，CP2 先作为 N/A-with-reason 处理。"
+
+handoff:
+  target_agent: "meta-se"
+  expected_output:
+    - "CP2 approved 后进入 CP3 蓝图 / HLD 人工确认。"
+    - "CP3 前不得进入 Story 分解实现或 CP5。"
+  exit_criteria:
+    - "CP2 人工审查结果 approved。"
+    - "无 CP2 blocker 或未回答 must-user decision。"
+  blocked_if_missing:
+    - "CP2 人工审查未 approved。"
+    - "用户要求修改产品 / 场景 / 范围基线。"
+
+read_expansion_log: []
+
+validation:
+  generated_from_sources:
+    - "process/changes/CR-037.md"
+    - "process/changes/CR-036.md"
+    - "process/docs/product/USE-CASES.md"
+    - "process/docs/product/REQUIREMENTS.md"
+    - "process/docs/product/SCENARIOS.yaml"
+    - "process/docs/product/TEST-MATRIX.md"
+    - "process/docs/product/STORY-MAP.md"
+    - "process/docs/product/MVP-SCOPE.md"
+    - "process/discussions/CP2-CR-037-SCENARIO-DISCUSSION-LOG.md"
+    - "process/checks/CP2-CR-037-DISCUSSION-CHECKPOINT.json"
+    - "process/state/AGENT-DISPATCH-LEDGER.ndjson"
+  missing_sources:
+    - "process/docs/product/RELEASE-SLICES.md：release slices 已在 STORY-MAP.md §推荐发布切片承载。"
+    - "process/docs/product/BACKLOG.md：deferred backlog 已在 MVP-SCOPE.md §Deferred 承载。"
+  consistency_status: "pass"
+  notes:
+    - "capsule 只用于 CP2 产品基线确认，不授权实现、runtime 或 quant-lab 发布库写入。"

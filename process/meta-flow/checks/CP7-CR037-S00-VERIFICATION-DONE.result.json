@@ -1,0 +1,142 @@
+{
+  "blockers": [],
+  "checked_at": "2026-07-03T09:52:01+08:00",
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR037-S00-VERIFICATION-DONE",
+  "context_ref": "process/context/stories/CR037-S00.CP7.verify-packet.json",
+  "cp_result_ref": "process/checks/CP7-CR037-S00-VERIFICATION-DONE.result.json",
+  "cr_id": "CR-037",
+  "decision": "PASS_WITH_RISK",
+  "dispatch_refs": [
+    "D-CR037-META-QA-CP7-S00"
+  ],
+  "evidence_ref": "process/evidence/CR037-S00.CP7.index.json",
+  "items": [
+    {
+      "category": "entry",
+      "evidence_refs": [
+        "process/context/stories/CR037-S00.CP7.verify-packet.json",
+        "process/state/STATE.current.json",
+        "process/checks/CP6-CR037-S00-CODING-DONE.result.json"
+      ],
+      "id": "CP7-S00-01",
+      "name": "CP7 verification context and CP6 PASS evidence are consumable",
+      "notes": "Story is ready-for-verification, current state awaits CP7 return, and CP6 result decision is PASS.",
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "contract",
+      "evidence_refs": [
+        "process/returns/CR037-S00.CP6.return.json",
+        "process/evidence/CR037-S00.CP6.index.json",
+        "process/checks/CP6-CR037-S00-CODING-DONE.result.json"
+      ],
+      "id": "CP7-S00-02",
+      "name": "CP6 return, evidence index and result contracts validate",
+      "notes": "return-check, evidence-check and cp result-check passed; CP6 return-check emitted only the known symlink-resolved expected_return_packet warning.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "boundary",
+      "evidence_refs": [
+        "process/evidence/CR037-S00.CP7.index.json#commands"
+      ],
+      "id": "CP7-S00-03",
+      "name": "Forbidden implementation paths have no S00 diff",
+      "notes": "git diff over process/quant-lab, meta_flow, delivery, docs and tests produced no output. CP6 boundary_check also reports no credential-like, runtime, production, publish, live or trading writes.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "guardrail",
+      "evidence_refs": [
+        "process/evidence/CR037-S00.CP7.index.json#contract_checks"
+      ],
+      "id": "CP7-S00-04",
+      "name": "Second-system keyword matches are approved context",
+      "notes": "Keyword matches are prohibition, non-goal, historical plan, LLD constraint, or S00 guardrail context; no newly introduced hot/warm/cold, roadmap_impact, PROJECT-LEDGER, free capability namespace, state/context/result/ledger/registry mechanism was identified.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "process/evidence/CR037-S00.CP7.index.json#tests"
+      ],
+      "id": "CP7-S00-05",
+      "name": "N/A runtime and unit-test rationale is valid",
+      "notes": "S00 owns no runtime code, fixtures, CLI, schema, installer, prompt, skill, delivery asset, or runtime interface. User authorization also forbids runtime, production write, publish, live, trading, and credential reads.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "risk",
+      "evidence_refs": [
+        "process/evidence/CR037-S00.CP7.index.json#risks"
+      ],
+      "id": "CP7-S00-06",
+      "name": "S01 unblock risks are explicit and routable",
+      "notes": "S00 may be marked verified-with-risk and CR037-S01 may be unblocked only with R-CR037-SECOND-MECHANISM and R-CR037-REGISTRY-DRIFT carried into downstream CP6 / CP7.",
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "handoff",
+      "evidence_refs": [
+        "process/state/STATE.current.json",
+        "process/returns/CR037-S00.CP7.return.json"
+      ],
+      "id": "CP7-S00-07",
+      "name": "CP7 return packet and evidence index are ready for host-orchestrator",
+      "notes": "Return packet and evidence index are generated in the allowed paths and will be validated by CP7 return/evidence checks.",
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "CR037-S01",
+  "read_expansion_refs": [],
+  "return_packet_ref": "process/returns/CR037-S00.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "owner": "meta-qa",
+      "routing": "carry_to_downstream_cp6_cp7",
+      "status": "open-for-downstream"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "owner": "meta-qa",
+      "routing": "carry_to_downstream_cp6_cp7",
+      "status": "open-for-downstream"
+    }
+  ],
+  "schema_version": 1,
+  "story_id": "CR037-S00",
+  "summary": "PASS_WITH_RISK: CR037-S00 CP7 verified the guardrail-only CP6 evidence. S00 introduced no runtime implementation and no forbidden-path writes. Keyword matches are approved context, unit/runtime tests are N/A with valid rationale, and CR037-S01 may be unblocked with downstream guardrail risks carried forward.",
+  "waivers": []
+}

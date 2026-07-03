@@ -1,0 +1,329 @@
+schema_version: "1"
+status: "baseline"
+version: "1.0"
+created_at: "2026-07-02"
+owner: "host-orchestrator"
+cr_ref: "CR-037"
+source_use_cases: "process/docs/product/USE-CASES.md"
+source_requirements: "process/docs/product/REQUIREMENTS.md"
+coverage_policy:
+  high_priority_minimum: "positive + negative"
+  blocked_cr_policy: "CR-037 is active after user-authorized pause of unfinished CR-036; scenarios are CP2 baseline inputs, not implementation, CP5, runtime, production write, or quant-lab release repo authorization."
+  release_repo_policy: "quant-lab release repo changes are never automated by roadmap refresh."
+
+scenarios:
+  - id: "TC-PG-001"
+    title: "current state 合法 patch 写入成功"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-PG-001"]
+    requirements: ["REQ-PG-001", "REQ-PG-002", "REQ-PG-003"]
+    stories: ["ST-PG-001", "ST-PG-002"]
+    preconditions:
+      - "STATE.current.json 符合 v2 schema"
+      - "allowlist audit 或 enforce 模式已启用"
+    action: "通过受控 update API 更新 next_action.text 和 active_context_ref"
+    expected:
+      - "patch deep-merge 成功"
+      - "写入前后 schema 和字段预算均通过"
+      - "未修改非 patch 字段"
+    evidence_type: "unit-test"
+    automation_status: "planned"
+
+  - id: "TC-PG-002"
+    title: "current state 未知字段被拦截"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-PG-001"]
+    requirements: ["REQ-PG-001", "REQ-PG-NF003"]
+    stories: ["ST-PG-001"]
+    preconditions:
+      - "allowlist enforce 模式已启用"
+    action: "尝试写入 last_actions 或 action_history 顶层字段"
+    expected:
+      - "写入失败"
+      - "错误指出 unknown field"
+      - "重型历史被要求写入 ledger / result / summary"
+    evidence_type: "unit-test"
+    automation_status: "planned"
+
+  - id: "TC-PG-003"
+    title: "合法字段超过预算被拒绝"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-PG-001"]
+    requirements: ["REQ-PG-002", "REQ-PG-NF001"]
+    stories: ["ST-PG-001"]
+    preconditions:
+      - "source_refs 字段预算已配置"
+    action: "写入超过 max_items 或 max_total_bytes 的 source_refs"
+    expected:
+      - "写入失败"
+      - "结果包含字段名、实际大小和预算上限"
+    evidence_type: "unit-test"
+    automation_status: "planned"
+
+  - id: "TC-PG-004"
+    title: "内部 current state 直写路径被收敛"
+    type: "precheck"
+    priority: "HIGH"
+    use_cases: ["UC-PG-001"]
+    requirements: ["REQ-PG-004", "REQ-PG-005", "REQ-PG-NF001"]
+    stories: ["ST-PG-002", "ST-PG-003"]
+    preconditions:
+      - "CR lifecycle 需要更新 active_change 或 next_action"
+    action: "静态扫描和单元测试检查直接 write_text 写 STATE.current.json 的路径"
+    expected:
+      - "内部路径使用 update_current_state"
+      - "agent contract 明确禁止直编 current state"
+      - "agent contract 指明重型状态必须落到 refs-only project state、ledger、result、summary 或 index 等受控对象"
+    evidence_type: "static-check"
+    automation_status: "planned"
+
+  - id: "TC-PG-005"
+    title: "PROJECT.current.json refs-only 状态可被 current state 引用"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-PG-002"]
+    requirements: ["REQ-PG-006", "REQ-PG-007", "REQ-PG-008"]
+    stories: ["ST-PG-004"]
+    preconditions:
+      - "process/project scaffold 已存在"
+      - "project_state_ref 已进入 current state allowlist"
+    action: "创建 PROJECT.current.json 并在 STATE.current.json 写入 project_state_ref"
+    expected:
+      - "STATE.current.json 只保存 ref"
+      - "PROJECT.current.json 不超过 16KB"
+      - "PROJECT.current.json 不包含 roadmap 全文或 deferred 详情"
+    evidence_type: "integration-test"
+    automation_status: "planned"
+
+  - id: "TC-PG-006"
+    title: "PROJECT.current.json 超预算失败"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-PG-002"]
+    requirements: ["REQ-PG-008", "REQ-PG-NF001"]
+    stories: ["ST-PG-004"]
+    preconditions:
+      - "project state checker 已启用"
+    action: "向 PROJECT.current.json 写入长 roadmap 正文或大量 deferred item"
+    expected:
+      - "project state check 失败"
+      - "错误建议改写为 refs 或 follow-up index"
+    evidence_type: "unit-test"
+    automation_status: "planned"
+
+  - id: "TC-PG-007"
+    title: "project scale 只影响默认 gate profile bias"
+    type: "positive"
+    priority: "MEDIUM"
+    use_cases: ["UC-PG-003"]
+    requirements: ["REQ-PG-009", "REQ-PG-C003"]
+    stories: ["ST-PG-005"]
+    preconditions:
+      - "PROJECT-SCALE.yaml 已创建"
+    action: "设置 project_scale=full 并读取 default_gate_profile_bias"
+    expected:
+      - "PROJECT-SCALE.yaml 记录 bias 和 reason"
+      - "GATE-PROFILES.json 未被直接改写"
+    evidence_type: "integration-test"
+    automation_status: "planned"
+
+  - id: "TC-PG-008"
+    title: "registry refs 可解析"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-PG-004"]
+    requirements: ["REQ-PG-010", "REQ-PG-011"]
+    stories: ["ST-PG-006"]
+    preconditions:
+      - "FEATURE-REGISTRY.yaml 和 CAPABILITY-STATUS.yaml 存在"
+    action: "新 CR 或 migration 写入已注册 feature_refs / capability_refs"
+    expected:
+      - "feature / capability checker 通过"
+      - "refs 可回链到标准 registry"
+    evidence_type: "checker"
+    automation_status: "planned"
+
+  - id: "TC-PG-009"
+    title: "未注册 capability 不得自动创建"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-PG-004"]
+    requirements: ["REQ-PG-011", "REQ-PG-C004"]
+    stories: ["ST-PG-006"]
+    preconditions:
+      - "registry resolver 已启用"
+    action: "migration 尝试写入未注册 capability id"
+    expected:
+      - "checker 或 migration report 输出 blocked finding"
+      - "不写 capability_refs"
+      - "必要时生成 FU-RF"
+    evidence_type: "checker"
+    automation_status: "planned"
+
+  - id: "TC-PG-010"
+    title: "impact surface 路径类输入被拆分"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-PG-005"]
+    requirements: ["REQ-PG-012", "REQ-PG-013"]
+    stories: ["ST-PG-007"]
+    preconditions:
+      - "impact surface migration report 已实现"
+    action: "输入 process/checks、trading/strategy_runner 等历史 surface"
+    expected:
+      - "治理面写入 impact_surface"
+      - "路径写入 affected_paths"
+      - "feature/capability 可解析时写入 refs"
+    evidence_type: "migration-dry-run"
+    automation_status: "planned"
+
+  - id: "TC-PG-011"
+    title: "新 CR unknown impact surface enforce 失败"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-PG-005"]
+    requirements: ["REQ-PG-012", "REQ-PG-NF002"]
+    stories: ["ST-PG-007"]
+    preconditions:
+      - "new CR impact surface enforce 模式已启用"
+    action: "新 CR 将 process/checks 写入 impact_surface"
+    expected:
+      - "cr check 失败"
+      - "提示改写到 affected_paths"
+    evidence_type: "checker"
+    automation_status: "planned"
+
+  - id: "TC-PG-012"
+    title: "ROADMAP-REFRESH result 独立校验通过"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-PG-006"]
+    requirements: ["REQ-PG-014", "REQ-PG-015", "REQ-PG-017"]
+    stories: ["ST-PG-008", "ST-PG-009"]
+    preconditions:
+      - "ROADMAP-REFRESH result schema 已实现"
+    action: "生成 decision=UPDATED_WITH_DOC_IMPACTS 的 refresh result"
+    expected:
+      - "roadmap-refresh checker 通过"
+      - "GATE-LEDGER event 包含 result_ref"
+    evidence_type: "checker"
+    automation_status: "planned"
+
+  - id: "TC-PG-013"
+    title: "roadmap refresh 不自动修改发布库"
+    type: "permission"
+    priority: "HIGH"
+    use_cases: ["UC-PG-006"]
+    requirements: ["REQ-PG-016", "REQ-PG-C002"]
+    stories: ["ST-PG-009"]
+    preconditions:
+      - "refresh 发现 quant-lab 发布库 HLD 或 TEST-STRATEGY 陈旧"
+    action: "执行 roadmap refresh cascade"
+    expected:
+      - "只更新过程归档库机器状态"
+      - "发布库对象进入 must_check / stale_items / follow_up_candidates"
+      - "发布库文件未被写入"
+    evidence_type: "integration-test"
+    automation_status: "planned"
+
+  - id: "TC-PG-014"
+    title: "FU-RF / SP-RF / RA-RF 可被 tracking 接受"
+    type: "positive"
+    priority: "MEDIUM"
+    use_cases: ["UC-PG-006"]
+    requirements: ["REQ-PG-018", "REQ-PG-019"]
+    stories: ["ST-PG-010"]
+    preconditions:
+      - "cr-tracking regex 和模板已更新"
+    action: "roadmap refresh 生成 FU-RF001-001、SP-RF001-001、RA-RF001-001"
+    expected:
+      - "cr-tracking 接受这些 ID"
+      - "不写入 RELEASE-CONTEXT"
+    evidence_type: "checker"
+    automation_status: "planned"
+
+  - id: "TC-PG-015"
+    title: "quant-lab migration dry-run 只写过程侧报告"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-PG-007"]
+    requirements: ["REQ-PG-020", "REQ-PG-021", "REQ-PG-022", "REQ-PG-NF004"]
+    stories: ["ST-PG-011"]
+    preconditions:
+      - "P0/P1 机制均已通过"
+      - "quant-lab 发布库作为只读输入"
+    action: "执行 quant-lab migration dry-run"
+    expected:
+      - "state cleanup、capability normalization、impact migration 和 stale report 可复跑"
+      - "发布库无自动写入"
+    evidence_type: "migration-dry-run"
+    automation_status: "planned"
+
+  - id: "TC-PG-016"
+    title: "quant-lab migration 缺 registry 时阻断"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-PG-007"]
+    requirements: ["REQ-PG-021", "REQ-PG-C004"]
+    stories: ["ST-PG-011"]
+    preconditions:
+      - "quant-lab capability 来源尚未归一到标准 registry"
+    action: "尝试迁移 capability_refs"
+    expected:
+      - "migration 输出 blocked finding"
+      - "不凭空创建 capability id"
+      - "生成可追踪 follow-up"
+    evidence_type: "migration-dry-run"
+    automation_status: "planned"
+
+  - id: "TC-PG-017"
+    title: "ledger compaction 命令不得复用 state compact"
+    type: "negative"
+    priority: "MEDIUM"
+    use_cases: ["UC-PG-001"]
+    requirements: ["REQ-PG-C005"]
+    stories: ["ST-PG-012"]
+    preconditions:
+      - "P0.5 ledger hygiene 设计进入 FEAT-PG-002"
+      - "`meta-flow state compact` 仍保留为 state render/check 语义"
+    action: "新增或审查 ledger compaction CLI 设计"
+    expected:
+      - "ledger compaction 命令使用 `meta-flow ledger compact` 或 `meta-flow event compact`"
+      - "不得复用 `meta-flow state compact` 表达 ledger 压缩"
+      - "帮助文档明确区分 state compact 与 ledger compact 职责"
+    evidence_type: "cli-contract-check"
+    automation_status: "planned"
+
+  - id: "TC-PG-018"
+    title: "second-system guardrail 阻止新增第二套治理机制"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-PG-001", "UC-PG-004", "UC-PG-005", "UC-PG-006"]
+    requirements: ["REQ-PG-C001"]
+    stories: ["ST-PG-013"]
+    preconditions:
+      - "CR-037 设计或实现 diff 已形成"
+      - "现有 state/context/result/ledger/registry 体系可作为复用基线"
+    action: "审查新增对象、字段、目录、CLI 和模板是否绕开现有体系创建平行机制"
+    expected:
+      - "不得新增 hot/warm/cold 上下文治理层"
+      - "不得新增 roadmap_impact 子树"
+      - "不得新增 PROJECT-LEDGER"
+      - "不得创建自由字符串 capability 命名空间"
+      - "不得用 CP result checker 替代 ROADMAP-REFRESH 独立 checker"
+      - "发现第二套机制时输出阻断 finding，并要求复用既有体系或通过 CR 重新评审"
+    evidence_type: "design-guardrail-review"
+    automation_status: "planned"
+
+coverage_summary:
+  total_scenarios: 18
+  high_priority_scenarios: 14
+  positive_scenarios: 7
+  negative_scenarios: 8
+  boundary_scenarios: 1
+  permission_scenarios: 1
+  precheck_scenarios: 1
+  source_requirements_covered: "REQ-PG-001..022 plus REQ-PG-C001..005 and REQ-PG-NF001..004"

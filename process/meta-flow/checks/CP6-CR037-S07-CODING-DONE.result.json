@@ -1,0 +1,177 @@
+{
+  "blockers": [],
+  "checked_at": "2026-07-03T17:27:30+08:00",
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR037-S07-CODING-DONE",
+  "context_ref": "process/context/stories/CR037-S07.CP6.work-packet.json",
+  "cp_result_ref": "process/checks/CP6-CR037-S07-CODING-DONE.result.json",
+  "cr_id": "CR-037",
+  "decision": "PASS",
+  "dispatch_refs": [
+    "D-CR037-META-DEV-CP6-S07"
+  ],
+  "evidence_ref": "process/evidence/CR037-S07.CP6.index.json",
+  "items": [
+    {
+      "category": "entry",
+      "evidence_refs": [
+        "process/context/stories/CR037-S07.CP6.work-packet.json",
+        "process/handoffs/CR037-S07-CP6-IMPLEMENTATION-HANDOFF.md",
+        "process/checks/CP7-CR037-S05-VERIFICATION-DONE.result.json",
+        "process/checks/CP7-CR037-S06-VERIFICATION-DONE.result.json"
+      ],
+      "id": "CP6-S07-01",
+      "name": "S07 CP6 work packet, handoff, and upstream dependencies are consumable",
+      "notes": "S05 and S06 are verified-with-risk, and S07 is the active CP6 story.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "dispatch",
+      "evidence_refs": [
+        "process/state/AGENT-DISPATCH-LEDGER.ndjson",
+        "process/returns/CR037-S07.CP6.return.json#authz_boundary"
+      ],
+      "id": "CP6-S07-02",
+      "name": "Child dev implementation and host-owned process artifact boundary are explicit",
+      "notes": "The dev child agent completed source/test work and did not write CP6 process artifacts. Host Orchestrator generated process artifacts under the S07+ execution strategy.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "meta_flow/design/feature_registry.py",
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-01"
+      ],
+      "id": "CP6-S07-03",
+      "name": "Feature registry v1/v2 compatibility and capability registry validation are implemented",
+      "notes": "The implementation validates feature and capability registry objects, aliases, status, feature_refs, source_refs, and credential-like content.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "meta_flow/design/feature_registry.py",
+        "tests/test_feature_registry.py",
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-01"
+      ],
+      "id": "CP6-S07-04",
+      "name": "Resolver API and candidate report contract are implemented",
+      "notes": "resolve_ref, resolve_refs, and build_candidate_report cover resolved, unresolved, deprecated, conflict, and candidate-only behavior.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "contract",
+      "evidence_refs": [
+        "tests/test_feature_registry.py",
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-01"
+      ],
+      "id": "CP6-S07-05",
+      "name": "Synthetic downstream consumers use resolver-backed refs",
+      "notes": "Synthetic impact and roadmap consumers normalize resolved refs and block unresolved free strings instead of writing them as canonical values.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-01",
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-02",
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-03"
+      ],
+      "id": "CP6-S07-06",
+      "name": "Target tests, feature CLI help, and state enforcement checks pass",
+      "notes": "S07 target tests passed 15/15; feature help exposes check/resolve; state enforce remains OK.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "boundary",
+      "evidence_refs": [
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-04",
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-05",
+        "process/evidence/CR037-S07.CP6.index.json#commands.VP-S07-06"
+      ],
+      "id": "CP6-S07-07",
+      "name": "Forbidden writes and formatting boundaries are respected",
+      "notes": "Whitespace check passed. The child dev agent did not write CP6 process artifacts, and no process/quant-lab or docs diff is present.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "risk",
+      "evidence_refs": [
+        "process/evidence/CR037-S07.CP6.index.json#risks"
+      ],
+      "id": "CP6-S07-08",
+      "name": "Residual registry drift, YAML subset, and process artifact ownership risks are explicit",
+      "notes": "S07 can enter CP7 with risk because the implementation and contract tests pass; risks carry forward for downstream Story verification.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "story-verification",
+  "read_expansion_refs": [],
+  "return_packet_ref": "process/returns/CR037-S07.CP6.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "owner": "host-orchestrator",
+      "routing": "carry_to_CP8",
+      "status": "open-for-downstream"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "owner": "host-orchestrator",
+      "routing": "verify_downstream_resolver_consumers_in_S08_S09_S10_S12_S13",
+      "status": "reduced-by-S07"
+    },
+    {
+      "id": "R-CR037-YAML-SUBSET",
+      "level": "LOW",
+      "owner": "host-orchestrator",
+      "routing": "carry_to_CP8_or_future_parser_cleanup",
+      "status": "accepted-for-registry-fixtures"
+    },
+    {
+      "id": "R-CR037-QA-SUBAGENT-NO-OUTPUT",
+      "level": "MEDIUM",
+      "owner": "host-orchestrator",
+      "routing": "host_owned_process_artifacts_for_S07_plus",
+      "status": "accepted-by-user"
+    }
+  ],
+  "schema_version": 1,
+  "story_id": "CR037-S07",
+  "summary": "PASS: CR037-S07 CP6 implemented feature/capability registry validation, resolver APIs, candidate report, CLI visibility, and synthetic downstream consumer tests. Target tests, feature help, state enforce, forbidden path checks, and diff-check pass. CP6 process artifacts are Host-owned by design under the S07+ execution strategy.",
+  "waivers": []
+}

@@ -1,0 +1,212 @@
+{
+  "boundary_check": {
+    "authorization": {
+      "credential_reads": false,
+      "live": false,
+      "production_write": false,
+      "publish": false,
+      "quant_lab_release_write": false,
+      "real_external_calls": false,
+      "runtime": false
+    },
+    "forbidden_path_writes": [],
+    "forbidden_write_paths": [
+      "process/quant-lab/**",
+      "meta_flow/**",
+      "tests/**",
+      "docs/**",
+      ".env",
+      "**/*credential*",
+      "**/*secret*",
+      "**/*token*",
+      "**/*cookie*",
+      "**/*private_key*"
+    ],
+    "notes": "S03 only changed allowed rule/skill documentation and CP6 evidence files."
+  },
+  "changed_files": [
+    "delivery/rules/AGENT-SKILL-CONTRACT.md",
+    ".agents/skills/state-router/SKILL.md",
+    "process/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync-IMPLEMENTATION.md",
+    "process/returns/CR037-S03.CP6.return.json",
+    "process/evidence/CR037-S03.CP6.index.json",
+    "process/checks/CP6-CR037-S03-CODING-DONE.result.json",
+    "process/checks/CP6-CR037-S03-CODING-DONE.result.summary.md"
+  ],
+  "context_ref": "process/context/stories/CR037-S03.CP6.work-packet.json",
+  "contract_changes": {
+    "S03-CONTRACT-01": {
+      "implemented_refs": [
+        "delivery/rules/AGENT-SKILL-CONTRACT.md#current-state-write-contract",
+        ".agents/skills/state-router/SKILL.md#current-state-更新契约"
+      ],
+      "summary": "Agents and skills must not directly edit unknown, non-allowlist, or over-budget fields in process/state/STATE.current.json."
+    },
+    "S03-CONTRACT-02": {
+      "implemented_refs": [
+        "delivery/rules/AGENT-SKILL-CONTRACT.md#current-state-write-contract",
+        ".agents/skills/state-router/SKILL.md#current-state-更新契约"
+      ],
+      "summary": "Legal updates must go through current.update_current_state() or an equivalent host-orchestrator/meta-flow state controlled command."
+    },
+    "S03-CONTRACT-03": {
+      "implemented_refs": [
+        "delivery/rules/AGENT-SKILL-CONTRACT.md#current-state-write-contract",
+        ".agents/skills/state-router/SKILL.md#current-state-更新契约"
+      ],
+      "summary": "Heavy state belongs in STATE.md human summaries, ledgers, CP results, context packs, Story return/evidence, PROJECT.current refs, project_state_ref, follow-up tracking, risks, or Design Delta."
+    }
+  },
+  "cp_result_ref": "process/checks/CP6-CR037-S03-CODING-DONE.result.json",
+  "cr_id": "CR-037",
+  "created_at": "2026-07-03T10:46:01+08:00",
+  "decision": "PASS",
+  "design_deltas": [],
+  "evidence_ref": "process/evidence/CR037-S03.CP6.index.json",
+  "host_revalidation": {
+    "notes": "Host-orchestrator cleaned generated Python cache files and reran delivery guardrail successfully. S03 forbidden-write assessment is scoped to S03 touched_files; parallel S01/S02/S04 meta_flow/tests diffs are outside S03 ownership.",
+    "result": "PASS",
+    "validated_at": "2026-07-03T10:58:00+08:00"
+  },
+  "implementation_ref": "process/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync-IMPLEMENTATION.md",
+  "known_limitations": [
+    "No runtime tests were added because this Story only updates contract and Skill documentation.",
+    "Broad whole-worktree forbidden-path diff is not a reliable S03-only signal while S01/S02/S04 are simultaneously dirty; CP6 uses touched_files and scoped diff evidence instead."
+  ],
+  "next_route": "CP7",
+  "owner": "meta-dev",
+  "packet_type": "story_return_packet",
+  "read_expansion_refs": [],
+  "return_type": "story_return",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "CP7 should verify S03 did not document a second state/context/result/ledger/registry mechanism.",
+      "source_refs": [
+        "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+        "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json"
+      ],
+      "status": "carried-forward"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "CP7 should verify S03 did not introduce new registry or ownership semantics beyond the confirmed contract.",
+      "source_refs": [
+        "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+        "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json"
+      ],
+      "status": "carried-forward"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "status": "implemented",
+  "story_id": "CR037-S03",
+  "story_ref": "process/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync.md",
+  "touched_files": [
+    {
+      "change_type": "updated",
+      "owner_scope": "primary",
+      "path": "delivery/rules/AGENT-SKILL-CONTRACT.md",
+      "summary": "Added Current State Write Contract with direct-edit prohibition, controlled writer entrypoint, S01/S02 semantics, and heavy-state destinations."
+    },
+    {
+      "change_type": "updated",
+      "owner_scope": "primary",
+      "path": ".agents/skills/state-router/SKILL.md",
+      "summary": "Added Current State update contract and required controlled update entrypoint in the status writeback step."
+    },
+    {
+      "change_type": "created",
+      "owner_scope": "allowed_cp6_evidence",
+      "path": "process/stories/STORY-CR037-S03-agent-contract-and-guardrail-sync-IMPLEMENTATION.md",
+      "summary": "Story implementation evidence for CR037-S03."
+    },
+    {
+      "change_type": "created",
+      "owner_scope": "allowed_cp6_evidence",
+      "path": "process/returns/CR037-S03.CP6.return.json",
+      "summary": "CP6 story return packet."
+    },
+    {
+      "change_type": "created",
+      "owner_scope": "allowed_cp6_evidence",
+      "path": "process/evidence/CR037-S03.CP6.index.json",
+      "summary": "CP6 evidence index."
+    },
+    {
+      "change_type": "created",
+      "owner_scope": "allowed_cp6_evidence",
+      "path": "process/checks/CP6-CR037-S03-CODING-DONE.result.json",
+      "summary": "CP6 machine result."
+    },
+    {
+      "change_type": "created",
+      "owner_scope": "allowed_cp6_evidence",
+      "path": "process/checks/CP6-CR037-S03-CODING-DONE.result.summary.md",
+      "summary": "CP6 human-readable result summary."
+    }
+  ],
+  "verification": {
+    "commands_run": [
+      {
+        "command": "rg -n \"STATE.current.json|update_current_state|unknown|allowlist|heavy state|ledger|PROJECT.current|no direct\" delivery/rules/AGENT-SKILL-CONTRACT.md .agents/skills/state-router/SKILL.md",
+        "expected": "Relevant contract wording is present in both target files.",
+        "id": "V-S03-01",
+        "result": "PASS",
+        "status": "PASS"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_delivery_guardrails.py",
+        "expected": "PASS",
+        "id": "V-S03-02",
+        "notes": "Host-orchestrator reran after clearing generated Python cache files; guardrail returned OK.",
+        "result": "PASS",
+        "status": "PASS"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S03.CP6.work-packet.json --return process/returns/CR037-S03.CP6.return.json --project-root .",
+        "expected": "PASS after schema corrections",
+        "id": "V-S03-03",
+        "notes": "Command exited 0; warning is the known symlink-resolved expected_return_packet path text warning.",
+        "result": "PASS_WITH_WARNING",
+        "status": "PASS_WITH_WARNING"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S03.CP6.index.json --project-root .",
+        "expected": "PASS after schema corrections",
+        "id": "V-S03-04",
+        "result": "PASS",
+        "status": "PASS"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S03-CODING-DONE.result.json --project-root .",
+        "expected": "PASS",
+        "id": "V-S03-07",
+        "result": "PASS",
+        "status": "PASS"
+      },
+      {
+        "command": "git diff -- process/quant-lab meta_flow tests docs",
+        "expected": "No forbidden-path writes from S03",
+        "id": "V-S03-05",
+        "notes": "process/quant-lab and docs diffs are empty. meta_flow/tests diffs are from parallel S01/S02/S04 code scopes, not S03 touched_files; S03 touched_files are all allowed.",
+        "result": "PASS_SCOPED",
+        "status": "PASS_SCOPED"
+      },
+      {
+        "command": "git diff --check -- delivery/rules/AGENT-SKILL-CONTRACT.md .agents/skills/state-router/SKILL.md AGENTS.md delivery/rules/AGENTS.md",
+        "expected": "PASS",
+        "id": "V-S03-06",
+        "result": "PASS",
+        "status": "PASS"
+      }
+    ],
+    "evidence_refs": [
+      "process/evidence/CR037-S03.CP6.index.json#commands"
+    ]
+  },
+  "waivers": []
+}

@@ -1,0 +1,278 @@
+{
+  "acceptance": [
+    "Expose a distinct meta-flow ledger compact CLI; do not implement ledger compression under state compact.",
+    "Default execution is dry-run and does not write ledger, archive, index, or backup files.",
+    "Explicit --apply writes backup, archive summary, archive index, compacted ledger marker, and performs compatibility checks; failures rollback or leave original ledger unchanged.",
+    "Retention policy is independent from context default_context and current-state budgets; defaults align with CP5 DQ-03: window_days=90, keep_latest_n_events=500, keep_latest_n_cr=20.",
+    "Archive summaries store refs/statistics/hash/range only, not full long ledger contents.",
+    "Event checker accepts compact markers or provides a typed compatibility path without breaking existing event check/list behavior.",
+    "Path guard rejects process/quant-lab/** and unsafe path traversal/absolute paths outside project process scope.",
+    "Tests cover CLI boundary, policy validation, dry-run no-write, apply archive/index, event check compatibility, rollback/hash mismatch, and path guard."
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 400,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 500,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S04-ledger-compaction-policy-and-cli.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 9000,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S04-ledger-compaction-policy-and-cli-LLD.md",
+      "reason": "lld_contract",
+      "required": true
+    },
+    {
+      "estimated_tokens": 3500,
+      "mode": "full",
+      "path": "process/docs/features/ledger-compaction/DESIGN.md",
+      "reason": "feature_design",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1800,
+      "mode": "full",
+      "path": "process/docs/features/ledger-compaction/TEST-PLAN.md",
+      "reason": "feature_test_plan",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1800,
+      "mode": "full",
+      "path": "process/docs/features/ledger-compaction/TASKS.md",
+      "reason": "feature_tasks",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1600,
+      "mode": "full",
+      "path": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+      "reason": "dependency_cp7_result",
+      "required": true
+    },
+    {
+      "estimated_tokens": 5000,
+      "mode": "full",
+      "path": "meta_flow/state/event_ledger.py",
+      "reason": "implementation_target",
+      "required": true
+    },
+    {
+      "estimated_tokens": 7000,
+      "mode": "full",
+      "path": "meta_flow/cli.py",
+      "reason": "implementation_target",
+      "required": true
+    },
+    {
+      "estimated_tokens": 3500,
+      "mode": "read_if_needed",
+      "path": "meta_flow/state/current.py",
+      "reason": "state compact help boundary",
+      "required": false
+    }
+  ],
+  "allowed_write_paths": [
+    "meta_flow/state/ledger_compaction.py",
+    "meta_flow/state/event_ledger.py",
+    "meta_flow/cli.py",
+    "meta_flow/state/current.py",
+    "process/policies/LEDGER-RETENTION.yaml",
+    "tests/test_cr037_ledger_compaction.py",
+    "process/stories/STORY-CR037-S04-ledger-compaction-policy-and-cli-IMPLEMENTATION.md",
+    "process/returns/CR037-S04.CP6.return.json",
+    "process/evidence/CR037-S04.CP6.index.json",
+    "process/checks/CP6-CR037-S04-CODING-DONE.result.json",
+    "process/checks/CP6-CR037-S04-CODING-DONE.result.summary.md"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING"
+  ],
+  "budget": {
+    "estimated_tokens": 21000,
+    "estimator": "chars_div_4",
+    "max_tokens": 26000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [
+      "event ledger retention/archive contract",
+      "CLI command boundary"
+    ],
+    "summary": "CR037-S04 adds P0.5 ledger hygiene after current-state enforcement S01 verified-with-risk. It must not use state compact for ledger compression and must preserve audit/rollback."
+  },
+  "cr_id": "CR-037",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-IMPLEMENTATION.md",
+    "process/quant-lab/**"
+  ],
+  "dependency_inputs": [
+    {
+      "result_ref": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S01"
+    }
+  ],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "expected_return_packet": "process/returns/CR037-S04.CP6.return.json",
+  "feature_contract_summary": "Ledger Compaction S04: implement independent meta-flow ledger compact CLI with retention policy, dry-run/apply split, archive summary/index, backup/rollback, event checker compatibility, path guard, and state compact help boundary.",
+  "feature_design_refs": [
+    "process/docs/features/ledger-compaction/DESIGN.md",
+    "process/docs/features/ledger-compaction/TEST-PLAN.md",
+    "process/docs/features/ledger-compaction/TASKS.md"
+  ],
+  "feature_refs": [
+    "FEAT-PG-002"
+  ],
+  "forbidden_write_paths": [
+    "process/quant-lab/**",
+    "docs/**",
+    "delivery/**",
+    ".env",
+    "**/*credential*",
+    "**/*secret*",
+    "**/*token*",
+    "**/*cookie*",
+    "**/*private_key*"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "lld_policy": {
+    "evidence_ref": "process/stories/STORY-CR037-S04-ledger-compaction-policy-and-cli-LLD.md",
+    "required_level": "full-lld"
+  },
+  "objective": {
+    "non_goals": [
+      "Do not reuse or change the semantics of meta-flow state compact beyond help clarification.",
+      "Do not compact or modify process/quant-lab/**.",
+      "Do not perform runtime, production write, publish, live trading, external calls, or credential reads."
+    ],
+    "summary": "ledger compaction policy and CLI"
+  },
+  "packet_type": "story_work_packet",
+  "parent_context_ref": "process/context/CP5-CR-037-LLD-CONTEXT.yaml",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "meta-flow",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 2500,
+      "mode": "full",
+      "path": "tests/test_event_ledger.py",
+      "reason": "adjacent_test_patterns",
+      "required_when": "event ledger test patterns are needed"
+    },
+    {
+      "estimated_tokens": 2500,
+      "mode": "full",
+      "path": "tests/test_cli.py",
+      "reason": "cli_test_patterns",
+      "required_when": "CLI parser patterns are needed"
+    },
+    {
+      "estimated_tokens": 400,
+      "mode": "full",
+      "path": "meta_flow/state/__init__.py",
+      "reason": "module export check",
+      "required_when": "new ledger_compaction module needs package export"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "ledger-archive-rollback",
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR037-S04",
+  "story_ref": "process/stories/STORY-CR037-S04-ledger-compaction-policy-and-cli.md",
+  "verification_plan": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_cr037_ledger_compaction.py",
+      "expected": "PASS",
+      "id": "V-S04-01",
+      "type": "unit-cli"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state compact --help && PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow ledger compact --help",
+      "expected": "state compact help remains state render/check; ledger compact help covers ledger retention/archive",
+      "id": "V-S04-02",
+      "type": "cli-boundary"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S04.CP6.work-packet.json --return process/returns/CR037-S04.CP6.return.json --project-root .",
+      "expected": "PASS after return is generated",
+      "id": "V-S04-03",
+      "type": "contract-check"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S04.CP6.index.json --project-root .",
+      "expected": "PASS after evidence index is generated",
+      "id": "V-S04-04",
+      "type": "evidence-check"
+    },
+    {
+      "command": "git diff -- process/quant-lab docs delivery",
+      "expected": "No forbidden-path writes from S04",
+      "id": "V-S04-05",
+      "type": "boundary"
+    },
+    {
+      "command": "git diff --check -- meta_flow/state/ledger_compaction.py meta_flow/state/event_ledger.py meta_flow/cli.py meta_flow/state/current.py tests/test_cr037_ledger_compaction.py",
+      "expected": "PASS",
+      "id": "V-S04-06",
+      "type": "diff-check"
+    }
+  ]
+}

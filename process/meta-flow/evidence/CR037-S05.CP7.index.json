@@ -1,0 +1,159 @@
+{
+  "artifacts": [
+    {
+      "kind": "story_return_packet",
+      "path": "process/returns/CR037-S05.CP7.return.json"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP7-CR037-S05-VERIFICATION-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP7-CR037-S05-VERIFICATION-DONE.result.summary.md"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "process/returns/CR037-S05.CP7.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S05.CP7.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S05-VERIFICATION-DONE.result.json",
+      "role": "cp7_result"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S05-VERIFICATION-DONE.result.summary.md",
+      "role": "cp7_summary"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr037_project_current.py tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "id": "VP-S05-01",
+      "result": "PASS",
+      "summary": "42 passed, 15 subtests passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow project check --project-root .",
+      "id": "VP-S05-02",
+      "result": "PASS",
+      "summary": "Project Current Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root . --mode enforce",
+      "id": "VP-S05-03",
+      "result": "PASS",
+      "summary": "State v2 Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S05-CODING-DONE.result.json --project-root .",
+      "id": "VP-S05-04",
+      "result": "PASS",
+      "summary": "CP Result Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S05.CP6.work-packet.json --return process/returns/CR037-S05.CP6.return.json --project-root .",
+      "id": "VP-S05-05",
+      "result": "PASS_WITH_WARNING",
+      "summary": "Story Return Packet Check: OK; warning is limited to symlink-resolved return path text differing from expected_return_packet."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S05.CP6.index.json --project-root .",
+      "id": "VP-S05-06",
+      "result": "PASS",
+      "summary": "Evidence Index Check: OK."
+    },
+    {
+      "command": "git diff -- process/quant-lab docs",
+      "id": "VP-S05-07",
+      "result": "PASS",
+      "summary": "No output; no process/quant-lab or docs diff."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow project scaffold --project-root . --project-id meta-flow --project-name meta-flow",
+      "id": "VP-S05-08",
+      "result": "PASS",
+      "summary": "Dry-run returned noop actions for existing process/project and valid PROJECT.current.json; no writes were requested."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow workspace check --project-root .",
+      "id": "VP-S05-09",
+      "result": "PASS_WITH_WARNING",
+      "summary": "process_link_health: ok; artifact_git_dirty: dirty is expected for active CR-037 process outputs."
+    },
+    {
+      "command": "git diff --check -- meta_flow/project/__init__.py meta_flow/project/state.py meta_flow/project/scaffold.py meta_flow/workspace/routing.py meta_flow/state/current.py meta_flow/cli.py tests/test_cr037_project_current.py tests/test_state_v2.py process/project/PROJECT.current.json",
+      "id": "VP-S05-10",
+      "result": "PASS",
+      "summary": "No whitespace errors."
+    }
+  ],
+  "coverage": [
+    {
+      "id": "COV-S05-01",
+      "result": "PASS",
+      "summary": "process/project scaffold is covered by workspace check and the project scaffold dry-run path."
+    },
+    {
+      "id": "COV-S05-02",
+      "result": "PASS",
+      "summary": "PROJECT.current.json is refs-only and validated by project check plus target tests."
+    },
+    {
+      "id": "COV-S05-03",
+      "result": "PASS",
+      "summary": "STATE.current.json contains project_state_ref and required routing_ref only; no long-lived project governance payload is embedded."
+    },
+    {
+      "id": "COV-S05-04",
+      "result": "PASS",
+      "summary": "Project scaffold dry-run/no-overwrite behavior is covered by CLI dry-run output and tests."
+    },
+    {
+      "id": "COV-S05-05",
+      "result": "PASS",
+      "summary": "CP6 return, evidence, and result contracts validate."
+    },
+    {
+      "id": "COV-S05-06",
+      "result": "PASS",
+      "summary": "No process/quant-lab or docs diff is present."
+    }
+  ],
+  "cr_id": "CR-037",
+  "design_delta_ref": "",
+  "return_ref": "process/returns/CR037-S05.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "S05 uses one refs-only PROJECT.current.json and one STATE.current.json project_state_ref."
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "S05 does not introduce capability or feature IDs."
+    },
+    {
+      "id": "R-CR037-QA-SUBAGENT-NO-OUTPUT",
+      "level": "MEDIUM",
+      "mitigation": "Inline-fallback was explicitly authorized after three QA dispatch interruptions."
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR037-S05",
+  "tests": [
+    {
+      "id": "target-tests",
+      "result": "PASS",
+      "summary": "tests/test_cr037_project_current.py, tests/test_state_v2.py, and tests/test_cr_lifecycle.py passed: 42 tests, 15 subtests."
+    }
+  ],
+  "waivers": []
+}

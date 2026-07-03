@@ -1,0 +1,137 @@
+{
+  "artifacts": [
+    {
+      "kind": "implementation_evidence",
+      "path": "process/stories/STORY-CR037-S05-project-scaffold-and-project-current-IMPLEMENTATION.md"
+    },
+    {
+      "kind": "runtime_baseline",
+      "path": "process/project/PROJECT.current.json"
+    },
+    {
+      "kind": "cp_result",
+      "path": "process/checks/CP6-CR037-S05-CODING-DONE.result.json"
+    },
+    {
+      "kind": "cp_summary",
+      "path": "process/checks/CP6-CR037-S05-CODING-DONE.result.summary.md"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "meta_flow/project/__init__.py",
+      "role": "implementation"
+    },
+    {
+      "path": "meta_flow/project/state.py",
+      "role": "implementation"
+    },
+    {
+      "path": "meta_flow/project/scaffold.py",
+      "role": "implementation"
+    },
+    {
+      "path": "meta_flow/workspace/routing.py",
+      "role": "implementation"
+    },
+    {
+      "path": "meta_flow/state/current.py",
+      "role": "implementation"
+    },
+    {
+      "path": "meta_flow/cli.py",
+      "role": "implementation"
+    },
+    {
+      "path": "process/project/PROJECT.current.json",
+      "role": "runtime_baseline"
+    },
+    {
+      "path": "tests/test_cr037_project_current.py",
+      "role": "tests"
+    },
+    {
+      "path": "process/stories/STORY-CR037-S05-project-scaffold-and-project-current-IMPLEMENTATION.md",
+      "role": "implementation_evidence"
+    },
+    {
+      "path": "process/returns/CR037-S05.CP6.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S05.CP6.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP6-CR037-S05-CODING-DONE.result.json",
+      "role": "cp6_result"
+    },
+    {
+      "path": "process/checks/CP6-CR037-S05-CODING-DONE.result.summary.md",
+      "role": "cp6_summary"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr037_project_current.py tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "result": "PASS",
+      "summary": "42 passed, 15 subtests passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root . --mode enforce",
+      "result": "PASS",
+      "summary": "State v2 Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow context check-story-packet --packet process/context/stories/CR037-S05.CP6.work-packet.json --project-root .",
+      "result": "PASS",
+      "summary": "Story Context Packet Check: OK."
+    },
+    {
+      "command": "git diff -- process/quant-lab docs",
+      "result": "PASS",
+      "summary": "No diff output."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow project check --project-root .",
+      "result": "PASS",
+      "summary": "Project Current Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow workspace check --project-root .",
+      "result": "PASS_WITH_WARNING",
+      "summary": "process_link_health: ok; artifact_git_dirty is dirty because this is an active parallel worktree."
+    }
+  ],
+  "cr_id": "CR-037",
+  "design_delta_ref": "",
+  "return_ref": "process/returns/CR037-S05.CP6.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "S05 adds a focused project governance module and reuses the existing current-state controlled writer; CP7 should confirm no second current-state mechanism was introduced."
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "S05 does not alter Feature/capability registries or long-lived design registries; PROJECT.current remains refs-only."
+    },
+    {
+      "id": "R-CR037-FUTURE-REFS",
+      "level": "LOW",
+      "mitigation": "S05 baseline omits scale/roadmap/milestone refs until S06 creates those target objects, preventing immediate broken references."
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR037-S05",
+  "tests": [
+    {
+      "id": "target-tests",
+      "result": "PASS",
+      "summary": "PROJECT.current schema/budget/forbidden/ref validation, dry-run no-write, apply create/noop, conflict no-overwrite, current ref contract, CLI, and workspace scaffold coverage are tested."
+    }
+  ],
+  "waivers": []
+}

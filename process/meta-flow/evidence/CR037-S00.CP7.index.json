@@ -1,0 +1,152 @@
+{
+  "artifacts": [
+    {
+      "kind": "cp7_result",
+      "path": "process/checks/CP7-CR037-S00-VERIFICATION-DONE.result.json"
+    },
+    {
+      "kind": "cp7_summary",
+      "path": "process/checks/CP7-CR037-S00-VERIFICATION-DONE.result.summary.md"
+    },
+    {
+      "kind": "cp6_return",
+      "path": "process/returns/CR037-S00.CP6.return.json"
+    },
+    {
+      "kind": "cp6_evidence",
+      "path": "process/evidence/CR037-S00.CP6.index.json"
+    },
+    {
+      "kind": "cp6_result",
+      "path": "process/checks/CP6-CR037-S00-CODING-DONE.result.json"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "process/returns/CR037-S00.CP7.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S00.CP7.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S00-VERIFICATION-DONE.result.json",
+      "role": "cp7_result"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S00-VERIFICATION-DONE.result.summary.md",
+      "role": "cp7_summary"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow workspace check --project-root .",
+      "result": "PASS",
+      "summary": "process_link_health: ok; routing_mode=symlink; expected_project_name=meta-flow."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S00.CP6.work-packet.json --return process/returns/CR037-S00.CP6.return.json --project-root .",
+      "result": "PASS_WITH_WARNING",
+      "summary": "Story Return Packet Check: OK; warning is limited to symlink-resolved return path text differing from expected_return_packet."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S00.CP6.index.json --project-root .",
+      "result": "PASS",
+      "summary": "Evidence Index Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S00-CODING-DONE.result.json --project-root .",
+      "result": "PASS",
+      "summary": "CP Result Check: OK."
+    },
+    {
+      "command": "rg -n \"hot/warm/cold|roadmap_impact|PROJECT-LEDGER|free capability|自由 capability\" process/docs/design process/stories",
+      "result": "PASS_WITH_REVIEW",
+      "summary": "Matches are approved prohibition, non-goal, historical plan, LLD constraint, or S00 guardrail context; no newly introduced second-system mechanism was found."
+    },
+    {
+      "command": "git diff -- process/quant-lab meta_flow delivery docs tests",
+      "result": "PASS",
+      "summary": "No diff output for forbidden implementation paths."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S00.CP7.verify-packet.json --return process/returns/CR037-S00.CP7.return.json --project-root .",
+      "result": "PASS_WITH_WARNING",
+      "summary": "Story Return Packet Check: OK; warning is limited to symlink-resolved return path text differing from expected_return_packet."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S00.CP7.index.json --project-root .",
+      "result": "PASS",
+      "summary": "Evidence Index Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP7-CR037-S00-VERIFICATION-DONE.result.json --project-root .",
+      "result": "PASS",
+      "summary": "CP Result Check: OK."
+    }
+  ],
+  "contract_checks": [
+    {
+      "id": "V7-S00-01",
+      "result": "PASS_WITH_WARNING",
+      "summary": "CP6 return packet is valid; symlink path warning is non-blocking."
+    },
+    {
+      "id": "V7-S00-02",
+      "result": "PASS",
+      "summary": "CP6 evidence index is valid."
+    },
+    {
+      "id": "V7-S00-03",
+      "result": "PASS",
+      "summary": "CP6 result JSON is valid."
+    },
+    {
+      "id": "V7-S00-04",
+      "result": "PASS_WITH_REVIEW",
+      "summary": "Second-system keyword matches are approved context, not a new mechanism."
+    },
+    {
+      "id": "V7-S00-05",
+      "result": "PASS",
+      "summary": "Forbidden-path diff is empty."
+    }
+  ],
+  "cr_id": "CR-037",
+  "design_delta_ref": "",
+  "return_ref": "process/returns/CR037-S00.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "mitigation": "Carry S00 guardrail checks into downstream CR037-S01+ CP6 / CP7.",
+      "owner": "meta-qa",
+      "status": "open-for-downstream"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "mitigation": "Verify downstream refs use existing YAML registries or approved extension points.",
+      "owner": "meta-qa",
+      "status": "open-for-downstream"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR037-S00",
+  "tests": [
+    {
+      "id": "unit-tests",
+      "result": "N/A",
+      "summary": "S00 owns no runtime code or test fixtures."
+    },
+    {
+      "id": "runtime-tests",
+      "result": "N/A",
+      "summary": "Runtime, production write, publish, live, trading, and credential reads are out of authorization scope."
+    }
+  ],
+  "validation_mode": "static-only",
+  "waivers": []
+}

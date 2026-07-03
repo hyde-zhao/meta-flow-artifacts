@@ -1,0 +1,214 @@
+{
+  "blockers": [],
+  "checked_at": "2026-07-03T10:58:00+08:00",
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR037-S02-VERIFICATION-DONE",
+  "context_ref": "process/context/stories/CR037-S02.CP7.verify-packet.json",
+  "cp_result_ref": "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json",
+  "cr_id": "CR-037",
+  "decision": "PASS_WITH_RISK",
+  "dispatch_refs": [
+    "D-CR037-META-QA-CP7-S02"
+  ],
+  "evidence_ref": "process/evidence/CR037-S02.CP7.index.json",
+  "items": [
+    {
+      "category": "entry",
+      "evidence_refs": [
+        "process/context/stories/CR037-S02.CP7.verify-packet.json",
+        "process/handoffs/CR037-S02-CP7-VERIFICATION-HANDOFF.md",
+        "process/state/STATE.current.json",
+        "process/checks/CP7-CR037-S00-VERIFICATION-DONE.result.json",
+        "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+        "process/checks/CP6-CR037-S02-CODING-DONE.result.json"
+      ],
+      "id": "CP7-S02-01",
+      "name": "CP7 verification context, dispatch handoff, S00/S01 dependencies, and CP6 PASS evidence are consumable",
+      "notes": "Story is ready-for-verification, current state points to CR037-S02 CP7, S00/S01 are PASS_WITH_RISK with carried risks, and S02 CP6 result decision is PASS.",
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "contract",
+      "evidence_refs": [
+        "process/returns/CR037-S02.CP6.return.json",
+        "process/evidence/CR037-S02.CP6.index.json",
+        "process/checks/CP6-CR037-S02-CODING-DONE.result.json",
+        "process/evidence/CR037-S02.CP7.index.json#commands"
+      ],
+      "id": "CP7-S02-02",
+      "name": "CP6 return, evidence index, and CP6 result contracts validate",
+      "notes": "return-check, evidence-check, and cp result-check passed. The return-check warning is the known symlink-resolved expected_return_packet path text warning and is non-blocking because the command exited 0.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "meta_flow/state/current.py",
+        "tests/test_state_v2.py",
+        "process/evidence/CR037-S02.CP7.index.json#contract_checks"
+      ],
+      "id": "CP7-S02-03",
+      "name": "Controlled update_current_state writer contract is implemented and verified",
+      "notes": "Patch allowlist, dict deep-merge, list/scalar/null replacement, candidate full-state enforce validation, failure no-write, and missing STATE.current.json no-create behavior are covered by implementation and tests.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "implementation",
+      "evidence_refs": [
+        "meta_flow/workflow/cr_lifecycle.py",
+        "tests/test_cr_lifecycle.py",
+        "process/evidence/CR037-S02.CP7.index.json#commands"
+      ],
+      "id": "CP7-S02-04",
+      "name": "CR lifecycle active-change writer converges on current.update_current_state()",
+      "notes": "_update_current_active_change() calls current.update_current_state(); static rg and the wrapper test confirm no direct active-change STATE.current.json write path remains.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "process/evidence/CR037-S02.CP7.index.json#tests",
+        "tests/test_state_v2.py",
+        "tests/test_cr_lifecycle.py"
+      ],
+      "id": "CP7-S02-05",
+      "name": "Target unit tests and adjacent regression pass",
+      "notes": "Target tests passed with 28 tests and 7 subtests; adjacent context pack, story context contract, and workspace routing tests passed with 18 tests.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "process/evidence/CR037-S02.CP7.index.json#commands",
+        "process/state/STATE.current.json"
+      ],
+      "id": "CP7-S02-06",
+      "name": "Current state enforce validation passes",
+      "notes": "meta-flow state check --mode enforce returned State v2 Check: OK.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "boundary",
+      "evidence_refs": [
+        "process/evidence/CR037-S02.CP7.index.json#boundary_check",
+        "process/returns/CR037-S02.CP7.return.json#boundary_check"
+      ],
+      "id": "CP7-S02-07",
+      "name": "Forbidden write and authorization boundaries are respected",
+      "notes": "CP7 wrote only allowed verification outputs. Forbidden-path diff for process/quant-lab, delivery, and docs is empty; no runtime, production write, publish, live, real external call, trading, credential read, or quant-lab release write was performed.",
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "security",
+      "evidence_refs": [
+        "process/evidence/CR037-S02.CP7.index.json#commands"
+      ],
+      "id": "CP7-S02-08",
+      "name": "Dangerous command and second-mechanism scan has no blocking finding",
+      "notes": "Keyword matches are authorization-boundary strings or secret-like negative tests. No credential read, runtime, production write, publish/live/trading call, dangerous shell command, or second state/context/result/ledger/registry implementation was found.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "quality-review",
+      "evidence_refs": [
+        "process/evidence/CR037-S02.CP7.index.json#coverage",
+        "process/evidence/CR037-S02.CP7.index.json#contract_checks"
+      ],
+      "id": "CP7-S02-09",
+      "name": "Scoped quality review finds no rework blocker",
+      "notes": "Review confirmed no second writer mechanism, no registry drift in S02, no design delta requirement, and no blocking findings. docs/quality outputs are N/A because the user restricted writes to CP7 return/evidence/result/summary files.",
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "risk",
+      "evidence_refs": [
+        "process/evidence/CR037-S02.CP7.index.json#risks",
+        "process/checks/CP7-CR037-S00-VERIFICATION-DONE.result.json#risks",
+        "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json#risks"
+      ],
+      "id": "CP7-S02-10",
+      "name": "S03/S05 unlock risks are explicit and routable",
+      "notes": "S02 may be marked verified_with_risk and downstream S03/S05 may consume update_current_state() only with R-CR037-SECOND-MECHANISM and R-CR037-REGISTRY-DRIFT carried into downstream CP6 / CP7.",
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "handoff",
+      "evidence_refs": [
+        "process/returns/CR037-S02.CP7.return.json",
+        "process/evidence/CR037-S02.CP7.index.json",
+        "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.summary.md"
+      ],
+      "id": "CP7-S02-11",
+      "name": "CP7 return packet, evidence index, result, and summary are ready for host-orchestrator",
+      "notes": "All four allowed CP7 output files are generated. CP7 conclusion uses the allowed PASS_WITH_RISK enum and routes downstream risk carry-forward.",
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "CR037-S03-and-CR037-S05",
+  "read_expansion_refs": [],
+  "return_packet_ref": "process/returns/CR037-S02.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "owner": "meta-qa",
+      "routing": "carry_to_CR037-S03_CR037-S05_CP6_CP7",
+      "status": "open-for-downstream"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "owner": "meta-qa",
+      "routing": "carry_to_CR037-S03_CR037-S05_CP6_CP7",
+      "status": "open-for-downstream"
+    }
+  ],
+  "schema_version": 1,
+  "story_id": "CR037-S02",
+  "summary": "PASS_WITH_RISK: CR037-S02 CP7 verified update_current_state() patch allowlist, deep-merge, list/scalar/null replacement, full candidate enforce validation, failure no-write, missing-state no-create behavior, and cr_lifecycle active-change writer convergence to current.update_current_state(). CP6 machine contracts validate, target and adjacent tests pass, state enforce passes, forbidden-path diff and diff --check pass, and the known symlink return path warning is non-blocking. Downstream S03/S05 must carry second-mechanism and registry-drift risks.",
+  "waivers": []
+}

@@ -1,0 +1,189 @@
+{
+  "acceptance": [
+    "PROJECT-SCALE.yaml records lite / standard / full scale options, selected scale, gate_profile_bias, review_cadence_bias, scale reason, and explicit not_authorized boundaries.",
+    "PROJECT-SCALE.yaml bias is a recommendation only and does not directly modify process/policies/GATE-PROFILES.json.",
+    "ROADMAP.yaml and MILESTONES.yaml are project-level baseline objects with stable IDs, status enums, source refs, and cross-reference validation.",
+    "PROJECT.current.json remains refs-only and links scale_ref, roadmap_ref, and milestones_ref without embedding roadmap or milestone details.",
+    "meta-flow project check validates PROJECT.current.json, PROJECT-SCALE.yaml, ROADMAP.yaml, and MILESTONES.yaml together.",
+    "Tests cover legal scale, unsafe authorization semantics, invalid gate profile bias, roadmap/milestone schema errors, duplicate IDs, broken refs, cross-ref mismatch, and typed snapshot loading.",
+    "No direct write is made to process/policies/GATE-PROFILES.json and no process/quant-lab or docs path is modified."
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 410,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 245,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S06-project-scale-and-roadmap-objects.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 322,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 817,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-037.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    }
+  ],
+  "allowed_write_paths": [
+    "process/handoffs/CR037-S06-CP7-VERIFICATION-HANDOFF.md",
+    "process/returns/CR037-S06.CP7.return.json",
+    "process/evidence/CR037-S06.CP7.index.json",
+    "process/checks/CP7-CR037-S06-VERIFICATION-DONE.result.json",
+    "process/checks/CP7-CR037-S06-VERIFICATION-DONE.result.summary.md",
+    "process/state/CHECKPOINT-LEDGER.ndjson",
+    "process/state/HANDOFF-LEDGER.ndjson",
+    "process/state/AGENT-DISPATCH-LEDGER.ndjson",
+    "process/STORY-BACKLOG.md",
+    "process/STORY-STATUS.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/state/STATE.current.json",
+    "process/STATE.md",
+    "process/docs/quality/CR-037-CP7-VERIFICATION-REPORT.md"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "NO_GATE_PROFILE_POLICY_WRITE",
+    "NO_QUANT_LAB_RELEASE_WRITE"
+  ],
+  "budget": {
+    "estimated_tokens": 1794,
+    "estimator": "chars_div_4",
+    "max_tokens": 18000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [
+      "PROJECT.current refs-only schema",
+      "PROJECT-SCALE.yaml project-scale bias contract",
+      "ROADMAP.yaml baseline object contract",
+      "MILESTONES.yaml baseline object contract",
+      "meta-flow project check aggregate validation"
+    ],
+    "summary": "CR037-S06 verifies project-scale, roadmap, and milestone baseline objects after user-authorized CP6 inline-fallback. Verification must prove refs-only PROJECT.current behavior, gate_profile_bias as recommendation only, project checker coverage, and write-boundary isolation."
+  },
+  "cr_id": "CR-037",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "dependency_inputs": [
+    {
+      "result_ref": "process/checks/CP7-CR037-S05-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT",
+        "R-CR037-QA-SUBAGENT-NO-OUTPUT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S05"
+    }
+  ],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "expected_return_packet": "process/returns/CR037-S06.CP7.return.json",
+  "feature_contract_summary": "Project State Governance S06: validate project-scale, roadmap, and milestones baseline objects; keep PROJECT.current.json refs-only; treat gate_profile_bias as recommendation only; do not write GATE-PROFILES.json or quant-lab release files.",
+  "feature_design_refs": [
+    "process/docs/features/project-state-governance/DESIGN.md",
+    "process/docs/features/project-state-governance/TEST-PLAN.md",
+    "process/docs/features/project-state-governance/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "FEAT-PG-003"
+  ],
+  "forbidden_write_paths": [
+    "process/policies/GATE-PROFILES.json",
+    "process/quant-lab/**",
+    "docs/**",
+    "delivery/**",
+    ".env",
+    "**/*credential*",
+    "**/*secret*",
+    "**/*token*",
+    "**/*cookie*",
+    "**/*private_key*"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "implementation_return_ref": "process/returns/CR037-S06.CP6.return.json",
+  "lld_policy": "full-lld",
+  "objective": {
+    "non_goals": [],
+    "summary": "PROJECT-SCALE and roadmap objects"
+  },
+  "packet_type": "story_verify_packet",
+  "parent_context_ref": "process/context/stories/CR037-S06.base.context.json",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "meta-flow",
+  "read_if_needed": [],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "",
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR037-S06",
+  "story_ref": "process/stories/STORY-CR037-S06-project-scale-and-roadmap-objects.md",
+  "verification_plan": [
+    "Run unit/contract tests for project scale, roadmap, milestones, and typed project snapshot.",
+    "Run existing project current, state, and lifecycle regression tests to prove S05/S01/S02 contracts still hold.",
+    "Run meta-flow project check --project-root . and confirm scale/roadmap/milestone objects validate.",
+    "Run meta-flow state check --mode enforce after PROJECT.current refs are updated.",
+    "Re-check CP6 result, CP6 return packet, and CP6 evidence index because CP6 was completed via user-authorized inline-fallback.",
+    "Verify process/policies/GATE-PROFILES.json is unchanged.",
+    "Verify git diff -- process/quant-lab docs is empty and no credentials/runtime/publish/live behavior is introduced."
+  ]
+}

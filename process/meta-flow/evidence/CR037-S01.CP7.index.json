@@ -1,0 +1,139 @@
+{
+  "artifacts": [
+    {
+      "kind": "cp7_result",
+      "path": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json"
+    },
+    {
+      "kind": "cp7_summary",
+      "path": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.summary.md"
+    },
+    {
+      "kind": "cp7_return",
+      "path": "process/returns/CR037-S01.CP7.return.json"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "process/returns/CR037-S01.CP7.return.json",
+      "role": "story_return_packet"
+    },
+    {
+      "path": "process/evidence/CR037-S01.CP7.index.json",
+      "role": "evidence_index"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+      "role": "cp7_result"
+    },
+    {
+      "path": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.summary.md",
+      "role": "cp7_summary"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow workspace check --project-root .",
+      "result": "PASS",
+      "summary": "process_link_health: ok; routing_mode=symlink; expected_project_name=meta-flow; artifact_git_dirty=dirty."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_state_v2.py",
+      "result": "PASS",
+      "summary": "14 passed, 7 subtests passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr_lifecycle.py tests/test_context_pack.py tests/test_story_context_contract.py tests/test_workspace_routing.py",
+      "result": "PASS",
+      "summary": "25 passed."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root . --mode enforce",
+      "result": "PASS",
+      "summary": "State v2 Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S01.CP6.work-packet.json --return process/returns/CR037-S01.CP6.return.json --project-root .",
+      "result": "PASS_WITH_WARNING",
+      "summary": "Story Return Packet Check: OK; warning is limited to symlink-resolved return path text differing from expected_return_packet."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S01.CP6.index.json --project-root .",
+      "result": "PASS",
+      "summary": "Evidence Index Check: OK."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S01-CODING-DONE.result.json --project-root .",
+      "result": "PASS",
+      "summary": "CP Result Check: OK."
+    },
+    {
+      "command": "git diff --check -- meta_flow/state/current.py tests/test_state_v2.py",
+      "result": "PASS",
+      "summary": "No whitespace errors."
+    },
+    {
+      "command": "git diff -- process/quant-lab delivery docs",
+      "result": "PASS",
+      "summary": "No forbidden-path diff output."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python -c '<contract probe>'",
+      "result": "PASS",
+      "summary": "Budget constants exactly match CP5-approved values; secret-like validation does not emit SUPERSECRET-VALUE; invalid writer payload leaves no STATE.current.json or state directory."
+    },
+    {
+      "command": "rg -n \"hot/warm/cold|roadmap_impact|PROJECT-LEDGER|free capability|自由 capability\" meta_flow/state/current.py tests/test_state_v2.py",
+      "result": "PASS",
+      "summary": "No matches in implementation or tests."
+    },
+    {
+      "command": "rg -n \"rm -rf|sudo|curl |wget |publish| live|trade|trading|PASSWORD|api_key\" meta_flow/state/current.py tests/test_state_v2.py",
+      "result": "PASS",
+      "summary": "No dangerous command, publish/live/trading, or credential-value patterns in implementation or tests."
+    }
+  ],
+  "cr_id": "CR-037",
+  "design_delta_ref": "",
+  "read_expansion_refs": [
+    "process/stories/STORY-CR037-S01-current-state-schema-and-budgets-IMPLEMENTATION.md#full_doc_read_reason=deep_verification_contract"
+  ],
+  "return_ref": "process/returns/CR037-S01.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR037-SECOND-MECHANISM",
+      "level": "MEDIUM",
+      "owner": "meta-qa",
+      "routing": "carry_to_CR037-S02_CP6_CP7",
+      "status": "open-for-downstream"
+    },
+    {
+      "id": "R-CR037-REGISTRY-DRIFT",
+      "level": "MEDIUM",
+      "owner": "meta-qa",
+      "routing": "carry_to_CR037-S02_CP6_CP7",
+      "status": "open-for-downstream"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR037-S01",
+  "tests": [
+    {
+      "id": "unit-tests",
+      "result": "PASS",
+      "summary": "tests/test_state_v2.py passed with 14 tests and 7 subtests."
+    },
+    {
+      "id": "adjacent-regression",
+      "result": "PASS",
+      "summary": "CR lifecycle, context pack, story context contract, and workspace routing tests passed with 25 tests."
+    },
+    {
+      "id": "contract-probe",
+      "result": "PASS",
+      "summary": "Budget constants, secret-like redaction, and writer no-write behavior passed direct probe."
+    }
+  ],
+  "waivers": []
+}

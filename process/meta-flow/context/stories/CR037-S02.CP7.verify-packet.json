@@ -1,0 +1,313 @@
+{
+  "acceptance": [
+    "CP6 return, evidence index, and CP6 result validate and match the S02 work packet.",
+    "Tests prove update_current_state patch allowlist, deep-merge, list/scalar/null replacement, candidate full-state enforce validation, failure no-write, and missing STATE.current.json no-create behavior.",
+    "cr_lifecycle._update_current_active_change() uses current.update_current_state() and no longer directly writes STATE.current.json.",
+    "Implementation uses existing meta_flow/state/current.py current-state v2 path and does not add a second state/context/result/ledger/registry mechanism.",
+    "No forbidden writes to process/quant-lab/**, delivery/**, docs/**, credential-like paths, runtime, production write, publish, live, or trading.",
+    "If verified, CR037-S03 and CR037-S05 may consume the controlled writer API with S00/S01/S02 risks carried forward."
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 333,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 249,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/stories/STORY-CR037-S02-controlled-update-api-and-writer-refactor.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 322,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 817,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-037.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1900,
+      "mode": "full",
+      "path": "process/returns/CR037-S02.CP6.return.json",
+      "reason": "implementation_return",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1600,
+      "mode": "full",
+      "path": "process/evidence/CR037-S02.CP6.index.json",
+      "reason": "evidence_index",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1400,
+      "mode": "full",
+      "path": "process/checks/CP6-CR037-S02-CODING-DONE.result.json",
+      "reason": "cp6_result",
+      "required": true
+    },
+    {
+      "estimated_tokens": 7000,
+      "mode": "full",
+      "path": "meta_flow/state/current.py",
+      "reason": "implementation_target",
+      "required": true
+    },
+    {
+      "estimated_tokens": 2500,
+      "mode": "full",
+      "path": "meta_flow/workflow/cr_lifecycle.py",
+      "reason": "implementation_target",
+      "required": true
+    },
+    {
+      "estimated_tokens": 3500,
+      "mode": "full",
+      "path": "tests/test_state_v2.py",
+      "reason": "test_target",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1800,
+      "mode": "full",
+      "path": "tests/test_cr_lifecycle.py",
+      "reason": "test_target",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1600,
+      "mode": "full",
+      "path": "process/checks/CP7-CR037-S00-VERIFICATION-DONE.result.json",
+      "reason": "dependency_cp7_result",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1600,
+      "mode": "full",
+      "path": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+      "reason": "dependency_cp7_result",
+      "required": true
+    }
+  ],
+  "allowed_write_paths": [
+    "process/returns/CR037-S02.CP7.return.json",
+    "process/evidence/CR037-S02.CP7.index.json",
+    "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.json",
+    "process/checks/CP7-CR037-S02-VERIFICATION-DONE.result.summary.md"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING"
+  ],
+  "budget": {
+    "estimated_tokens": 17600,
+    "estimator": "chars_div_4",
+    "max_tokens": 22000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [
+      "STATE.current.json writer contract",
+      "CR lifecycle active-change writer path"
+    ],
+    "summary": "CR037-S02 CP6 PASS implemented a controlled current-state patch API and refactored CR lifecycle active-change updates away from direct JSON writes. CP7 must verify no-write-on-failure, no-create-on-missing-state, deep-merge semantics, and S01 enforcement compatibility before S03/S05 consume the API."
+  },
+  "cr_id": "CR-037",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "dependency_inputs": [
+    {
+      "result_ref": "process/checks/CP7-CR037-S00-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S00"
+    },
+    {
+      "result_ref": "process/checks/CP7-CR037-S01-VERIFICATION-DONE.result.json",
+      "risks_to_carry": [
+        "R-CR037-SECOND-MECHANISM",
+        "R-CR037-REGISTRY-DRIFT"
+      ],
+      "stage": "CP7",
+      "status": "PASS_WITH_RISK",
+      "story_id": "CR037-S01"
+    },
+    {
+      "evidence_ref": "process/evidence/CR037-S02.CP6.index.json",
+      "result_ref": "process/checks/CP6-CR037-S02-CODING-DONE.result.json",
+      "return_ref": "process/returns/CR037-S02.CP6.return.json",
+      "stage": "CP6",
+      "status": "PASS",
+      "story_id": "CR037-S02"
+    }
+  ],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "expected_return_packet": "process/returns/CR037-S02.CP7.return.json",
+  "feature_contract_summary": "Verify Current State Enforcement S02: update_current_state must enforce patch allowlist and full candidate validation, use deep-merge for dict fields, replace list/scalar/null values without delete semantics, fail without writing, avoid creating missing state, and be the only CR lifecycle active-change writer path.",
+  "feature_design_refs": [
+    "process/docs/features/current-state-enforcement/DESIGN.md",
+    "process/docs/features/current-state-enforcement/TEST-PLAN.md",
+    "process/docs/features/current-state-enforcement/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "FEAT-PG-001"
+  ],
+  "forbidden_write_paths": [
+    "process/quant-lab/**",
+    "meta_flow/**",
+    "tests/**",
+    "delivery/**",
+    "docs/**",
+    ".env",
+    "**/*credential*",
+    "**/*secret*",
+    "**/*token*",
+    "**/*cookie*",
+    "**/*private_key*"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "implementation_return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/returns/CR037-S02.CP6.return.json",
+  "lld_policy": {
+    "evidence_ref": "process/stories/STORY-CR037-S02-controlled-update-api-and-writer-refactor-LLD.md",
+    "required_level": "full-lld"
+  },
+  "objective": {
+    "non_goals": [],
+    "summary": "controlled update API and writer refactor"
+  },
+  "packet_type": "story_verify_packet",
+  "parent_context_ref": "process/context/stories/CR037-S02.base.context.json",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "meta-flow",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 2200,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S02-controlled-update-api-and-writer-refactor-IMPLEMENTATION.md",
+      "reason": "deep_verification_contract",
+      "required_when": "return/evidence/result are insufficient or inconsistent"
+    },
+    {
+      "estimated_tokens": 3200,
+      "mode": "full",
+      "path": "process/stories/STORY-CR037-S02-controlled-update-api-and-writer-refactor-LLD.md",
+      "reason": "design_contract_deep_review",
+      "required_when": "implementation behavior or tests appear inconsistent with the LLD contract"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "state-writer-contract",
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR037-S02",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/stories/STORY-CR037-S02-controlled-update-api-and-writer-refactor.md",
+  "verification_plan": [
+    {
+      "command": "uv run --python 3.11 meta-flow story return-check --packet process/context/stories/CR037-S02.CP6.work-packet.json --return process/returns/CR037-S02.CP6.return.json --project-root .",
+      "expected": "PASS; known symlink expected_return_packet warning is non-blocking if path resolves to the same process artifact.",
+      "id": "VP-S02-01",
+      "type": "contract-check"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow story evidence-check --index process/evidence/CR037-S02.CP6.index.json --project-root .",
+      "expected": "PASS",
+      "id": "VP-S02-02",
+      "type": "contract-check"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR037-S02-CODING-DONE.result.json --project-root .",
+      "expected": "PASS",
+      "id": "VP-S02-03",
+      "type": "checkpoint-check"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "expected": "PASS; includes update_current_state and lifecycle convergence tests.",
+      "id": "VP-S02-04",
+      "type": "unit-test"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 pytest -q tests/test_context_pack.py tests/test_story_context_contract.py tests/test_workspace_routing.py",
+      "expected": "PASS",
+      "id": "VP-S02-05",
+      "type": "adjacent-regression"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow state check --project-root . --mode enforce",
+      "expected": "PASS",
+      "id": "VP-S02-06",
+      "type": "state-enforce"
+    },
+    {
+      "command": "git diff -- process/quant-lab delivery docs",
+      "expected": "No output for S02 implementation scope.",
+      "id": "VP-S02-07",
+      "type": "diff-boundary"
+    },
+    {
+      "command": "git diff --check",
+      "expected": "PASS",
+      "id": "VP-S02-08",
+      "type": "diff-whitespace"
+    }
+  ]
+}
