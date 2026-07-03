@@ -1,8 +1,8 @@
 {
   "affected_product_docs": [],
   "affected_use_cases": [],
-  "approval_focus": "批准完整方案实施：目标包、CR cohesion、决策分层、人类门禁校验、brief 命令和文档同步。",
-  "approve_effect": "接受完整方案后，meta-flow 将默认要求 CR / Human Gate 先输出审批者摘要和决策分层，并提供目标导向 brief 命令；低风险实现细节不再默认打扰用户。",
+  "approval_focus": "Accept CR036 recovery closure as source-implemented and process-recovered with remaining risk around missing original artifacts.",
+  "approve_effect": "Treat CR036 lightweight recovery as closed and keep future work limited to validation unless regression evidence appears.",
   "authz_policy_refs": [
     "NO_CREDENTIAL_READ",
     "NO_RUNTIME",
@@ -11,54 +11,95 @@
   ],
   "block_story_decomposition_until": "",
   "conflict_keys": [
-    "cr-lifecycle",
+    "project-governance",
     "human-gate",
-    "use-case-baseline",
-    "approval-ux"
+    "cr-lifecycle"
   ],
   "cr_type": "process",
   "decision": "pending",
-  "decision_burden": "reduced",
+  "decision_burden": "low",
   "evidence_index_ref": "process/archive/CR-036/evidence-index.json",
   "followup_candidates": [],
   "full_ref": "process/changes/CR-036.md",
-  "gate_profile": "standard",
-  "gate_status": "cp2_pending",
-  "goal_ref": "GOAL-CR036-approval-ux",
-  "goal_statement": "让审批者在 CR 和人工门禁中先理解整体目标、影响和授权边界，再决定真正需要人工判断的事项。",
+  "gate_profile": "standard-code",
+  "gate_status": "cp8_recovery_closed",
+  "goal_ref": "GOAL-CR036-HUMAN-GATE-RECOVERY",
+  "goal_statement": "Recover traceability for the approval-oriented human gate protocol change that predates formal CR036 process artifacts.",
   "id": "CR-036",
+  "impact_capability_normalized": [],
+  "impact_capability_refs": [],
+  "impact_capability_resolution": {
+    "kind": "capability",
+    "mode": "audit",
+    "results": [],
+    "summary": {
+      "conflict": 0,
+      "deprecated": 0,
+      "resolved": 0,
+      "unresolved": 0
+    }
+  },
+  "impact_data_refs": [],
+  "impact_feature_refs": [],
+  "impact_module_paths": [
+    "meta_flow/checks/human_gate.py",
+    "meta_flow/ask_user.py",
+    "meta_flow/workflow/cr_lifecycle.py",
+    "tests/test_ask_user.py",
+    "tests/test_cr_lifecycle.py",
+    "tests/test_gate_policy.py"
+  ],
+  "impact_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING"
+  ],
+  "impact_process_refs": [
+    "process/changes/CR-036.md",
+    "process/checks/CP0-CR036-RECOVERY.result.json",
+    "process/checks/CP8-CR036-RECOVERY.result.json",
+    "process/archive/CR-036/evidence-index.json",
+    "process/state/CR-LEDGER.ndjson",
+    "process/state/CHECKPOINT-LEDGER.ndjson"
+  ],
+  "impact_runtime_refs": [],
   "impact_surface": [
-    "process",
-    "changes",
-    "use-cases",
-    "human-gate",
-    "decision-brief"
+    "meta_flow/checks/human_gate.py",
+    "meta_flow/ask_user.py",
+    "meta_flow/workflow/cr_lifecycle.py",
+    "tests/test_ask_user.py",
+    "tests/test_cr_lifecycle.py",
+    "tests/test_gate_policy.py"
   ],
   "not_authorized_by_approve": [
-    "读取凭据或账户",
-    "真实运行外部服务",
-    "生产写入",
-    "publish / live / trading",
-    "自动关闭历史 CR",
-    "跳过 CP2 / CP5 / CP8 人工门禁"
+    "credentials",
+    "runtime",
+    "publish",
+    "live_trading",
+    "production_write",
+    "process/quant-lab",
+    "docs",
+    "delivery"
   ],
   "product_baseline_refresh_required": false,
-  "readiness": "READY",
-  "reject_effect": "拒绝或要求调整会保留既有 CR-036 use-case 刷新，但不启用新的 human-gate 校验和目标包协议。",
-  "remaining_risks": [],
-  "required_agent": "",
-  "required_gate": "",
-  "required_phase": "",
+  "readiness": "READY_WITH_RISK",
+  "reject_effect": "Open a follow-up recovery story to reconstruct deeper CR036 planning context.",
+  "remaining_risks": [
+    "CR036-RISK-ORIGINAL-PROCESS-ARTIFACTS-MISSING"
+  ],
+  "required_agent": "host-orchestrator",
+  "required_gate": "CP8",
+  "required_phase": "recovery-closure",
   "routing_design_ref": "",
   "scope_summary": [
-    "Refresh meta-flow use cases for goal-oriented CR grouping, approval impact summaries, and risk-based human gate decision burden reduction.",
-    "本 CR 响应用户反馈：meta-flow 当前 CR 拆分有时过细，人工确认项也偏细，审批者难以理解某个 CR 对整体目标的作用、待决策内容的真实影响，以及 approve 后会改变什么。"
+    "Approval-oriented human gate protocol recovery"
   ],
-  "split_rationale": "该 CR 聚合审批体验相关的 use-case、CR lifecycle、human-gate checker、ask-user 消息和交付文档，保持为一个目标包而不是拆成多个细 CR。",
-  "status": "blocked",
-  "title": "approval-oriented CR and human gate use-case refresh",
-  "updated_at": "2026-07-02T08:56:57+00:00",
-  "user_goal_impact": "CR 汇总会显示该 CR 服务的目标、影响哪些 use-case、approve 后果和不授权边界；人工确认会把低风险实现细节降级为 agent 默认处理或仅审计记录。",
-  "why_not_merge_with_parent": "没有仍在执行的父 CR 能完整覆盖审批体验目标；并入历史 CR 会掩盖用户反馈的独立目标和验收口径。",
-  "why_not_story_or_task": "该变更跨规则、CLI、模板、测试和文档，影响工作流治理协议，不只是单个 Story 或实现任务。"
+  "split_rationale": "CR036 recovery is limited to human-gate and CR lifecycle governance behavior; it does not authorize runtime, delivery, docs, trading, or production writes.",
+  "status": "closed",
+  "title": "Approval-oriented human gate protocol recovery",
+  "updated_at": "2026-07-03T13:04:27+00:00",
+  "user_goal_impact": "Maintainers can verify that CR036 behavior is implemented in source and distinguish recovered governance evidence from original planning records.",
+  "why_not_merge_with_parent": "",
+  "why_not_story_or_task": ""
 }

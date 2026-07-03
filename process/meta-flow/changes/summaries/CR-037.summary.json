@@ -1,25 +1,8 @@
 {
-  "affected_product_docs": [
-    "process/docs/product/USE-CASES.md",
-    "process/docs/product/REQUIREMENTS.md",
-    "process/docs/product/SCENARIOS.yaml",
-    "process/docs/product/TEST-MATRIX.md",
-    "process/docs/product/STORY-MAP.md",
-    "process/docs/product/MVP-SCOPE.md",
-    "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-BLUEPRINT.md",
-    "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-HLD.md"
-  ],
-  "affected_use_cases": [
-    "UC-PG-001",
-    "UC-PG-002",
-    "UC-PG-003",
-    "UC-PG-004",
-    "UC-PG-005",
-    "UC-PG-006",
-    "UC-PG-007"
-  ],
-  "approval_focus": "批准 CR-037 作为 CR-036 之后的正式整改变更包，进入 P0 state enforcement、P1 project governance 和 P2 quant-lab migration 的分阶段实施。",
-  "approve_effect": "接受后，meta-flow 将先实现 STATE.current.json allowlist 与受控更新入口，再引入 PROJECT.current.json、PROJECT-SCALE、ROADMAP/MILESTONES 和 ROADMAP-REFRESH 检查，最后用 quant-lab 做迁移验证。",
+  "affected_product_docs": [],
+  "affected_use_cases": [],
+  "approval_focus": "Confirm CR037 closure and retain recovered evidence for future audits.",
+  "approve_effect": "Treat CR037 S08-S11 implementation and governance evidence as closed.",
   "authz_policy_refs": [
     "NO_CREDENTIAL_READ",
     "NO_RUNTIME",
@@ -28,62 +11,88 @@
   ],
   "block_story_decomposition_until": "",
   "conflict_keys": [
-    "state-current",
     "project-governance",
-    "roadmap-refresh",
-    "impact-surface",
-    "capability-registry",
-    "quant-lab-migration"
+    "cr-lifecycle",
+    "impact-surface"
   ],
   "cr_type": "process",
-  "decision": "cp5-approved",
-  "decision_burden": "standard",
+  "decision": "pending",
+  "decision_burden": "medium",
   "evidence_index_ref": "process/archive/CR-037/evidence-index.json",
   "followup_candidates": [],
   "full_ref": "process/changes/CR-037.md",
-  "gate_profile": "standard",
-  "gate_status": "cp7_pending",
-  "goal_ref": "GOAL-CR037-project-governance-state-enforcement",
-  "goal_statement": "在不新增第二套机制的前提下，修复 STATE.current.json enforcement、补齐项目长期治理对象，并支持 quant-lab 的可迁移治理整改。",
+  "gate_profile": "standard-code",
+  "gate_status": "cp8_closed",
+  "goal_ref": "GOAL-CR037-GOVERNANCE",
+  "goal_statement": "Make project governance state, CR lifecycle records, and impact surface migration machine-readable and auditable.",
   "id": "CR-037",
+  "impact_capability_normalized": [],
+  "impact_capability_refs": [],
+  "impact_capability_resolution": {
+    "kind": "capability",
+    "mode": "audit",
+    "results": [],
+    "summary": {
+      "conflict": 0,
+      "deprecated": 0,
+      "resolved": 0,
+      "unresolved": 0
+    }
+  },
+  "impact_data_refs": [],
+  "impact_feature_refs": [],
+  "impact_module_paths": [
+    "meta_flow/workflow/cr_lifecycle.py",
+    "meta_flow/design/feature_registry.py",
+    "tests/test_cr_lifecycle.py",
+    "tests/test_feature_registry.py"
+  ],
+  "impact_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING"
+  ],
+  "impact_process_refs": [
+    "process/context/stories/CR037-S08.CP6.work-packet.json",
+    "process/context/stories/CR037-S09.CP6.work-packet.json",
+    "process/returns",
+    "process/evidence",
+    "process/checks",
+    "process/state/CHECKPOINT-LEDGER.ndjson"
+  ],
+  "impact_runtime_refs": [],
   "impact_surface": [
-    "state",
-    "context",
-    "changes",
-    "project-governance",
-    "roadmap",
-    "project-scale",
-    "design",
-    "quality"
+    "process",
+    "meta_flow/workflow/cr_lifecycle.py",
+    "meta_flow/design/feature_registry.py"
   ],
   "not_authorized_by_approve": [
-    "将 CR-036 暂停视为完成或关闭",
-    "自动关闭、恢复或完成 CR-036",
-    "自动修改 quant-lab 发布库代码或正式文档",
-    "读取凭据或账户",
-    "真实交易 / live / publish",
-    "生产写入"
+    "credentials",
+    "runtime",
+    "publish",
+    "live_trading",
+    "production_write",
+    "process/quant-lab"
   ],
   "product_baseline_refresh_required": false,
   "readiness": "READY",
-  "reject_effect": "拒绝或延后后，保留已评审实施计划作为设计记录，但不进入代码实现，也不迁移 quant-lab。",
+  "reject_effect": "Reopen CR037 verification or create a follow-up CR.",
   "remaining_risks": [
-    "R-CR037-ACTIVE-CR-BOUNDARY",
-    "R-CR037-SECOND-MECHANISM",
-    "R-CR037-REGISTRY-DRIFT"
+    "CR037-RISK-ORIGINAL-PACKETS-MISSING"
   ],
-  "required_agent": "meta-dev",
-  "required_gate": "CP6",
-  "required_phase": "story-execution",
+  "required_agent": "host-orchestrator",
+  "required_gate": "CP8",
+  "required_phase": "delivery-closure",
   "routing_design_ref": "",
   "scope_summary": [
-    "本 CR 承接 2026-07-02 多轮评审已通过的整改方案，把 meta-flow 当前缺失或失效的项目长期治理能力纳入正式实施跟踪。目标不是新建第二套机制，而是在现有 capsule-first、read-expansion ledger、handoff、gate profile、CR index、capability governance 和 CP result 体系上补齐缺口。"
+    "Project governance and impact surface migration"
   ],
-  "split_rationale": "该 CR 聚合本轮八轮评审已收敛的状态治理、长期项目治理、roadmap refresh、impact_surface 修复和 capability registry 归一，不拆成孤立机制以避免再次制造并行体系。",
-  "status": "active",
-  "title": "meta-flow project governance and state enforcement remediation",
-  "updated_at": "2026-07-03T00:00:00+08:00",
-  "user_goal_impact": "维护者可以用低 token 成本理解项目阶段、roadmap、规模治理、状态约束和后续迁移边界，避免长期项目靠散落文档和膨胀状态推进。",
-  "why_not_merge_with_parent": "CR-036 聚焦审批体验和 human gate；CR-037 聚焦状态与长期项目治理，冲突面不同，合并会扩大 CR-036 的审批范围。",
-  "why_not_story_or_task": "该变更跨状态 schema、CLI、workspace scaffold、CR lifecycle、capability registry、roadmap refresh、stale check、模板和迁移策略，不是单个实现 Story。"
+  "split_rationale": "CR037 governs meta-flow project governance mechanics and should remain separate from runtime, trading, publishing, and data-lake work.",
+  "status": "closed",
+  "title": "Project governance and impact surface migration",
+  "updated_at": "2026-07-03T12:43:32+00:00",
+  "user_goal_impact": "Host and implementation agents can continue CR037 with clearer boundaries, resolver-backed references, and checkpoint evidence.",
+  "why_not_merge_with_parent": "",
+  "why_not_story_or_task": ""
 }

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "story_id": "CR037-S09",
+  "cr_id": "CR-037",
+  "stage": "CP6",
+  "profile": "standard-code",
+  "objective": {
+    "summary": "Extend CR impact migration reporting so uncategorized legacy impact_surface values become visible follow-up candidates with aggregate counts, without mutating CR files or canonical registries."
+  },
+  "feature_refs": [
+    "CR037-S09"
+  ],
+  "feature_context": [
+    {
+      "path": "meta_flow/workflow/cr_lifecycle.py",
+      "reason": "CR impact migration report and brief rendering."
+    },
+    {
+      "path": "tests/test_cr_lifecycle.py",
+      "reason": "Focused lifecycle coverage for S09 follow-up candidate behavior."
+    }
+  ],
+  "acceptance": [
+    "impact-report summary includes uncategorized_cr_count and uncategorized_legacy_count.",
+    "Each CR item with uncategorized legacy impact_surface values includes candidate-only followup_candidates.",
+    "CR brief renders uncategorized legacy impact_surface values and their candidate ID.",
+    "No CR files, canonical registries, docs, delivery artifacts, runtime, publish, live/trading, or production-write paths are mutated.",
+    "S07 feature/capability registry resolver remains the only resolver for capability refs."
+  ],
+  "allowed_write_paths": [
+    "meta_flow/workflow/cr_lifecycle.py",
+    "tests/test_cr_lifecycle.py",
+    "process/context/stories/CR037-S09.CP6.work-packet.json",
+    "process/returns/CR037-S09.CP6.return.json",
+    "process/evidence/CR037-S09.CP6.index.json",
+    "process/checks/CP6-CR037-S09.result.json",
+    "process/checks/CP6-CR037-S09.result.summary.md",
+    "process/state/CHECKPOINT-LEDGER.ndjson"
+  ],
+  "forbidden_write_paths": [
+    "process/quant-lab/**",
+    "docs/**",
+    "delivery/**",
+    "runtime/**",
+    "publish/**",
+    "live/**",
+    "trading/**"
+  ],
+  "verification_plan": [
+    "uv run pytest tests/test_cr_lifecycle.py tests/test_feature_registry.py",
+    "uv run pytest tests/test_cr_lifecycle.py tests/test_feature_registry.py tests/test_cr037_project_current.py tests/test_cr037_project_scale_roadmap.py tests/test_state_v2.py tests/test_cp_result_event_ledger.py tests/test_story_evidence.py",
+    "git diff --check -- meta_flow/workflow/cr_lifecycle.py tests/test_cr_lifecycle.py",
+    "uv run meta-flow state check --project-root . --mode enforce",
+    "uv run meta-flow event check --ledger process/state/CHECKPOINT-LEDGER.ndjson --type checkpoint"
+  ],
+  "expected_return_packet": "process/returns/CR037-S09.CP6.return.json"
+}

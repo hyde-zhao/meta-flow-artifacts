@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "story_id": "CR037-CP7",
+  "cr_id": "CR-037",
+  "stage": "CP7",
+  "return_ref": "",
+  "changed_files": [
+    {
+      "path": "process/changes/CR-037.md",
+      "change_type": "modified",
+      "summary": "CR-037 status updated to verified/READY/cp7_verified."
+    },
+    {
+      "path": "process/changes/CR-INDEX.json",
+      "change_type": "generated",
+      "summary": "CR index regenerated after CR-037 verification update."
+    },
+    {
+      "path": "process/changes/summaries/CR-037.summary.json",
+      "change_type": "generated",
+      "summary": "CR-037 summary regenerated after verification update."
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run pytest tests/test_cr_lifecycle.py tests/test_feature_registry.py",
+      "result": "PASS",
+      "summary": "32 passed"
+    },
+    {
+      "command": "uv run pytest tests/test_cr_lifecycle.py tests/test_feature_registry.py tests/test_cr037_project_current.py tests/test_cr037_project_scale_roadmap.py tests/test_state_v2.py tests/test_cp_result_event_ledger.py tests/test_story_evidence.py",
+      "result": "PASS",
+      "summary": "88 passed"
+    },
+    {
+      "command": "git diff --check -- meta_flow/workflow/cr_lifecycle.py tests/test_cr_lifecycle.py",
+      "result": "PASS",
+      "summary": "No whitespace errors"
+    },
+    {
+      "command": "S08-S11 return/evidence/CP6 result validation loop",
+      "result": "PASS",
+      "summary": "All S08-S11 return packets, evidence indexes, and CP6 results passed validation."
+    },
+    {
+      "command": "uv run meta-flow cr check --project-root .",
+      "result": "PASS",
+      "summary": "CR Lifecycle Check: OK"
+    }
+  ],
+  "tests": [
+    {
+      "name": "CR037 CP7 aggregate verification",
+      "status": "PASS"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "process/context/stories/CR037.CP7.verify-packet.json",
+      "kind": "cp7_verify_packet"
+    },
+    {
+      "path": "process/checks/CP7-CR037.result.json",
+      "kind": "cp7_result"
+    }
+  ],
+  "risks": [
+    {
+      "id": "CR037-RISK-ORIGINAL-PACKETS-MISSING",
+      "severity": "MEDIUM",
+      "summary": "Original S08 planning artifacts were missing when recovered execution began; CR-037 records this as audit context."
+    }
+  ],
+  "waivers": [],
+  "design_delta_ref": ""
+}

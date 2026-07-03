@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "story_id": "CR037-S11",
+  "cr_id": "CR-037",
+  "stage": "CP6",
+  "status": "implemented",
+  "touched_files": [
+    {
+      "path": "meta_flow/workflow/cr_lifecycle.py",
+      "change_type": "modified",
+      "summary": "Added optional project impact-surface rule loading and validation for legacy impact classification."
+    },
+    {
+      "path": "tests/test_cr_lifecycle.py",
+      "change_type": "modified",
+      "summary": "Added S11 tests for project rules, brief usage, and invalid rule rejection."
+    },
+    {
+      "path": "process/changes/CR-037.md",
+      "change_type": "modified",
+      "summary": "Updated CR-037 formal record with S11 completion evidence."
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "notes": [
+      "S11 did not create or mutate a canonical rules config; it only added support for an optional project config path.",
+      "No process/quant-lab, docs, delivery, credential, runtime, publish, live/trading, or production-write path was modified."
+    ]
+  },
+  "contract_changes": {
+    "design_delta_required": false,
+    "design_delta_ref": "",
+    "notes": "No design document was updated because docs writes remain outside the active boundary."
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run pytest tests/test_cr_lifecycle.py tests/test_feature_registry.py",
+        "result": "PASS",
+        "summary": "32 passed"
+      },
+      {
+        "command": "uv run pytest tests/test_cr_lifecycle.py tests/test_feature_registry.py tests/test_cr037_project_current.py tests/test_cr037_project_scale_roadmap.py tests/test_state_v2.py tests/test_cp_result_event_ledger.py tests/test_story_evidence.py",
+        "result": "PASS",
+        "summary": "88 passed"
+      },
+      {
+        "command": "git diff --check -- meta_flow/workflow/cr_lifecycle.py tests/test_cr_lifecycle.py",
+        "result": "PASS",
+        "summary": "No whitespace errors"
+      }
+    ],
+    "tests": [
+      {
+        "name": "CR lifecycle and feature registry targeted tests",
+        "status": "PASS"
+      },
+      {
+        "name": "Related CR037/state/story evidence regression subset",
+        "status": "PASS"
+      }
+    ]
+  },
+  "evidence_refs": [
+    "process/evidence/CR037-S11.CP6.index.json",
+    "process/checks/CP6-CR037-S11.result.json"
+  ],
+  "artifacts": [
+    {
+      "path": "process/context/stories/CR037-S11.CP6.work-packet.json",
+      "kind": "cp6_work_packet"
+    },
+    {
+      "path": "process/returns/CR037-S11.CP6.return.json",
+      "kind": "cp6_return"
+    },
+    {
+      "path": "process/evidence/CR037-S11.CP6.index.json",
+      "kind": "cp6_evidence"
+    },
+    {
+      "path": "process/checks/CP6-CR037-S11.result.json",
+      "kind": "cp6_result"
+    }
+  ],
+  "risks": [],
+  "waivers": []
+}

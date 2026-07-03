@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "story_id": "CR037-CP8",
+  "cr_id": "CR-037",
+  "stage": "CP8",
+  "return_ref": "",
+  "changed_files": [
+    {
+      "path": "process/changes/CR-037.md",
+      "change_type": "modified",
+      "summary": "CR-037 status updated to closed/READY/cp8_closed."
+    },
+    {
+      "path": "process/changes/summaries/CR-037.summary.json",
+      "change_type": "generated",
+      "summary": "Closed CR-037 summary generated."
+    },
+    {
+      "path": "process/archive/CR-037/evidence-index.json",
+      "change_type": "generated",
+      "summary": "CR-037 archive evidence index generated."
+    },
+    {
+      "path": "process/state/CR-LEDGER.ndjson",
+      "change_type": "appended",
+      "summary": "CR-037 closed event appended."
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run meta-flow cr close --id CR-037 --readiness READY --project-root .",
+      "result": "PASS",
+      "summary": "CR-037 closure summary, archive evidence index, index, and CR ledger event generated."
+    },
+    {
+      "command": "uv run meta-flow cr check --project-root .",
+      "result": "PASS",
+      "summary": "CR Lifecycle Check: OK"
+    },
+    {
+      "command": "uv run meta-flow state check --project-root . --mode enforce",
+      "result": "PASS",
+      "summary": "State v2 Check: OK"
+    },
+    {
+      "command": "uv run meta-flow event check --ledger process/state/CHECKPOINT-LEDGER.ndjson --type checkpoint",
+      "result": "PASS",
+      "summary": "Event Ledger Check: OK"
+    }
+  ],
+  "tests": [
+    {
+      "name": "CR037 CP8 closure verification",
+      "status": "PASS"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "process/checks/CP8-CR037.result.json",
+      "kind": "cp8_result"
+    },
+    {
+      "path": "process/archive/CR-037/evidence-index.json",
+      "kind": "cr_archive_evidence_index"
+    }
+  ],
+  "risks": [
+    {
+      "id": "CR037-RISK-ORIGINAL-PACKETS-MISSING",
+      "severity": "MEDIUM",
+      "summary": "Original S08 planning artifacts remain unavailable; closure keeps the recovery note in CR-037 for audit context."
+    }
+  ],
+  "waivers": [],
+  "design_delta_ref": ""
+}

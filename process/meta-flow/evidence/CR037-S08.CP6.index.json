@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "story_id": "CR037-S08",
+  "cr_id": "CR-037",
+  "stage": "CP6",
+  "return_ref": "process/returns/CR037-S08.CP6.return.json",
+  "changed_files": [
+    {
+      "path": "meta_flow/workflow/cr_lifecycle.py",
+      "change_type": "modified",
+      "summary": "Structured impact surface split fields, migration report, uncategorized legacy reporting, and brief resolution mode support."
+    },
+    {
+      "path": "tests/test_cr_lifecycle.py",
+      "change_type": "modified",
+      "summary": "Focused S08 tests."
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run pytest tests/test_cr_lifecycle.py tests/test_feature_registry.py",
+      "result": "PASS",
+      "summary": "28 passed"
+    },
+    {
+      "command": "uv run pytest tests/test_cr_lifecycle.py tests/test_feature_registry.py tests/test_cr037_project_current.py tests/test_cr037_project_scale_roadmap.py tests/test_state_v2.py tests/test_cp_result_event_ledger.py tests/test_story_evidence.py",
+      "result": "PASS",
+      "summary": "84 passed"
+    },
+    {
+      "command": "git diff --check -- meta_flow/workflow/cr_lifecycle.py tests/test_cr_lifecycle.py",
+      "result": "PASS",
+      "summary": "No whitespace errors"
+    }
+  ],
+  "tests": [
+    {
+      "name": "test_index_summary_and_brief_include_split_impact_fields_with_capability_resolution",
+      "status": "PASS"
+    },
+    {
+      "name": "test_conflicts_detect_split_field_capability_overlap_after_alias_resolution",
+      "status": "PASS"
+    },
+    {
+      "name": "test_impact_report_marks_unresolved_capability_refs_as_blockers",
+      "status": "PASS"
+    },
+    {
+      "name": "test_impact_report_preserves_uncategorized_legacy_surface_values",
+      "status": "PASS"
+    },
+    {
+      "name": "test_brief_can_enforce_capability_resolution_mode_for_deprecated_refs",
+      "status": "PASS"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "process/context/stories/CR037-S08.CP6.work-packet.json",
+      "kind": "host_reconstructed_work_packet"
+    },
+    {
+      "path": "process/returns/CR037-S08.CP6.return.json",
+      "kind": "cp6_return_packet"
+    }
+  ],
+  "risks": [
+    {
+      "id": "CR037-S08-RISK-INPUT-MISSING",
+      "severity": "MEDIUM",
+      "summary": "Requested process context packet and handoff were missing at session start."
+    }
+  ],
+  "waivers": [],
+  "design_delta_ref": ""
+}

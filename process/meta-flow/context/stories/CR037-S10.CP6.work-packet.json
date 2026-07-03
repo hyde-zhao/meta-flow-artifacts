@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "story_id": "CR037-S10",
+  "cr_id": "CR-037",
+  "stage": "CP6",
+  "profile": "process-lite",
+  "objective": {
+    "summary": "Create a formal CR-037 governance record and regenerate CR lifecycle machine artifacts from recovered S08/S09 evidence."
+  },
+  "feature_refs": [
+    "CR037-S10"
+  ],
+  "feature_context": [
+    {
+      "path": "process/changes/CR-037.md",
+      "reason": "Formal umbrella CR record for CR037 governance work."
+    },
+    {
+      "path": "process/changes/CR-INDEX.json",
+      "reason": "Machine-readable CR lifecycle index."
+    },
+    {
+      "path": "process/changes/summaries/CR-037.summary.json",
+      "reason": "Machine-readable CR037 summary."
+    }
+  ],
+  "acceptance": [
+    "process/changes/CR-037.md exists and records CR037 scope, evidence, recovery notes, non-authorized surfaces, and remaining follow-up stories.",
+    "meta-flow cr summary --id CR-037 --project-root . succeeds.",
+    "meta-flow cr index --project-root . succeeds and includes CR-037.",
+    "meta-flow cr check --project-root . succeeds.",
+    "No source code, docs, delivery, runtime, publish, live/trading, production-write, or process/quant-lab path is changed for S10."
+  ],
+  "allowed_write_paths": [
+    "process/changes/CR-037.md",
+    "process/changes/CR-INDEX.json",
+    "process/changes/CR-INDEX.yaml",
+    "process/changes/summaries/CR-037.summary.json",
+    "process/context/stories/CR037-S10.CP6.work-packet.json",
+    "process/returns/CR037-S10.CP6.return.json",
+    "process/evidence/CR037-S10.CP6.index.json",
+    "process/checks/CP6-CR037-S10.result.json",
+    "process/checks/CP6-CR037-S10.result.summary.md",
+    "process/state/CHECKPOINT-LEDGER.ndjson"
+  ],
+  "forbidden_write_paths": [
+    "process/quant-lab/**",
+    "docs/**",
+    "delivery/**",
+    "runtime/**",
+    "publish/**",
+    "live/**",
+    "trading/**"
+  ],
+  "verification_plan": [
+    "uv run meta-flow cr summary --id CR-037 --project-root .",
+    "uv run meta-flow cr index --project-root .",
+    "uv run meta-flow cr check --project-root .",
+    "uv run meta-flow state check --project-root . --mode enforce",
+    "uv run meta-flow event check --ledger process/state/CHECKPOINT-LEDGER.ndjson --type checkpoint"
+  ],
+  "expected_return_packet": "process/returns/CR037-S10.CP6.return.json"
+}

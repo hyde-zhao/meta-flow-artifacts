@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "story_id": "CR037-S08",
+  "cr_id": "CR-037",
+  "stage": "CP6",
+  "status": "implemented_with_risk",
+  "touched_files": [
+    {
+      "path": "meta_flow/workflow/cr_lifecycle.py",
+      "change_type": "modified",
+      "summary": "Added structured impact fields, resolver-backed capability normalization, impact migration report, split-field conflict detection, uncategorized legacy reporting, and brief resolution mode support."
+    },
+    {
+      "path": "tests/test_cr_lifecycle.py",
+      "change_type": "modified",
+      "summary": "Added CR037-S08 focused tests for resolver reuse, split-field outputs, blocker reporting, and conflict detection."
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "notes": [
+      "Dev agent edits were limited to source and tests.",
+      "Host process artifact writes were limited to process context, return, evidence, checks, and state ledgers.",
+      "No process/quant-lab, docs, delivery, credential, runtime, publish, live/trading, or production-write path was modified."
+    ]
+  },
+  "contract_changes": {
+    "design_delta_required": false,
+    "design_delta_ref": "",
+    "notes": "No long-lived design document was updated because docs writes were outside the S08 boundary."
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run pytest tests/test_cr_lifecycle.py tests/test_feature_registry.py",
+        "result": "PASS",
+        "summary": "28 passed"
+      },
+      {
+        "command": "uv run pytest tests/test_cr_lifecycle.py tests/test_feature_registry.py tests/test_cr037_project_current.py tests/test_cr037_project_scale_roadmap.py tests/test_state_v2.py tests/test_cp_result_event_ledger.py tests/test_story_evidence.py",
+        "result": "PASS",
+        "summary": "84 passed"
+      },
+      {
+        "command": "git diff --check -- meta_flow/workflow/cr_lifecycle.py tests/test_cr_lifecycle.py",
+        "result": "PASS",
+        "summary": "No whitespace errors"
+      }
+    ],
+    "tests": [
+      {
+        "name": "CR lifecycle and feature registry targeted tests",
+        "status": "PASS"
+      },
+      {
+        "name": "CR lifecycle review follow-up tests",
+        "status": "PASS"
+      },
+      {
+        "name": "Related CR037/state/story evidence regression subset",
+        "status": "PASS"
+      }
+    ]
+  },
+  "evidence_refs": [
+    "process/evidence/CR037-S08.CP6.index.json",
+    "process/checks/CP6-CR037-S08.result.json"
+  ],
+  "artifacts": [
+    {
+      "path": "process/context/stories/CR037-S08.CP6.work-packet.json",
+      "kind": "host_reconstructed_work_packet"
+    },
+    {
+      "path": "process/returns/CR037-S08.CP6.return.json",
+      "kind": "cp6_return"
+    },
+    {
+      "path": "process/evidence/CR037-S08.CP6.index.json",
+      "kind": "cp6_evidence"
+    },
+    {
+      "path": "process/checks/CP6-CR037-S08.result.json",
+      "kind": "cp6_result"
+    },
+    {
+      "path": "process/checks/CP6-CR037-S08.result.summary.md",
+      "kind": "cp6_summary"
+    }
+  ],
+  "risks": [
+    {
+      "id": "CR037-S08-RISK-INPUT-MISSING",
+      "severity": "MEDIUM",
+      "summary": "The requested S08 work packet and handoff were absent at session start, so Host reconstructed minimal CP6 evidence from repository context."
+    }
+  ],
+  "waivers": []
+}

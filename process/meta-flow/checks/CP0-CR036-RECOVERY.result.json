@@ -1,0 +1,82 @@
+{
+  "blockers": [],
+  "checked_at": "2026-07-03T12:57:30+00:00",
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR036-RECOVERY",
+  "context_ref": "",
+  "cr_id": "CR-036",
+  "decision": "PASS",
+  "dispatch_refs": [
+    "host-orchestrator:local"
+  ],
+  "evidence_ref": "process/checks/CP0-CR036-RECOVERY.result.summary.md",
+  "items": [
+    {
+      "category": "source-history",
+      "evidence_refs": [
+        "git:34beb2d"
+      ],
+      "id": "CP0-CR036-01",
+      "name": "CR036 source-history anchor identified",
+      "notes": "git log -S'CR036' and -S'pre-CR036' identify 34beb2d Improve approval-oriented CR gates.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "verification",
+      "evidence_refs": [
+        "tests/test_ask_user.py",
+        "tests/test_cr_lifecycle.py",
+        "tests/test_gate_policy.py"
+      ],
+      "id": "CP0-CR036-02",
+      "name": "Human gate and CR lifecycle tests passed",
+      "notes": "uv run pytest tests/test_ask_user.py tests/test_cr_lifecycle.py tests/test_gate_policy.py reported 31 passed.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "BLOCKER",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "process-recovery",
+      "evidence_refs": [
+        "process/changes/summaries/CR-036.summary.json",
+        "process/changes/CR-INDEX.json",
+        "process/state/CR-LEDGER.ndjson"
+      ],
+      "id": "CP0-CR036-03",
+      "name": "CR036 recovery artifacts created",
+      "notes": "Original CR036 process artifacts were not found; this checkpoint records a recovery stub and ledger/index updates.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "severity": "MEDIUM",
+      "status": "PASS",
+      "waiver_ref": null
+    },
+    {
+      "category": "boundary",
+      "evidence_refs": [
+        "process/changes/summaries/CR-036.summary.json",
+        "process/checks/CP0-CR036-RECOVERY.result.json"
+      ],
+      "id": "CP0-CR036-04",
+      "name": "Recovery stayed within process governance boundary",
+      "notes": "No runtime, credential, production-write, trading, docs, delivery, or process/quant-lab action is authorized by this recovery.",
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "severity": "HIGH",
+      "status": "PASS",
+      "waiver_ref": null
+    }
+  ],
+  "next_route": "recovery_complete",
+  "profile": "standard-code",
+  "read_expansion_refs": [],
+  "schema_version": 1,
+  "story_id": "CR036-RECOVERY",
+  "waivers": []
+}
