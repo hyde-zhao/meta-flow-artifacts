@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP2",
+  "checkpoint_id": "CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE",
+  "cr_id": "CR-154",
+  "checked_at": "2026-07-02T23:25:00+08:00",
+  "context_ref": "process/context/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE-CONTEXT.yaml",
+  "dispatch_refs": [],
+  "evidence_ref": "",
+  "items": [
+    {
+      "id": "CP2-CR154-01",
+      "category": "entry",
+      "name": "CR154 formal CR exists and is active with CP2 pending",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/changes/CR-154.md", "process/changes/summaries/CR-154.summary.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": ""
+    },
+    {
+      "id": "CP2-CR154-02",
+      "category": "entry",
+      "name": "Rule 41, CP0 and CP1 passed before CP2 launch",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CR154-RULE41-CONFLICT-PRECHECK-2026-07-02.md",
+        "process/checks/CP0-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-REQUEST-INTAKE.result.json",
+        "process/checks/CP1-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-USE-CASE-COMPLETENESS.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": ""
+    },
+    {
+      "id": "CP2-CR154-03",
+      "category": "scope",
+      "name": "CR154 scope is limited to local/static/fixture cross-strategy production reliability gates",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-154.md#范围",
+        "process/context/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE-CONTEXT.yaml#scope_summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": ""
+    },
+    {
+      "id": "CP2-CR154-04",
+      "category": "decision-coverage",
+      "name": "Required CR154 CP2 decisions are collected",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checkpoints/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.md#待人工决策清单"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Seven decisions cover backtest trap gate, CV governance, survivorship/PIT universe gate, capacity/impact gate, regime/attribution/reconciliation slots, admission default policy and no-runtime/no-real-data boundary. CP3-DC-CR154-001 constrains the backtest trap gate to include auditable multiple-testing, PBO/CSCV, DSR/deflation and trial-count artifacts rather than a plain status enum."
+    },
+    {
+      "id": "CP2-CR154-05",
+      "category": "discussion",
+      "name": "CR154-specific Scenario Gray Areas and SGQ evidence exist",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/discussions/CP2-CR154-SCENARIO-DISCUSSION-LOG.md",
+        "process/checks/CP2-CR154-DISCUSSION-CHECKPOINT.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "SGQ-CR154-001..005 record user-visible scenario confirmation based on the startup request."
+    },
+    {
+      "id": "CP2-CR154-06",
+      "category": "authorization",
+      "name": "Runtime, credential, lake, NAS, provider, QMT, broker, trading, catalog, reconciliation and external framework actions remain not authorized",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-154.md#不授权范围",
+        "process/context/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE-CONTEXT.yaml#scope_summary.out_of_scope"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": ""
+    },
+    {
+      "id": "CP2-CR154-07",
+      "category": "routing",
+      "name": "CP2 approval is required before CP3, Story decomposition, LLD or implementation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/summaries/CR-154.summary.json#block_story_decomposition_until",
+        "process/changes/CR-154.md#启动约束"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": ""
+    },
+    {
+      "id": "CP2-CR154-08",
+      "category": "design-constraint",
+      "name": "CP3 must preserve auditable statistical reliability artifacts for multiple-testing, PBO and DSR",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/changes/CR-154.md#CP3-硬性设计约束",
+        "process/checkpoints/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.md#CP3-硬性设计约束",
+        "process/context/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE-CONTEXT.yaml#cp3_design_constraints"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP3-DC-CR154-001 prevents DQ-CP2-CR154-BACKTEST-TRAP-GATE from collapsing FDR/BH, White Reality Check, Hansen SPA, PBO/CSCV, DSR/deflation, trial counts, OOS split refs, purge/embargo refs, survivorship audit refs and impact/capacity refs into an unverified label."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR154-STARTUP-USER-REQUEST-2026-07-02T232500+0800",
+    "READ-CR154-DOCS-PRODUCT-USE-CASES-MISSING-2026-07-02T232500+0800",
+    "READ-CR154-CP2-FORMAL-CR-2026-07-02T232500+0800"
+  ],
+  "manual_gate_status": "approved",
+  "pending_human_decisions": [],
+  "accepted_decision_ids": [
+    "DQ-CP2-CR154-BACKTEST-TRAP-GATE",
+    "DQ-CP2-CR154-CV-GOVERNANCE",
+    "DQ-CP2-CR154-SURVIVORSHIP-UNIVERSE-GATE",
+    "DQ-CP2-CR154-CAPACITY-IMPACT-GATE",
+    "DQ-CP2-CR154-REGIME-ATTRIBUTION-RECONCILIATION-SLOTS",
+    "DQ-CP2-CR154-ADMISSION-GATE-DEFAULT-POLICY",
+    "DQ-CP2-CR154-NO-RUNTIME-NO-REAL-DATA-BOUNDARY"
+  ],
+  "decision": "PASS",
+  "approved_by": "user",
+  "approved_at": "2026-07-02T23:58:00+08:00",
+  "next_route": "CP3"
+}

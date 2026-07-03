@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION",
+  "cr_id": "CR-154",
+  "story_id": "CR154-S01..S08",
+  "context_ref": "process/checks/CP6-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-IMPLEMENTATION.result.json",
+  "dispatch_refs": [
+    "ADE-CR154-META-QA-CRITICAL-CP7-START-20260703T072431+0800",
+    "ADE-CR154-META-DEV-DEBUGGER-CP7-REWORK-MATRIX-20260703T072800+0800",
+    "ADE-CR154-META-QA-CRITICAL-CP7-REVERIFY-START-20260703T073153+0800"
+  ],
+  "return_packet_ref": "process/returns/CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.CP7.return.json",
+  "evidence_ref": "process/evidence/CR154-CP7-VERIFICATION.index.json",
+  "items": [
+    {
+      "id": "CP7-CR154-01",
+      "category": "entry",
+      "name": "CP6 implementation result is PASS and implementation evidence is readable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-IMPLEMENTATION.result.json",
+        "process/evidence/CR154-CP6-IMPLEMENTATION.index.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CP6 decision PASS; S01-S08 implementation evidence was consumed."
+    },
+    {
+      "id": "CP7-CR154-02",
+      "category": "independent-review",
+      "name": "Initial CP7 QA findings were captured and routed to rework",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "ADE-CR154-META-QA-CRITICAL-CP7-START-20260703T072431+0800",
+        "process/evidence/CR154-CP7-VERIFICATION.index.json#qa_findings"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Initial QA recommendation was NEEDS_REWORK for Gate 1/2/4/5/6 permissive paths."
+    },
+    {
+      "id": "CP7-CR154-03",
+      "category": "rework",
+      "name": "Gate 1/2/4/5/6 fail-closed gaps are fixed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/cross_strategy_reliability_gates.py",
+        "tests/research/test_cross_strategy_reliability_gates.py",
+        "process/evidence/CR154-CP7-VERIFICATION.index.json#probe_results"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Previous silent-PASS probes now return BLOCKED or NEEDS_REVIEW as designed."
+    },
+    {
+      "id": "CP7-CR154-04",
+      "category": "verification",
+      "name": "Targeted CR154 tests and admission package compatibility tests pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR154-CP7-VERIFICATION.index.json#commands"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "14 CR154/package tests passed."
+    },
+    {
+      "id": "CP7-CR154-05",
+      "category": "regression",
+      "name": "Adjacent event-driven and ML admission/gate regressions pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR154-CP7-VERIFICATION.index.json#commands"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "7 event-driven subset tests and 1 ML subset test passed."
+    },
+    {
+      "id": "CP7-CR154-06",
+      "category": "static-checks",
+      "name": "py_compile and git diff whitespace checks pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR154-CP7-VERIFICATION.index.json#commands"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "py_compile exit code 0; git diff --check produced no output."
+    },
+    {
+      "id": "CP7-CR154-07",
+      "category": "security-boundary",
+      "name": "Forbidden runtime, data, credential, store, registry, order and publish operations remain at zero",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR154-CP7-VERIFICATION.index.json#boundary_check"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "All verification stayed local/static/fixture-only."
+    },
+    {
+      "id": "CP7-CR154-08",
+      "category": "workflow-health",
+      "name": "Workspace, CR tracking and agent dispatch ledger checks pass",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/evidence/CR154-CP7-VERIFICATION.index.json#commands"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "CR tracking reports only CR-154 active and no blocked formal CRs; historical warnings remain outside CR154."
+    },
+    {
+      "id": "CP7-CR154-09",
+      "category": "release-hygiene",
+      "name": "New source and test files must be included in final change set",
+      "status": "PASS",
+      "severity": "LOW",
+      "evidence_refs": [
+        "process/evidence/CR154-CP7-VERIFICATION.index.json#risks"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "QA noted untracked new CR154 files; this is non-blocking before commit but must be handled by final packaging."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP8_INPUT_WITH_RISK",
+  "checked_at": "2026-07-03T07:38:46+08:00",
+  "summary": {
+    "effective_validation_mode": "static-fixture-only",
+    "tests_passed": 22,
+    "cr154_targeted_tests_passed": 14,
+    "related_regression_tests_passed": 8,
+    "full_pytest_claimed": false,
+    "py_compile": "PASS",
+    "git_diff_check": "PASS",
+    "forbidden_operation_count": 0,
+    "runtime_authorization_allowed": false,
+    "real_data_authorized": false,
+    "paper_live_trading_authorized": false,
+    "broker_authorized": false,
+    "store_catalog_registry_write_authorized": false,
+    "production_readiness_claimed": false,
+    "paper_live_trading_readiness_claimed": false,
+    "blocking_findings": 0,
+    "qa_rework_rounds": 2,
+    "risk_ids": [
+      "R-CR154-CP6-RETURN-PATH-WARN-001",
+      "R-CR154-CP7-UNTRACKED-FILES-001",
+      "R-CR154-FIRST-WAVE-FIXTURE-ONLY-001"
+    ]
+  },
+  "risks": [
+    "R-CR154-CP6-RETURN-PATH-WARN-001",
+    "R-CR154-CP7-UNTRACKED-FILES-001",
+    "R-CR154-FIRST-WAVE-FIXTURE-ONLY-001"
+  ],
+  "updated_at": "2026-07-03T07:38:46+08:00"
+}

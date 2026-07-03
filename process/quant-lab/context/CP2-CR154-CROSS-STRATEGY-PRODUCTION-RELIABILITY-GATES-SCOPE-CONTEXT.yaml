@@ -1,0 +1,126 @@
+schema_version: 1
+context_id: CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE
+cr_id: CR-154
+stage: CP2
+status: ready
+created_at: "2026-07-02T23:25:00+08:00"
+owner: host-orchestrator
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  default_reads:
+    - process/changes/summaries/CR-154.summary.json
+    - process/changes/CR-154.md
+    - process/USE-CASES.md
+    - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
+    - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
+    - process/discussions/CP2-CR154-SCENARIO-DISCUSSION-LOG.md
+    - process/checks/CP2-CR154-DISCUSSION-CHECKPOINT.json
+  read_if_needed:
+    - docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
+    - process/release/RELEASE-CONTEXT-CR153.yaml
+    - process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.json
+    - engine/research_production_contracts.py
+    - engine/backtest_production_contracts.py
+    - engine/strategy_admission_package.py
+  do_not_read_by_default:
+    - full conversation transcript
+    - all process/stories/*
+    - all process/evidence/*
+    - real lake/NAS/provider credential files
+    - external framework repositories
+scope_summary:
+  objective: Start local/static/fixture cross-strategy production reliability gates after CR153 Event-Driven Strategy E2E first-wave closure.
+  in_scope:
+    - backtest trap gate covering lookahead, survivorship, data snooping, regime overfit and cost underestimation
+    - CP3 statistical reliability artifact contract for multiple-testing correction, FDR/BH, White Reality Check / Hansen SPA, PBO / CSCV, DSR / Sharpe or IC deflation, trial count / effective trials, blocked claims and release-blocking reason
+    - cross-strategy walk-forward / OOS / purged-embargo governance
+    - survivorship-free universe / PIT universe gate
+    - capacity / market impact / liquidity sizing contracts
+    - regime / attribution / reconciliation slots as structured contracts
+    - CR151 / CR152 / CR153 admission gate default-required or release-blocking policy
+  deferred:
+    - real market impact calibration or real TCA
+    - true paper/live/broker reconciliation
+    - real lake / feature store / event store / model registry integration
+    - NAS shared current truth or provider catalog execution
+    - QMT / MiniQMT / xtquant / gateway runtime
+    - live event listener / real event feed / real order flow
+    - FU-CR152-001 test taxonomy / provenance hygiene
+  out_of_scope:
+    - real lake read or write
+    - NAS access, sync, restore, chmod, chgrp or metadata normalization
+    - provider fetch
+    - QMT / MiniQMT / xtquant / gateway runtime
+    - simulation / paper / live / trading runtime
+    - live event listener
+    - broker read/write/submit/cancel/real account query
+    - credential or .env read
+    - external framework clone/install/run
+    - Git remote write
+    - catalog pointer mutation
+    - feature store / label store / event store / model registry / prediction store writes
+    - real event feed execution
+    - real order flow
+    - real data validation
+    - real reconciliation
+    - true release execution / production deployment / publish
+decision_refs:
+  - DQ-CP2-CR154-BACKTEST-TRAP-GATE
+  - DQ-CP2-CR154-CV-GOVERNANCE
+  - DQ-CP2-CR154-SURVIVORSHIP-UNIVERSE-GATE
+  - DQ-CP2-CR154-CAPACITY-IMPACT-GATE
+  - DQ-CP2-CR154-REGIME-ATTRIBUTION-RECONCILIATION-SLOTS
+  - DQ-CP2-CR154-ADMISSION-GATE-DEFAULT-POLICY
+  - DQ-CP2-CR154-NO-RUNTIME-NO-REAL-DATA-BOUNDARY
+cp3_design_constraints:
+  - id: CP3-DC-CR154-001
+    source: CP2 review finding and docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
+    applies_to:
+      - DQ-CP2-CR154-BACKTEST-TRAP-GATE
+      - DQ-CP2-CR154-CV-GOVERNANCE
+      - DQ-CP2-CR154-ADMISSION-GATE-DEFAULT-POLICY
+    constraint: Backtest trap gate must not collapse multiple-testing, data-snooping, PBO or DSR into a plain trap status enum.
+    minimum_artifacts:
+      - multiple_testing_correction_refs
+      - fdr_bh_refs
+      - white_reality_check_or_hansen_spa_refs
+      - pbo_or_cscv_refs
+      - dsr_or_sharpe_ic_deflation_refs
+      - trial_count_and_effective_trials
+      - oos_split_refs
+      - purge_embargo_refs
+      - survivorship_audit_refs
+      - impact_capacity_refs
+      - blocked_claims
+      - release_blocking_reason
+    n_a_policy: Any unavailable artifact must be represented as n/a-with-reason rather than omitted.
+discussion_refs:
+  scenario_gray_areas_log: process/discussions/CP2-CR154-SCENARIO-DISCUSSION-LOG.md
+  scenario_discussion_checkpoint: process/checks/CP2-CR154-DISCUSSION-CHECKPOINT.json
+  status: sgq-completed-pending-cp2-human-gate
+validation_boundary:
+  current_mode: planning-and-scope-only
+  implementation_before_cp2: not_authorized
+  runtime_evidence_claims: not_authorized
+  fixture_claim_limit: fixture/static validation can prove contract semantics only, not real production reliability, runtime readiness, paper/live readiness, broker readiness or trading readiness
+read_expansion_log:
+  - id: READ-CR154-STARTUP-USER-REQUEST-2026-07-02T232500+0800
+    reason: "User explicitly requested startup context read, repository freshness confirmation and CR154 rule 41 / CP0 / CP1 / CP2 startup."
+    expanded_to:
+      - process/handoffs/NEXT-SESSION-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-CP0-CP2-2026-07-02.md
+      - process/state/STATE.current.json
+      - process/STATE.md
+      - process/changes/CR-INDEX.yaml
+      - process/release/RELEASE-CONTEXT-CR153.yaml
+      - process/changes/CR-153.md
+      - process/changes/summaries/CR-153.summary.json
+      - process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.json
+      - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
+      - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
+      - docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
+      - process/USE-CASES.md
+  - id: READ-CR154-DOCS-PRODUCT-USE-CASES-MISSING-2026-07-02T232500+0800
+    reason: "Requested docs/product/USE-CASES.md path is absent in this repository; process/USE-CASES.md contains confirmed UC-58/UC-59/UC-60 and is used as fallback evidence."
+    expanded_to:
+      - process/USE-CASES.md

@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "checkpoint_id": "CP3-CR154-DISCUSSION-CHECKPOINT",
+  "cr_id": "CR-154",
+  "phase": "solution-design",
+  "status": "ready-for-cp3-hld-review",
+  "created_at": "2026-07-03T00:28:00+08:00",
+  "context_ref": "process/context/CP3-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-HLD-CONTEXT.yaml",
+  "discussion_log_ref": "process/discussions/CP3-CR154-HLD-DISCUSSION-LOG.md",
+  "hld_ref": "process/docs/design/HLD-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md",
+  "adr_ref": "process/docs/design/ARCHITECTURE-DECISION-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md",
+  "selection_basis": "CP2 approved decisions plus delegated meta-se CP3 design task; final CP3 approval remains pending with host-orchestrator/user.",
+  "architecture_gray_areas": [
+    {
+      "id": "AGQ-CR154-001",
+      "topic": "Cross-strategy gate shape",
+      "selected_option": "shared-contract-plus-strategy-adapters",
+      "status": "selected-for-hld",
+      "decision_ref": "CP3-DQ-CR154-SHARED-CONTRACT"
+    },
+    {
+      "id": "AGQ-CR154-002",
+      "topic": "Statistical reliability artifact model",
+      "selected_option": "explicit-cross-strategy-artifact-refs-model",
+      "status": "selected-for-hld",
+      "constraint_refs": ["CP3-DC-CR154-001"]
+    },
+    {
+      "id": "AGQ-CR154-003",
+      "topic": "Admission default policy",
+      "selected_option": "tier-table-with-opt-in-default-required-release-blocking",
+      "status": "selected-for-hld",
+      "constraint_refs": ["CP3-DC-CR154-003"],
+      "decision_ref": "CP3-DQ-CR154-DEFAULT-POLICY"
+    },
+    {
+      "id": "AGQ-CR154-004",
+      "topic": "No-runtime reconciliation boundary",
+      "selected_option": "slots-status-refs-n-a-with-reason-only",
+      "status": "selected-for-hld",
+      "decision_ref": "CP3-DQ-CR154-NO-RUNTIME"
+    },
+    {
+      "id": "AGQ-CR154-005",
+      "topic": "Requirement traceability and CR154 REQ anchoring",
+      "selected_option": "reuse-existing-req-anchors-for-cp3-with-follow-up-trigger",
+      "status": "selected-for-hld",
+      "constraint_refs": ["CP3-DC-CR154-002"],
+      "decision_ref": "CP3-DQ-CR154-REQ-ANCHOR-POLICY"
+    },
+    {
+      "id": "AGQ-CR154-006",
+      "topic": "CR153 universe_pit_audit upgrade lifecycle",
+      "selected_option": "retain-cr153-slot-as-adapter-source-ref-and-delegate-shared-gate-ownership-to-cr154",
+      "status": "selected-for-hld",
+      "constraint_refs": ["CP3-DC-CR154-004"]
+    },
+    {
+      "id": "AGQ-CR154-007",
+      "topic": "Impact model enum and strategy-specific n/a policy",
+      "selected_option": "controlled-impact-model-family-enum-and-strategy-specific-n-a",
+      "status": "selected-for-hld",
+      "constraint_refs": ["CP3-DC-CR154-005", "CP3-DC-CR154-006"]
+    }
+  ],
+  "cp3_design_constraints_coverage": {
+    "CP3-DC-CR154-001": "covered-by-hld-statistical-artifact-contract-and-adr-002",
+    "CP3-DC-CR154-002": "covered-by-hld-traceability-and-adr-007",
+    "CP3-DC-CR154-003": "covered-by-hld-admission-tier-table-and-adr-005",
+    "CP3-DC-CR154-004": "covered-by-hld-cr153-universe-slot-lifecycle-and-adr-003",
+    "CP3-DC-CR154-005": "covered-by-hld-impact-model-enum-and-adr-004",
+    "CP3-DC-CR154-006": "covered-by-hld-strategy-specific-na-policy-and-adr-002"
+  },
+  "read_expansion_log": [
+    {
+      "path": "process/USE-CASES.md",
+      "full_doc_read_reason": "Selected UC-58/59/60 sections required for CP3-DC-CR154-002 traceability."
+    },
+    {
+      "path": "process/REQUIREMENTS.md",
+      "full_doc_read_reason": "Selected REQ anchors required for CP3-DC-CR154-002 traceability."
+    },
+    {
+      "path": "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md",
+      "full_doc_read_reason": "Needed CR154 roadmap relation and CR153 slot handoff evidence."
+    },
+    {
+      "path": "docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md",
+      "full_doc_read_reason": "Needed cross-strategy reliability scope and delegated gate evidence."
+    },
+    {
+      "path": "docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md",
+      "full_doc_read_reason": "Needed statistical reliability and impact/capacity gap source."
+    }
+  ],
+  "not_authorized": [
+    "story-decomposition",
+    "lld",
+    "source-implementation",
+    "test-implementation",
+    "real-lake-read-or-write",
+    "nas-read-write-sync-restore-or-metadata-normalization",
+    "provider-fetch",
+    "qmt-miniqmt-xtquant-or-gateway-runtime",
+    "simulation-paper-live-or-trading-runtime",
+    "broker-operation",
+    "credential-or-env-read",
+    "external-framework-run",
+    "catalog-event-store-model-registry-or-prediction-store-write",
+    "real-feed-order-reconciliation-release-or-publish"
+  ],
+  "ready_for_hld_draft": true,
+  "ready_for_host_cp3_decision_brief": true,
+  "human_cp3_approval_status": "pending"
+}

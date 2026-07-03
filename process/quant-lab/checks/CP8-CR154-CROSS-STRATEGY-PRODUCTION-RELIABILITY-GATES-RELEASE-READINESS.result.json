@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS",
+  "profile": "compact",
+  "story_id": "CR154-S01..S08",
+  "cr_id": "CR-154",
+  "checked_at": "2026-07-03T07:45:32+08:00",
+  "context_ref": "process/release/RELEASE-CONTEXT-CR154.yaml",
+  "dispatch_refs": [
+    "ADE-CR154-META-QA-CRITICAL-CP8-START-20260703T074532+0800"
+  ],
+  "evidence_ref": "process/evidence/CR154-CP7-VERIFICATION.index.json",
+  "items": [
+    {
+      "id": "CP8-CR154-01",
+      "category": "entry",
+      "name": "CP7 verification completed with PASS_WITH_RISK and zero blockers",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION.result.json",
+        "process/evidence/CR154-CP7-VERIFICATION.index.json",
+        "process/returns/CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.CP7.return.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "CP7 decision PASS_WITH_RISK; blocking_findings=0; forbidden_operation_count=0."
+    },
+    {
+      "id": "CP8-CR154-02",
+      "category": "release-context",
+      "name": "CR154 release context capsule generated with compact profile",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR154.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "release_artifact_profile=compact because CR154 is a standard cross-strategy admission/reliability semantic change; full is not used because runtime/deploy/publish is not authorized."
+    },
+    {
+      "id": "CP8-CR154-03",
+      "category": "release-decision",
+      "name": "Release decision uses READY_WITH_RISK and does not claim RELEASED",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR154.yaml#release_decision",
+        "process/checkpoints/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.md#待人工决策清单"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "release_decision=READY_WITH_RISK; no true publish/live/release execution is authorized or executed."
+    },
+    {
+      "id": "CP8-CR154-04",
+      "category": "authorization-boundary",
+      "name": "No real runtime, data, credential, store, registry, order or remote operation is authorized",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR154.yaml#non_authorized_items",
+        "process/evidence/CR154-CP7-VERIFICATION.index.json#boundary_check",
+        "process/checks/CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION.result.json#summary"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CP8 approve would not authorize real lake/NAS/provider, credential, QMT/runtime/trading/broker, feed/order/reconciliation, store/catalog/registry, external framework, Git remote or real release execution."
+    },
+    {
+      "id": "CP8-CR154-05",
+      "category": "release-wording",
+      "name": "Release wording preserves static-fixture-only and forbidden readiness claims",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR154.yaml#forbidden_release_claims",
+        "process/evidence/CR154-CP7-VERIFICATION.index.json#boundary_check"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "Artifacts do not claim production readiness, runtime readiness, paper/live/trading readiness, broker readiness, real data validation, true TCA, registry publication or real order flow."
+    },
+    {
+      "id": "CP8-CR154-06",
+      "category": "risk-acceptance",
+      "name": "DEC-CR154-CP8-001 is present for READY_WITH_RISK human decision",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.md#待人工决策清单",
+        "process/release/RELEASE-CONTEXT-CR154.yaml#follow_up_summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Decision covers CP6 return path warning, final packaging hygiene and fixture-only boundary."
+    },
+    {
+      "id": "CP8-CR154-07",
+      "category": "release-documents",
+      "name": "Compact release documents generated for CR154 without updating unversioned docs/release files",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR154.yaml#release_documents",
+        "process/docs/release/RELEASE-NOTES-CR154.md",
+        "process/docs/release/DEPLOY-CHECKLIST-CR154.md",
+        "process/docs/release/ROLLBACK-CR154.md",
+        "process/docs/release/MIGRATION-CR154.md",
+        "process/docs/release/FEEDBACK-CR154.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "CR154 uses CR-specific compact release docs; true deploy, runtime, migration, publish and Git remote actions remain N/A/not authorized."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "release_decision": "READY_WITH_RISK",
+  "manual_gate_status": "approved",
+  "accepted_human_decisions": [
+    "DEC-CR154-CP8-001"
+  ],
+  "pending_human_decisions": [],
+  "risk_acceptance": {
+    "decision_id": "DEC-CR154-CP8-001",
+    "decision_type": "risk_acceptance",
+    "status": "accepted",
+    "risk_ids": [
+      "R-CR154-CP6-RETURN-PATH-WARN-001",
+      "R-CR154-CP7-UNTRACKED-FILES-001",
+      "R-CR154-FIRST-WAVE-FIXTURE-ONLY-001",
+      "R-CR154-ADMISSION-DEFAULT-POLICY-SEMANTICS-001",
+      "R-CR154-CAPACITY-RECONCILIATION-INTERPRETATION-001"
+    ],
+    "recommended_outcome": "accept CP7 PASS_WITH_RISK and close CR154 local/static/fixture Cross-Strategy Production Reliability Gates first wave as READY_WITH_RISK",
+    "reject_route": "CR154_NOT_READY_OR_RETURN_TO_CP7_OR_DESIGN_CLARIFICATION",
+    "accepted_at": "2026-07-03T09:03:11+08:00",
+    "accepted_by": "user",
+    "accepted_risk_ids": [
+      "R-CR154-CP6-RETURN-PATH-WARN-001",
+      "R-CR154-CP7-UNTRACKED-FILES-001",
+      "R-CR154-FIRST-WAVE-FIXTURE-ONLY-001",
+      "R-CR154-ADMISSION-DEFAULT-POLICY-SEMANTICS-001",
+      "R-CR154-CAPACITY-RECONCILIATION-INTERPRETATION-001"
+    ]
+  },
+  "not_authorized": [
+    "true_release_execution_publish_production_deployment_or_live_enablement",
+    "real_lake_nas_provider_access_or_credential_env_session_read",
+    "qmt_miniqmt_xtquant_runtime_simulation_paper_live_trading_broker_operation",
+    "live_event_listener_real_event_feed_real_order_flow_real_tca_broker_fill_order_book_replay_real_reconciliation",
+    "feature_label_event_prediction_store_catalog_pointer_model_registry_write",
+    "external_framework_clone_install_run",
+    "git_remote_write",
+    "production_runtime_trading_broker_readiness_or_registry_publication_claim"
+  ],
+  "next_route": "CR154_CLOSED_READY_WITH_RISK",
+  "risk_refs": [
+    "R-CR154-CP6-RETURN-PATH-WARN-001",
+    "R-CR154-CP7-UNTRACKED-FILES-001",
+    "R-CR154-FIRST-WAVE-FIXTURE-ONLY-001",
+    "R-CR154-ADMISSION-DEFAULT-POLICY-SEMANTICS-001",
+    "R-CR154-CAPACITY-RECONCILIATION-INTERPRETATION-001"
+  ],
+  "follow_up_refs": [
+    "FU-CR154-001",
+    "RUNTIME-DATA-AUTHORIZATION-FUTURE"
+  ],
+  "updated_at": "2026-07-03T09:03:11+08:00",
+  "approved_at": "2026-07-03T09:03:11+08:00",
+  "approved_by": "user",
+  "approved_via": "user_cp8_review_acceptance_after_s08_feature_design_ref_fix",
+  "accepted_risk_ids": [
+    "R-CR154-CP6-RETURN-PATH-WARN-001",
+    "R-CR154-CP7-UNTRACKED-FILES-001",
+    "R-CR154-FIRST-WAVE-FIXTURE-ONLY-001",
+    "R-CR154-ADMISSION-DEFAULT-POLICY-SEMANTICS-001",
+    "R-CR154-CAPACITY-RECONCILIATION-INTERPRETATION-001"
+  ]
+}

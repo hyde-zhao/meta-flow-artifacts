@@ -1,6 +1,6 @@
 ---
 status: "ready-for-cp5-review"
-version: "1.16"
+version: "1.17"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld:
   - "docs/design/HLD.md"
@@ -8,7 +8,7 @@ source_hld:
 source_adr:
   - "docs/design/ARCHITECTURE-DECISION.md"
   - "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
-change: "CR-153"
+change: "CR-154"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 confirmed_by: ""
 confirmed_at: ""
@@ -37,6 +37,7 @@ confirmed_at: ""
 | 1.14 | 2026-07-01 | host-orchestrator | CR151 CP3 approved 后增补 Strategy Admission Statistical Gate CP4：FEAT-03 下新增统计准入门 Story 消费、`lld_policy`、DAG/Wave 和 Wave B deferred 边界。 |
 | 1.15 | 2026-07-02 | host-orchestrator | CR152 CP3 approved 后增补 ML Strategy E2E Framework CP4：FEAT-03 下新增 ML first-wave Story 消费、`lld_policy`、DAG/Wave、triple_barrier BLOCKED CP5 约束和 no-registry-write 边界。 |
 | 1.16 | 2026-07-02 | host-orchestrator | CR153 CP3 approved 后增补 Event-Driven Strategy E2E Framework CP4：FEAT-03 下新增事件研究 first-wave Story 消费、`lld_policy`、DAG/Wave、EV-GAP-7 multiple-testing slot、CR154 deferred 边界和 no-feed/no-runtime/no-store 边界。 |
+| 1.17 | 2026-07-03 | host-orchestrator | CR154 CP3 approved 后增补 Cross-Strategy Production Reliability Gates CP4：新增 FEAT-15 cross-strategy reliability gates 三件套、8 个 Story、Gate 5 显式 Story、Phase A runnable fixture schema 归属、Gate 6 tier resolver full-lld 和 CP4/CP5 follow-through acceptance hooks。 |
 
 ## 适用性判定规则
 
@@ -212,6 +213,52 @@ confirmed_at: ""
 | EV-GAP-7 multiple testing / data snooping slot 显式化 | PASS | S02 说明 + First-Wave 边界 |
 | CP4 不授权实现、真实 feed/listener、真实数据、event store/catalog/model registry write 或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR153.yaml#authorization_boundary` |
 | CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR153.yaml#lld_design_batch` |
+
+## CR154 CP4 增量：Cross-Strategy Production Reliability Gates
+
+> 来源：`process/docs/design/HLD-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md`、`process/docs/design/ARCHITECTURE-DECISION-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md`、CP3 用户批准和 CP4 Story split review。CR154 归属新增 FEAT-15「Cross-Strategy Production Reliability Gates」，保持 local/static/fixture-only，不新增真实 lake/NAS/provider/QMT/runtime/simulation/paper/live/trading/broker/credential/feed/order/reconciliation/store/catalog/registry/publish 授权。
+
+### Feature 归属与 lld_policy
+
+| Story ID | Owner Feature | feature_design_refs | lld_policy.required_level | trigger_reasons | CP5 设计证据 | 说明 |
+|---|---|---|---|---|---|---|
+| CR154-S01-shared-gate-contract-fixture-skeleton | FEAT-15 | `docs/features/cross-strategy-reliability-gates/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | shared contract、data model、status enum、first runnable fixture schema | Story LLD | Phase A 必须自带 fixture schema 和第一个可运行 fixture，避免 Phase A/B 边界空壳化。 |
+| CR154-S02-statistical-artifacts-and-trap-severity | FEAT-15 | `docs/features/cross-strategy-reliability-gates/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | Gate 1、12 artifact slots、WRC/SPA severity、PBO/DSR、adapter mapping | Story LLD | B1 是关键路径；CP5 LLD 必须按 multifactor / ML / event-driven 拆出 adapter 子任务，并覆盖 FT-CR154-CP5-001/002/003。 |
+| CR154-S03-cross-strategy-cv-governance | FEAT-15 | `docs/features/cross-strategy-reliability-gates/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | Gate 2、walk-forward / OOS / purged-embargo governance | Story LLD | 共享 contract + strategy-specific adapter；不得把 CR152 ML CV 语义直接套给多因子和事件策略。 |
+| CR154-S04-pit-universe-survivorship-gate | FEAT-15 | `docs/features/cross-strategy-reliability-gates/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | Gate 3、survivorship-free universe、CR153 `universe_pit_audit` lifecycle | Story LLD | CR153 slot first wave 保留为 delegated source；CR154 拥有 shared PIT release-blocking wording，不构建真实 universe 数据。 |
+| CR154-S05-capacity-impact-liquidity-contract | FEAT-15 | `docs/features/cross-strategy-reliability-gates/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | Gate 4、ADV participation、capacity dollars、impact enum、cost underestimation | Story LLD | `impact_model_family` 受控枚举至少含 `square_root` / `almgren_chriss` / `gatheral` / `custom` / `n/a-with-reason`；不做真实 TCA。 |
+| CR154-S06-regime-attribution-reconciliation-slots | FEAT-15 | `docs/features/cross-strategy-reliability-gates/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | Gate 5、slots/status/refs/n/a、no-runtime reconciliation boundary | Story LLD | 回应 CP4 review：Gate 5 必须有显式 Story，不得隐含在 Phase D。 |
+| CR154-S07-admission-default-policy-tier-resolution | FEAT-15 / FEAT-07 safety boundary | `docs/features/cross-strategy-reliability-gates/DESIGN.md`、`TEST-PLAN.md`、`docs/features/runtime-authorization-safety/DESIGN.md` | full-lld | Gate 6、tier resolver、release wording、unknown profile fail-closed | Story LLD | 回应 CP4 review：tier resolution 是独立 full-lld Story；需定义 config/function 边界、fallback 和 per-strategy override 规则。 |
+| CR154-S08-compatibility-follow-through-wording | FEAT-15 / FEAT-08 | `docs/features/cross-strategy-reliability-gates/TEST-PLAN.md`、`TASKS.md` | technical-note | CR151/152/153 compatibility、follow-through hooks、static evidence wording | Story technical note | 保存 MF-GAP-2/6/7 deferred、REQ anchor preservation、ML-only n/a policy、no-runtime/no-real-data release wording。 |
+
+### CR154 First-Wave / Later-Wave 边界
+
+| 范围 | 状态 | 处理 |
+|---|---|---|
+| Shared reliability gate summary and artifact refs | First wave | S01 必做。 |
+| First runnable fixture schema | First wave | S01 必做；Gate-specific fixtures由 S02-S07 扩展。 |
+| Gate 1 statistical artifact model | First wave | S02 必做；必须显式化 multiple-testing / FDR-BH / WRC-SPA / PBO-CSCV / DSR-deflation / trials / OOS / purge-embargo / survivorship / impact-capacity refs。 |
+| Gate 2 CV governance | First wave | S03 必做。 |
+| Gate 3 PIT universe / survivorship gate | First wave | S04 必做；不读取真实 universe。 |
+| Gate 4 capacity / impact / liquidity contract | First wave | S05 必做；不做真实 TCA。 |
+| Gate 5 regime / attribution / reconciliation slots | First wave | S06 必做；slot/status/ref/n/a only。 |
+| Gate 6 admission default policy | First wave | S07 必做；unknown release profile fail-closed。 |
+| CR151/152/153 compatibility and wording | First wave | S08 必做；technical-note。 |
+| Exact PBO / DSR / capacity thresholds | Required-later in CP5 | S02/S05/S07 必须提供默认、config owner 或 `n/a-with-reason` policy；不做真实 calibration。 |
+| MF-GAP-2/6/7 | Deferred | S08 必须声明 deferred to factor-evaluation follow-up CR。 |
+| Real lake / NAS / provider / runtime / broker / feed / reconciliation / publish | Deferred and not authorized | Future runtime/data authorization gate only。 |
+
+### CR154 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| 8 个 CR154 Story 均有 FEAT-15 归属和 `lld_policy` | PASS | 本节 `Feature 归属与 lld_policy` |
+| Gate 5 显式 Story | PASS | `CR154-S06-regime-attribution-reconciliation-slots` |
+| Phase A fixture schema 归属明确 | PASS | `CR154-S01-shared-gate-contract-fixture-skeleton` acceptance criteria |
+| Gate 6 tier resolution 独立 full-lld | PASS | `CR154-S07-admission-default-policy-tier-resolution` |
+| B1 工作量作为关键路径显式化 | PASS | S02 说明 + `process/DEVELOPMENT-PLAN-CR154.yaml#cp5_attention_items` |
+| CP4 不授权 LLD、实现、测试实现、真实数据或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR154.yaml#authorization_boundary` |
+| CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR154.yaml#lld_design_batch` |
 
 ### CR151 Wave A / Wave B 边界
 

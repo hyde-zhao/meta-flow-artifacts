@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-154",
+  "stage": "CP7",
+  "story_id": "CR154-S01..S08",
+  "return_ref": "process/returns/CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.CP7.return.json",
+  "result_ref": "process/checks/CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION.result.json",
+  "summary_ref": "process/checks/CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION.result.summary.md",
+  "effective_validation_mode": "static-fixture-only",
+  "cp6_refs": {
+    "result_ref": "process/checks/CP6-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-IMPLEMENTATION.result.json",
+    "evidence_ref": "process/evidence/CR154-CP6-IMPLEMENTATION.index.json",
+    "implementation_ref": "process/stories/CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-IMPLEMENTATION.md"
+  },
+  "implementation_evidence_refs": [
+    "process/evidence/CR154-S01-shared-gate-contract-fixture-skeleton.CP6.index.json",
+    "process/evidence/CR154-S02-statistical-artifacts-and-trap-severity.CP6.index.json",
+    "process/evidence/CR154-S03-cross-strategy-cv-governance.CP6.index.json",
+    "process/evidence/CR154-S04-pit-universe-survivorship-gate.CP6.index.json",
+    "process/evidence/CR154-S05-capacity-impact-liquidity-contract.CP6.index.json",
+    "process/evidence/CR154-S06-regime-attribution-reconciliation-slots.CP6.index.json",
+    "process/evidence/CR154-S07-admission-default-policy-tier-resolution.CP6.index.json",
+    "process/evidence/CR154-S08-compatibility-follow-through-wording.CP6.index.json"
+  ],
+  "changed_files_under_verification": [
+    {
+      "path": "engine/cross_strategy_reliability_gates.py",
+      "role": "CR154 shared reliability gate contracts and Gate 1-6 evaluators"
+    },
+    {
+      "path": "engine/strategy_admission_package.py",
+      "role": "CR154 summary attachment to strategy admission package"
+    },
+    {
+      "path": "tests/research/test_cross_strategy_reliability_gates.py",
+      "role": "CR154 local/static fixture tests"
+    },
+    {
+      "path": "tests/research/test_strategy_admission_package.py",
+      "role": "Strategy admission package compatibility tests"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_cross_strategy_reliability_gates.py tests/research/test_strategy_admission_package.py",
+      "result": "pass",
+      "summary": "14 passed in 0.06s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_event_driven_strategy_e2e_contracts.py -k 'admission or package or gate'",
+      "result": "pass",
+      "summary": "7 passed, 34 deselected in 0.54s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py -k 'admission or package or gate'",
+      "result": "pass",
+      "summary": "1 passed, 4 deselected in 0.50s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/cross_strategy_reliability_gates.py engine/strategy_admission_package.py",
+      "result": "pass",
+      "summary": "py_compile completed with exit code 0 and no stdout"
+    },
+    {
+      "command": "git diff --check -- engine/cross_strategy_reliability_gates.py engine/strategy_admission_package.py tests/research/test_cross_strategy_reliability_gates.py tests/research/test_strategy_admission_package.py",
+      "result": "pass",
+      "summary": "No whitespace errors"
+    },
+    {
+      "command": "in-memory CP7 gap probes for Gate1/Gate2/Gate4/Gate5/Gate6",
+      "result": "pass",
+      "summary": "Previous silent-PASS gaps now return BLOCKED or NEEDS_REVIEW as designed."
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab",
+      "result": "pass",
+      "summary": "process_link_health ok; routing_mode=symlink; artifact_git_dirty=dirty"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab",
+      "result": "pass",
+      "summary": "active formal CRs: CR-154; blocked formal CRs: none; historical warnings only"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow event check --ledger process/state/AGENT-DISPATCH-LEDGER.ndjson --type agent_dispatch",
+      "result": "pass",
+      "summary": "Event Ledger Check: OK"
+    }
+  ],
+  "probe_results": [
+    {
+      "probe_id": "GAP1_missing_multiple_fdr_effective_no_reason",
+      "result_status": "BLOCKED",
+      "claim_ids": [
+        "fdr_bh_correction",
+        "multiple_testing_correction",
+        "trial_count_policy"
+      ]
+    },
+    {
+      "probe_id": "GAP1_effective_gt_raw_with_reason_contract_check",
+      "result_status": "NEEDS_REVIEW",
+      "claim_ids": [
+        "trial_count_approximation_review"
+      ]
+    },
+    {
+      "probe_id": "GAP2_missing_oos",
+      "result_status": "BLOCKED",
+      "claim_ids": [
+        "oos_split_missing",
+        "overlap_applicability_unknown",
+        "split_policy_missing",
+        "walk_forward_missing"
+      ]
+    },
+    {
+      "probe_id": "GAP4_missing_refs",
+      "result_status": "BLOCKED",
+      "claim_ids": [
+        "adv_participation_missing",
+        "capacity_dollars_missing",
+        "cost_underestimation_status_missing",
+        "impact_model_ref_missing",
+        "liquidity_sizing_missing"
+      ]
+    },
+    {
+      "probe_id": "GAP5_bare_string_slots",
+      "result_status": "BLOCKED",
+      "claim_ids": [
+        "attribution_slot_shape_invalid",
+        "reconciliation_slot_shape_invalid",
+        "regime_slot_shape_invalid"
+      ]
+    },
+    {
+      "probe_id": "GAP6_T1_no_gates",
+      "result_status": "BLOCKED",
+      "reason_id": "default_required_gate_evidence_missing"
+    }
+  ],
+  "qa_dispatch_refs": [
+    "ADE-CR154-META-QA-CRITICAL-CP7-START-20260703T072431+0800",
+    "ADE-CR154-META-QA-CRITICAL-CP7-REVERIFY-START-20260703T073153+0800"
+  ],
+  "qa_findings": [
+    {
+      "id": "F-CR154-CP7-001",
+      "status": "fixed",
+      "severity": "BLOCKING",
+      "summary": "Initial Gate 1/2/4/5/6 implementation was too permissive versus CP5 LLD contracts."
+    },
+    {
+      "id": "F-CR154-CP7-002",
+      "status": "fixed",
+      "severity": "BLOCKING",
+      "summary": "Gate 1 effective_trial_count > raw_trial_count with approximation_reason returned PASS; now returns NEEDS_REVIEW."
+    }
+  ],
+  "boundary_check": {
+    "forbidden_operation_counter_total": 0,
+    "real_lake_or_nas_access": 0,
+    "provider_fetch": 0,
+    "runtime_or_broker_access": 0,
+    "real_feed_or_order_flow": 0,
+    "real_reconciliation": 0,
+    "catalog_store_registry_write": 0,
+    "credential_or_env_read": 0,
+    "git_remote_write": 0,
+    "true_release_execution": 0
+  },
+  "risks": [
+    {
+      "risk_id": "R-CR154-CP6-RETURN-PATH-WARN-001",
+      "status": "non-blocking",
+      "summary": "story return-check emitted path-name warnings despite expected return packet files existing."
+    },
+    {
+      "risk_id": "R-CR154-CP7-UNTRACKED-FILES-001",
+      "status": "non-blocking-release-hygiene",
+      "summary": "new CR154 source and test files are untracked until final git add/commit packaging."
+    },
+    {
+      "risk_id": "R-CR154-FIRST-WAVE-FIXTURE-ONLY-001",
+      "status": "accepted-boundary",
+      "summary": "CP7 validates local/static/fixture contract semantics only, not paper/live/trading/runtime/data-lake readiness."
+    }
+  ],
+  "decision": "PASS_WITH_RISK",
+  "checked_at": "2026-07-03T07:38:46+08:00"
+}

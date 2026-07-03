@@ -1,0 +1,247 @@
+schema_version: "1.0"
+status: ready_with_risk_approved
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+created_at: "2026-07-03T07:45:32+08:00"
+updated_at: "2026-07-03T09:03:11+08:00"
+approved_at: "2026-07-03T09:03:11+08:00"
+approved_by: "user"
+source_gate: CP8
+
+release_scope:
+  current_version: "roadmap-draft-v0.5-cr153-ready-with-risk"
+  target_version: "roadmap-draft-v0.5-cr154-ready-with-risk"
+  included_features:
+    - "CR154 local/static/fixture Cross-Strategy Production Reliability Gates first wave"
+  included_stories:
+    - "CR154-S01 shared gate contract and first runnable fixture skeleton"
+    - "CR154-S02 Gate 1 statistical artifacts and trap severity policy"
+    - "CR154-S03 Gate 2 cross-strategy CV governance"
+    - "CR154-S04 Gate 3 PIT universe and survivorship gate"
+    - "CR154-S05 Gate 4 capacity, impact and liquidity contract"
+    - "CR154-S06 Gate 5 regime, attribution and reconciliation slots"
+    - "CR154-S07 Gate 6 admission default policy tier resolution"
+    - "CR154-S08 compatibility, follow-through hooks and static evidence wording"
+  excluded_scope:
+    - "real lake read/write, NAS access/sync/write/restore or provider fetch"
+    - "credential, .env, token, account or session read"
+    - "QMT, MiniQMT, xtquant, gateway, runtime, simulation, paper, live, trading or broker operation"
+    - "live event listener, real event feed, real order flow or real data validation"
+    - "real TCA, broker fill, order book replay or runtime calibration"
+    - "real reconciliation"
+    - "feature store, label store, event store, prediction store, catalog pointer or model registry write"
+    - "external framework clone, install or run"
+    - "Git remote write or true release execution"
+    - "production readiness, runtime readiness, trading readiness, broker readiness or registry publication claim"
+  user_visible_changes:
+    - "Cross-strategy reliability gates now expose local/static fixture contracts for statistical reliability, OOS/CV governance, PIT universe, capacity/impact, regime/attribution/reconciliation slots and admission policy wording."
+    - "Strategy admission package can carry a CR154 reliability summary without changing runtime authorization flags."
+  internal_changes:
+    - "Added `engine/cross_strategy_reliability_gates.py` with pure in-memory CR154 Gate 1-6 evaluators."
+    - "Extended `engine/strategy_admission_package.py` to attach CR154 reliability summaries."
+    - "Added CR154 fixture tests and admission package compatibility coverage."
+  breaking_changes: []
+  known_risks:
+    - "R-CR154-CP6-RETURN-PATH-WARN-001"
+    - "R-CR154-CP7-UNTRACKED-FILES-001"
+    - "R-CR154-FIRST-WAVE-FIXTURE-ONLY-001"
+    - "R-CR154-ADMISSION-DEFAULT-POLICY-SEMANTICS-001"
+    - "R-CR154-CAPACITY-RECONCILIATION-INTERPRETATION-001"
+
+version_decision:
+  current_version: "roadmap-draft-v0.5-cr153-ready-with-risk"
+  target_version: "roadmap-draft-v0.5-cr154-ready-with-risk"
+  change_type: "PATCH"
+  compatibility: "compatible"
+  reason: "CR154 adds local/static/fixture reliability gate contracts and tests without install/deploy changes, external interface changes, runtime authorization, data migration or real release execution."
+
+quality_summary:
+  cp7_results:
+    - path: "process/checks/CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION.result.json"
+      decision: "PASS_WITH_RISK"
+      effective_validation_mode: "static-fixture-only"
+      runtime_validation: "N/A; explicitly out_of_scope and not_authorized"
+      full_pytest_claimed: false
+      scoped_tests:
+        cr154_targeted_and_package: "14 passed"
+        event_driven_related_regression: "7 passed, 34 deselected"
+        ml_related_regression: "1 passed, 4 deselected"
+      wording_status: "current wording compliant; CP8 must preserve local/static/fixture-only and no readiness/publication claims"
+  test_report_path: "N/A - CR154 compact profile uses CP7 result/evidence and scoped pytest as release readiness evidence"
+  review_path: "N/A - CP7 result/evidence index and meta-qa-critical review are scoped review equivalents"
+  blocker_count: 0
+  high_count: 0
+  accepted_risk_ids:
+    - "R-CR154-CP6-RETURN-PATH-WARN-001"
+    - "R-CR154-CP7-UNTRACKED-FILES-001"
+    - "R-CR154-FIRST-WAVE-FIXTURE-ONLY-001"
+    - "R-CR154-ADMISSION-DEFAULT-POLICY-SEMANTICS-001"
+    - "R-CR154-CAPACITY-RECONCILIATION-INTERPRETATION-001"
+  pending_risk_acceptance_ids: []
+  unresolved_findings:
+    - id: "R-CR154-CP6-RETURN-PATH-WARN-001"
+      severity: "low"
+      status: "non_blocking_process_hygiene"
+      summary: "story return-check emitted non-blocking path-name warnings despite expected return packet files existing."
+      impact: "Audit hygiene only; does not invalidate CP6/CP7 behavior."
+    - id: "R-CR154-CP7-UNTRACKED-FILES-001"
+      severity: "low"
+      status: "release_hygiene"
+      summary: "New CR154 source/test files are untracked until final git add/commit packaging."
+      impact: "Files must be included before commit/release; not a functional CP7 blocker."
+    - id: "R-CR154-FIRST-WAVE-FIXTURE-ONLY-001"
+      severity: "medium"
+      status: "scope_boundary"
+      summary: "CR154 first wave proves local/static/fixture contract semantics only."
+      impact: "Does not prove production readiness, data-lake readiness, runtime readiness, paper/live/trading readiness, broker readiness, true TCA, reconciliation or registry publication."
+    - id: "R-CR154-ADMISSION-DEFAULT-POLICY-SEMANTICS-001"
+      severity: "medium"
+      status: "risk_accepted"
+      summary: "CR154 changes shared reliability/admission gate semantics and must remain observable and rollbackable through fixture/static contract tests."
+      impact: "Does not claim compatibility beyond validated admission package and adjacent regression subsets."
+    - id: "R-CR154-CAPACITY-RECONCILIATION-INTERPRETATION-001"
+      severity: "medium"
+      status: "risk_accepted"
+      summary: "Capacity/impact/reconciliation slots are schema and contract readiness, not true TCA, broker reconciliation, runtime readiness or trading readiness."
+      impact: "Future operational readiness requires separate real data/runtime authorization."
+
+affected_surface:
+  platforms:
+    - "local Python static/fixture validation only"
+  components:
+    - "engine/cross_strategy_reliability_gates.py"
+    - "engine/strategy_admission_package.py"
+    - "tests/research/test_cross_strategy_reliability_gates.py"
+    - "tests/research/test_strategy_admission_package.py"
+  install_scopes: []
+  config_changes: []
+  permission_changes: []
+  migration_required: false
+  external_interfaces: []
+  state_schema_changes: []
+  command_parameter_changes: []
+
+install_validation_summary:
+  commands:
+    - "uv run --python 3.11 pytest -q tests/research/test_cross_strategy_reliability_gates.py tests/research/test_strategy_admission_package.py"
+    - "uv run --python 3.11 pytest -q tests/research/test_event_driven_strategy_e2e_contracts.py -k 'admission or package or gate'"
+    - "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py -k 'admission or package or gate'"
+    - "uv run --python 3.11 python -m py_compile engine/cross_strategy_reliability_gates.py engine/strategy_admission_package.py"
+    - "git diff --check -- engine/cross_strategy_reliability_gates.py engine/strategy_admission_package.py tests/research/test_cross_strategy_reliability_gates.py tests/research/test_strategy_admission_package.py"
+  results:
+    - "PASS: 14 CR154 targeted/package fixture tests passed"
+    - "PASS: 7 event-driven related admission/gate regression tests passed"
+    - "PASS: 1 ML related admission/gate regression test passed"
+    - "PASS: py_compile no output"
+    - "PASS: git diff --check no output"
+  log_paths:
+    - "process/evidence/CR154-CP7-VERIFICATION.index.json#commands"
+  git_status_summary:
+    source_repo: "dirty: modified engine/strategy_admission_package.py, tests/research/test_strategy_admission_package.py; untracked engine/cross_strategy_reliability_gates.py, tests/research/test_cross_strategy_reliability_gates.py"
+    artifact_repo: "dirty: CR154 process artifacts updated"
+  skipped_with_reason:
+    - "No install, deployment, migration, package publish, runtime launch, data lake/NAS/provider operation, registry/store/catalog write, broker/trading operation or true release execution is in CR154 scope."
+
+release_documents:
+  release_notes:
+    path: "process/docs/release/RELEASE-NOTES-CR154.md"
+    status: "generated"
+    na_reason: ""
+  deploy_checklist:
+    path: "process/docs/release/DEPLOY-CHECKLIST-CR154.md"
+    status: "generated"
+    na_reason: "Checklist records N/A for actual deploy/publish/runtime because none is authorized."
+  rollback:
+    path: "process/docs/release/ROLLBACK-CR154.md"
+    status: "generated"
+    na_reason: "Rollback is source/process artifact rollback only; no runtime/data rollback exists."
+  migration:
+    path: "process/docs/release/MIGRATION-CR154.md"
+    status: "generated"
+    na_reason: "Migration document records N/A for runtime/data/schema migration."
+  feedback:
+    path: "process/docs/release/FEEDBACK-CR154.md"
+    status: "generated"
+    na_reason: ""
+
+non_authorized_items:
+  - id: "NA-CR154-001"
+    operation: "true release execution, publish, production deployment or live enablement"
+    reason: "CP8 readiness does not execute a real release or production operation."
+    required_authorization: "separate explicit user authorization"
+  - id: "NA-CR154-002"
+    operation: "real lake/NAS/provider access or credential/.env/session read"
+    reason: "CR154 validates local/static/fixture contract semantics only."
+    required_authorization: "separate high-risk data/credential gate"
+  - id: "NA-CR154-003"
+    operation: "QMT/MiniQMT/xtquant/gateway/runtime/simulation/paper/live/trading/broker operation"
+    reason: "CR154 admission policy and reliability summary are contract metadata, not runtime authorization."
+    required_authorization: "separate runtime/trading authorization"
+  - id: "NA-CR154-004"
+    operation: "live event listener, real event feed, real order flow, real TCA, broker fill, order book replay or real reconciliation"
+    reason: "First wave does not connect to data feeds, brokers, execution systems or reconciliation sources."
+    required_authorization: "separate runtime/data/execution authorization CR"
+  - id: "NA-CR154-005"
+    operation: "feature store, label store, event store, prediction store, catalog pointer or model registry write"
+    reason: "CR154 first wave implements contract slots and evidence refs only."
+    required_authorization: "separate data governance and write gate"
+  - id: "NA-CR154-006"
+    operation: "external framework clone/install/run or Git remote write"
+    reason: "No external framework or remote repository action is in scope."
+    required_authorization: "separate explicit user approval"
+
+forbidden_release_claims:
+  effective_validation_mode: "static-fixture-only"
+  full_pytest_passed: false
+  production_ready: false
+  runtime_ready: false
+  paper_live_trading_ready: false
+  broker_ready: false
+  real_data_validated: false
+  real_tca_validated: false
+  real_reconciliation_ready: false
+  registry_published: false
+  real_order_flow: false
+
+follow_up_summary:
+  observation_items:
+    - "If future CRs need data lake/NAS/provider, QMT/runtime, paper/live/trading, broker, feed, order, reconciliation, catalog/store/registry or true release execution, require a new authorization gate and do not reuse CR154 CP8 approval."
+    - "Release wording must continue to say local/static/fixture contract capability, not production-ready strategy governance."
+  feedback_items:
+    - "R-CR154-CP6-RETURN-PATH-WARN-001 remains non-blocking process hygiene."
+    - "R-CR154-CP7-UNTRACKED-FILES-001 must be cleared by including new files in final git add/commit packaging."
+  follow_up_candidates:
+    - id: "FU-CR154-001"
+      status: "candidate"
+      summary: "Final packaging hygiene: ensure new CR154 source/test files are staged and included before commit/release."
+      tracking_ref: "CP8 decision brief risk acceptance"
+    - id: "RUNTIME-DATA-AUTHORIZATION-FUTURE"
+      status: "deferred"
+      summary: "Any real data lake/NAS/provider/runtime/broker/feed/order/reconciliation/store/catalog/registry/publish work requires a separate authorization CR."
+      tracking_ref: "future CR"
+  risk_acceptance_items:
+    - id: "DEC-CR154-CP8-001"
+      decision_type: "risk_acceptance"
+      status: "accepted"
+      accepted_at: "2026-07-03T09:03:11+08:00"
+      accepted_by: "user"
+      recommended_release_decision: "READY_WITH_RISK"
+      risk_ids:
+        - "R-CR154-CP6-RETURN-PATH-WARN-001"
+        - "R-CR154-CP7-UNTRACKED-FILES-001"
+        - "R-CR154-FIRST-WAVE-FIXTURE-ONLY-001"
+        - "R-CR154-ADMISSION-DEFAULT-POLICY-SEMANTICS-001"
+        - "R-CR154-CAPACITY-RECONCILIATION-INTERPRETATION-001"
+      recommended_outcome: "Accept CP7 PASS_WITH_RISK and close CR154 local/static/fixture Cross-Strategy Production Reliability Gates first wave as READY_WITH_RISK."
+      reject_route: "CR154_NOT_READY_OR_RETURN_TO_CP7_OR_DESIGN_CLARIFICATION"
+
+token_control:
+  default_read_mode: capsule-first
+  copied_long_text: false
+  allowed_payload: "summary, count, risk id, decision id, evidence path"
+  release_artifact_profile_reason: "compact because CR154 is a standard gate-profile cross-strategy admission/reliability semantic change. Full is not used because no real install, deploy, migration, runtime authorization or true release action is authorized."
+  full_doc_read_triggers:
+    - missing_capsule_field
+    - unreadable_evidence_path
+    - conflicting_conclusion
+    - user_requested_deep_review

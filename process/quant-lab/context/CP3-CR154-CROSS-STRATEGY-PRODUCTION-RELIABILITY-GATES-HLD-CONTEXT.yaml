@@ -1,0 +1,266 @@
+schema_version: 1
+context_id: CP3-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-HLD
+cr_id: CR-154
+stage: CP3
+status: ready
+created_at: "2026-07-02T23:58:00+08:00"
+owner: host-orchestrator
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - process/changes/summaries/CR-154.summary.json
+    - process/changes/CR-154.md
+    - process/checkpoints/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.md
+    - process/context/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE-CONTEXT.yaml
+  read_if_needed:
+    - process/USE-CASES.md
+    - process/REQUIREMENTS.md
+    - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
+    - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
+    - docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
+    - engine/research_production_contracts.py
+    - engine/backtest_production_contracts.py
+    - engine/strategy_admission_package.py
+    - engine/strategy_readiness_admission.py
+  do_not_read_by_default:
+    - full conversation transcript
+    - all process/stories/*
+    - all process/evidence/*
+    - process/STATE.md
+    - real lake/NAS/provider credential files
+    - external framework repositories
+cp2_approval:
+  approved_at: "2026-07-02T23:58:00+08:00"
+  approved_by: user
+  checkpoint_ref: process/checkpoints/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.md
+  result_ref: process/checks/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.result.json
+  accepted_decision_ids:
+    - DQ-CP2-CR154-BACKTEST-TRAP-GATE
+    - DQ-CP2-CR154-CV-GOVERNANCE
+    - DQ-CP2-CR154-SURVIVORSHIP-UNIVERSE-GATE
+    - DQ-CP2-CR154-CAPACITY-IMPACT-GATE
+    - DQ-CP2-CR154-REGIME-ATTRIBUTION-RECONCILIATION-SLOTS
+    - DQ-CP2-CR154-ADMISSION-GATE-DEFAULT-POLICY
+    - DQ-CP2-CR154-NO-RUNTIME-NO-REAL-DATA-BOUNDARY
+cp2_discussion_verification:
+  status: verified
+  verified_at: "2026-07-03T00:06:00+08:00"
+  discussion_log_ref: process/discussions/CP2-CR154-SCENARIO-DISCUSSION-LOG.md
+  discussion_checkpoint_ref: process/checks/CP2-CR154-DISCUSSION-CHECKPOINT.json
+  sgq_interactions:
+    - SGQ-CR154-001
+    - SGQ-CR154-002
+    - SGQ-CR154-003
+    - SGQ-CR154-004
+    - SGQ-CR154-005
+  conclusion: SGQ evidence chain is complete enough for CP3 entry; no CP2 rework required.
+objective:
+  summary: Design cross-strategy local/static/fixture production reliability gates for multifactor, machine-learning and event-driven strategies.
+  scope_boundary: CP3 HLD / ADR / Architecture Gray Areas only; no Story decomposition, LLD, source implementation, runtime, real data, broker, feed, reconciliation or publish.
+accepted_scope:
+  - shared backtest trap gate for lookahead, survivorship, data snooping, regime overfit and cost underestimation
+  - shared walk-forward / OOS / purged-embargo governance with strategy-specific adapters as needed
+  - shared PIT universe / survivorship-free universe gate contract without real universe data construction
+  - capacity / market impact / liquidity sizing contract semantics without real TCA
+  - structured regime / attribution / reconciliation slots with status, refs and n/a-with-reason
+  - admission default policy by strategy class, release profile, risk level and evidence completeness
+cp3_design_constraints:
+  - id: CP3-DC-CR154-001
+    source: CP2 review finding and E2E review C1 blocker
+    constraint: Backtest trap gate must not collapse multiple-testing, data-snooping, PBO or DSR into a plain trap status enum.
+    minimum_artifacts:
+      - multiple_testing_correction_refs
+      - fdr_bh_refs
+      - white_reality_check_or_hansen_spa_refs
+      - pbo_or_cscv_refs
+      - dsr_or_sharpe_ic_deflation_refs
+      - trial_count_and_effective_trials
+      - oos_split_refs
+      - purge_embargo_refs
+      - survivorship_audit_refs
+      - impact_capacity_refs
+      - blocked_claims
+      - release_blocking_reason
+    n_a_policy: Any unavailable artifact must be represented as n/a-with-reason rather than omitted.
+  - id: CP3-DC-CR154-002
+    source: CP2 post-approval review note and requirements coverage review
+    constraint: CR154 must not implicitly consume existing requirement anchors without a visible architecture traceability decision.
+    minimum_artifacts:
+      - uc_req_architecture_traceability_table
+      - uc_58_trace_refs
+      - uc_59_trace_refs
+      - uc_60_trace_refs
+      - existing_req_anchor_refs_for_pit_universe_capacity_cost_walk_forward_blocked_claims_purge_embargo_lookahead_cp3_gate
+      - req_anchor_policy_decision_reuse_existing_or_add_cr154_specific_later
+    n_a_policy: If CR154-specific REQ entries are deferred, HLD / ADR must state the reason, owner, trigger and follow-up path.
+  - id: CP3-DC-CR154-003
+    source: CP2 review finding and DQ-CP2-CR154-ADMISSION-GATE-DEFAULT-POLICY
+    constraint: Admission default policy must not remain an underspecified strategy class / release profile / risk level statement.
+    minimum_artifacts:
+      - admission_default_policy_tier_table
+      - strategy_class_column
+      - release_profile_column
+      - risk_level_column
+      - evidence_completeness_column
+      - gate_mode_opt_in_default_required_release_blocking
+      - exception_conditions
+      - rollback_or_switch_conditions
+      - release_wording_impact
+    n_a_policy: Any release profile not covered by the tier table must be n/a-with-reason or explicitly deferred.
+  - id: CP3-DC-CR154-004
+    source: CP2 review finding and CR153 universe_pit_audit relation
+    constraint: The upgrade from CR153 universe_pit_audit slot to CR154 PIT universe gate must have an explicit compatibility and ownership lifecycle.
+    minimum_artifacts:
+      - cr153_universe_pit_audit_slot_lifecycle
+      - retained_as_adapter_or_source_ref_decision
+      - delegated_to_cr154_status_semantics
+      - compatibility_or_deprecation_policy
+      - duplicate_owner_conflict_prevention
+      - story_planning_owner_boundary
+    n_a_policy: Slot deletion is not allowed in first wave; any deprecation must be deferred with migration conditions.
+  - id: CP3-DC-CR154-005
+    source: CP2 review finding and E2E review market impact recommendation
+    constraint: impact_model_family must be a controlled enum or equivalent vocabulary, not free text.
+    minimum_artifacts:
+      - impact_model_family_enum
+      - square_root
+      - almgren_chriss
+      - gatheral
+      - custom_policy
+      - n_a_with_reason_policy
+      - no_real_tca_claim
+    n_a_policy: Missing real execution data must remain n/a-with-reason and must not block local/static/fixture CP3 design.
+  - id: CP3-DC-CR154-006
+    source: CP2 review finding and UC-59 ML-specific gap classification
+    constraint: ML-only methods must be separated from CR154 cross-strategy release blockers.
+    minimum_artifacts:
+      - strategy_specific_na_policy
+      - triple_barrier_meta_labeling_classification
+      - feature_importance_classification
+      - non_ml_na_reason
+      - cr152_or_follow_up_owner_ref
+      - not_cross_strategy_release_blocker_reason
+    n_a_policy: For multifactor and event-driven adapters, ML-only fields must be n/a-with-reason rather than omitted.
+architecture_gray_areas:
+  - id: AGQ-CR154-001
+    topic: Cross-strategy gate shape
+    question: Should CR154 use one shared gate contract with per-strategy adapters, or separate gate objects for multifactor, ML and event-driven strategies?
+    recommended_direction: Shared contract plus strategy-specific adapter fields.
+    impact_surface:
+      - module boundaries
+      - compatibility
+      - validation
+      - release blocking
+  - id: AGQ-CR154-002
+    topic: Statistical reliability artifact model
+    question: How should multiple-testing, PBO/CSCV, DSR/deflation and trial-count evidence compose with existing CR151 statistical admission capability?
+    recommended_direction: Define cross-strategy artifact refs and let CR151/152/153 gates contribute evidence into the shared policy.
+    impact_surface:
+      - data structures
+      - admission package
+      - backward compatibility
+      - CP3-DC-CR154-001
+  - id: AGQ-CR154-003
+    topic: Admission default policy
+    question: Which release profiles make CR151/152/153 gates default-required or release-blocking, and which profiles keep opt-in exceptions?
+    recommended_direction: Produce a tier table covering strategy class, release profile, risk level, evidence completeness, gate mode, exceptions, rollback and release wording.
+    impact_surface:
+      - existing callers
+      - release wording
+      - no-overclaim policy
+      - CP3-DC-CR154-003
+  - id: AGQ-CR154-004
+    topic: No-runtime reconciliation boundary
+    question: How should regime / attribution / reconciliation slots stay useful for future paper/live readiness without implying real reconciliation capability?
+    recommended_direction: Use slots, status, refs and n/a-with-reason only; defer real reconciliation to runtime authorization.
+    impact_surface:
+      - security boundary
+      - future paper/live
+      - release claims
+  - id: AGQ-CR154-005
+    topic: Requirement traceability and CR154 REQ anchoring
+    question: Should CR154 CP3 design reuse existing requirements anchors, or should it create a follow-up requirement-document update to add CR154-specific REQ IDs?
+    recommended_direction: Reuse existing REQ anchors for CP3 design if they cover the architecture decisions, and create a follow-up decision item only if the traceability table exposes a real gap.
+    impact_surface:
+      - requirements traceability
+      - HLD / ADR completeness
+      - CP3 review
+      - later Story acceptance
+  - id: AGQ-CR154-006
+    topic: CR153 universe_pit_audit upgrade lifecycle
+    question: After CR154 introduces a PIT universe gate, should CR153 universe_pit_audit remain as adapter/source evidence, be marked delegated-to-CR154, or follow a deferred compatibility path?
+    recommended_direction: Retain CR153 slot compatibility in first wave, mark CR154 as the shared gate owner, and prevent duplicate owner semantics during Story planning.
+    impact_surface:
+      - CR153 compatibility
+      - file ownership
+      - story planning
+      - CP3-DC-CR154-004
+  - id: AGQ-CR154-007
+    topic: Impact model enum and strategy-specific n/a policy
+    question: Which impact model families and strategy-specific method fields are first-wave controlled contract fields, and which are n/a-with-reason or deferred?
+    recommended_direction: Enumerate square_root, almgren_chriss and gatheral for impact model family, and classify ML-only triple-barrier/meta-labeling and feature importance outside non-ML strategy gates.
+    impact_surface:
+      - capacity / impact contract
+      - ML-specific methods
+      - release blocking semantics
+      - CP3-DC-CR154-005
+      - CP3-DC-CR154-006
+not_authorized:
+  - Story decomposition before CP3 approval
+  - LLD before CP3 and later gates
+  - source implementation or tests before CP5 approval
+  - real lake read or write
+  - NAS read/write/sync/restore/chmod/chgrp/metadata normalization
+  - provider fetch
+  - QMT / MiniQMT / xtquant / gateway runtime
+  - simulation / paper / live / trading runtime
+  - live event listener
+  - broker read/write/submit/cancel/real account query
+  - credential or .env read
+  - external framework clone/install/run
+  - Git remote write
+  - catalog pointer mutation
+  - feature store / label store / event store / model registry / prediction store writes
+  - real event feed execution
+  - real order flow
+  - real data validation
+  - real reconciliation
+  - true release execution / production deployment / publish
+downstream_tasks:
+  - produce CP3 Architecture Gray Areas advisor table and discussion log
+  - produce CR154 HLD and ADR candidate set
+  - include UC / REQ -> Architecture Traceability for UC-58, UC-59, UC-60 and relevant existing REQ anchors
+  - decide whether CR154 reuses existing REQ anchors or requires a follow-up requirements-document update with CR154-specific REQ IDs
+  - define admission default policy tier table for opt-in, default-required, release-blocking and exceptions
+  - define CR153 universe_pit_audit slot compatibility / delegation lifecycle for CR154 PIT universe gate
+  - define impact_model_family enum with square_root, almgren_chriss, gatheral, custom and n/a-with-reason semantics
+  - define strategy-specific n/a policy for ML-only triple-barrier/meta-labeling and feature-importance methods
+  - simulate at least three key paths: multifactor release gate, ML admission with purged/embargo refs, event-driven admission with PIT/universe slot
+  - run CP3 consistency precheck and prepare CP3 human review only after HLD / ADR drafts exist
+risks_and_decisions:
+  - id: R-CR154-CP3-STAT-ARTIFACT-THINNESS
+    status: active-design-risk
+    mitigation: Enforce CP3-DC-CR154-001 in HLD / ADR and CP3 result checks.
+  - id: R-CR154-CP3-RUNTIME-OVERCLAIM
+    status: active-design-risk
+    mitigation: Keep all reconciliation, TCA, data and broker work as not-authorized / deferred.
+  - id: R-CR154-CP3-REQ-TRACEABILITY-IMPLICIT
+    status: active-design-risk
+    mitigation: Enforce CP3-DC-CR154-002 in HLD / ADR before CP3 review.
+  - id: R-CR154-CP3-ADMISSION-TIER-AMBIGUITY
+    status: active-design-risk
+    mitigation: Enforce CP3-DC-CR154-003 before CP3 review.
+  - id: R-CR154-CP3-UNIVERSE-SLOT-DUPLICATE-OWNER
+    status: active-design-risk
+    mitigation: Enforce CP3-DC-CR154-004 before Story planning.
+  - id: R-CR154-CP3-IMPACT-MODEL-FREE-TEXT
+    status: active-design-risk
+    mitigation: Enforce CP3-DC-CR154-005 before CP3 review.
+  - id: R-CR154-CP3-ML-SPECIFIC-METHOD-OVERBLOCKING
+    status: active-design-risk
+    mitigation: Enforce CP3-DC-CR154-006 before CP3 review.
+token_control:
+  max_source_files: 12
+  full_doc_read_policy: only for conflict resolution, architecture deep review, or missing capsule fields
+  read_expansion_required: true

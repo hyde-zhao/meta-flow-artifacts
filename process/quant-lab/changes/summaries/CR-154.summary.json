@@ -1,0 +1,217 @@
+{
+  "id": "CR-154",
+  "title": "Cross-Strategy Production Reliability Gates",
+  "status": "closed-current-delivery-ready-with-risk",
+  "cr_type": "requirement-change",
+  "readiness": "ready_with_risk",
+  "gate_status": "closed",
+  "gate_profile": "standard",
+  "decision": "closed_ready_with_risk",
+  "full_ref": "process/changes/CR-154.md",
+  "goal_ref": "ROADMAP-QUANT-RESEARCH-PRODUCTION",
+  "goal_statement": "Start local/static/fixture cross-strategy production reliability gates after CR153 Event-Driven Strategy E2E first-wave closure.",
+  "scope_summary": [
+    "CR154 passed Rule 41, CP0, CP1, CP2, CP3, CP4, CP5, CP6, CP7 and CP8.",
+    "CP7 passed with risk after QA-driven rework of Gate 1/2/4/5/6 fail-closed behavior.",
+    "CP8 DEC-CR154-CP8-001 accepted the five residual risk items and closed CR154 as READY_WITH_RISK.",
+    "No runtime, real data, broker, credential, feed, order, reconciliation, store/catalog/registry/publish or trading action is authorized."
+  ],
+  "product_baseline_refresh_required": true,
+  "product_baseline_refresh_status": "approved",
+  "product_baseline_refresh_completed_at": "2026-07-02T23:58:00+08:00",
+  "product_baseline_refresh_completion_ref": "process/checkpoints/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.md#人工审查结果",
+  "required_phase": "delivered",
+  "required_agent": "",
+  "required_gate": "",
+  "block_story_decomposition_until": "completed",
+  "affected_product_docs": [
+    "process/USE-CASES.md",
+    "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md",
+    "docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md",
+    "docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md"
+  ],
+  "affected_use_cases": [
+    "UC-58 multifactor strategy E2E",
+    "UC-59 machine-learning strategy E2E",
+    "UC-60 event-driven strategy E2E"
+  ],
+  "impact_surface": [
+    "requirements",
+    "scope",
+    "strategy-framework",
+    "multifactor",
+    "machine-learning",
+    "event-driven",
+    "research-admission",
+    "backtest-validation",
+    "production-reliability",
+    "human-gate"
+  ],
+  "conflict_keys": [
+    "cross-strategy-production-reliability-gates",
+    "backtest-trap-gate",
+    "walk-forward-oos-purged-embargo-governance",
+    "survivorship-free-pit-universe-gate",
+    "capacity-impact-liquidity-sizing-contracts",
+    "strategy-admission-default-policy"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "NO_REAL_LAKE_READ_OR_WRITE",
+    "NO_NAS_SYNC_OR_WRITE",
+    "NO_PROVIDER_FETCH",
+    "NO_BROKER_WRITE",
+    "NO_EXTERNAL_FRAMEWORK_RUN",
+    "NO_CATALOG_POINTER_WRITE"
+  ],
+  "approval_focus": "CR154 CP2 approved local/static/fixture first-wave scope for cross-strategy production reliability gates and no-runtime/no-real-data boundary.",
+  "approve_effect": "CR154 entered CP3 design only; no Story, LLD, source implementation, runtime, data, broker, credential, feed, order, reconciliation or publish action is authorized.",
+  "reject_effect": "N/A after CP2 approval; future changes require CP3 review changes_requested or a new CR.",
+  "not_authorized_by_approve": [
+    "real lake read or write",
+    "NAS read/write/sync/restore/chmod/chgrp/metadata normalization",
+    "provider fetch",
+    "QMT/MiniQMT/xtquant/gateway runtime",
+    "simulation/paper/live/trading runtime",
+    "live event listener",
+    "broker read/write/submit/cancel/real account query",
+    "credential or .env read",
+    "external framework clone/install/run",
+    "Git remote write",
+    "catalog pointer mutation",
+    "feature store / label store / event store / model registry / prediction store writes",
+    "real event feed execution",
+    "real order flow",
+    "real data validation",
+    "real reconciliation",
+    "true release execution / production deployment / publish"
+  ],
+  "decision_burden": "none; DEC-CR154-CP8-001 accepted by user; no runtime, real data, broker, credential, feed, order, reconciliation, store/catalog/registry, publish or trading action is authorized.",
+  "remaining_risks": [
+    "Fixture/static validation must not be represented as production reliability proof.",
+    "CP7 passed after QA-driven rework, but first-wave validation remains static/fixture-only.",
+    "New CR154 source and test files must be included in the final change set before commit or release.",
+    "CP6 story return path warnings remain non-blocking process hygiene.",
+    "Admission default policy could change historical CR151/CR152/CR153 caller behavior and must be explicitly gated.",
+    "Capacity/impact/reconciliation slots must not be mistaken for real TCA, broker reconciliation, runtime readiness or trading readiness.",
+    "Data-lake/NAS/provider/runtime candidates remain deferred and must not be silently pulled into CR154 first wave."
+  ],
+  "followup_candidates": [
+    "FU-CR152-001"
+  ],
+  "routing_design_ref": "docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md#7-横切生产可靠性计划Future-CR154",
+  "split_rationale": "CR154 is cross-strategy because backtest traps, OOS governance, survivorship-free universe, capacity/impact, regime, attribution, reconciliation and default admission policy are shared by multifactor, ML and event-driven strategies.",
+  "why_not_merge_with_parent": "Roadmap and remediation plan are planning artifacts; CR154 needs a formal CP2 scope baseline before design and implementation.",
+  "why_not_story_or_task": "The change affects requirements, strategy admission semantics, validation gates, release blocking policy and cross-strategy architecture, so it requires formal CR and checkpoint flow.",
+  "user_goal_impact": "Improves strategy framework reliability before any production data, runtime, paper/live or broker readiness is considered.",
+  "rule41_precheck_ref": "process/checks/CR154-RULE41-CONFLICT-PRECHECK-2026-07-02.md",
+  "cp0_result_ref": "process/checks/CP0-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-REQUEST-INTAKE.result.json",
+  "cp1_result_ref": "process/checks/CP1-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-USE-CASE-COMPLETENESS.result.json",
+  "cp2_result_ref": "process/checks/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.result.json",
+  "cp2_context_ref": "process/context/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE-CONTEXT.yaml",
+  "cp2_checkpoint_ref": "process/checkpoints/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.md",
+  "cp2_launch_message_ref": "process/checks/CP2-CR154-HUMAN-GATE-LAUNCH-MESSAGE.md",
+  "cp2_discussion_log_ref": "process/discussions/CP2-CR154-SCENARIO-DISCUSSION-LOG.md",
+  "cp2_discussion_checkpoint_ref": "process/checks/CP2-CR154-DISCUSSION-CHECKPOINT.json",
+  "cp3_design_constraints": [
+    {
+      "id": "CP3-DC-CR154-001",
+      "summary": "Backtest trap gate must expose auditable statistical reliability artifacts for multiple-testing/FDR-BH/WRC-SPA/PBO-CSCV/DSR-deflation/trial-count/OOS/purge-embargo/survivorship/impact-capacity evidence, with n/a-with-reason for unavailable fields."
+    },
+    {
+      "id": "CP3-DC-CR154-002",
+      "summary": "HLD / ADR must include UC / REQ -> Architecture traceability and decide whether CR154 reuses existing REQ anchors or later adds CR154-specific requirements."
+    },
+    {
+      "id": "CP3-DC-CR154-003",
+      "summary": "HLD / ADR must define an admission default policy tier table covering opt-in, default-required, release-blocking, exceptions and rollback."
+    },
+    {
+      "id": "CP3-DC-CR154-004",
+      "summary": "HLD / ADR must define how CR153 universe_pit_audit remains compatible while delegating or adapting to the CR154 PIT universe gate."
+    },
+    {
+      "id": "CP3-DC-CR154-005",
+      "summary": "HLD / ADR must define impact_model_family as a controlled enum including square_root, almgren_chriss and gatheral, with custom or n/a-with-reason policy."
+    },
+    {
+      "id": "CP3-DC-CR154-006",
+      "summary": "HLD / ADR must classify ML-only triple-barrier/meta-labeling and feature-importance methods as strategy-specific n/a for non-ML strategies and keep them outside CR154 cross-strategy release blockers."
+    }
+  ],
+  "accepted_cp2_decision_ids": [
+    "DQ-CP2-CR154-BACKTEST-TRAP-GATE",
+    "DQ-CP2-CR154-CV-GOVERNANCE",
+    "DQ-CP2-CR154-SURVIVORSHIP-UNIVERSE-GATE",
+    "DQ-CP2-CR154-CAPACITY-IMPACT-GATE",
+    "DQ-CP2-CR154-REGIME-ATTRIBUTION-RECONCILIATION-SLOTS",
+    "DQ-CP2-CR154-ADMISSION-GATE-DEFAULT-POLICY",
+    "DQ-CP2-CR154-NO-RUNTIME-NO-REAL-DATA-BOUNDARY"
+  ],
+  "pending_cp2_decision_ids": [],
+  "accepted_decision_ids": [
+    "DQ-CP2-CR154-BACKTEST-TRAP-GATE",
+    "DQ-CP2-CR154-CV-GOVERNANCE",
+    "DQ-CP2-CR154-SURVIVORSHIP-UNIVERSE-GATE",
+    "DQ-CP2-CR154-CAPACITY-IMPACT-GATE",
+    "DQ-CP2-CR154-REGIME-ATTRIBUTION-RECONCILIATION-SLOTS",
+    "DQ-CP2-CR154-ADMISSION-GATE-DEFAULT-POLICY",
+    "DQ-CP2-CR154-NO-RUNTIME-NO-REAL-DATA-BOUNDARY"
+  ],
+  "updated_at": "2026-07-03T09:03:11+08:00",
+  "lifecycle_status": "closed",
+  "readiness_status": "ready_with_risk",
+  "cp3_approved_at": "2026-07-03T01:05:00+08:00",
+  "cp3_approved_by": "user",
+  "accepted_cp3_decision_ids": [
+    "CP3-DQ-CR154-SHARED-CONTRACT",
+    "CP3-DQ-CR154-REQ-ANCHOR-POLICY",
+    "CP3-DQ-CR154-DEFAULT-POLICY",
+    "CP3-DQ-CR154-NO-RUNTIME"
+  ],
+  "follow_through_items": [
+    "FT-CR154-CP5-001-WRC-SPA-SEVERITY",
+    "FT-CR154-CP5-002-CROSS-GATE-PROPAGATION",
+    "FT-CR154-CP5-003-NUMERIC-THRESHOLDS",
+    "FT-CR154-CP5-004-MF-GAP-2-6-7-DEFERRED",
+    "FT-CR154-CP5-005-REQ-ANCHOR-PRESERVATION"
+  ],
+  "cp4_result_ref": "process/checks/CP4-CR154-STORY-DAG-PARALLEL-SAFETY.result.json",
+  "cp4_story_backlog_ref": "process/STORY-BACKLOG-CR154.md",
+  "cp4_development_plan_ref": "process/DEVELOPMENT-PLAN-CR154.yaml",
+  "cp4_story_status_ref": "process/STORY-STATUS-CR154.md",
+  "cp4_story_count": 8,
+  "cp4_full_lld_count": 7,
+  "cp4_technical_note_count": 1,
+  "cp4_next_route": "CP5_DESIGN_EVIDENCE_PREPARATION",
+  "cp5_result_ref": "process/checks/CP5-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-LLD-BATCH.result.json",
+  "cp5_checkpoint_ref": "process/checkpoints/CP5-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-LLD-BATCH.md",
+  "cp5_context_ref": "process/context/CP5-CR154.context.json",
+  "cp6_result_ref": "process/checks/CP6-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-IMPLEMENTATION.result.json",
+  "cp6_evidence_ref": "process/evidence/CR154-CP6-IMPLEMENTATION.index.json",
+  "cp7_result_ref": "process/checks/CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION.result.json",
+  "cp7_summary_ref": "process/checks/CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION.result.summary.md",
+  "cp7_evidence_ref": "process/evidence/CR154-CP7-VERIFICATION.index.json",
+  "cp7_return_ref": "process/returns/CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.CP7.return.json",
+  "cp7_decision": "PASS_WITH_RISK",
+  "next_route": "CR154_CLOSED_READY_WITH_RISK",
+  "closed_at": "2026-07-03T09:03:11+08:00",
+  "closed_by": "user",
+  "cp8_result_ref": "process/checks/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.result.json",
+  "cp8_checkpoint_ref": "process/checkpoints/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.md",
+  "release_context_ref": "process/release/RELEASE-CONTEXT-CR154.yaml",
+  "cp8_release_decision": "READY_WITH_RISK",
+  "accepted_cp8_decision_ids": [
+    "DEC-CR154-CP8-001"
+  ],
+  "accepted_risk_ids": [
+    "R-CR154-CP6-RETURN-PATH-WARN-001",
+    "R-CR154-CP7-UNTRACKED-FILES-001",
+    "R-CR154-FIRST-WAVE-FIXTURE-ONLY-001",
+    "R-CR154-ADMISSION-DEFAULT-POLICY-SEMANTICS-001",
+    "R-CR154-CAPACITY-RECONCILIATION-INTERPRETATION-001"
+  ]
+}

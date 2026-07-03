@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR154-S03-cross-strategy-cv-governance.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-154",
+  "story_id": "CR154-S03-cross-strategy-cv-governance",
+  "status": "implemented",
+  "created_at": "2026-07-03T07:20:45+08:00",
+  "created_by": "host-orchestrator",
+  "context_ref": "process/context/stories/CR154-S03-cross-strategy-cv-governance.CP6.work-packet.json",
+  "implementation_ref": "process/stories/CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-IMPLEMENTATION.md",
+  "source_story_ref": "process/stories/CR154-S03-cross-strategy-cv-governance.md",
+  "source_design_evidence_ref": "process/stories/CR154-S03-cross-strategy-cv-governance-LLD.md",
+  "touched_files": [
+    {
+      "path": "engine/cross_strategy_reliability_gates.py",
+      "change_type": "created"
+    },
+    {
+      "path": "engine/strategy_admission_package.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "tests/research/test_cross_strategy_reliability_gates.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/research/test_strategy_admission_package.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/stories/CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-IMPLEMENTATION.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/STORY-CR154-S03-cross-strategy-cv-governance.CP6.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR154-S03-cross-strategy-cv-governance.CP6.index.json",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "Implemented S03 slice of CR154 cross-strategy reliability gates as local/static/fixture contracts."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_read_touched": false,
+    "real_lake_write_touched": false,
+    "provider_fetch_executed": false,
+    "nas_operation_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_or_live_executed": false,
+    "broker_operation_executed": false,
+    "feed_listener_executed": false,
+    "store_catalog_registry_write_executed": false,
+    "real_order_flow_executed": false,
+    "real_data_validation_executed": false,
+    "real_reconciliation_executed": false,
+    "external_framework_executed": false,
+    "git_remote_write_executed": false,
+    "publish_executed": false,
+    "forbidden_story_files_touched": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/research/test_cross_strategy_reliability_gates.py",
+        "result": "pass",
+        "summary": "5 passed in 0.02s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/research/test_strategy_admission_package.py -k cr154",
+        "result": "pass",
+        "summary": "2 passed, 7 deselected in 0.03s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/research/test_strategy_admission_package.py",
+        "result": "pass",
+        "summary": "9 passed in 0.04s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/research/test_event_driven_strategy_e2e_contracts.py -k 'admission or package or gate'",
+        "result": "pass",
+        "summary": "7 passed, 34 deselected in 0.58s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py -k 'admission or package or gate'",
+        "result": "pass",
+        "summary": "1 passed, 4 deselected in 0.54s"
+      },
+      {
+        "command": "uv run --python 3.11 python -m py_compile engine/cross_strategy_reliability_gates.py engine/strategy_admission_package.py",
+        "result": "pass",
+        "summary": "py_compile passed"
+      },
+      {
+        "command": "git diff --check -- engine/cross_strategy_reliability_gates.py engine/strategy_admission_package.py tests/research/test_cross_strategy_reliability_gates.py tests/research/test_strategy_admission_package.py",
+        "result": "pass",
+        "summary": "No whitespace errors"
+      }
+    ],
+    "tests": [
+      "tests/research/test_cross_strategy_reliability_gates.py",
+      "tests/research/test_strategy_admission_package.py"
+    ],
+    "stage_decision": "PASS",
+    "skipped": []
+  },
+  "open_questions": [],
+  "risks": [],
+  "waivers": [],
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_architecture_doc_update": false,
+    "requires_hld_update": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "Implementation follows CP5-approved CR154 LLD batch and does not change long-lived design docs."
+  },
+  "evidence_refs": [
+    "process/evidence/CR154-S03-cross-strategy-cv-governance.CP6.index.json"
+  ],
+  "next_stage_recommendation": "ready_for_cp7",
+  "actor": "host-orchestrator",
+  "decision": "PASS",
+  "updated_at": "2026-07-03T07:20:45+08:00"
+}

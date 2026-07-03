@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-154",
+  "stage": "CP6",
+  "evidence_id": "CR154-CP6-IMPLEMENTATION",
+  "created_at": "2026-07-03T07:22:10+08:00",
+  "return_refs": [
+    "process/returns/CR154-S01-shared-gate-contract-fixture-skeleton.CP6.return.json",
+    "process/returns/CR154-S02-statistical-artifacts-and-trap-severity.CP6.return.json",
+    "process/returns/CR154-S03-cross-strategy-cv-governance.CP6.return.json",
+    "process/returns/CR154-S04-pit-universe-survivorship-gate.CP6.return.json",
+    "process/returns/CR154-S05-capacity-impact-liquidity-contract.CP6.return.json",
+    "process/returns/CR154-S06-regime-attribution-reconciliation-slots.CP6.return.json",
+    "process/returns/CR154-S07-admission-default-policy-tier-resolution.CP6.return.json",
+    "process/returns/CR154-S08-compatibility-follow-through-wording.CP6.return.json"
+  ],
+  "story_evidence_refs": [
+    "process/evidence/CR154-S01-shared-gate-contract-fixture-skeleton.CP6.index.json",
+    "process/evidence/CR154-S02-statistical-artifacts-and-trap-severity.CP6.index.json",
+    "process/evidence/CR154-S03-cross-strategy-cv-governance.CP6.index.json",
+    "process/evidence/CR154-S04-pit-universe-survivorship-gate.CP6.index.json",
+    "process/evidence/CR154-S05-capacity-impact-liquidity-contract.CP6.index.json",
+    "process/evidence/CR154-S06-regime-attribution-reconciliation-slots.CP6.index.json",
+    "process/evidence/CR154-S07-admission-default-policy-tier-resolution.CP6.index.json",
+    "process/evidence/CR154-S08-compatibility-follow-through-wording.CP6.index.json"
+  ],
+  "implementation_ref": "process/stories/CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-IMPLEMENTATION.md",
+  "changed_files": [
+    {
+      "path": "engine/cross_strategy_reliability_gates.py",
+      "change_type": "created"
+    },
+    {
+      "path": "engine/strategy_admission_package.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "tests/research/test_cross_strategy_reliability_gates.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/research/test_strategy_admission_package.py",
+      "change_type": "modified"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_cross_strategy_reliability_gates.py",
+      "result": "pass",
+      "summary": "5 passed in 0.02s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_strategy_admission_package.py -k cr154",
+      "result": "pass",
+      "summary": "2 passed, 7 deselected in 0.03s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_strategy_admission_package.py",
+      "result": "pass",
+      "summary": "9 passed in 0.04s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_event_driven_strategy_e2e_contracts.py -k 'admission or package or gate'",
+      "result": "pass",
+      "summary": "7 passed, 34 deselected in 0.58s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_ml_strategy_e2e_contracts.py -k 'admission or package or gate'",
+      "result": "pass",
+      "summary": "1 passed, 4 deselected in 0.54s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/cross_strategy_reliability_gates.py engine/strategy_admission_package.py",
+      "result": "pass",
+      "summary": "py_compile passed"
+    },
+    {
+      "command": "git diff --check -- engine/cross_strategy_reliability_gates.py engine/strategy_admission_package.py tests/research/test_cross_strategy_reliability_gates.py tests/research/test_strategy_admission_package.py",
+      "result": "pass",
+      "summary": "No whitespace errors"
+    }
+  ],
+  "boundary_check": {
+    "forbidden_operation_count": 0,
+    "credential_read": false,
+    "real_lake_or_nas_touched": false,
+    "provider_fetch_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_paper_live_trading_executed": false,
+    "broker_operation_executed": false,
+    "feed_listener_executed": false,
+    "store_catalog_registry_write_executed": false,
+    "real_order_flow_executed": false,
+    "real_reconciliation_executed": false,
+    "publish_executed": false,
+    "git_remote_write_executed": false
+  },
+  "parallelism_note": "Implementation wrote shared engine/test files and was kept host-serial to avoid file-owner conflicts; one explorer subagent ran read-only in parallel for package/admission pattern review."
+}

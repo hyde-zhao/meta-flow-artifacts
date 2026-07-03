@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR154-STORY-DAG-PARALLEL-SAFETY",
+  "profile": "story-dag-parallel-safety",
+  "story_id": null,
+  "cr_id": "CR-154",
+  "checked_at": "2026-07-03T10:55:00+08:00",
+  "context_ref": "process/checks/CP4-CR154-STORY-DAG-PARALLEL-SAFETY.md",
+  "dispatch_refs": [
+    "host-orchestrator-inline:no-new-explicit-subagent-request-for-cp4"
+  ],
+  "evidence_ref": "process/STORY-BACKLOG-CR154.md",
+  "items": [
+    {
+      "id": "CP4-CR154-01",
+      "category": "traceability",
+      "name": "Story plan is traceable to approved CP3 HLD, ADR and CP4 review findings",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/HLD-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md",
+        "process/docs/design/ARCHITECTURE-DECISION-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md#cr154-cp4-增量cross-strategy-production-reliability-gates",
+        "process/STORY-BACKLOG-CR154.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Eight stories map to HLD Phase A-D, six gates, CP3-DC-CR154-001..006 and the user-provided CP4 Story split review."
+    },
+    {
+      "id": "CP4-CR154-02",
+      "category": "story-granularity",
+      "name": "Story count and boundaries address CP4 review concerns",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR154.md#story-overview",
+        "process/DEVELOPMENT-PLAN-CR154.yaml#lld_design_batch"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Story count is 8. Gate 5 is explicit as S06, fixture schema belongs to S01, Gate 6 tier resolution is full-lld S07 and B1 workload is flagged as S02 critical path."
+    },
+    {
+      "id": "CP4-CR154-03",
+      "category": "dag",
+      "name": "Story DAG has no cycles or invalid references",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR154.md#dependency-dag",
+        "process/DEVELOPMENT-PLAN-CR154.yaml#dependency_graph"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S01 precedes S02-S06. S07 depends on S02-S06. S08 depends on S02-S07. No cycles or invalid references."
+    },
+    {
+      "id": "CP4-CR154-04",
+      "category": "parallel-safety",
+      "name": "Wave and file ownership rules constrain parallel LLD and implementation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR154.yaml#parallel_policy",
+        "process/STORY-BACKLOG-CR154.md#file-ownership-summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S02-S06 may be drafted in parallel after S01, but shared module implementation merges serially unless CP5 assigns disjoint sections."
+    },
+    {
+      "id": "CP4-CR154-05",
+      "category": "feature-design-matrix",
+      "name": "Feature Design Matrix records every CR154 Story lld_policy.required_level",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md#cr154-cp4-增量cross-strategy-production-reliability-gates",
+        "process/STORY-STATUS-CR154.md",
+        "process/stories/CR154-S01-shared-gate-contract-fixture-skeleton.md",
+        "process/stories/CR154-S02-statistical-artifacts-and-trap-severity.md",
+        "process/stories/CR154-S03-cross-strategy-cv-governance.md",
+        "process/stories/CR154-S04-pit-universe-survivorship-gate.md",
+        "process/stories/CR154-S05-capacity-impact-liquidity-contract.md",
+        "process/stories/CR154-S06-regime-attribution-reconciliation-slots.md",
+        "process/stories/CR154-S07-admission-default-policy-tier-resolution.md",
+        "process/stories/CR154-S08-compatibility-follow-through-wording.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S01-S07 require full-lld; S08 requires technical-note. Waived count is zero."
+    },
+    {
+      "id": "CP4-CR154-06",
+      "category": "review-follow-through",
+      "name": "CP4 review findings are converted into CP5 attention items",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR154.yaml#lld_design_batch.cp5_attention_items",
+        "process/docs/features/cross-strategy-reliability-gates/DESIGN.md#story-split-decisions"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Gate 5 explicit Story, Phase A fixture schema ownership, Gate 6 tier resolution, B1 workload and CP4/CP5 follow-through hooks are all explicit."
+    },
+    {
+      "id": "CP4-CR154-07",
+      "category": "authorization-boundary",
+      "name": "CP4 does not authorize LLD approval, implementation, tests implementation, real data, runtime or trading",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR154.yaml#authorization_boundary",
+        "process/STORY-BACKLOG-CR154.md#not-authorized",
+        "process/docs/features/cross-strategy-reliability-gates/DESIGN.md#not-authorized"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No real lake/NAS/provider/QMT/runtime/simulation/paper/live/trading/broker/credential/feed/order/reconciliation/store/catalog/registry/publish/Git remote action is authorized."
+    },
+    {
+      "id": "CP4-CR154-08",
+      "category": "deliverables",
+      "name": "Required CP4 Story planning deliverables exist",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR154.md",
+        "process/STORY-STATUS-CR154.md",
+        "process/DEVELOPMENT-PLAN-CR154.yaml",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md",
+        "process/docs/features/cross-strategy-reliability-gates/DESIGN.md",
+        "process/docs/features/cross-strategy-reliability-gates/TEST-PLAN.md",
+        "process/docs/features/cross-strategy-reliability-gates/TASKS.md",
+        "process/stories/CR154-S01-shared-gate-contract-fixture-skeleton.md",
+        "process/stories/CR154-S02-statistical-artifacts-and-trap-severity.md",
+        "process/stories/CR154-S03-cross-strategy-cv-governance.md",
+        "process/stories/CR154-S04-pit-universe-survivorship-gate.md",
+        "process/stories/CR154-S05-capacity-impact-liquidity-contract.md",
+        "process/stories/CR154-S06-regime-attribution-reconciliation-slots.md",
+        "process/stories/CR154-S07-admission-default-policy-tier-resolution.md",
+        "process/stories/CR154-S08-compatibility-follow-through-wording.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "All CP4 planning artifacts are present."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "CP5_DESIGN_EVIDENCE_PREPARATION",
+  "summary": {
+    "story_count": 8,
+    "wave_count": 4,
+    "lld_batch": "CR154-CROSS-STRATEGY-RELIABILITY-GATES-BATCH-A",
+    "full_lld_count": 7,
+    "technical_note_count": 1,
+    "waived_count": 0,
+    "cycles": 0,
+    "invalid_references": 0,
+    "parallel_internal_dependencies": 0,
+    "blocking_findings": 0,
+    "implementation_allowed": false,
+    "lld_approval_allowed": false,
+    "tests_implementation_allowed": false,
+    "runtime_operations_authorized": false,
+    "real_data_operations_authorized": false,
+    "trading_operations_authorized": false,
+    "cp5_attention_item_count": 6,
+    "follow_through_item_count": 5
+  }
+}

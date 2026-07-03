@@ -11,7 +11,67 @@ Pending gate: none
 
 ## Current Decision
 
-CR153 Event-Driven Strategy E2E Framework Foundation 已通过规则 41 冲突预检、CP0 受理、CP1 增量 UC-60 场景完备检查、CP2 自动预检 / 人工审查、CP3 HLD / ADR 自动预检和人工审查、CP4 Story DAG / parallel safety 自动预检、CP5 LLD batch 自动预检和 CP5 人工审查、CP6 implementation、CP7 verification 与 CP8 release readiness。用户已于 2026-07-02T23:10:00+08:00 接受 `DEC-CR153-CP8-001`，CR153 当前按 `READY_WITH_RISK` 闭环。当前 active formal CRs none，blocked formal CRs none。CR153 仍不授权任何真实运行 / 数据 / 交易能力。
+CR154 Cross-Strategy Production Reliability Gates 已通过规则 41 冲突预检、CP0 受理、CP1 增量 UC-58 / UC-59 / UC-60 场景完备检查、CP2 自动预检 / 人工范围基线门、CP3 HLD / ADR 人工架构门、CP4 Story DAG / parallel safety 自动预检、CP5 LLD batch 人工确认、CP6 implementation、CP7 verification 和 CP8 release-readiness。CP7 在 QA 首轮发现 Gate 1/2/4/5/6 fail-closed 缺口后完成回修，并经 `meta-qa-critical` 复核为 `PASS`；机器结果为 `PASS_WITH_RISK`。用户已于 2026-07-03T09:03:11+08:00 接受 `DEC-CR154-CP8-001`，CR154 当前按 `READY_WITH_RISK` 闭环。active formal CRs none，blocked formal CRs none。CR154 first wave 仍保持 local/static/fixture-only；这不授权 runtime、真实数据或交易相关工作。
+
+2026-07-02T23:55:00+08:00 已根据 CP2 review finding 补充 `CP3-DC-CR154-001`：CP3 不得把多重检验 / 数据偷窥 / PBO / DSR 泛化成 backtest trap name/status 枚举，必须设计可审计 statistical reliability artifacts，包括 multiple-testing correction refs、FDR/BH refs、White Reality Check / Hansen SPA refs、PBO / CSCV refs、DSR / deflation refs、trial count / effective trials、OOS split refs、purge / embargo refs、survivorship audit refs、impact / capacity refs、blocked claims 和 release-blocking reason。
+
+2026-07-02T23:59:00+08:00 已根据 CP2 post-approval review note 补充 `CP3-DC-CR154-002`：`process/REQUIREMENTS.md` 当前没有 CR154 专属新 REQ 编号或显式 CR154 条目，CP3 HLD / ADR 不得隐式消费需求锚点；必须输出 UC / REQ -> Architecture traceability table，并明确本轮复用既有 REQ 锚点，或后续增量追加 CR154 专属 REQ。
+
+2026-07-03T00:06:00+08:00 已根据 CR154 CP0→CP3 review 补充 `CP3-DC-CR154-003..006`：CP3 HLD / ADR 必须定义 admission default policy tier table、CR153 `universe_pit_audit` 到 CR154 PIT universe gate 的兼容 / owner 生命周期、`impact_model_family` 受控枚举（至少 `square_root` / `almgren_chriss` / `gatheral`）以及 ML-only triple-barrier / meta-labeling / feature-importance 的 strategy-specific `n/a-with-reason`。同轮已验证 `SGQ-CR154-001..005` discussion log 与 checkpoint，结论 PASS，不需要回退 CP2。
+
+CR154 当前范围：
+
+- 正式 CR：`process/changes/CR-154.md`。
+- 规则 41 冲突预检：`process/checks/CR154-RULE41-CONFLICT-PRECHECK-2026-07-02.md`，结论 `PASS`。
+- CP0 受理：`process/checks/CP0-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-REQUEST-INTAKE.result.json`，结论 `PASS`。
+- CP1 增量场景完备检查：`process/checks/CP1-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-USE-CASE-COMPLETENESS.result.json`，结论 `PASS`。
+- CP2 context capsule：`process/context/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE-CONTEXT.yaml`。
+- CP2 Scenario Gray Areas / SGQ 证据：`process/discussions/CP2-CR154-SCENARIO-DISCUSSION-LOG.md`；`process/checks/CP2-CR154-DISCUSSION-CHECKPOINT.json`。
+- CP2 自动预检：`process/checks/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.result.json`，结论 `PASS`，manual gate `approved`。
+- CP2 人工审查稿：`process/checkpoints/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.md`，状态 `approved`。
+- CP2 launch message：`process/checks/CP2-CR154-HUMAN-GATE-LAUNCH-MESSAGE.md`。
+- CP2 已接受 7 项决策：backtest trap gate、CV governance、survivorship / PIT universe gate、capacity / impact / liquidity gate、regime / attribution / reconciliation slots、CR151 / CR152 / CR153 admission gate default policy、no-runtime / no-real-data boundary。
+- CP2 approve 将携带 CP3 硬性设计约束 `CP3-DC-CR154-001` 进入 CP3；该约束不增加 CP2 决策数量，不授权实现。
+- CP3 另携带非阻断但 CP3 完成前必须收敛的 traceability 约束 `CP3-DC-CR154-002`：HLD / ADR 需明确 UC / REQ -> Architecture traceability 与 REQ anchor policy。
+- CP3 另携带 `CP3-DC-CR154-003..006`：admission tier 表、CR153 universe slot 升级路径、impact model enum、ML-only method n/a policy；这些不授权 Story/LLD/实现，但 CP3 完成前必须进入 HLD / ADR。
+- CP2 `approve` 只允许进入 CP3 设计，不授权 Story/LLD/实现、真实 lake/NAS/provider/QMT/runtime/simulation/live/trading/broker/credential/external framework、Git remote、catalog/event/model registry 写入、live event listener、真实事件 feed、真实下单、真实数据验证、真实 reconciliation 或真实发布执行。
+- CP3 context capsule：`process/context/CP3-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-HLD-CONTEXT.yaml`，状态 `ready`。
+- CP3 meta-se handoff：`process/handoffs/CR154-CP3-META-SE-HANDOFF-2026-07-02.md`，状态 `dispatched/returned`；用户已明确 `delegate meta-se`，已通过 `multi_agent_v1.spawn_agent` 调度 `meta-se`。
+- CP3 meta-se dispatch evidence：agent id `019f236d-9da3-7150-846a-fdab52731b8d`，nickname `se-shen`，dispatch time `2026-07-03T00:08:00+08:00`，return time `2026-07-03T00:40:00+08:00`，当前状态 `completed/closed`。
+- CP3 discussion log：`process/discussions/CP3-CR154-HLD-DISCUSSION-LOG.md`。
+- CP3 discussion checkpoint：`process/checks/CP3-CR154-DISCUSSION-CHECKPOINT.json`，状态 `ready-for-cp3-hld-review`。
+- CP3 HLD：`process/docs/design/HLD-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md`，状态 `approved`，版本 `0.2`。
+- CP3 ADR：`process/docs/design/ARCHITECTURE-DECISION-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md`，状态 `approved`。
+- CP3 自动一致性检查：`process/checks/CP3-CR154-HLD-CONSISTENCY.md`，结论 `PASS`。
+- CP3 机器结果：`process/checks/CP3-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-HLD-CONSISTENCY.result.json`，结论 `PASS`，manual gate `pending`。
+- CP3 launch message：`process/checks/CP3-CR154-HUMAN-GATE-LAUNCH-MESSAGE.md`。
+- CP3 人工审查稿：`process/checkpoints/CP3-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-HLD-REVIEW.md`，状态 `approved`。
+- CP3 已接受 4 项决策：shared reliability gate contract + adapters、REQ anchor policy、admission tier default policy、no-runtime/no-real-data/no-broker/no-publish boundary。
+- CP3 非阻断 CP4/CP5 follow-through 5 项已登记：`FT-CR154-CP5-001-WRC-SPA-SEVERITY`、`FT-CR154-CP5-002-CROSS-GATE-PROPAGATION`、`FT-CR154-CP5-003-NUMERIC-THRESHOLDS`、`FT-CR154-CP5-004-MF-GAP-2-6-7-DEFERRED`、`FT-CR154-CP5-005-REQ-ANCHOR-PRESERVATION`。这些不阻断 CP3，但 CP4/CP5 必须转为 Story / Feature design acceptance criteria、fixture cases、config policy 或显式 deferred-with-owner。
+- CP4 Feature Design Matrix：`process/docs/design/FEATURE-DESIGN-MATRIX.md`，已登记 CR154 Story `lld_policy.required_level`。
+- CP4 Feature 三件套：`process/docs/features/cross-strategy-reliability-gates/DESIGN.md`、`process/docs/features/cross-strategy-reliability-gates/TEST-PLAN.md`、`process/docs/features/cross-strategy-reliability-gates/TASKS.md`。
+- CP4 Story backlog：`process/STORY-BACKLOG-CR154.md`。
+- CP4 Story status：`process/STORY-STATUS-CR154.md`。
+- CP4 development plan：`process/DEVELOPMENT-PLAN-CR154.yaml`。
+- CP4 Story cards：`process/stories/CR154-S01-shared-gate-contract-fixture-skeleton.md`、`process/stories/CR154-S02-statistical-artifacts-and-trap-severity.md`、`process/stories/CR154-S03-cross-strategy-cv-governance.md`、`process/stories/CR154-S04-pit-universe-survivorship-gate.md`、`process/stories/CR154-S05-capacity-impact-liquidity-contract.md`、`process/stories/CR154-S06-regime-attribution-reconciliation-slots.md`、`process/stories/CR154-S07-admission-default-policy-tier-resolution.md`、`process/stories/CR154-S08-compatibility-follow-through-wording.md`。
+- CP4 自动预检：`process/checks/CP4-CR154-STORY-DAG-PARALLEL-SAFETY.result.json`，结论 `PASS`。
+- CP4 结果：8 个 Story，S01-S07 为 `full-lld`，S08 为 `technical-note`；DAG 无环，无阻断项；Gate 5 已显式为 S06，Phase A fixture schema 归 S01，Gate 6 tier resolver 归 S07，S02 statistical artifacts 是 CP5 关键路径。
+- CP5 设计证据：S01-S07 full LLD 与 S08 technical-note 已通过人工确认；结果 `process/checks/CP5-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-LLD-BATCH.result.json`，结论 `PASS`。
+- CP6 implementation：`process/checks/CP6-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-IMPLEMENTATION.result.json`，结论 `PASS`；evidence index `process/evidence/CR154-CP6-IMPLEMENTATION.index.json`。
+- CP7 verification：`process/checks/CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION.result.json`，结论 `PASS_WITH_RISK`；summary `process/checks/CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION.result.summary.md`；evidence index `process/evidence/CR154-CP7-VERIFICATION.index.json`；return `process/returns/CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.CP7.return.json`。
+- CP7 verification scope：目标 CR154/package 测试 14 passed，事件驱动邻接 admission/gate 子集 7 passed，ML 邻接 admission/gate 子集 1 passed，`py_compile` 与 `git diff --check` 通过；禁止操作计数为 0。
+- CP7 剩余风险：`R-CR154-CP6-RETURN-PATH-WARN-001`、`R-CR154-CP7-UNTRACKED-FILES-001`、`R-CR154-FIRST-WAVE-FIXTURE-ONLY-001`，进入 CP8 风险接受。
+- CP8 release context：`process/release/RELEASE-CONTEXT-CR154.yaml`，`release_artifact_profile=compact`，`READY_WITH_RISK` approved。
+- CP8 自动检查：`process/checks/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.result.json`，结论 `PASS` / `READY_WITH_RISK`，manual gate `approved`。
+- CP8 人工审查稿：`process/checkpoints/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.md`，状态 `approved`。
+- CP8 launch message：`process/checks/CP8-CR154-HUMAN-GATE-LAUNCH-MESSAGE.md`。
+- CP8 compact release docs：`process/docs/release/RELEASE-NOTES-CR154.md`、`process/docs/release/DEPLOY-CHECKLIST-CR154.md`、`process/docs/release/ROLLBACK-CR154.md`、`process/docs/release/MIGRATION-CR154.md`、`process/docs/release/FEEDBACK-CR154.md`。
+- 已接受人工决策：`DEC-CR154-CP8-001`，接受 5 个残余风险项并以 `READY_WITH_RISK` 收尾 CR154。
+- 下一步：无 active formal CR；后续可选择下一个 roadmap / follow-up candidate。任何真实 lake/NAS/provider/QMT/runtime/simulation/paper/live/trading/broker/credential/external framework、feed/order/reconciliation/store/catalog/registry/publish、Git remote 或 true release execution 仍必须另起授权 CR。
+
+CR153 Event-Driven Strategy E2E Framework Foundation 已通过规则 41 冲突预检、CP0 受理、CP1 增量 UC-60 场景完备检查、CP2 自动预检 / 人工审查、CP3 HLD / ADR 自动预检和人工审查、CP4 Story DAG / parallel safety 自动预检、CP5 LLD batch 自动预检和 CP5 人工审查、CP6 implementation、CP7 verification 与 CP8 release readiness。用户已于 2026-07-02T23:10:00+08:00 接受 `DEC-CR153-CP8-001`，CR153 当前按 `READY_WITH_RISK` 闭环。CR153 仍不授权任何真实运行 / 数据 / 交易能力。
+
+CR153 已关闭基线：
 
 CR153 当前范围：
 
@@ -260,10 +320,10 @@ Future work requires a new explicit gate when it touches one of these boundaries
 
 Current recommended action:
 
-- 发起 CP5 人工确认：请审查 `process/checkpoints/CP5-CR153-EVENT-DRIVEN-STRATEGY-E2E-LLD-BATCH.md`。
-- 如果用户回复 `approve`，表示接受 5 项 CR153 CP5 推荐方案，并只授权进入本地/static/fixture CP6 implementation。
-- 若用户回复 `修改: <具体修改点>`，按指定决策项或 Story LLD / technical-note 修改后重新发起 CP5 确认。
-- 若用户回复 `reject`，CR153 不进入 CP6，可保持 `cp5_pending_user_review`、缩小范围或回退 CP5 设计证据。
+- 发起 CR154 CP2 人工确认：请审查 `process/checkpoints/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.md`。
+- 如果用户回复 `approve`，表示接受 7 项 CR154 CP2 推荐方案，并只授权进入 CP3 设计。
+- 若用户回复 `修改: <具体修改点>`，按指定决策项、范围或授权边界修改后重新发起 CP2 确认。
+- 若用户回复 `reject`，CR154 不进入 CP3，可保持 `cp2_pending_user_review`、缩小范围、取消或转回候选。
 
 Current CR139 backlog action:
 
@@ -285,7 +345,7 @@ Open only when a trigger appears:
 ## Required Refs
 
 - Machine state: `process/state/STATE.current.json`
-- Active CR: `process/changes/CR-139-STRATEGY-DATA-FOUNDATION-2026-06-28.md`
+- Active CR: `process/changes/CR-154.md`
 - Story status: `process/STORY-STATUS-CR139.md`
 - Story reconciliation check: `process/checks/CR139-40-STORY-RECONCILIATION-2026-06-30.md`
 - Backlog-A0 gap analysis: `process/checks/CR139-BACKLOG-A0-GAP-ANALYSIS-2026-06-30.md`
@@ -424,6 +484,6 @@ Open only when a trigger appears:
 - S40 CP7 return-check: PASS
 - `git diff --check` for S40 CP5/CP6/CP7 implementation/evidence files: PASS
 
-Updated at: 2026-06-30T14:03:30+08:00
+Updated at: 2026-07-02T23:25:00+08:00
 
 <!-- generated-by: host-orchestrator -->
