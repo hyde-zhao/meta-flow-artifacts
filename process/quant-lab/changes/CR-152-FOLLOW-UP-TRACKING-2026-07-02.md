@@ -52,6 +52,7 @@ follow_up_items:
     implementation_ref: "process/checks/FU-CR152-001-TEST-TAXONOMY-PROVENANCE-HYGIENE-2026-07-04.md"
     blocked_by:
       - "final_packaging_or_commit_not_executed"
+    implementation_summary: "Local implementation complete on 2026-07-04; taxonomy guardrail 2/2, provenance 225/225, targeted regression 111/111. Final packaging/commit remains separate."
     impact_surface:
       - "tests/test_cr150_multifactor_framework_completion.py"
       - "tests/test_cr151_strategy_admission_statistical_gate.py"

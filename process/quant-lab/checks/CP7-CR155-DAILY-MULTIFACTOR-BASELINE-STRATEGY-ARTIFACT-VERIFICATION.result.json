@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-VERIFICATION",
+  "cr_id": "CR-155",
+  "story_id": "CR155-S01..S05",
+  "context_ref": "process/context/stories/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP7.verify-packet.json",
+  "dispatch_refs": [
+    "host-orchestrator-inline:cp7-verification-after-cp6-pass"
+  ],
+  "evidence_ref": "process/evidence/CR155-CP7-VERIFICATION.index.json",
+  "items": [
+    {
+      "id": "CP7-CR155-01",
+      "category": "entry",
+      "name": "CP6 implementation result passed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION.result.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CP6 result-check passed."
+    },
+    {
+      "id": "CP7-CR155-02",
+      "category": "tests",
+      "name": "Targeted and related regression tests pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR155-CP7-VERIFICATION.index.json#commands"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "35 tests passed."
+    },
+    {
+      "id": "CP7-CR155-03",
+      "category": "traceability",
+      "name": "S01-S05 design contracts have implementation and tests",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/quality/VERIFICATION-REPORT-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md#trace-matrix"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Artifact, provenance, validation, admission and rerun contracts are traced."
+    },
+    {
+      "id": "CP7-CR155-04",
+      "category": "security",
+      "name": "No forbidden write/runtime/trading/publish operations executed during real lake validation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR155-REAL-LAKE-VALIDATION-20260704.json#operation_counts",
+        "process/evidence/CR155-CP7-VERIFICATION.index.json#boundary_check"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Real local lake readonly was executed twice; lake_write/provider_fetch/credential/runtime/trading/broker/publish counts remained zero."
+    },
+    {
+      "id": "CP7-CR155-05",
+      "category": "admission",
+      "name": "Real-data validation and admission result are captured fail-closed",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR155-REAL-LAKE-VALIDATION-20260704.json",
+        "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "Rerun consistency PASS; admission package BLOCKED with paper_candidate=false due economic_significance and out_of_sample_validation."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP8",
+  "checked_at": "2026-07-04T19:21:44+08:00",
+  "summary": {
+    "story_count": 5,
+    "targeted_and_regression_tests_passed": 35,
+    "return_packet_valid": true,
+    "evidence_index_valid": true,
+    "cp6_result_valid": true,
+    "forbidden_operation_count": 0,
+    "risk_count": 1,
+    "real_lake_read_executed": true,
+    "real_lake_read_count": 2,
+    "rerun_consistency": "PASS",
+    "admission_package_status": "BLOCKED",
+    "paper_candidate": false
+  },
+  "risks": [
+    "I-CR155-REAL-LAKE-ADMISSION-BLOCKED"
+  ],
+  "updated_at": "2026-07-04T20:10:00+08:00"
+}

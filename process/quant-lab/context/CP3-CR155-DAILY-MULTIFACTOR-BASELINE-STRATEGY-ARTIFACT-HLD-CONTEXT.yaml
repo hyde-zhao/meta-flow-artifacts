@@ -1,0 +1,42 @@
+schema_version: 1
+context_id: CP3-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-HLD
+cr_id: CR-155
+stage: CP3
+status: ready
+created_at: "2026-07-04T18:35:00+08:00"
+owner: host-orchestrator
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  must_read:
+    - process/changes/summaries/CR-155.summary.json
+    - process/checkpoints/CP2-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-SCOPE.md
+    - process/context/CP2-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-SCOPE-CONTEXT.yaml
+  read_if_needed:
+    - docs/design/HLD-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md
+    - docs/design/ARCHITECTURE-DECISION-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md
+    - process/discussions/CP3-CR155-HLD-DISCUSSION-LOG.md
+    - process/checks/CP3-CR155-DISCUSSION-CHECKPOINT.json
+  do_not_read_by_default:
+    - process/stories/*
+    - process/evidence/*
+    - credential files
+    - .env
+    - NAS paths
+cp2_approval:
+  approved_at: "2026-07-04T18:15:00+08:00"
+  approved_by: user
+  checkpoint_ref: process/checkpoints/CP2-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-SCOPE.md
+  result_ref: process/checks/CP2-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-SCOPE.result.json
+  accepted_decision_ids:
+    - DQ-CP2-CR155-ARTIFACT-SCOPE
+    - DQ-CP2-CR155-REAL-LAKE-READONLY
+    - DQ-CP2-CR155-ADMISSION-AND-RERUN-CRITERIA
+objective:
+  summary: Design the daily multifactor baseline strategy artifact contract and readonly validation flow.
+  boundary: CP3 HLD/ADR only; no Story decomposition, LLD, implementation, lake write, runtime, trading or publish.
+cp3_decision_ids:
+  - CP3-DQ-CR155-ARTIFACT-CONTRACT
+  - CP3-DQ-CR155-READONLY-PIPELINE
+  - CP3-DQ-CR155-RERUN-POLICY
+  - CP3-DQ-CR155-NO-RUNTIME

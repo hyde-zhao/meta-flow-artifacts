@@ -1,0 +1,51 @@
+schema_version: 1
+context_id: "CP6-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION"
+created_at: "2026-07-04T19:15:20+08:00"
+created_by: "host-orchestrator"
+cr_id: "CR-155"
+stage: "CP6"
+status: "ready"
+read_profile: "compact"
+parent_context_ref: "process/context/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-CONTEXT.yaml"
+story_ids:
+  - "CR155-S01-baseline-artifact-contract"
+  - "CR155-S02-readonly-data-provenance-adapter"
+  - "CR155-S03-backtest-oos-walkforward-validation"
+  - "CR155-S04-admission-gate-composition-package"
+  - "CR155-S05-rerun-consistency-release-evidence"
+implementation_scope:
+  code:
+    - "engine/daily_multifactor_baseline_artifact.py"
+  tests:
+    - "tests/research/test_daily_multifactor_baseline_artifact.py"
+  process_evidence:
+    - "process/stories/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION.md"
+    - "process/returns/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP6.return.json"
+    - "process/evidence/CR155-CP6-IMPLEMENTATION.index.json"
+    - "process/checks/CP6-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION.result.json"
+authz_policy_refs:
+  - "NO_CREDENTIAL_READ"
+  - "NO_RUNTIME"
+  - "NO_PRODUCTION_WRITE"
+  - "NO_TRADING"
+  - "REAL_LAKE_READONLY_APPROVED_FOR_CR155_CP2"
+  - "NO_REAL_LAKE_WRITE"
+  - "NO_NAS_SYNC_OR_WRITE"
+  - "NO_PROVIDER_FETCH"
+  - "NO_BROKER_WRITE"
+  - "NO_EXTERNAL_FRAMEWORK_RUN"
+  - "NO_CATALOG_POINTER_WRITE"
+not_authorized:
+  - "real lake write"
+  - "catalog pointer mutation"
+  - "NAS read/write/sync/restore/chmod/chgrp/metadata normalization"
+  - "provider fetch"
+  - "credential or env read"
+  - "QMT/MiniQMT/xtquant/gateway runtime"
+  - "simulation/paper/live/trading runtime"
+  - "broker operation"
+  - "external framework execution"
+  - "store or registry write"
+  - "publish or production deployment"
+read_expansion_log: []
+next_route: "CP7_VERIFICATION"

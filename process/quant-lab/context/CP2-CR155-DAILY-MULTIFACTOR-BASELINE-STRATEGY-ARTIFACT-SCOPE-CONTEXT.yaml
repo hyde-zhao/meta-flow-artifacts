@@ -1,0 +1,125 @@
+schema_version: 1
+context_id: CP2-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-SCOPE
+cr_id: CR-155
+stage: CP2
+status: approved
+created_at: "2026-07-04T18:15:00+08:00"
+approved_at: "2026-07-04T18:15:00+08:00"
+owner: host-orchestrator
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  default_reads:
+    - process/changes/summaries/CR-155.summary.json
+    - process/changes/CR-155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-2026-07-04.md
+    - process/USE-CASES.md
+    - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md
+    - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
+    - docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
+  read_if_needed:
+    - process/changes/CR-148-UNIFIED-BACKTEST-EXPERIMENT-FOUNDATION-2026-07-01.md
+    - process/changes/summaries/CR-151.summary.json
+    - process/changes/summaries/CR-154.summary.json
+    - engine/mature_multifactor_research.py
+    - engine/backtest_production_contracts.py
+    - engine/strategy_admission_package.py
+  do_not_read_by_default:
+    - full conversation transcript
+    - all process/stories/*
+    - all process/evidence/*
+    - credential files
+    - .env
+    - NAS paths
+    - external framework repositories
+scope_summary:
+  objective: Create one auditable daily multifactor baseline strategy artifact, based on a simple non-optimal factor combination and explicit admission evidence.
+  in_scope:
+    - daily multifactor baseline strategy, simple factor combination, non-optimal and non-return-promising
+    - strategy artifact with strategy_id, universe ref, factor spec, signal spec, portfolio policy, rebalance policy, cost/slippage policy, backtest refs, experiment refs, report refs and evidence refs
+    - historical backtest using CR155-approved local governed lake/current truth readonly input
+    - OOS/walk-forward validation with split, purge/embargo, rerun id and core metrics
+    - statistical admission gate status: pass, fail or needs_review, with auditable reasons
+    - cross-strategy reliability gate status consuming CR154 semantics
+    - admission package with paper_candidate true/false, reason, blockers, risks and non-authorized boundary
+    - two reruns with core metrics consistency evidence covering return, drawdown, turnover, cost, capacity/liquidity summary and gate status
+  deferred:
+    - lake writes or catalog pointer mutation
+    - NAS/provider/credential/runtime/trading/broker operations
+    - production deployment, publish or true release execution
+    - multi-strategy portfolio, ML strategy artifact or event-driven strategy artifact expansion
+  out_of_scope:
+    - credential or .env read
+    - real lake write
+    - NAS read/write/sync/restore/chmod/chgrp/metadata normalization
+    - provider fetch
+    - QMT/MiniQMT/xtquant/gateway runtime
+    - simulation/paper/live/trading runtime
+    - broker read/write/submit/cancel/real account query
+    - external framework clone/install/run
+    - Git remote write
+    - catalog pointer mutation
+    - feature store / label store / event store / model registry / prediction store writes
+    - true release execution / production deployment / publish
+decision_refs:
+  - DQ-CP2-CR155-ARTIFACT-SCOPE
+  - DQ-CP2-CR155-REAL-LAKE-READONLY
+  - DQ-CP2-CR155-ADMISSION-AND-RERUN-CRITERIA
+accepted_decision_ids:
+  - DQ-CP2-CR155-ARTIFACT-SCOPE
+  - DQ-CP2-CR155-REAL-LAKE-READONLY
+  - DQ-CP2-CR155-ADMISSION-AND-RERUN-CRITERIA
+authorization_boundary:
+  authorized_after_cp2:
+    - CR155-scoped local governed lake/current truth readonly for historical backtest, OOS/walk-forward and rerun consistency only
+  still_not_authorized:
+    - credential or .env read
+    - real lake write
+    - NAS read/write/sync/restore/chmod/chgrp/metadata normalization
+    - provider fetch
+    - QMT/MiniQMT/xtquant/gateway runtime
+    - simulation/paper/live/trading runtime
+    - broker read/write/submit/cancel/real account query
+    - external framework clone/install/run
+    - Git remote write
+    - catalog pointer mutation
+    - store or registry writes
+    - true release execution / production deployment / publish
+cp3_design_constraints:
+  - id: CP3-DC-CR155-001
+    source: DQ-CP2-CR155-ARTIFACT-SCOPE
+    constraint: HLD must define the strategy artifact contract as a concrete artifact, not only a process checklist.
+    minimum_artifacts:
+      - strategy_id
+      - universe_ref
+      - factor_spec_refs
+      - signal_spec
+      - portfolio_policy
+      - rebalance_policy
+      - cost_slippage_policy
+      - backtest_refs
+      - oos_walk_forward_refs
+      - statistical_admission_ref
+      - cross_strategy_reliability_ref
+      - admission_package_ref
+      - rerun_consistency_ref
+  - id: CP3-DC-CR155-002
+    source: DQ-CP2-CR155-REAL-LAKE-READONLY
+    constraint: HLD must isolate CR155 lake readonly adapter/path from any lake write, catalog pointer mutation, NAS/provider/credential/runtime/trading capability.
+  - id: CP3-DC-CR155-003
+    source: DQ-CP2-CR155-ADMISSION-AND-RERUN-CRITERIA
+    constraint: HLD must model paper_candidate and rerun consistency as admission evidence, not free text.
+validation_boundary:
+  current_mode: cp2-approved-scope-only
+  cp2_approved_lake_readonly: true
+  implementation_before_cp3: not_authorized
+  story_decomposition_before_cp3: not_authorized
+  runtime_evidence_claims: not_authorized
+  claim_limit: CP2 approval authorizes design to proceed and later CR155-scoped local governed lake/current truth readonly validation; it does not claim production, paper, live, broker or trading readiness.
+read_expansion_log:
+  - id: READ-CR155-CP1-UC58-ROADMAP-2026-07-04T181500+0800
+    reason: "CP1/CP2 requirement baseline needed UC-58 and roadmap/remediation/E2E review evidence for CR155 artifact scope."
+    expanded_to:
+      - process/USE-CASES.md
+      - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md
+      - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
+      - docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md

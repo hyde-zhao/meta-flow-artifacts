@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR155-STORY-DAG-PARALLEL-SAFETY",
+  "profile": "story-dag-parallel-safety",
+  "story_id": null,
+  "cr_id": "CR-155",
+  "checked_at": "2026-07-04T18:37:08+08:00",
+  "context_ref": "process/DEVELOPMENT-PLAN-CR155.yaml",
+  "dispatch_refs": [
+    "host-orchestrator-inline:cp4-story-planning"
+  ],
+  "evidence_ref": "process/STORY-BACKLOG-CR155.md",
+  "items": [
+    {
+      "id": "CP4-CR155-01",
+      "category": "traceability",
+      "name": "Story plan is traceable to approved CP3 HLD and ADR",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md",
+        "docs/design/ARCHITECTURE-DECISION-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md",
+        "docs/design/FEATURE-DESIGN-MATRIX.md#cr155-cp4-增量daily-multifactor-baseline-strategy-artifact",
+        "process/STORY-BACKLOG-CR155.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Five stories map to artifact contract, readonly provenance, validation, admission package and rerun evidence."
+    },
+    {
+      "id": "CP4-CR155-02",
+      "category": "dag",
+      "name": "Story DAG has no cycles or invalid references",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR155.md#dependency-dag",
+        "process/DEVELOPMENT-PLAN-CR155.yaml#dependency_graph"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S01 precedes S02/S03/S04; S02 precedes S03; S03 precedes S04/S05; S04 precedes S05."
+    },
+    {
+      "id": "CP4-CR155-03",
+      "category": "feature-design-matrix",
+      "name": "Feature Design Matrix records every CR155 Story lld_policy.required_level",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/FEATURE-DESIGN-MATRIX.md#cr155-cp4-增量daily-multifactor-baseline-strategy-artifact",
+        "process/STORY-STATUS-CR155.md",
+        "process/stories/CR155-S01-baseline-artifact-contract.md",
+        "process/stories/CR155-S02-readonly-data-provenance-adapter.md",
+        "process/stories/CR155-S03-backtest-oos-walkforward-validation.md",
+        "process/stories/CR155-S04-admission-gate-composition-package.md",
+        "process/stories/CR155-S05-rerun-consistency-release-evidence.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "All five stories require full-lld. Waived count is zero."
+    },
+    {
+      "id": "CP4-CR155-04",
+      "category": "parallel-safety",
+      "name": "Wave and file ownership rules constrain parallel LLD and implementation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR155.yaml#parallel_policy",
+        "process/STORY-BACKLOG-CR155.md#file-ownership-summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Implementation merge remains serial because candidate module and test surfaces overlap."
+    },
+    {
+      "id": "CP4-CR155-05",
+      "category": "authorization-boundary",
+      "name": "CP4 does not authorize LLD approval, implementation, tests implementation, lake write, runtime or trading",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR155.yaml#authorization_boundary",
+        "process/STORY-BACKLOG-CR155.md#not-authorized",
+        "docs/features/daily-multifactor-baseline-strategy-artifact/DESIGN.md#authorization-boundary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CP2 readonly approval is preserved; no read was executed at CP4."
+    },
+    {
+      "id": "CP4-CR155-06",
+      "category": "deliverables",
+      "name": "Required CP4 Story planning deliverables exist",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/STORY-BACKLOG-CR155.md",
+        "process/STORY-STATUS-CR155.md",
+        "process/DEVELOPMENT-PLAN-CR155.yaml",
+        "docs/design/FEATURE-DESIGN-MATRIX.md",
+        "docs/features/daily-multifactor-baseline-strategy-artifact/DESIGN.md",
+        "docs/features/daily-multifactor-baseline-strategy-artifact/TEST-PLAN.md",
+        "docs/features/daily-multifactor-baseline-strategy-artifact/TASKS.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "All CP4 planning artifacts are present."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "CP5_DESIGN_EVIDENCE_PREPARATION",
+  "summary": {
+    "story_count": 5,
+    "wave_count": 4,
+    "lld_batch": "CR155-DAILY-MULTIFACTOR-BASELINE-ARTIFACT-BATCH-A",
+    "full_lld_count": 5,
+    "technical_note_count": 0,
+    "waived_count": 0,
+    "cycles": 0,
+    "invalid_references": 0,
+    "parallel_internal_dependencies": 0,
+    "blocking_findings": 0,
+    "implementation_allowed": false,
+    "lld_approval_allowed": false,
+    "tests_implementation_allowed": false,
+    "runtime_operations_authorized": false,
+    "real_lake_readonly_authorized_by_cp2": true,
+    "real_lake_read_executed_at_cp4": false,
+    "real_lake_write_authorized": false,
+    "trading_operations_authorized": false,
+    "cp5_attention_item_count": 5
+  }
+}

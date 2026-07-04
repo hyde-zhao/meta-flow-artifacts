@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP1",
+  "checkpoint_id": "CP1-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-USE-CASE-COMPLETENESS",
+  "cr_id": "CR-155",
+  "checked_at": "2026-07-04T18:15:00+08:00",
+  "context_ref": "process/context/CP2-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-SCOPE-CONTEXT.yaml",
+  "dispatch_refs": [],
+  "evidence_ref": "",
+  "items": [
+    {
+      "id": "CP1-CR155-01",
+      "category": "use-case-baseline",
+      "name": "UC-58 multifactor strategy E2E baseline exists and covers the daily multifactor research to admission flow",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/USE-CASES.md#UC-58",
+        "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md#phase-3-backtest--multifactor-framework"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR155 narrows UC-58 into one auditable daily multifactor baseline strategy artifact."
+    },
+    {
+      "id": "CP1-CR155-02",
+      "category": "artifact-scope",
+      "name": "The requested artifact scope is concrete enough for CP2 decision",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-2026-07-04.md#范围",
+        "process/changes/summaries/CR-155.summary.json#scope_summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Scope includes strategy_id, universe, factor spec, signal, portfolio policy, historical backtest, OOS/walk-forward, statistical admission, cross-strategy reliability gate, admission package and rerun consistency."
+    },
+    {
+      "id": "CP1-CR155-03",
+      "category": "dependency-traceability",
+      "name": "CR155 can consume CR148, CR151 and CR154 as closed foundations",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/changes/CR-148-UNIFIED-BACKTEST-EXPERIMENT-FOUNDATION-2026-07-01.md",
+        "process/changes/summaries/CR-151.summary.json",
+        "process/changes/summaries/CR-154.summary.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR155 does not reopen those foundations; it creates a concrete baseline artifact on top of them."
+    },
+    {
+      "id": "CP1-CR155-04",
+      "category": "authorization-boundary",
+      "name": "CP2 must explicitly decide governed lake readonly and keep all other external operations forbidden",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-2026-07-04.md#不授权范围",
+        "process/changes/CR-155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-2026-07-04.md#CP2-建议决策项"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No lake read is executed by CP1. CP2 decides whether later CR155 work may read local governed lake/current truth readonly."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR155-CP1-FORMAL-CR-2026-07-04T181500+0800",
+    "READ-CR155-CP1-CR148-FOUNDATION-2026-07-04T181500+0800",
+    "READ-CR155-CP1-UC58-ROADMAP-2026-07-04T181500+0800"
+  ],
+  "decision": "PASS",
+  "next_route": "CP2"
+}

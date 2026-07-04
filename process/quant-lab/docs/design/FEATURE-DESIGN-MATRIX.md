@@ -1,6 +1,6 @@
 ---
 status: "ready-for-cp5-review"
-version: "1.17"
+version: "1.18"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld:
   - "docs/design/HLD.md"
@@ -8,7 +8,7 @@ source_hld:
 source_adr:
   - "docs/design/ARCHITECTURE-DECISION.md"
   - "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
-change: "CR-154"
+change: "CR-155"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 confirmed_by: ""
 confirmed_at: ""
@@ -38,6 +38,7 @@ confirmed_at: ""
 | 1.15 | 2026-07-02 | host-orchestrator | CR152 CP3 approved 后增补 ML Strategy E2E Framework CP4：FEAT-03 下新增 ML first-wave Story 消费、`lld_policy`、DAG/Wave、triple_barrier BLOCKED CP5 约束和 no-registry-write 边界。 |
 | 1.16 | 2026-07-02 | host-orchestrator | CR153 CP3 approved 后增补 Event-Driven Strategy E2E Framework CP4：FEAT-03 下新增事件研究 first-wave Story 消费、`lld_policy`、DAG/Wave、EV-GAP-7 multiple-testing slot、CR154 deferred 边界和 no-feed/no-runtime/no-store 边界。 |
 | 1.17 | 2026-07-03 | host-orchestrator | CR154 CP3 approved 后增补 Cross-Strategy Production Reliability Gates CP4：新增 FEAT-15 cross-strategy reliability gates 三件套、8 个 Story、Gate 5 显式 Story、Phase A runnable fixture schema 归属、Gate 6 tier resolver full-lld 和 CP4/CP5 follow-through acceptance hooks。 |
+| 1.18 | 2026-07-04 | host-orchestrator | CR155 CP3 approved 后增补 Daily Multifactor Baseline Strategy Artifact CP4：新增 FEAT-16 baseline artifact 三件套、5 个 Story、readonly provenance、historical/OOS validation、admission composition、rerun consistency 和 no-runtime/no-write CP5 attention hooks。 |
 
 ## 适用性判定规则
 
@@ -259,6 +260,45 @@ confirmed_at: ""
 | B1 工作量作为关键路径显式化 | PASS | S02 说明 + `process/DEVELOPMENT-PLAN-CR154.yaml#cp5_attention_items` |
 | CP4 不授权 LLD、实现、测试实现、真实数据或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR154.yaml#authorization_boundary` |
 | CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR154.yaml#lld_design_batch` |
+
+## CR155 CP4 增量：Daily Multifactor Baseline Strategy Artifact
+
+> 来源：`docs/design/HLD-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md`、`docs/design/ARCHITECTURE-DECISION-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md`、CP3 用户批准。CR155 归属新增 FEAT-16「Daily Multifactor Baseline Strategy Artifact」，允许 CR155-scoped local governed lake/current truth readonly 作为设计输入和后续验证输入；仍不授权 lake write、NAS/provider/credential/runtime/trading/broker/catalog/store/registry/publish。
+
+### Feature 归属与 lld_policy
+
+| Story ID | Owner Feature | feature_design_refs | lld_policy.required_level | trigger_reasons | CP5 设计证据 | 说明 |
+|---|---|---|---|---|---|---|
+| CR155-S01-baseline-artifact-contract | FEAT-16 / FEAT-03 | `docs/features/daily-multifactor-baseline-strategy-artifact/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | 新增 strategy artifact contract、identity、policy refs、claim boundary | Story LLD | 定义 `strategy_id`、universe、factor spec、signal、portfolio policy、rebalance/cost policy、evidence refs 和 non-optimal baseline 声明。 |
+| CR155-S02-readonly-data-provenance-adapter | FEAT-16 / FEAT-02 / FEAT-07 | `docs/features/daily-multifactor-baseline-strategy-artifact/DESIGN.md`、`TEST-PLAN.md`、`docs/features/runtime-authorization-safety/DESIGN.md` | full-lld | CP2-approved readonly local governed lake/current truth boundary、provenance、forbidden operation counters | Story LLD | 只读读取合同必须证明 no lake write、no catalog mutation、no credential/env/NAS/provider/runtime。 |
+| CR155-S03-backtest-oos-walkforward-validation | FEAT-16 / FEAT-03 | `docs/features/daily-multifactor-baseline-strategy-artifact/DESIGN.md`、`TEST-PLAN.md` | full-lld | historical backtest、OOS/walk-forward、split manifest、cost/risk attribution refs | Story LLD | 消费 CR148 foundation；不得新增 optimizer、external framework 或 production runtime。 |
+| CR155-S04-admission-gate-composition-package | FEAT-16 / FEAT-03 / FEAT-15 | `docs/features/daily-multifactor-baseline-strategy-artifact/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | CR151 statistical gate、CR154 reliability gate、admission package、paper_candidate reason | Story LLD | 保留 statistical / reliability / final package 三层状态，不能把原因折叠成单一 PASS/FAIL。 |
+| CR155-S05-rerun-consistency-release-evidence | FEAT-16 / FEAT-08 | `docs/features/daily-multifactor-baseline-strategy-artifact/TEST-PLAN.md`、`TASKS.md` | full-lld | two rerun comparison、metric tolerance、CP6/CP7 evidence index、release wording | Story LLD | 两次 rerun 核心 metrics 一致是一级验收；release wording 必须说明 research artifact only。 |
+
+### CR155 First-Wave / Later-Wave 边界
+
+| 范围 | 状态 | 处理 |
+|---|---|---|
+| Standalone daily multifactor baseline artifact contract | First wave | S01 必做。 |
+| CR155-scoped readonly provenance adapter | First wave | S02 必做；真实读取只能在后续批准的实现/验证阶段按只读边界执行。 |
+| Historical backtest and OOS/walk-forward validation flow | First wave | S03 必做。 |
+| Statistical + reliability + admission package composition | First wave | S04 必做。 |
+| Two-run metric consistency and release evidence wording | First wave | S05 必做。 |
+| Factor optimizer / model search / strategy discovery | Deferred | Future research CR only。 |
+| Paper/live readiness or trading integration | Deferred and not authorized | Future runtime/trading authorization CR only。 |
+| Lake write / catalog pointer / store or registry writes | Deferred and not authorized | Future data authorization CR only。 |
+
+### CR155 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| 5 个 CR155 Story 均有 FEAT-16 归属和 `lld_policy` | PASS | 本节 `Feature 归属与 lld_policy` |
+| readonly provenance 独立 Story | PASS | `CR155-S02-readonly-data-provenance-adapter` |
+| historical/OOS validation 独立 Story | PASS | `CR155-S03-backtest-oos-walkforward-validation` |
+| admission composition 独立 Story | PASS | `CR155-S04-admission-gate-composition-package` |
+| rerun consistency 是一级 Story | PASS | `CR155-S05-rerun-consistency-release-evidence` |
+| CP4 不授权 LLD 审批、实现、测试实现、lake write、runtime 或 trading | PASS | `process/DEVELOPMENT-PLAN-CR155.yaml#authorization_boundary` |
+| CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR155.yaml#lld_design_batch` |
 
 ### CR151 Wave A / Wave B 边界
 

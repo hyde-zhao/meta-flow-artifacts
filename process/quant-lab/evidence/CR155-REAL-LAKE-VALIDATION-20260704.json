@@ -1,0 +1,499 @@
+{
+  "admission_result": {
+    "blocked_gate_ids": [
+      "economic_significance",
+      "out_of_sample_validation"
+    ],
+    "blockers": [
+      "economic_significance blocked: mean_net_return is negative after costs",
+      "out_of_sample_validation blocked by factor model validation gate"
+    ],
+    "package_status": "FAIL",
+    "paper_candidate": false,
+    "reliability_gate_status": "NEEDS_REVIEW",
+    "risks": [
+      "capacity_impact pass_with_risk: ADV/capacity evidence unavailable",
+      "factor_premium_significance/style_exposure/ic_decay/tail_risk pass_with_risk"
+    ],
+    "statistical_gate_status": "FAIL"
+  },
+  "authorization": {
+    "authorized_scope": "local governed data lake readonly validation for CR155 baseline historical backtest/OOS/rerun",
+    "lake_root": "/home/hyde/data/quant-lab/data-lake",
+    "not_authorized": [
+      "lake_write",
+      "catalog_pointer_mutation",
+      "provider_fetch",
+      "credential_read",
+      "NAS operation",
+      "runtime execution",
+      "simulation/live/trading",
+      "broker operation",
+      "store/registry write",
+      "publish",
+      "production deployment"
+    ],
+    "source": "user_explicit_message"
+  },
+  "checks": {
+    "admission_status_match": true,
+    "forbidden_operation_counts_zero": true,
+    "real_lake_validation_executed": true,
+    "rerun_metrics_exact_match": true
+  },
+  "cr_id": "CR-155",
+  "created_at": "2026-07-04T20:03:00+08:00",
+  "decision": "FAIL",
+  "operation_counts": {
+    "broker_operation": 0,
+    "catalog_pointer_mutation": 0,
+    "credential_read": 0,
+    "nas_operation": 0,
+    "production_deployment": 0,
+    "provider_fetch": 0,
+    "publish_operation": 0,
+    "real_lake_read": 2,
+    "real_lake_write": 0,
+    "runtime_operation": 0,
+    "simulation_or_live": 0,
+    "trading_operation": 0
+  },
+  "rerun_consistency": {
+    "admission_status_match": true,
+    "compared_metrics": {
+      "capacity_liquidity_summary": {
+        "first": "median_adv20_amount=1547317.587025; capacity_gate=pass_with_risk; adv_evidence_unavailable_warning=true",
+        "second": "median_adv20_amount=1547317.587025; capacity_gate=pass_with_risk; adv_evidence_unavailable_warning=true",
+        "status": "PASS"
+      },
+      "cost": {
+        "diff": 0.0,
+        "first": 5.048531408087536,
+        "second": 5.048531408087536,
+        "status": "PASS"
+      },
+      "max_drawdown": {
+        "diff": 0.0,
+        "first": -0.9695418716497479,
+        "second": -0.9695418716497479,
+        "status": "PASS"
+      },
+      "total_return": {
+        "diff": 0.0,
+        "first": -0.5889592112873733,
+        "second": -0.5889592112873733,
+        "status": "PASS"
+      },
+      "turnover": {
+        "diff": 0.0,
+        "first": 0.336568760539169,
+        "second": 0.336568760539169,
+        "status": "PASS"
+      }
+    },
+    "drift_reasons": [],
+    "schema_version": "daily_multifactor_baseline_artifact_v1",
+    "snapshot_refs": [
+      "cr155-real-lake-baseline-rerun-a",
+      "cr155-real-lake-baseline-rerun-b"
+    ],
+    "status": "PASS",
+    "tolerance": {
+      "numeric_tolerance": 0.0
+    }
+  },
+  "risk_resolution": {
+    "new_status": "resolved_by_execution_with_failed_admission",
+    "replacement_issue_id": "I-CR155-REAL-LAKE-ADMISSION-BLOCKED",
+    "resolved_risk_id": "R-CR155-CP7-REAL-DATA-VALIDATION-NOT-EXECUTED",
+    "summary": "Real local lake historical/OOS/rerun validation executed twice and was deterministic, but admission failed closed due economic_significance and out_of_sample_validation blockers."
+  },
+  "runs": [
+    {
+      "artifacts": {
+        "admission_package_ref": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/cr155-real-lake-baseline-rerun-a/MATURE-STRATEGY-ADMISSION-PACKAGE.json",
+        "exposure_ref": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/cr155-real-lake-baseline-rerun-a/exposure.csv",
+        "research_dir": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/cr155-real-lake-baseline-rerun-a",
+        "stage3_report_ref": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/cr155-real-lake-baseline-rerun-a/STAGE3-RESEARCH-REPORT.json",
+        "summary_ref": "process/evidence/stage3-mature-multifactor/cr155-real-lake-baseline-rerun-a/stage3-research-summary.json",
+        "turnover_ref": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/cr155-real-lake-baseline-rerun-a/turnover_cost.csv",
+        "validation_report_ref": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/cr155-real-lake-baseline-rerun-a/FACTOR-MODEL-VALIDATION-REPORT.json"
+      },
+      "blocked_reasons": [
+        {
+          "gate_id": "economic_significance",
+          "reason": "economic_significance status=blocked",
+          "severity": "blocker"
+        },
+        {
+          "gate_id": "out_of_sample_validation",
+          "reason": "out_of_sample_validation status=blocked",
+          "severity": "blocker"
+        }
+      ],
+      "factor_model_validation_status": "blocked",
+      "gate_decisions": [
+        {
+          "gate_id": "grs_test",
+          "metric_refs": [],
+          "reason": "GRS requires factor_returns and test_asset_returns; long-only Stage3 does not hard-block on missing GRS.",
+          "severity": "warning",
+          "status": "not_applicable"
+        },
+        {
+          "gate_id": "factor_premium_significance",
+          "metric_refs": [],
+          "reason": "factor_premium_significance status=pass_with_risk",
+          "severity": "warning",
+          "status": "pass_with_risk"
+        },
+        {
+          "gate_id": "economic_significance",
+          "metric_refs": [],
+          "reason": "economic_significance status=blocked",
+          "severity": "blocker",
+          "status": "blocked"
+        },
+        {
+          "gate_id": "time_split_validation",
+          "metric_refs": [],
+          "reason": "time_split_validation status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "test_asset_diversity",
+          "metric_refs": [],
+          "reason": "test_asset_diversity status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "out_of_sample_validation",
+          "metric_refs": [],
+          "reason": "out_of_sample_validation status=blocked",
+          "severity": "blocker",
+          "status": "blocked"
+        },
+        {
+          "gate_id": "shell_value_control",
+          "metric_refs": [],
+          "reason": "shell_value_control status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "short_feasibility",
+          "metric_refs": [],
+          "reason": "Long-only strategy; short feasibility only blocks long-short tradable claims.",
+          "severity": "warning",
+          "status": "not_applicable"
+        },
+        {
+          "gate_id": "policy_cycle_coverage",
+          "metric_refs": [],
+          "reason": "policy_cycle_coverage status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "redundancy_correlation",
+          "metric_refs": [],
+          "reason": "redundancy_correlation status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "style_exposure",
+          "metric_refs": [],
+          "reason": "style_exposure status=pass_with_risk",
+          "severity": "warning",
+          "status": "pass_with_risk"
+        },
+        {
+          "gate_id": "parameter_sensitivity",
+          "metric_refs": [],
+          "reason": "parameter_sensitivity status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "ic_decay",
+          "metric_refs": [],
+          "reason": "ic_decay status=pass_with_risk",
+          "severity": "warning",
+          "status": "pass_with_risk"
+        },
+        {
+          "gate_id": "multiple_testing_control",
+          "metric_refs": [],
+          "reason": "multiple_testing_control status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "data_bias_audit",
+          "metric_refs": [],
+          "reason": "data_bias_audit status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "portfolio_construction_robustness",
+          "metric_refs": [],
+          "reason": "portfolio_construction_robustness status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "capacity_impact",
+          "metric_refs": [],
+          "reason": "ADV/capacity evidence unavailable.",
+          "severity": "warning",
+          "status": "pass_with_risk"
+        },
+        {
+          "gate_id": "tail_risk",
+          "metric_refs": [],
+          "reason": "tail_risk status=pass_with_risk",
+          "severity": "warning",
+          "status": "pass_with_risk"
+        }
+      ],
+      "metrics": {
+        "capacity_liquidity_summary": "median_adv20_amount=1547317.587025; capacity_gate=pass_with_risk; adv_evidence_unavailable_warning=true",
+        "cost": 5.048531408087536,
+        "max_drawdown": -0.9695418716497479,
+        "rebalance_count": 260,
+        "total_return": -0.5889592112873733,
+        "turnover": 0.336568760539169
+      },
+      "operation_counts": {
+        "account_or_order_operation": 0,
+        "catalog_publish": 0,
+        "credential_read": 0,
+        "gateway_start": 0,
+        "lake_write": 0,
+        "provider_fetch": 0,
+        "qmt_operation": 0,
+        "simulation_or_live": 0
+      },
+      "overall_admission": "watch",
+      "package_status": "stage3_research_ready_for_stage4_review",
+      "paper_candidate": false,
+      "run_id": "cr155-real-lake-baseline-rerun-a",
+      "status": "BLOCKED",
+      "summary_metrics": {
+        "factor_panel_rows": 6750809,
+        "mean_composite_rank_ic": 0.0564930614211666,
+        "mean_net_forward_return": -0.0009249957670771533,
+        "mean_turnover": 0.336568760539169,
+        "portfolio_rows": 20603,
+        "rebalance_count": 260,
+        "top_quantile_mean_return": -0.0046233943514833,
+        "valid_research_rows": 267186
+      }
+    },
+    {
+      "artifacts": {
+        "admission_package_ref": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/cr155-real-lake-baseline-rerun-b/MATURE-STRATEGY-ADMISSION-PACKAGE.json",
+        "exposure_ref": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/cr155-real-lake-baseline-rerun-b/exposure.csv",
+        "research_dir": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/cr155-real-lake-baseline-rerun-b",
+        "stage3_report_ref": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/cr155-real-lake-baseline-rerun-b/STAGE3-RESEARCH-REPORT.json",
+        "summary_ref": "process/evidence/stage3-mature-multifactor/cr155-real-lake-baseline-rerun-b/stage3-research-summary.json",
+        "turnover_ref": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/cr155-real-lake-baseline-rerun-b/turnover_cost.csv",
+        "validation_report_ref": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/cr155-real-lake-baseline-rerun-b/FACTOR-MODEL-VALIDATION-REPORT.json"
+      },
+      "blocked_reasons": [
+        {
+          "gate_id": "economic_significance",
+          "reason": "economic_significance status=blocked",
+          "severity": "blocker"
+        },
+        {
+          "gate_id": "out_of_sample_validation",
+          "reason": "out_of_sample_validation status=blocked",
+          "severity": "blocker"
+        }
+      ],
+      "factor_model_validation_status": "blocked",
+      "gate_decisions": [
+        {
+          "gate_id": "grs_test",
+          "metric_refs": [],
+          "reason": "GRS requires factor_returns and test_asset_returns; long-only Stage3 does not hard-block on missing GRS.",
+          "severity": "warning",
+          "status": "not_applicable"
+        },
+        {
+          "gate_id": "factor_premium_significance",
+          "metric_refs": [],
+          "reason": "factor_premium_significance status=pass_with_risk",
+          "severity": "warning",
+          "status": "pass_with_risk"
+        },
+        {
+          "gate_id": "economic_significance",
+          "metric_refs": [],
+          "reason": "economic_significance status=blocked",
+          "severity": "blocker",
+          "status": "blocked"
+        },
+        {
+          "gate_id": "time_split_validation",
+          "metric_refs": [],
+          "reason": "time_split_validation status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "test_asset_diversity",
+          "metric_refs": [],
+          "reason": "test_asset_diversity status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "out_of_sample_validation",
+          "metric_refs": [],
+          "reason": "out_of_sample_validation status=blocked",
+          "severity": "blocker",
+          "status": "blocked"
+        },
+        {
+          "gate_id": "shell_value_control",
+          "metric_refs": [],
+          "reason": "shell_value_control status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "short_feasibility",
+          "metric_refs": [],
+          "reason": "Long-only strategy; short feasibility only blocks long-short tradable claims.",
+          "severity": "warning",
+          "status": "not_applicable"
+        },
+        {
+          "gate_id": "policy_cycle_coverage",
+          "metric_refs": [],
+          "reason": "policy_cycle_coverage status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "redundancy_correlation",
+          "metric_refs": [],
+          "reason": "redundancy_correlation status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "style_exposure",
+          "metric_refs": [],
+          "reason": "style_exposure status=pass_with_risk",
+          "severity": "warning",
+          "status": "pass_with_risk"
+        },
+        {
+          "gate_id": "parameter_sensitivity",
+          "metric_refs": [],
+          "reason": "parameter_sensitivity status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "ic_decay",
+          "metric_refs": [],
+          "reason": "ic_decay status=pass_with_risk",
+          "severity": "warning",
+          "status": "pass_with_risk"
+        },
+        {
+          "gate_id": "multiple_testing_control",
+          "metric_refs": [],
+          "reason": "multiple_testing_control status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "data_bias_audit",
+          "metric_refs": [],
+          "reason": "data_bias_audit status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "portfolio_construction_robustness",
+          "metric_refs": [],
+          "reason": "portfolio_construction_robustness status=pass",
+          "severity": "info",
+          "status": "pass"
+        },
+        {
+          "gate_id": "capacity_impact",
+          "metric_refs": [],
+          "reason": "ADV/capacity evidence unavailable.",
+          "severity": "warning",
+          "status": "pass_with_risk"
+        },
+        {
+          "gate_id": "tail_risk",
+          "metric_refs": [],
+          "reason": "tail_risk status=pass_with_risk",
+          "severity": "warning",
+          "status": "pass_with_risk"
+        }
+      ],
+      "metrics": {
+        "capacity_liquidity_summary": "median_adv20_amount=1547317.587025; capacity_gate=pass_with_risk; adv_evidence_unavailable_warning=true",
+        "cost": 5.048531408087536,
+        "max_drawdown": -0.9695418716497479,
+        "rebalance_count": 260,
+        "total_return": -0.5889592112873733,
+        "turnover": 0.336568760539169
+      },
+      "operation_counts": {
+        "account_or_order_operation": 0,
+        "catalog_publish": 0,
+        "credential_read": 0,
+        "gateway_start": 0,
+        "lake_write": 0,
+        "provider_fetch": 0,
+        "qmt_operation": 0,
+        "simulation_or_live": 0
+      },
+      "overall_admission": "watch",
+      "package_status": "stage3_research_ready_for_stage4_review",
+      "paper_candidate": false,
+      "run_id": "cr155-real-lake-baseline-rerun-b",
+      "status": "BLOCKED",
+      "summary_metrics": {
+        "factor_panel_rows": 6750809,
+        "mean_composite_rank_ic": 0.0564930614211666,
+        "mean_net_forward_return": -0.0009249957670771533,
+        "mean_turnover": 0.336568760539169,
+        "portfolio_rows": 20603,
+        "rebalance_count": 260,
+        "top_quantile_mean_return": -0.0046233943514833,
+        "valid_research_rows": 267186
+      }
+    }
+  ],
+  "schema_version": "cr155.real_lake_validation.v1",
+  "validation_scope": {
+    "date_range": {
+      "end": "2026-06-26",
+      "start": "2021-01-01"
+    },
+    "factor_combination": "simple equal-weight composite over Stage3 mature multifactor factors",
+    "portfolio_policy": {
+      "cost_bps": 15.0,
+      "max_weight": 0.025,
+      "rebalance_step": 5,
+      "top_n": 80
+    },
+    "rerun_count": 2,
+    "strategy_id": "daily_multifactor_baseline_stage3_simple_combo"
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP5",
+  "checkpoint_id": "CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-BATCH",
+  "cr_id": "CR-155",
+  "story_id": null,
+  "checked_at": "2026-07-04T18:45:00+08:00",
+  "context_ref": "process/context/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-CONTEXT.yaml",
+  "dispatch_refs": [
+    "host-orchestrator-inline:cp5-lld-batch-draft"
+  ],
+  "evidence_ref": "process/checkpoints/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-BATCH.md",
+  "items": [
+    {
+      "id": "CP5-CR155-01",
+      "category": "entry",
+      "name": "CP3 and CP4 gates are complete before CP5",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP3-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-HLD-REVIEW.md",
+        "process/checks/CP4-CR155-STORY-DAG-PARALLEL-SAFETY.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": ""
+    },
+    {
+      "id": "CP5-CR155-02",
+      "category": "design-evidence",
+      "name": "All five CR155 stories have full LLD evidence",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/CR155-S01-baseline-artifact-contract-LLD.md",
+        "process/stories/CR155-S02-readonly-data-provenance-adapter-LLD.md",
+        "process/stories/CR155-S03-backtest-oos-walkforward-validation-LLD.md",
+        "process/stories/CR155-S04-admission-gate-composition-package-LLD.md",
+        "process/stories/CR155-S05-rerun-consistency-release-evidence-LLD.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "full_lld_count=5, technical_note_count=0, waived_count=0."
+    },
+    {
+      "id": "CP5-CR155-03",
+      "category": "traceability",
+      "name": "LLDs trace to CP3 HLD/ADR and CP4 Feature Design Matrix",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md",
+        "docs/design/ARCHITECTURE-DECISION-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md",
+        "docs/design/FEATURE-DESIGN-MATRIX.md#cr155-cp4-增量daily-multifactor-baseline-strategy-artifact"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": ""
+    },
+    {
+      "id": "CP5-CR155-04",
+      "category": "parallel-safety",
+      "name": "File ownership and merge order are explicit",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR155.yaml#parallel_policy",
+        "process/STORY-BACKLOG-CR155.md#file-ownership-summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Implementation merge remains serial after CP5 because candidate module/test files overlap."
+    },
+    {
+      "id": "CP5-CR155-05",
+      "category": "authorization-boundary",
+      "name": "CP5 draft does not authorize write/runtime/trading/publish operations",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-CONTEXT.yaml",
+        "process/checkpoints/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-BATCH.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No real lake read was executed at CP5; CP2 readonly authorization remains scoped to later validation work."
+    },
+    {
+      "id": "CP5-CR155-06",
+      "category": "clarification",
+      "name": "LLD clarification queue has no blocking item",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/context/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-CONTEXT.yaml#risks_and_decisions"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Three CP5 decision items are collected for human gate; none blocks drafting."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260704T105637Z0000-bdec64bb",
+    "RE-20260704T105637Z0000-a4913fea",
+    "RE-20260704T105637Z0000-9bed8284",
+    "RE-20260704T105637Z0000-aff9ae9b",
+    "RE-20260704T105637Z0000-8557be81"
+  ],
+  "manual_gate_status": "approved",
+  "approved_by": "user",
+  "approved_at": "2026-07-04T19:06:03+08:00",
+  "accepted_decision_ids": [
+    "DQ-CP5-CR155-LLD-BATCH-APPROVAL",
+    "DQ-CP5-CR155-READONLY-IMPLEMENTATION-BOUNDARY",
+    "DQ-CP5-CR155-RERUN-TOLERANCE-POLICY"
+  ],
+  "pending_human_decisions": [],
+  "decision": "PASS",
+  "next_route": "CP6_STORY_EXECUTION",
+  "summary": {
+    "story_count": 5,
+    "full_lld_count": 5,
+    "technical_note_count": 0,
+    "waived_count": 0,
+    "open_blocking_items": 0,
+    "implementation_allowed_after_approval": true,
+    "implementation_allowed_before_approval": false,
+    "real_lake_readonly_authorized_by_cp2": true,
+    "real_lake_read_executed_at_cp5": false,
+    "real_lake_write_authorized": false,
+    "runtime_operations_authorized": false,
+    "trading_operations_authorized": false
+  }
+}

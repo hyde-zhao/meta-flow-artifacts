@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "stage": "CP6",
+  "cr_id": "CR-155",
+  "story_id": "CR155-S01..S05",
+  "return_ref": "process/returns/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP6.return.json",
+  "changed_files": [
+    {"path": "engine/daily_multifactor_baseline_artifact.py", "change_type": "created"},
+    {"path": "tests/research/test_daily_multifactor_baseline_artifact.py", "change_type": "created"}
+  ],
+  "artifacts": [
+    {"path": "process/stories/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION.md", "kind": "implementation_summary"},
+    {"path": "process/context/stories/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP6.work-packet.json", "kind": "work_packet"}
+  ],
+  "commands": [
+    {
+      "command": "uv run pytest -q tests/research/test_daily_multifactor_baseline_artifact.py",
+      "result": "pass",
+      "summary": "11 passed in 0.03s"
+    },
+    {
+      "command": "uv run pytest -q tests/research/test_strategy_admission_statistical_gate.py tests/research/test_cross_strategy_reliability_gates.py tests/research/test_strategy_admission_package.py",
+      "result": "pass",
+      "summary": "24 passed in 0.07s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/daily_multifactor_baseline_artifact.py",
+      "result": "pass",
+      "summary": "module compiles"
+    },
+    {
+      "command": "git diff --check -- engine/daily_multifactor_baseline_artifact.py tests/research/test_daily_multifactor_baseline_artifact.py process/checkpoints/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-BATCH.md process/checks/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-BATCH.result.json process/STATE.md process/STORY-STATUS-CR155.md process/DEVELOPMENT-PLAN-CR155.yaml process/changes/CR-INDEX.yaml process/changes/summaries/CR-155.summary.json process/state/STATE.current.json process/changes/CR-155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-2026-07-04.md",
+      "result": "pass",
+      "summary": "no whitespace errors"
+    }
+  ],
+  "tests": [
+    "test_cr155_s01_complete_artifact_validates_and_serializes_deterministically",
+    "test_cr155_s01_missing_universe_or_overclaim_blocks_artifact",
+    "test_cr155_s02_readonly_provenance_passes_with_zero_counters_and_blocks_forbidden_operations",
+    "test_cr155_s02_fixture_static_fallback_preserves_audit_and_blocks_real_data_claim",
+    "test_cr155_s03_split_manifest_and_validation_summary_pass_for_complete_refs",
+    "test_cr155_s03_missing_split_or_cost_blocks_validation",
+    "test_cr155_s04_admission_package_composes_pass_and_candidate_true",
+    "test_cr155_s04_admission_missing_or_nonpass_gate_fails_closed",
+    "test_cr155_s05_identical_reruns_pass_and_allow_candidate",
+    "test_cr155_s05_metric_or_status_drift_blocks_candidate",
+    "test_cr155_s05_release_wording_is_research_only_and_overclaim_is_blocked"
+  ],
+  "boundary_check": {
+    "forbidden_operation_count": 0,
+    "real_lake_read_executed": false,
+    "real_lake_write_executed": false,
+    "runtime_executed": false,
+    "trading_executed": false,
+    "broker_executed": false,
+    "credential_read_executed": false,
+    "publish_executed": false
+  },
+  "design_delta_ref": null,
+  "risks": [
+    {
+      "id": "R-CR155-CP6-REAL-DATA-NOT-EXECUTED",
+      "status": "accepted-cp6-contract-only",
+      "summary": "CP6 implements contract and fixture tests only; actual historical/OOS real readonly validation remains a CP7 concern under existing CP2 readonly authorization."
+    }
+  ],
+  "waivers": []
+}

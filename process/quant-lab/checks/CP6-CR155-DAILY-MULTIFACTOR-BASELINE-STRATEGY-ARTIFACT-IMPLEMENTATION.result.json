@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION",
+  "cr_id": "CR-155",
+  "story_id": "CR155-S01..S05",
+  "context_ref": "process/context/stories/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP6.work-packet.json",
+  "dispatch_refs": ["host-orchestrator-inline:cp6-implementation-after-user-approval"],
+  "evidence_ref": "process/evidence/CR155-CP6-IMPLEMENTATION.index.json",
+  "items": [
+    {
+      "id": "CP6-CR155-01",
+      "category": "entry",
+      "name": "CP5 LLD batch approved before implementation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-BATCH.md",
+        "process/checks/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-BATCH.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "manual_gate_status=approved; accepted CP5 decisions=3."
+    },
+    {
+      "id": "CP6-CR155-02",
+      "category": "implementation",
+      "name": "CR155 baseline artifact module implemented",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/daily_multifactor_baseline_artifact.py",
+        "process/stories/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION.md#implementation-objects"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Artifact, provenance, validation, admission, rerun and wording contracts are refs-only in-memory evaluators."
+    },
+    {
+      "id": "CP6-CR155-03",
+      "category": "tests",
+      "name": "CR155 targeted tests pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/evidence/CR155-CP6-IMPLEMENTATION.index.json#commands"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "11 CR155 tests passed."
+    },
+    {
+      "id": "CP6-CR155-04",
+      "category": "regression",
+      "name": "Related admission and reliability regressions pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/evidence/CR155-CP6-IMPLEMENTATION.index.json#commands"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "24 CR151/CR154/package tests passed."
+    },
+    {
+      "id": "CP6-CR155-05",
+      "category": "security",
+      "name": "Forbidden data/runtime/trading/publish operations were not executed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/evidence/CR155-CP6-IMPLEMENTATION.index.json#boundary_check"],
+      "owner": "meta-dev",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CP6 remained contract and fixture-test implementation only; no real lake read was executed."
+    },
+    {
+      "id": "CP6-CR155-06",
+      "category": "evidence",
+      "name": "Return packet and evidence index are present",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP6.return.json",
+        "process/evidence/CR155-CP6-IMPLEMENTATION.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Aggregate return/evidence covers CR155-S01..S05 because implementation shares one module/test file."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260704T111520Z0000-cr155cp6impl"],
+  "decision": "PASS",
+  "next_route": "CP7",
+  "checked_at": "2026-07-04T19:15:20+08:00",
+  "summary": {
+    "story_count": 5,
+    "return_packet_count": 1,
+    "evidence_index_count": 1,
+    "cr155_targeted_tests_passed": 11,
+    "related_regression_tests_passed": 24,
+    "forbidden_operation_count": 0,
+    "real_lake_read_executed": false,
+    "real_lake_write_authorized": false,
+    "runtime_authorized": false,
+    "trading_authorized": false,
+    "publish_authorized": false,
+    "risk_count": 1
+  },
+  "risks": ["R-CR155-CP6-REAL-DATA-NOT-EXECUTED"],
+  "updated_at": "2026-07-04T19:15:20+08:00"
+}

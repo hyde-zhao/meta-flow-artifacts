@@ -1,0 +1,70 @@
+schema_version: 1
+description: cr-tracking warning 分级策略 — 定义 current-surface 与 historical-ledger 边界
+created_at: '2026-07-04'
+current_surface:
+  scope:
+    cr_ids:
+    - CR-151
+    - CR-152
+    - CR-153
+    - CR-154
+    - CR-155
+    follow_up_ids:
+    - FU-CR152-001
+    - FU-CR154-001
+    paths:
+    - process/current/*
+    - process/state/STATE.current.json
+    - process/changes/CR-INDEX.yaml
+    - process/changes/CR-INDEX.json
+    patterns:
+    - CR151*
+    - CR152*
+    - CR153*
+    - CR154*
+    - CR155*
+    - FU-CR152*
+    - FU-CR154*
+  current_count: 0
+  status: clean
+historical_ledger:
+  scope: CR-001 到 CR-150 及 CR-019~CR-149 历史 follow-up tracking
+  categories:
+  - type: legacy_status_mismatch
+    count: 3
+    description: CR-012, CR-029, CR-031 的 legacy status 与 lifecycle_status=closed
+      不一致
+  - type: missing_from_cr_index
+    count: 51
+    description: CR-019~CR-149 follow-up tracking 中的候选 ID 未收录到 CR-INDEX items
+  policy: acknowledged — 历史台账，不污染 current discovery，不在 CR155 前追溯补录
+  future_governance: P2c 或独立治理 CR 处理
+validation:
+  cr_tracking_exit_code: 0
+  current_surface_warnings: 0
+  historical_warnings: allowed
+  indexed_candidates:
+  - FU-CR152-001
+  - FU-CR154-001
+classification_rules:
+  priority: id_match overrides path_match
+  id_match:
+    description: 以 CR ID / follow-up ID 判定是否属于 current-surface
+    current_surface_ids:
+    - CR-151
+    - CR-152
+    - CR-153
+    - CR-154
+    - CR-155
+    - FU-CR152-001
+    - FU-CR154-001
+    rule: warning 涉及的 CR ID 或 follow-up ID 命中上述列表 → current-surface
+  path_match:
+    description: 路径匹配仅用于 current discovery 入口有效性判定
+    current_surface_paths:
+    - process/current/CURRENT.json
+    - process/current/cr-index
+    - process/state/STATE.current.json
+    rule: warning 涉及上述路径且不是历史台账 → current-surface
+    note: process/changes/CR-INDEX.yaml 和 CR-INDEX.json 包含历史 item，不因文件路径整体判为 current-surface。仅当其
+      current discovery 角色失效（如 indexed candidates 缺失）时才属于 current-surface。

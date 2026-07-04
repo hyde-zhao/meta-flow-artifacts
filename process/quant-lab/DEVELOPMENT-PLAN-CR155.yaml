@@ -1,0 +1,185 @@
+schema_version: 1
+change_id: "CR-155"
+title: "CR155 Daily Multifactor Baseline Strategy Artifact Development Plan"
+status: "closed-ready-with-risk"
+created_at: "2026-07-04T18:37:08+08:00"
+updated_at: "2026-07-04T20:15:00+08:00"
+owner: "host-orchestrator"
+workflow_phase: "delivered"
+implementation_allowed: true
+lld_allowed_by_cp4: true
+cp5_approved: true
+cp5_approved_by: "user"
+cp5_approved_at: "2026-07-04T19:06:03+08:00"
+cp6_result: "process/checks/CP6-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION.result.json"
+cp6_evidence: "process/evidence/CR155-CP6-IMPLEMENTATION.index.json"
+cp6_return: "process/returns/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP6.return.json"
+ready_for_verification: true
+cp7_result: "process/checks/CP7-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-VERIFICATION.result.json"
+cp7_evidence: "process/evidence/CR155-CP7-VERIFICATION.index.json"
+real_lake_validation: "process/evidence/CR155-REAL-LAKE-VALIDATION-20260704.json"
+real_lake_artifact_package: "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json"
+cp8_result: "process/checks/CP8-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-RELEASE-READINESS.result.json"
+cp8_checkpoint: "process/checkpoints/CP8-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-RELEASE-READINESS.md"
+ready_for_cp8_review: false
+cp8_approved: true
+cp8_approved_by: "user"
+cp8_approved_at: "2026-07-04T20:15:00+08:00"
+feature_design_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md#cr155-cp4-增量daily-multifactor-baseline-strategy-artifact"
+feature_design_docs:
+  - "docs/features/daily-multifactor-baseline-strategy-artifact/DESIGN.md"
+  - "docs/features/daily-multifactor-baseline-strategy-artifact/TEST-PLAN.md"
+  - "docs/features/daily-multifactor-baseline-strategy-artifact/TASKS.md"
+story_backlog: "process/STORY-BACKLOG-CR155.md"
+story_status: "process/STORY-STATUS-CR155.md"
+cp4_auto_result: "process/checks/CP4-CR155-STORY-DAG-PARALLEL-SAFETY.result.json"
+cp5_result: "process/checks/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-BATCH.result.json"
+cp5_checkpoint: "process/checkpoints/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-BATCH.md"
+
+authorization_boundary:
+  cp4_does_not_authorize_lld_approval: true
+  cp4_does_not_authorize_implementation: true
+  cp5_required_before_implementation: true
+  real_lake_readonly_allowed_after_cp2: true
+  real_lake_readonly_scope: "CR155-scoped local governed lake/current truth readonly for historical backtest, OOS/walk-forward and rerun consistency only; executed in CP7 revalidation, no lake write."
+  credential_read_allowed: false
+  env_read_allowed: false
+  real_lake_write_allowed: false
+  nas_access_allowed: false
+  nas_sync_allowed: false
+  provider_fetch_allowed: false
+  qmt_runtime_allowed: false
+  miniqmt_runtime_allowed: false
+  xtquant_runtime_allowed: false
+  simulation_paper_live_allowed: false
+  broker_access_allowed: false
+  trading_allowed: false
+  external_framework_run_allowed: false
+  event_store_write_allowed: false
+  model_registry_write_allowed: false
+  feature_label_prediction_store_write_allowed: false
+  catalog_pointer_mutation_allowed: false
+  publish_allowed: false
+  git_remote_write_allowed: false
+  future_runtime_validation_policy: "Any lake write, NAS/provider/credential/runtime/trading/broker/store/catalog/registry/publish action requires a separate explicit gate or formal CR."
+
+feature_slices:
+  - feature_id: "FEAT-16"
+    name: "Daily Multifactor Baseline Strategy Artifact"
+    design_docs:
+      - "docs/features/daily-multifactor-baseline-strategy-artifact/DESIGN.md"
+      - "docs/features/daily-multifactor-baseline-strategy-artifact/TEST-PLAN.md"
+      - "docs/features/daily-multifactor-baseline-strategy-artifact/TASKS.md"
+    stories:
+      - "CR155-S01-baseline-artifact-contract"
+      - "CR155-S02-readonly-data-provenance-adapter"
+      - "CR155-S03-backtest-oos-walkforward-validation"
+      - "CR155-S04-admission-gate-composition-package"
+      - "CR155-S05-rerun-consistency-release-evidence"
+
+lld_design_batch:
+  batch_id: "CR155-DAILY-MULTIFACTOR-BASELINE-ARTIFACT-BATCH-A"
+  status: "approved"
+  policy: "All CR155 stories require full-lld. CP5 must review all design evidence together before implementation."
+  stories:
+    - "CR155-S01-baseline-artifact-contract"
+    - "CR155-S02-readonly-data-provenance-adapter"
+    - "CR155-S03-backtest-oos-walkforward-validation"
+    - "CR155-S04-admission-gate-composition-package"
+    - "CR155-S05-rerun-consistency-release-evidence"
+  cp5_attention_items:
+    - id: "CP5-FOCUS-CR155-001"
+      story: "CR155-S01-baseline-artifact-contract"
+      requirement: "Define exact artifact fields, mandatory refs, schema versioning and failure behavior for missing refs."
+    - id: "CP5-FOCUS-CR155-002"
+      story: "CR155-S02-readonly-data-provenance-adapter"
+      requirement: "Define readonly provenance proof, forbidden operation counters and downgrade behavior if provenance cannot be proven."
+    - id: "CP5-FOCUS-CR155-003"
+      story: "CR155-S03-backtest-oos-walkforward-validation"
+      requirement: "Define split manifest, purge/embargo, OOS/walk-forward metrics and CR148 consumption refs."
+    - id: "CP5-FOCUS-CR155-004"
+      story: "CR155-S04-admission-gate-composition-package"
+      requirement: "Preserve separate CR151 statistical, CR154 reliability and final package statuses with reasons."
+    - id: "CP5-FOCUS-CR155-005"
+      story: "CR155-S05-rerun-consistency-release-evidence"
+      requirement: "Define two-run metric comparison keys, tolerance policy and release wording that blocks paper/live/production readiness overclaim."
+
+parallel_policy:
+  max_parallel_lld: 3
+  max_parallel_dev_after_cp5: 1
+  max_parallel_verification_after_cp6: 2
+  parallel_lld_rule: "S02 and S03 may be drafted in parallel only after S01 contract draft exists; S04 and S05 depend on validation/admission semantics and should be drafted after S03/S04 respectively."
+  same_file_merge_rule: "All candidate implementation may touch one future module/test file; implementation merge remains serial unless CP5 assigns disjoint sections."
+
+dependency_graph:
+  CR155-S01-baseline-artifact-contract: []
+  CR155-S02-readonly-data-provenance-adapter:
+    - "CR155-S01-baseline-artifact-contract"
+  CR155-S03-backtest-oos-walkforward-validation:
+    - "CR155-S01-baseline-artifact-contract"
+    - "CR155-S02-readonly-data-provenance-adapter"
+  CR155-S04-admission-gate-composition-package:
+    - "CR155-S01-baseline-artifact-contract"
+    - "CR155-S03-backtest-oos-walkforward-validation"
+  CR155-S05-rerun-consistency-release-evidence:
+    - "CR155-S03-backtest-oos-walkforward-validation"
+    - "CR155-S04-admission-gate-composition-package"
+
+waves:
+  - wave: "CR155-W1-ARTIFACT-CONTRACT"
+    objective: "Define baseline strategy artifact contract and claim boundary."
+    parallel_lld: false
+    parallel_dev_after_cp5: false
+    stories:
+      - story_id: "CR155-S01-baseline-artifact-contract"
+        title: "Baseline artifact contract and claim boundary"
+        priority: "P0"
+        status: "verified-with-risk"
+        depends_on: []
+        primary_files: ["engine/daily_multifactor_baseline_artifact.py", "tests/research/test_daily_multifactor_baseline_artifact.py"]
+        lld_gate: {required: true, required_level: "full-lld", status: "approved", evidence_ref: "process/stories/CR155-S01-baseline-artifact-contract-LLD.md"}
+  - wave: "CR155-W2-VALIDATION-INPUTS"
+    objective: "Define readonly data provenance and backtest/OOS validation flow."
+    parallel_lld: true
+    parallel_dev_after_cp5: false
+    entry_conditions:
+      - "S01 artifact contract draft exists"
+    stories:
+      - story_id: "CR155-S02-readonly-data-provenance-adapter"
+        title: "Readonly data provenance adapter and guardrails"
+        priority: "P0"
+        status: "verified-with-risk"
+        depends_on: ["CR155-S01-baseline-artifact-contract"]
+        primary_files: ["engine/daily_multifactor_baseline_artifact.py", "tests/research/test_daily_multifactor_baseline_artifact.py"]
+        lld_gate: {required: true, required_level: "full-lld", status: "approved", evidence_ref: "process/stories/CR155-S02-readonly-data-provenance-adapter-LLD.md"}
+      - story_id: "CR155-S03-backtest-oos-walkforward-validation"
+        title: "Historical backtest and OOS/walk-forward validation flow"
+        priority: "P0"
+        status: "verified-with-risk"
+        depends_on: ["CR155-S01-baseline-artifact-contract", "CR155-S02-readonly-data-provenance-adapter"]
+        primary_files: ["engine/daily_multifactor_baseline_artifact.py", "tests/research/test_daily_multifactor_baseline_artifact.py"]
+        lld_gate: {required: true, required_level: "full-lld", status: "approved", evidence_ref: "process/stories/CR155-S03-backtest-oos-walkforward-validation-LLD.md"}
+  - wave: "CR155-W3-ADMISSION-PACKAGE"
+    objective: "Define statistical/reliability admission composition and package output."
+    parallel_lld: false
+    parallel_dev_after_cp5: false
+    stories:
+      - story_id: "CR155-S04-admission-gate-composition-package"
+        title: "Statistical/reliability gate composition and admission package"
+        priority: "P0"
+        status: "verified-with-risk"
+        depends_on: ["CR155-S01-baseline-artifact-contract", "CR155-S03-backtest-oos-walkforward-validation"]
+        primary_files: ["engine/daily_multifactor_baseline_artifact.py", "tests/research/test_daily_multifactor_baseline_artifact.py"]
+        lld_gate: {required: true, required_level: "full-lld", status: "approved", evidence_ref: "process/stories/CR155-S04-admission-gate-composition-package-LLD.md"}
+  - wave: "CR155-W4-RERUN-EVIDENCE"
+    objective: "Define deterministic rerun comparison and release evidence wording."
+    parallel_lld: false
+    parallel_dev_after_cp5: false
+    stories:
+      - story_id: "CR155-S05-rerun-consistency-release-evidence"
+        title: "Rerun consistency and release evidence wording"
+        priority: "P0"
+        status: "verified-with-risk"
+        depends_on: ["CR155-S03-backtest-oos-walkforward-validation", "CR155-S04-admission-gate-composition-package"]
+        primary_files: ["engine/daily_multifactor_baseline_artifact.py", "tests/research/test_daily_multifactor_baseline_artifact.py"]
+        lld_gate: {required: true, required_level: "full-lld", status: "approved", evidence_ref: "process/stories/CR155-S05-rerun-consistency-release-evidence-LLD.md"}

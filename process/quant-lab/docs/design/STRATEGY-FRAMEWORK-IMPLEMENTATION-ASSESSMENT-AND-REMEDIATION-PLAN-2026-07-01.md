@@ -5,7 +5,7 @@ owner: "host-orchestrator"
 created_at: "2026-07-01"
 scope: "multifactor, machine-learning, event-driven strategy E2E framework remediation"
 reviews: "docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md"
-roadmap_ref: "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md"
+roadmap_ref: "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md"
 authorization_boundary: "planning-only; no source implementation, runtime, lake write, NAS sync, provider fetch, QMT, broker, credential, simulation, live, or trading authorization"
 ---
 

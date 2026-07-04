@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-155",
+  "story_id": "CR155-S01..S05",
+  "status": "verified",
+  "created_at": "2026-07-04T19:21:44+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP7.verify-packet.json",
+  "dispatch_refs": [
+    "host-orchestrator-inline:cp7-verification-after-cp6-pass"
+  ],
+  "implementation_ref": "process/stories/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION.md",
+  "touched_files": [
+    {
+      "path": "docs/quality/VERIFICATION-REPORT-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md",
+      "change_type": "created"
+    },
+    {
+      "path": "docs/quality/TEST-REPORT-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md",
+      "change_type": "created"
+    },
+    {
+      "path": "docs/quality/REVIEW-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md",
+      "change_type": "created"
+    },
+    {
+      "path": "docs/quality/FIXES-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP7.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR155-CP7-VERIFICATION.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-VERIFICATION.result.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/context/stories/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP7.verify-packet.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR155-REAL-LAKE-VALIDATION-20260704.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "CP7 verification only; no implementation contract changes."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_read_executed": true,
+    "real_lake_write_touched": false,
+    "catalog_write_touched": false,
+    "broker_touched": false,
+    "trading_touched": false,
+    "publish_touched": false,
+    "real_lake_read_count": 2
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run pytest -q tests/research/test_daily_multifactor_baseline_artifact.py tests/research/test_strategy_admission_statistical_gate.py tests/research/test_cross_strategy_reliability_gates.py tests/research/test_strategy_admission_package.py",
+        "result": "pass",
+        "summary": "35 passed in 0.08s"
+      },
+      {
+        "command": "uv run meta-flow story return-check --packet process/context/stories/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP6.work-packet.json --return process/returns/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP6.return.json --project-root .",
+        "result": "pass",
+        "summary": "Story Return Packet Check: OK"
+      },
+      {
+        "command": "uv run meta-flow story evidence-check --index process/evidence/CR155-CP6-IMPLEMENTATION.index.json --project-root .",
+        "result": "pass",
+        "summary": "Evidence Index Check: OK"
+      },
+      {
+        "command": "uv run meta-flow cp result-check --result process/checks/CP6-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION.result.json --project-root .",
+        "result": "pass",
+        "summary": "CP Result Check: OK"
+      },
+      {
+        "command": "uv run --python 3.11 python scripts/research/run_multifactor_strategy_research.py --run-id cr155-real-lake-baseline-rerun-a --lake-root /home/hyde/data/quant-lab/data-lake --research-root /home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor --process-evidence-root process/evidence/stage3-mature-multifactor --start 2021-01-01 --end 2026-06-26 --top-n 80 --max-weight 0.025 --min-adv-amount 1000000 --cost-bps 15 --label-horizon 20 --rebalance-step 5",
+        "result": "blocked_admission",
+        "summary": "Real lake readonly run completed; runner status=BLOCKED due economic_significance and out_of_sample_validation gates; forbidden operation counts zero."
+      },
+      {
+        "command": "uv run --python 3.11 python scripts/research/run_multifactor_strategy_research.py --run-id cr155-real-lake-baseline-rerun-b --lake-root /home/hyde/data/quant-lab/data-lake --research-root /home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor --process-evidence-root process/evidence/stage3-mature-multifactor --start 2021-01-01 --end 2026-06-26 --top-n 80 --max-weight 0.025 --min-adv-amount 1000000 --cost-bps 15 --label-horizon 20 --rebalance-step 5",
+        "result": "blocked_admission",
+        "summary": "Second real lake readonly rerun completed with identical core metrics and same blocked admission status."
+      },
+      {
+        "command": "uv run --python 3.11 python - <<PY # build CR155 real lake validation evidence",
+        "result": "pass",
+        "summary": "Generated CR155 real lake validation evidence and artifact package; rerun consistency status=PASS; paper_candidate=false."
+      }
+    ],
+    "decision": "PASS_WITH_RISK",
+    "real_lake_validation": {
+      "executed": true,
+      "rerun_consistency": "PASS",
+      "admission_result": {
+        "blocked_gate_ids": [
+          "economic_significance",
+          "out_of_sample_validation"
+        ],
+        "blockers": [
+          "economic_significance blocked: mean_net_return is negative after costs",
+          "out_of_sample_validation blocked by factor model validation gate"
+        ],
+        "package_status": "FAIL",
+        "paper_candidate": false,
+        "reliability_gate_status": "NEEDS_REVIEW",
+        "risks": [
+          "capacity_impact pass_with_risk: ADV/capacity evidence unavailable",
+          "factor_premium_significance/style_exposure/ic_decay/tail_risk pass_with_risk"
+        ],
+        "statistical_gate_status": "FAIL"
+      },
+      "paper_candidate": false
+    }
+  },
+  "evidence_refs": [
+    "process/evidence/CR155-CP7-VERIFICATION.index.json",
+    "docs/quality/VERIFICATION-REPORT-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md",
+    "docs/quality/TEST-REPORT-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md",
+    "docs/quality/REVIEW-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md",
+    "process/evidence/CR155-REAL-LAKE-VALIDATION-20260704.json",
+    "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json",
+    "process/evidence/stage3-mature-multifactor/cr155-real-lake-baseline-rerun-a/stage3-research-summary.json",
+    "process/evidence/stage3-mature-multifactor/cr155-real-lake-baseline-rerun-b/stage3-research-summary.json"
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "I-CR155-REAL-LAKE-ADMISSION-BLOCKED",
+      "severity": "HIGH",
+      "status": "open-for-CP8-decision",
+      "summary": "Real lake validation executed; admission failed closed due economic_significance and out_of_sample_validation; paper_candidate=false."
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp8_with_real_lake_admission_blocked"
+}

@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "quant-lab",
+  "cr_id": "CR-155",
+  "story_id": "CR155-S01..S05",
+  "story_ref": "process/STORY-BACKLOG-CR155.md",
+  "parent_context_ref": "process/context/CP6-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION-CONTEXT.yaml",
+  "objective": {
+    "summary": "Implement CR155 daily multifactor baseline artifact contracts, readonly provenance guardrails, validation summary, admission package composition, rerun consistency and research-only release wording.",
+    "non_goals": [
+      "Do not execute real lake reads during CP6 implementation.",
+      "Do not write lake/catalog/store/registry paths.",
+      "Do not read credentials, env files, NAS paths, providers, runtime adapters, brokers or external frameworks.",
+      "Do not claim paper/live/trading/runtime/production readiness."
+    ]
+  },
+  "feature_refs": ["FEAT-16"],
+  "feature_design_refs": [
+    "docs/features/daily-multifactor-baseline-strategy-artifact/DESIGN.md",
+    "docs/features/daily-multifactor-baseline-strategy-artifact/TEST-PLAN.md",
+    "docs/features/daily-multifactor-baseline-strategy-artifact/TASKS.md",
+    "process/stories/CR155-S01-baseline-artifact-contract-LLD.md",
+    "process/stories/CR155-S02-readonly-data-provenance-adapter-LLD.md",
+    "process/stories/CR155-S03-backtest-oos-walkforward-validation-LLD.md",
+    "process/stories/CR155-S04-admission-gate-composition-package-LLD.md",
+    "process/stories/CR155-S05-rerun-consistency-release-evidence-LLD.md"
+  ],
+  "dependency_inputs": [
+    "process/checks/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-BATCH.result.json manual_gate_status=approved",
+    "process/checkpoints/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-BATCH.md status=approved"
+  ],
+  "acceptance": [
+    "Complete artifact validates and serializes deterministically.",
+    "Missing required refs and overclaim wording fail closed.",
+    "Readonly provenance blocks forbidden operation counters and supports fixture/static fallback.",
+    "Historical backtest and walk-forward split refs validate with required metrics.",
+    "Admission package preserves statistical/reliability gate statuses and derives paper_candidate safely.",
+    "Two rerun metric snapshots compare required metrics with explicit tolerance.",
+    "Release wording remains research-only and blocks paper/live/trading/runtime/production overclaim."
+  ],
+  "allowed_reads": [
+    "process/context/CP6-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION-CONTEXT.yaml",
+    "process/context/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-CONTEXT.yaml",
+    "process/stories/CR155-S01-baseline-artifact-contract-LLD.md",
+    "process/stories/CR155-S02-readonly-data-provenance-adapter-LLD.md",
+    "process/stories/CR155-S03-backtest-oos-walkforward-validation-LLD.md",
+    "process/stories/CR155-S04-admission-gate-composition-package-LLD.md",
+    "process/stories/CR155-S05-rerun-consistency-release-evidence-LLD.md",
+    "engine/serialization.py",
+    "engine/admission_contracts.py",
+    "engine/strategy_admission_statistical_gate.py",
+    "engine/cross_strategy_reliability_gates.py",
+    "engine/strategy_admission_package.py"
+  ],
+  "read_if_needed": [
+    "tests/research/test_strategy_admission_statistical_gate.py",
+    "tests/research/test_cross_strategy_reliability_gates.py",
+    "tests/research/test_strategy_admission_package.py"
+  ],
+  "allowed_write_paths": [
+    "engine/daily_multifactor_baseline_artifact.py",
+    "tests/research/test_daily_multifactor_baseline_artifact.py",
+    "process/context/CP6-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION-CONTEXT.yaml",
+    "process/context/stories/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP6.work-packet.json",
+    "process/stories/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION.md",
+    "process/returns/CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.CP6.return.json",
+    "process/evidence/CR155-CP6-IMPLEMENTATION.index.json",
+    "process/checks/CP6-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION.result.json",
+    "process/checkpoints/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-BATCH.md",
+    "process/checks/CP5-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-LLD-BATCH.result.json",
+    "process/state/CHECKPOINT-LEDGER.ndjson",
+    "process/state/GATE-LEDGER.ndjson",
+    "process/state/CR-LEDGER.ndjson",
+    "process/state/STATE.current.json",
+    "process/STATE.md",
+    "process/STORY-STATUS-CR155.md",
+    "process/DEVELOPMENT-PLAN-CR155.yaml",
+    "process/changes/CR-INDEX.yaml",
+    "process/changes/summaries/CR-155.summary.json",
+    "process/changes/CR-155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-2026-07-04.md"
+  ],
+  "forbidden_write_paths": [
+    "data/lake/**",
+    "market_data/catalog.py",
+    "market_data/manifest.py",
+    "market_data/publish.py",
+    "docs/release/**",
+    "delivery/**"
+  ],
+  "verification_plan": [
+    "uv run pytest -q tests/research/test_daily_multifactor_baseline_artifact.py",
+    "uv run pytest -q tests/research/test_strategy_admission_statistical_gate.py tests/research/test_cross_strategy_reliability_gates.py tests/research/test_strategy_admission_package.py",
+    "uv run --python 3.11 python -m py_compile engine/daily_multifactor_baseline_artifact.py",
+    "git diff --check -- engine/daily_multifactor_baseline_artifact.py tests/research/test_daily_multifactor_baseline_artifact.py"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "REAL_LAKE_READONLY_APPROVED_FOR_CR155_CP2",
+    "NO_REAL_LAKE_WRITE",
+    "NO_NAS_SYNC_OR_WRITE",
+    "NO_PROVIDER_FETCH",
+    "NO_BROKER_WRITE",
+    "NO_EXTERNAL_FRAMEWORK_RUN",
+    "NO_CATALOG_POINTER_WRITE"
+  ],
+  "risk_profile": "standard-code",
+  "lld_policy": "full-lld"
+}

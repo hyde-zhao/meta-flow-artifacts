@@ -5,7 +5,7 @@ owner: "host-orchestrator"
 created_at: "2026-07-01"
 scope: "UC-58 多因子 / UC-59 机器学习 / UC-60 事件驱动 端到端生产框架评审"
 authorization_boundary: "analysis-only; review of proposed use-case framework, no implementation / runtime / lake / NAS / provider / trading / broker authorization"
-reviews: "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md"
+reviews: "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md"
 methodology: "对照 GitHub 量化实践(Microsoft Qlib、vnpy、QuantConnect Lean)与学术文献(López de Prado AFML、MacKinlay 事件研究、Bailey-López de Prado PBO/DSR、Harvey-Liu-Zhu 多重检验),经并行研究 agent 逐条核实引用后综合"
 ---
 

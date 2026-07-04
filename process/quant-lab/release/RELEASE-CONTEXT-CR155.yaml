@@ -1,0 +1,81 @@
+schema_version: 1
+release_context_id: "RELEASE-CONTEXT-CR155"
+created_at: "2026-07-04T19:24:46+08:00"
+updated_at: "2026-07-04T20:15:00+08:00"
+created_by: "host-orchestrator"
+cr_id: "CR-155"
+release_artifact_profile: "compact"
+release_decision: "READY_WITH_RISK"
+release_decision_approved: true
+approved_by: "user"
+approved_at: "2026-07-04T20:15:00+08:00"
+release_scope:
+  version_decision: "research-contract-artifact; no SemVer package bump"
+  in_scope:
+    - "CR155 refs-only daily multifactor baseline artifact contract module"
+    - "Fixture tests for artifact/provenance/validation/admission/rerun/release wording"
+    - "Real local governed lake readonly baseline validation evidence"
+    - "Two-run rerun consistency evidence"
+    - "Admission package with paper_candidate=false and reasons"
+  out_of_scope:
+    - "strategy remediation to make admission pass"
+    - "real lake write"
+    - "catalog pointer mutation"
+    - "runtime, trading, broker, publish or production deployment"
+quality_summary:
+  cp6_result: "PASS"
+  cp7_result: "PASS_WITH_RISK"
+  targeted_tests: "11 passed"
+  related_regression_tests: "24 passed"
+  combined_tests: "35 passed"
+  real_lake_validation: "executed"
+  rerun_consistency: "PASS"
+  admission_package_status: "BLOCKED"
+  paper_candidate: false
+  blockers: 0
+  high_findings: 1
+  risks:
+    - id: "I-CR155-REAL-LAKE-ADMISSION-BLOCKED"
+      severity: "HIGH"
+      status: "accepted_by_cp8_close_decision"
+      summary: "Real lake validation executed twice and rerun metrics are deterministic, but admission failed closed due economic_significance and out_of_sample_validation."
+affected_surface:
+  code:
+    - "engine/daily_multifactor_baseline_artifact.py"
+  tests:
+    - "tests/research/test_daily_multifactor_baseline_artifact.py"
+  process:
+    - "process/checks/CP6-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-IMPLEMENTATION.result.json"
+    - "process/checks/CP7-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-VERIFICATION.result.json"
+    - "process/evidence/CR155-REAL-LAKE-VALIDATION-20260704.json"
+    - "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json"
+install_validation_summary:
+  required: false
+  reason: "No package install, platform install script or runtime deployment changed."
+release_documents:
+  release_notes: "docs/release/RELEASE-NOTES-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md"
+  deploy_checklist: "docs/release/DEPLOY-CHECKLIST-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md"
+  rollback: "docs/release/ROLLBACK-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md"
+  migration: "docs/release/MIGRATION-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md"
+  feedback: "docs/release/FEEDBACK-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md"
+non_authorized_items:
+  - "real lake write"
+  - "catalog pointer mutation"
+  - "NAS/provider/credential access"
+  - "QMT/MiniQMT/xtquant runtime"
+  - "simulation/paper/live/trading runtime"
+  - "broker operation"
+  - "external framework execution"
+  - "store or registry write"
+  - "publish or production deployment"
+follow_up_summary:
+  candidates:
+    - id: "FU-CR155-001"
+      status: "candidate-if-user-wants-remediation"
+      summary: "Remediate or redesign the daily multifactor baseline so economic_significance and out_of_sample_validation can pass."
+evidence_refs:
+  - "process/evidence/CR155-CP6-IMPLEMENTATION.index.json"
+  - "process/evidence/CR155-CP7-VERIFICATION.index.json"
+  - "process/evidence/CR155-REAL-LAKE-VALIDATION-20260704.json"
+  - "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json"
+  - "docs/quality/REVIEW-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md"
