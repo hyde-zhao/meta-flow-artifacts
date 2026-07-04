@@ -3,7 +3,7 @@ source_cr: "CR-152"
 status: "open"
 created_at: "2026-07-02T12:38:36+08:00"
 created_by: "host-orchestrator-inline"
-updated_at: "2026-07-02T13:35:51+08:00"
+updated_at: "2026-07-04T09:31:03+08:00"
 checkpoint_source: "CP7-static-fixture-only-verification"
 cr_index_path: "process/changes/CR-INDEX.yaml"
 ---
@@ -44,14 +44,14 @@ follow_up_items:
     lifecycle_status: "candidate"
     readiness_status: "not_ready"
     gate_status: "not_started"
-    gate_profile: "standard"
+    gate_profile: "compact"
     source_cr: "CR-152"
     source_checkpoint: "CP7-CR152-ML-STRATEGY-E2E-VERIFICATION"
     priority: 2
     formal_cr_path: ""
+    implementation_ref: "process/checks/FU-CR152-001-TEST-TAXONOMY-PROVENANCE-HYGIENE-2026-07-04.md"
     blocked_by:
-      - "requires_separate_scope_authorization"
-      - "outside_CR152_CP6_CP7_file_owner_boundary"
+      - "final_packaging_or_commit_not_executed"
     impact_surface:
       - "tests/test_cr150_multifactor_framework_completion.py"
       - "tests/test_cr151_strategy_admission_statistical_gate.py"
@@ -69,14 +69,26 @@ follow_up_items:
       runtime: false
       real_lake_readonly: false
       trading_write: false
-    next_action: "Present as CP8 follow-up candidate. Start a separate hygiene CR only if the user explicitly authorizes test taxonomy / provenance cleanup."
+    next_action: "Implemented under explicit user authorization on 2026-07-04. Closure remains local until final packaging/commit; Git remote write remains unauthorized."
 ```
+
+## 实施更新（2026-07-04）
+
+| 项 | 结果 | 证据 |
+|---|---|---|
+| 用户授权 | 用户明确要求实施该治理工作 | 当前会话 |
+| 根目录游离测试文件 | 2 个已移动到 `tests/research/` 并去掉 `test_crNNN_` 前缀 | `tests/research/test_multifactor_framework_completion.py`、`tests/research/test_strategy_admission_statistical_gate.py` |
+| `PROVENANCE.yaml` 缺失条目 | 11 条已补齐 | `tests/PROVENANCE.yaml` |
+| taxonomy guardrail | PASS: `2 passed in 0.06s` | `uv run pytest tests/meta_flow/test_test_file_taxonomy.py -q` |
+| affected targeted tests | PASS: `111 passed in 1.20s` | 11 个受影响测试文件集合 |
+| full pytest | `1603 passed, 4 failed in 43.66s` | 4 个失败均为 process/design-surface hygiene 既有/过程态检查，不属于本次 taxonomy/provenance 目标 |
+| 实施证据 | PASS_WITH_RESIDUAL_UNRELATED_FAILURES | `process/checks/FU-CR152-001-TEST-TAXONOMY-PROVENANCE-HYGIENE-2026-07-04.md` |
 
 ## 后续候选索引
 
 | 候选编号 | 标题 | 状态 | 类型 | 优先级 | 影响面 / 冲突键 | 正式 CR 路径 | 当前门控 | 阻塞原因 | 下一步 | 来源 |
 |---|---|---|---|---:|---|---|---|---|---|---|
-| FU-CR152-001 | tests taxonomy and PROVENANCE.yaml coverage hygiene | candidate | requirement-change | 2 | test taxonomy / provenance coverage / legacy CR150-CR151 root-level tests |  | not_started | outside CR152 CP6/CP7 file owner boundary | Present in CP8 as follow-up candidate; do not execute without separate authorization | CR152 CP7 |
+| FU-CR152-001 | tests taxonomy and PROVENANCE.yaml coverage hygiene | candidate | requirement-change | 2 | test taxonomy / provenance coverage / legacy CR150-CR151 root-level tests |  | not_started | final packaging/commit not executed | Local implementation and verification evidence complete; keep indexed until final packaging/commit closure, no Git remote write authorized | CR152 CP7 |
 
 ## 风险接受与门禁规则
 

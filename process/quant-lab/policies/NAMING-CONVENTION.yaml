@@ -1,0 +1,169 @@
+schema_version: 1
+# 命名规范 — 机器可消费的 artifact 命名模板。
+# 新 artifact 必须使用 canonical_pattern；legacy 按 migration_policy 处理。
+
+artifacts:
+  cp_result:
+    canonical_pattern: "CP{n}-CR{nnn}-{slug}.result.json"
+    examples:
+      - "CP0-CR151-BOOTSTRAP.result.json"
+      - "CP2-CR152-ML-STRATEGY-E2E-SCOPE.result.json"
+      - "CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.result.json"
+    legacy_allowed:
+      - "CP{n}-CR-{nnn}-{slug}.result.json"  # 早期 CR 使用 CR-044 等带横线格式
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "closed_cr_no_rename"
+
+  cp_summary:
+    canonical_pattern: "CP{n}-CR{nnn}-{slug}.result.summary.md"
+    examples:
+      - "CP0-CR151-BOOTSTRAP.result.summary.md"
+      - "CP6-CR152-ML-STRATEGY-E2E-IMPLEMENTATION.result.summary.md"
+    legacy_allowed: []
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "closed_cr_no_rename"
+
+  checkpoint_brief:
+    canonical_pattern: "CP{n}-CR{nnn}-{slug}.md"
+    examples:
+      - "CP2-CR151-MULTIFACTOR-STRATEGY-E2E-SCOPE.md"
+      - "CP3-CR152-ML-STRATEGY-E2E-HLD-REVIEW.md"
+      - "CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.md"
+    legacy_allowed: []
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "closed_cr_no_rename"
+
+  story_card:
+    canonical_pattern: "CR{nnn}-S{nn}-{slug}.md"
+    examples:
+      - "CR151-S01-statistical-report-contracts.md"
+      - "CR153-S02-event-study-method-test-slots.md"
+    legacy_allowed:
+      - "CR{nnn}-S{nn}-{slug}-LLD.md"  # 旧 CR 中 LLD 内嵌于 story card 同名文件
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "closed_cr_no_rename"
+
+  story_lld:
+    canonical_pattern: "CR{nnn}-S{nn}-{slug}-LLD.md"
+    examples:
+      - "CR151-S01-statistical-report-contracts-LLD.md"
+      - "CR153-S04-event-admission-gate-adapter-LLD.md"
+    legacy_allowed: []
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "closed_cr_no_rename"
+
+  story_return:
+    canonical_pattern: "STORY-CR{nnn}-S{nn}.CP{n}.return.json"
+    examples:
+      - "STORY-CR151-S01.CP6.return.json"
+      - "STORY-CR152-S01.CP6.return.json"
+      - "STORY-CR153-S01.CP6.return.json"
+    legacy_allowed:
+      - "CR{nnn}-S{nn}-{slug}.CP{n}.return.json"       # CR154 active no-prefix
+      - "STORY-CR{nnn}-S{nn}-{slug}.CP{n}.return.json"  # CR154 unreferenced historical duplicate alias (retained)
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "new_cr_only"
+    known_debt:
+      - id: "DEBT-CR154-RETURN-DUAL-PATH"
+        description: >
+          CR154 有 8 个 active no-prefix return
+          (CR154-S0X-{slug}.CP6.return.json) 作为规范引用路径；
+          8 个 STORY-prefix 副本 (STORY-CR154-S0X-...CP6.return.json)
+          保留为 unreferenced historical duplicate aliases，
+          不被任何 CP result / work-packet / evidence index / state / checkpoint 引用。
+          Active no-prefix return 的 touched_files 中可能仍记录
+          STORY-CR154 路径作为历史创建证据，不做追溯清理。
+          新 CR 统一使用 canonical pattern。
+        scope: "CR154-S01..S08 CP6 returns"
+        resolution: "new_cr_only"
+
+  story_work_packet:
+    canonical_pattern: "STORY-CR{nnn}-S{nn}.CP{n}.work-packet.json"
+    examples:
+      - "STORY-CR151-S01.CP6.work-packet.json"
+      - "STORY-CR152-S01.CP6.work-packet.json"
+    legacy_allowed:
+      - "CR{nnn}-S{nn}-{slug}.CP{n}.work-packet.json"   # CR153/CR154 no-prefix
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "new_cr_only"
+
+  story_verify_packet:
+    canonical_pattern: "CR{nnn}-S{nn}-{slug}.CP{n}.verify-packet.json"
+    examples:
+      - "CR151-S01-statistical-report-contracts.CP7.verify-packet.json"
+      - "CR153-S01-event-research-time-pit-contracts.CP7.verify-packet.json"
+    legacy_allowed:
+      - "CR{nnn}-{description}.CP{n}.verify-packet.json"  # CR152 package-level verify
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "new_cr_only"
+
+  evidence_index:
+    canonical_pattern: "CR{nnn}-S{nn}.CP{n}.index.json"
+    examples:
+      - "CR151-S01.CP6.index.json"
+      - "CR152-S01.CP6.index.json"
+    legacy_allowed:
+      - "CR{nnn}-S{nn}-{slug}.CP{n}.index.json"          # CR154 with slug
+      - "CR{nnn}-CP{n}-{phase}.index.json"                # e.g. CR151-CP6-IMPLEMENTATION.index.json
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "new_cr_only"
+
+  package_return:
+    canonical_pattern: "CR{nnn}-{description}.CP{n}.return.json"
+    examples:
+      - "CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.CP7.return.json"
+      - "CR153-EVENT-DRIVEN-STRATEGY-E2E.CP7.return.json"
+      - "CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.CP7.return.json"
+    legacy_allowed: []
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "closed_cr_no_rename"
+
+  context_capsule:
+    canonical_pattern: "CP{n}-CR{nnn}-{slug}-CONTEXT.yaml"
+    examples:
+      - "CP2-CR151-MULTIFACTOR-STRATEGY-E2E-SCOPE-CONTEXT.yaml"
+      - "CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-CONTEXT.yaml"
+    legacy_allowed:
+      - "CP{n}-CR{nnn}.context.json"                     # CP0 简化格式
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "new_cr_only"
+
+  discussion_checkpoint:
+    canonical_pattern: "CP{n}-CR{nnn}-DISCUSSION-CHECKPOINT.json"
+    examples:
+      - "CP2-CR151-DISCUSSION-CHECKPOINT.json"
+      - "CP3-CR153-DISCUSSION-CHECKPOINT.json"
+    legacy_allowed: []
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "closed_cr_no_rename"
+
+  human_gate_launch:
+    canonical_pattern: "CP{n}-CR{nnn}-HUMAN-GATE-LAUNCH-MESSAGE.md"
+    examples:
+      - "CP2-CR151-HUMAN-GATE-LAUNCH-MESSAGE.md"
+      - "CP5-CR152-HUMAN-GATE-LAUNCH-MESSAGE.md"
+      - "CP8-CR153-HUMAN-GATE-LAUNCH-MESSAGE.md"
+    legacy_allowed: []
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "closed_cr_no_rename"
+
+  handoff:
+    canonical_pattern: "CR{nnn}-CP{n}-{role}-HANDOFF-{date}.md"
+    examples:
+      - "CR154-CP3-META-SE-HANDOFF-2026-07-02.md"
+    legacy_allowed: []
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "closed_cr_no_rename"
+
+  design_delta:
+    canonical_pattern: "STORY-CR{nnn}-S{nn}.delta.json"
+    examples: []
+    legacy_allowed: []
+    new_artifacts_policy: "enforce_canonical"
+    migration_policy: "new_cr_only"
+
+global:
+  cr_id_format: "CR-{nnn}"          # CR-INDEX 中的规范 ID（3 位零填充、带横线）
+  cr_number_in_filename: "CR{nnn}"  # 文件名中的 CR 编号（无横线、无零填充）
+  new_artifacts_policy_default: "enforce_canonical"
+  migration_policy_default: "new_cr_only"

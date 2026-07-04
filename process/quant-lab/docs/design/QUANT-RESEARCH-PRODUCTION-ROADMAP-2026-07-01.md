@@ -1,6 +1,6 @@
 ---
 title: "Quant Research Production Roadmap"
-status: "draft-v0.9"
+status: "draft-v1.0"
 owner: "host-orchestrator"
 created_at: "2026-07-01"
 scope: "data lake, research/backtest framework, paper/live operations"
@@ -22,6 +22,7 @@ authorization_boundary: "planning-only; no runtime, broker write, provider fetch
 | v0.7 | 2026-07-02 | host-orchestrator | 回写 CR151 CP8 `READY_WITH_RISK` 闭环；明确 `StrategyAdmissionStatisticalGate` 当前为 opt-in capability；刷新下一步为 CR152 CP0/CP2，并加入 ML gate 关系、统计 gate opt-in 时机和 STATE/CR-INDEX/tool-check hygiene 并行治理建议。 |
 | v0.8 | 2026-07-02 | host-orchestrator | 回写 CR152 CP8 `READY_WITH_RISK` 闭环；明确 ML strategy first-wave 为 local/static/fixture-only capability，`FU-CR152-001` 保持 candidate；刷新下一推荐项为 CR153 Event-Driven Strategy E2E Framework CP0/CP2，并保留 hygiene / data-lake candidates 非阻断边界。 |
 | v0.9 | 2026-07-02 | host-orchestrator | 吸收 CR153 实施计划评审：CP2 增加 event CV strategy、survivorship universe PIT slot、method slot-only 三项范围决策；明确 first-wave 不实现事件检验族、overlap/cluster 和 endogeneity 具体算法。 |
+| v1.0 | 2026-07-04 | host-orchestrator | 回写 CR153 与 CR154 CP8 `READY_WITH_RISK` 闭环：CR153 event-driven first wave、CR154 cross-strategy reliability gates first wave 均已完成 local/static/fixture-only 能力；补 `FU-CR154-001` final packaging hygiene 为优先候选，并保留 `FU-CR152-001` test taxonomy / PROVENANCE hygiene 并列治理。 |
 
 ## 1. 目标
 
@@ -71,6 +72,8 @@ authorization_boundary: "planning-only; no runtime, broker write, provider fetch
 | Multifactor framework completion | `CR-150` | closed / READY_WITH_RISK | 已完成本地 `MultifactorFrameworkCompletionMap`：factor spec → factor run → factor panel → label window gate → signal set → portfolio policy → BacktestRunSpec → report pack → cost/risk attribution → strategy admission package。CP8 已由用户接受 inline-fallback risk acceptance；有效验证模式为 static-only。 |
 | Strategy admission statistical gate | `CR-151` | closed / READY_WITH_RISK | 已完成本地/static/fixture 多因子统计准入能力：FDR/multiple testing、robust factor statistics、walk-forward/OOS、PBO/DSR、fail-closed evaluator、admission package linkage 和 optional completion-map linkage。`CR151-CP8-R03-STATE-V2-HYGIENE` 已由用户接受为 process readiness caveat。 |
 | Machine Learning strategy E2E first wave | `CR-152` | closed / READY_WITH_RISK | 已完成 local/static/fixture-only ML strategy foundation：PIT feature matrix / label policy、purged + embargo CV、training snapshot / model artifact metadata、prediction artifact、ML admission gate 和 admission package linkage。`FU-CR152-001` taxonomy/provenance hygiene 保持 candidate；不声明真实模型性能、生产就绪、registry 发布或 runtime readiness。 |
+| Event-Driven strategy E2E first wave | `CR-153` | closed / READY_WITH_RISK | 已完成 local/static/fixture-only event-driven strategy foundation：event time / available_at / decision_time 语义、event study method / test slots、cluster/endogeneity slots、event admission gate adapter 和 event trace wording。CR153 不授权 live event feed、runtime、broker、真实订单或真实数据验证。 |
+| Cross-strategy production reliability gates first wave | `CR-154` | closed / READY_WITH_RISK | 已完成 local/static/fixture-only 横切可靠性门控：backtest trap / statistical reliability artifacts、walk-forward/OOS/purged-embargo governance、PIT universe / survivorship gate、capacity / impact / liquidity contract、regime / attribution / reconciliation slots 和 admission default policy tier resolution。`FU-CR154-001` final packaging hygiene 保持 candidate；不声明 production/runtime/trading/broker readiness。 |
 
 当前执行锁：
 
@@ -78,7 +81,7 @@ authorization_boundary: "planning-only; no runtime, broker write, provider fetch
 active formal CR: none
 selected route: A - local research / strategy framework completion first
 deferred data-lake candidates: RA-CR149-001, FU-CR149-002, FU-CR139-001, RA-CR139-002, FU-CR140-001
-next recommended CR: CR153 Event-Driven Strategy E2E Framework CP0/CP2
+next recommended candidate: FU-CR154-001 final packaging hygiene before or alongside FU-CR152-001 test taxonomy / PROVENANCE hygiene
 ```
 
 执行边界：
@@ -88,6 +91,8 @@ next recommended CR: CR153 Event-Driven Strategy E2E Framework CP0/CP2
 - RA-CR149-001 内容层同步完成不等于 NAS production shared current truth 全闭环；strict p/g metadata parity 仍由 `FU-CR149-002` 后置跟踪。
 - CR151 提供 statistical admission gate capability，但 `require_statistical_gate=False` 是有意默认值，用于保护 CR150 历史行为；UC-58/UC-59 调用方何时强制 `require_statistical_gate=True` 应在 CR152 CP2 或后续 admission governance 中显式决策。
 - CR152 提供 ML strategy first-wave capability，但有效验证模式是 `static-fixture-only`；它不证明真实模型收益、不发布 model registry、不写 catalog/store，也不授权 runtime 或真实训练。
+- CR153 提供 Event-Driven Strategy first-wave capability，但有效验证模式仍是 local/static/fixture-only；它不启动 live event listener、不连接真实 feed、不进入 order flow。
+- CR154 提供 cross-strategy production reliability gate contracts，但仍是 local/static/fixture-only；final packaging hygiene 由 `FU-CR154-001` 跟踪，不等于 Git remote write 或 true release execution 授权。
 - 当前不读取或写入真实 lake，不同步 NAS，不读取 provider，不启动 simulation/live/trading，不写 broker，不读取 credential。
 - 若后续需要真实 lake factor panel / label 构建、Feature Store 写入、NAS report 写入、provider/QMT/runtime execution 或 business-conflict quarantine 解除，必须另起人工门禁。
 
@@ -560,8 +565,8 @@ Paper trading：
 | CR-150 | Multifactor Framework Completion | 已关闭为 READY_WITH_RISK：本地 metadata chain 已补齐，CP8 inline-fallback risk acceptance 已由用户接受 |
 | CR-151 | Strategy Research Admission Statistical Gate | 已关闭为 READY_WITH_RISK：本地/static/fixture 多因子统计准入 capability 已完成；当前 statistical gate 为 opt-in，不改变 UC-58 默认调用行为。 |
 | CR-152 | Machine Learning Strategy E2E Framework Foundation | 已关闭为 READY_WITH_RISK：基于现有 ResearchDatasetSpec / BacktestRunSpec 扩展 ML 专项契约；ML gate 通过 adapter 复用 CR151 四态语义；statistical gate 仍保持 opt-in，强制默认留给 CR154 或后续 admission governance。 |
-| Future CR-153 | Event-Driven Strategy E2E Framework Foundation | 下一推荐项：补事件研究方法论契约，包括 estimation window、normal return model、CAR/BHAR、test family、event clustering、PIT revision、endogeneity、event-to-order trace；先走 CP0/CP1/CP2，不进入 live event feed 或 broker/runtime。 |
-| Future CR-154 | Cross-Strategy Production Reliability Gates | 三类策略共用的 market impact / capacity / walk-forward / attribution / reconciliation / regime gates |
+| CR-153 | Event-Driven Strategy E2E Framework Foundation | 已关闭为 READY_WITH_RISK：完成 event research time semantics、event study method/test slots、bias-risk audit slots、event admission adapter 和 trace evidence wording；不进入 live event feed 或 broker/runtime。 |
+| CR-154 | Cross-Strategy Production Reliability Gates | 已关闭为 READY_WITH_RISK：完成三类策略共用的 statistical reliability / market impact / capacity / walk-forward / attribution / reconciliation / regime gate contracts；`FU-CR154-001` final packaging hygiene 保持 candidate。 |
 | Future CR | Paper Trading and Readonly Live | readonly market/account、live signal shadow、paper OMS、daily paper report |
 | Future CR | Controlled Small-Live Authorization Gate | OMS、broker adapter write contract、pre-trade risk、kill switch、小额实盘门禁 |
 
@@ -609,23 +614,16 @@ Out of scope：
 
 ## 7. 近期建议
 
-用户已选择路线 A：先推进本地研究 / 策略框架补齐，等策略框架具备足够统计可靠性与准入门控后，再恢复数据湖生产级闭环。
+用户已选择路线 A：先推进本地研究 / 策略框架补齐，等策略框架具备足够统计可靠性与准入门控后，再恢复数据湖生产级闭环。CR151、CR152、CR153、CR154 的 local/static/fixture-only first wave 已全部以 `READY_WITH_RISK` 闭环。
 
 建议顺序：
 
-1. 以 Future CR-153 作为下一项推荐正式工作：启动 Event-Driven Strategy E2E Framework 的 CP0 受理、CP1 增量场景完备检查和 CP2 范围基线门。
-2. CR153 CP2 必须纳入事件驱动专项决策：event-time / available-at / decision-time 三时间语义、event revision PIT gate、事件研究 normal return model / estimation window / event window、test family、overlap / clustering、endogeneity treatment、event admission gate 与 CR151/CR152 gate 的关系、event-to-order trace 的非 runtime 边界。
-3. CR153 CP2 还必须纳入三项范围收敛决策：
-   - 事件驱动 CV 策略：CR153 first-wave 只预留 CV slot 和 split audit refs，walk-forward / purged-embargo 框架默认复用 CR154 横切治理，不重建 Event-specific CV。
-   - survivorship bias 边界：EventResearchSpec 预留 `universe_pit_audit` slot；survivorship-free universe 完整 gate 归入 CR154 backtest trap gate。
-   - method slot-only：事件检验族、overlap / clustering 和 endogeneity 在 first-wave 只定义 contract slot、status 和 `n/a-with-reason`，不实现具体统计或因果算法。
-4. CR153 保持本地、static/fixture/read-only 边界：不读取或写入真实 lake，不同步 NAS，不读取 provider，不读取 credential，不启动 QMT/runtime/simulation/live/trading/broker，不运行 live event listener 或外部框架。
-5. CR153 第一轮聚焦事件研究 hard prerequisites：event research spec、event study method spec、PIT revision gate、event test report slot、event clustering / overlap slot、endogeneity note slot、event strategy admission gate、event-to-signal / event-to-order trace contract。
-6. CR154 承接 Wave B / 横切生产可靠性工件：market impact、capacity、walk-forward/OOS governance、survivorship-free universe / backtest trap gate、attribution、reconciliation、regime gates，以及 CR151/CR152/CR153 admission gate 默认强制策略。
-7. 并行排小的 hygiene 治理候选，不阻塞 CR153 主线：`FU-CR152-001` test taxonomy / provenance cleanup、STATE v2 slimming、CR-INDEX legacy warning 清理、return/verify packet 字段非空工具校验加固。
-8. RA-CR149-001、FU-CR149-002、FU-CR139-001、RA-CR139-002、FU-CR140-001 全部保持 deferred/candidate；只有当策略框架需要生产级多节点数据、解除 quarantine、provider refresh、NAS strict metadata parity 或真实 reader validation 时才恢复。
-9. 若未来选择推进数据湖生产级闭环，优先确认目标是“解除 quarantine / 生产 turnover”还是“NAS shared-view strict parity”；前者触发 FU-CR139-001 逐 dataset human gate，后者触发 FU-CR149-002。
-10. 任一真实 lake、NAS、provider、runtime、QMT、simulation/live/trading、broker 或 credential 工作都必须另起授权 CR。
+1. 先收敛 `FU-CR154-001` final packaging hygiene：确认 CR154 新增 source/test 文件进入本地最终 packaging / staging 证据；不执行 Git remote write、true release execution 或 publish。
+2. 与 `FU-CR154-001` 并列或随后启动 `FU-CR152-001` test taxonomy / PROVENANCE hygiene：修复历史 CR150/CR151 root-level tests 与 `tests/PROVENANCE.yaml` 覆盖缺口，降低后续 CP7/CP8 质量追溯噪声。
+3. CR-INDEX legacy warning、STATE v2 slimming、return/verify packet 字段非空工具校验可作为小型治理候选，但不应抢在 `FU-CR154-001` 之前。
+4. RA-CR149-001、FU-CR149-002、FU-CR139-001、RA-CR139-002、FU-CR140-001 全部保持 deferred/candidate；只有当策略框架需要生产级多节点数据、解除 quarantine、provider refresh、NAS strict metadata parity 或真实 reader validation 时才恢复。
+5. 若未来选择推进数据湖生产级闭环，优先确认目标是“解除 quarantine / 生产 turnover”还是“NAS shared-view strict parity”；前者触发 FU-CR139-001 逐 dataset human gate，后者触发 FU-CR149-002。
+6. 任一真实 lake、NAS、provider、runtime、QMT、simulation/live/trading、broker、credential、Git remote write 或 true release execution 工作都必须另起授权 CR。
 
 核心原则：
 

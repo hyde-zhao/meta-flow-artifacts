@@ -24,7 +24,7 @@ target:
 | 条目 | 状态 | 证据 | 说明 |
 |---|---|---|---|
 | CR151 formal CR exists | PASS | `process/changes/CR-151.md` | `lifecycle_status=active`，`gate_status=cp2_pending`。 |
-| CP0 bootstrap result exists | PASS | `process/checks/CP0-CR-151-BOOTSTRAP.result.json` | CP0 decision PASS。 |
+| CP0 bootstrap result exists | PASS | `process/checks/CP0-CR151-BOOTSTRAP.result.json` | CP0 decision PASS。 |
 | Route A is documented | PASS | `docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md` | 用户选择先补齐本地策略框架，数据湖生产闭环后置。 |
 | Scope remediation plan exists | PASS | `docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md` | CR151 wave split and method baseline are documented. |
 
