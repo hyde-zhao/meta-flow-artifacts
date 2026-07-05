@@ -1,0 +1,85 @@
+schema_version: 1
+context_id: CP8-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-CLOSURE
+cr_id: CR-156
+created_at: "2026-07-05T00:38:02+08:00"
+read_profile: compact
+status: ready_for_human_gate
+capsule: "process/context/CP8-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-CLOSURE-CONTEXT.yaml"
+default_reading_strategy: capsule-first
+full_document_reading: not_required_for_closure
+
+formal_cr_ref: "process/changes/CR-156-HYGIENE-PACKAGING-TEST-TAXONOMY-2026-07-05.md"
+summary_ref: "process/changes/summaries/CR-156.summary.json"
+release_context_ref: "process/release/RELEASE-CONTEXT-CR156.yaml"
+closure_summary_ref: "process/checks/CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-CLOSURE-SUMMARY-2026-07-05.md"
+cp8_result_ref: "process/checks/CP8-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-RELEASE-READINESS.result.json"
+cp8_checkpoint_ref: "process/checkpoints/CP8-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-RELEASE-READINESS.md"
+
+approved_scope:
+  cp2_checkpoint_ref: "process/checkpoints/CP2-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-SCOPE.md"
+  approved_by: user
+  approved_at: "2026-07-05T00:38:02+08:00"
+  accepted_decision_ids:
+    - DQ-CP2-CR156-HYGIENE-SCOPE
+    - DQ-CP2-CR156-NO-REMOTE-RELEASE-RUNTIME
+    - DQ-CP2-CR156-RESIDUAL-FAILURE-WORDING
+  route_decision: "Skip CP3-CP7 as substantive phases; record N/A / WAIVED CP results and proceed directly to CP8 closure."
+
+evidence_refs:
+  packaging:
+    id: FU-CR154-001
+    status: PASS
+    evidence_ref: "process/checks/FU-CR154-001-FINAL-PACKAGING-HYGIENE-2026-07-04.md"
+    closure_decision: close_under_cr156
+  test_taxonomy:
+    id: FU-CR152-001
+    status: PASS_WITH_RESIDUAL_UNRELATED_FAILURES
+    evidence_ref: "process/checks/FU-CR152-001-TEST-TAXONOMY-PROVENANCE-HYGIENE-2026-07-04.md"
+    closure_decision: close_under_cr156_ready_with_risk
+    residual_risk_ref: R-CR156-RESIDUAL-UNRELATED-FULL-PYTEST-FAILURES-001
+
+waived_or_not_applicable_checkpoints:
+  CP3:
+    status: N/A
+    result_ref: "process/checks/CP3-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-DESIGN-NOT-APPLICABLE.result.json"
+    reason: "No HLD, ADR or design artifact required for process hygiene closure."
+  CP4:
+    status: N/A
+    result_ref: "process/checks/CP4-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-STORY-DAG-NOT-APPLICABLE.result.json"
+    reason: "No Story decomposition or DAG required."
+  CP5:
+    status: N/A
+    result_ref: "process/checks/CP5-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-LLD-BATCH-NOT-APPLICABLE.result.json"
+    reason: "No LLD batch or Story design evidence required."
+  CP6:
+    status: WAIVED
+    result_ref: "process/checks/CP6-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-IMPLEMENTATION-NOT-APPLICABLE.result.json"
+    reason: "No new implementation executed under CR156; existing evidence is consumed."
+  CP7:
+    status: WAIVED
+    result_ref: "process/checks/CP7-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-VERIFICATION-NOT-APPLICABLE.result.json"
+    reason: "No new verification run; CP8 verifies existing evidence refs and residual wording."
+
+authorization_boundary:
+  authorized:
+    - "Local process/checkpoint/follow-up tracking closure updates for CR156"
+    - "Refs-only verification of existing FU-CR154-001 and FU-CR152-001 evidence"
+    - "CP8 READY_WITH_RISK closure decision"
+  not_authorized:
+    - "git_remote_write_or_push"
+    - "true_release_execution_or_publish"
+    - "runtime_or_trading_or_broker_operation"
+    - "credential_or_env_read"
+    - "real_lake_or_nas_or_provider_access"
+    - "catalog_pointer_or_store_or_registry_write"
+    - "external_framework_clone_install_run"
+
+decision_items:
+  - id: DEC-CR156-CP8-001
+    decision_type: risk_acceptance
+    question: "Approve closing CR156 as READY_WITH_RISK using existing FU-CR154-001 and FU-CR152-001 evidence?"
+    recommendation: "Approve READY_WITH_RISK closure; close both follow-up rows under CR156 and keep unrelated full-suite failures as residual risk wording only."
+    alternatives:
+      - "Request changes to closure wording before approving."
+      - "Reject closure and keep both follow-up rows active."
+    impact: "Approval closes CR156 and removes the two hygiene follow-ups from active tracking; rejection keeps CR156 active at CP8."

@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-RELEASE-READINESS",
+  "profile": "compact",
+  "story_id": "CR157-S01..S05",
+  "cr_id": "CR-157",
+  "checked_at": "2026-07-05T14:30:00+08:00",
+  "context_ref": "process/release/RELEASE-CONTEXT-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.yaml",
+  "dispatch_refs": [
+    "ADE-CR157-META-QA-CP7-START-20260705T140000+0800"
+  ],
+  "evidence_ref": "process/evidence/CR157-CP7-VERIFICATION.index.json",
+  "items": [
+    {
+      "id": "CP8-CR157-01",
+      "category": "entry",
+      "name": "CP7 verification completed with PASS_WITH_RISK and zero blockers",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP7-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-VERIFICATION.result.json",
+        "process/evidence/CR157-CP7-VERIFICATION.index.json",
+        "process/returns/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP7.return.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "CP7 decision PASS_WITH_RISK; blockers empty; forbidden_operation_count=0."
+    },
+    {
+      "id": "CP8-CR157-02",
+      "category": "release-context",
+      "name": "CR157 release context capsule generated with compact profile",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "release_artifact_profile=compact because CR157 is a standard internal framework contract slice with no install/deploy/runtime/publish authorization."
+    },
+    {
+      "id": "CP8-CR157-03",
+      "category": "release-decision",
+      "name": "Release decision uses READY_WITH_RISK and does not claim RELEASED",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.yaml#release_decision",
+        "process/checkpoints/CP8-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-RELEASE-READINESS.md#待人工决策清单"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "release_decision=READY_WITH_RISK; true release execution is not authorized or executed."
+    },
+    {
+      "id": "CP8-CR157-04",
+      "category": "authorization-boundary",
+      "name": "No real runtime, data, credential, store, registry, publish, broker or remote operation is authorized",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.yaml#non_authorized_items",
+        "process/evidence/CR157-CP7-VERIFICATION.index.json#boundary_check",
+        "process/checkpoints/CP8-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-RELEASE-READINESS.md#审批者摘要"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "User approval accepts READY_WITH_RISK only and preserves deny-by-default runtime/data/publish/trading boundary."
+    },
+    {
+      "id": "CP8-CR157-05",
+      "category": "risk-acceptance",
+      "name": "User accepted CP8 READY_WITH_RISK decisions",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP8-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-RELEASE-READINESS.md#人工审查结果",
+        "process/state/GATE-LEDGER.ndjson#CP8-CR157-RELEASE-READINESS-GATE-APPROVED-20260705T143000+0800"
+      ],
+      "owner": "user",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Accepted DQ-CP8-CR157-001..003."
+    },
+    {
+      "id": "CP8-CR157-06",
+      "category": "release-documents",
+      "name": "Compact release documents generated for CR157",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "docs/release/RELEASE-NOTES-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md",
+        "docs/release/DEPLOY-CHECKLIST-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md",
+        "docs/release/ROLLBACK-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md",
+        "docs/release/MIGRATION-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md",
+        "docs/release/FEEDBACK-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "Docs are scoped to readiness; no deploy/runtime/publish action is included."
+    },
+    {
+      "id": "CP8-CR157-07",
+      "category": "index-hygiene",
+      "name": "CR index remains JSON-only",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-INDEX.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "process/changes/CR-INDEX.yaml and .yml are absent."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "release_decision": "READY_WITH_RISK",
+  "manual_gate_status": "approved",
+  "accepted_human_decisions": [
+    "DQ-CP8-CR157-001",
+    "DQ-CP8-CR157-002",
+    "DQ-CP8-CR157-003"
+  ],
+  "pending_human_decisions": [],
+  "risk_acceptance": {
+    "decision_id": "DQ-CP8-CR157-001",
+    "decision_type": "risk_acceptance",
+    "status": "accepted",
+    "risk_ids": [
+      "R-CR157-CP7-STATIC-FIXTURE-ONLY"
+    ],
+    "audit_note_ids": [
+      "R-CR157-CP7-TEST-STRATEGY-SCOPING"
+    ],
+    "recommended_outcome": "accept CP7 PASS_WITH_RISK and close CR157 local/static/fixture Stage 2 framework first slice as READY_WITH_RISK",
+    "reject_route": "CR157_NOT_READY_OR_RETURN_TO_CP7_OR_CP6_REWORK",
+    "accepted_at": "2026-07-05T14:30:00+08:00",
+    "accepted_by": "user",
+    "accepted_risk_ids": [
+      "R-CR157-CP7-STATIC-FIXTURE-ONLY"
+    ]
+  },
+  "not_authorized": [
+    "true_release_execution_publish_production_deployment_or_live_enablement",
+    "real_lake_nas_provider_access_or_credential_env_session_read",
+    "qmt_miniqmt_xtquant_gateway_runtime_simulation_paper_live_trading_broker_operation",
+    "catalog_store_registry_model_prediction_write",
+    "external_framework_clone_install_run",
+    "git_remote_write",
+    "runtime_data_publish_trading_readiness_claim"
+  ],
+  "next_route": "CR157_CLOSED_READY_WITH_RISK",
+  "risk_refs": [
+    "R-CR157-CP7-STATIC-FIXTURE-ONLY",
+    "R-CR157-CP7-TEST-STRATEGY-SCOPING"
+  ],
+  "follow_up_refs": [
+    "DF-CR157-001",
+    "DF-CR157-002",
+    "FU-CR157-TEST-STRATEGY-SCOPING"
+  ],
+  "updated_at": "2026-07-05T14:30:00+08:00",
+  "approved_at": "2026-07-05T14:30:00+08:00",
+  "approved_by": "user",
+  "approved_via": "user_cp8_review_acceptance",
+  "accepted_risk_ids": [
+    "R-CR157-CP7-STATIC-FIXTURE-ONLY"
+  ]
+}

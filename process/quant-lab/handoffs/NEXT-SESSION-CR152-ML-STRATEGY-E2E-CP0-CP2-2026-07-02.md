@@ -50,9 +50,9 @@ context_policy:
   allowed_reads:
     - "process/state/STATE.current.json"
     - "process/STATE.md"
-    - "process/changes/CR-151.md"
+    - "process/changes/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.md"
     - "process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.json"
-    - "process/release/RELEASE-CONTEXT-CR151.yaml"
+    - "process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml"
     - "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md"
     - "docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md"
     - "docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md"
@@ -63,9 +63,9 @@ context_policy:
     - "docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md"
   read_if_needed:
     - "docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md"
-    - "process/changes/CR-151.md"
+    - "process/changes/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.md"
     - "process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.json"
-    - "process/release/RELEASE-CONTEXT-CR151.yaml"
+    - "process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml"
     - "engine/strategy_admission_statistical_gate.py"
     - "engine/strategy_admission_package.py"
     - "engine/mature_multifactor_research.py"
@@ -208,9 +208,9 @@ Expected pytest result from the previous session: `20 passed`.
   - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
   - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
   - docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
-  - process/changes/CR-151.md
+  - process/changes/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.md
   - process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.json
-  - process/release/RELEASE-CONTEXT-CR151.yaml
+  - process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml
 
 先运行：
   uv run --python 3.11 meta-flow workspace check --project-root /home/hyde/workspace/quant-lab

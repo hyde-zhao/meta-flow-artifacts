@@ -8,7 +8,7 @@ created_at: "2026-07-02T08:50:00+08:00"
 checked_at: "2026-07-02T08:50:00+08:00"
 reviewed_by: "user"
 reviewed_at: "2026-07-02T09:05:00+08:00"
-release_context_ref: "process/release/RELEASE-CONTEXT-CR151.yaml"
+release_context_ref: "process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml"
 result_ref: "process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.json"
 manual_checkpoint: "process/checkpoints/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.md"
 ---
@@ -21,7 +21,7 @@ manual_checkpoint: "process/checkpoints/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL
 |---|---|---|---|
 | CP7 verification complete | PASS | `process/checks/CP7-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-VERIFICATION.result.json` | CP7 historical decision is `PASS_WITH_RISK`; R01/R02 process evidence risks are now closed before CP8. |
 | Canonical TEST-STRATEGY present | PASS | `docs/quality/TEST-STRATEGY.md` | Static-only strategy and non-authorized boundaries are documented. |
-| Release context generated | PASS | `process/release/RELEASE-CONTEXT-CR151.yaml` | Minimal release profile. |
+| Release context generated | PASS | `process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml` | Minimal release profile. |
 | Process route healthy | PASS | `meta-flow workspace check` | process link health OK; artifact git dirty due generated evidence. |
 
 ## Checklist
@@ -47,7 +47,7 @@ manual_checkpoint: "process/checkpoints/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL
 
 | 交付物 | 路径 | 状态 | 说明 |
 |---|---|---|---|
-| Release context | `process/release/RELEASE-CONTEXT-CR151.yaml` | PASS | Minimal profile. |
+| Release context | `process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml` | PASS | Minimal profile. |
 | CP8 result JSON | `process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.json` | PASS | Machine truth source. |
 | CP8 manual checkpoint | `process/checkpoints/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.md` | PASS | User approval recorded. |
 | Canonical test strategy | `docs/quality/TEST-STRATEGY.md` | PASS | Closes R01. |

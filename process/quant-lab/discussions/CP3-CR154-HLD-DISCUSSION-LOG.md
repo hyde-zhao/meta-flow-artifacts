@@ -23,8 +23,8 @@ This log records the Architecture Gray Areas used to form the CR154 HLD before C
 | Input | Path | Use |
 |---|---|---|
 | CP3 capsule | `process/context/CP3-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-HLD-CONTEXT.yaml` | Required CP3 constraints, AGQ list, no-runtime boundary. |
-| CR summary | `process/changes/summaries/CR-154.summary.json` | Lightweight CR state and CP3 design constraints. |
-| CR body | `process/changes/CR-154.md` | Approved CP2 scope and hard CP3 design constraints. |
+| CR summary | `process/changes/summaries/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.summary.json` | Lightweight CR state and CP3 design constraints. |
+| CR body | `process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.md` | Approved CP2 scope and hard CP3 design constraints. |
 | CP2 checkpoint | `process/checkpoints/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.md` | Accepted CP2 decisions and no-runtime/no-real-data boundary. |
 | UC baseline expansion | `process/USE-CASES.md#UC-58`, `#UC-59`, `#UC-60` | Required because CP3-DC-CR154-002 needs UC traceability and the capsule points to legacy `process/USE-CASES.md`. |
 | REQ anchor expansion | `process/REQUIREMENTS.md` selected rows | Required because CP3-DC-CR154-002 requires visible REQ anchor policy. |

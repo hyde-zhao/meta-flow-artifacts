@@ -18,7 +18,7 @@ summary_ref: "process/checks/CP4-CR154-STORY-DAG-PARALLEL-SAFETY.result.summary.
 | CP3 approved | PASS | `process/checkpoints/CP3-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-HLD-REVIEW.md` |
 | HLD / ADR approved | PASS | `process/docs/design/HLD-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md`, `process/docs/design/ARCHITECTURE-DECISION-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md` |
 | CP4 review findings available | PASS | User-provided CR154 Story split review in current session |
-| Story planning artifacts exist | PASS | `process/STORY-BACKLOG-CR154.md`, `process/DEVELOPMENT-PLAN-CR154.yaml`, `process/STORY-STATUS-CR154.md` |
+| Story planning artifacts exist | PASS | `process/STORY-BACKLOG-CR154-CROSS-STRATEGY-RELIABILITY-GATES.md`, `process/DEVELOPMENT-PLAN-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml`, `process/STORY-STATUS-CR154-CROSS-STRATEGY-RELIABILITY-GATES.md` |
 
 ## Checklist
 
@@ -47,9 +47,9 @@ summary_ref: "process/checks/CP4-CR154-STORY-DAG-PARALLEL-SAFETY.result.summary.
 |---|---|---|
 | Feature design matrix increment | complete | `process/docs/design/FEATURE-DESIGN-MATRIX.md` |
 | Feature design docs | complete | `process/docs/features/cross-strategy-reliability-gates/` |
-| Story backlog | complete | `process/STORY-BACKLOG-CR154.md` |
-| Story status | complete | `process/STORY-STATUS-CR154.md` |
-| Development plan | complete | `process/DEVELOPMENT-PLAN-CR154.yaml` |
+| Story backlog | complete | `process/STORY-BACKLOG-CR154-CROSS-STRATEGY-RELIABILITY-GATES.md` |
+| Story status | complete | `process/STORY-STATUS-CR154-CROSS-STRATEGY-RELIABILITY-GATES.md` |
+| Development plan | complete | `process/DEVELOPMENT-PLAN-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` |
 | Story cards | complete | `process/stories/CR154-S01-*.md` through `CR154-S08-*.md` |
 | CP4 result JSON | PASS | `process/checks/CP4-CR154-STORY-DAG-PARALLEL-SAFETY.result.json` |
 

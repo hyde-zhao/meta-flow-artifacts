@@ -17,7 +17,7 @@ summary_ref: "process/checks/CP4-CR153-STORY-DAG-PARALLEL-SAFETY.result.summary.
 |---|---|---|
 | CP3 approved | PASS | `process/checkpoints/CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-REVIEW.md` |
 | HLD / ADR approved and aligned to v0.2 | PASS | `process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md`, `process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md` |
-| Story planning artifacts exist | PASS | `process/STORY-BACKLOG-CR153.md`, `process/DEVELOPMENT-PLAN-CR153.yaml`, `process/STORY-STATUS-CR153.md` |
+| Story planning artifacts exist | PASS | `process/STORY-BACKLOG-CR153-EVENT-DRIVEN-STRATEGY-E2E.md`, `process/DEVELOPMENT-PLAN-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml`, `process/STORY-STATUS-CR153-EVENT-DRIVEN-STRATEGY-E2E.md` |
 
 ## Checklist
 
@@ -43,9 +43,9 @@ summary_ref: "process/checks/CP4-CR153-STORY-DAG-PARALLEL-SAFETY.result.summary.
 
 | Deliverable | Status | Path |
 |---|---|---|
-| Story backlog | complete | `process/STORY-BACKLOG-CR153.md` |
-| Story status | complete | `process/STORY-STATUS-CR153.md` |
-| Development plan | complete | `process/DEVELOPMENT-PLAN-CR153.yaml` |
+| Story backlog | complete | `process/STORY-BACKLOG-CR153-EVENT-DRIVEN-STRATEGY-E2E.md` |
+| Story status | complete | `process/STORY-STATUS-CR153-EVENT-DRIVEN-STRATEGY-E2E.md` |
+| Development plan | complete | `process/DEVELOPMENT-PLAN-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml` |
 | Story cards | complete | `process/stories/CR153-S01-*.md` through `CR153-S05-*.md` |
 | CP4 result JSON | PASS | `process/checks/CP4-CR153-STORY-DAG-PARALLEL-SAFETY.result.json` |
 

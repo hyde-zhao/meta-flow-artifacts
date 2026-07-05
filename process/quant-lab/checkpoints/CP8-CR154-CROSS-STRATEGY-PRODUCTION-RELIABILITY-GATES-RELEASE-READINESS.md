@@ -8,14 +8,14 @@ created_at: "2026-07-03T07:45:32+08:00"
 approved_at: "2026-07-03T09:03:11+08:00"
 approved_by: "user"
 auto_check_result: "process/checks/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.result.summary.md"
-release_context_ref: "process/release/RELEASE-CONTEXT-CR154.yaml"
+release_context_ref: "process/release/RELEASE-CONTEXT-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml"
 result_ref: "process/checks/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.result.json"
 target:
   phase: "cr154-release-readiness"
   workflow_id: "ROADMAP-QUANT-RESEARCH-PRODUCTION"
   active_change: "CR-154"
   artifacts:
-    - "process/release/RELEASE-CONTEXT-CR154.yaml"
+    - "process/release/RELEASE-CONTEXT-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml"
     - "process/checks/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.result.json"
     - "process/checks/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.result.summary.md"
     - "process/checks/CP8-CR154-HUMAN-GATE-LAUNCH-MESSAGE.md"
@@ -33,7 +33,7 @@ target:
 | 预检文件 | 结论 | 阻断项 | 说明 |
 |---|---|---:|---|
 | `process/checks/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.result.json` | PASS / READY_WITH_RISK approved | 0 | CR154 local/static/fixture reliability gates evidence complete; `DEC-CR154-CP8-001` accepted. |
-| `process/release/RELEASE-CONTEXT-CR154.yaml` | READY_WITH_RISK approved | 0 | Compact profile; no install, deployment, migration, runtime, real data, registry write or trading operation. |
+| `process/release/RELEASE-CONTEXT-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | READY_WITH_RISK approved | 0 | Compact profile; no install, deployment, migration, runtime, real data, registry write or trading operation. |
 
 ## Decision Brief
 
@@ -60,7 +60,7 @@ target:
 
 | 字段 | 内容 |
 |---|---|
-| capsule 路径 | `process/release/RELEASE-CONTEXT-CR154.yaml` |
+| capsule 路径 | `process/release/RELEASE-CONTEXT-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` |
 | release_artifact_profile | `compact` |
 | read_profile | compact |
 | 默认读取策略 | release context first；消费 CP7 result、CP7 evidence、CP7 return packet、CP6 result/evidence、CR summary 和最小状态摘要。 |
@@ -75,8 +75,8 @@ target:
 | CP7 result | `process/checks/CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION.result.json` | scanned | 3 | 1 | `PASS_WITH_RISK` 与 CP7 原始 3 个风险项进入 `DEC-CR154-CP8-001`；CP8 QA sidecar 追加 2 个 release-readiness 风险项。 |
 | CP7 evidence index | `process/evidence/CR154-CP7-VERIFICATION.index.json` | scanned | 3 | 1 | semantic boundary、probe results、forbidden operation count 汇入 release boundary。 |
 | CP8 QA sidecar | `ADE-CR154-META-QA-CRITICAL-CP8-START-20260703T074532+0800` | scanned | 3 | 1 | 建议 `compact` profile，补充 admission/default policy 与 capacity/reconciliation interpretation 风险。 |
-| CR summary | `process/changes/summaries/CR-154.summary.json` | scanned | 2 | 1 | CR154 当前为 active CP8 release readiness，no-runtime/no-real-data boundary preserved。 |
-| Release context | `process/release/RELEASE-CONTEXT-CR154.yaml` | scanned | 5 | 1 | release decision、non-authorized items、forbidden release claims and follow-up split represented. |
+| CR summary | `process/changes/summaries/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.summary.json` | scanned | 2 | 1 | CR154 当前为 active CP8 release readiness，no-runtime/no-real-data boundary preserved。 |
+| Release context | `process/release/RELEASE-CONTEXT-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | scanned | 5 | 1 | release decision、non-authorized items、forbidden release claims and follow-up split represented. |
 | Git status summary | source repo status | scanned | 1 | 1 | untracked new CR154 source/test files are risk acceptance and actual publish blocker until included. |
 
 ### 待人工决策清单
@@ -112,7 +112,7 @@ target:
 |---|---|---|---|---|---|
 | 关闭范围 | CLOSE-CR154-001 | pending | 等待用户 CP8 approve | 本文件 | CR154 local/static/fixture Cross-Strategy Production Reliability Gates first wave。 |
 | 风险接受项 | DEC-CR154-CP8-001 | pending | 用户待确认 | 本文件 | 覆盖 CP6 return path warning、untracked file packaging hygiene、fixture-only boundary。 |
-| 后续候选项 | FU-CR154-001 | candidate | CP8 后作为 packaging hygiene 跟踪 | `process/release/RELEASE-CONTEXT-CR154.yaml#follow_up_summary` | 确保新 CR154 源码和测试进入最终 git add / commit。 |
+| 后续候选项 | FU-CR154-001 | candidate | CP8 后作为 packaging hygiene 跟踪 | `process/release/RELEASE-CONTEXT-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml#follow_up_summary` | 确保新 CR154 源码和测试进入最终 git add / commit。 |
 | 后续 CR 候选项 | CR154-DATA-RUNTIME-FUTURE | candidate | future CR only | future CR | 若需要连接真实 lake/NAS/provider/runtime/broker/feed/order/reconciliation/store/catalog/registry/publish，必须重新走授权门。 |
 | Deferred 授权项 | RUNTIME-DATA-AUTHORIZATION-FUTURE | deferred | 不进入当前范围 | future CR | 真实数据、runtime、broker、feed、order、reconciliation、store/catalog/registry、publish 必须另起授权 CR。 |
 | 取消 / deferred | CR154-TRUE-RELEASE-EXECUTION | deferred | 本轮不执行 | N/A | CP8 readiness 不等于 `RELEASED`，不执行 publish、push、production deployment 或 live enablement。 |
@@ -122,7 +122,7 @@ target:
 | 条目 | 状态 | 证据 | 审查意见 |
 |---|---|---|---|
 | CP7 verification completed | PASS | `process/checks/CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION.result.json` | CP7 `PASS_WITH_RISK`, blocker=0. |
-| Release context generated | PASS | `process/release/RELEASE-CONTEXT-CR154.yaml` | Minimal profile. |
+| Release context generated | PASS | `process/release/RELEASE-CONTEXT-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | Minimal profile. |
 | CP8 result generated | PASS | `process/checks/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.result.json` | `release_decision=READY_WITH_RISK`. |
 | Human decision item present | PASS | `DEC-CR154-CP8-001` | Risk acceptance pending. |
 
@@ -148,7 +148,7 @@ target:
 
 | 交付物 | 路径 | 审查结果 | 审查意见 |
 |---|---|---|---|
-| Release context | `process/release/RELEASE-CONTEXT-CR154.yaml` | PASS | READY_WITH_RISK approved. |
+| Release context | `process/release/RELEASE-CONTEXT-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | PASS | READY_WITH_RISK approved. |
 | CP8 result JSON | `process/checks/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.result.json` | PASS | Auto result generated. |
 | CP8 result summary | `process/checks/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.result.summary.md` | PASS | Scoped summary. |
 | Release notes | `process/docs/release/RELEASE-NOTES-CR154.md` | PASS | Compact CR-specific release notes. |

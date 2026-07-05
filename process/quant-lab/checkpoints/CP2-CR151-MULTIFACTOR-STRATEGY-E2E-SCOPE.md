@@ -12,7 +12,7 @@ target:
   phase: "requirement-clarification"
   cr_id: "CR-151"
   artifacts:
-    - "process/changes/CR-151.md"
+    - "process/changes/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.md"
     - "process/context/CP2-CR151-MULTIFACTOR-STRATEGY-E2E-SCOPE-CONTEXT.yaml"
     - "docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md"
 ---
@@ -23,7 +23,7 @@ target:
 
 | 条目 | 状态 | 证据 | 说明 |
 |---|---|---|---|
-| CR151 formal CR exists | PASS | `process/changes/CR-151.md` | `lifecycle_status=active`，`gate_status=cp2_pending`。 |
+| CR151 formal CR exists | PASS | `process/changes/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.md` | `lifecycle_status=active`，`gate_status=cp2_pending`。 |
 | CP0 bootstrap result exists | PASS | `process/checks/CP0-CR151-BOOTSTRAP.result.json` | CP0 decision PASS。 |
 | Route A is documented | PASS | `docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md` | 用户选择先补齐本地策略框架，数据湖生产闭环后置。 |
 | Scope remediation plan exists | PASS | `docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md` | CR151 wave split and method baseline are documented. |
@@ -33,8 +33,8 @@ target:
 | # | 检查项 | 状态 | 证据 | 处理意见 |
 |---|---|---|---|---|
 | 1 | CR151 是否只覆盖本地/static/fixture 多因子统计准入框架 | PASS | `process/context/CP2-CR151-MULTIFACTOR-STRATEGY-E2E-SCOPE-CONTEXT.yaml` | 建议 approve。 |
-| 2 | 是否已明确 CP2 前不得 Story 拆解、LLD 或实现 | PASS | `process/changes/summaries/CR-151.summary.json` | 建议 approve。 |
-| 3 | 是否没有授权真实 lake/NAS/provider/QMT/runtime/trading/broker/credential/external framework | PASS | `process/changes/CR-151.md#不授权范围` | 建议 approve。 |
+| 2 | 是否已明确 CP2 前不得 Story 拆解、LLD 或实现 | PASS | `process/changes/summaries/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.summary.json` | 建议 approve。 |
+| 3 | 是否没有授权真实 lake/NAS/provider/QMT/runtime/trading/broker/credential/external framework | PASS | `process/changes/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.md#不授权范围` | 建议 approve。 |
 | 4 | 是否已将 Wave A 与 Wave B 候选拆开 | PASS | `docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md` | 建议 approve Wave A first。 |
 
 ## Exit Criteria
@@ -49,7 +49,7 @@ target:
 
 | 交付物 | 路径 | 状态 | 说明 |
 |---|---|---|---|
-| CR151 formal CR | `process/changes/CR-151.md` | PASS | 已补项目级范围。 |
+| CR151 formal CR | `process/changes/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.md` | PASS | 已补项目级范围。 |
 | CP2 context capsule | `process/context/CP2-CR151-MULTIFACTOR-STRATEGY-E2E-SCOPE-CONTEXT.yaml` | PASS | compact profile。 |
 | CP2 result JSON | `process/checks/CP2-CR151-MULTIFACTOR-STRATEGY-E2E-SCOPE.result.json` | PASS | 待 `result-check` 校验。 |
 | CP2 human checkpoint | `process/checkpoints/CP2-CR151-MULTIFACTOR-STRATEGY-E2E-SCOPE.md` | PASS | 本文件。 |
@@ -82,7 +82,7 @@ target:
 | 来源 | 路径 / 对象 | 扫描状态 | 候选问题数 | 纳入待决策数 | 分类 / N/A 原因 |
 |---|---|---:|---:|---:|---|
 | STATE pending queue | `STATE.current.json.human_gate_decisions` | scanned | 1 | 0 | Existing RA-CR149 metadata follow-up is future data-lake decision, not CR151 scope. |
-| CR151 formal CR | `process/changes/CR-151.md` | scanned | 3 | 3 | Scope, implementation wave split, authorization boundary. |
+| CR151 formal CR | `process/changes/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.md` | scanned | 3 | 3 | Scope, implementation wave split, authorization boundary. |
 | Roadmap | `docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md` | scanned | 1 | 1 | Confirms CR151 is next recommended formal work but still requires CP0/CP2. |
 | Remediation plan | `docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md` | scanned | 2 | 2 | Confirms Wave A/B split and method source. |
 | CP2 auto result | `process/checks/CP2-CR151-MULTIFACTOR-STRATEGY-E2E-SCOPE.result.json` | scanned | 0 | 0 | PASS; no blockers. |

@@ -54,9 +54,9 @@ context_policy:
     - "process/state/STATE.current.json"
     - "process/STATE.md"
     - "process/changes/CR-INDEX.yaml"
-    - "process/changes/CR-153.md"
-    - "process/changes/summaries/CR-153.summary.json"
-    - "process/release/RELEASE-CONTEXT-CR153.yaml"
+    - "process/changes/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.md"
+    - "process/changes/summaries/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.summary.json"
+    - "process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml"
     - "process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.json"
     - "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md"
     - "docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md"
@@ -68,12 +68,12 @@ context_policy:
     - "process/state/STATE.current.json"
     - "process/STATE.md"
     - "process/changes/CR-INDEX.yaml"
-    - "process/release/RELEASE-CONTEXT-CR153.yaml"
+    - "process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml"
     - "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md"
     - "docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md"
   read_if_needed:
-    - "process/changes/CR-153.md"
-    - "process/changes/summaries/CR-153.summary.json"
+    - "process/changes/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.md"
+    - "process/changes/summaries/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.summary.json"
     - "process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.json"
     - "docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md"
     - "docs/product/USE-CASES.md"
@@ -208,9 +208,9 @@ Use this as the next prompt after clearing context:
 - process/state/STATE.current.json
 - process/STATE.md
 - process/changes/CR-INDEX.yaml
-- process/release/RELEASE-CONTEXT-CR153.yaml
-- process/changes/CR-153.md
-- process/changes/summaries/CR-153.summary.json
+- process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml
+- process/changes/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.md
+- process/changes/summaries/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.summary.json
 - process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.json
 - docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md
 - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md

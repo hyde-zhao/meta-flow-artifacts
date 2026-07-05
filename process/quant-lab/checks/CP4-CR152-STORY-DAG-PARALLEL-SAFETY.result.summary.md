@@ -4,7 +4,7 @@ Decision: PASS
 Story: -
 CR: CR-152
 Context: process/checks/CP4-CR152-STORY-DAG-PARALLEL-SAFETY.md
-Evidence: process/STORY-BACKLOG-CR152.md
+Evidence: process/STORY-BACKLOG-CR152-ML-STRATEGY-E2E-FRAMEWORK.md
 Dispatch: host-orchestrator-inline:tool-policy-no-explicit-subagent-request
 
 ## Blocking Items

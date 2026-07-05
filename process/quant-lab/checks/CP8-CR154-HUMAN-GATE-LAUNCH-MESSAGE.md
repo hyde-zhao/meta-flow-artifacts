@@ -22,7 +22,7 @@
 
 ## Context Capsule
 
-- release context: `process/release/RELEASE-CONTEXT-CR154.yaml`
+- release context: `process/release/RELEASE-CONTEXT-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml`
 - CP7 result: `process/checks/CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION.result.json`
 - CP7 evidence: `process/evidence/CR154-CP7-VERIFICATION.index.json`
 - release docs: `process/docs/release/RELEASE-NOTES-CR154.md`, `process/docs/release/DEPLOY-CHECKLIST-CR154.md`, `process/docs/release/ROLLBACK-CR154.md`, `process/docs/release/MIGRATION-CR154.md`, `process/docs/release/FEEDBACK-CR154.md`

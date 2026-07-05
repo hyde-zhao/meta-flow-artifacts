@@ -37,7 +37,7 @@ implementation_type: "technical-note-evidence-only"
 | Trace refs 只是 metadata refs。 | S05 return `trace_metadata_refs_only`；evidence index `trace_refs`。 | PASS：`event_gate_ref`、`signal_ref`、`target_ref`、`order_intent_ref`、`fixture_contract_ref` 仅作为 metadata refs，不暗示真实 order flow。 |
 | Forbidden operation counters visible and zero。 | S05 return `forbidden_operation_counters`；evidence index `boundary_check`。 | PASS：所有禁止操作计数为 `0`，对应 boundary bool 为 `false`。 |
 | CP7 target paths 只能列为未来验证目标，不得创建。 | S05 return `future_verification_targets`；evidence index `future_targets.cp7`。 | PASS：仅引用 `process/checks/CP7-CR153-S05-event-trace-evidence-wording.result.json` 和 `.summary.md`，未创建。 |
-| CP8 target paths 只能列为未来发布审查目标，不得创建。 | S05 return `future_release_targets`；evidence index `future_targets.cp8`。 | PASS：仅引用 `process/checkpoints/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.md` 与 `process/release/RELEASE-CONTEXT-CR153.yaml`，未创建。 |
+| CP8 target paths 只能列为未来发布审查目标，不得创建。 | S05 return `future_release_targets`；evidence index `future_targets.cp8`。 | PASS：仅引用 `process/checkpoints/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.md` 与 `process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml`，未创建。 |
 | `docs/release/RELEASE-NOTES.md` 当前 N/A，除非 CP8 明确要求 CR153 section。 | S05 return `release_notes_treatment`；evidence index `release_notes_treatment`。 | PASS |
 | CR154 deferred risks 显式保留。 | S05 return `cr154_deferred_risks`；evidence index `risks`。 | PASS：保留 full event CV、survivorship-free universe gate、capacity/impact、regime、reconciliation、real feed/runtime/order governance。 |
 

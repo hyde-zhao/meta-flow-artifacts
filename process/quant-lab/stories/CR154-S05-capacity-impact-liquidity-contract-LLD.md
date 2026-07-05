@@ -39,7 +39,7 @@ open_items: 0
 | Feature DESIGN | `process/docs/features/cross-strategy-reliability-gates/DESIGN.md` | Gate 4 必须定义 ADV participation、capacity dollars、cost-underestimation status、liquidity sizing refs、impact enum 和 Gate 3/4 到 Gate 1 的 propagation。 |
 | Feature TEST-PLAN | `process/docs/features/cross-strategy-reliability-gates/TEST-PLAN.md` | S05 fixture 必须覆盖 allowed enum、custom rationale、invalid enum、cost-underestimation blocked、no-real-TCA wording。 |
 | Feature TASKS | `process/docs/features/cross-strategy-reliability-gates/TASKS.md` | `CR154-T05` 是本 Story 的设计任务；未来实现候选文件是 `engine/cross_strategy_reliability_gates.py` 与 `tests/research/test_cross_strategy_reliability_gates.py`。 |
-| Development Plan | `process/DEVELOPMENT-PLAN-CR154.yaml` | W2 gate policies 可并行 LLD；实现阶段 shared file 合并必须串行；不授权源码实现、测试实现或真实数据/runtime/broker/TCA。 |
+| Development Plan | `process/DEVELOPMENT-PLAN-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | W2 gate policies 可并行 LLD；实现阶段 shared file 合并必须串行；不授权源码实现、测试实现或真实数据/runtime/broker/TCA。 |
 
 ## 1. Goal
 

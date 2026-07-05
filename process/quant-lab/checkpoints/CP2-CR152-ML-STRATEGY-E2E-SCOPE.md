@@ -12,7 +12,7 @@ target:
   phase: "requirement-clarification"
   cr_id: "CR-152"
   artifacts:
-    - "process/changes/CR-152.md"
+    - "process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-2026-07-02.md"
     - "process/context/CP2-CR152-ML-STRATEGY-E2E-SCOPE-CONTEXT.yaml"
     - "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md"
     - "docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md"
@@ -24,7 +24,7 @@ target:
 
 | 条目 | 状态 | 证据 | 说明 |
 |---|---|---|---|
-| CR152 formal CR exists | PASS | `process/changes/CR-152.md` | `lifecycle_status=active`，`gate_status=cp2_pending`。 |
+| CR152 formal CR exists | PASS | `process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-2026-07-02.md` | `lifecycle_status=active`，`gate_status=cp2_pending`。 |
 | CP0 request intake passed | PASS | `process/checks/CP0-CR152-ML-STRATEGY-E2E-REQUEST-INTAKE.result.json` | CP0 decision PASS。 |
 | CP1 use-case completeness passed | PASS | `process/checks/CP1-CR152-ML-STRATEGY-E2E-USE-CASE-COMPLETENESS.result.json` | 基于既有 UC-59 / roadmap / remediation plan 增量通过。 |
 | CR151 baseline closed | PASS | `process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.json` | CR151 closed as READY_WITH_RISK；STATE v2 hygiene accepted as process caveat。 |
@@ -40,7 +40,7 @@ target:
 | 5 | statistical gate opt-in / 强制时机是否进入待决策项 | PASS | `DQ-CP2-CR152-STAT-GATE-OPT-IN` | 建议 CR152 继续 opt-in，强制默认留给 CR154 / governance。 |
 | 6 | label policy 是否预留 triple_barrier / meta_label 扩展位 | PASS | `DQ-CP2-CR152-LABEL-POLICY-EXTENSIBILITY` | 建议预留枚举和 spec slot，不实现算法。 |
 | 7 | fixture data contract 是否足以支持 purged + embargo CV 验证 | PASS | `DQ-CP2-CR152-FIXTURE-DATA-CONTRACT` | 建议作为 first-wave 隐含 prerequisite 显式确认。 |
-| 8 | 是否没有授权真实 lake/NAS/provider/QMT/runtime/trading/broker/credential/external framework | PASS | `process/changes/CR-152.md#不授权范围` | 建议 approve。 |
+| 8 | 是否没有授权真实 lake/NAS/provider/QMT/runtime/trading/broker/credential/external framework | PASS | `process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-2026-07-02.md#不授权范围` | 建议 approve。 |
 
 ## Exit Criteria
 
@@ -55,8 +55,8 @@ target:
 
 | 交付物 | 路径 | 状态 | 说明 |
 |---|---|---|---|
-| CR152 formal CR | `process/changes/CR-152.md` | PASS | 已创建并记录五维影响分析。 |
-| CR152 summary | `process/changes/summaries/CR-152.summary.json` | PASS | state-router / cr-tracking 轻量入口。 |
+| CR152 formal CR | `process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-2026-07-02.md` | PASS | 已创建并记录五维影响分析。 |
+| CR152 summary | `process/changes/summaries/CR-152-ML-STRATEGY-E2E-FRAMEWORK-2026-07-02.summary.json` | PASS | state-router / cr-tracking 轻量入口。 |
 | CP0 result | `process/checks/CP0-CR152-ML-STRATEGY-E2E-REQUEST-INTAKE.result.json` | PASS | request intake。 |
 | CP1 result | `process/checks/CP1-CR152-ML-STRATEGY-E2E-USE-CASE-COMPLETENESS.result.json` | PASS | 增量 use-case completeness。 |
 | CP2 context capsule | `process/context/CP2-CR152-ML-STRATEGY-E2E-SCOPE-CONTEXT.yaml` | PASS | compact profile。 |

@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-157",
+  "story_id": "CR157-S01..S05",
+  "status": "verified-with-risk",
+  "decision": "PASS_WITH_RISK",
+  "created_at": "2026-07-05T14:00:00+08:00",
+  "created_by": "meta-qa",
+  "context_ref": "process/context/CP7-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-VERIFICATION-CONTEXT.yaml",
+  "dispatch_refs": [
+    "ADE-CR157-META-QA-CP7-START-20260705T140000+0800"
+  ],
+  "verification_report_ref": "docs/quality/VERIFICATION-REPORT-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md",
+  "cp6_result_ref": "process/checks/CP6-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-IMPLEMENTATION.result.json",
+  "cp6_return_ref": "process/returns/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP6.return.json",
+  "cp6_evidence_ref": "process/evidence/CR157-CP6-IMPLEMENTATION.index.json",
+  "verified_artifacts": [
+    "engine/mature_multifactor_framework.py",
+    "tests/research/test_mature_multifactor_framework_stage2.py",
+    "tests/research/test_mature_multifactor_research_stage3.py",
+    "docs/components/MULTIFACTOR-RESEARCH.md",
+    "docs/product/BACKLOG.md",
+    "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md",
+    "process/changes/CR-INDEX.json",
+    "process/state/STATE.current.json",
+    "process/state/AGENT-DISPATCH-LEDGER.ndjson",
+    "process/state/CHECKPOINT-LEDGER.ndjson",
+    "process/state/GATE-LEDGER.ndjson"
+  ],
+  "produced_files": [
+    "docs/quality/VERIFICATION-REPORT-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md",
+    "process/returns/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP7.return.json",
+    "process/evidence/CR157-CP7-VERIFICATION.index.json",
+    "process/checks/CP7-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-VERIFICATION.result.json"
+  ],
+  "verification": {
+    "validation_mode": "mixed-static-fixture",
+    "commands_run": [
+      {
+        "command": "uv run pytest -q tests/research/test_mature_multifactor_framework_stage2.py",
+        "result": "pass",
+        "summary": "27 passed in 0.05s"
+      },
+      {
+        "command": "uv run pytest -q tests/research/test_mature_multifactor_research_stage3.py",
+        "result": "pass",
+        "summary": "7 passed in 0.63s"
+      },
+      {
+        "command": "uv run --python 3.11 python -m py_compile engine/mature_multifactor_framework.py",
+        "result": "pass",
+        "summary": "module compiles"
+      },
+      {
+        "command": "git diff --check -- engine/mature_multifactor_framework.py tests/research/test_mature_multifactor_framework_stage2.py tests/research/test_mature_multifactor_research_stage3.py docs/components/MULTIFACTOR-RESEARCH.md docs/product/BACKLOG.md docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md process/checks/CP6-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-IMPLEMENTATION.result.json process/returns/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP6.return.json process/evidence/CR157-CP6-IMPLEMENTATION.index.json",
+        "result": "pass",
+        "summary": "no whitespace errors"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-IMPLEMENTATION.result.json --project-root . --mode silent",
+        "result": "pass",
+        "summary": "CP6 result-check returned PASS"
+      }
+    ],
+    "tests": [
+      "test_stage2_12_mature_package_ref_set_covers_required_stage2_exit_refs",
+      "test_stage2_13_research_evidence_items_are_refs_only_and_unique",
+      "test_stage2_14_stage3_handoff_readiness_fails_closed_on_missing_package_or_unknown_status",
+      "test_stage2_15_every_forbidden_operation_counter_blocks_no_lake_boundary"
+    ],
+    "manual_static_checks": [
+      "CP6 result/return/evidence parse and are internally linked",
+      "mature package ref set contains required Stage 2 exit refs",
+      "ResearchEvidenceItem and ResearchEvidenceIndex validation are refs-only",
+      "Stage2/Stage3 handoff readiness fails closed on missing package or unknown readiness status",
+      "FORBIDDEN_OPERATION_COUNTERS contains 13 counters and each is covered by parametrized guard test",
+      "docs/backlog/roadmap avoid runtime/publish/trading overclaim",
+      "DF-CR157-001 and DF-CR157-002 remain deferred/follow-up only",
+      "process/changes/CR-INDEX.yaml and CR-INDEX.yml are absent; CR-INDEX.json is the sole index",
+      "state and ledger refs are sufficient for CP7 audit"
+    ],
+    "skipped": [
+      {
+        "scope": "real lake / NAS / provider / credential / QMT / gateway / runtime / simulation / paper / live / trading / broker / catalog / store / registry / publish / external framework / Git remote",
+        "reason": "explicitly not authorized by CP5 and CP7 context; static/fixture verification is sufficient for CR157 first slice"
+      }
+    ]
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "real_lake_read_executed": false,
+    "real_lake_write_executed": false,
+    "nas_operation_executed": false,
+    "provider_fetch_executed": false,
+    "credential_read_executed": false,
+    "qmt_or_gateway_runtime_executed": false,
+    "simulation_paper_live_executed": false,
+    "trading_or_broker_executed": false,
+    "catalog_store_registry_write_executed": false,
+    "publish_executed": false,
+    "external_framework_run_executed": false,
+    "git_remote_write_executed": false,
+    "forbidden_operation_count": 0
+  },
+  "open_questions": [],
+  "blockers": [],
+  "risks": [
+    {
+      "id": "R-CR157-CP7-STATIC-FIXTURE-ONLY",
+      "status": "cp8_risk_acceptance_required",
+      "severity": "medium",
+      "summary": "CP7 verifies local/static/fixture contracts only; real data/runtime/publish/paper/live/trading readiness remains unauthorized and out of scope."
+    },
+    {
+      "id": "R-CR157-CP7-TEST-STRATEGY-SCOPING",
+      "status": "process_hygiene_followup_candidate",
+      "severity": "low",
+      "summary": "Existing docs/quality/TEST-STRATEGY.md is CR151-scoped; CR157 scoped test strategy is recorded in the CP7 verification report."
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp8_with_risk_acceptance"
+}

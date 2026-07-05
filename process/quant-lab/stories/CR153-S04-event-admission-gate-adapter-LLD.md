@@ -38,8 +38,8 @@ open_items: 0
 | Story | `process/stories/CR153-S04-event-admission-gate-adapter.md` | 目标、验收标准、文件所有权、依赖 Story、full-lld 要求和 no-runtime 声明。 |
 | HLD | `process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md` | Event-specific admission gate、shared four-state adapter、StrategyAdmissionPackage linkage、forbidden operation counters、metadata no-store/no-runtime 边界。 |
 | ADR | `process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md` | ADR-CR153-001 event-specific gate + shared adapter；ADR-CR153-002 metadata is not store/catalog/registry；ADR-CR153-004 deterministic fixture-only validation。 |
-| Story Backlog | `process/STORY-BACKLOG-CR153.md` | S04 Wave、DAG、acceptance criteria、file ownership、S05 downstream dependency。 |
-| Development Plan | `process/DEVELOPMENT-PLAN-CR153.yaml` | `CR153-W4-EVENT-GATE` entry conditions、primary files、merge order、validation command and forbidden operations。 |
+| Story Backlog | `process/STORY-BACKLOG-CR153-EVENT-DRIVEN-STRATEGY-E2E.md` | S04 Wave、DAG、acceptance criteria、file ownership、S05 downstream dependency。 |
+| Development Plan | `process/DEVELOPMENT-PLAN-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml` | `CR153-W4-EVENT-GATE` entry conditions、primary files、merge order、validation command and forbidden operations。 |
 | Existing package source | `engine/strategy_admission_package.py` | `AdmissionStatus` package semantics、blocked reasons、not-authorized counters、CR151/CR152 attach helper pattern。 |
 | CR151 gate source | `engine/strategy_admission_statistical_gate.py` | `PASS / FAIL / NEEDS_REVIEW / BLOCKED` gate status style and forbidden counter fail-closed pattern。 |
 | CR152 gate source | `engine/ml_strategy_admission_gate.py` | Gate summary fields: `gate_present`、`gate_required`、`gate_status`、`gate_ref`、`blocked_reasons`、`needs_review_reasons`、`evidence_refs`、`operation_counts`。 |

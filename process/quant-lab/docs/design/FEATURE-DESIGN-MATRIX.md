@@ -1,6 +1,6 @@
 ---
 status: "ready-for-cp5-review"
-version: "1.18"
+version: "1.19"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld:
   - "docs/design/HLD.md"
@@ -39,6 +39,7 @@ confirmed_at: ""
 | 1.16 | 2026-07-02 | host-orchestrator | CR153 CP3 approved 后增补 Event-Driven Strategy E2E Framework CP4：FEAT-03 下新增事件研究 first-wave Story 消费、`lld_policy`、DAG/Wave、EV-GAP-7 multiple-testing slot、CR154 deferred 边界和 no-feed/no-runtime/no-store 边界。 |
 | 1.17 | 2026-07-03 | host-orchestrator | CR154 CP3 approved 后增补 Cross-Strategy Production Reliability Gates CP4：新增 FEAT-15 cross-strategy reliability gates 三件套、8 个 Story、Gate 5 显式 Story、Phase A runnable fixture schema 归属、Gate 6 tier resolver full-lld 和 CP4/CP5 follow-through acceptance hooks。 |
 | 1.18 | 2026-07-04 | host-orchestrator | CR155 CP3 approved 后增补 Daily Multifactor Baseline Strategy Artifact CP4：新增 FEAT-16 baseline artifact 三件套、5 个 Story、readonly provenance、historical/OOS validation、admission composition、rerun consistency 和 no-runtime/no-write CP5 attention hooks。 |
+| 1.19 | 2026-07-05 | host-orchestrator | CR157 CP3 approved 后增补 Stage 2 Multifactor Research Framework Upgrade CP4：新增 FEAT-17 mature admission package、FEAT-18 research evidence traceability、FEAT-19 Stage 2/3 handoff guardrails 三件套，5 个 Story、refs-only evidence、fail-closed handoff、no-runtime guard 和 event/ML adapter deferred 边界。 |
 
 ## 适用性判定规则
 
@@ -171,8 +172,8 @@ confirmed_at: ""
 | CR152 Story 均有 FEAT-03 / FEAT-07 / FEAT-08 归属和 `lld_policy` | PASS | 本节 `Feature 归属与 lld_policy` |
 | first-wave / later-wave 边界显式化 | PASS | 本节 `CR152 First-Wave / Later-Wave 边界` |
 | CP5 triple_barrier enforcement 约束显式化 | PASS | S01 说明 + Later-Wave 边界 |
-| CP4 不授权实现、真实训练、真实数据、registry write 或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR152.yaml#authorization_boundary` |
-| CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR152.yaml#lld_design_batch` |
+| CP4 不授权实现、真实训练、真实数据、registry write 或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml#authorization_boundary` |
+| CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml#lld_design_batch` |
 
 ## CR153 CP4 增量：Event-Driven Strategy E2E Framework
 
@@ -212,8 +213,8 @@ confirmed_at: ""
 | CR153 Story 均有 FEAT-03 / FEAT-07 / FEAT-08 归属和 `lld_policy` | PASS | 本节 `Feature 归属与 lld_policy` |
 | 原始 EV-GAP-1..9 编号未被重解释 | PASS | HLD §11；本节保留 CR153 专属 Story，不改 EV-GAP 编号 |
 | EV-GAP-7 multiple testing / data snooping slot 显式化 | PASS | S02 说明 + First-Wave 边界 |
-| CP4 不授权实现、真实 feed/listener、真实数据、event store/catalog/model registry write 或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR153.yaml#authorization_boundary` |
-| CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR153.yaml#lld_design_batch` |
+| CP4 不授权实现、真实 feed/listener、真实数据、event store/catalog/model registry write 或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml#authorization_boundary` |
+| CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml#lld_design_batch` |
 
 ## CR154 CP4 增量：Cross-Strategy Production Reliability Gates
 
@@ -257,9 +258,9 @@ confirmed_at: ""
 | Gate 5 显式 Story | PASS | `CR154-S06-regime-attribution-reconciliation-slots` |
 | Phase A fixture schema 归属明确 | PASS | `CR154-S01-shared-gate-contract-fixture-skeleton` acceptance criteria |
 | Gate 6 tier resolution 独立 full-lld | PASS | `CR154-S07-admission-default-policy-tier-resolution` |
-| B1 工作量作为关键路径显式化 | PASS | S02 说明 + `process/DEVELOPMENT-PLAN-CR154.yaml#cp5_attention_items` |
-| CP4 不授权 LLD、实现、测试实现、真实数据或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR154.yaml#authorization_boundary` |
-| CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR154.yaml#lld_design_batch` |
+| B1 工作量作为关键路径显式化 | PASS | S02 说明 + `process/DEVELOPMENT-PLAN-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml#cp5_attention_items` |
+| CP4 不授权 LLD、实现、测试实现、真实数据或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml#authorization_boundary` |
+| CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml#lld_design_batch` |
 
 ## CR155 CP4 增量：Daily Multifactor Baseline Strategy Artifact
 
@@ -320,8 +321,8 @@ confirmed_at: ""
 |---|---|---|
 | CR151 Story 均有 FEAT-03 归属和 `lld_policy` | PASS | 本节 `Feature 归属与 lld_policy` |
 | Wave A / Wave B 边界显式化 | PASS | 本节 `CR151 Wave A / Wave B 边界` |
-| CP4 不授权实现或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR151.yaml#authorization_boundary` |
-| CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR151.yaml#lld_design_batch` |
+| CP4 不授权实现或 runtime | PASS | `process/DEVELOPMENT-PLAN-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml#authorization_boundary` |
+| CP5 前需全量设计证据确认 | PASS | `process/DEVELOPMENT-PLAN-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml#lld_design_batch` |
 
 ## 豁免与 N/A 说明
 
@@ -451,3 +452,49 @@ confirmed_at: ""
 | 跨边界项 T6/R1/L3/L4/F1-F4 归属明确 | PASS | §跨边界项归属 |
 | AGA 推荐方案 CP3 已确认 A1/C1/E1 | PASS | DQ-FD-CR139-01..03 confirmed-cp3 |
 | CP3 前不授权 runtime / 物理分区迁移 | PASS | REQ-247/248、Wave1 N1 后置 |
+
+## CR157 CP4 增量：Stage 2 Multifactor Research Framework Upgrade
+
+> 来源：`docs/design/HLD-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md`、`docs/design/ARCHITECTURE-DECISION-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md`、CP3 用户批准。CR157 关闭 Stage 2 first slice 中的 mature admission package builder、research evidence traceability、Stage 2/3 handoff hardening 和 no-runtime guard，不新增真实数据湖、NAS/provider、QMT/gateway、simulation/paper/live/trading、catalog/store/registry/publish 或外部框架运行授权。
+
+### Feature 归属与 lld_policy
+
+| Story ID | Owner Feature | feature_design_refs | lld_policy.required_level | trigger_reasons | CP5 设计证据 | 说明 |
+|---|---|---|---|---|---|---|
+| CR157-S01-mature-admission-package-builder-contract | FEAT-17 / FEAT-03 | `docs/features/mature-admission-package/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | shared admission package builder contract、Stage 2 exit object aggregation、fail-closed missing mandatory refs、forbidden operation counters | Story LLD | Builder 必须消费既有 FactorSpec / FactorRunSpec / label / evaluation / portfolio-risk refs，不重新实现这些对象。 |
+| CR157-S02-research-evidence-index-traceability | FEAT-18 / FEAT-13 | `docs/features/research-evidence-traceability/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | refs-only evidence index、stable evidence id、source object traceability、no embedded report body | Story LLD | Evidence index 只保存 ref/hash/status/owner，不复制完整报告、测试正文或 transcript。 |
+| CR157-S03-stage2-stage3-handoff-hardening | FEAT-19 / FEAT-14 | `docs/features/stage-handoff-guardrails/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | Stage 2 exit checklist、Stage 3 candidate admission handoff、blocked claim propagation、fail-closed handoff | Story LLD | Stage 3 只能接收 complete / blocked-with-reason 包；不能通过缺字段默认放行。 |
+| CR157-S04-no-runtime-guard-coverage | FEAT-19 / FEAT-07 | `docs/features/stage-handoff-guardrails/DESIGN.md`、`docs/features/stage-handoff-guardrails/TEST-PLAN.md`、`docs/features/runtime-authorization-safety/DESIGN.md` | full-lld | no-runtime / no-real-data / no-publish guard coverage、negative fixture matrix、operation counters | Story LLD | 所有 forbidden counters 非零必须 BLOCKED；CP4/CP5 不授权实现或运行。 |
+| CR157-S05-docs-release-backlog-alignment | FEAT-18 / FEAT-19 / FEAT-08 | `docs/features/research-evidence-traceability/TASKS.md`、`docs/features/stage-handoff-guardrails/TASKS.md` | technical-note | roadmap/component docs alignment、deferred adapter refs、release wording and backlog hygiene | Story technical note | 文档收口不得声称 event adapter、ML adapter、真实数据验证或发布能力已完成。 |
+
+### First-Slice / Deferred 边界
+
+| 范围 | 状态 | 处理 |
+|---|---|---|
+| Mature admission package builder | First slice | CR157 必做；fixture/static-only，输出 package summary、mandatory ref completeness、blocked claims 和 forbidden counters。 |
+| Research evidence index | First slice | CR157 必做；refs-only evidence traceability，禁止嵌入完整报告正文。 |
+| Stage 2 / Stage 3 handoff hardening | First slice | CR157 必做；Stage 3 只消费 complete 或 blocked-with-reason handoff。 |
+| No-runtime guard coverage | First slice | CR157 必做；覆盖 data lake/provider/QMT/runtime/trading/store/publish/external framework negative cases。 |
+| Event adapter implementation | Deferred | `DF-CR157-001`；后续 event-specific CR 才能落地。 |
+| ML adapter implementation | Deferred | `DF-CR157-002`；后续 ML-specific CR 才能落地。 |
+| Real data validation / provider fetch / publish | Not authorized | 需要独立 runtime_authorization 或正式 CR，不由 CP4/CP5 默认放行。 |
+
+### CP5 注意项
+
+| Attention ID | Story | Requirement |
+|---|---|---|
+| CP5-FOCUS-CR157-001 | CR157-S01 | 明确 mandatory Stage 2 exit refs：FactorSpec、FactorRunSpec、factor panel、label window、evaluation、portfolio/risk、admission package、evidence index。 |
+| CP5-FOCUS-CR157-002 | CR157-S01 / S02 | `missing mandatory ref`、`stale ref`、`invalid hash`、`n/a-with-reason`、`blocked claim` 的状态映射必须可机器验证。 |
+| CP5-FOCUS-CR157-003 | CR157-S02 | Evidence index 必须 refs-only，禁止复制完整统计报告、完整 TEST-MATRIX、完整 REVIEW 或会话 transcript。 |
+| CP5-FOCUS-CR157-004 | CR157-S03 | Stage 2 / Stage 3 handoff 必须 fail closed；Stage 3 不能把缺字段当作 PASS。 |
+| CP5-FOCUS-CR157-005 | CR157-S04 | Forbidden operation counters 必须覆盖 lake/NAS/provider/QMT/runtime/trading/broker/store/catalog/registry/publish/external framework/Git remote write。 |
+| CP5-FOCUS-CR157-006 | CR157-S05 | Deferred event/ML adapter 只能写 backlog/ref，不得在 release wording 中声明已实现或可运行。 |
+
+### CR157 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| CR157 Story 均有 FEAT-17 / FEAT-18 / FEAT-19 或既有安全/文档 Feature 归属 | PASS | 本节 `Feature 归属与 lld_policy` |
+| first-slice / deferred / not-authorized 边界显式化 | PASS | 本节 `First-Slice / Deferred 边界` |
+| CP5 注意项已覆盖 Stage 2 exit refs、refs-only evidence、fail-closed handoff 和 no-runtime guard | PASS | 本节 `CP5 注意项` |
+| CP4 不授权 LLD approval、实现、测试实现、真实数据、runtime、publish 或交易 | PASS | `process/DEVELOPMENT-PLAN-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.yaml#authorization_boundary` |

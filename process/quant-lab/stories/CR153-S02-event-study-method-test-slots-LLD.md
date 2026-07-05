@@ -34,8 +34,8 @@ open_items: 0
 | Story | `process/stories/CR153-S02-event-study-method-test-slots.md` | `EventStudyMethodSpec`、event windows、normal return model、test family slots、`multiple_testing_or_data_snooping_slot` 验收标准。 |
 | HLD | `process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md` | EV-GAP-1 / 2 / 5 / 7 覆盖要求；CR153 不实现真实 feed、listener、store、runtime 或完整统计库。 |
 | ADR | `process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md` | ADR-CR153-002 metadata-only no-store、ADR-CR153-004 deterministic fixture-only、CP5 downstream obligation for multiple-testing / data-snooping slot。 |
-| Story Backlog | `process/STORY-BACKLOG-CR153.md` | S02 文件所有权、S02/S03 字段边界、S02 Wave 和依赖关系。 |
-| Development Plan | `process/DEVELOPMENT-PLAN-CR153.yaml` | CR153-W2-METHOD-TESTS、CP5 前不允许实现、shared file merge rule、fixture-only validation plan。 |
+| Story Backlog | `process/STORY-BACKLOG-CR153-EVENT-DRIVEN-STRATEGY-E2E.md` | S02 文件所有权、S02/S03 字段边界、S02 Wave 和依赖关系。 |
+| Development Plan | `process/DEVELOPMENT-PLAN-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml` | CR153-W2-METHOD-TESTS、CP5 前不允许实现、shared file merge rule、fixture-only validation plan。 |
 | Existing source anchor | `engine/research_production_contracts.py` | 当前仓库使用 metadata-only dataclass / validator / `to_dict()` 风格，S02 不修改该文件。 |
 | Existing status anchor | `engine/strategy_admission_statistical_gate.py` | 共享四态 `PASS / FAIL / NEEDS_REVIEW / BLOCKED`、issue payload、multiple-testing report 的相邻命名参考；S02 不复用 CR151 report schema 为 event report schema。 |
 | Shape reference | `process/stories/CR152-S01-pit-feature-label-contracts-LLD.md` | 14 节 LLD 结构、字段表、测试设计、TASK-ID 和人工确认区形态。 |

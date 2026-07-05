@@ -1,0 +1,230 @@
+---
+cr_id: "CR-154"
+cr_type: "requirement-change"
+title: "Cross-Strategy Production Reliability Gates"
+lifecycle_status: "closed"
+readiness_status: "ready_with_risk"
+gate_status: "closed"
+gate_profile: "standard"
+conflict_keys:
+  - "cross-strategy-production-reliability-gates"
+  - "backtest-trap-gate"
+  - "walk-forward-oos-purged-embargo-governance"
+  - "survivorship-free-pit-universe-gate"
+  - "capacity-impact-liquidity-sizing-contracts"
+  - "strategy-admission-default-policy"
+impact_surface:
+  - "requirements"
+  - "scope"
+  - "strategy-framework"
+  - "multifactor"
+  - "machine-learning"
+  - "event-driven"
+  - "research-admission"
+  - "backtest-validation"
+  - "production-reliability"
+  - "human-gate"
+product_baseline_refresh_required: true
+product_baseline_refresh_status: "approved"
+product_baseline_refresh_completed_at: "2026-07-02T23:58:00+08:00"
+product_baseline_refresh_completion_ref: "process/checkpoints/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.md#人工审查结果"
+required_phase: "delivered"
+required_agent: ""
+required_gate: ""
+block_story_decomposition_until: "completed"
+affected_product_docs:
+  - "process/USE-CASES.md"
+  - "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md"
+  - "docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md"
+  - "docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md"
+affected_use_cases:
+  - "UC-58 multifactor strategy E2E"
+  - "UC-59 machine-learning strategy E2E"
+  - "UC-60 event-driven strategy E2E"
+authz_policy_refs:
+  - "NO_CREDENTIAL_READ"
+  - "NO_RUNTIME"
+  - "NO_PRODUCTION_WRITE"
+  - "NO_TRADING"
+  - "NO_REAL_LAKE_READ_OR_WRITE"
+  - "NO_NAS_SYNC_OR_WRITE"
+  - "NO_PROVIDER_FETCH"
+  - "NO_BROKER_WRITE"
+  - "NO_EXTERNAL_FRAMEWORK_RUN"
+  - "NO_CATALOG_POINTER_WRITE"
+risk_refs:
+  - "R-CR154-DEFERRED-001"
+  - "R-CR154-CP6-RETURN-PATH-WARN-001"
+  - "R-CR154-CP7-UNTRACKED-FILES-001"
+  - "R-CR154-FIRST-WAVE-FIXTURE-ONLY-001"
+  - "R-CR154-ADMISSION-DEFAULT-POLICY-SEMANTICS-001"
+  - "R-CR154-CAPACITY-RECONCILIATION-INTERPRETATION-001"
+closed_at: "2026-07-03T09:03:11+08:00"
+closed_by: "user"
+release_decision: "READY_WITH_RISK"
+cp8_decision_ref: "DEC-CR154-CP8-001"
+created_at: "2026-07-02T23:25:00+08:00"
+created_by: "host-orchestrator"
+source: "user"
+source_checkpoint: "process/checks/CR154-RULE41-CONFLICT-PRECHECK-2026-07-02.md"
+---
+
+# CR-154 Cross-Strategy Production Reliability Gates
+
+## 变更描述
+
+启动 CR154 Cross-Strategy Production Reliability Gates，先完成规则 41 冲突预检、CP0 受理、CP1 对 UC-58 / UC-59 / UC-60 的增量场景完备检查，以及 CP2 范围基线门。
+
+CR154 的目标是在 CR151 多因子 statistical admission、CR152 ML admission、CR153 event-driven admission 已完成 local/static/fixture first-wave foundation 后，统一补齐三类策略共用的生产可靠性门控：回测陷阱、walk-forward / OOS / purged-embargo、survivorship-free / PIT universe、capacity / market impact / liquidity sizing、regime / attribution / reconciliation slots，以及 CR151 / CR152 / CR153 admission gate 默认强制策略。
+
+本 CR 已通过 CP2 人工范围基线门、CP3 HLD / ADR 人工架构门、CP4 Story planning 自动预检、CP5 LLD batch 人工确认、CP6 implementation、CP7 verification 和 CP8 release readiness。用户已于 2026-07-03T09:03:11+08:00 接受 `DEC-CR154-CP8-001`，CR154 local/static/fixture Cross-Strategy Production Reliability Gates first wave 以 `READY_WITH_RISK` 收尾；不授权真实 runtime、真实数据、broker、feed、order、reconciliation、store/catalog/registry、publish 或交易相关工作。
+
+## 用户目标
+
+用户要求在 CR153 `READY_WITH_RISK` 闭环后，单独启动 CR154，把 CR153 CP8 接受的 deferred 横切生产可靠性风险转成可审计范围基线。当前优先级仍是本地研究 / 策略框架补齐，不是数据湖生产级闭环、真实 event feed、runtime、paper/live trading、broker、真实下单、真实数据验证、catalog/event store/model registry 发布或交易就绪。
+
+## 当前基线
+
+| 基线 | 当前事实 | 证据 |
+|---|---|---|
+| CR151 closure | CR151 已关闭为 `READY_WITH_RISK`，提供 local/static/fixture 多因子 statistical admission gate capability；默认仍为 opt-in capability。 | `process/changes/summaries/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.summary.json`、`process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml` |
+| CR152 closure | CR152 已关闭为 `READY_WITH_RISK`，提供 local/static/fixture ML strategy first-wave capability；`FU-CR152-001` 保持 candidate。 | `process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-2026-07-02.md`、`process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-FOLLOW-UP-TRACKING-2026-07-02.md` |
+| CR153 closure | CR153 已关闭为 `READY_WITH_RISK`，提供 local/static/fixture Event-Driven Strategy E2E first-wave foundation；`R-CR154-DEFERRED-001` 已在 CP8 接受。 | `process/changes/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.md`、`process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml`、`process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.json` |
+| CR tracking | 当前 active formal CRs none，blocked formal CRs none；`FU-CR152-001` 只是 candidate。 | `uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab` |
+| UC-58/59/60 baseline | 三类策略 E2E 场景已确认，横切 blocker 包括多重检验 / 数据偷窥、walk-forward / OOS、市场冲击、容量 / 流动性 sizing 等。 | `process/USE-CASES.md`、`docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md` |
+| Roadmap recommendation | roadmap / remediation plan 将 CR154 作为 CR153 后的横切生产可靠性计划。 | `docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md`、`docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md#7-横切生产可靠性计划Future-CR154` |
+
+## 范围
+
+### In Scope
+
+1. CP0 受理 CR154，记录 CR153 closed 基线、规则 41 预检、当前无 active / blocked formal CR。
+2. CP1 增量检查 UC-58 / UC-59 / UC-60，确认三类策略的横切生产可靠性 blocker 进入 CR154 CP2 范围基线。
+3. CP2 范围基线门，确认 CR154 first wave 和不授权边界。
+4. Backtest trap gate：lookahead、survivorship、data snooping、regime overfit、cost underestimation。
+5. Cross-strategy walk-forward / OOS / purged-embargo governance，覆盖 multifactor、ML、event-driven 三类策略的共享语义。
+6. Survivorship-free universe / PIT universe gate，扩展 CR153 `universe_pit_audit` 从 slot 到可审计 gate contract。
+7. Capacity / market impact / liquidity sizing contracts，包括 ADV participation、capacity dollars、impact model family、cost underestimation status。
+8. Regime / attribution / reconciliation slots：仅作为结构化 contract / refs / status，不作为真实 runtime 或 broker reconciliation。
+9. Admission default policy：决定 CR151 / CR152 / CR153 gates 从 opt-in / package-visible 走向 default-required 或 release-blocking 的条件与回退策略。
+
+### Deferred / Later Wave Candidate
+
+1. 具体 market impact 数值校准、真实 TCA 或真实成交回放。
+2. 真实 lake / feature store / event store / model registry 接入。
+3. 真实 NAS shared current truth、provider catalog、provider fetch 或多节点读取。
+4. QMT / MiniQMT / xtquant / gateway runtime、simulation、paper、live、trading 或 broker 操作。
+5. 真实 event feed / live listener / real order flow / real reconciliation。
+6. `FU-CR152-001` test taxonomy / provenance hygiene；保持 candidate，不占 CR154 执行锁。
+
+## 不授权范围
+
+- credentials / secret / account read
+- `.env` read
+- real lake read or write
+- NAS read / write / sync / restore / chmod / chgrp / metadata normalization
+- provider fetch
+- QMT / MiniQMT / xtquant / gateway runtime
+- simulation / paper / live / trading runtime
+- live event listener
+- broker read / write / submit / cancel / real account query
+- external framework clone / install / run
+- Git remote write
+- catalog pointer mutation
+- feature store / label store / event store / model registry / prediction store writes
+- real event feed execution
+- real order flow
+- real data validation
+- real reconciliation
+- true release execution / production deployment / publish
+
+## 启动约束
+
+- CP2 已于 2026-07-02T23:58:00+08:00 由用户批准；只允许进入 CP3 HLD / ADR / Architecture Gray Areas 设计。
+- CP3 已于 2026-07-03T01:05:00+08:00 由用户批准；只允许进入 CP4 Story planning。
+- CP4 Story planning 不授权 LLD、源码实现或测试实现；后续仍需 CP5 人工门。
+- CR154 保持 local/static/fixture-only，除非另开人工 runtime authorization gate。
+- CP3 必须把 `DQ-CP2-CR154-BACKTEST-TRAP-GATE` 拆成可审计统计可靠性 contract；不得只落成 trap name / status 枚举。最低输出字段或等价结构必须覆盖 multiple-testing correction refs、FDR/BH refs、White Reality Check / Hansen SPA refs、PBO / CSCV refs、DSR / Sharpe 或 IC deflation refs、trial count / effective trials、OOS split refs、purge / embargo refs、survivorship audit refs、impact / capacity refs、blocked claims 和 release-blocking reason。
+- 本 CR 不继承 CR153 CP8 的风险接受为 runtime 授权；`R-CR154-DEFERRED-001` 只是 CR154 立项输入。
+- `docs/product/USE-CASES.md` 在当前仓库不存在；本次按外置 process 的 `process/USE-CASES.md` 读取已确认 UC-58 / UC-59 / UC-60，并在 CP1/CP2 证据中记录路径差异。
+- `meta-flow check cr-tracking` 必须保持 OK；legacy warning 不阻断本 CR，但不得掩盖 active / blocked formal CR。
+
+## 五维度影响分析
+
+| 维度 | 评估问题 | 受影响对象 | 结论 | 处理动作 |
+|---|---|---|---|---|
+| 需求层 | 是否新增或重定义三类策略生产可靠性需求 | UC-58 / UC-59 / UC-60 | true | 通过 CP1 / CP2 做增量范围基线确认。 |
+| 场景层 | 是否改变三类策略端到端验收口径 | research admission、backtest validation、production reliability gates | true | CP2 确认 first wave 只覆盖 contract / gate semantics 和 static fixture validation。 |
+| 计划层 | 是否改变后续 CR / wave 顺序 | CR151 / CR152 / CR153 / CR154 / hygiene candidates | true | CR154 在 CR153 后启动；hygiene candidate 并行但不占锁；data-lake/runtime candidates 继续 deferred。 |
+| 安全层 | 是否引入运行时、凭据或外部系统权限 | lake、NAS、provider、QMT、broker、credential、external framework | true | 全部保持不授权；任何真实操作另起人工门禁。 |
+| 交付层 | 是否需要新增代码、测试、证据和 release readiness | engine contracts、admission gates、tests、process evidence | true | CP2 通过后进入 CP3/CP5，再实施本地/static/fixture 代码和验证。 |
+
+## 文档处理决策
+
+| 受影响文档 | 处理方式 | 旧基线保留方式 | 修订记录位置 | 批准状态 |
+|---|---|---|---|---|
+| `process/USE-CASES.md` | 不变 | UC-58 / UC-59 / UC-60 已确认，作为本 CR 场景输入；不整体替换旧基线 | 既有修订记录 v1.18 | CP2 approved |
+| `docs/product/USE-CASES.md` | 不变 | 路径不存在；当前项目按 `process/USE-CASES.md` 外置 process fallback 读取 | 不适用 | path-missing-recorded |
+| `docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md` | 不变 | v0.9 记录 CR154 横切生产可靠性后续顺序 | 修订记录已有 v0.9 | CP2 approved |
+| `docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md` | 不变 | v0.5 记录 Future CR154 能力清单和数据湖后置规则 | 修订记录已有 v0.5 | CP2 approved |
+| `docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md` | 不变 | 作为横切 blocker 来源；后续实施以 roadmap/remediation 编号为准 | 本文档修订记录不变 | CP2 approved |
+| `process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.md` | 新增 | N/A | 本文件 frontmatter / 正文 | active / cp6-story-execution |
+
+## 回退决策
+
+- 回退到阶段：`delivered` / no active formal CR baseline after CR153 closure。
+- 若 CP2 不通过：CR154 保持 `cp2_pending`、按用户修改重写 CP2，或取消 / 转为 candidate。
+- 若 CP2 缩小范围：只保留用户批准的 first-wave 子集，其余进入 later CR 或 deferred list。
+- 若用户要求真实 lake/NAS/provider/runtime/trading/broker/credential 能力：不并入 CR154 first wave，另起 runtime_authorization 或正式 CR。
+
+## CP2 待确认项
+
+| 决策 ID | 类型 | 推荐方案 |
+|---|---|---|
+| DQ-CP2-CR154-BACKTEST-TRAP-GATE | architecture | 建立 cross-strategy backtest trap gate，覆盖 lookahead、survivorship、data snooping、regime overfit、cost underestimation，并在 CP3 强制拆出 multiple-testing / PBO / DSR 等可审计统计工件字段；默认 fail-closed / needs-review。 |
+| DQ-CP2-CR154-CV-GOVERNANCE | architecture | 统一 walk-forward / OOS / purged-embargo governance；不让三类策略各自重建互不兼容 CV 框架。 |
+| DQ-CP2-CR154-SURVIVORSHIP-UNIVERSE-GATE | architecture | 将 PIT universe / survivorship-free universe 从 CR153 slot 扩展为共享 gate contract；真实 universe 数据仍不授权。 |
+| DQ-CP2-CR154-CAPACITY-IMPACT-GATE | implementation | 定义 ADV participation、capacity dollars、impact model family、cost-underestimation status 和 liquidity sizing refs；first wave 只做 contract/fixture semantics。 |
+| DQ-CP2-CR154-REGIME-ATTRIBUTION-RECONCILIATION-SLOTS | implementation | 定义 regime / attribution / reconciliation slots，不执行真实 runtime/broker reconciliation。 |
+| DQ-CP2-CR154-ADMISSION-GATE-DEFAULT-POLICY | architecture | 决定 CR151/CR152/CR153 gates 从 opt-in / package-visible 到 default-required / release-blocking 的条件、例外和回退。 |
+| DQ-CP2-CR154-NO-RUNTIME-NO-REAL-DATA-BOUNDARY | security | CR154 first wave 保持 local/static/fixture-only，不授权真实 lake/NAS/provider/QMT/runtime/broker/credential/feed/order/reconciliation/publish。 |
+
+## 当前人工确认状态
+
+- CP0：PASS
+- CP1：PASS
+- CP2 自动预检：PASS
+- CP2 人工审查：approved
+- 已批准决策：`DQ-CP2-CR154-BACKTEST-TRAP-GATE`、`DQ-CP2-CR154-CV-GOVERNANCE`、`DQ-CP2-CR154-SURVIVORSHIP-UNIVERSE-GATE`、`DQ-CP2-CR154-CAPACITY-IMPACT-GATE`、`DQ-CP2-CR154-REGIME-ATTRIBUTION-RECONCILIATION-SLOTS`、`DQ-CP2-CR154-ADMISSION-GATE-DEFAULT-POLICY`、`DQ-CP2-CR154-NO-RUNTIME-NO-REAL-DATA-BOUNDARY`
+- CP3：approved
+- CP4：PASS
+- CP5：approved
+- CP6：PASS
+- CP7：PASS_WITH_RISK
+- CP8：approved / READY_WITH_RISK
+- 已批准 CP8 决策：`DEC-CR154-CP8-001`
+- 当前状态：closed / READY_WITH_RISK。
+
+## CP8 收尾结果
+
+| 项 | 结果 |
+|---|---|
+| CP8 result | `process/checks/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.result.json` |
+| Release context | `process/release/RELEASE-CONTEXT-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` |
+| 人工审查 | `process/checkpoints/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-RELEASE-READINESS.md` |
+| 发布就绪结论 | `READY_WITH_RISK` |
+| 已接受风险 | `R-CR154-CP6-RETURN-PATH-WARN-001`、`R-CR154-CP7-UNTRACKED-FILES-001`、`R-CR154-FIRST-WAVE-FIXTURE-ONLY-001`、`R-CR154-ADMISSION-DEFAULT-POLICY-SEMANTICS-001`、`R-CR154-CAPACITY-RECONCILIATION-INTERPRETATION-001` |
+| 不授权边界 | 不授权真实 lake/NAS/provider、credential/.env、QMT/MiniQMT/xtquant/runtime/simulation/paper/live/trading/broker、feed/order/TCA/reconciliation、store/catalog/model registry writes、external framework、Git remote write、true release execution、production/runtime/trading/broker readiness claim。 |
+
+CP8 前评审发现的 S08 `feature_design_refs` path hygiene 问题已修复：`process/stories/CR154-S08-compatibility-follow-through-wording.md` frontmatter 已补齐 `process/docs/features/cross-strategy-reliability-gates/DESIGN.md`，且 CR154 Story `feature_design_refs` 在当前 `process` routing mode 下解析通过。
+
+## CP3 硬性设计约束
+
+| 约束 ID | 来源 | 约束 | CP3 验收要求 |
+|---|---|---|---|
+| CP3-DC-CR154-001 | CP2 review finding / `docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md#4-横切生产实践评审三类策略共用` | 多重检验 / 数据偷窥 / PBO / DSR 不得被泛化成一句 `data_snooping` 状态。 | HLD / ADR 必须定义可机器验证的 statistical reliability artifacts，至少包含 multiple-testing correction refs、FDR/BH refs、White Reality Check / Hansen SPA refs、PBO / CSCV refs、DSR / Sharpe 或 IC deflation refs、trial count / effective trials、OOS split refs、purge / embargo refs、survivorship audit refs、impact / capacity refs、blocked claims 和 release-blocking reason；若某字段不适用，必须给出 `n/a-with-reason`。 |
+| CP3-DC-CR154-002 | CP2 post-approval review note / `process/REQUIREMENTS.md` coverage review | CR154 当前没有专属新 REQ 编号或显式 CR154 需求条目，不能在 CP3 继续隐式消费既有需求锚点。 | HLD / ADR 必须包含 UC / REQ -> Architecture traceability table，至少覆盖 UC-58 / UC-59 / UC-60 与 PIT universe、capacity / cost、walk-forward、blocked claims、purge / embargo、lookahead、CP3 gate 等既有需求锚点；同时必须明确决策：本轮复用既有 REQ 锚点，或后续通过需求文档增量追加 CR154 专属 REQ。 |
+| CP3-DC-CR154-003 | CP2 review finding / `DQ-CP2-CR154-ADMISSION-GATE-DEFAULT-POLICY` | Gate 6 的 default-required、release-blocking 与 opt-in exception 边界不得只停留在“按 strategy class / release profile / risk level / evidence completeness 决定”。 | HLD / ADR 必须定义 admission default policy tier table，至少列出 strategy class、release profile、risk level、evidence completeness、gate mode（opt-in / default-required / release-blocking）、exception 条件、回退条件和 release wording 影响；CP5 Story 拆解必须能直接引用该 tier 表。 |
+| CP3-DC-CR154-004 | CP2 review finding / CR153 `universe_pit_audit` relation | CR153 `universe_pit_audit` slot 升级到 CR154 PIT universe gate 的生命周期不得隐式处理。 | HLD / ADR 必须定义 CR153 slot 升级路径：slot 是否保留为 adapter/source ref、是否标记 delegated-to-CR154、是否有 deprecation / compatibility policy、如何避免 CR153 slot 与 CR154 gate 重复 owner 或冲突；不得删除 CR153 侧兼容语义。 |
+| CP3-DC-CR154-005 | CP2 review finding / E2E review event impact model recommendation | Gate 4 的 `impact_model_family` 不得只是自由文本字段。 | HLD / ADR 必须定义 impact model family enum 或等价受控词表，至少覆盖 `square_root`、`almgren_chriss`、`gatheral`，并定义 `custom` / `n/a-with-reason` 的使用条件；first wave 只验证 contract / fixture semantics，不声明真实 TCA 或成交回放。 |
+| CP3-DC-CR154-006 | CP2 review finding / UC-59 ML-specific gaps | ML-GAP-3 triple-barrier / meta-labeling 与 ML-GAP-5 feature importance 不属于 CR154 横切 scope，但不能在 Gate 1 中被误读为三类策略共同缺失。 | HLD / ADR 的 strategy-specific adapter / n/a policy 必须明确 ML-only method fields 对多因子与事件驱动为 `n/a-with-reason: ML-specific method, not applicable`，并说明 ML 专项方法继续归属 CR152 / follow-up tracking，而不是 CR154 横切 gate 的 release blocker。 |

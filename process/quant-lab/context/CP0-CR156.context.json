@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "context_id": "CP0-CR156",
+  "cr_id": "CR-156",
+  "created_at": "2026-07-04T23:43:42+08:00",
+  "read_profile": "minimal",
+  "status": "pass",
+  "current_state_recovery": {
+    "requested_files_read": [
+      "AGENTS.md",
+      "process/current/CURRENT.json",
+      "process/state/STATE.current.json",
+      "process/changes/CR-INDEX.json"
+    ],
+    "workspace_check": "PASS",
+    "workspace_check_command": "uv run meta-flow workspace check --project-root .",
+    "cr_tracking_check": "OK",
+    "cr_tracking_command": "uv run meta-flow check cr-tracking --project-root .",
+    "active_formal_crs": [],
+    "blocked_formal_crs": [],
+    "follow_up_candidates_indexed": [
+      "FU-CR154-001",
+      "FU-CR152-001",
+      "FU-CR155-001"
+    ],
+    "state_active_change_before": null,
+    "current_status_before": "idle"
+  },
+  "raw_user_request": "启动 CR156。请先按 meta-flow current state 恢复上下文：读取 AGENTS.md、process/current/CURRENT.json、process/state/STATE.current.json、process/changes/CR-INDEX.yaml，确认当前无 active formal CR 后，从 CP0 开始受理。",
+  "scope_update": {
+    "updated_at": "2026-07-05T00:07:22+08:00",
+    "raw_user_supplement": "CR156的目标是 hygiene 收束: FU-CR154-001 (packaging) → FU-CR152-001 (test taxonomy)",
+    "objective": "Local hygiene consolidation in order: first FU-CR154-001 packaging hygiene, then FU-CR152-001 test taxonomy / PROVENANCE.yaml coverage hygiene.",
+    "follow_up_sequence": [
+      {
+        "id": "FU-CR154-001",
+        "label": "packaging",
+        "source_ref": "process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-FOLLOW-UP-TRACKING-2026-07-04.md#FU-CR154-001",
+        "evidence_ref": "process/checks/FU-CR154-001-FINAL-PACKAGING-HYGIENE-2026-07-04.md",
+        "known_status": "PASS"
+      },
+      {
+        "id": "FU-CR152-001",
+        "label": "test taxonomy",
+        "source_ref": "process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-FOLLOW-UP-TRACKING-2026-07-02.md#FU-CR152-001",
+        "evidence_ref": "process/checks/FU-CR152-001-TEST-TAXONOMY-PROVENANCE-HYGIENE-2026-07-04.md",
+        "known_status": "PASS_WITH_RESIDUAL_UNRELATED_FAILURES"
+      }
+    ],
+    "acceptance_boundary": [
+      "CR156 can trace FU-CR154-001 packaging evidence and FU-CR152-001 taxonomy/provenance evidence",
+      "CR tracking shows only CR-156 as the active formal CR",
+      "follow-up tracking links both candidates to CR-156",
+      "no product baseline, Story, LLD, runtime, real data, Git remote or publish scope is introduced"
+    ],
+    "not_authorized": [
+      "git_remote_write",
+      "true_release_execution_or_publish",
+      "runtime_or_trading_or_broker_operation",
+      "credential_or_env_read",
+      "real_lake_or_nas_or_provider_access",
+      "catalog_pointer_or_store_or_registry_write",
+      "external_framework_clone_install_run"
+    ]
+  },
+  "known_facts": [
+    "process route health is ok and routing_mode=symlink",
+    "STATE.current.json.active_change was null before CR156 intake",
+    "CR-INDEX.json active_crs was empty before CR156 intake",
+    "meta-flow check cr-tracking reported active formal CRs none and blocked formal CRs none",
+    "CR156 objective is hygiene consolidation: FU-CR154-001 packaging before FU-CR152-001 test taxonomy",
+    "FU-CR154-001 existing local check status is PASS",
+    "FU-CR152-001 existing local check status is PASS_WITH_RESIDUAL_UNRELATED_FAILURES"
+  ],
+  "missing_inputs": [],
+  "allowed_reads": [
+    "process/changes/CR-156-HYGIENE-PACKAGING-TEST-TAXONOMY-2026-07-05.md",
+    "process/changes/summaries/CR-156.summary.json",
+    "process/checks/CP0-CR156-REQUEST-INTAKE.result.json",
+    "process/checks/CP0-CR156-REQUEST-INTAKE.md",
+    "process/state/STATE.current.json",
+    "process/current/CURRENT.json",
+    "process/changes/CR-INDEX.json",
+    "process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-FOLLOW-UP-TRACKING-2026-07-04.md",
+    "process/checks/FU-CR154-001-FINAL-PACKAGING-HYGIENE-2026-07-04.md",
+    "process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-FOLLOW-UP-TRACKING-2026-07-02.md",
+    "process/checks/FU-CR152-001-TEST-TAXONOMY-PROVENANCE-HYGIENE-2026-07-04.md",
+    "process/state/CR-LEDGER.ndjson",
+    "process/state/CHECKPOINT-LEDGER.ndjson"
+  ],
+  "do_not_read_by_default": [
+    "full historical CR files",
+    "full historical checkpoint files",
+    "full historical discussion logs"
+  ],
+  "next_exact_prompt": "执行下一步: 为 CR156 生成 compact CP1/CP2 scope baseline，确认 hygiene 收束范围和不授权边界"
+}

@@ -12,7 +12,7 @@ target:
   phase: "requirement-clarification"
   cr_id: "CR-154"
   artifacts:
-    - "process/changes/CR-154.md"
+    - "process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.md"
     - "process/context/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE-CONTEXT.yaml"
     - "process/USE-CASES.md"
     - "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md"
@@ -26,7 +26,7 @@ target:
 
 | 条目 | 状态 | 证据 | 说明 |
 |---|---|---|---|
-| CR154 formal CR exists | PASS | `process/changes/CR-154.md` | `lifecycle_status=active`，`gate_status=cp2_pending`。 |
+| CR154 formal CR exists | PASS | `process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.md` | `lifecycle_status=active`，`gate_status=cp2_pending`。 |
 | Rule 41 precheck passed | PASS | `process/checks/CR154-RULE41-CONFLICT-PRECHECK-2026-07-02.md` | active formal CRs none、blocked formal CRs none、FU-CR152-001 不占锁。 |
 | CP0 request intake passed | PASS | `process/checks/CP0-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-REQUEST-INTAKE.result.json` | CP0 decision PASS。 |
 | CP1 use-case completeness passed | PASS | `process/checks/CP1-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-USE-CASE-COMPLETENESS.result.json` | 基于 UC-58 / UC-59 / UC-60、roadmap、remediation plan、E2E review 增量通过。 |
@@ -46,7 +46,7 @@ target:
 | 7 | Capacity / impact / liquidity sizing 是否进入待决策项 | PASS | `DQ-CP2-CR154-CAPACITY-IMPACT-GATE` | 建议 first wave 只做 contract / status / refs，不做真实 TCA。 |
 | 8 | Regime / attribution / reconciliation slots 是否进入待决策项 | PASS | `DQ-CP2-CR154-REGIME-ATTRIBUTION-RECONCILIATION-SLOTS` | 建议 slots only，不授权真实 runtime/broker reconciliation。 |
 | 9 | CR151/CR152/CR153 admission gate 默认强制策略是否进入待决策项 | PASS | `DQ-CP2-CR154-ADMISSION-GATE-DEFAULT-POLICY` | 建议显式决定 default-required / release-blocking 条件和回退策略。 |
-| 10 | No-runtime / no-real-data 边界是否明确 | PASS | `DQ-CP2-CR154-NO-RUNTIME-NO-REAL-DATA-BOUNDARY`、`process/changes/CR-154.md#不授权范围` | 建议 approve no-runtime boundary。 |
+| 10 | No-runtime / no-real-data 边界是否明确 | PASS | `DQ-CP2-CR154-NO-RUNTIME-NO-REAL-DATA-BOUNDARY`、`process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.md#不授权范围` | 建议 approve no-runtime boundary。 |
 
 ## Exit Criteria
 
@@ -63,8 +63,8 @@ target:
 | 交付物 | 路径 | 状态 | 说明 |
 |---|---|---|---|
 | Rule 41 precheck | `process/checks/CR154-RULE41-CONFLICT-PRECHECK-2026-07-02.md` | PASS | 冲突预检通过。 |
-| CR154 formal CR | `process/changes/CR-154.md` | PASS | 已创建并记录五维影响分析。 |
-| CR154 summary | `process/changes/summaries/CR-154.summary.json` | PASS | state-router / cr-tracking 轻量入口。 |
+| CR154 formal CR | `process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.md` | PASS | 已创建并记录五维影响分析。 |
+| CR154 summary | `process/changes/summaries/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.summary.json` | PASS | state-router / cr-tracking 轻量入口。 |
 | CP0 result | `process/checks/CP0-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-REQUEST-INTAKE.result.json` | PASS | request intake。 |
 | CP1 result | `process/checks/CP1-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-USE-CASE-COMPLETENESS.result.json` | PASS | 增量 UC-58 / UC-59 / UC-60 completeness。 |
 | CP2 context capsule | `process/context/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE-CONTEXT.yaml` | PASS | compact profile。 |
@@ -107,7 +107,7 @@ target:
 | Roadmap | `docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md` | scanned | 5 | 5 | CR154 split、auth boundary、deferred data-lake candidates。 |
 | Remediation plan | `docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md` | scanned | 7 | 7 | Future CR154 能力清单、数据湖后置规则、推荐顺序。 |
 | E2E review | `docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md` | scanned | 9 | 7 | XC-GAP-1..9 映射到 CP2 decisions 或 later-wave。 |
-| CR153 closure evidence | `process/release/RELEASE-CONTEXT-CR153.yaml` / CP8 result | scanned | 3 | 2 | `R-CR154-DEFERRED-001` 与 no-overclaim/no-runtime boundary 进入 CR154 scope 和 not-authorized items。 |
+| CR153 closure evidence | `process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml` / CP8 result | scanned | 3 | 2 | `R-CR154-DEFERRED-001` 与 no-overclaim/no-runtime boundary 进入 CR154 scope 和 not-authorized items。 |
 | CR154 Scenario Gray Areas | `process/discussions/CP2-CR154-SCENARIO-DISCUSSION-LOG.md` / `process/checks/CP2-CR154-DISCUSSION-CHECKPOINT.json` | scanned | 5 | 5 | SGQ-CR154-001..005 已记录问题、用户回答来源、复述确认和影响面。 |
 | CP0 / CP1 / CP2 auto results | `process/checks/CP0-*`, `process/checks/CP1-*`, `process/checks/CP2-*` | scanned | 0 | 0 | PASS; no blockers. |
 | 用户显式约束 | 当前对话 | scanned | 8 | 7 | local/static/fixture-only、no lake/NAS/provider/runtime/broker/credential/feed/order/reconciliation/publish 进入 DQ 或不授权项。 |

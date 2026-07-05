@@ -38,7 +38,7 @@ open_items: 0
 | Feature DESIGN | `process/docs/features/cross-strategy-reliability-gates/DESIGN.md` | Gate 5 必须定义 structured slots、refs、status、`n/a-with-reason`，不得做 runtime/broker reconciliation。 |
 | Feature TEST-PLAN | `process/docs/features/cross-strategy-reliability-gates/TEST-PLAN.md` | S06 fixture 必须覆盖 slot pass、slot n/a-with-reason、missing reason blocked/review、no runtime reconciliation claim。 |
 | Feature TASKS | `process/docs/features/cross-strategy-reliability-gates/TASKS.md` | `CR154-T06` 是本 Story 的设计任务，输出 full LLD with slot/status/ref/n/a validation。 |
-| Development Plan | `process/DEVELOPMENT-PLAN-CR154.yaml` | W2 gate policies 可并行 LLD；实现阶段 shared file 合并必须串行；不授权真实 reconciliation、broker、feed、runtime 或测试实现。 |
+| Development Plan | `process/DEVELOPMENT-PLAN-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | W2 gate policies 可并行 LLD；实现阶段 shared file 合并必须串行；不授权真实 reconciliation、broker、feed、runtime 或测试实现。 |
 
 ## 1. Goal
 

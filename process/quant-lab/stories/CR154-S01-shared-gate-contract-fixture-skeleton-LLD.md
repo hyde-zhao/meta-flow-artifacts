@@ -40,7 +40,7 @@ open_items: 0
 | Feature DESIGN | `process/docs/features/cross-strategy-reliability-gates/DESIGN.md` | Mandatory shared field families: gate identity, status, evidence refs, blocked claims, release blocking and forbidden operation counters. |
 | Feature TEST-PLAN | `process/docs/features/cross-strategy-reliability-gates/TEST-PLAN.md` | Shared fixture skeleton must cover minimal PASS, missing artifact BLOCKED, NEEDS_REVIEW and forbidden-operation counter BLOCKED. |
 | Feature TASKS | `process/docs/features/cross-strategy-reliability-gates/TASKS.md` | `CR154-T01` designs shared gate summary, artifact ref and blocked-claim schema. |
-| Development Plan | `process/DEVELOPMENT-PLAN-CR154.yaml` | S01 is Wave 1, merge owner for shared schema, and prerequisite for S02-S06 LLD consumption. |
+| Development Plan | `process/DEVELOPMENT-PLAN-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | S01 is Wave 1, merge owner for shared schema, and prerequisite for S02-S06 LLD consumption. |
 
 ## 1. Goal
 

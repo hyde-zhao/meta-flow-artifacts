@@ -4,7 +4,7 @@
 
 | 检查项 | 结果 | 说明 |
 |---|---|---|
-| CR152 formal CR | PASS | `process/changes/CR-152.md` |
+| CR152 formal CR | PASS | `process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-2026-07-02.md` |
 | CP0 / CP1 | PASS | CP0 request intake 与 CP1 use-case completeness 已通过 |
 | scope | PASS | local/static/fixture ML strategy foundation |
 | decision coverage | PASS | 7 项 CP2 决策已收集 |

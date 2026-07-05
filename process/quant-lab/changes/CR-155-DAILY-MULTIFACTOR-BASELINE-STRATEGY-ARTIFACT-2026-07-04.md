@@ -108,8 +108,8 @@ routing_design_ref: "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md"
 | 基线 | 当前事实 | 证据 |
 |---|---|---|
 | CR148 unified backtest / experiment foundation | 已闭环统一 backtest run spec、report pack、cost/risk/attribution pack 和 daily multifactor baseline scope checks。 | `process/changes/CR-148-UNIFIED-BACKTEST-EXPERIMENT-FOUNDATION-2026-07-01.md`、`process/evidence/CR148-PHASE3-BACKTEST-COST-RISK-ATTRIBUTION-2026-07-01.json` |
-| CR151 multifactor statistical admission | 已闭环 local/static/fixture 多因子 statistical admission gate；不代表真实数据或 runtime readiness。 | `process/changes/CR-151.md`、`process/changes/summaries/CR-151.summary.json` |
-| CR154 cross-strategy reliability gates | 已闭环 local/static/fixture 横切可靠性门控；CP8 以 READY_WITH_RISK 收尾。 | `process/changes/CR-154.md`、`process/changes/summaries/CR-154.summary.json` |
+| CR151 multifactor statistical admission | 已闭环 local/static/fixture 多因子 statistical admission gate；不代表真实数据或 runtime readiness。 | `process/changes/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.md`、`process/changes/summaries/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.summary.json` |
+| CR154 cross-strategy reliability gates | 已闭环 local/static/fixture 横切可靠性门控；CP8 以 READY_WITH_RISK 收尾。 | `process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.md`、`process/changes/summaries/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.summary.json` |
 | 当前 CR tracking | 当前无 active / blocked formal CR；CR155 可成为新的 active formal CR。 | `uv run meta-flow check cr-tracking --project-root .` |
 
 ## 范围

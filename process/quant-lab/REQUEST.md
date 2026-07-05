@@ -119,3 +119,35 @@ def select_momentum_targets(
 - vectorbt 可在参数扫描规模变大后用于指标与持仓向量化。
 - bt 可在资产配置、ETF 轮动、多资产组合和定期再平衡场景中作为后续候选。
 
+## CR156 原始请求
+
+- 时间：2026-07-04T23:43:42+08:00
+- 请求：启动 CR156。请先按 meta-flow current state 恢复上下文：读取 AGENTS.md、process/current/CURRENT.json、process/state/STATE.current.json、process/changes/CR-INDEX.yaml，确认当前无 active formal CR 后，从 CP0 开始受理。
+- 初始处理：已创建 CR156 受理入口；CP0 曾因缺少具体变更目标、范围、验收标准、优先级和授权边界而 `BLOCKED`。
+
+## CR156 目标补充
+
+- 时间：2026-07-05T00:07:22+08:00
+- 补充：CR156 的目标是 hygiene 收束：`FU-CR154-001` packaging → `FU-CR152-001` test taxonomy。
+- 当前处理：CP0 已按该补充更新为 `PASS`；CR156 当前 scope 为本地 hygiene consolidation，不改变产品基线，不授权 Git remote write、true release execution、publish、runtime、真实数据、凭据、NAS/provider、broker 或交易动作。
+
+## CR156 命名整改与 CP2 推进
+
+- 时间：2026-07-05T00:21:55+08:00
+- 请求：修改为长命名后，继续推进项目。
+- 处理：正式 CR 文件已从短名迁移为 `process/changes/CR-156-HYGIENE-PACKAGING-TEST-TAXONOMY-2026-07-05.md`，并同步引用；CP1 自动检查已通过，CP2 compact scope baseline 已生成。
+- 下一步准确提示词：`请审查 process/checkpoints/CP2-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-SCOPE.md，并回复 approve / 修改: <具体修改点> / reject`
+
+## CR156 CP2 评审意见处理
+
+- 时间：2026-07-05T00:38:02+08:00
+- 请求：按照评审意见继续推进项目；重点修正 Checkpoint Index、CR-INDEX 路径、串行约束和 CP3-CP7 形式开销。
+- 处理：CP2 已回填为 `approved`；CR 正文与 summary / index 改为 `CR-INDEX.json`；CP3 / CP4 / CP5 已标记为 N/A；CP6 / CP7 已标记为 WAIVED；两项 follow-up evidence 可并行只读核验并统一 closure；已生成 CP8 READY_WITH_RISK closure gate。
+- 下一步准确提示词：`请审查 process/checkpoints/CP8-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-RELEASE-READINESS.md，并回复 approve / 修改: <具体修改点> / reject`
+
+## CR156 CP8 批准关闭与流程复盘
+
+- 时间：2026-07-05T09:09:46+08:00
+- 请求：批准 CR156 关闭；关闭后审核 CR156 开发过程中 Meta Flow 流程遵守情况、流程可改进点、token 消耗集中阶段和优化空间。
+- 处理：CP8 已回填为 `approved`；CR156 已关闭为 `READY_WITH_RISK`；`FU-CR154-001` 与 `FU-CR152-001` 已标记为 closed under CR156；当前无 active formal CR / pending gate。
+- 复盘产物：`process/checks/CR156-META-FLOW-PROCESS-RETROSPECTIVE-2026-07-05.md`

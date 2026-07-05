@@ -17,7 +17,7 @@ reviewed_at: "2026-07-02T18:00:00+08:00"
 
 | Criteria | Status | Evidence |
 |---|---|---|
-| CR153 exists and is active | PASS | `process/changes/CR-153.md` |
+| CR153 exists and is active | PASS | `process/changes/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.md` |
 | CP2 scope gate approved by user | PASS | `process/checkpoints/CP2-CR153-EVENT-DRIVEN-STRATEGY-E2E-SCOPE.md` |
 | CP2 SGQ evidence exists | PASS | `process/discussions/CP2-CR153-SCENARIO-DISCUSSION-LOG.md` |
 | CP3 context capsule exists | PASS | `process/context/CP3-CR153-EVENT-DRIVEN-STRATEGY-E2E-HLD-CONTEXT.yaml` |

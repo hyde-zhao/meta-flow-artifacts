@@ -37,8 +37,8 @@ open_items: 0
 | Story card | `process/stories/CR153-S03-event-bias-risk-audit-slots.md` | Acceptance Criteria、File Ownership、full-lld 要求、只拥有 overlap / cluster / endogeneity / event CV / universe PIT 字段。 |
 | HLD | `process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md` | EV-GAP-3 / 4 / 8 / 9 覆盖方式、CR154 dependency、no feed / no runtime / no store 边界。 |
 | ADR | `process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md` | ADR-CR153-004 deterministic fixture-only validation；ADR-CR153-005 CR154 owns full cross-strategy reliability governance。 |
-| Story backlog | `process/STORY-BACKLOG-CR153.md` | S03 scope、DAG、file ownership summary、deferred limitations。 |
-| Development plan | `process/DEVELOPMENT-PLAN-CR153.yaml` | Wave `CR153-W3-BIAS-RISK-SLOTS`、merge order、authorization boundary、deferred later-wave list。 |
+| Story backlog | `process/STORY-BACKLOG-CR153-EVENT-DRIVEN-STRATEGY-E2E.md` | S03 scope、DAG、file ownership summary、deferred limitations。 |
+| Development plan | `process/DEVELOPMENT-PLAN-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml` | Wave `CR153-W3-BIAS-RISK-SLOTS`、merge order、authorization boundary、deferred later-wave list。 |
 | Feature Matrix | `process/docs/design/FEATURE-DESIGN-MATRIX.md` | CR153 S03 `full-lld` policy、first-wave slot-only / later-wave boundary。 |
 | CP4 result | `process/checks/CP4-CR153-STORY-DAG-PARALLEL-SAFETY.result.json` | CP4 PASS、S02/S03 field ownership partition as CP5 blocker、implementation not authorized。 |
 | S01 dependency | `CR153-S01-event-research-time-pit-contracts` | Event identity, three-time semantics and PIT/revision fields consumed as upstream inputs; S03 does not redefine them. |

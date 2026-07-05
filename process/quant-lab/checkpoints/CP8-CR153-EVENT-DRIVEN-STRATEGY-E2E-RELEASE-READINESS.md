@@ -8,14 +8,14 @@ created_at: "2026-07-02T19:05:08+08:00"
 reviewed_by: "user"
 reviewed_at: "2026-07-02T23:10:00+08:00"
 auto_check_result: "process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.summary.md"
-release_context_ref: "process/release/RELEASE-CONTEXT-CR153.yaml"
+release_context_ref: "process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml"
 result_ref: "process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.json"
 target:
   phase: "cr153-release-readiness"
   workflow_id: "ROADMAP-QUANT-RESEARCH-PRODUCTION"
   active_change: "CR-153"
   artifacts:
-    - "process/release/RELEASE-CONTEXT-CR153.yaml"
+    - "process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml"
     - "process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.json"
     - "process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.summary.md"
     - "process/checks/CP8-CR153-HUMAN-GATE-LAUNCH-MESSAGE.md"
@@ -28,7 +28,7 @@ target:
 | 预检文件 | 结论 | 阻断项 | 说明 |
 |---|---|---:|---|
 | `process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.json` | PASS / READY_WITH_RISK recommended | 0 | CR153 local/static/fixture contract evidence complete; risk acceptance pending. |
-| `process/release/RELEASE-CONTEXT-CR153.yaml` | READY_WITH_RISK approved | 0 | Minimal profile; no install, deployment, migration, runtime, real feed, registry write or data operation. |
+| `process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml` | READY_WITH_RISK approved | 0 | Minimal profile; no install, deployment, migration, runtime, real feed, registry write or data operation. |
 
 ## Decision Brief
 
@@ -46,7 +46,7 @@ target:
 
 | 字段 | 内容 |
 |---|---|
-| capsule 路径 | `process/release/RELEASE-CONTEXT-CR153.yaml` |
+| capsule 路径 | `process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml` |
 | release_artifact_profile | `minimal` |
 | read_profile | compact |
 | 默认读取策略 | release context first；消费 CP7 result、CP7 evidence、CP7 return packet、CP6 result/evidence、CR summary 和最小状态摘要。 |
@@ -62,9 +62,9 @@ target:
 | CP7 evidence index | `process/evidence/CR153-CP7-VERIFICATION.index.json` | scanned | 3 | 1 | semantic scope、boundary check、S05 future target check 均汇入 release boundary。 |
 | CP7 return packet | `process/returns/CR153-EVENT-DRIVEN-STRATEGY-E2E.CP7.return.json` | scanned | 3 | 1 | no-overclaim 和 CR154 deferred risks 进入待决策项。 |
 | CP6 result/evidence | `process/checks/CP6-CR153-EVENT-DRIVEN-STRATEGY-E2E-IMPLEMENTATION.result.json` / `process/evidence/CR153-CP6-IMPLEMENTATION.index.json` | scanned | 3 | 1 | CP6 PASS，risks carried to CP7/CP8；forbidden counters remain 0。 |
-| CR summary | `process/changes/summaries/CR-153.summary.json` | scanned | 1 | 1 | CP8 release readiness and risk acceptance are approved. |
-| Release context | `process/release/RELEASE-CONTEXT-CR153.yaml` | scanned | 4 | 1 | release decision、non-authorized items、forbidden release claims and follow-up split represented. |
-| CR152 format reference | `process/release/RELEASE-CONTEXT-CR152.yaml` / `process/checkpoints/CP8-CR152-DELIVERY-READINESS.md` | scanned | 0 | 0 | Format reference only; CR152 content not copied. |
+| CR summary | `process/changes/summaries/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.summary.json` | scanned | 1 | 1 | CP8 release readiness and risk acceptance are approved. |
+| Release context | `process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml` | scanned | 4 | 1 | release decision、non-authorized items、forbidden release claims and follow-up split represented. |
+| CR152 format reference | `process/release/RELEASE-CONTEXT-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml` / `process/checkpoints/CP8-CR152-DELIVERY-READINESS.md` | scanned | 0 | 0 | Format reference only; CR152 content not copied. |
 
 ### 决策分层
 
@@ -124,7 +124,7 @@ target:
 | 风险接受项 | DEC-CR153-CP8-001 | accepted | 用户已接受 READY_WITH_RISK | 本文件 | 覆盖 overclaim 与 CR154 deferred risks。 |
 | 风险审计项 | R-CR153-S01-001 | non-blocking-audit-note | 不阻塞关闭 | `process/evidence/CR153-CP7-VERIFICATION.index.json#risks[0]` | stale packet path 已由实际回归路径通过缓解。 |
 | 后续 CR 候选项 | CR154 | future-scope | 不自动创建 / 不授权执行 | future CR154 or later CR | full event CV、survivorship-free universe gate、capacity/impact、regime、reconciliation、real feed/runtime/order governance。 |
-| 不授权范围 | NA-CR153-001..006 | not-authorized | 不进入本轮执行授权 | `process/release/RELEASE-CONTEXT-CR153.yaml#non_authorized_items` | 真实运行、凭据、publish、live、数据写入、order flow 等必须独立授权。 |
+| 不授权范围 | NA-CR153-001..006 | not-authorized | 不进入本轮执行授权 | `process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml#non_authorized_items` | 真实运行、凭据、publish、live、数据写入、order flow 等必须独立授权。 |
 | 取消 / deferred | DEF-CR153-RUNTIME | deferred | 不进入当前范围 | future runtime CR | real feed/listener/runtime/trading/registry publication。 |
 
 ## Entry Criteria
@@ -132,7 +132,7 @@ target:
 | 条目 | 状态 | 证据 | 审查意见 |
 |---|---|---|---|
 | CP7 verification completed | PASS | `process/checks/CP7-CR153-EVENT-DRIVEN-STRATEGY-E2E-VERIFICATION.result.json` | CP7 `PASS_WITH_RISK`, blocker=0. |
-| Release context generated | PASS | `process/release/RELEASE-CONTEXT-CR153.yaml` | Minimal profile. |
+| Release context generated | PASS | `process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml` | Minimal profile. |
 | CP8 result generated | PASS | `process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.json` | `release_decision=READY_WITH_RISK`. |
 | Human decision item present | PASS | `DEC-CR153-CP8-001` | Risk acceptance pending. |
 
@@ -159,7 +159,7 @@ target:
 
 | 交付物 | 路径 | 审查结果 | 审查意见 |
 |---|---|---|---|
-| Release context | `process/release/RELEASE-CONTEXT-CR153.yaml` | PASS | READY_WITH_RISK approved by user. |
+| Release context | `process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml` | PASS | READY_WITH_RISK approved by user. |
 | CP8 result JSON | `process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.json` | PASS | Auto result generated. |
 | CP8 result summary | `process/checks/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.result.summary.md` | PASS | Scoped summary. |
 | CP8 manual checkpoint | `process/checkpoints/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.md` | approved | User accepted `DEC-CR153-CP8-001`. |

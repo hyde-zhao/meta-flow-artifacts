@@ -4,7 +4,7 @@ Decision: PASS
 Story: -
 CR: CR-151
 Context: process/checks/CP4-CR151-STORY-DAG-PARALLEL-SAFETY.md
-Evidence: process/STORY-BACKLOG-CR151.md
+Evidence: process/STORY-BACKLOG-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.md
 Dispatch: -
 
 ## Blocking Items

@@ -1,6 +1,6 @@
 wrote: process/checks/CP4-CR154-STORY-DAG-PARALLEL-SAFETY.result.summary.md
 4-CR154-STORY-DAG-PARALLEL-SAFETY.md
-Evidence: process/STORY-BACKLOG-CR154.md
+Evidence: process/STORY-BACKLOG-CR154-CROSS-STRATEGY-RELIABILITY-GATES.md
 Dispatch: host-orchestrator-inline:no-new-explicit-subagent-request-for-cp4
 
 ## Blocking Items

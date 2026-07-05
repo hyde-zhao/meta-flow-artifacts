@@ -4,7 +4,7 @@ type: "fast-lane-implementation-verification"
 status: "PASS_WITH_RESIDUAL_UNRELATED_FAILURES"
 owner: "host-orchestrator"
 created_at: "2026-07-04T09:04:41+08:00"
-source_follow_up: "process/changes/CR-152-FOLLOW-UP-TRACKING-2026-07-02.md#FU-CR152-001"
+source_follow_up: "process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-FOLLOW-UP-TRACKING-2026-07-02.md#FU-CR152-001"
 authorization_source: "user-2026-07-04"
 ---
 

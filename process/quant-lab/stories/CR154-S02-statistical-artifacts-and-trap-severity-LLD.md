@@ -44,7 +44,7 @@ open_items: 0
 | Feature DESIGN | `process/docs/features/cross-strategy-reliability-gates/DESIGN.md` | S02 owns Gate 1 evidence policy and must define severity, threshold/config ownership and propagation behavior. |
 | Feature TEST-PLAN | `process/docs/features/cross-strategy-reliability-gates/TEST-PLAN.md` | Statistical fixture group must cover complete 12-slot evidence, missing WRC/SPA, missing PBO/DSR, invalid trial count and Gate 3/4 propagation. |
 | Feature TASKS | `process/docs/features/cross-strategy-reliability-gates/TASKS.md` | `CR154-T02` designs Gate 1 statistical artifact model, severity mapping and adapter subtasks. |
-| Development Plan | `process/DEVELOPMENT-PLAN-CR154.yaml` | S02 is Wave 2 critical path after S01 and shares future module/test files with S01. |
+| Development Plan | `process/DEVELOPMENT-PLAN-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | S02 is Wave 2 critical path after S01 and shares future module/test files with S01. |
 
 ## 1. Goal
 

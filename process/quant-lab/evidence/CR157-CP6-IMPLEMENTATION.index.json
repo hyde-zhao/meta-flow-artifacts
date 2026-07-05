@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "stage": "CP6",
+  "cr_id": "CR-157",
+  "story_id": "CR157-S01..S05",
+  "return_ref": "process/returns/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP6.return.json",
+  "changed_files": [
+    {
+      "path": "engine/mature_multifactor_framework.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "tests/research/test_mature_multifactor_framework_stage2.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "docs/components/MULTIFACTOR-RESEARCH.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "docs/product/BACKLOG.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md",
+      "change_type": "modified"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "process/stories/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-IMPLEMENTATION.md",
+      "kind": "implementation_summary"
+    },
+    {
+      "path": "process/context/stories/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP6.work-packet.json",
+      "kind": "work_packet"
+    },
+    {
+      "path": "process/context/CP6-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-IMPLEMENTATION-CONTEXT.yaml",
+      "kind": "context_capsule"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run pytest -q tests/research/test_mature_multifactor_framework_stage2.py",
+      "result": "pass",
+      "summary": "27 passed in 0.05s"
+    },
+    {
+      "command": "uv run pytest -q tests/research/test_mature_multifactor_research_stage3.py",
+      "result": "pass",
+      "summary": "7 passed in 0.64s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/mature_multifactor_framework.py",
+      "result": "pass",
+      "summary": "module compiles"
+    },
+    {
+      "command": "git diff --check -- engine/mature_multifactor_framework.py tests/research/test_mature_multifactor_framework_stage2.py docs/components/MULTIFACTOR-RESEARCH.md docs/product/BACKLOG.md docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md process/checkpoints/CP5-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-LLD-BATCH.md process/checks/CP5-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-LLD-IMPLEMENTABILITY.result.json process/STATE.md process/STORY-STATUS-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md process/DEVELOPMENT-PLAN-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.yaml process/changes/CR-INDEX.json process/changes/summaries/CR-157.summary.json process/state/STATE.current.json process/changes/CR-157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-2026-07-05.md",
+      "result": "pass",
+      "summary": "no whitespace errors"
+    }
+  ],
+  "tests": [
+    "test_stage2_12_mature_package_ref_set_covers_required_stage2_exit_refs",
+    "test_stage2_13_research_evidence_items_are_refs_only_and_unique",
+    "test_stage2_14_stage3_handoff_readiness_fails_closed_on_missing_package_or_unknown_status",
+    "test_stage2_15_every_forbidden_operation_counter_blocks_no_lake_boundary"
+  ],
+  "boundary_check": {
+    "forbidden_operation_count": 0,
+    "real_lake_read_executed": false,
+    "real_lake_write_executed": false,
+    "nas_operation_executed": false,
+    "provider_fetch_executed": false,
+    "credential_read_executed": false,
+    "qmt_or_gateway_runtime_executed": false,
+    "simulation_paper_live_executed": false,
+    "trading_or_broker_executed": false,
+    "catalog_store_registry_write_executed": false,
+    "publish_executed": false,
+    "external_framework_run_executed": false,
+    "git_remote_write_executed": false
+  },
+  "design_delta_ref": null,
+  "risks": [
+    {
+      "id": "R-CR157-CP6-STATIC-ONLY",
+      "status": "accepted-cp6-boundary",
+      "summary": "CP6 proves local/static contracts and fixture tests only; real data/runtime/publish readiness remains unauthorized and out of scope."
+    }
+  ],
+  "waivers": [],
+  "story_mapping": {
+    "CR157-S01": "Stage2MaturePackageRefSet builder/validator",
+    "CR157-S02": "ResearchEvidenceItem refs-only validation",
+    "CR157-S03": "Stage3ResearchMachineHandoff readiness metadata",
+    "CR157-S04": "FORBIDDEN_OPERATION_COUNTERS parametrized guard coverage",
+    "CR157-S05": "docs/backlog/roadmap wording alignment"
+  }
+}

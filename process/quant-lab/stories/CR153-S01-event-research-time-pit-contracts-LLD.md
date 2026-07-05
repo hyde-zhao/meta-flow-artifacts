@@ -36,8 +36,8 @@ open_items: 0
 | Story Card | `process/stories/CR153-S01-event-research-time-pit-contracts.md` | Story 目标、验收标准、文件所有权、`lld_policy.required_level=full-lld`、无前置 Story 依赖。 |
 | HLD | `process/docs/design/HLD-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md` | Event time semantics、`EventRevisionPITGate`、metadata-only contract extension、no-store/no-runtime 边界、UC-60 / EV-GAP-6 traceability。 |
 | ADR | `process/docs/design/ARCHITECTURE-DECISION-EVENT-DRIVEN-STRATEGY-E2E-FRAMEWORK.md` | ADR-CR153-002 metadata is not store/catalog/registry write；ADR-CR153-003 extend existing research anchors；ADR-CR153-004 deterministic fixture-only validation。 |
-| Story Backlog | `process/STORY-BACKLOG-CR153.md` | S01 acceptance criteria、S01/S02/S03 shared test ownership顺序、S01 冻结 time/PIT fields 后供下游消费。 |
-| Development Plan | `process/DEVELOPMENT-PLAN-CR153.yaml` | Wave `CR153-W1-EVENT-PIT`、CP5 前不允许实现、验证命令、禁止真实 feed/listener/lake/NAS/provider/runtime/broker/credential/store/catalog/registry/order flow。 |
+| Story Backlog | `process/STORY-BACKLOG-CR153-EVENT-DRIVEN-STRATEGY-E2E.md` | S01 acceptance criteria、S01/S02/S03 shared test ownership顺序、S01 冻结 time/PIT fields 后供下游消费。 |
+| Development Plan | `process/DEVELOPMENT-PLAN-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml` | Wave `CR153-W1-EVENT-PIT`、CP5 前不允许实现、验证命令、禁止真实 feed/listener/lake/NAS/provider/runtime/broker/credential/store/catalog/registry/order flow。 |
 | Feature Matrix | `process/docs/design/FEATURE-DESIGN-MATRIX.md` | FEAT-03 归属、CR153 first-wave / later-wave 边界、S01 full-lld 判定、`event_available_at > decision_time` 明确为 CP5 focus。 |
 | Existing source anchor | `engine/research_production_contracts.py` | `ResearchDatasetSpec`、`FeatureAvailabilityContract`、`ResearchDatasetSnapshotSpec`、metadata-only dataclass / validator / `to_dict()` / issue tuple 风格。 |
 | Reference LLD | `process/stories/CR152-S01-pit-feature-label-contracts-LLD.md` | 同类 PIT / leakage contract 的 LLD 结构、companion object 策略、reserved capability 不冒充实现的写法。 |

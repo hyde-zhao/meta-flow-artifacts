@@ -1,0 +1,109 @@
+schema_version: 1
+context_id: CP2-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-SCOPE
+cr_id: CR-156
+created_at: "2026-07-05T00:21:55+08:00"
+read_profile: compact
+status: ready_for_human_gate
+capsule: "process/context/CP2-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-SCOPE-CONTEXT.yaml"
+default_reading_strategy: capsule-first
+full_document_reading: not_required_for_scope_baseline
+
+formal_cr_ref: "process/changes/CR-156-HYGIENE-PACKAGING-TEST-TAXONOMY-2026-07-05.md"
+summary_ref: "process/changes/summaries/CR-156.summary.json"
+cp0_context_ref: "process/context/CP0-CR156.context.json"
+cp0_result_ref: "process/checks/CP0-CR156-REQUEST-INTAKE.result.json"
+cp1_result_ref: "process/checks/CP1-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-SCOPE-COMPLETENESS.result.json"
+cp2_result_ref: "process/checks/CP2-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-SCOPE.result.json"
+cp2_checkpoint_ref: "process/checkpoints/CP2-CR156-HYGIENE-PACKAGING-TEST-TAXONOMY-SCOPE.md"
+
+scope_summary:
+  objective: "Consolidate local hygiene follow-ups in order: FU-CR154-001 packaging, then FU-CR152-001 test taxonomy / PROVENANCE.yaml coverage."
+  sequence:
+    - id: FU-CR154-001
+      label: packaging
+      source_ref: "process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-FOLLOW-UP-TRACKING-2026-07-04.md#FU-CR154-001"
+      evidence_ref: "process/checks/FU-CR154-001-FINAL-PACKAGING-HYGIENE-2026-07-04.md"
+      current_evidence_status: PASS
+      closure_role: "First closure step; verify CR154 source/test files are covered by local packaging/staging evidence."
+    - id: FU-CR152-001
+      label: test-taxonomy
+      source_ref: "process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-FOLLOW-UP-TRACKING-2026-07-02.md#FU-CR152-001"
+      evidence_ref: "process/checks/FU-CR152-001-TEST-TAXONOMY-PROVENANCE-HYGIENE-2026-07-04.md"
+      current_evidence_status: PASS_WITH_RESIDUAL_UNRELATED_FAILURES
+      closure_role: "Second closure step; confirm test taxonomy and PROVENANCE.yaml coverage hygiene evidence, without claiming full-suite green."
+
+product_baseline:
+  refresh_required: false
+  affected_product_docs: []
+  affected_use_cases: []
+  rationale: "CR156 is process hygiene consolidation only; it does not add, remove or redefine product requirements, user scenarios, MVP scope, release slices or TEST-MATRIX semantics."
+
+authorization_boundary:
+  authorized:
+    - "Local process/checkpoint/follow-up tracking updates for CR156"
+    - "Local packaging/staging evidence verification for FU-CR154-001"
+    - "Local test taxonomy / PROVENANCE.yaml evidence consolidation for FU-CR152-001"
+  not_authorized:
+    - "git_remote_write"
+    - "true_release_execution_or_publish"
+    - "runtime_or_trading_or_broker_operation"
+    - "credential_or_env_read"
+    - "real_lake_or_nas_or_provider_access"
+    - "catalog_pointer_or_store_or_registry_write"
+    - "external_framework_clone_install_run"
+
+decision_items:
+  - id: DQ-CP2-CR156-HYGIENE-SCOPE
+    decision_type: scope
+    question: "Approve CR156 as a compact local hygiene consolidation scope for FU-CR154-001 then FU-CR152-001?"
+    recommendation: "Approve the compact scope and sequence."
+    alternatives:
+      - "Keep both items as separate follow-up candidates."
+      - "Split FU-CR152-001 into a separate formal CR after FU-CR154-001 closes."
+    impact: "Approving reduces follow-up noise and allows a refs-only local closure path; alternatives preserve separation but add tracking overhead."
+  - id: DQ-CP2-CR156-NO-REMOTE-RELEASE-RUNTIME
+    decision_type: security
+    question: "Confirm that CR156 approval does not authorize Git remote write, true release, publish, runtime, credentials, real data, NAS/provider, broker or trading actions."
+    recommendation: "Approve the explicit non-authorization boundary."
+    alternatives:
+      - "Allow only a later separate Git commit preparation gate while still forbidding remote write."
+      - "Defer all packaging closure until a separate release-readiness CR."
+    impact: "Keeps this CR low-risk and local; any expansion must go through a separate gate."
+  - id: DQ-CP2-CR156-RESIDUAL-FAILURE-WORDING
+    decision_type: risk_acceptance
+    question: "Accept FU-CR152-001 evidence wording as PASS_WITH_RESIDUAL_UNRELATED_FAILURES rather than full pytest green?"
+    recommendation: "Accept the residual unrelated failure classification and forbid a full-suite-green claim."
+    alternatives:
+      - "Block CR156 until the unrelated process/design-surface failures are remediated."
+      - "Move unrelated failures to a separate follow-up candidate and continue CR156 with explicit risk wording."
+    impact: "Recommended wording preserves accuracy while allowing CR156 to close its intended hygiene scope."
+
+decision_collection_coverage:
+  - source_type: formal_cr
+    source_path: "process/changes/CR-156-HYGIENE-PACKAGING-TEST-TAXONOMY-2026-07-05.md"
+    scan_status: scanned
+    candidate_count: 3
+    included_decision_count: 3
+    classification_or_na_reason: "Scope, security boundary and residual-risk wording require CP2 confirmation."
+  - source_type: context_capsule
+    source_path: "process/context/CP0-CR156.context.json"
+    scan_status: scanned
+    candidate_count: 1
+    included_decision_count: 1
+    classification_or_na_reason: "User-supplied sequence converted into DQ-CP2-CR156-HYGIENE-SCOPE."
+  - source_type: follow_up_tracking
+    source_path: "process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-FOLLOW-UP-TRACKING-2026-07-04.md"
+    scan_status: scanned
+    candidate_count: 1
+    included_decision_count: 1
+    classification_or_na_reason: "Packaging closure sequence included in scope decision."
+  - source_type: follow_up_tracking
+    source_path: "process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-FOLLOW-UP-TRACKING-2026-07-02.md"
+    scan_status: scanned
+    candidate_count: 1
+    included_decision_count: 1
+    classification_or_na_reason: "Residual unrelated failure wording included in risk acceptance decision."
+
+next_route_if_approved: "documentation"
+next_route_if_changes_requested: "requirement-clarification"
+next_route_if_rejected: "follow-up-candidates"

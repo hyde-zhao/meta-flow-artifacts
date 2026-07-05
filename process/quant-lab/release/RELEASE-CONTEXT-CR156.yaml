@@ -1,0 +1,53 @@
+schema_version: 1
+cr_id: CR-156
+release_context_id: RELEASE-CONTEXT-CR156
+created_at: "2026-07-05T00:38:02+08:00"
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+closed_at: "2026-07-05T09:09:46+08:00"
+decision_basis: "Existing 2026-07-04 follow-up evidence proves CR156 packaging and test taxonomy hygiene closure scope; residual unrelated full-suite failures are not claimed green."
+
+evidence_summary:
+  packaging:
+    follow_up_id: FU-CR154-001
+    evidence_ref: "process/checks/FU-CR154-001-FINAL-PACKAGING-HYGIENE-2026-07-04.md"
+    status: PASS
+    closure_effect: "Close packaging hygiene follow-up under CR156."
+  test_taxonomy:
+    follow_up_id: FU-CR152-001
+    evidence_ref: "process/checks/FU-CR152-001-TEST-TAXONOMY-PROVENANCE-HYGIENE-2026-07-04.md"
+    status: PASS_WITH_RESIDUAL_UNRELATED_FAILURES
+    closure_effect: "Close taxonomy/provenance hygiene follow-up under CR156 with residual risk wording."
+
+checkpoint_route:
+  CP0: "PASS"
+  CP1: "PASS"
+  CP2: "approved"
+  CP3: "N/A - no design artifacts required"
+  CP4: "N/A - no Story DAG required"
+  CP5: "N/A - no LLD batch required"
+  CP6: "WAIVED - no new implementation under CR156"
+  CP7: "WAIVED - no new verification run under CR156"
+  CP8: "pending human review"
+
+residual_risks:
+  - risk_id: R-CR156-RESIDUAL-UNRELATED-FULL-PYTEST-FAILURES-001
+    status: accepted_if_cp8_approved
+    severity: low
+    summary: "Full uv run pytest -q is not claimed green because four unrelated process/design-surface checks fail outside CR156 hygiene closure scope."
+
+follow_up_summary:
+  closed_on_cp8_approval:
+    - FU-CR154-001
+    - FU-CR152-001
+  new_follow_up_candidates: []
+  cancelled_or_deferred: []
+
+not_authorized:
+  - "git_remote_write_or_push"
+  - "true_release_execution_or_publish"
+  - "runtime_or_trading_or_broker_operation"
+  - "credential_or_env_read"
+  - "real_lake_or_nas_or_provider_access"
+  - "catalog_pointer_or_store_or_registry_write"
+  - "external_framework_clone_install_run"

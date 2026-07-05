@@ -1,0 +1,112 @@
+schema_version: 1
+capsule_id: "CP5-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-LLD-CONTEXT"
+created_at: "2026-07-05T13:30:00+08:00"
+created_by: "host-orchestrator"
+change_id: "CR-157"
+checkpoint: "CP5"
+purpose: "Minimal context for CR157 CP5 LLD batch human gate and subsequent CP6 routing if approved."
+
+must_read:
+  - "process/checkpoints/CP5-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-LLD-BATCH.md"
+  - "process/checks/CP5-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-LLD-IMPLEMENTABILITY.result.json"
+  - "process/stories/CR157-S01-mature-admission-package-builder-contract-LLD.md"
+  - "process/stories/CR157-S02-research-evidence-index-traceability-LLD.md"
+  - "process/stories/CR157-S03-stage2-stage3-handoff-hardening-LLD.md"
+  - "process/stories/CR157-S04-no-runtime-guard-coverage-LLD.md"
+  - "process/stories/CR157-S05-docs-release-backlog-alignment.md"
+read_if_needed:
+  - "docs/design/HLD-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md"
+  - "docs/design/ARCHITECTURE-DECISION-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md"
+  - "process/DEVELOPMENT-PLAN-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.yaml"
+  - "docs/features/mature-admission-package/DESIGN.md"
+  - "docs/features/research-evidence-traceability/DESIGN.md"
+  - "docs/features/stage-handoff-guardrails/DESIGN.md"
+  - "engine/mature_multifactor_framework.py"
+  - "engine/multifactor_contracts.py"
+do_not_read_by_default:
+  - "process/archive/**"
+  - "process/discussions/**"
+  - "docs/product/TEST-MATRIX.md"
+  - "docs/quality/**"
+  - "tests/**"
+token_control:
+  read_profile: "compact"
+  max_expected_tokens: 18000
+  expansion_policy: "Read full HLD/ADR/tests only for audit conflict, blocker investigation or user-requested deep review."
+
+key_facts:
+  scope_summary: "CP5 reviews five CR157 Story design evidence items: four full LLDs for package/evidence/handoff/no-runtime and one technical note for docs/backlog alignment."
+  cp4_result: "process/checks/CP4-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-STORY-DAG-PARALLEL-SAFETY.result.json"
+  design_evidence_distribution:
+    full_lld: 4
+    technical_note: 1
+    waived: 0
+  story_evidence:
+    CR157-S01: "process/stories/CR157-S01-mature-admission-package-builder-contract-LLD.md"
+    CR157-S02: "process/stories/CR157-S02-research-evidence-index-traceability-LLD.md"
+    CR157-S03: "process/stories/CR157-S03-stage2-stage3-handoff-hardening-LLD.md"
+    CR157-S04: "process/stories/CR157-S04-no-runtime-guard-coverage-LLD.md"
+    CR157-S05: "process/stories/CR157-S05-docs-release-backlog-alignment.md#技术说明"
+  clarification_queue:
+    ref: "process/state/QUESTION-LEDGER.ndjson"
+    blocking_open_count: 0
+    spike_count: 0
+  merge_order: "S01 -> S02 -> S03 -> S04 -> S05"
+  implementation_before_cp5_approval_allowed: false
+
+risks_and_decisions:
+  pending_decision_ids:
+    - "DQ-CP5-CR157-001"
+    - "DQ-CP5-CR157-002"
+    - "DQ-CP5-CR157-003"
+    - "DQ-CP5-CR157-004"
+  high_risks:
+    - id: "RISK-CR157-RUNTIME-OVERCLAIM"
+      status: "controlled_by_cp5_decision"
+      summary: "Package/handoff/docs must not imply runtime/paper/live/publish readiness."
+    - id: "RISK-CR157-SHARED-FILE-MERGE"
+      status: "controlled_by_serial_merge_order"
+      summary: "S01-S04 all touch shared engine/test files; implementation merge is serial unless later CP5 decision changes this."
+  deferred_items:
+    - "DF-CR157-001 event adapter implementation"
+    - "DF-CR157-002 ML adapter implementation"
+
+handoff:
+  next_phase_if_approved: "story-execution"
+  next_agent: "meta-dev"
+  next_action_if_approved: "Update Story statuses to lld-approved/dev-ready and start CP6 local source/test implementation in serial merge order."
+  next_action_if_changes_requested: "Reopen CP5 design evidence and regenerate affected LLD/checkpoint refs."
+  blocked_if_not_approved: "CP6 implementation remains blocked."
+
+validation:
+  cp5_auto_result_ref: "process/checks/CP5-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-LLD-IMPLEMENTABILITY.result.json"
+  expected_result_decision: "PASS"
+  human_gate_ref: "process/checkpoints/CP5-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-LLD-BATCH.md"
+  launch_message_ref: "process/checks/CP5-CR157-HUMAN-GATE-LAUNCH-MESSAGE.md"
+
+allowed_reads:
+  - "process/checkpoints/CP5-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-LLD-BATCH.md"
+  - "process/checks/CP5-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-LLD-IMPLEMENTABILITY.result.json"
+  - "process/stories/CR157-S01-mature-admission-package-builder-contract-LLD.md"
+  - "process/stories/CR157-S02-research-evidence-index-traceability-LLD.md"
+  - "process/stories/CR157-S03-stage2-stage3-handoff-hardening-LLD.md"
+  - "process/stories/CR157-S04-no-runtime-guard-coverage-LLD.md"
+  - "process/stories/CR157-S05-docs-release-backlog-alignment.md"
+  - "process/state/QUESTION-LEDGER.ndjson"
+  - "process/state/STATE.current.json"
+
+read_expansion_log: []
+
+authorization_boundary:
+  real_lake_read_allowed: false
+  real_lake_write_allowed: false
+  nas_operation_allowed: false
+  provider_fetch_allowed: false
+  credential_read_allowed: false
+  qmt_runtime_allowed: false
+  simulation_paper_live_allowed: false
+  broker_trading_allowed: false
+  catalog_store_registry_write_allowed: false
+  publish_allowed: false
+  external_framework_run_allowed: false
+  git_remote_write_allowed: false

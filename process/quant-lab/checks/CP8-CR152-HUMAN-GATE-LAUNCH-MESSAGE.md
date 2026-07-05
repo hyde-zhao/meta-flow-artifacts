@@ -13,7 +13,7 @@
 | 阻断项 | 0 |
 | 本轮待人工决策项 | 1 |
 | 待人工决策项数量 | 1 |
-| Context Capsule | `process/release/RELEASE-CONTEXT-CR152.yaml` |
+| Context Capsule | `process/release/RELEASE-CONTEXT-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml` |
 
 ## 审批者摘要
 

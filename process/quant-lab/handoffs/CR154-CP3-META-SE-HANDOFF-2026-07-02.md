@@ -42,8 +42,8 @@ Produce CP3 solution-design artifacts for CR154 Cross-Strategy Production Reliab
 ## Must Read
 
 - `process/context/CP3-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-HLD-CONTEXT.yaml`
-- `process/changes/summaries/CR-154.summary.json`
-- `process/changes/CR-154.md`
+- `process/changes/summaries/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.summary.json`
+- `process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.md`
 - `process/checkpoints/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.md`
 - `process/REQUIREMENTS.md` if the CP3 traceability table needs full requirement anchors beyond the context capsule.
 

@@ -25,7 +25,7 @@ manual_checkpoint: "host-orchestrator to generate CP3 human review"
 |---|---|---|---|
 | CP2 approved | PASS | `process/checkpoints/CP2-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-SCOPE.md` | User approved CP2 at 2026-07-02T23:58:00+08:00. |
 | CP3 capsule ready | PASS | `process/context/CP3-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-HLD-CONTEXT.yaml` | `status=ready`. |
-| Required CR inputs read | PASS | `process/changes/summaries/CR-154.summary.json`, `process/changes/CR-154.md` | Required inputs consumed. |
+| Required CR inputs read | PASS | `process/changes/summaries/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.summary.json`, `process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.md` | Required inputs consumed. |
 | No unauthorized runtime/data action | PASS | HLD §1, §13, ADR-CR154-006 | Design-only file writes; no `.env`, credential, real data, runtime or external operation. |
 
 ## Checklist

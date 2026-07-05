@@ -58,8 +58,8 @@ context_policy:
     - "docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md"
     - "docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md"
     - "docs/product/USE-CASES.md"
-    - "process/changes/CR-152.md"
-    - "process/release/RELEASE-CONTEXT-CR152.yaml"
+    - "process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-2026-07-02.md"
+    - "process/release/RELEASE-CONTEXT-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml"
     - "process/checks/CP8-CR152-ML-STRATEGY-E2E-RELEASE-READINESS.result.json"
   must_read:
     - "process/handoffs/NEXT-SESSION-CR153-EVENT-DRIVEN-STRATEGY-E2E-CP0-CP2-2026-07-02.md"
@@ -71,8 +71,8 @@ context_policy:
     - "process/STATE.md"
     - "process/changes/CR-INDEX.yaml"
     - "docs/product/USE-CASES.md"
-    - "process/changes/CR-152.md"
-    - "process/release/RELEASE-CONTEXT-CR152.yaml"
+    - "process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-2026-07-02.md"
+    - "process/release/RELEASE-CONTEXT-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml"
     - "process/checks/CP8-CR152-ML-STRATEGY-E2E-RELEASE-READINESS.result.json"
     - "engine/research_production_contracts.py"
     - "engine/research_manifest.py"
@@ -293,8 +293,8 @@ If any of these become necessary, stop and create an explicit runtime authorizat
   - docs/design/STRATEGY-FRAMEWORK-IMPLEMENTATION-ASSESSMENT-AND-REMEDIATION-PLAN-2026-07-01.md
   - docs/design/STRATEGY-E2E-FRAMEWORK-REVIEW-2026-07-01.md
   - docs/product/USE-CASES.md
-  - process/changes/CR-152.md
-  - process/release/RELEASE-CONTEXT-CR152.yaml
+  - process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-2026-07-02.md
+  - process/release/RELEASE-CONTEXT-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml
   - process/checks/CP8-CR152-ML-STRATEGY-E2E-RELEASE-READINESS.result.json
 
 先确认两个仓库都已拉到远端最新：

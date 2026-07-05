@@ -4,7 +4,7 @@ Decision: PASS
 Story: -
 CR: CR-153
 Context: process/checks/CP4-CR153-STORY-DAG-PARALLEL-SAFETY.md
-Evidence: process/STORY-BACKLOG-CR153.md
+Evidence: process/STORY-BACKLOG-CR153-EVENT-DRIVEN-STRATEGY-E2E.md
 Dispatch: host-orchestrator-inline:tool-policy-no-explicit-subagent-request
 
 ## Blocking Items

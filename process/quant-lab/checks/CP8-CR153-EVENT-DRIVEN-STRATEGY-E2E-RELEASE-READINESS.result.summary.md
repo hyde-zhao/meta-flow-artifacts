@@ -6,7 +6,7 @@ Manual gate status: approved
 Story: CR153-S01..S05
 CR: CR-153
 Release artifact profile: minimal
-Context: process/release/RELEASE-CONTEXT-CR153.yaml
+Context: process/release/RELEASE-CONTEXT-CR153-EVENT-DRIVEN-STRATEGY-E2E.yaml
 Evidence: process/evidence/CR153-CP7-VERIFICATION.index.json
 Checkpoint: process/checkpoints/CP8-CR153-EVENT-DRIVEN-STRATEGY-E2E-RELEASE-READINESS.md
 Accepted decision ids: DEC-CR153-CP8-001

@@ -12,7 +12,7 @@ target:
   phase: "requirement-clarification"
   cr_id: "CR-153"
   artifacts:
-    - "process/changes/CR-153.md"
+    - "process/changes/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.md"
     - "process/context/CP2-CR153-EVENT-DRIVEN-STRATEGY-E2E-SCOPE-CONTEXT.yaml"
     - "process/USE-CASES.md"
     - "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP-2026-07-01.md"
@@ -26,7 +26,7 @@ target:
 
 | 条目 | 状态 | 证据 | 说明 |
 |---|---|---|---|
-| CR153 formal CR exists | PASS | `process/changes/CR-153.md` | `lifecycle_status=active`，`gate_status=cp2_pending`。 |
+| CR153 formal CR exists | PASS | `process/changes/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.md` | `lifecycle_status=active`，`gate_status=cp2_pending`。 |
 | Rule 41 precheck passed | PASS | `process/checks/CR153-RULE41-CONFLICT-PRECHECK-2026-07-02.md` | active formal CRs none、blocked formal CRs none、FU-CR152-001 不占锁。 |
 | CP0 request intake passed | PASS | `process/checks/CP0-CR153-EVENT-DRIVEN-STRATEGY-E2E-REQUEST-INTAKE.result.json` | CP0 decision PASS。 |
 | CP1 use-case completeness passed | PASS | `process/checks/CP1-CR153-EVENT-DRIVEN-STRATEGY-E2E-USE-CASE-COMPLETENESS.result.json` | 基于既有 UC-60 / roadmap / remediation plan / E2E review 增量通过。 |
@@ -44,7 +44,7 @@ target:
 | 5 | 事件研究方法契约是否进入待决策项 | PASS | `DQ-CP2-CR153-EVENT-STUDY-METHOD` | 建议 first wave 定义 method slots，不实现完整统计库。 |
 | 6 | test family、cluster/endogeneity、CV、survivorship 和 method slot-only 是否进入待决策项 | PASS | `DQ-CP2-CR153-TEST-FAMILY`、`DQ-CP2-CR153-CLUSTER-ENDOGENEITY`、`DQ-CP2-CR153-CV-STRATEGY`、`DQ-CP2-CR153-SURVIVORSHIP-SLOT`、`DQ-CP2-CR153-METHOD-SLOT-ONLY` | 建议 approve slot-only 边界，并将完整治理归入 CR154。 |
 | 7 | Event admission gate 与 CR151/CR152 gate 关系是否进入待决策项 | PASS | `DQ-CP2-CR153-GATE-RELATION` | 建议新建 Event-specific gate + adapter 复用四态语义。 |
-| 8 | event-to-order trace 是否明确不授权 runtime/order/broker | PASS | `DQ-CP2-CR153-EVENT-TO-ORDER-BOUNDARY`、`process/changes/CR-153.md#不授权范围` | 建议 approve no-runtime boundary。 |
+| 8 | event-to-order trace 是否明确不授权 runtime/order/broker | PASS | `DQ-CP2-CR153-EVENT-TO-ORDER-BOUNDARY`、`process/changes/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.md#不授权范围` | 建议 approve no-runtime boundary。 |
 | 9 | standard CP2 是否有 CR153 专属 SGQ 场景确认交互 | PASS | `process/discussions/CP2-CR153-SCENARIO-DISCUSSION-LOG.md#SGQ-场景确认交互记录`、`process/checks/CP2-CR153-DISCUSSION-CHECKPOINT.json#sgq_interactions` | 已补 SGQ-CR153-001..005；9 个 DQ 推荐结论不变。 |
 
 ## Exit Criteria
@@ -62,8 +62,8 @@ target:
 | 交付物 | 路径 | 状态 | 说明 |
 |---|---|---|---|
 | Rule 41 precheck | `process/checks/CR153-RULE41-CONFLICT-PRECHECK-2026-07-02.md` | PASS | 冲突预检通过。 |
-| CR153 formal CR | `process/changes/CR-153.md` | PASS | 已创建并记录五维影响分析。 |
-| CR153 summary | `process/changes/summaries/CR-153.summary.json` | PASS | state-router / cr-tracking 轻量入口。 |
+| CR153 formal CR | `process/changes/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.md` | PASS | 已创建并记录五维影响分析。 |
+| CR153 summary | `process/changes/summaries/CR-153-EVENT-DRIVEN-STRATEGY-E2E-2026-07-02.summary.json` | PASS | state-router / cr-tracking 轻量入口。 |
 | CP0 result | `process/checks/CP0-CR153-EVENT-DRIVEN-STRATEGY-E2E-REQUEST-INTAKE.result.json` | PASS | request intake。 |
 | CP1 result | `process/checks/CP1-CR153-EVENT-DRIVEN-STRATEGY-E2E-USE-CASE-COMPLETENESS.result.json` | PASS | 增量 UC-60 completeness。 |
 | CP2 context capsule | `process/context/CP2-CR153-EVENT-DRIVEN-STRATEGY-E2E-SCOPE-CONTEXT.yaml` | PASS | compact profile。 |

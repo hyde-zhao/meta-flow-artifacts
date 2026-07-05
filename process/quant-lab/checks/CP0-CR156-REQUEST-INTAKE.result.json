@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR156-REQUEST-INTAKE",
+  "cr_id": "CR-156",
+  "context_ref": "process/context/CP0-CR156.context.json",
+  "items": [
+    {
+      "id": "CP0-CR156-01",
+      "category": "workspace-routing",
+      "name": "Process route is healthy",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run meta-flow workspace check --project-root ."
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "process_link_health reported ok with routing_mode=symlink."
+    },
+    {
+      "id": "CP0-CR156-02",
+      "category": "current-state-recovery",
+      "name": "Required current-state inputs read",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "AGENTS.md",
+        "process/current/CURRENT.json",
+        "process/state/STATE.current.json",
+        "process/changes/CR-INDEX.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Requested current-state recovery files were read before intake."
+    },
+    {
+      "id": "CP0-CR156-03",
+      "category": "cr-tracking",
+      "name": "No active or blocked formal CR conflicts before intake",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run meta-flow check cr-tracking --project-root .",
+        "process/changes/CR-INDEX.json#active_crs",
+        "process/state/STATE.current.json#active_change"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR tracking reported active formal CRs none and blocked formal CRs none."
+    },
+    {
+      "id": "CP0-CR156-04",
+      "category": "request-intake",
+      "name": "User request captured",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-156-HYGIENE-PACKAGING-TEST-TAXONOMY-2026-07-05.md#变更描述",
+        "process/context/CP0-CR156.context.json#raw_user_request"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "The explicit request to start CR156 was captured."
+    },
+    {
+      "id": "CP0-CR156-05",
+      "category": "request-intake",
+      "name": "Target object and change goal are clear",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP0-CR156.context.json#scope_update",
+        "process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-FOLLOW-UP-TRACKING-2026-07-04.md#FU-CR154-001",
+        "process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-FOLLOW-UP-TRACKING-2026-07-02.md#FU-CR152-001"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "The user clarified CR156 as hygiene consolidation in sequence: FU-CR154-001 packaging, then FU-CR152-001 test taxonomy/provenance."
+    },
+    {
+      "id": "CP0-CR156-06",
+      "category": "authorization-boundary",
+      "name": "Initial authorization boundary is explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-156-HYGIENE-PACKAGING-TEST-TAXONOMY-2026-07-05.md#结构化权限策略",
+        "process/context/CP0-CR156.context.json#scope_update"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR156 is local hygiene only; Git remote write, true release execution, publish, runtime, real data/lake/NAS/provider, credentials, broker and trading actions remain unauthorized."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR156-CP0-FORMAL-CR-2026-07-04T234342+0800",
+    "READ-CR156-CP0-FU-CR154-FOLLOWUP-2026-07-05T000722+0800",
+    "READ-CR156-CP0-FU-CR152-FOLLOWUP-2026-07-05T000722+0800"
+  ],
+  "decision": "PASS",
+  "next_route": "requirement-clarification"
+}

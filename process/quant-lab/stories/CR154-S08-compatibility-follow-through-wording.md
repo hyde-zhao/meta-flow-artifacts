@@ -59,7 +59,7 @@ Close compatibility, CP4/CP5 follow-through hooks and fixture-only wording witho
 | `process/evidence/CR154-*.index.json` | Future evidence index target list only after implementation. |
 | `process/checks/CP7-CR154-*.result.json` | Future verification wording target list. |
 | `process/checkpoints/CP8-CR154-*.md` | Future release-readiness wording target list. |
-| `process/release/RELEASE-CONTEXT-CR154.yaml` | Future release context target list. |
+| `process/release/RELEASE-CONTEXT-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | Future release context target list. |
 
 ## Design Evidence Required For CP5
 
@@ -78,7 +78,7 @@ Technical note covering exact artifact targets, deferred mappings, compatibility
 | `process/docs/features/cross-strategy-reliability-gates/DESIGN.md` | S08 owns FT-CR154-CP5-004 and compatibility/follow-through wording; package consumes summary only. |
 | `process/docs/features/cross-strategy-reliability-gates/TEST-PLAN.md` | S08 fixture group must prove MF-GAP-2/6/7 deferred wording, CR151/152/153 compatibility and no overclaim release text. |
 | `process/docs/features/cross-strategy-reliability-gates/TASKS.md` | CR154-T08 requires technical note with exact artifact targets and deferred scope mapping. |
-| `process/DEVELOPMENT-PLAN-CR154.yaml` | W4 depends on S02-S07 and owns exact evidence/release wording targets. |
+| `process/DEVELOPMENT-PLAN-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | W4 depends on S02-S07 and owns exact evidence/release wording targets. |
 
 ### 文件影响
 
@@ -90,7 +90,7 @@ S08 is a wording, evidence-target and follow-through Story. Future implementatio
 | `process/evidence/CR154-S08-compatibility-follow-through-wording.index.json` | Future CP6 evidence index target for this Story. |
 | `process/checks/CP7-CR154-S08-compatibility-follow-through-wording.result.json` | Future CP7 verification result target for S08 wording and compatibility checks. |
 | `process/checkpoints/CP8-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md` | Future CP8 release readiness checkpoint target for CR154 batch-level release wording. |
-| `process/release/RELEASE-CONTEXT-CR154.yaml` | Future release context target for CR154 summary, residual risks and no-runtime boundary. |
+| `process/release/RELEASE-CONTEXT-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | Future release context target for CR154 summary, residual risks and no-runtime boundary. |
 | `docs/release/RELEASE-NOTES-CR154.md` | N/A for first-wave S08 unless host-orchestrator chooses CR-specific release notes during CP8; default release wording is checkpoint/context scoped. |
 | `docs/quality/VERIFICATION-REPORT-CR154.md` | N/A for S08 CP5; CP7 may aggregate into quality docs only after verification routing. |
 

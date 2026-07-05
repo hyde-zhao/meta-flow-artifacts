@@ -23,6 +23,8 @@ authorization_boundary: "planning-only; no runtime, broker write, provider fetch
 | v0.8 | 2026-07-02 | host-orchestrator | 回写 CR152 CP8 `READY_WITH_RISK` 闭环；明确 ML strategy first-wave 为 local/static/fixture-only capability，`FU-CR152-001` 保持 candidate；刷新下一推荐项为 CR153 Event-Driven Strategy E2E Framework CP0/CP2，并保留 hygiene / data-lake candidates 非阻断边界。 |
 | v0.9 | 2026-07-02 | host-orchestrator | 吸收 CR153 实施计划评审：CP2 增加 event CV strategy、survivorship universe PIT slot、method slot-only 三项范围决策；明确 first-wave 不实现事件检验族、overlap/cluster 和 endogeneity 具体算法。 |
 | v1.0 | 2026-07-04 | host-orchestrator | 回写 CR153 与 CR154 CP8 `READY_WITH_RISK` 闭环：CR153 event-driven first wave、CR154 cross-strategy reliability gates first wave 均已完成 local/static/fixture-only 能力；补 `FU-CR154-001` final packaging hygiene 为优先候选，并保留 `FU-CR152-001` test taxonomy / PROVENANCE hygiene 并列治理。 |
+| v1.1 | 2026-07-05 | host-orchestrator | 回写 CR157 CP6 Stage 2 multifactor framework first slice：mature package refs、refs-only evidence index、fail-closed handoff 和 no-runtime guard 进入本地源码/测试实现；event/ML adapters 继续 deferred。 |
+| v1.2 | 2026-07-05 | host-orchestrator | 回写 CR157 CP7 `PASS_WITH_RISK` 与 CP8 发布就绪准备：本轮仍只证明 local/static/fixture 合同，不授权真实数据、runtime、publish、paper/live 或 trading。 |
 
 ## 1. 目标
 
@@ -74,6 +76,7 @@ authorization_boundary: "planning-only; no runtime, broker write, provider fetch
 | Machine Learning strategy E2E first wave | `CR-152` | closed / READY_WITH_RISK | 已完成 local/static/fixture-only ML strategy foundation：PIT feature matrix / label policy、purged + embargo CV、training snapshot / model artifact metadata、prediction artifact、ML admission gate 和 admission package linkage。`FU-CR152-001` taxonomy/provenance hygiene 保持 candidate；不声明真实模型性能、生产就绪、registry 发布或 runtime readiness。 |
 | Event-Driven strategy E2E first wave | `CR-153` | closed / READY_WITH_RISK | 已完成 local/static/fixture-only event-driven strategy foundation：event time / available_at / decision_time 语义、event study method / test slots、cluster/endogeneity slots、event admission gate adapter 和 event trace wording。CR153 不授权 live event feed、runtime、broker、真实订单或真实数据验证。 |
 | Cross-strategy production reliability gates first wave | `CR-154` | closed / READY_WITH_RISK | 已完成 local/static/fixture-only 横切可靠性门控：backtest trap / statistical reliability artifacts、walk-forward/OOS/purged-embargo governance、PIT universe / survivorship gate、capacity / impact / liquidity contract、regime / attribution / reconciliation slots 和 admission default policy tier resolution。`FU-CR154-001` final packaging hygiene 保持 candidate；不声明 production/runtime/trading/broker readiness。 |
+| Stage 2 multifactor framework first slice | `CR-157` | CP8 pending / READY_WITH_RISK candidate | CP7 已通过 local/static/fixture 验证：`Stage2MaturePackageRefSet`、refs-only `ResearchEvidenceItem`、handoff readiness metadata 和 all-counter no-runtime guard 均有测试 / 证据覆盖。该状态仍不声明真实数据验证、runtime、publish、paper/live 或 trading readiness。 |
 
 当前执行锁：
 
@@ -81,7 +84,7 @@ authorization_boundary: "planning-only; no runtime, broker write, provider fetch
 active formal CR: none
 selected route: A - local research / strategy framework completion first
 deferred data-lake candidates: RA-CR149-001, FU-CR149-002, FU-CR139-001, RA-CR139-002, FU-CR140-001
-next recommended candidate: FU-CR154-001 final packaging hygiene before or alongside FU-CR152-001 test taxonomy / PROVENANCE hygiene
+next active work: CR157 CP8 release readiness human gate for `READY_WITH_RISK`; do not treat this as runtime, publish, paper/live or trading authorization.
 ```
 
 执行边界：

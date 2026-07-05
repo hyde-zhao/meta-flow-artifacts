@@ -23,7 +23,7 @@ next_route: "CP5"
 | Item | Result | Notes |
 |---|---|---|
 | Story plan traceable to CP3 HLD / ADR | PASS | Four stories cover contracts, evaluator, linkage and evidence wording. |
-| DAG has no cycles or invalid references | PASS | `process/DEVELOPMENT-PLAN-CR151.yaml#dependency_graph` |
+| DAG has no cycles or invalid references | PASS | `process/DEVELOPMENT-PLAN-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml#dependency_graph` |
 | Parallel safety defined | PASS | S01/S02 serialized by shared module; S03 isolated as CR150 linkage owner. |
 | Authorization boundary preserved | PASS | No implementation/runtime/credential/lake/NAS/provider/QMT/broker/external framework/Git remote authorization. |
 | Wave B deferred items explicit | PASS | Extended diagnostics, regime-aware validation and factor clustering/de-dup are tracked as deferred. |
@@ -39,9 +39,9 @@ next_route: "CP5"
 
 ## Deliverables
 
-- `process/STORY-BACKLOG-CR151.md`
-- `process/STORY-STATUS-CR151.md`
-- `process/DEVELOPMENT-PLAN-CR151.yaml`
+- `process/STORY-BACKLOG-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.md`
+- `process/STORY-STATUS-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.md`
+- `process/DEVELOPMENT-PLAN-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml`
 - `process/stories/CR151-S01-statistical-report-contracts.md`
 - `process/stories/CR151-S02-gate-evaluator-fail-closed-rules.md`
 - `process/stories/CR151-S03-admission-completion-linkage.md`

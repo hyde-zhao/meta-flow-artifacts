@@ -43,7 +43,7 @@ open_items: 0
 | Feature DESIGN | `process/docs/features/cross-strategy-reliability-gates/DESIGN.md` | FEAT-15 boundary, shared contract shape, Gate 2 requirement and failure paths. |
 | Feature TEST-PLAN | `process/docs/features/cross-strategy-reliability-gates/TEST-PLAN.md` | Required Gate 2 fixture cases: pass, missing OOS, missing purge/embargo and strategy-specific n/a. |
 | Feature TASKS | `process/docs/features/cross-strategy-reliability-gates/TASKS.md` | `CR154-T03` design task and future implementation file anchors. |
-| Development Plan | `process/DEVELOPMENT-PLAN-CR154.yaml` | Wave W2 dependency on S01, shared file ownership, max parallel LLD and no implementation authorization. |
+| Development Plan | `process/DEVELOPMENT-PLAN-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | Wave W2 dependency on S01, shared file ownership, max parallel LLD and no implementation authorization. |
 
 ## 1. Goal
 

@@ -17,7 +17,7 @@ CR154 CP8 human risk acceptance is approved as `READY_WITH_RISK`. CP7 passed aft
 - CP7 result: `process/checks/CP7-CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES-VERIFICATION.result.json`
 - CP7 evidence: `process/evidence/CR154-CP7-VERIFICATION.index.json`
 - CP7 return: `process/returns/CR154-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.CP7.return.json`
-- Release context: `process/release/RELEASE-CONTEXT-CR154.yaml`
+- Release context: `process/release/RELEASE-CONTEXT-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml`
 - Release docs: `process/docs/release/RELEASE-NOTES-CR154.md`, `process/docs/release/DEPLOY-CHECKLIST-CR154.md`, `process/docs/release/ROLLBACK-CR154.md`, `process/docs/release/MIGRATION-CR154.md`, `process/docs/release/FEEDBACK-CR154.md`
 
 ## Risk Acceptance

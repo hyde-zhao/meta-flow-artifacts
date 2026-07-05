@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-VERIFICATION",
+  "cr_id": "CR-157",
+  "story_id": "CR157-S01..S05",
+  "context_ref": "process/context/CP7-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-VERIFICATION-CONTEXT.yaml",
+  "dispatch_refs": [
+    "ADE-CR157-META-QA-CP7-START-20260705T140000+0800"
+  ],
+  "evidence_ref": "process/evidence/CR157-CP7-VERIFICATION.index.json",
+  "return_ref": "process/returns/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP7.return.json",
+  "verification_report_ref": "docs/quality/VERIFICATION-REPORT-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md",
+  "items": [
+    {
+      "id": "CP7-CR157-01",
+      "category": "entry",
+      "name": "CP7 context and process route are readable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP7-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-VERIFICATION-CONTEXT.yaml",
+        "process/.meta-flow-process.yaml",
+        "process/state/STATE.current.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "process is a symlink to artifact-backed process root; STATE.current.json is readable and points to the CP7 context."
+    },
+    {
+      "id": "CP7-CR157-02",
+      "category": "dispatch",
+      "name": "meta-qa CP7 dispatch evidence is present",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/state/AGENT-DISPATCH-LEDGER.ndjson#ADE-CR157-META-QA-CP7-START-20260705T140000+0800"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "User requested placeholder dispatch ref is used; host-orchestrator may replace/update it during integration."
+    },
+    {
+      "id": "CP7-CR157-03",
+      "category": "cp6-evidence",
+      "name": "CP6 result, return packet and evidence index are complete and consumable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-IMPLEMENTATION.result.json",
+        "process/returns/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP6.return.json",
+        "process/evidence/CR157-CP6-IMPLEMENTATION.index.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "JSON parse succeeded; CP6 result-check returned PASS; return/evidence refs are internally linked."
+    },
+    {
+      "id": "CP7-CR157-04",
+      "category": "design-contract",
+      "name": "S01 mature package ref set contract is implemented and tested",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/mature_multifactor_framework.py#STAGE2_MATURE_PACKAGE_REQUIRED_REFS",
+        "tests/research/test_mature_multifactor_framework_stage2.py#test_stage2_12_mature_package_ref_set_covers_required_stage2_exit_refs"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Required refs include factor specs, run specs, panel, label, evaluation, portfolio/risk, mature support and evidence index refs."
+    },
+    {
+      "id": "CP7-CR157-05",
+      "category": "design-contract",
+      "name": "S02 refs-only evidence item/index contract is implemented and tested",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/mature_multifactor_framework.py#validate_research_evidence_index_refs_only",
+        "tests/research/test_mature_multifactor_framework_stage2.py#test_stage2_13_research_evidence_items_are_refs_only_and_unique"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Copied full body/report/matrix/review/diff/transcript fields block validation; duplicate evidence ids block validation."
+    },
+    {
+      "id": "CP7-CR157-06",
+      "category": "design-contract",
+      "name": "S03 Stage2/Stage3 handoff readiness contract is implemented and tested",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/mature_multifactor_framework.py#validate_stage3_research_machine_handoff",
+        "tests/research/test_mature_multifactor_framework_stage2.py#test_stage2_14_stage3_handoff_readiness_fails_closed_on_missing_package_or_unknown_status"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Missing package_ref and unknown readiness_status fail closed."
+    },
+    {
+      "id": "CP7-CR157-07",
+      "category": "design-contract",
+      "name": "S04 forbidden operation counter guard covers all counters",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/mature_multifactor_framework.py#FORBIDDEN_OPERATION_COUNTERS",
+        "engine/mature_multifactor_framework.py#validate_stage2_no_lake",
+        "tests/research/test_mature_multifactor_framework_stage2.py#test_stage2_15_every_forbidden_operation_counter_blocks_no_lake_boundary"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "13 counters imported from shared forbidden operation policy are parametrized in the Stage 2 test."
+    },
+    {
+      "id": "CP7-CR157-08",
+      "category": "tests",
+      "name": "Targeted Stage 2 and Stage 3 regression tests pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR157-CP7-VERIFICATION.index.json#commands"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "27 Stage 2 tests and 7 Stage 3 tests passed under uv."
+    },
+    {
+      "id": "CP7-CR157-09",
+      "category": "documentation",
+      "name": "Docs/backlog/roadmap avoid runtime/publish/trading overclaim and keep deferred adapters deferred",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/components/MULTIFACTOR-RESEARCH.md",
+        "docs/product/BACKLOG.md",
+        "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md",
+        "process/evidence/CR157-CP7-VERIFICATION.index.json#contract_checks"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "DF-CR157-001 and DF-CR157-002 remain follow-up/deferred; docs state no runtime/publish/paper/live/trading readiness."
+    },
+    {
+      "id": "CP7-CR157-10",
+      "category": "state-process",
+      "name": "CR-INDEX.json is the sole CR index",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-INDEX.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "CR-INDEX.json parses; process/changes/CR-INDEX.yaml and CR-INDEX.yml do not exist."
+    },
+    {
+      "id": "CP7-CR157-11",
+      "category": "security",
+      "name": "No forbidden runtime/data/publish/trading operation was executed during CP7",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR157-CP7-VERIFICATION.index.json#boundary_check"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CP7 commands were local pytest, py_compile, diff/check, JSON/process checks and static rg review only."
+    },
+    {
+      "id": "CP7-CR157-12",
+      "category": "risk",
+      "name": "Static/fixture-only residual risk is recorded for CP8",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/quality/VERIFICATION-REPORT-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md#12-剩余风险"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "waive_with_risk_acceptance",
+      "waiver_ref": null,
+      "notes": "Decision is PASS_WITH_RISK; CP8 must preserve not-authorized runtime/publish/trading boundary."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP8",
+  "checked_at": "2026-07-05T14:00:00+08:00",
+  "summary": {
+    "story_count": 5,
+    "validation_mode": "mixed-static-fixture",
+    "stage2_tests_passed": 27,
+    "stage3_regression_tests_passed": 7,
+    "py_compile_passed": true,
+    "diff_check_passed": true,
+    "cp6_result_check_passed": true,
+    "forbidden_operation_count": 0,
+    "cr_index_json_only": true,
+    "real_lake_read_executed": false,
+    "real_lake_write_executed": false,
+    "runtime_authorized": false,
+    "trading_authorized": false,
+    "publish_authorized": false,
+    "risk_count": 2
+  },
+  "risks": [
+    {
+      "id": "R-CR157-CP7-STATIC-FIXTURE-ONLY",
+      "severity": "medium",
+      "status": "cp8_risk_acceptance_required",
+      "summary": "CP7 verifies static/fixture contracts only and does not authorize or prove real runtime, real data, publish, paper/live or trading readiness."
+    },
+    {
+      "id": "R-CR157-CP7-TEST-STRATEGY-SCOPING",
+      "severity": "low",
+      "status": "process_hygiene_followup_candidate",
+      "summary": "Global TEST-STRATEGY.md is CR151-scoped; CR157 scoped strategy is in the verification report."
+    }
+  ],
+  "updated_at": "2026-07-05T14:00:00+08:00"
+}

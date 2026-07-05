@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-REQUEST-INTAKE",
+  "cr_id": "CR-157",
+  "context_ref": "process/context/CP0-CR157.context.json",
+  "items": [
+    {
+      "id": "CP0-CR157-01",
+      "category": "workspace-routing",
+      "name": "Process route is healthy",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run meta-flow workspace check --project-root ."
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "process_link_health reported ok with routing_mode=symlink."
+    },
+    {
+      "id": "CP0-CR157-02",
+      "category": "cr-tracking",
+      "name": "No active or blocked formal CR conflicts before intake",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run meta-flow check cr-tracking --project-root .",
+        "process/changes/CR-INDEX.json#active_crs",
+        "process/state/STATE.current.json#active_change"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Before CR157 activation, CR tracking reported no active formal CRs and no blocked formal CRs."
+    },
+    {
+      "id": "CP0-CR157-03",
+      "category": "request-intake",
+      "name": "User request captured",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-2026-07-05.md#变更描述",
+        "process/context/CP0-CR157.context.json#raw_user_request"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "The request to review the CR156 retrospective and proceed to Stage 2 or FU-CR154-001 was captured."
+    },
+    {
+      "id": "CP0-CR157-04",
+      "category": "routing",
+      "name": "Stage 2 selected over FU-CR154-001",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-FOLLOW-UP-TRACKING-2026-07-04.md#FU-CR154-001",
+        "process/checks/FU-CR154-001-FINAL-PACKAGING-HYGIENE-2026-07-04.md",
+        "process/checks/CR156-META-FLOW-PROCESS-RETROSPECTIVE-2026-07-05.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "FU-CR154-001 is already closed by CR156; CR157 is the next active Stage 2 product/framework upgrade."
+    },
+    {
+      "id": "CP0-CR157-05",
+      "category": "authorization-boundary",
+      "name": "Initial authorization boundary is explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-2026-07-05.md#结构化权限策略"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR157 does not authorize runtime, real lake/NAS/provider access, credentials, trading/broker action, catalog/store/registry write, Git remote write, publish or external framework execution."
+    },
+    {
+      "id": "CP0-CR157-06",
+      "category": "routing",
+      "name": "Product baseline refresh route selected",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-2026-07-05.md#产品基线重整门禁"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR157 requires requirement-clarification / meta-pm / CP2 before HLD, Story decomposition, LLD or implementation."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR157-CP0-FORMAL-CR-2026-07-05T112342+0800",
+    "READ-CR157-CP0-CR156-RETROSPECTIVE-2026-07-05T112342+0800",
+    "READ-CR157-CP0-FU-CR154-FOLLOWUP-2026-07-05T112342+0800",
+    "READ-CR157-CP0-STAGE2-INITIAL-SLICE-2026-07-05T112342+0800"
+  ],
+  "decision": "PASS",
+  "next_route": "requirement-clarification"
+}

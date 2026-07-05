@@ -8,7 +8,7 @@ created_at: "2026-07-02T08:50:00+08:00"
 reviewed_by: "user"
 reviewed_at: "2026-07-02T09:05:00+08:00"
 auto_check_result: "process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.summary.md"
-release_context_ref: "process/release/RELEASE-CONTEXT-CR151.yaml"
+release_context_ref: "process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml"
 result_ref: "process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.json"
 target:
   phase: "cr151-release-readiness"
@@ -16,7 +16,7 @@ target:
   active_change: "CR-151"
   artifacts:
     - "docs/quality/TEST-STRATEGY.md"
-    - "process/release/RELEASE-CONTEXT-CR151.yaml"
+    - "process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml"
     - "process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.json"
     - "process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.summary.md"
 ---
@@ -28,7 +28,7 @@ target:
 | 预检文件 | 结论 | 阻断项 | 说明 |
 |---|---|---:|---|
 | `process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.json` | PASS / READY_WITH_RISK pending approval | 0 | CR151 source and static/fixture evidence complete; only STATE v2 hygiene risk acceptance remains. |
-| `process/release/RELEASE-CONTEXT-CR151.yaml` | READY_WITH_RISK | 0 | Minimal profile; no install, deployment, runtime or data operation. |
+| `process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml` | READY_WITH_RISK | 0 | Minimal profile; no install, deployment, runtime or data operation. |
 
 ## Decision Brief
 
@@ -46,8 +46,8 @@ target:
 
 | 字段 | 内容 |
 |---|---|
-| capsule 路径 | `process/release/RELEASE-CONTEXT-CR151.yaml` |
-| release context | `process/release/RELEASE-CONTEXT-CR151.yaml` |
+| capsule 路径 | `process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml` |
+| release context | `process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml` |
 | read_profile | compact |
 | 默认读取策略 | release context first；消费 CP7 result、CP7 evidence、return packet、canonical TEST-STRATEGY 和最小验证命令结果。 |
 | 全文档读取扩展 | 读取 `docs/quality/TEST-STRATEGY.md` 是为关闭 `CR151-CP7-R01`；读取 CP7 result/evidence 用于 release readiness。 |
@@ -61,7 +61,7 @@ target:
 | CP7 evidence index | `process/evidence/CR151-CP7-VERIFICATION.index.json` | scanned | 3 | 0 | R01/R02 closed; no runtime operation. |
 | CP7 return packet | `process/returns/CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.CP7.return.json` | scanned | 2 | 0 | return actor/decision/design_delta complete; R01/R02 closed. |
 | TEST-STRATEGY | `docs/quality/TEST-STRATEGY.md` | scanned | 1 | 0 | Canonical strategy now exists and closes R01. |
-| Release context | `process/release/RELEASE-CONTEXT-CR151.yaml` | scanned | 2 | 1 | STATE v2 hygiene remains pending risk acceptance. |
+| Release context | `process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml` | scanned | 2 | 1 | STATE v2 hygiene remains pending risk acceptance. |
 | STATE check | `uv run --python 3.11 meta-flow state check --project-root /home/hyde/workspace/quant-lab` | scanned | 1 | 1 | v2 contract FAIL converted to `DEC-CR151-CP8-001`. |
 | cr-tracking | `uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab` | scanned | 1 | 0 | active formal CRs = CR-151; blocked formal CRs = none; historical warnings are not CR151 blockers. |
 
@@ -153,7 +153,7 @@ target:
 
 | 交付物 | 路径 | 审查结果 | 审查意见 |
 |---|---|---|---|
-| Release context | `process/release/RELEASE-CONTEXT-CR151.yaml` | PASS | READY_WITH_RISK pending approval. |
+| Release context | `process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml` | PASS | READY_WITH_RISK pending approval. |
 | CP8 result JSON | `process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.json` | PASS | Pending human decision. |
 | CP8 result summary | `process/checks/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.result.summary.md` | PASS | Scoped summary. |
 | CP8 manual checkpoint | `process/checkpoints/CP8-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-RELEASE-READINESS.md` | approved | User approval recorded. |

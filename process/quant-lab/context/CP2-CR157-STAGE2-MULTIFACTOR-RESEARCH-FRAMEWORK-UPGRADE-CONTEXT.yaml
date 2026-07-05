@@ -1,0 +1,229 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "CR-157"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-07-05T11:45:00+08:00"
+updated_at: "2026-07-05T12:20:00+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-157"
+profile: "stage2-multifactor-framework-upgrade-scope"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 12
+  max_summary_items: 24
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: "N/A; capsule contains sufficient CP2 gate summary. Full formal docs are read only for audit, conflict resolution, or user-requested deep review."
+  default_instruction: "Agent 必须先读取本 capsule，并且只读取 allowed_reads / must_read；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+
+allowed_reads:
+  - path: "process/state/STATE.current.json"
+    reason: "轻量运行态、当前阶段、活跃 CR、pending gate 和下一步。"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "文件系统级当前入口发现层，含 context / checkpoint 指针。"
+    required: true
+  - path: "process/changes/summaries/CR-157.summary.json"
+    reason: "CR157 轻量摘要和影响面。"
+    required: true
+  - path: "process/checkpoints/CP2-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-SCOPE.md"
+    reason: "CP2 Decision Brief 和待人工决策清单。"
+    required: true
+  - path: "docs/product/USE-CASES.md"
+    reason: "UC-58 / SGQ / Deferred Ideas 产品基线。"
+    required: true
+  - path: "docs/product/REQUIREMENTS.md"
+    reason: "REQ-CR157-* 需求基线。"
+    required: true
+  - path: "docs/product/SCENARIOS.yaml"
+    reason: "P0 场景和覆盖摘要。"
+    required: true
+  - path: "docs/product/TEST-MATRIX.md"
+    reason: "需求到场景的验证覆盖矩阵。"
+    required: true
+  - path: "docs/product/MVP-SCOPE.md"
+    reason: "In scope / out of scope / deferred 边界。"
+    required: true
+
+must_read:
+  - path: "process/state/STATE.current.json"
+    reason: "当前 pending gate、blocked 状态和 next_action。"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "当前 context / checkpoint / result 指针。"
+    required: true
+  - path: "process/changes/summaries/CR-157.summary.json"
+    reason: "CR157 scope summary、authz policy refs 和 required gate。"
+    required: true
+  - path: "process/checkpoints/CP2-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-SCOPE.md"
+    reason: "CP2 人工门禁真相源。"
+    required: true
+
+read_if_needed:
+  - path: "process/changes/CR-157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-2026-07-05.md"
+    trigger: "需要审计 formal CR frontmatter、Checkpoint Index、文档处理决策或不授权边界时读取。"
+  - path: "process/discussions/CP2-CR157-SCENARIO-DISCUSSION-LOG.md"
+    trigger: "需要追溯 Scenario Gray Areas 讨论状态或用户选择记录时读取。"
+  - path: "process/checks/CP2-CR157-DISCUSSION-CHECKPOINT.json"
+    trigger: "需要机器恢复 SGQ 状态时读取。"
+  - path: "process/checks/STAGE2-MULTIFACTOR-FRAMEWORK-NO-LAKE-INITIAL-SLICE-2026-06-26.md"
+    trigger: "CP3 需要追溯 Stage 2 no-lake initial slice 既有证据时读取。"
+  - path: "docs/components/MULTIFACTOR-RESEARCH.md"
+    trigger: "CP3 需要核对 component contract、Stage 2/Stage 3 handoff 和 existing runner evidence 时读取。"
+  - path: "docs/product/STORY-MAP.md"
+    trigger: "CP2 approved 后准备 CP3/CP4 Story planning 输入时读取。"
+  - path: "docs/product/RELEASE-SLICES.md"
+    trigger: "需要确认 CP2 到 CP8 切片关系时读取。"
+  - path: "docs/product/BACKLOG.md"
+    trigger: "需要确认 event/ML adapter deferred items 时读取。"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "人类摘要和 legacy fallback，不作为 agent 默认读取入口。"
+  - path_or_pattern: "process/DEVELOPMENT-PLAN*.yaml"
+    reason: "CP2 未批准前不得拆 Story 或读取开发计划作为执行依据。"
+  - path_or_pattern: "process/stories/**"
+    reason: "Story / LLD / implementation 在 CP2 前未授权。"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不属于当前阶段默认上下文。"
+  - path_or_pattern: "process/discussions/**"
+    reason: "讨论日志仅用于审计 / 恢复，不替代正式产物；需要追溯时再读取。"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "不得作为下游默认输入。"
+
+key_facts:
+  scope_summary:
+    recommended_first_slice:
+      - "mature admission package builder scope and contract"
+      - "research evidence index traceability"
+      - "Stage 2/Stage 3 handoff hardening"
+      - "fail-closed no-runtime/no-publish guard"
+      - "adapter backlog alignment for event and ML strategies"
+    recommended_deferred:
+      - "event strategy adapter implementation"
+      - "ML strategy adapter implementation"
+      - "Stage 4 observation workflow"
+    not_authorized_summary: "No real lake write, NAS/provider/credential/runtime/trading/catalog-store-registry write, publish, Git remote write or external framework run."
+  accepted_decisions:
+    - id: "DQ-CP2-CR157-FIRST-SLICE"
+      decision: "Approve CR157 first slice as mature admission package builder, research evidence traceability, Stage 2/Stage 3 handoff hardening and no-runtime guard; defer event/ML adapter implementation."
+      approved_by: "user"
+      approved_at: "2026-07-05T12:01:53+08:00"
+    - id: "SGQ-CR157-002"
+      decision: "No real external system, runtime, trading or publish authorization in CP2."
+    - id: "SGQ-CR157-003"
+      decision: "No HLD, Story split, LLD or implementation before CP2 approval."
+  active_constraints:
+    - "CP2 approval is required before CP3 solution-design."
+    - "CP2 approval only authorizes CP3 HLD / architecture review, not implementation."
+    - "All P0 validation remains fixture/static/no-lake until a later explicit authorization gate."
+  downstream_tasks:
+    - "If DQ-CP2-CR157-FIRST-SLICE is approved, update CP2 result/checkpoint/ledgers and route to CP3 solution-design."
+    - "If user requests scope changes, revise product baseline and regenerate Decision Brief / Decision Collection Coverage before re-launch."
+  traceability:
+    requirements:
+      - "REQ-CR157-001"
+      - "REQ-CR157-002"
+      - "REQ-CR157-003"
+      - "REQ-CR157-004"
+      - "REQ-CR157-005"
+      - "REQ-CR157-006"
+      - "REQ-CR157-007"
+    use_cases:
+      - "UC-58"
+      - "UC-58-CR157"
+    scenarios:
+      - "SC-CR157-P01"
+      - "SC-CR157-P02"
+      - "SC-CR157-N01"
+      - "SC-CR157-N02"
+      - "SC-CR157-B01"
+      - "SC-CR157-A01"
+    stories:
+      - "candidate-only: CR157-S01..S06 in docs/product/STORY-MAP.md"
+    features:
+      - "FEAT-03 mature admission package builder"
+      - "FEAT-13 research evidence index"
+      - "FEAT-14 handoff / runner boundary"
+
+risks_and_decisions:
+  pending_human_decisions: []
+  non_authorized_items:
+    - "implementation before CP5"
+    - "real lake write"
+    - "NAS read/write/sync/restore or metadata normalization"
+    - "provider fetch"
+    - "credential or env read"
+    - "QMT/MiniQMT/xtquant/gateway runtime"
+    - "simulation/paper/live/trading runtime"
+    - "broker write/submit/cancel/real account query"
+    - "catalog/store/registry/model/prediction write"
+    - "Git remote write"
+    - "true release execution or publish"
+    - "external framework clone/install/run"
+  risk_acceptance_items:
+    - id: "RISK-CR157-CP2-PENDING-SCOPE"
+      status: "resolved"
+      description: "First-slice scope accepted by user approve on 2026-07-05T12:01:53+08:00."
+  open_questions: []
+  n_a_or_waived_items:
+    - "No CP3 / CP4 / CP5 / CP6 / CP7 / CP8 evidence expected before CP2 approval."
+
+handoff:
+  target_agent: "meta-se"
+  expected_output:
+    - "CP3 HLD for CR157 mature admission package builder and handoff hardening"
+    - "Architecture decision for Stage 2 no-runtime / no-publish guard"
+    - "Use Case to Architecture traceability"
+  exit_criteria:
+    - "CP2 approved by user"
+    - "DQ-CP2-CR157-FIRST-SLICE status resolved"
+    - "No authorization boundary expanded by CP2 approval"
+  blocked_if_missing:
+    - "CP3 HLD output missing after CP3 design work starts"
+    - "CP3 checkpoint approval event missing before Story planning"
+    - "Updated CP2 result decision"
+
+read_expansion_log:
+  - at: "2026-07-05T11:45:00+08:00"
+    actor: "host-orchestrator"
+    expanded_to: "docs/components/MULTIFACTOR-RESEARCH.md"
+    reason: "CP1 use-case completeness needed existing multifactor component baseline."
+  - at: "2026-07-05T11:45:00+08:00"
+    actor: "host-orchestrator"
+    expanded_to: "process/checks/STAGE2-MULTIFACTOR-FRAMEWORK-NO-LAKE-INITIAL-SLICE-2026-06-26.md"
+    reason: "CP1 needed no-lake initial slice evidence."
+  - at: "2026-07-05T11:45:00+08:00"
+    actor: "host-orchestrator"
+    expanded_to: "process/discussions/CP2-CR157-SCENARIO-DISCUSSION-LOG.md"
+    reason: "CP1/CP2 needed SGQ status and pending user decision evidence."
+
+validation:
+  generated_from_sources:
+    - "process/changes/summaries/CR-157.summary.json"
+    - "process/checkpoints/CP2-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-SCOPE.md"
+    - "docs/product/USE-CASES.md"
+    - "docs/product/REQUIREMENTS.md"
+    - "docs/product/SCENARIOS.yaml"
+    - "docs/product/TEST-MATRIX.md"
+    - "docs/product/MVP-SCOPE.md"
+    - "process/discussions/CP2-CR157-SCENARIO-DISCUSSION-LOG.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "Capsule is structurally complete and ready for CP3 routing after user approved DQ-CP2-CR157-FIRST-SLICE."
+    - "No runtime or external operation authorization is added by this capsule."
+
+state_ref: "process/state/STATE.current.json"
+cr_index_ref: "process/changes/CR-INDEX.json"
+cr_summary_ref: "process/changes/summaries/CR-157.summary.json"
+formal_cr_ref: "process/changes/CR-157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-2026-07-05.md"
+discussion_ref: "process/discussions/CP2-CR157-SCENARIO-DISCUSSION-LOG.md"
+discussion_checkpoint_ref: "process/checks/CP2-CR157-DISCUSSION-CHECKPOINT.json"
+checkpoint_ref: "process/checkpoints/CP2-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-SCOPE.md"
+cp1_result_ref: "process/checks/CP1-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-USE-CASE-COMPLETENESS.result.json"
+cp2_result_ref: "process/checks/CP2-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-SCOPE.result.json"

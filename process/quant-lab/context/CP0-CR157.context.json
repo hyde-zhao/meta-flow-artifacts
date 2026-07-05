@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "project_id": "quant-lab",
+  "cr_id": "CR-157",
+  "stage": "CP0",
+  "profile": "stage2-multifactor-framework-upgrade-intake",
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-157.summary.json",
+  "formal_cr_ref": "process/changes/CR-157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-2026-07-05.md",
+  "raw_user_request": "评审 process/checks/CR156-META-FLOW-PROCESS-RETROSPECTIVE-2026-07-05.md 中的流程审计发现和优化机会，然后推进到 Stage 2（多因子研究框架升级）或 FU-CR154-001 最终打包 hygiene。",
+  "routing_decision": {
+    "selected_next_step": "Stage 2 multifactor research framework upgrade",
+    "not_selected": "FU-CR154-001 final packaging hygiene",
+    "reason": "FU-CR154-001 is already closed under CR156 CP8 with PASS evidence; Stage 2 is the remaining executable next work."
+  },
+  "source_evidence_refs": [
+    "process/checks/CR156-META-FLOW-PROCESS-RETROSPECTIVE-2026-07-05.md",
+    "process/changes/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-FOLLOW-UP-TRACKING-2026-07-04.md#FU-CR154-001",
+    "process/checks/FU-CR154-001-FINAL-PACKAGING-HYGIENE-2026-07-04.md",
+    "process/checks/STAGE2-MULTIFACTOR-FRAMEWORK-NO-LAKE-INITIAL-SLICE-2026-06-26.md",
+    "docs/components/MULTIFACTOR-RESEARCH.md"
+  ],
+  "must_read": [
+    {
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true,
+      "mode": "full"
+    },
+    {
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true,
+      "mode": "full"
+    },
+    {
+      "path": "process/changes/summaries/CR-157.summary.json",
+      "reason": "current_cr_summary",
+      "required": true,
+      "mode": "full"
+    }
+  ],
+  "read_if_needed": [
+    {
+      "path": "process/checks/CR156-META-FLOW-PROCESS-RETROSPECTIVE-2026-07-05.md",
+      "reason": "post_closure_process_audit",
+      "mode": "compact"
+    },
+    {
+      "path": "process/checks/STAGE2-MULTIFACTOR-FRAMEWORK-NO-LAKE-INITIAL-SLICE-2026-06-26.md",
+      "reason": "stage2_existing_evidence",
+      "mode": "compact"
+    },
+    {
+      "path": "docs/components/MULTIFACTOR-RESEARCH.md",
+      "reason": "stage2_component_baseline",
+      "mode": "compact"
+    }
+  ],
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "default to CR summary and context; full CR only for audit or conflict recovery"
+    },
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary / legacy fallback"
+    },
+    {
+      "path_or_pattern": "process/stories/*",
+      "reason": "Story work is blocked until CP2 and later design gates"
+    }
+  ],
+  "authorization_boundary": {
+    "real_lake_write": false,
+    "nas_access": false,
+    "provider_fetch": false,
+    "credential_read": false,
+    "runtime": false,
+    "trading": false,
+    "catalog_store_registry_write": false,
+    "git_remote_write": false,
+    "publish": false,
+    "external_framework_clone_install_run": false
+  },
+  "next_route": {
+    "phase": "requirement-clarification",
+    "agent": "meta-pm",
+    "gate": "CP2",
+    "block_story_decomposition_until": "CP2-approved"
+  }
+}

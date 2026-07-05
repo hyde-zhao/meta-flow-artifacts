@@ -40,7 +40,7 @@ open_items: 0
 | Feature DESIGN | `process/docs/features/cross-strategy-reliability-gates/DESIGN.md` | Gate 6 admission default policy、unknown profile fail-closed、release wording compatibility。 |
 | Feature TEST-PLAN | `process/docs/features/cross-strategy-reliability-gates/TEST-PLAN.md` | S07 fixture cases：T0 opt-in、T1 default-required、T2 release-blocking、T3 not-authorized、unknown fail-closed。 |
 | Feature TASKS | `process/docs/features/cross-strategy-reliability-gates/TASKS.md` | CR154-T07：Design Gate 6 admission tier resolver and release wording。 |
-| Development Plan | `process/DEVELOPMENT-PLAN-CR154.yaml` | W3 depends on S02-S06；same-file merge rule assigns S07 admission tier resolver after S02-S06。 |
+| Development Plan | `process/DEVELOPMENT-PLAN-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | W3 depends on S02-S06；same-file merge rule assigns S07 admission tier resolver after S02-S06。 |
 
 ## 1. Goal
 

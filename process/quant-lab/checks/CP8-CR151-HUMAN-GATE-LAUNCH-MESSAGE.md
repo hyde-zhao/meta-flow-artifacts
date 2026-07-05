@@ -2,7 +2,7 @@
 
 自动预检结论：PASS / READY_WITH_RISK pending approval
 
-Context Capsule：process/release/RELEASE-CONTEXT-CR151.yaml（read_profile=compact；minimal release profile）
+Context Capsule：process/release/RELEASE-CONTEXT-CR151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION.yaml（read_profile=compact；minimal release profile）
 
 审批者摘要：
 - 本次确认服务的整体目标：完成 CR151 multifactor strategy E2E statistical admission framework 的 CP8 release readiness，决定是否接受 STATE v2 hygiene 作为过程 caveat，并按 local/static/fixture 范围收尾。

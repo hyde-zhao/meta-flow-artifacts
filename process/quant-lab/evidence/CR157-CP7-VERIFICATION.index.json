@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "stage": "CP7",
+  "cr_id": "CR-157",
+  "story_id": "CR157-S01..S05",
+  "return_ref": "process/returns/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP7.return.json",
+  "verification_report_ref": "docs/quality/VERIFICATION-REPORT-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md",
+  "context_ref": "process/context/CP7-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-VERIFICATION-CONTEXT.yaml",
+  "dispatch_refs": [
+    "ADE-CR157-META-QA-CP7-START-20260705T140000+0800"
+  ],
+  "source_evidence_refs": [
+    "process/checks/CP6-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-IMPLEMENTATION.result.json",
+    "process/returns/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP6.return.json",
+    "process/evidence/CR157-CP6-IMPLEMENTATION.index.json",
+    "process/stories/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-IMPLEMENTATION.md",
+    "process/checkpoints/CP5-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-LLD-BATCH.md",
+    "process/DEVELOPMENT-PLAN-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.yaml"
+  ],
+  "changed_files": [
+    {
+      "path": "docs/quality/VERIFICATION-REPORT-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md",
+      "change_type": "added"
+    },
+    {
+      "path": "process/returns/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP7.return.json",
+      "change_type": "added"
+    },
+    {
+      "path": "process/evidence/CR157-CP7-VERIFICATION.index.json",
+      "change_type": "added"
+    },
+    {
+      "path": "process/checks/CP7-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-VERIFICATION.result.json",
+      "change_type": "added"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/quality/VERIFICATION-REPORT-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md",
+      "kind": "verification_report"
+    },
+    {
+      "path": "process/returns/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP7.return.json",
+      "kind": "return_packet"
+    },
+    {
+      "path": "process/checks/CP7-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-VERIFICATION.result.json",
+      "kind": "cp_result"
+    }
+  ],
+  "verified_files": [
+    {
+      "path": "engine/mature_multifactor_framework.py",
+      "kind": "code",
+      "checks": [
+        "py_compile",
+        "source_contract_review",
+        "targeted_pytest"
+      ],
+      "result": "PASS"
+    },
+    {
+      "path": "tests/research/test_mature_multifactor_framework_stage2.py",
+      "kind": "test",
+      "checks": [
+        "pytest_stage2_27_passed",
+        "negative_fixture_review"
+      ],
+      "result": "PASS"
+    },
+    {
+      "path": "tests/research/test_mature_multifactor_research_stage3.py",
+      "kind": "test",
+      "checks": [
+        "pytest_stage3_7_passed"
+      ],
+      "result": "PASS"
+    },
+    {
+      "path": "docs/components/MULTIFACTOR-RESEARCH.md",
+      "kind": "doc",
+      "checks": [
+        "no_runtime_overclaim_review",
+        "deferred_boundary_review"
+      ],
+      "result": "PASS"
+    },
+    {
+      "path": "docs/product/BACKLOG.md",
+      "kind": "doc",
+      "checks": [
+        "DF-CR157-001_deferred",
+        "DF-CR157-002_deferred",
+        "no_runtime_overclaim_review"
+      ],
+      "result": "PASS"
+    },
+    {
+      "path": "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md",
+      "kind": "doc",
+      "checks": [
+        "no_runtime_overclaim_review",
+        "deferred_boundary_review"
+      ],
+      "result": "PASS_WITH_RISK"
+    },
+    {
+      "path": "process/changes/CR-INDEX.json",
+      "kind": "state-process",
+      "checks": [
+        "json_parse",
+        "sole_index_check"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "commands": [
+    {
+      "command_id": "CMD-01",
+      "command": "uv run pytest -q tests/research/test_mature_multifactor_framework_stage2.py",
+      "result": "pass",
+      "summary": "27 passed in 0.05s"
+    },
+    {
+      "command_id": "CMD-02",
+      "command": "uv run pytest -q tests/research/test_mature_multifactor_research_stage3.py",
+      "result": "pass",
+      "summary": "7 passed in 0.63s"
+    },
+    {
+      "command_id": "CMD-03",
+      "command": "uv run --python 3.11 python -m py_compile engine/mature_multifactor_framework.py",
+      "result": "pass",
+      "summary": "module compiles"
+    },
+    {
+      "command_id": "CMD-04",
+      "command": "git diff --check -- engine/mature_multifactor_framework.py tests/research/test_mature_multifactor_framework_stage2.py tests/research/test_mature_multifactor_research_stage3.py docs/components/MULTIFACTOR-RESEARCH.md docs/product/BACKLOG.md docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md process/checks/CP6-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-IMPLEMENTATION.result.json process/returns/CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.CP6.return.json process/evidence/CR157-CP6-IMPLEMENTATION.index.json",
+      "result": "pass",
+      "summary": "no whitespace errors"
+    },
+    {
+      "command_id": "CMD-05",
+      "command": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE-IMPLEMENTATION.result.json --project-root . --mode silent",
+      "result": "pass",
+      "summary": "CP6 result-check returned PASS"
+    }
+  ],
+  "contract_checks": [
+    {
+      "id": "CR157-CP7-CONTRACT-S01",
+      "story": "CR157-S01",
+      "contract": "Stage2MaturePackageRefSet required refs are explicit and validation blocks missing refs.",
+      "result": "PASS",
+      "evidence_refs": [
+        "engine/mature_multifactor_framework.py#STAGE2_MATURE_PACKAGE_REQUIRED_REFS",
+        "tests/research/test_mature_multifactor_framework_stage2.py#test_stage2_12_mature_package_ref_set_covers_required_stage2_exit_refs"
+      ]
+    },
+    {
+      "id": "CR157-CP7-CONTRACT-S02",
+      "story": "CR157-S02",
+      "contract": "ResearchEvidenceItem and ResearchEvidenceIndex are refs-only and reject copied full body/diff/transcript data.",
+      "result": "PASS",
+      "evidence_refs": [
+        "engine/mature_multifactor_framework.py#EVIDENCE_BODY_FORBIDDEN_KEYS",
+        "tests/research/test_mature_multifactor_framework_stage2.py#test_stage2_13_research_evidence_items_are_refs_only_and_unique"
+      ]
+    },
+    {
+      "id": "CR157-CP7-CONTRACT-S03",
+      "story": "CR157-S03",
+      "contract": "Stage2/Stage3 handoff readiness fails closed on missing package/index/unknown status.",
+      "result": "PASS",
+      "evidence_refs": [
+        "engine/mature_multifactor_framework.py#validate_stage3_research_machine_handoff",
+        "tests/research/test_mature_multifactor_framework_stage2.py#test_stage2_14_stage3_handoff_readiness_fails_closed_on_missing_package_or_unknown_status"
+      ]
+    },
+    {
+      "id": "CR157-CP7-CONTRACT-S04",
+      "story": "CR157-S04",
+      "contract": "Every forbidden operation counter blocks Stage 2 no-lake boundary.",
+      "result": "PASS",
+      "evidence_refs": [
+        "engine/mature_multifactor_framework.py#validate_stage2_no_lake",
+        "tests/research/test_mature_multifactor_framework_stage2.py#test_stage2_15_every_forbidden_operation_counter_blocks_no_lake_boundary"
+      ]
+    },
+    {
+      "id": "CR157-CP7-CONTRACT-S05",
+      "story": "CR157-S05",
+      "contract": "Docs/backlog/roadmap do not overclaim runtime/publish/trading readiness and keep event/ML adapters deferred.",
+      "result": "PASS",
+      "evidence_refs": [
+        "docs/components/MULTIFACTOR-RESEARCH.md",
+        "docs/product/BACKLOG.md",
+        "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md"
+      ]
+    }
+  ],
+  "boundary_check": {
+    "forbidden_operation_count": 0,
+    "real_lake_read_executed": false,
+    "real_lake_write_executed": false,
+    "nas_operation_executed": false,
+    "provider_fetch_executed": false,
+    "credential_read_executed": false,
+    "qmt_or_gateway_runtime_executed": false,
+    "simulation_paper_live_executed": false,
+    "trading_or_broker_executed": false,
+    "catalog_store_registry_write_executed": false,
+    "publish_executed": false,
+    "external_framework_run_executed": false,
+    "git_remote_write_executed": false
+  },
+  "risks": [
+    {
+      "id": "R-CR157-CP7-STATIC-FIXTURE-ONLY",
+      "status": "cp8_risk_acceptance_required",
+      "severity": "medium",
+      "summary": "Static/fixture evidence only; no runtime, publish, paper/live or trading readiness is proven or authorized."
+    },
+    {
+      "id": "R-CR157-CP7-TEST-STRATEGY-SCOPING",
+      "status": "process_hygiene_followup_candidate",
+      "severity": "low",
+      "summary": "Global TEST-STRATEGY is CR151-scoped; CR157 strategy is embedded in the CP7 verification report."
+    }
+  ],
+  "waivers": [],
+  "blockers": [],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP8"
+}

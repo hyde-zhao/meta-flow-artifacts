@@ -8,17 +8,17 @@ created_at: "2026-07-02T13:53:21+08:00"
 reviewed_by: "user"
 reviewed_at: "2026-07-02T14:31:40+08:00"
 auto_check_result: "process/checks/CP8-CR152-ML-STRATEGY-E2E-RELEASE-READINESS.result.summary.md"
-release_context_ref: "process/release/RELEASE-CONTEXT-CR152.yaml"
+release_context_ref: "process/release/RELEASE-CONTEXT-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml"
 result_ref: "process/checks/CP8-CR152-ML-STRATEGY-E2E-RELEASE-READINESS.result.json"
 target:
   phase: "cr152-release-readiness"
   workflow_id: "ROADMAP-QUANT-RESEARCH-PRODUCTION"
   active_change: "CR-152"
   artifacts:
-    - "process/release/RELEASE-CONTEXT-CR152.yaml"
+    - "process/release/RELEASE-CONTEXT-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml"
     - "process/checks/CP8-CR152-ML-STRATEGY-E2E-RELEASE-READINESS.result.json"
     - "process/checks/CP8-CR152-ML-STRATEGY-E2E-RELEASE-READINESS.result.summary.md"
-    - "process/changes/CR-152-FOLLOW-UP-TRACKING-2026-07-02.md"
+    - "process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-FOLLOW-UP-TRACKING-2026-07-02.md"
 ---
 
 # CP8 CR152 Release Readiness 人工审查
@@ -28,7 +28,7 @@ target:
 | 预检文件 | 结论 | 阻断项 | 说明 |
 |---|---|---:|---|
 | `process/checks/CP8-CR152-ML-STRATEGY-E2E-RELEASE-READINESS.result.json` | PASS / READY_WITH_RISK approved | 0 | CR152 source and static-fixture-only evidence complete; taxonomy/provenance hygiene remains scope-out candidate. |
-| `process/release/RELEASE-CONTEXT-CR152.yaml` | READY_WITH_RISK approved | 0 | Minimal profile; no install, deployment, runtime, real training, registry write or data operation. |
+| `process/release/RELEASE-CONTEXT-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml` | READY_WITH_RISK approved | 0 | Minimal profile; no install, deployment, runtime, real training, registry write or data operation. |
 
 ## Decision Brief
 
@@ -46,7 +46,7 @@ target:
 
 | 字段 | 内容 |
 |---|---|
-| capsule 路径 | `process/release/RELEASE-CONTEXT-CR152.yaml` |
+| capsule 路径 | `process/release/RELEASE-CONTEXT-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml` |
 | release_artifact_profile | `minimal` |
 | read_profile | compact |
 | 默认读取策略 | release context first；消费 CP7 result、CP7 evidence、CP7 return packet、follow-up tracking 和最小命令摘要。 |
@@ -60,8 +60,8 @@ target:
 | CP7 result | `process/checks/CP7-CR152-ML-STRATEGY-E2E-VERIFICATION.result.json` | scanned | 2 | 1 | `CR152-CP7-R01` 进入 `DEC-CR152-CP8-001`；S05 wording becomes CP8 release boundary. |
 | CP7 evidence index | `process/evidence/CR152-CP7-VERIFICATION.index.json` | scanned | 3 | 1 | VO-05/traceability wording risk is carried into release wording; FU-CR152-001 enters follow-up split. |
 | CP7 return packet | `process/returns/CR152-ML-STRATEGY-E2E.CP7.return.json` | scanned | 2 | 0 | return-check warning is cosmetic; actual return path matches expected path string. |
-| Follow-up tracking | `process/changes/CR-152-FOLLOW-UP-TRACKING-2026-07-02.md` | scanned | 1 | 1 | `FU-CR152-001` must be presented as candidate and not promoted without explicit authorization. |
-| Release context | `process/release/RELEASE-CONTEXT-CR152.yaml` | scanned | 4 | 1 | release decision, non-authorized items, forbidden release claims and follow-up split are represented. |
+| Follow-up tracking | `process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-FOLLOW-UP-TRACKING-2026-07-02.md` | scanned | 1 | 1 | `FU-CR152-001` must be presented as candidate and not promoted without explicit authorization. |
+| Release context | `process/release/RELEASE-CONTEXT-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml` | scanned | 4 | 1 | release decision, non-authorized items, forbidden release claims and follow-up split are represented. |
 | cr-tracking | `uv run --python 3.11 meta-flow check cr-tracking --project-root /home/hyde/workspace/quant-lab` | scanned | 1 | 0 | active formal CRs = CR-152; blocked formal CRs = none; legacy warnings are not CR152 blockers. |
 | workspace git-status | `uv run --python 3.11 meta-flow workspace git-status --project-root /home/hyde/workspace/quant-lab` | scanned | 1 | 0 | project/artifact dirty, ahead=0, behind=0; no push/release execution authorized. |
 
@@ -127,7 +127,7 @@ target:
 |---|---|---|---|---|---|
 | 关闭范围 | CLOSE-CR152-001 | approved | 本轮 CP8 关闭 | 本文件 | CR152 local/static/fixture ML strategy E2E first-wave framework。 |
 | 风险接受项 | DEC-CR152-CP8-001 | accepted_by_user | 用户已接受，READY_WITH_RISK | 本文件 | taxonomy/provenance hygiene scope-out caveat。 |
-| 后续 CR 候选项 | FU-CR152-001 | candidate | 不自动启动 | `process/changes/CR-152-FOLLOW-UP-TRACKING-2026-07-02.md` | test taxonomy / PROVENANCE cleanup; requires explicit authorization. |
+| 后续 CR 候选项 | FU-CR152-001 | candidate | 不自动启动 | `process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-FOLLOW-UP-TRACKING-2026-07-02.md` | test taxonomy / PROVENANCE cleanup; requires explicit authorization. |
 | 后续 CR 候选项 | CR151-CP8-R03-STATE-V2-HYGIENE | accepted process caveat | 单独治理 | CR151 CP8 context | STATE.current.json / STATE.md slimming；不扩大 CR152。 |
 | 后续 CR 候选项 | CR-INDEX-LEGACY-WARNINGS | candidate | 单独治理 | cr-tracking output | Historical status/lifecycle and follow-up index warnings。 |
 | 后续路线图 | CR153 | planned | Rule 41 conflict precheck before start | roadmap | Event-driven strategy E2E framework foundation。 |
@@ -138,9 +138,9 @@ target:
 | 条目 | 状态 | 证据 | 审查意见 |
 |---|---|---|---|
 | CP7 verification completed | PASS | CP7 result/evidence/return | Static-fixture-only verification complete. |
-| Release context generated | PASS | `process/release/RELEASE-CONTEXT-CR152.yaml` | Minimal profile. |
+| Release context generated | PASS | `process/release/RELEASE-CONTEXT-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml` | Minimal profile. |
 | CP8 result generated | PASS | CP8 result JSON | READY_WITH_RISK approved. |
-| Follow-up tracking present | PASS | `process/changes/CR-152-FOLLOW-UP-TRACKING-2026-07-02.md` | `FU-CR152-001` remains candidate. |
+| Follow-up tracking present | PASS | `process/changes/CR-152-ML-STRATEGY-E2E-FRAMEWORK-FOLLOW-UP-TRACKING-2026-07-02.md` | `FU-CR152-001` remains candidate. |
 
 ## Checklist
 
@@ -164,7 +164,7 @@ target:
 
 | 交付物 | 路径 | 审查结果 | 审查意见 |
 |---|---|---|---|
-| Release context | `process/release/RELEASE-CONTEXT-CR152.yaml` | PASS | READY_WITH_RISK approved. |
+| Release context | `process/release/RELEASE-CONTEXT-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml` | PASS | READY_WITH_RISK approved. |
 | CP8 result JSON | `process/checks/CP8-CR152-ML-STRATEGY-E2E-RELEASE-READINESS.result.json` | PASS | User approval recorded. |
 | CP8 result summary | `process/checks/CP8-CR152-ML-STRATEGY-E2E-RELEASE-READINESS.result.summary.md` | PASS | Scoped summary. |
 | CP8 manual checkpoint | `process/checkpoints/CP8-CR152-DELIVERY-READINESS.md` | approved | User approval recorded. |

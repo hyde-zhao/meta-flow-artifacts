@@ -55,7 +55,7 @@ Story technical note covering wording sources, evidence refs, release limitation
 | HLD | `process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md` | Fixture-only claim boundary, deferred later-wave items |
 | ADR | `process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md` | Metadata-only and no-registry-write boundary |
 | CP4 Result | `process/checks/CP4-CR152-STORY-DAG-PARALLEL-SAFETY.result.json` | S05 technical-note policy and dependency order |
-| Development Plan | `process/DEVELOPMENT-PLAN-CR152.yaml` | Evidence wording after S01-S04 design decisions stabilize |
+| Development Plan | `process/DEVELOPMENT-PLAN-CR152-ML-STRATEGY-E2E-FRAMEWORK.yaml` | Evidence wording after S01-S04 design decisions stabilize |
 | Feature refs | `docs/features/factor-research-loop/TEST-PLAN.md` / `TASKS.md` | CP7/CP8 wording alignment only; not a claim that S05 implements factor-research-loop functional behavior. |
 
 ### 文件影响

@@ -44,7 +44,7 @@ open_items: 0
 | Feature DESIGN | `process/docs/features/cross-strategy-reliability-gates/DESIGN.md` | FEAT-15 Gate 3 requirement and integration contract with CR153 event gate. |
 | Feature TEST-PLAN | `process/docs/features/cross-strategy-reliability-gates/TEST-PLAN.md` | Required Gate 3 fixture cases: PIT pass, non-PIT blocked, CR153 slot delegated and CR153 slot absent blocked claim. |
 | Feature TASKS | `process/docs/features/cross-strategy-reliability-gates/TASKS.md` | `CR154-T04` design task and future implementation file anchors. |
-| Development Plan | `process/DEVELOPMENT-PLAN-CR154.yaml` | Wave W2 dependency on S01, file ownership, shared merge rule and no implementation authorization. |
+| Development Plan | `process/DEVELOPMENT-PLAN-CR154-CROSS-STRATEGY-RELIABILITY-GATES.yaml` | Wave W2 dependency on S01, file ownership, shared merge rule and no implementation authorization. |
 
 ## 1. Goal
 
