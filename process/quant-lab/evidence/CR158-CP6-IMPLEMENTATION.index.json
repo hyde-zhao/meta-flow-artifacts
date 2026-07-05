@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "stage": "CP6",
+  "cr_id": "CR-158",
+  "story_id": "CR158-S01..S06",
+  "return_ref": "process/returns/CR158-EVENT-ML-STRATEGY-ADAPTER.CP6.return.json",
+  "changed_files": [
+    {
+      "path": "engine/strategy_type_adapters.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/test_cr158_strategy_type_adapter_contract.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/test_cr158_event_strategy_adapter.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/test_cr158_ml_strategy_adapter.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/test_cr158_adapter_evidence_refs.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/test_cr158_adapter_no_runtime_guard.py",
+      "change_type": "created"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "process/stories/CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.md",
+      "kind": "implementation_summary"
+    },
+    {
+      "path": "process/context/stories/CR158-EVENT-ML-STRATEGY-ADAPTER.CP6.work-packet.json",
+      "kind": "work_packet"
+    },
+    {
+      "path": "process/context/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION-CONTEXT.yaml",
+      "kind": "context_capsule"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run pytest tests/test_cr158_strategy_type_adapter_contract.py tests/test_cr158_event_strategy_adapter.py tests/test_cr158_ml_strategy_adapter.py tests/test_cr158_adapter_evidence_refs.py tests/test_cr158_adapter_no_runtime_guard.py",
+      "result": "pass",
+      "summary": "20 passed in 0.04s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/strategy_type_adapters.py",
+      "result": "pass",
+      "summary": "module compiles"
+    },
+    {
+      "command": "uv run pytest tests/research/test_event_driven_strategy_e2e_contracts.py tests/research/test_ml_strategy_e2e_contracts.py tests/research/test_strategy_admission_package.py tests/research/test_cross_strategy_reliability_gates.py",
+      "result": "pass",
+      "summary": "60 passed in 0.60s"
+    }
+  ],
+  "tests": [
+    "test_cr158_s01_core_contract_passes_complete_static_fixture",
+    "test_cr158_s02_event_extension_passes_complete_static_fixture",
+    "test_cr158_s03_ml_extension_passes_complete_static_fixture",
+    "test_cr158_s04_builds_event_and_ml_evidence_refs_without_body_copy",
+    "test_cr158_s05_zero_operation_counters_pass_and_include_all_names"
+  ],
+  "boundary_check": {
+    "forbidden_operation_count": 0,
+    "real_event_feed_executed": false,
+    "real_ml_training_executed": false,
+    "external_model_service_executed": false,
+    "model_registry_write_executed": false,
+    "real_lake_read_executed": false,
+    "real_lake_write_executed": false,
+    "nas_operation_executed": false,
+    "provider_fetch_executed": false,
+    "credential_or_env_read_executed": false,
+    "qmt_or_gateway_runtime_executed": false,
+    "simulation_paper_live_executed": false,
+    "trading_or_broker_executed": false,
+    "catalog_store_registry_write_executed": false,
+    "publish_executed": false,
+    "external_framework_run_executed": false,
+    "git_remote_write_executed": false
+  },
+  "design_delta_ref": null,
+  "risks": [
+    {
+      "id": "R-CR158-STATIC-ONLY",
+      "status": "accepted-cp6-boundary",
+      "summary": "CP6 proves local/static/fixture adapter contracts only; real feed/training/data/runtime/registry/publish/trading readiness remains unauthorized and out of scope."
+    }
+  ],
+  "waivers": [],
+  "story_mapping": {
+    "CR158-S01": "StrategyTypeAdapterCore and AdapterValidationResult contract",
+    "CR158-S02": "EventAdapterExtension typed refs and no-feed guard",
+    "CR158-S03": "MLAdapterExtension typed refs and no-training/registry guard",
+    "CR158-S04": "AdapterTypedEvidenceRef and refs-only handoff summary",
+    "CR158-S05": "CR158 forbidden operation counters and limitations",
+    "CR158-S06": "Local/static/fixture wording boundary captured for CP7/CP8"
+  }
+}

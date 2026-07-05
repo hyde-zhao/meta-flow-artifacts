@@ -1,0 +1,80 @@
+schema_version: 1
+capsule_id: CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION-CONTEXT
+change_id: CR-158
+stage: CP7
+phase: story-execution
+status: ready-for-verification
+created_at: '2026-07-05T18:32:00+08:00'
+created_by: host-orchestrator
+validation_mode: mixed-static-fixture
+context_policy:
+  read_profile: compact
+  capsule_path: process/context/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION-CONTEXT.yaml
+  full_doc_read_requires_reason: true
+must_read:
+- process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json
+- process/returns/CR158-EVENT-ML-STRATEGY-ADAPTER.CP6.return.json
+- process/evidence/CR158-CP6-IMPLEMENTATION.index.json
+- process/stories/CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.md
+read_if_needed:
+- docs/product/SCENARIOS.yaml
+- docs/product/TEST-MATRIX.md
+- docs/design/HLD-EVENT-ML-STRATEGY-ADAPTER.md
+- docs/design/ARCHITECTURE-DECISION-EVENT-ML-STRATEGY-ADAPTER.md
+- engine/strategy_type_adapters.py
+- tests/test_cr158_strategy_type_adapter_contract.py
+- tests/test_cr158_event_strategy_adapter.py
+- tests/test_cr158_ml_strategy_adapter.py
+- tests/test_cr158_adapter_evidence_refs.py
+- tests/test_cr158_adapter_no_runtime_guard.py
+do_not_read_by_default:
+- process/discussions/**
+- process/archive/**
+- full conversation transcript
+- real data lake/NAS/provider resources
+- credentials or environment secrets
+key_facts:
+  cp6_decision: PASS
+  cp6_result_ref: process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json
+  cp6_evidence_ref: process/evidence/CR158-CP6-IMPLEMENTATION.index.json
+  test_summary:
+    cr158_targeted_tests: 20 passed
+    related_regression_tests: 60 passed
+    py_compile: passed
+    diff_check: passed
+  no_runtime_boundary: No real feed/training/provider/lake/NAS/credential/runtime/trading/broker/catalog/store/registry/publish/external
+    framework/Git remote operation was authorized or executed.
+risks_and_decisions:
+- id: R-CR158-CP7-STATIC-FIXTURE-ONLY
+  status: cp8_risk_acceptance_required
+  severity: medium
+  summary: CP7 verifies static/fixture contracts only; CP8 must not overclaim runtime, publish or trading readiness.
+handoff:
+  target_agent: meta-qa
+  dispatch_required: true
+  reasoning_profile: high
+  requested_action: Run CP7 verification-execution for CR158 S01-S06 using CP6 result/evidence and no-runtime boundary.
+  expected_outputs:
+  - docs/quality/VERIFICATION-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  - process/returns/CR158-EVENT-ML-STRATEGY-ADAPTER.CP7.return.json
+  - process/evidence/CR158-CP7-VERIFICATION.index.json
+  - process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json
+validation:
+  required_checks:
+  - scenario_requirement_story_design_implementation_traceability
+  - cr158_targeted_tests
+  - related_event_ml_regression_tests
+  - refs_only_evidence_policy
+  - all_forbidden_operation_counters_block_no_runtime_boundary
+  - release_wording_no_runtime_overclaim_review
+  forbidden_validation_actions:
+  - real feed/listener
+  - real training/service/registry
+  - real lake/NAS/provider access
+  - credential or env secret read
+  - QMT/MiniQMT/xtquant/gateway runtime
+  - simulation/paper/live/trading/broker operations
+  - catalog/store/registry/model/prediction writes
+  - publish or Git remote write
+  - external framework clone/install/run
+read_expansion_log: []

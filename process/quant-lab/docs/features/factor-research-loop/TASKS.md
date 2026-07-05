@@ -17,6 +17,7 @@ feature_id: "FEAT-03"
 | 1.5 | 2026-06-27 | codex | 增补自动异象发现系统任务：受控模板、批量 discovery、多重检验、动态目录接入和 Stage 3 候选消费。 |
 | 1.6 | 2026-06-28 | codex | 增补研究引擎稳定模块整改任务：领域名模块、共享 helper、旧 engine 入口归档、脚本归档和测试引用迁移。 |
 | 1.7 | 2026-07-01 | host-orchestrator | CR151 增补 Strategy Admission Statistical Gate 任务：统计报告合同、fail-closed evaluator、admission/completion linkage 和 static-only evidence wording。 |
+| 1.8 | 2026-07-05 | host-orchestrator | CR158 增补 Event + ML Strategy Adapter 任务：shared core、typed event/ML extensions、typed evidence refs 和 static-only release wording。 |
 
 | Task ID | 任务 | 输入 | 输出 | 文件范围 | 验证 |
 |---|---|---|---|---|---|
@@ -38,6 +39,11 @@ feature_id: "FEAT-03"
 | FEAT-03-T01J | CR151 fail-closed gate evaluator | T01I contracts、threshold policy、operation counters | PASS / FAIL / NEEDS_REVIEW / BLOCKED 聚合规则、mandatory missing BLOCKED、forbidden operation BLOCKED | `engine/strategy_admission_statistical_gate.py` | `tests/test_cr151_strategy_admission_statistical_gate.py` |
 | FEAT-03-T01K | CR151 admission / completion linkage | CR150 MultifactorFrameworkCompletionMap、StrategyAdmissionPackage | statistical gate ref、blocked reason、`statistical_admission_gate_missing` linkage gap；不改变 runtime readiness | `engine/mature_multifactor_research.py`、`engine/strategy_admission_package.py` | `tests/test_cr151_strategy_admission_statistical_gate.py`、`tests/test_cr150_multifactor_framework_completion.py` |
 | FEAT-03-T01L | CR151 static-only evidence wording | CP6/CP7/CP8 evidence rules、CR150 static-only precedent | return/evidence/release wording、no-real-operation counters、`effective_validation_mode=static-only` | `process/returns/*`、`process/evidence/*`、`docs/release/*` | CP7/CP8 result checks |
+| FEAT-03-T01M | CR158 shared adapter core contract | CP3-approved CR158 HLD/ADR、REQ-CR158-001 | StrategyTypeAdapterCore、AdapterValidationResult、typed extension dispatch boundary | planned `engine/strategy_type_adapters.py` or existing strategy contract module | planned `tests/test_cr158_strategy_type_adapter_contract.py` |
+| FEAT-03-T01N | CR158 event strategy adapter extension | CR158 shared core、REQ-CR158-002 | Event typed extension, event ref validation and blocked reasons | planned event adapter module under strategy contracts | planned `tests/test_cr158_event_strategy_adapter.py` |
+| FEAT-03-T01O | CR158 ML strategy adapter extension | CR158 shared core、REQ-CR158-003 | ML typed extension, model artifact refs and validation refs | planned ML adapter module under strategy contracts | planned `tests/test_cr158_ml_strategy_adapter.py` |
+| FEAT-03-T01P | CR158 adapter evidence typed refs | REQ-CR158-004、CR157 refs-only baseline | event/ML evidence extension refs, body_copy_count=0 validation | planned evidence index helpers | planned `tests/test_cr158_adapter_evidence_refs.py` |
+| FEAT-03-T01Q | CR158 adapter release wording | REQ-CR158-007、CP8 wording boundary | static-only adapter readiness wording and trace links | `docs/release/*`、component docs after CP6/CP7 | CP7/CP8 review |
 | FEAT-03-T02 | 维护 FactorPanel / LabelWindow gates | CR-011 + CR-030 | fail-closed panel / label policy | `engine/factor_panel_contracts.py` | label window tests |
 | FEAT-03-T03 | 维护评价报告与组合器 | factor panel / benchmark / cost | report 和 portfolio plan | `engine/factor_evaluation.py`、`engine/multifactor_combiner.py` | evaluation / combiner tests |
 | FEAT-03-T04 | 维护 ExperimentManifest / ReportCatalog | run spec / report path | 可复跑 manifest | `engine/research_manifest.py` | manifest catalog tests |
@@ -52,6 +58,7 @@ feature_id: "FEAT-03"
 - 新增或调整 FactorModelValidationReport schema、核心 gate policy、政策周期配置、GRS / 样本外 / 做空 / 壳价值 / 经济显著性评估规则。
 - Stage 3 目标、pass gate、candidate sweep、候选参数空间或 blocked 候选复盘格式变化。
 - StrategyAdmissionStatisticalGate schema、四态 gate policy、CR150 completion map linkage、或 static-only release wording 变化。
+- CR158 event/ML adapter core、typed extension 字段、evidence typed refs、adapter handoff 或 fixture/static readiness wording 变化。
 - 将 CR151 deferred Wave B（IC decay、half-life、turnover、capacity/liquidity、orthogonalization、monotonicity、quantile spread、regime-aware validation、factor correlation clustering / redundancy de-duplication）提前时。
 - 将 Qlib / external runner 从 reference 升级为 Spike。
 - admission package 要进入 CR-021 simulation 申请输入。

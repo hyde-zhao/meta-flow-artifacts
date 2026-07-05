@@ -1,0 +1,147 @@
+schema_version: 1
+capsule_id: CP5-CR158-EVENT-ML-STRATEGY-ADAPTER-LLD-CONTEXT
+created_at: '2026-07-05T17:35:00+08:00'
+created_by: host-orchestrator
+change_id: CR-158
+checkpoint: CP5
+purpose: Minimal context for CR158 LLD design evidence preparation and CP5 human gate.
+must_read:
+- process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml
+- process/STORY-STATUS-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+- process/docs/design/FEATURE-DESIGN-MATRIX.md
+- process/checks/CP4-CR158-EVENT-ML-STRATEGY-ADAPTER-STORY-DAG-PARALLEL-SAFETY.result.json
+- process/stories/CR158-S01-shared-adapter-core-contract.md
+- process/stories/CR158-S02-event-strategy-adapter-extension.md
+- process/stories/CR158-S03-ml-strategy-adapter-extension.md
+- process/stories/CR158-S04-evidence-handoff-typed-refs.md
+- process/stories/CR158-S05-no-runtime-guard-counters.md
+- process/stories/CR158-S06-verification-release-boundary.md
+read_if_needed:
+- process/checkpoints/CP3-CR158-EVENT-ML-STRATEGY-ADAPTER-HLD-REVIEW.md
+- process/checks/CP3-CR158-EVENT-ML-STRATEGY-ADAPTER-HLD-CONSISTENCY.result.json
+- docs/design/HLD-EVENT-ML-STRATEGY-ADAPTER.md
+- docs/design/ARCHITECTURE-DECISION-EVENT-ML-STRATEGY-ADAPTER.md
+- docs/product/SCENARIOS.yaml
+- docs/product/TEST-MATRIX.md
+- docs/product/STORY-MAP.md
+- docs/product/MVP-SCOPE.md
+- docs/features/factor-research-loop/DESIGN.md
+- docs/features/factor-research-loop/TEST-PLAN.md
+- docs/features/factor-research-loop/TASKS.md
+- docs/features/runtime-authorization-safety/DESIGN.md
+- docs/features/runtime-authorization-safety/TEST-PLAN.md
+- docs/features/runtime-authorization-safety/TASKS.md
+do_not_read_by_default:
+- process/archive/**
+- process/discussions/**
+- docs/quality/**
+- tests/**
+token_control:
+  read_profile: compact
+  max_expected_tokens: 20000
+  expansion_policy: Read full HLD/ADR/product docs/tests only for audit conflict,
+    blocker investigation or user-requested deep review.
+key_facts:
+  scope_summary: 'CP5 must review six CR158 design evidence items together: five full
+    LLDs for shared core/event/ML/evidence/no-runtime and one technical note for verification/release
+    boundary.'
+  cp3_approval:
+    approved_by: user
+    approved_at: '2026-07-05T17:35:00+08:00'
+    accepted_decisions:
+    - DQ-CP3-CR158-001
+    - DQ-CP3-CR158-002
+  cp4_result: process/checks/CP4-CR158-EVENT-ML-STRATEGY-ADAPTER-STORY-DAG-PARALLEL-SAFETY.result.json
+  design_evidence_distribution:
+    full_lld: 5
+    technical_note: 1
+    waived: 0
+  story_evidence:
+    CR158-S01: process/stories/CR158-S01-shared-adapter-core-contract-LLD.md
+    CR158-S02: process/stories/CR158-S02-event-strategy-adapter-extension-LLD.md
+    CR158-S03: process/stories/CR158-S03-ml-strategy-adapter-extension-LLD.md
+    CR158-S04: process/stories/CR158-S04-evidence-handoff-typed-refs-LLD.md
+    CR158-S05: process/stories/CR158-S05-no-runtime-guard-counters-LLD.md
+    CR158-S06: process/stories/CR158-S06-verification-release-boundary.md#技术说明
+  clarification_queue:
+    ref: process/state/QUESTION-LEDGER.ndjson
+    blocking_open_count: 0
+    spike_count: 0
+  merge_order: S01 -> S02/S03 -> S04/S05 -> S06
+  implementation_before_cp5_approval_allowed: false
+risks_and_decisions:
+  pending_decision_ids:
+  - DQ-CP5-CR158-001
+  - DQ-CP5-CR158-002
+  - DQ-CP5-CR158-003
+  high_risks:
+  - id: R-CR158-ADAPTER-CONTRACT-COUPLING
+    status: controlled_by_cp5_design_review
+    summary: Shared core must stay thin and avoid forcing event/ML private fields
+      into one schema.
+  - id: R-CR158-EVIDENCE-SEMANTIC-OVERFIT
+    status: controlled_by_refs_only_evidence_contract
+    summary: Evidence extension must use typed refs and body_copy_count=0.
+  - id: R-CR158-RUNTIME-OVERCLAIM
+    status: controlled_by_no_runtime_guard_and_release_wording
+    summary: Docs and release wording must not imply production/runtime/trading/model-registry
+      readiness.
+  not_authorized:
+  - real event feed or listener
+  - real ML training
+  - external model service
+  - model registry write/promotion
+  - real lake/NAS/provider/credential access
+  - QMT/MiniQMT/xtquant/gateway runtime
+  - simulation/paper/live/trading/broker operation
+  - catalog/store/registry/publish
+  - external framework run
+  - Git remote write
+handoff:
+  next_phase_if_approved: story-execution
+  next_agent: meta-dev
+  next_action_if_approved: Update Story statuses to lld-approved/dev-ready and start
+    CP6 local/static/fixture implementation in controlled merge order.
+  next_action_if_changes_requested: Reopen affected CR158 LLD/technical-note evidence
+    and regenerate CP5 checkpoint refs.
+  blocked_if_not_approved: CP6 implementation remains blocked.
+validation:
+  cp5_auto_result_ref: process/checks/CP5-CR158-EVENT-ML-STRATEGY-ADAPTER-LLD-IMPLEMENTABILITY.result.json
+  expected_result_decision: PASS
+  human_gate_ref: process/checkpoints/CP5-CR158-EVENT-ML-STRATEGY-ADAPTER-LLD-BATCH.md
+  launch_message_ref: process/checkpoints/CP5-CR158-EVENT-ML-STRATEGY-ADAPTER-LLD-BATCH.launch.md
+allowed_reads:
+- process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml
+- process/STORY-STATUS-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+- process/docs/design/FEATURE-DESIGN-MATRIX.md
+- process/checks/CP4-CR158-EVENT-ML-STRATEGY-ADAPTER-STORY-DAG-PARALLEL-SAFETY.result.json
+- process/state/STATE.current.json
+- process/state/QUESTION-LEDGER.ndjson
+- process/stories/CR158-S01-shared-adapter-core-contract.md
+- process/stories/CR158-S02-event-strategy-adapter-extension.md
+- process/stories/CR158-S03-ml-strategy-adapter-extension.md
+- process/stories/CR158-S04-evidence-handoff-typed-refs.md
+- process/stories/CR158-S05-no-runtime-guard-counters.md
+- process/stories/CR158-S06-verification-release-boundary.md
+read_expansion_log: []
+authorization_boundary:
+  lld_preparation_allowed: true
+  lld_approval_allowed: false
+  implementation_allowed: false
+  tests_implementation_allowed: false
+  real_event_feed_allowed: false
+  real_ml_training_allowed: false
+  external_model_service_allowed: false
+  model_registry_write_allowed: false
+  real_lake_read_allowed: false
+  real_lake_write_allowed: false
+  nas_operation_allowed: false
+  provider_fetch_allowed: false
+  credential_read_allowed: false
+  qmt_runtime_allowed: false
+  simulation_paper_live_allowed: false
+  broker_trading_allowed: false
+  catalog_store_registry_write_allowed: false
+  publish_allowed: false
+  external_framework_run_allowed: false
+  git_remote_write_allowed: false

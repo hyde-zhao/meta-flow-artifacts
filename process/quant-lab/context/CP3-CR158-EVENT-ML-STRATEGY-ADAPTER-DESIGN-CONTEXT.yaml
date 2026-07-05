@@ -1,0 +1,104 @@
+schema_version: 1
+context_id: "CP3-CR158-EVENT-ML-STRATEGY-ADAPTER-DESIGN-CONTEXT"
+cr_id: "CR-158"
+phase: "solution-design"
+checkpoint: "CP3"
+status: ready
+created_at: "2026-07-05T16:55:00+08:00"
+created_by: "host-orchestrator"
+read_profile: compact
+state_ref: "process/state/STATE.current.json"
+cr_ref: "process/changes/CR-158-EVENT-ML-STRATEGY-ADAPTER-UNIFIED-IMPLEMENTATION-2026-07-05.md"
+cr_summary_ref: "process/changes/summaries/CR-158.summary.json"
+route_plan_ref: "process/checks/CP0-CR158.route-plan.json"
+cp2_checkpoint_ref: "process/checkpoints/CP2-CR158-EVENT-ML-STRATEGY-ADAPTER-SCOPE.md"
+cp2_result_ref: "process/checks/CP2-CR158-EVENT-ML-STRATEGY-ADAPTER-SCOPE.result.json"
+objective:
+  summary: "Prepare CR158 HLD / ADR for a unified event + ML strategy adapter after CP2 approval."
+  user_decision: "User replied approve to CP2, accepting unified scope, no-runtime boundary and CP3-before-implementation gate sequence."
+  next_gate: "CP3 human review is required before story-planning."
+scope:
+  in_scope:
+    - "Architecture Gray Areas for shared adapter core vs type-specific event/ML extensions."
+    - "HLD and ADR for adapter contract, evidence index typed refs and Stage 2/Stage 3 handoff impact."
+    - "Use Case -> Architecture traceability for CR158 P0 scenarios."
+    - "No-runtime/no-publish security and release wording constraints."
+  out_of_scope:
+    - "Story decomposition before CP3 approval."
+    - "LLD, code implementation, tests or fixture implementation before CP5 approval."
+    - "Real event feed, real model training, external model service, model registry promotion, provider/lake/NAS/credential access, runtime, trading, publish or Git remote write."
+key_facts:
+  - "CP2 approved three decisions: DQ-CP2-CR158-UNIFIED-SCOPE, DQ-CP2-CR158-NO-RUNTIME, DQ-CP2-CR158-GATE-SEQUENCE."
+  - "CR158 uses architecture-major route; CP3, CP4, CP5, CP6, CP7 and CP8 remain applicable."
+  - "Product baseline contains UC-58-CR158, REQ-CR158-001..007, SC-CR158-P01/P02/N01/N02/B01/A01 and Test Matrix rows."
+  - "Implementation remains blocked until CP5 approves the full Story design evidence batch."
+must_read:
+  - path: "process/checkpoints/CP2-CR158-EVENT-ML-STRATEGY-ADAPTER-SCOPE.md"
+    reason: "Approved CP2 scope, decisions, no-runtime boundary and rollback alternatives."
+  - path: "process/changes/summaries/CR-158.summary.json"
+    reason: "Current CR summary, impact surface, conflict keys and authorization policy refs."
+  - path: "docs/product/USE-CASES.md"
+    reason: "UC-58-CR158, Scenario Gray Areas and deferred promotion mapping."
+  - path: "docs/product/REQUIREMENTS.md"
+    reason: "REQ-CR158-001..007 architecture and contract requirements."
+  - path: "docs/product/SCENARIOS.yaml"
+    reason: "P0 scenarios for architecture traceability and scenario simulation."
+  - path: "docs/product/TEST-MATRIX.md"
+    reason: "Validation modes and no-runtime coverage expectations."
+allowed_reads:
+  - "docs/product/STORY-MAP.md"
+  - "docs/product/MVP-SCOPE.md"
+  - "docs/product/RELEASE-SLICES.md"
+  - "docs/product/BACKLOG.md"
+  - "docs/components/MULTIFACTOR-RESEARCH.md"
+  - "docs/design/HLD-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md"
+  - "docs/design/ARCHITECTURE-DECISION-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md"
+read_if_needed:
+  - path: "process/changes/CR-158-EVENT-ML-STRATEGY-ADAPTER-UNIFIED-IMPLEMENTATION-2026-07-05.md"
+    trigger: "field conflict, audit, or need for full CR body."
+  - path: "process/checks/CP0-CR158.route-plan.json"
+    trigger: "route applicability or checkpoint sequence question."
+  - path: "process/changes/CR-157-FOLLOW-UP-TRACKING-2026-07-05.md"
+    trigger: "deferred provenance audit."
+do_not_read_by_default:
+  - "process/STATE.md"
+  - "process/archive/**"
+  - "process/discussions/**"
+  - "process/stories/**"
+  - "docs/quality/**"
+  - "docs/release/**"
+risks_and_decisions:
+  accepted_decisions:
+    - id: "DQ-CP2-CR158-UNIFIED-SCOPE"
+      type: scope
+      decision: "one unified event + ML adapter CR with shared core and type-specific extensions"
+    - id: "DQ-CP2-CR158-NO-RUNTIME"
+      type: security
+      decision: "fixture/static/no-runtime boundary only"
+    - id: "DQ-CP2-CR158-GATE-SEQUENCE"
+      type: implementation
+      decision: "CP2 -> CP3 -> CP5 before implementation"
+  open_risks:
+    - "R-CR158-ADAPTER-CONTRACT-COUPLING"
+    - "R-CR158-EVIDENCE-SEMANTIC-OVERFIT"
+    - "R-CR158-RUNTIME-OVERCLAIM"
+authz_policy_refs:
+  - "NO_CREDENTIAL_READ"
+  - "NO_RUNTIME"
+  - "NO_PRODUCTION_WRITE"
+  - "NO_TRADING"
+  - "NO_REAL_LAKE_WRITE"
+  - "NO_NAS_SYNC_OR_WRITE"
+  - "NO_PROVIDER_FETCH"
+  - "NO_BROKER_WRITE"
+  - "NO_EXTERNAL_FRAMEWORK_RUN"
+  - "NO_CATALOG_POINTER_WRITE"
+downstream_tasks:
+  - "Prepare Architecture Gray Areas and advisor table for shared core vs type-specific extensions."
+  - "Draft HLD / ADR with candidate architectures and recommendation."
+  - "Define Use Case -> Architecture traceability and scenario simulations."
+  - "Prepare CP3 auto precheck and human Decision Brief before story-planning."
+token_control:
+  default_policy: "capsule-first"
+  full_doc_read_policy: "Only when capsule missing, conflict, field insufficiency, human audit or deep review."
+  read_expansion_log_ref: "process/state/READ-EXPANSION-LEDGER.ndjson"

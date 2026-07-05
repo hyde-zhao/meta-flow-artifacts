@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP5",
+  "checkpoint_id": "CP5-CR158-EVENT-ML-STRATEGY-ADAPTER-LLD-IMPLEMENTABILITY",
+  "profile": "lld-implementability",
+  "story_id": null,
+  "cr_id": "CR-158",
+  "checked_at": "2026-07-05T17:55:00+08:00",
+  "context_ref": "process/context/CP5-CR158-EVENT-ML-STRATEGY-ADAPTER-LLD-CONTEXT.yaml",
+  "dispatch_refs": [
+    "AD-CR158-META-DEV-INLINE-FALLBACK-CP5-20260705T175500+0800"
+  ],
+  "evidence_ref": "process/STORY-STATUS-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+  "items": [
+    {
+      "id": "CP5-CR158-01",
+      "category": "entry-criteria",
+      "name": "CP4 Story planning result is PASS",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP4-CR158-EVENT-ML-STRATEGY-ADAPTER-STORY-DAG-PARALLEL-SAFETY.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "CP4 passed with six Story cards, full-lld count 5 and technical-note count 1."
+    },
+    {
+      "id": "CP5-CR158-02",
+      "category": "design-evidence",
+      "name": "All target Story design evidence exists",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/CR158-S01-shared-adapter-core-contract-LLD.md",
+        "process/stories/CR158-S02-event-strategy-adapter-extension-LLD.md",
+        "process/stories/CR158-S03-ml-strategy-adapter-extension-LLD.md",
+        "process/stories/CR158-S04-evidence-handoff-typed-refs-LLD.md",
+        "process/stories/CR158-S05-no-runtime-guard-counters-LLD.md",
+        "process/stories/CR158-S06-verification-release-boundary.md#技术说明"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S01-S05 have full LLD; S06 has technical-note evidence."
+    },
+    {
+      "id": "CP5-CR158-03",
+      "category": "lld-completeness",
+      "name": "Full LLD documents include required 14-section structure",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/CR158-S01-shared-adapter-core-contract-LLD.md",
+        "process/stories/CR158-S02-event-strategy-adapter-extension-LLD.md",
+        "process/stories/CR158-S03-ml-strategy-adapter-extension-LLD.md",
+        "process/stories/CR158-S04-evidence-handoff-typed-refs-LLD.md",
+        "process/stories/CR158-S05-no-runtime-guard-counters-LLD.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Each full LLD contains upstream basis, goal, requirements, module split, file impact, data/API/flow/design/security/test/implementation/risk/rollback/DoD sections."
+    },
+    {
+      "id": "CP5-CR158-04",
+      "category": "cp5-focus",
+      "name": "Shared core remains thin and excludes event-only / ML-only fields",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/CR158-S01-shared-adapter-core-contract-LLD.md#5-数据模型与持久化设计",
+        "process/stories/CR158-S01-shared-adapter-core-contract-LLD.md#10-测试设计"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S01 defines seven shared core field groups and tests private-field leakage."
+    },
+    {
+      "id": "CP5-CR158-05",
+      "category": "cp5-focus",
+      "name": "Event and ML typed extensions are not cross-required",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/CR158-S02-event-strategy-adapter-extension-LLD.md",
+        "process/stories/CR158-S03-ml-strategy-adapter-extension-LLD.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S02/S03 keep event-only and ML-only refs in separate extension contracts."
+    },
+    {
+      "id": "CP5-CR158-06",
+      "category": "cp5-focus",
+      "name": "Evidence and handoff design remains refs-only",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/CR158-S04-evidence-handoff-typed-refs-LLD.md#5-数据模型与持久化设计",
+        "process/stories/CR158-S04-evidence-handoff-typed-refs-LLD.md#10-测试设计"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S04 defines body_copy_count == 0 and handoff public refs/status only."
+    },
+    {
+      "id": "CP5-CR158-07",
+      "category": "authorization-boundary",
+      "name": "No-runtime guard covers forbidden operation families",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/CR158-S05-no-runtime-guard-counters-LLD.md#5-数据模型与持久化设计",
+        "docs/features/runtime-authorization-safety/DESIGN.md#cr158-adapter-no-runtime-guard"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "S05 covers feed/listener/training/service/provider/lake/NAS/credential/runtime/trading/registry/publish/external-framework/Git remote counters."
+    },
+    {
+      "id": "CP5-CR158-08",
+      "category": "documentation-boundary",
+      "name": "Verification and release wording constraints are explicit",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/CR158-S06-verification-release-boundary.md#技术说明"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S06 constrains TEST-MATRIX, VERIFICATION-REPORT and RELEASE-NOTES to fixture/static/local readiness only."
+    },
+    {
+      "id": "CP5-CR158-09",
+      "category": "clarification-queue",
+      "name": "No unresolved blocking LLD clarification items",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/state/QUESTION-LEDGER.ndjson"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "CR158 CP5 clarification queue event has blocking_open_count=0 and no spike items."
+    },
+    {
+      "id": "CP5-CR158-10",
+      "category": "merge-order",
+      "name": "Shared-file ownership and serial merge order are defined",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml#parallel_policy",
+        "process/stories/CR158-S01-shared-adapter-core-contract-LLD.md",
+        "process/stories/CR158-S02-event-strategy-adapter-extension-LLD.md",
+        "process/stories/CR158-S03-ml-strategy-adapter-extension-LLD.md",
+        "process/stories/CR158-S04-evidence-handoff-typed-refs-LLD.md",
+        "process/stories/CR158-S05-no-runtime-guard-counters-LLD.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Implementation merge remains controlled: S01 -> S02/S03 -> S04/S05 -> S06; max parallel dev after CP5 remains 1."
+    },
+    {
+      "id": "CP5-CR158-11",
+      "category": "authorization-boundary",
+      "name": "CP5 launch does not authorize implementation until user approves the gate",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml#authorization_boundary",
+        "process/context/CP5-CR158-EVENT-ML-STRATEGY-ADAPTER-LLD-CONTEXT.yaml#authorization_boundary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Story cards still have implementation allowed false. CP5 approval may allow local/static/fixture source/test implementation only; runtime/data/publish/trading remain unauthorized."
+    },
+    {
+      "id": "CP5-CR158-12",
+      "category": "dispatch-evidence",
+      "name": "meta-dev inline fallback dispatch is recorded without claiming real subagent execution",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/state/AGENT-DISPATCH-LEDGER.ndjson"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "CP5 design evidence was prepared inline under user-requested continuation; no implementation was performed."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260705T095100Z0000-482f0816",
+    "RE-20260705T095100Z0000-27b8c058",
+    "RE-20260705T095100Z0000-ee4a7c06",
+    "RE-20260705T095100Z0000-fbef76d5",
+    "RE-20260705T095249Z0000-990feb08",
+    "RE-20260705T095249Z0000-244fb244",
+    "RE-20260705T095249Z0000-4f0fd80e",
+    "RE-20260705T095250Z0000-f6620ddc",
+    "RE-20260705T095250Z0000-4c3c2e8f"
+  ],
+  "decision": "PASS",
+  "next_route": "CP6_STORY_EXECUTION",
+  "summary": {
+    "story_count": 6,
+    "full_lld_count": 5,
+    "technical_note_count": 1,
+    "waived_count": 0,
+    "open_lld_clarification_count": 0,
+    "spike_question_count": 0,
+    "blocking_findings": 0,
+    "implementation_allowed_before_user_cp5_approval": false,
+    "tests_implementation_allowed_before_user_cp5_approval": false,
+    "implementation_allowed_after_approval": "local_static_fixture_only",
+    "runtime_operations_authorized": false,
+    "real_data_operations_authorized": false,
+    "trading_operations_authorized": false,
+    "publish_authorized": false,
+    "pending_decision_count": 4,
+    "recommended_decision": "approve",
+    "accepted_decision_count": 4,
+    "manual_gate_status": "approved"
+  },
+  "manual_gate_status": "approved",
+  "accepted_decision_ids": [
+    "DQ-CP5-CR158-001",
+    "DQ-CP5-CR158-002",
+    "DQ-CP5-CR158-003",
+    "DQ-CP5-CR158-004"
+  ],
+  "approved_by": "user",
+  "approved_at": "2026-07-05T18:05:00+08:00"
+}

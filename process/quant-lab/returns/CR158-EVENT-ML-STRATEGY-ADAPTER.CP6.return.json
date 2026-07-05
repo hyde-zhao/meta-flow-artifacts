@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "stage": "CP6",
+  "cr_id": "CR-158",
+  "story_id": "CR158-S01..S06",
+  "work_packet_ref": "process/context/stories/CR158-EVENT-ML-STRATEGY-ADAPTER.CP6.work-packet.json",
+  "artifacts": [
+    {
+      "path": "process/stories/CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.md",
+      "kind": "implementation_summary"
+    },
+    {
+      "path": "process/context/stories/CR158-EVENT-ML-STRATEGY-ADAPTER.CP6.work-packet.json",
+      "kind": "work_packet"
+    },
+    {
+      "path": "process/context/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION-CONTEXT.yaml",
+      "kind": "context_capsule"
+    }
+  ],
+  "tests": [
+    "test_cr158_s01_core_contract_passes_complete_static_fixture",
+    "test_cr158_s02_event_extension_passes_complete_static_fixture",
+    "test_cr158_s03_ml_extension_passes_complete_static_fixture",
+    "test_cr158_s04_builds_event_and_ml_evidence_refs_without_body_copy",
+    "test_cr158_s05_zero_operation_counters_pass_and_include_all_names"
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_event_feed_touched": false,
+    "real_ml_training_touched": false,
+    "real_lake_read_executed": false,
+    "real_lake_write_touched": false,
+    "catalog_write_touched": false,
+    "nas_touched": false,
+    "provider_fetch_touched": false,
+    "broker_touched": false,
+    "trading_touched": false,
+    "external_framework_run_touched": false,
+    "store_or_registry_write_touched": false,
+    "publish_touched": false
+  },
+  "design_delta_ref": null,
+  "risks": [
+    {
+      "id": "R-CR158-STATIC-ONLY",
+      "status": "accepted-cp6-boundary",
+      "summary": "CP6 proves local/static/fixture adapter contracts only; real feed/training/data/runtime/registry/publish/trading readiness remains unauthorized and out of scope."
+    }
+  ],
+  "waivers": [],
+  "story_mapping": {
+    "CR158-S01": "StrategyTypeAdapterCore and AdapterValidationResult contract",
+    "CR158-S02": "EventAdapterExtension typed refs and no-feed guard",
+    "CR158-S03": "MLAdapterExtension typed refs and no-training/registry guard",
+    "CR158-S04": "AdapterTypedEvidenceRef and refs-only handoff summary",
+    "CR158-S05": "CR158 forbidden operation counters and limitations",
+    "CR158-S06": "Local/static/fixture wording boundary captured for CP7/CP8"
+  },
+  "packet_type": "story_return_packet",
+  "return_id": "CR158-EVENT-ML-STRATEGY-ADAPTER.CP6",
+  "status": "implemented",
+  "created_at": "2026-07-05T18:18:00+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/CR158-EVENT-ML-STRATEGY-ADAPTER.CP6.work-packet.json",
+  "dispatch_refs": [
+    "AD-CR158-META-DEV-INLINE-FALLBACK-CP6-20260705T181800+0800"
+  ],
+  "implementation_ref": "process/stories/CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.md",
+  "touched_files": [
+    {
+      "path": "engine/strategy_type_adapters.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/test_cr158_strategy_type_adapter_contract.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/test_cr158_event_strategy_adapter.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/test_cr158_ml_strategy_adapter.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/test_cr158_adapter_evidence_refs.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/test_cr158_adapter_no_runtime_guard.py",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "Added CR158 strategy adapter core, event/ML typed refs, refs-only evidence/handoff contracts, no-runtime counter guard and fixture/static limitation strings."
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run pytest tests/test_cr158_strategy_type_adapter_contract.py tests/test_cr158_event_strategy_adapter.py tests/test_cr158_ml_strategy_adapter.py tests/test_cr158_adapter_evidence_refs.py tests/test_cr158_adapter_no_runtime_guard.py",
+        "result": "pass",
+        "summary": "20 passed in 0.04s"
+      },
+      {
+        "command": "uv run --python 3.11 python -m py_compile engine/strategy_type_adapters.py",
+        "result": "pass",
+        "summary": "module compiles"
+      },
+      {
+        "command": "uv run pytest tests/research/test_event_driven_strategy_e2e_contracts.py tests/research/test_ml_strategy_e2e_contracts.py tests/research/test_strategy_admission_package.py tests/research/test_cross_strategy_reliability_gates.py",
+        "result": "pass",
+        "summary": "60 passed in 0.60s"
+      }
+    ],
+    "tests": [
+      "test_cr158_s01_core_contract_passes_complete_static_fixture",
+      "test_cr158_s02_event_extension_passes_complete_static_fixture",
+      "test_cr158_s03_ml_extension_passes_complete_static_fixture",
+      "test_cr158_s04_builds_event_and_ml_evidence_refs_without_body_copy",
+      "test_cr158_s05_zero_operation_counters_pass_and_include_all_names"
+    ],
+    "skipped": [
+      {
+        "scope": "real feed / real training / provider / lake / NAS / credential / QMT / runtime / simulation / trading / broker / registry / publish / Git remote",
+        "reason": "not authorized by CP5 approval and not needed for CP6 local/static/fixture contract implementation"
+      }
+    ]
+  },
+  "evidence_refs": [
+    "process/evidence/CR158-CP6-IMPLEMENTATION.index.json",
+    "process/stories/CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.md"
+  ],
+  "open_questions": [],
+  "next_stage_recommendation": "ready_for_cp7"
+}

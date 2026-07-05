@@ -1,0 +1,161 @@
+schema_version: 1
+release_context_id: RELEASE-CONTEXT-CR158-EVENT-ML-STRATEGY-ADAPTER
+change_id: CR-158
+title: Event + ML Strategy Adapter Unified Implementation
+created_at: '2026-07-05T18:55:00+08:00'
+created_by: host-orchestrator
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+release_decision_reason: CP7 returned PASS_WITH_RISK because CR158 proves local/static/fixture
+  adapter contracts only and intentionally does not authorize or prove real feed,
+  training, data, runtime, registry, publish, paper/live or trading readiness.
+release_scope:
+  in_scope:
+  - shared static adapter core and validation result contract
+  - event strategy adapter extension with refs-only event evidence and no-feed/listener
+    counters
+  - ML strategy adapter extension with refs-only model/training evidence and no-training/registry
+    counters
+  - typed evidence handoff refs without body/private payload copy
+  - no-runtime forbidden operation counter family and release wording boundary
+  out_of_scope:
+  - real event feed or listener runtime
+  - real ML training, external model service or model registry write
+  - real lake/NAS/provider access
+  - credential or environment secret read
+  - QMT/MiniQMT/xtquant/gateway runtime
+  - simulation, paper, live or trading runtime
+  - broker operation
+  - catalog/store/registry/feature/label/prediction write
+  - publish or true release execution
+  - external framework clone/install/run
+  - Git remote write
+version_decision:
+  current_version: N/A
+  target_version: internal-adapter-slice
+  semver_classification: minor-internal
+  reason: Adds local adapter contracts and tests without external runtime or user-facing
+    package release.
+quality_summary:
+  cp6_decision: PASS
+  cp6_result_ref: process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json
+  cp6_evidence_ref: process/evidence/CR158-CP6-IMPLEMENTATION.index.json
+  cp7_decision: PASS_WITH_RISK
+  cp7_result_ref: process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json
+  cp7_evidence_ref: process/evidence/CR158-CP7-VERIFICATION.index.json
+  verification_report_ref: docs/quality/VERIFICATION-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  test_report_ref: docs/quality/TEST-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  review_ref: docs/quality/REVIEW-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  fixes_ref: docs/quality/FIXES-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  blocker_count: 0
+  high_open_count: 0
+  medium_risk_count: 1
+  risk_acceptance_required:
+  - R-CR158-CP7-STATIC-FIXTURE-ONLY
+fact_diff:
+- promise_ref: DQ-CP2-CR158-UNIFIED-SCOPE
+  promise: Merge DF-CR157-001 and DF-CR157-002 into one event + ML adapter CR and
+    deliver a shared adapter slice.
+  status: DELIVERED_WITH_STATIC_FIXTURE_SCOPE
+  decision_impact: READY_WITH_RISK
+  evidence_refs:
+  - process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json
+  - process/evidence/CR158-CP7-VERIFICATION.index.json
+  risk_ref: R-CR158-CP7-STATIC-FIXTURE-ONLY
+- promise_ref: DQ-CP2-CR158-NO-RUNTIME
+  promise: Do not authorize real feed/training/provider/lake/NAS/credential/runtime/trading/registry/publish
+    operations.
+  status: PRESERVED
+  decision_impact: READY_WITH_RISK
+  evidence_refs:
+  - process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json
+  - process/release/RELEASE-CONTEXT-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml
+  risk_ref: R-CR158-CP7-STATIC-FIXTURE-ONLY
+- promise_ref: DQ-CP5-CR158-003
+  promise: Keep evidence handoff refs-only and prevent body/private payload copying.
+  status: DELIVERED
+  decision_impact: READY_WITH_RISK
+  evidence_refs:
+  - tests/test_cr158_adapter_evidence_refs.py
+  - process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json
+  risk_ref: null
+affected_surface:
+  code:
+  - engine/strategy_type_adapters.py
+  tests:
+  - tests/test_cr158_strategy_type_adapter_contract.py
+  - tests/test_cr158_event_strategy_adapter.py
+  - tests/test_cr158_ml_strategy_adapter.py
+  - tests/test_cr158_adapter_evidence_refs.py
+  - tests/test_cr158_adapter_no_runtime_guard.py
+  docs:
+  - docs/quality/VERIFICATION-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  - docs/quality/TEST-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  - docs/quality/REVIEW-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  - docs/quality/FIXES-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  - docs/release/RELEASE-NOTES-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  - docs/release/DEPLOY-CHECKLIST-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  - docs/release/ROLLBACK-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  - docs/release/MIGRATION-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  - docs/release/FEEDBACK-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  process:
+  - process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json
+  - process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json
+  - process/checks/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.result.json
+  - process/evidence/CR158-CP6-IMPLEMENTATION.index.json
+  - process/evidence/CR158-CP7-VERIFICATION.index.json
+  - process/checkpoints/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.md
+install_validation_summary:
+  applicable: false
+  reason: CR158 does not change install scripts, package manager configuration, platform
+    agent installation or deployment scripts.
+release_documents:
+- path: docs/release/RELEASE-NOTES-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  profile: compact
+  status: generated
+- path: docs/release/DEPLOY-CHECKLIST-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  profile: compact
+  status: generated
+- path: docs/release/ROLLBACK-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  profile: compact
+  status: generated
+- path: docs/release/MIGRATION-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  profile: compact
+  status: generated
+- path: docs/release/FEEDBACK-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+  profile: compact
+  status: generated
+non_authorized_items:
+- true_release_execution_publish_production_deployment_or_live_enablement
+- real_event_feed_or_listener_runtime
+- real_ml_training_external_model_service_or_model_registry_write
+- real_lake_nas_provider_access_or_credential_env_session_read
+- qmt_miniqmt_xtquant_gateway_runtime_simulation_paper_live_trading_broker_operation
+- catalog_store_registry_feature_label_prediction_write_or_pointer_mutation
+- external_framework_clone_install_run
+- git_remote_write
+- production_runtime_trading_broker_readiness_claim
+follow_up_summary:
+  risks:
+  - R-CR158-CP7-STATIC-FIXTURE-ONLY
+  deferred_items:
+  - real event feed validation
+  - real ML training/model registry validation
+  - runtime/publish/trading readiness
+  feedback_entry_ref: docs/release/FEEDBACK-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+workspace_status:
+  process_route_health: ok
+  artifact_git_dirty: true
+  note: Process artifacts are dirty because CR158 CP6/CP7/CP8 evidence was generated
+    in this session; no Git remote write is authorized.
+cp8_approval:
+  status: approved
+  approved_at: '2026-07-05T19:20:00+08:00'
+  approved_by: user
+  accepted_decision_ids:
+  - DQ-CP8-CR158-001
+  - DQ-CP8-CR158-002
+  - DQ-CP8-CR158-003
+  accepted_risk_ids:
+  - R-CR158-CP7-STATIC-FIXTURE-ONLY
+  true_release_execution_authorized: false

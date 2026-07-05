@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION",
+  "cr_id": "CR-158",
+  "story_id": "CR158-S01..S06",
+  "context_ref": "process/context/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION-CONTEXT.yaml",
+  "dispatch_refs": [
+    "AD-CR158-META-QA-INLINE-FALLBACK-CP7-20260705T183200+0800"
+  ],
+  "evidence_ref": "process/evidence/CR158-CP7-VERIFICATION.index.json",
+  "return_ref": "process/returns/CR158-EVENT-ML-STRATEGY-ADAPTER.CP7.return.json",
+  "verification_report_ref": "docs/quality/VERIFICATION-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+  "items": [
+    {
+      "id": "CP7-CR158-01",
+      "category": "entry",
+      "name": "CP7 context and process route are readable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION-CONTEXT.yaml",
+        "process/.meta-flow-process.yaml",
+        "process/state/STATE.current.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "CP7 context generated and process route is artifact-backed."
+    },
+    {
+      "id": "CP7-CR158-02",
+      "category": "dispatch",
+      "name": "meta-qa CP7 dispatch evidence is present",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/state/AGENT-DISPATCH-LEDGER.ndjson#AD-CR158-META-QA-INLINE-FALLBACK-CP7-20260705T183200+0800"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Inline fallback recorded under user-approved advance-to-next-human-gate request."
+    },
+    {
+      "id": "CP7-CR158-03",
+      "category": "cp6-evidence",
+      "name": "CP6 result, return packet and evidence index are complete and consumable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json",
+        "process/returns/CR158-EVENT-ML-STRATEGY-ADAPTER.CP6.return.json",
+        "process/evidence/CR158-CP6-IMPLEMENTATION.index.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CP6 return/evidence/result checks passed."
+    },
+    {
+      "id": "CP7-CR158-04",
+      "category": "design-contract",
+      "name": "Shared core required groups are explicit and private event/ML fields are blocked.",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/strategy_type_adapters.py#CORE_REQUIRED_FIELD_GROUPS",
+        "tests/test_cr158_strategy_type_adapter_contract.py"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CR158-S01 verification result: PASS"
+    },
+    {
+      "id": "CP7-CR158-05",
+      "category": "design-contract",
+      "name": "Event adapter refs are required and feed/listener counters block readiness.",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/strategy_type_adapters.py#validate_event_adapter_extension",
+        "tests/test_cr158_event_strategy_adapter.py"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CR158-S02 verification result: PASS"
+    },
+    {
+      "id": "CP7-CR158-06",
+      "category": "design-contract",
+      "name": "ML adapter refs are required and training/registry counters block readiness.",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/strategy_type_adapters.py#validate_ml_adapter_extension",
+        "tests/test_cr158_ml_strategy_adapter.py"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CR158-S03 verification result: PASS"
+    },
+    {
+      "id": "CP7-CR158-07",
+      "category": "design-contract",
+      "name": "Adapter evidence refs are refs-only and block body/private payload inclusion.",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/strategy_type_adapters.py#validate_adapter_evidence_refs",
+        "tests/test_cr158_adapter_evidence_refs.py"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CR158-S04 verification result: PASS"
+    },
+    {
+      "id": "CP7-CR158-08",
+      "category": "design-contract",
+      "name": "Forbidden operation counters cover runtime/data/trading/publish families and block nonzero values.",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/strategy_type_adapters.py#CR158_FORBIDDEN_OPERATION_COUNTERS",
+        "tests/test_cr158_adapter_no_runtime_guard.py"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CR158-S05 verification result: PASS"
+    },
+    {
+      "id": "CP7-CR158-09",
+      "category": "design-contract",
+      "name": "Verification and release wording do not overclaim runtime readiness.",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/quality/VERIFICATION-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+        "docs/quality/TEST-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+        "docs/quality/REVIEW-CR158-EVENT-ML-STRATEGY-ADAPTER.md"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CR158-S06 verification result: PASS_WITH_RISK"
+    },
+    {
+      "id": "CP7-CR158-10",
+      "category": "tests",
+      "name": "Targeted and related regression tests pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR158-CP7-VERIFICATION.index.json#commands"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "20 CR158 tests and 60 related regression tests passed."
+    },
+    {
+      "id": "CP7-CR158-11",
+      "category": "security",
+      "name": "No forbidden runtime/data/publish/trading operation was executed during CP7",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR158-CP7-VERIFICATION.index.json#boundary_check"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CP7 commands were local pytest, py_compile, diff check and static review only."
+    },
+    {
+      "id": "CP7-CR158-12",
+      "category": "risk",
+      "name": "Static/fixture-only residual risk is recorded for CP8",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/quality/VERIFICATION-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md#8-decision"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "waive_with_risk_acceptance",
+      "waiver_ref": null,
+      "notes": "Decision is PASS_WITH_RISK; CP8 must preserve non-authorization boundary."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP8",
+  "checked_at": "2026-07-05T18:32:00+08:00",
+  "summary": {
+    "story_count": 6,
+    "validation_mode": "mixed-static-fixture",
+    "cr158_targeted_tests_passed": 20,
+    "related_regression_tests_passed": 60,
+    "py_compile_passed": true,
+    "diff_check_passed": true,
+    "cp6_result_check_passed": true,
+    "forbidden_operation_count": 0,
+    "real_event_feed_executed": false,
+    "real_ml_training_executed": false,
+    "real_data_operations_authorized": false,
+    "runtime_authorized": false,
+    "trading_authorized": false,
+    "publish_authorized": false,
+    "risk_count": 1
+  },
+  "risks": [
+    {
+      "id": "R-CR158-CP7-STATIC-FIXTURE-ONLY",
+      "status": "cp8_risk_acceptance_required",
+      "severity": "medium",
+      "summary": "CP7 verifies local/static/fixture contracts only; real feed/training/data/runtime/registry/publish/trading readiness remains unauthorized and out of scope."
+    }
+  ],
+  "updated_at": "2026-07-05T18:32:00+08:00"
+}

@@ -1,0 +1,345 @@
+schema_version: 1
+change_id: CR-158
+title: CR158 Event + ML Strategy Adapter Development Plan
+status: closed-current-delivery-ready-with-risk
+created_at: '2026-07-05T17:35:00+08:00'
+updated_at: '2026-07-05T19:20:00+08:00'
+owner: host-orchestrator
+workflow_phase: delivered
+story_management_truth_source: process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml
+implementation_allowed: true
+lld_allowed_by_cp4: true
+cp3_approved: true
+cp3_approved_at: '2026-07-05T17:35:00+08:00'
+cp3_approved_by: user
+cp4_auto_result: process/checks/CP4-CR158-EVENT-ML-STRATEGY-ADAPTER-STORY-DAG-PARALLEL-SAFETY.result.json
+cp5_checkpoint: process/checkpoints/CP5-CR158-EVENT-ML-STRATEGY-ADAPTER-LLD-BATCH.md
+feature_design_matrix: process/docs/design/FEATURE-DESIGN-MATRIX.md
+source_hld: docs/design/HLD-EVENT-ML-STRATEGY-ADAPTER.md
+source_adr: docs/design/ARCHITECTURE-DECISION-EVENT-ML-STRATEGY-ADAPTER.md
+story_status: process/STORY-STATUS-CR158-EVENT-ML-STRATEGY-ADAPTER.md
+authorization_boundary:
+  cp4_does_not_authorize_lld_approval: true
+  cp4_does_not_authorize_implementation: true
+  cp4_does_not_authorize_tests_implementation: true
+  cp5_required_before_implementation: true
+  credential_read_allowed: false
+  env_read_allowed: false
+  real_lake_access_allowed: false
+  real_lake_write_allowed: false
+  nas_access_allowed: false
+  nas_sync_allowed: false
+  provider_fetch_allowed: false
+  qmt_runtime_allowed: false
+  miniqmt_runtime_allowed: false
+  xtquant_runtime_allowed: false
+  gateway_runtime_allowed: false
+  simulation_paper_live_allowed: false
+  broker_access_allowed: false
+  trading_allowed: false
+  feed_listener_allowed: false
+  real_ml_training_allowed: false
+  external_model_service_allowed: false
+  model_registry_write_allowed: false
+  event_store_write_allowed: false
+  feature_label_prediction_store_write_allowed: false
+  catalog_pointer_mutation_allowed: false
+  publish_allowed: false
+  external_framework_run_allowed: false
+  git_remote_write_allowed: false
+  future_runtime_validation_policy: Any real feed/training/provider/lake/NAS/credential/QMT/runtime/simulation/paper/live/trading/broker/store/catalog/registry/publish/external-framework/Git-remote
+    action requires a separate explicit authorization gate or formal CR.
+feature_slices:
+- feature_id: FEAT-03
+  name: Research Dataset and Factor Research Loop
+  design_docs:
+  - docs/features/factor-research-loop/DESIGN.md
+  - docs/features/factor-research-loop/TEST-PLAN.md
+  - docs/features/factor-research-loop/TASKS.md
+  stories:
+  - CR158-S01-shared-adapter-core-contract
+  - CR158-S02-event-strategy-adapter-extension
+  - CR158-S03-ml-strategy-adapter-extension
+  - CR158-S04-evidence-handoff-typed-refs
+  - CR158-S06-verification-release-boundary
+- feature_id: FEAT-07
+  name: Runtime Authorization Safety
+  design_docs:
+  - docs/features/runtime-authorization-safety/DESIGN.md
+  - docs/features/runtime-authorization-safety/TEST-PLAN.md
+  - docs/features/runtime-authorization-safety/TASKS.md
+  stories:
+  - CR158-S01-shared-adapter-core-contract
+  - CR158-S02-event-strategy-adapter-extension
+  - CR158-S03-ml-strategy-adapter-extension
+  - CR158-S05-no-runtime-guard-counters
+  - CR158-S06-verification-release-boundary
+lld_design_batch:
+  batch_id: CR158-EVENT-ML-STRATEGY-ADAPTER-BATCH-A
+  status: approved
+  cp5_manual_review: process/checkpoints/CP5-CR158-EVENT-ML-STRATEGY-ADAPTER-LLD-BATCH.md
+  policy: S01-S05 require full-lld; S06 requires technical-note. CP5 must review all
+    design evidence together before implementation.
+  stories:
+  - CR158-S01-shared-adapter-core-contract
+  - CR158-S02-event-strategy-adapter-extension
+  - CR158-S03-ml-strategy-adapter-extension
+  - CR158-S04-evidence-handoff-typed-refs
+  - CR158-S05-no-runtime-guard-counters
+  - CR158-S06-verification-release-boundary
+  design_evidence:
+  - story: CR158-S01-shared-adapter-core-contract
+    type: full-lld
+    ref: process/stories/CR158-S01-shared-adapter-core-contract-LLD.md
+    status: approved
+  - story: CR158-S02-event-strategy-adapter-extension
+    type: full-lld
+    ref: process/stories/CR158-S02-event-strategy-adapter-extension-LLD.md
+    status: approved
+  - story: CR158-S03-ml-strategy-adapter-extension
+    type: full-lld
+    ref: process/stories/CR158-S03-ml-strategy-adapter-extension-LLD.md
+    status: approved
+  - story: CR158-S04-evidence-handoff-typed-refs
+    type: full-lld
+    ref: process/stories/CR158-S04-evidence-handoff-typed-refs-LLD.md
+    status: approved
+  - story: CR158-S05-no-runtime-guard-counters
+    type: full-lld
+    ref: process/stories/CR158-S05-no-runtime-guard-counters-LLD.md
+    status: approved
+  - story: CR158-S06-verification-release-boundary
+    type: technical-note
+    ref: process/stories/CR158-S06-verification-release-boundary.md#技术说明
+    status: approved
+  cp5_attention_items:
+  - id: CP5-FOCUS-CR158-001
+    story: CR158-S01
+    requirement: Shared core fields must remain thin and must not include event payload
+      or ML model private metadata.
+  - id: CP5-FOCUS-CR158-002
+    story: CR158-S02 / CR158-S03
+    requirement: Event-only and ML-only fields must not become mandatory for the other
+      adapter type.
+  - id: CP5-FOCUS-CR158-003
+    story: CR158-S04
+    requirement: Evidence extension must remain refs-only; body_copy_count must stay
+      0.
+  - id: CP5-FOCUS-CR158-004
+    story: CR158-S05
+    requirement: Forbidden operation counters must fail closed on any real feed/training/provider/lake/NAS/credential/runtime/trading/registry/publish/Git
+      remote signal.
+  - id: CP5-FOCUS-CR158-005
+    story: CR158-S06
+    requirement: Release wording must not claim production/runtime/trading/model-registry
+      readiness.
+  approved_at: '2026-07-05T18:05:00+08:00'
+  approved_by: user
+parallel_policy:
+  max_parallel_lld: 3
+  max_parallel_dev_after_cp5: 1
+  max_parallel_verification_after_cp6: 2
+  lld_parallel_rule: S01 should establish shared core first. S02 and S03 may draft
+    in parallel after S01 contract outline exists. S04 and S05 consume S01-S03 semantics.
+    S06 can draft technical note after S04/S05 interfaces are stable.
+  same_file_merge_rule: S01 owns shared core contract; S02 owns event extension; S03
+    owns ML extension; S04 owns evidence/handoff refs; S05 owns no-runtime counters;
+    S06 owns wording and verification matrix. Shared files require S01 or S05 merge
+    owner review.
+waves:
+- wave: CR158-W1-CORE
+  objective: Freeze shared adapter core and validation result contract.
+  parallel_lld: false
+  parallel_dev_after_cp5: false
+  stories:
+  - story_id: CR158-S01-shared-adapter-core-contract
+    title: Shared adapter core and validation result contract
+    priority: P0
+    status: verified-with-risk
+    depends_on: []
+    dependency_types: []
+    primary_files:
+    - engine/strategy_type_adapters.py
+    - tests/test_cr158_strategy_type_adapter_contract.py
+    shared_files:
+    - docs/features/factor-research-loop/DESIGN.md
+    - docs/features/runtime-authorization-safety/DESIGN.md
+    merge_owner: CR158-S01-shared-adapter-core-contract
+    lld_policy:
+      required_level: full-lld
+      evidence_type: full-lld
+    design_evidence_confirmed: true
+    lld_confirmed: true
+    implementation_allowed: local_static_fixture_only
+    cp6_result_ref: process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json
+    cp7_result_ref: process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json
+    release_gate_ref: process/checkpoints/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.md
+    cp8_result_ref: process/checks/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.result.json
+    closure_status: closed-current-delivery-ready-with-risk
+  cp7_decision: PASS_WITH_RISK
+  delivery_status: closed-current-delivery-ready-with-risk
+- wave: CR158-W2-TYPED-EXTENSIONS
+  objective: Define event and ML typed extensions without cross-required fields.
+  parallel_lld: true
+  parallel_dev_after_cp5: false
+  stories:
+  - story_id: CR158-S02-event-strategy-adapter-extension
+    title: Event strategy adapter typed extension
+    priority: P0
+    status: verified-with-risk
+    depends_on:
+    - CR158-S01-shared-adapter-core-contract
+    dependency_types:
+    - contract
+    primary_files:
+    - engine/strategy_type_adapters.py
+    - tests/test_cr158_event_strategy_adapter.py
+    merge_owner: CR158-S02-event-strategy-adapter-extension
+    lld_policy:
+      required_level: full-lld
+      evidence_type: full-lld
+    design_evidence_confirmed: true
+    lld_confirmed: true
+    implementation_allowed: local_static_fixture_only
+    cp6_result_ref: process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json
+    cp7_result_ref: process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json
+    release_gate_ref: process/checkpoints/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.md
+    cp8_result_ref: process/checks/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.result.json
+    closure_status: closed-current-delivery-ready-with-risk
+  - story_id: CR158-S03-ml-strategy-adapter-extension
+    title: ML strategy adapter typed extension
+    priority: P0
+    status: verified-with-risk
+    depends_on:
+    - CR158-S01-shared-adapter-core-contract
+    dependency_types:
+    - contract
+    primary_files:
+    - engine/strategy_type_adapters.py
+    - tests/test_cr158_ml_strategy_adapter.py
+    merge_owner: CR158-S03-ml-strategy-adapter-extension
+    lld_policy:
+      required_level: full-lld
+      evidence_type: full-lld
+    design_evidence_confirmed: true
+    lld_confirmed: true
+    implementation_allowed: local_static_fixture_only
+    cp6_result_ref: process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json
+    cp7_result_ref: process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json
+    release_gate_ref: process/checkpoints/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.md
+    cp8_result_ref: process/checks/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.result.json
+    closure_status: closed-current-delivery-ready-with-risk
+  cp7_decision: PASS_WITH_RISK
+  delivery_status: closed-current-delivery-ready-with-risk
+- wave: CR158-W3-EVIDENCE-SAFETY
+  objective: Connect typed adapter refs to evidence/handoff and no-runtime guard counters.
+  parallel_lld: true
+  parallel_dev_after_cp5: false
+  stories:
+  - story_id: CR158-S04-evidence-handoff-typed-refs
+    title: Evidence index typed refs and Stage 2/3 handoff refs
+    priority: P0
+    status: verified-with-risk
+    depends_on:
+    - CR158-S01-shared-adapter-core-contract
+    - CR158-S02-event-strategy-adapter-extension
+    - CR158-S03-ml-strategy-adapter-extension
+    dependency_types:
+    - contract
+    - contract
+    - contract
+    primary_files:
+    - engine/strategy_type_adapters.py
+    - tests/test_cr158_adapter_evidence_refs.py
+    merge_owner: CR158-S04-evidence-handoff-typed-refs
+    lld_policy:
+      required_level: full-lld
+      evidence_type: full-lld
+    design_evidence_confirmed: true
+    lld_confirmed: true
+    implementation_allowed: local_static_fixture_only
+    cp6_result_ref: process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json
+    cp7_result_ref: process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json
+    release_gate_ref: process/checkpoints/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.md
+    cp8_result_ref: process/checks/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.result.json
+    closure_status: closed-current-delivery-ready-with-risk
+  - story_id: CR158-S05-no-runtime-guard-counters
+    title: No-runtime guard counters and failure reasons
+    priority: P0
+    status: verified-with-risk
+    depends_on:
+    - CR158-S01-shared-adapter-core-contract
+    - CR158-S02-event-strategy-adapter-extension
+    - CR158-S03-ml-strategy-adapter-extension
+    dependency_types:
+    - contract
+    - contract
+    - contract
+    primary_files:
+    - engine/strategy_type_adapters.py
+    - tests/test_cr158_adapter_no_runtime_guard.py
+    merge_owner: CR158-S05-no-runtime-guard-counters
+    lld_policy:
+      required_level: full-lld
+      evidence_type: full-lld
+    design_evidence_confirmed: true
+    lld_confirmed: true
+    implementation_allowed: local_static_fixture_only
+    cp6_result_ref: process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json
+    cp7_result_ref: process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json
+    release_gate_ref: process/checkpoints/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.md
+    cp8_result_ref: process/checks/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.result.json
+    closure_status: closed-current-delivery-ready-with-risk
+  cp7_decision: PASS_WITH_RISK
+  delivery_status: closed-current-delivery-ready-with-risk
+- wave: CR158-W4-VERIFICATION-RELEASE
+  objective: Align verification matrix and release wording with fixture/static boundary.
+  parallel_lld: false
+  parallel_dev_after_cp5: false
+  stories:
+  - story_id: CR158-S06-verification-release-boundary
+    title: Verification matrix and release wording boundary
+    priority: P1
+    status: verified-with-risk
+    depends_on:
+    - CR158-S04-evidence-handoff-typed-refs
+    - CR158-S05-no-runtime-guard-counters
+    dependency_types:
+    - contract
+    - contract
+    primary_files:
+    - docs/product/TEST-MATRIX.md
+    - docs/release/RELEASE-NOTES.md
+    - docs/quality/VERIFICATION-REPORT.md
+    merge_owner: CR158-S06-verification-release-boundary
+    lld_policy:
+      required_level: technical-note
+      evidence_type: technical-note
+    design_evidence_confirmed: true
+    lld_confirmed: true
+    implementation_allowed: local_static_fixture_only
+    cp6_result_ref: process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json
+    cp7_result_ref: process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json
+    release_gate_ref: process/checkpoints/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.md
+    cp8_result_ref: process/checks/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.result.json
+    closure_status: closed-current-delivery-ready-with-risk
+  cp7_decision: PASS_WITH_RISK
+  delivery_status: closed-current-delivery-ready-with-risk
+cp5_approved: true
+cp5_approved_at: '2026-07-05T18:05:00+08:00'
+cp5_approved_by: user
+block_implementation_until: completed_cp5_approved
+cp6_result: process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json
+cp7_result: process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json
+cp7_decision: PASS_WITH_RISK
+cp8_checkpoint: process/checkpoints/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.md
+release_context: process/release/RELEASE-CONTEXT-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml
+release_decision_candidate: READY_WITH_RISK
+cp8_pending_human_gate: true
+cp8_result: process/checks/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.result.json
+cp8_approved: true
+cp8_approved_at: '2026-07-05T19:20:00+08:00'
+cp8_approved_by: user
+release_decision: READY_WITH_RISK
+closed_at: '2026-07-05T19:20:00+08:00'
+closed_by: user

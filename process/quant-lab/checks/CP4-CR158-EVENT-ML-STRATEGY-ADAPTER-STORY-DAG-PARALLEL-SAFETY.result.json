@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR158-EVENT-ML-STRATEGY-ADAPTER-STORY-DAG-PARALLEL-SAFETY",
+  "profile": "story-dag-parallel-safety",
+  "story_id": null,
+  "cr_id": "CR-158",
+  "checked_at": "2026-07-05T17:35:00+08:00",
+  "context_ref": "process/context/CP4-CR158-EVENT-ML-STRATEGY-ADAPTER-STORY-PLANNING-CONTEXT.yaml",
+  "dispatch_refs": [
+    "host-orchestrator-inline:user-approved-continue-story-planning-cp4"
+  ],
+  "evidence_ref": "process/STORY-STATUS-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+  "items": [
+    {
+      "id": "CP4-CR158-01",
+      "category": "traceability",
+      "name": "Story plan is traceable to approved CP3 HLD and ADR",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-EVENT-ML-STRATEGY-ADAPTER.md",
+        "docs/design/ARCHITECTURE-DECISION-EVENT-ML-STRATEGY-ADAPTER.md",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md#cr158-cp4-增量event--ml-strategy-adapter-unified-implementation",
+        "process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Six stories map to thin shared core, event extension, ML extension, refs-only evidence/handoff, no-runtime guard and release wording boundary."
+    },
+    {
+      "id": "CP4-CR158-02",
+      "category": "story-granularity",
+      "name": "Story count and boundaries match first-slice scope",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml#waves",
+        "process/STORY-STATUS-CR158-EVENT-ML-STRATEGY-ADAPTER.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Story count is 6. S01-S05 are full-lld; S06 is technical-note."
+    },
+    {
+      "id": "CP4-CR158-03",
+      "category": "dag",
+      "name": "Story DAG has no cycles or invalid references",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml#waves",
+        "process/STORY-STATUS-CR158-EVENT-ML-STRATEGY-ADAPTER.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Waves are forward-only: S01 -> S02/S03 -> S04/S05 -> S06. Cycles and invalid references are zero."
+    },
+    {
+      "id": "CP4-CR158-04",
+      "category": "parallel-safety",
+      "name": "Wave and file ownership rules constrain shared adapter implementation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml#parallel_policy",
+        "process/stories/CR158-S01-shared-adapter-core-contract.md",
+        "process/stories/CR158-S02-event-strategy-adapter-extension.md",
+        "process/stories/CR158-S03-ml-strategy-adapter-extension.md",
+        "process/stories/CR158-S04-evidence-handoff-typed-refs.md",
+        "process/stories/CR158-S05-no-runtime-guard-counters.md",
+        "process/stories/CR158-S06-verification-release-boundary.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Shared engine/adapter file ownership is explicit; implementation stays serial unless later CP5 decision changes merge ownership."
+    },
+    {
+      "id": "CP4-CR158-05",
+      "category": "feature-design-matrix",
+      "name": "Feature Design Matrix records every CR158 Story lld_policy.required_level",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md#cr158-cp4-增量event--ml-strategy-adapter-unified-implementation",
+        "process/STORY-STATUS-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+        "process/stories/CR158-S01-shared-adapter-core-contract.md",
+        "process/stories/CR158-S02-event-strategy-adapter-extension.md",
+        "process/stories/CR158-S03-ml-strategy-adapter-extension.md",
+        "process/stories/CR158-S04-evidence-handoff-typed-refs.md",
+        "process/stories/CR158-S05-no-runtime-guard-counters.md",
+        "process/stories/CR158-S06-verification-release-boundary.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S01-S05 require full-lld; S06 requires technical-note. Waived count is zero."
+    },
+    {
+      "id": "CP4-CR158-06",
+      "category": "coverage",
+      "name": "CR158 scenario and TEST-MATRIX rows are covered by planned Stories",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/product/SCENARIOS.yaml",
+        "docs/product/TEST-MATRIX.md",
+        "process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml",
+        "process/STORY-STATUS-CR158-EVENT-ML-STRATEGY-ADAPTER.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "SC-CR158-P01/P02/N01/N02/B01/A01 all map to S01-S06 and CP5 attention items."
+    },
+    {
+      "id": "CP4-CR158-07",
+      "category": "cp5-follow-through",
+      "name": "CP5 attention items cover core, extension, refs-only evidence, no-runtime guard and release wording",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml#lld_design_batch.cp5_attention_items",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md#cp5-注意项"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Five CP5 attention items are explicit and trace to accepted CP3 risks."
+    },
+    {
+      "id": "CP4-CR158-08",
+      "category": "authorization-boundary",
+      "name": "CP4 does not authorize LLD approval, implementation, tests implementation, real feed/training/data/runtime/registry/publish or trading",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml#authorization_boundary",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md#first-slice--deferred--not-authorized-边界"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No real feed/training/provider/lake/NAS/credential/runtime/trading/broker/store/catalog/registry/model/publish/external-framework/Git remote action is authorized."
+    },
+    {
+      "id": "CP4-CR158-09",
+      "category": "deliverables",
+      "name": "Required CP4 Story planning deliverables exist",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml",
+        "process/STORY-STATUS-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+        "process/docs/design/FEATURE-DESIGN-MATRIX.md",
+        "docs/features/factor-research-loop/DESIGN.md",
+        "docs/features/factor-research-loop/TEST-PLAN.md",
+        "docs/features/factor-research-loop/TASKS.md",
+        "docs/features/runtime-authorization-safety/DESIGN.md",
+        "docs/features/runtime-authorization-safety/TEST-PLAN.md",
+        "docs/features/runtime-authorization-safety/TASKS.md",
+        "process/stories/CR158-S01-shared-adapter-core-contract.md",
+        "process/stories/CR158-S02-event-strategy-adapter-extension.md",
+        "process/stories/CR158-S03-ml-strategy-adapter-extension.md",
+        "process/stories/CR158-S04-evidence-handoff-typed-refs.md",
+        "process/stories/CR158-S05-no-runtime-guard-counters.md",
+        "process/stories/CR158-S06-verification-release-boundary.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "All CP4 planning artifacts are present."
+    },
+    {
+      "id": "CP4-CR158-10",
+      "category": "legacy-drift",
+      "name": "Global legacy Story plan drift is recorded and isolated from CR158 scoped CP4 decision",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml",
+        "process/checks/CP4-CR158-EVENT-ML-STRATEGY-ADAPTER-STORY-DAG-PARALLEL-SAFETY.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "A prior meta-flow story plan-check reports pre-existing CR013 draft-pending-cp4 legacy statuses and missing global truth-source metadata outside CR158. CR158 scoped artifacts include their own truth source and pass DAG/coverage checks; this is recorded as non-CR158 legacy drift, not a CR158 blocker."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "CP5_DESIGN_EVIDENCE_PREPARATION",
+  "summary": {
+    "story_count": 6,
+    "wave_count": 4,
+    "lld_batch": "CR158-EVENT-ML-STRATEGY-ADAPTER-BATCH-A",
+    "full_lld_count": 5,
+    "technical_note_count": 1,
+    "waived_count": 0,
+    "cycles": 0,
+    "invalid_references": 0,
+    "parallel_internal_dependencies": 0,
+    "blocking_findings": 0,
+    "scenario_rows_covered": 6,
+    "implementation_allowed": false,
+    "lld_approval_allowed": false,
+    "tests_implementation_allowed": false,
+    "runtime_operations_authorized": false,
+    "real_data_operations_authorized": false,
+    "trading_operations_authorized": false,
+    "cp5_attention_item_count": 5,
+    "deferred_item_count": 0,
+    "legacy_global_story_plan_check_failures_outside_cr158": true
+  }
+}

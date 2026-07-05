@@ -40,6 +40,7 @@ confirmed_at: ""
 | 1.17 | 2026-07-03 | host-orchestrator | CR154 CP3 approved 后增补 Cross-Strategy Production Reliability Gates CP4：新增 FEAT-15 cross-strategy reliability gates 三件套、8 个 Story、Gate 5 显式 Story、Phase A runnable fixture schema 归属、Gate 6 tier resolver full-lld 和 CP4/CP5 follow-through acceptance hooks。 |
 | 1.18 | 2026-07-04 | host-orchestrator | CR155 CP3 approved 后增补 Daily Multifactor Baseline Strategy Artifact CP4：新增 FEAT-16 baseline artifact 三件套、5 个 Story、readonly provenance、historical/OOS validation、admission composition、rerun consistency 和 no-runtime/no-write CP5 attention hooks。 |
 | 1.19 | 2026-07-05 | host-orchestrator | CR157 CP3 approved 后增补 Stage 2 Multifactor Research Framework Upgrade CP4：新增 FEAT-17 mature admission package、FEAT-18 research evidence traceability、FEAT-19 Stage 2/3 handoff guardrails 三件套，5 个 Story、refs-only evidence、fail-closed handoff、no-runtime guard 和 event/ML adapter deferred 边界。 |
+| 1.20 | 2026-07-05 | host-orchestrator | CR158 CP3 approved 后增补 Event + ML Strategy Adapter Unified Implementation CP4：复用 FEAT-03 / FEAT-07 / FEAT-08，新增 6 个 Story、thin shared core、typed event/ML extension、refs-only evidence、no-runtime counters 和 release wording boundary。 |
 
 ## 适用性判定规则
 
@@ -498,3 +499,50 @@ confirmed_at: ""
 | first-slice / deferred / not-authorized 边界显式化 | PASS | 本节 `First-Slice / Deferred 边界` |
 | CP5 注意项已覆盖 Stage 2 exit refs、refs-only evidence、fail-closed handoff 和 no-runtime guard | PASS | 本节 `CP5 注意项` |
 | CP4 不授权 LLD approval、实现、测试实现、真实数据、runtime、publish 或交易 | PASS | `process/DEVELOPMENT-PLAN-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.yaml#authorization_boundary` |
+
+## CR158 CP4 增量：Event + ML Strategy Adapter Unified Implementation
+
+> 来源：`docs/design/HLD-EVENT-ML-STRATEGY-ADAPTER.md`、`docs/design/ARCHITECTURE-DECISION-EVENT-ML-STRATEGY-ADAPTER.md`、CP3 用户批准。CR158 复用 FEAT-03 作为策略研究 adapter 合同 owner，FEAT-07 作为 no-runtime / no-real-operation guard owner，FEAT-08 作为 release wording / docs boundary owner；不新增真实 event feed、真实 ML training、external model service、model registry、provider/lake/NAS/credential、QMT/gateway、simulation/paper/live/trading、publish 或 Git remote write 授权。
+
+### Feature 归属与 lld_policy
+
+| Story ID | Owner Feature | feature_design_refs | lld_policy.required_level | trigger_reasons | CP5 设计证据 | 说明 |
+|---|---|---|---|---|---|---|
+| CR158-S01-shared-adapter-core-contract | FEAT-03 / FEAT-07 | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md`、`docs/features/runtime-authorization-safety/DESIGN.md` | full-lld | shared adapter core schema、validation result contract、authorization flags、blocked reason semantics | Story LLD | 定义 StrategyTypeAdapterCore 最小 7 类字段和 AdapterValidationResult；event-only / ML-only 字段不得进入 core。 |
+| CR158-S02-event-strategy-adapter-extension | FEAT-03 / FEAT-07 | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md`、`docs/features/runtime-authorization-safety/DESIGN.md` | full-lld | event source/time/payload schema/alignment policy/signal output/blocked reason refs、no-feed boundary | Story LLD | 只允许 fixture/static event refs；不得创建 live listener、provider fetch、gateway call 或 event store writer。 |
+| CR158-S03-ml-strategy-adapter-extension | FEAT-03 / FEAT-07 | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md`、`docs/features/runtime-authorization-safety/DESIGN.md` | full-lld | training snapshot/feature set/label policy/model artifact/validation report/prediction signal refs、no-training/no-registry boundary | Story LLD | 只允许 fixture/static model artifact refs；不得训练真实模型、调用外部模型服务或写 model registry / prediction store。 |
+| CR158-S04-evidence-handoff-typed-refs | FEAT-03 / FEAT-13 / FEAT-14 | `docs/features/factor-research-loop/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | evidence index typed refs-only extension、Stage 2/3 handoff refs、body-copy count 0 | Story LLD | Event / ML evidence extension 只保存 refs、hash、status、owner 和短元数据；不得复制正文、payload、模型二进制、diff 或 transcript。 |
+| CR158-S05-no-runtime-guard-counters | FEAT-07 | `docs/features/runtime-authorization-safety/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | forbidden operation counter report、fail-closed guard、CP7 security validation | Story LLD | 任一 forbidden counter 非 0 必须 BLOCKED；覆盖 feed/training/provider/lake/NAS/credential/runtime/trading/registry/publish/Git remote。 |
+| CR158-S06-verification-release-boundary | FEAT-08 / FEAT-07 | `docs/features/factor-research-loop/TEST-PLAN.md`、`docs/features/runtime-authorization-safety/TEST-PLAN.md`、`docs/features/runtime-authorization-safety/TASKS.md` | technical-note | TEST-MATRIX 回链、release wording、no runtime readiness claim、CP8 follow-through | Story technical note | 收口 docs、release notes、verification report wording；明确 local/static/fixture adapter readiness 不等于 production/runtime readiness。 |
+
+### First-Slice / Deferred / Not-Authorized 边界
+
+| 范围 | 状态 | 处理 |
+|---|---|---|
+| Thin shared adapter core | First slice | CR158 必做；只定义可被 event/ML 共用的 strategy type、input/output/evidence/blocked/authorization/handoff refs。 |
+| Event typed extension | First slice | CR158 必做；fixture/static refs only，不接真实 event feed。 |
+| ML typed extension | First slice | CR158 必做；fixture/static refs only，不训练真实模型、不写 registry。 |
+| Evidence typed refs and handoff refs | First slice | CR158 必做；refs-only，不复制正文或二进制。 |
+| No-runtime guard counter report | First slice | CR158 必做；所有 forbidden operation counters 必须为 0。 |
+| Real event feed / live listener | Not authorized | 后续 runtime authorization CR 才能启动。 |
+| Real ML training / external model service / registry promotion | Not authorized | 后续 runtime / model registry authorization CR 才能启动。 |
+| Provider/lake/NAS/credential/QMT/gateway/trading/publish/Git remote write | Not authorized | 任何触达都需要独立授权。 |
+
+### CP5 注意项
+
+| Attention ID | Story | Requirement |
+|---|---|---|
+| CP5-FOCUS-CR158-001 | CR158-S01 | Shared core 字段必须保持 thin；event-only 与 ML-only 字段不得互设必填。 |
+| CP5-FOCUS-CR158-002 | CR158-S02 / S03 | Event extension 与 ML extension 必须各自 fail-closed；缺 P0 refs 时不得降级为 warning。 |
+| CP5-FOCUS-CR158-003 | CR158-S04 | Evidence extension 必须 refs-only，body_copy_count 必须为 0。 |
+| CP5-FOCUS-CR158-004 | CR158-S05 | Forbidden counters must cover feed、training、provider、lake、NAS、credential、runtime、trading、registry、publish、external framework 和 Git remote write。 |
+| CP5-FOCUS-CR158-005 | CR158-S06 | Release wording 只能声明 local/static/fixture adapter readiness；不得声明 production/runtime/trading/model-registry readiness。 |
+
+### CR158 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| CR158 Story 均有 FEAT-03 / FEAT-07 / FEAT-08 或相邻 Feature 归属 | PASS | 本节 `Feature 归属与 lld_policy` |
+| first-slice / deferred / not-authorized 边界显式化 | PASS | 本节 `First-Slice / Deferred / Not-Authorized 边界` |
+| CP5 注意项覆盖 core、extension、refs-only evidence、no-runtime guard 和 release wording | PASS | 本节 `CP5 注意项` |
+| CP4 不授权 LLD approval、实现、测试实现、真实 feed、真实训练、真实数据、runtime、registry、publish 或交易 | PASS | `process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml#authorization_boundary` |

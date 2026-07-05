@@ -1,0 +1,101 @@
+schema_version: 1
+context_id: "CP2-CR158-EVENT-ML-STRATEGY-ADAPTER-CONTEXT"
+cr_id: "CR-158"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+status: ready
+created_at: "2026-07-05T16:25:00+08:00"
+created_by: "host-orchestrator"
+read_profile: compact
+state_ref: "process/state/STATE.current.json"
+cr_ref: "process/changes/CR-158-EVENT-ML-STRATEGY-ADAPTER-UNIFIED-IMPLEMENTATION-2026-07-05.md"
+cr_summary_ref: "process/changes/summaries/CR-158.summary.json"
+route_plan_ref: "process/checks/CP0-CR158.route-plan.json"
+cp0_result_ref: "process/checks/CP0-CR158-EVENT-ML-STRATEGY-ADAPTER-REQUEST-INTAKE.result.json"
+cp1_result_ref: "process/checks/CP1-CR158-EVENT-ML-STRATEGY-ADAPTER-USE-CASE-COMPLETENESS.result.json"
+cp2_result_ref: "process/checks/CP2-CR158-EVENT-ML-STRATEGY-ADAPTER-SCOPE.result.json"
+cp2_checkpoint_ref: "process/checkpoints/CP2-CR158-EVENT-ML-STRATEGY-ADAPTER-SCOPE.md"
+objective:
+  summary: "Confirm CR158 product baseline for one unified event + ML strategy adapter CR before HLD, Story decomposition, LLD or implementation."
+  user_request: "批准，继续推进"
+  interpretation: "Continue to CP2 preparation; not treated as CP2 approval because the CP2 Decision Brief did not yet exist."
+scope:
+  in_scope:
+    - "Promote legacy DF-CR157-001 event adapter and DF-CR157-002 ML adapter into CR158."
+    - "Define unified adapter scope with shared core and type-specific event/ML extensions."
+    - "Update product docs: USE-CASES, REQUIREMENTS, SCENARIOS, TEST-MATRIX, STORY-MAP, MVP-SCOPE, RELEASE-SLICES, BACKLOG."
+    - "Prepare CP2 scope decisions and no-runtime authorization boundary."
+  out_of_scope:
+    - "HLD/ADR before CP2 approval."
+    - "Story decomposition, LLD, source/test implementation before later gates."
+    - "Real event feed, real model training, external model service, provider/lake/NAS/credential access, runtime, trading, publish or Git remote write."
+key_facts:
+  - "CR157 is closed READY_WITH_RISK and explicitly deferred event/ML adapter implementation."
+  - "CR158 has route profile architecture-major; CP1, CP2, CP3, CP4, CP5, CP6, CP7 and CP8 all apply."
+  - "CP2 approve authorizes only progression to solution-design; implementation remains blocked until CP5 approval."
+  - "Product baseline now contains CR158 use case, 7 CR158 requirements, 6 CR158 scenarios and coverage matrix rows."
+must_read:
+  - path: "process/changes/summaries/CR-158.summary.json"
+    reason: "Current CR summary and authorization boundary."
+  - path: "docs/product/USE-CASES.md"
+    reason: "CR158 use case, deferred promotion mapping and scenario gray areas."
+  - path: "docs/product/REQUIREMENTS.md"
+    reason: "REQ-CR158-001..007."
+  - path: "docs/product/SCENARIOS.yaml"
+    reason: "SC-CR158-* engineering scenarios."
+  - path: "docs/product/TEST-MATRIX.md"
+    reason: "Scenario to requirement verification matrix."
+  - path: "docs/product/MVP-SCOPE.md"
+    reason: "CR158 in-scope/out-of-scope boundaries."
+allowed_reads:
+  - "docs/product/STORY-MAP.md"
+  - "docs/product/RELEASE-SLICES.md"
+  - "docs/product/BACKLOG.md"
+  - "process/checks/CP0-CR158.route-plan.json"
+  - "process/checks/CP1-CR158-EVENT-ML-STRATEGY-ADAPTER-USE-CASE-COMPLETENESS.result.json"
+read_if_needed:
+  - path: "process/changes/CR-158-EVENT-ML-STRATEGY-ADAPTER-UNIFIED-IMPLEMENTATION-2026-07-05.md"
+    trigger: "human audit, field conflict, or CP2 Decision Brief dispute"
+  - path: "process/changes/CR-157-FOLLOW-UP-TRACKING-2026-07-05.md"
+    trigger: "follow-up provenance audit"
+do_not_read_by_default:
+  - "process/STATE.md"
+  - "process/archive/**"
+  - "process/discussions/**"
+  - "process/stories/**"
+  - "docs/quality/**"
+risks_and_decisions:
+  decisions:
+    - id: "DQ-CP2-CR158-UNIFIED-SCOPE"
+      type: scope
+      recommendation: "Approve one unified event + ML adapter CR with shared core and type-specific extensions."
+    - id: "DQ-CP2-CR158-NO-RUNTIME"
+      type: security
+      recommendation: "Approve fixture/static/no-runtime boundary only."
+    - id: "DQ-CP2-CR158-GATE-SEQUENCE"
+      type: implementation
+      recommendation: "Approve CP2 -> CP3 route; implementation remains blocked until CP5."
+  risks:
+    - "R-CR158-ADAPTER-CONTRACT-COUPLING"
+    - "R-CR158-EVIDENCE-SEMANTIC-OVERFIT"
+    - "R-CR158-RUNTIME-OVERCLAIM"
+authz_policy_refs:
+  - "NO_CREDENTIAL_READ"
+  - "NO_RUNTIME"
+  - "NO_PRODUCTION_WRITE"
+  - "NO_TRADING"
+  - "NO_REAL_LAKE_WRITE"
+  - "NO_NAS_SYNC_OR_WRITE"
+  - "NO_PROVIDER_FETCH"
+  - "NO_BROKER_WRITE"
+  - "NO_EXTERNAL_FRAMEWORK_RUN"
+  - "NO_CATALOG_POINTER_WRITE"
+downstream_tasks:
+  after_cp2_approval:
+    - "meta-se prepares CR158 HLD/ADR and architecture decisions."
+    - "meta-se decomposes Stories only after CP3 approval."
+    - "meta-dev prepares full design evidence batch before CP5."
+token_control:
+  default_policy: "capsule-first"
+  full_doc_read_policy: "Only when capsule missing, conflict, field insufficiency, human audit or deep review."
+  read_expansion_log_ref: "process/state/READ-EXPANSION-LEDGER.ndjson"

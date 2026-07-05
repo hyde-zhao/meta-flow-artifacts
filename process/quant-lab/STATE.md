@@ -7,8 +7,8 @@ Blocked: false
 Active CR: none
 Active Story: none
 Pending gate: none
-Current agent: host-orchestrator
-Next action: CR157 is closed-current-delivery-ready-with-risk. Select the next CR or follow-up; no active formal CR remains.
+Last closed CR: CR-158 (`closed-current-delivery / READY_WITH_RISK`)
+Next action: complete CR158 post-closure meta-flow compliance and token/redundancy retrospective.
 
 Refs:
 - state: process/state/STATE.current.json
@@ -21,24 +21,26 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: process/release/RELEASE-CONTEXT-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.yaml
+- latest context: process/context/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-CONTEXT.yaml
+- release context: process/release/RELEASE-CONTEXT-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml
+- CP8 checkpoint: process/checkpoints/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.md
 
-Policy refs:
-- NO_CREDENTIAL_READ
-- NO_RUNTIME
-- NO_NAS_SYNC_OR_WRITE
-- NO_TRADING
-- NO_PRODUCTION_WRITE
-- NO_PROVIDER_FETCH
-- NO_REAL_LAKE_WRITE
-- NO_CATALOG_POINTER_WRITE
-- NO_BROKER_WRITE
-- NO_EXTERNAL_FRAMEWORK_RUN
+Closed scope:
+- CR158 local/static/fixture event + ML adapter slice.
+- Release decision: READY_WITH_RISK.
+- Accepted risk: R-CR158-CP7-STATIC-FIXTURE-ONLY.
 
-Open risks:
-- {'id': 'R-CR157-CP7-STATIC-FIXTURE-ONLY', 'severity': 'medium', 'status': 'accepted_by_cp8_ready_with_risk', 'summary': 'CR157 proves local/static/fixture contracts only; it does not authorize or prove real runtime, data, publish, paper/live or trading readiness.'}
-- {'id': 'R-CR157-CP7-TEST-STRATEGY-SCOPING', 'severity': 'low', 'status': 'followup_candidate', 'summary': 'Global TEST-STRATEGY.md is CR151-scoped; CR157 scoped strategy is captured in CP7 verification report.'}
+Not authorized:
+- true release execution / publish / production deployment / live enablement
+- real event feed or listener runtime
+- real ML training / external model service / model registry write
+- real lake / NAS / provider access or credential/env/session read
+- QMT / MiniQMT / xtquant / gateway runtime / simulation / paper / live / trading / broker operation
+- catalog / store / registry / feature / label / prediction write or pointer mutation
+- external framework clone/install/run
+- Git remote write
+- production/runtime/trading/broker readiness claim
 
-Updated at: 2026-07-05T14:30:00+08:00
+Updated at: 2026-07-05T19:20:00+08:00
 
-<!-- generated-by: meta-flow state render -->
+<!-- generated-by: host-orchestrator -->

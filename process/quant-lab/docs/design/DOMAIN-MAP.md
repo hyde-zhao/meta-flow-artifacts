@@ -282,6 +282,46 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | RULE-52 | 新增研究脚本主入口必须放入 `scripts/research/*` 或对应稳定目录；旧 root 实现只能归档到 `scripts/legacy/*` 并由稳定 wrapper 调用 | FEAT-03 / FEAT-07 | CLI 入口、运行手册、归档治理 | `scripts/quality/check_script_entrypoints.py` |
 | RULE-53 | 重复的 JSON 序列化、矩阵转换、gate/admission 状态枚举必须优先复用 `engine.serialization`、`engine.factor_research_matrices` 和 `engine.admission_contracts`；不得在新模块私有复制 | FEAT-03 | 共享合同、报告输出、admission gate | compileall / targeted research tests |
 
+## CR158 增量：Event + ML Strategy Adapter 领域模型
+
+### 术语增量
+
+| Term | 定义 | 来源 | 备注 |
+|---|---|---|---|
+| StrategyTypeAdapterCore | event / ML adapter 的最小公共合同，只承载 strategy_type、input_refs、output_signal_refs、evidence_refs、blocked_reasons、authorization_flags、handoff_refs。 | REQ-CR158-001 | 不包含 event-only 或 ML-only 必填字段。 |
+| EventAdapterExtension | event adapter 的 type-specific extension，承载 event source、event time、payload schema、alignment policy、signal output 和 blocked reason refs。 | REQ-CR158-002 | 不读取真实 event feed。 |
+| MLAdapterExtension | ML adapter 的 type-specific extension，承载 training snapshot、feature set、label policy、model artifact、validation report、prediction signal 和 blocked reason refs。 | REQ-CR158-003 | 不训练真实模型，不写 registry。 |
+| AdapterTypedEvidenceRef | evidence index 中 event/ML adapter 的 typed refs-only 扩展。 | REQ-CR158-004 | 大型正文复制计数必须为 0。 |
+| AdapterOperationCounterReport | no-runtime guard 的结构化计数报告，覆盖 feed、training、registry、provider、lake、credential、runtime、trading、publish 等 forbidden operations。 | REQ-CR158-005 | 任一非 0 时 blocked。 |
+
+### 领域对象增量
+
+| Object ID | 对象 | Owner Feature | 关键字段 / 属性 | 状态 | 规则来源 |
+|---|---|---|---|---|---|
+| OBJ-CR158-01 | StrategyTypeAdapterCore | FEAT-13 | adapter_id、strategy_type、input_refs、output_signal_refs、evidence_refs、blocked_reason_refs、authorization_flags、handoff_refs | draft / validated / blocked | REQ-CR158-001 |
+| OBJ-CR158-02 | EventAdapterExtension | FEAT-13 | event_source_ref、event_time_ref、event_payload_schema_ref、alignment_policy_ref、signal_output_ref、blocked_reason_ref | draft / validated / blocked | REQ-CR158-002 |
+| OBJ-CR158-03 | MLAdapterExtension | FEAT-13 / FEAT-03 | training_snapshot_ref、feature_set_ref、label_policy_ref、model_artifact_ref、validation_report_ref、prediction_signal_ref、blocked_reason_ref | draft / validated / blocked | REQ-CR158-003 |
+| OBJ-CR158-04 | AdapterTypedEvidenceRef | FEAT-13 / FEAT-03 | evidence_type、typed_refs、short_metadata、body_copy_count、traceability_refs | recorded / blocked | REQ-CR158-004 |
+| OBJ-CR158-05 | AdapterOperationCounterReport | FEAT-07 | forbidden_operation_counts、blocked_reason、not_authorized_items、checked_at | pass / blocked | REQ-CR158-005 |
+
+### 状态机增量
+
+| State Machine ID | 对象 | 状态 | 合法转换 | 非法转换处理 |
+|---|---|---|---|---|
+| SM-CR158-01 | StrategyTypeAdapterCore | draft -> core_validated -> extension_validated -> evidence_linked -> handoff_ready / blocked | core 字段完整、type extension 通过、evidence refs-only、operation counters 全 0 后进入 handoff_ready | event-only / ML-only 字段互设必填时 blocked |
+| SM-CR158-02 | EventAdapterExtension | draft -> validated / blocked | event source、alignment policy、signal output refs 齐备且 feed counter 为 0 | 缺 P0 refs 或真实 feed/listener counter 非 0 时 blocked |
+| SM-CR158-03 | MLAdapterExtension | draft -> validated / blocked | training snapshot、validation report、prediction signal refs 齐备且 training/registry counters 为 0 | 缺 P0 refs、训练或 registry counter 非 0 时 blocked |
+
+### 业务规则增量
+
+| Rule ID | 规则 | Owner | 影响场景 | 验证入口 |
+|---|---|---|---|---|
+| RULE-CR158-01 | shared core 只能包含公共字段；event-only 与 ML-only 字段必须在 type-specific extension 中表达。 | FEAT-13 | SC-CR158-P01 | adapter contract tests |
+| RULE-CR158-02 | Event adapter 不得读取真实 event feed、live listener、provider 或 gateway；fixture/static refs 缺失时 fail-closed。 | FEAT-13 / FEAT-07 | SC-CR158-N01 / N02 | no-runtime guard tests |
+| RULE-CR158-03 | ML adapter 不得训练真实模型、调用外部模型服务或写 model registry；fixture/static refs 缺失时 fail-closed。 | FEAT-13 / FEAT-03 / FEAT-07 | SC-CR158-N01 / N02 | no-runtime guard tests |
+| RULE-CR158-04 | Adapter evidence index 只能存 typed refs 和短元数据，不得复制报告正文、event payload、模型文件、transcript 或大型 diff。 | FEAT-13 / FEAT-03 | SC-CR158-P02 | evidence index tests |
+| RULE-CR158-05 | CP3 approval 只确认架构，不授权 Story decomposition、LLD、实现、runtime、publish 或 Git remote write。 | host-orchestrator / FEAT-07 | SC-CR158-B01 / A01 | CP3 gate / release wording review |
+
 ## CR-139 增量：策略生产数据底座领域模型
 
 > 来源：CR-139 companion HLD「Strategy Data Foundation」（写侧/读侧分离）+ handoff v0.7 §3 整改 45 项 + REQ-201..249。既有合同闭环非新建（REQ-249）。

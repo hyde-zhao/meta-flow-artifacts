@@ -231,3 +231,42 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | 禁止反向依赖写明替代路径与违反风险 | PASS | FD-46..53 |
 | 循环风险已状态化 | PASS | CYCLE-20..22 |
 | 未新增运行授权 / 物理分区迁移授权 | PASS | FD-53、REQ-247/248、Wave1 N1 后置 |
+
+## CR158 增量：Event + ML Strategy Adapter 依赖边界
+
+### 依赖关系增量
+
+| From | To | 依赖类型 | 允许方向 | 原因 | 验证 / 监控 |
+|---|---|---|---|---|---|
+| FEAT-13 Strategy Type Adapter | FEAT-03 ML evidence refs | read / reference | allowed | ML extension 只引用 training snapshot、model artifact、validation report 和 prediction signal refs。 | SC-CR158-P01 / N01 |
+| FEAT-13 Strategy Type Adapter | FEAT-07 Safety Authorization | guard | allowed | Adapter validation 必须消费 no-runtime policy 和 forbidden operation counters。 | SC-CR158-N02 |
+| FEAT-13 Strategy Type Adapter | FEAT-11 Handoff Consumer | handoff refs | allowed | 只有 unified core 输出可进入 Stage 2/Stage 3 handoff refs。 | SC-CR158-P01 |
+| FEAT-03 ML evidence refs | FEAT-13 Adapter Core | typed extension | allowed | ML-specific evidence 进入 type-specific extension，不反向修改 core 字段。 | CP5 design review |
+| FEAT-08 Docs / Release Wording | FEAT-07 NotAuthorizedList | read / summarize | allowed | CP8 wording 必须复述 no-runtime / no-publish 边界。 | SC-CR158-A01 |
+
+### 禁止依赖增量
+
+| Forbidden ID | From | To | 禁止原因 | 替代路径 | 违反风险 |
+|---|---|---|---|---|---|
+| FD-CR158-01 | FEAT-13 Adapter Core | real event feed / live listener / provider / gateway | CR158 只允许 fixture/static event refs。 | EventAdapterExtension refs + no-runtime counters | 未授权 runtime / release overclaim |
+| FD-CR158-02 | FEAT-13 / FEAT-03 ML Extension | real model training / external model service / model registry write | CR158 不授权训练、服务调用或 registry promotion。 | MLAdapterExtension refs + metadata only | 未授权模型发布或数据泄漏 |
+| FD-CR158-03 | FEAT-11 Handoff Consumer | event-only / ML-only private fields | 下游只能消费 shared core 和 typed refs，不得依赖策略类型私有对象。 | StrategyTypeAdapterCore + typed extension refs | Handoff schema 分叉、Story 耦合 |
+| FD-CR158-04 | CP3 HLD / ADR | source/test implementation | CP3 只做架构评审，implementation 等 CP5。 | CP4/CP5 Story design evidence | 绕过设计证据门禁 |
+| FD-CR158-05 | Evidence index extension | report body / event payload body / model binary / transcript / full diff | Evidence index 必须 refs-only。 | typed refs + short metadata | process/evidence 膨胀、敏感内容泄露 |
+
+### 循环风险增量
+
+| Cycle ID | 涉及对象 | 风险 | 当前处理 |
+|---|---|---|---|
+| CYCLE-CR158-01 | FEAT-13 shared core <-> event / ML extensions | 为统一而把 event-only / ML-only 字段互相设为必填 | eliminated：thin core + typed extension；CP5 检查互不污染 |
+| CYCLE-CR158-02 | FEAT-03 ML evidence <-> FEAT-13 adapter core | ML 证据需求反向扩张 adapter core，导致 event adapter 背负 ML 字段 | eliminated：ML 证据只进 ML extension |
+| CYCLE-CR158-03 | CP3 architecture <-> implementation desire | 为验证架构而提前实现 adapter | eliminated：CP3 approval 不授权实现；CP5 前 source/test implementation blocked |
+
+### CR158 依赖自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| 允许依赖方向覆盖 adapter core、typed extension、safety guard 和 handoff | PASS | §依赖关系增量 |
+| 禁止依赖写明替代路径和违反风险 | PASS | FD-CR158-01..05 |
+| 循环风险已状态化 | PASS | CYCLE-CR158-01..03 |
+| 未新增运行授权 | PASS | FD-CR158-01 / 02 / 04 |

@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION",
+  "cr_id": "CR-158",
+  "story_id": "CR158-S01..S06",
+  "context_ref": "process/context/stories/CR158-EVENT-ML-STRATEGY-ADAPTER.CP6.work-packet.json",
+  "dispatch_refs": [
+    "AD-CR158-META-DEV-INLINE-FALLBACK-CP6-20260705T181800+0800"
+  ],
+  "evidence_ref": "process/evidence/CR158-CP6-IMPLEMENTATION.index.json",
+  "items": [
+    {
+      "id": "CP6-CR158-01",
+      "category": "entry",
+      "name": "CP5 LLD batch approved before implementation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP5-CR158-EVENT-ML-STRATEGY-ADAPTER-LLD-BATCH.md",
+        "process/checks/CP5-CR158-EVENT-ML-STRATEGY-ADAPTER-LLD-IMPLEMENTABILITY.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "manual_gate_status=approved; accepted CP5 decisions=4."
+    },
+    {
+      "id": "CP6-CR158-02",
+      "category": "implementation",
+      "name": "CR158 adapter contracts implemented",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/strategy_type_adapters.py",
+        "process/stories/CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.md#implementation-objects"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Implemented shared core, typed event/ML extensions, refs-only evidence/handoff and no-runtime counters."
+    },
+    {
+      "id": "CP6-CR158-03",
+      "category": "tests",
+      "name": "CR158 targeted tests pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR158-CP6-IMPLEMENTATION.index.json#commands"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "20 CR158 tests passed and module compiles."
+    },
+    {
+      "id": "CP6-CR158-04",
+      "category": "regression",
+      "name": "Related event/ML regression tests pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR158-CP6-IMPLEMENTATION.index.json#commands"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "60 related event/ML/admission/reliability regression tests passed."
+    },
+    {
+      "id": "CP6-CR158-05",
+      "category": "security",
+      "name": "Forbidden data/runtime/trading/publish operations were not executed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR158-CP6-IMPLEMENTATION.index.json#boundary_check"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CP6 stayed local source/test only."
+    },
+    {
+      "id": "CP6-CR158-06",
+      "category": "evidence",
+      "name": "Return packet and evidence index are present",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR158-EVENT-ML-STRATEGY-ADAPTER.CP6.return.json",
+        "process/evidence/CR158-CP6-IMPLEMENTATION.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Aggregate return/evidence covers CR158-S01..S06 because implementation shares one module/test set."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260705T103615Z0000-1f8b2e24"
+  ],
+  "decision": "PASS",
+  "next_route": "CP7",
+  "checked_at": "2026-07-05T18:18:00+08:00",
+  "summary": {
+    "story_count": 6,
+    "return_packet_count": 1,
+    "evidence_index_count": 1,
+    "cr158_targeted_tests_passed": 20,
+    "related_regression_tests_passed": 60,
+    "forbidden_operation_count": 0,
+    "real_event_feed_authorized": false,
+    "real_ml_training_authorized": false,
+    "real_data_operations_authorized": false,
+    "runtime_authorized": false,
+    "trading_authorized": false,
+    "publish_authorized": false,
+    "risk_count": 1
+  },
+  "risks": [
+    "R-CR158-STATIC-ONLY"
+  ],
+  "updated_at": "2026-07-05T18:18:00+08:00"
+}

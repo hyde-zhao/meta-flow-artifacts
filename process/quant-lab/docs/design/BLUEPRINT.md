@@ -217,6 +217,53 @@ archived_previous:
 | 共享能力写明调用方向和降级策略 | PASS | SH-11..SH-14 |
 | 运行授权边界未被放大 | PASS | DQ-BP-CR138-02、HLD §12/§13 |
 
+## CR158 增量：Event + ML Strategy Adapter Unified Implementation
+
+> 本节是 `docs/design/HLD-EVENT-ML-STRATEGY-ADAPTER.md` 的蓝图索引。CR158 已在 CP2 批准把 `DF-CR157-001` 与 `DF-CR157-002` 合并为一个统一 adapter CR；本蓝图只冻结产品能力、数据归属和依赖方向，不授权真实 event feed、真实模型训练、model registry、provider/lake/NAS/credential、runtime、trading、publish 或 implementation before CP5。
+
+### 能力地图增量
+
+| Capability ID | 能力域 | 用户价值 | 覆盖 Story / CR | Owner Feature |
+|---|---|---|---|---|
+| CAP-CR158-01 | Unified Strategy Type Adapter | 让 event 与 ML 策略都通过统一 adapter core 输出 `SignalSet`、evidence refs、handoff refs 和 blocked reasons，避免两条 adapter 线产生 schema 分叉。 | CR-158 / UC-58-CR158 | FEAT-13 |
+| CAP-CR158-02 | Event Strategy Adapter Extension | 让事件型策略用 fixture/static event refs 表达 event source、event time、payload schema、alignment policy 与 signal output，不触达真实 feed。 | REQ-CR158-002 / SC-CR158-P01 | FEAT-13 |
+| CAP-CR158-03 | ML Strategy Adapter Extension | 让 ML 策略用 fixture/static model refs 表达 training snapshot、feature set、label policy、model artifact、validation report 和 prediction signal，不训练真实模型。 | REQ-CR158-003 / SC-CR158-P01 | FEAT-13 / FEAT-03 |
+| CAP-CR158-04 | Adapter Evidence Typed Refs | 让 event/ML adapter evidence 继续保持 refs-only，不复制报告正文、event payload、模型文件、diff 或 transcript。 | REQ-CR158-004 / SC-CR158-P02 | FEAT-13 / FEAT-03 |
+| CAP-CR158-05 | Adapter No-runtime Guard | 让 adapter 设计、实现和验证都能 fail-closed 报告 forbidden operation counters，避免 release overclaim。 | REQ-CR158-005 / SC-CR158-N02 / SC-CR158-A01 | FEAT-07 |
+
+### Feature / Epic 边界增量
+
+| Feature ID | 名称 | 负责事项 | 不负责事项 | 拥有数据 / 对象 | 只读数据 | 禁止依赖 |
+|---|---|---|---|---|---|---|
+| FEAT-13 | Strategy Type Adapter | `StrategyTypeAdapterCore`、`EventAdapterExtension`、`MLAdapterExtension`、`AdapterValidationResult`、`AdapterBlockedReason`；负责统一 adapter contract 和 type-specific extension 边界。 | 真实 event feed listener、真实模型训练、model registry promotion、QMT/gateway/runtime、trading、publish。 | Adapter core schema、typed extension schema、adapter validation result。 | FEAT-03 ML metadata refs、FEAT-07 authorization policy、FEAT-11 handoff refs。 | provider/lake/NAS/credential、model registry write、feed subscription、gateway runtime。 |
+| FEAT-03 | Strategy Research Evidence | ML training snapshot refs、feature set refs、label policy refs、model artifact refs、validation report refs；负责 ML evidence 语义解释。 | 拥有 event adapter 字段、训练真实模型、写 registry、发布模型。 | ML evidence refs、model artifact metadata refs。 | FEAT-13 adapter core、FEAT-02 published refs（仅未来授权后）。 | 反向修改 adapter core；绕过 FEAT-13 直接输出 runner 私有对象。 |
+| FEAT-07 | Safety Authorization | no-runtime / no-publish guard、forbidden operation counters、release wording guard。 | 解释策略语义、生成 adapter signal、执行真实 runtime。 | AuthorizationPolicyRef、OperationCounterReport、NotAuthorizedList。 | FEAT-13 adapter validation result、FEAT-08 docs wording。 | health pass 或 fixture pass 被解释为 runtime 授权。 |
+| FEAT-11 | Handoff Consumer | 只消费通过 adapter core 输出的 signal/evidence/handoff refs，用于后续 Stage 2/Stage 3 handoff。 | 读取 event/ML 私有对象、直接消费 raw event payload 或 model artifact body。 | Handoff ref linkage。 | FEAT-13 adapter output refs。 | 直接依赖 event-only / ML-only 私有字段。 |
+
+### 共享能力增量
+
+| Shared ID | 名称 | 使用方 | Owner | 调用方向 | 降级策略 |
+|---|---|---|---|---|---|
+| SH-CR158-01 | StrategyTypeAdapterCore | FEAT-13 / FEAT-03 / FEAT-11 | FEAT-13 | event/ML extension -> core -> signal/evidence/handoff refs | core 字段缺失时 blocked；不得自动读取真实数据补齐。 |
+| SH-CR158-02 | AdapterTypedEvidenceRef | FEAT-13 / FEAT-03 / FEAT-08 | FEAT-13 / FEAT-03 | adapter validation -> evidence index typed refs | 大型正文复制计数非 0 时 blocked。 |
+| SH-CR158-03 | AdapterOperationCounterReport | FEAT-13 / FEAT-07 / FEAT-08 | FEAT-07 | adapter validation -> no-runtime guard -> CP7 / CP8 wording | 任一 forbidden counter 非 0 时 CP7 不得 PASS。 |
+
+### 待确认边界增量
+
+| Decision ID | 决策类型 | 问题 | 推荐方案 | 备选方案 | 优劣分析 | 影响 / 风险 | 回退 / 切换条件 | 状态 |
+|---|---|---|---|---|---|---|---|---|
+| DQ-BP-CR158-01 | architecture | shared core 是否只包含最小公共字段，event/ML 差异全部进 type-specific extension？ | A. Thin shared core + typed extension | B. Fat common schema；C. 两套完全独立 adapter | A 降低语义污染且保留统一消费；B 字段多但会把 event-only/ML-only 互设必填；C 最清晰但重复 CP5/验证。 | 影响 HLD、ADR、Story split、schema 演进。 | CP5 发现 extension 仍互相污染时拆分子 CR。 |
+| DQ-BP-CR158-02 | security | CP3 是否继续保持 no-runtime/no-publish，而不是引入只读真实数据或 registry 验证？ | A. 继续 fixture/static only | B. 只读真实数据；C. registry / runtime proof | A 与 CP2 一致，风险最低；B/C 需要 runtime authorization 和更重验证。 | 防止架构文档被误读为 runtime-ready。 | 用户要求真实验证时另起 runtime authorization CR。 |
+
+### CR158 蓝图自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| 每个新增 Feature 有职责、非职责和数据归属 | PASS | FEAT-13 / FEAT-03 / FEAT-07 / FEAT-11 边界表 |
+| 共享能力写明调用方向和降级策略 | PASS | SH-CR158-01..03 |
+| 待确认边界进入 CP3 Decision Brief | PASS | DQ-BP-CR158-01..02 |
+| 运行授权边界未被放大 | PASS | DQ-BP-CR158-02、HLD §12 / §13 |
+
 ## CR-139 增量：策略生产数据底座（Strategy Data Foundation）
 
 > 本节是 `process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md`（companion HLD，写侧/读侧分离，D2 命名）的蓝图索引。它收口 `process/HLD-DATA-LAKE.md`（CR-018，superseded-in-scope）的范围，把数据湖从"已验证小窗口市场数据链路"推进为支撑多因子 + ML 策略从信息收集→回测→模拟盘→实盘全流程可信/可复现/可审计的**策略生产数据底座**。CP3 approve 不授权 runtime/NAS/QMT/trading/provider-lake-catalog 写入/物理分区迁移（Wave1 N1 后置到基线冻结之后）/Git remote write（REQ-248）。整改性质为"既有对象与 release/lineage/ML feature/run-id 全链路闭环"，**非整体新建**——仅 L3/E4/T7/T8/X1/X2（d1）为纯新建（REQ-249）。

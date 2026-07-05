@@ -15,6 +15,7 @@ change: "CR-031"
 |---|---|---|---|
 | 1.0 | 2026-06-07 | meta-po | 新增运行授权与 no-real-operation 安全治理 Feature 设计索引 |
 | 1.1 | 2026-06-23 | host-orchestrator | CR129 增加与 `strategy-runner-core` 的边界说明。 |
+| 1.2 | 2026-07-05 | host-orchestrator | CR158 增补 event/ML adapter no-runtime guard：forbidden operation counter report、fail-closed blocked reasons 和 release overclaim 防线。 |
 
 ## Feature 摘要
 
@@ -68,8 +69,21 @@ change: "CR-031"
 | no-real-op counter 非 0 且无授权 | blocker；不得关闭 gate |
 | 文档弱化不授权项 | docs guardrail FAIL |
 
+## CR158 Adapter No-Runtime Guard
+
+| Guard ID | Forbidden operation | 默认计数 | 失败行为 |
+|---|---|---:|---|
+| CR158-G-01 | real event feed / live listener / provider fetch / gateway event call | 0 | blocked；不得声明 event adapter ready。 |
+| CR158-G-02 | real ML training / external model service / model registry write / model promotion | 0 | blocked；不得声明 ML adapter ready。 |
+| CR158-G-03 | lake write / NAS access / credential or env/session read / catalog or prediction store write | 0 | blocked；停止 CP7/CP8 readiness claim。 |
+| CR158-G-04 | QMT / MiniQMT / xtquant / gateway runtime / simulation / paper / live / broker / trading | 0 | blocked；必须另起 runtime authorization CR。 |
+| CR158-G-05 | external framework clone/install/run / Git remote write / publish / deployment | 0 | blocked；不得进入 release execution。 |
+
+CR158 的 `approve`、CP3 approved、CP4 PASS、CP5 approved、CP6/CP7 PASS 或 CP8 READY 都不改变上述默认计数。若用户需要真实 feed、真实训练、registry 或 runtime 验证，必须先创建独立 runtime authorization CR，并在对应 Decision Brief 中列出 scope、allowlist、凭据处理、证据脱敏和回退方式。
+
 ## Gotchas
 
 - “只读”仍然可能触达真实账户信息，必须受 scope、redaction 和 evidence 边界控制。
 - `approve` 只接受当前门禁的推荐方案，不是对未来真实操作的永久授权。
 - 任何真实 `.env` 内容不得进入 memory、对话、docs、checks、reports 或 git。
+- CR158 的 adapter PASS 只能表示 fixture/static 合同验证通过，不表示 feed-ready、model-ready、registry-ready、runtime-ready 或 trade-ready。

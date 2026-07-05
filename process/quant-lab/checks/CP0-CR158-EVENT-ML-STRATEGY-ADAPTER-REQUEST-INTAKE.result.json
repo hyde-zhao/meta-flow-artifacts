@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR158-EVENT-ML-STRATEGY-ADAPTER-REQUEST-INTAKE",
+  "cr_id": "CR-158",
+  "context_ref": "process/context/CP0-CR158.context.json",
+  "route_plan_ref": "process/checks/CP0-CR158.route-plan.json",
+  "items": [
+    {
+      "id": "CP0-CR158-01",
+      "category": "workspace-routing",
+      "name": "Process route is healthy",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run meta-flow workspace check --project-root ."
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "process_link_health reported ok with routing_mode=symlink."
+    },
+    {
+      "id": "CP0-CR158-02",
+      "category": "cr-tracking",
+      "name": "No active or blocked formal CR conflicts before intake",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run meta-flow check cr-tracking --project-root .",
+        "process/changes/CR-INDEX.json",
+        "process/state/STATE.current.json#active_change"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Before CR158 activation, STATE.current.json had active_change=null and CR tracking reported no active formal CRs."
+    },
+    {
+      "id": "CP0-CR158-03",
+      "category": "request-intake",
+      "name": "User request captured",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-158-EVENT-ML-STRATEGY-ADAPTER-UNIFIED-IMPLEMENTATION-2026-07-05.md#变更描述",
+        "process/context/CP0-CR158.context.json#raw_user_request"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "The user requested one formal CR merging `DF-CR157-001` and `DF-CR157-002`."
+    },
+    {
+      "id": "CP0-CR158-04",
+      "category": "follow-up-merge",
+      "name": "DF-CR157-001 and DF-CR157-002 merged into one CR",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/product/USE-CASES.md#Deferred-Ideas",
+        "process/DEVELOPMENT-PLAN-CR157-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.yaml#deferred_items"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "The two deferred adapter items share adapter contract, evidence index, handoff and no-runtime boundary concerns; one CR is the correct audit shell."
+    },
+    {
+      "id": "CP0-CR158-05",
+      "category": "route-plan",
+      "name": "Route plan generated",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP0-CR158.route-plan.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Route plan is architecture-major with CP1, CP2, CP3, CP4, CP5, CP6, CP7 and CP8 applicable."
+    },
+    {
+      "id": "CP0-CR158-06",
+      "category": "authorization-boundary",
+      "name": "Initial authorization boundary is explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-158-EVENT-ML-STRATEGY-ADAPTER-UNIFIED-IMPLEMENTATION-2026-07-05.md#结构化权限策略"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR158 does not authorize real event feeds, real model training, real lake/NAS/provider/credential access, runtime, trading, publish, registry/store/catalog writes, external framework execution or Git remote writes."
+    },
+    {
+      "id": "CP0-CR158-07",
+      "category": "product-baseline",
+      "name": "Product baseline refresh route selected",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/summaries/CR-158.summary.json#product_baseline_refresh_required",
+        "process/changes/CR-158-EVENT-ML-STRATEGY-ADAPTER-UNIFIED-IMPLEMENTATION-2026-07-05.md#产品基线重整门禁"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR158 must return to requirement-clarification / meta-pm / CP2 before HLD, Story decomposition, LLD or implementation."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "READ-CR158-CP0-CR157-DEFERRED-SOURCES-2026-07-05T155800+0800"
+  ],
+  "decision": "PASS",
+  "next_route": "requirement-clarification"
+}

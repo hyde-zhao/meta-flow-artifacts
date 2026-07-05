@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS",
+  "profile": "compact",
+  "story_id": "CR158-S01..S06",
+  "cr_id": "CR-158",
+  "checked_at": "2026-07-05T18:55:00+08:00",
+  "context_ref": "process/context/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-CONTEXT.yaml",
+  "release_context_ref": "process/release/RELEASE-CONTEXT-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml",
+  "dispatch_refs": [
+    "AD-CR158-META-QA-INLINE-FALLBACK-CP7-20260705T183200+0800"
+  ],
+  "evidence_ref": "process/evidence/CR158-CP7-VERIFICATION.index.json",
+  "items": [
+    {
+      "id": "CP8-CR158-01",
+      "category": "entry",
+      "name": "CP7 verification completed with PASS_WITH_RISK and zero blockers",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json",
+        "process/evidence/CR158-CP7-VERIFICATION.index.json",
+        "process/returns/CR158-EVENT-ML-STRATEGY-ADAPTER.CP7.return.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "CP7 decision PASS_WITH_RISK; blockers empty; forbidden_operation_count=0."
+    },
+    {
+      "id": "CP8-CR158-02",
+      "category": "release-context",
+      "name": "CR158 release context capsule generated with compact profile",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml",
+        "process/context/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-CONTEXT.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "release_artifact_profile=compact because CR158 is a local/static/fixture adapter contract slice with no install/deploy/runtime/publish authorization."
+    },
+    {
+      "id": "CP8-CR158-03",
+      "category": "release-decision",
+      "name": "Release decision uses READY_WITH_RISK and does not claim RELEASED",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml#release_decision",
+        "process/checkpoints/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.md#待人工决策清单"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "release_decision=READY_WITH_RISK; true release execution is not authorized or executed."
+    },
+    {
+      "id": "CP8-CR158-04",
+      "category": "authorization-boundary",
+      "name": "No real runtime, data, credential, store, registry, publish, broker or remote operation is authorized",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml#non_authorized_items",
+        "process/evidence/CR158-CP7-VERIFICATION.index.json#boundary_check",
+        "process/checkpoints/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.md#审批者摘要"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "User approval would accept READY_WITH_RISK only and preserve deny-by-default runtime/data/publish/trading boundary."
+    },
+    {
+      "id": "CP8-CR158-05",
+      "category": "risk-acceptance",
+      "name": "User decision required for CP8 READY_WITH_RISK",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.md#待人工决策清单",
+        "process/checkpoints/CP8-CR158-EVENT-ML-STRATEGY-ADAPTER-RELEASE-READINESS.launch.md"
+      ],
+      "owner": "user",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "User approved DQ-CP8-CR158-001..003; risk acceptance recorded; true release execution remains unauthorized."
+    },
+    {
+      "id": "CP8-CR158-06",
+      "category": "release-documents",
+      "name": "Compact release documents generated for CR158",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "docs/release/RELEASE-NOTES-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+        "docs/release/DEPLOY-CHECKLIST-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+        "docs/release/ROLLBACK-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+        "docs/release/MIGRATION-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+        "docs/release/FEEDBACK-CR158-EVENT-ML-STRATEGY-ADAPTER.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "Docs are scoped to readiness; no deploy/runtime/publish action is included."
+    },
+    {
+      "id": "CP8-CR158-07",
+      "category": "install-validation",
+      "name": "Install validation is N/A because no install or platform packaging files changed",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml#install_validation_summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "No install scripts, package manager config, platform agents or deployment scripts changed."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "release_decision": "READY_WITH_RISK",
+  "manual_gate_status": "approved",
+  "accepted_human_decisions": [
+    "DQ-CP8-CR158-001",
+    "DQ-CP8-CR158-002",
+    "DQ-CP8-CR158-003"
+  ],
+  "pending_human_decisions": [],
+  "risk_acceptance": {
+    "decision_id": "DQ-CP8-CR158-001",
+    "decision_type": "risk_acceptance",
+    "status": "accepted",
+    "risk_ids": [
+      "R-CR158-CP7-STATIC-FIXTURE-ONLY"
+    ],
+    "recommended_outcome": "accept CP7 PASS_WITH_RISK and close CR158 local/static/fixture event + ML adapter slice as READY_WITH_RISK",
+    "reject_route": "CR158_NOT_READY_OR_RETURN_TO_CP7_OR_CP6_REWORK",
+    "accepted_at": "2026-07-05T19:20:00+08:00",
+    "accepted_by": "user",
+    "accepted_risk_ids": [
+      "R-CR158-CP7-STATIC-FIXTURE-ONLY"
+    ]
+  },
+  "not_authorized": [
+    "true_release_execution_publish_production_deployment_or_live_enablement",
+    "real_event_feed_or_listener_runtime",
+    "real_ml_training_external_model_service_or_model_registry_write",
+    "real_lake_nas_provider_access_or_credential_env_session_read",
+    "qmt_miniqmt_xtquant_gateway_runtime_simulation_paper_live_trading_broker_operation",
+    "catalog_store_registry_feature_label_prediction_write_or_pointer_mutation",
+    "external_framework_clone_install_run",
+    "git_remote_write",
+    "production_runtime_trading_broker_readiness_claim"
+  ],
+  "next_route": "CR158_CLOSED_READY_WITH_RISK",
+  "risk_refs": [
+    "R-CR158-CP7-STATIC-FIXTURE-ONLY"
+  ],
+  "follow_up_refs": [
+    "future-real-event-feed-validation",
+    "future-real-ml-training-model-registry-validation",
+    "future-runtime-publish-trading-readiness"
+  ],
+  "updated_at": "2026-07-05T19:20:00+08:00",
+  "approved_at": "2026-07-05T19:20:00+08:00",
+  "approved_by": "user",
+  "approved_via": "user_cp8_review_acceptance",
+  "accepted_risk_ids": [
+    "R-CR158-CP7-STATIC-FIXTURE-ONLY"
+  ]
+}

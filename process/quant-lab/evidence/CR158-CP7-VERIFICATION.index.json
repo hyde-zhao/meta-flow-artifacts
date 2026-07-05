@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "stage": "CP7",
+  "cr_id": "CR-158",
+  "story_id": "CR158-S01..S06",
+  "return_ref": "process/returns/CR158-EVENT-ML-STRATEGY-ADAPTER.CP7.return.json",
+  "verification_report_ref": "docs/quality/VERIFICATION-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+  "context_ref": "process/context/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION-CONTEXT.yaml",
+  "dispatch_refs": [
+    "AD-CR158-META-QA-INLINE-FALLBACK-CP7-20260705T183200+0800"
+  ],
+  "source_evidence_refs": [
+    "process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json",
+    "process/returns/CR158-EVENT-ML-STRATEGY-ADAPTER.CP6.return.json",
+    "process/evidence/CR158-CP6-IMPLEMENTATION.index.json",
+    "process/stories/CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.md"
+  ],
+  "changed_files": [
+    {
+      "path": "docs/quality/VERIFICATION-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+      "change_type": "added"
+    },
+    {
+      "path": "docs/quality/TEST-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+      "change_type": "added"
+    },
+    {
+      "path": "docs/quality/REVIEW-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+      "change_type": "added"
+    },
+    {
+      "path": "docs/quality/FIXES-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+      "change_type": "added"
+    },
+    {
+      "path": "process/returns/CR158-EVENT-ML-STRATEGY-ADAPTER.CP7.return.json",
+      "change_type": "added"
+    },
+    {
+      "path": "process/evidence/CR158-CP7-VERIFICATION.index.json",
+      "change_type": "added"
+    },
+    {
+      "path": "process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json",
+      "change_type": "added"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/quality/VERIFICATION-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+      "kind": "verification_report"
+    },
+    {
+      "path": "docs/quality/TEST-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+      "kind": "test_report"
+    },
+    {
+      "path": "docs/quality/REVIEW-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+      "kind": "review"
+    },
+    {
+      "path": "docs/quality/FIXES-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+      "kind": "fixes"
+    },
+    {
+      "path": "process/returns/CR158-EVENT-ML-STRATEGY-ADAPTER.CP7.return.json",
+      "kind": "return_packet"
+    },
+    {
+      "path": "process/checks/CP7-CR158-EVENT-ML-STRATEGY-ADAPTER-VERIFICATION.result.json",
+      "kind": "cp_result"
+    }
+  ],
+  "verified_files": [
+    {
+      "path": "engine/strategy_type_adapters.py",
+      "kind": "code",
+      "checks": [
+        "py_compile",
+        "targeted_pytest",
+        "source_contract_review"
+      ],
+      "result": "PASS"
+    },
+    {
+      "path": "tests/test_cr158_strategy_type_adapter_contract.py",
+      "kind": "test",
+      "checks": [
+        "pytest_cr158_targeted"
+      ],
+      "result": "PASS"
+    },
+    {
+      "path": "tests/test_cr158_event_strategy_adapter.py",
+      "kind": "test",
+      "checks": [
+        "pytest_cr158_targeted"
+      ],
+      "result": "PASS"
+    },
+    {
+      "path": "tests/test_cr158_ml_strategy_adapter.py",
+      "kind": "test",
+      "checks": [
+        "pytest_cr158_targeted"
+      ],
+      "result": "PASS"
+    },
+    {
+      "path": "tests/test_cr158_adapter_evidence_refs.py",
+      "kind": "test",
+      "checks": [
+        "pytest_cr158_targeted"
+      ],
+      "result": "PASS"
+    },
+    {
+      "path": "tests/test_cr158_adapter_no_runtime_guard.py",
+      "kind": "test",
+      "checks": [
+        "pytest_cr158_targeted"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "commands": [
+    {
+      "command_id": "CMD-01",
+      "command": "uv run pytest tests/test_cr158_strategy_type_adapter_contract.py tests/test_cr158_event_strategy_adapter.py tests/test_cr158_ml_strategy_adapter.py tests/test_cr158_adapter_evidence_refs.py tests/test_cr158_adapter_no_runtime_guard.py",
+      "result": "pass",
+      "summary": "20 passed in 0.04s"
+    },
+    {
+      "command_id": "CMD-02",
+      "command": "uv run --python 3.11 python -m py_compile engine/strategy_type_adapters.py",
+      "result": "pass",
+      "summary": "module compiles"
+    },
+    {
+      "command_id": "CMD-03",
+      "command": "uv run pytest tests/research/test_event_driven_strategy_e2e_contracts.py tests/research/test_ml_strategy_e2e_contracts.py tests/research/test_strategy_admission_package.py tests/research/test_cross_strategy_reliability_gates.py",
+      "result": "pass",
+      "summary": "60 passed in 0.60s"
+    },
+    {
+      "command_id": "CMD-04",
+      "command": "git diff --check -- engine/strategy_type_adapters.py tests/test_cr158_strategy_type_adapter_contract.py tests/test_cr158_event_strategy_adapter.py tests/test_cr158_ml_strategy_adapter.py tests/test_cr158_adapter_evidence_refs.py tests/test_cr158_adapter_no_runtime_guard.py process/stories/CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.md",
+      "result": "pass",
+      "summary": "no whitespace errors"
+    },
+    {
+      "command_id": "CMD-05",
+      "command": "uv run meta-flow cp result-check --result process/checks/CP6-CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.result.json --project-root . --mode silent",
+      "result": "pass",
+      "summary": "CP6 result-check returned PASS"
+    }
+  ],
+  "contract_checks": [
+    {
+      "id": "CR158-CP7-CONTRACT-S01",
+      "story": "CR158-S01",
+      "contract": "Shared core required groups are explicit and private event/ML fields are blocked.",
+      "result": "PASS",
+      "evidence_refs": [
+        "engine/strategy_type_adapters.py#CORE_REQUIRED_FIELD_GROUPS",
+        "tests/test_cr158_strategy_type_adapter_contract.py"
+      ]
+    },
+    {
+      "id": "CR158-CP7-CONTRACT-S02",
+      "story": "CR158-S02",
+      "contract": "Event adapter refs are required and feed/listener counters block readiness.",
+      "result": "PASS",
+      "evidence_refs": [
+        "engine/strategy_type_adapters.py#validate_event_adapter_extension",
+        "tests/test_cr158_event_strategy_adapter.py"
+      ]
+    },
+    {
+      "id": "CR158-CP7-CONTRACT-S03",
+      "story": "CR158-S03",
+      "contract": "ML adapter refs are required and training/registry counters block readiness.",
+      "result": "PASS",
+      "evidence_refs": [
+        "engine/strategy_type_adapters.py#validate_ml_adapter_extension",
+        "tests/test_cr158_ml_strategy_adapter.py"
+      ]
+    },
+    {
+      "id": "CR158-CP7-CONTRACT-S04",
+      "story": "CR158-S04",
+      "contract": "Adapter evidence refs are refs-only and block body/private payload inclusion.",
+      "result": "PASS",
+      "evidence_refs": [
+        "engine/strategy_type_adapters.py#validate_adapter_evidence_refs",
+        "tests/test_cr158_adapter_evidence_refs.py"
+      ]
+    },
+    {
+      "id": "CR158-CP7-CONTRACT-S05",
+      "story": "CR158-S05",
+      "contract": "Forbidden operation counters cover runtime/data/trading/publish families and block nonzero values.",
+      "result": "PASS",
+      "evidence_refs": [
+        "engine/strategy_type_adapters.py#CR158_FORBIDDEN_OPERATION_COUNTERS",
+        "tests/test_cr158_adapter_no_runtime_guard.py"
+      ]
+    },
+    {
+      "id": "CR158-CP7-CONTRACT-S06",
+      "story": "CR158-S06",
+      "contract": "Verification and release wording do not overclaim runtime readiness.",
+      "result": "PASS_WITH_RISK",
+      "evidence_refs": [
+        "docs/quality/VERIFICATION-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+        "docs/quality/TEST-REPORT-CR158-EVENT-ML-STRATEGY-ADAPTER.md",
+        "docs/quality/REVIEW-CR158-EVENT-ML-STRATEGY-ADAPTER.md"
+      ]
+    }
+  ],
+  "boundary_check": {
+    "forbidden_operation_count": 0,
+    "real_event_feed_executed": false,
+    "real_ml_training_executed": false,
+    "external_model_service_executed": false,
+    "real_lake_read_executed": false,
+    "real_lake_write_executed": false,
+    "nas_operation_executed": false,
+    "provider_fetch_executed": false,
+    "credential_or_env_read_executed": false,
+    "qmt_or_gateway_runtime_executed": false,
+    "simulation_paper_live_executed": false,
+    "trading_or_broker_executed": false,
+    "catalog_store_registry_write_executed": false,
+    "publish_executed": false,
+    "external_framework_run_executed": false,
+    "git_remote_write_executed": false
+  },
+  "risks": [
+    {
+      "id": "R-CR158-CP7-STATIC-FIXTURE-ONLY",
+      "status": "cp8_risk_acceptance_required",
+      "severity": "medium",
+      "summary": "CP7 verifies local/static/fixture contracts only; real feed/training/data/runtime/registry/publish/trading readiness remains unauthorized and out of scope."
+    }
+  ],
+  "waivers": [],
+  "decision": "PASS_WITH_RISK"
+}

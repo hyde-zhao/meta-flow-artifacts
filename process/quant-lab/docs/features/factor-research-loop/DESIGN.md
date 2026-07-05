@@ -22,6 +22,7 @@ change: "CR-031"
 | 1.6 | 2026-06-27 | codex | 增补自动异象发现系统：受控模板候选生成、批量研究 runner、多重检验、准入报告、动态因子目录接入和 Stage 3 候选消费。 |
 | 1.7 | 2026-06-28 | codex | 增补研究引擎稳定模块整改：chapter/stage/root 旧入口归档到 legacy archive，领域名模块和共享 helper 成为主实现面。 |
 | 1.8 | 2026-07-01 | host-orchestrator | CR151 增补 Strategy Admission Statistical Gate：Wave A 统计准入合同、fail-closed 四态门、CR150 linkage 和 static-only evidence；显式 deferred Wave B 评价工件。 |
+| 1.9 | 2026-07-05 | host-orchestrator | CR158 增补 Event + ML Strategy Adapter：thin shared core、typed event/ML extension、refs-only evidence 和 fixture/static validation boundary。 |
 
 ## Feature 摘要
 
@@ -166,3 +167,23 @@ change: "CR-031"
 - Qlib / Alphalens / Zipline / LEAN 只能 cross-check，不成为 truth。
 - CR151 statistical gate PASS 只代表本地 fixture/static 统计准入语义通过，不代表 production turnover、simulation、paper、live 或 QMT-ready。
 - 不得把 MF-GAP-2 扩展评价统计、MF-GAP-4 regime 分层或 MF-GAP-7 因子相关性聚类 / 去重视为 CR151 已完成；这些仍是 CR154 / follow-up。
+
+## CR158 Event + ML Strategy Adapter
+
+| 层 | 设计 |
+|---|---|
+| Adapter core | `StrategyTypeAdapterCore` 只承载 strategy type、input refs、output signal refs、evidence refs、blocked reason refs、authorization flags 和 handoff refs。 |
+| Event extension | 事件策略只在 typed extension 中表达 event source ref、event time ref、payload schema ref、alignment policy ref、signal output ref 和 blocked reason ref。 |
+| ML extension | ML 策略只在 typed extension 中表达 training snapshot ref、feature set ref、label policy ref、model artifact ref、validation report ref、prediction signal ref 和 blocked reason ref。 |
+| Validation result | Adapter validation result 必须能区分 pass / blocked / missing-ref / forbidden-operation，不得把缺 P0 ref 降级为 warning。 |
+| Evidence / handoff | Event / ML evidence 只写 typed refs 和短元数据，Stage 2/3 handoff 只消费 refs 和 status，不消费 event/ML private payload。 |
+| Safety boundary | 本 Feature 只定义 local/static/fixture adapter 合同；真实 feed、真实训练、registry、provider/lake/NAS/credential、runtime、trading 和 publish 均归 FEAT-07 授权门禁。 |
+
+### CR158 边界与失败路径
+
+| 失败点 | 行为 |
+|---|---|
+| Event fixture 缺少 event source ref、alignment policy ref 或 signal output ref | Adapter validation result 为 blocked，并写 blocked reason ref。 |
+| ML fixture 缺少 training snapshot ref、model artifact ref、validation report ref 或 prediction signal ref | Adapter validation result 为 blocked，并写 blocked reason ref。 |
+| Event-only 字段被 ML fixture 设为必填，或 ML-only 字段被 event fixture 设为必填 | Contract validation blocked；返回 CP5 设计澄清。 |
+| Evidence extension 复制 report body、event payload body、model binary、diff 或 transcript | Evidence validation blocked；body_copy_count 必须回到 0。 |
