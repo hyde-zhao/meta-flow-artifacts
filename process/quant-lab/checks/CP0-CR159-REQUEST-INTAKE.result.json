@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR159-REQUEST-INTAKE",
+  "cr_id": "CR-159",
+  "checked_at": "2026-07-06T22:05:54+08:00",
+  "context_ref": "process/context/CP0-CR159.context.json",
+  "items": [
+    {
+      "id": "CP0-CR159-01",
+      "category": "workspace-routing",
+      "name": "Process route is healthy",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run meta-flow workspace check --project-root ."
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "process_link_health reported ok with routing_mode=symlink; process symlink resolves to ../meta-flow-artifacts/process/quant-lab."
+    },
+    {
+      "id": "CP0-CR159-02",
+      "category": "current-state-recovery",
+      "name": "Required current-state inputs read",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "AGENTS.md",
+        "process/current/CURRENT.json",
+        "process/state/STATE.current.json",
+        "process/changes/CR-INDEX.json",
+        "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Current-state recovery files read before intake; roadmap §7 and CR-156 closure state confirmed."
+    },
+    {
+      "id": "CP0-CR159-03",
+      "category": "cr-tracking",
+      "name": "No active or blocked formal CR conflicts before intake",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run meta-flow check cr-tracking --project-root .",
+        "process/changes/CR-INDEX.json#active_crs",
+        "process/state/STATE.current.json#active_change"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR tracking reported active formal CRs none and blocked formal CRs none; CR-159 id available (existing items end at CR-158). Residual ERROR/WARNING are in-scope hygiene targets for this CR, not conflicts."
+    },
+    {
+      "id": "CP0-CR159-04",
+      "category": "request-intake",
+      "name": "User request captured",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-2026-07-06.md#变更描述",
+        "process/context/CP0-CR159.context.json#raw_user_request"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "The explicit request to start CR159 with three subitems and three required CP2 decisions was captured."
+    },
+    {
+      "id": "CP0-CR159-05",
+      "category": "request-intake",
+      "name": "Target object and change goal are clear",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP0-CR159.context.json#scope_update",
+        "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md#7-近期建议",
+        "process/checks/CP0-CR159-REQUEST-INTAKE.result.json (state check / cr check / cr-tracking tool evidence)"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "User clarified CR159 as three-subitem hygiene consolidation: STATE v2 slim, CR-INDEX legacy, return/verify field validation probe; plus roadmap v1.3 rewrite at CP8."
+    },
+    {
+      "id": "CP0-CR159-06",
+      "category": "authorization-boundary",
+      "name": "Initial authorization boundary is explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-2026-07-06.md#结构化权限策略",
+        "process/context/CP0-CR159.context.json#scope_update"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR159 is local process/tooling hygiene only; Git remote write, true release execution, publish, runtime, real data/lake/NAS/provider, credentials, broker, trading, and reopening closed CR-151/152/153/154/158 remain unauthorized."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260706T141816Z0000-e77789e7",
+    "RE-20260706T141857Z0000-e341c3d2",
+    "RE-20260706T141857Z0000-d5f51809",
+    "RE-20260706T141857Z0000-5c8e09b1",
+    "RE-20260706T141857Z0000-438ce884"
+  ],
+  "decision": "PASS",
+  "next_route": "requirement-clarification"
+}

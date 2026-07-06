@@ -1,0 +1,35 @@
+schema_version: 1
+context_id: CP8-CR159-DELIVERY-CONTEXT
+cr_id: CR-159
+created_at: "2026-07-06T23:45:00+08:00"
+read_profile: compact
+status: ready_for_human_gate
+capsule: "process/context/CP8-CR159-DELIVERY-CONTEXT.yaml"
+default_reading_strategy: capsule-first
+
+formal_cr_ref: "process/changes/CR-159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-2026-07-06.md"
+summary_ref: "process/changes/summaries/CR-159.summary.json"
+cp8_result_ref: "process/checks/CP8-CR159-DELIVERY-READINESS.result.json"
+follow_up_tracking_ref: "process/changes/CR-159-FOLLOW-UP-TRACKING-2026-07-06.md"
+roadmap_ref: "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md"
+
+scoped_verifier:
+  b1_zero: "PASS — CR-158 + CR-159 index item valid"
+  b2_registered: "PASS — FU-CR159-001 + FU-CR159-002 in台账"
+  a_budget: "PASS — source_refs budget resolved + phase deleted"
+  residual_warn: "4 (current_agent/last_action/cr_tracking_ref/cr_ledger_ref) — state-router contract, FU-CR159-002 revisit"
+  not_pass_global: "global cr check retains 182 B2 legacy ERROR + authz L2 infer false-positive; FU-CR159-001 deferred"
+
+authorization_boundary:
+  authorized:
+    - "CR-159 closure as READY_WITH_RISK (scoped)"
+  not_authorized:
+    - "git_remote_write"
+    - "true_release_execution_or_publish"
+    - "runtime_or_trading_or_broker_operation"
+    - "credential_or_env_read"
+    - "real_lake_or_nas_or_provider_access"
+    - "catalog_pointer_or_store_or_registry_write"
+    - "external_framework_clone_install_run"
+    - "reopen_closed_CR_151_152_153_154_or_158"
+    - "global_cr_check_0_ERROR_claim"

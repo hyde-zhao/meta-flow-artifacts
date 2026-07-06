@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP2",
+  "checkpoint_id": "CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE",
+  "cr_id": "CR-159",
+  "checked_at": "2026-07-06T22:05:54+08:00",
+  "context_ref": "process/context/CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE-CONTEXT.yaml",
+  "dispatch_refs": [],
+  "evidence_ref": "",
+  "items": [
+    {
+      "id": "CP2-CR159-01",
+      "category": "entry",
+      "name": "CR159 formal CR exists with long descriptive filename",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-2026-07-06.md",
+        "process/changes/summaries/CR-159.summary.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Formal CR file with long descriptive name created; summary entry created."
+    },
+    {
+      "id": "CP2-CR159-02",
+      "category": "entry",
+      "name": "CP0 and CP1 passed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP0-CR159-REQUEST-INTAKE.result.json",
+        "process/checks/CP1-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE-COMPLETENESS.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": ""
+    },
+    {
+      "id": "CP2-CR159-03",
+      "category": "scope",
+      "name": "Compact hygiene consolidation scope is concrete and tool-verified",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE-CONTEXT.yaml#scope_summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Three subitems (v0.3): A) STATE slim + delete phase + keep 4 runtime-contract fields as residual WARN (FU-CR159-002 revisit); B1) CR-INDEX scoped (4 authz L2 + CR-158 status), B2 deferred FU-CR159-001 (182 ERROR: 63 cr_ledger + 58 cr_index invalid status + 57 missing summary_ref + 4 invalid cr_type); C) return/verify probe. Tool-verified: state check 9 WARN, cr check 187 ERROR, state slim 7.9KB->5.2KB."
+    },
+    {
+      "id": "CP2-CR159-04",
+      "category": "decision-coverage",
+      "name": "Required CP2 decision items are represented in the manual checkpoint",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE.md#待人工决策清单"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Seven decisions cover scope, STATE unknown field, authz L2 semantics, CR-158 status, CP8 scoped check, CP6/7 conditional routing, security boundary; user-required three decisions (STATE/authz/CR158) explicitly included."
+    },
+    {
+      "id": "CP2-CR159-05",
+      "category": "authorization",
+      "name": "No remote, release, runtime, real-data, credential, broker, trading or closed-CR-reopen authorization is granted by this gate",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE-CONTEXT.yaml#authorization_boundary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Approval only confirms local process/tooling hygiene scope; CR-INDEX data corrections are evidence-label fixes, not capability changes or CR reopen."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260706T141816Z0000-e77789e7",
+    "RE-20260706T141857Z0000-e341c3d2",
+    "RE-20260706T141857Z0000-d5f51809",
+    "RE-20260706T141857Z0000-5c8e09b1"
+  ],
+  "manual_gate_status": "approved",
+  "approved_at": "2026-07-06T23:10:00+08:00",
+  "approved_by": "user",
+  "accepted_decision_ids": [
+    "DQ-CP2-CR159-SCOPE",
+    "DQ-CP2-CR159-STATE-UNKNOWN-FIELDS",
+    "DQ-CP2-CR159-AUTHZ-L2-SEMANTICS",
+    "DQ-CP2-CR159-CR158-STATUS",
+    "DQ-CP2-CR159-CP8-SCOPED-CHECK",
+    "DQ-CP2-CR159-CP6-CP7-CONDITIONAL",
+    "DQ-CP2-CR159-NO-REMOTE-RELEASE-RUNTIME"
+  ],
+  "review_notes": "User approved all 7 decisions; cp8_scoped_verifier fixed to executable shell in v0.3.",
+  "decision": "PASS",
+  "next_route": "implementation_then_CP8"
+}

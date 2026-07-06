@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR159-DELIVERY-READINESS",
+  "cr_id": "CR-159",
+  "checked_at": "2026-07-06T23:45:00+08:00",
+  "context_ref": "process/context/CP8-CR159-DELIVERY-CONTEXT.yaml",
+  "items": [
+    {
+      "id": "CP8-CR159-01",
+      "category": "entry",
+      "name": "CP0-CP2 approved, CP3-7 N/A",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP2 approved v0.3 (7 decisions); CP3/4/5 N/A; CP6/7 N/A (subitem C no code change, tools already validate)."
+    },
+    {
+      "id": "CP8-CR159-02",
+      "category": "scoped_verifier",
+      "name": "B1 zero (CR-158 + CR-159 index item)",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "test \"$(meta-flow cr check --project-root . 2>&1 | grep -cE 'CR index item CR-158: invalid status|CR index item CR-159:')\" -eq 0"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR-158 status=closed; CR-159 item valid."
+    },
+    {
+      "id": "CP8-CR159-03",
+      "category": "scoped_verifier",
+      "name": "B2 registered (FU-CR159-001)",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-159-FOLLOW-UP-TRACKING-2026-07-06.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "FU-CR159-001 (B2 legacy + authz L2) + FU-CR159-002 (STATE schema) registered."
+    },
+    {
+      "id": "CP8-CR159-04",
+      "category": "scoped_verifier",
+      "name": "A budget resolved (source_refs + phase)",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "test \"$(meta-flow state check --mode audit --project-root . 2>&1 | grep -cE 'source_refs exceeds|unknown field: phase')\" -eq 0"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "source_refs archived (7.9KB->5.3KB); phase deleted."
+    },
+    {
+      "id": "CP8-CR159-05",
+      "category": "risk_acceptance",
+      "name": "4 residual WARN documented",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "R-CR159-STATE-RESIDUAL-WARN",
+        "process/changes/CR-159-FOLLOW-UP-TRACKING-2026-07-06.md#FU-CR159-002"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "current_agent/last_action/cr_tracking_ref/cr_ledger_ref kept for state-router/SKILL.md:104,114,290 contract; FU-CR159-002 revisit."
+    },
+    {
+      "id": "CP8-CR159-06",
+      "category": "deferred",
+      "name": "B2 legacy + authz L2 deferred FU-CR159-001",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/changes/CR-159-FOLLOW-UP-TRACKING-2026-07-06.md#FU-CR159-001"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "182 legacy ERROR (63 cr_ledger + 58 cr_index invalid status + 57 missing summary_ref + 4 invalid cr_type) + authz L2 infer false-positive (formal CR 'real lake' keyword) deferred."
+    },
+    {
+      "id": "CP8-CR159-07",
+      "category": "subitem_c",
+      "name": "return/verify probe N/A",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "meta_flow/workflow/story_evidence.py:576-636,687-703",
+        "meta-flow story evidence-check CR158 CP6/CP7 OK"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "tools already have field non-empty validation; no code change; CP6/CP7 N/A."
+    },
+    {
+      "id": "CP8-CR159-08",
+      "category": "authorization",
+      "name": "No remote/release/runtime/closed-CR-reopen authorized",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-2026-07-06.md#结构化权限策略"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No git remote write, true release, publish, runtime, real data, credentials, broker, trading, catalog/store/registry write, external framework, closed CR reopen, or global cr check 0 ERROR claim."
+    },
+    {
+      "id": "CP8-CR159-09",
+      "category": "roadmap",
+      "name": "Roadmap v1.3 rewrite complete",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md#修订记录"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "§7 item 1/2/3 marked done; CR-156/158/159 closure recorded; append-only."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260706T141816Z0000-e77789e7",
+    "RE-20260706T141857Z0000-e341c3d2",
+    "RE-20260706T141857Z0000-d5f51809",
+    "RE-20260706T141857Z0000-5c8e09b1",
+    "RE-20260706T141857Z0000-438ce884",
+    "RE-20260706T152724Z0000-31f99850"
+  ],
+  "manual_gate_status": "approved",
+  "approved_at": "2026-07-07T00:30:00+08:00",
+  "approved_by": "user",
+  "accepted_decision_ids": [
+    "DQ-CP8-CR159-RELEASE"
+  ],
+  "review_notes": "User approved READY_WITH_RISK scoped; implementation corrections accepted.",
+  "decision": "PASS",
+  "next_route": "delivered"
+}

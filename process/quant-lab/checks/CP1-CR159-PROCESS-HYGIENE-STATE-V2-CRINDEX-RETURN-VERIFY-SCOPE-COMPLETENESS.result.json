@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP1",
+  "checkpoint_id": "CP1-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE-COMPLETENESS",
+  "cr_id": "CR-159",
+  "checked_at": "2026-07-06T22:05:54+08:00",
+  "context_ref": "process/context/CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE-CONTEXT.yaml",
+  "dispatch_refs": [],
+  "evidence_ref": "",
+  "items": [
+    {
+      "id": "CP1-CR159-01",
+      "category": "scope",
+      "name": "CR159 hygiene consolidation objective is explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP0-CR159.context.json#scope_update",
+        "process/changes/CR-159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-2026-07-06.md#三子项范围"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "User defined CR159 as three-subitem hygiene consolidation: A) STATE v2 slim, B) CR-INDEX legacy, C) return/verify field validation probe; plus roadmap v1.3 rewrite at CP8."
+    },
+    {
+      "id": "CP1-CR159-02",
+      "category": "follow-up-traceability",
+      "name": "Hygiene gaps are traceable to tool-verified evidence",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md#7-近期建议",
+        "uv run meta-flow state check --project-root . --mode audit",
+        "uv run meta-flow cr check --project-root .",
+        "uv run meta-flow check cr-tracking --project-root .",
+        "uv run meta-flow state slim --project-root . --dry-run"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "All three subitem gaps were mechanically verified by meta-flow tooling (state check 9 WARN, cr check 30+ ERROR, cr-tracking 6 WARNING, state slim dry-run 7.9KB→5.2KB); not hand-counted."
+    },
+    {
+      "id": "CP1-CR159-03",
+      "category": "product-baseline",
+      "name": "Product baseline refresh is not required",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/changes/CR-159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-2026-07-06.md#文档处理决策",
+        "process/context/CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE-CONTEXT.yaml#product_baseline"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR159 is local process/tooling hygiene; it does not add, delete or redefine product requirements, use cases, scenarios or TEST-MATRIX semantics. Roadmap rewrite is process documentation, not product baseline."
+    },
+    {
+      "id": "CP1-CR159-04",
+      "category": "authorization-boundary",
+      "name": "Local-only non-authorization boundary is explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE-CONTEXT.yaml#authorization_boundary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No Git remote write, true release, publish, runtime, credentials, real data, NAS/provider, broker, trading, catalog/store/registry write, or reopening of closed CR-151/152/153/154/158 is authorized."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260706T141816Z0000-e77789e7",
+    "RE-20260706T141857Z0000-e341c3d2",
+    "RE-20260706T141857Z0000-d5f51809",
+    "RE-20260706T141857Z0000-5c8e09b1"
+  ],
+  "decision": "PASS",
+  "next_route": "CP2"
+}

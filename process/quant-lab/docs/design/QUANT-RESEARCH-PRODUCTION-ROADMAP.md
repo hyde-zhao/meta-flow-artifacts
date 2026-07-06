@@ -25,6 +25,7 @@ authorization_boundary: "planning-only; no runtime, broker write, provider fetch
 | v1.0 | 2026-07-04 | host-orchestrator | 回写 CR153 与 CR154 CP8 `READY_WITH_RISK` 闭环：CR153 event-driven first wave、CR154 cross-strategy reliability gates first wave 均已完成 local/static/fixture-only 能力；补 `FU-CR154-001` final packaging hygiene 为优先候选，并保留 `FU-CR152-001` test taxonomy / PROVENANCE hygiene 并列治理。 |
 | v1.1 | 2026-07-05 | host-orchestrator | 回写 CR157 CP6 Stage 2 multifactor framework first slice：mature package refs、refs-only evidence index、fail-closed handoff 和 no-runtime guard 进入本地源码/测试实现；event/ML adapters 继续 deferred。 |
 | v1.2 | 2026-07-05 | host-orchestrator | 回写 CR157 CP7 `PASS_WITH_RISK` 与 CP8 发布就绪准备：本轮仍只证明 local/static/fixture 合同，不授权真实数据、runtime、publish、paper/live 或 trading。 |
+| v1.3 | 2026-07-06 | host-orchestrator | 回写 CR-158 闭环（EVENT+ML adapter unified，READY_WITH_RISK）与 CR-159 process hygiene 收束（STATE v2 slim + CR-INDEX scoped + return/verify 探测 N/A）；修正 §7 第 1/2 条措辞为已完成（FU-CR154-001/FU-CR152-001 已由 CR-156 关闭）；CR-159 CP8 scoped（B1：CR-158 status + CR-INDEX required_evidence 留痕；B2 全局 legacy 归一化 deferred FU-CR159-001；4 residual WARN deferred FU-CR159-002）。 |
 
 ## 1. 目标
 
@@ -621,9 +622,9 @@ Out of scope：
 
 建议顺序：
 
-1. 先收敛 `FU-CR154-001` final packaging hygiene：确认 CR154 新增 source/test 文件进入本地最终 packaging / staging 证据；不执行 Git remote write、true release execution 或 publish。
-2. 与 `FU-CR154-001` 并列或随后启动 `FU-CR152-001` test taxonomy / PROVENANCE hygiene：修复历史 CR150/CR151 root-level tests 与 `tests/PROVENANCE.yaml` 覆盖缺口，降低后续 CP7/CP8 质量追溯噪声。
-3. CR-INDEX legacy warning、STATE v2 slimming、return/verify packet 字段非空工具校验可作为小型治理候选，但不应抢在 `FU-CR154-001` 之前。
+1. ~~先收敛 `FU-CR154-001` final packaging hygiene~~ **已完成（CR-156，2026-07-05）**：CR154 新增 source/test 文件已进入本地 packaging/staging 证据；未执行 Git remote write、true release execution 或 publish。
+2. ~~与 `FU-CR154-001` 并列或随后启动 `FU-CR152-001` test taxonomy / PROVENANCE hygiene~~ **已完成（CR-156，2026-07-05）**：CR150/CR151 root-level tests 与 `tests/PROVENANCE.yaml` 覆盖缺口已修复（taxonomy guardrail 2/2、provenance 225/225、targeted regression 111/111；full pytest 1603 passed / 4 residual unrelated failures）。
+3. ~~CR-INDEX legacy warning、STATE v2 slimming、return/verify packet 字段非空工具校验可作为小型治理候选~~ **已完成（CR-159，2026-07-06，CP8 scoped READY_WITH_RISK）**：STATE v2 slim（`source_refs` budget resolved + `phase` deleted，4 residual WARN `current_agent`/`last_action`/`cr_tracking_ref`/`cr_ledger_ref` 因 state-router 契约保留，deferred FU-CR159-002）；CR-INDEX scoped（CR-158 status→closed + CR-INDEX item CR-151/152/153/154 required_evidence 留痕；B2 全局 legacy 182 ERROR deferred FU-CR159-001；authz L2 根因是 formal CR 正文 "real lake" 触发 infer 误判，deferred FU-CR159-001）；return/verify 字段非空校验探测 N/A（`meta-flow story return-check`/`evidence-check` 已具备字段非空校验，`story_evidence.py:576-636,687-703`）。
 4. RA-CR149-001、FU-CR149-002、FU-CR139-001、RA-CR139-002、FU-CR140-001 全部保持 deferred/candidate；只有当策略框架需要生产级多节点数据、解除 quarantine、provider refresh、NAS strict metadata parity 或真实 reader validation 时才恢复。
 5. 若未来选择推进数据湖生产级闭环，优先确认目标是“解除 quarantine / 生产 turnover”还是“NAS shared-view strict parity”；前者触发 FU-CR139-001 逐 dataset human gate，后者触发 FU-CR149-002。
 6. 任一真实 lake、NAS、provider、runtime、QMT、simulation/live/trading、broker、credential、Git remote write 或 true release execution 工作都必须另起授权 CR。

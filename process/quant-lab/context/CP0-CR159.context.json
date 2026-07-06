@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "context_id": "CP0-CR159",
+  "cr_id": "CR-159",
+  "created_at": "2026-07-06T22:05:54+08:00",
+  "read_profile": "compact",
+  "raw_user_request": "启动 process hygiene CR（STATE v2 slim + CR-INDEX legacy 治理 + return/verify 字段校验探测），从 CP0 受理；CP2 Decision Brief 须含 STATE unknown field 处置、CR-151/152/153/154 authz L2 语义判定、CR-158 status 修正三项决策，可完成后需要回写路标文件。",
+  "source": "user",
+  "scope_update": {
+    "objective": "收束三项本地 process hygiene：STATE v2 slim、CR-INDEX legacy 治理、return/verify 字段校验探测；CP8 后回写路标 v1.3。",
+    "subitems": [
+      "A: STATE v2 slimming (6 unknown field + source_refs 超 budget)",
+      "B: CR-INDEX legacy 治理 (25 missing summary_ref + CR-158 status + 3 invalid lifecycle_status + 6 follow-up missing from items + CR-151/152/153/154 authz L2)",
+      "C: return/verify packet 字段非空校验探测 (probe meta-flow story return-check/evidence-check/verify-packet)"
+    ],
+    "required_decisions": [
+      "STATE unknown field 处置",
+      "CR-151/152/153/154 authz L2 语义判定",
+      "CR-158 status 修正"
+    ],
+    "roadmap_rewrite": "CP8 阶段回写 docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md v1.3：补记 CR-156/157/158 闭环、CR-159 hygiene 收束；修正 §7 第 1、2 条措辞。"
+  },
+  "current_state_refs": {
+    "state_current": "process/state/STATE.current.json",
+    "cr_index": "process/changes/CR-INDEX.json",
+    "roadmap": "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md",
+    "cr156_formal": "process/changes/CR-156-HYGIENE-PACKAGING-TEST-TAXONOMY-2026-07-05.md"
+  },
+  "conflict_precheck": {
+    "active_change": null,
+    "active_crs": null,
+    "cr_tracking_summary": "active formal CRs none / blocked formal CRs none",
+    "cr_159_available": true,
+    "tooling_evidence": {
+      "state_check": "9 WARN (6 unknown field + source_refs 超 budget + legacy fields 建议 slim)",
+      "cr_check": "30+ ERROR (25 missing summary_ref + CR-158 invalid status + 3 invalid lifecycle_status + 4 authz L2)",
+      "cr_tracking": "6 WARNING (follow-up candidates missing from CR-INDEX items)"
+    }
+  },
+  "authorization_boundary": {
+    "authorized": [
+      "Local process/state/CR-INDEX/story-tooling hygiene",
+      "meta-flow state slim --apply --render",
+      "CR-INDEX.json data corrections with backup",
+      "meta-flow story tooling probe and regression",
+      "Roadmap v1.3 append-only rewrite at CP8"
+    ],
+    "not_authorized": [
+      "git_remote_write",
+      "true_release_execution_or_publish",
+      "runtime_or_trading_or_broker_operation",
+      "credential_or_env_read",
+      "real_lake_or_nas_or_provider_access",
+      "catalog_pointer_or_store_or_registry_write",
+      "external_framework_clone_install_run",
+      "reopen_closed_CR_151_152_153_154_or_158"
+    ]
+  },
+  "read_expansion_refs": [
+    "READ-CR159-CP0-ROADMAP-SECTION7-2026-07-06T220554+0800",
+    "READ-CR159-CP0-STATE-AUDIT-2026-07-06T220554+0800",
+    "READ-CR159-CP0-CRINDEX-CHECK-2026-07-06T220554+0800",
+    "READ-CR159-CP0-CR156-TEMPLATE-2026-07-06T220554+0800"
+  ]
+}

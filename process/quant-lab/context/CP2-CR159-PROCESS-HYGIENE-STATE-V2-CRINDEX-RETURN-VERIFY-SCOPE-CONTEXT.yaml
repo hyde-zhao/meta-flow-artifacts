@@ -1,0 +1,268 @@
+schema_version: 1
+context_id: CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE
+cr_id: CR-159
+created_at: "2026-07-06T22:05:54+08:00"
+revised_at: "2026-07-06T22:40:00+08:00"
+read_profile: compact
+status: ready_for_human_gate
+capsule: "process/context/CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE-CONTEXT.yaml"
+default_reading_strategy: capsule-first
+full_document_reading: not_required_for_scope_baseline
+revision_notes: "v0.3 per 2nd CP2 review: subitem A keeps 4 runtime-contract fields (current_agent/last_action/cr_tracking_ref/cr_ledger_ref) as residual WARN + FU-CR159-002 revisit; only deletes stale phase + archives source_refs/workflow_health; added cp8_scoped_verifier. v0.2: B1/B2 split, CP8 scoped, CP6/CP7 conditional, mapping table, 7 decisions."
+
+formal_cr_ref: "process/changes/CR-159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-2026-07-06.md"
+summary_ref: "process/changes/summaries/CR-159.summary.json"
+cp0_context_ref: "process/context/CP0-CR159.context.json"
+cp0_result_ref: "process/checks/CP0-CR159-REQUEST-INTAKE.result.json"
+cp1_result_ref: "process/checks/CP1-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE-COMPLETENESS.result.json"
+cp2_result_ref: "process/checks/CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE.result.json"
+cp2_checkpoint_ref: "process/checkpoints/CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE.md"
+
+scope_summary:
+  objective: "Consolidate three local process hygiene items: A) STATE v2 slim to true 0 WARN, B1) CR-INDEX scoped data fixes (authz L2 + CR-158 status), C) return/verify field validation probe; B2 global legacy deferred to FU-CR159-001; rewrite roadmap to v1.3 at CP8."
+  subitems:
+    - id: "A-STATE-V2-SLIM"
+      label: "state-v2-slim"
+      tool_evidence: "meta-flow state check --mode audit: 9 WARN; meta-flow state slim --dry-run: 7.9KB→5.2KB (archives source_refs + workflow_health only)"
+      gaps: "6 unknown field + source_refs 超 budget (37>24, 4.1KB>4.0KB)"
+      approach: "slim --apply (archive source_refs + workflow_health) + delete stale phase only; KEEP current_agent/last_action/cr_tracking_ref/cr_ledger_ref (state-router/SKILL.md:104,114,290 + STATE-TEMPLATE.md contract dependency) as 4 residual WARN documented + FU-CR159-002 revisit"
+      target: "source_refs budget resolved + workflow_health archived + phase deleted + 4 residual WARN documented (NOT global 0 WARN)"
+    - id: "B1-CRINDEX-SCOPED"
+      label: "crindex-scoped-fix"
+      tool_evidence: "meta-flow cr check: 187 ERROR total; B1 scope = 4 authz L2 + 1 CR-158 status"
+      gaps: "CR-151/152/153/154 required_evidence real_lake_validation vs NO_REAL_LAKE_READ_OR_WRITE; CR-158 status closed-current-delivery invalid"
+      approach: "fix required_evidence real_lake_validation→static_fixture_only_validation; CR-158 status→closed-current-delivery-ready-with-risk; backup + mapping table"
+      target: "cr check scoped 0 ERROR for authz L2 + CR-158 + CR-159 item"
+    - id: "B2-CRINDEX-LEGACY-DEFERRED"
+      label: "crindex-legacy-deferred"
+      tool_evidence: "meta-flow cr check: 182 ERROR outside B1 (63 cr_ledger invalid status + 58 cr_index invalid status + 57 missing summary_ref + 4 invalid cr_type)"
+      approach: "defer to FU-CR159-001 follow-up candidate; not fixed in this CR"
+      target: "FU-CR159-001 candidate registered; not blocking CP8"
+    - id: "C-RETURN-VERIFY-PROBE"
+      label: "return-verify-probe"
+      tool_evidence: "meta-flow story return-check / evidence-check / verify-packet exist; validation depth unverified"
+      approach: "probe field non-empty validation depth; if already present N/A, else enhance + regression"
+      target: "probe result documented; if enhanced, regression 0 new failures"
+      cp6_cp7_routing: "conditional — N/A if no code change; lightweight CP6/CP7 evidence if tool implementation change"
+  roadmap_rewrite:
+    target: "docs/design/QUANT-RESEARCH-PRODUCTION-ROADMAP.md"
+    version: "v1.2 → v1.3"
+    when: "CP8"
+    scope: "append 修订记录; record CR-156/157/158 closure, CR-159 hygiene; fix §7 item 1/2 wording from 建议 to 已完成"
+
+cr_tracking_assertion:
+  active_blocked_conflict_check: "OK — active formal CRs: CR-159; blocked formal CRs: none"
+  tracking_hygiene: "NOT OK as whole — command exit code 1 due to historical invalid lifecycle_status and follow-up missing warnings; these belong to CR-159 subitem B2 (deferred) or are pre-existing legacy, not blocking CP2"
+  wording_rule: "Do not write 'cr-tracking OK' as overall pass condition; only 'active/blocked conflict check OK; tracking hygiene warnings/errors belong to CR-159 B2 or explicitly deferred'."
+
+product_baseline:
+  refresh_required: false
+  affected_product_docs: []
+  affected_use_cases: []
+  rationale: "CR159 is process/tooling hygiene only; roadmap rewrite is process documentation, not product baseline."
+
+authorization_boundary:
+  authorized:
+    - "Local process/state/CR-INDEX/story-tooling hygiene"
+    - "meta-flow state slim --apply --render + manual field deletion"
+    - "CR-INDEX.json B1 data corrections (authz L2 + CR-158) with backup and mapping table"
+    - "meta-flow story tooling probe and conditional regression"
+    - "Roadmap v1.3 append-only rewrite at CP8"
+  not_authorized:
+    - "git_remote_write"
+    - "true_release_execution_or_publish"
+    - "runtime_or_trading_or_broker_operation"
+    - "credential_or_env_read"
+    - "real_lake_or_nas_or_provider_access"
+    - "catalog_pointer_or_store_or_registry_write"
+    - "external_framework_clone_install_run"
+    - "reopen_closed_CR_151_152_153_154_or_158"
+    - "global_cr_check_0_ERROR_claim (only scoped B1 0 ERROR)"
+
+correction_mapping:
+  b1_authz_l2_and_cr158:
+    - cr_id: "CR-151"
+      field: "required_evidence"
+      old_value: "[admission_package, oos_walkforward, real_lake_validation, rerun_consistency]"
+      new_value: "[admission_package, oos_walkforward, static_fixture_only_validation, rerun_consistency]"
+      reason: "actual validation mode is local/static/fixture-only (ROADMAP §2.1); evidence label mislabeled"
+      backup_ref: "process/backups/CR-INDEX.json.bak-20260706"
+    - cr_id: "CR-152"
+      field: "required_evidence"
+      old_value: "[admission_package, real_lake_validation]"
+      new_value: "[admission_package, static_fixture_only_validation]"
+      reason: "same as CR-151"
+      backup_ref: "process/backups/CR-INDEX.json.bak-20260706"
+    - cr_id: "CR-153"
+      field: "required_evidence"
+      old_value: "[admission_package, oos_walkforward, real_lake_validation]"
+      new_value: "[admission_package, oos_walkforward, static_fixture_only_validation]"
+      reason: "same as CR-151"
+      backup_ref: "process/backups/CR-INDEX.json.bak-20260706"
+    - cr_id: "CR-154"
+      field: "required_evidence"
+      old_value: "[admission_package, oos_walkforward, real_lake_validation]"
+      new_value: "[admission_package, oos_walkforward, static_fixture_only_validation]"
+      reason: "same as CR-151"
+      backup_ref: "process/backups/CR-INDEX.json.bak-20260706"
+    - cr_id: "CR-158"
+      field: "status / lifecycle_status"
+      old_value: "closed-current-delivery"
+      new_value: "closed-current-delivery-ready-with-risk"
+      reason: "align with CR-156; CR-158 is READY_WITH_RISK closure"
+      backup_ref: "process/backups/CR-INDEX.json.bak-20260706"
+  a_state_fields:
+    - field: "source_refs"
+      old_value: "37 items / 4.1 KB"
+      new_value: "archived to process/archive/state/<ts>/archived-fields.json"
+      reason: "slim 超 budget"
+      backup_ref: "process/backups/STATE.current.json.bak-20260706"
+    - field: "workflow_health"
+      old_value: "inline object"
+      new_value: "archived (workflow_health_ref points to archive)"
+      reason: "v2 unrecognized"
+      backup_ref: "process/backups/STATE.current.json.bak-20260706"
+    - field: "phase"
+      old_value: "story-execution"
+      new_value: "deleted"
+      reason: "conflicts with current_phase and stale; state-router does not read phase"
+      backup_ref: "process/backups/STATE.current.json.bak-20260706"
+    - field: "current_agent"
+      old_value: "host-orchestrator"
+      new_value: "KEPT (residual WARN)"
+      reason: "state-router/SKILL.md:104,225,290 contract dependency"
+      backup_ref: "process/backups/STATE.current.json.bak-20260706"
+    - field: "last_action"
+      old_value: "(string)"
+      new_value: "KEPT (residual WARN)"
+      reason: "state-router/SKILL.md:290 contract dependency"
+      backup_ref: "process/backups/STATE.current.json.bak-20260706"
+    - field: "cr_tracking_ref"
+      old_value: "process/changes/CR-INDEX.json"
+      new_value: "KEPT (residual WARN)"
+      reason: "state-router/SKILL.md:104,114 contract dependency"
+      backup_ref: "process/backups/STATE.current.json.bak-20260706"
+    - field: "cr_ledger_ref"
+      old_value: "process/state/CR-LEDGER.ndjson"
+      new_value: "KEPT (residual WARN)"
+      reason: "state-router/SKILL.md:104,114 contract dependency"
+      backup_ref: "process/backups/STATE.current.json.bak-20260706"
+  residual_warn_revisit:
+    follow_up_id: "FU-CR159-002"
+    description: "STATE v2 schema/check allowlist extension to legitimize current_agent/last_action/cr_tracking_ref/cr_ledger_ref"
+    status: "candidate"
+  b2_deferred:
+    follow_up_id: "FU-CR159-001"
+    tracking_path: "process/changes/CR-159-FOLLOW-UP-TRACKING-2026-07-06.md"
+    counts:
+      cr_ledger_invalid_status: 63
+      cr_index_invalid_status: 58
+      missing_summary_ref: 57
+      invalid_cr_type: 4
+    status: "candidate"
+    reason: "historical CR status/cr_type/summary semantic mapping requires per-CR judgment; out of scope for hygiene CR"
+
+decision_items:
+  - id: DQ-CP2-CR159-SCOPE
+    decision_type: scope
+    question: "批准 CR-159 作为三子项 compact local hygiene consolidation（A: STATE v2 slim 0 WARN + B1: CR-INDEX scoped 数据修正 + C: return/verify 探测）+ B2 deferred FU-CR159-001 + CP8 路标 v1.3 回写？"
+    recommendation: "批准三子项范围 + B2 deferred + 路标回写；CP8 scoped（非全局 0 ERROR）。"
+    alternatives:
+      - "扩大 B 到全局 187 ERROR 归一化（含 57 missing summary_ref + 44 种 invalid status 映射）。"
+      - "只做 A（STATE slim），B/C 全部 deferred。"
+    impact: "推荐方案 scoped 可执行且不漏修 B1 明确项；扩大方案需逐 CR 语义判断，超出 hygiene 范围；只做 A 遗留 authz L2 + CR-158。"
+  - id: DQ-CP2-CR159-STATE-UNKNOWN-FIELDS
+    decision_type: implementation
+    question: "STATE.current.json 6 unknown field + source_refs 超 budget 如何处置？（state-router 契约依赖 4 字段）"
+    recommendation: "slim --apply 归档 source_refs + workflow_health；删除 stale phase（与 current_phase 冲突）；保留 current_agent/last_action/cr_tracking_ref/cr_ledger_ref（state-router/SKILL.md:104,114,290 + STATE-TEMPLATE.md:7,11,318,319 契约依赖），接受 4 residual WARN documented + FU-CR159-002 重访（schema allowlist 扩展）。目标：source_refs budget resolved + phase deleted + 4 residual WARN documented，非全局 0 WARN。"
+    alternatives:
+      - "扩展 STATE v2 schema/check allowlist 纳入 4 字段（需改 meta-flow 工具，转 FU-CR159-002）。"
+      - "删除 4 字段 + 同步改 state-router/SKILL.md + STATE-TEMPLATE.md（破坏运行态契约，高风险，不推荐）。"
+    impact: "推荐方案不破坏运行态契约，诚实记录 residual WARN；A 超出本 CR 范围转 follow-up；B 破坏 state-router 契约，删除会被下一轮补回。"
+  - id: DQ-CP2-CR159-AUTHZ-L2-SEMANTICS
+    decision_type: implementation
+    question: "CR-151/152/153/154 required_evidence 含 real_lake_validation 与 NO_REAL_LAKE_READ_OR_WRITE 冲突，如何修正？"
+    recommendation: "修正 required_evidence: real_lake_validation → static_fixture_only_validation，匹配实际 local/static/fixture-only 验证模式；evidence 标签数据修正，非能力变更，不重开 closed CR；修正前备份 + mapping table。"
+    alternatives:
+      - "保留 real_lake_validation 标注 evidence_status=deferred。"
+      - "移除 real_lake_validation 不替换。"
+    impact: "推荐方案与实际验证模式一致且 B1 scoped 0 ERROR；A 保留矛盾语义；B 损失追溯。"
+  - id: DQ-CP2-CR159-CR158-STATUS
+    decision_type: implementation
+    question: "CR-158 lifecycle_status/status=closed-current-delivery 无效，修正为什么值？"
+    recommendation: "修正为 closed-current-delivery-ready-with-risk，对齐 CR-156（CR-158 同为 READY_WITH_RISK 闭环）。"
+    alternatives:
+      - "修正为 closed（更简）。"
+      - "保留并接受 ERROR（转 B2 deferred）。"
+    impact: "推荐方案与 CR-156 一致且准确；A 丢失 ready_with_risk 语义；B 把 CR-158 转 deferred，不修。"
+  - id: DQ-CP2-CR159-CP8-SCOPED-CHECK
+    decision_type: implementation
+    question: "CP8 验收是全局 cr check 0 ERROR，还是 scoped（B1 0 ERROR + B2 deferred）？"
+    recommendation: "CP8 scoped：B1（authz L2 + CR-158 + CR-159 item）0 ERROR；B2 全部转入 FU-CR159-001 candidate；不承诺全局 0 ERROR。"
+    alternatives:
+      - "CP8 全局 0 ERROR（扩大 B 到 187 ERROR 修正）。"
+      - "CP8 不做 cr check 验收，只做 state check + story tooling。"
+    impact: "推荐方案可执行且诚实；A 需逐 CR 语义判断，工作量大；B 丢失 cr 治理验收。"
+  - id: DQ-CP2-CR159-CP6-CP7-CONDITIONAL
+    decision_type: implementation
+    question: "CP6/CP7 是 blanket WAIVED 还是条件路由？"
+    recommendation: "条件路由：子项 C 探测若无代码变更 → CP6 N/A、CP7 由 CP8 统一验证；若需增强 meta-flow story 工具 → 生成轻量 CP6 implementation evidence + CP7 verification evidence（回归 CR156/157/158 packet，0 新失败）再进 CP8。"
+    alternatives:
+      - "blanket WAIVED（不论子项 C 结果都跳过 CP6/CP7）。"
+      - "一律走完整 CP6/CP7（即使无代码变更）。"
+    impact: "推荐方案匹配子项 C 不确定性；A 可能漏工具实现验证；B 对无代码变更场景过重。"
+  - id: DQ-CP2-CR159-NO-REMOTE-RELEASE-RUNTIME
+    decision_type: security
+    question: "确认 CR-159 approval 不授权 Git remote write、true release、publish、runtime、真实数据、凭据、NAS/provider、broker、trading、catalog/store/registry 写入、外部框架运行、重开 closed CR-151/152/153/154/158，也不承诺全局 cr check 0 ERROR？"
+    recommendation: "确认不授权边界 + 不承诺全局 0 ERROR；后续只允许本地 process/state/CR-INDEX/tooling hygiene 与路标 append-only 回写。"
+    alternatives:
+      - "允许后续单独本地 commit preparation gate（仍禁止 remote write）。"
+      - "延后全部 closure 到 release-readiness CR。"
+    impact: "推荐方案风险最低；A 减少等待但需新门禁；B 审计更重。"
+
+decision_collection_coverage:
+  - source_type: formal_cr
+    source_path: "process/changes/CR-159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-2026-07-06.md"
+    scan_status: scanned
+    candidate_count: 7
+    included_decision_count: 7
+    classification_or_na_reason: "Scope, STATE fields, authz L2, CR-158 status, CP8 scoped, CP6/7 conditional, security boundary."
+  - source_type: context_capsule
+    source_path: "process/context/CP0-CR159.context.json"
+    scan_status: scanned
+    candidate_count: 3
+    included_decision_count: 3
+    classification_or_na_reason: "User-required three decisions (STATE/authz/CR158) mapped to DQ items."
+  - source_type: cp2_review_findings
+    source_path: "user review findings 2026-07-06"
+    scan_status: scanned
+    candidate_count: 5
+    included_decision_count: 5
+    classification_or_na_reason: "Findings 1-5 drove CP8 scoped, CP6/7 conditional, STATE 0 WARN alignment, mapping table, cr-tracking split."
+  - source_type: tool_evidence
+    source_path: "meta-flow state check / cr check / cr-tracking / state slim --dry-run"
+    scan_status: scanned
+    candidate_count: 3
+    included_decision_count: 3
+    classification_or_na_reason: "Tool-verified gaps fed STATE/authz/CR158 decisions."
+  - source_type: product_baseline_docs
+    source_path: "USE-CASES / REQUIREMENTS / SCENARIOS / MVP"
+    scan_status: na
+    candidate_count: 0
+    included_decision_count: 0
+    classification_or_na_reason: "本 CR 不改变产品基线。"
+
+cp8_scoped_verifier:
+  b1_zero_check: |
+    test "$(meta-flow cr check --project-root . 2>&1 | grep -cE 'CR index item CR-158: invalid status|CR index item CR-159:')" -eq 0
+  b1_authz_l2_note: "authz L2 (CR-151/152/153/154 required_evidence_forbidden_by_authz) deferred to FU-CR159-001: root cause is formal CR body 'real lake' keyword in non-authorization declarations triggering infer_required_evidence_from_text false-positive; cr check uses record_from_cr_file (formal CR), not CR-INDEX item required_evidence. Fix requires closed-CR body rewording or meta-flow infer logic change."
+  b2_registration_check: |
+    grep -q 'FU-CR159-001' process/changes/CR-159-FOLLOW-UP-TRACKING-2026-07-06.md
+  a_budget_check: |
+    test "$(meta-flow state check --mode audit --project-root . 2>&1 | grep -cE 'source_refs exceeds|unknown field: phase')" -eq 0
+  residual_warn_documented: "4 (current_agent/last_action/cr_tracking_ref/cr_ledger_ref) - state-router contract, FU-CR159-002 revisit"
+  pass_criteria: "b1_zero + b2_registered + a_budget resolved + 4 residual WARN documented; global cr check NOT required 0"
+
+next_route_if_approved: "implementation_then_CP8"
+next_route_if_changes_requested: "requirement-clarification"
+next_route_if_rejected: "follow-up-candidates"
