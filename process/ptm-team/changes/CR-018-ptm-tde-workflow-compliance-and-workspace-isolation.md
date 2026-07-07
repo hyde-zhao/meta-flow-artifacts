@@ -3,7 +3,7 @@ change_id: CR-018-ptm-tde-workflow-compliance-and-workspace-isolation
 workflow_id: WF-PTM-TEAM-20260520-001
 created_at: "2026-06-11T00:00:00+08:00"
 created_by: meta-po（po-zhao via current Codex session）
-status: active
+status: closed
 impact_level: high
 complexity: standard
 rollback_to: solution-design
@@ -21,6 +21,47 @@ related_changes:
   - CR-015-ptm-tde-ask-user-question-interaction
   - CR-016-atomic-ops-consumption-gap
   - CR-017-factor-library-discovery-gap
+# 结构化影响面（规则 43；下方"五维度影响分析"降为补充说明）
+impact_capability_refs:
+  - install-managed-block-projection
+  - feature-workspace-isolation
+  - gate-machine-baseline
+  - skill-execution-evidence
+  - install-drift-detection
+impact_feature_refs:
+  - ptm-tde-kym-phase
+  - ptm-tde-mfq-phase
+  - ptm-tde-ppdcs-phase
+impact_module_paths:
+  - script/ptm_team/install.py
+  - script/install.py
+  - agents/ptm-tde.md
+  - skills/checkpoint-manager/
+  - skills/feature-parser/
+  - skills/scenario-discovery/
+  - skills/change-impact-analyzer/
+  - skills/bug-gap-analyzer/
+  - skills/kym/
+  - skills/f-analyzer/
+  - skills/q-analyzer/
+  - skills/test-point-integrator/
+  - skills/design-planner/
+  - skills/deliverable-renderer/
+  - docs/ptm-tde/
+  - tests/test_cr018_p2.py
+impact_policy_refs:
+  - platform-interaction-protocol（Claude AskUserQuestion 优先，Codex/不可用走 exact text）
+impact_process_refs:
+  - process/execution/SKILL-CALLS.yaml
+  - feature_workspace_root/process/STATE.yaml
+impact_runtime_refs:
+  - .input-resolver
+  - feature_workspace_root
+  - AGENTS.md/CLAUDE.md managed block
+  - ~/.ptm-team/resource/
+impact_data_refs:
+  - .ptm-team-manifest.json
+  - resource/component-resource-links.yaml
 ---
 
 # CR-018 — ptm-tde 流程合规、安装投影与多特性工作区隔离
@@ -79,11 +120,11 @@ related_changes:
 
 | Story | 主题 | 状态 | 说明 |
 |---|---|---|---|
-| STORY-018-01 | `.input` 运行根与状态隔离 | in_progress | 已开始修改 checkpoint resolver 与 agent 路径契约 |
-| STORY-018-02 | 安装器 managed block 投影 | in_progress | 已开始实现 `AGENTS.md` / `CLAUDE.md` upsert 与 uninstall 清理 |
-| STORY-018-03 | 文档与 Skill 路径口径收敛 | in_progress | 已覆盖 `docs/ptm-tde/*` 主路径、checkpoint-manager、scenario-discovery、change-impact、bug-gap；仍需后续审查全量 AskUserQuestion 平台措辞 |
+| STORY-018-01 | `.input` 运行根与状态隔离 | done | checkpoint resolver + agent 路径契约 + 多 .input 阻断已实现（P1，CP6/CP7 PASS 2026-07-06） |
+| STORY-018-02 | 安装器 managed block 投影 | done | AGENTS.md/CLAUDE.md managed block upsert + uninstall 清理已实现（P1，dry-run 验证 PASS） |
+| STORY-018-03 | 文档与 Skill 路径口径收敛 | done | docs/ptm-tde/* + 扩展 Skill 路径口径已收敛；旧口径为禁止性表述；DEPLOY-CHECKLIST/skills/README/TEST-STRATEGY 已补对齐（2026-07-06） |
 | STORY-018-04 | Gate 真实校验升级 | done | GATE-2/3/4/5 已从 skeleton 升级为 machine-baseline；GATE-2/3/4 会生成独立 `*-manual.md` 人工审查稿；P2 已补字段级结构检查 |
-| STORY-018-05 | Skill 执行证据与平台交互协议 | in_progress | 已定义 `process/execution/SKILL-CALLS.yaml` 最小 schema，新增 `--record-skill-call` 写入器，并接入 GATE-2/3/4 结构化阻断；高频 Skill 已收敛 Claude/Codex 交互分支 |
+| STORY-018-05 | Skill 执行证据与平台交互协议 | done | SKILL-CALLS.yaml schema + --record-skill-call 写入器 + GATE-2/3/4 结构化阻断 + Claude/Codex 交互收敛已实现（P1/P5/P6，unittest PASS） |
 | STORY-018-06 | 安装漂移检测与测试 | done | manifest 已记录 agent/skill/rule/resource source_hash 与 installed_hash；`check <platform> --agent ptm-tde` 检查 installed/source drift、managed block 缺失、目标文件缺失和 resource 内容漂移；P2 已沉淀 unittest |
 
 ### 4. 安全/权限影响
@@ -171,3 +212,4 @@ related_changes:
 | 2026-06-11 | meta-po / current Codex session | v0.3 | P0 整改：新增 `--record-skill-call` 结构化 evidence 写入器，Gate evidence 结构化校验，独立 manual Gate 草稿，高频 Skill 平台交互协议收敛 |
 | 2026-06-11 | meta-po / current Codex session | v0.4 | P1 整改：新增安装 drift check 命令，Gate/CP 文档从 skeleton 残留收敛到 machine-baseline + Skill evidence，change/bug 扩展 Skill 补齐工作区隔离契约；临时 fixture 验证 PASS 路径和 managed block 缺失阻断 |
 | 2026-06-11 | meta-po / current Codex session | v0.5 | P2 整改：resource content hash + drift check、Gate 字段级机器基线、正式 unittest 夹具落地 |
+| 2026-07-06 | host-orchestrator | v0.6 | CP6/CP7 回填 PASS：P1-P6 实施批次全部完成，6 Story 全部 done；19+23 unittest 通过，13/13 验收标准达成；CR-INDEX.json phase → verified。inline-fallback（Claude Code 平台无 meta-dev/meta-qa agent） |
