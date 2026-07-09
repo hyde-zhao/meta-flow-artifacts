@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP1",
+  "checkpoint_id": "CP1-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-USE-CASE-COMPLETENESS",
+  "cr_id": "CR-160",
+  "checked_at": "2026-07-08T22:55:00+08:00",
+  "context_ref": "process/context/CP2-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-SCOPE-CONTEXT.yaml",
+  "dispatch_refs": [],
+  "evidence_ref": "process/changes/summaries/CR-160.summary.json",
+  "route_plan_ref": "process/checks/CP0-CR160.route-plan.json",
+  "items": [
+    {
+      "id": "CP1-CR160-01",
+      "category": "product-baseline",
+      "name": "CR160 is traceable to CR157 Stage 4 deferred baseline",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md#旧基线映射",
+        "process/context/CP0-CR160.context.json#scope_update"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR160 promotes BL-CR157-003 / DF-CR157-003 into an active product-scope CR without reopening CR157."
+    },
+    {
+      "id": "CP1-CR160-02",
+      "category": "scenario-coverage",
+      "name": "Required Stage 4 review scenarios are identified",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md#CP2 待确认决策",
+        "process/context/CP0-CR160.context.json#cr155_seed_classification"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP2 must cover contract-only evidence, real-data validated evidence, blocked admission, and runtime authorization request scenarios."
+    },
+    {
+      "id": "CP1-CR160-03",
+      "category": "gray-area-classification",
+      "name": "User review issues are converted into CP2 decisions",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-SCOPE.md#待人工决策清单"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP6 route mismatch and scope_authz_consistency NEEDS_REVIEW are explicitly handled in CP2 route and authorization decisions."
+    },
+    {
+      "id": "CP1-CR160-04",
+      "category": "authorization-boundary",
+      "name": "CR160 does not require new data, runtime, credential, broker, provider, NAS, publish, or trading access",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md#结构化权限策略",
+        "process/context/CP0-CR160.context.json#authorization_boundary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CR155 real lake validation is consumed only as existing evidence. CR160 does not authorize new real lake reads."
+    },
+    {
+      "id": "CP1-CR160-05",
+      "category": "product-doc-routing",
+      "name": "Product baseline documents requiring post-CP2 updates are enumerated",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md#文档处理决策",
+        "process/changes/summaries/CR-160.summary.json#affected_product_docs"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "USE-CASES, REQUIREMENTS, SCENARIOS, TEST-MATRIX, MVP-SCOPE, and BACKLOG updates are blocked until CP2 approval."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260708T135800Z0000-cr160formal",
+    "RE-20260708T135800Z0000-cr155evid",
+    "RE-20260708T135800Z0000-cr157prod"
+  ],
+  "decision": "PASS",
+  "next_route": "CP2"
+}

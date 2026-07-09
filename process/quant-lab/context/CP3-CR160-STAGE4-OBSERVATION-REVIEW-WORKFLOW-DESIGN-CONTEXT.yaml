@@ -1,0 +1,185 @@
+schema_version: 1
+context_id: CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-DESIGN
+cr_id: CR-160
+stage: CP3
+status: ready
+created_at: "2026-07-08T23:25:13+08:00"
+owner: host-orchestrator
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  default_reads:
+    - process/changes/summaries/CR-160.summary.json
+    - process/checks/CP2-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-SCOPE.result.json
+    - process/context/CP2-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-SCOPE-CONTEXT.yaml
+    - process/checks/CP0-CR160.route-plan.json
+  read_if_needed:
+    - process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md
+    - process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json
+    - engine/mature_multifactor_framework.py
+    - docs/design/HLD-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md
+    - docs/design/HLD-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md
+    - docs/design/HLD-EVENT-ML-STRATEGY-ADAPTER.md
+    - docs/product/USE-CASES.md
+    - docs/product/REQUIREMENTS.md
+    - docs/product/SCENARIOS.yaml
+    - docs/product/TEST-MATRIX.md
+    - docs/product/MVP-SCOPE.md
+    - docs/product/BACKLOG.md
+  do_not_read_by_default:
+    - full conversation transcript
+    - all process/stories/*
+    - unrelated closed CR full histories
+    - real lake/NAS/provider credential files
+    - broker/runtime/live/paper execution materials
+objective:
+  summary: Define the Stage 4 observation review workflow and authorization gate contract for CR160.
+  design_only: true
+  no_code_implementation: true
+  no_story_decomposition: true
+  next_human_gate: CP3
+cp2_approved_decisions:
+  - id: DQ-CP2-CR160-EVIDENCE-PROFILE
+    decision: dual-lane fail-closed evidence profile
+    constraint: contract_only can only produce low-grade review conclusions; it must never emit paper_candidate=true, simulation_ready=true, or runtime_authorized=true.
+  - id: DQ-CP2-CR160-CR155-SEED-CLASSIFICATION
+    decision: CR155 is blocked_admission_failed seed evidence, not an observation candidate.
+  - id: DQ-CP2-CR160-DELIVERABLE-SHAPE
+    decision: design-only deliverables; code schema/checker is out of scope for CR160.
+  - id: DQ-CP2-CR160-AUTHORIZATION-BOUNDARY
+    decision: no new runtime/data operation is authorized; existing CR155 evidence may be cited only as prior evidence.
+  - id: DQ-CP2-CR160-CP4-CP5-ROUTE
+    decision: CP4/CP5/CP6 are N/A on the pure design route; design deliverables become CP7 verification inputs.
+required_cp3_design_constraints:
+  - id: CP3-FOCUS-CR160-005
+    severity: high
+    requirement: Observation review checklist must be layered across Stage 1 data foundation, Stage 2 research production, Stage 3 research machine admission, and cross-cutting authorization/no-overclaim controls.
+  - id: CP3-FOCUS-CR160-006
+    severity: medium
+    requirement: Distinguish CR160 observation_plan_template from future Stage 3 observation_plan_instance; review instance compliance against the template.
+  - id: CP3-FOCUS-CR160-007
+    severity: medium
+    requirement: Observation plan template must include observation period, checkpoint frequency, tracking metrics, exit criteria, and remediation/pause triggers.
+  - id: CP3-FOCUS-CR160-008
+    severity: low
+    requirement: Checklist is a human review tool and decision table is the post-review classification framework; automatic checker is a possible follow-up CR only.
+pipeline_traceability:
+  stage_1_data_foundation:
+    expected_refs:
+      - ResearchDatasetSpec.universe
+      - ResearchDatasetSpec.leakage_policy
+      - ResearchDatasetSpec.output_snapshot_id
+      - ResearchDatasetSpec.lineage_refs
+      - PIT gate
+      - BacktestRunSpec
+  stage_2_research_production:
+    expected_refs:
+      - Stage2MaturePackageRefSet.factor_spec_refs
+      - Stage2MaturePackageRefSet.factor_run_spec_refs
+      - Stage2MaturePackageRefSet.factor_panel_ref
+      - Stage2MaturePackageRefSet.evaluation_report_refs
+      - Stage2MaturePackageRefSet.research_evidence_index
+      - Stage2MaturePackageRefSet.typed_unavailable
+      - Stage2MaturePackageRefSet.blocked_reasons
+  stage_3_research_machine:
+    expected_refs:
+      - Stage3MatureResearchPackage.run_manifest
+      - Stage3MatureResearchPackage.input_refs
+      - Stage3MatureResearchPackage.evidence_refs
+      - Stage3MatureResearchPackage.research_evidence_index
+      - Stage3MatureResearchPackage.admission_package_ref
+      - Stage3MatureResearchPackage.observation_plan_ref
+      - Stage3MatureResearchPackage.blocked_claims
+      - Stage3MatureResearchPackage.unlock_conditions
+      - Stage3MatureResearchPackage.blocked_reasons
+  stage_4_observation_review:
+    design_objects:
+      - ObservationReviewInput
+      - EvidenceProfile
+      - AdmissionReadiness
+      - ObservationDecision
+      - EscalationRoute
+      - AuthorizationBoundary
+  stage_5_paper_simulation:
+    handoff_boundary:
+      - PaperSimulationAdmissionView.overall_admission
+      - PaperSimulationAdmissionView.simulation_candidate
+      - PaperSimulationAdmissionView.not_simulation_auth
+      - PaperSimulationAdmissionView.validation
+deliverables:
+  required:
+    - docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+    - docs/quality/OBSERVATION-REVIEW-CHECKLIST.md
+    - process/checks/CR160-CR155-SEED-CLASSIFICATION.md
+    - process/discussions/CP3-CR160-HLD-DISCUSSION-LOG.md
+    - process/checks/CP3-CR160-DISCUSSION-CHECKPOINT.json
+    - process/checks/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-CONSISTENCY.result.json
+  optional_or_if_needed:
+    - docs/design/ARCHITECTURE-DECISION-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+    - product baseline incremental notes in affected product docs
+  forbidden:
+    - engine/observation_review.py
+    - runtime execution scripts
+    - new real lake reads or writes
+    - catalog/store/registry writes
+    - paper/simulation/live runs
+architecture_gray_areas:
+  - id: AGA-CR160-01
+    question: Whether Stage 4 should accept contract-only artifacts as review inputs.
+    cp2_resolution: yes, but contract_only is capped to low-grade fail-closed conclusions.
+    cp3_design_need: encode the lane ceiling in the workflow and decision table.
+  - id: AGA-CR160-02
+    question: Whether CR155 real-data evidence can seed the workflow without authorizing new data access.
+    cp2_resolution: yes, existing evidence may be consumed only as a fail-closed sample.
+    cp3_design_need: record blocked_admission_failed classification and evidence references.
+  - id: AGA-CR160-03
+    question: Whether the observation plan is a template or an artifact instance.
+    cp2_resolution: CP3 must distinguish template from future instance.
+    cp3_design_need: define producer, reviewer, compliance relation, and fail-closed missing-instance behavior.
+  - id: AGA-CR160-04
+    question: Whether review is manual, automated, or mixed.
+    cp2_resolution: checklist is manual; decision table is post-review classification; no checker in CR160.
+    cp3_design_need: keep automation out of scope and list it as follow-up only.
+cr155_seed_classification:
+  classification: blocked_admission_failed
+  package_status: BLOCKED
+  admission_decision: FAIL
+  paper_candidate: false
+  rerun_consistency: PASS
+  interpretation: deterministic replay plus correct fail-closed admission; not eligible for observation or paper simulation.
+authorization_boundary:
+  existing_evidence_consumption: allowed
+  new_real_lake_access: not_authorized
+  runtime_authorization: not_authorized
+  paper_or_simulation_authorization: not_authorized
+  credential_or_provider_access: not_authorized
+  broker_or_trading_operation: not_authorized
+  git_remote_or_publish: not_authorized
+downstream_tasks:
+  meta_se:
+    - Write the Stage 4 HLD with candidate architecture options, recommendation, workflow, decision table, traceability, NFRs, risks, ADR candidates, and CP3 self-check.
+    - Write the layered observation review checklist.
+    - Write the CR155 blocked_admission_failed classification sample.
+    - Write CP3 discussion log and checkpoint, including Architecture Gray Areas and advisor table-first analysis.
+    - Write a CP3 HLD consistency result JSON that can be checked by meta-flow cp result-check, if the available schema accepts non-story CP3 results.
+  host_orchestrator_after_return:
+    - Review produced files.
+    - Generate CP3 human checkpoint and launch message.
+    - Validate result JSON and event ledgers.
+    - Stop at CP3 human gate.
+risks_and_decisions:
+  open_risks:
+    - R-CR160-READY-WITH-RISK-MISREAD
+    - R-CR160-CR155-BLOCKED-ARTIFACT-PROMOTION
+    - R-CR160-RUNTIME-AUTHORIZATION-LEAK
+    - R-CR160-GATE-PROFILE-NAME-MISMATCH
+  no_new_user_decision_expected_before_cp3_gate: true
+observability_points:
+  - HLD contains Stage 1->2->3->4->5 traceability.
+  - Checklist contains Stage 1, Stage 2, Stage 3, and cross-cutting sections.
+  - Decision table blocks contract_only overclaim and CR155 blocked admission.
+  - Authorization boundary states approve does not authorize runtime, paper, simulation, lake, NAS, provider, broker, trading, catalog/store, Git remote, or publish operations.
+token_control:
+  max_source_files: 14
+  full_doc_read_policy: expand only for conflict, audit, missing capsule fields, or deep review needed for a cited contract.
+read_expansion_log: []

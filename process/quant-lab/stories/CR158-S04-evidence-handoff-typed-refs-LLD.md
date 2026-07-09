@@ -85,7 +85,7 @@ Connect event/ML adapter validation summaries to refs-only evidence index record
 | 动作 | 文件路径 | 变更内容 |
 | --- | --- | --- |
 | 修改 | engine/strategy_type_adapters.py | Add typed evidence ref, evidence builder, handoff summary and refs-only validator. |
-| 创建 | tests/test_cr158_adapter_evidence_refs.py | Add refs-only, body-copy blocked and handoff public surface tests. |
+| 创建 | tests/research/test_strategy_adapter_evidence_refs.py | Add refs-only, body-copy blocked and handoff public surface tests. |
 
 ## 5. 数据模型与持久化设计
 
@@ -147,8 +147,8 @@ Connect event/ML adapter validation summaries to refs-only evidence index record
 
 | TASK-ID | 动作 | 目标文件 | 详细描述 | 对应测试 |
 | --- | --- | --- | --- | --- |
-| CR158-S04-T1 | 修改 | engine/strategy_type_adapters.py | Add typed evidence ref and handoff summary helpers. | tests/test_cr158_adapter_evidence_refs.py |
-| CR158-S04-T2 | 创建 | tests/test_cr158_adapter_evidence_refs.py | Cover refs-only and handoff public surface. | pytest tests/test_cr158_adapter_evidence_refs.py |
+| CR158-S04-T1 | 修改 | engine/strategy_type_adapters.py | Add typed evidence ref and handoff summary helpers. | tests/research/test_strategy_adapter_evidence_refs.py |
+| CR158-S04-T2 | 创建 | tests/research/test_strategy_adapter_evidence_refs.py | Cover refs-only and handoff public surface. | pytest tests/research/test_strategy_adapter_evidence_refs.py |
 
 ## 12. 风险、难点与预研建议
 

@@ -19,7 +19,7 @@ feature_id: "FEAT-07"
 | FEAT-07-T03 | 维护凭据脱敏策略 | `.env.example` / credential_ref | redaction policy | `trading/qmt_redaction.py`、docs | redaction tests |
 | FEAT-07-T04 | 维护 HMAC / scope / nonce guardrail | gateway scope | fail-closed auth | `trading/qmt_auth.py` | auth tests |
 | FEAT-07-T05 | 维护禁止依赖扫描 | dependency map | forbidden import checks | tests / scripts | boundary tests |
-| FEAT-07-T06 | CR158 adapter forbidden counter report | CR158 HLD/ADR、REQ-CR158-005 | AdapterOperationCounterReport、blocked reason refs、CP7 evidence hooks | planned adapter safety module / tests / docs | planned `tests/test_cr158_adapter_no_runtime_guard.py` |
+| FEAT-07-T06 | CR158 adapter forbidden counter report | CR158 HLD/ADR、REQ-CR158-005 | AdapterOperationCounterReport、blocked reason refs、CP7 evidence hooks | planned adapter safety module / tests / docs | planned `tests/research/test_strategy_adapter_no_runtime_guard.py` |
 | FEAT-07-T07 | CR158 release overclaim guard | CR158 CP8 wording boundary | no-runtime/no-registry/no-publish wording checklist | docs/release and component docs | CP8 review |
 
 ## 后续触发条件

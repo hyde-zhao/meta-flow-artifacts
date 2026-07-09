@@ -1,0 +1,202 @@
+schema_version: 1
+release_context_id: RELEASE-CONTEXT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW
+change_id: CR-160
+title: Stage 4 Observation Review Workflow
+created_at: '2026-07-09T19:45:00+08:00'
+updated_at: '2026-07-09T20:18:07+08:00'
+created_by: host-orchestrator
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+release_decision_reason: CP7 returned PASS_WITH_RISK because CR160 validates design-static Stage 4 workflow evidence only. CP8 product baseline refresh was completed across 6 product docs after user review. The delivery is ready for design closure because the user accepted that checker/schema implementation, real-data validation, paper/simulation/runtime authorization, live trading, data lake/NAS/provider access and publish remain out of scope.
+release_scope:
+  in_scope:
+  - Stage 4 ObservationReviewInput to AuthorizationBoundary workflow design
+  - observation_plan_template contract and future observation_plan_instance compliance boundary
+  - layered manual observation review checklist for Stage 1, Stage 2, Stage 3 and cross-cutting authorization/no-overclaim controls
+  - fail-closed decision table for contract_only and real_data_validated evidence lanes
+  - CR155 blocked_admission_failed seed classification using existing packaged evidence
+  - product baseline refresh for USE-CASES, REQUIREMENTS, SCENARIOS, TEST-MATRIX, MVP-SCOPE and BACKLOG
+  - CP7 design-static verification and CP8 readiness decision
+  out_of_scope:
+  - code implementation, schema or checker implementation
+  - strategy remediation or CR155 reclassification
+  - new real lake read/write, NAS read/write/sync, provider fetch or credential read
+  - QMT/MiniQMT/xtquant/gateway runtime
+  - simulation, paper, live, broker, order or trading runtime
+  - catalog, store, registry, model or prediction write
+  - Git remote write
+  - true release execution, deployment or publish
+version_decision:
+  current_version: N/A
+  target_version: internal-stage4-design-slice
+  semver_classification: minor-internal
+  reason: Adds internal product/design gate semantics and review artifacts without a runtime package release or public API implementation.
+quality_summary:
+  cp7_decision: PASS_WITH_RISK
+  cp7_result_ref: process/checks/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION.result.json
+  cp7_evidence_ref: process/evidence/CR160-CP7-VERIFICATION.index.json
+  cp7_return_ref: process/returns/CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.CP7.return.json
+  verification_report_ref: docs/quality/VERIFICATION-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  blocker_count: 0
+  high_open_count: 1
+  medium_risk_count: 2
+  low_risk_count: 0
+  product_baseline_refresh: PASS
+  product_baseline_docs_refreshed: 6
+  risk_acceptance_required:
+  - R-CR160-CP7-DESIGN-ONLY
+  - R-CR160-FUTURE-CHECKER-DEFERRED
+  - R-CR160-RUNTIME-AUTHORIZATION-LEAK
+fact_diff:
+- promise_ref: DQ-CP2-CR160-EVIDENCE-PROFILE
+  promise: Support contract-level and real-data evidence lanes while remaining fail-closed.
+  status: DELIVERED_WITH_DESIGN_STATIC_SCOPE
+  decision_impact: READY_WITH_RISK
+  evidence_refs:
+  - docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/quality/OBSERVATION-REVIEW-CHECKLIST.md
+  - process/checks/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION.result.json
+  risk_ref: R-CR160-CP7-DESIGN-ONLY
+- promise_ref: DQ-CP2-CR160-CR155-SEED-CLASSIFICATION
+  promise: Classify CR155 as blocked_admission_failed and prevent promotion to observation/paper candidate.
+  status: DELIVERED
+  decision_impact: READY_WITH_RISK
+  evidence_refs:
+  - process/checks/CR160-CR155-SEED-CLASSIFICATION.md
+  - process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json
+  - process/checks/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION.result.json
+  risk_ref: R-CR160-CP7-DESIGN-ONLY
+- promise_ref: DQ-CP2-CR160-DELIVERABLE-SHAPE
+  promise: Deliver design documents, checklist and classification evidence without source implementation.
+  status: DELIVERED
+  decision_impact: READY_WITH_RISK
+  evidence_refs:
+  - docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/quality/OBSERVATION-REVIEW-CHECKLIST.md
+  - process/checks/CR160-CR155-SEED-CLASSIFICATION.md
+  risk_ref: R-CR160-FUTURE-CHECKER-DEFERRED
+- promise_ref: DQ-CP2-CR160-AUTHORIZATION-BOUNDARY
+  promise: Do not authorize new runtime, data, paper/simulation/live/trading, catalog/store/registry, provider, credential, Git remote or publish operations.
+  status: DELIVERED
+  decision_impact: READY_WITH_RISK
+  evidence_refs:
+  - docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/quality/OBSERVATION-REVIEW-CHECKLIST.md
+  - process/evidence/CR160-CP7-VERIFICATION.index.json
+  risk_ref: R-CR160-RUNTIME-AUTHORIZATION-LEAK
+- promise_ref: DQ-CP2-CR160-CP4-CP5-ROUTE
+  promise: Keep CP4/CP5/CP6 N/A for pure design route and use CP7 verification input for design deliverables.
+  status: DELIVERED
+  decision_impact: READY_WITH_RISK
+  evidence_refs:
+  - process/checks/CP0-CR160.route-plan.json
+  - process/checks/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION.result.json
+  risk_ref: R-CR160-CP7-DESIGN-ONLY
+- promise_ref: CP3-DQ-CR160-002
+  promise: Define observation_plan_template and future observation_plan_instance boundary with time model.
+  status: DELIVERED
+  decision_impact: READY_WITH_RISK
+  evidence_refs:
+  - docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/quality/OBSERVATION-REVIEW-CHECKLIST.md
+  risk_ref: R-CR160-FUTURE-CHECKER-DEFERRED
+- promise_ref: DQ-CP8-CR160-004
+  promise: Complete product baseline refresh before CP8 closure and mark DF-CR157-003 / BL-CR157-003 promoted to CR160.
+  status: DELIVERED
+  decision_impact: READY_WITH_RISK
+  evidence_refs:
+  - docs/product/USE-CASES.md
+  - docs/product/REQUIREMENTS.md
+  - docs/product/SCENARIOS.yaml
+  - docs/product/TEST-MATRIX.md
+  - docs/product/MVP-SCOPE.md
+  - docs/product/BACKLOG.md
+  risk_ref: null
+affected_surface:
+  docs:
+  - docs/product/USE-CASES.md
+  - docs/product/REQUIREMENTS.md
+  - docs/product/SCENARIOS.yaml
+  - docs/product/TEST-MATRIX.md
+  - docs/product/MVP-SCOPE.md
+  - docs/product/BACKLOG.md
+  - docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/quality/OBSERVATION-REVIEW-CHECKLIST.md
+  - docs/quality/VERIFICATION-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/quality/TEST-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/quality/REVIEW-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/quality/FIXES-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/release/RELEASE-NOTES-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/release/DEPLOY-CHECKLIST-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/release/ROLLBACK-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/release/MIGRATION-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/release/FEEDBACK-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  process:
+  - process/checks/CR160-CR155-SEED-CLASSIFICATION.md
+  - process/checks/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION.result.json
+  - process/evidence/CR160-CP7-VERIFICATION.index.json
+  - process/returns/CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.CP7.return.json
+  code: []
+  tests: []
+install_validation_summary:
+  applicable: false
+  reason: CR160 does not change installation scripts, package manager configuration, platform agent definitions, runtime services or deployment scripts.
+release_documents:
+- path: docs/release/RELEASE-NOTES-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  profile: compact
+  status: generated
+- path: docs/release/DEPLOY-CHECKLIST-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  profile: compact
+  status: generated
+- path: docs/release/ROLLBACK-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  profile: compact
+  status: generated
+- path: docs/release/MIGRATION-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  profile: compact
+  status: generated
+- path: docs/release/FEEDBACK-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  profile: compact
+  status: generated
+non_authorized_items:
+- code implementation, schema implementation or checker implementation
+- strategy remediation or CR155 promotion
+- new real lake read/write or real-data validation execution
+- NAS read/write/sync or metadata normalization
+- provider fetch or credential/env/secret read
+- QMT/MiniQMT/xtquant/gateway runtime
+- simulation, paper, live, broker, order or trading operation
+- catalog/store/registry/model/prediction write
+- Git remote write
+- true release execution, deployment or publish
+follow_up_summary:
+  risks:
+  - R-CR160-CP7-DESIGN-ONLY
+  - R-CR160-FUTURE-CHECKER-DEFERRED
+  - R-CR160-RUNTIME-AUTHORIZATION-LEAK
+  candidates:
+  - FU-CR160-001-strategy-remediation
+  - FU-CR160-002-real-data-validation
+  - FU-CR160-003-paper-authorization-gate
+  - FU-CR160-004-runtime-authorization
+  - FU-CR160-005-data-lake-governance
+  - FU-CR160-006-observation-review-checker-schema
+  feedback_entry_ref: docs/release/FEEDBACK-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+workspace_status:
+  process_route_health: ok
+  source_git_dirty: false
+  artifact_git_dirty: true
+  note: Process artifacts and scoped docs are dirty because CR160 CP0-CP8 evidence is being generated in the external artifact repo; Git remote write is not authorized.
+cp8_approval:
+  status: approved
+  approved_at: '2026-07-09T20:18:07+08:00'
+  approved_by: user
+  accepted_decision_ids:
+  - DQ-CP8-CR160-001
+  - DQ-CP8-CR160-002
+  - DQ-CP8-CR160-003
+  - DQ-CP8-CR160-004
+  accepted_risk_ids:
+  - R-CR160-CP7-DESIGN-ONLY
+  - R-CR160-FUTURE-CHECKER-DEFERRED
+  - R-CR160-RUNTIME-AUTHORIZATION-LEAK
+  true_release_execution_authorized: false

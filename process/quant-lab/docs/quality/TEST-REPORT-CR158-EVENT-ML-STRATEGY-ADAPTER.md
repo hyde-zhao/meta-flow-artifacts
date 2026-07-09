@@ -9,10 +9,10 @@ created_at: 2026-07-05T18:32:00+08:00
 
 | Suite | Command | Result | Summary |
 |---|---|---|---|
-| CR158 targeted adapter contracts | `uv run pytest tests/test_cr158_strategy_type_adapter_contract.py tests/test_cr158_event_strategy_adapter.py tests/test_cr158_ml_strategy_adapter.py tests/test_cr158_adapter_evidence_refs.py tests/test_cr158_adapter_no_runtime_guard.py` | PASS | 20 passed in 0.04s |
+| CR158 targeted adapter contracts | `uv run pytest tests/research/test_strategy_type_adapter_core.py tests/research/test_event_strategy_adapter.py tests/research/test_ml_strategy_adapter.py tests/research/test_strategy_adapter_evidence_refs.py tests/research/test_strategy_adapter_no_runtime_guard.py` | PASS | 20 passed in 0.04s |
 | Syntax | `uv run --python 3.11 python -m py_compile engine/strategy_type_adapters.py` | PASS | Module compiles |
 | Related regression | `uv run pytest tests/research/test_event_driven_strategy_e2e_contracts.py tests/research/test_ml_strategy_e2e_contracts.py tests/research/test_strategy_admission_package.py tests/research/test_cross_strategy_reliability_gates.py` | PASS | 60 passed in 0.60s |
-| Static diff | `git diff --check -- engine/strategy_type_adapters.py tests/test_cr158_*.py process/stories/CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.md` | PASS | No whitespace errors |
+| Static diff | `git diff --check -- engine/strategy_type_adapters.py tests/research/test_*strategy_adapter*.py tests/research/test_strategy_type_adapter_core.py process/stories/CR158-EVENT-ML-STRATEGY-ADAPTER-IMPLEMENTATION.md` | PASS | No whitespace errors |
 
 ## Coverage Summary
 

@@ -1,0 +1,143 @@
+{
+  "affected_product_docs": [
+    "docs/product/USE-CASES.md",
+    "docs/product/REQUIREMENTS.md",
+    "docs/product/SCENARIOS.yaml",
+    "docs/product/TEST-MATRIX.md",
+    "docs/product/MVP-SCOPE.md",
+    "docs/product/BACKLOG.md"
+  ],
+  "affected_use_cases": [
+    "UC-58 multifactor strategy E2E",
+    "DF-CR157-003 Stage 4 observation review workflow"
+  ],
+  "approval_focus": "scope|architecture|security|runtime|risk",
+  "approve_effect": "Approve CP0 intake and route CR160 to requirement clarification / CP2 for evidence profile, CR155 seed classification, deliverable shape, authorization boundary, and CP4/CP5 route decisions.",
+  "archive_isolation_review": {
+    "decision": "PASS",
+    "findings": []
+  },
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "NO_REAL_LAKE_WRITE",
+    "NO_NAS_SYNC_OR_WRITE",
+    "NO_PROVIDER_FETCH",
+    "NO_BROKER_WRITE",
+    "NO_EXTERNAL_FRAMEWORK_RUN",
+    "NO_CATALOG_POINTER_WRITE"
+  ],
+  "block_story_decomposition_until": "N/A; CR160 design-only route keeps CP4/CP5/CP6 N/A",
+  "conflict_keys": [],
+  "cp1_review_profile": {
+    "decision": "FULL_CP1_REQUIRED",
+    "profile": "full",
+    "reason": "product baseline docs or product_baseline_refresh_required indicate use-case completeness must be rechecked",
+    "required_checks": [
+      "use_case_completeness",
+      "requirements_traceability",
+      "scenario_coverage",
+      "story_map_alignment",
+      "mvp_scope_alignment"
+    ]
+  },
+  "cr_type": "product-scope",
+  "decision": "closed",
+  "decision_burden": "medium",
+  "evidence_index_ref": "process/archive/CR-160/evidence-index.json",
+  "followup_candidates": [
+    "FU-CR160-001-strategy-remediation",
+    "FU-CR160-002-real-data-validation",
+    "FU-CR160-003-paper-authorization-gate",
+    "FU-CR160-004-runtime-authorization",
+    "FU-CR160-005-data-lake-governance",
+    "FU-CR160-006-observation-review-checker-schema"
+  ],
+  "full_ref": "process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md",
+  "gate_profile": "standard-lite",
+  "gate_status": "delivered",
+  "goal_ref": "BL-CR157-003",
+  "goal_statement": "Fill CR157 Stage 4 observation review semantic gap without promoting blocked artifacts or authorizing runtime.",
+  "governance_dependency_review": {
+    "decision": "PASS",
+    "findings": []
+  },
+  "id": "CR-160",
+  "impact_capability_normalized": [],
+  "impact_capability_refs": [],
+  "impact_capability_resolution": {
+    "kind": "capability",
+    "mode": "audit",
+    "results": [],
+    "summary": {
+      "conflict": 0,
+      "deprecated": 0,
+      "resolved": 0,
+      "unresolved": 0
+    }
+  },
+  "impact_data_refs": [],
+  "impact_feature_refs": [],
+  "impact_module_paths": [],
+  "impact_policy_refs": [],
+  "impact_process_refs": [],
+  "impact_runtime_refs": [],
+  "impact_surface": [],
+  "not_authorized_by_approve": [
+    "simulation_or_paper_run",
+    "live_or_trading_runtime",
+    "qmt_miniqmt_xtquant_gateway_runtime",
+    "broker_operation_or_order_write",
+    "credential_or_env_read",
+    "new_real_lake_read",
+    "real_lake_write",
+    "nas_read_write_sync_or_metadata_normalization",
+    "provider_fetch",
+    "catalog_store_registry_model_prediction_write",
+    "git_remote_write",
+    "true_release_execution_or_publish"
+  ],
+  "product_baseline_refresh_required": true,
+  "readiness": "ready_with_risk",
+  "reject_effect": "Stage 4 observation review remains undefined; CR157 observation_plan_ref and stage4_observation_gate_approved stay as unresolved semantic placeholders.",
+  "remaining_risks": [
+    "R-CR160-READY-WITH-RISK-MISREAD",
+    "R-CR160-CR155-BLOCKED-ARTIFACT-PROMOTION",
+    "R-CR160-RUNTIME-AUTHORIZATION-LEAK",
+    "R-CR160-GATE-PROFILE-NAME-MISMATCH",
+    "R-CR160-CP7-DESIGN-ONLY",
+    "R-CR160-FUTURE-CHECKER-DEFERRED"
+  ],
+  "required_agent": "",
+  "required_capabilities": [],
+  "required_evidence": [
+    "admission_package",
+    "oos_walkforward",
+    "real_lake_validation",
+    "rerun_consistency"
+  ],
+  "required_gate": "CP8",
+  "required_phase": "documentation",
+  "routing_design_ref": "process/checks/CP0-CR160.route-plan.json",
+  "scope_authz_consistency": {
+    "blockers": [],
+    "decision": "PASS",
+    "notes": [
+      "CR160 consumes existing CR155 real lake validation evidence only as a fail-closed sample.",
+      "CP8 approval does not authorize new real lake read/write, runtime, paper/simulation/live, trading, publish or deployment."
+    ]
+  },
+  "scope_summary": [
+    "用户要求启动 `CR160 CP0 请求受理`，承接 `BL-CR157-003 / DF-CR157-003 Stage 4 observation review workflow`。本 CR 的目标是补齐 CR157 已预留但未定义的 Stage 4 语义：`observation_plan_ref` 指向的 observation plan 内容、`stage4_observation_gate_approved` 的批准条件、observation review workflow、review checklist、authorization gate contract 和 fail-closed 分类规则。",
+    "本 CR 不是把 CR155 推入 observation / paper / simulation。CR155 只能作为 `blocked_admission_failed` 的标准反例样本：真实 lake readonly validation 和 rerun consistency 已执行并通过，但 admission package 为 `BLOCKED`、statistical gate 为 `FAIL`、`paper_candidate=false`。"
+  ],
+  "split_rationale": "CR157 reserved observation_plan_ref and stage4_observation_gate_approved semantics but did not define their content or workflow; CR158 closed adapter scope and CR159 closed process hygiene, leaving Stage 4 review as the next product baseline decision.",
+  "status": "closed",
+  "title": "Stage 4 Observation Review Workflow",
+  "updated_at": "2026-07-09T12:23:42+00:00",
+  "user_goal_impact": "Clarifies whether future strategy artifacts can enter observation review, need remediation, need real-data evidence, or require separate simulation/paper/runtime authorization.",
+  "why_not_merge_with_parent": "CR157 is closed and CR158 already consumed event/ML adapter deferred items; CR160 has a distinct Stage 4 review/gate objective and authorization boundary.",
+  "why_not_story_or_task": "This changes product scope and gate semantics before any implementation Story can be safely decomposed."
+}

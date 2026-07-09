@@ -39,7 +39,7 @@ lld_policy:
 file_ownership:
   primary:
   - engine/strategy_type_adapters.py
-  - tests/test_cr158_adapter_no_runtime_guard.py
+  - tests/research/test_strategy_adapter_no_runtime_guard.py
   shared:
   - docs/features/runtime-authorization-safety/DESIGN.md
   merge_owner: CR158-S05-no-runtime-guard-counters
@@ -89,7 +89,7 @@ closed_at: '2026-07-05T19:20:00+08:00'
 | 文件影响 | planned adapter safety counters and tests |
 | 接口 / 数据 / 权限变化 | 新增 local counter report；不新增任何真实操作授权。 |
 | 异常、失败与回退 | 任一 forbidden counter 非 0 -> blocked。 |
-| 测试入口 | planned `tests/test_cr158_adapter_no_runtime_guard.py` |
+| 测试入口 | planned `tests/research/test_strategy_adapter_no_runtime_guard.py` |
 | 风险与重访条件 | 用户需要真实验证时回退到 runtime authorization CR。 |
 
 ## 量化验收标准（acceptance_criteria）

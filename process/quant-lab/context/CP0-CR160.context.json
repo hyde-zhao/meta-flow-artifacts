@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "context_id": "CP0-CR160",
+  "cr_id": "CR-160",
+  "created_at": "2026-07-08T21:55:00+08:00",
+  "read_profile": "compact",
+  "raw_user_request": "启动 CR160 CP0 请求受理。上游评审要求将 CR160 定位为 product-scope + cr_kind=requirement-change，补齐 CR157 observation_plan_ref / stage4_observation_gate_approved 语义；CR155 仅作为 BLOCKED / paper_candidate=false 的 fail-closed 样例。",
+  "source": "user",
+  "scope_update": {
+    "objective": "Define Stage 4 observation review workflow and gate contract without promoting CR155 or authorizing runtime.",
+    "source_backlog_items": [
+      "BL-CR157-003 Stage 4 observation review workflow",
+      "DF-CR157-003 Stage 4 observation review workflow"
+    ],
+    "required_decisions": [
+      "DQ-CP2-CR160-EVIDENCE-PROFILE",
+      "DQ-CP2-CR160-CR155-SEED-CLASSIFICATION",
+      "DQ-CP2-CR160-DELIVERABLE-SHAPE",
+      "DQ-CP2-CR160-AUTHORIZATION-BOUNDARY",
+      "DQ-CP2-CR160-CP4-CP5-ROUTE"
+    ],
+    "route_strategy": "standard-governance; machine gate_profile standard-lite because current meta-flow route planner rejects literal standard",
+    "default_deliverable_shape": "design documents + checklist + gate contract + CR155 fail-closed classification evidence; optional lightweight schema/checker only if CP2 approves"
+  },
+  "current_state_refs": {
+    "state_current": "process/state/STATE.current.json",
+    "cr_index": "process/changes/CR-INDEX.json",
+    "route_plan": "process/checks/CP0-CR160.route-plan.json",
+    "cr160_formal": "process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md",
+    "cr155_evidence": "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json",
+    "cr157_hld": "process/docs/design/HLD-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md",
+    "product_backlog": "docs/product/BACKLOG.md"
+  },
+  "conflict_precheck": {
+    "active_change_before_intake": null,
+    "active_formal_crs": "none",
+    "blocked_formal_crs": "none",
+    "cr_tracking_summary": "meta-flow check cr-tracking reports active formal CRs none / blocked formal CRs none; command still exits 1 due known deferred CR159 legacy hygiene items and old lifecycle statuses.",
+    "cr_160_available": true,
+    "known_non_blocking_tracking_debt": [
+      "FU-CR159-001/002 candidate table uses literal '(未创建)' formal path and is deferred from CR159",
+      "CR-010/018/031 legacy lifecycle_status values remain invalid",
+      "multiple historical follow-up candidates are missing from CR-INDEX items"
+    ]
+  },
+  "code_contract_facts": {
+    "stage3_forbidden_claims": "engine/mature_multifactor_framework.py includes simulation_ready as forbidden claim, not as an allowed readiness output.",
+    "observation_plan_ref": "Stage3MatureResearchPackage requires observation_plan_ref; missing ref fail-closes the package.",
+    "simulation_candidate": "PaperSimulationAdmissionView carries a simulation_candidate flag but it is not runtime authorization.",
+    "stage4_observation_gate_approved": "Current unlock condition string exists but the gate approval semantics are not defined."
+  },
+  "cr155_seed_classification": {
+    "classification": "blocked_admission_failed",
+    "admission_package_status": "BLOCKED",
+    "statistical_gate_status": "FAIL",
+    "decision": "ARTIFACT_COMPLETE_ADMISSION_FAILED",
+    "paper_candidate": false,
+    "rerun_consistency": "PASS",
+    "evidence_ref": "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json"
+  },
+  "authorization_boundary": {
+    "authorized": [
+      "local product/process design",
+      "static review of existing CR155/CR157/CR158/CR159 evidence",
+      "product baseline updates after CP2 approval",
+      "HLD/checklist/gate contract drafting after CP2 approval"
+    ],
+    "not_authorized": [
+      "simulation_or_paper_run",
+      "live_or_trading_runtime",
+      "qmt_miniqmt_xtquant_gateway_runtime",
+      "broker_operation_or_order_write",
+      "credential_or_env_read",
+      "new_real_lake_read",
+      "real_lake_write",
+      "nas_read_write_sync_or_metadata_normalization",
+      "provider_fetch",
+      "catalog_store_registry_model_prediction_write",
+      "git_remote_write",
+      "true_release_execution_or_publish"
+    ]
+  },
+  "read_expansion_refs": [
+    "RE-20260708T135800Z0000-cr160formal",
+    "RE-20260708T135800Z0000-cr160code",
+    "RE-20260708T135800Z0000-cr155evid",
+    "RE-20260708T135800Z0000-cr157prod"
+  ]
+}

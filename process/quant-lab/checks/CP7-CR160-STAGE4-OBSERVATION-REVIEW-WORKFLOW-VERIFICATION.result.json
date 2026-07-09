@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION",
+  "cr_id": "CR-160",
+  "story_id": "CR160-DESIGN-ONLY",
+  "context_ref": "process/context/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION-CONTEXT.yaml",
+  "dispatch_refs": [
+    "process/state/AGENT-DISPATCH-LEDGER.ndjson#CR160-CP7-META-QA-20260709T191808"
+  ],
+  "evidence_ref": "process/evidence/CR160-CP7-VERIFICATION.index.json",
+  "return_ref": "process/returns/CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.CP7.return.json",
+  "verification_report_ref": "docs/quality/VERIFICATION-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+  "items": [
+    {
+      "id": "CP7-CR160-01",
+      "category": "entry",
+      "name": "CP7 context, process route, and required inputs are readable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION-CONTEXT.yaml",
+        "process/handoffs/CR160-CP7-META-QA-HANDOFF-2026-07-09.md",
+        "process/.meta-flow-process.yaml",
+        "process/state/STATE.current.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "Design-static route is explicit; process route is symlink-backed and readable."
+    },
+    {
+      "id": "CP7-CR160-02",
+      "category": "dispatch",
+      "name": "meta-qa CP7 dispatch evidence is present",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/state/AGENT-DISPATCH-LEDGER.ndjson#CR160-CP7-META-QA-20260709T191808",
+        "process/handoffs/CR160-CP7-META-QA-HANDOFF-2026-07-09.md#dispatch"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Dispatch ledger contains subagent dispatch for canonical role meta-qa with agent qa-hua."
+    },
+    {
+      "id": "CP7-CR160-03",
+      "category": "upstream-gate",
+      "name": "CP3 HLD review is approved and accepted decisions are available",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-CONSISTENCY.result.json",
+        "process/checkpoints/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-REVIEW.md"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP3 result decision is PASS, manual_gate_status is approved, and five CP3 decisions are accepted."
+    },
+    {
+      "id": "CP7-CR160-04",
+      "category": "design-contract",
+      "name": "HLD defines Stage 4 contract objects and failure paths",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md#6-高层模块与职责划分",
+        "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md#9-decision-table",
+        "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md#13-关键流程"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Six objects cover responsibility, inputs, outputs, and fail-closed/degrade behavior."
+    },
+    {
+      "id": "CP7-CR160-05",
+      "category": "checklist",
+      "name": "Observation review checklist is layered and testable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/quality/OBSERVATION-REVIEW-CHECKLIST.md#stage-1-data-foundation-review",
+        "docs/quality/OBSERVATION-REVIEW-CHECKLIST.md#stage-2-research-production-review",
+        "docs/quality/OBSERVATION-REVIEW-CHECKLIST.md#stage-3-research-machine-admission-review",
+        "docs/quality/OBSERVATION-REVIEW-CHECKLIST.md#cross-cutting-authorization-and-no-overclaim-review"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Checklist includes expected evidence, status, notes, and fail-closed rules for all required layers."
+    },
+    {
+      "id": "CP7-CR160-06",
+      "category": "seed-classification",
+      "name": "CR155 is blocked_admission_failed and not promoted",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CR160-CR155-SEED-CLASSIFICATION.md",
+        "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Packaged CR155 evidence shows BLOCKED/FAIL/paper_candidate=false/rerun_consistency=PASS; classification stays blocked_admission_failed."
+    },
+    {
+      "id": "CP7-CR160-07",
+      "category": "authorization",
+      "name": "contract_only no-overclaim ceiling is enforced in design wording",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md#9-decision-table",
+        "docs/quality/OBSERVATION-REVIEW-CHECKLIST.md#post-review-decision-table",
+        "process/evidence/CR160-CP7-VERIFICATION.index.json#commands"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No positive `paper_candidate=true`, `simulation_ready=true`, or `runtime_authorized=true` output is present for contract_only."
+    },
+    {
+      "id": "CP7-CR160-08",
+      "category": "observation-plan",
+      "name": "observation_plan_template and future observation_plan_instance boundary is clear",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md#7-observation-plan-template-contract",
+        "docs/quality/OBSERVATION-REVIEW-CHECKLIST.md#observation-plan-template-compliance"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "CR160 defines the template; future Stage 3 must produce an instance; template-only refs fail closed."
+    },
+    {
+      "id": "CP7-CR160-09",
+      "category": "authorization",
+      "name": "CR160 remains non-authorizing for code/checker/runtime/data/publish surfaces",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+        "docs/quality/OBSERVATION-REVIEW-CHECKLIST.md",
+        "process/checks/CR160-CR155-SEED-CLASSIFICATION.md",
+        "process/context/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION-CONTEXT.yaml"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No code/checker, lake/NAS/provider/credential/broker/trading/runtime/paper/simulation/live/catalog/store/registry/Git remote/release/publish authorization is granted."
+    },
+    {
+      "id": "CP7-CR160-10",
+      "category": "security",
+      "name": "No forbidden validation action was executed during CP7",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR160-CP7-VERIFICATION.index.json#boundary_check"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CP7 commands were static reads, rg scans, date, and JSON validation only."
+    },
+    {
+      "id": "CP7-CR160-11",
+      "category": "risk",
+      "name": "Design-only residual risks are recorded for CP8",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/quality/VERIFICATION-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md#12-residual-risks",
+        "docs/quality/REVIEW-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md#release--cp8-considerations"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "waive_with_risk_acceptance",
+      "waiver_ref": null,
+      "notes": "Decision is PASS_WITH_RISK; CP8 must preserve design-only and non-authorization caveats."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP8",
+  "checked_at": "2026-07-09T19:27:06+08:00",
+  "summary": {
+    "validation_mode": "design-static-review",
+    "hld_contract_completeness": "PASS",
+    "checklist_layering_and_testability": "PASS",
+    "cr155_blocked_admission_failed": "PASS",
+    "contract_only_no_overclaim": "PASS",
+    "template_instance_boundary": "PASS",
+    "non_authorization_wording": "PASS",
+    "forbidden_operation_count": 0,
+    "real_lake_read_executed": false,
+    "real_lake_write_executed": false,
+    "nas_operation_executed": false,
+    "provider_fetch_executed": false,
+    "credential_read_executed": false,
+    "broker_executed": false,
+    "trading_executed": false,
+    "runtime_executed": false,
+    "simulation_or_paper_executed": false,
+    "catalog_or_registry_write_executed": false,
+    "git_remote_executed": false,
+    "publish_executed": false,
+    "risk_count": 3
+  },
+  "risks": [
+    {
+      "id": "R-CR160-CP7-DESIGN-ONLY",
+      "severity": "MEDIUM",
+      "status": "open-controlled-for-cp8",
+      "summary": "CP7 validates design evidence only; it does not prove checker/schema/runtime readiness."
+    },
+    {
+      "id": "R-CR160-FUTURE-CHECKER-DEFERRED",
+      "severity": "MEDIUM",
+      "status": "follow-up-candidate",
+      "summary": "Automatic checker/schema remains deferred and must require a separate CR."
+    },
+    {
+      "id": "R-CR160-RUNTIME-AUTHORIZATION-LEAK",
+      "severity": "HIGH",
+      "status": "controlled-for-cp8-non-authorization",
+      "summary": "CP8 must explicitly state that approve does not authorize code/checker, real lake/NAS/provider/credential/broker/trading/runtime/paper/simulation/live/catalog/store/registry/Git remote/release/publish actions."
+    }
+  ],
+  "pending_human_decisions": [
+    {
+      "id": "CP8-DQ-CR160-RISK-ACCEPTANCE",
+      "decision_type": "risk_acceptance",
+      "summary": "Accept design-only residual risk and non-authorization boundary for CR160 closure.",
+      "recommended": "Proceed to CP8 human gate with READY_WITH_RISK/design-only wording.",
+      "alternatives": [
+        "Return to CP3 design clarification if the user wants implementation/checker/schema in current scope.",
+        "Open a follow-up CR for checker/schema or Stage 5 gate before closing CR160."
+      ]
+    }
+  ]
+}

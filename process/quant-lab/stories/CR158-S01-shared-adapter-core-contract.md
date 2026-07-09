@@ -28,7 +28,7 @@ lld_policy:
 file_ownership:
   primary:
   - engine/strategy_type_adapters.py
-  - tests/test_cr158_strategy_type_adapter_contract.py
+  - tests/research/test_strategy_type_adapter_core.py
   shared:
   - docs/features/factor-research-loop/DESIGN.md
   - docs/features/runtime-authorization-safety/DESIGN.md
@@ -73,7 +73,7 @@ closed_at: '2026-07-05T19:20:00+08:00'
 ## 开发上下文（dev_context）
 
 - 输入文件：`docs/design/HLD-EVENT-ML-STRATEGY-ADAPTER.md`、`docs/design/ARCHITECTURE-DECISION-EVENT-ML-STRATEGY-ADAPTER.md`、`docs/product/REQUIREMENTS.md`
-- 输出文件：planned `engine/strategy_type_adapters.py`、planned `tests/test_cr158_strategy_type_adapter_contract.py`
+- 输出文件：planned `engine/strategy_type_adapters.py`、planned `tests/research/test_strategy_type_adapter_core.py`
 - 设计约束：core 只包含 strategy type、input refs、output signal refs、evidence refs、blocked reason refs、authorization flags、handoff refs。
 - 平台目标：local/static/fixture only；no runtime。
 
@@ -88,7 +88,7 @@ closed_at: '2026-07-05T19:20:00+08:00'
 | 类型 | 文件 | Owner / 合并规则 |
 |---|---|---|
 | primary | `engine/strategy_type_adapters.py` | 当前 Story 定义 core 合同，后续 Story 只能扩展本 LLD 冻结的 extension slots。 |
-| primary | `tests/test_cr158_strategy_type_adapter_contract.py` | 当前 Story 拥有 shared core contract tests。 |
+| primary | `tests/research/test_strategy_type_adapter_core.py` | 当前 Story 拥有 shared core contract tests。 |
 | forbidden | `.env`, `data/**`, `/home/hyde/data/**` | 不得读取或写入真实数据、凭据或外部运行态。 |
 
 ## 技术说明
@@ -97,10 +97,10 @@ closed_at: '2026-07-05T19:20:00+08:00'
 |---|---|
 | 设计证据类型 | full-lld (see LLD file) |
 | 设计依据 | CR158 HLD §4/§5、ADR-CR158-001、FEATURE-DESIGN-MATRIX CR158 增量 |
-| 文件影响 | planned create/modify `engine/strategy_type_adapters.py`; planned create `tests/test_cr158_strategy_type_adapter_contract.py` |
+| 文件影响 | planned create/modify `engine/strategy_type_adapters.py`; planned create `tests/research/test_strategy_type_adapter_core.py` |
 | 接口 / 数据 / 权限变化 | 新增本地 typed contract；不新增 runtime 权限。 |
 | 异常、失败与回退 | 缺 mandatory core refs 或 forbidden flag 非法时 blocked。 |
-| 测试入口 | planned `tests/test_cr158_strategy_type_adapter_contract.py` |
+| 测试入口 | planned `tests/research/test_strategy_type_adapter_core.py` |
 | 风险与重访条件 | 若 core 变成 fat schema，回到 CP5 设计澄清或拆分子 CR。 |
 
 ## 量化验收标准（acceptance_criteria）

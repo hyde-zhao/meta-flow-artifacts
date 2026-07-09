@@ -84,7 +84,7 @@ Define the MLAdapterExtension typed ref contract without real model training, ex
 | 动作 | 文件路径 | 变更内容 |
 | --- | --- | --- |
 | 修改 | engine/strategy_type_adapters.py | Add MLAdapterExtension, ML required refs and ML validator. |
-| 创建 | tests/test_cr158_ml_strategy_adapter.py | Add ML extension positive, missing-ref, no-training and isolation tests. |
+| 创建 | tests/research/test_ml_strategy_adapter.py | Add ML extension positive, missing-ref, no-training and isolation tests. |
 
 ## 5. 数据模型与持久化设计
 
@@ -144,8 +144,8 @@ Define the MLAdapterExtension typed ref contract without real model training, ex
 
 | TASK-ID | 动作 | 目标文件 | 详细描述 | 对应测试 |
 | --- | --- | --- | --- | --- |
-| CR158-S03-T1 | 修改 | engine/strategy_type_adapters.py | Add ML extension dataclass and validator. | tests/test_cr158_ml_strategy_adapter.py |
-| CR158-S03-T2 | 创建 | tests/test_cr158_ml_strategy_adapter.py | Cover ML P0 refs and no-training counters. | pytest tests/test_cr158_ml_strategy_adapter.py |
+| CR158-S03-T1 | 修改 | engine/strategy_type_adapters.py | Add ML extension dataclass and validator. | tests/research/test_ml_strategy_adapter.py |
+| CR158-S03-T2 | 创建 | tests/research/test_ml_strategy_adapter.py | Cover ML P0 refs and no-training counters. | pytest tests/research/test_ml_strategy_adapter.py |
 
 ## 12. 风险、难点与预研建议
 

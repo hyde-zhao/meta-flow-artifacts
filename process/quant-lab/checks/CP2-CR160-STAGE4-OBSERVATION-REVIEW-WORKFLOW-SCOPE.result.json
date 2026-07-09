@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP2",
+  "checkpoint_id": "CP2-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-SCOPE",
+  "cr_id": "CR-160",
+  "checked_at": "2026-07-08T22:55:00+08:00",
+  "context_ref": "process/context/CP2-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-SCOPE-CONTEXT.yaml",
+  "dispatch_refs": [],
+  "evidence_ref": "process/changes/summaries/CR-160.summary.json",
+  "route_plan_ref": "process/checks/CP0-CR160.route-plan.json",
+  "items": [
+    {
+      "id": "CP2-CR160-01",
+      "category": "entry",
+      "name": "CR160 formal CR exists and is active with CP2 pending",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md",
+        "process/changes/summaries/CR-160.summary.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "status=active, gate_status=cp2_pending, readiness=not_ready."
+    },
+    {
+      "id": "CP2-CR160-02",
+      "category": "entry",
+      "name": "CP0 and CP1 passed before CP2 launch",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP0-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-REQUEST-INTAKE.result.json",
+        "process/checks/CP1-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-USE-CASE-COMPLETENESS.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP0 intake and CP1 product baseline completeness checks have no blockers."
+    },
+    {
+      "id": "CP2-CR160-03",
+      "category": "scope",
+      "name": "CR160 scope is limited to Stage 4 review workflow and gate semantics",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP2-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-SCOPE-CONTEXT.yaml#scope_summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "No strategy remediation, simulation, paper run, runtime, broker, or real data operation is included."
+    },
+    {
+      "id": "CP2-CR160-04",
+      "category": "decision-coverage",
+      "name": "Required CP2 decisions are collected",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-SCOPE.md#待人工决策清单"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Five decisions cover evidence profile, CR155 seed classification, deliverable shape, authorization boundary, and CP4/CP5/CP6 route handling."
+    },
+    {
+      "id": "CP2-CR160-05",
+      "category": "authorization",
+      "name": "Existing CR155 evidence consumption is distinguished from new real lake access",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP2-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-SCOPE-CONTEXT.yaml#validation_boundary",
+        "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "The prior scope_authz_consistency NEEDS_REVIEW item is resolved by stating that CR160 may cite existing CR155 evidence but does not authorize any new real lake read."
+    },
+    {
+      "id": "CP2-CR160-06",
+      "category": "routing",
+      "name": "CP6 route inconsistency is resolved for the design-only path",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP0-CR160.route-plan.json#checkpoint_applicability.CP6",
+        "process/context/CP2-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-SCOPE-CONTEXT.yaml#scope_summary.default_route"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP6 remains N/A because has_new_implementation=false. Design deliverables are recorded as CP7 verification inputs."
+    },
+    {
+      "id": "CP2-CR160-07",
+      "category": "authorization",
+      "name": "Approve does not authorize runtime, credential, lake/NAS/provider, broker, trading, catalog/store, Git remote, or publish actions",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md#结构化权限策略",
+        "process/context/CP2-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-SCOPE-CONTEXT.yaml#scope_summary.out_of_scope"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Any runtime, paper, real-data generation, data-lake, registry, broker, provider, or publish action must use a separate authorization gate/CR."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260708T135800Z0000-cr160formal",
+    "RE-20260708T135800Z0000-cr155evid",
+    "RE-20260708T135800Z0000-cr157prod"
+  ],
+  "manual_gate_status": "approved",
+  "pending_human_decisions": [],
+  "decision": "PASS",
+  "next_route": "CP3",
+  "approved_at": "2026-07-08T23:20:00+08:00",
+  "approved_by": "user",
+  "accepted_human_decisions": [
+    "DQ-CP2-CR160-EVIDENCE-PROFILE",
+    "DQ-CP2-CR160-CR155-SEED-CLASSIFICATION",
+    "DQ-CP2-CR160-DELIVERABLE-SHAPE",
+    "DQ-CP2-CR160-AUTHORIZATION-BOUNDARY",
+    "DQ-CP2-CR160-CP4-CP5-ROUTE"
+  ],
+  "cp3_attention_items": [
+    {
+      "id": "CP3-FOCUS-CR160-005",
+      "summary": "Layer checklist across Stage 1 data foundation, Stage 2 research production, Stage 3 research machine admission, and cross-cutting authorization/no-overclaim controls."
+    },
+    {
+      "id": "CP3-FOCUS-CR160-006",
+      "summary": "Distinguish CR160 observation_plan_template from future Stage 3 observation_plan_instance."
+    },
+    {
+      "id": "CP3-FOCUS-CR160-007",
+      "summary": "Add observation period, checkpoint frequency, tracking metrics, exit criteria, and remediation/pause triggers to the observation plan template."
+    },
+    {
+      "id": "CP3-FOCUS-CR160-008",
+      "summary": "Treat checklist as a human review tool and decision table as post-review classification framework; no automatic checker in CR160."
+    }
+  ]
+}

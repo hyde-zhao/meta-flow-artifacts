@@ -39,7 +39,7 @@ lld_policy:
 file_ownership:
   primary:
   - engine/strategy_type_adapters.py
-  - tests/test_cr158_adapter_evidence_refs.py
+  - tests/research/test_strategy_adapter_evidence_refs.py
   shared:
   - process/evidence/*.index.json
   merge_owner: CR158-S04-evidence-handoff-typed-refs
@@ -89,7 +89,7 @@ closed_at: '2026-07-05T19:20:00+08:00'
 | 文件影响 | planned evidence helper/tests; no large evidence body writes |
 | 接口 / 数据 / 权限变化 | 新增 typed evidence refs；不新增 storage/publish 权限。 |
 | 异常、失败与回退 | body_copy_count > 0 必须 blocked。 |
-| 测试入口 | planned `tests/test_cr158_adapter_evidence_refs.py` |
+| 测试入口 | planned `tests/research/test_strategy_adapter_evidence_refs.py` |
 | 风险与重访条件 | 若 consumer 需要正文，另行设计 evidence artifact ref，不写入 index body。 |
 
 ## 量化验收标准（acceptance_criteria）

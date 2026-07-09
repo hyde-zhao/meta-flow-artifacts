@@ -1,0 +1,65 @@
+schema_version: 1
+context_id: CP8-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-CONTEXT
+created_at: '2026-07-09T19:45:00+08:00'
+created_by: host-orchestrator
+change_id: CR-160
+checkpoint: CP8
+phase: documentation
+read_profile: compact
+context_policy:
+  capsule_first: true
+  default_read: this capsule and release context first
+  expand_full_docs_only_if:
+  - missing evidence path
+  - contradictory CP7 or release decision
+  - human audit requests full source
+  - CP8 gate wording needs exact source text
+must_read:
+- process/release/RELEASE-CONTEXT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.yaml
+- process/checks/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION.result.json
+- process/evidence/CR160-CP7-VERIFICATION.index.json
+- process/checkpoints/CP8-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-RELEASE-READINESS.md
+read_if_needed:
+- docs/quality/VERIFICATION-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+- docs/quality/TEST-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+- docs/quality/REVIEW-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+- docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+- docs/quality/OBSERVATION-REVIEW-CHECKLIST.md
+- process/checks/CR160-CR155-SEED-CLASSIFICATION.md
+do_not_read_by_default:
+- process/STATE.md
+- process/DEVELOPMENT-PLAN.yaml
+- full HLD/checklist/report bodies
+- full conversation transcript
+- real lake/NAS/provider paths
+- credential or environment secret files
+release_scope_summary:
+  release_artifact_profile: compact
+  release_decision: READY_WITH_RISK
+  reason: CP7 is PASS_WITH_RISK for design-static evidence; CR160 closes Stage 4 gate design but does not implement checker/schema or authorize runtime/data/paper/simulation/live operations.
+quality_summary:
+  cp7_decision: PASS_WITH_RISK
+  cp7_blocker_count: 0
+  cp7_forbidden_operation_count: 0
+  cp7_result_ref: process/checks/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION.result.json
+  cp7_evidence_ref: process/evidence/CR160-CP7-VERIFICATION.index.json
+  cp7_return_ref: process/returns/CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.CP7.return.json
+pending_human_decisions:
+- DQ-CP8-CR160-001
+- DQ-CP8-CR160-002
+- DQ-CP8-CR160-003
+- DQ-CP8-CR160-004
+non_authorized_summary:
+- code implementation
+- schema/checker implementation
+- strategy remediation
+- new real lake read/write
+- NAS read/write/sync or metadata normalization
+- provider fetch
+- credential/env/secret read
+- broker/order/trading operation
+- QMT/MiniQMT/xtquant/gateway runtime
+- paper/simulation/live/runtime execution
+- catalog/store/registry/model/prediction write
+- Git remote write
+- true release execution or publish

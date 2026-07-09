@@ -86,7 +86,7 @@ Define the thin shared StrategyTypeAdapterCore and AdapterValidationResult contr
 | 动作 | 文件路径 | 变更内容 |
 | --- | --- | --- |
 | 创建 | engine/strategy_type_adapters.py | Add CR158 shared dataclasses, status enum, normalization and core validation helpers. |
-| 创建 | tests/test_cr158_strategy_type_adapter_contract.py | Add contract tests for required groups, extension isolation, blocked reasons and zero default counters. |
+| 创建 | tests/research/test_strategy_type_adapter_core.py | Add contract tests for required groups, extension isolation, blocked reasons and zero default counters. |
 
 ## 5. 数据模型与持久化设计
 
@@ -147,8 +147,8 @@ Define the thin shared StrategyTypeAdapterCore and AdapterValidationResult contr
 
 | TASK-ID | 动作 | 目标文件 | 详细描述 | 对应测试 |
 | --- | --- | --- | --- | --- |
-| CR158-S01-T1 | 创建 | engine/strategy_type_adapters.py | Add status enum, blocked reason, core dataclass, validation result and zero counter constants. | tests/test_cr158_strategy_type_adapter_contract.py |
-| CR158-S01-T2 | 创建 | tests/test_cr158_strategy_type_adapter_contract.py | Cover complete, missing, private-field leakage and nonzero-counter paths. | pytest tests/test_cr158_strategy_type_adapter_contract.py |
+| CR158-S01-T1 | 创建 | engine/strategy_type_adapters.py | Add status enum, blocked reason, core dataclass, validation result and zero counter constants. | tests/research/test_strategy_type_adapter_core.py |
+| CR158-S01-T2 | 创建 | tests/research/test_strategy_type_adapter_core.py | Cover complete, missing, private-field leakage and nonzero-counter paths. | pytest tests/research/test_strategy_type_adapter_core.py |
 
 ## 12. 风险、难点与预研建议
 

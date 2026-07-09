@@ -1,0 +1,129 @@
+schema_version: 1
+context_id: CP2-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-SCOPE
+cr_id: CR-160
+stage: CP2
+status: ready
+created_at: "2026-07-08T22:55:00+08:00"
+owner: host-orchestrator
+read_profile: compact
+context_policy:
+  require_capsule_first: true
+  default_reads:
+    - process/changes/summaries/CR-160.summary.json
+    - process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md
+    - process/checks/CP0-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-REQUEST-INTAKE.result.json
+    - process/checks/CP1-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-USE-CASE-COMPLETENESS.result.json
+    - process/checks/CP0-CR160.route-plan.json
+  read_if_needed:
+    - process/context/CP0-CR160.context.json
+    - process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json
+    - engine/mature_multifactor_framework.py
+    - docs/product/USE-CASES.md
+    - docs/product/REQUIREMENTS.md
+    - docs/product/SCENARIOS.yaml
+    - docs/product/TEST-MATRIX.md
+    - docs/product/MVP-SCOPE.md
+    - docs/product/BACKLOG.md
+  do_not_read_by_default:
+    - full conversation transcript
+    - all process/stories/*
+    - all process/evidence/* except the CR155 seed evidence when classification audit is needed
+    - real lake/NAS/provider credential files
+    - closed CR full histories unrelated to CR155/CR157/CR158/CR159
+scope_summary:
+  objective: Define Stage 4 observation review workflow and authorization gate semantics without promoting blocked artifacts or authorizing runtime.
+  in_scope:
+    - observation_plan_ref content contract
+    - stage4_observation_gate_approved decision table
+    - observation review workflow
+    - review checklist
+    - authorization boundary wording
+    - CR155 blocked_admission_failed seed classification
+    - product baseline updates after CP2 approval
+  default_route:
+    deliverable_shape: design-only
+    cp4: N/A because no Story decomposition is planned
+    cp5: N/A because no LLD/design batch for implementation Stories is planned
+    cp6: N/A because no code implementation is planned
+    cp7: required to verify design contract completeness, checklist testability, CR155 fail-closed classification, and no-overclaim wording
+  cp3_required_design_constraints:
+    - Checklist must be layered across Stage 1 data foundation, Stage 2 research production, Stage 3 research machine admission, and cross-cutting authorization/no-overclaim controls.
+    - Observation plan contract must distinguish CR160-defined observation_plan_template from future Stage 3 observation_plan_instance.
+    - Observation plan template must include observation period, checkpoint frequency, tracking metrics, exit criteria, and remediation/pause triggers.
+    - Checklist is a human review tool; decision table is the classification framework after review. Automatic schema/checker implementation remains out of scope unless a later CR authorizes it.
+  out_of_scope:
+    - simulation_or_paper_run
+    - live_or_trading_runtime
+    - qmt_miniqmt_xtquant_gateway_runtime
+    - broker_operation_or_order_write
+    - credential_or_env_read
+    - new_real_lake_read
+    - real_lake_write
+    - nas_read_write_sync_or_metadata_normalization
+    - provider_fetch
+    - catalog_store_registry_model_prediction_write
+    - git_remote_write
+    - true_release_execution_or_publish
+decision_refs:
+  - DQ-CP2-CR160-EVIDENCE-PROFILE
+  - DQ-CP2-CR160-CR155-SEED-CLASSIFICATION
+  - DQ-CP2-CR160-DELIVERABLE-SHAPE
+  - DQ-CP2-CR160-AUTHORIZATION-BOUNDARY
+  - DQ-CP2-CR160-CP4-CP5-ROUTE
+validation_boundary:
+  current_mode: requirement-scope-and-decision-only
+  existing_evidence_consumption: allowed for CR155 fail-closed classification
+  new_real_lake_access: not_authorized
+  runtime_evidence_claims: not_authorized
+  no_overclaim_rule: contract-level evidence cannot output paper_candidate=true, simulation_ready=true, or runtime_authorized=true
+cr155_seed_classification:
+  classification: blocked_admission_failed
+  admission_package_status: BLOCKED
+  statistical_gate_status: FAIL
+  decision: ARTIFACT_COMPLETE_ADMISSION_FAILED
+  paper_candidate: false
+  rerun_consistency: PASS
+  interpretation: deterministic replay plus correct fail-closed admission, not an observation candidate
+risks_and_decisions:
+  open_risks:
+    - R-CR160-READY-WITH-RISK-MISREAD
+    - R-CR160-CR155-BLOCKED-ARTIFACT-PROMOTION
+    - R-CR160-RUNTIME-AUTHORIZATION-LEAK
+    - R-CR160-GATE-PROFILE-NAME-MISMATCH
+  resolved_cp0_review_items:
+    - CP6 route mismatch resolved by keeping CP6 N/A and recording design deliverables as CP7 verification inputs.
+    - scope_authz_consistency NEEDS_REVIEW resolved by distinguishing consumption of existing CR155 real lake evidence from authorization for new real lake reads.
+  cp2_review_additions:
+    - Full pipeline traceability is accepted as a CP3 design constraint, not a new CP2 decision.
+    - CR160 scope remains design-only; Stage 1/2/3 layering expands checklist content but does not add code implementation or runtime authorization.
+downstream_tasks:
+  cp3:
+    - Produce HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md with Stage 1→2→3→4→5 traceability.
+    - Define ObservationReviewInput, EvidenceProfile, AdmissionReadiness, ObservationDecision, EscalationRoute, and AuthorizationBoundary.
+    - Define observation_plan_template and the expected future observation_plan_instance compliance relation.
+    - Define layered OBSERVATION-REVIEW-CHECKLIST.md covering Stage 1, Stage 2, Stage 3, and cross-cutting authorization/no-overclaim controls.
+    - Define CR155 blocked_admission_failed sample classification evidence requirements.
+observability_points:
+  - Stage 1 PIT/universe/lineage refs present and no leakage overclaim.
+  - Stage 2 factor methodology, evaluation refs, typed_unavailable handling, and blocked_reasons are reviewable.
+  - Stage 3 admission package, OOS validation, economic significance, capacity, impact, rerun consistency, and blocked_claims are reviewable.
+  - Authorization boundary prevents contract_only, blocked, or unknown evidence from becoming paper_candidate, simulation_ready, or runtime_authorized.
+token_control:
+  max_source_files: 12
+  full_doc_read_policy: expand only for conflict, audit, missing capsule fields, or user-requested deep review
+read_expansion_log:
+  - id: RE-20260708T135800Z0000-cr160formal
+    reason: CP0/CP2 formal CR intake and checkpoint preparation.
+    expanded_to:
+      - process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md
+  - id: RE-20260708T135800Z0000-cr155evid
+    reason: CR155 fail-closed seed classification audit.
+    expanded_to:
+      - process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json
+  - id: RE-20260708T135800Z0000-cr157prod
+    reason: CR157 deferred Stage 4 baseline traceability audit.
+    expanded_to:
+      - docs/product/BACKLOG.md
+      - docs/product/USE-CASES.md
+      - docs/product/REQUIREMENTS.md
+      - docs/product/MVP-SCOPE.md

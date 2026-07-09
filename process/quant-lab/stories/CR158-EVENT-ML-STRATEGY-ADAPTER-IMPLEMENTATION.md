@@ -27,18 +27,18 @@ implementation_scope: local_static_fixture_only
 
 | Contract | Implementation | Verification |
 |---|---|---|
-| Shared core includes adapter id/type, input refs, output signal refs, evidence refs, blocked reason refs, authorization flags and handoff refs. | `StrategyTypeAdapterCore` and `validate_strategy_type_adapter_core`. | `tests/test_cr158_strategy_type_adapter_contract.py` |
-| Event-only fields stay outside shared core and ML adapters. | Core denylist and event/ML extension denylist checks. | `tests/test_cr158_strategy_type_adapter_contract.py`, `tests/test_cr158_event_strategy_adapter.py`, `tests/test_cr158_ml_strategy_adapter.py` |
-| Event extension exposes source/time/schema/alignment/signal refs only. | `EventAdapterExtension`, `validate_event_adapter_extension`, `event_adapter_summary`. | `tests/test_cr158_event_strategy_adapter.py` |
-| ML extension exposes training/feature/label/artifact/report/prediction refs only. | `MLAdapterExtension`, `validate_ml_adapter_extension`, `ml_adapter_summary`. | `tests/test_cr158_ml_strategy_adapter.py` |
-| Evidence and handoff remain refs-only; body copies are forbidden. | `AdapterTypedEvidenceRef`, `validate_adapter_evidence_refs`, `adapter_handoff_summary`. | `tests/test_cr158_adapter_evidence_refs.py` |
-| Any forbidden operation counter blocks adapter readiness. | `CR158_FORBIDDEN_OPERATION_COUNTERS`, `validate_adapter_operation_counters`, `adapter_no_runtime_summary`. | `tests/test_cr158_adapter_no_runtime_guard.py` |
+| Shared core includes adapter id/type, input refs, output signal refs, evidence refs, blocked reason refs, authorization flags and handoff refs. | `StrategyTypeAdapterCore` and `validate_strategy_type_adapter_core`. | `tests/research/test_strategy_type_adapter_core.py` |
+| Event-only fields stay outside shared core and ML adapters. | Core denylist and event/ML extension denylist checks. | `tests/research/test_strategy_type_adapter_core.py`, `tests/research/test_event_strategy_adapter.py`, `tests/research/test_ml_strategy_adapter.py` |
+| Event extension exposes source/time/schema/alignment/signal refs only. | `EventAdapterExtension`, `validate_event_adapter_extension`, `event_adapter_summary`. | `tests/research/test_event_strategy_adapter.py` |
+| ML extension exposes training/feature/label/artifact/report/prediction refs only. | `MLAdapterExtension`, `validate_ml_adapter_extension`, `ml_adapter_summary`. | `tests/research/test_ml_strategy_adapter.py` |
+| Evidence and handoff remain refs-only; body copies are forbidden. | `AdapterTypedEvidenceRef`, `validate_adapter_evidence_refs`, `adapter_handoff_summary`. | `tests/research/test_strategy_adapter_evidence_refs.py` |
+| Any forbidden operation counter blocks adapter readiness. | `CR158_FORBIDDEN_OPERATION_COUNTERS`, `validate_adapter_operation_counters`, `adapter_no_runtime_summary`. | `tests/research/test_strategy_adapter_no_runtime_guard.py` |
 
 ## Verification Commands
 
 | Command | Result | Summary |
 |---|---|---|
-| `uv run pytest tests/test_cr158_strategy_type_adapter_contract.py tests/test_cr158_event_strategy_adapter.py tests/test_cr158_ml_strategy_adapter.py tests/test_cr158_adapter_evidence_refs.py tests/test_cr158_adapter_no_runtime_guard.py` | PASS | 20 passed in 0.04s |
+| `uv run pytest tests/research/test_strategy_type_adapter_core.py tests/research/test_event_strategy_adapter.py tests/research/test_ml_strategy_adapter.py tests/research/test_strategy_adapter_evidence_refs.py tests/research/test_strategy_adapter_no_runtime_guard.py` | PASS | 20 passed in 0.04s |
 | `uv run --python 3.11 python -m py_compile engine/strategy_type_adapters.py` | PASS | Module compiles |
 | `uv run pytest tests/research/test_event_driven_strategy_e2e_contracts.py tests/research/test_ml_strategy_e2e_contracts.py tests/research/test_strategy_admission_package.py tests/research/test_cross_strategy_reliability_gates.py` | PASS | 60 passed in 0.60s |
 

@@ -84,7 +84,7 @@ Define the EventAdapterExtension typed ref contract without adding live feed, li
 | 动作 | 文件路径 | 变更内容 |
 | --- | --- | --- |
 | 修改 | engine/strategy_type_adapters.py | Add EventAdapterExtension, event required refs and event validator. |
-| 创建 | tests/test_cr158_event_strategy_adapter.py | Add event extension positive, missing-ref, no-feed and isolation tests. |
+| 创建 | tests/research/test_event_strategy_adapter.py | Add event extension positive, missing-ref, no-feed and isolation tests. |
 
 ## 5. 数据模型与持久化设计
 
@@ -143,8 +143,8 @@ Define the EventAdapterExtension typed ref contract without adding live feed, li
 
 | TASK-ID | 动作 | 目标文件 | 详细描述 | 对应测试 |
 | --- | --- | --- | --- | --- |
-| CR158-S02-T1 | 修改 | engine/strategy_type_adapters.py | Add event extension dataclass and validator. | tests/test_cr158_event_strategy_adapter.py |
-| CR158-S02-T2 | 创建 | tests/test_cr158_event_strategy_adapter.py | Cover event P0 refs and no-feed counters. | pytest tests/test_cr158_event_strategy_adapter.py |
+| CR158-S02-T1 | 修改 | engine/strategy_type_adapters.py | Add event extension dataclass and validator. | tests/research/test_event_strategy_adapter.py |
+| CR158-S02-T2 | 创建 | tests/research/test_event_strategy_adapter.py | Cover event P0 refs and no-feed counters. | pytest tests/research/test_event_strategy_adapter.py |
 
 ## 12. 风险、难点与预研建议
 

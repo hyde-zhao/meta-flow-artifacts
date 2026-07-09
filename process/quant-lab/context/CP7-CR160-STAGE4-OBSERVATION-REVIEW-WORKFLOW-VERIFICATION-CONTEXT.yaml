@@ -1,0 +1,114 @@
+schema_version: 1
+capsule_id: CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION-CONTEXT
+change_id: CR-160
+stage: CP7
+phase: story-execution
+status: ready-for-verification
+created_at: "2026-07-09T19:18:08+08:00"
+created_by: host-orchestrator
+validation_mode: design-static-review
+context_policy:
+  read_profile: compact
+  capsule_path: process/context/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION-CONTEXT.yaml
+  full_doc_read_requires_reason: true
+must_read:
+  - process/checks/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-CONSISTENCY.result.json
+  - process/checkpoints/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-REVIEW.md
+  - docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/quality/OBSERVATION-REVIEW-CHECKLIST.md
+  - process/checks/CR160-CR155-SEED-CLASSIFICATION.md
+read_if_needed:
+  - process/context/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-DESIGN-CONTEXT.yaml
+  - process/discussions/CP3-CR160-HLD-DISCUSSION-LOG.md
+  - process/checks/CP3-CR160-DISCUSSION-CHECKPOINT.json
+  - process/changes/summaries/CR-160.summary.json
+  - process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md
+  - process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json
+  - docs/product/TEST-MATRIX.md
+  - docs/product/SCENARIOS.yaml
+do_not_read_by_default:
+  - process/discussions/**
+  - process/archive/**
+  - process/stories/**
+  - process/DEVELOPMENT-PLAN.yaml
+  - full conversation transcript
+  - real data lake/NAS/provider resources
+  - credentials or environment secrets
+token_control:
+  default_budget: compact
+  expand_only_for:
+    - traceability gap
+    - design-contract dispute
+    - verification finding
+    - manual audit
+key_facts:
+  cp3_decision: approved
+  cp3_result_ref: process/checks/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-CONSISTENCY.result.json
+  cp3_checkpoint_ref: process/checkpoints/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-REVIEW.md
+  design_only_route: true
+  skipped_route:
+    CP4: N/A
+    CP5: N/A
+    CP6: N/A
+  approved_cp3_decisions:
+    - CP3-DQ-CR160-001 manual layered review plus fail-closed decision table
+    - CP3-DQ-CR160-002 observation_plan_template vs future observation_plan_instance split
+    - CP3-DQ-CR160-003 contract_only lane cannot output readiness or authorization booleans
+    - CP3-DQ-CR160-004 CR155 is blocked_admission_failed seed sample
+    - CP3-DQ-CR160-005 CR160 approve does not authorize Stage 5 paper/simulation/runtime or external data/operation actions
+  no_runtime_boundary: No code implementation, checker/schema, Story/LLD, new real lake read/write, NAS/provider/credential/broker/trading/runtime/paper/simulation/live/catalog/store/registry/Git remote/release/publish is authorized.
+risks_and_decisions:
+  - id: R-CR160-CP7-DESIGN-ONLY
+    status: expected
+    severity: medium
+    summary: CP7 validates design evidence only; it must not overclaim runtime, paper/simulation, data access, or implementation readiness.
+  - id: R-CR160-RUNTIME-AUTHORIZATION-LEAK
+    status: must_remain_blocked
+    severity: high
+    summary: Verification must fail if any artifact claims runtime_authorized, simulation_ready, paper_candidate, live/trading readiness, or new data access under CR160.
+  - id: CP7-DISPATCH-REQUIRED
+    status: authorized
+    severity: high
+    summary: User explicitly authorized meta-qa execution for CR160 CP7 verification on 2026-07-09.
+handoff:
+  target_agent: meta-qa
+  dispatch_required: true
+  reasoning_profile: high
+  requested_action: Run CP7 design verification for CR160 Stage 4 observation review workflow using CP3 approved design evidence and no-runtime boundary.
+  expected_outputs:
+    - docs/quality/VERIFICATION-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+    - docs/quality/TEST-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+    - docs/quality/REVIEW-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+    - docs/quality/FIXES-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+    - process/returns/CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.CP7.return.json
+    - process/evidence/CR160-CP7-VERIFICATION.index.json
+    - process/checks/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION.result.json
+validation:
+  required_checks:
+    - hld_contract_completeness
+    - checklist_layering_and_testability
+    - cr155_fail_closed_seed_classification
+    - contract_only_no_overclaim
+    - template_instance_boundary
+    - non_authorization_wording
+    - design_only_route_no_story_lld_code_claim
+    - forbidden_operation_counters_zero
+  forbidden_validation_actions:
+    - code implementation
+    - schema or checker implementation
+    - real lake/NAS/provider access
+    - credential or env secret read
+    - QMT/MiniQMT/xtquant/gateway runtime
+    - simulation/paper/live/trading/broker operations
+    - catalog/store/registry/model/prediction writes
+    - publish or Git remote write
+    - external framework clone/install/run
+allowed_reads:
+  - process/checks/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-CONSISTENCY.result.json
+  - process/checkpoints/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-REVIEW.md
+  - docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md
+  - docs/quality/OBSERVATION-REVIEW-CHECKLIST.md
+  - process/checks/CR160-CR155-SEED-CLASSIFICATION.md
+  - process/context/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-DESIGN-CONTEXT.yaml
+  - process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json
+read_expansion_log: []

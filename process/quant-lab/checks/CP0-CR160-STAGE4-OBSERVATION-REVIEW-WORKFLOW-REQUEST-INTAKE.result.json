@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-REQUEST-INTAKE",
+  "cr_id": "CR-160",
+  "checked_at": "2026-07-08T21:55:00+08:00",
+  "context_ref": "process/context/CP0-CR160.context.json",
+  "route_plan_ref": "process/checks/CP0-CR160.route-plan.json",
+  "items": [
+    {
+      "id": "CP0-CR160-01",
+      "category": "workspace-routing",
+      "name": "Process route is healthy",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run meta-flow workspace check --project-root ."
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "process_link_health reported ok; routing_mode=symlink; artifact_git_dirty=clean."
+    },
+    {
+      "id": "CP0-CR160-02",
+      "category": "current-state-recovery",
+      "name": "Current state and CR tracking inputs read",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/state/STATE.current.json",
+        "process/changes/CR-INDEX.json",
+        "process/state/CR-LEDGER.ndjson",
+        "process/state/CHECKPOINT-LEDGER.ndjson"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "STATE.current.json showed active_change=null and current_phase=delivered before CR160 intake."
+    },
+    {
+      "id": "CP0-CR160-03",
+      "category": "cr-tracking",
+      "name": "No active or blocked formal CR conflicts before intake",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run meta-flow check cr-tracking --project-root .",
+        "process/changes/CR-INDEX.json",
+        "process/state/STATE.current.json#active_change"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "cr-tracking command exits 1 due known deferred legacy hygiene issues, but its summary reports active formal CRs none and blocked formal CRs none; these residual issues are documented CR159 follow-up debt and do not conflict with CR160."
+    },
+    {
+      "id": "CP0-CR160-04",
+      "category": "request-intake",
+      "name": "User request captured",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md#变更描述",
+        "process/context/CP0-CR160.context.json#raw_user_request"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "The explicit request to start CR160 CP0 request intake was captured with the preceding review adjustments."
+    },
+    {
+      "id": "CP0-CR160-05",
+      "category": "scope",
+      "name": "Target object and change goal are clear",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/product/BACKLOG.md#BL-CR157-003",
+        "docs/product/USE-CASES.md#DF-CR157-003",
+        "process/docs/design/HLD-STAGE2-MULTIFACTOR-RESEARCH-FRAMEWORK-UPGRADE.md",
+        "engine/mature_multifactor_framework.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR160 fills the CR157 Stage 4 observation review semantic gap rather than creating a new runtime capability."
+    },
+    {
+      "id": "CP0-CR160-06",
+      "category": "seed-evidence",
+      "name": "CR155 blocked seed classification is grounded",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json",
+        "process/checks/CP8-CR155-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT-RELEASE-READINESS.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR155 package_status=BLOCKED, statistical_gate.status=FAIL, decision=ARTIFACT_COMPLETE_ADMISSION_FAILED, paper_candidate=false, rerun_consistency=PASS."
+    },
+    {
+      "id": "CP0-CR160-07",
+      "category": "authorization-boundary",
+      "name": "Initial authorization boundary is explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-2026-07-08.md#结构化权限策略",
+        "process/context/CP0-CR160.context.json#authorization_boundary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CR160 does not authorize simulation, paper, live, trading, runtime, new real lake reads, NAS/provider/credential access, broker operation, registry/store writes, Git remote write, or publish."
+    },
+    {
+      "id": "CP0-CR160-08",
+      "category": "route-plan",
+      "name": "Route plan generated",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP0-CR160.route-plan.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Current meta-flow route planner rejects literal gate_profile=standard. CP0 uses valid gate_profile=standard-lite and records standard-governance route strategy; CP2 may require route adjustment if code implementation is selected."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260708T135800Z0000-cr160formal",
+    "RE-20260708T135800Z0000-cr160code",
+    "RE-20260708T135800Z0000-cr155evid",
+    "RE-20260708T135800Z0000-cr157prod"
+  ],
+  "decision": "PASS",
+  "next_route": "requirement-clarification"
+}

@@ -1,0 +1,267 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-RELEASE-READINESS",
+  "profile": "compact",
+  "story_id": "CR160-DESIGN-ONLY",
+  "cr_id": "CR-160",
+  "checked_at": "2026-07-09T20:18:07+08:00",
+  "context_ref": "process/context/CP8-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-CONTEXT.yaml",
+  "release_context_ref": "process/release/RELEASE-CONTEXT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.yaml",
+  "dispatch_refs": [
+    "process/state/AGENT-DISPATCH-LEDGER.ndjson#CR160-CP7-META-QA-20260709T191808",
+    "process/state/AGENT-DISPATCH-LEDGER.ndjson#CR160-CP7-META-QA-COMPLETED-20260709T193239"
+  ],
+  "evidence_ref": "process/evidence/CR160-CP7-VERIFICATION.index.json",
+  "items": [
+    {
+      "id": "CP8-CR160-01",
+      "category": "entry",
+      "name": "CP7 verification completed with PASS_WITH_RISK and zero blockers",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION.result.json",
+        "process/evidence/CR160-CP7-VERIFICATION.index.json",
+        "process/returns/CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.CP7.return.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "CP7 decision PASS_WITH_RISK; blockers empty; forbidden_operation_count=0."
+    },
+    {
+      "id": "CP8-CR160-02",
+      "category": "release-context",
+      "name": "CR160 release context capsule generated with compact profile",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP8-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-CONTEXT.yaml",
+        "process/release/RELEASE-CONTEXT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "release_artifact_profile=compact because CR160 is a standard internal design/gate contract slice with no install/deploy/runtime/publish authorization."
+    },
+    {
+      "id": "CP8-CR160-03",
+      "category": "release-decision",
+      "name": "Release decision uses READY_WITH_RISK and does not claim RELEASED",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.yaml#release_decision",
+        "process/checkpoints/CP8-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-RELEASE-READINESS.md#待人工决策清单"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "release_decision=READY_WITH_RISK; true release execution is not authorized or executed."
+    },
+    {
+      "id": "CP8-CR160-04",
+      "category": "authorization-boundary",
+      "name": "No code/checker/runtime/data/credential/store/registry/publish/broker/trading/Git remote operation is authorized",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.yaml#non_authorized_items",
+        "process/evidence/CR160-CP7-VERIFICATION.index.json#boundary_check",
+        "process/checkpoints/CP8-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-RELEASE-READINESS.md#审批者摘要"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CP8 approve accepts READY_WITH_RISK only and preserves deny-by-default runtime/data/publish/trading boundary."
+    },
+    {
+      "id": "CP8-CR160-05",
+      "category": "risk-acceptance",
+      "name": "User decision required for CR160 design-only READY_WITH_RISK",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP8-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-RELEASE-READINESS.md#待人工决策清单",
+        "process/checks/CP8-CR160-HUMAN-GATE-LAUNCH-MESSAGE.md"
+      ],
+      "owner": "user",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "User requested DQ-CP8-CR160-004 product baseline refresh before closure; 6 product baseline docs were refreshed and DQ-CP8-CR160-001..004 are accepted by user instruction."
+    },
+    {
+      "id": "CP8-CR160-06",
+      "category": "release-documents",
+      "name": "Compact release documents generated for CR160",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "docs/release/RELEASE-NOTES-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+        "docs/release/DEPLOY-CHECKLIST-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+        "docs/release/ROLLBACK-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+        "docs/release/MIGRATION-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+        "docs/release/FEEDBACK-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "Docs are scoped to readiness; no deploy/runtime/publish action is included."
+    },
+    {
+      "id": "CP8-CR160-07",
+      "category": "install-validation",
+      "name": "Install validation is N/A because no install or platform packaging files changed",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.yaml#install_validation_summary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "No install scripts, package manager config, platform agents or deployment scripts changed."
+    },
+    {
+      "id": "CP8-CR160-08",
+      "category": "follow-up-tracking",
+      "name": "Follow-up candidates are recorded without starting new CRs",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/changes/CR-160-FOLLOW-UP-TRACKING-2026-07-09.md",
+        "docs/release/FEEDBACK-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "CP8 approve accepts candidate tracking only; no candidate is activated."
+    },
+    {
+      "id": "CP8-CR160-09",
+      "category": "product-baseline",
+      "name": "Product baseline refresh completed before CP8 closure",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/product/USE-CASES.md",
+        "docs/product/REQUIREMENTS.md",
+        "docs/product/SCENARIOS.yaml",
+        "docs/product/TEST-MATRIX.md",
+        "docs/product/MVP-SCOPE.md",
+        "docs/product/BACKLOG.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "DQ-CP8-CR160-004 modification fulfilled: DF-CR157-003 and BL-CR157-003 are preserved and marked promoted to CR160 across 6/6 product docs."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260709T194500Z0000-cr160cp8followup"
+  ],
+  "decision": "PASS",
+  "release_decision": "READY_WITH_RISK",
+  "manual_gate_status": "approved",
+  "accepted_human_decisions": [
+    {
+      "id": "DQ-CP8-CR160-001",
+      "decision_type": "risk_acceptance",
+      "status": "accepted_by_user",
+      "summary": "Accept CP7 PASS_WITH_RISK and close CR160 as design-only READY_WITH_RISK.",
+      "recommended": "approve READY_WITH_RISK for design-only Stage 4 workflow delivery.",
+      "resolved_by": "user",
+      "resolved_at": "2026-07-09T20:18:07+08:00",
+      "outcome": "Accepted after CP8 product baseline refresh fix.",
+      "alternatives": [
+        "request changes and return to CP3 design clarification",
+        "reject closure and start a checker/schema implementation CR before closing CR160"
+      ]
+    },
+    {
+      "id": "DQ-CP8-CR160-002",
+      "decision_type": "runtime_authorization",
+      "status": "accepted_by_user",
+      "summary": "Confirm CP8 approval does not authorize code/checker/runtime/data/paper/simulation/live/trading/broker/provider/NAS/catalog/Git/publish operations.",
+      "recommended": "approve deny-by-default non-authorization boundary.",
+      "resolved_by": "user",
+      "resolved_at": "2026-07-09T20:18:07+08:00",
+      "outcome": "Accepted; no new runtime, data, paper/simulation/live, trading, publish or deployment authorization.",
+      "alternatives": [
+        "start a separate high-risk authorization CR",
+        "reject CP8 if runtime readiness must be proven before closure"
+      ]
+    },
+    {
+      "id": "DQ-CP8-CR160-003",
+      "decision_type": "follow_up_tracking",
+      "status": "accepted_by_user",
+      "summary": "Record six follow-up candidates without starting them.",
+      "recommended": "approve follow-up candidate tracking in CR-160-FOLLOW-UP-TRACKING-2026-07-09.md.",
+      "resolved_by": "user",
+      "resolved_at": "2026-07-09T20:18:07+08:00",
+      "outcome": "Accepted; follow-up candidates remain candidates only.",
+      "alternatives": [
+        "promote one or more candidates to active CR after CP8",
+        "remove selected candidates from tracking"
+      ]
+    },
+    {
+      "id": "DQ-CP8-CR160-004",
+      "decision_type": "scope",
+      "status": "accepted_by_user_after_fix",
+      "summary": "Close CR160 scope at Stage 4 design/gate contract after completing product baseline refresh.",
+      "recommended": "approve CR160 closure boundary after 6/6 product docs record DF-CR157-003 / BL-CR157-003 promoted to CR160; Stage 5 paper/simulation gate remains follow-up.",
+      "resolved_by": "user",
+      "resolved_at": "2026-07-09T20:18:07+08:00",
+      "outcome": "User requested product baseline refresh as CP8 closure precondition; fix completed and accepted by user instruction to proceed.",
+      "alternatives": [
+        "return to CP3 to expand scope",
+        "keep CR160 active until a separate Stage 5 authorization design is approved"
+      ]
+    }
+  ],
+  "pending_human_decisions": [],
+  "risk_acceptance": {
+    "decision_id": "DQ-CP8-CR160-001",
+    "decision_type": "risk_acceptance",
+    "status": "accepted_by_user",
+    "risk_ids": [
+      "R-CR160-CP7-DESIGN-ONLY",
+      "R-CR160-FUTURE-CHECKER-DEFERRED",
+      "R-CR160-RUNTIME-AUTHORIZATION-LEAK"
+    ],
+    "recommended_outcome": "accept CP7 PASS_WITH_RISK and close CR160 design-only Stage 4 observation review workflow as READY_WITH_RISK",
+    "reject_route": "CR160_NOT_READY_OR_RETURN_TO_CP3_OR_NEW_CHECKER_SCHEMA_CR"
+  },
+  "not_authorized": [
+    "code_implementation_schema_checker_implementation",
+    "strategy_remediation_or_cr155_promotion",
+    "new_real_lake_read_write_or_real_data_validation_execution",
+    "nas_read_write_sync_or_metadata_normalization",
+    "provider_fetch_or_credential_env_secret_read",
+    "qmt_miniqmt_xtquant_gateway_runtime",
+    "simulation_paper_live_broker_order_trading_operation",
+    "catalog_store_registry_model_prediction_write",
+    "git_remote_write",
+    "true_release_execution_deployment_or_publish"
+  ],
+  "next_route": "CR160_DELIVERED_READY_WITH_RISK",
+  "risk_refs": [
+    "R-CR160-CP7-DESIGN-ONLY",
+    "R-CR160-FUTURE-CHECKER-DEFERRED",
+    "R-CR160-RUNTIME-AUTHORIZATION-LEAK"
+  ],
+  "follow_up_refs": [
+    "FU-CR160-001-strategy-remediation",
+    "FU-CR160-002-real-data-validation",
+    "FU-CR160-003-paper-authorization-gate",
+    "FU-CR160-004-runtime-authorization",
+    "FU-CR160-005-data-lake-governance",
+    "FU-CR160-006-observation-review-checker-schema"
+  ],
+  "updated_at": "2026-07-09T20:18:07+08:00"
+}

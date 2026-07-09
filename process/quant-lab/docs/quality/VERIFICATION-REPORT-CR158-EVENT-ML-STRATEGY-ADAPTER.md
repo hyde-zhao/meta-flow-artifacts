@@ -24,7 +24,7 @@ cp6_evidence_ref: process/evidence/CR158-CP6-IMPLEMENTATION.index.json
 | Object | Path | Verification |
 |---|---|---|
 | Code | `engine/strategy_type_adapters.py` | py_compile, CR158 unit tests, manual contract review |
-| Tests | `tests/test_cr158_*.py` | 20 targeted tests passed |
+| Tests | `tests/research/test_*strategy_adapter*.py`, `tests/research/test_strategy_type_adapter_core.py` | 20 targeted tests passed |
 | Regression | `tests/research/test_event_driven_strategy_e2e_contracts.py`, `tests/research/test_ml_strategy_e2e_contracts.py`, `tests/research/test_strategy_admission_package.py`, `tests/research/test_cross_strategy_reliability_gates.py` | 60 regression tests passed |
 | Process evidence | CP6 result, return packet, evidence index | `meta-flow` checks passed |
 | Quality artifacts | This report, CR158 test report, review, fixes | Scoped CP7 evidence for CP8 |
@@ -55,7 +55,7 @@ cp6_evidence_ref: process/evidence/CR158-CP6-IMPLEMENTATION.index.json
 | Layer | Command / Method | Result |
 |---|---|---|
 | Syntax | `uv run --python 3.11 python -m py_compile engine/strategy_type_adapters.py` | PASS |
-| Targeted unit | `uv run pytest tests/test_cr158_strategy_type_adapter_contract.py tests/test_cr158_event_strategy_adapter.py tests/test_cr158_ml_strategy_adapter.py tests/test_cr158_adapter_evidence_refs.py tests/test_cr158_adapter_no_runtime_guard.py` | PASS, 20 passed |
+| Targeted unit | `uv run pytest tests/research/test_strategy_type_adapter_core.py tests/research/test_event_strategy_adapter.py tests/research/test_ml_strategy_adapter.py tests/research/test_strategy_adapter_evidence_refs.py tests/research/test_strategy_adapter_no_runtime_guard.py` | PASS, 20 passed |
 | Related regression | `uv run pytest tests/research/test_event_driven_strategy_e2e_contracts.py tests/research/test_ml_strategy_e2e_contracts.py tests/research/test_strategy_admission_package.py tests/research/test_cross_strategy_reliability_gates.py` | PASS, 60 passed |
 | Whitespace/static diff | `git diff --check -- <CR158 touched files>` | PASS |
 | Process evidence | `return-check`, `evidence-check`, `cp result-check` for CP6 | PASS |

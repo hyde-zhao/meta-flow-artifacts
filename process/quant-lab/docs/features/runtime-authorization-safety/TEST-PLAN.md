@@ -22,7 +22,7 @@ feature_id: "FEAT-07"
 | forbidden dependency | C 侧不导入 xtquant，consumer 不导入 provider/runtime | CR019 / CR020 / CR010 consumer boundary tests |
 | docs authorization guardrail | README / runbook 不把 verified 写成真实授权 | `tests/test_cr020_docs_runbook_no_authorization.py`、CR016 docs tests |
 | stage / runtime gate | health / capabilities / CP pass 不升级权限 | CR019 run gate tests、CR020 runtime tests |
-| CR158 adapter forbidden counters | event feed、model training、model registry、provider/lake/NAS/credential、runtime/trading、publish、Git remote 计数均为 0；任一非 0 blocked | planned `tests/test_cr158_adapter_no_runtime_guard.py`、CP7 evidence scan |
+| CR158 adapter forbidden counters | event feed、model training、model registry、provider/lake/NAS/credential、runtime/trading、publish、Git remote 计数均为 0；任一非 0 blocked | planned `tests/research/test_strategy_adapter_no_runtime_guard.py`、CP7 evidence scan |
 | CR158 release overclaim guard | release wording 不得把 fixture/static adapter readiness 写成 production/runtime/trading/model-registry readiness | planned docs/release review + CP8 checklist |
 
 ## 手工验证

@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-160",
+  "story_id": "CR160-DESIGN-ONLY",
+  "status": "verified-with-risk",
+  "created_at": "2026-07-09T19:27:06+08:00",
+  "created_by": "meta-qa",
+  "context_ref": "process/context/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION-CONTEXT.yaml",
+  "dispatch_refs": [
+    "process/state/AGENT-DISPATCH-LEDGER.ndjson#CR160-CP7-META-QA-20260709T191808",
+    "process/handoffs/CR160-CP7-META-QA-HANDOFF-2026-07-09.md#dispatch"
+  ],
+  "implementation_ref": null,
+  "touched_files": [
+    {
+      "path": "docs/quality/VERIFICATION-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "change_type": "created"
+    },
+    {
+      "path": "docs/quality/TEST-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "change_type": "created"
+    },
+    {
+      "path": "docs/quality/REVIEW-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "change_type": "created"
+    },
+    {
+      "path": "docs/quality/FIXES-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.CP7.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR160-CP7-VERIFICATION.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION.result.json",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "CP7 design-static verification only; no implementation or design contract changed."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_read_executed": false,
+    "real_lake_write_touched": false,
+    "catalog_write_touched": false,
+    "broker_touched": false,
+    "trading_touched": false,
+    "publish_touched": false,
+    "simulation_or_paper_executed": false,
+    "git_remote_touched": false,
+    "forbidden_operation_count": 0,
+    "notes": "Only static reads/searches and JSON validation were performed. Packaged CR155 evidence JSON was read; referenced real lake paths were not opened."
+  },
+  "verification": {
+    "validation_mode": "design-static-review",
+    "commands_run": [
+      {
+        "command": "sed -n ... process/context/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION-CONTEXT.yaml",
+        "result": "pass",
+        "summary": "Required CP7 context read."
+      },
+      {
+        "command": "sed -n ... process/handoffs/CR160-CP7-META-QA-HANDOFF-2026-07-09.md",
+        "result": "pass",
+        "summary": "Required meta-qa handoff read."
+      },
+      {
+        "command": "sed -n ... process/checks/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-CONSISTENCY.result.json",
+        "result": "pass",
+        "summary": "Required CP3 result read; decision PASS and manual_gate_status approved."
+      },
+      {
+        "command": "sed -n ... docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md docs/quality/OBSERVATION-REVIEW-CHECKLIST.md process/checks/CR160-CR155-SEED-CLASSIFICATION.md",
+        "result": "pass",
+        "summary": "Allowed design/checklist/seed evidence reviewed."
+      },
+      {
+        "command": "rg -n \"paper_candidate=true|simulation_ready=true|runtime_authorized=true|...\" docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md docs/quality/OBSERVATION-REVIEW-CHECKLIST.md process/checks/CR160-CR155-SEED-CLASSIFICATION.md",
+        "result": "pass",
+        "summary": "Static scan found no true readiness assignment; positive terms are forbidden examples or fail conditions."
+      },
+      {
+        "command": "uv run --python 3.11 python -m json.tool process/checks/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-CONSISTENCY.result.json",
+        "result": "pass",
+        "summary": "CP3 result JSON parses."
+      }
+    ],
+    "decision": "PASS_WITH_RISK",
+    "summary": "HLD contract completeness, checklist layering/testability, CR155 fail-closed classification, contract-only no-overclaim ceiling, template/instance boundary, and non-authorization wording all pass CP7 design-static verification."
+  },
+  "evidence_refs": [
+    "process/evidence/CR160-CP7-VERIFICATION.index.json",
+    "docs/quality/VERIFICATION-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+    "docs/quality/TEST-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+    "docs/quality/REVIEW-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+    "docs/quality/FIXES-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md"
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "R-CR160-CP7-DESIGN-ONLY",
+      "severity": "MEDIUM",
+      "status": "open-controlled-for-cp8",
+      "summary": "CP7 validates design evidence only and must not be read as implementation, checker, paper/simulation, or runtime readiness."
+    },
+    {
+      "id": "R-CR160-FUTURE-CHECKER-DEFERRED",
+      "severity": "MEDIUM",
+      "status": "follow-up-candidate",
+      "summary": "Automatic checker/schema remains a future CR candidate, not a current-scope fix."
+    },
+    {
+      "id": "R-CR160-RUNTIME-AUTHORIZATION-LEAK",
+      "severity": "HIGH",
+      "status": "controlled-for-cp8-non-authorization",
+      "summary": "CP8 must explicitly state that approval does not authorize code/checker, real lake/NAS/provider/credential/broker/trading/runtime/paper/simulation/live/catalog/store/registry/Git remote/release/publish actions."
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "proceed_to_cp8_human_gate_with_design_only_risk_acceptance"
+}

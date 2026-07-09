@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3",
+  "checkpoint_id": "CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-CONSISTENCY",
+  "cr_id": "CR-160",
+  "checked_at": "2026-07-08T23:36:39+08:00",
+  "context_ref": "process/context/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-DESIGN-CONTEXT.yaml",
+  "dispatch_refs": [
+    "process/handoffs/CR160-CP3-META-SE-HANDOFF-2026-07-08.md#dispatch"
+  ],
+  "evidence_ref": "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+  "items": [
+    {
+      "id": "CP3-CR160-01",
+      "category": "entry",
+      "name": "CP2 scope gate approved before CP3 design",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP2-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-SCOPE.result.json"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP2 result decision is PASS and manual_gate_status is approved."
+    },
+    {
+      "id": "CP3-CR160-02",
+      "category": "discussion",
+      "name": "Architecture Gray Areas and advisor table are recorded",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/discussions/CP3-CR160-HLD-DISCUSSION-LOG.md",
+        "process/checks/CP3-CR160-DISCUSSION-CHECKPOINT.json",
+        "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md#3-架构灰区与方案形成记录"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Four gray areas are resolved through table-first advisor analysis."
+    },
+    {
+      "id": "CP3-CR160-03",
+      "category": "hld",
+      "name": "HLD covers required Stage 4 workflow objects",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md#6-高层模块与职责划分"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "ObservationReviewInput, EvidenceProfile, AdmissionReadiness, ObservationDecision, EscalationRoute and AuthorizationBoundary are defined."
+    },
+    {
+      "id": "CP3-CR160-04",
+      "category": "checklist",
+      "name": "Observation review checklist is layered across Stage 1, Stage 2, Stage 3 and cross-cutting controls",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/quality/OBSERVATION-REVIEW-CHECKLIST.md"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Checklist is explicitly a human review tool and not an automatic checker."
+    },
+    {
+      "id": "CP3-CR160-05",
+      "category": "observation-plan",
+      "name": "Observation plan template is distinguished from future instance and includes required time model fields",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md#7-observation-plan-template-contract",
+        "docs/quality/OBSERVATION-REVIEW-CHECKLIST.md#observation-plan-template-compliance"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Template includes observation period, checkpoint frequency, tracking metrics, exit criteria, remediation triggers and pause triggers."
+    },
+    {
+      "id": "CP3-CR160-06",
+      "category": "authorization",
+      "name": "Contract-only lane cannot output readiness or authorization booleans",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md#9-decision-table",
+        "docs/quality/OBSERVATION-REVIEW-CHECKLIST.md#post-review-decision-table"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "paper_candidate, simulation_ready and runtime_authorized remain false for contract_only and blocked paths."
+    },
+    {
+      "id": "CP3-CR160-07",
+      "category": "seed-classification",
+      "name": "CR155 is classified as blocked_admission_failed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CR160-CR155-SEED-CLASSIFICATION.md",
+        "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR155 BLOCKED/FAIL/paper_candidate=false/rerun_consistency=PASS maps to blocked_admission_failed, not observation candidate."
+    },
+    {
+      "id": "CP3-CR160-08",
+      "category": "scope",
+      "name": "Design-only route does not produce Story, LLD, code, checker or runtime artifacts",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md#17-分阶段落地建议",
+        "process/context/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-DESIGN-CONTEXT.yaml#deliverables"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Automatic checker is deferred; CP4/CP5/CP6 remain N/A for CR160 design-only route."
+    },
+    {
+      "id": "CP3-CR160-09",
+      "category": "authorization",
+      "name": "CP3 approval does not authorize runtime, data, broker, catalog, Git remote, release or publish operations",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+        "docs/quality/OBSERVATION-REVIEW-CHECKLIST.md",
+        "process/checks/CR160-CR155-SEED-CLASSIFICATION.md"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "All produced design artifacts include non-authorization wording."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260708T153639Z0000-cr160cp3discussion",
+    "RE-20260708T135800Z0000-cr155evid"
+  ],
+  "pending_human_decisions": [],
+  "compatibility_note": "This file uses the local checkpoint-manager CP-RESULT.schema.json shape: checkpoint=CP3, required items/blockers/waivers/decision fields, optional non-story context/evidence/dispatch refs.",
+  "decision": "PASS",
+  "next_route": "CP7",
+  "manual_gate_status": "approved",
+  "approved_at": "2026-07-09T19:09:29+08:00",
+  "approved_by": "user",
+  "accepted_human_decisions": [
+    "CP3-DQ-CR160-001",
+    "CP3-DQ-CR160-002",
+    "CP3-DQ-CR160-003",
+    "CP3-DQ-CR160-004",
+    "CP3-DQ-CR160-005"
+  ]
+}

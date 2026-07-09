@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "stage": "CP7",
+  "cr_id": "CR-160",
+  "story_id": "CR160-DESIGN-ONLY",
+  "return_ref": "process/returns/CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.CP7.return.json",
+  "changed_files": [
+    {
+      "path": "docs/quality/VERIFICATION-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "change_type": "created"
+    },
+    {
+      "path": "docs/quality/TEST-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "change_type": "created"
+    },
+    {
+      "path": "docs/quality/REVIEW-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "change_type": "created"
+    },
+    {
+      "path": "docs/quality/FIXES-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.CP7.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR160-CP7-VERIFICATION.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION.result.json",
+      "change_type": "created"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "process/context/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION-CONTEXT.yaml",
+      "kind": "cp7_context"
+    },
+    {
+      "path": "process/handoffs/CR160-CP7-META-QA-HANDOFF-2026-07-09.md",
+      "kind": "handoff"
+    },
+    {
+      "path": "process/checks/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-CONSISTENCY.result.json",
+      "kind": "upstream_cp3_result"
+    },
+    {
+      "path": "process/checkpoints/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-REVIEW.md",
+      "kind": "upstream_manual_gate"
+    },
+    {
+      "path": "docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "kind": "design_hld"
+    },
+    {
+      "path": "docs/quality/OBSERVATION-REVIEW-CHECKLIST.md",
+      "kind": "manual_review_checklist"
+    },
+    {
+      "path": "process/checks/CR160-CR155-SEED-CLASSIFICATION.md",
+      "kind": "seed_classification"
+    },
+    {
+      "path": "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json",
+      "kind": "packaged_prior_evidence"
+    },
+    {
+      "path": "docs/quality/VERIFICATION-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "kind": "verification_report"
+    },
+    {
+      "path": "docs/quality/TEST-REPORT-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "kind": "test_report"
+    },
+    {
+      "path": "docs/quality/REVIEW-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "kind": "review_report"
+    },
+    {
+      "path": "docs/quality/FIXES-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "kind": "fixes_report"
+    }
+  ],
+  "commands": [
+    {
+      "command": "sed -n '1,260p' process/context/CP7-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-VERIFICATION-CONTEXT.yaml",
+      "result": "pass",
+      "summary": "Required CP7 context read."
+    },
+    {
+      "command": "sed -n '1,260p' process/handoffs/CR160-CP7-META-QA-HANDOFF-2026-07-09.md",
+      "result": "pass",
+      "summary": "Required CP7 handoff read."
+    },
+    {
+      "command": "sed -n '1,240p' process/checks/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-CONSISTENCY.result.json",
+      "result": "pass",
+      "summary": "Required CP3 result read."
+    },
+    {
+      "command": "sed -n '1,760p' docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md",
+      "result": "pass",
+      "summary": "Allowed HLD read for design contract verification."
+    },
+    {
+      "command": "sed -n '1,300p' docs/quality/OBSERVATION-REVIEW-CHECKLIST.md",
+      "result": "pass",
+      "summary": "Allowed checklist read for layering and testability verification."
+    },
+    {
+      "command": "sed -n '1,260p' process/checks/CR160-CR155-SEED-CLASSIFICATION.md",
+      "result": "pass",
+      "summary": "Allowed seed classification read."
+    },
+    {
+      "command": "sed -n '1,420p' process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json",
+      "result": "pass",
+      "summary": "Allowed packaged prior evidence read; referenced real lake paths were not opened."
+    },
+    {
+      "command": "rg -n \"paper_candidate=true|simulation_ready=true|runtime_authorized=true|paper_candidate: true|simulation_ready: true|runtime_authorized: true|simulation_candidate=true|not_simulation_auth=false|authorize|authorized|runtime|simulation|paper|live|broker|trading|lake|NAS|provider|credential|catalog|store|registry|Git remote|publish|checker|schema\" docs/design/HLD-STAGE4-OBSERVATION-REVIEW-WORKFLOW.md docs/quality/OBSERVATION-REVIEW-CHECKLIST.md process/checks/CR160-CR155-SEED-CLASSIFICATION.md",
+      "result": "pass",
+      "summary": "Static scan found non-authorization and forbidden-example matches only; no positive readiness assignment."
+    },
+    {
+      "command": "uv run --python 3.11 python -m json.tool process/checks/CP3-CR160-STAGE4-OBSERVATION-REVIEW-WORKFLOW-HLD-CONSISTENCY.result.json",
+      "result": "pass",
+      "summary": "Upstream CP3 result JSON parses."
+    }
+  ],
+  "boundary_check": {
+    "forbidden_operation_count": 0,
+    "real_lake_read_executed": false,
+    "real_lake_write_executed": false,
+    "nas_operation_executed": false,
+    "provider_fetch_executed": false,
+    "credential_read_executed": false,
+    "broker_executed": false,
+    "trading_executed": false,
+    "runtime_executed": false,
+    "simulation_or_paper_executed": false,
+    "catalog_or_registry_write_executed": false,
+    "git_remote_executed": false,
+    "publish_executed": false
+  },
+  "decision": "PASS_WITH_RISK",
+  "risks": [
+    {
+      "id": "R-CR160-CP7-DESIGN-ONLY",
+      "severity": "MEDIUM",
+      "status": "open-controlled-for-cp8",
+      "summary": "Design-static evidence does not prove executable checker or runtime readiness."
+    },
+    {
+      "id": "R-CR160-FUTURE-CHECKER-DEFERRED",
+      "severity": "MEDIUM",
+      "status": "follow-up-candidate",
+      "summary": "Automatic checker/schema remains deferred."
+    },
+    {
+      "id": "R-CR160-RUNTIME-AUTHORIZATION-LEAK",
+      "severity": "HIGH",
+      "status": "controlled-for-cp8-non-authorization",
+      "summary": "CP8 must preserve explicit non-authorization wording."
+    }
+  ],
+  "waivers": []
+}

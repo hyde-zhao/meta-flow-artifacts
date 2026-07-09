@@ -86,7 +86,7 @@ Define the CR158 adapter forbidden operation counter report and fail-closed bloc
 | 动作 | 文件路径 | 变更内容 |
 | --- | --- | --- |
 | 修改 | engine/strategy_type_adapters.py | Add CR158 counter tuple, report dataclass, zero factory and validation helper. |
-| 创建 | tests/test_cr158_adapter_no_runtime_guard.py | Add zero, nonzero, missing/default and limitation wording tests. |
+| 创建 | tests/research/test_strategy_adapter_no_runtime_guard.py | Add zero, nonzero, missing/default and limitation wording tests. |
 
 ## 5. 数据模型与持久化设计
 
@@ -145,8 +145,8 @@ Define the CR158 adapter forbidden operation counter report and fail-closed bloc
 
 | TASK-ID | 动作 | 目标文件 | 详细描述 | 对应测试 |
 | --- | --- | --- | --- | --- |
-| CR158-S05-T1 | 修改 | engine/strategy_type_adapters.py | Add counter report, zero factory and validator. | tests/test_cr158_adapter_no_runtime_guard.py |
-| CR158-S05-T2 | 创建 | tests/test_cr158_adapter_no_runtime_guard.py | Cover forbidden counter semantics and limitation summary. | pytest tests/test_cr158_adapter_no_runtime_guard.py |
+| CR158-S05-T1 | 修改 | engine/strategy_type_adapters.py | Add counter report, zero factory and validator. | tests/research/test_strategy_adapter_no_runtime_guard.py |
+| CR158-S05-T2 | 创建 | tests/research/test_strategy_adapter_no_runtime_guard.py | Cover forbidden counter semantics and limitation summary. | pytest tests/research/test_strategy_adapter_no_runtime_guard.py |
 
 ## 12. 风险、难点与预研建议
 

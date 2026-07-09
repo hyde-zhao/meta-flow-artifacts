@@ -31,9 +31,9 @@ lld_policy:
 file_ownership:
   primary:
   - engine/strategy_type_adapters.py
-  - tests/test_cr158_event_strategy_adapter.py
+  - tests/research/test_event_strategy_adapter.py
   shared:
-  - tests/test_cr158_strategy_type_adapter_contract.py
+  - tests/research/test_strategy_type_adapter_core.py
   merge_owner: CR158-S02-event-strategy-adapter-extension
   forbidden:
   - .env
@@ -75,7 +75,7 @@ closed_at: '2026-07-05T19:20:00+08:00'
 ## 开发上下文（dev_context）
 
 - 输入文件：CR158 HLD、ADR-CR158-001/003、REQ-CR158-002、SC-CR158-P01/N01/N02
-- 输出文件：planned `engine/strategy_type_adapters.py` event extension、planned `tests/test_cr158_event_strategy_adapter.py`
+- 输出文件：planned `engine/strategy_type_adapters.py` event extension、planned `tests/research/test_event_strategy_adapter.py`
 - 设计约束：真实 event feed、live listener、provider fetch、gateway call 计数必须为 0。
 
 ### 依赖与并行门控
@@ -93,7 +93,7 @@ closed_at: '2026-07-05T19:20:00+08:00'
 | 文件影响 | planned adapter contract module and event adapter tests |
 | 接口 / 数据 / 权限变化 | 新增 event typed refs；不新增真实 event feed/runtime 权限。 |
 | 异常、失败与回退 | 缺 event source ref、alignment policy ref 或 signal output ref 必须 blocked。 |
-| 测试入口 | planned `tests/test_cr158_event_strategy_adapter.py` |
+| 测试入口 | planned `tests/research/test_event_strategy_adapter.py` |
 | 风险与重访条件 | 若需要真实 event feed，另起 runtime authorization CR。 |
 
 ## 量化验收标准（acceptance_criteria）
