@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "stage": "CP7",
+  "cr_id": "CR-162",
+  "verification_mode": "static-document-and-existing-evidence",
+  "return_ref": "process/returns/CR162-PRODUCT-BASELINE.CP7.return.json",
+  "changed_files": [
+    {"path": "docs/product/USE-CASES.md", "change_type": "modified"},
+    {"path": "docs/product/REQUIREMENTS.md", "change_type": "modified"},
+    {"path": "docs/product/SCENARIOS.yaml", "change_type": "modified"},
+    {"path": "docs/product/TEST-MATRIX.md", "change_type": "modified"},
+    {"path": "docs/product/MVP-SCOPE.md", "change_type": "modified"},
+    {"path": "docs/product/BACKLOG.md", "change_type": "modified"},
+    {"path": "process/docs/features/factor-research-loop/DESIGN.md", "change_type": "modified"},
+    {"path": "process/docs/features/factor-research-loop/TEST-PLAN.md", "change_type": "modified"},
+    {"path": "process/docs/features/factor-research-loop/TASKS.md", "change_type": "modified"}
+  ],
+  "commands": [
+    {"command": "rg -l 'CR162' <nine target documents>", "result": "pass", "summary": "All nine CP2-approved target documents were found."},
+    {"command": "rg -n '<seven evidence object names>' process/docs/features/factor-research-loop/DESIGN.md", "result": "pass", "summary": "All seven evidence objects were found."},
+    {"command": "uv run --python 3.11 python -c 'yaml.safe_load(...)'", "result": "pass", "summary": "SCENARIOS.yaml parses."},
+    {"command": "git diff --check", "result": "pass", "summary": "No whitespace errors."}
+  ],
+  "boundary_check": {
+    "forbidden_operation_count": 0,
+    "source_or_test_implementation": false,
+    "research_engine_instrumentation": false,
+    "statistical_or_economic_computation": false,
+    "real_data_or_runtime_operation": false,
+    "git_remote_or_publish": false
+  },
+  "decision": "PASS_WITH_RISK",
+  "risks": [
+    {"id": "R-CR162-RECURRENCE-CONTROL-GAP", "severity": "MEDIUM", "status": "follow-up-candidate", "summary": "FU-CR162-001 is not implemented in this documentation-only correction."}
+  ]
+}

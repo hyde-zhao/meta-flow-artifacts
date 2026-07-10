@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.7"
+version: "1.8"
 feature_id: "FEAT-03"
 ---
 
@@ -18,6 +18,7 @@ feature_id: "FEAT-03"
 | 1.6 | 2026-06-28 | codex | 增补研究引擎稳定模块和脚本归档测试：测试 import 指向领域名模块，质量检查禁止新增不稳定 engine / root script 主入口。 |
 | 1.7 | 2026-07-01 | host-orchestrator | CR151 增补统计准入门测试入口：FDR、robust stats、walk-forward/OOS、PBO/DSR、fail-closed 状态、CR150 linkage 和 static-only 证据边界。 |
 | 1.8 | 2026-07-05 | host-orchestrator | CR158 增补 event/ML adapter contract、typed refs-only evidence 和 no-runtime fixture/static 测试入口。 |
+| 1.9 | 2026-07-10 | host-orchestrator | CR162 增补 CR161 evidence availability overlay 的静态追溯、fail-closed、negative regression 和 no-overclaim 验证入口。 |
 
 ## 测试矩阵
 
@@ -45,6 +46,10 @@ feature_id: "FEAT-03"
 | CR158 event typed extension | Event fixture 必须包含 event source/time/payload schema/alignment policy/signal output/blocked reason refs；真实 feed/listener/provider/gateway 计数为 0 | planned `tests/research/test_event_strategy_adapter.py` |
 | CR158 ML typed extension | ML fixture 必须包含 training snapshot/feature set/label policy/model artifact/validation report/prediction signal/blocked reason refs；真实 training/model service/registry 计数为 0 | planned `tests/research/test_ml_strategy_adapter.py` |
 | CR158 typed evidence refs-only | Event / ML evidence extension 只能保存 refs、hash、status、owner 和短元数据；body_copy_count 为 0 | planned `tests/research/test_strategy_adapter_evidence_refs.py` |
+| CR161 seven-object baseline traceability | 七对象、C1-C4 映射、CR151/CR154 integration 和 FU-CR161-001..006 在产品/feature 基线中均可发现 | CR162 CP7 static baseline verification |
+| CR161 typed-unavailable fail-closed | 缺 lineage、p-values、fold metrics、成本或容量输入时只能写 `typed_unavailable` 并阻断，不能 PASS | CR162 CP7 static wording and traceability review |
+| CR161 CR155 negative regression | CR155 仍为 `blocked`，不重建历史输入，不因 contract refresh 提升 | CR162 CP7 existing-evidence review |
+| CR161 no-overclaim boundary | 文档不得声称 FDR/PBO/DSR、fold OOS、TCA/impact 或 capacity sizing 已计算，也不得声称 runtime readiness | CR162 CP7 static wording scan |
 | Stage 3 pass gate | 只有 FactorModelValidationReport 核心门禁无 blocked、mature admission PASS、runner offline / preflight PASS 且 no-real-op 计数为 0 的候选才能作为 Stage 3 输出；blocked 候选必须保持研究失败 / 诊断状态 | `tests/test_stage3_factor_model_validation_integration.py`、后续 `tests/test_stage3_candidate_pass_gate.py` |
 | 候选搜索 / sweep | 多组因子、权重、样本切分、持仓数、换手和成本参数搜索时，每个候选都必须生成评估报告；只有通过候选可被标记为 stage3_pass_candidate | 后续 `tests/test_stage3_candidate_sweep.py` |
 | FactorPanel / LabelWindow | 四层值、coverage、label window fail-closed | `tests/test_cr030_factor_panel_label_window_gates.py` |
@@ -63,3 +68,4 @@ feature_id: "FEAT-03"
 | Stage 3 blocked 运行复盘 | 明确 blocked 原因、修复方向和下一轮候选配置；不得把 blocked 运行写入 Stage 4 observation 输入 |
 | CR151 release wording | 明确 `effective_validation_mode=static-only`，statistical PASS 不代表 simulation / paper / live / trading readiness。 |
 | CR158 adapter release wording | 明确 `effective_validation_mode=static-only`，adapter PASS 不代表真实 feed、真实训练、registry、runtime、simulation、paper、live、trading 或 publish readiness。 |
+| CR161 evidence availability wording | 明确 current slice provides availability contracts and `typed_unavailable` fail-closed semantics, not computed statistical/economic/capacity proof or runtime readiness. |

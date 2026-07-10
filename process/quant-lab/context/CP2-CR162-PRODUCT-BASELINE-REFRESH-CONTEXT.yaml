@@ -1,0 +1,101 @@
+schema_version: 1
+context_id: CP2-CR162-PRODUCT-BASELINE-REFRESH
+cr_id: CR-162
+created_at: "2026-07-10T12:30:31+00:00"
+read_profile: compact
+phase: requirement-clarification
+context_type: cp2-requirement
+source_gates:
+  cp0:
+    result_ref: process/checks/CP0-CR-162-BOOTSTRAP.result.json
+    route_plan_ref: process/checks/CP0-CR162.route-plan.json
+  cp1:
+    result_ref: process/checks/CP1-CR162-PRODUCT-BASELINE-COMPLETENESS.result.json
+context_policy:
+  must_read:
+    - process/changes/summaries/CR-162.summary.json
+    - process/checks/CP0-CR162.route-plan.json
+    - process/checks/CP1-CR162-PRODUCT-BASELINE-COMPLETENESS.result.json
+    - process/changes/CR-162.md
+  read_if_needed:
+    - process/changes/CR-161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-2026-07-09.md
+    - docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    - docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    - docs/product/USE-CASES.md
+    - docs/product/REQUIREMENTS.md
+    - docs/product/SCENARIOS.yaml
+    - docs/product/TEST-MATRIX.md
+    - docs/product/MVP-SCOPE.md
+    - docs/product/BACKLOG.md
+    - process/docs/features/factor-research-loop/DESIGN.md
+    - process/docs/features/factor-research-loop/TEST-PLAN.md
+    - process/docs/features/factor-research-loop/TASKS.md
+  do_not_read_by_default:
+    - process/archive/**
+    - full research run directories under /home/hyde/data/quant-lab
+    - credentials, .env, provider configs, broker/runtime sessions
+full_doc_read_policy:
+  allowed_reasons:
+    - requirement_traceability
+    - product_baseline_refresh
+    - human_audit
+    - conflict_resolution
+  default_instruction: Read the compact CR162 baseline first. Expand only to map a CR161 contract to a specific product or feature document, and record the expansion.
+scope:
+  in_scope:
+    - Incrementally refresh the six CR161 product baseline documents.
+    - Incrementally refresh the three CR161 factor-research-loop feature baseline documents.
+    - Preserve prior CR157/CR158/CR160 baseline and append CR162 revision records.
+    - Reframe CR161 historical baseline after correction without changing its HLD, ADR, CP7 evidence, waiver, or closed status.
+    - Add static scenario and test-matrix traceability for the refreshed baseline.
+  out_of_scope:
+    - HLD or ADR semantic changes.
+    - Source, schema, checker, research-engine, or test implementation.
+    - FDR, PBO, DSR, OOS, TCA, market-impact, capacity, or liquidity computation.
+    - Real data, credentials, provider, NAS, broker, simulation, paper, live, trading, external framework, Git remote, or publish operations.
+requirements:
+  - id: REQ-CR162-001
+    requirement: Nine target documents must contain an incremental CR161 baseline reference and a CR162 revision record.
+  - id: REQ-CR162-002
+    requirement: Product baseline must distinguish evidence-availability/fail-closed contracts from computable FDR/PBO/DSR/OOS/TCA/capacity proof.
+  - id: REQ-CR162-003
+    requirement: CR155 remains blocked negative regression only; no historical evidence is reconstructed.
+  - id: REQ-CR162-004
+    requirement: FU-CR161-001 through FU-CR161-006 remain candidates and do not authorize implementation or runtime.
+  - id: REQ-CR162-005
+    requirement: CR161 historical delivery is reframed by CR162 rather than reopened or rewritten.
+decisions:
+  - id: DQ-CP2-CR162-001
+    type: scope
+    status: approved
+  - id: DQ-CP2-CR162-002
+    type: historical_reframe
+    status: approved
+  - id: DQ-CP2-CR162-003
+    type: follow_up_tracking
+    status: approved
+risks_and_decisions:
+  - id: R-CR162-BASELINE-CONTRACT-DRIFT
+    status: requires_cp2_scope_confirmation
+  - id: R-CR162-HISTORICAL-OVERWRITE
+    status: controlled_by_reframe_not_reopen
+  - id: R-CR162-OVERCLAIM
+    status: controlled_by_design_only_wording
+authorization_boundary:
+  not_authorized:
+    - hld_or_adr_semantic_change
+    - source_or_test_implementation
+    - research_engine_trial_lineage_instrumentation
+    - fdr_pbo_dsr_oos_tca_capacity_computation
+    - new_real_lake_read_or_write
+    - nas_provider_credential_or_broker_access
+    - simulation_paper_live_or_trading_runtime
+    - external_framework_clone_install_or_run
+    - git_remote_write_or_publish
+downstream_tasks:
+  - Record CP3 through CP6 as N/A under the approved documentation-only route.
+  - Update nine documents, generate CP7 static verification, and present CP8 readiness.
+token_control:
+  read_profile: compact
+  max_source_files: 14
+  do_not_copy_full_documents: true

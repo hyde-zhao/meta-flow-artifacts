@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.7"
+version: "1.8"
 feature_id: "FEAT-03"
 ---
 
@@ -18,6 +18,7 @@ feature_id: "FEAT-03"
 | 1.6 | 2026-06-28 | codex | 增补研究引擎稳定模块整改任务：领域名模块、共享 helper、旧 engine 入口归档、脚本归档和测试引用迁移。 |
 | 1.7 | 2026-07-01 | host-orchestrator | CR151 增补 Strategy Admission Statistical Gate 任务：统计报告合同、fail-closed evaluator、admission/completion linkage 和 static-only evidence wording。 |
 | 1.8 | 2026-07-05 | host-orchestrator | CR158 增补 Event + ML Strategy Adapter 任务：shared core、typed event/ML extensions、typed evidence refs 和 static-only release wording。 |
+| 1.9 | 2026-07-10 | host-orchestrator | CR162 回写 CR161 evidence-producer follow-up 映射；当前仅为 baseline tracking，不创建实施任务。 |
 
 | Task ID | 任务 | 输入 | 输出 | 文件范围 | 验证 |
 |---|---|---|---|---|---|
@@ -44,6 +45,12 @@ feature_id: "FEAT-03"
 | FEAT-03-T01O | CR158 ML strategy adapter extension | CR158 shared core、REQ-CR158-003 | ML typed extension, model artifact refs and validation refs | planned ML adapter module under strategy contracts | planned `tests/research/test_ml_strategy_adapter.py` |
 | FEAT-03-T01P | CR158 adapter evidence typed refs | REQ-CR158-004、CR157 refs-only baseline | event/ML evidence extension refs, body_copy_count=0 validation | planned evidence index helpers | planned `tests/research/test_strategy_adapter_evidence_refs.py` |
 | FEAT-03-T01Q | CR158 adapter release wording | REQ-CR158-007、CP8 wording boundary | static-only adapter readiness wording and trace links | `docs/release/*`、component docs after CP6/CP7 | CP7/CP8 review |
+| FEAT-03-FU-CR161-001 | Experiment-family trial lineage instrumentation | FU-CR161-001 | experiment family identity、trial count、parameter-search lineage | future research-engine CR | independent design + implementation route |
+| FEAT-03-FU-CR161-002 | C1 multiple-testing / data-snooping / overfit evidence producer | FU-CR161-002 | typed FDR/PBO/DSR or typed_unavailable evidence | future statistical-evidence CR | contract, fixture and independent CP7 verification |
+| FEAT-03-FU-CR161-003 | C2 walk-forward / OOS evidence producer | FU-CR161-003 | purged-embargo fold manifest and OOS metrics | future OOS-validation CR | fold-level validation and fail-closed cases |
+| FEAT-03-FU-CR161-004 | C3/C4 economic cost and capacity evidence producer | FU-CR161-004 | TCA/impact and capacity/liquidity evidence | future economics-capacity CR | auditable input and no-overclaim verification |
+| FEAT-03-FU-CR161-005 | Existing-gate integration and regression implementation | FU-CR161-005 | CR151/CR154 integration, CR155 remains blocked | future integration CR | negative regression suite |
+| FEAT-03-FU-CR161-006 | Independent verifier-lane resilience | FU-CR161-006 | independent CP7 verifier evidence for high-risk follow-ups | future process/QA CR | dispatch and independence verification |
 | FEAT-03-T02 | 维护 FactorPanel / LabelWindow gates | CR-011 + CR-030 | fail-closed panel / label policy | `engine/factor_panel_contracts.py` | label window tests |
 | FEAT-03-T03 | 维护评价报告与组合器 | factor panel / benchmark / cost | report 和 portfolio plan | `engine/factor_evaluation.py`、`engine/multifactor_combiner.py` | evaluation / combiner tests |
 | FEAT-03-T04 | 维护 ExperimentManifest / ReportCatalog | run spec / report path | 可复跑 manifest | `engine/research_manifest.py` | manifest catalog tests |

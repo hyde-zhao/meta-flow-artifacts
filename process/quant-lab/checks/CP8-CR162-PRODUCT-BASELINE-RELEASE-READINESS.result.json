@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR162-PRODUCT-BASELINE-RELEASE-READINESS",
+  "profile": "compact",
+  "story_id": "CR162-PRODUCT-BASELINE",
+  "cr_id": "CR-162",
+  "checked_at": "2026-07-10T21:08:01+08:00",
+  "context_ref": "process/context/CP8-CR162-PRODUCT-BASELINE-CONTEXT.yaml",
+  "release_context_ref": "process/release/RELEASE-CONTEXT-CR162-PRODUCT-BASELINE-REFRESH.yaml",
+  "dispatch_refs": ["process/state/AGENT-DISPATCH-LEDGER.ndjson#AD-CR162-CP7-META-QA-NOT-REQUIRED-20260710T205443+0800"],
+  "evidence_ref": "process/evidence/CR162-CP7-VERIFICATION.index.json",
+  "items": [
+    {"id": "CP8-CR162-01", "category": "entry", "name": "CP7 correction verification completed with zero blockers", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/checks/CP7-CR162-PRODUCT-BASELINE-VERIFICATION.result.json", "process/evidence/CR162-CP7-VERIFICATION.index.json", "process/returns/CR162-PRODUCT-BASELINE.CP7.return.json"], "owner": "host-orchestrator", "route_on_fail": "block_release", "waiver_ref": null, "notes": "CP7 is PASS_WITH_RISK; the corrective evidence itself has no blocker."},
+    {"id": "CP8-CR162-02", "category": "release-context", "name": "Compact release context and required release documents are generated", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/context/CP8-CR162-PRODUCT-BASELINE-CONTEXT.yaml", "process/release/RELEASE-CONTEXT-CR162-PRODUCT-BASELINE-REFRESH.yaml", "docs/release/RELEASE-NOTES-CR162-PRODUCT-BASELINE-REFRESH.md"], "owner": "host-orchestrator", "route_on_fail": "block_release", "waiver_ref": null, "notes": "No deployable surface exists; profile is compact."},
+    {"id": "CP8-CR162-03", "category": "product-baseline", "name": "Nine-document refresh and CR161 reframe are ready for closure", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["docs/quality/VERIFICATION-REPORT-CR162-PRODUCT-BASELINE-REFRESH.md#nine-document-matrix", "process/changes/summaries/CR-161.summary.json"], "owner": "host-orchestrator", "route_on_fail": "block_release", "waiver_ref": null, "notes": "Current baseline is corrected; CR161 historical design and prior closure are preserved."},
+    {"id": "CP8-CR162-04", "category": "follow-up-tracking", "name": "Recurrence-prevention candidate is tracked without scope expansion", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/changes/CR-162-FOLLOW-UP-TRACKING-2026-07-10.md", "docs/release/FEEDBACK-CR162-PRODUCT-BASELINE-REFRESH.md"], "owner": "host-orchestrator", "route_on_fail": "create_followup_candidate", "waiver_ref": null, "notes": "FU-CR162-001 is a candidate only and was intentionally not implemented in CR162."},
+    {"id": "CP8-CR162-05", "category": "authorization-boundary", "name": "Closure remains documentation-only and denies runtime and Git remote actions", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/release/RELEASE-CONTEXT-CR162-PRODUCT-BASELINE-REFRESH.yaml", "docs/release/DEPLOY-CHECKLIST-CR162-PRODUCT-BASELINE-REFRESH.md"], "owner": "host-orchestrator", "route_on_fail": "escalate_runtime_high_risk", "waiver_ref": null, "notes": "CP8 approval closes CR162; separate explicit user instruction is required for any remote push."}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260710T130048Z0000-f28599a6"],
+  "decision": "PASS",
+  "release_decision": "READY_WITH_RISK",
+  "manual_gate_status": "approved",
+  "approved_by": "user",
+  "approved_at": "2026-07-10T21:08:01+08:00",
+  "accepted_decision_ids": ["DQ-CP8-CR162-001", "DQ-CP8-CR162-002", "DQ-CP8-CR162-003"],
+  "accepted_human_decisions": [
+    {"id": "DQ-CP8-CR162-001", "decision_type": "risk_acceptance", "summary": "Accept READY_WITH_RISK closure while the generic recurrence checker remains separate candidate FU-CR162-001.", "recommended": "Approve closure; the current corrective scope is complete and generic checker implementation must use a separate CR.", "alternatives": ["Require checker implementation before closure.", "Leave CR162 open pending a process implementation CR."]},
+    {"id": "DQ-CP8-CR162-002", "decision_type": "runtime_authorization", "summary": "Confirm CP8 approval does not authorize implementation, computation, data, runtime, trading, Git remote or publish actions.", "recommended": "Approve deny-by-default boundary.", "alternatives": ["Open a separate authorized CR for a specific action."]},
+    {"id": "DQ-CP8-CR162-003", "decision_type": "follow_up_tracking", "summary": "Keep FU-CR161-001..006 and FU-CR162-001 as candidates without activation.", "recommended": "Approve candidate tracking only.", "alternatives": ["Promote one candidate through a separate CP0/CP2 process."]}
+  ],
+  "pending_human_decisions": [],
+  "not_authorized": ["source_test_schema_or_checker_implementation", "fdr_pbo_dsr_oos_tca_capacity_computation", "real_data_credential_provider_nas_broker_runtime_or_trading", "git_remote_write_or_publish"],
+  "next_route": "CR162_CLOSED_READY_WITH_RISK"
+}

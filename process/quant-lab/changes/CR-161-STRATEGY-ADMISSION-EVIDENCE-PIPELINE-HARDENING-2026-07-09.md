@@ -42,9 +42,10 @@ acceptance_criteria: "CP2 confirms contract-first evidence hardening, typed_unav
 close_condition: "CP8 approves delivered evidence contracts, admission integration semantics, verification evidence, and follow-up tracking for research-engine instrumentation and economic/capacity extensions."
 cr_index_path: "process/changes/CR-INDEX.json"
 current_requirement_baseline_path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
-historical_baseline_status: "active"
-reframed_by: []
-reframe_summary: ""
+historical_baseline_status: "reframed"
+reframed_by:
+  - "CR-162"
+reframe_summary: "CR162 refreshed the nine promised product and feature baseline documents after CR161 closure; CR161 design, CP7 evidence, waiver and CP8 READY_WITH_RISK decision remain historical."
 goal_ref: "ROADMAP-QUANT-RESEARCH-PRODUCTION"
 goal_statement: "Upgrade strategy admission from contract-visible evidence slots to computable or explicitly unavailable fail-closed evidence semantics."
 user_goal_impact: "Prevents strategies from passing admission when trial lineage, multiple-testing evidence, OOS evidence, or economic/capacity evidence is missing; preserves CR155 as a blocked negative sample."

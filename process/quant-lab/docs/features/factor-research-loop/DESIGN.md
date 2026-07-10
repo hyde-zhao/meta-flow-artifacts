@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.8"
+version: "1.9"
 feature_id: "FEAT-03"
 source_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md"
 source_blueprint: "docs/design/BLUEPRINT.md"
@@ -23,6 +23,7 @@ change: "CR-031"
 | 1.7 | 2026-06-28 | codex | 增补研究引擎稳定模块整改：chapter/stage/root 旧入口归档到 legacy archive，领域名模块和共享 helper 成为主实现面。 |
 | 1.8 | 2026-07-01 | host-orchestrator | CR151 增补 Strategy Admission Statistical Gate：Wave A 统计准入合同、fail-closed 四态门、CR150 linkage 和 static-only evidence；显式 deferred Wave B 评价工件。 |
 | 1.9 | 2026-07-05 | host-orchestrator | CR158 增补 Event + ML Strategy Adapter：thin shared core、typed event/ML extension、refs-only evidence 和 fixture/static validation boundary。 |
+| 1.10 | 2026-07-10 | host-orchestrator | CR162 回写 CR161 七对象 evidence availability overlay、typed_unavailable fail-closed ceiling 和 deferred producers；不改变已关闭 CR161 HLD/ADR。 |
 
 ## Feature 摘要
 
@@ -47,6 +48,7 @@ change: "CR-031"
 | Evaluation / Combiner | IC、RankIC、分层收益、多因子组合、高级模型评估和报告 | 实盘执行、broker shortability facts 生产 | FEAT-06 |
 | StrategyAdmissionPackage | 准入证据、FactorModelValidationReport 引用、blocked reasons、order intent draft 引用 | runtime authorization | FEAT-07 / FEAT-14 |
 | StrategyAdmissionStatisticalGate | Wave A 统计准入证据、多重检验、稳健统计、walk-forward/OOS、PBO/DSR 和四态 fail-closed 汇总 | 真实收益证明、生产容量/冲击、regime 建模、交易授权 | FEAT-07 / FEAT-08 |
+| CR161 admission evidence availability overlay | 七对象 availability、claim tier ceiling、现有 gate integration、CR155 negative regression 和 producer follow-up 映射 | 当前 FDR/PBO/DSR/OOS/TCA/capacity 计算、trial lineage instrumentation、平行 gate、runtime readiness | CR151 / CR154 / future CRs |
 
 ## 与 Strategy Runner Core 的边界
 
@@ -120,6 +122,22 @@ change: "CR-031"
 | Linkage | `engine.mature_multifactor_research` / `StrategyAdmissionPackage` 只消费 statistical gate refs、status 和 blocked reasons，不把 statistical PASS 转成 runtime readiness。 |
 | Evidence | CP6/CP7/CP8 只声明 `effective_validation_mode=static-only`；fixture PASS 不代表真实 lake、NAS、provider、QMT、simulation、live、broker 或 trading 证据。 |
 | Deferred Wave B | IC decay by lag、half-life、turnover、liquidity/capacity view、orthogonalization、monotonicity、quantile spread、regime-aware validation、factor correlation clustering / redundancy de-duplication、capacity / impact、IR/TE/Active Share、PIT universe audit。 |
+
+## CR161 Admission Evidence Availability Overlay
+
+| Evidence object | C1-C4 coverage | Current contract semantics | Integration / follow-up |
+|---|---|---|---|
+| `ExperimentFamilyManifest` | C1 | Holds experiment family identity, trial count and parameter-search lineage when available. Missing lineage is `typed_unavailable`. | FU-CR161-001 instruments the producer. |
+| `MultipleTestingEvidence` | C1 | Carries FDR or equivalent correction result only when inputs are complete. | FU-CR161-002; consumed through CR151, not a parallel gate. |
+| `DataSnoopingEvidence` | C1 | Carries data-snooping evidence such as PBO/DSR only when computable. | FU-CR161-002; absence blocks rather than passes. |
+| `OverfitRiskEvidence` | C1 | Records overfit-risk evidence or typed unavailability. | FU-CR161-002. |
+| `WalkForwardEvidence` | C2 | Carries purged-embargo fold manifest and OOS metrics only when produced. | FU-CR161-003; links to CR151/CR154. |
+| `EconomicCostEvidence` | C3 | Requires auditable economic costs and impact inputs; commission/tax slots alone are insufficient. | FU-CR161-004. |
+| `CapacityLiquidityEvidence` | C4 | Requires capacity and liquidity sizing inputs; missing inputs block the claim. | FU-CR161-004. |
+
+- Claim ceiling: these are availability contracts, not computed proof. Mandatory unavailable evidence must remain `typed_unavailable` and fail closed.
+- Existing-gate rule: CR151 and CR154 remain the integration surface; this overlay must not create a parallel admission gate.
+- Regression rule: CR155 remains `blocked`; no missing trial lineage, p-values, fold metrics or costs may be reconstructed from its packaged evidence.
 
 ## 研究引擎稳定模块
 
