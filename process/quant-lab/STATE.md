@@ -2,12 +2,12 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: implementation
+Phase: documentation
 Blocked: false
-Active CR: CR-159
+Active CR: CR-161
 Active Story: none
-Pending gate: none
-Next action: CR-159 CP2 approved; implement subitems A (STATE slim + delete phase), B1 (CR-INDEX scoped fixes), C (story tool probe); then conditional CP6/CP7 and CP8 sco...
+Pending gate: CP8
+Next action: Review CP8 release readiness gate for CR161. Recommended reply: approve.
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,7 +20,7 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: process/context/CP2-CR159-PROCESS-HYGIENE-STATE-V2-CRINDEX-RETURN-VERIFY-SCOPE-CONTEXT.yaml
+- active context: process/context/CP8-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-CONTEXT.yaml
 
 Policy refs:
 - NO_CREDENTIAL_READ
@@ -49,6 +49,6 @@ Open risks:
 - {'id': 'R-CR158-EVIDENCE-SEMANTIC-OVERFIT', 'severity': 'medium', 'status': 'open'}
 - {'id': 'R-CR158-RUNTIME-OVERCLAIM', 'severity': 'high', 'status': 'open'}
 
-Updated at: 2026-07-06T15:06:14+00:00
+Updated at: 2026-07-10T12:17:28+00:00
 
 <!-- generated-by: meta-flow state render -->

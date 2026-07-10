@@ -1,0 +1,64 @@
+schema_version: 1
+context_id: CP8-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING
+cr_id: CR-161
+created_at: "2026-07-10T06:20:54+08:00"
+read_profile: compact
+phase: documentation
+context_type: cp8-delivery
+source_gates:
+  cp3:
+    checkpoint_ref: process/checkpoints/CP3-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-HLD-REVIEW.md
+    result_ref: process/checks/CP3-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-HLD-CONSISTENCY.result.json
+    approved_at: "2026-07-09T23:07:21+08:00"
+  cp7:
+    result_ref: process/checks/CP7-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-VERIFICATION.result.json
+    evidence_ref: process/evidence/CR161-CP7-VERIFICATION.index.json
+    return_ref: process/returns/CR161-DESIGN-ONLY.CP7.return.json
+release_context_ref: process/release/RELEASE-CONTEXT-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.yaml
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+must_read:
+  - process/release/RELEASE-CONTEXT-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.yaml
+  - process/checks/CP7-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-VERIFICATION.result.json
+  - process/evidence/CR161-CP7-VERIFICATION.index.json
+  - docs/quality/VERIFICATION-REPORT-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+  - docs/quality/REVIEW-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+read_if_needed:
+  - docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+  - docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+  - process/checkpoints/CP3-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-HLD-REVIEW.md
+do_not_read_by_default:
+  - process/archive/**
+  - full research run directories under /home/hyde/data/quant-lab
+  - credentials, .env, provider configs, broker/runtime sessions
+key_facts:
+  - CP7 decision is PASS_WITH_RISK with zero blockers.
+  - Current slice is design-only typed_unavailable fail-closed contract semantics.
+  - Computable evidence producers remain deferred follow-up candidates.
+  - CP8 approval must not be interpreted as true release execution or runtime/data authorization.
+  - CP7 dispatch/fallback evidence is auditable, but independent meta-qa verification was not completed; CP8 carries an explicit time-bounded waiver.
+risks_and_decisions:
+  - id: DQ-CP8-CR161-001
+    type: risk_acceptance
+    status: approved_by_user
+  - id: DQ-CP8-CR161-002
+    type: authorization_boundary
+    status: approved_by_user
+  - id: DQ-CP8-CR161-003
+    type: follow_up_tracking
+    status: approved_by_user
+  - id: DQ-CP8-CR161-004
+    type: risk_acceptance
+    status: approved_by_user
+  - id: R-CR161-STATIC-CONTRACT-MISREAD-AS-COMPUTED-PROOF
+    status: requires_cp8_acceptance
+  - id: R-CR161-RUNTIME-AUTHORIZATION-LEAK
+    status: requires_cp8_non_authorization
+  - id: R-CR161-VERIFICATION-INDEPENDENCE-GAP
+    status: accepted_by_user_time_bounded_waiver
+downstream_tasks:
+  - CP8 approved with explicit verifier-independence waiver; close CR161 as READY_WITH_RISK / delivered.
+  - Preserve FU-CR161-001 through FU-CR161-006 as candidates only.
+token_control:
+  read_profile: compact
+  do_not_copy_full_documents: true

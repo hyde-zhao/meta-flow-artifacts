@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-161",
+  "route_plan_id": "CP0-CR161-route-plan",
+  "created_at": "2026-07-09T21:39:26+08:00",
+  "cr_type": "product-scope",
+  "gate_profile": "standard-lite",
+  "route_strategy": "standard-governance",
+  "traits": {
+    "uses_existing_evidence_only": false,
+    "has_new_design": true,
+    "has_new_implementation": false,
+    "has_new_verification": true,
+    "requires_architecture_review": true,
+    "requires_story_decomposition": false,
+    "requires_subagent_dispatch": true
+  },
+  "stages": [
+    {
+      "phase": "requirement-clarification",
+      "checkpoint": "CP0",
+      "mode": "standard",
+      "human_gate": "none",
+      "result_ref": "process/checks/CP0-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-REQUEST-INTAKE.result.json"
+    },
+    {
+      "phase": "requirement-clarification",
+      "checkpoint": "CP1",
+      "mode": "standard",
+      "human_gate": "none",
+      "result_ref": "process/checks/CP1-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-USE-CASE-COMPLETENESS.result.json"
+    },
+    {
+      "phase": "requirement-clarification",
+      "checkpoint": "CP2",
+      "mode": "standard",
+      "human_gate": "required",
+      "result_ref": "process/checks/CP2-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-SCOPE.result.json",
+      "checkpoint_ref": "process/checkpoints/CP2-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-SCOPE.md"
+    },
+    {
+      "phase": "solution-design",
+      "checkpoint": "CP3",
+      "mode": "standard",
+      "human_gate": "required",
+      "condition": "after CP2 approval"
+    },
+    {
+      "phase": "story-planning",
+      "checkpoint": "CP4",
+      "mode": "conditional",
+      "human_gate": "none",
+      "condition": "only if CP2/CP3 selects code implementation or Story decomposition"
+    },
+    {
+      "phase": "story-planning",
+      "checkpoint": "CP5",
+      "mode": "conditional",
+      "human_gate": "required",
+      "condition": "only if Story/LLD evidence is required"
+    },
+    {
+      "phase": "story-execution",
+      "checkpoint": "CP6",
+      "mode": "conditional",
+      "human_gate": "none",
+      "condition": "only after CP5 approval and explicit implementation route"
+    },
+    {
+      "phase": "verification",
+      "checkpoint": "CP7",
+      "mode": "standard",
+      "human_gate": "none",
+      "condition": "verify design or implementation according to approved route"
+    },
+    {
+      "phase": "documentation",
+      "checkpoint": "CP8",
+      "mode": "standard",
+      "human_gate": "required",
+      "condition": "release readiness / final acceptance"
+    }
+  ],
+  "checkpoint_applicability": {
+    "CP0": {
+      "decision": "applicable",
+      "reason": "request intake"
+    },
+    "CP1": {
+      "decision": "applicable",
+      "reason": "product scope and use-case completeness"
+    },
+    "CP2": {
+      "decision": "applicable",
+      "reason": "product baseline and scope approval required"
+    },
+    "CP3": {
+      "decision": "applicable_after_cp2",
+      "reason": "architecture/evidence model design required"
+    },
+    "CP4": {
+      "decision": "conditional",
+      "reason": "not applicable unless code/story route is selected"
+    },
+    "CP5": {
+      "decision": "conditional",
+      "reason": "not applicable unless Story/LLD route is selected"
+    },
+    "CP6": {
+      "decision": "conditional",
+      "reason": "no implementation before explicit approval"
+    },
+    "CP7": {
+      "decision": "applicable",
+      "reason": "verify fail-closed semantics and CR155 negative regression"
+    },
+    "CP8": {
+      "decision": "applicable",
+      "reason": "release readiness / final acceptance"
+    }
+  },
+  "stop_reason": "required_human_gate",
+  "next_required_gate": "CP2"
+}

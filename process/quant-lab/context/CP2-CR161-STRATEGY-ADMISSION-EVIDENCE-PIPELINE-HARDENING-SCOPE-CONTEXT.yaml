@@ -1,0 +1,93 @@
+schema_version: 1
+context_id: CP2-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING
+cr_id: CR-161
+created_at: "2026-07-09T21:39:26+08:00"
+read_profile: compact
+context_policy:
+  must_read:
+    - process/changes/CR-161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-2026-07-09.md
+    - process/changes/summaries/CR-161.summary.json
+    - process/checks/CP0-CR161.route-plan.json
+    - process/checks/CP0-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-REQUEST-INTAKE.result.json
+    - process/checks/CP1-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-USE-CASE-COMPLETENESS.result.json
+  read_if_needed:
+    - process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json
+    - process/changes/summaries/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.summary.json
+    - process/changes/summaries/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.summary.json
+    - process/changes/summaries/CR-155.summary.json
+  do_not_read_by_default:
+    - process/archive/**
+    - process/evidence/**/*
+    - full research run directories under /home/hyde/data/quant-lab
+scope_summary:
+  objective: Define contract-first strategy admission evidence hardening.
+  current_slice:
+    - ExperimentFamilyManifest contract and availability semantics.
+    - MultipleTestingEvidence / DataSnoopingEvidence / OverfitRiskEvidence typed_unavailable behavior.
+    - WalkForwardEvidence present / typed_unavailable / blocked status semantics.
+    - CR155 negative regression criteria.
+    - No-runtime / no-new-real-data boundary.
+  out_of_scope_current_slice:
+    - Research-engine automatic trial-lineage instrumentation.
+    - Strategy remediation or optimization for CR155.
+    - Paper/simulation/live/runtime execution.
+    - New real lake/NAS/provider/credential access.
+    - Full real TCA or broker fill calibration.
+required_decisions:
+  - id: DQ-CP2-CR161-WAVE1-TRIAL-LINEAGE-SOURCE
+    recommendation: contract-first
+    summary: Define ExperimentFamilyManifest and evidence availability contract; trial lineage missing becomes typed_unavailable.
+  - id: DQ-CP2-CR161-TYPED-UNAVAILABLE-FAIL-CLOSED
+    recommendation: fail-closed
+    summary: typed_unavailable blocks statistical significance, robustness, paper candidate and production-like claims.
+  - id: DQ-CP2-CR161-CR155-NEGATIVE-REGRESSION
+    recommendation: blocked sample only
+    summary: CR155 remains blocked_admission_failed / paper_candidate=false; historical C1/C2 may be typed_unavailable.
+  - id: DQ-CP2-CR161-FOLLOWUP-SPLIT
+    recommendation: forward instrumentation as follow-up
+    summary: Research-engine trial-lineage instrumentation and full impact/capacity computation are later waves/follow-up, not CP2 minimum slice.
+  - id: DQ-CP2-CR161-AUTHORIZATION-BOUNDARY
+    recommendation: no new runtime/data/implementation authorization
+    summary: CP2 approval only authorizes design/product baseline work until later gates.
+evidence_facts:
+  cr151:
+    summary_ref: process/changes/summaries/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.summary.json
+    fact: Existing statistical gate consumes passed-in reports and has fail-closed evaluator.
+  cr154:
+    summary_ref: process/changes/summaries/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.summary.json
+    fact: Existing reliability gate is static/fixture-first and warns against production proof overclaim.
+  cr155:
+    evidence_ref: process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json
+    facts:
+      - admission_package_status: BLOCKED
+      - statistical_gate_status: FAIL
+      - paper_candidate: false
+      - rerun_consistency: PASS
+      - historical_trial_lineage_available: false
+      - raw_p_value_family_available: false
+authorization_boundary:
+  authorized:
+    - CP2 scope review and decision brief.
+    - Local product/design artifact creation after CP2 approval.
+    - Static reading of existing summaries and packaged evidence.
+  not_authorized:
+    - source_or_test_implementation_before_CP5_approval
+    - research_engine_forward_instrumentation_unless_CP2_selects_it
+    - simulation_or_paper_run
+    - live_or_trading_runtime
+    - qmt_miniqmt_xtquant_gateway_runtime
+    - broker_operation_or_order_write
+    - credential_or_env_read
+    - new_real_lake_read
+    - real_lake_write
+    - nas_read_write_sync_or_metadata_normalization
+    - provider_fetch
+    - catalog_store_registry_model_prediction_write
+    - external_framework_clone_install_run
+    - git_remote_write
+    - true_release_execution_or_publish
+route:
+  current_gate: CP2
+  next_on_approve: CP3 solution design
+  stop_reason: required_human_gate
+  route_plan_ref: process/checks/CP0-CR161.route-plan.json

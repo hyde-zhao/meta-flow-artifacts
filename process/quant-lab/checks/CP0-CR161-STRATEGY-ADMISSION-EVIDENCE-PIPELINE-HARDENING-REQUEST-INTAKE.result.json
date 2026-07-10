@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-REQUEST-INTAKE",
+  "cr_id": "CR-161",
+  "checked_at": "2026-07-09T21:39:26+08:00",
+  "context_ref": "process/context/CP0-CR161.context.json",
+  "route_plan_ref": "process/checks/CP0-CR161.route-plan.json",
+  "items": [
+    {
+      "id": "CP0-CR161-01",
+      "category": "workspace-routing",
+      "name": "Process route is healthy",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run meta-flow workspace check --project-root ."
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "process_link_health reported ok; routing_mode=symlink; artifact_git_dirty=clean."
+    },
+    {
+      "id": "CP0-CR161-02",
+      "category": "current-state-recovery",
+      "name": "Current state and CR tracking inputs read",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/state/STATE.current.json",
+        "process/changes/CR-INDEX.json",
+        "process/state/CR-LEDGER.ndjson"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "STATE.current.json showed active_change=null and current_phase=delivered before CR161 intake."
+    },
+    {
+      "id": "CP0-CR161-03",
+      "category": "cr-tracking",
+      "name": "No active or blocked formal CR conflicts before intake",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "uv run meta-flow check cr-tracking --project-root .",
+        "process/changes/CR-INDEX.json",
+        "process/state/STATE.current.json#active_change"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "cr-tracking exits 1 due known deferred legacy hygiene, but summary reports active formal CRs none and blocked formal CRs none. CR-032 appears active in CR-INDEX but gate_status=not_started legacy item without overlapping conflict keys."
+    },
+    {
+      "id": "CP0-CR161-04",
+      "category": "request-intake",
+      "name": "User request captured",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-2026-07-09.md#变更描述",
+        "process/context/CP0-CR161.context.json#raw_user_request"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "User explicitly asked to implement the CR according to the adjusted plan."
+    },
+    {
+      "id": "CP0-CR161-05",
+      "category": "scope",
+      "name": "Target object and change goal are clear",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/summaries/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.summary.json",
+        "process/changes/summaries/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.summary.json",
+        "process/changes/summaries/CR-155.summary.json",
+        "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Scope is strategy admission evidence pipeline hardening, not CR155 remediation or runtime authorization."
+    },
+    {
+      "id": "CP0-CR161-06",
+      "category": "authorization-boundary",
+      "name": "Initial authorization boundary is explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-2026-07-09.md#结构化权限策略",
+        "process/context/CP0-CR161.context.json#authorization_boundary"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CR161 does not authorize implementation, new real lake reads, runtime, trading, broker, credentials, NAS/provider, external frameworks, Git remote write, or publish."
+    },
+    {
+      "id": "CP0-CR161-07",
+      "category": "route-plan",
+      "name": "Route plan generated",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP0-CR161.route-plan.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Route stops at CP2 human gate before any Story/LLD/implementation decomposition."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260709T133926Z0000-cr161formal",
+    "RE-20260709T133926Z0000-cr161prior",
+    "RE-20260709T133926Z0000-cr161cr155evid"
+  ],
+  "decision": "PASS",
+  "next_route": "requirement-clarification"
+}

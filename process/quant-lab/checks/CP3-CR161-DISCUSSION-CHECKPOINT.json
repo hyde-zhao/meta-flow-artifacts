@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3-DISCUSSION",
+  "checkpoint_id": "CP3-CR161-DISCUSSION-CHECKPOINT",
+  "cr_id": "CR-161",
+  "phase": "solution-design",
+  "status": "ready-for-cp3-hld-review",
+  "created_at": "2026-07-09T22:24:20+08:00",
+  "context_ref": "process/context/CP3-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-DESIGN-CONTEXT.yaml",
+  "discussion_log_ref": "process/discussions/CP3-CR161-HLD-DISCUSSION-LOG.md",
+  "hld_ref": "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+  "adr_ref": "docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+  "selection_basis": "CP2 approved decisions plus current user hard requirements; no additional reviewer lane dispatch is claimed in this artifact.",
+  "architecture_gray_areas": [
+    {
+      "id": "AGA-CR161-001",
+      "topic": "Current slice contract-first vs compute-first",
+      "selected_option": "contract-first evidence availability overlay",
+      "status": "selected-for-hld",
+      "decision_ref": "DQ-CP3-CR161-001",
+      "source_refs": [
+        "DQ-CP2-CR161-WAVE1-TRIAL-LINEAGE-SOURCE",
+        "process/context/CP3-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-DESIGN-CONTEXT.yaml#approved_cp2_decisions"
+      ]
+    },
+    {
+      "id": "AGA-CR161-002",
+      "topic": "typed_unavailable claim ceiling",
+      "selected_option": "fail-closed for mandatory evidence by claim tier",
+      "status": "selected-for-hld",
+      "decision_ref": "DQ-CP3-CR161-002",
+      "source_refs": [
+        "DQ-CP2-CR161-TYPED-UNAVAILABLE-FAIL-CLOSED"
+      ]
+    },
+    {
+      "id": "AGA-CR161-003",
+      "topic": "CR151/CR154 integration boundary",
+      "selected_option": "extend existing evidence refs and summaries; no parallel gate family",
+      "status": "selected-for-hld",
+      "decision_ref": "DQ-CP3-CR161-003",
+      "source_refs": [
+        "process/context/CP3-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-DESIGN-CONTEXT.yaml#design_musts.integration_boundary"
+      ]
+    },
+    {
+      "id": "AGA-CR161-004",
+      "topic": "CR155 negative regression",
+      "selected_option": "blocked negative regression only; no historical reconstruction",
+      "status": "selected-for-hld",
+      "decision_ref": "DQ-CP3-CR161-004",
+      "source_refs": [
+        "DQ-CP2-CR161-CR155-NEGATIVE-REGRESSION"
+      ]
+    },
+    {
+      "id": "AGA-CR161-005",
+      "topic": "Follow-up split for computable evidence",
+      "selected_option": "defer analytics into FU-CR161-001 through FU-CR161-005",
+      "status": "selected-for-hld",
+      "decision_ref": "DQ-CP3-CR161-005",
+      "source_refs": [
+        "DQ-CP2-CR161-FOLLOWUP-SPLIT"
+      ]
+    },
+    {
+      "id": "AGA-CR161-006",
+      "topic": "Authorization boundary",
+      "selected_option": "design-only with no implementation/runtime/data/credential/external/publish authorization",
+      "status": "selected-for-hld",
+      "decision_ref": "DQ-CP3-CR161-006",
+      "source_refs": [
+        "DQ-CP2-CR161-AUTHORIZATION-BOUNDARY"
+      ]
+    }
+  ],
+  "design_musts_coverage": {
+    "seven_object_matrix": "covered-by-hld-section-8",
+    "availability_status_state_machine": "covered-by-hld-section-7",
+    "claim_tier_decision_table": "covered-by-hld-section-9",
+    "integration_boundary": "covered-by-hld-sections-8-10-11-and-adr-cr161-003",
+    "first_slice_truthfulness": "covered-by-hld-sections-1-5-8-12-14-and-adr-consistency-notes",
+    "follow_up_candidates": "covered-by-hld-section-19-and-adr-follow-up-candidate-register",
+    "cr155_negative_regression": "covered-by-hld-sections-8-13-23-24-and-adr-cr161-004"
+  },
+  "read_expansion_log": [
+    {
+      "path": "process/changes/summaries/CR-151-MULTIFACTOR-STRATEGY-STATISTICAL-ADMISSION-2026-07-01.summary.json",
+      "full_doc_read_reason": "design_traceability: confirm CR151 statistical admission integration surface and avoid a parallel CR161 gate family."
+    },
+    {
+      "path": "process/changes/summaries/CR-154-CROSS-STRATEGY-RELIABILITY-GATES-2026-07-03.summary.json",
+      "full_doc_read_reason": "design_traceability: confirm CR154 shared reliability integration surface and no-runtime boundary."
+    },
+    {
+      "path": "docs/design/HLD-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md",
+      "full_doc_read_reason": "contract_boundary_check: verify CR151 HLD evidence refs and statistical gate ownership before defining CR161 overlay."
+    },
+    {
+      "path": "docs/design/HLD-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md",
+      "full_doc_read_reason": "contract_boundary_check: verify CR154 shared reliability gate artifacts before defining CR161 overlay."
+    },
+    {
+      "path": "docs/design/ARCHITECTURE-DECISION-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md",
+      "full_doc_read_reason": "design_traceability: confirm CR151 ADR decisions do not conflict with CR161 fail-closed overlay."
+    },
+    {
+      "path": "docs/design/ARCHITECTURE-DECISION-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md",
+      "full_doc_read_reason": "design_traceability: confirm CR154 ADR decisions do not conflict with CR161 fail-closed overlay."
+    }
+  ],
+  "deny_default_process_evidence_reads": [],
+  "not_authorized": [
+    "source_or_test_implementation",
+    "research_engine_forward_instrumentation_in_current_slice",
+    "simulation_or_paper_run",
+    "live_or_trading_runtime",
+    "qmt_miniqmt_xtquant_gateway_runtime",
+    "broker_operation_or_order_write",
+    "credential_or_env_read",
+    "new_real_lake_read",
+    "real_lake_write",
+    "nas_read_write_sync_or_metadata_normalization",
+    "provider_fetch",
+    "catalog_store_registry_model_prediction_write",
+    "external_framework_clone_install_run",
+    "git_remote_write",
+    "true_release_execution_or_publish"
+  ],
+  "ready_for_hld_draft": true,
+  "ready_for_host_cp3_decision_brief": true,
+  "human_cp3_approval_status": "pending"
+}

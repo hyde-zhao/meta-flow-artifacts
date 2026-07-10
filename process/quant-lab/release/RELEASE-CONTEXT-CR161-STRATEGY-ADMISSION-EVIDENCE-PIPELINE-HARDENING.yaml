@@ -1,0 +1,162 @@
+schema_version: 1
+release_context_id: RELEASE-CONTEXT-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING
+change_id: CR-161
+title: Strategy Admission Evidence Pipeline Hardening
+created_at: "2026-07-10T06:20:54+08:00"
+created_by: host-orchestrator
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+release_decision_reason: CP7 returned PASS_WITH_RISK because CR161 validates design-only evidence availability and fail-closed semantics. The delivery is ready for design closure with risk because computable evidence producers remain follow-up scope, no runtime/data/implementation action is authorized, and the independent meta-qa verifier was unavailable; that verifier-independence exception is explicitly accepted and time bounded at CP8.
+release_scope:
+  in_scope:
+    - contract-first evidence availability overlay
+    - seven-object evidence coverage matrix
+    - typed_unavailable fail-closed claim-tier semantics
+    - CR151/CR154 refs and summaries integration boundary
+    - CR155 blocked negative regression expectation
+    - CP4/CP5/CP6 N/A route for design-only slice
+    - CP7 review-only verification
+  out_of_scope:
+    - source/test/schema/checker implementation
+    - research-engine trial-lineage instrumentation
+    - FDR/PBO/DSR/OOS/TCA/capacity computation
+    - strategy remediation or CR155 historical reconstruction
+    - runtime, data, broker, trading, credential, provider, NAS, external framework, Git remote, release execution or publish
+version_decision:
+  current_version: N/A
+  target_version: internal-admission-evidence-contract-slice
+  semver_classification: minor-internal
+  reason: Adds internal design and process artifacts, not a packaged runtime release.
+quality_summary:
+  cp7_decision: PASS_WITH_RISK
+  cp7_result_ref: process/checks/CP7-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-VERIFICATION.result.json
+  cp7_evidence_ref: process/evidence/CR161-CP7-VERIFICATION.index.json
+  cp7_return_ref: process/returns/CR161-DESIGN-ONLY.CP7.return.json
+  verification_report_ref: docs/quality/VERIFICATION-REPORT-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+  blocker_count: 0
+  high_open_count: 3
+  medium_risk_count: 1
+  risk_acceptance_required:
+    - R-CR161-STATIC-CONTRACT-MISREAD-AS-COMPUTED-PROOF
+    - R-CR161-TRIAL-LINEAGE-SOURCE
+    - R-CR161-RUNTIME-AUTHORIZATION-LEAK
+    - R-CR161-VERIFICATION-INDEPENDENCE-GAP
+fact_diff:
+  - promise_ref: DQ-CP2-CR161-WAVE1-TRIAL-LINEAGE-SOURCE
+    promise: Use contract-first ExperimentFamilyManifest and typed_unavailable when lineage is absent.
+    status: DELIVERED_WITH_DESIGN_ONLY_SCOPE
+    decision_impact: READY_WITH_RISK
+    evidence_refs:
+      - docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+      - process/checks/CP7-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-VERIFICATION.result.json
+    risk_ref: R-CR161-TRIAL-LINEAGE-SOURCE
+  - promise_ref: DQ-CP2-CR161-TYPED-UNAVAILABLE-FAIL-CLOSED
+    promise: typed_unavailable must fail closed and not silently PASS.
+    status: DELIVERED
+    decision_impact: READY_WITH_RISK
+    evidence_refs:
+      - docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+      - docs/quality/VERIFICATION-REPORT-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    risk_ref: R-CR161-STATIC-CONTRACT-MISREAD-AS-COMPUTED-PROOF
+  - promise_ref: DQ-CP2-CR161-CR155-NEGATIVE-REGRESSION
+    promise: CR155 remains blocked negative regression only.
+    status: DELIVERED
+    decision_impact: READY_WITH_RISK
+    evidence_refs:
+      - docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+      - process/checks/CP7-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-VERIFICATION.result.json
+    risk_ref: R-CR161-CR155-HISTORICAL-EVIDENCE-GAP
+  - promise_ref: DQ-CP2-CR161-FOLLOWUP-SPLIT
+    promise: Follow-up work is split out and not forced into current CP6.
+    status: DELIVERED
+    decision_impact: READY_WITH_RISK
+    evidence_refs:
+      - process/changes/CR-161-FOLLOW-UP-TRACKING-2026-07-10.md
+      - docs/release/FEEDBACK-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    risk_ref: R-CR161-RESEARCH-ENGINE-INSTRUMENTATION-SCOPE-CREEP
+  - promise_ref: DQ-CP2-CR161-AUTHORIZATION-BOUNDARY
+    promise: No new runtime, data, implementation, credential, external or publish authorization.
+    status: DELIVERED
+    decision_impact: READY_WITH_RISK
+    evidence_refs:
+      - process/evidence/CR161-CP7-VERIFICATION.index.json
+      - docs/release/DEPLOY-CHECKLIST-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    risk_ref: R-CR161-RUNTIME-AUTHORIZATION-LEAK
+  - promise_ref: DQ-CP8-CR161-004
+    promise: Independent CP7 QA verification was unavailable; accept only a time-bounded READY_WITH_RISK waiver or require a fresh independent review.
+    status: ACCEPTED_BY_USER_TIME_BOUNDED_WAIVER
+    decision_impact: READY_WITH_RISK
+    evidence_refs:
+      - process/state/AGENT-DISPATCH-LEDGER.ndjson
+      - process/handoffs/CR161-CP7-META-QA-HANDOFF-2026-07-09.md
+      - process/checkpoints/CP8-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-RELEASE-READINESS.md
+    risk_ref: R-CR161-VERIFICATION-INDEPENDENCE-GAP
+affected_surface:
+  docs:
+    - docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    - docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    - docs/quality/VERIFICATION-REPORT-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    - docs/quality/TEST-REPORT-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    - docs/quality/REVIEW-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    - docs/quality/FIXES-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    - docs/release/RELEASE-NOTES-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    - docs/release/DEPLOY-CHECKLIST-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    - docs/release/ROLLBACK-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    - docs/release/MIGRATION-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    - docs/release/FEEDBACK-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+  process:
+    - process/checks/CP7-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-VERIFICATION.result.json
+    - process/evidence/CR161-CP7-VERIFICATION.index.json
+    - process/returns/CR161-DESIGN-ONLY.CP7.return.json
+  code: []
+  tests: []
+install_validation_summary:
+  applicable: false
+  reason: CR161 does not change install scripts, packages, platform agents, runtime services or deployment scripts.
+release_documents:
+  - path: docs/release/RELEASE-NOTES-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    profile: compact
+    status: generated
+  - path: docs/release/DEPLOY-CHECKLIST-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    profile: compact
+    status: generated
+  - path: docs/release/ROLLBACK-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    profile: compact
+    status: generated
+  - path: docs/release/MIGRATION-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    profile: compact
+    status: generated
+  - path: docs/release/FEEDBACK-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+    profile: compact
+    status: generated
+non_authorized_items:
+  - source/test/schema/checker implementation
+  - research-engine trial-lineage instrumentation
+  - FDR/PBO/DSR/OOS/TCA/capacity computation
+  - strategy remediation or CR155 historical reconstruction
+  - real lake read/write or NAS read/write/sync
+  - provider fetch or credential/env/secret read
+  - broker/order/trading/runtime/paper/simulation/live operation
+  - catalog/store/registry/model/prediction write
+  - external framework clone/install/run
+  - Git remote write
+  - true release execution, deployment or publish
+follow_up_summary:
+  risks:
+    - R-CR161-STATIC-CONTRACT-MISREAD-AS-COMPUTED-PROOF
+    - R-CR161-TRIAL-LINEAGE-SOURCE
+    - R-CR161-RUNTIME-AUTHORIZATION-LEAK
+    - R-CR161-VERIFICATION-INDEPENDENCE-GAP
+  candidates:
+    - FU-CR161-001-trial-lineage-instrumentation
+    - FU-CR161-002-multiple-testing-pbo-dsr-computation
+    - FU-CR161-003-walk-forward-oos-fold-metrics
+    - FU-CR161-004-economic-cost-impact-implementation
+    - FU-CR161-005-capacity-liquidity-alpha-decay
+    - FU-CR161-006-independent-cp7-verifier-lane-resilience
+  feedback_entry_ref: docs/release/FEEDBACK-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md
+workspace_status:
+  process_route_health: ok
+  source_git_dirty: false
+  artifact_git_dirty: true
+  note: Process artifacts are dirty because CR161 evidence is being generated in the external artifact repo; Git remote write is not authorized.

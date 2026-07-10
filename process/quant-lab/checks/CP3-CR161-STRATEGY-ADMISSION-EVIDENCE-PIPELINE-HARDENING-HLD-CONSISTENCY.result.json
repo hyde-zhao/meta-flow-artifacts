@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3",
+  "checkpoint_id": "CP3-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-HLD-CONSISTENCY",
+  "cr_id": "CR-161",
+  "checked_at": "2026-07-09T22:24:20+08:00",
+  "context_ref": "process/context/CP3-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-DESIGN-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR161.route-plan.json",
+  "dispatch_refs": [
+    "process/handoffs/CR161-CP3-META-SE-HANDOFF-2026-07-09.md#dispatch"
+  ],
+  "evidence_ref": "",
+  "items": [
+    {
+      "id": "CP3-CR161-01",
+      "category": "entry",
+      "name": "CP2 scope baseline is approved",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-SCOPE.md",
+        "process/checks/CP2-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-SCOPE.result.json"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP2 approved contract-first, typed_unavailable fail-closed, CR155 negative regression, follow-up split and no-runtime boundary."
+    },
+    {
+      "id": "CP3-CR161-02",
+      "category": "discussion",
+      "name": "Architecture Gray Areas and advisor table are recorded",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/discussions/CP3-CR161-HLD-DISCUSSION-LOG.md",
+        "process/checks/CP3-CR161-DISCUSSION-CHECKPOINT.json"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Six gray areas are selected for HLD based on CP2 decisions and current user hard requirements; no additional reviewer lane dispatch is claimed."
+    },
+    {
+      "id": "CP3-CR161-03",
+      "category": "hld",
+      "name": "HLD exists and covers required CP3 structure",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "HLD covers problem definition, candidate options, recommendation, blueprint applicability, traceability, scenarios, NFR, risks, ADR candidates and implementation design triggers."
+    },
+    {
+      "id": "CP3-CR161-04",
+      "category": "hld",
+      "name": "Seven-object evidence coverage matrix is complete",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#8-seven-object-evidence-coverage-matrix"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Matrix covers ExperimentFamilyManifest, MultipleTestingEvidence, DataSnoopingEvidence, OverfitRiskEvidence, WalkForwardEvidence, EconomicCostEvidence and CapacityLiquidityEvidence with all required columns."
+    },
+    {
+      "id": "CP3-CR161-05",
+      "category": "policy",
+      "name": "typed_unavailable fail-closed semantics and claim-tier table are explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#7-evidence-availability-state-machine",
+        "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#9-claim-tier-decision-table"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "typed_unavailable may allow labeled exploratory notes only; it blocks statistical significance, robustness, paper_candidate and production_like claims when evidence is mandatory."
+    },
+    {
+      "id": "CP3-CR161-06",
+      "category": "integration",
+      "name": "CR151/CR154 integration does not create a parallel gate family",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#8-seven-object-evidence-coverage-matrix",
+        "docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#adr-cr161-003-integrate-through-cr151cr154-no-parallel-gate-family"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR161 evidence feeds existing CR151 statistical and CR154 reliability refs/summaries."
+    },
+    {
+      "id": "CP3-CR161-07",
+      "category": "negative-regression",
+      "name": "CR155 is preserved as blocked negative regression only",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#13-key-flows",
+        "docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#adr-cr161-004-cr155-negative-regression-only"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR155 remains blocked_admission_failed and paper_candidate=false; missing historical C1/C2 facts are not reconstructed."
+    },
+    {
+      "id": "CP3-CR161-08",
+      "category": "scope",
+      "name": "Current slice truthfulness and follow-up split are explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#19-follow-up-candidates",
+        "docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#follow-up-candidate-register"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "HLD states current slice is typed_unavailable contract semantics only, not computable FDR/PBO/DSR, fold-level OOS, real TCA or capacity implementation; FU-CR161-001..005 are defined."
+    },
+    {
+      "id": "CP3-CR161-09",
+      "category": "blueprint",
+      "name": "Blueprint applicability is evaluated",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#2-blueprint-applicability"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Standalone BLUEPRINT/DOMAIN-MAP/DEPENDENCY-MAP outputs are waived for this CP3-only design slice and must be revisited before any implementation route."
+    },
+    {
+      "id": "CP3-CR161-10",
+      "category": "authorization",
+      "name": "No unauthorized implementation, runtime, data, credential, external or publish action is included",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#1-problem-definition",
+        "docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#not-authorized",
+        "process/checks/CP3-CR161-DISCUSSION-CHECKPOINT.json#not_authorized"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Only design/check artifacts were produced; no source code or tests are part of this CP3 output."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260709T142420Z0000-cr161cp3discussion"
+  ],
+  "deny_default_process_evidence_read_expansion_refs": [],
+  "manual_gate_status": "approved",
+  "approved_by": "user",
+  "approved_at": "2026-07-09T23:07:21+08:00",
+  "accepted_human_decisions": [
+    "DQ-CP3-CR161-001",
+    "DQ-CP3-CR161-002",
+    "DQ-CP3-CR161-003",
+    "DQ-CP3-CR161-004",
+    "DQ-CP3-CR161-005",
+    "DQ-CP3-CR161-006"
+  ],
+  "pending_human_decisions": [
+    {
+      "decision_id": "DQ-CP3-CR161-001",
+      "decision_type": "architecture",
+      "status": "pending_user_decision",
+      "question": "Approve contract-first evidence availability overlay for CR161?",
+      "recommended_option": "Use a typed evidence availability overlay integrated through CR151/CR154 refs and summaries.",
+      "alternatives": [
+        "Compute-first implementation after explicit route change",
+        "Documentation-only checklist",
+        "Parallel CR161 gate family"
+      ],
+      "source_ref": "docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#adr-cr161-001-contract-first-evidence-availability-overlay"
+    },
+    {
+      "decision_id": "DQ-CP3-CR161-002",
+      "decision_type": "architecture",
+      "status": "pending_user_decision",
+      "question": "Approve typed_unavailable fail-closed semantics by claim tier?",
+      "recommended_option": "Mandatory typed_unavailable evidence blocks statistical significance, robustness, paper_candidate and production_like claims.",
+      "alternatives": [
+        "Warning-only NEEDS_REVIEW",
+        "Block all claims including exploratory",
+        "Manual waiver path"
+      ],
+      "source_ref": "docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#adr-cr161-002-typed_unavailable-fail-closed-claim-policy"
+    },
+    {
+      "decision_id": "DQ-CP3-CR161-003",
+      "decision_type": "architecture",
+      "status": "pending_user_decision",
+      "question": "Approve CR151/CR154 integration with no parallel CR161 gate family?",
+      "recommended_option": "Extend CR151/CR154 evidence refs and summaries only.",
+      "alternatives": [
+        "Parallel CR161 gate family",
+        "Direct package-only fields"
+      ],
+      "source_ref": "docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#adr-cr161-003-integrate-through-cr151cr154-no-parallel-gate-family"
+    },
+    {
+      "decision_id": "DQ-CP3-CR161-004",
+      "decision_type": "risk_acceptance",
+      "status": "pending_user_decision",
+      "question": "Approve CR155 as blocked negative regression only?",
+      "recommended_option": "Preserve blocked_admission_failed and paper_candidate=false without reconstructing missing historical facts.",
+      "alternatives": [
+        "Require historical C1/C2 computable proof",
+        "Omit CR155",
+        "Treat CR155 as remediation target"
+      ],
+      "source_ref": "docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#adr-cr161-004-cr155-negative-regression-only"
+    },
+    {
+      "decision_id": "DQ-CP3-CR161-005",
+      "decision_type": "follow_up_tracking",
+      "status": "pending_user_decision",
+      "question": "Approve FU-CR161-001 through FU-CR161-005 as deferred follow-up candidates?",
+      "recommended_option": "Track lineage instrumentation, computable statistical evidence, OOS folds, economic cost/impact and capacity/liquidity as separate follow-up candidates.",
+      "alternatives": [
+        "Implement all now",
+        "Collapse follow-ups into one candidate"
+      ],
+      "source_ref": "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#19-follow-up-candidates"
+    },
+    {
+      "decision_id": "DQ-CP3-CR161-006",
+      "decision_type": "security",
+      "status": "pending_user_decision",
+      "question": "Confirm no new implementation, runtime, data, credential, external framework, Git remote or publish authorization?",
+      "recommended_option": "Keep CR161 CP3 design-only and no-runtime/no-data/no-credential.",
+      "alternatives": [
+        "Separate implementation route after CP3",
+        "Separate data/runtime authorization CR"
+      ],
+      "source_ref": "docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md#adr-cr161-006-no-new-runtime-data-credential-implementation-or-publish-authorization"
+    }
+  ],
+  "decision": "PASS",
+  "next_route": "CP4_CP5_CP6_NA_THEN_CP7"
+}

@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP2",
+  "checkpoint_id": "CP2-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-SCOPE",
+  "cr_id": "CR-161",
+  "checked_at": "2026-07-09T21:39:26+08:00",
+  "context_ref": "process/context/CP2-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-SCOPE-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR161.route-plan.json",
+  "items": [
+    {
+      "id": "CP2-CR161-01",
+      "category": "entry",
+      "name": "CP0 and CP1 passed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP0-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-REQUEST-INTAKE.result.json",
+        "process/checks/CP1-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-USE-CASE-COMPLETENESS.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Both pre-CP2 automated checks passed."
+    },
+    {
+      "id": "CP2-CR161-02",
+      "category": "scope",
+      "name": "Contract-first current slice is explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP2-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-SCOPE-CONTEXT.yaml#scope_summary.current_slice"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Current slice defines contracts and typed_unavailable behavior, not research-engine instrumentation."
+    },
+    {
+      "id": "CP2-CR161-03",
+      "category": "scope",
+      "name": "Trial lineage source risk is surfaced",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/changes/CR-161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-2026-07-09.md#风险与开放项"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP2 decision DQ-CP2-CR161-WAVE1-TRIAL-LINEAGE-SOURCE covers contract-first vs forward instrumentation."
+    },
+    {
+      "id": "CP2-CR161-04",
+      "category": "negative-regression",
+      "name": "CR155 historical evidence gap is handled",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/context/CP2-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-SCOPE-CONTEXT.yaml#evidence_facts.cr155",
+        "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR155 negative regression requires blocked result preservation, not historical C1/C2 reconstruction."
+    },
+    {
+      "id": "CP2-CR161-05",
+      "category": "authorization",
+      "name": "Authorization boundary is explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP2-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-SCOPE-CONTEXT.yaml#authorization_boundary",
+        "process/changes/CR-161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-2026-07-09.md#结构化权限策略"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No implementation, runtime, new real lake, NAS/provider/credential, broker, external framework or publish authorization."
+    },
+    {
+      "id": "CP2-CR161-06",
+      "category": "decision-brief",
+      "name": "Human decisions are collected",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-SCOPE.md#待人工决策清单"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Five CP2 decisions are ready for user approval."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260709T133926Z0000-cr161formal",
+    "RE-20260709T133926Z0000-cr161cr155evid"
+  ],
+  "manual_gate_status": "approved",
+  "approved_at": "2026-07-09T22:19:04+08:00",
+  "approved_by": "user",
+  "accepted_human_decisions": [
+    "DQ-CP2-CR161-WAVE1-TRIAL-LINEAGE-SOURCE",
+    "DQ-CP2-CR161-TYPED-UNAVAILABLE-FAIL-CLOSED",
+    "DQ-CP2-CR161-CR155-NEGATIVE-REGRESSION",
+    "DQ-CP2-CR161-FOLLOWUP-SPLIT",
+    "DQ-CP2-CR161-AUTHORIZATION-BOUNDARY"
+  ],
+  "cp3_attention_items": [
+    {
+      "id": "CP3-FOCUS-CR161-007",
+      "summary": "CP3 HLD must include an explicit 7-object evidence coverage matrix: ExperimentFamilyManifest, MultipleTestingEvidence, DataSnoopingEvidence, OverfitRiskEvidence, WalkForwardEvidence, EconomicCostEvidence, CapacityLiquidityEvidence."
+    },
+    {
+      "id": "CP3-FOCUS-CR161-008",
+      "summary": "CP3 must state the first slice delivers typed_unavailable fail-closed semantics, not computable FDR/PBO/DSR or real TCA/capacity implementation."
+    }
+  ],
+  "decision": "PASS",
+  "next_route": "CP3"
+}

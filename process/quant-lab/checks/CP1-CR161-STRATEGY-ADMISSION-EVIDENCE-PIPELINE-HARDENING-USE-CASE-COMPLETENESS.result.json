@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP1",
+  "checkpoint_id": "CP1-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-USE-CASE-COMPLETENESS",
+  "cr_id": "CR-161",
+  "checked_at": "2026-07-09T21:39:26+08:00",
+  "context_ref": "process/context/CP2-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-SCOPE-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR161.route-plan.json",
+  "items": [
+    {
+      "id": "CP1-CR161-01",
+      "category": "use-case",
+      "name": "C1 multiple-testing and data-snooping gap is represented",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/context/CP0-CR161.context.json#scope_update",
+        "process/changes/CR-161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-2026-07-09.md#变更描述"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP2 will decide contract-first trial-lineage semantics and typed_unavailable behavior."
+    },
+    {
+      "id": "CP1-CR161-02",
+      "category": "use-case",
+      "name": "C2 walk-forward/OOS evidence gap is represented",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/context/CP0-CR161.context.json#scope_update"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP2 covers existing refs vs first-class evidence stage and missing fold metrics behavior."
+    },
+    {
+      "id": "CP1-CR161-03",
+      "category": "use-case",
+      "name": "C3/C4 economic and capacity gaps are represented without over-scoping current slice",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/changes/CR-161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-2026-07-09.md#风险与开放项"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Impact/capacity computation is retained in the parent scope but current CP2 recommendation keeps implementation as follow-up/later wave."
+    },
+    {
+      "id": "CP1-CR161-04",
+      "category": "negative-regression",
+      "name": "CR155 negative regression acceptance is clear",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR155-DAILY-MULTIFACTOR-BASELINE-REAL-LAKE-ARTIFACT-PACKAGE.json",
+        "process/context/CP0-CR161.context.json#cr155_negative_regression"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR155 must remain blocked_admission_failed / paper_candidate=false; historical C1/C2 evidence may be typed_unavailable."
+    },
+    {
+      "id": "CP1-CR161-05",
+      "category": "authorization",
+      "name": "No-runtime and no-new-real-data boundary is complete",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP0-CR161.context.json#authorization_boundary",
+        "process/changes/CR-161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-2026-07-09.md#结构化权限策略"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Approval does not authorize implementation, research engine instrumentation, runtime, trading, broker, new real lake read, or publish."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260709T133926Z0000-cr161formal",
+    "RE-20260709T133926Z0000-cr161cr155evid"
+  ],
+  "decision": "PASS",
+  "next_route": "CP2_SCOPE_REVIEW"
+}

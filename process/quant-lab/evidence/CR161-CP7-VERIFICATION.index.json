@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "stage": "CP7",
+  "cr_id": "CR-161",
+  "story_id": "CR161-DESIGN-ONLY",
+  "return_ref": "process/returns/CR161-DESIGN-ONLY.CP7.return.json",
+  "changed_files": [
+    {
+      "path": "docs/quality/VERIFICATION-REPORT-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+      "change_type": "created"
+    },
+    {
+      "path": "docs/quality/TEST-REPORT-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+      "change_type": "created"
+    },
+    {
+      "path": "docs/quality/REVIEW-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+      "change_type": "created"
+    },
+    {
+      "path": "docs/quality/FIXES-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/CR161-DESIGN-ONLY.CP7.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR161-CP7-VERIFICATION.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-VERIFICATION.result.json",
+      "change_type": "created"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "process/context/CP7-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-VERIFICATION-CONTEXT.yaml",
+      "kind": "cp7_context"
+    },
+    {
+      "path": "process/handoffs/CR161-CP7-META-QA-HANDOFF-2026-07-09.md",
+      "kind": "handoff"
+    },
+    {
+      "path": "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+      "kind": "design_hld"
+    },
+    {
+      "path": "docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+      "kind": "design_adr"
+    },
+    {
+      "path": "process/checks/CP4-CR161-STORY-DAG-PARALLEL-SAFETY.result.json",
+      "kind": "cp4_na_result"
+    },
+    {
+      "path": "process/checks/CP5-CR161-LLD-DESIGN-EVIDENCE.result.json",
+      "kind": "cp5_na_result"
+    },
+    {
+      "path": "process/checks/CP6-CR161-IMPLEMENTATION-DONE.result.json",
+      "kind": "cp6_na_result"
+    },
+    {
+      "path": "docs/quality/VERIFICATION-REPORT-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+      "kind": "verification_report"
+    },
+    {
+      "path": "docs/quality/TEST-REPORT-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+      "kind": "test_report"
+    },
+    {
+      "path": "docs/quality/REVIEW-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+      "kind": "review_report"
+    },
+    {
+      "path": "docs/quality/FIXES-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+      "kind": "fixes_report"
+    }
+  ],
+  "commands": [
+    {
+      "command": "rg -n \"ExperimentFamilyManifest|MultipleTestingEvidence|DataSnoopingEvidence|OverfitRiskEvidence|WalkForwardEvidence|EconomicCostEvidence|CapacityLiquidityEvidence\" docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+      "result": "pass",
+      "summary": "All seven evidence objects are present."
+    },
+    {
+      "command": "rg -n \"paper_candidate=true|paper_candidate: true|production_like=true|production_ready=true|runtime_authorized=true|simulation_ready=true|FDR proven|PBO proven|DSR proven|real TCA proven|capacity-ready|production-ready|live-ready\" docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md",
+      "result": "pass_with_note",
+      "summary": "Only blocked wording examples were found; no positive readiness assignment."
+    },
+    {
+      "command": "uv run --python 3.11 python -m json.tool process/checks/CP3-CR161-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING-HLD-CONSISTENCY.result.json",
+      "result": "pass",
+      "summary": "Upstream CP3 result JSON parses."
+    },
+    {
+      "command": "uv run --python 3.11 python -m json.tool process/checks/CP4-CR161-STORY-DAG-PARALLEL-SAFETY.result.json",
+      "result": "pass",
+      "summary": "CP4 N/A result JSON parses."
+    }
+  ],
+  "boundary_check": {
+    "forbidden_operation_count": 0,
+    "real_lake_read_executed": false,
+    "real_lake_write_executed": false,
+    "nas_operation_executed": false,
+    "provider_fetch_executed": false,
+    "credential_read_executed": false,
+    "broker_executed": false,
+    "trading_executed": false,
+    "runtime_executed": false,
+    "simulation_or_paper_executed": false,
+    "catalog_or_registry_write_executed": false,
+    "git_remote_executed": false,
+    "publish_executed": false
+  },
+  "decision": "PASS_WITH_RISK",
+  "risks": [
+    {
+      "id": "R-CR161-STATIC-CONTRACT-MISREAD-AS-COMPUTED-PROOF",
+      "severity": "HIGH",
+      "status": "controlled-for-cp8",
+      "summary": "Design-only contract could be misread as computed proof unless CP8 wording is explicit."
+    },
+    {
+      "id": "R-CR161-TRIAL-LINEAGE-SOURCE",
+      "severity": "MEDIUM",
+      "status": "follow-up-candidate",
+      "summary": "Trial lineage instrumentation remains deferred."
+    },
+    {
+      "id": "R-CR161-RUNTIME-AUTHORIZATION-LEAK",
+      "severity": "HIGH",
+      "status": "controlled-for-cp8-non-authorization",
+      "summary": "CP8 must preserve explicit non-authorization wording."
+    },
+    {
+      "id": "R-CR161-VERIFICATION-INDEPENDENCE-GAP",
+      "severity": "HIGH",
+      "status": "waived-by-cp8-risk-acceptance",
+      "summary": "The meta-qa-critical handle was lost and host completed the review-only fallback; dispatch/fallback evidence does not establish independent QA completion."
+    }
+  ],
+  "waivers": [
+    {
+      "waiver_id": "WAIVER-CR161-CP7-VERIFICATION-INDEPENDENCE",
+      "approval_ref": "DQ-CP8-CR161-004",
+      "status": "accepted_by_user",
+      "expires_at": "2026-10-10T00:00:00+08:00"
+    }
+  ]
+}
