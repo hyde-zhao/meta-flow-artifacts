@@ -1,0 +1,212 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR163-TRIAL-LINEAGE-INSTRUMENTATION-DESIGN-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "CR-163"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready"
+created_at: "2026-07-11T10:54:00+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-163"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 22
+  max_summary_items: 32
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: "Architecture-major design may expand the named product baselines, CR161 design baseline and relevant engine contracts; unrelated CRs, plans, Story/LLD and archives remain deny-default."
+  default_instruction: "Read this capsule first; use CR163 summary/CP2 evidence as the default truth. Expand only named design/product/source inputs and log any other full-doc read."
+
+allowed_reads:
+  - path: "process/state/STATE.current.json"
+    reason: "Current phase, CR and authorization boundary"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "Current context and handoff discovery"
+    required: true
+  - path: "process/changes/summaries/CR-163.summary.json"
+    reason: "Current CR machine summary and traits"
+    required: true
+  - path: "process/checkpoints/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.md"
+    reason: "Approved scope, DQ decisions, non-authorization and CP3 effect"
+    required: true
+  - path: "process/checks/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.result.json"
+    reason: "CP2 machine precheck evidence"
+    required: true
+  - path: "process/checks/CP2-CR163-DISCUSSION-CHECKPOINT.json"
+    reason: "Four confirmed SGQ semantics"
+    required: true
+  - path: "docs/product/USE-CASES.md"
+    reason: "Approved UC-58-CR163, inventory and availability ceiling"
+    required: false
+  - path: "docs/product/REQUIREMENTS.md"
+    reason: "Approved REQ-CR163-001..008 and NFR targets"
+    required: false
+  - path: "docs/product/SCENARIOS.yaml"
+    reason: "Twelve P0 architecture-driving scenarios"
+    required: false
+  - path: "docs/product/TEST-MATRIX.md"
+    reason: "Scenario and validation traceability"
+    required: false
+  - path: "docs/product/STORY-MAP.md"
+    reason: "Five candidate Story outcomes and S03 normalized coverage"
+    required: false
+  - path: "docs/product/MVP-SCOPE.md"
+    reason: "Scope, exclusions, deferred work and claim ceiling"
+    required: false
+  - path: "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md"
+    reason: "CR161 design-only parent baseline; preserve and extend, do not rewrite history"
+    required: false
+  - path: "docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md"
+    reason: "CR161 contract-first ADR baseline and availability semantics"
+    required: false
+  - path: "engine/mature_multifactor_research.py"
+    reason: "Producer chain 1 orchestration and construction hook facts"
+    required: false
+  - path: "engine/multifactor_strategy_candidates.py"
+    reason: "Producer chain 2 orchestration and construction hook facts"
+    required: false
+  - path: "engine/research_manifest.py"
+    reason: "Single-run ExperimentManifest boundary"
+    required: false
+  - path: "engine/backtest_production_contracts.py"
+    reason: "BacktestRunSpec identity linkage"
+    required: false
+  - path: "engine/strategy_admission_statistical_gate.py"
+    reason: "Existing raw trial-count consumer boundary"
+    required: false
+  - path: "engine/cross_strategy_reliability_gates.py"
+    reason: "Existing raw/effective count consumer boundary"
+    required: false
+  - path: "engine/strategy_admission_package.py"
+    reason: "Existing admission package lineage ref integration target"
+    required: false
+
+must_read:
+  - path: "process/context/CP3-CR163-TRIAL-LINEAGE-INSTRUMENTATION-DESIGN-CONTEXT.yaml"
+    reason: "Approved decisions, scope and read budget"
+    required: true
+  - path: "process/changes/summaries/CR-163.summary.json"
+    reason: "CR traits and authorization boundary"
+    required: true
+  - path: "process/checkpoints/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.md"
+    reason: "Approved CP2 Decision Brief"
+    required: true
+  - path: "process/checks/CP2-CR163-DISCUSSION-CHECKPOINT.json"
+    reason: "Frozen inventory/count/effective/seal choices"
+    required: true
+
+read_if_needed:
+  - path: "docs/product/USE-CASES.md"
+    trigger: "Need exact inventory, actors, present/typed_unavailable/blocked semantics or scenario gray-area wording."
+  - path: "docs/product/REQUIREMENTS.md"
+    trigger: "Need exact REQ/NFR acceptance criteria and traceability."
+  - path: "docs/product/SCENARIOS.yaml"
+    trigger: "Need architecture simulation of a P0 positive, failure/recovery or CR155 negative-regression path."
+  - path: "docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md"
+    trigger: "Need CR161 parent contract baseline or conflict check; preserve historical sections."
+  - path: "engine/*.py named in allowed_reads"
+    trigger: "Need repository fact for module boundary, call direction, lifecycle integration or compatibility constraint."
+  - path: "scripts/research/run_multifactor_strategy_research.py"
+    trigger: "Need public producer chain wrapper facts."
+  - path: "scripts/legacy/research/run_multifactor_strategy_candidates.py"
+    trigger: "Need legacy producer chain wrapper facts."
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "Human summary/legacy fallback"
+  - path_or_pattern: "process/DEVELOPMENT-PLAN.yaml"
+    reason: "Formal Story planning is after CP3 approval"
+  - path_or_pattern: "process/changes/CR-*.md"
+    reason: "Use CR163 summary; full CR only for logged audit"
+  - path_or_pattern: "process/stories/**"
+    reason: "No Story/LLD work before CP3 approval"
+  - path_or_pattern: "process/archive/**"
+    reason: "Historical archive is unrelated to current design"
+  - path_or_pattern: "process/discussions/**"
+    reason: "Use confirmed discussion checkpoint; historical logs are audit-only"
+  - path_or_pattern: "docs/quality/**"
+    reason: "CP3 does not consume prior quality history by default"
+  - path_or_pattern: "complete conversation transcript"
+    reason: "Approved checkpoint and capsule contain the decisions"
+
+key_facts:
+  scope_summary: "Design an auditable experiment-family lifecycle that declares before search, records trial/attempt/selection append-only, seals deterministic immutable manifests with supersession, instruments two producer chains/four mappings, and integrates lineage refs into existing admission consumers."
+  accepted_decisions:
+    - "Inventory is 2 deduplicated producer chains / CPI-CR163-001..004 4 mappings; S03 covers all four within the five-Story target."
+    - "Different seed/parameters are trials; retry is an attempt; failed/cancelled/excluded declared trials remain in raw count and lineage."
+    - "effective_trial_count remains typed_unavailable with empty ref/method; CR163 only makes C1 raw-lineage input ready."
+    - "Sealed versions are immutable; correction only through append-only supersession preserving prior ref/hash/version chain."
+    - "CR155 remains blocked; no historical family/trial reconstruction."
+  active_constraints:
+    - "Final object names may be frozen at CP3, but must cover Spec, Trial, Attempt, Selection, Manifest and Validation concepts."
+    - "ExperimentManifest remains single-run; family lineage is a separate lifecycle connected via run_id, experiment_id and artifact refs."
+    - "Use local deterministic JSON/JSONL conventions; no database, MLflow, external registry or shared runtime."
+    - "present requires seal+completeness+reference+count+tamper checks; uninstrumented is typed_unavailable; invalid/incomplete/tampered is blocked."
+    - "No source/test implementation, real data/runtime/credentials/trading/external write/statistical computation is authorized at CP3."
+  downstream_tasks:
+    - "Perform blueprint applicability and Architecture Gray Areas analysis."
+    - "Compare at least two viable architectures and recommend the minimum contract-first append-only JSON/JSONL design."
+    - "Define explicit producer, recorder, sealer/validator, manifest, single-run identity and admission-consumer integration contracts."
+    - "Freeze count state machine, duplicate/retry semantics, incomplete/invalid transitions, seal/supersession and deterministic hash rules in ADRs."
+    - "Simulate at least three key scenarios: happy-path seal/present, failure/retry/exclusion count, tamper/supersession/CR155 negative regression."
+    - "Provide CP4 inputs for exactly five Stories, including S03 all-four-mapping coverage, dependencies, likely file owners and LLD policy recommendations, without writing DEVELOPMENT-PLAN."
+    - "Return CP3 precheck inputs and any unresolved architecture DQ to host-orchestrator; do not open the formal CP3 gate."
+  traceability:
+    requirements: ["REQ-CR163-001", "REQ-CR163-002", "REQ-CR163-003", "REQ-CR163-004", "REQ-CR163-005", "REQ-CR163-006", "REQ-CR163-007", "REQ-CR163-008"]
+    use_cases: ["UC-58-CR163"]
+    scenarios: ["SC-CR163-P01", "SC-CR163-P02", "SC-CR163-P03", "SC-CR163-N01", "SC-CR163-N02", "SC-CR163-B01", "SC-CR163-B02", "SC-CR163-F01", "SC-CR163-R01", "SC-CR163-T01", "SC-CR163-A01", "SC-CR163-G01"]
+    stories: ["CR163-S01 candidate", "CR163-S02 candidate", "CR163-S03 candidate", "CR163-S04 candidate", "CR163-S05 candidate"]
+    features: ["experiment-family-lineage", "strategy-admission-evidence"]
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "CP3 must confirm final object names, module boundaries, storage/seal protocol, integration call direction and Story/LLD planning inputs."
+  non_authorized_items:
+    - "source or test implementation"
+    - "real lake/NAS/provider/credential/runtime/trading/broker/external framework/remote write/publish"
+    - "effective-trial/FDR/PBO/DSR/OOS/TCA/capacity computation"
+    - "historical lineage reconstruction"
+  risk_acceptance_items: []
+  open_questions:
+    - "Whether recorder API is event-command based or lifecycle-session based must be compared and frozen."
+    - "Exact deterministic serialization and supersession pointer ownership must be frozen."
+    - "Exact integration point for manually supplied legacy trial_count must be fail-closed or reconciliation-only."
+  n_a_or_waived_items:
+    - "Real ML/event runner instrumentation is N/A; shared contract compatibility only."
+
+handoff:
+  target_agent: "meta-se-critical"
+  expected_output:
+    - "docs/design/BLUEPRINT-TRIAL-LINEAGE-INSTRUMENTATION.md"
+    - "docs/design/DOMAIN-MAP-TRIAL-LINEAGE-INSTRUMENTATION.md"
+    - "docs/design/DEPENDENCY-MAP-TRIAL-LINEAGE-INSTRUMENTATION.md"
+    - "docs/design/HLD-TRIAL-LINEAGE-INSTRUMENTATION.md"
+    - "docs/design/ARCHITECTURE-DECISION-TRIAL-LINEAGE-INSTRUMENTATION.md"
+    - "process/discussions/CP3-CR163-HLD-DISCUSSION-LOG.md"
+    - "process/checks/CP3-CR163-DISCUSSION-CHECKPOINT.json"
+    - "process/checks/CP3-CR163-TRIAL-LINEAGE-INSTRUMENTATION-HLD-CONSISTENCY.result.json"
+    - "process/handoffs/CR163-CP3-META-SE-RETURN-SUMMARY.md"
+  exit_criteria:
+    - "All eight requirements and twelve P0 scenarios trace to architecture and validation."
+    - "Object/state/count/seal/supersession/integration contracts and failure paths are explicit."
+    - "At least two candidate architectures, recommendation, switch conditions, ADRs and three scenario simulations are complete."
+    - "Five-Story CP4 input is consistent; no source/plan/Story/LLD implementation is written."
+  blocked_if_missing:
+    - "A public contract or producer/consumer call direction cannot be established from repository facts."
+    - "The design would require expanding runtime/data authorization."
+    - "Any unresolved architecture decision prevents HLD consistency."
+
+read_expansion_log: []
+
+validation:
+  generated_from_sources:
+    - "process/checkpoints/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.md"
+    - "process/checks/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.result.json"
+    - "process/checks/CP2-CR163-DISCUSSION-CHECKPOINT.json"
+    - "process/changes/summaries/CR-163.summary.json"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "CP2 approved all three formal DQ and four prior SGQ; CP3 remains design-only."

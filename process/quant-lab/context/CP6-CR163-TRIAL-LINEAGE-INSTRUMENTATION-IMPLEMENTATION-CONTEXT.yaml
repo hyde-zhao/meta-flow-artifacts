@@ -1,0 +1,28 @@
+schema_version: "meta-flow.context-capsule.v1"
+context_id: "CP6-CR163-TRIAL-LINEAGE-INSTRUMENTATION"
+workflow_id: "CR-163"
+change_id: "CR-163"
+phase: "story-execution"
+checkpoint: "CP6"
+status: "active"
+created_at: "2026-07-11T12:30:00+08:00"
+read_profile: "minimal"
+objective: {summary: "Implement and verify CR163 Stories in DAG order using repository-local source/tests and per-Story evidence only."}
+key_facts:
+  - "CP5 approved all five LLDs; S02/S03 are v1.1 after user-requested hardening."
+  - "Execution order is S01 -> S02 -> (S03 || S04) -> S05."
+  - "Every Story requires CP6 and independent meta-qa-critical CP7 before runtime dependencies unlock."
+downstream_tasks:
+  - "Use Story work packets as the only implementation authority."
+  - "Write implementation report, return packet, evidence index and CP6 result inputs."
+  - "Never perform real runtime/data/credential/external/statistical/backfill/release operations."
+risks_and_decisions:
+  accepted_decisions: ["DQ-CP5-CR163-001", "DQ-CP5-CR163-002", "DQ-CP5-CR163-003", "DQ-CP5-CR163-004", "DQ-CP5-CR163-005"]
+  non_authorized: ["real-runtime", "real-data", "credentials", "external-writes", "statistical-correction", "CR155-backfill", "git-remote", "publish"]
+token_control: {capsule_first: true, full_doc_read_reason_required: true, read_expansion_log_ref: "process/state/READ-EXPANSION-LEDGER.ndjson"}
+observability_points: ["Story return-check", "Story evidence-check", "CP6 result-check", "independent CP7", "git diff --check"]
+allowed_reads: ["process/context/stories/*.CP6.work-packet.json", "assigned Story/LLD/Feature refs", "assigned source/test files"]
+must_read: ["assigned CP6 Story work packet", ".agents/skills/implementation-execution/SKILL.md"]
+read_if_needed: ["approved named HLD/ADR only for detected contract conflict"]
+do_not_read_by_default: ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "unassigned Story LLDs", "docs/quality/TEST-REPORT.md", "docs/quality/REVIEW.md", "process/archive/**"]
+

@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR163-S02.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-163",
+  "story_id": "CR163-S02-recorder-seal-supersession",
+  "status": "verified_with_risk",
+  "reverification_round": 2,
+  "created_at": "2026-07-11T13:43:28+08:00",
+  "created_by": "meta-qa-critical",
+  "context_ref": "process/context/stories/STORY-CR163-S02.CP7.work-packet.json",
+  "verification_report_ref": "docs/quality/VERIFICATION-REPORT-CR163-S02.md",
+  "source_story_ref": "process/stories/STORY-CR163-S02-recorder-seal-supersession.md",
+  "source_design_evidence_ref": "process/stories/STORY-CR163-S02-recorder-seal-supersession-LLD.md",
+  "cp6_return_ref": "process/returns/STORY-CR163-S02.CP6.return.json",
+  "touched_files": [
+    {"path": "docs/quality/VERIFICATION-REPORT-CR163-S02.md", "change_type": "modified"},
+    {"path": "docs/quality/TEST-REPORT-CR163-S02.md", "change_type": "modified"},
+    {"path": "docs/quality/REVIEW-CR163-S02.md", "change_type": "modified"},
+    {"path": "docs/quality/FIXES-CR163-S02.md", "change_type": "modified"},
+    {"path": "process/returns/STORY-CR163-S02.CP7.return.json", "change_type": "modified"},
+    {"path": "process/evidence/STORY-CR163-S02.CP7.index.json", "change_type": "modified"}
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "Verification only. QA-001..005 are independently closed; no public contract or design change was made by CP7."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_read_touched": false,
+    "real_lake_write_touched": false,
+    "provider_fetch_executed": false,
+    "nas_operation_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_or_live_executed": false,
+    "broker_operation_executed": false,
+    "external_framework_executed": false,
+    "statistical_effective_trial_computation_executed": false,
+    "historical_backfill_executed": false,
+    "git_remote_write_executed": false,
+    "publish_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_store.py tests/test_experiment_family_lineage_contracts.py", "result": "pass", "summary": "196 passed in 28.26s"},
+      {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_store.py -k 'qa_s02_001 or qa_s02_002 or qa_s02_003 or qa_s02_004'", "result": "pass", "summary": "10 passed, 21 deselected in 1.65s"},
+      {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_store.py -k qa_s02_005", "result": "pass", "summary": "4 passed, 27 deselected in 0.05s"},
+      {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_store.py -k qa_s02_003", "result": "pass", "summary": "3 passed, 28 deselected in 1.53s"},
+      {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_store.py -k 'partial or no_resume or tamper or broken or cycle or fork or immutable'", "result": "pass", "summary": "7 passed, 24 deselected in 10.49s"},
+      {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_store.py -k 10k --junitxml=/tmp/cr163-s02-10k-final.xml", "result": "pass", "summary": "1 passed, 30 deselected in 16.69s; exact 10,000/four observations/no threshold"},
+      {"command": "repository-local direct two-handle identical/conflict/reopen probe", "result": "pass", "summary": "accepted, idempotent replay, conflict blocked, two lines, shared state, clean reopen"},
+      {"command": "uv run --python 3.11 python -m py_compile engine/experiment_family_lineage_store.py", "result": "pass", "summary": "py_compile passed"},
+      {"command": "git diff --check", "result": "pass", "summary": "No whitespace errors"}
+    ],
+    "tests": ["tests/test_experiment_family_lineage_store.py", "tests/test_experiment_family_lineage_contracts.py"],
+    "stage_decision": "PASS_WITH_RISK",
+    "skipped": [{"scope": "real lineage/data/lake/NAS/provider/credentials/runtime/statistical/backfill/release/publish", "reason": "Forbidden and outside CP7 packet"}]
+  },
+  "open_questions": [],
+  "risks": [
+    "No in-place resume/repair: malformed families remain blocked evidence and recovery requires a new family from pre-search declaration.",
+    "Cross-process ownership is a cooperative local advisory lock; deliberately non-cooperating external writers are outside the supported model.",
+    "Exact-10k measurements are characterization observations without capacity threshold, SLA, production-scale or recoverability claim."
+  ],
+  "waivers": [],
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_architecture_doc_update": false,
+    "requires_hld_update": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "Rework rounds implement the confirmed LLD without changing public objects, artifact layout or long-lived design."
+  },
+  "workflow_health": {
+    "threshold_escalation_required": false,
+    "reason": "Final within-threshold reverification passed with no new defect."
+  },
+  "evidence_refs": [
+    "docs/quality/VERIFICATION-REPORT-CR163-S02.md",
+    "docs/quality/TEST-REPORT-CR163-S02.md",
+    "docs/quality/REVIEW-CR163-S02.md",
+    "docs/quality/FIXES-CR163-S02.md",
+    "process/evidence/STORY-CR163-S02.CP7.index.json"
+  ],
+  "next_stage_recommendation": "verified_with_risk",
+  "actor": "meta-qa-critical",
+  "decision": "PASS_WITH_RISK",
+  "updated_at": "2026-07-11T13:43:28+08:00"
+}

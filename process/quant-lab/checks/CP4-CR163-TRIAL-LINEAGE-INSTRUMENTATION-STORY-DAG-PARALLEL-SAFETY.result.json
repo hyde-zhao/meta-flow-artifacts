@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR163-TRIAL-LINEAGE-INSTRUMENTATION-STORY-DAG-PARALLEL-SAFETY",
+  "cr_id": "CR-163",
+  "checked_at": "2026-07-11T12:15:00+08:00",
+  "context_ref": "process/context/CP4-CR163-TRIAL-LINEAGE-INSTRUMENTATION-STORY-PLANNING-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR163.route-plan.json",
+  "dispatch_refs": ["AD-CR163-CP4-META-SE-CRITICAL-20260711T112000+0800"],
+  "evidence_ref": "process/DEVELOPMENT-PLAN-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml",
+  "items": [
+    {"id":"CP4-CR163-01","category":"entry-criteria","name":"CP3 HLD and DQ-CP3-CR163-001..004 are user-approved","status":"PASS","severity":"BLOCKER","evidence_refs":["process/checkpoints/CP3-CR163-TRIAL-LINEAGE-INSTRUMENTATION-HLD-REVIEW.md"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"CP3 status approved; CP4 may formalize Feature/Story planning without implementation authority."},
+    {"id":"CP4-CR163-02","category":"feature-design","name":"Feature design applicability is complete and required packages exist","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/FEATURE-DESIGN-MATRIX.md","docs/features/experiment-family-lineage/DESIGN.md","docs/features/trial-lineage-producer-adapters/DESIGN.md","docs/features/strategy-admission-lineage-projection/DESIGN.md"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"FEAT-20/21/22 required packages each have DESIGN/TEST-PLAN/TASKS; FEAT-23 standalone design is waived with explicit reason and revisit condition while S05 remains full-lld."},
+    {"id":"CP4-CR163-03","category":"story-boundary","name":"Exactly five formal Stories preserve the approved outcomes","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"S01 contract/validator, S02 recorder/seal, S03 producers, S04 consumers, S05 integrity/regression; no sixth Story."},
+    {"id":"CP4-CR163-04","category":"dependency-dag","name":"Typed Story and task dependencies are valid and acyclic","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml#dependency_graph"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"5 nodes, 9 typed edges, contract/runtime types only, invalid refs=0, cycles=0, isolated nodes=0."},
+    {"id":"CP4-CR163-05","category":"parallel-safety","name":"Waves, file ownership and merge order are conflict-free","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml#waves"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"Four Waves; merge order S01→S02→(S03||S04)→S05; primary file overlap=0; same-wave internal dependencies=0; S05 runtime-gated."},
+    {"id":"CP4-CR163-06","category":"producer-inventory","name":"S03 alone covers both producer chains and CPI-CR163-001..004","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/features/trial-lineage-producer-adapters/DESIGN.md","process/DEVELOPMENT-PLAN-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"S03 count=1, mappings=4/4, deduplicated chains=2/2; wrapper/hook no-double-count criteria explicit."},
+    {"id":"CP4-CR163-07","category":"traceability","name":"Quantitative acceptance covers all requirements, scenarios and claim ceilings","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/features/experiment-family-lineage/TEST-PLAN.md","docs/features/trial-lineage-producer-adapters/TEST-PLAN.md","docs/features/strategy-admission-lineage-projection/TEST-PLAN.md"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"REQ 8/8, scenarios 12/12, hash 10→1, negative classes 5/5 blocked, forbidden counters=0, CR155 blocked 1/1, effective/C1 computed claims=0."},
+    {"id":"CP4-CR163-08","category":"design-evidence-policy","name":"All five Stories have complete Feature refs and full-lld policy","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/FEATURE-DESIGN-MATRIX.md","process/DEVELOPMENT-PLAN-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml#cp5_batch"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"feature refs complete=5/5, quantitative acceptance complete=5/5, full-lld=5/5; CP5 batch requires five design evidence artifacts."},
+    {"id":"CP4-CR163-09","category":"plan-coexistence","name":"Canonical multi-CR plan is preserved with a CR163 integration pointer","status":"PASS","severity":"HIGH","evidence_refs":["process/DEVELOPMENT-PLAN.yaml","process/DEVELOPMENT-PLAN-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"Canonical YAML parses and exposes cr163_story_planning with five Stories; unrelated CR content was not rewritten. Pre-existing CR013 legacy-status plan-check failure is recorded, while the CR163 scoped plan-check is OK."},
+    {"id":"CP4-CR163-10","category":"authorization","name":"CP4 planning does not authorize implementation, runtime, data, credentials, statistics, backfill or external writes","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml#authorization_boundary","docs/design/FEATURE-DESIGN-MATRIX.md#first-slice--deferred--not-authorized"],"owner":"meta-se","route_on_fail":"escalate_runtime_high_risk","waiver_ref":null,"notes":"Implementation/test implementation false; real runtime/data/credentials/external/statistical/backfill/Git remote/publish false; CP5 gate not opened."},
+    {"id":"CP4-CR163-11","category":"validators","name":"Scoped plan, YAML, DAG, coverage and diff validators pass","status":"PASS","severity":"HIGH","evidence_refs":["process/DEVELOPMENT-PLAN-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"Scoped story plan-check OK; YAML parse OK; DAG custom check PASS; git diff --check PASS. Global story-to-feature and canonical plan checks retain pre-existing unrelated registry/legacy failures and are not used to overstate project-wide health."}
+  ],
+  "entry_criteria": [
+    {"name":"CP3 approved","status":"PASS","evidence_ref":"process/checkpoints/CP3-CR163-TRIAL-LINEAGE-INSTRUMENTATION-HLD-REVIEW.md"},
+    {"name":"CP4 context ready","status":"PASS","evidence_ref":"process/context/CP4-CR163-TRIAL-LINEAGE-INSTRUMENTATION-STORY-PLANNING-CONTEXT.yaml"},
+    {"name":"No open planning blocker","status":"PASS","evidence_ref":"process/DEVELOPMENT-PLAN-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml"}
+  ],
+  "exit_criteria": [
+    {"name":"Five Story plan complete","status":"PASS"},
+    {"name":"DAG and parallel safety pass","status":"PASS"},
+    {"name":"CP5 design evidence batch computable","status":"PASS"},
+    {"name":"No implementation authorization","status":"PASS"}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260711T033225Z0000-53151ca5", "RE-20260711T033225Z0000-05751318"],
+  "known_unrelated_failures": [
+    {"validator":"canonical story plan-check","status":"pre-existing-fail","detail":"CR013-S01..S04 legacy status draft-pending-cp4 is invalid; present before CR163 edits and preserved."},
+    {"validator":"global story-to-feature-trace","status":"pre-existing-fail","detail":"FEATURE-REGISTRY has no features and legacy STORY-001..018 lack trace fields; CR163 cards include feature refs/design refs/full-lld but global registry remediation is out of scope."}
+    ,{"validator":"cp result-check --check-consistency / state-transition","status":"host-integration-pending","detail":"CP4 artifact validation passes, but STATE.current.json has not yet been advanced by host to the CP5 preparation route; the subagent is not authorized to mutate host state."}
+    ,{"validator":"global read-expansion-ledger check","status":"pre-existing-fail","detail":"The global ledger contains many historical policy/schema failures; CP4 read events are present and referenced, but project-wide ledger remediation is out of CR163 scope."}
+  ],
+  "formal_cp5_gate_opened": false,
+  "decision": "PASS",
+  "next_route": "meta-dev_all_five_story_design_evidence_then_cp5_human_gate"
+}

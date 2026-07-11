@@ -1,0 +1,189 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "CR-163"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-07-11T10:20:00+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-163"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 18
+  max_summary_items: 24
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: "Product-baseline files may be read in full only to perform the explicitly authorized CR163 incremental revisions; complete historical CRs and archives remain deny-default."
+  default_instruction: "Read this capsule and CP2-CR163.context.json first. Stay within allowed_reads; log any deny-default expansion before reading."
+
+allowed_reads:
+  - path: "process/state/STATE.current.json"
+    reason: "CR163 lightweight state and active phase"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "Current context/handoff discovery pointers"
+    required: true
+  - path: "process/context/CP2-CR163.context.json"
+    reason: "Validated machine context pack and read budget"
+    required: true
+  - path: "process/changes/summaries/CR-163.summary.json"
+    reason: "Current CR scope, traits, gates, risks and authorization summary"
+    required: true
+  - path: "process/checks/CP0-CR163-TRIAL-LINEAGE-INSTRUMENTATION-REQUEST-INTAKE.result.json"
+    reason: "CP0 intake and route readiness"
+    required: true
+  - path: "process/checks/CP0-CR163.route-plan.json"
+    reason: "CP0-CP8 applicability and required human gates"
+    required: true
+  - path: "docs/product/USE-CASES.md"
+    reason: "Incremental CR163 use-case revision; preserve prior baseline and revision history"
+    required: false
+  - path: "docs/product/REQUIREMENTS.md"
+    reason: "Incremental CR163 requirements and quantitative AC revision"
+    required: false
+  - path: "docs/product/SCENARIOS.yaml"
+    reason: "CR163 positive/negative/boundary/recovery/tamper scenarios"
+    required: false
+  - path: "docs/product/TEST-MATRIX.md"
+    reason: "Scenario→Requirement→Story→Test traceability update"
+    required: false
+  - path: "docs/product/STORY-MAP.md"
+    reason: "User activity and five-Story candidate planning input"
+    required: false
+  - path: "docs/product/MVP-SCOPE.md"
+    reason: "Implementation slice, exclusions and deferred items"
+    required: false
+  - path: "docs/product/RELEASE-SLICES.md"
+    reason: "CR163 implementation/verification slice"
+    required: false
+  - path: "docs/product/BACKLOG.md"
+    reason: "Map FU-CR161-001 to CR163 while retaining FU-CR161-002..006"
+    required: false
+  - path: "engine/mature_multifactor_research.py"
+    reason: "Known Stage 3 candidate-producing entrypoint inventory seed"
+    required: false
+  - path: "engine/research_manifest.py"
+    reason: "Existing single-run ExperimentManifest contract"
+    required: false
+  - path: "engine/backtest_production_contracts.py"
+    reason: "Existing BacktestRunSpec experiment_id path"
+    required: false
+  - path: "engine/strategy_admission_statistical_gate.py"
+    reason: "Existing BacktestOverfitRiskReport.trial_count consumer surface"
+    required: false
+  - path: "engine/cross_strategy_reliability_gates.py"
+    reason: "Existing raw/effective trial-count consumer surface"
+    required: false
+
+must_read:
+  - path: "process/context/CP2-CR163.context.json"
+    reason: "Validated context budget and deny-default rules"
+    required: true
+  - path: "process/changes/summaries/CR-163.summary.json"
+    reason: "Current CR machine summary"
+    required: true
+  - path: "process/checks/CP0-CR163.route-plan.json"
+    reason: "Full standard route and CP2 block"
+    required: true
+  - path: "process/checks/CP0-CR163-TRIAL-LINEAGE-INSTRUMENTATION-REQUEST-INTAKE.result.json"
+    reason: "Accepted CP0 facts and explicit authorization boundary"
+    required: true
+
+read_if_needed:
+  - path: "docs/product/*.md"
+    trigger: "Read each named product baseline only when preparing its incremental CR163 revision; preserve prior content and append revision records."
+  - path: "engine/**/*.py"
+    trigger: "Use rg first; expand only to files that can construct an admission candidate, BacktestRunSpec, ExperimentManifest, or admission lineage consumer."
+  - path: "tests/**/*.py"
+    trigger: "Inspect only to identify existing fixture/static adapter behavior and negative-regression coverage; do not implement tests during CP1/CP2."
+  - path: "process/changes/CR-163.md"
+    trigger: "Only if summary lacks a field required for human audit; log read expansion first."
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "Human summary/legacy fallback; STATE.current.json is authoritative."
+  - path_or_pattern: "process/DEVELOPMENT-PLAN.yaml"
+    reason: "Story decomposition is blocked until CP2 approval."
+  - path_or_pattern: "process/changes/CR-*.md"
+    reason: "Read CR summary by default; historical CR full text is deny-default."
+  - path_or_pattern: "process/stories/*-LLD.md"
+    reason: "LLD work is not authorized before CP2/CP3/CP4."
+  - path_or_pattern: "process/archive/**"
+    reason: "Historical archive is unrelated to current incremental product baseline."
+  - path_or_pattern: "process/discussions/**"
+    reason: "Historical discussion logs are audit-only and do not replace current baselines."
+  - path_or_pattern: "complete conversation transcript"
+    reason: "The capsule and CR summary carry the required facts."
+
+key_facts:
+  scope_summary: "Declare experiment families before search, automatically record trial/attempt/selection lineage append-only, seal deterministic manifests, validate completeness/tamper/counts, and expose lineage availability/ref to existing admission consumers."
+  accepted_decisions:
+    - "Use one formal CR163 with a target of five Stories; do not split the goal package into multiple CRs."
+    - "Use standard architecture-major flow with CP2/CP3/CP5/CP8 human gates and independent meta-qa-critical CP7."
+    - "ExperimentManifest remains a single-run object; family lineage is a separate lifecycle connected by run_id, experiment_id and artifact refs."
+    - "Availability remains present/typed_unavailable/not_applicable_with_reason/blocked; no new parallel gate family."
+    - "CR155 is negative regression only and must remain blocked."
+  active_constraints:
+    - "Family spec exists before first trial; failed/cancelled/excluded trials remain in lineage."
+    - "Retries use distinct attempt_id without increasing raw_trial_count; different seeds remain distinct trials."
+    - "Seal is immutable; later corrections supersede and preserve prior version."
+    - "effective_trial_count stays typed_unavailable with empty ref/method in this CR."
+    - "No real lake/NAS/provider/credential/runtime/trading/broker/external-framework/remote-write/publish action is authorized."
+  downstream_tasks:
+    - "Perform Scenario Gray Areas discussion using at least one SGQ interaction or return a focused question batch to the host."
+    - "Create and freeze a named candidate-producing entrypoint inventory with 100% P0 coverage semantics."
+    - "Incrementally update USE-CASES, REQUIREMENTS, SCENARIOS, TEST-MATRIX, STORY-MAP, MVP-SCOPE, RELEASE-SLICES and BACKLOG with revision records."
+    - "Produce CP1 result, CP2 precheck inputs, discussion log/checkpoint, and a return summary for host-orchestrator."
+  traceability:
+    requirements: ["CR163 family lifecycle", "trial instrumentation", "search lineage", "count semantics", "manifest production", "existing-gate integration"]
+    use_cases: ["UC-58", "UC-59 compatibility-only", "UC-60 compatibility-only"]
+    scenarios: ["pre-search declaration", "retry/seed/duplicate", "failure/cancel/exclude", "seal/supersede/tamper", "missing instrumentation", "CR155 negative regression"]
+    stories: ["S01 contract+validator", "S02 recorder+seal+hash", "S03 mature multifactor entrypoint", "S04 admission integration", "S05 integrity/recovery/tamper/CR155 regression"]
+    features: ["experiment-family-lineage", "strategy-admission-evidence"]
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "CP2 must confirm the frozen entrypoint inventory, count semantics, availability semantics, quantitative AC and exclusions."
+  non_authorized_items:
+    - "statistical corrections or effective-trial computation"
+    - "historical lineage backfill"
+    - "real data, runtime, provider, credential, NAS, broker, trading, publish or remote write"
+  risk_acceptance_items: []
+  open_questions:
+    - "Exact inventory of all current candidate-producing entrypoints must be proven from repository facts, not assumed from the initial list."
+    - "Final object names and artifact paths are CP3 decisions, not CP2 implementation guesses."
+  n_a_or_waived_items:
+    - "Real ML/event runner instrumentation is N/A because current paths are fixture/static adapters; shared producer contract and compatibility tests remain in scope."
+
+handoff:
+  target_agent: "meta-pm"
+  expected_output:
+    - "Incremental product baseline revisions for all eight affected docs"
+    - "Candidate-producing entrypoint inventory with explicit included/excluded paths and evidence"
+    - "process/discussions/CP2-CR163-SCENARIO-DISCUSSION-LOG.md"
+    - "process/checks/CP2-CR163-DISCUSSION-CHECKPOINT.json"
+    - "process/checks/CP1-CR163-TRIAL-LINEAGE-INSTRUMENTATION-USE-CASE-COMPLETENESS.result.json"
+    - "process/handoffs/CR163-CP2-META-PM-RETURN-SUMMARY.md"
+  exit_criteria:
+    - "P0 scenarios, entrypoint inventory, quantitative AC, exclusions and CR155 negative regression are traceable."
+    - "No implementation, Story decomposition, LLD or runtime action occurs."
+    - "All OPEN items are classified; host-orchestrator can prepare CP2 Decision Brief."
+  blocked_if_missing:
+    - "A candidate-producing entrypoint cannot be determined from repository evidence."
+    - "Count semantics or effective-trial boundary conflicts with CR161 baseline."
+    - "Any requested action exceeds the authorization boundary."
+
+read_expansion_log: []
+
+validation:
+  generated_from_sources:
+    - "process/changes/summaries/CR-163.summary.json"
+    - "process/checks/CP0-CR163.route-plan.json"
+    - "process/checks/CP0-CR163-TRIAL-LINEAGE-INSTRUMENTATION-REQUEST-INTAKE.result.json"
+    - "user-provided FU-CR161-001 scope definition"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "The machine context pack initially exceeded budget because CR-INDEX was included; it was removed and revalidated."

@@ -2,12 +2,12 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: init
+Phase: delivered
 Blocked: false
-Active CR: CR-162
+Active CR: none
 Active Story: none
 Pending gate: none
-Next action: Review CP0 bootstrap readiness for CR-162, then launch the first human gate.
+Next action: CR163 is CP8 approved and closed READY_WITH_RISK; complete the explicitly authorized paired repository push and record delivery evidence.
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,7 +20,7 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: process/context/CP0-CR162.context.json
+- active context: process/context/CP8-CR163-TRIAL-LINEAGE-INSTRUMENTATION-CONTEXT.yaml
 
 Policy refs:
 - NO_CREDENTIAL_READ
@@ -49,6 +49,6 @@ Open risks:
 - {'id': 'R-CR158-EVIDENCE-SEMANTIC-OVERFIT', 'severity': 'medium', 'status': 'open'}
 - {'id': 'R-CR158-RUNTIME-OVERCLAIM', 'severity': 'high', 'status': 'open'}
 
-Updated at: 2026-07-10T12:30:31+00:00
+Updated at: 2026-07-11T04:25:00+00:00
 
 <!-- generated-by: meta-flow state render -->

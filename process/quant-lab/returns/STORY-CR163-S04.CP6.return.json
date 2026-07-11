@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR163-S04.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-163",
+  "story_id": "CR163-S04-existing-admission-projection",
+  "status": "implemented",
+  "rework_round": 2,
+  "created_at": "2026-07-11T13:51:29+08:00",
+  "created_by": "meta-dev-debugger",
+  "context_ref": "process/context/stories/STORY-CR163-S04.CP6.work-packet.json",
+  "implementation_ref": "process/stories/STORY-CR163-S04-existing-admission-projection-IMPLEMENTATION.md",
+  "source_story_ref": "process/stories/STORY-CR163-S04-existing-admission-projection.md",
+  "source_design_evidence_ref": "process/stories/STORY-CR163-S04-existing-admission-projection-LLD.md",
+  "predecessor_refs": [
+    "process/evidence/STORY-CR163-S01.CP7.index.json",
+    "process/evidence/STORY-CR163-S02.CP7.index.json"
+  ],
+  "touched_files": [
+    {"path": "engine/strategy_admission_statistical_gate.py", "change_type": "modified"},
+    {"path": "engine/cross_strategy_reliability_gates.py", "change_type": "modified"},
+    {"path": "engine/strategy_admission_package.py", "change_type": "modified"},
+    {"path": "tests/test_cr163_trial_lineage_admission_projection.py", "change_type": "created"},
+    {"path": "tests/research/test_strategy_admission_statistical_gate.py", "change_type": "modified"},
+    {"path": "tests/research/test_cross_strategy_reliability_gates.py", "change_type": "modified"},
+    {"path": "process/stories/STORY-CR163-S04-existing-admission-projection-IMPLEMENTATION.md", "change_type": "created"},
+    {"path": "process/returns/STORY-CR163-S04.CP6.return.json", "change_type": "created"},
+    {"path": "process/evidence/STORY-CR163-S04.CP6.index.json", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "Rework 2 preserves the trusted fail-closed production contract and migrates stale CR151/CR154 native threshold fixtures to explicit trusted-lineage or missing-lineage expectations."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_data_touched": false,
+    "real_lake_read_touched": false,
+    "real_lake_write_touched": false,
+    "provider_fetch_executed": false,
+    "nas_operation_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_or_live_executed": false,
+    "broker_operation_executed": false,
+    "statistical_execution_executed": false,
+    "historical_backfill_executed": false,
+    "release_operation_executed": false,
+    "external_framework_executed": false,
+    "git_remote_write_executed": false,
+    "new_gate_family_count": 0,
+    "forbidden_story_files_touched": [],
+    "s01_s02_s03_files_touched": false,
+    "cr155_files_touched": false
+    ,"expanded_test_write_scope_only": [
+      "tests/research/test_strategy_admission_statistical_gate.py",
+      "tests/research/test_cross_strategy_reliability_gates.py"
+    ]
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/research/test_strategy_admission_statistical_gate.py tests/research/test_cross_strategy_reliability_gates.py",
+        "result": "pass",
+        "summary": "16 passed in 0.07s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/research/test_strategy_admission_statistical_gate.py tests/research/test_cross_strategy_reliability_gates.py tests/research/test_strategy_admission_package.py tests/test_cr163_trial_lineage_admission_projection.py tests/test_experiment_family_lineage_contracts.py tests/research/test_daily_multifactor_baseline_artifact.py",
+        "result": "pass",
+        "summary": "220 passed in 0.18s"
+      },
+      {
+        "command": "uv run --python 3.11 python -m py_compile engine/strategy_admission_statistical_gate.py engine/cross_strategy_reliability_gates.py engine/strategy_admission_package.py",
+        "result": "pass",
+        "summary": "py_compile passed"
+      },
+      {
+        "command": "git diff --check",
+        "result": "pass",
+        "summary": "No whitespace errors"
+      }
+    ],
+    "tests": [
+      "tests/test_cr163_trial_lineage_admission_projection.py",
+      "tests/test_experiment_family_lineage_contracts.py",
+      "tests/research/test_daily_multifactor_baseline_artifact.py",
+      "tests/research/test_strategy_admission_statistical_gate.py",
+      "tests/research/test_cross_strategy_reliability_gates.py",
+      "tests/research/test_strategy_admission_package.py"
+    ],
+    "stage_decision": "PASS",
+    "skipped": []
+  },
+  "open_questions": [],
+  "resolved_findings": [
+    {
+      "finding_id": "QA-CR163-S04-001",
+      "status": "resolved",
+      "summary": "Untrusted Mapping and bare present DTO cannot mint positive lineage; trusted positive input must bind manifest and validation result through S01 project_family_evidence."
+    },
+    {
+      "finding_id": "QA-CR163-S04-002",
+      "status": "resolved",
+      "summary": "All three consumers expose an identical canonical payload; manual absent/match/mismatch is CR151-local diagnostic state."
+    },
+    {
+      "finding_id": "QA-CR163-S04-003",
+      "status": "resolved",
+      "summary": "Actual CR155 compose/derive path is blocked with paper_candidate false when native lineage is absent; historical backfill remains zero."
+    },
+    {
+      "finding_id": "QA-CR163-S04-004",
+      "status": "resolved",
+      "summary": "Stale CR151/CR154 native threshold fixtures now use trusted lineage where appropriate and explicitly assert missing-lineage BLOCKED; full affected subset is green without production relaxation."
+    }
+  ],
+  "risks": [
+    {
+      "risk_id": "R-CR163-S04-001",
+      "severity": "accepted",
+      "summary": "Effective trial count is unavailable, therefore CR154 C1 and deflated-performance claims remain non-computable and blocked.",
+      "mitigation": "Preserve typed_unavailable with empty ref/method and require a separately approved later CR before enabling the claim."
+    }
+  ],
+  "waivers": [],
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_architecture_doc_update": false,
+    "requires_hld_update": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "Implementation follows the CP5-approved S04 LLD."
+  },
+  "evidence_refs": ["process/evidence/STORY-CR163-S04.CP6.index.json"],
+  "next_stage_recommendation": "ready_for_cp7",
+  "actor": "meta-dev-debugger",
+  "decision": "PASS",
+  "updated_at": "2026-07-11T14:31:44+08:00"
+}

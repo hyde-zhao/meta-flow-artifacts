@@ -1,0 +1,94 @@
+{
+  "checkpoint_id": "CP2-CR163-DISCUSSION",
+  "cr_id": "CR-163",
+  "status": "completed",
+  "formal_gate_opened": false,
+  "question_broker": "host-orchestrator",
+  "selected_gray_areas": [
+    "GA-CR163-01",
+    "GA-CR163-02",
+    "GA-CR163-03",
+    "GA-CR163-04"
+  ],
+  "completed_gray_areas": [
+    "GA-CR163-01",
+    "GA-CR163-02",
+    "GA-CR163-03",
+    "GA-CR163-04"
+  ],
+  "remaining_gray_areas": [],
+  "deferred_ideas": [
+    "DF-CR163-001 effective-trial/statistical correction producer",
+    "DF-CR163-002 historical lineage backfill",
+    "DF-CR163-003 real ML/event runner instrumentation"
+  ],
+  "scenario_confirmation_interactions": [
+    {
+      "question_id": "SGQ-CR163-001",
+      "question": "Freeze CPI-CR163-001..004 as the P0 producer inventory denominator?",
+      "options": ["A: four mappings across two deduplicated producer chains", "B: Stage 3 public chain only", "C: include anomaly/adapters/consumers"],
+      "recommendation": "A",
+      "user_response": "A — explicitly confirmed by the user's new assessment.",
+      "confirmed_understanding": "Freeze CPI-CR163-001..004 as four instrumentation mappings across two deduplicated producer chains; anomaly/adapters/consumers/contracts remain excluded or N/A.",
+      "impact_surface": ["scope", "architecture", "validation", "maintenance"],
+      "source_refs": ["docs/product/USE-CASES.md#cr163-候选生产入口清单cp2-冻结候选", "process/discussions/CP2-CR163-SCENARIO-DISCUSSION-LOG.md"],
+      "status": "confirmed",
+      "blocking": false
+    },
+    {
+      "question_id": "SGQ-CR163-002",
+      "question": "Freeze retry/seed/failed-cancelled-excluded raw count semantics?",
+      "options": ["A: retries are attempts; seeds are trials; all declared terminal trials count", "B: exclude failed/cancelled/excluded", "C: count every attempt as a trial"],
+      "recommendation": "A",
+      "user_response": "A — explicitly confirmed by the user's new assessment.",
+      "confirmed_understanding": "Different parameters or seeds are distinct trials; retries are distinct attempts without increasing raw_trial_count; failed/cancelled/excluded declared trials remain append-only and counted.",
+      "impact_surface": ["semantics", "validation", "risk"],
+      "source_refs": ["docs/product/REQUIREMENTS.md#req-cr163-003-raw-trial-count-semantics"],
+      "status": "confirmed",
+      "blocking": false
+    },
+    {
+      "question_id": "SGQ-CR163-003",
+      "question": "Keep effective_trial_count typed_unavailable with empty ref and method?",
+      "options": ["A: keep unavailable", "B: add effective-count computation to CR163", "C: copy raw count into effective count"],
+      "recommendation": "A",
+      "user_response": "A — explicitly confirmed by the user's new assessment.",
+      "confirmed_understanding": "effective_trial_count remains typed_unavailable with empty ref/method. CR163 makes only the C1 raw-lineage input ready and does not make C1 computable.",
+      "impact_surface": ["scope", "claim_ceiling", "admission"],
+      "source_refs": ["docs/product/REQUIREMENTS.md#req-cr163-006-existing-gate-availability-integration"],
+      "status": "confirmed",
+      "blocking": false
+    },
+    {
+      "question_id": "SGQ-CR163-004",
+      "question": "Require immutable sealed versions and correction by supersession only?",
+      "options": ["A: immutable plus supersession", "B: controlled in-place rewrite", "C: delete and rebuild"],
+      "recommendation": "A",
+      "user_response": "A — explicitly confirmed by the user's new assessment.",
+      "confirmed_understanding": "Sealed versions are immutable; correction is append-only through a superseding version that preserves the prior ref/hash and auditable version chain.",
+      "impact_surface": ["integrity", "recovery", "release"],
+      "source_refs": ["docs/product/REQUIREMENTS.md#req-cr163-004-deterministic-seal-and-supersession"],
+      "status": "confirmed",
+      "blocking": false
+    }
+  ],
+  "canonical_refs": [
+    "process/context/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-CONTEXT.yaml",
+    "process/changes/summaries/CR-163.summary.json",
+    "docs/product/USE-CASES.md",
+    "docs/product/REQUIREMENTS.md",
+    "docs/product/SCENARIOS.yaml",
+    "process/discussions/CP2-CR163-SCENARIO-DISCUSSION-LOG.md"
+  ],
+  "inventory": {
+    "p0_mapping_total": 4,
+    "producer_chain_total": 2,
+    "mapped": 4,
+    "coverage_percent": 100,
+    "status": "confirmed_user_option_A"
+  },
+  "last_user_confirmation": "2026-07-11: User explicitly confirmed option A for SGQ-CR163-001..004 through the new assessment supplied to host-orchestrator.",
+  "blocking_reason": "",
+  "scope_impact": "No scope expansion and no Story-count change. Normalize wording to four instrumentation mappings across two deduplicated producer chains; CR163-S03 covers CPI-CR163-001..004 within the existing five-Story target.",
+  "next_step": "Host-orchestrator may prepare CP2 precheck and Decision Brief. Formal CP2 gate remains unopened by meta-pm."
+}

@@ -10,7 +10,7 @@ owner: "host-orchestrator"
 
 | Candidate ID | Title | Status | Activation Condition |
 |---|---|---|---|
-| `FU-CR161-001` | Research-engine trial lineage instrumentation | candidate | Need `ExperimentFamilyManifest=present` for future runs. |
+| `FU-CR161-001` | Research-engine trial lineage instrumentation | active (`CR-163`) | Activated 2026-07-11; formal CR: `process/changes/CR-163.md`; target is `ExperimentFamilyManifest=present` for future instrumented runs. |
 | `FU-CR161-002` | Multiple testing / PBO / DSR computable evidence implementation | candidate | Need FDR/BH, WRC/SPA, PBO/CSCV, DSR/deflation evidence. |
 | `FU-CR161-003` | Walk-forward fold-level metrics and OOS evidence computation | candidate | Need fold-level OOS metrics and split evidence. |
 | `FU-CR161-004` | Economic cost / impact approximation implementation | candidate | Need net-return, impact, slippage or TCA evidence. |

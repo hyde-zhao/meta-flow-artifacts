@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3-DISCUSSION",
+  "checkpoint_id": "CP3-CR163-DISCUSSION-CHECKPOINT",
+  "cr_id": "CR-163",
+  "phase": "solution-design",
+  "status": "ready-for-cp3-hld-review",
+  "created_at": "2026-07-11T11:35:00+08:00",
+  "context_ref": "process/context/CP3-CR163-TRIAL-LINEAGE-INSTRUMENTATION-DESIGN-CONTEXT.yaml",
+  "discussion_log_ref": "process/discussions/CP3-CR163-HLD-DISCUSSION-LOG.md",
+  "hld_ref": "docs/design/HLD-TRIAL-LINEAGE-INSTRUMENTATION.md",
+  "adr_ref": "docs/design/ARCHITECTURE-DECISION-TRIAL-LINEAGE-INSTRUMENTATION.md",
+  "formal_gate_opened": false,
+  "question_broker": "host-orchestrator",
+  "selection_basis": "CP2-approved four SGQ decisions, CR163 product baselines, CR161 contract-first baseline and named repository producer/consumer facts; no additional reviewer lane dispatch is claimed.",
+  "architecture_gray_areas": [
+    {"id":"AGA-CR163-01","topic":"recorder API","selected_option":"lifecycle session facade backed by typed event commands","status":"selected-for-hld","decision_ref":"DQ-CP3-CR163-001"},
+    {"id":"AGA-CR163-02","topic":"storage backend","selected_option":"local canonical JSON spec plus append-only JSONL events and immutable manifest JSON","status":"selected-for-hld","decision_ref":"DQ-CP3-CR163-002"},
+    {"id":"AGA-CR163-03","topic":"seal and supersession","selected_option":"restricted canonical JSON plus SHA-256 and full immutable supersession chain","status":"selected-for-hld","decision_ref":"DQ-CP3-CR163-002"},
+    {"id":"AGA-CR163-04","topic":"legacy manual trial_count","selected_option":"reconciliation-only; no sealed native ref means typed_unavailable and mismatch means blocked","status":"selected-for-hld","decision_ref":"DQ-CP3-CR163-003"}
+  ],
+  "frozen_contracts": {
+    "persistent_objects": ["ExperimentFamilySpec","ExperimentTrial","TrialAttempt","TrialSelection","ExperimentFamilyManifest","FamilyLineageValidationResult"],
+    "application_facade": "FamilyLineageSession",
+    "producer_chains": 2,
+    "instrumentation_mappings": ["CPI-CR163-001","CPI-CR163-002","CPI-CR163-003","CPI-CR163-004"],
+    "story_outcomes": ["CR163-S01","CR163-S02","CR163-S03","CR163-S04","CR163-S05"],
+    "raw_count": "count(distinct stable_trial_id); failed/cancelled/excluded/never-started-with-reason included; retries are attempts",
+    "effective_count": "typed_unavailable with empty ref and method",
+    "cr155": "blocked negative regression; no historical reconstruction"
+  },
+  "read_expansion_log": [
+    {"paths":["docs/product/USE-CASES.md","docs/product/REQUIREMENTS.md","docs/product/SCENARIOS.yaml","docs/product/STORY-MAP.md","docs/product/MVP-SCOPE.md"],"full_doc_read_reason":"architecture_traceability: exact inventory, requirements, scenarios, Story outcomes and claim ceiling were needed."},
+    {"paths":["docs/design/HLD-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md","docs/design/ARCHITECTURE-DECISION-STRATEGY-ADMISSION-EVIDENCE-PIPELINE-HARDENING.md"],"full_doc_read_reason":"parent_baseline_conflict_check: preserve CR161 contract-first, typed_unavailable and existing-gate decisions."},
+    {"paths":["engine/mature_multifactor_research.py","engine/multifactor_strategy_candidates.py","engine/research_manifest.py","engine/backtest_production_contracts.py","engine/strategy_admission_statistical_gate.py","engine/cross_strategy_reliability_gates.py","engine/strategy_admission_package.py"],"full_doc_read_reason":"public_contract_and_call_direction: confirm two producer chains, single-run identity and existing consumer input/attach surfaces."}
+  ],
+  "deny_default_process_evidence_reads": [],
+  "blocking_dq_batch": [],
+  "pending_cp3_decisions": ["DQ-CP3-CR163-001","DQ-CP3-CR163-002","DQ-CP3-CR163-003","DQ-CP3-CR163-004"],
+  "not_authorized": ["source_or_test_implementation","development_plan_or_story_or_lld_write","quality_or_release_write","runtime_or_real_data_or_credentials","external_write_or_publish","statistical_or_effective_trial_computation","historical_lineage_reconstruction","git_remote_write"],
+  "ready_for_hld_draft": true,
+  "ready_for_host_cp3_decision_brief": true,
+  "human_cp3_approval_status": "pending"
+}
+

@@ -1,0 +1,83 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "modified",
+      "path": "docs/quality/VERIFICATION-REPORT-CR163-S01.md"
+    },
+    {
+      "change_type": "modified",
+      "path": "docs/quality/TEST-REPORT-CR163-S01.md"
+    },
+    {
+      "change_type": "modified",
+      "path": "docs/quality/REVIEW-CR163-S01.md"
+    },
+    {
+      "change_type": "modified",
+      "path": "docs/quality/FIXES-CR163-S01.md"
+    },
+    {
+      "change_type": "modified",
+      "path": "process/returns/STORY-CR163-S01.CP7.return.json"
+    },
+    {
+      "change_type": "modified",
+      "path": "process/evidence/STORY-CR163-S01.CP7.index.json"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_contracts.py",
+      "result": "pass",
+      "summary": "165 passed in 0.12s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_contracts.py -k 'declare_family_binds or record_selection_binds or all_nine_commands or superseding_seal_nested'",
+      "result": "pass",
+      "summary": "19 passed, 146 deselected in 0.03s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_contracts.py -k 'v1_validation_replays or malformed_or_ambiguous or internal_sequence_gap or post_seal_and_post_supersession or projection_exhaustively or unknown_or_base'",
+      "result": "pass",
+      "summary": "118 passed, 47 deselected in 0.09s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/data_lake/test_lineage_and_run_id.py tests/experiments/test_experiment_manifest_catalog.py tests/experiments/test_experiment_manifest_closure.py tests/meta_flow/test_experiment_entrypoint_taxonomy.py tests/research/test_strategy_admission_package.py tests/research/test_strategy_admission_statistical_gate.py",
+      "result": "pass",
+      "summary": "38 passed in 0.65s"
+    },
+    {
+      "command": "repository-local direct exact 9/9 command identity fold probe",
+      "result": "pass",
+      "summary": "9/9 exact command classes emitted expected stable blocked codes and preserved expected raw membership"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/experiment_family_lineage.py",
+      "result": "pass",
+      "summary": "py_compile passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "summary": "No whitespace errors"
+    }
+  ],
+  "cr_id": "CR-163",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/STORY-CR163-S01.CP7.return.json",
+  "risks": [],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR163-S01-family-contract-validator",
+  "tests": [
+    "tests/test_experiment_family_lineage_contracts.py",
+    "tests/data_lake/test_lineage_and_run_id.py",
+    "tests/experiments/test_experiment_manifest_catalog.py",
+    "tests/experiments/test_experiment_manifest_closure.py",
+    "tests/meta_flow/test_experiment_entrypoint_taxonomy.py",
+    "tests/research/test_strategy_admission_package.py",
+    "tests/research/test_strategy_admission_statistical_gate.py"
+  ],
+  "waivers": []
+}

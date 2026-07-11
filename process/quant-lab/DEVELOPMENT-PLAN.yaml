@@ -1,16 +1,17 @@
 project_id: "local_backtest"
-version: "1.8"
+version: "1.9"
 status: "cr138-ready-for-cp5-review"
 confirmed: true
 confirmed_by: "user"
 confirmed_at: "2026-05-14"
 created_at: "2026-05-14"
 created_by: "meta-se"
-last_updated: "2026-06-24T16:55:00+08:00"
+last_updated: "2026-07-11T12:05:00+08:00"
 source_hld: "process/HLD.md"
 companion_hld: "process/HLD-DATA-LAKE.md"
 source_adr: "process/ARCHITECTURE-DECISION.md"
 story_backlog: "process/STORY-BACKLOG.md"
+story_management_truth_source: "process/DEVELOPMENT-PLAN.yaml"
 active_change: "CR-138"
 secondary_change: ""
 cr004_status: "draft-pending-cp4"
@@ -7368,3 +7369,95 @@ cr020_increment:
     isolated_nodes: []
     conclusion: "PASS"
     note: "CR020 增量 DAG 从 W1 gateway runtime/session 单向流向 W2 client/auth、W3 query_positions、W4 docs/CP7 evidence。LLD 可按 max_parallel_lld=3 基于 file owner 分轮起草；开发仍受 CP5、依赖类型、文件所有权和运行授权门控约束。"
+
+cr163_story_planning:
+  change_id: "CR-163"
+  title: "Trial Lineage Instrumentation"
+  status: "cp4-pass-pending-cp5-design-evidence"
+  scoped_plan: "process/DEVELOPMENT-PLAN-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml"
+  cp3_review: "process/checkpoints/CP3-CR163-TRIAL-LINEAGE-INSTRUMENTATION-HLD-REVIEW.md"
+  cp4_result: "process/checks/CP4-CR163-TRIAL-LINEAGE-INSTRUMENTATION-STORY-DAG-PARALLEL-SAFETY.result.json"
+  feature_design_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md#cr163-cp4-增量trial-lineage-instrumentation"
+  required_feature_design:
+    - "docs/features/experiment-family-lineage/DESIGN.md"
+    - "docs/features/trial-lineage-producer-adapters/DESIGN.md"
+    - "docs/features/strategy-admission-lineage-projection/DESIGN.md"
+  story_count: 5
+  wave_count: 4
+  cp5_batch:
+    id: "CP5-CR163-ALL-STORIES-LLD-BATCH"
+    design_evidence_required: 5
+    required_level: "full-lld"
+    status: "not-started"
+    human_gate: "required"
+  authorization_boundary:
+    implementation_allowed: false
+    test_implementation_allowed: false
+    runtime_data_credential_external_write_allowed: false
+    effective_trial_or_statistical_computation_allowed: false
+    historical_cr155_backfill_allowed: false
+    git_remote_write_or_publish_allowed: false
+  parallel_policy:
+    max_parallel_lld: 3
+    max_parallel_dev: 2
+    max_parallel_qa: 2
+    lld_rule: "All five full LLDs may be drafted in bounded rounds, but CP5 confirms all five together."
+    dev_rule: "S01 then S02 then S03/S04 may run in parallel; S05 is runtime-gated by S01-S04."
+  stories:
+    - id: "CR163-S01-family-contract-validator"
+      card: "process/stories/STORY-CR163-S01-family-contract-validator.md"
+      wave: "CR163-W1-CONTRACT-VALIDATOR"
+      depends_on: []
+      dependency_types: []
+      lld_policy: "full-lld"
+      primary_files: ["engine/experiment_family_lineage.py", "tests/test_experiment_family_lineage_contracts.py"]
+    - id: "CR163-S02-recorder-seal-supersession"
+      card: "process/stories/STORY-CR163-S02-recorder-seal-supersession.md"
+      wave: "CR163-W2-RECORDER-SEAL"
+      depends_on: ["CR163-S01-family-contract-validator"]
+      dependency_types: ["contract"]
+      lld_policy: "full-lld"
+      primary_files: ["engine/experiment_family_lineage_store.py", "tests/test_experiment_family_lineage_store.py"]
+    - id: "CR163-S03-two-producer-chain-instrumentation"
+      card: "process/stories/STORY-CR163-S03-two-producer-chain-instrumentation.md"
+      wave: "CR163-W3-PRODUCERS-CONSUMERS"
+      depends_on: ["CR163-S01-family-contract-validator", "CR163-S02-recorder-seal-supersession"]
+      dependency_types: ["contract", "contract"]
+      lld_policy: "full-lld"
+      primary_files: ["engine/mature_multifactor_research.py", "engine/multifactor_strategy_candidates.py", "scripts/research/run_multifactor_strategy_research.py", "scripts/legacy/research/run_multifactor_strategy_candidates.py", "tests/test_cr163_trial_lineage_producer_adapters.py"]
+    - id: "CR163-S04-existing-admission-projection"
+      card: "process/stories/STORY-CR163-S04-existing-admission-projection.md"
+      wave: "CR163-W3-PRODUCERS-CONSUMERS"
+      depends_on: ["CR163-S01-family-contract-validator", "CR163-S02-recorder-seal-supersession"]
+      dependency_types: ["contract", "contract"]
+      lld_policy: "full-lld"
+      primary_files: ["engine/strategy_admission_statistical_gate.py", "engine/cross_strategy_reliability_gates.py", "engine/strategy_admission_package.py", "tests/test_cr163_trial_lineage_admission_projection.py"]
+    - id: "CR163-S05-integrity-recovery-permission-regression"
+      card: "process/stories/STORY-CR163-S05-integrity-recovery-permission-regression.md"
+      wave: "CR163-W4-INTEGRITY-REGRESSION"
+      depends_on: ["CR163-S01-family-contract-validator", "CR163-S02-recorder-seal-supersession", "CR163-S03-two-producer-chain-instrumentation", "CR163-S04-existing-admission-projection"]
+      dependency_types: ["runtime", "runtime", "runtime", "runtime"]
+      lld_policy: "full-lld"
+      primary_files: ["tests/test_cr163_trial_lineage_integrity.py", "tests/test_cr163_trial_lineage_authorization.py", "tests/test_cr163_trial_lineage_cr155_regression.py"]
+  dependency_graph:
+    nodes: ["CR163-S01-family-contract-validator", "CR163-S02-recorder-seal-supersession", "CR163-S03-two-producer-chain-instrumentation", "CR163-S04-existing-admission-projection", "CR163-S05-integrity-recovery-permission-regression"]
+    edges:
+      - ["CR163-S01-family-contract-validator", "CR163-S02-recorder-seal-supersession", "contract"]
+      - ["CR163-S01-family-contract-validator", "CR163-S03-two-producer-chain-instrumentation", "contract"]
+      - ["CR163-S02-recorder-seal-supersession", "CR163-S03-two-producer-chain-instrumentation", "contract"]
+      - ["CR163-S01-family-contract-validator", "CR163-S04-existing-admission-projection", "contract"]
+      - ["CR163-S02-recorder-seal-supersession", "CR163-S04-existing-admission-projection", "contract"]
+      - ["CR163-S01-family-contract-validator", "CR163-S05-integrity-recovery-permission-regression", "runtime"]
+      - ["CR163-S02-recorder-seal-supersession", "CR163-S05-integrity-recovery-permission-regression", "runtime"]
+      - ["CR163-S03-two-producer-chain-instrumentation", "CR163-S05-integrity-recovery-permission-regression", "runtime"]
+      - ["CR163-S04-existing-admission-projection", "CR163-S05-integrity-recovery-permission-regression", "runtime"]
+  dag_validation_result:
+    cycles: []
+    invalid_references: []
+    isolated_nodes: []
+    parallel_internal_dependencies: 0
+    conclusion: "PASS"
+    merge_order: "S01 -> S02 -> (S03 || S04) -> S05"
+  pre_existing_plan_check_failure:
+    status: "recorded-unrelated"
+    details: "Canonical plan-check already failed before CR163 edits because CR013-S01..S04 use legacy status draft-pending-cp4. CR163 scoped plan is validated independently; unrelated statuses were preserved."

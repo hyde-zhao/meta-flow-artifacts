@@ -1,0 +1,72 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {"change_type": "created", "path": "docs/quality/VERIFICATION-REPORT-CR163-S03.md"},
+    {"change_type": "created", "path": "docs/quality/TEST-REPORT-CR163-S03.md"},
+    {"change_type": "created", "path": "docs/quality/REVIEW-CR163-S03.md"},
+    {"change_type": "created", "path": "docs/quality/FIXES-CR163-S03.md"},
+    {"change_type": "created", "path": "process/returns/STORY-CR163-S03.CP7.return.json"},
+    {"change_type": "created", "path": "process/evidence/STORY-CR163-S03.CP7.index.json"}
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_cr163_trial_lineage_producer_adapters.py tests/test_experiment_family_lineage_contracts.py tests/test_experiment_family_lineage_store.py",
+      "result": "pass",
+      "summary": "210 passed in 29.50s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q tests/research/test_multifactor_strategy_candidates.py tests/research/test_mature_multifactor_research_stage3.py",
+      "result": "pass",
+      "summary": "12 passed in 0.49s"
+    },
+    {
+      "command": "focused seven-case retry/raw/replay/post-hoc/orphan/no-inference pytest selection",
+      "result": "pass",
+      "summary": "7 passed in 0.40s"
+    },
+    {
+      "command": "local temporary CLI pair invalid-matrix probe",
+      "result": "pass",
+      "summary": "Absent, partial pair, URI, missing spec, bad JSON, non-object, unsupported schema, missing field, chain mismatch, file root and valid typed pair matched exact expected outcomes"
+    },
+    {
+      "command": "exact inventory/ownership/order/prohibited-inference source probe",
+      "result": "pass",
+      "summary": "4 mappings, 2 chains, one shared parser, two pure hooks, 2/2 declaration-before-hook and 2/2 post-hook writer; prohibited lineage inference sources absent"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/mature_multifactor_research.py engine/multifactor_strategy_candidates.py scripts/research/run_multifactor_strategy_research.py scripts/legacy/research/run_multifactor_strategy_candidates.py",
+      "result": "pass",
+      "summary": "py_compile passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "summary": "No whitespace errors"
+    }
+  ],
+  "cr_id": "CR-163",
+  "design_delta_ref": null,
+  "return_ref": "process/returns/STORY-CR163-S03.CP7.return.json",
+  "risks": [
+    {
+      "acceptance_condition": "Any future retry-loop change must add and pass the adapter integration fixture before release.",
+      "id": "R-S03-01",
+      "owner": "future retry-loop change owner and meta-qa",
+      "severity": "LOW",
+      "status": "open-controlled",
+      "summary": "Current producer paths invoke each hook once and emit ordinal 1; shared core proves three attempts retain raw count 1, but a future producer retry loop needs an end-to-end same-session/same-trial ordinal integration fixture."
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR163-S03-two-producer-chain-instrumentation",
+  "tests": [
+    "tests/test_cr163_trial_lineage_producer_adapters.py",
+    "tests/test_experiment_family_lineage_contracts.py",
+    "tests/test_experiment_family_lineage_store.py",
+    "tests/research/test_multifactor_strategy_candidates.py",
+    "tests/research/test_mature_multifactor_research_stage3.py"
+  ],
+  "waivers": []
+}

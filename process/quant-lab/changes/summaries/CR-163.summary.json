@@ -1,0 +1,175 @@
+{
+  "affected_product_docs": [
+    "docs/product/USE-CASES.md",
+    "docs/product/REQUIREMENTS.md",
+    "docs/product/SCENARIOS.yaml",
+    "docs/product/TEST-MATRIX.md",
+    "docs/product/STORY-MAP.md",
+    "docs/product/MVP-SCOPE.md",
+    "docs/product/RELEASE-SLICES.md",
+    "docs/product/BACKLOG.md"
+  ],
+  "affected_use_cases": [
+    "UC-58 multifactor strategy E2E",
+    "UC-59 machine learning strategy E2E (producer contract/compatibility only)",
+    "UC-60 event-driven strategy E2E (producer contract/compatibility only)"
+  ],
+  "approval_focus": "scope|architecture|security|implementation|runtime|risk|follow_up",
+  "approve_effect": "Approve the CR163 requirement, scenario, coverage inventory, count semantics, and non-authorization boundary; then dispatch meta-se-critical for CP3 architecture and contract freezing.",
+  "archive_isolation_review": {
+    "decision": "PASS",
+    "findings": []
+  },
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "NO_REAL_LAKE_READ_OR_WRITE",
+    "NO_NAS_SYNC_OR_WRITE",
+    "NO_PROVIDER_FETCH",
+    "NO_BROKER_WRITE",
+    "NO_EXTERNAL_FRAMEWORK_RUN",
+    "NO_CATALOG_POINTER_WRITE"
+  ],
+  "block_story_decomposition_until": "CP2-approved",
+  "conflict_keys": [
+    "experiment-family-lineage",
+    "research-trial-instrumentation",
+    "mature-multifactor-candidate-production",
+    "strategy-admission-evidence",
+    "cr151-cr154-lineage-consumer"
+  ],
+  "cp1_review_profile": {
+    "decision": "FULL_CP1_REQUIRED",
+    "profile": "full",
+    "reason": "product baseline docs or product_baseline_refresh_required indicate use-case completeness must be rechecked",
+    "required_checks": [
+      "use_case_completeness",
+      "requirements_traceability",
+      "scenario_coverage",
+      "story_map_alignment",
+      "mvp_scope_alignment"
+    ]
+  },
+  "cr_type": "product-scope",
+  "decision": "pending",
+  "decision_burden": "high",
+  "evidence_index_ref": "process/archive/CR-163/evidence-index.json",
+  "followup_candidates": [],
+  "full_ref": "process/changes/CR-163.md",
+  "gate_profile": "architecture-major",
+  "gate_status": "cp8_closed",
+  "goal_ref": "ROADMAP-QUANT-RESEARCH-PRODUCTION",
+  "goal_statement": "Make experiment-family trial lineage a trustworthy, auditable fact source for future strategy admission evidence.",
+  "governance_dependency_review": {
+    "decision": "PASS",
+    "findings": []
+  },
+  "id": "CR-163",
+  "impact_capability_normalized": [],
+  "impact_capability_refs": [],
+  "impact_capability_resolution": {
+    "kind": "capability",
+    "mode": "audit",
+    "results": [],
+    "summary": {
+      "conflict": 0,
+      "deprecated": 0,
+      "resolved": 0,
+      "unresolved": 0
+    }
+  },
+  "impact_data_refs": [],
+  "impact_feature_refs": [],
+  "impact_module_paths": [],
+  "impact_policy_refs": [],
+  "impact_process_refs": [],
+  "impact_runtime_refs": [],
+  "impact_surface": [
+    "product-baseline",
+    "requirements",
+    "use-cases",
+    "research-engine",
+    "experiment-manifest",
+    "backtest-run-spec",
+    "admission-package",
+    "public-contract",
+    "append-only-artifacts",
+    "tamper-detection",
+    "negative-regression"
+  ],
+  "not_authorized_by_approve": [
+    "real lake read or write",
+    "NAS/provider/credential access",
+    "simulation, paper, live, broker, or trading runtime",
+    "external framework installation or execution",
+    "Git remote write, deployment, release execution, or publish",
+    "historical CR155 lineage reconstruction",
+    "effective-trial, FDR/BH, WRC/SPA, PBO/CSCV, DSR, walk-forward, TCA, capacity, or alpha-decay computation"
+  ],
+  "product_baseline_refresh_required": true,
+  "readiness": "READY_WITH_RISK",
+  "reject_effect": "Keep FU-CR161-001 as a candidate; future runs continue to report ExperimentFamilyManifest=typed_unavailable and C1 remains input-blocked.",
+  "remaining_risks": [
+    "R-CR163-POSTHOC-TRIAL-COUNT",
+    "R-CR163-FAMILY-SHRINKAGE",
+    "R-CR163-SEAL-TAMPER",
+    "R-CR163-EFFECTIVE-TRIAL-OVERCLAIM",
+    "R-CR163-ENTRYPOINT-COVERAGE-GAP",
+    "R-CR163-HISTORICAL-BACKFILL-OVERCLAIM"
+  ],
+  "required_agent": "meta-pm",
+  "required_capabilities": [],
+  "required_evidence": [
+    "admission_package",
+    "oos_walkforward",
+    "real_lake_validation",
+    "rerun_consistency"
+  ],
+  "required_gate": "CP2",
+  "required_phase": "requirement-clarification",
+  "routing_design_ref": "process/checks/CP0-CR163.route-plan.json",
+  "scope_authz_consistency": {
+    "blockers": [
+      {
+        "authz_policy_refs": [
+          "NO_CREDENTIAL_READ",
+          "NO_RUNTIME",
+          "NO_PRODUCTION_WRITE",
+          "NO_TRADING",
+          "NO_REAL_LAKE_READ_OR_WRITE",
+          "NO_NAS_SYNC_OR_WRITE",
+          "NO_PROVIDER_FETCH",
+          "NO_BROKER_WRITE",
+          "NO_EXTERNAL_FRAMEWORK_RUN",
+          "NO_CATALOG_POINTER_WRITE"
+        ],
+        "code": "required_evidence_forbidden_by_authz",
+        "decision": "BLOCKED",
+        "level": "L2",
+        "required_capabilities": [
+          "real_lake_read"
+        ],
+        "required_evidence": [
+          "admission_package",
+          "oos_walkforward",
+          "real_lake_validation",
+          "rerun_consistency"
+        ]
+      }
+    ],
+    "decision": "BLOCKED",
+    "needs_review": []
+  },
+  "scope_summary": [
+    "把当前“研究完成后由调用方手工填写 `trial_count`”升级为“研究开始前声明试验族、运行中自动记录每个 trial/attempt/selection、结束时封存并校验完整谱系”的可审计机制。目标是让未来研究运行能够合法产生 `ExperimentFamilyManifest.availability=present`，为 CR151/CR154/admission package 提供可信 lineage ref；本 CR 解决 C1 的事实来源，不计算多重检验或过拟合校正。"
+  ],
+  "split_rationale": "CR161 deliberately stopped at design-only typed_unavailable semantics; this follow-up has a distinct implementation, verification, rollback, and audit boundary.",
+  "status": "closed",
+  "title": "Trial Lineage Instrumentation",
+  "updated_at": "2026-07-11T08:17:06+00:00",
+  "user_goal_impact": "Future candidate-producing research runs can legitimately emit ExperimentFamilyManifest=present without treating lineage instrumentation as statistical correction.",
+  "why_not_merge_with_parent": "CR161 and CR162 are closed historical baselines. Reopening them would mix design-only closure evidence with a new implementation lifecycle.",
+  "why_not_story_or_task": "The change crosses public contracts, research entrypoints, admission consumers, persistence semantics, five Stories, and independent verification; it requires its own CP2/CP3/CP5/CP8 decisions."
+}

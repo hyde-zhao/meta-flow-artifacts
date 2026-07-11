@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR163-TRIAL-LINEAGE-INSTRUMENTATION-RELEASE-READINESS",
+  "profile": "compact",
+  "story_id": "CR163-ALL-STORIES",
+  "cr_id": "CR-163",
+  "checked_at": "2026-07-11T16:20:00+08:00",
+  "context_ref": "process/context/CP8-CR163-TRIAL-LINEAGE-INSTRUMENTATION-CONTEXT.yaml",
+  "release_context_ref": "process/release/RELEASE-CONTEXT-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml",
+  "dispatch_refs": ["AD-CR163-CP8-META-QA-CRITICAL-20260711T160100+0800", "AD-CR163-DOCUMENTATION-META-DOC-RETRY-20260711T160400+0800", "AD-CR163-CP8-META-QA-CRITICAL-RISK-RESPONSE-20260711T163000+0800", "AD-CR163-CP8-META-QA-CRITICAL-RISK-AUDIT-20260711T164000+0800"],
+  "evidence_ref": "docs/quality/VERIFICATION-REPORT-CR163.md",
+  "items": [
+    {"id":"CP8-CR163-01","category":"entry","name":"All five Story CP7 results are complete with no open blocker","status":"PASS","severity":"BLOCKER","evidence_refs":["process/checks/CP7-CR163-S01-family-contract-validator-VERIFICATION-DONE.result.json","process/checks/CP7-CR163-S02-recorder-seal-supersession-VERIFICATION-DONE.result.json","process/checks/CP7-CR163-S03-two-producer-chain-instrumentation-VERIFICATION-DONE.result.json","process/checks/CP7-CR163-S04-existing-admission-projection-VERIFICATION-DONE.result.json","process/checks/CP7-CR163-S05-integrity-recovery-permission-regression-VERIFICATION-DONE.result.json"],"owner":"host-orchestrator","route_on_fail":"block_release","waiver_ref":null,"notes":"S01 PASS; S02-S05 PASS_WITH_RISK; open blockers=0; open HIGH implementation findings=0."},
+    {"id":"CP8-CR163-02","category":"verification","name":"Aggregate lineage and admission regressions pass","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/quality/TEST-REPORT-CR163.md","docs/quality/REVIEW-CR163.md"],"owner":"meta-qa-critical","route_on_fail":"block_release","waiver_ref":null,"notes":"Full packet 262 passed; affected admission subset 220 passed; docs quality 61 passed."},
+    {"id":"CP8-CR163-03","category":"authorization-boundary","name":"Forbidden operation and historical reconstruction boundaries remain closed","status":"PASS","severity":"BLOCKER","evidence_refs":["process/evidence/STORY-CR163-S05.CP7.index.json","process/release/RELEASE-CONTEXT-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml"],"owner":"meta-qa-critical","route_on_fail":"escalate_runtime_high_risk","waiver_ref":null,"notes":"13/13 concrete guards, guarded path zero, marker fail-closed; CR155 reconstruction/backfill zero."},
+    {"id":"CP8-CR163-04","category":"claim-ceiling","name":"Raw lineage fact does not overclaim effective trials or C1 computation","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/quality/VERIFICATION-REPORT-CR163.md","docs/release/RELEASE-NOTES-CR163-TRIAL-LINEAGE-INSTRUMENTATION.md"],"owner":"host-orchestrator","route_on_fail":"block_release","waiver_ref":null,"notes":"effective_trial_count=typed_unavailable; c1_computable=false; MultipleTesting/DataSnooping/Overfit evidence unchanged."},
+    {"id":"CP8-CR163-05","category":"release-context","name":"Compact release context and five release documents are complete","status":"PASS","severity":"HIGH","evidence_refs":["process/release/RELEASE-CONTEXT-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml","docs/release/DEPLOY-CHECKLIST-CR163-TRIAL-LINEAGE-INSTRUMENTATION.md","docs/release/ROLLBACK-CR163-TRIAL-LINEAGE-INSTRUMENTATION.md","docs/release/MIGRATION-CR163-TRIAL-LINEAGE-INSTRUMENTATION.md","docs/release/FEEDBACK-CR163-TRIAL-LINEAGE-INSTRUMENTATION.md"],"owner":"meta-qa-critical","route_on_fail":"block_release","waiver_ref":null,"notes":"fact_diff=10; missing required evidence=0; accepted risks exact 2; release execution status NOT_EXECUTED."},
+    {"id":"CP8-CR163-06","category":"documentation","name":"Existing user documentation states CLI, availability and limitations","status":"PASS","severity":"HIGH","evidence_refs":["docs/components/MULTIFACTOR-RESEARCH.md","docs/components/SCRIPT-ENTRYPOINTS.md","docs/USER-MANUAL.md"],"owner":"meta-doc","route_on_fail":"create_followup_candidate","waiver_ref":null,"notes":"61 docs tests and entrypoint naming check pass."},
+    {"id":"CP8-CR163-07","category":"workspace","name":"Paired source and artifact repository delivery push is explicitly authorized","status":"PASS","severity":"HIGH","evidence_refs":["process/release/RELEASE-CONTEXT-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml"],"owner":"host-orchestrator","route_on_fail":"block_release","waiver_ref":null,"notes":"Authorization is limited to paired commit/push; tag/package publish/deploy/runtime/data remain forbidden."},
+    {"id":"CP8-CR163-08","category":"follow-up-tracking","name":"All residual risks and design-boundary triggers have executable follow-up routes","status":"PASS","severity":"HIGH","evidence_refs":["process/changes/CR-163-FOLLOW-UP-TRACKING-2026-07-11.md","process/changes/CR-INDEX.json","process/state/CR-LEDGER.ndjson"],"owner":"host-orchestrator","route_on_fail":"create_followup_candidate","waiver_ref":null,"notes":"2/2 accepted risks, 3/3 boundaries and 4/4 candidate triggers independently audited."}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260711T084600Z0000-cr163cp8risk"],
+  "decision": "PASS",
+  "release_decision": "READY_WITH_RISK",
+  "manual_gate_status": "approved",
+  "approved_by": "user",
+  "approved_at": "2026-07-11T16:13:44+08:00",
+  "accepted_decision_ids": ["DQ-CP8-CR163-001","DQ-CP8-CR163-002","DQ-CP8-CR163-003","DQ-CP8-CR163-004"],
+  "pending_human_decisions": [],
+  "risk_acceptance": [
+    {"risk_id":"RA-CR163-A","classification":"availability_cost","status":"accepted_by_user","trigger_ref":"FU-CR163-001","summary":"No-resume may require a bounded full rerun but cannot weaken lineage correctness."},
+    {"risk_id":"RA-CR163-B","classification":"conditional_validation_coverage","status":"accepted_by_user","trigger_ref":"FU-CR163-004","summary":"Any future producer retry loop must add real-producer ordinal E2E coverage in the same CR before CP7/present eligibility."}
+  ],
+  "repository_delivery_push": {"authorization_status":"authorized_by_user","execution_status":"pending","scope":"paired_source_and_artifact_repositories"},
+  "not_authorized": ["real_research_runtime_or_data_access","credential_provider_nas_broker_simulation_paper_or_live_operation","historical_cr155_reconstruction_or_backfill","effective_trial_or_statistical_correction_computation","tag_package_publish_deploy_or_release_execution"],
+  "next_route": "EXECUTE_AUTHORIZED_PAIRED_REPOSITORY_PUSH"
+}

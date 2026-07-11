@@ -1,0 +1,283 @@
+schema_version: "1.0"
+project_id: "quant-lab"
+change_id: "CR-163"
+title: "Trial Lineage Instrumentation"
+status: "cp7-complete-pending-cp8"
+story_management_truth_source: "process/DEVELOPMENT-PLAN.yaml"
+canonical_plan: "process/DEVELOPMENT-PLAN.yaml"
+created_at: "2026-07-11T12:05:00+08:00"
+updated_at: "2026-07-11T17:56:00+08:00"
+source_cp3: "process/checkpoints/CP3-CR163-TRIAL-LINEAGE-INSTRUMENTATION-HLD-REVIEW.md"
+source_hld: "docs/design/HLD-TRIAL-LINEAGE-INSTRUMENTATION.md"
+source_adr: "docs/design/ARCHITECTURE-DECISION-TRIAL-LINEAGE-INSTRUMENTATION.md"
+feature_design_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md#cr163-cp4-增量trial-lineage-instrumentation"
+required_feature_design:
+  - "docs/features/experiment-family-lineage/DESIGN.md"
+  - "docs/features/trial-lineage-producer-adapters/DESIGN.md"
+  - "docs/features/strategy-admission-lineage-projection/DESIGN.md"
+story_count: 5
+wave_count: 4
+cp5_batch:
+  id: "CP5-CR163-ALL-STORIES-LLD-BATCH"
+  human_gate: "required"
+  design_evidence_required: 5
+  design_evidence_type: "full-lld"
+  status: "approved"
+authorization_boundary:
+  implementation_allowed: true
+  test_implementation_allowed: true
+  runtime_or_real_data_allowed: false
+  credential_or_external_write_allowed: false
+  effective_trial_or_statistical_computation_allowed: false
+  historical_cr155_backfill_allowed: false
+  git_remote_write_or_publish_allowed: false
+parallel_policy:
+  max_parallel_lld: 3
+  max_parallel_dev: 2
+  max_parallel_qa: 2
+  rules:
+    - "All five LLDs may be drafted in bounded rounds after CP4 because the CP3 public contracts are frozen; CP5 confirms them as one batch."
+    - "S03 and S04 may develop in parallel only after S01/S02 contracts are confirmed and implemented, because their primary files do not overlap."
+    - "S05 has runtime dependencies on S01-S04 and cannot start implementation until all four are ready-for-verification or verified as required by its LLD."
+waves:
+  - wave: "CR163-W1-CONTRACT-VALIDATOR"
+    parallel_lld: true
+    parallel_dev: false
+    status: "verified"
+    entry_conditions:
+      - "CP3 approved and Feature design refs present"
+    exit_conditions:
+      - "Six-object public contract, state machine, error codes and validation projection are frozen"
+    stories:
+      - story_id: "CR163-S01-family-contract-validator"
+        title: "Experiment-family contract and validator"
+        story_slug: "family-contract-validator"
+        status: "verified"
+        priority: "P0"
+        depends_on: []
+        dependency_contracts: []
+        feature_design_refs:
+          - "docs/features/experiment-family-lineage/DESIGN.md"
+          - "docs/features/experiment-family-lineage/TEST-PLAN.md"
+          - "docs/features/experiment-family-lineage/TASKS.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["public-contract", "data-state", "security", "cross-story-contract"]
+          evidence_path: "process/stories/STORY-CR163-S01-family-contract-validator-LLD.md"
+        output_files:
+          - "engine/experiment_family_lineage.py"
+          - "tests/test_experiment_family_lineage_contracts.py"
+        file_ownership:
+          primary: ["engine/experiment_family_lineage.py", "tests/test_experiment_family_lineage_contracts.py"]
+          shared: []
+          merge_owner: "CR163-S01-family-contract-validator"
+          forbidden: ["engine/mature_multifactor_research.py", "engine/multifactor_strategy_candidates.py", "engine/strategy_admission_statistical_gate.py", "engine/cross_strategy_reliability_gates.py", "engine/strategy_admission_package.py", "data/**", "process/runtime/**"]
+        tasks:
+          - {id: "TASK-CR163-S01-01", action: "freeze", target: "six objects, enums, commands and error codes", depends_on: [], dependency_type: "contract"}
+          - {id: "TASK-CR163-S01-02", action: "implement", target: "engine/experiment_family_lineage.py", depends_on: ["TASK-CR163-S01-01"], dependency_type: "contract"}
+          - {id: "TASK-CR163-S01-03", action: "verify", target: "contract and validator fixtures", depends_on: ["TASK-CR163-S01-02"], dependency_type: "runtime"}
+        completion_criteria:
+          - "6/6 persistent objects and FamilyLineageSession façade are represented"
+          - "All legal/illegal family/trial/attempt transitions have deterministic machine results"
+          - "effective-trial available declarations equal 0 and forbidden operation counters equal 0"
+  - wave: "CR163-W2-RECORDER-SEAL"
+    parallel_lld: true
+    parallel_dev: false
+    status: "verified-with-risk"
+    entry_conditions:
+      - "S01 public contract frozen"
+    exit_conditions:
+      - "Append-only recorder, canonical bytes, immutable seal and supersession resolver are frozen"
+    stories:
+      - story_id: "CR163-S02-recorder-seal-supersession"
+        title: "Append-only recorder, deterministic seal and supersession"
+        story_slug: "recorder-seal-supersession"
+        status: "verified-with-risk"
+        priority: "P0"
+        depends_on: ["CR163-S01-family-contract-validator"]
+        dependency_contracts:
+          - {upstream: "CR163-S01-family-contract-validator", type: "contract", lld_gate: "upstream_contract_declared", dev_gate: "upstream_contract_confirmed"}
+        feature_design_refs:
+          - "docs/features/experiment-family-lineage/DESIGN.md"
+          - "docs/features/experiment-family-lineage/TEST-PLAN.md"
+          - "docs/features/experiment-family-lineage/TASKS.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["append-only-storage", "idempotency", "canonical-hash", "tamper", "recovery"]
+          evidence_path: "process/stories/STORY-CR163-S02-recorder-seal-supersession-LLD.md"
+        output_files:
+          - "engine/experiment_family_lineage_store.py"
+          - "tests/test_experiment_family_lineage_store.py"
+        file_ownership:
+          primary: ["engine/experiment_family_lineage_store.py", "tests/test_experiment_family_lineage_store.py"]
+          shared: []
+          merge_owner: "CR163-S02-recorder-seal-supersession"
+          forbidden: ["engine/experiment_family_lineage.py", "engine/mature_multifactor_research.py", "engine/multifactor_strategy_candidates.py", "engine/strategy_admission_statistical_gate.py", "engine/cross_strategy_reliability_gates.py", "engine/strategy_admission_package.py", "data/**"]
+        tasks:
+          - {id: "TASK-CR163-S02-01", action: "freeze", target: "file layout and canonical golden bytes", depends_on: [], dependency_type: "contract"}
+          - {id: "TASK-CR163-S02-02", action: "implement", target: "recorder/sealer/resolver", depends_on: ["TASK-CR163-S02-01"], dependency_type: "contract"}
+          - {id: "TASK-CR163-S02-03", action: "verify", target: "determinism/tamper/supersession fixtures", depends_on: ["TASK-CR163-S02-02"], dependency_type: "runtime"}
+        completion_criteria:
+          - "Identical fixture sealed 10 times yields exactly 1 content hash"
+          - "In-place mutation count equals 0 and valid supersession chain coverage equals 100%"
+          - "Duplicate conflict, count mismatch, tamper, broken or cyclic chain fixtures are blocked 100%"
+  - wave: "CR163-W3-PRODUCERS-CONSUMERS"
+    parallel_lld: true
+    parallel_dev: true
+    status: "verified-with-risk"
+    entry_conditions:
+      - "S01/S02 contracts confirmed; CP5 all-Story batch approved before development"
+    exit_conditions:
+      - "Four producer mappings and three existing consumer surfaces are integrated without file overlap"
+    stories:
+      - story_id: "CR163-S03-two-producer-chain-instrumentation"
+        title: "Two producer chains and four instrumentation mappings"
+        story_slug: "two-producer-chain-instrumentation"
+        status: "verified-with-risk"
+        priority: "P0"
+        depends_on: ["CR163-S01-family-contract-validator", "CR163-S02-recorder-seal-supersession"]
+        dependency_contracts:
+          - {upstream: "CR163-S01-family-contract-validator", type: "contract", lld_gate: "upstream_contract_declared", dev_gate: "upstream_contract_confirmed"}
+          - {upstream: "CR163-S02-recorder-seal-supersession", type: "contract", lld_gate: "upstream_contract_declared", dev_gate: "upstream_contract_confirmed"}
+        feature_design_refs:
+          - "docs/features/trial-lineage-producer-adapters/DESIGN.md"
+          - "docs/features/trial-lineage-producer-adapters/TEST-PLAN.md"
+          - "docs/features/trial-lineage-producer-adapters/TASKS.md"
+          - "docs/features/experiment-family-lineage/DESIGN.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["cross-module", "two-producer-chains", "identity-ownership", "four-mapping-coverage"]
+          evidence_path: "process/stories/STORY-CR163-S03-two-producer-chain-instrumentation-LLD.md"
+        output_files:
+          - "engine/mature_multifactor_research.py"
+          - "engine/multifactor_strategy_candidates.py"
+          - "scripts/research/run_multifactor_strategy_research.py"
+          - "scripts/legacy/research/run_multifactor_strategy_candidates.py"
+          - "tests/test_cr163_trial_lineage_producer_adapters.py"
+        file_ownership:
+          primary: ["engine/mature_multifactor_research.py", "engine/multifactor_strategy_candidates.py", "scripts/research/run_multifactor_strategy_research.py", "scripts/legacy/research/run_multifactor_strategy_candidates.py", "tests/test_cr163_trial_lineage_producer_adapters.py"]
+          shared: []
+          merge_owner: "CR163-S03-two-producer-chain-instrumentation"
+          forbidden: ["engine/strategy_admission_statistical_gate.py", "engine/cross_strategy_reliability_gates.py", "engine/strategy_admission_package.py", "data/**", "credentials", "external runtime"]
+        tasks:
+          - {id: "TASK-CR163-S03-01", action: "freeze", target: "CPI-001/003 public chain adapter", depends_on: [], dependency_type: "contract"}
+          - {id: "TASK-CR163-S03-02", action: "freeze", target: "CPI-002/004 legacy chain adapter", depends_on: [], dependency_type: "contract"}
+          - {id: "TASK-CR163-S03-03", action: "implement", target: "four mapping call sites", depends_on: ["TASK-CR163-S03-01", "TASK-CR163-S03-02"], dependency_type: "contract"}
+          - {id: "TASK-CR163-S03-04", action: "verify", target: "4/4 coverage and no-double-count fixtures", depends_on: ["TASK-CR163-S03-03"], dependency_type: "runtime"}
+        completion_criteria:
+          - "CPI-CR163-001..004 mapped 4/4 and two deduplicated chains covered 2/2"
+          - "Each chain has exactly one session owner; wrapper/hook double trial count equals 0"
+          - "Different seed produces distinct trial; three retries remain one raw trial"
+      - story_id: "CR163-S04-existing-admission-projection"
+        title: "Existing admission consumer lineage projection"
+        story_slug: "existing-admission-projection"
+        status: "verified-with-risk"
+        priority: "P0"
+        depends_on: ["CR163-S01-family-contract-validator", "CR163-S02-recorder-seal-supersession"]
+        dependency_contracts:
+          - {upstream: "CR163-S01-family-contract-validator", type: "contract", lld_gate: "upstream_contract_declared", dev_gate: "upstream_contract_confirmed"}
+          - {upstream: "CR163-S02-recorder-seal-supersession", type: "contract", lld_gate: "upstream_contract_declared", dev_gate: "upstream_contract_confirmed"}
+        feature_design_refs:
+          - "docs/features/strategy-admission-lineage-projection/DESIGN.md"
+          - "docs/features/strategy-admission-lineage-projection/TEST-PLAN.md"
+          - "docs/features/strategy-admission-lineage-projection/TASKS.md"
+          - "docs/features/experiment-family-lineage/DESIGN.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["three-consumer-surfaces", "compatibility", "fail-closed", "claim-ceiling"]
+          evidence_path: "process/stories/STORY-CR163-S04-existing-admission-projection-LLD.md"
+        output_files:
+          - "engine/strategy_admission_statistical_gate.py"
+          - "engine/cross_strategy_reliability_gates.py"
+          - "engine/strategy_admission_package.py"
+          - "tests/test_cr163_trial_lineage_admission_projection.py"
+        file_ownership:
+          primary: ["engine/strategy_admission_statistical_gate.py", "engine/cross_strategy_reliability_gates.py", "engine/strategy_admission_package.py", "tests/test_cr163_trial_lineage_admission_projection.py"]
+          shared: []
+          merge_owner: "CR163-S04-existing-admission-projection"
+          forbidden: ["engine/mature_multifactor_research.py", "engine/multifactor_strategy_candidates.py", "engine/experiment_family_lineage_store.py", "data/**", "credentials", "new gate family"]
+        tasks:
+          - {id: "TASK-CR163-S04-01", action: "freeze", target: "projection DTO/status/manual reconciliation", depends_on: [], dependency_type: "contract"}
+          - {id: "TASK-CR163-S04-02", action: "implement", target: "three existing consumer adapters", depends_on: ["TASK-CR163-S04-01"], dependency_type: "contract"}
+          - {id: "TASK-CR163-S04-03", action: "verify", target: "present/unavailable/blocked/CR155 fixtures", depends_on: ["TASK-CR163-S04-02"], dependency_type: "runtime"}
+        completion_criteria:
+          - "3/3 consumers receive the same validated lineage ref and raw count"
+          - "Manual count without native sealed ref is typed_unavailable; mismatch is blocked 100%"
+          - "Effective available claims=0, nonempty effective ref/method=0, C1 computed claims=0"
+  - wave: "CR163-W4-INTEGRITY-REGRESSION"
+    parallel_lld: true
+    parallel_dev: false
+    status: "verified-with-risk"
+    entry_conditions:
+      - "S01-S04 implementation evidence and contracts available; no runtime/data authorization required"
+    exit_conditions:
+      - "Twelve P0 scenarios and integrity/security/CR155 regression close with fixture/static evidence"
+    stories:
+      - story_id: "CR163-S05-integrity-recovery-permission-regression"
+        title: "Integrity, recovery, permission and CR155 regression"
+        story_slug: "integrity-recovery-permission-regression"
+        status: "verified-with-risk"
+        priority: "P0"
+        depends_on: ["CR163-S01-family-contract-validator", "CR163-S02-recorder-seal-supersession", "CR163-S03-two-producer-chain-instrumentation", "CR163-S04-existing-admission-projection"]
+        dependency_contracts:
+          - {upstream: "CR163-S01-family-contract-validator", type: "runtime", lld_gate: "upstream_contract_declared", dev_gate: "upstream_ready_for_verification"}
+          - {upstream: "CR163-S02-recorder-seal-supersession", type: "runtime", lld_gate: "upstream_contract_declared", dev_gate: "upstream_ready_for_verification"}
+          - {upstream: "CR163-S03-two-producer-chain-instrumentation", type: "runtime", lld_gate: "upstream_story_declared", dev_gate: "upstream_ready_for_verification"}
+          - {upstream: "CR163-S04-existing-admission-projection", type: "runtime", lld_gate: "upstream_story_declared", dev_gate: "upstream_ready_for_verification"}
+        feature_design_refs:
+          - "docs/features/experiment-family-lineage/DESIGN.md"
+          - "docs/features/experiment-family-lineage/TEST-PLAN.md"
+          - "docs/features/experiment-family-lineage/TASKS.md"
+          - "docs/features/trial-lineage-producer-adapters/DESIGN.md"
+          - "docs/features/trial-lineage-producer-adapters/TEST-PLAN.md"
+          - "docs/features/trial-lineage-producer-adapters/TASKS.md"
+          - "docs/features/strategy-admission-lineage-projection/DESIGN.md"
+          - "docs/features/strategy-admission-lineage-projection/TEST-PLAN.md"
+          - "docs/features/strategy-admission-lineage-projection/TASKS.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["cross-module-fixtures", "tamper-security", "recovery", "permission-boundary", "negative-regression"]
+          evidence_path: "process/stories/STORY-CR163-S05-integrity-recovery-permission-regression-LLD.md"
+        output_files:
+          - "tests/test_cr163_trial_lineage_integrity.py"
+          - "tests/test_cr163_trial_lineage_authorization.py"
+          - "tests/test_cr163_trial_lineage_cr155_regression.py"
+        file_ownership:
+          primary: ["tests/test_cr163_trial_lineage_integrity.py", "tests/test_cr163_trial_lineage_authorization.py", "tests/test_cr163_trial_lineage_cr155_regression.py"]
+          shared: []
+          merge_owner: "CR163-S05-integrity-recovery-permission-regression"
+          forbidden: ["engine/**", "scripts/**", "data/**", "credentials", "runtime", "historical lineage backfill", "external systems"]
+        tasks:
+          - {id: "TASK-CR163-S05-01", action: "freeze", target: "12-scenario fixture and traceability matrix", depends_on: [], dependency_type: "contract"}
+          - {id: "TASK-CR163-S05-02", action: "implement", target: "integrity/recovery/permission/regression tests", depends_on: ["TASK-CR163-S05-01"], dependency_type: "runtime"}
+          - {id: "TASK-CR163-S05-03", action: "verify", target: "all quantitative exits", depends_on: ["TASK-CR163-S05-02"], dependency_type: "runtime"}
+        completion_criteria:
+          - "REQ-CR163-001..008 coverage=8/8 and SC-CR163 P0 coverage=12/12"
+          - "Five negative fixture classes blocked=5/5; identical seal hash distinct count=1 across 10 runs"
+          - "Forbidden operation counters=0 and CR155 remains blocked 1/1 with historical backfill count=0"
+dependency_graph:
+  nodes:
+    - "CR163-S01-family-contract-validator"
+    - "CR163-S02-recorder-seal-supersession"
+    - "CR163-S03-two-producer-chain-instrumentation"
+    - "CR163-S04-existing-admission-projection"
+    - "CR163-S05-integrity-recovery-permission-regression"
+  edges:
+    - {from: "CR163-S01-family-contract-validator", to: "CR163-S02-recorder-seal-supersession", type: "contract"}
+    - {from: "CR163-S01-family-contract-validator", to: "CR163-S03-two-producer-chain-instrumentation", type: "contract"}
+    - {from: "CR163-S02-recorder-seal-supersession", to: "CR163-S03-two-producer-chain-instrumentation", type: "contract"}
+    - {from: "CR163-S01-family-contract-validator", to: "CR163-S04-existing-admission-projection", type: "contract"}
+    - {from: "CR163-S02-recorder-seal-supersession", to: "CR163-S04-existing-admission-projection", type: "contract"}
+    - {from: "CR163-S01-family-contract-validator", to: "CR163-S05-integrity-recovery-permission-regression", type: "runtime"}
+    - {from: "CR163-S02-recorder-seal-supersession", to: "CR163-S05-integrity-recovery-permission-regression", type: "runtime"}
+    - {from: "CR163-S03-two-producer-chain-instrumentation", to: "CR163-S05-integrity-recovery-permission-regression", type: "runtime"}
+    - {from: "CR163-S04-existing-admission-projection", to: "CR163-S05-integrity-recovery-permission-regression", type: "runtime"}
+dag_validation_result:
+  checked_by: "meta-se-critical using dependency-mapper/dag-validator/wave-planner"
+  checked_at: "2026-07-11T12:05:00+08:00"
+  cycles: []
+  invalid_references: []
+  parallel_internal_dependencies: 0
+  isolated_nodes: []
+  conclusion: "PASS"
+  note: "S01→S02→(S03||S04)→S05; S03/S04 primary files do not overlap; S05 runtime-gated."

@@ -1,0 +1,29 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {"change_type": "modified", "path": "engine/mature_multifactor_research.py"},
+    {"change_type": "modified", "path": "engine/multifactor_strategy_candidates.py"},
+    {"change_type": "modified", "path": "scripts/research/run_multifactor_strategy_research.py"},
+    {"change_type": "modified", "path": "scripts/legacy/research/run_multifactor_strategy_candidates.py"},
+    {"change_type": "created", "path": "tests/test_cr163_trial_lineage_producer_adapters.py"},
+    {"change_type": "created", "path": "process/stories/STORY-CR163-S03-two-producer-chain-instrumentation-IMPLEMENTATION.md"},
+    {"change_type": "created", "path": "process/returns/STORY-CR163-S03.CP6.return.json"},
+    {"change_type": "created", "path": "process/evidence/STORY-CR163-S03.CP6.index.json"}
+  ],
+  "commands": [
+    {"command": "uv run --python 3.11 pytest -q tests/test_cr163_trial_lineage_producer_adapters.py tests/test_experiment_family_lineage_contracts.py tests/test_experiment_family_lineage_store.py", "result": "pass", "summary": "210 passed"},
+    {"command": "uv run --python 3.11 python -m py_compile engine/mature_multifactor_research.py engine/multifactor_strategy_candidates.py scripts/research/run_multifactor_strategy_research.py scripts/legacy/research/run_multifactor_strategy_candidates.py", "result": "pass", "summary": "py_compile passed"},
+    {"command": "git diff --check", "result": "pass", "summary": "No whitespace errors"},
+    {"command": "uv run meta-flow story return-check --packet process/context/stories/STORY-CR163-S03.CP6.work-packet.json --return process/returns/STORY-CR163-S03.CP6.return.json --project-root .", "result": "pass", "summary": "Story Return Packet Check: OK"},
+    {"command": "uv run meta-flow story evidence-check --index process/evidence/STORY-CR163-S03.CP6.index.json --project-root .", "result": "pass", "summary": "Evidence Index Check: OK"}
+  ],
+  "cr_id": "CR-163",
+  "design_delta_ref": null,
+  "return_ref": "process/returns/STORY-CR163-S03.CP6.return.json",
+  "risks": ["Future producer retries must use higher attempt ordinals in the existing trial/session."],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR163-S03-two-producer-chain-instrumentation",
+  "tests": ["tests/test_cr163_trial_lineage_producer_adapters.py", "tests/test_experiment_family_lineage_contracts.py", "tests/test_experiment_family_lineage_store.py"],
+  "waivers": []
+}

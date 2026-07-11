@@ -1,0 +1,132 @@
+schema_version: "meta-flow.context-capsule.v1"
+context_id: "CP5-CR163-TRIAL-LINEAGE-INSTRUMENTATION-LLD"
+workflow_id: "CR-163"
+change_id: "CR-163"
+phase: "story-planning"
+checkpoint: "CP5"
+status: "ready-for-cp5-review"
+created_at: "2026-07-11T11:38:00+08:00"
+read_profile: "minimal"
+read_expansion_refs:
+  - "RE-20260711T035710Z0000-1210d7d0"
+  - "RE-20260711T035710Z0000-3636c891"
+  - "RE-20260711T035710Z0000-9564490f"
+  - "RE-20260711T035710Z0000-759306f6"
+  - "RE-20260711T035710Z0000-5cfa8833"
+allowed_reads:
+  - "process/context/CP5-CR163-TRIAL-LINEAGE-INSTRUMENTATION-LLD-CONTEXT.yaml"
+  - "process/stories/STORY-CR163-S0*-*.md"
+  - "docs/features/*/DESIGN.md"
+  - "docs/features/*/TEST-PLAN.md"
+  - "docs/features/*/TASKS.md"
+must_read:
+  - "process/context/CP5-CR163-TRIAL-LINEAGE-INSTRUMENTATION-LLD-CONTEXT.yaml"
+  - "assigned Story card and Feature design package"
+read_if_needed:
+  - "named CR163 HLD/ADR for a detected contract conflict"
+  - "target engine interfaces for read-only signature verification"
+do_not_read_by_default:
+  - "docs/design/HLD.md"
+  - "docs/design/ARCHITECTURE-DECISION.md"
+  - "docs/product/TEST-MATRIX.md"
+  - "docs/quality/TEST-REPORT.md"
+  - "docs/quality/REVIEW.md"
+objective:
+  summary: "Produce independently reviewable full LLD evidence for all five CR163 Stories, merge any clarification items through the Host broker, run per-Story CP5 prechecks, and stop at the CP5 required human gate without implementation."
+key_facts:
+  - "CP3 approved DQ-CP3-CR163-001..004; CP4 scoped result is PASS with blocker=0 and checkpoint waiver=0."
+  - "DAG is S01 -> S02 -> (S03 || S04) -> S05; all five LLDs may be drafted before implementation because public contracts are frozen."
+  - "All five Stories require independent full-lld; batch-lld, technical-note and waived are not permitted for these Stories."
+  - "S03 must cover exactly two deduplicated producer chains and CPI-CR163-001..004 4/4 without wrapper/hook double count."
+  - "effective_trial_count stays typed_unavailable with empty ref/method; C1 remains non-computable; CR155 remains blocked."
+downstream_tasks:
+  - "Each meta-dev lane must completely read lld-designer/SKILL.md and its assigned Story/Feature inputs before writing."
+  - "Write only assigned LLD files and a lane return summary; do not modify source/tests, canonical plan, STATE, ledgers or CP5 checkpoint."
+  - "If clarification is needed, write a structured lane clarification JSON under process/context/clarifications/; the Host is the only broker and ledger merger."
+  - "Run lld-check for every assigned LLD and git diff --check; return PASS or exact BLOCKED route."
+lld_design_batch:
+  batch_id: "CP5-CR163-ALL-STORIES-LLD-BATCH"
+  source: "change"
+  max_parallel_lld: 3
+  status: "ready-for-review"
+  items:
+    - story_id: "CR163-S01-family-contract-validator"
+      design_evidence_type: "full-lld"
+      lld_policy_required_level: "full-lld"
+      evidence_path: "process/stories/STORY-CR163-S01-family-contract-validator-LLD.md"
+      lane: "core"
+    - story_id: "CR163-S02-recorder-seal-supersession"
+      design_evidence_type: "full-lld"
+      lld_policy_required_level: "full-lld"
+      evidence_path: "process/stories/STORY-CR163-S02-recorder-seal-supersession-LLD.md"
+      lane: "core"
+    - story_id: "CR163-S03-two-producer-chain-instrumentation"
+      design_evidence_type: "full-lld"
+      lld_policy_required_level: "full-lld"
+      evidence_path: "process/stories/STORY-CR163-S03-two-producer-chain-instrumentation-LLD.md"
+      lane: "integration"
+    - story_id: "CR163-S04-existing-admission-projection"
+      design_evidence_type: "full-lld"
+      lld_policy_required_level: "full-lld"
+      evidence_path: "process/stories/STORY-CR163-S04-existing-admission-projection-LLD.md"
+      lane: "integration"
+    - story_id: "CR163-S05-integrity-recovery-permission-regression"
+      design_evidence_type: "full-lld"
+      lld_policy_required_level: "full-lld"
+      evidence_path: "process/stories/STORY-CR163-S05-integrity-recovery-permission-regression-LLD.md"
+      lane: "verification"
+lld_clarification_queue:
+  status: "resolved"
+  active_question_batch: "CP5-CR163-ALL-STORIES-LLD-BATCH"
+  blocking_open_count: 0
+  items: []
+  lane_drop_dir: "process/context/clarifications"
+risks_and_decisions:
+  accepted_decisions: ["DQ-CP3-CR163-001", "DQ-CP3-CR163-002", "DQ-CP3-CR163-003", "DQ-CP3-CR163-004"]
+  open_blockers: []
+  non_authorized:
+    - "source_or_test_implementation"
+    - "runtime_real_data_credentials_external_writes"
+    - "statistical_computation_or_cr155_backfill"
+    - "git_remote_publish_or_release"
+context_policy:
+  capsule_first: true
+  read_profile: "minimal"
+  max_source_files: 12
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  allowed_reads:
+    - "process/context/CP5-CR163-TRIAL-LINEAGE-INSTRUMENTATION-LLD-CONTEXT.yaml"
+    - "process/DEVELOPMENT-PLAN-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml"
+    - "process/stories/STORY-CR163-S0*-*.md"
+    - "docs/features/experiment-family-lineage/{DESIGN,TEST-PLAN,TASKS}.md"
+    - "docs/features/trial-lineage-producer-adapters/{DESIGN,TEST-PLAN,TASKS}.md"
+    - "docs/features/strategy-admission-lineage-projection/{DESIGN,TEST-PLAN,TASKS}.md"
+    - "docs/design/HLD-TRIAL-LINEAGE-INSTRUMENTATION.md"
+    - "docs/design/ARCHITECTURE-DECISION-TRIAL-LINEAGE-INSTRUMENTATION.md"
+    - "docs/design/FEATURE-DESIGN-MATRIX.md"
+    - ".agents/skills/lld-designer/SKILL.md"
+    - ".agents/skills/lld-designer/templates/STORY-LLD-TEMPLATE.md"
+    - "target engine files as read-only interface verification"
+  must_read:
+    - "process/context/CP5-CR163-TRIAL-LINEAGE-INSTRUMENTATION-LLD-CONTEXT.yaml"
+    - ".agents/skills/lld-designer/SKILL.md"
+    - "assigned Story card(s)"
+    - "assigned Feature DESIGN/TEST-PLAN/TASKS"
+  read_if_needed:
+    - "HLD/ADR and scoped development plan for contract conflict resolution"
+    - "target engine files for exact current signature verification; read-only"
+  do_not_read_by_default:
+    - "process/STATE.md"
+    - "process/DEVELOPMENT-PLAN.yaml"
+    - "process/archive/**"
+    - "process/discussions/**"
+    - "unassigned Story LLDs"
+    - "complete conversation transcript"
+token_control:
+  capsule_first: true
+  full_doc_read_reason_required: true
+  read_expansion_log_ref: "process/state/READ-EXPANSION-LEDGER.ndjson"
+observability_points:
+  - "meta-flow story lld-check --lld <evidence> --evidence-type full-lld"
+  - "meta-flow story cp5-context-check --context process/context/CP5-CR163-TRIAL-LINEAGE-INSTRUMENTATION-LLD-CONTEXT.yaml --project-root ."
+  - "git diff --check"

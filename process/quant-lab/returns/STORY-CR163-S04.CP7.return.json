@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR163-S04.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-163",
+  "story_id": "CR163-S04-existing-admission-projection",
+  "status": "verified_with_risk",
+  "reverification_round": 2,
+  "created_at": "2026-07-11T16:24:00+08:00",
+  "updated_at": "2026-07-11T16:48:00+08:00",
+  "created_by": "meta-qa-critical",
+  "context_ref": "process/context/stories/STORY-CR163-S04.CP7.work-packet.json",
+  "verification_report_ref": "docs/quality/VERIFICATION-REPORT-CR163-S04.md",
+  "source_story_ref": "process/stories/STORY-CR163-S04-existing-admission-projection.md",
+  "source_design_evidence_ref": "process/stories/STORY-CR163-S04-existing-admission-projection-LLD.md",
+  "cp6_return_ref": "process/returns/STORY-CR163-S04.CP6.return.json",
+  "touched_files": [
+    {"path": "docs/quality/VERIFICATION-REPORT-CR163-S04.md", "change_type": "modified"},
+    {"path": "docs/quality/TEST-REPORT-CR163-S04.md", "change_type": "modified"},
+    {"path": "docs/quality/REVIEW-CR163-S04.md", "change_type": "modified"},
+    {"path": "docs/quality/FIXES-CR163-S04.md", "change_type": "modified"},
+    {"path": "process/returns/STORY-CR163-S04.CP7.return.json", "change_type": "modified"},
+    {"path": "process/evidence/STORY-CR163-S04.CP7.index.json", "change_type": "modified"}
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "Final QA verification only; no source, test, Host-state or design change."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_data_touched": false,
+    "real_lake_read_touched": false,
+    "real_lake_write_touched": false,
+    "provider_fetch_executed": false,
+    "nas_operation_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_or_live_executed": false,
+    "broker_operation_executed": false,
+    "statistical_execution_executed": false,
+    "historical_backfill_executed": false,
+    "release_operation_executed": false,
+    "external_framework_executed": false,
+    "git_remote_write_executed": false,
+    "new_gate_family_count": 0
+  },
+  "verification": {
+    "commands_run": [
+      {"command": "uv run --python 3.11 pytest -q tests/research/test_strategy_admission_statistical_gate.py tests/research/test_cross_strategy_reliability_gates.py tests/research/test_strategy_admission_package.py tests/test_cr163_trial_lineage_admission_projection.py tests/test_experiment_family_lineage_contracts.py tests/research/test_daily_multifactor_baseline_artifact.py", "result": "pass", "summary": "220 passed in 0.19s"},
+      {"command": "CR151 trusted threshold and missing-lineage selector", "result": "pass", "summary": "4 passed, 7 deselected in 0.05s"},
+      {"command": "CR154 Gate1 selector", "result": "pass", "summary": "1 passed, 4 deselected in 0.03s"},
+      {"command": "S04 malformed/mismatch/manual/status/CR155 selector", "result": "pass", "summary": "18 passed, 1 deselected in 0.06s"},
+      {"command": "repository-local validation-bound mismatch matrix", "result": "pass", "summary": "hash/count/status/manifest 4/4 blocked with raw unavailable"},
+      {"command": "repository-local actual CR155 blocked-lineage probe", "result": "pass", "summary": "BLOCKED, paper_candidate false, derive false, historical backfill 0"},
+      {"command": "uv run --python 3.11 python -m py_compile engine/strategy_admission_statistical_gate.py engine/cross_strategy_reliability_gates.py engine/strategy_admission_package.py", "result": "pass", "summary": "py_compile passed"},
+      {"command": "git diff --check", "result": "pass", "summary": "No whitespace errors"}
+    ],
+    "tests": [
+      "tests/test_cr163_trial_lineage_admission_projection.py",
+      "tests/test_experiment_family_lineage_contracts.py",
+      "tests/research/test_daily_multifactor_baseline_artifact.py",
+      "tests/research/test_strategy_admission_statistical_gate.py",
+      "tests/research/test_cross_strategy_reliability_gates.py",
+      "tests/research/test_strategy_admission_package.py"
+    ],
+    "stage_decision": "PASS_WITH_RISK",
+    "skipped": [{"scope": "real research/data/lake/NAS/provider/credentials/runtime/statistical/backfill/release", "reason": "Forbidden by CP7 packet"}]
+  },
+  "resolved_findings": [
+    {"finding_id": "QA-CR163-S04-001", "status": "resolved", "summary": "Untrusted/unbound positive inputs fail closed."},
+    {"finding_id": "QA-CR163-S04-002", "status": "resolved", "summary": "Canonical projection exact across consumers; manual reconciliation local."},
+    {"finding_id": "QA-CR163-S04-003", "status": "resolved", "summary": "Actual CR155 absent/blocked paths are blocked with candidate false/backfill zero."},
+    {"finding_id": "QA-CR163-S04-004", "status": "resolved", "summary": "Native contracts migrated; 220/220 affected tests pass without production relaxation."}
+  ],
+  "open_questions": [],
+  "risks": [{"risk_id": "R-CR163-S04-001", "severity": "accepted", "summary": "Effective trial count is unavailable, so C1 and deflated-performance claims remain non-computable and blocked.", "mitigation": "Carry to CP8 and require a separately approved method before enabling claims."}],
+  "waivers": [],
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_architecture_doc_update": false,
+    "requires_hld_update": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "Final implementation follows confirmed LLD; test-contract migration changes no design."
+  },
+  "workflow_health": {"threshold_escalation_required": false, "reason": "Final within-threshold reverification closed QA-004 and found no new defect."},
+  "evidence_refs": [
+    "docs/quality/VERIFICATION-REPORT-CR163-S04.md",
+    "docs/quality/TEST-REPORT-CR163-S04.md",
+    "docs/quality/REVIEW-CR163-S04.md",
+    "docs/quality/FIXES-CR163-S04.md",
+    "process/evidence/STORY-CR163-S04.CP7.index.json"
+  ],
+  "next_stage_recommendation": "verified_with_risk",
+  "actor": "meta-qa-critical",
+  "decision": "PASS_WITH_RISK"
+}

@@ -1,0 +1,31 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {"change_type": "created", "path": "engine/experiment_family_lineage_store.py"},
+    {"change_type": "created", "path": "tests/test_experiment_family_lineage_store.py"},
+    {"change_type": "created", "path": "process/stories/STORY-CR163-S02-recorder-seal-supersession-IMPLEMENTATION.md"},
+    {"change_type": "created", "path": "process/returns/STORY-CR163-S02.CP6.return.json"},
+    {"change_type": "created", "path": "process/evidence/STORY-CR163-S02.CP6.index.json"}
+  ],
+  "commands": [
+    {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_store.py tests/test_experiment_family_lineage_contracts.py", "result": "pass", "summary": "196 passed"},
+    {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_store.py -k 'qa_s02_001 or qa_s02_002 or qa_s02_003 or qa_s02_004'", "result": "pass", "summary": "10 passed, 21 deselected; prior four CP7 negative groups remain closed"},
+    {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_store.py -k qa_s02_005", "result": "pass", "summary": "4 passed, 27 deselected; exhaustive same-process two-handle matrix"},
+    {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_store.py -k qa_s02_003", "result": "pass", "summary": "3 passed, 28 deselected; synchronized cross-process ownership stress"},
+    {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_store.py -k 'partial or no_resume or tamper or broken or cycle or fork or immutable'", "result": "pass", "summary": "7 passed, 20 deselected; crash/no-resume/chain regression"},
+    {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_store.py -k 10k --junitxml=/tmp/cr163-s02-10k-rework2.xml", "result": "pass", "summary": "1 passed, 30 deselected; exact 10,000 commands and four metrics without threshold"},
+    {"command": "uv run --python 3.11 python -m py_compile engine/experiment_family_lineage_store.py", "result": "pass", "summary": "py_compile passed"},
+    {"command": "git diff --check", "result": "pass", "summary": "No whitespace errors"},
+    {"command": "uv run meta-flow story return-check --packet process/context/stories/STORY-CR163-S02.CP6.work-packet.json --return process/returns/STORY-CR163-S02.CP6.return.json --project-root .", "result": "pass", "summary": "Story Return Packet Check: OK"},
+    {"command": "uv run meta-flow story evidence-check --index process/evidence/STORY-CR163-S02.CP6.index.json --project-root .", "result": "pass", "summary": "Evidence Index Check: OK"}
+  ],
+  "cr_id": "CR-163",
+  "design_delta_ref": null,
+  "return_ref": "process/returns/STORY-CR163-S02.CP6.return.json",
+  "risks": ["No in-place resume/repair: a malformed family is retained as blocked evidence and the search restarts from declaration under a new family_id.", "10k results are four observed synthetic metrics with no capacity threshold or supported-capacity claim.", "Cross-process ownership is a local advisory lock on the existing event ledger; non-cooperating external writers are outside the supported model."],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR163-S02-recorder-seal-supersession",
+  "tests": ["tests/test_experiment_family_lineage_store.py", "tests/test_experiment_family_lineage_contracts.py"],
+  "waivers": []
+}

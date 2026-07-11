@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR163-S05.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-163",
+  "story_id": "CR163-S05-integrity-recovery-permission-regression",
+  "status": "verified_with_risk",
+  "reverification_round": 2,
+  "created_at": "2026-07-11T17:28:00+08:00",
+  "updated_at": "2026-07-11T17:56:00+08:00",
+  "created_by": "meta-qa-critical",
+  "context_ref": "process/context/stories/STORY-CR163-S05.CP7.work-packet.json",
+  "verification_report_ref": "docs/quality/VERIFICATION-REPORT-CR163-S05.md",
+  "source_story_ref": "process/stories/STORY-CR163-S05-integrity-recovery-permission-regression.md",
+  "source_design_evidence_ref": "process/stories/STORY-CR163-S05-integrity-recovery-permission-regression-LLD.md",
+  "cp6_return_ref": "process/returns/STORY-CR163-S05.CP6.return.json",
+  "touched_files": [
+    {"path": "docs/quality/VERIFICATION-REPORT-CR163-S05.md", "change_type": "modified"},
+    {"path": "docs/quality/TEST-REPORT-CR163-S05.md", "change_type": "modified"},
+    {"path": "docs/quality/REVIEW-CR163-S05.md", "change_type": "modified"},
+    {"path": "docs/quality/FIXES-CR163-S05.md", "change_type": "modified"},
+    {"path": "process/returns/STORY-CR163-S05.CP7.return.json", "change_type": "modified"},
+    {"path": "process/evidence/STORY-CR163-S05.CP7.index.json", "change_type": "modified"}
+  ],
+  "contract_changes": {"public_api_changed": false, "data_contract_changed": false, "design_delta_required": false, "design_delta_ref": null, "summary": "Final QA reverify only; no source/test/Host/design change."},
+  "boundary_check": {"allowed_paths_only": true, "forbidden_paths_touched": [], "unexpected_imports": [], "production_source_touched": false, "tests_touched": false, "host_artifacts_touched": false, "runtime_touched": false, "credentials_touched": false, "real_data_touched": false, "real_lake_read_touched": false, "real_lake_write_touched": false, "provider_fetch_executed": false, "nas_operation_executed": false, "qmt_runtime_executed": false, "simulation_or_live_executed": false, "broker_operation_executed": false, "statistical_execution_executed": false, "historical_backfill_executed": false, "historical_reconstruction_executed": false, "release_operation_executed": false, "external_framework_executed": false, "git_remote_write_executed": false},
+  "verification": {
+    "commands_run": [
+      {"command": "uv run --python 3.11 pytest -q tests/test_cr163_trial_lineage_authorization.py", "result": "pass", "summary": "19 passed in 0.60s"},
+      {"command": "uv run --python 3.11 pytest -q tests/test_cr163_trial_lineage_integrity.py tests/test_cr163_trial_lineage_authorization.py tests/test_cr163_trial_lineage_cr155_regression.py", "result": "pass", "summary": "33 passed in 0.93s"},
+      {"command": "schema and trace selectors", "result": "pass", "summary": "5 authorization + 2 trace passed"},
+      {"command": "repository-local exact manifest/non-marker safe-spy matrix", "result": "pass", "summary": "manifest 13/13; pass-through 13/13; original spy calls 13; forbidden counts zero"},
+      {"command": "uv run --python 3.11 pytest -q tests/test_cr163_trial_lineage_integrity.py tests/test_cr163_trial_lineage_authorization.py tests/test_cr163_trial_lineage_cr155_regression.py tests/test_experiment_family_lineage_contracts.py tests/test_experiment_family_lineage_store.py tests/test_cr163_trial_lineage_producer_adapters.py tests/test_cr163_trial_lineage_admission_projection.py", "result": "pass", "summary": "262 passed in 29.59s"},
+      {"command": "uv run meta-flow story return-check/evidence-check for CP6", "result": "pass", "summary": "Return Packet and Evidence Index OK"},
+      {"command": "git diff --check", "result": "pass", "summary": "No whitespace errors"}
+    ],
+    "tests": ["tests/test_cr163_trial_lineage_integrity.py", "tests/test_cr163_trial_lineage_authorization.py", "tests/test_cr163_trial_lineage_cr155_regression.py", "tests/test_experiment_family_lineage_contracts.py", "tests/test_experiment_family_lineage_store.py", "tests/test_cr163_trial_lineage_producer_adapters.py", "tests/test_cr163_trial_lineage_admission_projection.py"],
+    "stage_decision": "PASS_WITH_RISK",
+    "skipped": [{"scope": "real systems", "reason": "Forbidden; all marker tests use safe substituted originals"}]
+  },
+  "quantitative_exits": {"requirements": "8/8", "scenarios": "12/12 structured/resolvable", "cpi_mappings": "4/4", "producer_chains": "2/2", "identical_seals_to_distinct_hashes": "10/1", "negative_classes_blocked": "5/5", "concrete_boundary_installations": "13/13", "guarded_path_forbidden_categories_zero": "13/13", "safe_marker_blocks_before_original": "13/13", "original_marker_calls": 0, "nonmarker_pass_through": "13/13", "nonmarker_original_calls": 13, "authorization_schema_negative_classes": "5/5", "scenario_trace_resolvable_functions": "12/12", "cr155_actual_synthetic_blocked": "2/2", "historical_backfill_or_reconstruction": 0, "effective_claims": 0, "c1_computed_claims": 0, "runtime_ready_claims": 0},
+  "resolved_findings": [
+    {"finding_id": "QA-CR163-S05-001", "status": "resolved", "initial_status": "BLOCKER", "round_1_status": "OPEN", "round_2_status": "RESOLVED", "summary": "All 13 concrete/path-aware guards installed; marker and pass-through behavior independently verified."},
+    {"finding_id": "QA-CR163-S05-002", "status": "resolved", "initial_status": "HIGH", "round_1_status": "RESOLVED", "round_2_status": "RESOLVED", "summary": "Exact schema/value negatives remain fail closed."},
+    {"finding_id": "QA-CR163-S05-003", "status": "resolved", "initial_status": "HIGH", "round_1_status": "RESOLVED", "round_2_status": "RESOLVED", "summary": "Structured AST trace remains complete and negative-tested."}
+  ],
+  "open_questions": [],
+  "risks": [
+    {"risk_id": "R-CR163-S05-001", "severity": "accepted", "summary": "Future producer retry-loop changes require an end-to-end same-session ordinal fixture.", "mitigation": "Retain S03 acceptance condition and reverify on future loop changes."},
+    {"risk_id": "R-CR163-S05-002", "severity": "accepted", "summary": "Upstream effective/C1 and S02 recovery/capacity claim ceilings remain.", "mitigation": "Carry existing upstream limitations to CP8; do not infer readiness."}
+  ],
+  "waivers": [],
+  "design_delta": {"requires_feature_doc_update": false, "requires_architecture_doc_update": false, "requires_hld_update": false, "design_delta_required": false, "design_delta_ref": null, "status": "not_required", "reason": "Final evidence follows confirmed LLD."},
+  "workflow_health": {"threshold_escalation_required": false, "reason": "Normal final round closed QA-001 and found no new defect."},
+  "evidence_refs": ["docs/quality/VERIFICATION-REPORT-CR163-S05.md", "docs/quality/TEST-REPORT-CR163-S05.md", "docs/quality/REVIEW-CR163-S05.md", "docs/quality/FIXES-CR163-S05.md", "process/evidence/STORY-CR163-S05.CP7.index.json"],
+  "next_stage_recommendation": "verified_with_risk",
+  "actor": "meta-qa-critical",
+  "decision": "PASS_WITH_RISK"
+}

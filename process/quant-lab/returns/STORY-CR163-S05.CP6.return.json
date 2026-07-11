@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR163-S05.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-163",
+  "story_id": "CR163-S05-integrity-recovery-permission-regression",
+  "status": "implemented",
+  "rework_round": 2,
+  "created_at": "2026-07-11T17:15:00+08:00",
+  "created_by": "meta-dev-debugger",
+  "context_ref": "process/context/stories/STORY-CR163-S05.CP6.work-packet.json",
+  "implementation_ref": "process/stories/STORY-CR163-S05-integrity-recovery-permission-regression-IMPLEMENTATION.md",
+  "source_story_ref": "process/stories/STORY-CR163-S05-integrity-recovery-permission-regression.md",
+  "source_design_evidence_ref": "process/stories/STORY-CR163-S05-integrity-recovery-permission-regression-LLD.md",
+  "predecessor_refs": [
+    "process/evidence/STORY-CR163-S01.CP7.index.json",
+    "process/evidence/STORY-CR163-S02.CP7.index.json",
+    "process/evidence/STORY-CR163-S03.CP7.index.json",
+    "process/evidence/STORY-CR163-S04.CP7.index.json"
+  ],
+  "touched_files": [
+    {"path": "tests/test_cr163_trial_lineage_integrity.py", "change_type": "created"},
+    {"path": "tests/test_cr163_trial_lineage_authorization.py", "change_type": "created"},
+    {"path": "tests/test_cr163_trial_lineage_cr155_regression.py", "change_type": "created"},
+    {"path": "process/stories/STORY-CR163-S05-integrity-recovery-permission-regression-IMPLEMENTATION.md", "change_type": "created"},
+    {"path": "process/returns/STORY-CR163-S05.CP6.return.json", "change_type": "created"},
+    {"path": "process/evidence/STORY-CR163-S05.CP6.index.json", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "Rework 2 installs all 13 authorization categories on concrete/path-aware standard-library boundaries with safe marker predicates; production contracts remain read-only."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "production_source_touched": false,
+    "existing_tests_touched": false,
+    "host_artifacts_touched": false,
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_data_touched": false,
+    "real_lake_read_touched": false,
+    "real_lake_write_touched": false,
+    "provider_fetch_executed": false,
+    "nas_operation_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_or_live_executed": false,
+    "broker_operation_executed": false,
+    "statistical_execution_executed": false,
+    "historical_backfill_executed": false,
+    "historical_reconstruction_executed": false,
+    "release_operation_executed": false,
+    "external_framework_executed": false,
+    "git_remote_write_executed": false,
+    "cr155_files_touched": false
+  },
+  "quantitative_exits": {
+    "requirements": "8/8",
+    "scenarios": "12/12",
+    "cpi_mappings": "4/4",
+    "producer_chains": "2/2",
+    "identical_seals_to_distinct_hashes": "10/1",
+    "negative_classes_blocked": "5/5",
+    "forbidden_categories_zero": "13/13",
+    "forbidden_categories_nonzero_fail_closed": "13/13",
+    "concrete_boundary_installations": "13/13",
+    "safe_marker_blocks_before_original": "13/13",
+    "original_marker_calls": 0,
+    "authorization_schema_negative_classes": "5/5",
+    "scenario_trace_resolvable_functions": "12/12",
+    "cr155_actual_synthetic_blocked": "2/2",
+    "historical_backfill_or_reconstruction": 0,
+    "effective_claims": 0,
+    "c1_computed_claims": 0,
+    "runtime_ready_claims": 0
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr163_trial_lineage_authorization.py",
+        "result": "pass",
+        "summary": "19 passed in 0.63s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr163_trial_lineage_integrity.py tests/test_cr163_trial_lineage_authorization.py tests/test_cr163_trial_lineage_cr155_regression.py",
+        "result": "pass",
+        "summary": "33 passed in 0.66s"
+      },
+      {
+        "command": "uv run --python 3.11 pytest -q tests/test_cr163_trial_lineage_integrity.py tests/test_cr163_trial_lineage_authorization.py tests/test_cr163_trial_lineage_cr155_regression.py tests/test_experiment_family_lineage_contracts.py tests/test_experiment_family_lineage_store.py tests/test_cr163_trial_lineage_producer_adapters.py tests/test_cr163_trial_lineage_admission_projection.py",
+        "result": "pass",
+        "summary": "262 passed in 29.28s"
+      },
+      {"command": "git diff --check", "result": "pass", "summary": "No whitespace errors"}
+    ],
+    "tests": [
+      "tests/test_cr163_trial_lineage_integrity.py",
+      "tests/test_cr163_trial_lineage_authorization.py",
+      "tests/test_cr163_trial_lineage_cr155_regression.py",
+      "tests/test_experiment_family_lineage_contracts.py",
+      "tests/test_experiment_family_lineage_store.py",
+      "tests/test_cr163_trial_lineage_producer_adapters.py",
+      "tests/test_cr163_trial_lineage_admission_projection.py"
+    ],
+    "stage_decision": "PASS",
+    "skipped": []
+  },
+  "open_questions": [],
+  "resolved_findings": [
+    {"finding_id": "QA-CR163-S05-001", "status": "resolved", "rework_round": 2, "summary": "All 13 categories are installed on concrete/path-aware Path, os, socket, subprocess or urllib boundaries with marker predicates; the guarded S01-S05 path observes zero, and 13 safe marker calls block before their substituted original spies."},
+    {"finding_id": "QA-CR163-S05-002", "status": "resolved", "summary": "Authorization evidence now requires the exact 13-key schema; missing, unknown, boolean, negative and nonzero values all fail closed."},
+    {"finding_id": "QA-CR163-S05-003", "status": "resolved", "summary": "All 12 structured scenario entries carry scope and unique resolvable test functions; wrong/deleted references fail closed."}
+  ],
+  "risks": [
+    {
+      "risk_id": "R-CR163-S05-001",
+      "severity": "accepted",
+      "summary": "Future producer retry-loop changes still require an end-to-end same-session ordinal fixture.",
+      "mitigation": "Preserve the S03 accepted-risk condition; S05 proves stable raw membership under three attempts without authorizing runtime execution."
+    }
+  ],
+  "waivers": [],
+  "design_delta": {
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "Implementation follows the CP5-approved S05 LLD and changes no production or long-term design."
+  },
+  "evidence_refs": ["process/evidence/STORY-CR163-S05.CP6.index.json"],
+  "next_stage_recommendation": "ready_for_cp7",
+  "actor": "meta-dev-debugger",
+  "decision": "PASS"
+}

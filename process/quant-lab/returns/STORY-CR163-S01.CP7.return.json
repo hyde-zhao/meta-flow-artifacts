@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR163-S01.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-163",
+  "story_id": "CR163-S01-family-contract-validator",
+  "status": "verified",
+  "reverification_round": 2,
+  "created_at": "2026-07-11T13:02:26+08:00",
+  "created_by": "meta-qa-critical",
+  "context_ref": "process/context/stories/STORY-CR163-S01.CP7.work-packet.json",
+  "verification_report_ref": "docs/quality/VERIFICATION-REPORT-CR163-S01.md",
+  "source_story_ref": "process/stories/STORY-CR163-S01-family-contract-validator.md",
+  "source_design_evidence_ref": "process/stories/STORY-CR163-S01-family-contract-validator-LLD.md",
+  "cp6_return_ref": "process/returns/STORY-CR163-S01.CP6.return.json",
+  "touched_files": [
+    {"path": "docs/quality/VERIFICATION-REPORT-CR163-S01.md", "change_type": "modified"},
+    {"path": "docs/quality/TEST-REPORT-CR163-S01.md", "change_type": "modified"},
+    {"path": "docs/quality/REVIEW-CR163-S01.md", "change_type": "modified"},
+    {"path": "docs/quality/FIXES-CR163-S01.md", "change_type": "modified"},
+    {"path": "process/returns/STORY-CR163-S01.CP7.return.json", "change_type": "modified"},
+    {"path": "process/evidence/STORY-CR163-S01.CP7.index.json", "change_type": "modified"}
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "Verification only. All QA-001..008 are closed; no public contract or long-lived design change was made by CP7."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_read_touched": false,
+    "real_lake_write_touched": false,
+    "provider_fetch_executed": false,
+    "nas_operation_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_or_live_executed": false,
+    "broker_operation_executed": false,
+    "external_framework_executed": false,
+    "statistical_effective_trial_computation_executed": false,
+    "historical_backfill_executed": false,
+    "git_remote_write_executed": false,
+    "publish_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_contracts.py", "result": "pass", "summary": "165 passed in 0.12s"},
+      {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_contracts.py -k 'declare_family_binds or record_selection_binds or all_nine_commands or superseding_seal_nested'", "result": "pass", "summary": "19 passed, 146 deselected in 0.03s"},
+      {"command": "uv run --python 3.11 pytest -q tests/test_experiment_family_lineage_contracts.py -k 'v1_validation_replays or malformed_or_ambiguous or internal_sequence_gap or post_seal_and_post_supersession or projection_exhaustively or unknown_or_base'", "result": "pass", "summary": "118 passed, 47 deselected in 0.09s"},
+      {"command": "uv run --python 3.11 pytest -q tests/data_lake/test_lineage_and_run_id.py tests/experiments/test_experiment_manifest_catalog.py tests/experiments/test_experiment_manifest_closure.py tests/meta_flow/test_experiment_entrypoint_taxonomy.py tests/research/test_strategy_admission_package.py tests/research/test_strategy_admission_statistical_gate.py", "result": "pass", "summary": "38 passed in 0.65s"},
+      {"command": "repository-local direct exact 9/9 command identity fold probe", "result": "pass", "summary": "9/9 exact command classes emitted expected stable blocked codes and preserved expected raw membership"},
+      {"command": "uv run --python 3.11 python -m py_compile engine/experiment_family_lineage.py", "result": "pass", "summary": "py_compile passed"},
+      {"command": "git diff --check", "result": "pass", "summary": "No whitespace errors"}
+    ],
+    "tests": [
+      "tests/test_experiment_family_lineage_contracts.py",
+      "tests/data_lake/test_lineage_and_run_id.py",
+      "tests/experiments/test_experiment_manifest_catalog.py",
+      "tests/experiments/test_experiment_manifest_closure.py",
+      "tests/meta_flow/test_experiment_entrypoint_taxonomy.py",
+      "tests/research/test_strategy_admission_package.py",
+      "tests/research/test_strategy_admission_statistical_gate.py"
+    ],
+    "stage_decision": "PASS",
+    "skipped": [
+      {"scope": "real runtime/data/credentials/external/statistical/backfill/release operations", "reason": "Explicitly forbidden and outside the S01 static contract surface"}
+    ]
+  },
+  "open_questions": [],
+  "risks": [],
+  "waivers": [],
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_architecture_doc_update": false,
+    "requires_hld_update": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "Both rework rounds implement the already-confirmed S01 LLD without changing long-lived design."
+  },
+  "workflow_health": {
+    "threshold_escalation_required": false,
+    "reason": "Final within-threshold reverification passed with no new defect."
+  },
+  "evidence_refs": [
+    "docs/quality/VERIFICATION-REPORT-CR163-S01.md",
+    "docs/quality/TEST-REPORT-CR163-S01.md",
+    "docs/quality/REVIEW-CR163-S01.md",
+    "docs/quality/FIXES-CR163-S01.md",
+    "process/evidence/STORY-CR163-S01.CP7.index.json"
+  ],
+  "next_stage_recommendation": "verified",
+  "actor": "meta-qa-critical",
+  "decision": "PASS",
+  "updated_at": "2026-07-11T13:02:26+08:00"
+}

@@ -1,0 +1,213 @@
+schema_version: 1
+context_id: RELEASE-CONTEXT-CR163-TRIAL-LINEAGE-INSTRUMENTATION
+change_id: CR-163
+created_at: "2026-07-11T18:15:00+08:00"
+updated_at: "2026-07-11T18:38:00+08:00"
+created_by: meta-qa-critical
+release_artifact_profile: compact
+profile_reason: "standard workflow with additive, non-destructive code/contracts and no installer, external interface, irreversible migration or true release action"
+release_decision: READY_WITH_RISK
+release_execution_status: NOT_EXECUTED
+
+release_scope:
+  version_label: "CR163 internal release candidate"
+  in_scope:
+    - experiment family lifecycle and typed commands
+    - append-only local recorder, deterministic seal and supersession validation
+    - two producer chains and four instrumentation mappings
+    - three existing admission consumer projections
+    - integrity, authorization and CR155 negative regression
+  out_of_scope:
+    - effective-trial or statistical correction computation
+    - historical lineage reconstruction or backfill
+    - real data, runtime, credentials, provider, NAS, broker or trading operations
+    - deployment, publish, release execution or Git remote write
+  user_visible_changes:
+    - "future instrumented runs can emit validation-bound raw family lineage"
+    - "uninstrumented, incomplete, mismatched or tampered evidence remains fail closed"
+  internal_changes:
+    - "new family contract/store and producer hooks"
+    - "trusted projection into existing consumers; no new gate family"
+
+version_decision:
+  current_version: "repository version unchanged"
+  target_version: "internal CR163 release candidate"
+  bump: none
+  reason: "No version/tag/publish authorization or public release target was provided."
+
+quality_summary:
+  stories: 5
+  cp7_pass: 1
+  cp7_pass_with_risk: 4
+  open_blockers: 0
+  open_high_implementation_findings: 0
+  waivers: 0
+  full_packet_tests: "262 passed in 29.59s"
+  affected_admission_tests: "220 passed"
+  authorization: "13/13 installed and observed zero; 13/13 marker blocked before original; 13/13 non-marker pass-through"
+  cr155: "actual and synthetic blocked; paper_candidate=false; reconstruction/backfill=0"
+  evidence_refs:
+    - process/checks/CP7-CR163-S01-family-contract-validator-VERIFICATION-DONE.result.json
+    - process/checks/CP7-CR163-S02-recorder-seal-supersession-VERIFICATION-DONE.result.json
+    - process/checks/CP7-CR163-S03-two-producer-chain-instrumentation-VERIFICATION-DONE.result.json
+    - process/checks/CP7-CR163-S04-existing-admission-projection-VERIFICATION-DONE.result.json
+    - process/checks/CP7-CR163-S05-integrity-recovery-permission-regression-VERIFICATION-DONE.result.json
+
+fact_diff:
+  - promise_ref: "process/checks/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.result.json#CP2-CR163-03"
+    promise: "instrument 2 producer chains through exactly 4 mappings"
+    status: DELIVERED
+    decision_impact: "supports readiness"
+    evidence_refs: [process/evidence/STORY-CR163-S03.CP7.index.json, process/evidence/STORY-CR163-S05.CP7.index.json]
+    risk_ref: RA-CR163-B
+  - promise_ref: "process/checks/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.result.json#CP2-CR163-04"
+    promise: "implement REQ-CR163-001..008 across five Stories"
+    status: DELIVERED
+    decision_impact: "five CP7 results complete; blockers zero"
+    evidence_refs: [process/checks/CP7-CR163-S01-family-contract-validator-VERIFICATION-DONE.result.json, process/checks/CP7-CR163-S05-integrity-recovery-permission-regression-VERIFICATION-DONE.result.json]
+    risk_ref: null
+  - promise_ref: "process/checks/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.result.json#CP2-CR163-05"
+    promise: "meet deterministic, integrity and forbidden-operation NFRs"
+    status: DELIVERED
+    decision_impact: "10-to-1 hash, five negative classes and 13/13 guards verified"
+    evidence_refs: [process/evidence/STORY-CR163-S02.CP7.index.json, process/evidence/STORY-CR163-S05.CP7.index.json]
+    risk_ref: null
+  - promise_ref: "process/checks/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.result.json#CP2-CR163-06"
+    promise: "cover and trace all 12 P0 scenarios"
+    status: DELIVERED
+    decision_impact: "12/12 structured AST-resolvable trace"
+    evidence_refs: [process/checks/CP7-CR163-S05-integrity-recovery-permission-regression-VERIFICATION-DONE.result.json]
+    risk_ref: null
+  - promise_ref: "process/checks/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.result.json#CP2-CR163-07"
+    promise: "freeze retry, seed and terminal raw-count semantics"
+    status: DELIVERED_WITH_RISK
+    decision_impact: "current behavior verified; future retry-loop change has revisit condition"
+    evidence_refs: [process/evidence/STORY-CR163-S01.CP7.index.json, process/evidence/STORY-CR163-S03.CP7.index.json]
+    risk_ref: RA-CR163-B
+  - promise_ref: "process/checks/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.result.json#CP2-CR163-08"
+    promise: "preserve present/unavailable/blocked boundary without overclaiming C1"
+    status: DELIVERED
+    decision_impact: "scope boundary delivered exactly; effective/C1 remains intentionally unavailable and points to existing FU-CR161-002"
+    evidence_refs: [process/checks/CP7-CR163-S04-existing-admission-projection-VERIFICATION-DONE.result.json, process/checks/CP7-CR163-S05-integrity-recovery-permission-regression-VERIFICATION-DONE.result.json]
+    risk_ref: null
+  - promise_ref: "process/checks/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.result.json#CP2-CR163-09"
+    promise: "immutable seals and append-only supersession recovery"
+    status: DELIVERED_WITH_RISK
+    decision_impact: "verified; accepted availability loss is no in-place resume, while cooperative writer scope is a design boundary"
+    evidence_refs: [process/evidence/STORY-CR163-S02.CP7.index.json, process/evidence/STORY-CR163-S05.CP7.index.json]
+    risk_ref: RA-CR163-A
+  - promise_ref: "process/checks/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.result.json#CP2-CR163-10"
+    promise: "keep historical CR155 blocked without reconstruction"
+    status: DELIVERED
+    decision_impact: "supports readiness; paper candidate false and counts zero"
+    evidence_refs: [process/evidence/STORY-CR163-S04.CP7.index.json, process/evidence/STORY-CR163-S05.CP7.index.json]
+    risk_ref: null
+  - promise_ref: "process/checks/CP2-CR163-TRIAL-LINEAGE-INSTRUMENTATION-SCOPE.result.json#CP2-CR163-13"
+    promise: "deny runtime/data/credential/trading/release operations"
+    status: DELIVERED
+    decision_impact: "13/13 guarded evidence; no authorization expansion"
+    evidence_refs: [process/evidence/STORY-CR163-S05.CP7.index.json]
+    risk_ref: null
+  - promise_ref: "process/context/CP8-CR163-TRIAL-LINEAGE-INSTRUMENTATION-CONTEXT.yaml"
+    promise: "source and artifact repositories form one release unit"
+    status: AUTHORIZED_PENDING_EXECUTION
+    decision_impact: "user authorized paired push; both repositories remain dirty/unpushed until Host executes and records evidence"
+    evidence_refs: [process/release/RELEASE-CONTEXT-CR163-TRIAL-LINEAGE-INSTRUMENTATION.yaml]
+    risk_ref: null
+
+claim_ceiling:
+  raw_trial_lineage: "present only for future instrumented runs after complete valid seal and matching validation"
+  uninstrumented: typed_unavailable
+  invalid_incomplete_mismatched_tampered: blocked
+  effective_trial_count: typed_unavailable
+  effective_trial_count_ref: ""
+  effective_trial_count_method: ""
+  c1_computable: false
+  statistical_correction_claim: false
+  runtime_ready_claim: false
+  cr155: "blocked; paper_candidate=false; historical reconstruction/backfill=0"
+
+affected_surface:
+  platforms: [local-python]
+  components: [family-contract, local-lineage-store, producer-adapters, existing-admission-consumers, synthetic-regressions]
+  install_scope: none
+  configuration_changes: none
+  permission_changes: "none; deny-default retained"
+  external_interfaces: none
+  state_schema_migration: none
+  historical_data_migration: none
+
+install_validation_summary:
+  applicable: false
+  reason: "No installer, dependency or platform-path change."
+  regression_refs: [process/evidence/STORY-CR163-S05.CP7.index.json]
+
+repository_status:
+  checked_with: "uv run meta-flow workspace git-status --project-root ."
+  project:
+    root: /home/hyde/workspace/quant-lab
+    branch: precheck/ql-rd-000-redesign-baseline
+    upstream: origin/precheck/ql-rd-000-redesign-baseline
+    dirty: false
+    ahead: 1
+    behind: 0
+    delivery_commit: 3cc7992
+  artifact:
+    root: /home/hyde/workspace/meta-flow-artifacts
+    branch: main
+    upstream: origin/main
+    dirty: true
+    ahead: 0
+    behind: 0
+  commit_executed: partial_source_complete
+  source_commit_executed: true
+  artifact_commit_executed: false
+  push_executed: false
+  paired_push_required_if_authorized: true
+  push_authorization_status: authorized_pending_execution
+  push_authorization_scope: "paired source and artifact repository push only"
+  push_approval_ref: "user CP8 risk-response approval in current session"
+
+process_consistency:
+  cp8_capsule_and_cp7_results: current
+  state_current_summary: current
+  required_host_action: "execute and record the explicitly authorized paired repository delivery push"
+  blocking_implementation_finding: false
+
+release_documents:
+  profile: compact
+  status: generated
+  documents:
+    - docs/release/RELEASE-NOTES-CR163-TRIAL-LINEAGE-INSTRUMENTATION.md
+    - docs/release/DEPLOY-CHECKLIST-CR163-TRIAL-LINEAGE-INSTRUMENTATION.md
+    - docs/release/ROLLBACK-CR163-TRIAL-LINEAGE-INSTRUMENTATION.md
+    - docs/release/MIGRATION-CR163-TRIAL-LINEAGE-INSTRUMENTATION.md
+    - docs/release/FEEDBACK-CR163-TRIAL-LINEAGE-INSTRUMENTATION.md
+
+non_authorized_items:
+  - real research runtime or data access
+  - credentials, provider, NAS, broker, simulation, paper or live operations
+  - historical CR155 reconstruction or backfill
+  - effective-trial or statistical correction computation
+  - release execution, deployment, tag, package/version publish or any Git remote write outside the authorized paired source+artifact push
+
+follow_up_summary:
+  accepted_risks:
+    - "A: no in-place resume can lose completed long-running work and require a full rerun; this is availability/cost loss, not lineage correctness risk"
+    - "B: a future producer retry-loop needs a real producer end-to-end ordinal fixture; this is conditional future validation coverage, not a current implementation defect"
+  design_boundaries_not_risks:
+    - "cooperative writer lock is the supported single/cooperating-writer model; seal/hash guards preserve correctness"
+    - "exact-10k is characterization only and carries no capacity/SLA claim"
+    - "effective trial/C1 is an explicit scope ceiling and remains owned by existing FU-CR161-002"
+  process_status_not_risk:
+    - "both repositories are dirty; paired push is authorized_pending_execution"
+    - "CP8 approval and CR/state closure are recorded; paired delivery execution remains"
+  follow_up_candidates:
+    - FU-CR163-001
+    - FU-CR163-002
+    - FU-CR163-003
+    - FU-CR163-004
+  existing_follow_up_refs:
+    - FU-CR161-002
+  tracking_ref: process/changes/CR-163-FOLLOW-UP-TRACKING-2026-07-11.md
+  feedback_ref: docs/release/FEEDBACK-CR163-TRIAL-LINEAGE-INSTRUMENTATION.md

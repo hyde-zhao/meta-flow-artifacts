@@ -1,6 +1,6 @@
 ---
 status: "ready-for-cp5-review"
-version: "1.19"
+version: "1.21"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld:
   - "docs/design/HLD.md"
@@ -8,7 +8,7 @@ source_hld:
 source_adr:
   - "docs/design/ARCHITECTURE-DECISION.md"
   - "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
-change: "CR-155"
+change: "CR-163"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 confirmed_by: ""
 confirmed_at: ""
@@ -41,6 +41,7 @@ confirmed_at: ""
 | 1.18 | 2026-07-04 | host-orchestrator | CR155 CP3 approved 后增补 Daily Multifactor Baseline Strategy Artifact CP4：新增 FEAT-16 baseline artifact 三件套、5 个 Story、readonly provenance、historical/OOS validation、admission composition、rerun consistency 和 no-runtime/no-write CP5 attention hooks。 |
 | 1.19 | 2026-07-05 | host-orchestrator | CR157 CP3 approved 后增补 Stage 2 Multifactor Research Framework Upgrade CP4：新增 FEAT-17 mature admission package、FEAT-18 research evidence traceability、FEAT-19 Stage 2/3 handoff guardrails 三件套，5 个 Story、refs-only evidence、fail-closed handoff、no-runtime guard 和 event/ML adapter deferred 边界。 |
 | 1.20 | 2026-07-05 | host-orchestrator | CR158 CP3 approved 后增补 Event + ML Strategy Adapter Unified Implementation CP4：复用 FEAT-03 / FEAT-07 / FEAT-08，新增 6 个 Story、thin shared core、typed event/ML extension、refs-only evidence、no-runtime counters 和 release wording boundary。 |
+| 1.21 | 2026-07-11 | meta-se-critical | CR163 CP3 approved 后增补 FEAT-20 experiment-family lineage core、FEAT-21 producer adapters、FEAT-22 admission projection 三套 required Feature 设计；FEAT-23 standalone validation waived，由三套 TEST-PLAN 汇总覆盖；五 Story 全部 full-lld。 |
 
 ## 适用性判定规则
 
@@ -546,3 +547,59 @@ confirmed_at: ""
 | first-slice / deferred / not-authorized 边界显式化 | PASS | 本节 `First-Slice / Deferred / Not-Authorized 边界` |
 | CP5 注意项覆盖 core、extension、refs-only evidence、no-runtime guard 和 release wording | PASS | 本节 `CP5 注意项` |
 | CP4 不授权 LLD approval、实现、测试实现、真实 feed、真实训练、真实数据、runtime、registry、publish 或交易 | PASS | `process/DEVELOPMENT-PLAN-CR158-EVENT-ML-STRATEGY-ADAPTER.yaml#authorization_boundary` |
+
+## CR163 CP4 增量：Trial Lineage Instrumentation
+
+> 来源：`docs/design/BLUEPRINT-TRIAL-LINEAGE-INSTRUMENTATION.md`、`docs/design/HLD-TRIAL-LINEAGE-INSTRUMENTATION.md`、`docs/design/ARCHITECTURE-DECISION-TRIAL-LINEAGE-INSTRUMENTATION.md` 和 CP3 用户批准。CR163 新增可审计的 experiment-family raw lineage 事实源，但不计算 effective trial count 或 C1 statistical evidence，不重建 CR155 历史，不扩大 runtime/data/credential/external-write 授权。
+
+### Feature 适用性判定
+
+| Feature ID | Feature / Epic | 适用性 | 判定理由 | 需要产物 | 关联 Story | lld_policy | 重访条件 |
+|---|---|---|---|---|---|---|---|
+| FEAT-20 | Experiment-family lineage core | required | 六个持久化对象、FamilyLineageSession、状态机、幂等/冲突、canonical JSON/JSONL、immutable seal 与 supersession 被 S01/S02/S05 共享 | `docs/features/experiment-family-lineage/{DESIGN,TEST-PLAN,TASKS}.md` | CR163-S01, S02, S05 | full-lld | object/schema/state/hash/storage/supersession 或 single-writer 假设变化 |
+| FEAT-21 | Trial-lineage producer adapters | required | 两条 producer chains / CPI-001..004 跨四个调用点共享 pre-search/session/trial identity 防双计数 contract | `docs/features/trial-lineage-producer-adapters/{DESIGN,TEST-PLAN,TASKS}.md` | CR163-S03, S05 | full-lld | 新增 candidate producer、wrapper/hook owner 或跨语言 command transport |
+| FEAT-22 | Strategy-admission lineage projection | required | 跨 CR151/CR154/admission package 的 availability/ref/raw count/status-worsening contract；manual count reconciliation-only | `docs/features/strategy-admission-lineage-projection/{DESIGN,TEST-PLAN,TASKS}.md` | CR163-S04, S05 | full-lld | existing gate schema、availability、manual/backfill policy 或 claim tier变化 |
+| FEAT-23 | Trial-lineage verification orchestration | waived-as-standalone | 不拥有新生产数据或公共接口；S05 只组合 FEAT-20..22 的 contract/fixture/security/regression 验证，独立 DESIGN 会复制三套测试职责 | none；消费三套 TEST-PLAN | CR163-S05 | full-lld（Story） | 若形成独立验证 runtime/service、共享 fixture schema 或跨 CR validation API，升级 required |
+
+### Story 下游消费表
+
+| Story ID | Owner Feature | feature_design_refs | lld_policy.required_level | trigger_reasons | CP5 设计证据 |
+|---|---|---|---|---|---|
+| CR163-S01-family-contract-validator | FEAT-20 | `docs/features/experiment-family-lineage/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | six-object public contract / state / validation / availability / security boundary | Story LLD |
+| CR163-S02-recorder-seal-supersession | FEAT-20 | `docs/features/experiment-family-lineage/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md` | full-lld | append-only storage / idempotency / canonicalization / immutable seal / recovery | Story LLD |
+| CR163-S03-two-producer-chain-instrumentation | FEAT-21 / FEAT-20 | `docs/features/trial-lineage-producer-adapters/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md`、`docs/features/experiment-family-lineage/DESIGN.md` | full-lld | cross-module 2 chains / 4 mappings / identity ownership / file coordination | Story LLD |
+| CR163-S04-existing-admission-projection | FEAT-22 / FEAT-20 | `docs/features/strategy-admission-lineage-projection/DESIGN.md`、`TEST-PLAN.md`、`TASKS.md`、`docs/features/experiment-family-lineage/DESIGN.md` | full-lld | three consumer surfaces / compatibility / fail-closed / claim ceiling | Story LLD |
+| CR163-S05-integrity-recovery-permission-regression | FEAT-20 / FEAT-21 / FEAT-22 / FEAT-23 | 三套 `DESIGN.md` / `TEST-PLAN.md` / `TASKS.md` | full-lld | cross-module fixtures / tamper / supersession / permission / CR155 regression | Story LLD；FEAT-23 standalone waiver 作为附加依据 |
+
+### CP5 注意项
+
+| Attention ID | Story | Requirement |
+|---|---|---|
+| CP5-FOCUS-CR163-001 | S01 | 六对象与 façade 字段、state transitions、machine blocked codes、validation target ref/hash 必须完整。 |
+| CP5-FOCUS-CR163-002 | S02 | canonical bytes/hash domain、create-exclusive version、event idempotency/conflict、full supersession chain 与 rollback 必须冻结到文件/接口级。 |
+| CP5-FOCUS-CR163-003 | S03 | S03 必须同时覆盖 2 chains 与 CPI-001..004 4/4；wrapper/hook 同 chain 不得双建 session/trial。 |
+| CP5-FOCUS-CR163-004 | S04 | 无 sealed native ref=typed_unavailable；manual mismatch=blocked；status 只可持平或变差；不得新建 gate 或填充 effective value。 |
+| CP5-FOCUS-CR163-005 | S05 | 12/12 P0 scenarios、10 seals=1 hash、五类 negative 5/5 blocked、forbidden counters=0、CR155 blocked 1/1。 |
+
+### First Slice / Deferred / Not Authorized
+
+| 范围 | 状态 | 处理 |
+|---|---|---|
+| Six objects + session/event contract | first slice | S01；fixture/static 可验证。 |
+| Append-only recorder/seal/supersession | first slice | S02；local repo artifacts only。 |
+| Two producer chains / four mappings | first slice | S03 单 Story全覆盖。 |
+| Existing consumer projection | first slice | S04；no new gate。 |
+| Integrity/recovery/security/CR155 evidence | first slice | S05；static/fixture only。 |
+| Effective trial / FDR/PBO/DSR/C1 computation | deferred/not authorized | 独立统计 CR。 |
+| Historical CR155 backfill | not authorized | 只保留 blocked negative regression。 |
+| Real data/runtime/credential/external registry | not authorized | 独立 authorization gate/CR。 |
+
+### CR163 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| 所有 Blueprint Feature 均有 required 或 waived-as-standalone 判定 | PASS | 本节 Feature 适用性判定 |
+| required Feature 三件套完整 | PASS | `docs/features/experiment-family-lineage/`、`trial-lineage-producer-adapters/`、`strategy-admission-lineage-projection/` |
+| 五 Story 均有 feature_design_refs 与 full-lld | PASS | 本节 Story 下游消费表 |
+| FEAT-23 waiver 有理由、风险和重访条件 | PASS | standalone 不拥有接口；出现 validation service/schema 时升级 |
+| CP4 不授权实现、测试实现、runtime/data/credential/statistical/backfill/external write | PASS | CR163 scoped development plan authorization boundary |
