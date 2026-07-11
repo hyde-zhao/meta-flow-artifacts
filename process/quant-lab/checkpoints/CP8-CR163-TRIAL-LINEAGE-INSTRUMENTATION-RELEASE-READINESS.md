@@ -135,3 +135,4 @@ CR-163 已完成“把 trial_count 从事后声明变成过程中自动记录的
 - 接受决策：`DQ-CP8-CR163-001`、`DQ-CP8-CR163-002`、`DQ-CP8-CR163-003`、`DQ-CP8-CR163-004`
 - 风险接受：仅 `RA-CR163-A` no-resume availability/cost loss 与 `RA-CR163-B` future retry-loop conditional validation coverage。
 - 修改意见：补齐 `FU-CR163-001..004` 的 owner、activation trigger、required-before、closure/evidence 和 non-authorization 后批准；cooperative lock、10k、effective/C1 改列设计/范围边界；明确授权 source + artifact repositories 成对提交与推送。
+- 推送执行：source `3cc7992719ab8597f1d2861dd793e3fee33d80fe` 与 artifact release payload `924983620c0f303e251a17041f4b2b28ebedf099` 已成功推送；收尾证据见 `process/release/CR163-PAIRED-REPOSITORY-DELIVERY-EVIDENCE.yaml`。

@@ -7,7 +7,7 @@ Blocked: false
 Active CR: none
 Active Story: none
 Pending gate: none
-Next action: CR163 is CP8 approved and closed READY_WITH_RISK; complete the explicitly authorized paired repository push and record delivery evidence.
+Next action: CR163 is CP8 approved, closed READY_WITH_RISK, and the paired source/artifact repository delivery is complete.
 
 Refs:
 - state: process/state/STATE.current.json
