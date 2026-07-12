@@ -1,15 +1,27 @@
 schema_version: "1"
 status: "baseline"
-version: "1.0"
+version: "1.3"
 created_at: "2026-07-02"
 owner: "host-orchestrator"
 cr_ref: "CR-037"
+active_change_ref: "CR-046"
 source_use_cases: "process/docs/product/USE-CASES.md"
 source_requirements: "process/docs/product/REQUIREMENTS.md"
 coverage_policy:
   high_priority_minimum: "positive + negative"
   blocked_cr_policy: "CR-037 is active after user-authorized pause of unfinished CR-036; scenarios are CP2 baseline inputs, not implementation, CP5, runtime, production write, or quant-lab release repo authorization."
   release_repo_policy: "quant-lab release repo changes are never automated by roadmap refresh."
+revision_history:
+  - version: "1.3"
+    date: "2026-07-12"
+    author: "meta-pm"
+    change: "Append TC-EI-014..018 for CR-046 CP2 scope rework R2 while preserving all prior scenario IDs."
+    document_handling: "incremental-update"
+  - version: "1.2"
+    date: "2026-07-11"
+    author: "meta-pm"
+    change: "Append TC-EI-001..013 for CR-046 while preserving TC-PG-001..018."
+    document_handling: "incremental-update"
 
 scenarios:
   - id: "TC-PG-001"
@@ -318,12 +330,247 @@ scenarios:
     evidence_type: "design-guardrail-review"
     automation_status: "planned"
 
+  - id: "TC-EI-001"
+    title: "合法条件式批准时序可完整重放"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-EI-001"]
+    requirements: ["REQ-EI-001", "REQ-EI-002"]
+    stories: ["ST-EI-001"]
+    preconditions: ["自动预检、条件式 human approval、条件满足和生效事件齐全"]
+    action: "按事件顺序运行 chronology replay"
+    expected: ["条件满足前不得推进", "生效事件后可重放为有效批准", "所有 refs 与 CR/checkpoint 一致"]
+    evidence_type: "chronology-fixture"
+    automation_status: "planned"
+
+  - id: "TC-EI-002"
+    title: "非法 gate 时序被 100% 拒绝"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-EI-001"]
+    requirements: ["REQ-EI-001", "REQ-EI-002", "REQ-EI-NF001"]
+    stories: ["ST-EI-001"]
+    preconditions: ["negative fixtures 覆盖提前推进、缺失前置结果、回填历史批准时间"]
+    action: "对全部 chronology negative fixtures 运行 checker"
+    expected: ["非法 fixture 100% FAIL", "finding 包含事件 ID、规则 ID、字段和安全路由"]
+    evidence_type: "negative-fixture-suite"
+    automation_status: "planned"
+
+  - id: "TC-EI-003"
+    title: "dispatch attempt 具有真实 receipt 和 terminal closure"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-EI-002"]
+    requirements: ["REQ-EI-003", "REQ-EI-005"]
+    stories: ["ST-EI-002"]
+    preconditions: ["平台返回可验证 receipt"]
+    action: "创建 dispatch attempt、关联 receipt 并正常完成"
+    expected: ["attempt ID 唯一", "receipt correlation 可验证", "attempt 进入 terminal success"]
+    evidence_type: "dispatch-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-EI-004"
+    title: "缺失平台 receipt 时明确 unavailable"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-EI-002"]
+    requirements: ["REQ-EI-005", "REQ-EI-C001"]
+    stories: ["ST-EI-002"]
+    preconditions: ["平台不提供 receipt 或签名"]
+    action: "关闭 dispatch attempt 并生成 provenance evidence"
+    expected: ["attestation_status 为 unavailable", "可保留 session-observed/repository-verifiable", "不得生成伪造 receipt 或 verified 标记"]
+    evidence_type: "dispatch-degradation-fixture"
+    automation_status: "planned"
+
+  - id: "TC-EI-005"
+    title: "失败 attempt retry 与 supersession 可恢复"
+    type: "failure-recovery"
+    priority: "HIGH"
+    use_cases: ["UC-EI-002"]
+    requirements: ["REQ-EI-003", "REQ-EI-004"]
+    stories: ["ST-EI-002"]
+    preconditions: ["首个 attempt 失败并需要 retry"]
+    action: "terminal-close 首个 attempt，创建 retry 并 supersede 旧 attempt"
+    expected: ["旧 attempt terminal", "新 attempt 回链旧 attempt", "supersession 无循环和悬空引用"]
+    evidence_type: "retry-recovery-fixture"
+    automation_status: "planned"
+
+  - id: "TC-EI-006"
+    title: "CP result 的 check attempt、输入 hash 与 final correlation 完整"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-EI-001", "UC-EI-002"]
+    requirements: ["REQ-EI-006", "REQ-EI-007"]
+    stories: ["ST-EI-003"]
+    preconditions: ["同一 CP 存在多个 check/dispatch attempts"]
+    action: "生成 final CP result 并运行 correlation checker"
+    expected: ["适用 input hash 覆盖率 100%", "final ref 指向最终 terminal attempt", "outcome 与 decision 兼容"]
+    evidence_type: "cp-result-correlation-test"
+    automation_status: "planned"
+
+  - id: "TC-EI-007"
+    title: "跨真相源冲突被阻断"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-EI-001"]
+    requirements: ["REQ-EI-008", "REQ-EI-NF001"]
+    stories: ["ST-EI-003"]
+    preconditions: ["result/checkpoint/gate/state/ledger 中至少一处 decision、CR 或 ref 冲突"]
+    action: "运行 consistency checker"
+    expected: ["结论 BLOCKED/FAIL", "输出冲突对象与字段", "summary 不覆盖机器真相"]
+    evidence_type: "cross-truth-negative-fixture"
+    automation_status: "planned"
+
+  - id: "TC-EI-008"
+    title: "delivered state finalization 与 health ref 前置检查"
+    type: "precheck"
+    priority: "HIGH"
+    use_cases: ["UC-EI-001"]
+    requirements: ["REQ-EI-009"]
+    stories: ["ST-EI-004"]
+    preconditions: ["workflow 请求 finalized/delivered"]
+    action: "检查 active refs、workflow health target 和 CR attribution"
+    expected: ["active refs 为 0", "health target 存在", "health attribution 属于当前 CR"]
+    evidence_type: "state-finalization-check"
+    automation_status: "planned"
+
+  - id: "TC-EI-009"
+    title: "未授权 deny-default read expansion 被拒绝"
+    type: "permission"
+    priority: "HIGH"
+    use_cases: ["UC-EI-001"]
+    requirements: ["REQ-EI-010", "REQ-EI-C003"]
+    stories: ["ST-EI-004"]
+    preconditions: ["请求展开 deny-default 文档但缺少合法 authz/reason/CR attribution"]
+    action: "运行 read-expansion checker"
+    expected: ["未授权 expansion 数为 0", "非法事件被拒绝", "CP2 approval 不被解释为 runtime/credential/publish 授权"]
+    evidence_type: "authorization-fixture"
+    automation_status: "planned"
+
+  - id: "TC-EI-010"
+    title: "token telemetry measured、estimated 与 unavailable 严格分离"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-EI-004"]
+    requirements: ["REQ-EI-011", "REQ-EI-012", "REQ-EI-013"]
+    stories: ["ST-EI-005"]
+    preconditions: ["fixture 同时包含平台实测、只有 proxy 和完全不可用三类记录"]
+    action: "生成并聚合 workflow cost report"
+    expected: ["measurement_status 覆盖率 100%", "只有平台报告值标 measured", "按 CR/phase/agent/attempt 可聚合"]
+    evidence_type: "telemetry-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-EI-011"
+    title: "checker identity 不完整时重放诚实降级"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-EI-003"]
+    requirements: ["REQ-EI-014", "REQ-EI-015", "REQ-EI-C001", "REQ-EI-C002"]
+    stories: ["ST-EI-006"]
+    preconditions: ["历史证据缺部分 checker provenance，且 legacy YAML 与 canonical JSON 并存"]
+    action: "生成 as-executed/current-replay 报告"
+    expected: ["缺失 provenance 标 unavailable", "current checker 只消费 canonical JSON", "两个结论均保留且差异分类"]
+    evidence_type: "replay-compatibility-fixture"
+    automation_status: "planned"
+
+  - id: "TC-EI-012"
+    title: "已识别 checker 的双口径 replay 可复现"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-EI-003"]
+    requirements: ["REQ-EI-014", "REQ-EI-015", "REQ-EI-NF002"]
+    stories: ["ST-EI-006"]
+    preconditions: ["checker version/commit、schema/policy hash 与输入 hash 齐全"]
+    action: "重复执行 current-replay"
+    expected: ["相同输入得到相同结论", "as-executed 不被改写", "provenance 可定位"]
+    evidence_type: "replay-reproducibility-test"
+    automation_status: "planned"
+
+  - id: "TC-EI-013"
+    title: "quant-lab CR-163 append-only migration pilot"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-EI-005"]
+    requirements: ["REQ-EI-016", "REQ-EI-017", "REQ-EI-018", "REQ-EI-NF002"]
+    stories: ["ST-EI-007"]
+    preconditions: ["evidence-integrity contract 已通过设计/实现门，且 pilot 获独立授权"]
+    action: "仅追加 migration/correction/supersession evidence 并运行 23 项 current replay"
+    expected: ["原历史事件 hash/prefix 不变", "23/23 current replay PASS", "quant-lab lineage 业务源码 diff 为 0"]
+    evidence_type: "append-only-migration-replay"
+    automation_status: "planned"
+
+  - id: "TC-EI-014"
+    title: "ledger compaction/restore 不得造成标识混淆或语义丢失"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-EI-001", "UC-EI-002"]
+    requirements: ["REQ-EI-019", "REQ-EI-NF001"]
+    stories: ["ST-EI-002", "ST-EI-004"]
+    preconditions: ["fixture 同时包含 event_id、dispatch_id、attempt_id、run_id、retry/supersession、correction chain 和 workflow-health ref"]
+    action: "执行 compact、restore 和 replay，并与 compact 前语义图对比"
+    expected: ["标识类型不发生 fallback conflation", "attempt/correction/health-ref 图语义差异为 0", "terminal attempt selection 不变", "任一语义丢失 fixture 100% FAIL"]
+    evidence_type: "compaction-restore-semantic-fixture"
+    automation_status: "planned"
+
+  - id: "TC-EI-015"
+    title: "通用 post-close correction lifecycle 可追加并独立审计"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-EI-003", "UC-EI-005"]
+    requirements: ["REQ-EI-020", "REQ-EI-016", "REQ-EI-NF002"]
+    stories: ["ST-EI-007"]
+    preconditions: ["workflow 已关闭，correction 只触及 schema 明确允许的字段和范围"]
+    action: "使用 versioned schema 追加带 author/reason/evidence/supersedes 的 correction，并运行独立 audit checker"
+    expected: ["原事件逐字节不变", "correction chain 无环且 closure 完整", "audit trail 可独立重放", "非法字段、越界 correction 或原位改写 100% FAIL", "CR-163 pilot 消费同一通用 lifecycle"]
+    evidence_type: "post-close-correction-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-EI-016"
+    title: "机器 audit report 分离计数维度并携带 provenance"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-EI-001", "UC-EI-004"]
+    requirements: ["REQ-EI-021", "REQ-EI-013", "REQ-EI-014"]
+    stories: ["ST-EI-004", "ST-EI-006"]
+    preconditions: ["fixture 含一个 thread 的多 event rows、多 attempts、不同 terminal outcomes，以及 measured/proxy/unavailable token records"]
+    action: "从 ledgers/results 生成 machine-readable audit report 并与 fixture oracle 对账"
+    expected: ["event rows、attempts、threads、terminal outcomes 逐维计数 100% 正确", "token measured/proxy/unavailable 分栏", "不从 dispatch 行数推断 attempt/thread 或 token share", "checker provenance 和全部适用 input hashes 非空"]
+    evidence_type: "audit-report-golden-fixture"
+    automation_status: "planned"
+
+  - id: "TC-EI-017"
+    title: "CR-046 R1 CP1/CP2 null-provenance dogfooding"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-EI-003"]
+    requirements: ["REQ-EI-022", "REQ-EI-014", "REQ-EI-015", "REQ-EI-NF002"]
+    stories: ["ST-EI-006"]
+    preconditions: ["保留未含 checker_provenance 的 CR-046 R1 CP1/CP2 result 及其原始 hash"]
+    action: "将 R1 results 作为 first-class fixture 运行新 strict profile 和 current replay"
+    expected: ["原始文件 hash 不变", "strict profile FAIL 或明确 legacy/unavailable", "不得标 fully replayable", "R2/current result 通过新记录或 append-only correction 携带 measured provenance"]
+    evidence_type: "null-provenance-dogfood-fixture"
+    automation_status: "planned"
+
+  - id: "TC-EI-018"
+    title: "session-observed dispatch 在缺 repository receipt 时诚实披露证明上限"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-EI-002"]
+    requirements: ["REQ-EI-023", "REQ-EI-005", "REQ-EI-C001"]
+    stories: ["ST-EI-002"]
+    preconditions: ["当前 Codex session 观察到 agent/thread/tool 调度，但仓库中不存在平台 receipt"]
+    action: "生成 dispatch evidence 和 audit report"
+    expected: ["证据状态为 session-observed/repository-unverifiable", "platform receipt 明确 unavailable", "不得声称 repository-verified 或 platform-attested", "平台 receipt 后续可用时通过新证据升级而非改写旧记录"]
+    evidence_type: "dispatch-evidence-level-fixture"
+    automation_status: "planned"
+
 coverage_summary:
-  total_scenarios: 18
-  high_priority_scenarios: 14
-  positive_scenarios: 7
-  negative_scenarios: 8
-  boundary_scenarios: 1
-  permission_scenarios: 1
-  precheck_scenarios: 1
-  source_requirements_covered: "REQ-PG-001..022 plus REQ-PG-C001..005 and REQ-PG-NF001..004"
+  total_scenarios: 36
+  high_priority_scenarios: 32
+  positive_scenarios: 15
+  negative_scenarios: 13
+  boundary_scenarios: 3
+  permission_scenarios: 2
+  failure_recovery_scenarios: 1
+  precheck_scenarios: 2
+  source_requirements_covered: "REQ-PG-001..022, REQ-PG-C001..005, REQ-PG-NF001..004, REQ-EI-001..023, REQ-EI-C001..003 and REQ-EI-NF001..002"

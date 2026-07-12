@@ -1,6 +1,6 @@
 ---
 status: baseline
-version: "1.0"
+version: "1.3"
 created_at: "2026-07-02"
 owner: "meta-pm"
 cr_ref: "CR-037"
@@ -16,7 +16,8 @@ delivery_routing:
   mode: meta-flow-delivery
   output_root: "process/docs/product"
   source: meta-self-dev
-total_use_cases: 7
+active_change_ref: "CR-046"
+total_use_cases: 12
 ---
 
 # Meta Flow 项目治理与状态强制用户场景
@@ -26,6 +27,8 @@ total_use_cases: 7
 | 版本 | 日期 | 修订人 | 变更要点 | 文档处理方式 |
 |---|---|---|---|---|
 | 1.1 | 2026-07-02 | host-orchestrator | 同步 CR-037 已激活、CR-036 暂停未完成和 CP2 pending 不授权实现的状态语义 | 小范围状态语义同步 |
+| 1.2 | 2026-07-11 | meta-pm | 为 CR-046 增量加入可信时序、平台调度证明、checker 重放、token telemetry 与 append-only 历史迁移场景；保留 UC-PG-001..007 | 原文档增量更新 |
+| 1.3 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：显式加入 compaction 语义保持、通用 post-close correction、机器生成 audit report、null-provenance dogfooding 与 session-observed/repository-unverifiable dispatch 披露；保留全部 UC ID | 原文档增量更新 |
 | 1.0 | 2026-07-02 | meta-pm | 基于已批准实施计划建立产品侧场景基线 | 初始化长期可追踪产品基线 |
 
 ## 用户画像
@@ -36,6 +39,8 @@ total_use_cases: 7
 | P-02 | 功能 Agent / Skill 作者 | 编写或维护 meta-flow agent、skill、规则和 CLI | 清楚知道哪些状态可写、如何写、写错时如何被拦截 | 中高级 |
 | P-03 | 项目迁移执行者 | 将 quant-lab 等长期项目迁移到新的治理机制 | 在不污染发布库的前提下完成状态清理、路线图刷新和能力引用归一 | 高级 |
 | P-04 | 审批者 / Reviewer | 审批高风险流程、迁移计划和治理变更 | 快速看到自动更新范围、人工决策项、风险和回退条件 | 中高级 |
+| P-05 | 工作流审计者 | 复核 checkpoint、gate、dispatch、state 与 ledger 的一致性 | 以机器证据重建实际发生顺序，并区分平台证明、仓库证明与不可用证据 | 高级 |
+| P-06 | 证据生产者 / 成本分析者 | 维护自动检查、dispatch producer、context/read 记录与成本报告 | 让每次 attempt、checker 身份、输入摘要和 token 用量具有一致且不可伪造的语义 | 高级 |
 
 ## 成功指标
 
@@ -46,6 +51,13 @@ total_use_cases: 7
 | SM-03 | 影响面语义归一 | 新 CR 的 `impact_surface` 只包含治理面枚举，路径进入 `affected_paths` | 新 CR enforce 阶段 unknown surface 为 0 |
 | SM-04 | Roadmap refresh 边界清晰 | refresh result 中自动写入项、must_check、stale_items、follow_up_candidates 可区分 | 不自动修改 quant-lab 发布库 |
 | SM-05 | quant-lab 迁移可验证 | 迁移后 state check、capability check、feature check、capability-claims check 结果 | P2 迁移报告可复现、失败项可追踪 |
+| SM-06 | 时序负例阻断 | chronology negative fixtures 的 checker 结果 | 非法 gate / dispatch / result / state 顺序 100% 被拒绝 |
+| SM-07 | Evidence attempt 完整性 | execution/check attempt 的 terminal status、supersession 与 final correlation 覆盖率 | 适用 attempt 覆盖率 100%，final result 只引用最终 terminal attempt |
+| SM-08 | Telemetry 诚实性 | usage `measurement_status` 与 measured/proxy 字段检查 | 适用记录覆盖率 100%；不可用写 `unavailable`，估算值不得标为 measured |
+| SM-09 | 历史重放可复现 | checker identity、schema/policy hash、as-executed/current-replay 报告 | quant-lab CR-163 current replay 23/23 PASS；lineage 业务源码 diff 为 0 |
+| SM-10 | Compaction 语义保持 | compact/restore 前后关系图和 terminal selection 对比 | event/dispatch/attempt/run 标识不混淆；attempt、correction、workflow-health refs 语义差异为 0 |
+| SM-11 | Post-close correction 可审计 | versioned correction schema、允许字段、supersedes closure 与 audit trail 检查 | 非法历史改写 100% 拒绝；合法 correction 100% 可独立重放 |
+| SM-12 | Audit report 统计可信 | 机器生成报告与已知 fixture 逐维对账 | event rows、attempts、threads、terminal outcomes 与 measured/proxy/unavailable token 指标 100% 正确，且携带 checker provenance/input hashes |
 
 ## 明确排除
 
@@ -55,6 +67,9 @@ total_use_cases: 7
 - 不直接修改 `process/policies/GATE-PROFILES.json` 来表达 project scale。
 - 不让 `capability_refs` 或 `feature_refs` 成为自由字符串命名空间。
 - 不把 `PROJECT.current.json` 设计成新巨型状态文件。
+- 不伪造历史 platform receipt、签名、token telemetry 或 checker identity。
+- 不修改 quant-lab lineage contract、recorder、producer、consumer 或 admission 业务实现。
+- 不让 CP2 approval 隐式授权 credentials、runtime、production write、publish、交易、commit 或 push。
 
 ## Scenario Gray Areas
 
@@ -66,6 +81,10 @@ total_use_cases: 7
 | SGA-02 | Roadmap refresh 是否跨仓自动更新 | 决定 quant-lab 发布库是否被自动改写以及回滚边界 | 范围 / 运行风险 / 交付出口 | 只自动更新过程归档库，发布库只输出 follow-up | resolved |
 | SGA-03 | capability / feature 引用是否允许自由字符串 | 决定迁移后冲突检测和能力追踪是否可信 | 验证 / 维护成本 / 数据治理 | 必须引用标准 registry | resolved |
 | SGA-04 | 项目规模是否引入更多档位 | 影响 gate profile、状态复杂度和审批负担 | 范围 / 复杂度 / 后续门控 | 使用 `lite / standard / full` 三档 | resolved |
+| SGA-05 | 平台没有可验证 receipt 时是否推断为已证明 | 决定 dispatch provenance 是否可信 | 安全 / 审计 / 降级 | 明确记录 `unavailable`，保留 session-observed 与 repository-verifiable 分层，不合成 receipt | resolved |
+| SGA-06 | token telemetry 缺失时能否用估算替代实测 | 决定成本报告是否误导审批与优化 | 度量 / 审计 / 用户信任 | `measured`、`estimated`、`unavailable` 分离；估算仅作 proxy | resolved |
+| SGA-07 | quant-lab CR-163 历史证据如何修正 | 决定迁移能否保留事实链和可追溯性 | 迁移 / 回滚 / 验证 | append-only correction / supersession / migration events；不改写原事件 | resolved |
+| SGA-08 | checker 重放只看当前结论还是保留执行时结论 | 决定历史证据能否解释 checker 演进 | 兼容性 / 审计 / 发布 | 同时记录 checker version/commit/schema-policy hash 与 as-executed/current-replay 双口径 | resolved |
 
 ## Deferred Ideas
 
@@ -75,6 +94,8 @@ total_use_cases: 7
 | DEF-02 | 跨仓事务式 roadmap refresh | 设计评审否决项 | 跨仓原子性成本高且回滚边界不清 | 未来有可靠跨仓事务协调器和明确授权 |
 | DEF-03 | 长期消费 Markdown register 或 Python 常量作为 capability registry | P1.2a 备选 | 不利于稳定引用和 checker 实现 | 标准 YAML registry 无法覆盖某类能力状态时重新评审 |
 | DEF-04 | 复用 CP result checker 校验 roadmap refresh | P1.4 备选 | result 语义不同，复用会污染 CP 检查模型 | roadmap refresh 与 CP result 出现大量共享字段和统一生命周期时 |
+| DEF-EI-001 | 跨平台统一加密签名 receipt | SGA-05 | 平台能力并不一致，本轮只能诚实表达 receipt 可用性和证据层级 | 所有目标平台提供稳定可验证签名契约后另行立项 |
+| DEF-EI-002 | 用估算 token 建立计费或配额门禁 | SGA-06 | 估算不是平台实测，不能成为强制成本决策依据 | 平台 telemetry 覆盖稳定且误差模型经独立验证后重新评审 |
 
 ## 使用场景列表
 
@@ -162,15 +183,75 @@ total_use_cases: 7
 | 前置条件 | P0 / P1 机制和 checker 已可用 |
 | 排除情况 | 不与能力实现 CR 混在一起；不自动修改 quant-lab 发布库正式代码或文档 |
 
+### UC-EI-001：重建可信的 gate 与结果时序
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-05 工作流审计者、P-01 Host Orchestrator 维护者 |
+| 触发条件 | 自动检查、条件式批准、人工门、state finalization 或 ledger 事件需要被审计或重放 |
+| 输入 | checkpoint result、human checkpoint、gate/state/ledger 事件、check attempt 与输入 artifact hash |
+| 处理逻辑 | 校验事件因果顺序、条件式批准前置、check attempt、supersession、最终 dispatch correlation 和跨真相源一致性；compaction/restore 还必须保持 event/dispatch/attempt/run 标识、terminal selection、correction chain 与 workflow-health refs；非法顺序或语义丢失 fail-closed |
+| 输出/结果 | 可机器重建的有效时序与 provenance-bearing 机器 audit report，或带对象 ID、冲突字段和路由建议的阻断 finding；报告分开统计 event rows、attempts、threads、terminal outcomes 与 measured/proxy/unavailable token 指标 |
+| 前置条件 | 事件时间、attempt ID、correlation refs 与 checker contract 可用 |
+| 排除情况 | 不以文件修改时间代替事件因果；不回填伪造的历史批准时间 |
+
+### UC-EI-002：证明平台调度与 attempt 生命周期
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-05 工作流审计者、P-06 证据生产者 / 成本分析者 |
+| 触发条件 | 功能 agent 被 spawn/resume/send_input，发生 retry、supersession 或 terminal closure |
+| 输入 | dispatch event、platform receipt（若平台提供）、agent/thread ID、attempt 状态和 supersession refs |
+| 处理逻辑 | 区分 platform-attested、session-observed、repository-verifiable 与 unavailable；要求每个 attempt 最终 closed，并让 retry 指向被替代 attempt；仅在当前 session 观察到 agent/thread/tool 且仓库无平台 receipt 时必须披露 `session-observed/repository-unverifiable` |
+| 输出/结果 | 可追踪到终态的 dispatch chain；缺 receipt 时显式 `unavailable` 或 `session-observed/repository-unverifiable`，不得升级为 repository-verified/platform-attested |
+| 前置条件 | producer 能写 attempt/correlation 字段；平台 receipt 能力按实际报告 |
+| 排除情况 | 不合成平台签名或 receipt；handoff 文件本身不等于真实调度 |
+
+### UC-EI-003：用已识别 checker 双口径重放证据
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-05 工作流审计者、P-03 项目迁移执行者 |
+| 触发条件 | 历史 CP/CR 证据需要解释执行时结果，或用当前 checker 评估兼容性 |
+| 输入 | evidence bundle、checker version/commit、schema/policy hash、执行时结论与当前 checker |
+| 处理逻辑 | 保留 as-executed 结论和 checker identity，再运行 current-replay；对差异使用通用、版本化、append-only post-close correction lifecycle，限制允许修正字段和范围，并记录 author/reason/evidence/supersedes 与独立 audit trail；CR-046 CP1/CP2 原始 null-provenance results 保留为 dogfooding 输入，不静默改写 |
+| 输出/结果 | 同时包含 as-executed/current-replay、checker provenance、输入 hash 和差异分类的 replay report；null provenance 在 strict profile 下失败或明确标为 legacy/unavailable；合法 correction 可独立校验 |
+| 前置条件 | 历史证据可读；无法识别的 checker 字段可明确标为 unavailable |
+| 排除情况 | 不以当前 PASS 改写历史 FAIL/PARTIAL；不让 legacy YAML 干扰 canonical JSON checker |
+
+### UC-EI-004：诚实度量工作流 token 成本
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-06 证据生产者 / 成本分析者、P-04 审批者 / Reviewer |
+| 触发条件 | agent turn、checker run、context expansion 或阶段交接需要报告成本 |
+| 输入 | 平台报告 token usage（若有）、measurement status、proxy estimate、阶段/CR/agent attribution |
+| 处理逻辑 | 将 measured、estimated/proxy 和 unavailable 分栏；只把平台报告值计为 measured，并按 CR/阶段/agent/attempt 聚合；机器 audit report 不得以 dispatch event rows 代替 attempt/thread 数或推断 token 占比 |
+| 输出/结果 | 可比较且不会把估算冒充实测的 workflow cost report，以及带 checker provenance/input hashes 的机器 audit report |
+| 前置条件 | telemetry 字段和 attribution contract 已定义 |
+| 排除情况 | 不从文本长度反推“实测 token”；不因 telemetry 缺失阻止如实记录 unavailable |
+
+### UC-EI-005：以 append-only 方式迁移 quant-lab CR-163 证据
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-03 项目迁移执行者、P-05 工作流审计者 |
+| 触发条件 | Meta Flow 的 evidence-integrity contract 已实现并进入 CR-163 验收试点 |
+| 输入 | quant-lab CR-163 既有 process evidence、migration manifest、当前 checker 和 immutable business-code boundary |
+| 处理逻辑 | 先消费通用 post-close correction lifecycle，再仅追加 migration/correction/supersession events 与 replay fixture，校验 23 个目标证据，并检查 lineage 业务源码 diff 为 0；pilot 不得自创专用 correction 语义 |
+| 输出/结果 | 23/23 current replay PASS 的可重放试点证据，或逐项阻断 finding；原历史行保持不变 |
+| 前置条件 | 相应 Story 已通过设计门且迁移路径获得独立授权 |
+| 排除情况 | 不修改或重做 quant-lab lineage 业务实现；不访问 credentials、runtime 或 production data |
+
 ## 附录：覆盖自检表
 
 | 维度 ID | 维度名称 | 状态 | 涉及场景 | 备注 |
 |---|---|---|---|---|
-| D1 | 用户维度 | 已覆盖 | UC-PG-001..007 | 覆盖维护者、作者、迁移者、审批者 |
-| D2 | 任务维度 | 已覆盖 | UC-PG-001..007 | 覆盖状态写入、项目治理、引用归一、refresh、迁移 |
-| D3 | 动机维度 | 已覆盖 | UC-PG-001..007 | 防污染、防漂移、可审计、可迁移 |
-| D4 | 时间维度 | 已覆盖 | UC-PG-001, UC-PG-006, UC-PG-007 | 覆盖 audit -> enforce、P0 -> P1 -> P2 |
-| D5 | 环境维度 | 已覆盖 | UC-PG-006, UC-PG-007 | 区分过程归档库与 quant-lab 发布库 |
-| D6 | 方式维度 | 已覆盖 | UC-PG-001, UC-PG-006 | 受控 API / CLI / checker / result |
-| D7 | 异常维度 | 已覆盖 | UC-PG-001, UC-PG-004, UC-PG-006 | unknown field、缺失 registry、refresh blocked |
-| D8 | 集成维度 | 已覆盖 | UC-PG-001..007 | 与 CR、ledger、state-router、agent contract、checker 衔接 |
+| D1 | 用户维度 | 已补充 | UC-PG-001..007, UC-EI-001..005 | 新增审计者、证据生产者与成本分析者 |
+| D2 | 任务维度 | 已补充 | UC-PG-001..007, UC-EI-001..005 | 补充时序、调度证明、重放、telemetry 与 append-only 迁移 |
+| D3 | 动机维度 | 已补充 | UC-EI-001..005 | 可信审计、可复现重放、诚实成本和历史不可变 |
+| D4 | 时间维度 | 已补充 | UC-EI-001, UC-EI-002, UC-EI-003, UC-EI-005 | 覆盖条件式批准、retry/supersession、as-executed/current-replay 与历史修正 |
+| D5 | 环境维度 | 已补充 | UC-EI-002, UC-EI-005 | 区分平台 session、仓库证据与 quant-lab pilot |
+| D6 | 方式维度 | 已补充 | UC-EI-001..005 | checker、ledger、receipt、hash、telemetry 与 migration manifest |
+| D7 | 异常维度 | 已补充 | UC-EI-001..005 | 非法时序、缺 receipt/telemetry、retry、replay drift、历史不可变性 |
+| D8 | 集成维度 | 已补充 | UC-EI-001..005 | 与 CP result、gate/state/dispatch/read ledger、checker 和 CR-163 衔接 |
