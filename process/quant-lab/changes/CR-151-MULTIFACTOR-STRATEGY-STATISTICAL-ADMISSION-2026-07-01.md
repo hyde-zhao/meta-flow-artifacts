@@ -4,7 +4,7 @@ cr_type: "requirement-change"
 title: "Multifactor Strategy E2E Statistical Admission Framework"
 lifecycle_status: "closed"
 readiness_status: "ready_with_risk"
-gate_status: "closed"
+gate_status: "cp8_closed"
 gate_profile: "standard"
 conflict_keys:
   - "multifactor-statistical-admission-gate"

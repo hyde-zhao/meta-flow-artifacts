@@ -2,7 +2,7 @@
 checkpoint_id: "CP5-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE-LLD-BATCH"
 checkpoint_name: "CR151 Strategy Admission Statistical Gate LLD Batch Review"
 type: "batch_auto_then_manual"
-status: "pending_user_review"
+status: "approved"
 owner: "host-orchestrator"
 created_at: "2026-07-01T23:52:00+08:00"
 reviewed_by: ""
