@@ -1,0 +1,189 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR164-MULTIPLE-TESTING-PBO-DSR-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "CR-164"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-07-12T17:46:02+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-164"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 18
+  max_summary_items: 24
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: "The eight named product baselines may be expanded only for the explicitly authorized incremental CR164 revisions. Complete historical CRs, archived evidence and unrelated Story/LLD documents remain deny-default."
+  default_instruction: "Read this capsule and CP2-CR164.context.json first. Use rg before source expansion and stay within allowed_reads."
+
+allowed_reads:
+  - path: "process/state/STATE.current.json"
+    reason: "CR164 lightweight machine state"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "Current context and handoff pointers"
+    required: true
+  - path: "process/context/CP2-CR164.context.json"
+    reason: "Validated machine context budget and deny-default policy"
+    required: true
+  - path: "process/changes/summaries/CR-164.summary.json"
+    reason: "Current CR scope, product-baseline route, risks and authorization summary"
+    required: true
+  - path: "process/checks/CP0-CR-164-BOOTSTRAP.result.json"
+    reason: "CP0 intake and conflict-precheck evidence"
+    required: true
+  - path: "process/checks/CP0-CR164.route-plan.json"
+    reason: "Checkpoint applicability and required human gates"
+    required: true
+  - path: "process/changes/CR-161-FOLLOW-UP-TRACKING-2026-07-10.md"
+    reason: "FU-CR161-002 source row only"
+    required: false
+  - path: "docs/product/USE-CASES.md"
+    reason: "Incremental computable-evidence journey revision"
+    required: false
+  - path: "docs/product/REQUIREMENTS.md"
+    reason: "Incremental method, sufficiency and fail-closed requirements"
+    required: false
+  - path: "docs/product/SCENARIOS.yaml"
+    reason: "Positive, negative, boundary, permission and recovery scenarios"
+    required: false
+  - path: "docs/product/TEST-MATRIX.md"
+    reason: "Scenario/Requirement/Story/Test traceability update"
+    required: false
+  - path: "docs/product/STORY-MAP.md"
+    reason: "User activity and candidate Story planning input"
+    required: false
+  - path: "docs/product/MVP-SCOPE.md"
+    reason: "MVP method set, exclusions and deferred methods"
+    required: false
+  - path: "docs/product/RELEASE-SLICES.md"
+    reason: "CR164 design/implementation/verification slices"
+    required: false
+  - path: "docs/product/BACKLOG.md"
+    reason: "Link FU-CR161-002 to CR164 and retain unrelated candidates"
+    required: false
+  - path: "engine/strategy_admission_statistical_gate.py"
+    reason: "Existing evidence report contracts and fail-closed consumer semantics"
+    required: false
+  - path: "engine/cross_strategy_reliability_gates.py"
+    reason: "Existing Gate 1 evidence slots, effective-trial and blocked-claim semantics"
+    required: false
+  - path: "engine/anomaly_multiple_testing.py"
+    reason: "Existing Bonferroni/BH implementation fact; reuse decision belongs to CP3"
+    required: false
+  - path: "engine/experiment_family_lineage.py"
+    reason: "CR163 sealed family lineage and raw/effective count boundary"
+    required: false
+  - path: "engine/strategy_admission_package.py"
+    reason: "Current admission-package limitation projection"
+    required: false
+
+must_read:
+  - path: "process/context/CP2-CR164.context.json"
+    reason: "Validated read policy and budget"
+  - path: "process/changes/summaries/CR-164.summary.json"
+    reason: "Current formal scope"
+  - path: "process/checks/CP0-CR164.route-plan.json"
+    reason: "CP2 block and downstream route"
+  - path: "process/checks/CP0-CR-164-BOOTSTRAP.result.json"
+    reason: "Accepted CP0 facts"
+
+read_if_needed:
+  - path: "docs/product/*"
+    trigger: "Open only each named baseline being incrementally revised; preserve old content and append a revision record."
+  - path: "engine/**/*.py"
+    trigger: "Use rg first; expand only the named calculators/contracts/consumers needed to establish current repository facts."
+  - path: "tests/**/*.py"
+    trigger: "Inspect narrowly to inventory existing fixture semantics; do not implement tests during CP1/CP2."
+  - path: "process/changes/CR-164.md"
+    trigger: "Only when the summary lacks a field required for human audit; log the expansion."
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "Human summary; STATE.current.json is authoritative."
+  - path_or_pattern: "process/DEVELOPMENT-PLAN.yaml"
+    reason: "Story decomposition is blocked until CP2 approval."
+  - path_or_pattern: "process/changes/CR-*.md"
+    reason: "Read the CR164 summary; historical full CRs are deny-default."
+  - path_or_pattern: "process/stories/*-LLD.md"
+    reason: "LLD work is not authorized before CP2/CP3/CP4."
+  - path_or_pattern: "process/archive/**"
+    reason: "Archived evidence is not the current product baseline."
+  - path_or_pattern: "process/discussions/**"
+    reason: "Historical discussions are audit-only; create a new CR164 log."
+  - path_or_pattern: "complete conversation transcript"
+    reason: "The capsule and summary contain the authorized facts."
+
+key_facts:
+  scope_summary: "Define an MVP computable-evidence pipeline for multiple-testing and backtest-overfitting controls using sealed CR163 experiment-family lineage, while preserving CR161 typed-unavailable/blocked semantics whenever inputs are insufficient."
+  accepted_decisions:
+    - "FU-CR161-002 is activated as formal CR-164; CR-161 and CR-163 remain closed baselines."
+    - "Use standard architecture-major flow with CP2/CP3/CP5/CP8 human gates."
+    - "Story/LLD/implementation are blocked until CP2 approval; source implementation remains blocked until CP5 approval."
+    - "CR164 will obtain a fresh independent CP7 and does not reuse CR161's waived CP7 result as proof."
+    - "No real research, production dataset, NAS, provider, credential, runtime, broker, trading, publish or remote-write action is authorized."
+  repository_facts:
+    - "CR163 exposes sealed family lineage and raw_trial_count; effective_trial_count remains typed_unavailable."
+    - "strategy_admission_statistical_gate validates report shapes and thresholds but does not establish their computation provenance."
+    - "cross_strategy_reliability_gates requires FDR/BH, WRC/SPA, PBO/CSCV and DSR/deflation references and valid trial-count provenance for positive claims."
+    - "anomaly_multiple_testing contains an existing Bonferroni/BH implementation that may be reusable only after scope/architecture review."
+  downstream_tasks:
+    - "Run Scenario Gray Areas discussion and return a compact SGQ batch through the host if decisions remain."
+    - "Incrementally revise all eight product baselines with revision records; never replace the documents wholesale."
+    - "Freeze CP2-level method scope, personas/journey, evidence inputs, insufficiency behavior, quantitative acceptance criteria, exclusions and non-authorization."
+    - "Separate MVP requirements from deferred methods and from future real-run authorization."
+    - "Produce CP1 result, CR164 discussion log/checkpoint and a return summary; do not open CP2 yourself."
+  traceability:
+    requirements: ["method-scope", "input-sufficiency", "lineage-binding", "determinism", "fail-closed", "consumer-integration", "numerical-boundaries"]
+    use_cases: ["UC-58 multifactor P0", "UC-59 ML compatibility", "UC-60 event compatibility"]
+    scenarios: ["complete sealed family", "missing/partial family", "method disagreement", "low sample/fold count", "NaN/Inf/degenerate inputs", "tamper/hash mismatch", "CR155 negative regression"]
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "Which method set is mandatory in the MVP: BH only versus BH plus WRC/SPA/PBO/DSR."
+    - "Whether effective-trial computation belongs in the same slice or remains typed_unavailable until a separately bounded method is approved."
+    - "Minimum sample, trial, split/fold and return-path sufficiency thresholds for each selected method."
+    - "Whether ML/event adapters are current implementation scope or compatibility-only consumers."
+  non_authorized_items:
+    - "real research or statistical batch execution"
+    - "production datasets, NAS, provider, credentials, external frameworks or network"
+    - "broker, simulation, live, orders or trading"
+    - "deployment, tags, package publication or Git remote writes"
+  risk_acceptance_items: []
+  open_questions:
+    - "Do existing data structures provide all inputs for WRC/SPA, PBO/CSCV and DSR, or must some methods remain typed_unavailable in the MVP?"
+    - "How are method disagreement and partial method availability projected into admission decisions without overclaim?"
+
+handoff:
+  target_agent: "meta-pm"
+  expected_output:
+    - "Incremental revisions to all eight affected product baselines"
+    - "Method/input/consumer inventory grounded in repository facts"
+    - "process/discussions/CP2-CR164-SCENARIO-DISCUSSION-LOG.md"
+    - "process/checks/CP2-CR164-DISCUSSION-CHECKPOINT.json"
+    - "process/checks/CP1-CR164-MULTIPLE-TESTING-PBO-DSR-USE-CASE-COMPLETENESS.result.json"
+    - "process/handoffs/CR164-CP2-META-PM-RETURN-SUMMARY.md"
+  exit_criteria:
+    - "P0 journey, method scope candidates, quantitative AC, exclusions and fail-closed semantics are traceable."
+    - "No Story decomposition, LLD, implementation or runtime action occurs."
+    - "All OPEN items are classified for the host to prepare CP2."
+  blocked_if_missing:
+    - "The MVP method set cannot be decided without user input."
+    - "Required method inputs conflict with current CR163 lineage or CR161 fail-closed semantics."
+    - "Any requested action exceeds the authorization boundary."
+
+read_expansion_log: []
+
+validation:
+  generated_from_sources:
+    - "process/changes/summaries/CR-164.summary.json"
+    - "process/checks/CP0-CR164.route-plan.json"
+    - "process/checks/CP0-CR-164-BOOTSTRAP.result.json"
+    - "process/changes/CR-161-FOLLOW-UP-TRACKING-2026-07-10.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "CR-INDEX was removed from the machine context allowed_reads to satisfy the 16k budget."
+

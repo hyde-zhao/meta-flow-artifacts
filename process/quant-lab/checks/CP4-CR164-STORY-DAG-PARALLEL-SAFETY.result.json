@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR164-STORY-DAG-PARALLEL-SAFETY",
+  "cr_id": "CR-164",
+  "context_ref": "process/context/CP5-CR164-MULTIPLE-TESTING-PBO-DSR-CONTEXT.yaml",
+  "dispatch_refs": ["AD-CR164-CP4-META-SE-INLINE-COMPLETED-20260712T202500+0800"],
+  "route_plan_ref": "process/checks/CP0-CR164.route-plan.json",
+  "items": [
+    {"id":"CP4-01","category":"entry","name":"CP3 approved","status":"PASS","severity":"BLOCKER","evidence_refs":["process/checkpoints/CP3-CR164-MULTIPLE-TESTING-PBO-DSR-HLD-REVIEW.md"],"owner":"host-orchestrator","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"Four architecture decisions approved."},
+    {"id":"CP4-02","category":"feature-design","name":"All five Features classified and four required design triplets complete","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/FEATURE-DESIGN-MATRIX.md","docs/features/statistical-evidence-contract/DESIGN.md","docs/features/multiple-testing-calculators/DESIGN.md","docs/features/overfit-deflation-calculators/DESIGN.md","docs/features/statistical-evidence-projection/DESIGN.md"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"FEAT-28 standalone waiver has explicit revisit condition; S05 remains full-lld."},
+    {"id":"CP4-03","category":"story","name":"Exactly five Story cards have complete refs and full-lld policy","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr164_story_planning"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"5/5 cards, feature refs, acceptance criteria and evidence paths."},
+    {"id":"CP4-04","category":"dag","name":"Story dependency graph is acyclic and references are valid","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr164_story_planning"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"cycles=0; invalid refs=0; isolated=0."},
+    {"id":"CP4-05","category":"parallel-safety","name":"S02 and S03 can parallelize after S01 without file conflicts","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr164_story_planning"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"parallel internal dependencies=0; file conflicts=0."},
+    {"id":"CP4-06","category":"files","name":"Primary shared and forbidden file ownership is explicit","status":"PASS","severity":"HIGH","evidence_refs":["process/stories/STORY-CR164-S01-statistical-evidence-contract-validator.md","process/stories/STORY-CR164-S02-bh-wrc-spa-evidence.md","process/stories/STORY-CR164-S03-pbo-cscv-dsr-evidence.md","process/stories/STORY-CR164-S04-conservative-aggregation-projections.md","process/stories/STORY-CR164-S05-independent-verification.md"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"S05 forbids engine writes; lineage modules forbidden for CR164."},
+    {"id":"CP4-07","category":"traceability","name":"Nine requirements thirteen scenarios and ten QAC map to five Stories","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/HLD-MULTIPLE-TESTING-PBO-DSR-EVIDENCE.md","docs/design/FEATURE-DESIGN-MATRIX.md"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"No uncovered P0 item."},
+    {"id":"CP4-08","category":"planning","name":"Story count and wave count agree across HLD and plan","status":"PASS","severity":"HIGH","evidence_refs":["docs/design/HLD-MULTIPLE-TESTING-PBO-DSR-EVIDENCE.md#11-five-story-cp4-input-and-rollout-order","process/DEVELOPMENT-PLAN.yaml#cr164_story_planning"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"Stories=5; Waves=4; order S01 -> (S02||S03) -> S04 -> S05."},
+    {"id":"CP4-09","category":"authorization","name":"No-subagent design-only boundary remains explicit","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr164_story_planning","process/state/AGENT-DISPATCH-LEDGER.ndjson"],"owner":"host-orchestrator","route_on_fail":"escalate_runtime_high_risk","waiver_ref":null,"notes":"Implementation and all real operations remain false."},
+    {"id":"CP4-10","category":"legacy","name":"Pre-existing global plan-check debt is isolated from CR164 scoped DAG","status":"PASS","severity":"HIGH","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr164_story_planning"],"owner":"host-orchestrator","route_on_fail":"create_followup_candidate","waiver_ref":null,"notes":"No unrelated legacy status was rewritten."}
+  ],
+  "entry_criteria": [{"name":"CP3 approved","status":"PASS","evidence_ref":"process/checkpoints/CP3-CR164-MULTIPLE-TESTING-PBO-DSR-HLD-REVIEW.md"}],
+  "exit_criteria": [{"name":"Feature and Story plan complete","status":"PASS"},{"name":"DAG and file ownership safe","status":"PASS"},{"name":"Ready for CP5 design evidence","status":"PASS"}],
+  "deliverables": ["docs/design/FEATURE-DESIGN-MATRIX.md","process/DEVELOPMENT-PLAN.yaml","process/stories/STORY-CR164-S01-statistical-evidence-contract-validator.md","process/stories/STORY-CR164-S02-bh-wrc-spa-evidence.md","process/stories/STORY-CR164-S03-pbo-cscv-dsr-evidence.md","process/stories/STORY-CR164-S04-conservative-aggregation-projections.md","process/stories/STORY-CR164-S05-independent-verification.md"],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260712T124544Z0000-7de60b33"],
+  "decision": "PASS",
+  "next_route": "CP5-design-evidence"
+}

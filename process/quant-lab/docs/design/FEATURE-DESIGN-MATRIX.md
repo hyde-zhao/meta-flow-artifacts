@@ -603,3 +603,35 @@ confirmed_at: ""
 | 五 Story 均有 feature_design_refs 与 full-lld | PASS | 本节 Story 下游消费表 |
 | FEAT-23 waiver 有理由、风险和重访条件 | PASS | standalone 不拥有接口；出现 validation service/schema 时升级 |
 | CP4 不授权实现、测试实现、runtime/data/credential/statistical/backfill/external write | PASS | CR163 scoped development plan authorization boundary |
+
+## CR164 CP4 增量：Computable Multiple-Testing / PBO / DSR Evidence
+
+> 来源：CR164 CP3 已批准 HLD/ADR。只允许 Story、Feature 和 LLD 设计；不拉起子 Agent，不实现代码/测试，不执行真实统计、数据、runtime 或外部写入。
+
+| Feature | 名称 | 判定 | 触发原因 | 三件套 | Stories | lld_policy | 重访条件 |
+|---|---|---|---|---|---|---|---|
+| FEAT-24 | Statistical evidence contract | required | 公共 schema、sealed identity、availability、minima、canonical hash 被全部 Story 共享 | `docs/features/statistical-evidence-contract/{DESIGN,TEST-PLAN,TASKS}.md` | S01,S02,S03,S04,S05 | full-lld | schema/status/minima/hash 改变 |
+| FEAT-25 | Multiple-testing calculators | required | BH 与 WRC/SPA 方法、fixed-window bootstrap、参数 provenance | `docs/features/multiple-testing-calculators/{DESIGN,TEST-PLAN,TASKS}.md` | S02,S05 | full-lld | automatic selector 或方法公式改变 |
+| FEAT-26 | Overfit/deflation calculators | required | PBO/CSCV split contract、raw-count DSR 与 effective non-alias | `docs/features/overfit-deflation-calculators/{DESIGN,TEST-PLAN,TASKS}.md` | S03,S05 | full-lld | effective estimator 或 split policy 改变 |
+| FEAT-27 | Conservative aggregation and projections | required | severity lattice、three consumers、no parallel gate | `docs/features/statistical-evidence-projection/{DESIGN,TEST-PLAN,TASKS}.md` | S04,S05 | full-lld | mandatory set、consumer schema 或 policy 改变 |
+| FEAT-28 | Independent verification orchestration | waived-as-standalone | 不拥有生产接口或数据；S05 组合 FEAT-24..27 测试计划，独立设计会复制职责 | none；消费四套 TEST-PLAN | S05 | full-lld（Story） | 出现共享 validation API/service/runtime 时升级 required |
+
+### Story 下游消费表
+
+| Story | Owner Feature(s) | feature_design_refs | lld_policy | CP5 evidence |
+|---|---|---|---|---|
+| CR164-S01-statistical-evidence-contract-validator | FEAT-24 | `docs/features/statistical-evidence-contract/{DESIGN,TEST-PLAN,TASKS}.md` | full-lld | Story LLD |
+| CR164-S02-bh-wrc-spa-evidence | FEAT-25/24 | FEAT-25 + FEAT-24 三件套 | full-lld | Story LLD |
+| CR164-S03-pbo-cscv-dsr-evidence | FEAT-26/24 | FEAT-26 + FEAT-24 三件套 | full-lld | Story LLD |
+| CR164-S04-conservative-aggregation-projections | FEAT-27/24 | FEAT-27 + FEAT-24 三件套 | full-lld | Story LLD |
+| CR164-S05-independent-verification | FEAT-24..28 | 四套 TEST-PLAN/TASKS + FEAT-28 waiver | full-lld | Story LLD |
+
+### CR164 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| Blueprint Feature 判定覆盖 | PASS | FEAT-24..28 = 5/5 |
+| required 三件套 | PASS | FEAT-24..27 = 4/4 |
+| Story refs / lld_policy | PASS | 5/5 full-lld |
+| verification waiver | PASS | 无新生产接口；出现 validation service 时重访 |
+| 授权边界 | PASS | design-only、no-subagent、forbidden operations=0 |

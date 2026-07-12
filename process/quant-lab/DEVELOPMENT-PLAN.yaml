@@ -7461,3 +7461,97 @@ cr163_story_planning:
   pre_existing_plan_check_failure:
     status: "recorded-unrelated"
     details: "Canonical plan-check already failed before CR163 edits because CR013-S01..S04 use legacy status draft-pending-cp4. CR163 scoped plan is validated independently; unrelated statuses were preserved."
+
+cr164_story_planning:
+  change_id: "CR-164"
+  title: "Computable Multiple-Testing PBO DSR Evidence"
+  status: "cp4-pass-pending-cp5-design-evidence"
+  cp3_review: "process/checkpoints/CP3-CR164-MULTIPLE-TESTING-PBO-DSR-HLD-REVIEW.md"
+  cp4_result: "process/checks/CP4-CR164-STORY-DAG-PARALLEL-SAFETY.result.json"
+  feature_design_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md#cr164-cp4-增量computable-multiple-testing--pbo--dsr-evidence"
+  story_count: 5
+  wave_count: 4
+  cp5_batch:
+    id: "CP5-CR164-ALL-STORIES-LLD-BATCH"
+    design_evidence_required: 5
+    required_level: "full-lld"
+    status: "approved"
+    human_gate: "required"
+  authorization_boundary:
+    subagent_allowed: false
+    implementation_allowed: false
+    test_implementation_allowed: false
+    real_statistical_or_research_run_allowed: false
+    runtime_data_credential_external_write_allowed: false
+    git_remote_write_or_publish_allowed: false
+  parallel_policy:
+    max_parallel_lld: 1
+    max_parallel_dev: 2
+    max_parallel_qa: 2
+    lld_rule: "Host inline fallback drafts all five LLDs serially; CP5 confirms all together."
+    dev_rule: "S01 -> (S02 || S03) -> S04 -> S05; CP5 required before any implementation."
+  stories:
+    - id: "CR164-S01-statistical-evidence-contract-validator"
+      card: "process/stories/STORY-CR164-S01-statistical-evidence-contract-validator.md"
+      wave: "CR164-W1-CONTRACT"
+      status: "verified"
+      depends_on: []
+      dependency_types: []
+      lld_policy: "full-lld"
+      primary_files: ["engine/statistical_evidence.py", "tests/research/test_statistical_evidence_contracts.py"]
+    - id: "CR164-S02-bh-wrc-spa-evidence"
+      card: "process/stories/STORY-CR164-S02-bh-wrc-spa-evidence.md"
+      wave: "CR164-W2-CALCULATORS"
+      status: "verified"
+      depends_on: ["CR164-S01-statistical-evidence-contract-validator"]
+      dependency_types: ["contract"]
+      lld_policy: "full-lld"
+      primary_files: ["engine/multiple_testing_evidence.py", "tests/research/test_multiple_testing_evidence.py"]
+      shared_files: ["engine/anomaly_multiple_testing.py"]
+    - id: "CR164-S03-pbo-cscv-dsr-evidence"
+      card: "process/stories/STORY-CR164-S03-pbo-cscv-dsr-evidence.md"
+      wave: "CR164-W2-CALCULATORS"
+      status: "verified"
+      depends_on: ["CR164-S01-statistical-evidence-contract-validator"]
+      dependency_types: ["contract"]
+      lld_policy: "full-lld"
+      primary_files: ["engine/overfit_evidence.py", "tests/research/test_overfit_evidence.py"]
+    - id: "CR164-S04-conservative-aggregation-projections"
+      card: "process/stories/STORY-CR164-S04-conservative-aggregation-projections.md"
+      wave: "CR164-W3-PROJECTION"
+      status: "verified"
+      depends_on: ["CR164-S01-statistical-evidence-contract-validator", "CR164-S02-bh-wrc-spa-evidence", "CR164-S03-pbo-cscv-dsr-evidence"]
+      dependency_types: ["contract", "runtime", "runtime"]
+      lld_policy: "full-lld"
+      primary_files: ["engine/strategy_admission_statistical_gate.py", "engine/cross_strategy_reliability_gates.py", "engine/strategy_admission_package.py", "tests/research/test_statistical_evidence_projection.py"]
+    - id: "CR164-S05-independent-verification"
+      card: "process/stories/STORY-CR164-S05-independent-verification.md"
+      wave: "CR164-W4-VERIFICATION"
+      status: "verified-with-risk"
+      depends_on: ["CR164-S01-statistical-evidence-contract-validator", "CR164-S02-bh-wrc-spa-evidence", "CR164-S03-pbo-cscv-dsr-evidence", "CR164-S04-conservative-aggregation-projections"]
+      dependency_types: ["runtime", "runtime", "runtime", "runtime"]
+      lld_policy: "full-lld"
+      primary_files: ["tests/research/test_statistical_evidence_qac.py", "tests/research/test_statistical_evidence_authorization.py", "tests/research/test_statistical_evidence_cr155_regression.py"]
+  dependency_graph:
+    nodes: ["CR164-S01-statistical-evidence-contract-validator", "CR164-S02-bh-wrc-spa-evidence", "CR164-S03-pbo-cscv-dsr-evidence", "CR164-S04-conservative-aggregation-projections", "CR164-S05-independent-verification"]
+    edges:
+      - ["CR164-S01-statistical-evidence-contract-validator", "CR164-S02-bh-wrc-spa-evidence", "contract"]
+      - ["CR164-S01-statistical-evidence-contract-validator", "CR164-S03-pbo-cscv-dsr-evidence", "contract"]
+      - ["CR164-S01-statistical-evidence-contract-validator", "CR164-S04-conservative-aggregation-projections", "contract"]
+      - ["CR164-S02-bh-wrc-spa-evidence", "CR164-S04-conservative-aggregation-projections", "runtime"]
+      - ["CR164-S03-pbo-cscv-dsr-evidence", "CR164-S04-conservative-aggregation-projections", "runtime"]
+      - ["CR164-S01-statistical-evidence-contract-validator", "CR164-S05-independent-verification", "runtime"]
+      - ["CR164-S02-bh-wrc-spa-evidence", "CR164-S05-independent-verification", "runtime"]
+      - ["CR164-S03-pbo-cscv-dsr-evidence", "CR164-S05-independent-verification", "runtime"]
+      - ["CR164-S04-conservative-aggregation-projections", "CR164-S05-independent-verification", "runtime"]
+  dag_validation_result:
+    cycles: []
+    invalid_references: []
+    isolated_nodes: []
+    parallel_internal_dependencies: 0
+    file_conflicts_within_parallel_wave: 0
+    conclusion: "PASS"
+    merge_order: "S01 -> (S02 || S03) -> S04 -> S05"
+  pre_existing_plan_check_failure:
+    status: "recorded-unrelated"
+    details: "Canonical plan-check retains pre-existing legacy status failures; CR164 scoped DAG and fields are independently validated."

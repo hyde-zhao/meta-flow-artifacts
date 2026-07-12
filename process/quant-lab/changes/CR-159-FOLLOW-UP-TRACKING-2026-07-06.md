@@ -115,8 +115,8 @@ follow_up_items:
 
 | 候选编号 | 标题 | 状态 | 类型 | 优先级 | 影响面 / 冲突键 | 正式 CR 路径 | 当前门控 | 相关 CR | 阻塞原因 | 下一步 | 来源 |
 |---|---|---|---|---:|---|---|---|---|---|---|---|
-| FU-CR159-001 | CR-INDEX/ledger global legacy normalization (incl. authz L2 infer false-positive) | candidate | requirement-change | 2 | cr_legacy_status_normalization / closed_cr_body_infer_rewording / meta_flow_infer_logic_change | (未创建) | not_started | CR-159 | 需 closed CR 正文改写或 meta-flow infer 逻辑变更授权 | 仅当用户要求全局 cr check 0 ERROR 或 authz L2 清零时启动 | CR159 实施 |
-| FU-CR159-002 | STATE v2 schema/check allowlist extension | candidate | requirement-change | 3 | state_v2_schema_extension / state_router_contract_alignment | (未创建) | not_started | CR-159 | 需 meta-flow 工具 CR 扩展 v2 schema | 仅当用户要求消除 4 residual WARN 时启动 | CR159 实施 |
+| FU-CR159-001 | CR-INDEX/ledger global legacy normalization (incl. authz L2 infer false-positive) | candidate | requirement-change | 2 | cr_legacy_status_normalization / closed_cr_body_infer_rewording / meta_flow_infer_logic_change | N/A | not_started | CR-159 | 需 closed CR 正文改写或 meta-flow infer 逻辑变更授权 | 仅当用户要求全局 cr check 0 ERROR 或 authz L2 清零时启动 | CR159 实施 |
+| FU-CR159-002 | STATE v2 schema/check allowlist extension | candidate | requirement-change | 3 | state_v2_schema_extension / state_router_contract_alignment | N/A | not_started | CR-159 | 需 meta-flow 工具 CR 扩展 v2 schema | 仅当用户要求消除 4 residual WARN 时启动 | CR159 实施 |
 
 ## 风险接受与门禁规则
 

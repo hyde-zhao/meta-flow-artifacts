@@ -1,0 +1,87 @@
+schema_version: "1.0"
+batch_id: "CR164-CP2-SGQ-BATCH"
+workflow_id: "CR-164"
+checkpoint: "CP2-preparation"
+owner: "host-orchestrator"
+source_agent: "meta-pm"
+status: "answered"
+answered_at: "2026-07-12T18:05:00+08:00"
+answered_by: "user"
+answer_interpretation: "User approved the immediately preceding scope assessment; SGQ-CR164-001..004 use their sharpened recommended option A."
+answers:
+  SGQ-CR164-001: "A"
+  SGQ-CR164-002: "A"
+  SGQ-CR164-003: "A"
+  SGQ-CR164-004: "A"
+created_at: "2026-07-12T17:52:00+08:00"
+blocks_cp1: true
+blocks_cp2_launch: true
+questions:
+  - id: "SGQ-CR164-001"
+    topic: "MVP method set"
+    recommendation: "A"
+    options:
+      A: "BH + WRC/SPA + PBO/CSCV + DSR; each method independently typed_unavailable/blocked on insufficient inputs; claim-relevant mandatory methods aggregate conservatively with no OR-pass, so BH PASS plus PBO FAIL cannot produce a clean admission PASS."
+      B: "BH only; smallest delivery, but WRC/PBO/DSR slots remain unavailable and robustness/Sharpe claims remain blocked."
+      C: "BH + PBO + DSR; defer WRC/SPA, leaving statistical-significance/data-snooping wording blocked."
+  - id: "SGQ-CR164-002"
+    topic: "effective-trial boundary"
+    recommendation: "A"
+    options:
+      A: "Keep effective_trial_count typed_unavailable; DSR consumes sealed raw count plus approved DSR inputs, and CP3 must emit dsr_input_method=raw_trial_count with lineage provenance and an explicit non-alias limitation; Gate-1 deflated-performance wording remains blocked wherever effective count is mandatory."
+      B: "Add effective-trial computation to CR164, expanding methodology/audit scope and requiring a separately frozen estimator."
+      C: "Defer DSR until effective count is approved."
+  - id: "SGQ-CR164-003"
+    topic: "minimum sufficiency thresholds"
+    recommendation: "A"
+    options:
+      A: "BH/WRC-SPA >=2 complete candidates with finite aligned inputs; PBO/CSCV >=4 complete candidates and >=4 valid train/test splits; DSR >=2 trials, sample_length>=30, finite moments/returns, positive variance and complete lineage/ref binding. This option also freezes the consolidated quantitative-acceptance table recorded below."
+      B: "Stricter floor: >=10 candidates, >=8 splits, DSR sample_length>=60."
+      C: "Defer numeric minima to CP3, weakening CP2 measurability."
+  - id: "SGQ-CR164-004"
+    topic: "ML/event compatibility scope"
+    recommendation: "A"
+    options:
+      A: "Implement UC-58 multifactor only; UC-59/60 are contract-compatibility consumers and fail closed without identical sealed-family/statistical inputs."
+      B: "Implement fixture/static ML and event adapters now."
+      C: "Multifactor only with no compatibility contract."
+non_authorization: "These are scope/methodology decisions only; no runtime, data, credential, NAS, provider, broker, trading, publish or remote-write authorization is requested."
+
+review_feedback_assessment:
+  scope_change_required: false
+  new_blocking_question_required: false
+  ready_for_design: false
+  reasons:
+    - "SGQ-CR164-001..004 remain unanswered."
+    - "Quantitative acceptance criteria cannot be frozen until SGQ-CR164-003 is answered."
+  cp2_obligations:
+    - "Render one consolidated Quantitative Acceptance Criteria table before launching CP2."
+    - "Freeze conservative no-OR-pass, claim-relevant mandatory-method aggregation semantics."
+  cp3_obligations:
+    - "If DSR uses raw count, schema must carry dsr_input_method=raw_trial_count, lineage provenance and effective-count non-alias limitation."
+    - "If WRC/SPA is selected, freeze stationary-bootstrap block-length selection mode, parameter/seed provenance, deterministic replay and switching criteria."
+    - "Define the full method-disagreement decision table and reason-code mapping."
+
+proposed_quantitative_acceptance_criteria:
+  status: "approved-by-SGQ-CR164-003-A"
+  rows:
+    - metric: "selected-method required-input coverage"
+      target: "100%"
+    - metric: "family/ref/hash/raw-count binding coverage"
+      target: "100%"
+    - metric: "candidate/raw-ledger/method-input count difference"
+      target: "0"
+    - metric: "enumerated negative-fixture fail-closed hit rate"
+      target: "100%"
+    - metric: "same-fixture deterministic reruns"
+      target: "10 runs -> 1 summary hash"
+    - metric: "orphan method-evidence references"
+      target: "0"
+    - metric: "consumer projection coverage"
+      target: "3/3 (multifactor plus ML/event contract compatibility)"
+    - metric: "CR155 negative-regression blocked preservation"
+      target: "1/1"
+    - metric: "forbidden-operation counters"
+      target: "0"
+    - metric: "runtime/statistical overclaims"
+      target: "0"

@@ -1,0 +1,73 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR164-MULTIPLE-TESTING-PBO-DSR-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "CR-164"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready"
+created_at: "2026-07-12T19:59:27+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-164"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  default_instruction: "Read this capsule first; use rg before expanding named product or source contracts."
+
+must_read:
+  - "process/checkpoints/CP2-CR164-MULTIPLE-TESTING-PBO-DSR-SCOPE.md"
+  - "process/checks/CP0-CR164.route-plan.json"
+  - "process/changes/summaries/CR-164.summary.json"
+  - "docs/product/REQUIREMENTS.md#cr164"
+  - "docs/product/USE-CASES.md#cr164"
+read_if_needed:
+  - "engine/strategy_admission_statistical_gate.py"
+  - "engine/cross_strategy_reliability_gates.py"
+  - "engine/anomaly_multiple_testing.py"
+  - "engine/experiment_family_lineage.py"
+  - "engine/strategy_admission_package.py"
+  - "tests/test_cr163_trial_lineage_*.py"
+do_not_read_by_default:
+  - "process/STATE.md"
+  - "process/archive/**"
+  - "process/stories/*-LLD.md"
+  - "complete conversation transcript"
+
+approved_product_baseline:
+  methods: ["BH", "WRC/SPA", "PBO/CSCV", "DSR"]
+  aggregation: "mandatory claim-relevant methods use conservative no-OR-pass semantics"
+  minima:
+    bh_wrc_spa_candidates: 2
+    pbo_candidates: 4
+    pbo_valid_splits: 4
+    dsr_trials: 2
+    dsr_sample_length: 30
+  dsr_boundary: "dsr_input_method=raw_trial_count; effective_trial_count remains typed_unavailable and is not an alias"
+  consumer_scope: "UC-58 implementation; UC-59/60 compatibility-only"
+  quantitative_acceptance_criteria_count: 10
+
+design_obligations:
+  - "Freeze method-neutral input envelope and per-method evidence schemas."
+  - "Freeze WRC/SPA stationary-bootstrap block-length mode, parameter and seed provenance."
+  - "Freeze method-disagreement final-status decision table and reason codes."
+  - "Reuse CR151/CR154/admission consumers; do not create a parallel gate."
+  - "Keep all computation repository-local and fixture/static until later implementation and verification gates."
+
+authorization:
+  inline_fallback_approved: true
+  subagent_launch_allowed: false
+  design_only: true
+  not_authorized:
+    - "source or test implementation before CP5 approval"
+    - "real statistical batch or research runtime"
+    - "production data, credentials, NAS, provider or external framework access"
+    - "broker, simulation, live order or trading operation"
+    - "catalog, store, registry, deploy, publish or Git remote write"
+
+exit_criteria:
+  - "Blueprint, Domain Map, Dependency Map, HLD and ADR are mutually consistent."
+  - "All 9 requirements, 13 scenarios and 10 QAC items trace to architecture."
+  - "CP3 result PASS and required CP3 human gate opened."
+

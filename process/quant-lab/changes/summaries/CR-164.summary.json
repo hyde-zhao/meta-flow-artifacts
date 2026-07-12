@@ -1,0 +1,144 @@
+{
+  "affected_product_docs": [
+    "docs/product/USE-CASES.md",
+    "docs/product/REQUIREMENTS.md",
+    "docs/product/SCENARIOS.yaml",
+    "docs/product/TEST-MATRIX.md",
+    "docs/product/STORY-MAP.md",
+    "docs/product/MVP-SCOPE.md",
+    "docs/product/RELEASE-SLICES.md",
+    "docs/product/BACKLOG.md"
+  ],
+  "affected_use_cases": [
+    "UC-58 multifactor strategy E2E",
+    "UC-59 machine-learning strategy E2E compatibility",
+    "UC-60 event-driven strategy E2E compatibility"
+  ],
+  "approval_focus": "scope|architecture|security|implementation|runtime|risk|follow_up",
+  "approve_effect": "CP2 approval will freeze the computation scope, evidence sufficiency semantics, quantitative acceptance criteria and exclusions, then route to CP3 architecture design. It will not authorize implementation until CP5 or any real research run.",
+  "archive_isolation_review": {
+    "decision": "PASS",
+    "findings": []
+  },
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "NO_REAL_LAKE_READ_OR_WRITE",
+    "NO_NAS_SYNC_OR_WRITE",
+    "NO_PROVIDER_FETCH",
+    "NO_BROKER_WRITE",
+    "NO_EXTERNAL_FRAMEWORK_RUN",
+    "NO_CATALOG_POINTER_WRITE"
+  ],
+  "block_story_decomposition_until": "CP2-approved",
+  "conflict_keys": [
+    "strategy-admission-evidence",
+    "multiple-testing-correction",
+    "pbo-cscv",
+    "dsr-deflation",
+    "experiment-family-lineage"
+  ],
+  "cp1_review_profile": {
+    "decision": "FULL_CP1_REQUIRED",
+    "profile": "full",
+    "reason": "product baseline docs or product_baseline_refresh_required indicate use-case completeness must be rechecked",
+    "required_checks": [
+      "use_case_completeness",
+      "requirements_traceability",
+      "scenario_coverage",
+      "story_map_alignment",
+      "mvp_scope_alignment"
+    ]
+  },
+  "cr_type": "product-scope",
+  "decision": "pending",
+  "decision_burden": "high",
+  "evidence_index_ref": "process/archive/CR-164/evidence-index.json",
+  "followup_candidates": [],
+  "full_ref": "process/changes/CR-164.md",
+  "gate_profile": "architecture-major",
+  "gate_status": "cp8_closed",
+  "goal_ref": "GOAL-STRATEGY-ADMISSION-COMPUTABLE-EVIDENCE",
+  "goal_statement": "Turn strategy-admission multiple-testing and overfitting controls from typed availability contracts into reproducible, computable and independently verifiable evidence.",
+  "governance_dependency_review": {
+    "decision": "PASS",
+    "findings": []
+  },
+  "id": "CR-164",
+  "impact_capability_normalized": [],
+  "impact_capability_refs": [],
+  "impact_capability_resolution": {
+    "kind": "capability",
+    "mode": "audit",
+    "results": [],
+    "summary": {
+      "conflict": 0,
+      "deprecated": 0,
+      "resolved": 0,
+      "unresolved": 0
+    }
+  },
+  "impact_data_refs": [],
+  "impact_feature_refs": [],
+  "impact_module_paths": [],
+  "impact_policy_refs": [],
+  "impact_process_refs": [],
+  "impact_runtime_refs": [],
+  "impact_surface": [
+    "use-cases",
+    "requirements",
+    "scope",
+    "product-baseline",
+    "architecture",
+    "story",
+    "implementation",
+    "verification"
+  ],
+  "not_authorized_by_approve": [
+    "source_or_test_implementation_before_CP5_approval",
+    "real_research_or_statistical_batch_execution",
+    "credential_or_environment_secret_read",
+    "new_real_lake_read_or_any_real_lake_write",
+    "NAS_read_write_sync_or_metadata_normalization",
+    "provider_fetch_or_external_framework_install_run",
+    "broker_simulation_live_order_or_trading_operation",
+    "catalog_store_registry_model_prediction_write",
+    "deployment_tag_package_publish_or_git_remote_write"
+  ],
+  "product_baseline_refresh_required": true,
+  "readiness": "READY_WITH_RISK",
+  "reject_effect": "CR-164 remains active/not-ready and existing strategy admission continues to emit typed_unavailable or blocked for computable multiple-testing/PBO/DSR evidence.",
+  "remaining_risks": [
+    "R-CR164-METHOD-SELECTION-AMBIGUITY",
+    "R-CR164-INPUT-SUFFICIENCY-OVERCLAIM",
+    "R-CR164-DATA-SNOOPING-LEAKAGE",
+    "R-CR164-CR163-LINEAGE-MISMATCH",
+    "R-CR164-NUMERICAL-STABILITY"
+  ],
+  "required_agent": "meta-pm",
+  "required_capabilities": [],
+  "required_evidence": [
+    "admission_package"
+  ],
+  "required_gate": "CP2",
+  "required_phase": "requirement-clarification",
+  "routing_design_ref": "process/checks/CP0-CR164.route-plan.json",
+  "scope_authz_consistency": {
+    "blockers": [],
+    "decision": "PASS",
+    "needs_review": []
+  },
+  "scope_summary": [
+    "将 CR-161 的 `typed_unavailable` 统计证据合同和 CR-163 的完整 experiment-family trial lineage 事实源连接起来，形成可计算、可复跑、可验证的 multiple-testing / backtest-overfitting evidence。候选方法集合包括 FDR/BH、WRC/SPA、PBO/CSCV 与 DSR/deflation；CP2 必须先确认 MVP 方法组合、输入充分性、失败语义和定量验收标准，CP3 再冻结架构与证据 schema。",
+    "本 CR 只授权建立正式工作流、增量产品基线、设计、后续经 CP5 批准的本地实现与 fixture/static 验证。当前不授权真实研究批量计算、生产数据存储/NAS/provider/凭据访问、外部框架运行、交易、发布或远端写入。"
+  ],
+  "split_rationale": "CR-161 deliberately stopped at design-only fail-closed availability contracts, while CR-163 delivered the trial-lineage fact source. Statistical computation has a distinct methodology, implementation, verification, rollback and audit boundary.",
+  "status": "closed",
+  "title": "Multiple Testing / PBO / DSR Computable Evidence Implementation",
+  "updated_at": "2026-07-12T13:48:54+00:00",
+  "user_goal_impact": "A candidate can only obtain positive statistical-admission evidence when its complete CR-163 experiment-family lineage and the approved correction/overfitting computations are both sufficient and internally consistent.",
+  "why_not_merge_with_parent": "CR-161 and CR-163 are closed baselines. Reopening either would conflate historical decisions with a new computable-evidence implementation and risk-acceptance boundary.",
+  "why_not_story_or_task": "The change spans product admission semantics, statistical-method selection, evidence schemas, multiple consumers, failure behavior and independent verification; CP2 and CP3 must freeze the contract before Story decomposition."
+}
