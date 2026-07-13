@@ -18,8 +18,8 @@
 | F-008 | AskUserQuestion 交互 | ptm-tde | required | technical-note | ✅ delivered |
 | F-009 | 原子操作集成 | ptm-tde | required | full-lld | ✅ delivered |
 | F-010 | 因子库发现 | ptm-tde | required | full-lld | ✅ delivered |
-| F-011 | 测试用例执行 | ptm-te | required | full-lld | ⬜ planned |
-| F-012 | Topo 映射与环境管理 | ptm-te | required | full-lld | ⬜ planned |
+| F-011 | 测试用例执行 | ptm-te | required | full-lld | ✅ delivered（CR-024） |
+| F-012 | Topo 映射与环境管理 | ptm-te | required | full-lld | ✅ delivered（CR-024） |
 | F-013 | 原子能力框架 | ptm-tae | required | full-lld | 🔄 in-progress |
 | F-014 | 自动化翻译与回归 | ptm-tae | required | full-lld | ⬜ planned |
 | F-015 | 公共 Skill 基础设施 | ptm-tae | required | full-lld | 🔄 in-progress |
@@ -45,7 +45,7 @@
 | Feature ID | DESIGN | TEST-PLAN | TASKS | 状态 |
 |---|---|---|---|---|
 | F-001~010 | CR 级 LLD（约 25 个 STORY-*-LLD.md） | CP5 checks | CP6 checks | ✅ delivered |
-| F-011~012 | — | — | — | ⬜ planned |
+| F-011~012 | STORY-024-01/02/03（full-lld）+ STORY-024-04（technical-note） | process/checkpoints/CP5-ALL-STORIES-LLD-BATCH-CR-024.md | process/checks/CP6-CR-024-CODING-DONE.md | ✅ delivered（CR-024） |
 | F-013~015 | — | — | — | 🔄 in-progress |
 | F-016 | — | — | — | ⬜ planned |
 | F-017~018 | — | — | — | ⬜ planned |
@@ -58,12 +58,12 @@
 | Agent | Features | delivered | in-progress | planned |
 |---|---|---|---|---|
 | ptm-tde | 10 | 10 | 0 | 0 |
-| ptm-te | 2 | 0 | 0 | 2 |
+| ptm-te | 2 | 2 | 0 | 0 |
 | ptm-tae | 3 | 0 | 2 | 1 |
 | ptm-tm | 1 | 0 | 0 | 1 |
 | ptm-tse | 2 | 0 | 0 | 2 |
 | ptm-qa | 1 | 0 | 0 | 1 |
-| **合计** | **19** | **10** | **2** | **7** |
+| **合计** | **19** | **12** | **2** | **5** |
 
 ---
 
