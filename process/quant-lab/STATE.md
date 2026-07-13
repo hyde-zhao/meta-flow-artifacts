@@ -2,12 +2,12 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: init
+Phase: delivered
 Blocked: false
-Active CR: CR-167
+Active CR: none
 Active Story: none
 Pending gate: none
-Next action: Review CP0 bootstrap readiness for CR-167, then launch the first human gate.
+Next action: CR-167 status synced as closed; choose next CR.
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,7 +20,7 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: process/context/CP0-CR167.context.json
+- active context: none
 
 Policy refs:
 - NO_CREDENTIAL_READ
@@ -49,6 +49,6 @@ Open risks:
 - {'id': 'R-CR158-EVIDENCE-SEMANTIC-OVERFIT', 'severity': 'medium', 'status': 'open'}
 - {'id': 'R-CR158-RUNTIME-OVERCLAIM', 'severity': 'high', 'status': 'open'}
 
-Updated at: 2026-07-13T02:46:41+00:00
+Updated at: 2026-07-13T03:24:13+00:00
 
 <!-- generated-by: meta-flow state render -->

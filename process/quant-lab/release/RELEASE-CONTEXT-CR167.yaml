@@ -1,0 +1,72 @@
+schema_version: 1
+cr_id: CR-167
+release_artifact_profile: minimal
+release_decision: READY
+release_execution: git_archive_published
+release_scope:
+  in_scope:
+    - archive 35 CR-scoped release documents in process/quant-lab/docs/release
+    - align README and process routing metadata
+    - publish paired quant-lab and meta-flow-artifacts commits
+  out_of_scope:
+    - product behavior or version changes
+    - runtime, credentials, data lake, broker or trading operations
+  user_visible_change: quant-lab public release entry now points to docs/release/README.md
+version_decision:
+  current_version: unchanged
+  target_version: unchanged
+  reason: documentation ownership remediation; no product package release
+quality_summary:
+  cp6: PASS
+  cp7: PASS
+  blocker_count: 0
+  high_count: 0
+  evidence_refs:
+    - process/checks/CP6-CR167-ARCHIVAL.result.json
+    - process/checks/CP7-CR167-ARCHIVAL-VERIFICATION.result.json
+    - process/evidence/CR167-RELEASE-DOCUMENT-ARCHIVE.sha256
+fact_diff:
+  - promise_ref: process/changes/CR-167.md
+    promise: archive all 35 local-only CR release documents
+    status: DELIVERED
+    decision_impact: READY
+    evidence_refs:
+      - process/evidence/CR167-RELEASE-DOCUMENT-ARCHIVE.sha256
+      - process/checks/CP7-CR167-ARCHIVAL-VERIFICATION.result.json
+    risk_ref: R-CR167-UNARCHIVED-LOCAL-ONLY-DOCS
+  - promise_ref: process/changes/CR-167.md
+    promise: publish both repository changes without including parallel artifact work
+    status: DELIVERED
+    decision_impact: READY
+    evidence_refs:
+      - quant-lab:6aa0bc04d8d80083c4324028ee4a407850e22188
+      - meta-flow-artifacts:3fbbbab9d14d3508f4b1d8311053c1772ea9aad3
+    risk_ref: R-CR167-CROSS-REPO-PARTIAL-PUBLICATION
+affected_surface:
+  platforms: [git, github]
+  components: [documentation, process-routing]
+  install_scope: none
+  configuration: process/.meta-flow-process.yaml
+  permissions: unchanged
+  migration: local ignored files moved to tracked artifact repository
+  external_interfaces: none
+  state_schema: unchanged
+install_validation_summary:
+  status: N/A
+  reason: no installer, dependency or executable behavior changed
+release_documents:
+  profile: minimal
+  release_notes: N/A; CR-167 and this capsule provide the archive summary
+  deploy_checklist: N/A; Git commit and remote synchronization are the complete deployment surface
+  rollback: restore README and artifact commits; preserve the 35 files before any move-back
+  migration: completed file-ownership migration with 35/35 checksum evidence
+  feedback: report missing or mismatched archive objects through a new CR candidate
+non_authorized_items:
+  - runtime access
+  - credential or secret read
+  - production or data-lake write
+  - broker, simulation, live or trading operation
+follow_up_summary:
+  risks: []
+  candidates: []
+  observation: verify both upstream branches remain synchronized after final CR closure commit
