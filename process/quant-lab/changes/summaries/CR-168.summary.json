@@ -56,6 +56,13 @@
   },
   "cr_type": "product-scope",
   "decision": "pending",
+  "decision_revision": {
+    "at": "2026-07-13T22:45:00+08:00",
+    "decision_id": "DQ-CP2-CR168-GATE4",
+    "input": "changes_requested",
+    "status": "applied_pending_reapproval",
+    "summary": "C4 reserved/not-built/typed_unavailable maps to three absent refs without field-specific or generic na-reason keys; every reason escape is blocked/rejected by the projection; canonical Gate 4 and aggregate orchestration remain unchanged."
+  },
   "decision_burden": "high",
   "evidence_index_ref": "process/archive/CR-168/evidence-index.json",
   "followup_candidates": [],
@@ -188,7 +195,8 @@
     "R-CR168-COST-UNDERSTATEMENT",
     "R-CR168-UNIT-CURRENCY-BASIS",
     "R-CR168-TRUE-TCA-OVERCLAIM",
-    "R-CR168-CR155-PROMOTION"
+    "R-CR168-CR155-PROMOTION",
+    "R-CR168-VERIFIER-INDEPENDENCE"
   ],
   "required_agent": "meta-pm",
   "required_capabilities": [],
@@ -197,6 +205,37 @@
     "c3_gate4_compatibility_projection",
     "cr155_admission_blocked_regression"
   ],
+  "cp3_design_obligations": [
+    "freeze envelope availability to Gate 4 flat-payload mapping and projection reason-key denylist",
+    "record capability-registry-missing as N/A-with-reason using existing feature/module refs or route a separate governance CR",
+    "map three CR168 required_evidence labels to an existing evidence taxonomy or explicit alternative verification path before CP4",
+    "freeze impact_model_family n/a-with-reason as an impact-specific path that cannot emit generic or C4 na-reason keys",
+    "freeze component semantic hash and full envelope canonical hash input domains without requiring ambiguous cross-strategy full-hash equality"
+  ],
+  "gate4_projection_guard": {
+    "canonical_gate4_validator_changes": 0,
+    "aggregate_orchestration_changes": 0,
+    "c4_unavailable_projection": "three_refs_absent_without_na_reason",
+    "forbidden_reason_key_families": [
+      "<c4_field>_na_reason",
+      "<c4_field>_n_a_reason",
+      "na_reason",
+      "n_a_reason"
+    ],
+    "reason_escape_behavior": "BLOCKED_OR_REJECTED_BY_PROJECTION",
+    "capacity_or_aggregate_pass": 0,
+    "scenario_refs": [
+      "SC-CR168-B01",
+      "SC-CR168-B02"
+    ]
+  },
+  "scenario_profile": {
+    "total": 17,
+    "p0": 16,
+    "p1": 1,
+    "c3_input_fail_closed_classes": "10/10",
+    "projection_guard_negative_scenarios": 1
+  },
   "required_gate": "CP2",
   "required_phase": "requirement-clarification",
   "routing_design_ref": "docs/features/strategy-evidence-envelope/DESIGN.md",
@@ -223,7 +262,7 @@
   "split_rationale": "C3 有独立方法、输入、claim ceiling、授权与回滚边界；C4 和全链路 existing-gate integration 有不同输入、验收与启动条件，必须保持为独立 follow-up。",
   "status": "active",
   "title": "Economic Cost / Slippage / Impact Computable Evidence Producer Foundation",
-  "updated_at": "2026-07-13T10:56:53+00:00",
+  "updated_at": "2026-07-13T14:45:00+00:00",
   "user_goal_impact": "把成本、滑点与透明 impact approximation 从口头假设转为可审计、确定性、fail-closed 的 typed evidence，同时保持 C4、真实 TCA、真实数据和 Stage 3 边界关闭。",
   "why_not_merge_with_parent": "CR-161、CR-166 已关闭；本 CR 是 FU-CR161-004 的独立正式启动，不重开父 CR 或 C2 交付。",
   "why_not_story_or_task": "本变更重定义产品证据语义、公共 component contract、C3/C4 边界和 Gate 4 兼容投影，必须先通过 CP2/CP3，再拆 Story。"

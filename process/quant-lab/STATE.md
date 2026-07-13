@@ -6,13 +6,8 @@ Phase: requirement-clarification
 Blocked: false
 Active CR: CR-168
 Active Story: none
-Status: awaiting-user
 Pending gate: CP2
-Pending checklist: process/checkpoints/CP2-CR168-REQUIREMENTS-BASELINE.md
-Pending decisions: DQ-CP2-CR168-METHOD, DQ-CP2-CR168-C3-C4, DQ-CP2-CR168-GATE4, DQ-CP2-CR168-FIXTURE, DQ-CP2-CR168-CLAIM
-Stop reason: required_human_gate
-Next action: approve CR-168 CP2，按已批准范围继续推进到下一个人工门禁
-Cross-PC handoff: process/handoffs/NEXT-SESSION-CR168-CP2-CROSS-PC-2026-07-13.md
+Next action: approve
 
 Refs:
 - state: process/state/STATE.current.json
@@ -62,7 +57,8 @@ Open risks:
 - {'id': 'R-CR168-CR155-PROMOTION', 'severity': 'high', 'status': 'open_controlled_by_fail_closed_boundary'}
 - {'id': 'R-CR168-LEGACY-METADATA', 'severity': 'medium', 'status': 'accepted_nonblocking_preexisting'}
 - {'id': 'R-CR168-INLINE-INDEPENDENCE', 'severity': 'medium', 'status': 'accepted_by_user'}
+- {'id': 'R-CR168-VERIFIER-INDEPENDENCE', 'severity': 'medium', 'status': 'open_nonblocking_cp8_disclosure_required'}
 
-Updated at: 2026-07-13T11:31:26+00:00
+Updated at: 2026-07-13T14:45:00+00:00
 
 <!-- generated-by: meta-flow state render -->

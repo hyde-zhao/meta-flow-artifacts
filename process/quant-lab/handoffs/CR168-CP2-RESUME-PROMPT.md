@@ -11,12 +11,15 @@
 1. 在 meta-flow-artifacts 确认 main 已 fast-forward 到 origin/main。
 2. 在 quant-lab 确认当前分支为 work/cr168-economic-cost-impact-evidence，并已跟踪 origin/work/cr168-economic-cost-impact-evidence。
 3. 执行 `uv run --python 3.11 meta-flow workspace check --project-root .`；若 process 软链接、project_name、route metadata 或 STATE.md 不健康，立即停止报告，不得新建 process 或重建 STATE.md。
-4. 读取 `process/handoffs/NEXT-SESSION-CR168-CP2-CROSS-PC-2026-07-13.md`，然后按其中的 capsule-first 最小读取列表读取。
+4. 读取 `process/handoffs/NEXT-SESSION-CR168-CP2-CROSS-PC-2026-07-14.md`，然后按其中的 capsule-first 最小读取列表读取。
 
 当前事实必须复核：
 - CR-168 状态应为 awaiting-user，pending_gate=CP2，stop_reason=required_human_gate。
 - CP0、CP1、CP2 自动预检均为 PASS；CP2 尚未获人工批准。
-- Gate 4 是 C3+C4 联合门禁。CR-168 只投影四个 C3 字段；C4 字段保持 typed_unavailable，Gate 4 必须 fail-closed，capacity/aggregate PASS=0。
+- Gate 4 是 C3+C4 联合门禁。CR-168 只投影四个 C3 字段；C4 reserved/not-built/typed_unavailable 必须映射为三个 refs absent-no-na-reason，字段级或通用 na-reason 逃逸必须由 projection BLOCKED/REJECTED；canonical Gate 4/aggregate 不修改，capacity/aggregate PASS=0。
+- CR-168 工程场景应为 17 个（P0=16、P1=1）；10 类 C3 input fail-closed 不变，新增 `SC-CR168-B02` 专门覆盖 reason 逃逸。
+- F2/F3/F4/F6/F7 已进入 CP3 设计义务；`R-CR168-VERIFIER-INDEPENDENCE` 为非阻断风险，若 CP7 仍 inline 则 CP8 必须暴露。
+- 最近的只读实施评审结论是：无需再次修改 CP2 范围；CP3 应把 projection denylist 与 canonical consumer `_has_na_reason` 的候选语义关系写成设计/测试契约，但不得运行时依赖该私有 helper、不得修改 canonical Gate 4 或 aggregate orchestration。
 - C3 为 fixture/static-only economic cost/slippage/impact approximation foundation；不连接真实数据，不做真实 TCA/calibration/capacity sizing，不启动 Stage 3。
 - C4 计算保留 FU-CR161-005；C1-C4 aggregate integration 与 CR155 regression/promotion 保留 FU-CR161-007；CR155 admission package 继续 BLOCKED/paper_candidate=false。
 
@@ -33,5 +36,5 @@
 如果用户已审阅本 CR 的 CP2 Decision Brief 并接受全部推荐方案，可在上述恢复会话中直接发送：
 
 ```text
-approve CR-168 CP2，按已批准范围继续推进到下一个人工门禁
+approve
 ```

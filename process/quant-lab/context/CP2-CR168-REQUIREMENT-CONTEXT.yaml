@@ -6,7 +6,7 @@ phase: "requirement-clarification"
 checkpoint: "CP2"
 capsule_type: "cp2-requirement"
 status: "ready"
-created_at: "2026-07-13T17:40:00+08:00"
+created_at: "2026-07-13T22:45:00+08:00"
 created_by: "host-orchestrator"
 source_cr: "CR-168"
 
@@ -15,7 +15,7 @@ token_control:
   max_source_files: 12
   max_summary_items: 24
   full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
-  full_doc_read_reason: ""
+  full_doc_read_reason: "用户在 CP2 对 Gate 4 projection-side fail-closed 契约作精确修改；需深度审计并同步需求、场景、矩阵、范围、风险和门禁。"
   default_instruction: "先读取本 capsule、CR168 summary、CP1 result 和产品证据；只有字段冲突、人工审计或深度评审时才扩展完整产品文档，并记录 read expansion。"
 
 allowed_reads:
@@ -101,19 +101,21 @@ key_facts:
   active_constraints:
     - "typed C3 component/schema=1/1"
     - "input field families=9/9"
-    - "P0 fail-closed=10/10"
+    - "P0 C3 input fail-closed=10/10；另有 Gate 4 projection guard 场景 1 个"
     - "fixture families=2/2"
     - "10 deterministic runs -> 1 canonical hash"
-    - "C3-to-Gate-4 projection=1；C4 calculator=0；capacity/aggregate PASS=0"
+    - "C3-to-Gate-4 projection=1；C4 unavailable=three refs absent-no-na-reason；field/generic reason escape=projection BLOCKED/REJECTED；canonical Gate4/aggregate changes=0；C4 calculator=0；capacity/aggregate PASS=0"
+    - "CR168 scenarios=17（P0=16，P1=1）；matrix=17/17"
     - "Stage2=true；Stage3=false；真实 TCA/calibration/data/runtime=false"
     - "CP2 前不得进入 HLD/Story/LLD/implementation/verification"
   downstream_tasks:
     - "仅在 CP2 approved 后，生成 meta-se capsule-first handoff 并进入 CP3 solution-design。"
-    - "CP3 需冻结 9-family schema、static approximation method、C3/C4 header 和 Gate 4 projection contract。"
+    - "CP3 需冻结 9-family schema、static approximation method、C3/C4 header、availability→Gate 4 flat-payload mapping 和 projection reason-key denylist。"
+    - "CP3 需处理 capability-registry-missing、三个 required_evidence kind、impact-specific n/a-with-reason 与 component/envelope hash domain；不得新建平行 registry 或模糊跨策略 full-hash QAC。"
   traceability:
     requirements: ["REQ-CR168-001..009"]
     use_cases: ["UC-58-CR168"]
-    scenarios: ["SC-CR168-P01..E01（16项）"]
+    scenarios: ["SC-CR168-P01..E01（17项；含新增 SC-CR168-B02）"]
     stories: []
     features: ["strategy-evidence-envelope", "cross-strategy-reliability-gates"]
 
@@ -136,8 +138,9 @@ risks_and_decisions:
   risk_acceptance_items:
     - "全局 legacy CR tracking/ledger 元数据债务非 CR168 引入；当前 CR-specific checks 无错误。"
     - "meta-pm 由 Host inline 执行，没有独立子 Agent 视角；该限制由用户显式批准并已入 ledger。"
+    - "R-CR168-VERIFIER-INDEPENDENCE 尚未被接受；仅登记为非阻断风险，若 CP7 仍 inline，必须在 CP8 Decision Brief 暴露。"
   open_questions:
-    - "五个 DQ 均由 CP2 决定；其余评审事实偏差已 RESOLVED。"
+    - "五个 DQ 均由 CP2 决定；DQ-GATE4 推荐方案已按用户 changes_requested 收紧但仍未 approved。"
   n_a_or_waived_items:
     - "event-specific C3 producer=N/A/deferred"
     - "CP2 前 BLUEPRINT/DOMAIN-MAP/DEPENDENCY-MAP/HLD/FEATURE-DESIGN-MATRIX unchanged"
@@ -161,6 +164,10 @@ read_expansion_log:
     actor: "host-orchestrator-inline-meta-pm"
     expanded_to: "8 product docs + CURRENT-REQUIREMENT-BASELINE"
     reason: "CR168 product baseline incremental refresh with revision preservation"
+  - at: "2026-07-13T22:39:29+08:00"
+    actor: "host-orchestrator-inline-meta-pm"
+    expanded_to: "CR168 formal CR + 8 product docs + CURRENT-REQUIREMENT-BASELINE"
+    reason: "用户在 CP2 精确修改 Gate 4 projection-side fail-closed；需同步需求、场景、矩阵、风险、CP3 obligations 与 Decision Brief"
 
 validation:
   generated_from_sources:
@@ -172,5 +179,6 @@ validation:
   missing_sources: []
   consistency_status: "pass"
   notes:
-    - "YAML/JSON parse PASS；16/16 scenario matrix coverage；9/9 requirement refs；wrong quality refs=0。"
+    - "YAML/JSON parse PASS；17/17 scenario matrix coverage；9/9 requirement refs；wrong quality refs=0。"
+    - "SC-CR168-B02 为 projection guard，不改变 10/10 C3 input fail-closed 类别或 15 项 QAC。"
     - "No HLD/Story/LLD/code/test implementation was created."

@@ -9,10 +9,10 @@
 ## Checklist
 
 - 9 项 requirements、4 项量化 NFR、15 项 QAC：`PASS`。
-- 16 个 scenarios（P0=15、P1=1）与 matrix 16/16：`PASS`。
+- 17 个 scenarios（P0=16、P1=1）与 matrix 17/17：`PASS`；10/10 C3 输入 fail-closed 类别不变，新增 1 个 Gate 4 projection reason-escape guard 场景。
 - In Scope / Out of Scope / Deferred / claim ceiling：`PASS`。
-- Gate 4 C3+C4 联合事实、C3/C4/FU-007/CR155 边界：`PASS`。
-- 5 项开放问题全部进入 Decision Brief：`PASS`。
+- Gate 4 C3+C4 联合事实、C4 absent-no-na-reason 投影、reason-escape rejection、C3/C4/FU-007/CR155 边界：`PASS`。
+- `DQ-CP2-CR168-GATE4` 修改已应用，5 项开放问题重新进入 Decision Brief：`PASS`。
 - Story/LLD/HLD/implementation/verification 提前产物：`0`。
 
 ## Exit Criteria
@@ -28,4 +28,4 @@
 
 ## 结论
 
-自动预检 `PASS`，正式打开 CP2 人工门禁；该结论不等于人工批准。
+修订后自动预检 `PASS`，重新打开 CP2 人工门禁；该结论不等于人工批准。

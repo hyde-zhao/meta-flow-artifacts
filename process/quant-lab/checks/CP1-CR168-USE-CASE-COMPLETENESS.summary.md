@@ -13,9 +13,9 @@
 | Use Case | PASS | 新增 1 个 UC-58-CR168；用户、触发、9 类输入、处理、输出、旅程、排除和 claim ceiling 完整。 |
 | 用户可见 SGQ | PASS | 1 条 confirmed；5 条方法/边界决策转入 CP2。 |
 | Requirements / QAC | PASS | REQ 9 项；QAC 15 项；无“尽量/尽可能/不少于”类模糊目标。 |
-| Scenarios | PASS | 16 项：P0=15、P1=1；10/10 fail-closed 类别独立覆盖。 |
-| Test Matrix | PASS | 16/16 映射；missing scenario=0；missing requirement ref=0。 |
-| Scope boundary | PASS | Gate 4=C3+C4；C4/FU-007/event/真实 TCA/runtime/Stage3 保持范围外。 |
+| Scenarios | PASS | 17 项：P0=16、P1=1；10/10 C3 输入 fail-closed 类别独立覆盖，另有 1 个 projection reason-escape guard 场景。 |
+| Test Matrix | PASS | 17/17 映射；missing scenario=0；missing requirement ref=0。 |
+| Scope boundary | PASS | Gate 4=C3+C4；C4 unavailable 映射为 absent-no-na-reason，reason 逃逸由 projection 阻断；canonical Gate 4、C4/FU-007/event/真实 TCA/runtime/Stage3 保持范围外。 |
 | Planning boundary | PASS | 仅 5 个产品 outcome 候选；正式 CR168 Story/LLD=0；设计文档修改=0。 |
 | Baseline traceability | PASS | 8 个产品文档 + 当前需求基线增量更新；旧基线与修订记录保留。 |
 | Authorization | PASS | 真实数据/TCA/calibration/runtime/trading/remote write 授权数=0。 |

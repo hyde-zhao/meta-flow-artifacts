@@ -3,7 +3,7 @@ baseline_id: CURRENT-REQUIREMENT-BASELINE
 project: quant-lab
 status: active
 created_at: "2026-06-19T20:50:00+08:00"
-updated_at: "2026-07-13T17:20:00+08:00"
+updated_at: "2026-07-13T22:45:00+08:00"
 created_by: host-orchestrator
 source_crs:
   - CR-046
@@ -23,6 +23,10 @@ revision_record:
     date: "2026-07-13"
     author: host-orchestrator-inline
     summary: "增量追加 CR166 neutral strategy evidence envelope 与 CR168 fixture/static C3 economic-cost scope；不重写既有 QMT/runner 基线。"
+  - version: v0.3
+    date: "2026-07-13"
+    author: host-orchestrator-inline
+    summary: "收紧 CR168 Gate 4 projection-side fail-closed：C4 unavailable 只映射为 absent-no-na-reason，reason 逃逸由 projection 阻断；记录 CP3 前向设计义务与 verifier-independence 风险。"
 purpose: >
   记录当前可执行需求基线，避免后续 CR 从历史台账中误读已重解释的
   QMT / MiniQMT / runner / strategy package 目标。
@@ -109,6 +113,19 @@ current_baseline:
         - adv_participation_ref
         - capacity_dollars_ref
         - liquidity_sizing_refs
+      c4_projection_representation: absent_without_na_reason
+      forbidden_projection_reason_keys:
+        - adv_participation_ref_na_reason
+        - adv_participation_ref_n_a_reason
+        - capacity_dollars_ref_na_reason
+        - capacity_dollars_ref_n_a_reason
+        - liquidity_sizing_refs_na_reason
+        - liquidity_sizing_refs_n_a_reason
+        - na_reason
+        - n_a_reason
+      reason_escape_behavior: BLOCKED_OR_REJECTED_BY_PROJECTION
+      canonical_gate4_validator_changes: 0
+      aggregate_orchestration_changes: 0
       capacity_or_aggregate_pass_from_c3_only: 0
     fail_closed_contract:
       p0_classes: 10
@@ -131,6 +148,18 @@ current_baseline:
       cr155_lifecycle_status: closed
       cr155_admission_package_status: BLOCKED
       cr155_paper_candidate: false
+    cp3_design_obligations:
+      - availability_to_gate4_flat_payload_mapping
+      - projection_reason_key_denylist_and_fail_closed_decision_table
+      - capability_registry_missing_n_a_or_separate_governance_route
+      - required_evidence_kind_taxonomy_mapping
+      - impact_model_family_n_a_with_reason_specific_contract
+      - component_semantic_hash_vs_envelope_canonical_hash_domains
+    verification_independence_risk:
+      risk_id: R-CR168-VERIFIER-INDEPENDENCE
+      status: open_nonblocking
+      follow_up_ref: FU-CR161-006
+      cp8_disclosure_required: true
     evidence_paths:
       - process/changes/CR-168.md
       - process/checks/CR168-REMOTE-BASELINE-CONFLICT-PRECHECK.json
