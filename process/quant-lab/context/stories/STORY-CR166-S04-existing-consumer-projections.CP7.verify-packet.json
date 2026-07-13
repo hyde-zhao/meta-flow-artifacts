@@ -1,0 +1,199 @@
+{
+  "acceptance": ["consumers=3/3", "identity difference=0", "status improvement=0", "CR155 promotion=0", "runtime flags unchanged=4/4"],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 1673,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 193,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_discovery_entry",
+      "required": true
+    },
+    {
+      "estimated_tokens": 533,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR166-S04-existing-consumer-projections.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1192,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-166.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 606,
+      "mode": "full",
+      "path": "docs/design/MODULE-BOUNDARIES.yaml",
+      "reason": "module_boundaries",
+      "required": false
+    },
+    {
+      "estimated_tokens": 211,
+      "mode": "full",
+      "path": "docs/design/PACKAGE-IDENTITY.yaml",
+      "reason": "package_identity",
+      "required": false
+    }
+  ],
+  "allowed_write_paths": ["docs/quality/VERIFICATION-REPORT-CR166.md", "docs/quality/TEST-REPORT-CR166.md", "docs/quality/REVIEW-CR166.md", "docs/quality/FIXES-CR166.md", "process/returns/CR166-S04-existing-consumer-projections.CP7.return.json", "process/evidence/CR166-S04-existing-consumer-projections.CP7.index.json"],
+  "authz_policy_refs": ["NO_RUNTIME", "NO_TRADING", "NO_BROKER_WRITE", "NO_GIT_REMOTE_WRITE"],
+  "budget": {
+    "estimated_tokens": 4764,
+    "estimator": "chars_div_4",
+    "max_tokens": 18000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": ["CR151 projection", "CR154 Gate2 projection", "admission package attach"],
+    "summary": "Verify one identity, existing policy ownership and worst-state merge across three consumers."
+  },
+  "cr_id": "CR-166",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "dependency_inputs": ["S04 CP6 return and evidence index", "S03 self-validated component"],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/archive/**", "reason": "historical archive is deny-default except explicit audit"},
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary / legacy fallback，不作为 agent 默认机器入口"
+    },
+    {
+      "path_or_pattern": "process/DEVELOPMENT-PLAN.yaml",
+      "reason": "计划长文由 Story packet / context 摘要承载"
+    },
+    {
+      "path_or_pattern": "process/STORY-STATUS.md",
+      "reason": "legacy status 汇总，不作为当前 Story 真相源"
+    },
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "默认读取 CR summary / CR ledger，完整 CR 只用于审计或冲突恢复"
+    },
+    {
+      "path_or_pattern": "process/stories/*-LLD.md",
+      "reason": "默认读取 Story packet / design summary，完整 LLD 按需展开"
+    },
+    {
+      "path_or_pattern": "process/stories/*-IMPLEMENTATION.md",
+      "reason": "实现长证据默认通过 return/evidence index 消费"
+    }
+  ],
+  "expected_return_packet": "process/returns/CR166-S04-existing-consumer-projections.CP7.return.json",
+  "feature_contract_summary": "Verify three thin existing-consumer projections without adding a gate or authorization.",
+  "feature_design_refs": [
+    "docs/features/walk-forward-oos-projections/DESIGN.md",
+    "docs/features/walk-forward-oos-projections/TEST-PLAN.md",
+    "docs/features/walk-forward-oos-projections/TASKS.md",
+    "docs/features/walk-forward-oos-producer/DESIGN.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": ["FEAT-166-04", "FEAT-166-03"],
+  "forbidden_write_paths": ["consumer policy changes during verification", "runtime authorization changes", "raw fold recomputation"],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "implementation_return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR166-S04-existing-consumer-projections.CP6.return.json",
+  "lld_policy": "{required_level: \"full-lld\", trigger_reasons: [\"cross-module-integration\", \"backward-compatibility\", \"worse-state-merge\", \"claim-ceiling\"], rationale: \"Three existing policy owners must consume one identity without a parallel gate.\", evidence_path: \"process/stories/STORY-CR166-S04-existing-consumer-projections-LLD.md\"}",
+  "must_read": [
+    {
+      "estimated_tokens": 1673,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 193,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true
+    },
+    {
+      "estimated_tokens": 533,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR166-S04-existing-consumer-projections.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    }
+  ],
+  "objective": {
+    "non_goals": [],
+    "summary": "Existing-consumer projections and CR155 regression"
+  },
+  "packet_type": "story_verify_packet",
+  "parent_context_ref": "process/context/stories/CR166-S04-existing-consumer-projections.base.context.json",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "quant-lab",
+  "read_if_needed": [],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "",
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR166-S04-existing-consumer-projections",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR166-S04-existing-consumer-projections.md",
+  "verification_plan": ["run projection plus adjacent consumer tests", "verify shared identity", "verify CR155 and four auth flags"]
+}

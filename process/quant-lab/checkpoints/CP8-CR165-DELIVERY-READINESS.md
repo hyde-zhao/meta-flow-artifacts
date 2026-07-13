@@ -108,7 +108,7 @@ auto_check_result: "process/checks/CP8-CR165-DELIVERY-READINESS.result.json"
 | 交付物 | 路径 | 状态 | 说明 |
 |---|---|---|---|
 | Release Context | `process/release/RELEASE-CONTEXT-CR165.yaml` | PASS | minimal profile |
-| Verification | `process/docs/quality/VERIFICATION-REPORT-CR165.md` | PASS | CP7 PASS |
+| Verification | `docs/quality/VERIFICATION-REPORT-CR165.md` | PASS | CP7 PASS |
 
 ## 人工审查结果
 

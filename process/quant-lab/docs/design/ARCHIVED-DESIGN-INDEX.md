@@ -14,6 +14,7 @@ archive_root: "process/archive/design-cr-docs"
 |---|---|---|---|
 | 1.0 | 2026-06-23 | host-orchestrator | CR131 新增默认 design root 的归档入口，指向 CR 命名历史设计文档归档区。 |
 | 1.1 | 2026-07-12 | host-orchestrator-inline | CR165 将 32 份非 canonical 设计快照迁入归档区；当前根目录只保留允许的 authority 文件。 |
+| 1.2 | 2026-07-13 | host-orchestrator | CR166 将 5 份 CP3 专题设计基线迁入归档区；Feature Matrix 继续作为 current authority。 |
 
 ## 入口
 
@@ -38,3 +39,7 @@ CR 命名历史 HLD、ADR、Feature Matrix 和治理设计说明已从默认 des
 | ADR | `ARCHITECTURE-DECISION-*.md`（除 `ARCHITECTURE-DECISION.md`） | 历史决策记录，不再充当默认 authority。 |
 | Blueprint / Domain / Dependency | `BLUEPRINT-*`、`DOMAIN-MAP-*`、`DEPENDENCY-MAP-*` | 变更期领域和依赖快照。 |
 | Roadmap / review | `QUANT-RESEARCH-PRODUCTION-ROADMAP.md`、`STRATEGY-*.md` | 历史评估与路线材料。 |
+
+## CR-166 归档迁移（2026-07-13）
+
+CR166 的 `HLD-WALK-FORWARD-OOS-EVIDENCE.md`、`ARCHITECTURE-DECISION-WALK-FORWARD-OOS-EVIDENCE.md`、`BLUEPRINT-WALK-FORWARD-OOS-EVIDENCE.md`、`DOMAIN-MAP-WALK-FORWARD-OOS-EVIDENCE.md` 与 `DEPENDENCY-MAP-WALK-FORWARD-OOS-EVIDENCE.md` 已迁入 `process/archive/design-cr-docs/`。其批准决策继续作为 CR166 Story 的设计基线，但不替代 current design root 的默认 authority。

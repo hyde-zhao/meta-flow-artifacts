@@ -1,0 +1,76 @@
+{
+  "allowed_reads": [
+    {"estimated_tokens": 1673, "mode": "full", "path": "process/state/STATE.current.json", "reason": "lightweight_runtime_state", "required": true},
+    {"estimated_tokens": 193, "mode": "full", "path": "process/current/CURRENT.json", "reason": "current_discovery_entry", "required": true},
+    {"estimated_tokens": 1192, "mode": "full", "path": "process/changes/summaries/CR-166.summary.json", "reason": "current_cr_summary", "required": true},
+    {"estimated_tokens": 356, "mode": "full", "path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true},
+    {"estimated_tokens": 1200, "mode": "full", "path": "process/release/RELEASE-CONTEXT-CR166.yaml", "reason": "cp8_release_context", "required": true},
+    {"estimated_tokens": 800, "mode": "full", "path": "process/checks/CP7-CR166-AGGREGATE.result.json", "reason": "cp7_aggregate", "required": true},
+    {"estimated_tokens": 1200, "mode": "full", "path": "process/checks/CP8-CR166-DELIVERY-READINESS.result.json", "reason": "cp8_auto_result", "required": true},
+    {"estimated_tokens": 5000, "mode": "full", "path": "process/checkpoints/CP8-CR166-DELIVERY-READINESS.md", "reason": "cp8_decision_brief", "required": true},
+    {"estimated_tokens": 1000, "mode": "full", "path": "process/checks/CP8-CR166-HUMAN-GATE-LAUNCH-MESSAGE.md", "reason": "cp8_launch_message", "required": true}
+  ],
+  "budget": {"estimated_tokens": 12614, "estimator": "declared_cp8_minimal", "max_tokens": 16000},
+  "cr_id": "CR-166",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-166.summary.json",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md",
+    "process/archive/**"
+  ],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_design_matrix": "docs/design/FEATURE-DESIGN-MATRIX.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human summary / legacy fallback，不作为默认机器入口"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "计划长文由 context summary 承载"},
+    {"path_or_pattern": "process/STORY-STATUS.md", "reason": "legacy status 汇总不作为真相源"},
+    {"path_or_pattern": "process/changes/*.md", "reason": "默认读取 CR summary；完整 CR 仅用于审计或冲突恢复"},
+    {"path_or_pattern": "process/stories/*-LLD.md", "reason": "CP8 默认消费 CP7 aggregate 和质量摘要"},
+    {"path_or_pattern": "process/stories/*-IMPLEMENTATION.md", "reason": "实现证据默认通过 CP7/evidence index 消费"},
+    {"path_or_pattern": "process/archive/**", "reason": "历史归档默认拒绝读取"}
+  ],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "must_read": [
+    {"estimated_tokens": 1673, "mode": "full", "path": "process/state/STATE.current.json", "reason": "machine_state", "required": true},
+    {"estimated_tokens": 193, "mode": "full", "path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true},
+    {"estimated_tokens": 356, "mode": "full", "path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true},
+    {"estimated_tokens": 1192, "mode": "full", "path": "process/changes/summaries/CR-166.summary.json", "reason": "current_cr_summary", "required": true},
+    {"estimated_tokens": 1200, "mode": "full", "path": "process/release/RELEASE-CONTEXT-CR166.yaml", "reason": "cp8_release_context", "required": true},
+    {"estimated_tokens": 800, "mode": "full", "path": "process/checks/CP7-CR166-AGGREGATE.result.json", "reason": "cp7_aggregate", "required": true},
+    {"estimated_tokens": 1200, "mode": "full", "path": "process/checks/CP8-CR166-DELIVERY-READINESS.result.json", "reason": "cp8_auto_result", "required": true},
+    {"estimated_tokens": 5000, "mode": "full", "path": "process/checkpoints/CP8-CR166-DELIVERY-READINESS.md", "reason": "cp8_decision_brief", "required": true}
+  ],
+  "must_verify": [],
+  "policy_refs": {
+    "artifact_budgets": "process/policies/ARTIFACT-BUDGETS.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "profile": "minimal",
+  "project_id": "quant-lab",
+  "read_if_needed": [
+    {"estimated_tokens": 2800, "mode": "full", "path": "docs/quality/VERIFICATION-REPORT-CR166.md", "reason": "human_audit_of_verification", "required": false},
+    {"estimated_tokens": 1800, "mode": "full", "path": "docs/quality/TEST-REPORT-CR166.md", "reason": "human_audit_of_test_counts", "required": false},
+    {"estimated_tokens": 1900, "mode": "full", "path": "docs/quality/REVIEW-CR166.md", "reason": "human_audit_of_findings", "required": false},
+    {"estimated_tokens": 1800, "mode": "full", "path": "process/docs/release/RELEASE-NOTES-CR166.md", "reason": "human_audit_of_release_scope", "required": false}
+  ],
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "schema_version": 1,
+  "stage": "CP8",
+  "state_ref": "process/state/STATE.current.json",
+  "story_id": null,
+  "story_summary_ref": null
+}

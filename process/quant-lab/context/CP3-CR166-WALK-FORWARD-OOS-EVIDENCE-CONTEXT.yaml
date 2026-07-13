@@ -1,0 +1,83 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR166-WALK-FORWARD-OOS-EVIDENCE-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "CR-166"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready"
+created_at: "2026-07-13T10:50:00+08:00"
+created_by: "host-orchestrator-inline"
+source_cr: "CR-166"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 24
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  default_instruction: "先读本 capsule、CR166 summary 和 CP2 审批结果；使用 rg 定位 source contract，历史设计只按 READ-EXPANSION-LEDGER 已授权路径展开。"
+
+must_read:
+  - "process/checkpoints/CP2-CR166-WALK-FORWARD-OOS-EVIDENCE-SCOPE.md"
+  - "process/checks/CP0-CR166.route-plan.json"
+  - "process/changes/summaries/CR-166.summary.json"
+  - "docs/product/REQUIREMENTS.md#cr166-walk-forward--oos-producer-requirements"
+  - "docs/product/USE-CASES.md#uc-58-cr166-walk-forward--oos-evidence-producer-foundation"
+read_if_needed:
+  - "engine/strategy_admission_statistical_gate.py"
+  - "engine/daily_multifactor_baseline_artifact.py"
+  - "engine/research_production_contracts.py"
+  - "engine/cross_strategy_reliability_gates.py"
+  - "engine/statistical_evidence.py"
+  - "engine/strategy_admission_package.py"
+  - "process/archive/design-cr-docs/HLD-MULTIPLE-TESTING-PBO-DSR-EVIDENCE.md"
+  - "process/archive/design-cr-docs/HLD-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md"
+  - "process/archive/design-cr-docs/HLD-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md"
+  - "process/archive/design-cr-docs/HLD-DAILY-MULTIFACTOR-BASELINE-STRATEGY-ARTIFACT.md"
+do_not_read_by_default:
+  - "process/STATE.md"
+  - "process/archive/** except authorized CR151/CR154/CR155/CR164 design refs above"
+  - "process/stories/*"
+  - "process/DEVELOPMENT-PLAN.yaml"
+  - "complete conversation transcript"
+
+approved_product_baseline:
+  scope: "fixture/static-only C2 producer foundation; Stage 2 to Stage 3 bridge enhancement"
+  typed_input_field_families: 7
+  p0_fail_closed_classes: 8
+  p0_fixture_families: ["daily_multifactor", "ml_purged_embargo"]
+  p1_applicability: ["event_strategy"]
+  existing_consumers: 3
+  future_calculators_in_scope:
+    c3_economic_cost: 0
+    c4_capacity_liquidity: 0
+  determinism: "same normalized fixture 10 runs -> 1 canonical hash"
+  stage_claims:
+    stage2_complete: true
+    stage3_started: false
+    runtime_authorized: false
+    real_evidence_available: false
+
+design_obligations:
+  - "冻结 stable envelope header、静态 versioned component registry、canonical serialization 与 unknown-component decision table。"
+  - "冻结半开时间区间、fold 内顺序、显式 purge/embargo 下限、metric denominator 与 lineage binding。"
+  - "定义 daily manifest 与 ML purged-embargo policy 到 common input 的 adapter contract；不得推断缺失事实。"
+  - "明确 producer 到 CR151、CR154、StrategyAdmissionPackage 三个既有 consumers 的方向、时机、输入、输出、降级和同步修改面。"
+  - "完成 event applicability 决策；当前推荐 event-specific producer=N/A，等待独立事件窗口语义设计。"
+  - "保持 CR155 blocked、C3/C4 calculators=0、external dereference=0、forbidden operations=0。"
+
+authorization:
+  inline_fallback_approved: true
+  subagent_launch_allowed: false
+  design_only: true
+  not_authorized:
+    - "formal Story decomposition before CP3 approval"
+    - "source or test implementation before CP5 approval"
+    - "real fold/OOS ingestion or historical recomputation"
+    - "lake, NAS, provider, credentials, external framework or runtime access"
+    - "broker, simulation, paper, live, trading or order operation"
+    - "catalog, store, registry, deploy, publish or Git remote write"
+
+exit_criteria:
+  - "Blueprint、Domain Map、Dependency Map、HLD 与 ADR 内部一致。"
+  - "9/9 requirements、11/11 CR166 scenarios、12/12 QAC 有架构 owner 或验证入口。"
+  - "CP3 自动结果 PASS，blocker=0，人工门禁已打开。"

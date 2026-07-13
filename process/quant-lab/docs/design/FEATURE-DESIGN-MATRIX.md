@@ -1,14 +1,16 @@
 ---
 status: "ready-for-cp5-review"
-version: "1.21"
+version: "1.22"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld:
   - "docs/design/HLD.md"
   - "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
+  - "process/archive/design-cr-docs/HLD-WALK-FORWARD-OOS-EVIDENCE.md"
 source_adr:
   - "docs/design/ARCHITECTURE-DECISION.md"
   - "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
-change: "CR-163"
+  - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-WALK-FORWARD-OOS-EVIDENCE.md"
+change: "CR-166"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 confirmed_by: ""
 confirmed_at: ""
@@ -42,6 +44,7 @@ confirmed_at: ""
 | 1.19 | 2026-07-05 | host-orchestrator | CR157 CP3 approved 后增补 Stage 2 Multifactor Research Framework Upgrade CP4：新增 FEAT-17 mature admission package、FEAT-18 research evidence traceability、FEAT-19 Stage 2/3 handoff guardrails 三件套，5 个 Story、refs-only evidence、fail-closed handoff、no-runtime guard 和 event/ML adapter deferred 边界。 |
 | 1.20 | 2026-07-05 | host-orchestrator | CR158 CP3 approved 后增补 Event + ML Strategy Adapter Unified Implementation CP4：复用 FEAT-03 / FEAT-07 / FEAT-08，新增 6 个 Story、thin shared core、typed event/ML extension、refs-only evidence、no-runtime counters 和 release wording boundary。 |
 | 1.21 | 2026-07-11 | meta-se-critical | CR163 CP3 approved 后增补 FEAT-20 experiment-family lineage core、FEAT-21 producer adapters、FEAT-22 admission projection 三套 required Feature 设计；FEAT-23 standalone validation waived，由三套 TEST-PLAN 汇总覆盖；五 Story 全部 full-lld。 |
+| 1.22 | 2026-07-13 | host-orchestrator inline meta-se | CR166 CP3 approved 后增补 FEAT-166-01..05 五套 required Feature 设计；五 Story 全部 full-lld、五个串行安全 Wave，保持 fixture/static 与 no-runtime 边界。 |
 
 ## 适用性判定规则
 
@@ -635,3 +638,35 @@ confirmed_at: ""
 | Story refs / lld_policy | PASS | 5/5 full-lld |
 | verification waiver | PASS | 无新生产接口；出现 validation service 时重访 |
 | 授权边界 | PASS | design-only、no-subagent、forbidden operations=0 |
+
+## CR166 CP4 增量：Walk-forward / OOS Evidence Producer Foundation
+
+> 来源：CR166 CP3 已批准 HLD/ADR。当前只允许 Story、Feature 与 LLD 设计；不启动子 Agent，不实现源代码/测试，不执行真实 fold/OOS、数据、runtime、外部操作或 Git remote write。
+
+| Feature | 名称 | 判定 | 触发原因 | 三件套 | Stories | lld_policy | 重访条件 |
+|---|---|---|---|---|---|---|---|
+| FEAT-166-01 | Strategy evidence envelope | required | 公共 canonical/envelope、C1 API/hash compatibility、C3/C4 extension catalog | `docs/features/strategy-evidence-envelope/{DESIGN,TEST-PLAN,TASKS}.md` | S01,S03,S05 | full-lld | schema/domain/hash/catalog 或 C1 public compatibility 变化 |
+| FEAT-166-02 | Walk-forward/OOS validation | required | 时间与泄漏边界、7 字段族、daily/ML cross-contract、event N/A、authorization | `docs/features/walk-forward-oos-validation/{DESIGN,TEST-PLAN,TASKS}.md` | S02,S03,S05 | full-lld | calendar/session/event window、adapter input 或 leakage policy 变化 |
+| FEAT-166-03 | Deterministic C2 producer | required | fold computation、declared denominator、hash/provenance/self-validation | `docs/features/walk-forward-oos-producer/{DESIGN,TEST-PLAN,TASKS}.md` | S03,S05 | full-lld | metric/outcome/aggregation/determinism contract 变化 |
+| FEAT-166-04 | Existing-consumer projections | required | 三模块集成、backward compatibility、worse-state merge 与 CR155 claim ceiling | `docs/features/walk-forward-oos-projections/{DESIGN,TEST-PLAN,TASKS}.md` | S04,S05 | full-lld | consumer schema、mandatory policy、status lattice 或 package flags 变化 |
+| FEAT-166-05 | Fixture/static verification | required | 跨四 Feature 的 12 QAC、安全/权限、CR155/CR165 回归归因属于 claim-sensitive 设计 | `docs/features/walk-forward-oos-verification/{DESIGN,TEST-PLAN,TASKS}.md` | S05 | full-lld | 新验证 runtime/service、真实数据 lane 或共享外部验证 API 出现 |
+
+### CR166 Story 下游消费表
+
+| Story | Owner Feature(s) | feature_design_refs | lld_policy | CP5 evidence |
+|---|---|---|---|---|
+| CR166-S01-evidence-envelope-contracts | FEAT-166-01 | FEAT-166-01 三件套 | full-lld | Story LLD |
+| CR166-S02-fold-validator-adapters | FEAT-166-02/01 | FEAT-166-02 + FEAT-166-01 DESIGN/TEST-PLAN | full-lld | Story LLD |
+| CR166-S03-deterministic-c2-producer | FEAT-166-03/02/01 | FEAT-166-03 + FEAT-166-02 + FEAT-166-01 DESIGN/TEST-PLAN | full-lld | Story LLD |
+| CR166-S04-existing-consumer-projections | FEAT-166-04/03 | FEAT-166-04 + FEAT-166-03 DESIGN/TEST-PLAN | full-lld | Story LLD |
+| CR166-S05-independent-static-verification | FEAT-166-05/01..04 | 五套 DESIGN/TEST-PLAN/TASKS | full-lld | Story LLD |
+
+### CR166 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| Blueprint Feature 判定覆盖 | PASS | FEAT-166-01..05 = 5/5 required |
+| required Feature 三件套 | PASS | 5/5 × 3 文件完整 |
+| Story refs / lld_policy | PASS | 5/5 full-lld；无 waived Story |
+| 相邻边界 | PASS | C1 compatibility、C3/C4 calculator=0、event N/A、3 existing consumers |
+| 授权边界 | PASS | design-only、no-subagent、external dereference/runtime/data/write=0 |

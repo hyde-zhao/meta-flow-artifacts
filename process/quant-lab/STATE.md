@@ -7,7 +7,7 @@ Blocked: false
 Active CR: none
 Active Story: none
 Pending gate: none
-Next action: CR-167 status synced as closed; choose next CR.
+Next action: CR-166 delivered; no remaining route.
 
 Refs:
 - state: process/state/STATE.current.json
@@ -27,12 +27,14 @@ Policy refs:
 - NO_RUNTIME
 - NO_PRODUCTION_WRITE
 - NO_TRADING
+- NO_REAL_LAKE_READ_OR_WRITE
 - NO_REAL_LAKE_WRITE
 - NO_NAS_SYNC_OR_WRITE
 - NO_PROVIDER_FETCH
 - NO_BROKER_WRITE
 - NO_EXTERNAL_FRAMEWORK_RUN
 - NO_CATALOG_POINTER_WRITE
+- NO_GIT_REMOTE_WRITE
 
 Open risks:
 - {'id': 'RISK-CR139-W2-REAL-LAKE-NOT-YET-ENUMERATED', 'severity': 'medium', 'status': 'controlled_by_dry_run_plan'}
@@ -49,6 +51,6 @@ Open risks:
 - {'id': 'R-CR158-EVIDENCE-SEMANTIC-OVERFIT', 'severity': 'medium', 'status': 'open'}
 - {'id': 'R-CR158-RUNTIME-OVERCLAIM', 'severity': 'high', 'status': 'open'}
 
-Updated at: 2026-07-13T03:24:13+00:00
+Updated at: 2026-07-13T07:08:17+00:00
 
 <!-- generated-by: meta-flow state render -->

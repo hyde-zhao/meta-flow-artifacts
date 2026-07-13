@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR166-STORY-DAG-PARALLEL-SAFETY",
+  "cr_id": "CR-166",
+  "checked_at": "2026-07-13T12:45:00+08:00",
+  "context_ref": "process/context/CP3-CR166-WALK-FORWARD-OOS-EVIDENCE-CONTEXT.yaml",
+  "dispatch_refs": [
+    "AD-CR166-CP4-META-SE-INLINE-COMPLETED-20260713T124000+0800"
+  ],
+  "route_plan_ref": "process/checks/CP0-CR166.route-plan.json",
+  "items": [
+    {
+      "id": "CP4-CR166-01",
+      "category": "entry",
+      "name": "CP3 architecture decisions are approved",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checkpoints/CP3-CR166-WALK-FORWARD-OOS-EVIDENCE-HLD-REVIEW.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "DQ-CP3-CR166-001..004 are approved; CP4 design-only work is authorized."
+    },
+    {
+      "id": "CP4-CR166-02",
+      "category": "feature-design",
+      "name": "All five Blueprint Features have required design triplets",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/design/FEATURE-DESIGN-MATRIX.md", "docs/features/strategy-evidence-envelope/DESIGN.md", "docs/features/walk-forward-oos-validation/DESIGN.md", "docs/features/walk-forward-oos-producer/DESIGN.md", "docs/features/walk-forward-oos-projections/DESIGN.md", "docs/features/walk-forward-oos-verification/DESIGN.md"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "FEAT-166-01..05 = 5/5 required; DESIGN/TEST-PLAN/TASKS = 15/15; no Feature waiver."
+    },
+    {
+      "id": "CP4-CR166-03",
+      "category": "story",
+      "name": "Exactly five formal Story cards have stable IDs and full-lld policy",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml#cr166_story_planning"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Story cards=5/5; stable slugs, acceptance criteria, Feature refs, evidence paths and ownership are present."
+    },
+    {
+      "id": "CP4-CR166-04",
+      "category": "dag",
+      "name": "CR166 scoped Story dependency graph is acyclic and references are valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml#cr166_story_planning.dependency_graph"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "nodes=5; cycles=0; invalid refs=0; isolated nodes=0; topological order S01→S02→S03→S04→S05."
+    },
+    {
+      "id": "CP4-CR166-05",
+      "category": "parallel-safety",
+      "name": "Five serial safety Waves have no internal dependency or file conflict",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml#cr166_story_planning.waves"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Waves=5; one Story per Wave; parallel internal dependencies=0; parallel file conflicts=0."
+    },
+    {
+      "id": "CP4-CR166-06",
+      "category": "file-ownership",
+      "name": "Production, test and read-only file ownership is explicit",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/stories/STORY-CR166-S01-evidence-envelope-contracts.md", "process/stories/STORY-CR166-S02-fold-validator-adapters.md", "process/stories/STORY-CR166-S03-deterministic-c2-producer.md", "process/stories/STORY-CR166-S04-existing-consumer-projections.md", "process/stories/STORY-CR166-S05-independent-static-verification.md"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Shared C2 file changes are serial across W1-W3; S05 is production-read-only; S04 owns all three consumer edits in W4."
+    },
+    {
+      "id": "CP4-CR166-07",
+      "category": "traceability",
+      "name": "Requirements scenarios QAC and HLD outcomes map to formal Stories",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/product/REQUIREMENTS.md#cr166-walk-forward--oos-producer-requirements", "docs/product/TEST-MATRIX.md", "docs/design/HLD-WALK-FORWARD-OOS-EVIDENCE.md#14-五个-cp4-输入与分阶段落地建议", "docs/design/FEATURE-DESIGN-MATRIX.md#cr166-cp4-增量walk-forward--oos-evidence-producer-foundation"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Requirements=9/9; scenarios=11/11; QAC=12/12; formal Stories=5/5; uncovered P0=0."
+    },
+    {
+      "id": "CP4-CR166-08",
+      "category": "design-evidence",
+      "name": "All five Stories have full LLD evidence ready for CP5 review",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR166-S01-evidence-envelope-contracts-LLD.md", "process/stories/STORY-CR166-S02-fold-validator-adapters-LLD.md", "process/stories/STORY-CR166-S03-deterministic-c2-producer-LLD.md", "process/stories/STORY-CR166-S04-existing-consumer-projections-LLD.md", "process/stories/STORY-CR166-S05-independent-static-verification-LLD.md"],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "LLD structure checks=5/5 OK; open_items=0; confirmed=false pending CP5."
+    },
+    {
+      "id": "CP4-CR166-09",
+      "category": "authorization",
+      "name": "No-subagent design-only and Stage claim ceilings remain explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml#cr166_story_planning.authorization_boundary", "process/state/AGENT-DISPATCH-LEDGER.ndjson"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Subagent/source/test implementation/real fold/OOS/data/runtime/external/write/Stage3 flags are all false."
+    },
+    {
+      "id": "CP4-CR166-10",
+      "category": "legacy",
+      "name": "Pre-existing global plan-check debt is isolated from CR166 scoped validation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml#cr166_story_planning.pre_existing_plan_check_failure"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "Global checker fails on four inherited CR013 legacy statuses plus existing warnings; CR166 scoped YAML/DAG/refs/Waves/files passes and no unrelated object was rewritten."
+    },
+    {
+      "id": "CP4-CR166-11",
+      "category": "scope-boundary",
+      "name": "Adjacent C1 C3 C4 event and consumer boundaries remain non-overlapping",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["docs/design/FEATURE-DESIGN-MATRIX.md#cr166-cp4-增量walk-forward--oos-evidence-producer-foundation", "docs/features/strategy-evidence-envelope/DESIGN.md", "docs/features/walk-forward-oos-validation/DESIGN.md", "docs/features/walk-forward-oos-projections/DESIGN.md"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "C1 golden compatibility required; C3/C4 calculator=0; event producer=0/N/A; existing consumer policy owners=3/3."
+    }
+  ],
+  "entry_criteria": [
+    {"name": "CP3 approved", "status": "PASS", "evidence_ref": "process/checkpoints/CP3-CR166-WALK-FORWARD-OOS-EVIDENCE-HLD-REVIEW.md"},
+    {"name": "CP3 architecture package confirmed", "status": "PASS", "evidence_ref": "docs/design/HLD-WALK-FORWARD-OOS-EVIDENCE.md"},
+    {"name": "Inline fallback authorized", "status": "PASS", "evidence_ref": "process/state/AGENT-DISPATCH-LEDGER.ndjson"}
+  ],
+  "exit_criteria": [
+    {"name": "Feature matrix and triplets complete", "status": "PASS"},
+    {"name": "Story DAG and file safety pass", "status": "PASS"},
+    {"name": "All LLD evidence ready for CP5", "status": "PASS"},
+    {"name": "No implementation authorization consumed", "status": "PASS"}
+  ],
+  "deliverables": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "docs/features/strategy-evidence-envelope/",
+    "docs/features/walk-forward-oos-validation/",
+    "docs/features/walk-forward-oos-producer/",
+    "docs/features/walk-forward-oos-projections/",
+    "docs/features/walk-forward-oos-verification/",
+    "process/stories/STORY-CR166-S01-evidence-envelope-contracts.md",
+    "process/stories/STORY-CR166-S02-fold-validator-adapters.md",
+    "process/stories/STORY-CR166-S03-deterministic-c2-producer.md",
+    "process/stories/STORY-CR166-S04-existing-consumer-projections.md",
+    "process/stories/STORY-CR166-S05-independent-static-verification.md"
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-CR166-CP4-DEVELOPMENT-PLAN-20260713",
+    "RE-CR166-CP5-S01-LLD-20260713",
+    "RE-CR166-CP5-S02-LLD-20260713",
+    "RE-CR166-CP5-S03-LLD-20260713",
+    "RE-CR166-CP5-S04-LLD-20260713",
+    "RE-CR166-CP5-S05-LLD-20260713"
+  ],
+  "decision": "PASS",
+  "manual_gate_status": null,
+  "next_route": "CP5-design-evidence"
+}
