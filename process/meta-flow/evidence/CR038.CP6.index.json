@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-038",
+  "checkpoint": "CP6",
+  "generated_at": "2026-07-04T13:47:47+00:00",
+  "evidence": {
+    "implementation_scope": [
+      "meta_flow/checks/cp_result.py",
+      "meta_flow/context_pack/builder.py",
+      "meta_flow/policies/authz.py",
+      "meta_flow/policies/gate_profiles.py",
+      "meta_flow/workflow/cr_lifecycle.py",
+      "meta_flow/state/current.py",
+      "delivery/skills/lld-designer/templates/BATCH-LLD-TEMPLATE.md",
+      "delivery/skills/lld-designer/SKILL.md",
+      "delivery/skills/checkpoint-manager/SKILL.md",
+      "delivery/skills/state-router/SKILL.md",
+      "delivery/skills/story-manager/SKILL.md",
+      "delivery/agents/meta-dev.md",
+      "delivery/agents/meta-se.md",
+      "delivery/rules/AGENTS.md",
+      "delivery/rules/CLAUDE.md",
+      "scripts/check_delivery_guardrails.py"
+    ],
+    "implemented_capabilities": [
+      "CP0 scope/authz L1/L2/L3 consistency findings",
+      "CP2 commitments.required_evidence schema validation",
+      "CP2-to-CP7 required evidence context injection",
+      "CP7 promise/evidence alignment and missing required evidence blocking",
+      "missing vs executed-negative evidence taxonomy",
+      "capsule content redundancy warning",
+      "standard-lite explicit opt-in profile",
+      "Batch LLD template and CP5/story/status/guardrail contract"
+    ],
+    "tests": [
+      "tests/test_cr_lifecycle.py",
+      "tests/test_cp_result_event_ledger.py",
+      "tests/test_context_pack.py",
+      "tests/test_gate_policy.py"
+    ],
+    "commands": [
+      "uv run pytest",
+      "PYTHONDONTWRITEBYTECODE=1 uv run python scripts/check_delivery_guardrails.py",
+      "PYTHONDONTWRITEBYTECODE=1 uv run meta-flow cr check --project-root .",
+      "PYTHONDONTWRITEBYTECODE=1 uv run meta-flow doctor workspace",
+      "git diff --check"
+    ],
+    "results": {
+      "pytest": "217 passed",
+      "delivery_guardrails": "OK",
+      "cr_check": "OK",
+      "doctor": "OK with known local-directory compatibility warning",
+      "diff_check": "OK"
+    }
+  }
+}

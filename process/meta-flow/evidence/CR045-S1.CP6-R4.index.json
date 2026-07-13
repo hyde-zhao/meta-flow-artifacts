@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "story_id": "CR045-S1",
+  "cr_id": "CR-045",
+  "stage": "CP6",
+  "checkpoint": "CP6-R4",
+  "return_ref": "process/returns/CR045-S1.CP6-R4.return.json",
+  "summary": "CR045-F-004-R3 fixed with decision-compatible failure stop-reason sets; local 11, focused 125 and repository 320 tests pass.",
+  "changed_files": [
+    {"path": "meta_flow/checks/state_transition.py", "change_type": "modified"},
+    {"path": "tests/test_state_transition.py", "change_type": "modified"},
+    {"path": "process/stories/CR045-S1-IMPLEMENTATION-R4.md", "change_type": "added"}
+  ],
+  "commands": [
+    {"command": "uv run pytest tests/test_state_transition.py", "result": "PASS", "summary": "11 passed"},
+    {"command": "uv run pytest tests/test_route_plan.py tests/test_gate_policy.py tests/test_cp_result_event_ledger.py tests/test_state_transition.py tests/test_cr_lifecycle.py tests/test_ask_user.py", "result": "PASS", "summary": "125 passed"},
+    {"command": "uv run pytest", "result": "PASS", "summary": "320 passed"},
+    {"command": "uv run meta-flow check state-transition --route-plan process/checks/CP0-CR045.route-plan.json --result process/checks/CP7-CR045-R3.result.json --project-root .", "result": "PASS"},
+    {"command": "uv run meta-flow cp result-check --result process/checks/CP7-CR045-R3.result.json --project-root . --check-consistency --mode silent", "result": "PASS"},
+    {"command": "git diff --check", "result": "PASS"},
+    {"command": "uv run --python 3.11 python scripts/check_delivery_guardrails.py", "result": "FAIL_UNRELATED_TRANSIENT", "summary": "ignored test caches only"}
+  ],
+  "tests": [
+    {"scope": "local-state-transition", "passed": 11, "failed": 0},
+    {"scope": "focused-cr045", "passed": 125, "failed": 0},
+    {"scope": "repository", "passed": 320, "failed": 0}
+  ],
+  "artifacts": ["process/stories/CR045-S1-IMPLEMENTATION-R4.md"],
+  "verification_claims": [
+    {"id": "CR045-F-004-R3", "status": "FIXED_PENDING_INDEPENDENT_REVERIFY", "evidence_refs": ["tests/test_state_transition.py"]},
+    {"id": "CR045-F-001", "status": "PRESERVED", "evidence_refs": ["tests/test_route_plan.py"]},
+    {"id": "CR045-F-002", "status": "PRESERVED", "evidence_refs": ["tests/test_cp_result_event_ledger.py"]},
+    {"id": "CR045-F-003-R2", "status": "PRESERVED", "evidence_refs": ["tests/test_state_transition.py"]}
+  ],
+  "risks": ["CR045-O-001-R4"],
+  "waivers": [],
+  "dispatch_refs": ["DISPATCH-CR045-CP7-REWORK-R4-DEV"],
+  "design_delta_ref": null
+}

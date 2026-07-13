@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR038",
+  "profile": "standard-code",
+  "story_id": "CR038-CP7",
+  "cr_id": "CR-038",
+  "context_ref": "process/evidence/CR038.CP7.index.json",
+  "dispatch_refs": [
+    "host-orchestrator:local"
+  ],
+  "evidence_ref": "process/evidence/CR038.CP7.index.json",
+  "items": [
+    {
+      "id": "CP7-CR038-01",
+      "category": "verification",
+      "name": "Automated regression suite passed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR038.CP7.index.json#commands"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "uv run pytest passed with 217 tests."
+    },
+    {
+      "id": "CP7-CR038-02",
+      "category": "verification",
+      "name": "CR155 hard gate regression claims are evidenced",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR038.CP7.index.json#verification_claims"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Scope/authz blocking, CP2 required evidence, CP7 missing evidence blocking, executed negative results, capsule behavior and standard-lite opt-in are covered."
+    },
+    {
+      "id": "CP7-CR038-03",
+      "category": "verification",
+      "name": "Delivery guardrail passed",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR038.CP7.index.json#commands"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "scripts/check_delivery_guardrails.py passed after scope expansion documentation."
+    },
+    {
+      "id": "CP7-CR038-04",
+      "category": "risk",
+      "name": "Non-core efficiency items remain deferred",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/evidence/CR038.CP7.index.json#remaining_risks"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "P1-0, P1-4, P1-5 and S3b items are known follow-up candidates and do not block core gate correctness."
+    }
+  ],
+  "promise_evidence_alignment": [
+    {
+      "promise_ref": "CR038-P0-HARD-GATES",
+      "promise": "scope_authz_and_required_evidence_hard_gates",
+      "evidence_status": "EXECUTED_POSITIVE_RESULT",
+      "evidence_refs": [
+        "tests/test_cr_lifecycle.py",
+        "tests/test_cp_result_event_ledger.py"
+      ],
+      "result": "PASS"
+    },
+    {
+      "promise_ref": "CR038-P1-CONTEXT-COMPACT",
+      "promise": "capsule_dedup_standard_lite_batch_lld",
+      "evidence_status": "EXECUTED_POSITIVE_RESULT",
+      "evidence_refs": [
+        "tests/test_context_pack.py",
+        "tests/test_gate_policy.py",
+        "scripts/check_delivery_guardrails.py"
+      ],
+      "result": "PASS"
+    },
+    {
+      "promise_ref": "CR038-FOLLOW-UP-EFFICIENCY",
+      "promise": "release_docs_compression_cp8_fact_diff_governance_warning_efficiency_cleanup",
+      "evidence_status": "NEEDS_REVIEW",
+      "evidence_refs": [
+        "process/evidence/CR038.CP8.index.json#follow_up_candidates"
+      ],
+      "result": "PASS_WITH_RISK"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP8",
+  "checked_at": "2026-07-04T13:47:47+00:00"
+}

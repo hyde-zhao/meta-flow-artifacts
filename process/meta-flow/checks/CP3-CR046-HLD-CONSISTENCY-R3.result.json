@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3",
+  "checkpoint_id": "CP3-CR046-HLD-CONSISTENCY-R3",
+  "cr_id": "CR-046",
+  "profile": "architecture-major",
+  "check_attempt": 3,
+  "context_ref": "process/context/CP3-CR046-DESIGN-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR046.route-plan.json",
+  "evidence_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-HLD.md",
+  "supersedes_result_ref": "process/checks/CP3-CR046-HLD-CONSISTENCY-R2.result.json",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "844d351abee5b3872f30f0c6cab389c12e15fb83",
+    "invocation": "uv run meta-flow cp result-check --result process/checks/CP3-CR046-HLD-CONSISTENCY-R3.result.json --project-root .",
+    "generated_by": "host-orchestrator-after-platform-contract-r3",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/context/CP3-CR046-DESIGN-CONTEXT.yaml": "sha256:e50c28c8023072259bd9c2931ab04c8137ea37c515aefcf7313d061c0c93dde0",
+    "process/changes/CR-046.md": "sha256:b7775c65a74ff82591ece671e53fb722fb3d622af81c741b845980895f02f14c",
+    "delivery/doc/PLATFORM-CONTRACTS.yaml": "sha256:4bf923cbd8ecea5230cc0410c555e9d632c3a1916c90a9f4d73fca3f998b8cb2",
+    "docs/design/CR046-EVIDENCE-INTEGRITY-BLUEPRINT.md": "sha256:e243d38bdf23f6652c46462cf1b626cb8f13a5090b59647fc4cf686527cbb300",
+    "docs/design/CR046-EVIDENCE-INTEGRITY-DOMAIN-MAP.md": "sha256:0921565144157b944db6e9104a1bba4b556e63284f585a75f3a96c04c5f1c7f9",
+    "docs/design/CR046-EVIDENCE-INTEGRITY-DEPENDENCY-MAP.md": "sha256:1145c7a327cf50a04182bba78ea4ac99b31968071ebb847ac159027321205d12",
+    "docs/design/CR046-EVIDENCE-INTEGRITY-HLD.md": "sha256:87f5d7986fd42c6ae957f12d9286d1c3bfc0e3459ab32a027c8e45b6dd86f163",
+    "docs/design/CR046-EVIDENCE-INTEGRITY-ARCHITECTURE-DECISION.md": "sha256:de33e426f55cda2664bd7d120e5adcaa023cbc298cebb2ee156d443e2ac43cd0",
+    "docs/design/CR046-CODEX-SUBAGENT-PLATFORM-CONTRACT.md": "sha256:4caa884158c95724594bfeab652df3906ef6d71d1efd17a99d35ed83b6a65c27"
+  },
+  "items": [
+    {
+      "id": "CP3-CR046-R3-001",
+      "category": "platform_contract",
+      "name": "Codex subagent CURRENT and REQUIRED behavior is formalized as an explicit normative contract",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-CODEX-SUBAGENT-PLATFORM-CONTRACT.md", "delivery/doc/PLATFORM-CONTRACTS.yaml"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "The contract specifies discovery, spawn request/receipt, followup reuse guarantees, fallback semantics and PC-01..17 without presenting required extensions as current capabilities."
+    },
+    {
+      "id": "CP3-CR046-R3-002",
+      "category": "capability_discovery",
+      "name": "D0-D3 discovery sources have explicit and non-interchangeable evidence ceilings",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-CODEX-SUBAGENT-PLATFORM-CONTRACT.md", "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-DOMAIN-MAP.md"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Only D0 platform session discovery may establish PROFILE_DISCOVERED; D2 TOML scan establishes CONFIG_VALIDATED only."
+    },
+    {
+      "id": "CP3-CR046-R3-003",
+      "category": "thread_reuse_identity",
+      "name": "ThreadRuntimeIdentity is immutable and followup reuse cannot upgrade a profile by declaration",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-HLD.md#thread-reuse-与-profile-escalation", "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-ARCHITECTURE-DECISION.md#cr046-ei-adr-010指定-custom-agent-必须经-live-discovery显式-selector-与平台-receipt-证明"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "A required profile mismatch routes to a new spawn; reuse needs a receipt bound to the original spawn identity."
+    },
+    {
+      "id": "CP3-CR046-R3-004",
+      "category": "dogfooding_strategy",
+      "name": "CR-046 adopts A-baseline plus Conditional-B with machine-checkable switch and rollback conditions",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-HLD.md#51b-cr-046-dogfooding-策略", "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-ARCHITECTURE-DECISION.md#cr046-ei-adr-011cr-046-采用-a-baseline--conditional-b-狗粮策略"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Conditional B requires D0, selector, spawn/reuse receipts, PC-01..17 17/17 and a newly spawned verified CP7 thread; otherwise CP7/CP8 retain explicit risk ceilings."
+    },
+    {
+      "id": "CP3-CR046-R3-005",
+      "category": "story_cp_integration",
+      "name": "Story 2/6 and CP0/CP6/CP7/CP8 responsibilities consume the platform contract without creating a parallel truth source",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-CODEX-SUBAGENT-PLATFORM-CONTRACT.md#9-ownership-and-integration-responsibilities", "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-DEPENDENCY-MAP.md"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Codex owns resolved runtime facts; Meta Flow owns intent, policy, persistence, correlation and gate decisions."
+    },
+    {
+      "id": "CP3-CR046-R3-006",
+      "category": "dogfooding_truth",
+      "name": "The R3 delegated execution remains session-observed without fabricated custom-profile/model attestation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/handoffs/CR046-CP3-R3-CODEX-PLATFORM-CONTRACT-META-SE-RETURN-SUMMARY.md", "process/state/AGENT-DISPATCH-LEDGER.ndjson"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Requested meta-se-critical is recorded as intent only; resolved profile/model and platform receipt remain unavailable."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260712T015333Z0000-aa4ca88d"],
+  "decision": "PASS",
+  "next_route": "CP3-human-gate-review-r3",
+  "checked_at": "2026-07-12T03:07:04Z"
+}

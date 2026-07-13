@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-042",
+  "checkpoint": "CP7",
+  "created_at": "2026-07-04T14:58:00+00:00",
+  "summary": "Verified CP1 grading and archive isolation behavior with focused and full regression tests.",
+  "verification_claims": [
+    {
+      "id": "CR042-VERIFY-001",
+      "claim": "Existing use-case extension CRs receive LIGHTWEIGHT_CP1.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_cr_lifecycle.py#test_cp1_profile_is_lightweight_for_existing_use_case_extension"
+      ]
+    },
+    {
+      "id": "CR042-VERIFY-002",
+      "claim": "Product baseline refresh CRs receive FULL_CP1_REQUIRED.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_cr_lifecycle.py#test_cp1_profile_is_full_when_product_baseline_refresh_required"
+      ]
+    },
+    {
+      "id": "CR042-VERIFY-003",
+      "claim": "Business CRs touching archive/backups refs receive warning-only NEEDS_REVIEW.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_cr_lifecycle.py#test_archive_isolation_warns_for_business_cr_archive_paths",
+        "tests/test_cr_lifecycle.py#test_cr_check_prints_archive_isolation_warning_without_blocking"
+      ]
+    },
+    {
+      "id": "CR042-VERIFY-004",
+      "claim": "Housekeeping process CRs can touch archive/backups refs without warning.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_cr_lifecycle.py#test_archive_isolation_allows_housekeeping_process_cr"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest tests/test_cr_lifecycle.py",
+      "result": "PASS",
+      "summary": "28 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest",
+      "result": "PASS",
+      "summary": "234 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run python scripts/check_delivery_guardrails.py",
+      "result": "PASS",
+      "summary": "OK"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run meta-flow cr check --project-root .",
+      "result": "PASS",
+      "summary": "CR Lifecycle Check: OK"
+    }
+  ],
+  "remaining_risks": [
+    {
+      "id": "CR042-RISK-CP1-HEURISTIC-MISCLASSIFICATION",
+      "status": "accepted",
+      "reason": "CP1 profile is a deterministic heuristic over CR metadata; unusual CRs can still override via product baseline fields."
+    },
+    {
+      "id": "CR042-RISK-ARCHIVE-ISOLATION-FALSE-POSITIVE",
+      "status": "accepted",
+      "reason": "Archive isolation is warning-only and can be resolved by marking a CR as process housekeeping."
+    }
+  ]
+}

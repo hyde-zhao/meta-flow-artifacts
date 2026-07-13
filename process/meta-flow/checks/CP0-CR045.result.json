@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR045-RECOVERY-INTAKE",
+  "cr_id": "CR-045",
+  "profile": "standard-code",
+  "route_plan_ref": "process/checks/CP0-CR045.route-plan.json",
+  "items": [
+    {
+      "id": "CP0-CR045-001",
+      "category": "routing",
+      "name": "Current CR facts derive a valid route plan",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/changes/summaries/CR-045.summary.json",
+        "process/checks/CP0-CR045.route-plan.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "The stale route-plan artifact was regenerated from current CR frontmatter without rewriting historical approval times."
+    },
+    {
+      "id": "CP0-CR045-002",
+      "category": "recovery",
+      "name": "Historical workflow deviation is explicitly retained",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP6-CR045.result.json",
+        "process/state/CHECKPOINT-LEDGER.ndjson"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP6 implementation evidence predates CP2/CP5 recovery gates; recovery records must not claim those gates occurred before implementation."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS",
+  "next_route": "CP2",
+  "checked_at": "2026-07-11T10:39:43Z"
+}

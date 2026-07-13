@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-039",
+  "checkpoint": "CP6",
+  "created_at": "2026-07-04T14:14:19+00:00",
+  "summary": "Implemented CP8 fact diff validation/rendering and compact release-readiness template contract.",
+  "changed_files": [
+    "meta_flow/checks/cp_result.py",
+    "tests/test_cp_result_event_ledger.py",
+    "delivery/skills/release-readiness/SKILL.md",
+    "delivery/skills/release-readiness/templates/RELEASE-CONTEXT-TEMPLATE.yaml",
+    "delivery/skills/release-readiness/templates/RELEASE-NOTES-TEMPLATE.md",
+    "delivery/skills/release-readiness/templates/DEPLOY-CHECKLIST-TEMPLATE.md",
+    "delivery/skills/release-readiness/templates/ROLLBACK-TEMPLATE.md",
+    "delivery/skills/release-readiness/templates/MIGRATION-TEMPLATE.md",
+    "delivery/skills/release-readiness/templates/FEEDBACK-TEMPLATE.md",
+    "scripts/check_delivery_guardrails.py"
+  ],
+  "implementation_claims": [
+    {
+      "id": "CR039-IMPL-001",
+      "claim": "CP8 result validation accepts structured fact_diff entries and release_decision.",
+      "evidence_refs": [
+        "meta_flow/checks/cp_result.py#_validate_cp8_fact_diff"
+      ]
+    },
+    {
+      "id": "CR039-IMPL-002",
+      "claim": "CP8 summary rendering includes release_decision and a fact diff table.",
+      "evidence_refs": [
+        "meta_flow/checks/cp_result.py#render_summary"
+      ]
+    },
+    {
+      "id": "CR039-IMPL-003",
+      "claim": "Release-readiness skill and templates use release context fact_diff and evidence indexes as compact truth references.",
+      "evidence_refs": [
+        "delivery/skills/release-readiness/SKILL.md",
+        "delivery/skills/release-readiness/templates/RELEASE-CONTEXT-TEMPLATE.yaml",
+        "delivery/skills/release-readiness/templates/RELEASE-NOTES-TEMPLATE.md",
+        "delivery/skills/release-readiness/templates/DEPLOY-CHECKLIST-TEMPLATE.md",
+        "delivery/skills/release-readiness/templates/ROLLBACK-TEMPLATE.md",
+        "delivery/skills/release-readiness/templates/MIGRATION-TEMPLATE.md",
+        "delivery/skills/release-readiness/templates/FEEDBACK-TEMPLATE.md"
+      ]
+    },
+    {
+      "id": "CR039-IMPL-004",
+      "claim": "Delivery guardrail checks the CP8 fact diff and compact release docs contract.",
+      "evidence_refs": [
+        "scripts/check_delivery_guardrails.py#SOFTWARE_WORKFLOW_TOKEN_TARGETS"
+      ]
+    }
+  ],
+  "test_refs": [
+    "tests/test_cp_result_event_ledger.py#test_cp8_fact_diff_rejects_pass_when_required_evidence_is_missing",
+    "tests/test_cp_result_event_ledger.py#test_cp8_fact_diff_allows_ready_with_risk_for_executed_negative_result",
+    "tests/test_cp_result_event_ledger.py#test_cp8_fact_diff_rejects_ready_for_deferred_follow_up",
+    "tests/test_cp_result_event_ledger.py#test_render_summary_includes_cp8_release_decision_and_fact_diff"
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest tests/test_cp_result_event_ledger.py",
+      "result": "PASS",
+      "summary": "15 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run python scripts/check_delivery_guardrails.py",
+      "result": "PASS",
+      "summary": "OK"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest",
+      "result": "PASS",
+      "summary": "220 passed"
+    }
+  ],
+  "forbidden_operations": {
+    "credential_reads": 0,
+    "runtime_calls": 0,
+    "production_writes": 0,
+    "trading_operations": 0
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-045",
+  "checkpoint": "CP6",
+  "created_at": "2026-07-05T02:27:58+00:00",
+  "summary": "Implemented executable route-plan derivation, frontmatter trait bridging, route-plan JSON artifact output, route-plan consumption guard, N/A CP result semantics, gate profile validation compatibility, profile-upgrade blockers, structured dispatch events with CP result ref checks, CP8 applicability aggregate build/check, launch replay, CLI entry points, route-plan tests, and synchronized route guidance across delivery and active skill templates.",
+  "implementation_refs": [
+    "meta_flow/policies/route_plan.py",
+    "process/checks/CP0-CR045.route-plan.json",
+    "process/checks/CP8-CR045.applicability.json",
+    "meta_flow/cli.py#_run_route",
+    "meta_flow/checks/cp_result.py#validate_cp_result",
+    "meta_flow/checks/cp_result.py#validate_applicability_aggregate",
+    "meta_flow/checks/cr_tracking.py#ALLOWED_GATE_PROFILES",
+    "meta_flow/state/event_ledger.py#build_inline_fallback_event",
+    "meta_flow/workflow/cr_lifecycle.py#collect_check_errors",
+    "meta_flow/ask_user.py#main",
+    "tests/test_route_plan.py",
+    "tests/test_cp_result_event_ledger.py",
+    "tests/test_cr_lifecycle.py",
+    "tests/test_ask_user.py",
+    "tests/test_gate_policy.py",
+    "delivery/skills/state-router/SKILL.md",
+    "delivery/skills/checkpoint-manager/SKILL.md",
+    "delivery/skills/change-impact-analysis/templates/CR-TEMPLATE.md",
+    ".agents/skills/state-router/SKILL.md",
+    ".agents/skills/checkpoint-manager/SKILL.md",
+    ".agents/skills/change-impact-analysis/templates/CR-TEMPLATE.md"
+  ],
+  "commands": [
+    {
+      "command": "uv run meta-flow route plan --cr-type process --gate-profile process-lite --cr-trait '{\"uses_existing_evidence_only\": true, \"existing_evidence_refs\": [\"process/evidence/CR156.index.json\"]}' --project-root .",
+      "result": "PASS",
+      "summary": "Produced CP0, CP2, CP8 stages with CP3-CP7 marked N/A."
+    },
+    {
+      "command": "uv run meta-flow route plan --cr-type process --gate-profile standard-code --cr-trait '{\"has_new_implementation\": true}' --project-root .",
+      "result": "PASS",
+      "summary": "Produced CP0, CP2, CP5, CP6, CP7, CP8 stages so standard-code implementation paths retain CP5 design readiness and CP6/CP7 execution gates."
+    },
+    {
+      "command": "uv run pytest tests/test_route_plan.py tests/test_gate_policy.py tests/test_cp_result_event_ledger.py tests/test_failure_routing_waiver.py",
+      "result": "PASS",
+      "summary": "53 passed."
+    },
+    {
+      "command": "uv run pytest",
+      "result": "PASS",
+      "summary": "267 passed."
+    },
+    {
+      "command": "uv run pytest tests/test_route_plan.py",
+      "result": "PASS",
+      "summary": "19 passed, including frontmatter trait bridging, route-plan artifact output, route-plan-ref consistency checking, and profile-upgrade blockers."
+    },
+    {
+      "command": "uv run meta-flow route check --from-cr process/changes/CR-045.md --project-root .",
+      "result": "PASS_WITH_WARNING",
+      "summary": "Route plan artifact matches CR-045 frontmatter; expected warning reports has_new_verification auto-derived from has_new_implementation."
+    },
+    {
+      "command": "uv run meta-flow route plan --from-cr process/changes/CR-045.md --output process/checks/CP0-CR045.route-plan.json --project-root .",
+      "result": "PASS",
+      "summary": "Wrote machine-readable route-plan artifact referenced by CR-045 route_plan_ref."
+    },
+    {
+      "command": "uv run meta-flow route plan --cr-type process --gate-profile process-lite --cr-trait '{\"requires_story_decomposition\": true}' --project-root .",
+      "result": "BLOCKED",
+      "summary": "CP5 keeps human_gate=required and profile_upgrade_required is emitted instead of silently downgrading the gate."
+    },
+    {
+      "command": "uv run meta-flow cp result-check --result process/checks/CP6-CR045.result.json --project-root . --check-consistency --mode silent",
+      "result": "PASS",
+      "summary": "Printed a single PASS line; dispatch_refs now resolve to AGENT-DISPATCH-LEDGER entry ADE-CR045-INLINE-CP6."
+    },
+    {
+      "command": "uv run meta-flow event check --ledger process/state/CHECKPOINT-LEDGER.ndjson --type checkpoint --mode silent",
+      "result": "PASS",
+      "summary": "Printed a single PASS line."
+    },
+    {
+      "command": "uv run pytest tests/test_cp_result_event_ledger.py",
+      "result": "PASS",
+      "summary": "28 passed, including dispatch_not_required, inline_fallback ledger validation, dispatch_refs reverse lookup, and applicability aggregate validation."
+    },
+    {
+      "command": "uv run meta-flow event check --ledger process/state/AGENT-DISPATCH-LEDGER.ndjson --type dispatch --mode silent",
+      "result": "PASS",
+      "summary": "Printed a single PASS line."
+    },
+    {
+      "command": "uv run meta-flow cp applicability-build --project-root . --route-plan process/checks/CP0-CR045.route-plan.json --output process/checks/CP8-CR045.applicability.json --cr-id CR-045",
+      "result": "PASS",
+      "summary": "Generated CP8 checkpoint applicability aggregate JSON from the route-plan artifact."
+    },
+    {
+      "command": "uv run meta-flow cp applicability-check --aggregate process/checks/CP8-CR045.applicability.json --project-root . --mode silent",
+      "result": "PASS",
+      "summary": "Aggregate checkpoint_applicability and stages match the source route-plan artifact."
+    },
+    {
+      "command": "uv run pytest tests/test_ask_user.py",
+      "result": "PASS",
+      "summary": "4 passed, including --replay dynamic human-gate launch regeneration without persisted launch-message file."
+    },
+    {
+      "command": "uv run meta-flow check cr-tracking --project-root .",
+      "result": "PASS",
+      "summary": "CR tracking reports active formal CR-045 and no conflicts."
+    },
+    {
+      "command": "uv run meta-flow cr check --project-root .",
+      "result": "PASS",
+      "summary": "CR lifecycle check passed with route-plan guard active for CRs that declare route_plan_ref or cr_trait_* fields."
+    },
+    {
+      "command": "uv run meta-flow gate check --project-root .",
+      "result": "PASS",
+      "summary": "Gate profile check passed."
+    },
+    {
+      "command": "uv run meta-flow state check --project-root . --mode audit",
+      "result": "PASS",
+      "summary": "State v2 audit check passed."
+    },
+    {
+      "command": "uv run pytest",
+      "result": "PASS",
+      "summary": "276 passed."
+    }
+  ],
+  "remaining_risks": [
+    "CR045-RISK-STATE-ROUTER-UNDER-REFACTOR"
+  ]
+}

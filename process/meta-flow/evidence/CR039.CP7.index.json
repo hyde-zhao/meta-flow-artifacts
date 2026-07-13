@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-039",
+  "checkpoint": "CP7",
+  "created_at": "2026-07-04T14:14:19+00:00",
+  "summary": "Verified CR-039 acceptance claims against tests, guardrail, and implementation evidence.",
+  "verification_claims": [
+    {
+      "id": "CR039-VERIFY-001",
+      "claim": "CP8 fact_diff rejects PASS/READY when required evidence is missing.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_cp_result_event_ledger.py#test_cp8_fact_diff_rejects_pass_when_required_evidence_is_missing"
+      ]
+    },
+    {
+      "id": "CR039-VERIFY-002",
+      "claim": "CP8 READY_WITH_RISK is allowed for executed negative evidence with evidence_refs.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_cp_result_event_ledger.py#test_cp8_fact_diff_allows_ready_with_risk_for_executed_negative_result"
+      ]
+    },
+    {
+      "id": "CR039-VERIFY-003",
+      "claim": "CP8 READY is rejected when fact_diff contains deferred follow-up risk.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_cp_result_event_ledger.py#test_cp8_fact_diff_rejects_ready_for_deferred_follow_up"
+      ]
+    },
+    {
+      "id": "CR039-VERIFY-004",
+      "claim": "CP8 summary renders release_decision and fact_diff.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_cp_result_event_ledger.py#test_render_summary_includes_cp8_release_decision_and_fact_diff"
+      ]
+    },
+    {
+      "id": "CR039-VERIFY-005",
+      "claim": "Release templates reference release context, fact_diff, and evidence indexes instead of becoming independent truth sources.",
+      "status": "PASS",
+      "evidence_refs": [
+        "delivery/skills/release-readiness/templates/RELEASE-CONTEXT-TEMPLATE.yaml#fact_diff",
+        "delivery/skills/release-readiness/templates/RELEASE-NOTES-TEMPLATE.md#cp8-fact-diff",
+        "delivery/skills/release-readiness/templates/DEPLOY-CHECKLIST-TEMPLATE.md#cp8-fact-diff"
+      ]
+    },
+    {
+      "id": "CR039-VERIFY-006",
+      "claim": "Regression suite and guardrails pass.",
+      "status": "PASS",
+      "evidence_refs": [
+        "process/evidence/CR039.CP6.index.json#commands"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest tests/test_cp_result_event_ledger.py",
+      "result": "PASS",
+      "summary": "15 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run python scripts/check_delivery_guardrails.py",
+      "result": "PASS",
+      "summary": "OK"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest",
+      "result": "PASS",
+      "summary": "220 passed"
+    }
+  ],
+  "remaining_risks": [
+    {
+      "id": "CR039-RISK-HISTORICAL-CR-MISSING-STRUCTURED-COMMITMENTS",
+      "status": "accepted",
+      "reason": "Historical CRs without structured CP2 commitments can still use manual fact_diff population; new structured flow is supported."
+    },
+    {
+      "id": "CR039-RISK-RELEASE-DOCS-COMPACT-OVERCOMPRESSION",
+      "status": "mitigated",
+      "reason": "Templates retain evidence index refs and allow full-doc expansion when capsule fields are missing or conflicting."
+    }
+  ]
+}

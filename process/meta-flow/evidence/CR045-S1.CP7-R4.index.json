@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "story_id": "CR045-S1",
+  "cr_id": "CR-045",
+  "stage": "CP7",
+  "checkpoint": "CP7-R4",
+  "return_ref": "process/returns/CR045-S1.CP7-R4.return.json",
+  "summary": "Final independent R4 closes all four findings; exact 38-outcome matrix and 11/125/320 test layers pass.",
+  "changed_files": [],
+  "commands": [
+    {"command": "git diff --check", "result": "PASS"},
+    {"command": "isolated exact decision x stop-reason matrix", "result": "PASS", "summary": "35 decision/reason outcomes plus 3 pending-CP8 outcomes"},
+    {"command": "uv run pytest tests/test_state_transition.py", "result": "PASS", "summary": "11 passed"},
+    {"command": "focused CR-045 suite", "result": "PASS", "summary": "125 passed"},
+    {"command": "uv run pytest", "result": "PASS", "summary": "320 passed"},
+    {"command": "CP2/CP5/CP6/R1/R2/R3 result consistency", "result": "PASS"},
+    {"command": "route/applicability/checkpoint/dispatch/gate/state/CR/gate/failure/waiver checks", "result": "PASS"},
+    {"command": "delivery guardrail", "result": "FAIL_UNRELATED_TRANSIENT", "summary": "ignored test caches only"}
+  ],
+  "tests": [
+    {"scope": "state-transition", "passed": 11, "failed": 0},
+    {"scope": "focused-cr045", "passed": 125, "failed": 0},
+    {"scope": "repository", "passed": 320, "failed": 0}
+  ],
+  "artifacts": [
+    "process/docs/quality/VERIFICATION-REPORT-CR045-R4.md",
+    "process/docs/quality/TEST-REPORT-CR045-R4.md",
+    "process/docs/quality/REVIEW-CR045-R4.md",
+    "process/docs/quality/FIXES-CR045-R4.md"
+  ],
+  "verification_claims": [
+    {"id": "CR045-F-001", "status": "CLOSED", "evidence_refs": ["tests/test_route_plan.py"]},
+    {"id": "CR045-F-002", "status": "CLOSED", "evidence_refs": ["tests/test_cp_result_event_ledger.py"]},
+    {"id": "CR045-F-003-R2", "status": "CLOSED", "evidence_refs": ["tests/test_state_transition.py"]},
+    {"id": "CR045-F-004-R3", "status": "CLOSED", "evidence_refs": ["tests/test_state_transition.py", "meta_flow/checks/state_transition.py:24"]}
+  ],
+  "risks": ["CR045-O-001-R4"],
+  "waivers": [],
+  "dispatch_refs": ["DISPATCH-CR045-CP7-REVERIFY-R4-QA"],
+  "design_delta_ref": null
+}

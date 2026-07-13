@@ -1,246 +1,74 @@
 {
-  "acceptance": [
-    "New CRs support normalized impact fields: impact_surfaces, affected_paths, feature_refs, and capability_refs.",
-    "impact_surfaces uses a finite governance enum; unknown values are WARN in audit mode and ERROR in enforce mode.",
-    "feature_refs and capability_refs are validated through the S07 registry resolver and do not accept free strings as canonical refs.",
-    "Legacy impact_surface drift generates a migration report and does not rewrite source CR files.",
-    "The migration report includes source_cr, legacy_value, suggested fields, finding severity/code, recovery hint, and source hash.",
-    "affected_paths is treated only as an impact declaration and never as write authorization.",
-    "S08 does not read or write process/quant-lab and does not modify docs or delivery artifacts."
-  ],
-  "allowed_reads": [
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "story_id": "CR037-S08",
+  "cr_id": "CR-037",
+  "stage": "CP6",
+  "profile": "standard-code",
+  "objective": {
+    "summary": "Implement impact surface field split and migration report while reusing the S07 feature/capability registry resolver."
+  },
+  "input_gaps": [
     {
-      "estimated_tokens": 420,
-      "mode": "full",
-      "path": "process/state/STATE.current.json",
-      "reason": "runtime_state",
-      "required": true
+      "path": "process/context/stories/CR037-S08.CP6.work-packet.json",
+      "status": "missing_at_session_start",
+      "impact": "Host created this minimal CP6 evidence packet after confirming the requested packet was absent from the checkout."
     },
     {
-      "estimated_tokens": 320,
-      "mode": "full",
-      "path": "process/stories/STORY-CR037-S08-impact-surface-field-split-and-migration-report.md",
-      "reason": "story_card",
-      "required": true
-    },
-    {
-      "estimated_tokens": 5200,
-      "mode": "full",
-      "path": "process/stories/STORY-CR037-S08-impact-surface-field-split-and-migration-report-LLD.md",
-      "reason": "story_lld",
-      "required": true
-    },
-    {
-      "estimated_tokens": 4300,
-      "mode": "full",
-      "path": "process/docs/features/impact-surface-normalization/DESIGN.md",
-      "reason": "feature_design",
-      "required": true
-    },
-    {
-      "estimated_tokens": 1400,
-      "mode": "full",
-      "path": "process/docs/features/impact-surface-normalization/TEST-PLAN.md",
-      "reason": "feature_test_plan",
-      "required": true
-    },
-    {
-      "estimated_tokens": 720,
-      "mode": "full",
-      "path": "process/docs/features/impact-surface-normalization/TASKS.md",
-      "reason": "feature_tasks",
-      "required": true
-    },
-    {
-      "estimated_tokens": 1800,
-      "mode": "full",
-      "path": "meta_flow/workflow/cr_lifecycle.py",
-      "reason": "implementation_target",
-      "required": true
-    },
-    {
-      "estimated_tokens": 2200,
-      "mode": "full",
-      "path": "meta_flow/checks/cr_tracking.py",
-      "reason": "implementation_target",
-      "required": true
-    },
-    {
-      "estimated_tokens": 820,
-      "mode": "full",
-      "path": "process/changes/summaries/CR-037.summary.json",
-      "reason": "cr_summary",
-      "required": true
+      "path": "process/handoffs/CR037-S08-NEXT-SESSION-HANDOFF.md",
+      "status": "missing_at_session_start",
+      "impact": "Host proceeded from repository code context and recorded the missing handoff as evidence."
     }
+  ],
+  "feature_refs": [
+    "CR037-S08"
+  ],
+  "feature_context": [
+    {
+      "path": "meta_flow/design/feature_registry.py",
+      "reason": "Existing S07 resolver reused for capability refs."
+    },
+    {
+      "path": "meta_flow/workflow/cr_lifecycle.py",
+      "reason": "CR lifecycle impact surface parsing, summary, index, conflicts, and report command."
+    }
+  ],
+  "acceptance": [
+    "Structured impact split fields are parsed from CR frontmatter and emitted in summary/index/brief output.",
+    "Capability refs are resolved through meta_flow.design.feature_registry.resolve_refs.",
+    "A side-effect-free CR impact migration report is available.",
+    "Migration report preserves uncategorized legacy impact_surface entries for manual classification.",
+    "CR brief output can show capability resolution in audit or enforce mode.",
+    "Conflict detection considers split fields and normalized capability refs.",
+    "Focused tests cover alias resolution, blockers, summary/index output, and conflicts."
   ],
   "allowed_write_paths": [
     "meta_flow/workflow/cr_lifecycle.py",
-    "meta_flow/checks/cr_tracking.py",
-    "meta_flow/cli.py",
-    "tests/test_cr037_impact_surface_normalization.py",
     "tests/test_cr_lifecycle.py",
-    "process/checks/CR037-S08-IMPACT-MIGRATION.report.json"
-  ],
-  "authz_policy_refs": [
-    "NO_CREDENTIAL_READ",
-    "NO_RUNTIME",
-    "NO_PRODUCTION_WRITE",
-    "NO_TRADING",
-    "NO_QUANT_LAB_RELEASE_WRITE"
-  ],
-  "budget": {
-    "estimated_tokens": 17180,
-    "estimator": "chars_div_4",
-    "max_tokens": 18000
-  },
-  "context_sufficiency": {
-    "required_slots": [
-      "objective.summary",
-      "feature_refs",
-      "feature_context",
-      "cr_delta.summary",
-      "acceptance",
-      "dependency_inputs",
-      "allowed_write_paths",
-      "forbidden_write_paths",
-      "verification_plan",
-      "authz_policy_refs",
-      "expected_return_packet"
-    ],
-    "strict_profiles": [
-      "architecture-major",
-      "product-redesign",
-      "runtime-high-risk"
-    ]
-  },
-  "cr_delta": {
-    "affected_contracts": [
-      "CR normalized impact field schema",
-      "impact surface governance enum",
-      "affected_paths path validation and non-authorization semantics",
-      "feature_refs/capability_refs resolver contract",
-      "legacy impact_surface migration report contract",
-      "cr-tracking audit/enforce mode behavior"
-    ],
-    "summary": "CR037-S08 starts after S07 verified-with-risk. It must split legacy mixed impact_surface usage into normalized impact_surfaces, affected_paths, feature_refs, and capability_refs; use the S07 resolver for refs; generate migration reports for legacy drift without rewriting source CRs."
-  },
-  "cr_id": "CR-037",
-  "denied_default_reads": [
-    "process/STATE.md",
-    "process/DEVELOPMENT-PLAN.yaml",
-    "process/STORY-STATUS.md",
-    "process/changes/*.md",
-    "process/stories/*-IMPLEMENTATION.md",
-    "process/quant-lab/**",
-    "docs/**",
-    "delivery/**",
-    "process/returns/**",
-    "process/evidence/**",
-    "process/checks/**"
-  ],
-  "dependency_inputs": [
-    {
-      "result_ref": "process/checks/CP7-CR037-S07-VERIFICATION-DONE.result.json",
-      "risks_to_carry": [
-        "R-CR037-SECOND-MECHANISM",
-        "R-CR037-REGISTRY-DRIFT",
-        "R-CR037-YAML-SUBSET",
-        "R-CR037-QA-SUBAGENT-NO-OUTPUT"
-      ],
-      "stage": "CP7",
-      "status": "PASS_WITH_RISK",
-      "story_id": "CR037-S07"
-    }
-  ],
-  "design_refs": {
-    "feature_design": "process/docs/features/impact-surface-normalization/DESIGN.md",
-    "feature_test_plan": "process/docs/features/impact-surface-normalization/TEST-PLAN.md",
-    "feature_tasks": "process/docs/features/impact-surface-normalization/TASKS.md",
-    "story_lld": "process/stories/STORY-CR037-S08-impact-surface-field-split-and-migration-report-LLD.md"
-  },
-  "expected_return_packet": "process/returns/CR037-S08.CP6.return.json",
-  "feature_contract_summary": "Impact Surface Normalization S08: implement normalized CR impact fields, finite governance enum, audit/enforce checker behavior, S07 resolver-backed feature/capability refs, legacy migration report, and no-source-rewrite safety.",
-  "feature_design_refs": [
-    "process/docs/features/impact-surface-normalization/DESIGN.md",
-    "process/docs/features/impact-surface-normalization/TEST-PLAN.md",
-    "process/docs/features/impact-surface-normalization/TASKS.md"
-  ],
-  "feature_refs": [
-    "FEAT-PG-005"
+    "process/context/stories/CR037-S08.CP6.work-packet.json",
+    "process/returns/CR037-S08.CP6.return.json",
+    "process/evidence/CR037-S08.CP6.index.json",
+    "process/checks/CP6-CR037-S08.result.json",
+    "process/checks/CP6-CR037-S08.result.summary.md",
+    "process/state/STATE.current.json",
+    "process/state/CHECKPOINT-LEDGER.ndjson",
+    "process/STATE.md"
   ],
   "forbidden_write_paths": [
     "process/quant-lab/**",
     "docs/**",
     "delivery/**",
-    ".env",
-    "**/*credential*",
-    "**/*secret*",
-    "**/*token*",
-    "**/*cookie*",
-    "**/*private_key*"
+    "runtime/**",
+    "publish/**",
+    "live/**",
+    "trading/**"
   ],
-  "full_doc_read_allowed_when": [
-    "capsule_missing",
-    "field_conflict",
-    "human_audit",
-    "deep_review",
-    "schema_validation_failed"
-  ],
-  "lld_policy": "full-lld",
-  "objective": {
-    "non_goals": [
-      "Do not auto-rewrite historical CR files.",
-      "Do not read or write process/quant-lab.",
-      "Do not treat affected_paths as write authorization.",
-      "Do not implement roadmap refresh, stale-check, FU-RF, or quant-lab migration.",
-      "Do not introduce a second feature/capability resolver outside S07."
-    ],
-    "summary": "impact surface field split and migration report"
-  },
-  "packet_type": "story_work_packet",
-  "parent_context_ref": "process/context/stories/CR037-S08.base.context.json",
-  "policy_refs": {
-    "authz_policy": "process/policies/AUTHZ-POLICY.json",
-    "gate_profiles": "process/policies/GATE-PROFILES.json",
-    "read_policy": "process/policies/READ-POLICY.json"
-  },
-  "project_id": "meta-flow",
-  "read_if_needed": [
-    {
-      "estimated_tokens": 0,
-      "mode": "full",
-      "path": "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-HLD.md",
-      "reason": "hld",
-      "trigger": "architecture_boundary_dispute"
-    },
-    {
-      "estimated_tokens": 0,
-      "mode": "full",
-      "path": "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-ARCHITECTURE-DECISION.md",
-      "reason": "adr",
-      "trigger": "adr_trace_needed"
-    },
-    {
-      "estimated_tokens": 0,
-      "mode": "full",
-      "path": "meta_flow/design/feature_registry.py",
-      "reason": "resolver_contract_reference",
-      "trigger": "need_to_confirm_S07_resolver_API"
-    }
-  ],
-  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
-  "risk_profile": "standard",
-  "schema_version": 1,
-  "stage": "CP6",
-  "story_id": "CR037-S08",
-  "story_ref": "process/stories/STORY-CR037-S08-impact-surface-field-split-and-migration-report.md",
   "verification_plan": [
-    "Run unit tests for normalized impact schema, legal enum, audit WARN, enforce ERROR, path validation, and non-authorization semantics.",
-    "Run contract tests proving feature_refs and capability_refs use S07 resolver results and block unresolved refs.",
-    "Run migration report tests proving legacy impact_surface generates report items, source hashes are stable, and source CR files are not rewritten.",
-    "Run existing CR lifecycle and cr-tracking regressions.",
-    "Run meta-flow check cr-tracking --project-root . and confirm historical warnings remain non-blocking.",
-    "Run state check --mode enforce after implementation.",
-    "Verify git diff -- process/quant-lab docs delivery is empty."
-  ]
+    "uv run pytest tests/test_cr_lifecycle.py tests/test_feature_registry.py",
+    "uv run pytest tests/test_cr_lifecycle.py tests/test_feature_registry.py tests/test_cr037_project_current.py tests/test_cr037_project_scale_roadmap.py tests/test_state_v2.py tests/test_cp_result_event_ledger.py tests/test_story_evidence.py",
+    "git diff --check -- meta_flow/workflow/cr_lifecycle.py tests/test_cr_lifecycle.py",
+    "uv run meta-flow state check --project-root . --mode enforce",
+    "uv run meta-flow event check --ledger process/state/CHECKPOINT-LEDGER.ndjson --type checkpoint"
+  ],
+  "expected_return_packet": "process/returns/CR037-S08.CP6.return.json"
 }

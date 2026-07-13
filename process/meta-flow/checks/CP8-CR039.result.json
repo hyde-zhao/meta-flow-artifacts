@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR039",
+  "profile": "standard-code",
+  "story_id": "",
+  "cr_id": "CR-039",
+  "context_ref": "process/context/CR039.CP8.context.json",
+  "dispatch_refs": [],
+  "evidence_ref": "process/evidence/CR039.CP8.index.json",
+  "release_decision": "READY_WITH_RISK",
+  "fact_diff": [
+    {
+      "promise_ref": "CR039-ACCEPT-001",
+      "promise": "CP8 result can include fact_diff with promised / delivered / status / risk / decision impact.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": [
+        "meta_flow/checks/cp_result.py#_validate_cp8_fact_diff",
+        "tests/test_cp_result_event_ledger.py#test_render_summary_includes_cp8_release_decision_and_fact_diff"
+      ],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR039-ACCEPT-002",
+      "promise": "CP8 READY / PASS is rejected when required evidence is missing.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": [
+        "tests/test_cp_result_event_ledger.py#test_cp8_fact_diff_rejects_pass_when_required_evidence_is_missing"
+      ],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR039-ACCEPT-003",
+      "promise": "CP8 READY_WITH_RISK is allowed for evidenced executed negative result.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": [
+        "tests/test_cp_result_event_ledger.py#test_cp8_fact_diff_allows_ready_with_risk_for_executed_negative_result"
+      ],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR039-ACCEPT-004",
+      "promise": "Release docs templates reference fact_diff / release context / evidence indexes.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": [
+        "delivery/skills/release-readiness/templates/RELEASE-CONTEXT-TEMPLATE.yaml#fact_diff",
+        "delivery/skills/release-readiness/templates/RELEASE-NOTES-TEMPLATE.md#cp8-fact-diff",
+        "delivery/skills/release-readiness/templates/DEPLOY-CHECKLIST-TEMPLATE.md#cp8-fact-diff",
+        "scripts/check_delivery_guardrails.py#SOFTWARE_WORKFLOW_TOKEN_TARGETS"
+      ],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR039-RISK-HISTORICAL-CR-MISSING-STRUCTURED-COMMITMENTS",
+      "promise": "Historical CRs may lack structured CP2 commitments and need manual fact_diff population.",
+      "status": "NEEDS_REVIEW",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": [
+        "process/evidence/CR039.CP7.index.json#remaining_risks"
+      ],
+      "risk_ref": "CR039-RISK-HISTORICAL-CR-MISSING-STRUCTURED-COMMITMENTS"
+    }
+  ],
+  "items": [
+    {
+      "id": "CP8-CR039-001",
+      "category": "release-readiness",
+      "name": "All CR-039 acceptance claims delivered and verified",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR039.CP7.index.json#verification_claims"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": ""
+    },
+    {
+      "id": "CP8-CR039-002",
+      "category": "release-readiness",
+      "name": "Remaining historical-CR risk is documented and non-blocking",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/evidence/CR039.CP8.index.json#remaining_risks"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "READY_WITH_RISK because historical CRs without structured commitments still need manual fact_diff population."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS",
+  "next_route": "delivered",
+  "checked_at": "2026-07-04T14:14:19+00:00"
+}

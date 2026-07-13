@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR046-RELEASE-READINESS",
+  "event_id": "CP8-CR046-RELEASE-READINESS-APPROVED",
+  "cr_id": "CR-046",
+  "profile": "architecture-major",
+  "check_attempt": 1,
+  "context_ref": "process/context/CP8-CR046.context.json",
+  "route_plan_ref": "process/checks/CP0-CR046.route-plan.json",
+  "dispatch_refs": [
+    "IF-CR046-CP8-READINESS"
+  ],
+  "evidence_ref": "process/checkpoints/CP8-CR046-RELEASE-READINESS.md",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "invocation": "uv run meta-flow cp result-check --result process/checks/CP8-CR046-RELEASE-READINESS.result.json --check-consistency --project-root .",
+    "generated_by": "host-orchestrator",
+    "fallback_used": true,
+    "fallback_reason": "User approved host inline CP8 readiness review; no independent meta-qa subagent was spawned.",
+    "fallback_review_ref": "process/checkpoints/CP8-CR046-RELEASE-READINESS.md#人工审查结果"
+  },
+  "input_artifact_hashes": {
+    "process/context/CP8-CR046.context.json": "sha256:4a5e2552fb4ed03e53c6049cd76af883c0eb50584358a7b7aafc2bb832f102a1",
+    "process/checkpoints/CP8-CR046-RELEASE-READINESS.md": "sha256:6217bda4a586237dfa1deab7aebe2d50b2a9612f32b3b77b2a95c0700b71033b",
+    "process/checks/CR046-MACHINE-AUDIT.json": "sha256:27dfe8be421434cea991c33c31fccc05c4db2252ca8e3609553fedba4b56f034",
+    "process/checks/CR046-CP7-INLINE-VERIFICATION.md": "sha256:f97f685f2a23c03543df693b26bdfdfff5a3f7ba2a70666c61dc8d5807990b5c"
+  },
+  "release_decision": "READY_WITH_RISK",
+  "fact_diff": [
+    {
+      "promise_ref": "CR046-EI-FUNCTIONAL",
+      "promise": "All seven evidence-integrity Stories implement and verify their repository contracts.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": [
+        "process/returns/ST-EI-001.CP7.return.json",
+        "process/returns/ST-EI-002.CP7.return.json",
+        "process/returns/ST-EI-003.CP7.return.json",
+        "process/returns/ST-EI-004.CP7.return.json",
+        "process/returns/ST-EI-005.CP7.return.json",
+        "process/returns/ST-EI-006.CP7.return.json",
+        "process/returns/ST-EI-007.CP7.return.json"
+      ],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR046-EI-REGRESSION",
+      "promise": "The full Meta Flow repository regression and governance checks pass.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": [
+        "process/checkpoints/CP8-CR046-RELEASE-READINESS.md#自动预检摘要",
+        "process/checks/CR046-IMPLEMENTATION-TEST-COUNT-CORRECTION.md"
+      ],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR046-EI-PLATFORM-ATTESTATION",
+      "promise": "Requested custom-agent profile and model can be proven by platform discovery and receipts.",
+      "status": "NEEDS_REVIEW",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": [
+        "process/checks/CR046-CUSTOM-AGENT-CAPABILITY-PROBE.json",
+        "process/checks/CR046-CP7-INLINE-VERIFICATION.md"
+      ],
+      "risk_ref": "CR046-RISK-PLATFORM-RECEIPT-UNAVAILABLE"
+    },
+    {
+      "promise_ref": "CR046-EI-TOKEN-MEASUREMENT",
+      "promise": "Actual per-dispatch token usage is measured by platform telemetry.",
+      "status": "DEFERRED_FOLLOW_UP",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": [
+        "process/checks/CR046-MACHINE-AUDIT.json",
+        "process/returns/ST-EI-005.CP7.return.json"
+      ],
+      "risk_ref": "CR046-RISK-TOKEN-TELEMETRY-UNAVAILABLE"
+    },
+    {
+      "promise_ref": "CR046-EI-CR163-PILOT",
+      "promise": "CR-163 migration remains a separately authorized real target operation.",
+      "status": "DEFERRED_FOLLOW_UP",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": [
+        "process/returns/ST-EI-007.CP7.return.json",
+        "process/checkpoints/CP8-CR046-RELEASE-READINESS.md#cp8-后续跟踪分流表"
+      ],
+      "risk_ref": "CR046-RISK-REAL-PILOT-UNAUTHORIZED"
+    },
+    {
+      "promise_ref": "CR046-EI-PERSISTENCE",
+      "promise": "The approved delivery is persisted in Git history.",
+      "status": "NEEDS_REVIEW",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": [
+        "process/checkpoints/CP8-CR046-RELEASE-READINESS.md#人工审查结果"
+      ],
+      "risk_ref": "CR046-RISK-WORKING-TREE-ONLY"
+    }
+  ],
+  "items": [
+    {
+      "id": "CP8-EI046-01",
+      "category": "functional-delivery",
+      "name": "Seven Story CP6/CP7 evidence chains are complete",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP8-CR046-RELEASE-READINESS.md#entry-criteria"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "All functional and negative checks pass."
+    },
+    {
+      "id": "CP8-EI046-02",
+      "category": "regression",
+      "name": "Full regression and machine governance checks pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP8-CR046-RELEASE-READINESS.md#自动预检摘要"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "377 tests and 70 subtests passed at gate preparation."
+    },
+    {
+      "id": "CP8-EI046-03",
+      "category": "risk-acceptance",
+      "name": "Platform attestation, token measurement, real pilot and working-tree risks are explicitly accepted",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP8-CR046-RELEASE-READINESS.md#人工审查结果"
+      ],
+      "owner": "user",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "User accepted CP8-DQ-01 through CP8-DQ-04; these are risks and authorization boundaries, not fabricated evidence."
+    },
+    {
+      "id": "CP8-EI046-04",
+      "category": "authorization",
+      "name": "Approval does not authorize commit, push, runtime, credentials or CR-163 target writes",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP8-CR046-RELEASE-READINESS.md#人工审查结果"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "All prohibited operations remain separately authorized."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "risks": [
+    "CR046-RISK-PLATFORM-RECEIPT-UNAVAILABLE",
+    "CR046-RISK-NO-INDEPENDENT-CP7-AGENT",
+    "CR046-RISK-TOKEN-TELEMETRY-UNAVAILABLE",
+    "CR046-RISK-REAL-PILOT-UNAUTHORIZED",
+    "CR046-RISK-WORKING-TREE-ONLY"
+  ],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "delivered-ready-with-risk-working-tree-only",
+  "checked_at": "2026-07-12T08:14:36Z"
+}

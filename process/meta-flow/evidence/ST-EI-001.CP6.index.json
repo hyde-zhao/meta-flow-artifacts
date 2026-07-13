@@ -1,0 +1,67 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "modified",
+      "path": "meta_flow/checks/state_transition.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "tests/test_state_transition.py"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run pytest tests/test_state_transition.py -q",
+      "result": "pass",
+      "summary": "27 passed, 42 subtests passed"
+    },
+    {
+      "command": "uv run pytest tests/test_cp_result_event_ledger.py -q",
+      "result": "pass",
+      "summary": "36 passed, 2 subtests passed"
+    },
+    {
+      "command": "uv run meta-flow check state-transition --route-plan process/checks/CP0-CR046.route-plan.json --approved-gate CP5 --project-root .",
+      "result": "pass",
+      "summary": "real story-execution accepted before CP8"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "summary": "no whitespace errors"
+    }
+  ],
+  "cr_id": "CR-046",
+  "design_delta_ref": null,
+  "return_ref": "process/returns/ST-EI-001.CP6.return.json",
+  "risks": [
+    {
+      "detail": "User explicitly authorized host inline implementation; this is not evidence of a resolved custom agent/model.",
+      "id": "CR046-RISK-HOST-INLINE-CP6",
+      "level": "medium",
+      "owner": "host-orchestrator",
+      "status": "accepted-for-cp6"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "ST-EI-001",
+  "tests": [
+    "CT-CORE-01",
+    "TC-001-COND",
+    "TC-001-PHASE",
+    "TC-001-CLI",
+    "TC-001-REG"
+  ],
+  "waivers": [
+    {
+      "approval_ref": "process/state/GATE-LEDGER.ndjson#GATE-CR046-CP5-APPROVED",
+      "approved_by": "user",
+      "expires_at": "CP8",
+      "id": "WAIVER-CR046-CP6-INLINE-001",
+      "scope": "CP6 agent separation for ST-EI-001 only",
+      "status": "accepted"
+    }
+  ]
+}

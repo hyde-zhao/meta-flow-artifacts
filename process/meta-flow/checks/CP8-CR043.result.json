@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR043",
+  "profile": "standard-code",
+  "story_id": "",
+  "cr_id": "CR-043",
+  "context_ref": "process/context/CR043.CP8.context.json",
+  "dispatch_refs": [],
+  "evidence_ref": "process/evidence/CR043.CP8.index.json",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "invocation": "PYTHONDONTWRITEBYTECODE=1 uv run meta-flow cp result-check --result process/checks/CP8-CR043.result.json --project-root .",
+    "generated_by": "host-orchestrator",
+    "fallback_used": false
+  },
+  "release_decision": "READY_WITH_RISK",
+  "fact_diff": [
+    {
+      "promise_ref": "CR043-ACCEPT-001",
+      "promise": "Dry-run writes structured planned evidence without executing commands.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": [
+        "tests/test_validation_task_runner.py#test_real_lake_readonly_dry_run_writes_structured_evidence_without_execution"
+      ],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR043-ACCEPT-002",
+      "promise": "--execute without --command fails.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": [
+        "tests/test_validation_task_runner.py#test_execute_requires_command"
+      ],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR043-ACCEPT-003",
+      "promise": "Executed reruns record consistency.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": [
+        "tests/test_validation_task_runner.py#test_execute_records_consistent_reruns_for_successful_command"
+      ],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR043-ACCEPT-004",
+      "promise": "Forbidden operation counts fail the validation task.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": [
+        "tests/test_validation_task_runner.py#test_ops_counter_detects_forbidden_write"
+      ],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR043-RISK-PROJECT-SPECIFIC-COMMAND-CONTRACT",
+      "promise": "Target projects still own their real validation command contract.",
+      "status": "NEEDS_REVIEW",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": [
+        "process/evidence/CR043.CP7.index.json#remaining_risks"
+      ],
+      "risk_ref": "CR043-RISK-PROJECT-SPECIFIC-COMMAND-CONTRACT"
+    },
+    {
+      "promise_ref": "CR043-RISK-DRY-RUN-DOES-NOT-SATISFY-CP7",
+      "promise": "Planned evidence does not satisfy real CP7 execution.",
+      "status": "NEEDS_REVIEW",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": [
+        "process/evidence/CR043.CP7.index.json#remaining_risks"
+      ],
+      "risk_ref": "CR043-RISK-DRY-RUN-DOES-NOT-SATISFY-CP7"
+    }
+  ],
+  "items": [
+    {
+      "id": "CP8-CR043-001",
+      "category": "release-readiness",
+      "name": "Real lake validation wrapper delivered",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR043.CP7.index.json#verification_claims"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": ""
+    },
+    {
+      "id": "CP8-CR043-002",
+      "category": "release-readiness",
+      "name": "Project command and dry-run risks accepted",
+      "status": "PASS",
+      "severity": "LOW",
+      "evidence_refs": [
+        "process/evidence/CR043.CP8.index.json#release_context.remaining_risks"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": ""
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS",
+  "next_route": "delivered",
+  "checked_at": "2026-07-04T15:06:00+00:00"
+}

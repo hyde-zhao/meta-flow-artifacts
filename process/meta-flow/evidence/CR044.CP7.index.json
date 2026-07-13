@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-044",
+  "checkpoint": "CP7",
+  "created_at": "2026-07-04T15:20:00+00:00",
+  "summary": "Verified story plan-check behavior and delivery guidance consistency.",
+  "verification_claims": [
+    {
+      "id": "CR044-VERIFY-001",
+      "claim": "A valid DEVELOPMENT-PLAN.yaml truth source passes.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_story_plan_check.py#test_plan_check_accepts_development_plan_truth_source"
+      ]
+    },
+    {
+      "id": "CR044-VERIFY-002",
+      "claim": "Duplicate Story IDs fail.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_story_plan_check.py#test_plan_check_rejects_duplicate_story_ids"
+      ]
+    },
+    {
+      "id": "CR044-VERIFY-003",
+      "claim": "Legacy STORY-STATUS status conflicts fail.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_story_plan_check.py#test_plan_check_rejects_legacy_story_status_conflict"
+      ]
+    },
+    {
+      "id": "CR044-VERIFY-004",
+      "claim": "Unknown legacy refs warn by default and fail in strict mode.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_story_plan_check.py#test_plan_check_reports_unknown_legacy_refs_as_warning_or_strict_error",
+        "tests/test_story_plan_check.py#test_plan_check_cli_prints_warning_without_failing_by_default"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest tests/test_story_plan_check.py tests/test_story_evidence.py",
+      "result": "PASS",
+      "summary": "13 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest",
+      "result": "PASS",
+      "summary": "243 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run python scripts/check_delivery_guardrails.py",
+      "result": "PASS",
+      "summary": "OK"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run meta-flow cr check --project-root .",
+      "result": "PASS",
+      "summary": "CR Lifecycle Check: OK"
+    }
+  ],
+  "remaining_risks": [
+    {
+      "id": "CR044-RISK-LEGACY-STORY-FILES-STILL-READABLE",
+      "status": "accepted",
+      "reason": "Legacy STORY-BACKLOG and STORY-STATUS remain readable for compatibility; plan-check prevents silent status drift."
+    },
+    {
+      "id": "CR044-RISK-PARTIAL-TASKS-DEDUP",
+      "status": "accepted",
+      "reason": "Feature TASKS.md dedup is drift-detected but not fully migrated in this CR."
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR045",
+  "profile": "standard-code",
+  "story_id": "CR045-S1",
+  "cr_id": "CR-045",
+  "context_ref": "process/context/CR045.CP6.context.json",
+  "dispatch_refs": [
+    "ADE-CR045-INLINE-CP6"
+  ],
+  "evidence_ref": "process/evidence/CR045.CP6.index.json",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "invocation": "uv run meta-flow cp result-check --result process/checks/CP6-CR045.result.json --project-root .",
+    "generated_by": "host-orchestrator",
+    "fallback_used": false
+  },
+  "items": [
+    {
+      "id": "CP6-CR045-001",
+      "category": "implementation",
+      "name": "Executable route-plan policy added",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "meta_flow/policies/route_plan.py",
+        "tests/test_route_plan.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Route derivation is code-backed, not only documented."
+    },
+    {
+      "id": "CP6-CR045-002",
+      "category": "implementation",
+      "name": "N/A CP result semantics added",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "meta_flow/checks/cp_result.py#validate_cp_result",
+        "tests/test_cp_result_event_ledger.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "N/A is now a valid decision and CP6/CP7 N/A results do not require story dispatch fields."
+    },
+    {
+      "id": "CP6-CR045-003",
+      "category": "implementation",
+      "name": "Gate profile compatibility guard added",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "meta_flow/checks/cr_tracking.py#ALLOWED_GATE_PROFILES",
+        "tests/test_gate_policy.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CR tracking now accepts the default gate profile registry plus legacy aliases."
+    },
+    {
+      "id": "CP6-CR045-004",
+      "category": "documentation",
+      "name": "Route-plan workflow guidance synchronized",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "delivery/skills/state-router/SKILL.md",
+        "delivery/skills/checkpoint-manager/SKILL.md",
+        "delivery/skills/change-impact-analysis/templates/CR-TEMPLATE.md",
+        ".agents/skills/state-router/SKILL.md",
+        ".agents/skills/checkpoint-manager/SKILL.md",
+        ".agents/skills/change-impact-analysis/templates/CR-TEMPLATE.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Delivery and active skill copies were updated together."
+    },
+    {
+      "id": "CP6-CR045-005",
+      "category": "guardrail",
+      "name": "Route-plan consumption guard added",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "meta_flow/policies/route_plan.py#validate_route_plan_for_cr",
+        "meta_flow/workflow/cr_lifecycle.py#collect_check_errors",
+        "tests/test_route_plan.py",
+        "tests/test_cr_lifecycle.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "meta-flow route check validates route_plan_ref directly; cr check consumes the guard for CRs declaring route_plan_ref or cr_trait_* fields."
+    },
+    {
+      "id": "CP6-CR045-006",
+      "category": "dispatch",
+      "name": "Structured dispatch event write integration added",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "meta_flow/state/event_ledger.py#build_inline_fallback_event",
+        "meta_flow/state/event_ledger.py#build_dispatch_not_required_event",
+        "meta_flow/checks/cp_result.py#_validate_dispatch_refs",
+        "process/state/AGENT-DISPATCH-LEDGER.ndjson#ADE-CR045-INLINE-CP6",
+        "tests/test_cp_result_event_ledger.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CP result dispatch_refs now resolve to structured dispatch ledger entries in consistency mode."
+    },
+    {
+      "id": "CP6-CR045-007",
+      "category": "audit",
+      "name": "CP8 applicability aggregate build/check added",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "meta_flow/checks/cp_result.py#build_applicability_aggregate",
+        "meta_flow/checks/cp_result.py#validate_applicability_aggregate",
+        "process/checks/CP8-CR045.applicability.json",
+        "tests/test_cp_result_event_ledger.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Aggregate applicability is a separate JSON schema and checker, not a CP-AGGREGATE checkpoint."
+    },
+    {
+      "id": "CP6-CR045-008",
+      "category": "token-optimization",
+      "name": "Human-gate launch replay added",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "meta_flow/ask_user.py#main",
+        "tests/test_ask_user.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "meta-flow ask-user human-gate --replay regenerates launch text from checkpoint content without requiring a persisted launch-message file."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS",
+  "next_route": "CP7",
+  "checked_at": "2026-07-05T02:27:58+00:00"
+}

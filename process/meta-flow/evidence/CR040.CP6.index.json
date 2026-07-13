@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-040",
+  "checkpoint": "CP6",
+  "created_at": "2026-07-04T14:36:35+00:00",
+  "summary": "Implemented warning-only governance dependency detection for CR lifecycle summaries and checks.",
+  "changed_files": [
+    "meta_flow/workflow/cr_lifecycle.py",
+    "tests/test_cr_lifecycle.py"
+  ],
+  "implementation_claims": [
+    {
+      "id": "CR040-IMPL-001",
+      "claim": "CR summaries include governance_dependency_review with NEEDS_REVIEW findings for open governance baseline dependencies.",
+      "evidence_refs": [
+        "meta_flow/workflow/cr_lifecycle.py#collect_governance_dependency_findings",
+        "meta_flow/workflow/cr_lifecycle.py#summary_from_cr_file"
+      ]
+    },
+    {
+      "id": "CR040-IMPL-002",
+      "claim": "meta-flow cr check prints warning-only governance dependency findings without changing exit code when no blockers exist.",
+      "evidence_refs": [
+        "meta_flow/workflow/cr_lifecycle.py#collect_check_warnings",
+        "meta_flow/workflow/cr_lifecycle.py#main"
+      ]
+    }
+  ],
+  "test_refs": [
+    "tests/test_cr_lifecycle.py#test_cr_summary_records_governance_dependency_warning",
+    "tests/test_cr_lifecycle.py#test_cr_check_prints_governance_dependency_warning_without_blocking",
+    "tests/test_cr_lifecycle.py#test_closed_governance_cr_does_not_warn"
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest tests/test_cr_lifecycle.py",
+      "result": "PASS",
+      "summary": "23 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest",
+      "result": "PASS",
+      "summary": "224 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run python scripts/check_delivery_guardrails.py",
+      "result": "PASS",
+      "summary": "OK"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS",
+      "summary": "no output"
+    }
+  ],
+  "forbidden_operations": {
+    "credential_reads": 0,
+    "runtime_calls": 0,
+    "production_writes": 0,
+    "trading_operations": 0
+  }
+}

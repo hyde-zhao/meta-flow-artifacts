@@ -1,0 +1,51 @@
+schema_version: "1.0"
+capsule_id: "CP5-CR046-LLD-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "story-planning"
+checkpoint: "CP5"
+status: "lld-batch-ready"
+created_at: "2026-07-12T03:36:19Z"
+created_by: "host-orchestrator"
+source_cr: "CR-046"
+gate_profile: "architecture-major"
+token_control:
+  read_profile: "minimal"
+  max_parallel_lld: 3
+  full_doc_read_policy: "story-card-and-feature-refs-first; expand only for contract conflict"
+must_read:
+  - {path: "process/DEVELOPMENT-PLAN.yaml", reason: "Story truth, DAG, ownership and evidence paths"}
+  - {path: "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-FEATURE-DESIGN-MATRIX.md", reason: "LLD policy and three minor acceptance items"}
+  - {path: "delivery/doc/PLATFORM-CONTRACTS.yaml", reason: "official platform discovery/path truth"}
+read_if_needed:
+  - {path: "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-HLD.md", trigger: "Story/Feature contract ambiguity"}
+  - {path: "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-ARCHITECTURE-DECISION.md", trigger: "ADR detail needed"}
+do_not_read_by_default:
+  - {path_or_pattern: "process/archive/**", reason: "cold history"}
+  - {path_or_pattern: "non-assigned Story cards/LLDs", reason: "parallel isolation"}
+  - {path_or_pattern: "quant-lab business source", reason: "pilot not authorized"}
+lld_clarification_queue:
+  status: "clear"
+  ledger_ref: "process/state/QUESTION-LEDGER.ndjson"
+  blocking_items: 0
+lld_design_batch:
+  batch_id: "CR046-all-stories"
+  source: "change"
+  items:
+    - {story_id: "ST-EI-001", design_evidence_type: "full-lld", evidence_path: "process/stories/STORY-ST-EI-001-gate-chronology-LLD.md"}
+    - {story_id: "ST-EI-002", design_evidence_type: "full-lld", evidence_path: "process/stories/STORY-ST-EI-002-dispatch-attestation-LLD.md"}
+    - {story_id: "ST-EI-003", design_evidence_type: "full-lld", evidence_path: "process/stories/STORY-ST-EI-003-cp-attempt-correlation-LLD.md"}
+    - {story_id: "ST-EI-004", design_evidence_type: "full-lld", evidence_path: "process/stories/STORY-ST-EI-004-governance-integrity-LLD.md"}
+    - {story_id: "ST-EI-005", design_evidence_type: "full-lld", evidence_path: "process/stories/STORY-ST-EI-005-token-telemetry-LLD.md"}
+    - {story_id: "ST-EI-006", design_evidence_type: "full-lld", evidence_path: "process/stories/STORY-ST-EI-006-replay-audit-LLD.md"}
+    - {story_id: "ST-EI-007", design_evidence_type: "full-lld", evidence_path: "process/stories/STORY-ST-EI-007-correction-pilot-LLD.md"}
+key_facts:
+  minor_requirements: ["PC-18 D0 freshness/re-probe", "PC-19 followup no reuse receipt", "MIG-EI-03 legacy codex_agent_name D3"]
+  implementation_forbidden: true
+  real_pilot_forbidden: true
+risks_and_decisions:
+  pending_human_decisions: []
+  non_authorized_items: ["code implementation", "runtime", "credentials", "real CR-163 pilot", "commit", "push"]
+downstream_tasks:
+  - "Produce seven independent 14-section full LLDs and per-Story CP5 implementability results."
+  - "Host aggregates clarification items and opens one CP5 batch gate only after all checks pass."

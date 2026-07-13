@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-045",
+  "story_id": "CR045-S1",
+  "status": "verified",
+  "touched_files": [
+    {"path": "process/docs/quality/VERIFICATION-REPORT-CR045-R4.md", "change_type": "added"},
+    {"path": "process/docs/quality/TEST-REPORT-CR045-R4.md", "change_type": "added"},
+    {"path": "process/docs/quality/REVIEW-CR045-R4.md", "change_type": "added"},
+    {"path": "process/docs/quality/FIXES-CR045-R4.md", "change_type": "added"},
+    {"path": "process/returns/CR045-S1.CP7-R4.return.json", "change_type": "added"},
+    {"path": "process/evidence/CR045-S1.CP7-R4.index.json", "change_type": "added"},
+    {"path": "process/checks/CP7-CR045-R4.result.json", "change_type": "added"},
+    {"path": "process/checks/CP7-CR045-R4.result.summary.md", "change_type": "added"}
+  ],
+  "contract_changes": {"public_api_changed": false, "data_contract_changed": false, "design_delta_required": false, "design_delta_ref": null},
+  "boundary_check": {"allowed_paths_only": true, "forbidden_paths_touched": [], "unexpected_imports": []},
+  "verification": {
+    "commands_run": [
+      {"command": "isolated exact decision x stop-reason matrix", "result": "pass", "summary": "38 expected outcomes"},
+      {"command": "uv run pytest tests/test_state_transition.py", "result": "pass", "summary": "11 passed"},
+      {"command": "focused CR-045 suite", "result": "pass", "summary": "125 passed"},
+      {"command": "uv run pytest", "result": "pass", "summary": "320 passed"},
+      {"command": "route/result/ledger/state/lifecycle/governance checks", "result": "pass"}
+    ],
+    "tests": ["all four findings", "exact decision-stop matrix", "focused regression", "full regression"],
+    "skipped": []
+  },
+  "open_questions": [],
+  "risks": [{"id": "CR045-O-001-R4", "severity": "INFO", "status": "host-hygiene", "owner": "host-orchestrator"}],
+  "waivers": [],
+  "dispatch_refs": ["DISPATCH-CR045-CP7-REVERIFY-R4-QA"],
+  "next_stage_recommendation": "CP8"
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "story_id": "CR045-S1",
+  "cr_id": "CR-045",
+  "stage": "CP7",
+  "checkpoint": "CP7-R2",
+  "return_ref": "process/returns/CR045-S1.CP7-R2.return.json",
+  "summary": "Independent R2 closes both original HIGH findings but finds a new HIGH state-transition defect; 60 local, 120 focused, and 315 full tests pass.",
+  "changed_files": [],
+  "commands": [
+    {"command": "git diff --check", "result": "PASS"},
+    {"command": "uv run pytest tests/test_route_plan.py tests/test_cp_result_event_ledger.py", "result": "PASS", "summary": "60 passed"},
+    {"command": "focused CR-045 six-file suite", "result": "PASS", "summary": "120 passed"},
+    {"command": "uv run pytest", "result": "PASS", "summary": "315 passed"},
+    {"command": "uv run meta-flow route check --from-cr process/changes/CR-045.md --project-root .", "result": "PASS_WITH_WARNING"},
+    {"command": "historical CP6 result consistency", "result": "PASS"},
+    {"command": "R1 CP7 result consistency", "result": "PASS"},
+    {"command": "dispatch/checkpoint/gate ledger checks", "result": "PASS"},
+    {"command": "applicability/state/transition/CR/gate checks", "result": "PASS"},
+    {"command": "uv run meta-flow check state-transition --route-plan process/checks/CP0-CR045.route-plan.json --checkpoint CP7 --decision PASS --project-root .", "result": "EXECUTED_NEGATIVE_RESULT", "summary": "Unexpected OK with stale stop_reason=needs_rework; expected requirement to advance to CP8"},
+    {"command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python scripts/check_delivery_guardrails.py", "result": "FAIL_UNRELATED_TRANSIENT", "summary": "ignored caches created before guardrail invocation"}
+  ],
+  "tests": [
+    {"scope": "r2-local", "passed": 60, "failed": 0},
+    {"scope": "focused-cr045", "passed": 120, "failed": 0},
+    {"scope": "repository", "passed": 315, "failed": 0}
+  ],
+  "artifacts": [
+    "process/docs/quality/VERIFICATION-REPORT-CR045-R2.md",
+    "process/docs/quality/TEST-REPORT-CR045-R2.md",
+    "process/docs/quality/REVIEW-CR045-R2.md",
+    "process/docs/quality/FIXES-CR045-R2.md"
+  ],
+  "verification_claims": [
+    {"id": "CR045-F-001", "status": "CLOSED", "evidence_refs": ["tests/test_route_plan.py", "meta_flow/policies/route_plan.py:418"]},
+    {"id": "CR045-F-002", "status": "CLOSED", "evidence_refs": ["tests/test_cp_result_event_ledger.py", "meta_flow/checks/cp_result.py:271"]},
+    {"id": "CR045-F-003-R2", "status": "OPEN", "evidence_refs": ["meta_flow/checks/state_transition.py:75", "process/state/STATE.current.json"]},
+    {"id": "CR045-EV-REGRESSION", "status": "PASS", "evidence_refs": ["process/docs/quality/TEST-REPORT-CR045-R2.md"]}
+  ],
+  "risks": ["CR045-F-003-R2", "CR045-O-001-R2"],
+  "waivers": [],
+  "dispatch_refs": ["DISPATCH-CR045-CP7-REVERIFY-R2-QA"],
+  "design_delta_ref": null
+}

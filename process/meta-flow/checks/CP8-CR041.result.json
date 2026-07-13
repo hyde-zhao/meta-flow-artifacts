@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR041",
+  "profile": "standard-code",
+  "story_id": "",
+  "cr_id": "CR-041",
+  "context_ref": "process/context/CR041.CP8.context.json",
+  "dispatch_refs": [],
+  "evidence_ref": "process/evidence/CR041.CP8.index.json",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "invocation": "PYTHONDONTWRITEBYTECODE=1 uv run meta-flow cp result-check --result process/checks/CP8-CR041.result.json --project-root .",
+    "generated_by": "host-orchestrator",
+    "fallback_used": false
+  },
+  "release_decision": "READY_WITH_RISK",
+  "fact_diff": [
+    {
+      "promise_ref": "CR041-ACCEPT-001",
+      "promise": "CP result checker_provenance is validated and rendered.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": [
+        "tests/test_cp_result_event_ledger.py#test_checker_provenance_requires_review_ref_when_fallback_used",
+        "tests/test_cp_result_event_ledger.py#test_checker_provenance_is_rendered_and_added_to_checkpoint_event"
+      ],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR041-ACCEPT-002",
+      "promise": "Repository publication authz is separate from runtime/data/trading publish.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": [
+        "tests/test_gate_policy.py#test_repository_publication_alias_is_separate_from_runtime_and_data_publish",
+        "tests/test_gate_policy.py#test_policy_check_distinguishes_git_push_from_lake_publish",
+        "tests/test_gate_policy.py#test_policy_check_accepts_repository_publication_ref_without_data_publish_ref"
+      ],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR041-RISK-PROVENANCE-OPTIONAL-LEGACY",
+      "promise": "Historical CP results may not contain checker_provenance.",
+      "status": "NEEDS_REVIEW",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": [
+        "process/evidence/CR041.CP7.index.json#remaining_risks"
+      ],
+      "risk_ref": "CR041-RISK-PROVENANCE-OPTIONAL-LEGACY"
+    }
+  ],
+  "items": [
+    {
+      "id": "CP8-CR041-001",
+      "category": "release-readiness",
+      "name": "Checker provenance and repository publication authz delivered",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR041.CP7.index.json#verification_claims"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": ""
+    },
+    {
+      "id": "CP8-CR041-002",
+      "category": "release-readiness",
+      "name": "Legacy provenance optionality risk accepted",
+      "status": "PASS",
+      "severity": "LOW",
+      "evidence_refs": [
+        "process/evidence/CR041.CP8.index.json#remaining_risks"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": ""
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS",
+  "next_route": "delivered",
+  "checked_at": "2026-07-04T14:45:03+00:00"
+}

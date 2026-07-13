@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR043",
+  "profile": "standard-code",
+  "story_id": "CR043-S1",
+  "cr_id": "CR-043",
+  "context_ref": "process/context/CR043.CP7.context.json",
+  "dispatch_refs": [
+    "inline-host-orchestrator-CR043"
+  ],
+  "evidence_ref": "process/evidence/CR043.CP7.index.json",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "invocation": "PYTHONDONTWRITEBYTECODE=1 uv run meta-flow cp result-check --result process/checks/CP7-CR043.result.json --project-root .",
+    "generated_by": "host-orchestrator",
+    "fallback_used": false
+  },
+  "items": [
+    {
+      "id": "CP7-CR043-001",
+      "category": "verification",
+      "name": "Validation task wrapper tests pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "tests/test_validation_task_runner.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": ""
+    },
+    {
+      "id": "CP7-CR043-002",
+      "category": "verification",
+      "name": "Validation CLI smoke passes",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR043.CP7.index.json#commands"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": ""
+    }
+  ],
+  "promise_evidence_alignment": [
+    {
+      "promise_ref": "CR043-ACCEPT-001",
+      "promise": "Dry-run writes structured planned evidence without executing commands.",
+      "evidence_status": "EXECUTED_POSITIVE_RESULT",
+      "result": "PASS",
+      "evidence_refs": [
+        "tests/test_validation_task_runner.py#test_real_lake_readonly_dry_run_writes_structured_evidence_without_execution"
+      ]
+    },
+    {
+      "promise_ref": "CR043-ACCEPT-002",
+      "promise": "--execute without --command fails.",
+      "evidence_status": "EXECUTED_POSITIVE_RESULT",
+      "result": "PASS",
+      "evidence_refs": [
+        "tests/test_validation_task_runner.py#test_execute_requires_command"
+      ]
+    },
+    {
+      "promise_ref": "CR043-ACCEPT-003",
+      "promise": "Executed reruns record consistency.",
+      "evidence_status": "EXECUTED_POSITIVE_RESULT",
+      "result": "PASS",
+      "evidence_refs": [
+        "tests/test_validation_task_runner.py#test_execute_records_consistent_reruns_for_successful_command"
+      ]
+    },
+    {
+      "promise_ref": "CR043-ACCEPT-004",
+      "promise": "Forbidden operation counts fail the validation task.",
+      "evidence_status": "EXECUTED_POSITIVE_RESULT",
+      "result": "PASS",
+      "evidence_refs": [
+        "tests/test_validation_task_runner.py#test_ops_counter_detects_forbidden_write"
+      ]
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS",
+  "next_route": "CP8",
+  "checked_at": "2026-07-04T15:06:00+00:00"
+}

@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP2",
+  "checkpoint_id": "CP2-CR045-RECOVERY-BASELINE",
+  "cr_id": "CR-045",
+  "profile": "standard-code",
+  "context_ref": "process/context/CP2-CR045.context.json",
+  "route_plan_ref": "process/checks/CP0-CR045.route-plan.json",
+  "commitments": {
+    "required_evidence": [
+      {
+        "id": "CR045-EV-ROUTE",
+        "kind": "route-plan-contract",
+        "required_stage": "CP7",
+        "minimum_evidence": {
+          "commands": [
+            "meta-flow route check",
+            "pytest tests/test_route_plan.py"
+          ],
+          "expected_result": "PASS"
+        }
+      },
+      {
+        "id": "CR045-EV-CP-LEDGER",
+        "kind": "cp-result-and-ledger-contract",
+        "required_stage": "CP7",
+        "minimum_evidence": {
+          "commands": [
+            "meta-flow cp result-check",
+            "meta-flow event check"
+          ],
+          "expected_result": "PASS"
+        }
+      },
+      {
+        "id": "CR045-EV-REGRESSION",
+        "kind": "repository-regression",
+        "required_stage": "CP7",
+        "minimum_evidence": {
+          "commands": [
+            "pytest"
+          ],
+          "expected_result": "PASS"
+        }
+      }
+    ]
+  },
+  "items": [
+    {
+      "id": "CP2-CR045-001",
+      "category": "scope",
+      "name": "Recovery scope matches the existing CR-045 goal",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/changes/summaries/CR-045.summary.json",
+        "process/changes/summaries/CR-045.summary.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "No product requirements, runtime authorization, credential access, publication, or external writes are added."
+    },
+    {
+      "id": "CP2-CR045-002",
+      "category": "traceability",
+      "name": "CP7 evidence commitments are machine-readable",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP2-CR045.result.json#commitments"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Independent CP7 must verify route-plan behavior, result/ledger behavior, and repository regression."
+    },
+    {
+      "id": "CP2-CR045-003",
+      "category": "recovery",
+      "name": "Historical gate gap is disclosed rather than backdated",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP6-CR045.result.json",
+        "process/checkpoints/CP2-CR045-RECOVERY-BASELINE.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Approval, if granted, confirms the current recovery baseline only; it does not rewrite CP2 as having preceded CP6."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS",
+  "next_route": "CP2-human-gate",
+  "checked_at": "2026-07-11T10:39:43Z"
+}

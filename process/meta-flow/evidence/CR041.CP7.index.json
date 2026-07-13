@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-041",
+  "checkpoint": "CP7",
+  "created_at": "2026-07-04T14:45:03+00:00",
+  "summary": "Verified checker provenance and repository publication authz behavior.",
+  "verification_claims": [
+    {
+      "id": "CR041-VERIFY-001",
+      "claim": "Fallback checker provenance requires fallback_review_ref.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_cp_result_event_ledger.py#test_checker_provenance_requires_review_ref_when_fallback_used"
+      ]
+    },
+    {
+      "id": "CR041-VERIFY-002",
+      "claim": "Checker provenance renders in summary and propagates to checkpoint event.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_cp_result_event_ledger.py#test_checker_provenance_is_rendered_and_added_to_checkpoint_event"
+      ]
+    },
+    {
+      "id": "CR041-VERIFY-003",
+      "claim": "Repository publication alias is separate from runtime/data/trading publication.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_gate_policy.py#test_repository_publication_alias_is_separate_from_runtime_and_data_publish"
+      ]
+    },
+    {
+      "id": "CR041-VERIFY-004",
+      "claim": "Policy check distinguishes git push from provider/lake/catalog publish.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_gate_policy.py#test_policy_check_distinguishes_git_push_from_lake_publish",
+        "tests/test_gate_policy.py#test_policy_check_accepts_repository_publication_ref_without_data_publish_ref"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest tests/test_cp_result_event_ledger.py tests/test_gate_policy.py",
+      "result": "PASS",
+      "summary": "33 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest",
+      "result": "PASS",
+      "summary": "229 passed"
+    }
+  ],
+  "remaining_risks": [
+    {
+      "id": "CR041-RISK-PROVENANCE-OPTIONAL-LEGACY",
+      "status": "accepted",
+      "reason": "checker_provenance is optional for legacy CP results to avoid rewriting historical evidence."
+    }
+  ]
+}

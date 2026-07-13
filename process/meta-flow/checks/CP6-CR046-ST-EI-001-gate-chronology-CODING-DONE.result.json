@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR046-ST-EI-001-gate-chronology-CODING-DONE",
+  "story_id": "ST-EI-001",
+  "cr_id": "CR-046",
+  "profile": "architecture-major",
+  "check_attempt": 1,
+  "context_ref": "process/context/stories/ST-EI-001.CP6.work-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR046.route-plan.json",
+  "dispatch_refs": ["IF-CR046-ST-EI-001-CP6"],
+  "evidence_ref": "process/evidence/ST-EI-001.CP6.index.json",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "invocation": "uv run meta-flow cp result-check --result process/checks/CP6-CR046-ST-EI-001-gate-chronology-CODING-DONE.result.json --check-consistency --project-root .",
+    "generated_by": "host-orchestrator",
+    "fallback_used": true,
+    "fallback_reason": "User approved host inline implementation; no subagent was spawned.",
+    "fallback_review_ref": "process/state/GATE-LEDGER.ndjson#GATE-CR046-CP5-APPROVED"
+  },
+  "input_artifact_hashes": {
+    "meta_flow/checks/state_transition.py": "sha256:ff2210f526ec75e3bf3760d045ea9eea71ce07689e1647d8e400f497945cfc41",
+    "tests/test_state_transition.py": "sha256:3c4582547dd912e37a8a92dfbc9dc079e9e9720f9b6d6f06d4244717b3867ce1",
+    "process/context/stories/ST-EI-001.CP6.work-packet.json": "sha256:bd303a356e431b9c9e15e21ebd25b0eb529a337e5f560d09d22e81d19d260e5f",
+    "process/stories/STORY-ST-EI-001-gate-chronology-LLD.md": "sha256:585c2a6d55120b62ee18cd471a5447fa1776f51d237b2fc11459ba364969d92c"
+  },
+  "items": [
+    {"id": "CP6-EI001-01", "category": "implementation", "name": "Typed chronology and conditional approval are implemented", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/stories/STORY-ST-EI-001-gate-chronology-IMPLEMENTATION.md#5"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Stable chronology finding codes and fail-closed conditional decision are present."},
+    {"id": "CP6-EI001-02", "category": "implementation", "name": "Phase work is not represented as a future human gate", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["meta_flow/checks/state_transition.py#_is_automatic_phase_in_progress", "tests/test_state_transition.py#test_approved_cp5_accepts_story_execution_before_cp8_exists"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "CP5 approved route accepts actual CP6/CP7 execution before CP8 becomes pending."},
+    {"id": "CP6-EI001-03", "category": "verification", "name": "Targeted, related regression, route and diff checks pass", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/evidence/ST-EI-001.CP6.index.json#commands"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "27 targeted tests, 36 related tests, route check and diff check passed."},
+    {"id": "CP6-EI001-04", "category": "boundary", "name": "Inline fallback is explicit and no custom-agent claim is made", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/state/GATE-LEDGER.ndjson#GATE-CR046-CP5-APPROVED", "process/state/AGENT-DISPATCH-LEDGER.ndjson#IF-CR046-ST-EI-001-CP6"], "owner": "host-orchestrator", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "User-authorized fallback is a recorded execution mode; runtime custom profile/model remains unavailable."}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260712T042928Z0000-541c22af", "RE-20260712T043245Z0000-b7aceba3"],
+  "decision": "PASS",
+  "next_route": "CP7-ST-EI-001-inline-verification",
+  "checked_at": "2026-07-12T04:29:56Z"
+}

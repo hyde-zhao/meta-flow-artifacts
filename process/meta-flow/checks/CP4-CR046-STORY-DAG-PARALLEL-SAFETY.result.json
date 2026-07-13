@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR046-STORY-DAG-PARALLEL-SAFETY",
+  "cr_id": "CR-046",
+  "profile": "architecture-major",
+  "check_attempt": 1,
+  "context_ref": "process/context/CP4-CR046-STORY-PLANNING-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR046.route-plan.json",
+  "evidence_ref": "process/DEVELOPMENT-PLAN.yaml",
+  "checker_provenance": {
+    "checker_name": "meta-flow story plan-check + CP4 deterministic review",
+    "checker_commit": "844d351abee5b3872f30f0c6cab389c12e15fb83",
+    "invocation": "uv run meta-flow story plan-check --project-root .",
+    "generated_by": "meta-se-session-observed-unattested",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/DEVELOPMENT-PLAN.yaml": "sha256:8e8d3df1169d1aa0d71e2fa8546ddf941bdfc6f0656809ab9d719dfc299c882a",
+    "docs/design/CR046-FEATURE-DESIGN-MATRIX.md": "sha256:3ab3198e79b285891dcfcb673e4217803b9e1f4e3c5d494a65b067bc9f4a1b63",
+    "process/stories/STORY-ST-EI-001-gate-chronology.md": "sha256:1e9ef5d2c88785c550346920ed5427dfc11928691b01ce355da1040b3e6c57a4",
+    "process/stories/STORY-ST-EI-002-dispatch-attestation.md": "sha256:603c60f11eae79265e43e1b789834dc1f93a92143f9555b49c8d2215619d8fb6",
+    "process/stories/STORY-ST-EI-003-cp-attempt-correlation.md": "sha256:20fa197b3c79a38486bff568d39d6256c3c37ef9fddef9a45939d587574515a7",
+    "process/stories/STORY-ST-EI-004-governance-integrity.md": "sha256:5e51dcc801a9374b44b519090b8371cbd01f966482527339c1a9d84f3e175b87",
+    "process/stories/STORY-ST-EI-005-token-telemetry.md": "sha256:42a6eaa5eb7edf2e6c277f34d03552932556febbe15eb3b4aca8af62f8227c8e",
+    "process/stories/STORY-ST-EI-006-replay-audit.md": "sha256:205c19f573b8963def079dc9c06cb7013ab6585796a20d7d1a36107c23d0b966",
+    "process/stories/STORY-ST-EI-007-correction-pilot.md": "sha256:b66158c092e1e8ba7bfc72290e3ec2e7d491d4d5f223a73c6827caf5eedeb276"
+  },
+  "items": [
+    {
+      "id": "CP4-CR046-001",
+      "category": "entry",
+      "name": "CP3-R3 architecture and platform contract are approved inputs",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checkpoints/CP3-CR046-HLD-REVIEW.md", "process/context/CP4-CR046-STORY-PLANNING-CONTEXT.yaml"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP3 status=approved; CP4 authorization excludes implementation and pilot execution."
+    },
+    {
+      "id": "CP4-CR046-002",
+      "category": "feature_design",
+      "name": "All four Features have required DESIGN, TEST-PLAN and TASKS evidence",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-FEATURE-DESIGN-MATRIX.md", "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/features/cr046-core/DESIGN.md", "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/features/cr046-governance/DESIGN.md", "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/features/cr046-observability/DESIGN.md", "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/features/cr046-correction/DESIGN.md"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Feature coverage=4/4 required; waived=0."
+    },
+    {
+      "id": "CP4-CR046-003",
+      "category": "story_coverage",
+      "name": "Approved seven Story outcomes and full-lld policies are complete",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml", "process/stories/STORY-ST-EI-001-gate-chronology.md", "process/stories/STORY-ST-EI-007-correction-pilot.md"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Stories=7/7; feature_design_refs=7/7; lld_policy full-lld=7/7; no LLD was created at CP4."
+    },
+    {
+      "id": "CP4-CR046-004",
+      "category": "dag",
+      "name": "Approved Story DAG is preserved with no cycle or dangling reference",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml#approved_dag", "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-DEPENDENCY-MAP.md#4-七-story-dag"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "001->002->003->004; 002->005; 003+004+005->006; 004+006->007; cycles=0 and dependency refs valid."
+    },
+    {
+      "id": "CP4-CR046-005",
+      "category": "parallel_safety",
+      "name": "LLD, development and QA waves obey dependency and concurrency limits",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml#parallel_policy", "process/DEVELOPMENT-PLAN.yaml#lld_waves", "process/DEVELOPMENT-PLAN.yaml#qa_waves"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "max LLD/dev/QA=3/2/2; runtime dependencies wait for upstream verified; shared files have merge owners."
+    },
+    {
+      "id": "CP4-CR046-006",
+      "category": "minor_freshness",
+      "name": "D0 freshness and re-probe requirement is machine-checkable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/features/cr046-core/DESIGN.md#d0-freshness-policy", "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/features/cr046-core/TEST-PLAN.md", "process/stories/STORY-ST-EI-002-dispatch-attestation.md"],
+      "owner": "ST-EI-002/ST-EI-006",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "PC-18 covers TTL/expiry, session, epoch, config hash, selector schema and reload triggers; stale probe cannot authorize a new spawn."
+    },
+    {
+      "id": "CP4-CR046-007",
+      "category": "minor_reuse_receipt",
+      "name": "Followup without reuse receipt cannot inherit attestation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/features/cr046-core/TEST-PLAN.md", "process/stories/STORY-ST-EI-002-dispatch-attestation.md", "process/stories/STORY-ST-EI-006-replay-audit.md"],
+      "owner": "ST-EI-002/ST-EI-006",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "PC-19 requires followup custom_agent_verified=false and model_attested=false even if the original spawn receipt was verified."
+    },
+    {
+      "id": "CP4-CR046-008",
+      "category": "minor_legacy_replay",
+      "name": "Legacy codex_agent_name is D3 self-declared-unverifiable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/features/cr046-observability/TEST-PLAN.md", "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/features/cr046-correction/DESIGN.md", "process/stories/STORY-ST-EI-007-correction-pilot.md"],
+      "owner": "ST-EI-006/ST-EI-007",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "MIG-EI-03 keeps resolved profile/model/effort unavailable and prohibits resolution from legacy labels or TOML."
+    },
+    {
+      "id": "CP4-CR046-009",
+      "category": "truth_source",
+      "name": "DEVELOPMENT-PLAN is the single Story management truth and plan-check passes",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml", "meta_flow/workflow/story_evidence.py"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "uv run meta-flow story plan-check --project-root . => OK."
+    },
+    {
+      "id": "CP4-CR046-010",
+      "category": "authorization_and_attestation",
+      "name": "Planning stayed within authorization and did not claim custom-profile/model attestation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/handoffs/CR046-CP4-STORY-PLANNING-META-SE.md", "process/DEVELOPMENT-PLAN.yaml#forbidden_global"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "No code implementation, LLD, CP5 gate, runtime, real CR-163 pilot, commit or push; current reused thread remains session-observed and unattested."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260712T033528Z0000-a2504cf7"
+  ],
+  "decision": "PASS",
+  "next_route": "CP5-design-evidence-preparation",
+  "checked_at": "2026-07-12T03:36:19Z"
+}

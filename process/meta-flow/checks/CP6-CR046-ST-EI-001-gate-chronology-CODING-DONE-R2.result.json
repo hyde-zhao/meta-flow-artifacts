@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR046-ST-EI-001-gate-chronology-CODING-DONE-R2",
+  "event_id": "CP6-ST-EI-001-R2",
+  "story_id": "ST-EI-001",
+  "cr_id": "CR-046",
+  "profile": "architecture-major",
+  "check_attempt": 2,
+  "supersedes_result_ref": "process/checks/CP6-CR046-ST-EI-001-gate-chronology-CODING-DONE.result.json",
+  "context_ref": "process/context/stories/ST-EI-001.CP6.work-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR046.route-plan.json",
+  "dispatch_refs": ["IF-CR046-ST-EI-001-CP6"],
+  "evidence_ref": "process/evidence/ST-EI-001.CP6-R2.index.json",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "invocation": "uv run meta-flow cp result-check --result process/checks/CP6-CR046-ST-EI-001-gate-chronology-CODING-DONE-R2.result.json --check-consistency --project-root .",
+    "generated_by": "host-orchestrator",
+    "fallback_used": true,
+    "fallback_reason": "User approved host inline implementation; no subagent was spawned.",
+    "fallback_review_ref": "process/state/GATE-LEDGER.ndjson#GATE-CR046-CP5-APPROVED"
+  },
+  "input_artifact_hashes": {
+    "meta_flow/checks/state_transition.py": "sha256:b9ca3a3c3e27574f3135328af0950ebe223f6b15f2aa5962c12e8620b79439e4",
+    "tests/test_state_transition.py": "sha256:5382df278bee223092d92f5297e31208900c3991dd6ee696e4354b6a665a9311",
+    "process/stories/STORY-ST-EI-001-gate-chronology-IMPLEMENTATION-R2.md": "sha256:20c158034198073c9661e16e2c003f7d54c83e768c43abda341b056f337e4a4a"
+  },
+  "items": [
+    {"id": "CP6-EI001-R2-01", "category": "implementation", "name": "Rolling CP7 advances to the next active Story without fabricating CP8", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/stories/STORY-ST-EI-001-gate-chronology-IMPLEMENTATION-R2.md"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Only a state with active_story may defer CP8; final CP7 still requires the human gate."},
+    {"id": "CP6-EI001-R2-02", "category": "verification", "name": "Updated targeted and related regression checks pass", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/evidence/ST-EI-001.CP6-R2.index.json#commands"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "28 targeted tests and 36 related tests pass."},
+    {"id": "CP6-EI001-R2-03", "category": "boundary", "name": "Superseding attempt remains host-inline and does not claim custom-agent runtime proof", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/state/AGENT-DISPATCH-LEDGER.ndjson#IF-CR046-ST-EI-001-CP6"], "owner": "host-orchestrator", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "The pre-existing user-authorized CP6 inline dispatch remains the execution mode."}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260712T043731Z0000-72a8b80f"],
+  "decision": "PASS",
+  "next_route": "CP7-ST-EI-001-inline-verification",
+  "checked_at": "2026-07-12T04:33:49Z"
+}

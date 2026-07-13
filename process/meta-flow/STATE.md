@@ -2,12 +2,12 @@
 
 Project: meta-flow
 Workflow mode: standard
-Phase: story-execution
+Phase: delivered
 Blocked: false
-Active CR: CR-037
-Active Story: CR037-S08
-Pending gate: CP6
-Next action: CR037-S07 CP7 PASS_WITH_RISK; CR037-S08 is unblocked and ready for CP6 implementation handoff using process/context/stories/CR037-S08.CP6.work-packet.json.
+Active CR: none
+Active Story: none
+Pending gate: none
+Next action: CR-046 status synced as closed; choose next CR.
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,14 +20,18 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: process/context/stories/CR037-S08.CP6.work-packet.json
+- active context: none
 
 Policy refs:
 - none
 
 Open risks:
-- none
+- CR046-RISK-PLATFORM-RECEIPT-UNAVAILABLE
+- CR046-RISK-NO-INDEPENDENT-CP7-AGENT
+- CR046-RISK-TOKEN-TELEMETRY-UNAVAILABLE
+- CR046-RISK-REAL-PILOT-UNAUTHORIZED
+- CR046-RISK-WORKING-TREE-ONLY
 
-Updated at: 2026-07-03T17:40:18+08:00
+Updated at: 2026-07-12T08:18:00+00:00
 
 <!-- generated-by: meta-flow state render -->

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR045-R2",
+  "profile": "standard-code",
+  "story_id": "CR045-S1",
+  "cr_id": "CR-045",
+  "context_ref": "process/context/CP6-CR045-R2.context.json",
+  "route_plan_ref": "process/checks/CP0-CR045.route-plan.json",
+  "dispatch_refs": [
+    "DISPATCH-CR045-CP7-REWORK-DEV"
+  ],
+  "evidence_ref": "process/evidence/CR045-S1.CP6-R2.index.json",
+  "return_packet_ref": "process/returns/CR045-S1.CP6-R2.return.json",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "invocation": "uv run meta-flow cp result-check --result process/checks/CP6-CR045-R2.result.json --check-consistency --project-root .",
+    "generated_by": "host-orchestrator",
+    "fallback_used": false
+  },
+  "items": [
+    {
+      "id": "CP6-CR045-R2-001",
+      "category": "waiver-governance",
+      "name": "Verification waiver requires both reason and approval reference",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR045-S1.CP6-R2.index.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Reason-only and ref-only paths now block; valid reason+ref remains supported."
+    },
+    {
+      "id": "CP6-CR045-R2-002",
+      "category": "dispatch-governance",
+      "name": "Applicable CP6/CP7 dispatch refs require semantically valid execution evidence",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR045-S1.CP6-R2.index.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Role, checkpoint, status, event type/mode, tool and agent identity or fallback approval fields are validated."
+    },
+    {
+      "id": "CP6-CR045-R2-003",
+      "category": "regression",
+      "name": "Focused and full regression pass after rework",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/CR045-S1-IMPLEMENTATION-R2.md",
+        "process/evidence/CR045-S1.CP6-R2.index.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "120 focused and 315 repository tests passed; independent QA reverification remains required."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS",
+  "next_route": "CP7-reverify",
+  "checked_at": "2026-07-11T11:42:37Z"
+}

@@ -1,0 +1,197 @@
+schema_version: "1.0"
+status: ready-for-cp8-review
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+created_at: "2026-07-11T12:13:56Z"
+updated_at: "2026-07-11T13:25:22Z"
+source_gate: CP8
+dispatch_ref: "DISPATCH-CR045-CP8-DOC"
+
+release_scope:
+  current_version: "0.4.0"
+  target_version: "0.4.1"
+  included_features:
+    - "CR-aware checkpoint route planning"
+    - "Explicit N/A versus WAIVED checkpoint semantics"
+    - "Route-plan-driven post-approval state transitions"
+  included_stories:
+    - "CR045-S1"
+  excluded_scope:
+    - "Runtime execution, production operation, external writes and repository publication"
+    - "Unrelated repository hygiene beyond the CP8 cache check"
+  user_visible_changes:
+    - "Process CRs now receive a deterministic checkpoint route derived from CR traits and gate profile."
+    - "Non-applicable checkpoints are recorded as N/A instead of being represented as waivers."
+    - "After an approval or pass-like result, state transition validation follows the route plan until the next required gate or an explicit stop reason."
+  internal_changes:
+    - "CP result dispatch and waiver consistency validation was tightened."
+    - "Authorization and workflow-health stop reasons remain compatible with pass-like and BLOCKED decisions without accepting stale rework reasons."
+  breaking_changes: []
+  known_risks:
+    - "CR045-RISK-RECOVERY-ORDERING: CP2 and CP5 were approved after historical CP6; the recovery history is preserved and was not backdated."
+    - "CR045-PROVENANCE-LIMITATION: subagent execution was session-observed, but repository artifacts do not contain a platform-signed dispatch receipt; transferred to CR-A S01."
+
+version_decision:
+  current_version: "0.4.0"
+  target_version: "0.4.1"
+  change_type: PATCH
+  compatibility: compatible
+  reason: "CR-045 corrects process-routing and validation behavior without changing installation paths, persisted schemas or public command parameters."
+
+quality_summary:
+  cp7_results:
+    - "process/checks/CP7-CR045-R6.result.json: PASS"
+  test_report_path: "process/docs/quality/TEST-REPORT-CR045-R6.md"
+  review_path: "process/docs/quality/REVIEW-CR045-R6.md"
+  blocker_count: 0
+  high_count: 0
+  accepted_risk_ids: []
+  unresolved_findings:
+    - "CR045-RISK-RECOVERY-ORDERING: accepted at CP8"
+    - "CR045-PROVENANCE-LIMITATION: transferred to CR-A S01; not an implementation defect"
+
+fact_diff:
+  source_refs:
+    cr_scope_ref: "process/changes/summaries/CR-045.summary.json"
+    cp2_commitments_ref: "process/checks/CP2-CR045.result.json"
+    cp7_alignment_ref: "process/checks/CP7-CR045-R6.result.json#promise_evidence_alignment"
+    evidence_index_refs:
+      - "process/evidence/CR045-S1.CP7-R6.index.json"
+  items:
+    - promise_ref: "CR045-EV-ROUTE"
+      promise: "Derive deterministic checkpoint applicability and human-gate routing from CR type, traits and gate profile."
+      status: EXECUTED_POSITIVE_RESULT
+      decision_impact: READY
+      evidence_refs:
+        - "process/evidence/CR045-S1.CP7-R6.index.json"
+        - "tests/test_route_plan.py"
+      risk_ref: ""
+      notes: "Positive and negative route matrices passed."
+    - promise_ref: "CR045-EV-CP-LEDGER"
+      promise: "Distinguish N/A from WAIVED and require semantically valid waiver and dispatch evidence."
+      status: EXECUTED_POSITIVE_RESULT
+      decision_impact: READY
+      evidence_refs:
+        - "process/evidence/CR045-S1.CP7-R6.index.json"
+        - "tests/test_cp_result_event_ledger.py"
+      risk_ref: ""
+      notes: "Waiver reason/ref and semantic dispatch matrices passed."
+    - promise_ref: "CR045-EV-REGRESSION"
+      promise: "Preserve correct post-approval and failure-stop routing while closing the independent QA findings."
+      status: EXECUTED_POSITIVE_RESULT
+      decision_impact: READY
+      evidence_refs:
+        - "process/evidence/CR045-S1.CP7-R6.index.json"
+        - "process/docs/quality/TEST-REPORT-CR045-R6.md"
+      risk_ref: "CR045-RISK-RECOVERY-ORDERING"
+      notes: "All implementation findings closed; approved-CP8 matrix 9/9 and 17/113/329 test layers passed. Recovery approval ordering remains explicit."
+  summary:
+    promised_count: 3
+    delivered_count: 3
+    missing_required_count: 0
+    ready_with_risk_count: 0
+    not_ready_count: 0
+  generation_policy:
+    source_of_truth: "CP7-R6 promise_evidence_alignment and this compact release context"
+    copied_long_text: false
+    allowed_payload: "promise summary, status, decision impact, risk id, evidence path"
+
+affected_surface:
+  platforms:
+    - "All host platforms using the meta-flow CLI"
+  components:
+    - "meta_flow.policies.route_plan"
+    - "meta_flow.checks.cp_result"
+    - "meta_flow.checks.state_transition"
+  install_scopes: []
+  config_changes: []
+  permission_changes: []
+  migration_required: false
+  external_interfaces: []
+  state_schema_changes: []
+  command_parameter_changes: []
+
+install_validation_summary:
+  commands: []
+  results: []
+  log_paths: []
+  skipped_with_reason:
+    - "No installer, platform path or installation-scope change is included in CR-045."
+
+release_documents:
+  release_notes:
+    path: "docs/release/RELEASE-NOTES.md"
+    status: updated
+    na_reason: ""
+  deploy_checklist:
+    path: "docs/release/DEPLOY-CHECKLIST-CR045.md"
+    status: generated
+    na_reason: ""
+  rollback:
+    path: "docs/release/ROLLBACK-CR045.md"
+    status: generated
+    na_reason: ""
+  migration:
+    path: "docs/release/MIGRATION-CR045.md"
+    status: generated
+    na_reason: ""
+  feedback:
+    path: "docs/release/FEEDBACK-CR045.md"
+    status: generated
+    na_reason: ""
+
+non_authorized_items:
+  - id: CR045-NA-001
+    operation: "release execution or deployment"
+    reason: "The later user authorization covers local commit and push only; it does not authorize release execution or deployment."
+    required_authorization: "Separate explicit release/deployment authorization with execution evidence."
+  - id: CR045-NA-002
+    operation: "runtime, credential access, external calls, production or data writes"
+    reason: "These operations are outside CR-045 scope and were not used for CP7 verification."
+    required_authorization: "A separately scoped authorization covering the exact operation and environment."
+
+follow_up_summary:
+  observation_items:
+    - "Confirm process CR route selection across standard-code and existing-evidence-only profiles."
+    - "Watch for stale stop_reason values after pass-like results and required-gate transitions."
+  feedback_items:
+    - "Report any N/A checkpoint that is incorrectly emitted as WAIVED, or vice versa."
+  follow_up_candidates:
+    - "CR-A S01: platform-issued dispatch receipt and producer contract; do not backfill historical receipts."
+  risk_acceptance_items:
+    - "Acknowledge the preserved ex-post CP2/CP5 recovery ordering at CP8."
+
+token_control:
+  default_read_mode: capsule-first
+  copied_long_text: false
+  allowed_payload: "summary, count, risk id, decision id, evidence path"
+  full_doc_read_triggers:
+    - field_conflict
+    - unreadable_evidence_path
+    - conflicting_conclusion
+    - user_requested_deep_review
+
+state_precision:
+  current_phase: delivered
+  active_change: null
+  pending_gate: null
+  stop_reason_path: "next_action.stop_reason"
+  stop_reason_value: delivered
+  top_level_stop_reason: absent
+
+dispatch_provenance:
+  assurance: session-observed
+  repository_replayability: unverifiable
+  platform_receipt_status: unavailable
+  follow_up_ref: "CR-A S01"
+
+source_persistence:
+  status: committed
+  base_commit: "51bd14442aa67b0f89637015c76e27ece785edb6"
+  source_commit: "844d351abee5b3872f30f0c6cab389c12e15fb83"
+  remote: "origin"
+  branch: "main"
+  push_status: verified
+  remote_ref: "origin/main"
+  remote_commit: "844d351abee5b3872f30f0c6cab389c12e15fb83"
+  verified_at: "2026-07-11T13:25:22Z"

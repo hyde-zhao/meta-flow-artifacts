@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR045-R3",
+  "profile": "standard-code",
+  "story_id": "CR045-S1",
+  "cr_id": "CR-045",
+  "context_ref": "process/context/CP7-CR045.context.json",
+  "route_plan_ref": "process/checks/CP0-CR045.route-plan.json",
+  "dispatch_refs": ["DISPATCH-CR045-CP7-REVERIFY-R3-QA"],
+  "evidence_ref": "process/evidence/CR045-S1.CP7-R3.index.json",
+  "return_packet_ref": "process/returns/CR045-S1.CP7-R3.return.json",
+  "checker_provenance": {"checker_name": "meta-flow cp result-check", "checker_commit": "working-tree", "invocation": "uv run meta-flow cp result-check --result process/checks/CP7-CR045-R3.result.json --project-root .", "generated_by": "meta-qa-critical", "fallback_used": false},
+  "items": [
+    {"id": "CP7-CR045-R3-001", "category": "waiver-governance", "name": "CR045-F-001 remains closed", "status": "PASS", "severity": "HIGH", "evidence_refs": ["tests/test_route_plan.py"], "owner": "meta-qa", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Reason/ref matrix passes."},
+    {"id": "CP7-CR045-R3-002", "category": "dispatch-governance", "name": "CR045-F-002 remains closed", "status": "PASS", "severity": "HIGH", "evidence_refs": ["tests/test_cp_result_event_ledger.py"], "owner": "meta-qa", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Semantic dispatch matrix passes."},
+    {"id": "CP7-CR045-R3-003", "category": "state-transition", "name": "CR045-F-003-R2 pass-like stale failure state", "status": "PASS", "severity": "HIGH", "evidence_refs": ["tests/test_state_transition.py", "process/evidence/CR045-S1.CP7-R3.index.json"], "owner": "meta-qa", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Original R2 HIGH closed."},
+    {"id": "CP7-CR045-R3-004", "category": "authorization-state-transition", "name": "BLOCKED preserves authorization and workflow-health stop causes", "status": "FAIL", "severity": "HIGH", "evidence_refs": ["process/docs/quality/VERIFICATION-REPORT-CR045-R3.md#new-finding", "meta_flow/checks/state_transition.py:93"], "owner": "meta-dev", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "BLOCKED incorrectly requires only stop_reason=blocked."},
+    {"id": "CP7-CR045-R3-005", "category": "regression", "name": "Local, focused and full regression", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/docs/quality/TEST-REPORT-CR045-R3.md"], "owner": "meta-qa", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "11, 125 and 320 tests pass."},
+    {"id": "CP7-CR045-R3-006", "category": "recovery-audit", "name": "Recovery gate history remains explicit", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/checks/CP2-CR045.result.json", "process/checks/CP5-CR045.result.json", "process/checks/CP6-CR045.result.json"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "No backdating."},
+    {"id": "CP7-CR045-R3-007", "category": "repository-health", "name": "Ignored Python cache cleanup", "status": "N/A", "severity": "INFO", "evidence_refs": ["process/docs/quality/VERIFICATION-REPORT-CR045-R3.md#non-cr-repository-hygiene"], "owner": "host-orchestrator", "route_on_fail": "create_followup_candidate", "waiver_ref": null, "notes": "Separate CP8 hygiene."}
+  ],
+  "promise_evidence_alignment": [
+    {"promise_ref": "CR045-EV-ROUTE", "evidence_status": "EXECUTED_POSITIVE_RESULT", "result": "PASS", "evidence_refs": ["process/evidence/CR045-S1.CP7-R3.index.json"]},
+    {"promise_ref": "CR045-EV-CP-LEDGER", "evidence_status": "EXECUTED_NEGATIVE_RESULT", "result": "FAIL", "evidence_refs": ["process/docs/quality/VERIFICATION-REPORT-CR045-R3.md#new-finding"]},
+    {"promise_ref": "CR045-EV-REGRESSION", "evidence_status": "EXECUTED_POSITIVE_RESULT", "result": "PASS", "evidence_refs": ["process/docs/quality/TEST-REPORT-CR045-R3.md"]}
+  ],
+  "blockers": ["CR045-F-004-R3"],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "NEEDS_REWORK",
+  "next_route": "rework_same_story",
+  "checked_at": "2026-07-11T12:03:02Z"
+}

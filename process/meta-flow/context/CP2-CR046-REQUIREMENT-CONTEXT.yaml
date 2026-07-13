@@ -1,0 +1,134 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR046-REQUIREMENT-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready-r2-host-review"
+created_at: "2026-07-12T01:25:42Z"
+created_by: "meta-pm"
+source_cr: "CR-046"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 12
+  max_summary_items: 12
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "Read this capsule first; expand to complete product documents only for missing fields, conflict, audit or deep review, and log the expansion."
+
+allowed_reads:
+  - {path: "process/state/STATE.current.json", reason: "current phase, active CR and next action", required: true}
+  - {path: "process/changes/summaries/CR-046.summary.json", reason: "scope, authorization and risk summary", required: true}
+  - {path: "process/checks/CP1-CR046-USE-CASE-COMPLETENESS-R2.result.json", reason: "R2 CP1 machine result with measured checker provenance", required: true}
+  - {path: "process/checks/CP2-CR046-REQUIREMENTS-BASELINE-R2.result.json", reason: "R2 CP2 automatic precheck with measured checker provenance", required: true}
+  - {path: "process/checks/CP1-CR046-USE-CASE-COMPLETENESS.result.json", reason: "immutable R1 null-provenance dogfooding input", required: false}
+  - {path: "process/checks/CP2-CR046-REQUIREMENTS-BASELINE.result.json", reason: "immutable R1 null-provenance dogfooding input", required: false}
+  - {path: "process/checks/CP2-CR046-DISCUSSION-CHECKPOINT.json", reason: "resolved scenario gray areas", required: true}
+  - {path: "docs/product/USE-CASES.md", reason: "formal incremental use-case baseline", required: false}
+  - {path: "docs/product/REQUIREMENTS.md", reason: "formal incremental requirements baseline", required: false}
+  - {path: "docs/product/SCENARIOS.yaml", reason: "engineering scenarios", required: false}
+  - {path: "docs/product/TEST-MATRIX.md", reason: "traceability and coverage", required: false}
+  - {path: "docs/product/STORY-MAP.md", reason: "product outcome stories", required: false}
+  - {path: "docs/product/MVP-SCOPE.md", reason: "in/out/deferred scope", required: false}
+  - {path: "docs/product/RELEASE-SLICES.md", reason: "incremental release value slices", required: false}
+
+must_read:
+  - {path: "process/state/STATE.current.json", reason: "current machine state and pending gate", required: true}
+  - {path: "process/changes/summaries/CR-046.summary.json", reason: "authoritative compact CR boundary", required: true}
+  - {path: "process/checks/CP2-CR046-REQUIREMENTS-BASELINE-R2.result.json", reason: "R2 automatic baseline readiness", required: true}
+  - {path: "process/handoffs/CR046-CP2-SCOPE-REWORK-R2-META-PM-RETURN-SUMMARY.md", reason: "R2 meta-pm CP2 Decision Brief input", required: true}
+
+read_if_needed:
+  - {path: "docs/product/*", trigger: "human audit, field-level review, traceability conflict or requested deep review"}
+  - {path: "process/changes/CR-046.md", trigger: "summary conflict or detailed old-baseline/document-handling audit"}
+  - {path: "process/discussions/CP2-CR046-SCENARIO-DISCUSSION-LOG.md", trigger: "gray-area interaction audit"}
+
+do_not_read_by_default:
+  - {path_or_pattern: "process/STATE.md", reason: "human summary / legacy fallback"}
+  - {path_or_pattern: "process/DEVELOPMENT-PLAN.yaml", reason: "story decomposition is blocked until CP2 approval"}
+  - {path_or_pattern: "process/archive/**", reason: "historical archive is outside default CP2 input"}
+  - {path_or_pattern: "process/discussions/**", reason: "audit/recovery evidence, not formal product truth"}
+  - {path_or_pattern: "process/stories/**", reason: "no CR-046 Story decomposition before CP2 approval"}
+  - {path_or_pattern: "quant-lab source code", reason: "business implementation is immutable and outside product-baseline work"}
+  - {path_or_pattern: "complete conversation transcript", reason: "not a downstream default input"}
+
+key_facts:
+  scope_summary: "Upgrade Meta Flow evidence governance so chronology, platform dispatch, current-checker replay and workflow cost are machine-auditable; use quant-lab CR-163 only as an append-only acceptance pilot."
+  accepted_decisions:
+    - "Missing platform receipt or token telemetry is unavailable, never synthesized."
+    - "Replay retains checker identity and as-executed/current-replay conclusions."
+    - "CR-163 migration appends correction/supersession/migration evidence and does not rewrite original events."
+    - "quant-lab lineage business-code diff must remain zero."
+    - "Ledger compaction/restore preserves event/dispatch/attempt/run identity, terminal selection, correction chains and workflow-health refs without semantic loss."
+    - "Post-close corrections use one reusable versioned append-only lifecycle with allowed scope, author/reason/evidence/supersedes and independent audit trail; CR-163 consumes it."
+    - "Audit reports are machine-generated, carry checker provenance/input hashes, and separate event rows, attempts, threads, outcomes and measured/proxy/unavailable token metrics."
+    - "Original CR-046 R1 CP1/CP2 null-provenance results remain immutable strict-profile negative fixtures."
+    - "Current Codex dispatch is session-observed/repository-unverifiable until a platform receipt is repository-verifiable."
+  active_constraints:
+    - "CP2 is not launched or approved by this capsule."
+    - "No credentials, runtime, production write, publish, trading, repository commit/push or quant-lab business-code changes."
+    - "Artifact repository product directory is the single truth source; no duplicate source-checkout baseline."
+  downstream_tasks:
+    - "Host Orchestrator prepares the CP2 Decision Brief and human checkpoint."
+    - "After CP2 approval only, meta-se may perform blueprint/HLD and Story decomposition."
+  traceability:
+    requirements: ["REQ-EI-001..023", "REQ-EI-C001..003", "REQ-EI-NF001..002"]
+    use_cases: ["UC-EI-001..005"]
+    scenarios: ["TC-EI-001..018"]
+    stories: ["ST-EI-001..007"]
+    features: []
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "CP2-DQ-01: approve, modify or reject the CR-046 product/scenario/scope baseline; recommended approve."
+  non_authorized_items: ["credentials", "runtime", "production_write", "publish", "trading", "repository_commit", "repository_push", "quant_lab_lineage_business_changes"]
+  risk_acceptance_items:
+    - "Platform receipt may remain unavailable on platforms without a receipt contract."
+    - "Token telemetry may remain unavailable; proxy estimates must stay separate."
+    - "The current meta-pm dispatch identity/tool observation is session evidence only; repository verification remains unavailable without a platform receipt."
+  open_questions: []
+  n_a_or_waived_items:
+    - "Implemented automation and CP7 evidence are N/A at CP2 because implementation is not authorized."
+
+handoff:
+  target_agent: "host-orchestrator"
+  expected_output: ["CP2 Decision Brief", "CP2 human checkpoint draft", "human-gate launch only by Host Orchestrator"]
+  exit_criteria: ["CP1 result PASS", "CP2 automatic result PASS", "discussion checkpoint completed", "no blocking clarification"]
+  blocked_if_missing: ["product baseline", "CP2 automatic result", "authorization boundary", "discussion checkpoint"]
+
+read_expansion_log:
+  - at: "2026-07-11T14:00:00Z"
+    actor: "meta-pm"
+    expanded_to: "process/changes/CR-046.md"
+    reason: "field_conflict"
+  - at: "2026-07-11T14:05:00Z"
+    actor: "meta-pm"
+    expanded_to: "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/product/*"
+    reason: "field_conflict"
+  - at: "2026-07-12T01:20:00Z"
+    actor: "meta-pm"
+    expanded_to: "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/product/*"
+    reason: "deep_review"
+
+validation:
+  generated_from_sources:
+    - "process/context/CP1-CR046.context.json"
+    - "process/changes/summaries/CR-046.summary.json"
+    - "process/reviews/CR046-CP2-SCOPE-REVIEW-R1.md"
+    - "process/checks/CP1-CR046-USE-CASE-COMPLETENESS-R2.result.json"
+    - "process/checks/CP2-CR046-REQUIREMENTS-BASELINE-R2.result.json"
+    - "docs/product/USE-CASES.md"
+    - "docs/product/REQUIREMENTS.md"
+    - "docs/product/SCENARIOS.yaml"
+    - "docs/product/TEST-MATRIX.md"
+    - "docs/product/STORY-MAP.md"
+    - "docs/product/MVP-SCOPE.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "Logical docs/product refs route to /home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/product."
+    - "The source checkout intentionally contains no independent docs/product copy."
+    - "R1 CP1/CP2 results are retained unchanged as null-provenance historical inputs; R2 results add measured checker provenance and supersession refs."
+    - "This capsule does not launch or approve CP2; Host Orchestrator remains the only human-gate launcher."

@@ -1,0 +1,59 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "verified",
+      "path": "meta_flow/checks/state_transition.py"
+    },
+    {
+      "change_type": "verified",
+      "path": "tests/test_state_transition.py"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run pytest tests/test_state_transition.py -q",
+      "result": "pass",
+      "summary": "28 passed, 42 subtests passed"
+    },
+    {
+      "command": "uv run pytest tests/test_cp_result_event_ledger.py -q",
+      "result": "pass",
+      "summary": "36 passed, 2 subtests passed"
+    },
+    {
+      "command": "uv run meta-flow check state-transition --route-plan process/checks/CP0-CR046.route-plan.json --approved-gate CP5 --project-root .",
+      "result": "pass",
+      "summary": "real CP5->story-execution transition passes"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "summary": "no whitespace errors"
+    }
+  ],
+  "cr_id": "CR-046",
+  "design_delta_ref": null,
+  "return_ref": "process/returns/ST-EI-001.CP7.return.json",
+  "risks": [
+    {
+      "acceptance_ref": "process/state/GATE-LEDGER.ndjson#GATE-CR046-CP5-APPROVED",
+      "detail": "CP7 was host inline by explicit user instruction. Functional checks pass, but the result is not an independent QA/custom-agent runtime attestation.",
+      "id": "CR046-RISK-NO-INDEPENDENT-CP7-AGENT",
+      "level": "high",
+      "owner": "CP8 decision owner",
+      "status": "accepted-for-progression"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "ST-EI-001",
+  "tests": [
+    "CT-CORE-01",
+    "TC-001-COND",
+    "TC-001-PHASE",
+    "TC-001-CLI",
+    "TC-001-REG"
+  ],
+  "waivers": []
+}

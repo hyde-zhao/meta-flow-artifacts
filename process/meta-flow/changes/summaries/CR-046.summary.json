@@ -1,0 +1,169 @@
+{
+  "affected_product_docs": [
+    "docs/product/USE-CASES.md",
+    "docs/product/REQUIREMENTS.md",
+    "docs/product/SCENARIOS.yaml",
+    "docs/product/TEST-MATRIX.md",
+    "docs/product/STORY-MAP.md",
+    "docs/product/MVP-SCOPE.md",
+    "docs/product/RELEASE-SLICES.md",
+    "docs/product/BACKLOG.md"
+  ],
+  "affected_use_cases": [
+    "governance evidence producer",
+    "workflow auditor",
+    "historical evidence migrator",
+    "cost analyst"
+  ],
+  "approval_focus": "Confirm the governance contract and migration boundary before architecture and implementation design.",
+  "approve_effect": "After CP2, proceed to architecture review, Story decomposition, full design evidence, implementation, independent verification and CP8 readiness.",
+  "archive_isolation_review": {
+    "decision": "PASS",
+    "findings": []
+  },
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "NO_REPOSITORY_PUBLICATION"
+  ],
+  "block_story_decomposition_until": "CP2-approved",
+  "conflict_keys": [
+    "gate-temporal-invariants",
+    "dispatch-provenance",
+    "custom-agent-resolution",
+    "codex-subagent-platform-contract",
+    "thread-runtime-identity",
+    "cp-result-correlation",
+    "cross-truth-consistency",
+    "state-finalization",
+    "workflow-health",
+    "read-expansion-authz",
+    "token-telemetry",
+    "checker-replay",
+    "historical-evidence-migration"
+  ],
+  "cp1_review_profile": {
+    "decision": "FULL_CP1_REQUIRED",
+    "profile": "full",
+    "reason": "product baseline docs or product_baseline_refresh_required indicate use-case completeness must be rechecked",
+    "required_checks": [
+      "use_case_completeness",
+      "requirements_traceability",
+      "scenario_coverage",
+      "story_map_alignment",
+      "mvp_scope_alignment"
+    ]
+  },
+  "cr_type": "architecture",
+  "decision": "pending",
+  "decision_burden": "high",
+  "evidence_index_ref": "process/archive/CR-046/evidence-index.json",
+  "followup_candidates": [],
+  "full_ref": "process/changes/CR-046.md",
+  "gate_profile": "architecture-major",
+  "gate_status": "cp8_closed",
+  "goal_ref": "GOAL-META-FLOW-EVIDENCE-INTEGRITY",
+  "goal_statement": "Make Meta Flow prove trustworthy chronology, attestable platform dispatch, reproducible current-checker replay, and measurable workflow cost.",
+  "governance_dependency_review": {
+    "decision": "PASS",
+    "findings": []
+  },
+  "id": "CR-046",
+  "impact_capability_normalized": [],
+  "impact_capability_refs": [],
+  "impact_capability_resolution": {
+    "kind": "capability",
+    "mode": "audit",
+    "results": [],
+    "summary": {
+      "conflict": 0,
+      "deprecated": 0,
+      "resolved": 0,
+      "unresolved": 0
+    }
+  },
+  "impact_data_refs": [],
+  "impact_feature_refs": [],
+  "impact_module_paths": [
+    "meta_flow/checks/cp_result.py",
+    "meta_flow/state/current.py",
+    "meta_flow/workflow/cr_lifecycle.py",
+    "meta_flow/context_pack/builder.py",
+    "meta_flow/cli.py",
+    "tests"
+  ],
+  "impact_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "NO_REPOSITORY_PUBLICATION"
+  ],
+  "impact_process_refs": [
+    "process/changes/CR-046.md",
+    "process/changes/summaries/CR-046.summary.json",
+    "process/checks/CP0-CR046.route-plan.json",
+    "process/state/CR-LEDGER.ndjson",
+    "process/state/STATE.current.json"
+  ],
+  "impact_runtime_refs": [],
+  "impact_surface": [
+    "meta_flow/checks",
+    "meta_flow/state",
+    "meta_flow/workflow",
+    "meta_flow/context_pack",
+    "meta_flow/cli.py",
+    "delivery/rules",
+    "delivery/skills",
+    "delivery/agents",
+    "tests",
+    "process",
+    "quant-lab process evidence"
+  ],
+  "not_authorized_by_approve": [
+    "credentials",
+    "runtime",
+    "production_write",
+    "data_publish",
+    "provider_publish",
+    "live_trading",
+    "quant_lab_lineage_business_changes",
+    "repository_commit",
+    "repository_push"
+  ],
+  "product_baseline_refresh_required": true,
+  "readiness": "READY_WITH_RISK",
+  "reject_effect": "Meta Flow retains current schema-level validation while chronology, platform authenticity, replay and cost evidence remain only partially auditable.",
+  "remaining_risks": [
+    "CR046-RISK-HISTORICAL-EVIDENCE-IMMUTABILITY",
+    "CR046-RISK-PLATFORM-RECEIPT-UNAVAILABLE",
+    "CR046-RISK-TELEMETRY-UNAVAILABLE",
+    "CR046-RISK-CHECKER-COMPATIBILITY"
+  ],
+  "required_agent": "meta-pm",
+  "required_capabilities": [],
+  "required_evidence": [
+    "admission_package",
+    "rerun_consistency"
+  ],
+  "required_gate": "CP2",
+  "required_phase": "requirement-clarification",
+  "routing_design_ref": "",
+  "scope_authz_consistency": {
+    "blockers": [],
+    "decision": "PASS",
+    "needs_review": []
+  },
+  "scope_summary": [
+    "修改 Meta Flow，使其从“主要证明 schema 能过”升级到“能证明时序可信、平台调用可证、当前 checker 可重放、成本可量化”。随后以 quant-lab CR-163 作为 append-only 历史证据迁移和验收试点，但不修改或重做 quant-lab lineage 业务实现。"
+  ],
+  "split_rationale": "The findings share one evidence-integrity objective, one release value and one acceptance pilot, so they belong in one Change Package with multiple Stories.",
+  "status": "closed",
+  "title": "Evidence integrity, replayability, and token telemetry governance",
+  "updated_at": "2026-07-12T08:17:19+00:00",
+  "user_goal_impact": "Auditors can reconstruct the effective gate and dispatch sequence, replay historical evidence with an identified checker, and distinguish measured token use from estimates.",
+  "why_not_merge_with_parent": "No active or blocked formal CR exists; CR-045 is closed and its route-aware foundation is an input, not an active parent.",
+  "why_not_story_or_task": "The change affects public schemas, multiple checkers, state finalization, dispatch producers, read policy, telemetry and cross-repository historical migration."
+}

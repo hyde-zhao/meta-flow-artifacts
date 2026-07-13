@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-041",
+  "checkpoint": "CP6",
+  "created_at": "2026-07-04T14:45:03+00:00",
+  "summary": "Implemented optional checker provenance validation/rendering/ledger propagation and repository publication authz aliases.",
+  "changed_files": [
+    "meta_flow/checks/cp_result.py",
+    "meta_flow/policies/authz.py",
+    "tests/test_cp_result_event_ledger.py",
+    "tests/test_gate_policy.py",
+    "delivery/skills/context-manifest-builder/templates/AUTHZ-POLICY-TEMPLATE.json",
+    "scripts/check_delivery_guardrails.py"
+  ],
+  "implementation_claims": [
+    {
+      "id": "CR041-IMPL-001",
+      "claim": "CP result checker_provenance is validated, rendered, and propagated to checkpoint ledger events when present.",
+      "evidence_refs": [
+        "meta_flow/checks/cp_result.py#_validate_checker_provenance",
+        "meta_flow/checks/cp_result.py#render_summary",
+        "meta_flow/checks/cp_result.py#build_checkpoint_event"
+      ]
+    },
+    {
+      "id": "CR041-IMPL-002",
+      "claim": "Repository publication authz is separated from runtime, trading, provider/lake/catalog publish and lake writes.",
+      "evidence_refs": [
+        "meta_flow/policies/authz.py#AUTHZ_CAPABILITY_ALIASES",
+        "meta_flow/policies/authz.py#default_authz_policy"
+      ]
+    },
+    {
+      "id": "CR041-IMPL-003",
+      "claim": "Default AUTHZ policy template and guardrail tokens include repository publication policy.",
+      "evidence_refs": [
+        "delivery/skills/context-manifest-builder/templates/AUTHZ-POLICY-TEMPLATE.json",
+        "scripts/check_delivery_guardrails.py#SOFTWARE_WORKFLOW_TOKEN_TARGETS"
+      ]
+    }
+  ],
+  "test_refs": [
+    "tests/test_cp_result_event_ledger.py#test_checker_provenance_requires_review_ref_when_fallback_used",
+    "tests/test_cp_result_event_ledger.py#test_checker_provenance_is_rendered_and_added_to_checkpoint_event",
+    "tests/test_gate_policy.py#test_repository_publication_alias_is_separate_from_runtime_and_data_publish",
+    "tests/test_gate_policy.py#test_policy_check_distinguishes_git_push_from_lake_publish",
+    "tests/test_gate_policy.py#test_policy_check_accepts_repository_publication_ref_without_data_publish_ref"
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest tests/test_cp_result_event_ledger.py tests/test_gate_policy.py",
+      "result": "PASS",
+      "summary": "33 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest",
+      "result": "PASS",
+      "summary": "229 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run python scripts/check_delivery_guardrails.py",
+      "result": "PASS",
+      "summary": "OK"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run meta-flow policy check --project-root .",
+      "result": "PASS",
+      "summary": "Authz Policy Check: OK"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS",
+      "summary": "no output"
+    }
+  ],
+  "forbidden_operations": {
+    "credential_reads": 0,
+    "runtime_calls": 0,
+    "production_writes": 0,
+    "repository_publication_executions": 0,
+    "trading_operations": 0
+  }
+}

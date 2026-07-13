@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR045",
+  "profile": "standard-code",
+  "story_id": "",
+  "cr_id": "CR-045",
+  "context_ref": "process/context/CP8-CR045.context.json",
+  "route_plan_ref": "process/checks/CP0-CR045.route-plan.json",
+  "dispatch_refs": ["DISPATCH-CR045-CP8-QA"],
+  "evidence_ref": "process/docs/quality/RELEASE-READINESS-REVIEW-CR045.md",
+  "release_context_ref": "process/release/RELEASE-CONTEXT-CR045.yaml",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "invocation": "uv run meta-flow cp result-check --result process/checks/CP8-CR045.result.json --project-root .",
+    "generated_by": "meta-qa-critical",
+    "fallback_used": false
+  },
+  "release_decision": "NOT_READY",
+  "fact_diff": [
+    {
+      "promise_ref": "CR045-EV-ROUTE",
+      "promise": "Deterministic CR-aware checkpoint route and applicability semantics.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["process/evidence/CR045-S1.CP7-R4.index.json", "tests/test_route_plan.py"],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR045-EV-CP-LEDGER",
+      "promise": "N/A/WAIVED, dispatch and state-transition governance remain machine-checkable.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["process/evidence/CR045-S1.CP7-R4.index.json", "tests/test_cp_result_event_ledger.py", "tests/test_state_transition.py"],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR045-EV-REGRESSION",
+      "promise": "Focused and complete repository regression pass.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["process/docs/quality/TEST-REPORT-CR045-R4.md"],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR045-CP8-STATE-INTEGRATION",
+      "promise": "CP7-R4 PASS is integrated and current state is pending CP8.",
+      "status": "MISSING_REQUIRED_EVIDENCE",
+      "decision_impact": "NOT_READY",
+      "evidence_refs": ["process/state/STATE.current.json", "process/docs/quality/RELEASE-READINESS-REVIEW-CR045.md#cp7-r4-and-state-integration"],
+      "risk_ref": "CR045-CP8-BLOCKER-STATE"
+    },
+    {
+      "promise_ref": "CR045-CP8-GUARDRAIL",
+      "promise": "Delivery guardrail returns OK after cache cleanup.",
+      "status": "EXECUTED_NEGATIVE_RESULT",
+      "decision_impact": "NOT_READY",
+      "evidence_refs": ["process/docs/quality/RELEASE-READINESS-REVIEW-CR045.md#guardrail"],
+      "risk_ref": "CR045-CP8-BLOCKER-GUARDRAIL"
+    },
+    {
+      "promise_ref": "CR045-RISK-RECOVERY-ORDERING",
+      "promise": "CP2/CP5 ex-post recovery ordering remains transparent and requires CP8 acknowledgement.",
+      "status": "NEEDS_REVIEW",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/checks/CP2-CR045.result.json", "process/checks/CP5-CR045.result.json", "process/checks/CP6-CR045.result.json"],
+      "risk_ref": "CR045-RISK-RECOVERY-ORDERING"
+    }
+  ],
+  "items": [
+    {
+      "id": "CP8-CR045-001",
+      "category": "cp7-quality",
+      "name": "CP7-R4 engineering verification is PASS with four findings closed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP7-CR045-R4.result.json", "process/evidence/CR045-S1.CP7-R4.index.json"],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "Engineering quality is ready."
+    },
+    {
+      "id": "CP8-CR045-002",
+      "category": "state-readiness",
+      "name": "CP7-R4 is integrated and current state is pending CP8",
+      "status": "FAIL",
+      "severity": "HIGH",
+      "evidence_refs": ["process/state/STATE.current.json", "process/docs/quality/RELEASE-READINESS-REVIEW-CR045.md#cp7-r4-and-state-integration"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "State still retains R3 needs_rework and no pending CP8."
+    },
+    {
+      "id": "CP8-CR045-003",
+      "category": "guardrail",
+      "name": "Release-context delivery guardrail OK claim is independently reproducible",
+      "status": "FAIL",
+      "severity": "HIGH",
+      "evidence_refs": ["process/docs/quality/RELEASE-READINESS-REVIEW-CR045.md#guardrail"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "Independent prescribed command still finds Python cache artifacts."
+    },
+    {
+      "id": "CP8-CR045-004",
+      "category": "release-documents",
+      "name": "Compact release notes, deploy, rollback, migration and feedback documents are structurally complete",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["docs/release/RELEASE-NOTES.md", "docs/release/DEPLOY-CHECKLIST-CR045.md", "docs/release/ROLLBACK-CR045.md", "docs/release/MIGRATION-CR045.md", "docs/release/FEEDBACK-CR045.md"],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "Two readiness claims require factual refresh after remediation."
+    },
+    {
+      "id": "CP8-CR045-005",
+      "category": "migration-rollback",
+      "name": "Migration N/A and rollback plan match the affected surface",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["docs/release/MIGRATION-CR045.md", "docs/release/ROLLBACK-CR045.md"],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "No persisted migration; rollback preserves audit ledgers."
+    },
+    {
+      "id": "CP8-CR045-006",
+      "category": "risk-acceptance",
+      "name": "Recovery ordering is transparent and requires explicit CP8 acceptance",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": ["process/docs/quality/RELEASE-READINESS-REVIEW-CR045.md#recovery-ordering-risk"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "This risk alone would produce READY_WITH_RISK after blockers close."
+    },
+    {
+      "id": "CP8-CR045-007",
+      "category": "authorization",
+      "name": "CP8 approval and readiness do not authorize release execution or external operations",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/release/RELEASE-CONTEXT-CR045.yaml#non_authorized_items", "process/docs/quality/RELEASE-READINESS-REVIEW-CR045.md#authorization-boundaries"],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "No publish/push/runtime/credential/write authorization."
+    }
+  ],
+  "blockers": ["CR045-CP8-BLOCKER-STATE", "CR045-CP8-BLOCKER-GUARDRAIL"],
+  "waivers": [],
+  "decision": "BLOCKED",
+  "next_route": "block_release",
+  "checked_at": "2026-07-11T12:22:00Z"
+}

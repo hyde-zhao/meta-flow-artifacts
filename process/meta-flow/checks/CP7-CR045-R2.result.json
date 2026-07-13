@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR045-R2",
+  "profile": "standard-code",
+  "story_id": "CR045-S1",
+  "cr_id": "CR-045",
+  "context_ref": "process/context/CP7-CR045.context.json",
+  "route_plan_ref": "process/checks/CP0-CR045.route-plan.json",
+  "dispatch_refs": ["DISPATCH-CR045-CP7-REVERIFY-R2-QA"],
+  "evidence_ref": "process/evidence/CR045-S1.CP7-R2.index.json",
+  "return_packet_ref": "process/returns/CR045-S1.CP7-R2.return.json",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "invocation": "uv run meta-flow cp result-check --result process/checks/CP7-CR045-R2.result.json --project-root .",
+    "generated_by": "meta-qa-critical",
+    "fallback_used": false
+  },
+  "items": [
+    {"id": "CP7-CR045-R2-001", "category": "waiver-governance", "name": "CR045-F-001 reason/ref waiver matrix", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/evidence/CR045-S1.CP7-R2.index.json", "tests/test_route_plan.py"], "owner": "meta-qa", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Original HIGH closed."},
+    {"id": "CP7-CR045-R2-002", "category": "dispatch-governance", "name": "CR045-F-002 semantic dispatch matrix", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/evidence/CR045-S1.CP7-R2.index.json", "tests/test_cp_result_event_ledger.py"], "owner": "meta-qa", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Original HIGH closed."},
+    {"id": "CP7-CR045-R2-003", "category": "compatibility", "name": "Historical CP6 inline fallback and R1 real QA dispatch remain valid", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/state/AGENT-DISPATCH-LEDGER.ndjson#ADE-CR045-INLINE-CP6", "process/state/AGENT-DISPATCH-LEDGER.ndjson#DISPATCH-CR045-CP7-QA"], "owner": "meta-qa", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Both consistency checks pass."},
+    {"id": "CP7-CR045-R2-004", "category": "regression", "name": "Local, focused and full regression", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/docs/quality/TEST-REPORT-CR045-R2.md"], "owner": "meta-qa", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "60, 120 and 315 tests pass."},
+    {"id": "CP7-CR045-R2-005", "category": "recovery-audit", "name": "Recovery gate history remains explicit", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/checks/CP2-CR045.result.json", "process/checks/CP5-CR045.result.json", "process/checks/CP6-CR045.result.json"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "No backdating."},
+    {"id": "CP7-CR045-R2-006", "category": "state-transition", "name": "Pass-like CP7 result rejects stale failure/rework stop state", "status": "FAIL", "severity": "HIGH", "evidence_refs": ["process/docs/quality/VERIFICATION-REPORT-CR045-R2.md#new-finding", "meta_flow/checks/state_transition.py:75", "process/state/STATE.current.json"], "owner": "meta-dev", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "CP7 PASS incorrectly accepts stale stop_reason=needs_rework instead of requiring CP8."},
+    {"id": "CP7-CR045-R2-007", "category": "repository-health", "name": "Ignored Python cache cleanup", "status": "N/A", "severity": "INFO", "evidence_refs": ["process/docs/quality/VERIFICATION-REPORT-CR045-R2.md#non-cr-repository-hygiene"], "owner": "host-orchestrator", "route_on_fail": "create_followup_candidate", "waiver_ref": null, "notes": "Host-owned CP8 hygiene; not a CR-045 implementation defect."}
+  ],
+  "promise_evidence_alignment": [
+    {"promise_ref": "CR045-EV-ROUTE", "evidence_status": "EXECUTED_POSITIVE_RESULT", "result": "PASS", "evidence_refs": ["process/evidence/CR045-S1.CP7-R2.index.json"]},
+    {"promise_ref": "CR045-EV-CP-LEDGER", "evidence_status": "EXECUTED_POSITIVE_RESULT", "result": "PASS", "evidence_refs": ["process/evidence/CR045-S1.CP7-R2.index.json"]},
+    {"promise_ref": "CR045-EV-REGRESSION", "evidence_status": "EXECUTED_POSITIVE_RESULT", "result": "PASS", "evidence_refs": ["process/docs/quality/TEST-REPORT-CR045-R2.md"]}
+  ],
+  "blockers": ["CR045-F-003-R2"],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "NEEDS_REWORK",
+  "next_route": "rework_same_story",
+  "checked_at": "2026-07-11T11:45:43Z"
+}

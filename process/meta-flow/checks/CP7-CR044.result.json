@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR044",
+  "profile": "standard-code",
+  "story_id": "CR044-S1",
+  "cr_id": "CR-044",
+  "context_ref": "process/context/CR044.CP7.context.json",
+  "dispatch_refs": [
+    "inline-host-orchestrator-CR044"
+  ],
+  "evidence_ref": "process/evidence/CR044.CP7.index.json",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "invocation": "PYTHONDONTWRITEBYTECODE=1 uv run meta-flow cp result-check --result process/checks/CP7-CR044.result.json --project-root .",
+    "generated_by": "host-orchestrator",
+    "fallback_used": false
+  },
+  "items": [
+    {
+      "id": "CP7-CR044-001",
+      "category": "verification",
+      "name": "Story plan-check tests pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "tests/test_story_plan_check.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": ""
+    }
+  ],
+  "promise_evidence_alignment": [
+    {
+      "promise_ref": "CR044-ACCEPT-001",
+      "promise": "Valid consolidated plan passes.",
+      "evidence_status": "EXECUTED_POSITIVE_RESULT",
+      "result": "PASS",
+      "evidence_refs": [
+        "tests/test_story_plan_check.py#test_plan_check_accepts_development_plan_truth_source"
+      ]
+    },
+    {
+      "promise_ref": "CR044-ACCEPT-002",
+      "promise": "Duplicate Story IDs fail.",
+      "evidence_status": "EXECUTED_POSITIVE_RESULT",
+      "result": "PASS",
+      "evidence_refs": [
+        "tests/test_story_plan_check.py#test_plan_check_rejects_duplicate_story_ids"
+      ]
+    },
+    {
+      "promise_ref": "CR044-ACCEPT-003",
+      "promise": "Legacy STORY-STATUS status conflict fails.",
+      "evidence_status": "EXECUTED_POSITIVE_RESULT",
+      "result": "PASS",
+      "evidence_refs": [
+        "tests/test_story_plan_check.py#test_plan_check_rejects_legacy_story_status_conflict"
+      ]
+    },
+    {
+      "promise_ref": "CR044-ACCEPT-004",
+      "promise": "Legacy unknown refs are reported.",
+      "evidence_status": "EXECUTED_POSITIVE_RESULT",
+      "result": "PASS",
+      "evidence_refs": [
+        "tests/test_story_plan_check.py#test_plan_check_reports_unknown_legacy_refs_as_warning_or_strict_error"
+      ]
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS",
+  "next_route": "CP8",
+  "checked_at": "2026-07-04T15:20:00+00:00"
+}

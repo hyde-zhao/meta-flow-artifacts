@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "story_id": "CR045-S1",
+  "cr_id": "CR-045",
+  "stage": "CP7",
+  "checkpoint": "CP7-R3",
+  "return_ref": "process/returns/CR045-S1.CP7-R3.return.json",
+  "summary": "All three prior findings close, but isolated R3 matrix finds a new HIGH BLOCKED/interrupt compatibility regression.",
+  "changed_files": [],
+  "commands": [
+    {"command": "git diff --check", "result": "PASS"},
+    {"command": "uv run pytest tests/test_state_transition.py", "result": "PASS", "summary": "11 passed"},
+    {"command": "focused CR-045 suite", "result": "PASS", "summary": "125 passed"},
+    {"command": "uv run pytest", "result": "PASS", "summary": "320 passed"},
+    {"command": "isolated PASS/PASS_WITH_RISK/WAIVED x stop-reason fixture", "result": "PASS"},
+    {"command": "isolated BLOCKED/authorization_required fixture", "result": "EXECUTED_NEGATIVE_RESULT", "summary": "unexpected rejection: must leave matching stop_reason=blocked"},
+    {"command": "isolated BLOCKED/workflow_health_threshold fixture", "result": "EXECUTED_NEGATIVE_RESULT", "summary": "unexpected rejection: must leave matching stop_reason=blocked"},
+    {"command": "route/applicability/result/ledger/state/CR/gate checks", "result": "PASS"},
+    {"command": "delivery guardrail", "result": "FAIL_UNRELATED_TRANSIENT", "summary": "ignored test caches"}
+  ],
+  "tests": [
+    {"scope": "state-transition", "passed": 11, "failed": 0},
+    {"scope": "focused-cr045", "passed": 125, "failed": 0},
+    {"scope": "repository", "passed": 320, "failed": 0}
+  ],
+  "artifacts": [
+    "process/docs/quality/VERIFICATION-REPORT-CR045-R3.md",
+    "process/docs/quality/TEST-REPORT-CR045-R3.md",
+    "process/docs/quality/REVIEW-CR045-R3.md",
+    "process/docs/quality/FIXES-CR045-R3.md"
+  ],
+  "verification_claims": [
+    {"id": "CR045-F-001", "status": "CLOSED", "evidence_refs": ["tests/test_route_plan.py"]},
+    {"id": "CR045-F-002", "status": "CLOSED", "evidence_refs": ["tests/test_cp_result_event_ledger.py"]},
+    {"id": "CR045-F-003-R2", "status": "CLOSED", "evidence_refs": ["tests/test_state_transition.py"]},
+    {"id": "CR045-F-004-R3", "status": "OPEN", "evidence_refs": ["meta_flow/checks/state_transition.py:93", "process/docs/quality/VERIFICATION-REPORT-CR045-R3.md#new-finding"]}
+  ],
+  "risks": ["CR045-F-004-R3", "CR045-O-001-R3"],
+  "waivers": [],
+  "dispatch_refs": ["DISPATCH-CR045-CP7-REVERIFY-R3-QA"],
+  "design_delta_ref": null
+}

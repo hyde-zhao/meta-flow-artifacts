@@ -1,0 +1,63 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "meta_flow/evidence/__init__.py"
+    },
+    {
+      "change_type": "created",
+      "path": "meta_flow/evidence/dispatch.py"
+    },
+    {
+      "change_type": "created",
+      "path": "meta_flow/evidence/platform_contract.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "meta_flow/state/event_ledger.py"
+    },
+    {
+      "change_type": "created",
+      "path": "tests/test_cr046_dispatch_attestation.py"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run pytest tests/test_cr046_dispatch_attestation.py -q",
+      "result": "pass"
+    },
+    {
+      "command": "uv run pytest tests/test_cp_result_event_ledger.py -q",
+      "result": "pass"
+    },
+    {
+      "command": "uv run meta-flow event dispatch-check --ledger process/state/AGENT-DISPATCH-LEDGER.ndjson --mode silent",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  ],
+  "cr_id": "CR-046",
+  "design_delta_ref": null,
+  "return_ref": "process/returns/ST-EI-002.CP6.return.json",
+  "risks": [
+    {
+      "detail": "Current platform has no D0 selector or receipts; adapter correctly remains A-baseline.",
+      "id": "CR046-RISK-PLATFORM-RECEIPT-UNAVAILABLE",
+      "level": "high",
+      "status": "open"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "ST-EI-002",
+  "tests": [
+    "PC-01..19",
+    "CT-CORE-02..05",
+    "CT-CORE-07..09"
+  ],
+  "waivers": []
+}

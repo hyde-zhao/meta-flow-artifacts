@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR045",
+  "profile": "standard-code",
+  "story_id": "CR045-S1",
+  "cr_id": "CR-045",
+  "context_ref": "process/context/CP7-CR045.context.json",
+  "route_plan_ref": "process/checks/CP0-CR045.route-plan.json",
+  "dispatch_refs": ["DISPATCH-CR045-CP7-QA"],
+  "evidence_ref": "process/evidence/CR045-S1.CP7.index.json",
+  "return_packet_ref": "process/returns/CR045-S1.CP7.return.json",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "invocation": "uv run meta-flow cp result-check --result process/checks/CP7-CR045.result.json --project-root .",
+    "generated_by": "meta-qa-critical",
+    "fallback_used": false
+  },
+  "items": [
+    {"id": "CP7-CR045-001", "category": "route-contract", "name": "Route derivation, frontmatter bridge, profile upgrade, phase sequence and stale-artifact behavior", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/evidence/CR045-S1.CP7.index.json"], "owner": "meta-qa", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Focused tests and route check passed."},
+    {"id": "CP7-CR045-002", "category": "waiver-governance", "name": "Applicable CP7 waiver requires explicit approval reference", "status": "FAIL", "severity": "HIGH", "evidence_refs": ["process/docs/quality/REVIEW-CR045.md#findings", "meta_flow/policies/route_plan.py:373", "meta_flow/policies/route_plan.py:418"], "owner": "meta-dev", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Reason-only waiver returns route PASS and CP7 WAIVED."},
+    {"id": "CP7-CR045-003", "category": "dispatch-governance", "name": "CP7 dispatch reference proves role-appropriate completed execution", "status": "FAIL", "severity": "HIGH", "evidence_refs": ["process/docs/quality/REVIEW-CR045.md#findings", "meta_flow/checks/cp_result.py:270"], "owner": "meta-dev", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Lookup validates only ID existence."},
+    {"id": "CP7-CR045-004", "category": "regression", "name": "Focused and full repository regression", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/docs/quality/TEST-REPORT-CR045.md"], "owner": "meta-qa", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "111 focused and 306 full tests passed."},
+    {"id": "CP7-CR045-005", "category": "recovery-audit", "name": "CP2/CP5 recovery gates remain explicitly later than historical CP6", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/checks/CP2-CR045.result.json", "process/checks/CP5-CR045.result.json", "process/checks/CP6-CR045.result.json"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "No backdating or reinterpretation."},
+    {"id": "CP7-CR045-006", "category": "repository-health", "name": "Delivery guardrail free of transient Python caches", "status": "N/A", "severity": "INFO", "evidence_refs": ["process/docs/quality/TEST-REPORT-CR045.md"], "owner": "host-orchestrator", "route_on_fail": "create_followup_candidate", "waiver_ref": null, "notes": "Guardrail failure is limited to ignored caches produced by test execution and is not attributed to CR-045 implementation."}
+  ],
+  "promise_evidence_alignment": [
+    {"promise_ref": "CR045-EV-ROUTE", "evidence_status": "EXECUTED_POSITIVE_RESULT", "result": "PASS", "evidence_refs": ["process/evidence/CR045-S1.CP7.index.json"]},
+    {"promise_ref": "CR045-EV-CP-LEDGER", "evidence_status": "EXECUTED_NEGATIVE_RESULT", "result": "FAIL", "evidence_refs": ["process/docs/quality/REVIEW-CR045.md#findings"]},
+    {"promise_ref": "CR045-EV-REGRESSION", "evidence_status": "EXECUTED_POSITIVE_RESULT", "result": "PASS", "evidence_refs": ["process/docs/quality/TEST-REPORT-CR045.md"]}
+  ],
+  "blockers": ["CR045-F-001", "CR045-F-002"],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "NEEDS_REWORK",
+  "next_route": "rework_same_story",
+  "checked_at": "2026-07-11T11:32:01Z"
+}

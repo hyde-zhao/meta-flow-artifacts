@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "story_id": "CR045-S1",
+  "cr_id": "CR-045",
+  "stage": "CP6",
+  "checkpoint": "CP6-R3",
+  "return_ref": "process/returns/CR045-S1.CP6-R3.return.json",
+  "summary": "CR045-F-003-R2 fixed with decision-aware stop-reason validation; local 11, focused 125 and repository 320 tests pass.",
+  "changed_files": [
+    {"path": "meta_flow/checks/state_transition.py", "change_type": "modified"},
+    {"path": "tests/test_state_transition.py", "change_type": "modified"},
+    {"path": "process/stories/CR045-S1-IMPLEMENTATION-R3.md", "change_type": "added"}
+  ],
+  "commands": [
+    {"command": "uv run pytest tests/test_state_transition.py", "result": "PASS", "summary": "11 passed"},
+    {"command": "uv run pytest tests/test_route_plan.py tests/test_gate_policy.py tests/test_cp_result_event_ledger.py tests/test_state_transition.py tests/test_cr_lifecycle.py tests/test_ask_user.py", "result": "PASS", "summary": "125 passed"},
+    {"command": "uv run pytest", "result": "PASS", "summary": "320 passed"},
+    {"command": "uv run meta-flow check state-transition --route-plan process/checks/CP0-CR045.route-plan.json --result process/checks/CP7-CR045-R2.result.json --project-root .", "result": "PASS"},
+    {"command": "uv run meta-flow cp result-check --result process/checks/CP7-CR045-R2.result.json --project-root . --check-consistency --mode silent", "result": "PASS"},
+    {"command": "uv run meta-flow route check --from-cr process/changes/CR-045.md --project-root .", "result": "PASS_WITH_WARNING"},
+    {"command": "uv run meta-flow cp applicability-check --aggregate process/checks/CP8-CR045.applicability.json --project-root . --mode silent", "result": "PASS"},
+    {"command": "uv run meta-flow event check --ledger process/state/AGENT-DISPATCH-LEDGER.ndjson --type dispatch --mode silent", "result": "PASS"},
+    {"command": "uv run meta-flow cr check --project-root .", "result": "PASS_WITH_WARNING"},
+    {"command": "git diff --check", "result": "PASS"},
+    {"command": "uv run --python 3.11 python scripts/check_delivery_guardrails.py", "result": "FAIL_UNRELATED_TRANSIENT", "summary": "ignored test caches only"}
+  ],
+  "tests": [
+    {"scope": "local-state-transition", "passed": 11, "failed": 0},
+    {"scope": "focused-cr045", "passed": 125, "failed": 0},
+    {"scope": "repository", "passed": 320, "failed": 0}
+  ],
+  "artifacts": ["process/stories/CR045-S1-IMPLEMENTATION-R3.md"],
+  "verification_claims": [
+    {"id": "CR045-F-003-R2", "status": "FIXED_PENDING_INDEPENDENT_REVERIFY", "evidence_refs": ["tests/test_state_transition.py"]},
+    {"id": "CR045-F-001", "status": "PRESERVED", "evidence_refs": ["tests/test_route_plan.py"]},
+    {"id": "CR045-F-002", "status": "PRESERVED", "evidence_refs": ["tests/test_cp_result_event_ledger.py"]}
+  ],
+  "risks": ["CR045-O-001-R3"],
+  "waivers": [],
+  "dispatch_refs": ["DISPATCH-CR045-CP7-REWORK-R3-DEV"],
+  "design_delta_ref": null
+}

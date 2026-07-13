@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "story_id": "CR045-S1",
+  "cr_id": "CR-045",
+  "stage": "CP6",
+  "profile": "standard-code",
+  "objective": {
+    "summary": "Close final CR-045 delivered-state replay and canonical cp8_closed lifecycle consistency gaps."
+  },
+  "feature_refs": ["CR045-S1"],
+  "feature_context": [
+    {"path": "meta_flow/checks/state_transition.py", "reason": "Historical result replay and approved-gate terminal validation."},
+    {"path": "meta_flow/workflow/cr_lifecycle.py", "reason": "Canonical closed gate-status producer."},
+    {"path": "delivery/doc/USER-MANUAL.md", "reason": "Public status-sync command contract."}
+  ],
+  "acceptance": [
+    "Historical pass-like results replay only against a complete delivered terminal state.",
+    "Approved CP8 rejects residual pending gates, active changes, wrong phases, and wrong stop reasons.",
+    "Closed CR lifecycle output uses cp8_closed and rejects cp8_approved.",
+    "Current user documentation uses the canonical cp8_closed command.",
+    "Focused and full repository regression pass."
+  ],
+  "allowed_write_paths": [
+    "meta_flow/checks/state_transition.py",
+    "meta_flow/workflow/cr_lifecycle.py",
+    "tests/test_state_transition.py",
+    "tests/test_cr_lifecycle.py",
+    "delivery/doc/USER-MANUAL.md",
+    "process/**"
+  ],
+  "forbidden_write_paths": ["runtime/**", "publish/**", "live/**", "trading/**"],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 uv run --no-sync pytest tests/test_state_transition.py",
+    "PYTHONDONTWRITEBYTECODE=1 uv run --no-sync pytest",
+    "PYTHONDONTWRITEBYTECODE=1 uv run --no-sync meta-flow check state-transition --route-plan process/checks/CP0-CR045.route-plan.json --approved-gate CP8 --project-root .",
+    "PYTHONDONTWRITEBYTECODE=1 uv run --no-sync python scripts/check_delivery_guardrails.py"
+  ],
+  "expected_return_packet": "process/returns/CR045-S1.CP6-R6.return.json"
+}

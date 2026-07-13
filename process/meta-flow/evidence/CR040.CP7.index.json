@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-040",
+  "checkpoint": "CP7",
+  "created_at": "2026-07-04T14:36:35+00:00",
+  "summary": "Verified governance dependency warning behavior and non-blocking semantics.",
+  "verification_claims": [
+    {
+      "id": "CR040-VERIFY-001",
+      "claim": "Active governance baseline overlap is recorded as NEEDS_REVIEW in CR summary.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_cr_lifecycle.py#test_cr_summary_records_governance_dependency_warning"
+      ]
+    },
+    {
+      "id": "CR040-VERIFY-002",
+      "claim": "cr check prints governance dependency warning and exits 0 when no blockers exist.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_cr_lifecycle.py#test_cr_check_prints_governance_dependency_warning_without_blocking"
+      ]
+    },
+    {
+      "id": "CR040-VERIFY-003",
+      "claim": "Closed governance CRs do not produce dependency warnings.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_cr_lifecycle.py#test_closed_governance_cr_does_not_warn"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest tests/test_cr_lifecycle.py",
+      "result": "PASS",
+      "summary": "23 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest",
+      "result": "PASS",
+      "summary": "224 passed"
+    }
+  ],
+  "remaining_risks": [
+    {
+      "id": "CR040-RISK-GOVERNANCE-DEPENDENCY-FALSE-POSITIVE",
+      "status": "accepted",
+      "reason": "Detection is intentionally warning-only because governance impact matching is fuzzy."
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP5",
+  "checkpoint_id": "CP5-CR045-RECOVERY-DESIGN",
+  "cr_id": "CR-045",
+  "profile": "standard-code",
+  "context_ref": "process/context/CP5-CR045.context.json",
+  "route_plan_ref": "process/checks/CP0-CR045.route-plan.json",
+  "items": [
+    {
+      "id": "CP5-CR045-001",
+      "category": "design-contract",
+      "name": "Executable route-plan contract matches the accepted implementation plan",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/changes/summaries/CR-045.summary.json",
+        "meta_flow/policies/route_plan.py",
+        "tests/test_route_plan.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "The CR implementation plan is the design evidence for this single process-code Story; CR frontmatter explicitly states no Story decomposition is required."
+    },
+    {
+      "id": "CP5-CR045-002",
+      "category": "result-contract",
+      "name": "N/A, WAIVED, dispatch evidence, and applicability contracts are implemented",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "meta_flow/checks/cp_result.py",
+        "meta_flow/state/event_ledger.py",
+        "tests/test_cp_result_event_ledger.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Independent CP7 must verify positive and negative behavior; CP5 only confirms implementability and contract alignment."
+    },
+    {
+      "id": "CP5-CR045-003",
+      "category": "state-routing",
+      "name": "State-router and lifecycle consumers use route-plan semantics",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "meta_flow/checks/state_transition.py",
+        "meta_flow/workflow/cr_lifecycle.py",
+        "delivery/skills/state-router/SKILL.md",
+        "tests/test_state_transition.py",
+        "tests/test_cr_lifecycle.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "The prior stale state was corrected through the controlled state writer; CP7 must repeat transition checks."
+    },
+    {
+      "id": "CP5-CR045-004",
+      "category": "testability",
+      "name": "Acceptance criteria have executable regression coverage",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "tests/test_route_plan.py",
+        "tests/test_cp_result_event_ledger.py",
+        "tests/test_gate_policy.py",
+        "tests/test_cr_lifecycle.py",
+        "tests/test_ask_user.py"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Host diagnostics currently show 105 focused tests and 306 repository tests passing; CP7 will independently rerun and review them."
+    },
+    {
+      "id": "CP5-CR045-005",
+      "category": "recovery",
+      "name": "Design confirmation is explicitly ex-post and does not alter history",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR045-RECOVERY-BASELINE.md",
+        "process/checks/CP6-CR045.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP5 approval confirms the current design-to-implementation alignment; it does not claim approval occurred before CP6."
+    },
+    {
+      "id": "CP5-CR045-006",
+      "category": "story-design",
+      "name": "Separate LLD batch and clarification queue",
+      "status": "N/A",
+      "severity": "INFO",
+      "evidence_refs": [
+        "process/checks/CP0-CR045.route-plan.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "CR-045 has one host-owned process-code Story and requires_story_decomposition=false; its accepted implementation plan is the applicable design evidence."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS",
+  "next_route": "CP5-human-gate",
+  "checked_at": "2026-07-11T11:17:09Z"
+}

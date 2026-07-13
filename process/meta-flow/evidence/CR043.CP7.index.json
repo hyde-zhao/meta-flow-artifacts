@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-043",
+  "checkpoint": "CP7",
+  "created_at": "2026-07-04T15:06:00+00:00",
+  "summary": "Verified validation task wrapper behavior with unit tests, full regression, guardrails and CLI smoke.",
+  "verification_claims": [
+    {
+      "id": "CR043-VERIFY-001",
+      "claim": "Dry-run writes structured planned real-lake-readonly evidence without executing commands.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_validation_task_runner.py#test_real_lake_readonly_dry_run_writes_structured_evidence_without_execution"
+      ]
+    },
+    {
+      "id": "CR043-VERIFY-002",
+      "claim": "Explicit execution requires a command.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_validation_task_runner.py#test_execute_requires_command"
+      ]
+    },
+    {
+      "id": "CR043-VERIFY-003",
+      "claim": "Executed successful reruns record matching output hashes and PASS consistency.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_validation_task_runner.py#test_execute_records_consistent_reruns_for_successful_command"
+      ]
+    },
+    {
+      "id": "CR043-VERIFY-004",
+      "claim": "Forbidden operation counters fail the validation task when write counts are non-zero.",
+      "status": "PASS",
+      "evidence_refs": [
+        "tests/test_validation_task_runner.py#test_ops_counter_detects_forbidden_write"
+      ]
+    },
+    {
+      "id": "CR043-VERIFY-005",
+      "claim": "CLI smoke works through meta-flow validation run.",
+      "status": "PASS",
+      "evidence_refs": [
+        "process/evidence/CR043.CP7.index.json#commands"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest tests/test_validation_task_runner.py",
+      "result": "PASS",
+      "summary": "4 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run pytest",
+      "result": "PASS",
+      "summary": "238 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run python scripts/check_delivery_guardrails.py",
+      "result": "PASS",
+      "summary": "OK"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run meta-flow validation run --cr CR-043-SMOKE --profile real-lake-readonly --reruns 2 --project-root /tmp/meta-flow-validation-smoke-2",
+      "result": "PASS",
+      "summary": "Validation Task: PLANNED"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run meta-flow cr check --project-root .",
+      "result": "PASS",
+      "summary": "CR Lifecycle Check: OK"
+    }
+  ],
+  "remaining_risks": [
+    {
+      "id": "CR043-RISK-PROJECT-SPECIFIC-COMMAND-CONTRACT",
+      "status": "accepted",
+      "reason": "The wrapper standardizes evidence; each target project still owns its validation command and output contract."
+    },
+    {
+      "id": "CR043-RISK-DRY-RUN-DOES-NOT-SATISFY-CP7",
+      "status": "accepted",
+      "reason": "Planned evidence is intentionally not real validation evidence. CP7 promise/evidence gates must consume executed run refs."
+    }
+  ]
+}

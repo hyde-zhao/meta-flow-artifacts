@@ -1,0 +1,49 @@
+schema_version: "1.0"
+capsule_id: "CP4-CR046-STORY-PLANNING-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "story-planning"
+checkpoint: "CP4"
+status: "ready"
+created_at: "2026-07-12T03:17:27Z"
+created_by: "host-orchestrator"
+source_cr: "CR-046"
+token_control:
+  read_profile: "compact"
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-design-detail"
+must_read:
+  - {path: "process/checkpoints/CP3-CR046-HLD-REVIEW.md", reason: "approved architecture and three CP4/CP5 minor requirements"}
+  - {path: "process/changes/summaries/CR-046.summary.json", reason: "scope and authorization boundary"}
+  - {path: "delivery/doc/PLATFORM-CONTRACTS.yaml", reason: "platform path and CURRENT/REQUIRED contract"}
+  - {path: "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-HLD.md", reason: "approved architecture"}
+  - {path: "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-ARCHITECTURE-DECISION.md", reason: "accepted ADR-001..011"}
+  - {path: "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-CODEX-SUBAGENT-PLATFORM-CONTRACT.md", reason: "platform contract and conformance fixtures"}
+read_if_needed:
+  - {path: "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-BLUEPRINT.md", trigger: "Feature boundary and Story owner mapping"}
+  - {path: "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-EVIDENCE-INTEGRITY-DEPENDENCY-MAP.md", trigger: "DAG and forbidden dependency detail"}
+  - {path: "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/product/STORY-MAP.md", trigger: "seven approved Story outcomes"}
+  - {path: "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/product/MVP-SCOPE.md", trigger: "in/out scope confirmation"}
+  - {path: "meta_flow/**", trigger: "target module/file ownership inventory"}
+  - {path: "tests/**", trigger: "verification entrypoint inventory"}
+do_not_read_by_default:
+  - {path_or_pattern: "process/archive/**", reason: "cold history"}
+  - {path_or_pattern: "quant-lab business source", reason: "pilot not authorized"}
+  - {path_or_pattern: "complete conversation transcript", reason: "not a truth source"}
+key_facts:
+  approved_story_ids: ["ST-EI-001", "ST-EI-002", "ST-EI-003", "ST-EI-004", "ST-EI-005", "ST-EI-006", "ST-EI-007"]
+  approved_features: ["FEAT-EI-CORE", "FEAT-EI-GOVERNANCE", "FEAT-EI-OBSERVABILITY", "FEAT-EI-CORRECTION"]
+  approved_dag: "001->002->003->004; 002->005; 003+004+005->006; 004+006->007"
+  dogfood_strategy: "A-baseline plus Conditional-B"
+  mandatory_minor_design_items:
+    - "Define D0 discovery freshness policy, TTL/session/config-change invalidation and re-probe triggers; add explicit conformance fixture."
+    - "Add explicit negative fixture: followup without reuse receipt cannot inherit custom_agent_verified/model_attested from the original spawn."
+    - "In ST-EI-007/S09 migration, classify legacy codex_agent_name as D3 self-declared-unverifiable during strict replay; never resolve model/profile from it."
+  authorization_boundary: "No implementation, runtime, credentials, commit/push, quant-lab business change or real CR-163 pilot."
+required_outputs:
+  - "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/design/CR046-FEATURE-DESIGN-MATRIX.md"
+  - "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/features/cr046-*/DESIGN.md"
+  - "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/features/cr046-*/TEST-PLAN.md"
+  - "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/docs/features/cr046-*/TASKS.md"
+  - "process/DEVELOPMENT-PLAN.yaml"
+  - "process/stories/STORY-ST-EI-*.md"
+  - "process/checks/CP4-CR046-STORY-DAG-PARALLEL-SAFETY.result.json"

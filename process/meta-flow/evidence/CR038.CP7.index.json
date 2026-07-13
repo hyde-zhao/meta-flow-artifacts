@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-038",
+  "checkpoint": "CP7",
+  "generated_at": "2026-07-04T13:47:47+00:00",
+  "verification_claims": [
+    {
+      "claim": "CP0 scope/authz contradiction is blocked",
+      "evidence_refs": ["tests/test_cr_lifecycle.py"]
+    },
+    {
+      "claim": "L2 prerequisite conflict can surface without overblocking direct alternatives",
+      "evidence_refs": ["tests/test_cr_lifecycle.py"]
+    },
+    {
+      "claim": "CP2 required evidence schema is machine-readable",
+      "evidence_refs": ["tests/test_cp_result_event_ledger.py"]
+    },
+    {
+      "claim": "CP7 missing required evidence blocks PASS_WITH_RISK",
+      "evidence_refs": ["tests/test_cp_result_event_ledger.py"]
+    },
+    {
+      "claim": "Executed negative result can pass with risk when evidenced",
+      "evidence_refs": ["tests/test_cp_result_event_ledger.py"]
+    },
+    {
+      "claim": "Capsule dedup warning and CP2-to-CP7 must_verify injection work",
+      "evidence_refs": ["tests/test_context_pack.py"]
+    },
+    {
+      "claim": "standard-lite is explicit opt-in",
+      "evidence_refs": ["tests/test_gate_policy.py"]
+    },
+    {
+      "claim": "Batch LLD delivery contract is guarded",
+      "evidence_refs": ["scripts/check_delivery_guardrails.py"]
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run pytest",
+      "result": "217 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run python scripts/check_delivery_guardrails.py",
+      "result": "OK"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run meta-flow cr check --project-root .",
+      "result": "OK"
+    },
+    {
+      "command": "git diff --check",
+      "result": "OK"
+    }
+  ],
+  "remaining_risks": [
+    "P1-0 governance dependency warning not implemented",
+    "P1-4 release docs compression not implemented",
+    "P1-5 CP8 fact diff not implemented",
+    "S3b efficiency cleanup deferred"
+  ]
+}
