@@ -2,12 +2,17 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: delivered
+Phase: requirement-clarification
 Blocked: false
-Active CR: none
+Active CR: CR-168
 Active Story: none
-Pending gate: none
-Next action: CR-166 delivered; no remaining route.
+Status: awaiting-user
+Pending gate: CP2
+Pending checklist: process/checkpoints/CP2-CR168-REQUIREMENTS-BASELINE.md
+Pending decisions: DQ-CP2-CR168-METHOD, DQ-CP2-CR168-C3-C4, DQ-CP2-CR168-GATE4, DQ-CP2-CR168-FIXTURE, DQ-CP2-CR168-CLAIM
+Stop reason: required_human_gate
+Next action: approve CR-168 CP2，按已批准范围继续推进到下一个人工门禁
+Cross-PC handoff: process/handoffs/NEXT-SESSION-CR168-CP2-CROSS-PC-2026-07-13.md
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,7 +25,7 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: none
+- active context: process/context/CP2-CR168-REQUIREMENT-CONTEXT.yaml
 
 Policy refs:
 - NO_CREDENTIAL_READ
@@ -50,7 +55,14 @@ Open risks:
 - {'id': 'R-CR158-ADAPTER-CONTRACT-COUPLING', 'severity': 'medium', 'status': 'open'}
 - {'id': 'R-CR158-EVIDENCE-SEMANTIC-OVERFIT', 'severity': 'medium', 'status': 'open'}
 - {'id': 'R-CR158-RUNTIME-OVERCLAIM', 'severity': 'high', 'status': 'open'}
+- {'id': 'R-CR168-GATE4-C3-C4-SEMANTIC', 'severity': 'high', 'status': 'open_pending_cp2_cp3'}
+- {'id': 'R-CR168-COST-UNDERSTATEMENT', 'severity': 'high', 'status': 'open_pending_cp2_cp3'}
+- {'id': 'R-CR168-UNIT-CURRENCY-BASIS', 'severity': 'high', 'status': 'open_pending_cp2_cp3'}
+- {'id': 'R-CR168-TRUE-TCA-OVERCLAIM', 'severity': 'high', 'status': 'open_controlled_by_claim_ceiling'}
+- {'id': 'R-CR168-CR155-PROMOTION', 'severity': 'high', 'status': 'open_controlled_by_fail_closed_boundary'}
+- {'id': 'R-CR168-LEGACY-METADATA', 'severity': 'medium', 'status': 'accepted_nonblocking_preexisting'}
+- {'id': 'R-CR168-INLINE-INDEPENDENCE', 'severity': 'medium', 'status': 'accepted_by_user'}
 
-Updated at: 2026-07-13T07:08:17+00:00
+Updated at: 2026-07-13T11:31:26+00:00
 
 <!-- generated-by: meta-flow state render -->

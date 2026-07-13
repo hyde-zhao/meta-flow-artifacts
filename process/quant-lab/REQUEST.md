@@ -151,3 +151,11 @@ def select_momentum_targets(
 - 请求：批准 CR156 关闭；关闭后审核 CR156 开发过程中 Meta Flow 流程遵守情况、流程可改进点、token 消耗集中阶段和优化空间。
 - 处理：CP8 已回填为 `approved`；CR156 已关闭为 `READY_WITH_RISK`；`FU-CR154-001` 与 `FU-CR152-001` 已标记为 closed under CR156；当前无 active formal CR / pending gate。
 - 复盘产物：`process/checks/CR156-META-FLOW-PROCESS-RETROSPECTIVE-2026-07-05.md`
+
+## CR168 原始请求与评审修正
+
+- 时间：2026-07-13T16:00:00+08:00
+- 请求：将 `FU-CR161-004` 启动为下一个正式变更，建议编号 `CR-168`，建立 fixture/static-only 的 C3 Economic Cost / Slippage / Impact computable evidence producer foundation；只推进到 CP2 人工门禁。
+- 评审修正：Gate 4 明确为 C3+C4 联合门禁；C3 只投影 `impact_model_family`、`impact_model_ref`、`cost_underestimation_status`、`no_real_tca_claim`，C4 字段保持 `typed_unavailable` 并 fail-closed；把成本低估风险状态纳入 C3 合同；fixture 调整为 daily multifactor 与 ML 的 multi-strategy-type compatibility；跨字段 currency/price-basis/calendar 混用仅在缺少显式转换声明时触发失败。
+- 授权边界：允许双仓库远端读取/fetch、本地安全分支创建和必要冲突处理；不允许 Git 远端写入、真实数据/凭据访问、真实 TCA/impact calibration、C4 计算、交易/runtime、Stage 3 启动或 CR-155 admission promotion。
+- 编排方式：用户于 2026-07-13 明确要求不拉起子 Agent；产品基线刷新由当前 Host Orchestrator 以内联方式执行，并记录为用户批准的 `meta-pm inline-fallback`。

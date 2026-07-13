@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR168-REQUEST-INTAKE",
+  "profile": "architecture-major",
+  "story_id": null,
+  "cr_id": "CR-168",
+  "route_plan_ref": "process/checks/CP0-CR168.route-plan.json",
+  "context_ref": "process/context/CP0-CR168.context.json",
+  "dispatch_refs": [],
+  "evidence_ref": "process/checks/CR168-REMOTE-BASELINE-CONFLICT-PRECHECK.json",
+  "items": [
+    {
+      "id": "CP0-01",
+      "category": "request",
+      "name": "原始目标、评审修正、停止点和授权边界已登记",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/REQUEST.md", "process/changes/CR-168.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "本轮只推进到 CP2。"
+    },
+    {
+      "id": "CP0-02",
+      "category": "workspace",
+      "name": "process 外置路由和软链接健康",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/.meta-flow-process.yaml", "process/checks/CR168-REMOTE-BASELINE-CONFLICT-PRECHECK.json#process_route"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "未创建新的本地 process，也未静默重建 STATE.md。"
+    },
+    {
+      "id": "CP0-03",
+      "category": "baseline",
+      "name": "quant-lab 工作区初始干净、fetch 完成并从已验证 CR-166 基线派生",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CR168-REMOTE-BASELINE-CONFLICT-PRECHECK.json#repositories/quant_lab"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "origin/master 落后该能力基线 116 commits，未从旧 master 启动。"
+    },
+    {
+      "id": "CP0-04",
+      "category": "baseline",
+      "name": "meta-flow-artifacts 工作区初始干净、fetch 完成且 main 与 origin/main 一致",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CR168-REMOTE-BASELINE-CONFLICT-PRECHECK.json#repositories/meta_flow_artifacts"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "无 merge/rebase/冲突处理。"
+    },
+    {
+      "id": "CP0-05",
+      "category": "change-control",
+      "name": "CR-168 编号未占用且 FU-CR161-004 已转换为唯一 active formal CR",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/changes/CR-168.md", "process/changes/CR-INDEX.json", "process/changes/CR-161-FOLLOW-UP-TRACKING-2026-07-10.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "创建前 active=0、blocked=0。"
+    },
+    {
+      "id": "CP0-06",
+      "category": "conflict",
+      "name": "产品文档、Feature、公共接口、Story/LLD/file owner 与 follow-up 边界冲突预检",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CR168-REMOTE-BASELINE-CONFLICT-PRECHECK.json#conflict_precheck", "process/changes/CR-168.md#CR-conflict-precheck"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "C3/C4、FU-CR161-007、CR-166 envelope 和 CR-155 admission 边界均已显式化。"
+    },
+    {
+      "id": "CP0-07",
+      "category": "review",
+      "name": "四项评审修正已纳入启动范围",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/checks/CR168-REMOTE-BASELINE-CONFLICT-PRECHECK.json#review_adjustments_applied", "process/changes/CR-168.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "修正不扩展到真实 TCA、C4 或 Stage 3。"
+    },
+    {
+      "id": "CP0-08",
+      "category": "routing",
+      "name": "architecture-major standard route plan 有效且 CP2 为下一个人工门禁",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP0-CR168.route-plan.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP2 前阻断 HLD/CP3、Story、LLD、实现和验证。"
+    },
+    {
+      "id": "CP0-09",
+      "category": "tracking",
+      "name": "CR-168 专属 tracking 与 conflict check 一致",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/checks/CR168-REMOTE-BASELINE-CONFLICT-PRECHECK.json#global_tracking_check", "process/state/CR-LEDGER.ndjson"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "全局 strict 检查仍报告 CR-168 之前已存在的 legacy metadata debt；本 CR 不扩张修复范围。"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260713T085850Z0000-b48d16fb",
+    "RE-20260713T085850Z0000-0794958a"
+  ],
+  "decision": "PASS",
+  "next_route": "requirement-clarification",
+  "checked_at": "2026-07-13T16:56:02+08:00"
+}

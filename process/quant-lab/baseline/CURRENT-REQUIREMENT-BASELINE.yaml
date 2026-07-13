@@ -3,7 +3,7 @@ baseline_id: CURRENT-REQUIREMENT-BASELINE
 project: quant-lab
 status: active
 created_at: "2026-06-19T20:50:00+08:00"
-updated_at: "2026-06-24T18:58:00+08:00"
+updated_at: "2026-07-13T17:20:00+08:00"
 created_by: host-orchestrator
 source_crs:
   - CR-046
@@ -12,6 +12,17 @@ source_crs:
   - CR-098
   - CR-100
   - CR-101
+  - CR-166
+  - CR-168
+revision_record:
+  - version: v0.1
+    date: "2026-06-19"
+    author: host-orchestrator
+    summary: "建立 QMT/runner/strategy-package 当前需求基线。"
+  - version: v0.2
+    date: "2026-07-13"
+    author: host-orchestrator-inline
+    summary: "增量追加 CR166 neutral strategy evidence envelope 与 CR168 fixture/static C3 economic-cost scope；不重写既有 QMT/runner 基线。"
 purpose: >
   记录当前可执行需求基线，避免后续 CR 从历史台账中误读已重解释的
   QMT / MiniQMT / runner / strategy package 目标。
@@ -62,6 +73,73 @@ current_baseline:
       - process/checks/CP7-CR101-S03-runner-adapter-evidence-boundary-VERIFICATION-DONE.md
       - docs/qmt/CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-HLD.md
 
+  strategy_evidence_c3_economic_cost:
+    requirement_status: awaiting_cp2
+    current_owner: quant_lab_strategy_evidence
+    current_change: CR-168
+    source_follow_up: FU-CR161-004
+    predecessor_contract: CR-166
+    current_target: fixture_static_c3_economic_cost_slippage_impact_approximation_foundation
+    envelope_contract:
+      component_slot: economic_cost
+      prior_state: reserved
+      target_active_component_types: 1
+      target_active_schema_versions: 1
+      parallel_envelopes_gates_registries: 0
+    input_contract:
+      field_families: 9
+      required_rule_coverage: "9/9"
+      cost_underestimation_status_required: true
+      explicit_static_parameters_only: true
+    fixture_contract:
+      fixture_families: 2
+      daily_multifactor_synthetic: 1
+      multi_strategy_type_daily_ml_compatibility: 1
+      event_specific_producers: 0
+    gate4_contract:
+      gate_name: GATE_4_CAPACITY_IMPACT
+      gate_kind: c3_c4_joint
+      c3_projection_count: 1
+      c3_fields:
+        - impact_model_family
+        - impact_model_ref
+        - cost_underestimation_status
+        - no_real_tca_claim
+      c4_typed_unavailable_fields:
+        - adv_participation_ref
+        - capacity_dollars_ref
+        - liquidity_sizing_refs
+      capacity_or_aggregate_pass_from_c3_only: 0
+    fail_closed_contract:
+      p0_classes: 10
+      deterministic_runs: 10
+      canonical_hashes_for_equal_normalized_input: 1
+    claim_ceiling:
+      stage2_complete: true
+      stage3_started: false
+      c3_fixture_static_foundation: false
+      real_tca_available: false
+      real_market_impact_calibrated: false
+      real_data_connected: false
+      runtime_ready: false
+      c4_calculators: 0
+      event_specific_producer: false
+      cr155_promoted: false
+    adjacent_boundaries:
+      c4_owner: FU-CR161-005
+      aggregate_integration_owner: FU-CR161-007
+      cr155_lifecycle_status: closed
+      cr155_admission_package_status: BLOCKED
+      cr155_paper_candidate: false
+    evidence_paths:
+      - process/changes/CR-168.md
+      - process/checks/CR168-REMOTE-BASELINE-CONFLICT-PRECHECK.json
+      - docs/product/USE-CASES.md
+      - docs/product/REQUIREMENTS.md
+      - docs/product/SCENARIOS.yaml
+      - docs/product/TEST-MATRIX.md
+      - docs/features/strategy-evidence-envelope/DESIGN.md
+
 not_authorized:
   nas_access: true
   credential_or_env_read: true
@@ -70,6 +148,11 @@ not_authorized:
   submit_cancel_buy_sell: true
   simulation_live: true
   provider_lake_catalog_publish: true
+  real_order_fill_quote_book_flow_adv_liquidity_read: true
+  real_tca_or_market_impact_calibration: true
+  c4_capacity_liquidity_adv_alpha_decay_calculation: true
+  stage3_start_or_runtime_ready_claim: true
+  git_remote_write_publish_deploy_release: true
 
 historical_reframes:
   - source: CR-046

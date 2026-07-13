@@ -1,0 +1,176 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR168-REQUIREMENT-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "CR-168"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-07-13T17:40:00+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-168"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 12
+  max_summary_items: 24
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读取本 capsule、CR168 summary、CP1 result 和产品证据；只有字段冲突、人工审计或深度评审时才扩展完整产品文档，并记录 read expansion。"
+
+allowed_reads:
+  - path: "process/state/STATE.current.json"
+    reason: "当前 active CR、pending gate、授权与停止原因"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "当前 checkpoint/context/checklist 发现入口"
+    required: true
+  - path: "process/changes/summaries/CR-168.summary.json"
+    reason: "CR 状态、范围、gate profile、风险与 claim ceiling 摘要"
+    required: true
+  - path: "process/checks/CP1-CR168-USE-CASE-COMPLETENESS.result.json"
+    reason: "CP1 机器真相源"
+    required: true
+  - path: "process/checks/CR168-PRODUCT-BASELINE-EVIDENCE.json"
+    reason: "产品计数、修订、hash、边界和验证证据"
+    required: true
+  - path: "process/checks/CP2-CR168-DISCUSSION-CHECKPOINT.json"
+    reason: "用户可见 SGQ 与五个待决策项"
+    required: true
+
+must_read:
+  - path: "process/state/STATE.current.json"
+    reason: "人工门禁状态和不授权边界"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "当前 context/checkpoint 指针"
+    required: true
+  - path: "process/changes/summaries/CR-168.summary.json"
+    reason: "CR168 compact summary"
+    required: true
+  - path: "process/checks/CP1-CR168-USE-CASE-COMPLETENESS.result.json"
+    reason: "CP1 PASS 证据"
+    required: true
+  - path: "process/checks/CR168-PRODUCT-BASELINE-EVIDENCE.json"
+    reason: "所有产品量化事实"
+    required: true
+  - path: "process/checkpoints/CP2-CR168-REQUIREMENTS-BASELINE.md"
+    reason: "完整 Decision Brief、checklist 和人工审查区"
+    required: true
+
+read_if_needed:
+  - path: "docs/product/USE-CASES.md"
+    trigger: "需要审计 UC-58-CR168 用户旅程或 SGQ 原文"
+  - path: "docs/product/REQUIREMENTS.md"
+    trigger: "需要审计 9 项 requirement、15 项 QAC 或五项 DQ 原文"
+  - path: "docs/product/SCENARIOS.yaml"
+    trigger: "需要审计 16 个场景或 10 类 fail-closed 映射"
+  - path: "docs/product/TEST-MATRIX.md"
+    trigger: "需要审计 scenario/requirement coverage"
+  - path: "docs/product/MVP-SCOPE.md"
+    trigger: "需要审计 In/Out/Deferred/Promoted 边界"
+  - path: "process/discussions/CP2-CR168-SCENARIO-DISCUSSION-LOG.md"
+    trigger: "人工审计或恢复 SGQ 讨论"
+  - path: "process/changes/CR-168.md"
+    trigger: "formal CR 字段冲突或人工深度审计"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "人类摘要，不是机器状态入口"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不属于 CP2 默认上下文"
+  - path_or_pattern: "process/discussions/**"
+    reason: "讨论日志只在审计/恢复时读取"
+  - path_or_pattern: "process/stories/**"
+    reason: "CP2 前禁止 Story/LLD/implementation"
+  - path_or_pattern: "docs/design/HLD.md"
+    reason: "CP2 未批准前禁止 HLD/CP3"
+  - path_or_pattern: "完整 CR-166 Story/LLD/测试报告"
+    reason: "CR166 summary、release context 与代码事实已足够"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "不得作为下游默认输入"
+
+key_facts:
+  scope_summary: "建立 fixture/static-only C3 Economic Cost / Slippage / Impact approximation typed evidence producer foundation；复用 CR166 neutral envelope，不连接真实数据，不启动 Stage 3。"
+  accepted_decisions:
+    - "Gate 4 是 C3+C4 联合门禁，不是 C3-only。"
+    - "C3 必须输出 cost_underestimation_status 与 structured limitations。"
+    - "fixture 语义为 daily multifactor synthetic + daily/ML multi-strategy-type compatibility。"
+    - "currency/price-basis/calendar 仅在跨字段不一致且无显式转换声明时 fail-closed。"
+    - "用户批准 Host Orchestrator 执行 meta-pm inline-fallback；未使用子 Agent。"
+  active_constraints:
+    - "typed C3 component/schema=1/1"
+    - "input field families=9/9"
+    - "P0 fail-closed=10/10"
+    - "fixture families=2/2"
+    - "10 deterministic runs -> 1 canonical hash"
+    - "C3-to-Gate-4 projection=1；C4 calculator=0；capacity/aggregate PASS=0"
+    - "Stage2=true；Stage3=false；真实 TCA/calibration/data/runtime=false"
+    - "CP2 前不得进入 HLD/Story/LLD/implementation/verification"
+  downstream_tasks:
+    - "仅在 CP2 approved 后，生成 meta-se capsule-first handoff 并进入 CP3 solution-design。"
+    - "CP3 需冻结 9-family schema、static approximation method、C3/C4 header 和 Gate 4 projection contract。"
+  traceability:
+    requirements: ["REQ-CR168-001..009"]
+    use_cases: ["UC-58-CR168"]
+    scenarios: ["SC-CR168-P01..E01（16项）"]
+    stories: []
+    features: ["strategy-evidence-envelope", "cross-strategy-reliability-gates"]
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CP2-CR168-METHOD"
+    - "DQ-CP2-CR168-C3-C4"
+    - "DQ-CP2-CR168-GATE4"
+    - "DQ-CP2-CR168-FIXTURE"
+    - "DQ-CP2-CR168-CLAIM"
+  non_authorized_items:
+    - "真实 lake/NAS/provider/data-vendor/credential/secret 访问"
+    - "真实 order/fill/quote/book/flow/ADV/liquidity 数据"
+    - "真实 TCA、market-impact calibration、capacity sizing、历史回填"
+    - "C4 calculator、event producer、FU-007 aggregate integration"
+    - "broker/QMT/simulation/paper/live/trading/order/runtime"
+    - "catalog/store/registry/lake pointer/publish/deploy/tag/release/Git remote write"
+    - "Stage 3 启动、runtime/production/real-evidence readiness 声明"
+    - "CR155 admission promotion/unblock/regression-pass reinterpretation"
+  risk_acceptance_items:
+    - "全局 legacy CR tracking/ledger 元数据债务非 CR168 引入；当前 CR-specific checks 无错误。"
+    - "meta-pm 由 Host inline 执行，没有独立子 Agent 视角；该限制由用户显式批准并已入 ledger。"
+  open_questions:
+    - "五个 DQ 均由 CP2 决定；其余评审事实偏差已 RESOLVED。"
+  n_a_or_waived_items:
+    - "event-specific C3 producer=N/A/deferred"
+    - "CP2 前 BLUEPRINT/DOMAIN-MAP/DEPENDENCY-MAP/HLD/FEATURE-DESIGN-MATRIX unchanged"
+
+handoff:
+  target_agent: "user-human-gate"
+  expected_output:
+    - "approve"
+    - "修改: <具体修改点>"
+    - "reject"
+  exit_criteria:
+    - "五个 DQ 得到统一审批或明确修改"
+    - "人工审查结果回填 checkpoint 和 gate ledger"
+    - "只有 approved 才可进入 CP3"
+  blocked_if_missing:
+    - "CP2 人工结论"
+    - "五个 DQ 的决策"
+
+read_expansion_log:
+  - at: "2026-07-13T17:25:00+08:00"
+    actor: "host-orchestrator-inline-meta-pm"
+    expanded_to: "8 product docs + CURRENT-REQUIREMENT-BASELINE"
+    reason: "CR168 product baseline incremental refresh with revision preservation"
+
+validation:
+  generated_from_sources:
+    - "process/checks/CP0-CR168-REQUEST-INTAKE.result.json"
+    - "process/checks/CP1-CR168-USE-CASE-COMPLETENESS.result.json"
+    - "process/checks/CR168-PRODUCT-BASELINE-EVIDENCE.json"
+    - "process/checks/CP2-CR168-DISCUSSION-CHECKPOINT.json"
+    - "process/changes/summaries/CR-168.summary.json"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "YAML/JSON parse PASS；16/16 scenario matrix coverage；9/9 requirement refs；wrong quality refs=0。"
+    - "No HLD/Story/LLD/code/test implementation was created."

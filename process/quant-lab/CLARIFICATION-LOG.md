@@ -25,6 +25,47 @@ created_by: "meta-pm"
 | 2026-05-31 | meta-pm | CR-025 Backtrader optional execution backend hardening CP2 前澄清 | 基于 CR-025 与 CR-019 follow-up 台账完成阶段零调研、Scenario Gray Areas desk review、UC-19 与 REQ-161 至 REQ-168 增量；不发起 CP2 人工门禁，不实现代码，不修改依赖，不触发真实 broker/QMT/provider/lake/publish |
 | 2026-05-31 | meta-po | CR-025 CP2 修改意见：production-grade research-to-execution 目标澄清 | 用户澄清目标不是开发框架级 Backtrader/lightweight 回测框架，而是生产级策略研究回测、模拟盘和实盘框架；CR-025 修订为研究执行语义对照与 target portfolio / order intent 衔接，QMT 真实运行仍由 CR-020..CR-024 承接 |
 | 2026-06-01 | meta-po | CR-025 CP2 approved 与 Backtrader 本地项目 HLD 分析要求 | 用户批准推进 CR-025，并要求 meta-se 在 CP3/HLD 充分分析 `/home/hyde/download/backtrader`，对比可借鉴、可适配、可移植和禁止移植模块；源码级移植只作为 HLD 决策项，不构成实现授权 |
+| 2026-07-13 | host-orchestrator-inline | CR168 C3 economic-cost 产品基线增量澄清 | 已按用户评审修正 Gate 4 联合门禁、成本低估状态、multi-strategy fixture 与跨字段 basis 条件；5 个方法/共享合同/集成/fixture/claim 决策保留给 CP2，ready_for_design=false。 |
+
+## CR168 第 1 轮增量澄清（2026-07-13）
+
+### 本轮识别的歧义项
+
+| ID | 维度 | 问题描述 | 阻断等级 | 状态 |
+|---|---|---|---|---|
+| Q-CR168-001 | 方法边界 | 是否在 C3 中包含只用显式静态参数的 transparent impact approximation？ | BLOCKING_FOR_CP3 | OPEN，待 CP2 |
+| Q-CR168-002 | 相邻合同 | 是否冻结最小 C3/C4 shared header，且 C4 专属字段保持 reserved？ | BLOCKING_FOR_CP3 | OPEN，待 CP2 |
+| Q-CR168-003 | 集成边界 | 是否交付 1 条 C3-to-Gate-4 compatibility projection，还是全部延后 FU-007？ | BLOCKING_FOR_CP3 | OPEN，待 CP2 |
+| Q-CR168-004 | 适用面 | fixture 是否精确为 daily synthetic + daily/ML compatibility 两族，event N/A？ | REQUIRED_FOR_CP2 | OPEN，待 CP2 |
+| Q-CR168-005 | claim ceiling | 是否保持 Stage2 complete、Stage3 not-started 与全部真实/runtime/C4/event/CR155 promotion false/0？ | REQUIRED_FOR_CP2 | OPEN，待 CP2 |
+
+### 用户回答与评审修正记录
+
+| Q-ID | 答复内容 | 记录时间 | 状态 |
+|---|---|---|---|
+| SGQ-CR168-000 | 用户要求“根据提示词启动 CR168，并根据评审意见查看范围和目标是否需要调整”，且评审结论明确“按上述 4 处调整后即可启动”。 | 2026-07-13 | CONFIRMED |
+| SGQ-CR168-000-A | Gate 4 不是 C3-only；改为 C3+C4 联合门禁，C3 只提供四字段，C4 typed_unavailable/fail-closed。 | 2026-07-13 | RESOLVED_BY_USER_REVIEW |
+| SGQ-CR168-000-B | `cost_underestimation_status` 必须进入 C3 输出/合同。 | 2026-07-13 | RESOLVED_BY_USER_REVIEW |
+| SGQ-CR168-000-C | package-neutral fixture 改为 daily multifactor + ML 的 multi-strategy-type compatibility。 | 2026-07-13 | RESOLVED_BY_USER_REVIEW |
+| SGQ-CR168-000-D | currency/price-basis/calendar 失败条件精确为跨字段不一致且无显式转换声明。 | 2026-07-13 | RESOLVED_BY_USER_REVIEW |
+
+### 本轮结论
+
+- 剩余 BLOCKING 未决项：`5` 项，均已转化为 CP2 人工决策，不阻断 CP1 自动完备性检查。
+- `ready_for_design=false`；只有 CP2 approve 后才可进入 CP3。
+- 产品目标未发生方向性扩大：仍为 fixture/static C3 foundation；真实 TCA/data/runtime、C4、event producer、aggregate integration 与 Stage 3 均未授权。
+
+### 场景发现摘要
+
+| 类型 | 条目 | 说明 |
+|---|---|---|
+| 新增 | UC-58-CR168 | C3 economic cost/slippage/impact approximation 用户旅程和 Gate 4 联合边界。 |
+| 新增 | REQ-CR168-001..009 | 组件、输入、算法透明度、10 类 fail-closed、确定性、Gate 4、fixture、权限、相邻 follow-up。 |
+| 新增 | SC-CR168-P01..E01 | 16 个场景，其中 P0=15、P1=1。 |
+| 修改 | 产品规划文档 | 追加 CR168 outcome、MVP、release slices、backlog promotion，不创建正式 Story。 |
+| 保留 | CR166 及更早基线 | 旧修订、已批准需求和场景不删除、不重写。 |
+
+下一步：Host Orchestrator 完成 CP1 自动检查并打开 CP2；用户在 CP2 决定 Q-CR168-001..005。
 
 ## 调研发现（2026-05-31，CR-025）
 
