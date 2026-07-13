@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR167-ARCHIVAL",
+  "cr_id": "CR-167",
+  "story_id": "CR167-ARCHIVAL",
+  "event_id": "CP6-CR167-ARCHIVAL",
+  "checked_at": "2026-07-13T11:05:00+08:00",
+  "decision": "PASS",
+  "context_ref": "process/context/CP0-CR167.context.json",
+  "dispatch_refs": ["AD-CR167-CP6-META-DEV-20260713"],
+  "evidence_ref": "process/evidence/CR167-RELEASE-DOCUMENT-ARCHIVE.sha256",
+  "read_expansion_refs": [],
+  "items": [
+    {
+      "id": "CP6-01",
+      "category": "implementation",
+      "name": "CR-scoped release documents migrated to the configured artifact archive",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/evidence/CR167-RELEASE-DOCUMENT-ARCHIVE.sha256"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "meta-dev dev-yang independently confirmed 35 archive targets, 0 source duplicates, 35/35 checksum success, route consistency, CR166 absence and namespace isolation."
+    }
+  ],
+  "entry_criteria": [
+    {"id": "EC-1", "description": "Process route health and CR conflict precheck pass.", "status": "PASS", "evidence_ref": "process/changes/CR-167.md"}
+  ],
+  "checklist": [
+    {"id": "CL-1", "description": "Exactly 35 local-only CR release documents are present in process/docs/release.", "status": "PASS", "evidence_ref": "process/evidence/CR167-RELEASE-DOCUMENT-ARCHIVE.sha256"},
+    {"id": "CL-2", "description": "The quant-lab docs/release source directory contains no ignored CR-numbered duplicate.", "status": "PASS", "evidence_ref": "docs/release/README.md"},
+    {"id": "CL-3", "description": "Artifact routing metadata names the actual public release entry retained in quant-lab.", "status": "PASS", "evidence_ref": "process/.meta-flow-process.yaml"},
+    {"id": "CL-4", "description": "README delivery boundary points to docs/release/README.md and externalizes internal CR documents.", "status": "PASS", "evidence_ref": "README.md"}
+  ],
+  "exit_criteria": [
+    {"id": "XC-1", "description": "All archive objects exist at the canonical artifact path with a checksum manifest.", "status": "PASS"}
+  ],
+  "deliverables": [
+    "process/docs/release/",
+    "process/evidence/CR167-RELEASE-DOCUMENT-ARCHIVE.sha256",
+    "process/.meta-flow-process.yaml",
+    "README.md"
+  ],
+  "blockers": [],
+  "waivers": [],
+  "next_route": "CP7"
+}
