@@ -1,10 +1,10 @@
 ---
 document_id: "RELEASE-NOTES-CR166"
 cr_id: "CR-166"
-status: "READY_WITH_RISK"
-release_execution_status: "NOT_EXECUTED"
+status: "RELEASED"
+release_execution_status: "GIT_REMOTE_DELIVERED"
 created_at: "2026-07-13T14:38:00+08:00"
-updated_at: "2026-07-13T15:19:46+08:00"
+updated_at: "2026-07-13T15:45:43+08:00"
 ---
 
 # CR-166 Walk-forward / OOS Evidence Producer Foundation 发布说明
@@ -15,10 +15,11 @@ updated_at: "2026-07-13T15:19:46+08:00"
 |---|---|---|---|
 | 1.0 | 2026-07-13 | host-orchestrator inline | 固化 CR-166 fixture/static foundation 的交付范围、验证结论、claim ceiling 与不授权边界。 |
 | 1.1 | 2026-07-13 | host-orchestrator inline | 追加 CP8 批准、关闭态 hygiene 回修和 1987 项最终全量验证。 |
+| 1.2 | 2026-07-13 | host-orchestrator inline | 记录用户在 CP8 后独立授权的双仓库 Git 远端交付。 |
 
 ## 交付结论
 
-CR-166 已完成 5/5 Story 的实现与验证，经 CP8 人工批准并关闭。交付的是 repository-local、fixture/static-only 的 Walk-forward/OOS typed C2 evidence producer foundation；发布执行状态为 `NOT_EXECUTED`，本轮没有 commit、push、tag、publish 或 deploy。
+CR-166 已完成 5/5 Story 的实现与验证，经 CP8 人工批准并关闭。用户随后独立授权双仓库 Git 远端交付：`quant-lab` 的 `work/cr166-walk-forward-oos-evidence@e8507cb` 与 `meta-flow-artifacts` 的 `main@063d3b6` 已成功推送。交付的是 repository-local、fixture/static-only 的 Walk-forward/OOS typed C2 evidence producer foundation；tag、publish 与 deploy 仍未执行。
 
 质量结论为 `READY_WITH_RISK`：关闭态最终仓库全量测试 1987/1987 通过、0 failed，新增代码路径失败为 0，四项评审发现均已关闭。唯一已接受风险是实现与验证均由同一 Host 的 inline fallback 完成，因此不得宣称独立 agent/model 隔离。
 
@@ -46,6 +47,15 @@ CR-166 已完成 5/5 Story 的实现与验证，经 CP8 人工批准并关闭。
 | 编译与 diff hygiene | PASS |
 | 未解决 finding / waiver | 0 / 0 |
 
+## Git 远端交付
+
+| 仓库 | 远端分支 | 已推送提交 | 结果 |
+|---|---|---|---|
+| `hyde-zhao/quant-lab` | `work/cr166-walk-forward-oos-evidence` | `e8507cb` | SUCCESS；新建远端工作分支 |
+| `hyde-zhao/meta-flow-artifacts` | `main` | `063d3b6` | SUCCESS；fast-forward |
+
+该动作由用户在 CP8 关闭后单独授权，只覆盖 commit/push。未创建 tag，未执行 publish/deploy，也未启动 Stage 3 或连接真实数据/runtime。
+
 正式质量证据统一使用 `docs/quality/` 路径：
 
 - `docs/quality/VERIFICATION-REPORT-CR166.md`
@@ -68,5 +78,4 @@ CR-166 已完成 5/5 Story 的实现与验证，经 CP8 人工批准并关闭。
 - real fold/OOS ingestion、historical recomputation、real research run；
 - runtime、broker、simulation、paper、live、trading、order；
 - catalog/store/registry write、publish、deploy；
-- Git remote write；
 - Stage 3 start 或 real-evidence claim。

@@ -3,7 +3,7 @@ document_id: "DEPLOY-CHECKLIST-CR166"
 cr_id: "CR-166"
 status: "NOT_APPLICABLE"
 created_at: "2026-07-13T14:38:00+08:00"
-updated_at: "2026-07-13T15:19:46+08:00"
+updated_at: "2026-07-13T15:45:43+08:00"
 ---
 
 # CR-166 部署检查清单
@@ -14,10 +14,11 @@ updated_at: "2026-07-13T15:19:46+08:00"
 |---|---|---|---|
 | 1.0 | 2026-07-13 | host-orchestrator inline | 声明 repository-local foundation 的部署 N/A 结论和后续启用前置条件。 |
 | 1.1 | 2026-07-13 | host-orchestrator inline | 更新 CP8 批准后的关闭态回归与 finding 闭环证据。 |
+| 1.2 | 2026-07-13 | host-orchestrator inline | 记录 CP8 后独立授权的源码与 artifact Git 远端推送。 |
 
 ## 结论
 
-本 CR 的 deploy 为 `N/A`，release execution 为 `NOT_EXECUTED`。CR-166 没有安装器、服务、进程、数据库迁移、远端配置、生产资源或运行时开关；CP8 只确认本地源码、测试、synthetic fixtures 与审计证据是否可关闭。
+本 CR 的 deploy 仍为 `N/A`；Git 交付状态为 `GIT_REMOTE_DELIVERED`。CR-166 没有安装器、服务、进程、数据库迁移、远端配置、生产资源或运行时开关；CP8 只确认本地源码、测试、synthetic fixtures 与审计证据是否可关闭，Git push 则由用户在 CP8 后另行授权。
 
 ## CP8 前检查
 
@@ -28,7 +29,8 @@ updated_at: "2026-07-13T15:19:46+08:00"
 | 3 | 评审 finding 闭环 | PASS | QR-CR166-001、QR-CR166-002、GR-CR166-001、GR-CR166-002 全部 RESOLVED |
 | 4 | 禁止操作计数 | PASS | file/env/network/provider/runtime/broker/trading 等操作均为 0 |
 | 5 | Stage claim ceiling | PASS | Stage 2 complete；Stage 3/runtime/real evidence=false |
-| 6 | 远端写入 | NOT EXECUTED | CP8 不授权 commit/push/tag/publish/deploy |
+| 6 | 双仓库 Git 远端交付 | PASS | `quant-lab@e8507cb` 推送到工作分支；`meta-flow-artifacts@063d3b6` 推送到 `main` |
+| 7 | tag / publish / deploy | NOT EXECUTED | 本轮独立授权不包含这些操作 |
 
 ## 未来连接真实环境前必须重新满足
 
