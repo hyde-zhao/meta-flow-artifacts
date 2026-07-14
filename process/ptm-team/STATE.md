@@ -16,9 +16,9 @@ updated_at: "2026-07-10T00:00:00+08:00"
 | workflow_id | WF-PTM-TEAM-20260520-001 |
 | current_phase | delivered |
 | engagement_mode | production |
-| active_change | -（CR-024 closed，ptm-te v1 交付；follow-up T-01~T-06 candidate） |
-| pending_action | CR-024 closed。ptm-te v1 交付（agents/ptm-te.md active + 3 skill + install.py + 文档刷新）。runtime 端到端验证留 T-01 follow-up。 |
-| cr_tracking_follow_up | CR-024 后续候选：T-01 真实消费 ptm-tde PC / T-02 1900 型号验证 / T-03 managed rule block v2 / T-04 进程管理串口 / T-05 batch policy-route package |
+| active_change | CR-028 closed（ptm-te v2 op_mapper 扩展，2026-07-13）；CR-026/027/028 均 closed |
+| pending_action | CR-028 closed：op_mapper 扩展 operation-log/object/interface 3 族（8->15 op，5 族）+ op 覆盖矩阵文档（mapped 15/gap 6/unmapped 97/total 118）。安装版 object 族仅 config，4 gap 待 ptm-atomic 升级。后续：T-01 runtime 验证 / CR-029 object gap 激活。 |
+| cr_tracking_follow_up | CR-024 后续候选：T-01 真实消费 ptm-tde PC / T-02 1900 型号验证 / T-03 managed rule block v2 / T-04 进程管理串口 / T-05 batch policy-route package；CR-027 后续：CR-028 ptm-te v2 op_mapper 扩展（待 CR-026）/ F-02 preconditions 消费（待 CR-026） |
 | source_baseline | ptm-tde 已交付基线（CR-010~017 closed）。CR-024 是 ptm-te 首次实现，消费 ptm-tde PC + ptm-atomic CLI。 |
 | gate_inheritance | 不适用。CR-024 是全新 agent 实现，CP0-CP8 全程走标准门控。 |
 
@@ -31,7 +31,7 @@ ptm-team 是一个包含 **6 个 AI Agent 角色** 的 production 项目，产�
 | ptm-tm | 测试经理 / 对外协调 | ⬜ 未开始 |
 | ptm-tse | 测试架构师 / 技术 Owner | ⬜ 未开始 |
 | ptm-tde | 测试设计工程师（MFQ&PPDCS） | ✅ 已交付（CR-010~017） |
-| ptm-te | 测试执行工程师 | ✅ v1 交付（CR-024，设备管理 + 策略路由执行） |
+| ptm-te | 测试执行工程师 | ✅ v1.1 交付（CR-024 + CR-027；v1.1：args 对齐 + 依赖声明 + session 隔离 + 授权审计 + snapshot diff + 参数预检 + NO_PROXY） |
 | ptm-tae | 自动化工程师 / 基础设施 | 🔄 Step 1 进行中 |
 | ptm-qa | 质量工程师 | ⬜ 未开始 |
 

@@ -1,0 +1,31 @@
+{
+  "check_id": "CP8-CR-028",
+  "change_id": "CR-028-ptm-te-v2-op-mapper-extension",
+  "checkpoint": "CP8",
+  "type": "auto",
+  "status": "pass",
+  "checked_at": "2026-07-13T20:10:00+08:00",
+  "release_decision": "READY",
+  "approval": {"source": "用户授权 standard-compressed 模式自动推进 CP8", "note": "CP0-CP5 n/a，CP6/CP7 pass 后自动 CP8"},
+  "summary": "ptm-te v2 op_mapper 覆盖面扩展完成。7 新 op_id（operation-log/object/interface 3 族）+ op 覆盖矩阵文档。op_mapper 从 8 op 扩到 15 op（5 族），覆盖率从 ~7% 提升到 ~12.7%。",
+  "deliverables_verified": [
+    "skills/policy-route-execution/scripts/op_mapper.py（7 新 op_id 映射 + validate 族校验）",
+    "agents/ptm-te.md（三层映射 15 op + 修订记录 v1.2）",
+    "docs/ptm-te/op-coverage-matrix.md（118 op 覆盖矩阵）"
+  ],
+  "follow_up_candidates": [
+    {"id": "CR-029", "desc": "object 族 4 gap 激活（ptm-atomic 升级后）", "priority": "P2", "trigger": "ptm-atomic 安装版升级"},
+    {"id": "CR-030", "desc": "hainterface + ospf_interface 族扩展", "priority": "P2", "trigger": "HA/OSPF 实战需求"},
+    {"id": "F-03", "desc": "interface 布尔 flag 映射（--interface-enabled/disabled）", "priority": "P3"},
+    {"id": "T-01", "desc": "runtime 端到端验证（含新 7 op）", "priority": "P1", "status": "candidate"}
+  ],
+  "risk_acceptance": [
+    {"risk": "object config 无回滚（inverse_op 未暴露）", "accepted_by": "standard-compressed 模式", "condition": "gap 标注，升级激活"},
+    {"risk": "runtime 未验证", "accepted_by": "用户", "condition": "STATE 标注 T-01；上线前 runtime 验证"}
+  ],
+  "not_authorized": [
+    "本 CR 仅映射表 + 文档扩展，不含真实设备运行授权",
+    "dry_run 默认门（ADR-04）不变",
+    "新 op 的 args->flag 真实映射需 runtime 验证（T-01）"
+  ]
+}

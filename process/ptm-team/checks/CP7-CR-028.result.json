@@ -1,0 +1,38 @@
+{
+  "check_id": "CP7-CR-028",
+  "change_id": "CR-028-ptm-te-v2-op-mapper-extension",
+  "checkpoint": "CP7",
+  "type": "auto",
+  "status": "pass",
+  "validation_mode": "static-only + dry-run-only",
+  "checked_at": "2026-07-13T20:05:00+08:00",
+  "checklist": [
+    {"item": "op_mapper.py 语法", "result": "pass", "evidence": "py_compile OK"},
+    {"item": "validate 三表一致 + 5 族校验", "result": "pass", "evidence": "PASS (15 op_id 全覆盖，三表一致)"},
+    {"item": "7 新 op_id map 正例（action + flag 正确）", "result": "pass", "evidence": "capture/config/create/update/delete/delete-batch/verify 全部正确"},
+    {"item": "原有 8 op 未破坏", "result": "pass", "evidence": "policy-route config --source-network / auth login --username 仍正确"},
+    {"item": "全局残留扫描（继承 CR-027 教训）", "result": "pass", "evidence": "op_mapper.py 硬编码 8 残留 0；agent md '8 个 op'/'首期 N/A' 残留 0"},
+    {"item": "覆盖矩阵文档完整", "result": "pass", "evidence": "mapped 15 / gap 6 / unmapped 97 / total 118 + 真相源说明"},
+    {"item": "fw_config_interface 特殊映射（config op_id -> create action）", "result": "pass", "evidence": "map 输出 action=create"}
+  ],
+  "design_decisions": [
+    {"decision": "op_mapper 按安装版 ptm-atomic 0.1.0 扩展（runtime 真相源），非源码", "reason": "安装版 object 族仅 config，源码有 5 子命令；op_mapper 构造的命令由安装版执行，必须匹配"},
+    {"decision": "object 族 update/delete/delete-batch/verify 进覆盖矩阵 gap，不进 OP_ID_TO_SUBCOMMAND", "reason": "安装版 CLI 报 invalid choice，扩展会导致 runtime 失败；ptm-atomic 升级后激活"},
+    {"decision": "fw_config_object 的 inverse_op=fw_delete_object 标 type=none", "reason": "inverse_op 安装版未暴露，回滚待升级"},
+    {"decision": "fw_delete_interface ROLLBACK_STRATEGY.type=none", "reason": "yaml 无 rollback_strategy 字段（2026-07-13 实测），尊重真相源"},
+    {"decision": "interface args key 用 CLI flag snake_case（interface_kind/ip_address）非 op yaml params（val.type/val.ip_addresses）", "reason": "op yaml params 嵌套 val 且 type 是数字枚举，CLI flag 是扁平枚举；ptm-tde 产出应直接给枚举字符串"}
+  ],
+  "not_validated_runtime": {
+    "declaration": "standard-compressed 模式 static-only + dry-run-only，以下 runtime 项未验证，留 follow-up",
+    "items": [
+      "7 新 op_id 真实设备执行（需 VALIDATION-ENV + 授权 + ptm-atomic + 设备）",
+      "interface 嵌套 params（val.type 数字 -> --interface-kind 枚举）真实映射",
+      "object config 真实创建 + 回滚（inverse_op 未暴露）"
+    ]
+  },
+  "remaining_risks": [
+    {"risk": "object config 无可用回滚（inverse_op 安装版未暴露）", "severity": "medium", "mitigation": "覆盖矩阵 gap 标注；ptm-atomic 升级后激活", "follow_up": "CR-029 候选"},
+    {"risk": "interface 布尔 flag（--interface-enabled/--interface-disabled）未映射", "severity": "low", "mitigation": "可选 flag，留 follow-up", "follow_up": "F-03"},
+    {"risk": "runtime 未验证即交付", "severity": "medium", "mitigation": "STATE 标注 T-01；上线前 runtime 验证"}
+  ]
+}

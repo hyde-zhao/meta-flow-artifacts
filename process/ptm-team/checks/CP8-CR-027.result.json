@@ -1,0 +1,32 @@
+{
+  "check_id": "CP8-CR-027",
+  "change_id": "CR-027-ptm-te-v1.1-quickfix",
+  "checkpoint": "CP8",
+  "type": "auto",
+  "status": "pass",
+  "checked_at": "2026-07-13T19:15:00+08:00",
+  "checked_by": "host-orchestrator（主进程）+ 用户批准",
+  "release_decision": "READY",
+  "approval": {"source": "用户确认", "note": "用户在 CP7 真实状态补全后批准进入 CP8"},
+  "summary": "ptm-te v1.1 快速修复交付完成。7 项整改功能层全部通过 static + dry-run 验证；复跑补全全局残留扫描（零残留）。runtime 端到端未验证，fast-lane 不强制但已在 STATE 标注 T-01 follow-up。",
+  "deliverables_verified": [
+    "skills/policy-route-execution/scripts/op_mapper.py（F-01 + P2-9 + P2-11 + P2-12 + 残留修复）",
+    "skills/device-connection/SKILL.md（P1-6）",
+    "skills/device-connection/scripts/collect_sysinfo.py（P2-10）",
+    "agents/ptm-te.md（F-01 + P2-8 + P2-9 + P2-10 + P2-11 + P2-12 + 修订记录）",
+    ".gitignore（P2-8）"
+  ],
+  "follow_up_candidates": [
+    {"id": "T-01", "desc": "runtime 端到端验证（真实设备 + 授权环境）", "priority": "P1", "status": "candidate（CR-024/027 继承）"},
+    {"id": "CR-028", "desc": "ptm-te v2 op_mapper 扩展（op 覆盖矩阵 + operation-log/object/interface 族）", "priority": "P1", "depends_on": "CR-026 op_id 规范定稿"},
+    {"id": "F-02", "desc": "P2-11 preconditions 消费", "priority": "P2", "depends_on": "CR-026 契约定稿"}
+  ],
+  "risk_acceptance": [
+    {"risk": "runtime 未验证即交付", "accepted_by": "用户", "condition": "STATE.md 标注 T-01 未完成；上线前必须 runtime 验证", "severity": "medium"}
+  ],
+  "not_authorized": [
+    "本 CR 仅文档/脚本静态增强，不含真实设备运行授权",
+    "dry_run 默认门（ADR-04）不变，--execute 仍需单次授权",
+    "CP7 pass 不等于 runtime 可上线"
+  ]
+}
