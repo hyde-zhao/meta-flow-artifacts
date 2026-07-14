@@ -1,9 +1,10 @@
 ---
 status: "draft-current-index"
-version: "1.13"
+version: "1.15"
 source_blueprint: "docs/design/BLUEPRINT.md"
-change: "CR-139"
+change: "CR-168"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
+companion_dependency_map_cr168: "process/archive/design-cr-docs/DEPENDENCY-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md"
 archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quant-lab-project-roadmap-2026-06-26.md"
 ---
 
@@ -27,6 +28,8 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | 1.11 | 2026-06-28 | codex | 增补研究引擎稳定模块依赖边界：FEAT-03 主实现只能使用领域名模块；旧 chapter/stage/root 脚本只允许兼容 wrapper 或 legacy archive。 |
 | 1.12 | 2026-06-28 | meta-se | 按 CR-139「Strategy Data Foundation」CP3 增补策略生产数据底座依赖方向：reader → published current pointer（非 raw）、ML → panel reader（非 `--data-dir` 旁路）、broker facts/RunEvidenceIndex → 数据 run-id 贯通、配置类事实源 → release 闭环（复用 V1 pointer 语义）；明确禁止反向（engine 不写 lake、reader 不读未发布、DuckDB 不写持久事实源、ML 不旁路）；补禁止依赖 FD-46..52 与循环风险 CYCLE-20..22。AGA-1/3/5 推荐方案 CP3 已确认 A1/C1/E1。 |
 | 1.13 | 2026-06-28 | host-orchestrator | CP3 approved，AGA-1/3/5 确认 A1/C1/E1，pending-cp3 → confirmed-cp3。 |
+| 1.14 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR168 companion dependency map 草案：C3→neutral public API、adapter→canonical public validator 单向依赖；禁止 neutral 反向依赖、私有 helper、mapping 透传、C4/aggregate/runtime；待 CP3。 |
+| 1.15 | 2026-07-14 | host-orchestrator inline fallback | CP3 已批准后将 CR168 companion dependency map 正文归档到 `process/archive/design-cr-docs/`；长期 index 仅修正状态/路由，不改变依赖规则。 |
 
 ## 依赖关系
 

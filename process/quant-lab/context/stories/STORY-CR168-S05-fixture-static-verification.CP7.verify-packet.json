@@ -1,0 +1,68 @@
+{
+  "schema_version": "meta-flow.story-cp7-verify-packet.v1",
+  "packet_id": "STORY-CR168-S05-CP7-VERIFY-PACKET",
+  "cr_id": "CR-168",
+  "story_id": "CR168-S05-fixture-static-verification",
+  "stage": "CP7",
+  "created_at": "2026-07-14T14:51:00+08:00",
+  "created_by": "host-orchestrator-inline-fallback",
+  "context_policy": {
+    "read_profile": "compact",
+    "capsule_first": true,
+    "must_read": [
+      "process/checks/CP6-CR168-S05-FIXTURE-STATIC-VERIFICATION-IMPLEMENTATION.result.json",
+      "process/returns/STORY-CR168-S05-fixture-static-verification.CP6.return.json",
+      "process/evidence/STORY-CR168-S05-fixture-static-verification.CP6.index.json",
+      "process/stories/STORY-CR168-S05-fixture-static-verification-IMPLEMENTATION.md",
+      "process/stories/STORY-CR168-S05-fixture-static-verification-LLD.md"
+    ],
+    "read_if_needed": [
+      "engine/economic_cost_evidence.py",
+      "engine/economic_cost_gate4_projection.py",
+      "tests/research/test_economic_cost_cr168_qac.py",
+      "tests/research/test_economic_cost_authorization.py",
+      "tests/research/test_economic_cost_cr155_regression.py",
+      "scripts/check_process_artifact_hygiene.py"
+    ],
+    "do_not_read_by_default": [
+      "process/archive/**",
+      "process/discussions/**",
+      "unrelated CR full test reports",
+      "all historical CP result bodies"
+    ]
+  },
+  "verification_scope": {
+    "requirements": ["REQ-CR168-001", "REQ-CR168-002", "REQ-CR168-003", "REQ-CR168-004", "REQ-CR168-005", "REQ-CR168-006", "REQ-CR168-007", "REQ-CR168-008", "REQ-CR168-009"],
+    "contracts": [
+      "9/17/15 coverage and 10 P0 fail-closed",
+      "two synthetic fixture families and 10-runs determinism",
+      "C3 local Gate4 projection with C4 typed-unavailable fail-closed",
+      "no capability registry write and auditable N/A-with-reason",
+      "no C4/capacity/aggregate PASS and CR155 remains BLOCKED",
+      "full-suite failure attribution and active-CR asset governance"
+    ],
+    "test_commands": [
+      "uv run --python 3.11 pytest -q --cache-clear",
+      "uv run --python 3.11 pytest -q tests/meta_flow/test_design_surface.py::test_cr131_design_surface_current_docs_pass tests/meta_flow/test_design_surface.py::test_cr131_design_surface_cli_json tests/meta_flow/test_process_artifact_hygiene.py::test_cr132_process_artifact_hygiene_current_workspace_passes tests/meta_flow/test_process_artifact_hygiene.py::test_cr132_process_artifact_hygiene_cli_json tests/meta_flow/test_test_file_taxonomy.py::test_test_provenance_registry_covers_every_test_file"
+    ],
+    "acceptance": [
+      "final repository suite failures=0",
+      "all initially observed full-suite failures have introduced_by_cr168=true and resolved evidence",
+      "unknown attribution=0",
+      "design-surface errors=0 and hygiene unclassified=0",
+      "R-CR168-VERIFIER-INDEPENDENCE remains explicit at CP8"
+    ]
+  },
+  "authorization": {
+    "inline_verification_only": true,
+    "independent_subagent": false,
+    "real_data_runtime_registry_or_git_remote_write": false,
+    "risk_disclosure": "R-CR168-VERIFIER-INDEPENDENCE is accepted for CP7 only and must produce a CP8 READY_WITH_RISK decision, never a fabricated independent-verifier claim."
+  },
+  "return_requirements": {
+    "verification_evidence": "process/evidence/STORY-CR168-S05-fixture-static-verification.CP7.index.json",
+    "return_packet": "process/returns/STORY-CR168-S05-fixture-static-verification.CP7.return.json",
+    "cp7_result": "process/checks/CP7-CR168-S05-FIXTURE-STATIC-VERIFICATION-VERIFICATION.result.json",
+    "quality_documents": ["docs/quality/VERIFICATION-REPORT-CR168.md", "docs/quality/TEST-REPORT-CR168.md", "docs/quality/REVIEW-CR168.md"]
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR168-S03-ENVELOPE-COMPATIBILITY-IMPLEMENTATION",
+  "story_id": "CR168-S03-envelope-multi-strategy-compatibility",
+  "cr_id": "CR-168",
+  "checked_at": "2026-07-14T13:42:10+08:00",
+  "check_attempt": 1,
+  "context_ref": "process/context/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP6.work-packet.json",
+  "dispatch_refs": ["AD-CR168-CP6-S03-META-DEV-INLINE-20260714T131200+0800"],
+  "return_packet_ref": "process/returns/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP6.return.json",
+  "evidence_ref": "process/evidence/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP6.index.json",
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP6.work-packet.json": "sha256:0a9628993636b4e88e358539e3978ff48a99d3d08760ddca6628fce78a85ae41",
+    "process/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility-LLD.md": "sha256:674717816b3516d817100010dc5f628541b258a5fd91fec0966ea700a2b3520e",
+    "process/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility.md": "sha256:8b22134b8c0a60085f9e79c8f8c3d3d66cb061cb131e51adc28feb045d7f3cf1",
+    "engine/strategy_evidence.py": "sha256:c64f759fa66c080560d689112e093a67307eee22b234a64ee5decf5788a79f8c",
+    "tests/research/test_economic_cost_envelope_compatibility.py": "sha256:fc9011303b42ec77e437e9b81ab4b4ea83b5368800eeea694cd24be168aa421a"
+  },
+  "items": [
+    {
+      "id": "CP6-CR168-S03-01",
+      "category": "implementation",
+      "name": "唯一 economic_cost@v1 catalog descriptor 按已批准边界激活",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility-IMPLEMENTATION.md"],
+      "owner": "meta-dev-inline",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "economic_cost@v1 active=1；capacity_liquidity@reserved 仍为 reserved，C4 activation=0。"
+    },
+    {
+      "id": "CP6-CR168-S03-02",
+      "category": "testing",
+      "name": "subject-neutral component hash 与 subject-bound envelope hash 的多策略兼容断言通过",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/evidence/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP6.index.json"],
+      "owner": "meta-dev-inline",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "S01/S02/S03/C2 targeted pytest 40/40 passed；daily/ML component hash 相同、envelope hash 不同且 stale identity hash 被阻断。"
+    },
+    {
+      "id": "CP6-CR168-S03-03",
+      "category": "boundary",
+      "name": "neutral envelope 不反向依赖 C3 producer，且未触碰 Gate4、aggregate 或外部边界",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP6.return.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "静态扫描无 economic_cost_evidence reverse import、无 Gate4/aggregate import；无真实数据、runtime、registry 或远端写入。"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260714T050933Z0000-812ab76a", "RE-20260714T054157Z0000-984bf9ea"],
+  "decision": "PASS",
+  "next_route": "CP7-CR168-S03-VERIFICATION"
+}

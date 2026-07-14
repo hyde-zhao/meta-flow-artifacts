@@ -1,16 +1,18 @@
 ---
 status: "ready-for-cp5-review"
-version: "1.22"
+version: "1.24"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld:
   - "docs/design/HLD.md"
   - "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
   - "process/archive/design-cr-docs/HLD-WALK-FORWARD-OOS-EVIDENCE.md"
+  - "process/archive/design-cr-docs/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md"
 source_adr:
   - "docs/design/ARCHITECTURE-DECISION.md"
   - "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
   - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-WALK-FORWARD-OOS-EVIDENCE.md"
-change: "CR-166"
+  - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+change: "CR-168"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 confirmed_by: ""
 confirmed_at: ""
@@ -45,6 +47,8 @@ confirmed_at: ""
 | 1.20 | 2026-07-05 | host-orchestrator | CR158 CP3 approved 后增补 Event + ML Strategy Adapter Unified Implementation CP4：复用 FEAT-03 / FEAT-07 / FEAT-08，新增 6 个 Story、thin shared core、typed event/ML extension、refs-only evidence、no-runtime counters 和 release wording boundary。 |
 | 1.21 | 2026-07-11 | meta-se-critical | CR163 CP3 approved 后增补 FEAT-20 experiment-family lineage core、FEAT-21 producer adapters、FEAT-22 admission projection 三套 required Feature 设计；FEAT-23 standalone validation waived，由三套 TEST-PLAN 汇总覆盖；五 Story 全部 full-lld。 |
 | 1.22 | 2026-07-13 | host-orchestrator inline meta-se | CR166 CP3 approved 后增补 FEAT-166-01..05 五套 required Feature 设计；五 Story 全部 full-lld、五个串行安全 Wave，保持 fixture/static 与 no-runtime 边界。 |
+| 1.23 | 2026-07-14 | host-orchestrator inline meta-se | CR168 CP3 revised/approved 后增补 FEAT-168-01..03，并增量复用 FEAT-166-01；五 Story 全部 full-lld、五个串行安全 Wave，固化 component/envelope identity 分域与 Gate4 adapter-local containment。 |
+| 1.24 | 2026-07-14 | host-orchestrator inline fallback | CR168 专题 CP3 正文归档后更新其 HLD/ADR source path；Feature 判定、Story、lld_policy 和实施语义不变。 |
 
 ## 适用性判定规则
 
@@ -670,3 +674,59 @@ confirmed_at: ""
 | Story refs / lld_policy | PASS | 5/5 full-lld；无 waived Story |
 | 相邻边界 | PASS | C1 compatibility、C3/C4 calculator=0、event N/A、3 existing consumers |
 | 授权边界 | PASS | design-only、no-subagent、external dereference/runtime/data/write=0 |
+
+## CR168 CP4 增量：Economic Cost / Slippage / Impact Evidence Producer Foundation
+
+> 来源：CR168 CP3 v1.1 HLD/ADR 已在吸收 A1–E3 深度评审后获用户批准。本阶段只允许 Feature/Story/LLD 设计，不拉起子 Agent，不修改 source/test，不执行真实数据、TCA、C4、runtime、aggregate、发布或 Git remote write。
+
+### Feature 适用性判定
+
+| Feature | 名称 | 判定 | 触发原因 | 三件套 | Stories | lld_policy | 重访条件 |
+|---|---|---|---|---|---|---|---|
+| FEAT-168-01 | Economic Cost Evidence | required | 9-family validation、subject-neutral semantic hash、Decimal/rounding、static square-root、typed outcome 被 S01/S02/S03/S05 共享 | `docs/features/economic-cost-evidence/{DESIGN,TEST-PLAN,TASKS}.md` | S01,S02,S03,S05 | full-lld | schema/hash input domain、cost formula、rounding、availability 或 active family 变化 |
+| FEAT-166-01 | Strategy Evidence Envelope（既有增量） | required-incremental | `economic_cost@reserved` 激活为 `economic_cost@v1`，且 attachment identity 必须由 envelope hash 独立绑定 | `docs/features/strategy-evidence-envelope/{DESIGN,TEST-PLAN,TASKS}.md` v0.2 | S01,S03,S05 | full-lld | neutral schema/domain/catalog、C1/C2 compatibility 或 attachment identity 变化 |
+| FEAT-168-02 | Economic Cost Gate4 Projection | required | joint Gate4 C3/C4 payload、4-key allowlist、8-key denylist、candidate-release 和 postcondition guard 属于跨模块安全合同 | `docs/features/economic-cost-gate4-projection/{DESIGN,TEST-PLAN,TASKS}.md` | S04,S05 | full-lld | canonical public result、C4 refs、release profile、direct caller 或 aggregate path 变化 |
+| FEAT-168-03 | Economic Cost Fixture Verification | required | 17 scenarios、15 QAC、10/10 negatives、2/2 fixtures、10→1 hash、CR155/no-runtime claim ceiling 是跨 Feature 的 claim-sensitive 验证设计 | `docs/features/economic-cost-verification/{DESIGN,TEST-PLAN,TASKS}.md` | S05 | full-lld | 新验证 runtime/service、真实 TCA/data lane、共享外部 API 或 independent verifier lane 出现 |
+
+### Story 下游消费表
+
+| Story | Owner Feature(s) | feature_design_refs | lld_policy | CP5 evidence |
+|---|---|---|---|---|
+| CR168-S01-c3-contract-identity-validation | FEAT-168-01 / FEAT-166-01 | Economic Cost Evidence 三件套 + Strategy Evidence Envelope DESIGN/TEST-PLAN | full-lld（data/security/cross-module） | Story LLD |
+| CR168-S02-deterministic-cost-producer | FEAT-168-01 | Economic Cost Evidence 三件套 | full-lld（numeric/public contract） | Story LLD |
+| CR168-S03-envelope-multi-strategy-compatibility | FEAT-166-01 / FEAT-168-01 | Strategy Evidence Envelope 三件套 + Economic Cost Evidence DESIGN/TEST-PLAN | full-lld（catalog/hash/backward compatibility） | Story LLD |
+| CR168-S04-gate4-projection-containment | FEAT-168-02 / FEAT-168-01 | Gate4 Projection 三件套 + Economic Cost Evidence DESIGN | full-lld（security/cross-module/fail-closed） | Story LLD |
+| CR168-S05-fixture-static-verification | FEAT-168-03 / FEAT-168-01 / FEAT-166-01 / FEAT-168-02 | 四 Feature 的 DESIGN/TEST-PLAN/TASKS | full-lld（cross-feature claim verification） | Story LLD |
+
+### CP5 注意项
+
+| Attention ID | Story | Requirement |
+|---|---|---|
+| CP5-FOCUS-CR168-001 | S01 | 九族全部校验；component hash 只绑定字段族 2-9 subject-neutral 成本语义；envelope hash 绑定 attachment identity；identity tamper false PASS=0。 |
+| CP5-FOCUS-CR168-002 | S02 | proxy 合法域有限 `[0,+∞)` 且 `>1` 允许；五分项先 sum 再量化 total/net；minor unit 缺失 blocked；v1 只启用 static square_root。 |
+| CP5-FOCUS-CR168-003 | S03 | catalog active schema=1；daily/ML 同成本语义 component hash 相同、不同 subject envelope hash 不同；C1/C2 regression=0。 |
+| CP5-FOCUS-CR168-004 | S04 | candidate-release 固定；4-key allowlist、8-key presence denylist；escape canonical calls=0；PASS 与 postcondition violation 分 reason；canonical/aggregate changes=0。 |
+| CP5-FOCUS-CR168-005 | S05 | requirements 9/9、scenarios 17/17、QAC 15/15、negative 10/10、fixtures 2/2、10 runs→1 hash、C4/capacity/aggregate PASS=0、CR155 promotion=0。 |
+
+### First Slice / Deferred / Not Authorized
+
+| 范围 | 状态 | 处理 |
+|---|---|---|
+| `economic_cost@v1` contract + static calculator | first slice | S01/S02；repo-local pure values only。 |
+| Neutral envelope activation + daily/ML attach | first slice | S03；component semantics independent of package subject。 |
+| CR168 adapter-local Gate4 containment | first slice | S04；one public caller、canonical/aggregate changes=0。 |
+| Fixture/security/claim regression | first slice | S05；static-only。 |
+| C4 producer/adapter present path | deferred | FU-CR161-005 decides adapter evolution。 |
+| Canonical global hardening/C1-C4 aggregate/CR155 promotion decision | deferred | FU-CR161-007 or separate remediation CR。 |
+| Real data/TCA/calibration/runtime/trading/publish/Git remote write | not authorized | 任何触达都需要独立授权。 |
+
+### CR168 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| Blueprint Feature 判定覆盖 | PASS | FEAT-168-01..03 + FEAT-166-01 = 4/4 required |
+| required Feature 三件套 | PASS | 4/4 × 3 = 12/12 |
+| Story refs / lld_policy | PASS | 5/5 full-lld；无 waived/technical-note |
+| A1–E3 revision 下沉 | PASS | 五个 CP5 focus + Feature contract/test/tasks |
+| 相邻边界 | PASS | C4=0、canonical/aggregate changes=0、event=0、CR155 promotion=0 |
+| 授权边界 | PASS | design-only、no-subagent、source/test/external/runtime/write=0 |

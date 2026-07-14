@@ -3,7 +3,7 @@ baseline_id: CURRENT-REQUIREMENT-BASELINE
 project: quant-lab
 status: active
 created_at: "2026-06-19T20:50:00+08:00"
-updated_at: "2026-07-13T22:45:00+08:00"
+updated_at: "2026-07-14T09:45:10+08:00"
 created_by: host-orchestrator
 source_crs:
   - CR-046
@@ -27,6 +27,10 @@ revision_record:
     date: "2026-07-13"
     author: host-orchestrator-inline
     summary: "收紧 CR168 Gate 4 projection-side fail-closed：C4 unavailable 只映射为 absent-no-na-reason，reason 逃逸由 projection 阻断；记录 CP3 前向设计义务与 verifier-independence 风险。"
+  - version: v0.4
+    date: "2026-07-14"
+    author: host-orchestrator-inline
+    summary: "回填 CR168 CP2 批准；将 Gate 4 风险整改限定为 CR168 adapter 的 8-key denylist、strict allowlist、调用前拒绝和调用后非 PASS 断言，并把 canonical 全局语义复核保留给 FU-CR161-007。"
 purpose: >
   记录当前可执行需求基线，避免后续 CR 从历史台账中误读已重解释的
   QMT / MiniQMT / runner / strategy package 目标。
@@ -78,7 +82,7 @@ current_baseline:
       - docs/qmt/CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-HLD.md
 
   strategy_evidence_c3_economic_cost:
-    requirement_status: awaiting_cp2
+    requirement_status: cp2_approved_cp3_in_progress
     current_owner: quant_lab_strategy_evidence
     current_change: CR-168
     source_follow_up: FU-CR161-004
@@ -124,6 +128,16 @@ current_baseline:
         - na_reason
         - n_a_reason
       reason_escape_behavior: BLOCKED_OR_REJECTED_BY_PROJECTION
+      forbidden_key_match_rule: key_presence
+      escaped_payload_canonical_invocations: 0
+      safe_absent_gate4_passes: 0
+      cr168_gate4_calls_through_projection_adapter: "100%"
+      projection_adapter_external_direct_calls: 0
+      runtime_private_has_na_reason_dependency: 0
+      strict_payload_allowlist_required: true
+      post_call_non_pass_assertion_required: true
+      containment_scope: CR168_PROJECTION_ONLY
+      canonical_global_hardening_claimed: false
       canonical_gate4_validator_changes: 0
       aggregate_orchestration_changes: 0
       capacity_or_aggregate_pass_from_c3_only: 0
@@ -155,6 +169,10 @@ current_baseline:
       - required_evidence_kind_taxonomy_mapping
       - impact_model_family_n_a_with_reason_specific_contract
       - component_semantic_hash_vs_envelope_canonical_hash_domains
+      - adapter_only_call_surface_and_strict_payload_allowlist
+      - exact_eight_key_presence_denylist_and_zero_canonical_calls_on_escape
+      - safe_absent_post_call_non_pass_assertion
+      - canonical_gate4_global_semantics_follow_up_routed_to_FU_CR161_007
     verification_independence_risk:
       risk_id: R-CR168-VERIFIER-INDEPENDENCE
       status: open_nonblocking

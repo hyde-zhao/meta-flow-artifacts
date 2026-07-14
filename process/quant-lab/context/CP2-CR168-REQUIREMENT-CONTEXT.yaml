@@ -5,7 +5,7 @@ workflow_id: "CR-168"
 phase: "requirement-clarification"
 checkpoint: "CP2"
 capsule_type: "cp2-requirement"
-status: "ready"
+status: "approved"
 created_at: "2026-07-13T22:45:00+08:00"
 created_by: "host-orchestrator"
 source_cr: "CR-168"
@@ -98,19 +98,21 @@ key_facts:
     - "fixture 语义为 daily multifactor synthetic + daily/ML multi-strategy-type compatibility。"
     - "currency/price-basis/calendar 仅在跨字段不一致且无显式转换声明时 fail-closed。"
     - "用户批准 Host Orchestrator 执行 meta-pm inline-fallback；未使用子 Agent。"
+    - "2026-07-14 用户批准五项 CP2 推荐方案；只解锁 CP3 solution-design。"
+    - "Gate 4 整改限定为 CR168 projection adapter 的局部 containment；不修改或宣称全局修复 canonical Gate 4。"
   active_constraints:
     - "typed C3 component/schema=1/1"
     - "input field families=9/9"
     - "P0 C3 input fail-closed=10/10；另有 Gate 4 projection guard 场景 1 个"
     - "fixture families=2/2"
     - "10 deterministic runs -> 1 canonical hash"
-    - "C3-to-Gate-4 projection=1；C4 unavailable=three refs absent-no-na-reason；field/generic reason escape=projection BLOCKED/REJECTED；canonical Gate4/aggregate changes=0；C4 calculator=0；capacity/aggregate PASS=0"
+    - "C3-to-Gate-4 projection=1；C4 unavailable=three refs absent-no-na-reason；8/8 forbidden reason keys are rejected by presence before canonical call；escaped canonical calls=0；safe absent postcondition=non-PASS；canonical Gate4/aggregate changes=0；C4 calculator=0；capacity/aggregate PASS=0"
     - "CR168 scenarios=17（P0=16，P1=1）；matrix=17/17"
     - "Stage2=true；Stage3=false；真实 TCA/calibration/data/runtime=false"
-    - "CP2 前不得进入 HLD/Story/LLD/implementation/verification"
+    - "CP2 已批准；当前只允许 CP3 HLD/ADR/blueprint，Story/LLD/implementation/verification 仍禁止"
   downstream_tasks:
-    - "仅在 CP2 approved 后，生成 meta-se capsule-first handoff 并进入 CP3 solution-design。"
-    - "CP3 需冻结 9-family schema、static approximation method、C3/C4 header、availability→Gate 4 flat-payload mapping 和 projection reason-key denylist。"
+    - "生成 meta-se-critical capsule-first inline handoff 并进入 CP3 solution-design。"
+    - "CP3 需冻结 9-family schema、static approximation method、C3/C4 header、availability→Gate 4 flat-payload mapping、exact 8-key denylist、strict allowlist、adapter-only 调用面和 pre/post guard。"
     - "CP3 需处理 capability-registry-missing、三个 required_evidence kind、impact-specific n/a-with-reason 与 component/envelope hash domain；不得新建平行 registry 或模糊跨策略 full-hash QAC。"
   traceability:
     requirements: ["REQ-CR168-001..009"]
@@ -120,12 +122,13 @@ key_facts:
     features: ["strategy-evidence-envelope", "cross-strategy-reliability-gates"]
 
 risks_and_decisions:
-  pending_human_decisions:
+  approved_human_decisions:
     - "DQ-CP2-CR168-METHOD"
     - "DQ-CP2-CR168-C3-C4"
     - "DQ-CP2-CR168-GATE4"
     - "DQ-CP2-CR168-FIXTURE"
     - "DQ-CP2-CR168-CLAIM"
+  pending_human_decisions: []
   non_authorized_items:
     - "真实 lake/NAS/provider/data-vendor/credential/secret 访问"
     - "真实 order/fill/quote/book/flow/ADV/liquidity 数据"
@@ -139,25 +142,21 @@ risks_and_decisions:
     - "全局 legacy CR tracking/ledger 元数据债务非 CR168 引入；当前 CR-specific checks 无错误。"
     - "meta-pm 由 Host inline 执行，没有独立子 Agent 视角；该限制由用户显式批准并已入 ledger。"
     - "R-CR168-VERIFIER-INDEPENDENCE 尚未被接受；仅登记为非阻断风险，若 CP7 仍 inline，必须在 CP8 Decision Brief 暴露。"
-  open_questions:
-    - "五个 DQ 均由 CP2 决定；DQ-GATE4 推荐方案已按用户 changes_requested 收紧但仍未 approved。"
+  open_questions: []
   n_a_or_waived_items:
     - "event-specific C3 producer=N/A/deferred"
     - "CP2 前 BLUEPRINT/DOMAIN-MAP/DEPENDENCY-MAP/HLD/FEATURE-DESIGN-MATRIX unchanged"
 
 handoff:
-  target_agent: "user-human-gate"
+  target_agent: "meta-se-critical-inline-fallback"
   expected_output:
-    - "approve"
-    - "修改: <具体修改点>"
-    - "reject"
+    - "CR168 companion BLUEPRINT / DOMAIN-MAP / DEPENDENCY-MAP / HLD / ADR"
+    - "CP3 context capsule, automatic precheck and human-gate draft"
   exit_criteria:
-    - "五个 DQ 得到统一审批或明确修改"
-    - "人工审查结果回填 checkpoint 和 gate ledger"
-    - "只有 approved 才可进入 CP3"
+    - "CP3 architecture decisions, integration contracts and residual risks are explicit"
+    - "No Story/LLD/code/test implementation is created before CP3 approval"
   blocked_if_missing:
-    - "CP2 人工结论"
-    - "五个 DQ 的决策"
+    - "CP3 设计证据不足或与 CP2 scope 冲突"
 
 read_expansion_log:
   - at: "2026-07-13T17:25:00+08:00"
@@ -168,6 +167,10 @@ read_expansion_log:
     actor: "host-orchestrator-inline-meta-pm"
     expanded_to: "CR168 formal CR + 8 product docs + CURRENT-REQUIREMENT-BASELINE"
     reason: "用户在 CP2 精确修改 Gate 4 projection-side fail-closed；需同步需求、场景、矩阵、风险、CP3 obligations 与 Decision Brief"
+  - at: "2026-07-14T09:45:10+08:00"
+    actor: "host-orchestrator-inline"
+    expanded_to: "canonical Gate 4 validator, focused tests, CR168 product baseline and CP2 gate artifacts"
+    reason: "用户要求按评审建议整改后批准；需确认 N/A reason 逃逸代码事实、限定局部 containment、回填 CP2 并形成 CP3 输入"
 
 validation:
   generated_from_sources:
@@ -181,4 +184,4 @@ validation:
   notes:
     - "YAML/JSON parse PASS；17/17 scenario matrix coverage；9/9 requirement refs；wrong quality refs=0。"
     - "SC-CR168-B02 为 projection guard，不改变 10/10 C3 input fail-closed 类别或 15 项 QAC。"
-    - "No HLD/Story/LLD/code/test implementation was created."
+    - "CP2 approval was recorded; only CP3 design is unlocked. No Story/LLD/code/test implementation was created."

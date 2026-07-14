@@ -1,9 +1,10 @@
 ---
 status: "ready-for-cp5-review"
-version: "0.1"
+version: "0.2"
 cr_id: "CR-166"
 feature_id: "FEAT-166-01"
 owner: "meta-se-inline"
+change_refs: ["CR-166", "CR-168"]
 source_hld: "process/archive/design-cr-docs/HLD-WALK-FORWARD-OOS-EVIDENCE.md"
 source_adr: "process/archive/design-cr-docs/ARCHITECTURE-DECISION-WALK-FORWARD-OOS-EVIDENCE.md"
 ---
@@ -15,6 +16,7 @@ source_adr: "process/archive/design-cr-docs/ARCHITECTURE-DECISION-WALK-FORWARD-O
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 0.1 | 2026-07-13 | host-orchestrator inline meta-se | 冻结 method-neutral canonical primitive、稳定 envelope、静态 component catalog 与 C1 兼容迁移。 |
+| 0.2 | 2026-07-14 | host-orchestrator inline meta-se | CR168 增量：激活 `economic_cost@v1` descriptor，冻结 attachment identity 与 component semantic hash 分域，以及 C1/C2 零回归边界。 |
 
 ## 1. 目标与边界
 
@@ -49,11 +51,17 @@ source_adr: "process/archive/design-cr-docs/ARCHITECTURE-DECISION-WALK-FORWARD-O
 | type/version | 状态 | mandatory | optional |
 |---|---|---|---|
 | `walk_forward_oos@v1` | active | 正常校验 | 正常校验 |
-| `economic_cost@reserved` | reserved，calculator=0 | typed_unavailable | audit-only，无 PASS 贡献 |
+| `economic_cost@v1` | active（CR168）；calculator 在 C3 leaf module | 按 typed availability 校验 | present 可 attach；typed_unavailable 无 PASS 贡献 |
 | `capacity_liquidity@reserved` | reserved，calculator=0 | typed_unavailable | audit-only，无 PASS 贡献 |
 | unknown | unknown | blocked | round-trip audit-only，无 PASS 贡献 |
 
 catalog 是源码常量，不提供注册 API、entry point、filesystem scan 或远程 discovery。
+
+### CR168 attachment identity 增量
+
+- `manifest_ref/run_ref/strategy_ref/package_ref` 与 package/run provenance/authorization 属于 envelope attachment identity，必须进入 envelope canonical hash，不进入 `economic_cost` component semantic hash。
+- `economic_cost` component 只绑定 subject-neutral 字段族 2-9 成本语义；daily/ML 同成本语义允许同 component hash，不同 subject 必须产生不同 envelope hash。
+- descriptor 激活不得改变 C1/C2 已有 canonical bytes/hash、active schema 或 availability；C3 calculator/方法不得进入 neutral module。
 
 ## 6. 调用与失败路径
 
@@ -68,4 +76,4 @@ S01 contracts → S02 validator → S03 producer → S04 projection。schema/ver
 
 ## 8. 回退与重访
 
-C1 bytes/hash 任一变化时停用 neutral re-export；envelope/C2 新模块可保留未消费状态。出现第三方 component、跨包发现或 artifact service 的已批准需求时重访动态 registry；C3/C4 calculator 不在本 Feature。
+C1/C2 bytes/hash 任一变化时停止 C3 catalog activation并保留 `economic_cost@reserved`；C3 leaf component 可保留未 attach 状态。出现第三方 component、跨包发现或 artifact service 的已批准需求时重访动态 registry；C3/C4 calculator 不在本 Feature。

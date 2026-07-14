@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR168-S02-deterministic-cost-producer.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-168",
+  "story_id": "CR168-S02-deterministic-cost-producer",
+  "status": "implemented",
+  "created_at": "2026-07-14T13:02:40+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR168-S02-deterministic-cost-producer.CP6.work-packet.json",
+  "implementation_ref": "process/stories/STORY-CR168-S02-deterministic-cost-producer-IMPLEMENTATION.md",
+  "source_story_ref": "process/stories/STORY-CR168-S02-deterministic-cost-producer.md",
+  "source_design_evidence_ref": "process/stories/STORY-CR168-S02-deterministic-cost-producer-LLD.md",
+  "touched_files": [
+    {"path": "engine/economic_cost_calculator.py", "change_type": "created"},
+    {"path": "engine/economic_cost_evidence.py", "change_type": "modified"},
+    {"path": "tests/research/test_economic_cost_producer.py", "change_type": "created"},
+    {"path": "process/stories/STORY-CR168-S02-deterministic-cost-producer-IMPLEMENTATION.md", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "Adds only the CP5-confirmed pure calculator and C3 producer public API; no envelope activation, Gate4 adapter or aggregate integration."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_read_touched": false,
+    "real_lake_write_touched": false,
+    "provider_fetch_executed": false,
+    "nas_operation_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_or_live_executed": false,
+    "broker_operation_executed": false,
+    "external_framework_executed": false,
+    "historical_backfill_executed": false,
+    "git_remote_write_executed": false,
+    "publish_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {"command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python -m py_compile engine/economic_cost_calculator.py engine/economic_cost_evidence.py tests/research/test_economic_cost_producer.py", "result": "pass", "summary": "static compilation passed"},
+      {"command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_economic_cost_producer.py", "result": "pass", "summary": "12 passed in 0.04s"},
+      {"command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_economic_cost_contracts.py tests/research/test_economic_cost_producer.py tests/research/test_walk_forward_oos_contracts.py tests/research/test_walk_forward_oos_qac.py", "result": "pass", "summary": "37 passed in 0.12s"},
+      {"command": "static forbidden-operation/Gate4-private-helper scan and git diff --check", "result": "pass", "summary": "no forbidden hit"}
+    ],
+    "tests": ["tests/research/test_economic_cost_contracts.py", "tests/research/test_economic_cost_producer.py", "tests/research/test_walk_forward_oos_contracts.py", "tests/research/test_walk_forward_oos_qac.py"],
+    "stage_decision": "PASS",
+    "skipped": []
+  },
+  "open_questions": [],
+  "risks": [
+    {"id": "R-CR168-COST-UNDERSTATEMENT", "severity": "HIGH", "status": "controlled-by-claim-ceiling", "owner": "CR-168", "note": "Static assumptions remain transparent but are not real TCA or calibrated impact."}
+  ],
+  "waivers": [],
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_architecture_doc_update": false,
+    "requires_hld_update": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "Implemented the approved S02 numeric and orchestration contract without changing its formula, schema or boundary."
+  },
+  "evidence_refs": ["process/evidence/STORY-CR168-S02-deterministic-cost-producer.CP6.index.json"],
+  "next_stage_recommendation": "ready_for_cp7",
+  "actor": "host-orchestrator-inline",
+  "decision": "PASS"
+}

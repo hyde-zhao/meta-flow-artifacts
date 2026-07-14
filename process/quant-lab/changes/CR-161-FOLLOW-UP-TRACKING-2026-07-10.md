@@ -13,7 +13,7 @@ owner: "host-orchestrator"
 | `FU-CR161-001` | Research-engine trial lineage instrumentation | closed (`CR-163`) | CR-163 已关闭；formal CR: `process/changes/CR-163.md`；为未来原生 instrumented runs 提供 lineage foundation。 |
 | `FU-CR161-002` | Multiple testing / PBO / DSR computable evidence implementation | closed (`CR-164`) | CR-164 completed CP2-CP8 and closed `READY_WITH_RISK` on 2026-07-12; formal CR: `process/changes/CR-164.md`. |
 | `FU-CR161-003` | Walk-forward / OOS evidence producer foundation | closed (`CR-166`) | CR-166 于 2026-07-13 经 CP8 批准以 `READY_WITH_RISK` 关闭；只交付 fixture/static producer foundation，不连接真实数据湖，Stage 3 未启动。 |
-| `FU-CR161-004` | Economic cost / slippage / impact evidence producer foundation | active (`CR-168`) | `related_active_cr=CR-168`；先完成 fixture/static-only C3 产品基线、CP1 与 CP2，不授权真实 TCA、C4 计算或 Stage 3。 |
+| `FU-CR161-004` | Economic cost / slippage / impact evidence producer foundation | closed (`CR-168`) | CR-168 于 2026-07-14 经 CP8 批准以 `READY_WITH_RISK` 关闭；交付 fixture/static-only C3 foundation，不授权真实 TCA、C4 计算或 Stage 3。 |
 | `FU-CR161-005` | Capacity / liquidity sizing and alpha decay implementation | candidate | Need capacity curve, ADV participation, liquidity sizing or alpha decay evidence. |
 | `FU-CR161-006` | Independent CP7 verifier-lane resilience | candidate | A later high-risk CR needs to rely on CR161 CP7, or the CP8 verifier-independence waiver expires. |
 | `FU-CR161-007` | Existing-gate integration and CR155 regression implementation | candidate | C1-C4 producers 的 typed evidence 均稳定后，补齐跨 producer 端到端集成；必须保持 CR155 blocked。 |
@@ -61,16 +61,15 @@ follow_up_items:
   - id: FU-CR161-004
     title: Economic cost / impact evidence producer
     kind: implementation-gate
-    status: active
-    lifecycle_status: active
-    readiness_status: not_ready
-    gate_status: cp2_pending
+    status: closed
+    lifecycle_status: closed
+    readiness_status: READY_WITH_RISK
+    gate_status: cp8_closed
     gate_profile: architecture-major
     formal_cr_path: process/changes/CR-168.md
     related_cr: CR-168
-    related_active_cr: CR-168
-    blocked_by: "CP2 product scope approval; related_active_cr=CR-168"
-    next_action: "Complete CP0/CP1 and open CP2 for the fixture/static-only C3 contract; Gate 4 remains a C3+C4 joint gate and must fail closed while C4 is unavailable."
+    blocked_by: ""
+    next_action: "Closed under CR168 CP8 approval as READY_WITH_RISK. Real TCA, C4 capacity/liquidity, canonical global Gate4/aggregate work and Stage 3 remain separately authorized follow-up scope."
   - id: FU-CR161-005
     title: Capacity / liquidity / ADV / alpha-decay evidence producer
     kind: implementation-gate

@@ -1,18 +1,18 @@
 project_id: "local_backtest"
-version: "1.10"
-status: "cr166-closed-cp8-approved"
-confirmed: true
-confirmed_by: "user"
-confirmed_at: "2026-07-13T15:05:04+08:00"
+version: "1.11"
+status: "cr168-cp4-pass-cp5-pending"
+confirmed: false
+confirmed_by: ""
+confirmed_at: ""
 created_at: "2026-05-14"
 created_by: "meta-se"
-last_updated: "2026-07-13T15:05:04+08:00"
+last_updated: "2026-07-14T11:10:00+08:00"
 source_hld: "process/HLD.md"
 companion_hld: "process/HLD-DATA-LAKE.md"
 source_adr: "process/ARCHITECTURE-DECISION.md"
 story_backlog: "process/STORY-BACKLOG.md"
 story_management_truth_source: "process/DEVELOPMENT-PLAN.yaml"
-active_change: ""
+active_change: "CR-168"
 secondary_change: ""
 cr004_status: "draft-pending-cp4"
 cr004_confirmed: false
@@ -7705,3 +7705,143 @@ cr166_story_planning:
   pre_existing_plan_check_failure:
     status: "recorded-unrelated"
     details: "Canonical plan-check fails only on inherited CR013-S01..S04 legacy status=draft-pending-cp4 and legacy index warnings. CR166 scoped YAML/DAG/refs/Waves/file ownership passes independently; unrelated historical objects were preserved."
+
+cr168_story_planning:
+  change_id: "CR-168"
+  title: "Economic Cost / Slippage / Impact Computable Evidence Producer Foundation"
+  status: "cp4-pass-cp5-awaiting-user"
+  cp3_review: "process/checkpoints/CP3-CR168-ECONOMIC-COST-IMPACT-EVIDENCE-HLD-REVIEW.md"
+  cp4_result: "process/checks/CP4-CR168-STORY-DAG-PARALLEL-SAFETY.result.json"
+  feature_design_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md#cr168"
+  required_feature_design:
+    - "docs/features/economic-cost-evidence/DESIGN.md"
+    - "docs/features/economic-cost-evidence/TEST-PLAN.md"
+    - "docs/features/economic-cost-evidence/TASKS.md"
+    - "docs/features/strategy-evidence-envelope/DESIGN.md"
+    - "docs/features/strategy-evidence-envelope/TEST-PLAN.md"
+    - "docs/features/strategy-evidence-envelope/TASKS.md"
+    - "docs/features/economic-cost-gate4-projection/DESIGN.md"
+    - "docs/features/economic-cost-gate4-projection/TEST-PLAN.md"
+    - "docs/features/economic-cost-gate4-projection/TASKS.md"
+    - "docs/features/economic-cost-verification/DESIGN.md"
+    - "docs/features/economic-cost-verification/TEST-PLAN.md"
+    - "docs/features/economic-cost-verification/TASKS.md"
+  story_count: 5
+  wave_count: 5
+  cp5_batch:
+    id: "CP5-CR168-ALL-STORIES-LLD-BATCH"
+    design_evidence_required: 5
+    required_level: "full-lld"
+    status: "awaiting-user"
+    human_gate: "required"
+  authorization_boundary:
+    subagent_allowed: false
+    implementation_allowed_before_cp5_approval: false
+    test_implementation_allowed_before_cp5_approval: false
+    post_approval_repository_local_source_test_fixture_recommended: true
+    canonical_gate4_or_aggregate_modification_allowed: false
+    c4_or_event_producer_allowed: false
+    real_data_tca_calibration_allowed: false
+    runtime_data_credential_external_operation_allowed: false
+    lake_nas_provider_or_external_framework_allowed: false
+    broker_trading_deploy_publish_allowed: false
+    catalog_store_registry_write_allowed: false
+    git_remote_write_allowed: false
+    stage3_start_or_cr155_promotion_allowed: false
+  parallel_policy:
+    max_parallel_lld: 1
+    max_parallel_dev: 1
+    max_parallel_qa: 1
+    lld_rule: "User forbids subagents; Host inline fallback drafts all five full LLDs serially and CP5 confirms them as one batch."
+    dev_rule: "S01 -> S02 -> S03 -> S04 -> S05; contract/hash/catalog/security/claim dependencies and shared files make every Wave serial."
+  waves:
+    - id: "CR168-W1-CONTRACT-IDENTITY"
+      stories: ["CR168-S01-c3-contract-identity-validation"]
+      depends_on: []
+    - id: "CR168-W2-CALCULATOR-PRODUCER"
+      stories: ["CR168-S02-deterministic-cost-producer"]
+      depends_on: ["CR168-W1-CONTRACT-IDENTITY"]
+    - id: "CR168-W3-ENVELOPE-COMPATIBILITY"
+      stories: ["CR168-S03-envelope-multi-strategy-compatibility"]
+      depends_on: ["CR168-W2-CALCULATOR-PRODUCER"]
+    - id: "CR168-W4-GATE4-CONTAINMENT"
+      stories: ["CR168-S04-gate4-projection-containment"]
+      depends_on: ["CR168-W3-ENVELOPE-COMPATIBILITY"]
+    - id: "CR168-W5-STATIC-VERIFICATION"
+      stories: ["CR168-S05-fixture-static-verification"]
+      depends_on: ["CR168-W4-GATE4-CONTAINMENT"]
+  stories:
+    - id: "CR168-S01-c3-contract-identity-validation"
+      card: "process/stories/STORY-CR168-S01-c3-contract-identity-validation.md"
+      status: "verified-with-risk"
+      wave: "CR168-W1-CONTRACT-IDENTITY"
+      depends_on: []
+      dependency_types: []
+      lld_policy: "full-lld"
+      feature_design_refs: ["docs/features/economic-cost-evidence/DESIGN.md", "docs/features/economic-cost-evidence/TEST-PLAN.md", "docs/features/economic-cost-evidence/TASKS.md", "docs/features/strategy-evidence-envelope/DESIGN.md"]
+      primary_files: ["engine/economic_cost_evidence.py", "tests/research/test_economic_cost_contracts.py"]
+      read_only_files: ["engine/strategy_evidence.py"]
+    - id: "CR168-S02-deterministic-cost-producer"
+      card: "process/stories/STORY-CR168-S02-deterministic-cost-producer.md"
+      status: "verified-with-risk"
+      wave: "CR168-W2-CALCULATOR-PRODUCER"
+      depends_on: ["CR168-S01-c3-contract-identity-validation"]
+      dependency_types: ["contract"]
+      lld_policy: "full-lld"
+      feature_design_refs: ["docs/features/economic-cost-evidence/DESIGN.md", "docs/features/economic-cost-evidence/TEST-PLAN.md", "docs/features/economic-cost-evidence/TASKS.md"]
+      primary_files: ["engine/economic_cost_calculator.py", "engine/economic_cost_evidence.py", "tests/research/test_economic_cost_producer.py"]
+    - id: "CR168-S03-envelope-multi-strategy-compatibility"
+      card: "process/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility.md"
+      status: "verified-with-risk"
+      wave: "CR168-W3-ENVELOPE-COMPATIBILITY"
+      depends_on: ["CR168-S01-c3-contract-identity-validation", "CR168-S02-deterministic-cost-producer"]
+      dependency_types: ["contract", "runtime"]
+      lld_policy: "full-lld"
+      feature_design_refs: ["docs/features/strategy-evidence-envelope/DESIGN.md", "docs/features/strategy-evidence-envelope/TEST-PLAN.md", "docs/features/strategy-evidence-envelope/TASKS.md", "docs/features/economic-cost-evidence/DESIGN.md", "docs/features/economic-cost-evidence/TEST-PLAN.md"]
+      primary_files: ["engine/strategy_evidence.py", "tests/research/test_economic_cost_envelope_compatibility.py"]
+      read_only_files: ["engine/economic_cost_evidence.py", "engine/statistical_evidence.py", "engine/walk_forward_oos_evidence.py"]
+    - id: "CR168-S04-gate4-projection-containment"
+      card: "process/stories/STORY-CR168-S04-gate4-projection-containment.md"
+      status: "verified-with-risk"
+      wave: "CR168-W4-GATE4-CONTAINMENT"
+      depends_on: ["CR168-S01-c3-contract-identity-validation", "CR168-S02-deterministic-cost-producer", "CR168-S03-envelope-multi-strategy-compatibility"]
+      dependency_types: ["contract", "runtime", "contract"]
+      lld_policy: "full-lld"
+      feature_design_refs: ["docs/features/economic-cost-gate4-projection/DESIGN.md", "docs/features/economic-cost-gate4-projection/TEST-PLAN.md", "docs/features/economic-cost-gate4-projection/TASKS.md", "docs/features/economic-cost-evidence/DESIGN.md"]
+      primary_files: ["engine/economic_cost_gate4_projection.py", "tests/research/test_economic_cost_gate4_projection.py"]
+      read_only_files: ["engine/cross_strategy_reliability_gates.py", "engine/economic_cost_evidence.py"]
+      forbidden_files: ["engine/strategy_admission_package.py", "engine/cross_strategy_reliability_gates.py"]
+    - id: "CR168-S05-fixture-static-verification"
+      card: "process/stories/STORY-CR168-S05-fixture-static-verification.md"
+      status: "verified-with-risk"
+      wave: "CR168-W5-STATIC-VERIFICATION"
+      depends_on: ["CR168-S01-c3-contract-identity-validation", "CR168-S02-deterministic-cost-producer", "CR168-S03-envelope-multi-strategy-compatibility", "CR168-S04-gate4-projection-containment"]
+      dependency_types: ["runtime", "runtime", "runtime", "runtime"]
+      lld_policy: "full-lld"
+      feature_design_refs: ["docs/features/economic-cost-verification/DESIGN.md", "docs/features/economic-cost-verification/TEST-PLAN.md", "docs/features/economic-cost-verification/TASKS.md", "docs/features/economic-cost-evidence/TEST-PLAN.md", "docs/features/strategy-evidence-envelope/TEST-PLAN.md", "docs/features/economic-cost-gate4-projection/TEST-PLAN.md"]
+      primary_files: ["tests/fixtures/economic_cost/", "tests/research/test_economic_cost_cr168_qac.py", "tests/research/test_economic_cost_authorization.py", "tests/research/test_economic_cost_cr155_regression.py"]
+      read_only_files: ["engine/economic_cost_evidence.py", "engine/economic_cost_calculator.py", "engine/strategy_evidence.py", "engine/economic_cost_gate4_projection.py", "engine/cross_strategy_reliability_gates.py", "engine/strategy_admission_package.py"]
+  dependency_graph:
+    nodes: ["CR168-S01-c3-contract-identity-validation", "CR168-S02-deterministic-cost-producer", "CR168-S03-envelope-multi-strategy-compatibility", "CR168-S04-gate4-projection-containment", "CR168-S05-fixture-static-verification"]
+    edges:
+      - ["CR168-S01-c3-contract-identity-validation", "CR168-S02-deterministic-cost-producer", "contract"]
+      - ["CR168-S01-c3-contract-identity-validation", "CR168-S03-envelope-multi-strategy-compatibility", "contract"]
+      - ["CR168-S02-deterministic-cost-producer", "CR168-S03-envelope-multi-strategy-compatibility", "runtime"]
+      - ["CR168-S01-c3-contract-identity-validation", "CR168-S04-gate4-projection-containment", "contract"]
+      - ["CR168-S02-deterministic-cost-producer", "CR168-S04-gate4-projection-containment", "runtime"]
+      - ["CR168-S03-envelope-multi-strategy-compatibility", "CR168-S04-gate4-projection-containment", "contract"]
+      - ["CR168-S01-c3-contract-identity-validation", "CR168-S05-fixture-static-verification", "runtime"]
+      - ["CR168-S02-deterministic-cost-producer", "CR168-S05-fixture-static-verification", "runtime"]
+      - ["CR168-S03-envelope-multi-strategy-compatibility", "CR168-S05-fixture-static-verification", "runtime"]
+      - ["CR168-S04-gate4-projection-containment", "CR168-S05-fixture-static-verification", "runtime"]
+  dag_validation_result:
+    cycles: []
+    invalid_references: []
+    isolated_nodes: []
+    parallel_internal_dependencies: 0
+    file_conflicts_within_parallel_wave: 0
+    conclusion: "PASS"
+    merge_order: "S01 -> S02 -> S03 -> S04 -> S05"
+  pre_existing_plan_check_failure:
+    status: "recorded-unrelated"
+    details: "Canonical global plan-check retains inherited CR013 legacy statuses/warnings. CR168 scoped YAML, five nodes, ten edges, five serial Waves, refs and file owners pass independently; unrelated historical entries were preserved."

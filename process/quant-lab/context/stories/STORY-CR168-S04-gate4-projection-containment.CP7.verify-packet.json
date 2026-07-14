@@ -1,0 +1,24 @@
+{
+  "schema_version": "meta-flow.story-cp7-verify-packet.v1",
+  "packet_id": "STORY-CR168-S04-CP7-VERIFY-PACKET",
+  "cr_id": "CR-168",
+  "story_id": "CR168-S04-gate4-projection-containment",
+  "stage": "CP7",
+  "created_at": "2026-07-14T14:08:00+08:00",
+  "created_by": "host-orchestrator-inline-fallback",
+  "context_policy": {
+    "read_profile": "compact",
+    "capsule_first": true,
+    "must_read": ["process/checks/CP6-CR168-S04-GATE4-PROJECTION-CONTAINMENT-IMPLEMENTATION.result.json", "process/returns/STORY-CR168-S04-gate4-projection-containment.CP6.return.json", "process/evidence/STORY-CR168-S04-gate4-projection-containment.CP6.index.json", "process/stories/STORY-CR168-S04-gate4-projection-containment-IMPLEMENTATION.md", "process/stories/STORY-CR168-S04-gate4-projection-containment-LLD.md"],
+    "read_if_needed": ["engine/economic_cost_gate4_projection.py", "engine/cross_strategy_reliability_gates.py", "tests/research/test_economic_cost_gate4_projection.py"],
+    "do_not_read_by_default": ["process/archive/**", "process/discussions/**", "all S05 implementation/verification artifacts", "docs/quality/TEST-REPORT-CR168.md"]
+  },
+  "verification_scope": {
+    "requirements": ["REQ-CR168-001", "REQ-CR168-003", "REQ-CR168-005"],
+    "contracts": ["Gate4 C3+C4 joint containment", "four-key payload / eight-key reason denylist", "candidate-release exact three C4 missing claims", "unexpected PASS and postcondition violation split", "no canonical/aggregate/private dependency"],
+    "test_commands": ["uv run --python 3.11 pytest -q tests/research/test_economic_cost_gate4_projection.py tests/research/test_economic_cost_contracts.py tests/research/test_economic_cost_producer.py tests/research/test_economic_cost_envelope_compatibility.py tests/research/test_walk_forward_oos_contracts.py tests/research/test_walk_forward_oos_qac.py"],
+    "acceptance": ["G4-T01..T09 pass", "B01/B02=2/2", "8/8 reason escapes blocked before canonical", "capacity/aggregate PASS=0", "canonical/aggregate source modifications=0/0"]
+  },
+  "authorization": {"inline_verification_only": true, "independent_subagent": false, "real_data_runtime_registry_or_git_remote_write": false, "risk_disclosure": "R-CR168-VERIFIER-INDEPENDENCE remains non-blocking and must be disclosed at CP8 if CP7 remains inline."},
+  "return_requirements": {"verification_evidence": "process/evidence/STORY-CR168-S04-gate4-projection-containment.CP7.index.json", "return_packet": "process/returns/STORY-CR168-S04-gate4-projection-containment.CP7.return.json", "cp7_result": "process/checks/CP7-CR168-S04-GATE4-PROJECTION-CONTAINMENT-VERIFICATION.result.json"}
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-168",
+  "story_id": "CR168-S03-envelope-multi-strategy-compatibility",
+  "status": "verified",
+  "created_at": "2026-07-14T13:48:00+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7.verify-packet.json",
+  "implementation_ref": "process/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility-IMPLEMENTATION.md",
+  "source_story_ref": "process/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility.md",
+  "source_design_evidence_ref": "process/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility-LLD.md",
+  "cp6_result_ref": "process/checks/CP6-CR168-S03-ENVELOPE-COMPATIBILITY-IMPLEMENTATION.result.json",
+  "touched_files": [
+    {"path": "engine/strategy_evidence.py", "change_type": "verified"},
+    {"path": "tests/research/test_economic_cost_envelope_compatibility.py", "change_type": "verified"},
+    {"path": "tests/research/test_walk_forward_oos_contracts.py", "change_type": "verified_expected_catalog"},
+    {"path": "tests/research/test_walk_forward_oos_qac.py", "change_type": "verified_expected_catalog"}
+  ],
+  "verification_scope": {
+    "mode": "static-only",
+    "requirements": ["REQ-CR168-001", "REQ-CR168-005"],
+    "contracts": ["active C3 catalog", "subject-neutral C3 semantic hash", "identity-bound envelope hash", "stale identity blocked", "C1/C2 compatibility", "fixture-only claim ceiling"],
+    "non_scope": ["real data", "real TCA", "calibration", "C4 calculator", "Gate4 projection", "aggregate integration", "runtime", "registry", "Git remote write"]
+  },
+  "traceability": [
+    {"requirement": "REQ-CR168-001", "contract": "one active economic_cost@v1 component descriptor", "test": "test_c3_catalog_is_active_while_c4_stays_reserved", "status": "PASS"},
+    {"requirement": "REQ-CR168-001", "contract": "families 2-9 semantic identity remains subject-neutral while envelope identity is subject-bound", "test": "test_daily_and_ml_share_component_semantics_but_not_envelope_identity", "status": "PASS"},
+    {"requirement": "REQ-CR168-005", "contract": "identity tamper cannot pass stale envelope hash and neutral envelope has no reverse producer/Gate4/aggregate dependency", "test": "test_stale_subject_identity_hash_is_blocked; static import scan", "status": "PASS"}
+  ],
+  "verification": {
+    "commands_run": [
+      {"command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python -m py_compile engine/strategy_evidence.py tests/research/test_economic_cost_envelope_compatibility.py", "result": "pass", "summary": "static compilation passed"},
+      {"command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_economic_cost_contracts.py tests/research/test_economic_cost_producer.py tests/research/test_economic_cost_envelope_compatibility.py tests/research/test_walk_forward_oos_contracts.py tests/research/test_walk_forward_oos_qac.py", "result": "pass", "summary": "40 passed in 0.14s"},
+      {"command": "rg static reverse-import/Gate4/aggregate scan", "result": "pass", "summary": "no forbidden import hit"},
+      {"command": "git diff --check", "result": "pass", "summary": "no whitespace error"}
+    ],
+    "tests": ["tests/research/test_economic_cost_envelope_compatibility.py", "tests/research/test_walk_forward_oos_contracts.py", "tests/research/test_walk_forward_oos_qac.py"],
+    "stage_decision": "PASS_WITH_RISK",
+    "skipped": [{"item": "repository full suite", "reason": "S03 rolling CP7 validates its catalog/hash/C1-C2 subset; CR-wide full-suite attribution is S05's explicit owner."}]
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_read_touched": false,
+    "real_lake_write_touched": false,
+    "provider_fetch_executed": false,
+    "nas_operation_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_or_live_executed": false,
+    "broker_operation_executed": false,
+    "external_framework_executed": false,
+    "historical_backfill_executed": false,
+    "git_remote_write_executed": false,
+    "publish_executed": false
+  },
+  "open_questions": [],
+  "risks": [
+    {"id": "R-CR168-VERIFIER-INDEPENDENCE", "severity": "LOW", "status": "accepted-nonblocking", "owner": "host-orchestrator", "acceptance_ref": "CP5 DQ-004 user-approved inline fallback", "required_follow_up": "CP8 Decision Brief must disclose that CP7 verification was inline, not an independent verifier lane."}
+  ],
+  "waivers": [],
+  "design_delta": {"requires_feature_doc_update": false, "requires_architecture_doc_update": false, "requires_hld_update": false, "design_delta_required": false, "design_delta_ref": null, "status": "not_required", "reason": "S03 only activated the CP5-confirmed descriptor and used existing Feature v0.2 traceability without changing feature-design semantics."},
+  "evidence_refs": ["process/evidence/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7.index.json"],
+  "next_stage_recommendation": "unlock_cr168_s04_cp6",
+  "actor": "host-orchestrator-inline",
+  "decision": "PASS_WITH_RISK"
+}

@@ -16,6 +16,7 @@ owner: "host-orchestrator"
 | 1.0 | 2026-06-23 | host-orchestrator | CR131 将默认 design root 中的 CR 命名历史设计文档移入本归档区，并保留完整正文。 |
 | 1.1 | 2026-06-30 | host-orchestrator | CR141 继续收敛 CR131 design surface 红基线，将 CR138/CR139 专属 HLD/ADR 从 current design root 归档。 |
 | 1.2 | 2026-07-13 | host-orchestrator | CR166 将 CP3 已批准的 Walk-forward/OOS 专题 HLD、ADR、Blueprint、Domain Map 与 Dependency Map 归档，避免污染 current design surface。 |
+| 1.3 | 2026-07-14 | host-orchestrator inline fallback | CR168 将 CP3 已批准的 Economic Cost 专题 HLD、ADR、Blueprint、Domain Map 与 Dependency Map 归档；正文不变，仅保持 default design surface 的 current-index 语义。 |
 
 ## 定位
 
@@ -34,7 +35,9 @@ owner: "host-orchestrator"
 | `ARCHITECTURE-DECISION-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md` | CR138 Runner & QMT Gateway operational control plane ADR |
 | `ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md` | CR139 Strategy Data Foundation ADR |
 | `ARCHITECTURE-DECISION-WALK-FORWARD-OOS-EVIDENCE.md` | CR166 Walk-forward/OOS evidence ADR |
+| `ARCHITECTURE-DECISION-ECONOMIC-COST-IMPACT-EVIDENCE.md` | CR168 Economic Cost / Slippage / Impact evidence ADR |
 | `BLUEPRINT-WALK-FORWARD-OOS-EVIDENCE.md` | CR166 Walk-forward/OOS evidence Blueprint |
+| `BLUEPRINT-ECONOMIC-COST-IMPACT-EVIDENCE.md` | CR168 Economic Cost / Slippage / Impact evidence Blueprint |
 | `CONTEXT-CAPSULE-HUMAN-GATE-CONSISTENCY-CR114.md` | CR114 context / human gate consistency design notes |
 | `CONTEXT-PATH-ALIAS-NORMALIZATION-NOTES-CR117.md` | CR117 path alias normalization notes |
 | `CR-TRACKING-CHECKER-EXPECTATION-NOTES-CR112.md` | CR112 CR tracking checker expectation notes |
@@ -54,8 +57,11 @@ owner: "host-orchestrator"
 | `HLD-RUNNER-QMT-OPERATIONAL-CONTROL-PLANE.md` | CR138 Runner & QMT Gateway operational control plane HLD |
 | `HLD-STRATEGY-DATA-FOUNDATION.md` | CR139 Strategy Data Foundation HLD |
 | `HLD-WALK-FORWARD-OOS-EVIDENCE.md` | CR166 Walk-forward/OOS evidence HLD |
+| `HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md` | CR168 Economic Cost / Slippage / Impact evidence HLD |
 | `DOMAIN-MAP-WALK-FORWARD-OOS-EVIDENCE.md` | CR166 Walk-forward/OOS evidence Domain Map |
+| `DOMAIN-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md` | CR168 Economic Cost / Slippage / Impact evidence Domain Map |
 | `DEPENDENCY-MAP-WALK-FORWARD-OOS-EVIDENCE.md` | CR166 Walk-forward/OOS evidence Dependency Map |
+| `DEPENDENCY-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md` | CR168 Economic Cost / Slippage / Impact evidence Dependency Map |
 | `HUMAN-GATE-LAUNCH-MESSAGE-CHECKABLE-DRAFT-CONTRACT-CR115.md` | CR115 human gate launch message draft contract |
 | `HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-IMPLEMENTATION-CANDIDATE-CR119.md` | CR119 human gate launch message checker candidate |
 | `PATH-ALIAS-CHECKER-ENFORCEMENT-CANDIDATE-CR118.md` | CR118 path alias checker enforcement candidate |

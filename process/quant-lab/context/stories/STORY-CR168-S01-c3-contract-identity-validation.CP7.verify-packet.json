@@ -1,0 +1,46 @@
+{
+  "schema_version": "meta-flow.story-cp7-verify-packet.v1",
+  "packet_id": "STORY-CR168-S01-CP7-VERIFY-PACKET",
+  "cr_id": "CR-168",
+  "story_id": "CR168-S01-c3-contract-identity-validation",
+  "stage": "CP7",
+  "created_at": "2026-07-14T12:30:45+08:00",
+  "created_by": "host-orchestrator-inline-fallback",
+  "context_policy": {
+    "read_profile": "compact",
+    "capsule_first": true,
+    "must_read": [
+      "process/checks/CP6-CR168-S01-C3-CONTRACT-IMPLEMENTATION.result.json",
+      "process/returns/STORY-CR168-S01-c3-contract-identity-validation.CP6.return.json",
+      "process/evidence/STORY-CR168-S01-c3-contract-identity-validation.CP6.index.json",
+      "process/stories/STORY-CR168-S01-c3-contract-identity-validation-IMPLEMENTATION.md",
+      "process/stories/STORY-CR168-S01-c3-contract-identity-validation-LLD.md"
+    ],
+    "read_if_needed": [
+      "engine/economic_cost_evidence.py",
+      "tests/research/test_economic_cost_contracts.py",
+      "docs/design/DOMAIN-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+    ],
+    "do_not_read_by_default": ["process/archive/**", "process/discussions/**", "all S02-S05 implementation/verification artifacts", "docs/quality/TEST-REPORT.md"]
+  },
+  "verification_scope": {
+    "requirements": ["REQ-CR168-001", "REQ-CR168-002", "REQ-CR168-004", "REQ-CR168-005"],
+    "contracts": ["nine-family typed input", "N01..N10 fail-closed reason code", "subject-neutral semantic hash", "no I/O / opaque refs"],
+    "test_commands": [
+      "uv run --python 3.11 pytest -q tests/research/test_economic_cost_contracts.py",
+      "uv run --python 3.11 pytest -q tests/research/test_walk_forward_oos_contracts.py tests/research/test_walk_forward_oos_qac.py"
+    ],
+    "acceptance": ["24/24 targeted tests pass", "no forbidden import/operation", "return/evidence/CP6 result consistent", "design delta absent"]
+  },
+  "authorization": {
+    "inline_verification_only": true,
+    "independent_subagent": false,
+    "real_data_runtime_registry_or_git_remote_write": false,
+    "risk_disclosure": "R-CR168-VERIFIER-INDEPENDENCE remains non-blocking and must be disclosed at CP8 if CP7 remains inline."
+  },
+  "return_requirements": {
+    "verification_evidence": "process/evidence/STORY-CR168-S01-c3-contract-identity-validation.CP7.index.json",
+    "return_packet": "process/returns/STORY-CR168-S01-c3-contract-identity-validation.CP7.return.json",
+    "cp7_result": "process/checks/CP7-CR168-S01-C3-CONTRACT-VERIFICATION.result.json"
+  }
+}

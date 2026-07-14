@@ -1,0 +1,71 @@
+schema_version: 1
+context_id: CP8-CR168-ECONOMIC-COST-IMPACT-EVIDENCE
+cr_id: CR-168
+created_at: "2026-07-14T15:06:00+08:00"
+read_profile: compact
+phase: documentation
+context_type: cp8-delivery
+source_gates:
+  cp3:
+    checkpoint_ref: process/checkpoints/CP3-CR168-ECONOMIC-COST-IMPACT-EVIDENCE-HLD-REVIEW.md
+    result_ref: process/checks/CP3-CR168-ECONOMIC-COST-IMPACT-EVIDENCE-HLD-CONSISTENCY.result.json
+    approved_at: "2026-07-14T10:57:44+08:00"
+  cp5:
+    checkpoint_ref: process/checkpoints/CP5-CR168-ALL-STORIES-LLD-BATCH.md
+    result_ref: process/checks/CP5-CR168-LLD-DESIGN-EVIDENCE.result.json
+  cp7:
+    result_ref: process/checks/CP7-CR168-S05-FIXTURE-STATIC-VERIFICATION-VERIFICATION.result.json
+    evidence_ref: process/evidence/STORY-CR168-S05-fixture-static-verification.CP7.index.json
+    return_ref: process/returns/STORY-CR168-S05-fixture-static-verification.CP7.return.json
+release_context_ref: process/release/RELEASE-CONTEXT-CR168-ECONOMIC-COST-IMPACT-EVIDENCE.yaml
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+must_read:
+  - process/state/STATE.current.json
+  - process/current/CURRENT.json
+  - process/changes/summaries/CR-168.summary.json
+  - process/release/RELEASE-CONTEXT-CR168-ECONOMIC-COST-IMPACT-EVIDENCE.yaml
+  - process/checks/CP7-CR168-S05-FIXTURE-STATIC-VERIFICATION-VERIFICATION.result.json
+  - process/evidence/STORY-CR168-S05-fixture-static-verification.CP7.index.json
+  - process/checks/CP8-CR168-DELIVERY-READINESS.result.json
+  - process/checkpoints/CP8-CR168-DELIVERY-READINESS.md
+read_if_needed:
+  - docs/quality/VERIFICATION-REPORT-CR168.md
+  - docs/quality/TEST-REPORT-CR168.md
+  - docs/quality/REVIEW-CR168.md
+  - process/archive/design-cr-docs/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md
+  - process/archive/design-cr-docs/ARCHITECTURE-DECISION-ECONOMIC-COST-IMPACT-EVIDENCE.md
+do_not_read_by_default:
+  - process/archive/**
+  - process/discussions/**
+  - process/stories/*-LLD.md
+  - process/stories/*-IMPLEMENTATION.md
+  - full historical CR bodies
+  - credentials, .env, provider configs, real data and runtime sessions
+key_facts:
+  - Five of five Stories completed CP6 and CP7; final CP7 decision is PASS_WITH_RISK with zero blockers.
+  - Final repository suite is 2077 passed and zero failed; initial five CR168 governance failures are resolved and unknown attribution is zero.
+  - Gate4 is C3+C4 joint; CR168 is a local C3 projection guard and C4 remains typed unavailable/fail-closed.
+  - Approving CP8 may close CR168 as READY_WITH_RISK but cannot execute Git remote write or any real/runtime action.
+risks_and_decisions:
+  - id: DQ-CP8-CR168-001
+    type: risk_acceptance
+    status: pending_user
+  - id: DQ-CP8-CR168-002
+    type: authorization_boundary
+    status: pending_user
+  - id: DQ-CP8-CR168-003
+    type: follow_up_tracking
+    status: pending_user
+  - id: R-CR168-VERIFIER-INDEPENDENCE
+    status: requires_cp8_acceptance
+  - id: R-CR168-GATE4-C3-C4-SEMANTIC
+    status: requires_cp8_locality_acknowledgement
+  - id: R-CR168-TRUE-TCA-OVERCLAIM
+    status: requires_cp8_claim_ceiling_acknowledgement
+downstream_tasks:
+  - Await user CP8 decision.
+  - If approved, run legal closure/state synchronization only; do not commit, push, publish, deploy, start Stage 3 or expand authorization.
+token_control:
+  read_profile: compact
+  do_not_copy_full_documents: true

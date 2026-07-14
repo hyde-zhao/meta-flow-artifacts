@@ -1,0 +1,46 @@
+{
+  "schema_version": "meta-flow.story-cp7-verify-packet.v1",
+  "packet_id": "STORY-CR168-S03-CP7-VERIFY-PACKET",
+  "cr_id": "CR-168",
+  "story_id": "CR168-S03-envelope-multi-strategy-compatibility",
+  "stage": "CP7",
+  "created_at": "2026-07-14T13:45:00+08:00",
+  "created_by": "host-orchestrator-inline-fallback",
+  "context_policy": {
+    "read_profile": "compact",
+    "capsule_first": true,
+    "must_read": [
+      "process/checks/CP6-CR168-S03-ENVELOPE-COMPATIBILITY-IMPLEMENTATION.result.json",
+      "process/returns/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP6.return.json",
+      "process/evidence/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP6.index.json",
+      "process/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility-IMPLEMENTATION.md",
+      "process/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility-LLD.md"
+    ],
+    "read_if_needed": [
+      "engine/strategy_evidence.py",
+      "tests/research/test_economic_cost_envelope_compatibility.py",
+      "tests/research/test_walk_forward_oos_contracts.py",
+      "tests/research/test_walk_forward_oos_qac.py"
+    ],
+    "do_not_read_by_default": ["process/archive/**", "process/discussions/**", "all S04-S05 implementation/verification artifacts", "docs/quality/TEST-REPORT-CR168.md"]
+  },
+  "verification_scope": {
+    "requirements": ["REQ-CR168-001", "REQ-CR168-005"],
+    "contracts": ["economic_cost@v1 single active descriptor", "families 2-9 subject-neutral component identity", "identity-bound envelope hash", "C1/C2 compatibility", "no reverse C3 import or C4/Gate4/aggregate change"],
+    "test_commands": [
+      "uv run --python 3.11 pytest -q tests/research/test_economic_cost_contracts.py tests/research/test_economic_cost_producer.py tests/research/test_economic_cost_envelope_compatibility.py tests/research/test_walk_forward_oos_contracts.py tests/research/test_walk_forward_oos_qac.py"
+    ],
+    "acceptance": ["40/40 targeted tests pass", "active C3=1 and active C4=0", "component hash=1 / envelope hash=2 for daily and ML", "stale identity false PASS=0", "no forbidden import or operation"]
+  },
+  "authorization": {
+    "inline_verification_only": true,
+    "independent_subagent": false,
+    "real_data_runtime_registry_or_git_remote_write": false,
+    "risk_disclosure": "R-CR168-VERIFIER-INDEPENDENCE remains non-blocking and must be disclosed at CP8 if CP7 remains inline."
+  },
+  "return_requirements": {
+    "verification_evidence": "process/evidence/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7.index.json",
+    "return_packet": "process/returns/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7.return.json",
+    "cp7_result": "process/checks/CP7-CR168-S03-ENVELOPE-COMPATIBILITY-VERIFICATION.result.json"
+  }
+}

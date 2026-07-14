@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR168-S03-ENVELOPE-COMPATIBILITY-VERIFICATION",
+  "story_id": "CR168-S03-envelope-multi-strategy-compatibility",
+  "cr_id": "CR-168",
+  "checked_at": "2026-07-14T13:48:00+08:00",
+  "check_attempt": 1,
+  "context_ref": "process/context/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7.verify-packet.json",
+  "dispatch_refs": ["AD-CR168-CP7-S03-META-QA-INLINE-20260714T134500+0800"],
+  "return_packet_ref": "process/returns/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7.return.json",
+  "evidence_ref": "process/evidence/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7.index.json",
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7.verify-packet.json": "sha256:573d4abec7de68d1bd14d20ddfe1ba0a695ef9a3e16bb6a2077957865d0ca4fe",
+    "process/checks/CP6-CR168-S03-ENVELOPE-COMPATIBILITY-IMPLEMENTATION.result.json": "sha256:d60f92d07071b2f9e3648829a44e3ca4449858ceb0cf548fb92e89aa3598fd49",
+    "engine/strategy_evidence.py": "sha256:c64f759fa66c080560d689112e093a67307eee22b234a64ee5decf5788a79f8c",
+    "tests/research/test_economic_cost_envelope_compatibility.py": "sha256:fc9011303b42ec77e437e9b81ab4b4ea83b5368800eeea694cd24be168aa421a",
+    "process/returns/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7.return.json": "sha256:92092324fd0ff06ea7944fd35f2fcf81c600ecdadcb5413906612d407ef55eb4"
+  },
+  "items": [
+    {"id": "CP7-CR168-S03-01", "category": "traceability", "name": "S03 catalog/hash compatibility contracts可追溯", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/returns/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7.return.json"], "owner": "meta-qa-inline", "route_on_fail": "reopen_cp5_design", "waiver_ref": null, "notes": "active descriptor、component/envelope hash 分域与 stale identity block 已映射到 targeted assertions。"},
+    {"id": "CP7-CR168-S03-02", "category": "testing", "name": "S01/S02/S03/C2 定向回归通过", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/evidence/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7.index.json"], "owner": "meta-qa-inline", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "40/40 passed；C3 active=1、C4 active=0、daily/ML component=1 and envelope=2。"},
+    {"id": "CP7-CR168-S03-03", "category": "security-boundary", "name": "neutral envelope 未反向导入 C3 producer，且未触碰 Gate4、aggregate 或外部操作", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/evidence/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7.index.json"], "owner": "meta-qa-inline", "route_on_fail": "escalate_runtime_high_risk", "waiver_ref": null, "notes": "静态扫描和 boundary return 均无 forbidden hit。"},
+    {"id": "CP7-CR168-S03-04", "category": "risk", "name": "inline verifier 独立性限制已保留 CP8 强制披露", "status": "PASS", "severity": "LOW", "evidence_refs": ["process/returns/STORY-CR168-S03-envelope-multi-strategy-compatibility.CP7.return.json"], "owner": "host-orchestrator", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "R-CR168-VERIFIER-INDEPENDENCE 未消除，仍为用户接受的非阻断风险。"}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260714T050933Z0000-812ab76a", "RE-20260714T055015Z0000-190242bf"],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP6-CR168-S04-IMPLEMENTATION"
+}

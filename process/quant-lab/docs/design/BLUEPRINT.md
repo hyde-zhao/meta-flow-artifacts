@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.14"
+version: "1.16"
 source_use_cases: "process/USE-CASES.md"
 source_requirements: "process/REQUIREMENTS.md"
 source_story_backlog: "process/STORY-BACKLOG.md"
@@ -10,10 +10,13 @@ source_hld:
   - "process/HLD-QMT-TRADING.md"
   - "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
   - "process/archive/design-cr-docs/HLD-CR051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK.md"
+  - "process/archive/design-cr-docs/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md"
 source_adr: "process/ARCHITECTURE-DECISION.md"
-change: "CR-139"
+change: "CR-168"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 companion_adr_cr139: "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
+companion_blueprint_cr168: "process/archive/design-cr-docs/BLUEPRINT-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+companion_hld_cr168: "process/archive/design-cr-docs/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md"
 superseded_in_scope_hld: "process/HLD-DATA-LAKE.md (CR-018, superseded-in-scope by CR-139 companion HLD)"
 confirmed_by: ""
 confirmed_at: ""
@@ -46,6 +49,8 @@ archived_previous:
 | 1.12 | 2026-06-28 | codex | 增补研究引擎稳定模块边界；FEAT-03 研究实现入口改用领域名模块，旧 chapter/stage/root 脚本只作兼容或归档，不再作为主实现面。 |
 | 1.13 | 2026-06-28 | meta-se | 按 CR-139「Strategy Data Foundation」parent CP3 增补"策略生产数据底座"能力地图增量：FEAT-02 写侧/读侧分层、ML feature/label/artifact 层归属（FEAT-03）、读侧语义（PIT reader/panel reader/dedup/published selector/读审计）、run evidence + broker facts + 交易审计链 run-id 贯通、配置类事实源层（benchmark/commission/universe·risk policy/政策周期）版本化 + release 闭环；补跨 Feature 流程 FLOW-20..FLOW-23（reader→published pointer、ML→panel reader、broker facts→run-id 贯通、配置类事实源→release 闭环）；companion HLD「Strategy Data Foundation」收口 HLD-DATA-LAKE 范围（superseded-in-scope）。AGA-1/AGA-3/AGA-5 推荐方案 CP3 已确认 A1/C1/E1（2026-06-28T17:30:00+08:00）。 |
 | 1.14 | 2026-06-28 | host-orchestrator | CP3 approved，AGA-1/3/5 确认 A1/C1/E1，pending-cp3 → confirmed-cp3。 |
+| 1.15 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR168 companion blueprint 草案：FEAT-168-01 C3 evidence 与 FEAT-168-02 guarded projection adapter；复用 FEAT-166-01 neutral envelope，保持 C4/canonical global hardening/aggregate/Stage3 范围外；待 CP3。 |
+| 1.16 | 2026-07-14 | host-orchestrator inline fallback | CP3 已批准后将 CR168 companion blueprint 正文归档到 `process/archive/design-cr-docs/`；长期 index 保留 approved 入口，不改变能力或 owner 语义。 |
 
 ## 蓝图定位
 

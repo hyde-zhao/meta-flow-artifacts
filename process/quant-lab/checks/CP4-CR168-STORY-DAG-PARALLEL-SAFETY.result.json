@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR168-STORY-DAG-PARALLEL-SAFETY",
+  "cr_id": "CR-168",
+  "checked_at": "2026-07-14T11:45:00+08:00",
+  "context_ref": "process/context/CP3-CR168-ECONOMIC-COST-IMPACT-EVIDENCE-CONTEXT.yaml",
+  "dispatch_refs": ["AD-CR168-CP4-META-SE-INLINE-COMPLETED-20260714T114500+0800"],
+  "route_plan_ref": "process/checks/CP0-CR168.route-plan.json",
+  "items": [
+    {"id":"CP4-CR168-01","category":"entry","name":"CP3 architecture decisions are approved","status":"PASS","severity":"BLOCKER","evidence_refs":["process/checkpoints/CP3-CR168-ECONOMIC-COST-IMPACT-EVIDENCE-HLD-REVIEW.md"],"owner":"host-orchestrator","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"CP3 five decisions and A1–E3 revisions are approved; only CP4/CP5 design work was authorized."},
+    {"id":"CP4-CR168-02","category":"feature-design","name":"Four required Features have complete design triplets","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/FEATURE-DESIGN-MATRIX.md#cr168-cp4-增量economic-cost--impact-evidence-producer-foundation","docs/features/economic-cost-evidence/DESIGN.md","docs/features/strategy-evidence-envelope/DESIGN.md","docs/features/economic-cost-gate4-projection/DESIGN.md","docs/features/economic-cost-verification/DESIGN.md"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"Features=4/4 (three CR168 plus existing FEAT-166-01 incremental); DESIGN/TEST-PLAN/TASKS=12/12; no waiver."},
+    {"id":"CP4-CR168-03","category":"story","name":"Exactly five formal Story cards have stable IDs tool-canonical Feature refs and full-lld policy","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr168_story_planning","process/stories/STORY-CR168-S01-c3-contract-identity-validation.md","process/stories/STORY-CR168-S02-deterministic-cost-producer.md","process/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility.md","process/stories/STORY-CR168-S04-gate4-projection-containment.md","process/stories/STORY-CR168-S05-fixture-static-verification.md"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"Stories=5/5; `feature_refs` use feature tool's dotted canonical IDs while `feature_reference_ids` retain FEAT-168/166 trace labels. A temporary tool-generated FEATURE-REGISTRY snapshot validated trace=5/5, then was removed because persistent registry creation is out of CR168 scope."},
+    {"id":"CP4-CR168-04","category":"dag","name":"CR168 scoped Story dependency graph is acyclic and references are valid","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr168_story_planning.dependency_graph"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"nodes=5; edges=10; cycles=0; invalid_refs=0; isolated_nodes=0; topological order S01→S02→S03→S04→S05."},
+    {"id":"CP4-CR168-05","category":"parallel-safety","name":"Five serial safety Waves have no internal dependency or file conflict","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr168_story_planning.waves"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"Waves=5; one Story per Wave; max_parallel_lld/dev/qa=1; internal dependencies=0; parallel file conflicts=0; shared `economic_cost_evidence.py` is serial W1→W2."},
+    {"id":"CP4-CR168-06","category":"file-ownership","name":"Production test read-only and forbidden file ownership is explicit","status":"PASS","severity":"HIGH","evidence_refs":["process/stories/STORY-CR168-S01-c3-contract-identity-validation.md","process/stories/STORY-CR168-S02-deterministic-cost-producer.md","process/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility.md","process/stories/STORY-CR168-S04-gate4-projection-containment.md","process/stories/STORY-CR168-S05-fixture-static-verification.md"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"S04 alone owns adapter and forbids canonical Gate4/aggregate files; S05 is production-read-only; no Story owns C4/event/real-data interfaces."},
+    {"id":"CP4-CR168-07","category":"traceability","name":"Requirements scenarios QAC HLD outcomes and Gate4 containment map to formal Stories","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/product/REQUIREMENTS.md#cr168-economic-cost--slippage--impact-evidence-producer-requirements","docs/product/TEST-MATRIX.md","docs/design/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md#14-五个-cp4-输入与分阶段落地建议","docs/design/FEATURE-DESIGN-MATRIX.md#cr168-cp4-增量economic-cost--impact-evidence-producer-foundation"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"Requirements=9/9; scenarios=17/17 (P0=16,P1=1); QAC=15/15; P0 fail-closed=10/10; uncovered P0=0; Gate4 safe-absent/escape cases map to S04/S05."},
+    {"id":"CP4-CR168-08","category":"design-evidence","name":"All five Stories have full LLD evidence ready for CP5 review","status":"PASS","severity":"BLOCKER","evidence_refs":["process/stories/STORY-CR168-S01-c3-contract-identity-validation-LLD.md","process/stories/STORY-CR168-S02-deterministic-cost-producer-LLD.md","process/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility-LLD.md","process/stories/STORY-CR168-S04-gate4-projection-containment-LLD.md","process/stories/STORY-CR168-S05-fixture-static-verification-LLD.md"],"owner":"meta-dev","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"full LLD structure checks=5/5 OK; open clarification=0; all remain unconfirmed pending CP5."},
+    {"id":"CP4-CR168-09","category":"authorization","name":"Design-only no-subagent and no-persisted-registry boundary remains explicit","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr168_story_planning.authorization_boundary","process/state/AGENT-DISPATCH-LEDGER.ndjson","process/checks/CR168-CP4-READ-EXPANSION-EVENT.json"],"owner":"host-orchestrator","route_on_fail":"escalate_runtime_high_risk","waiver_ref":null,"notes":"No source/test implementation or test execution occurred. User forbids subagents. The feature-trace tool temporarily generated and then removed FEATURE-REGISTRY; persisted product/evidence/capability registry writes=0 and capability registry remains uncreated."},
+    {"id":"CP4-CR168-10","category":"legacy","name":"Pre-existing global plan and registry governance debt is isolated from CR168 scoped validation","status":"PASS","severity":"HIGH","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr168_story_planning.pre_existing_plan_check_failure","docs/design/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md#8-失败路径与恢复"],"owner":"host-orchestrator","route_on_fail":"create_followup_candidate","waiver_ref":null,"notes":"Global `story plan-check` fails only inherited CR013 legacy statuses plus historical warnings. Global feature registry check is not applicable: no authorized registry write and baseline lacks required capability registry/module metadata. CR168 scoped card→Feature trace and LLD checks pass; no legacy object was rewritten."},
+    {"id":"CP4-CR168-11","category":"scope-boundary","name":"C3 C4 aggregate canonical Gate4 event and real-operation boundaries remain non-overlapping","status":"PASS","severity":"HIGH","evidence_refs":["docs/design/FEATURE-DESIGN-MATRIX.md#cr168-cp4-增量economic-cost--impact-evidence-producer-foundation","docs/features/economic-cost-gate4-projection/DESIGN.md","docs/features/economic-cost-verification/DESIGN.md"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"C3 component/schema=1/1; adapter=1; canonical/aggregate source changes=0; C4 calculator=0; event producer=0; real data/TCA/runtime operations=0; CR155 remains BLOCKED/paper_candidate=false."}
+  ],
+  "entry_criteria": [
+    {"name":"CP3 approved","status":"PASS","evidence_ref":"process/checkpoints/CP3-CR168-ECONOMIC-COST-IMPACT-EVIDENCE-HLD-REVIEW.md"},
+    {"name":"CP3 architecture package confirmed","status":"PASS","evidence_ref":"docs/design/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md"},
+    {"name":"User-approved inline fallback recorded","status":"PASS","evidence_ref":"process/state/AGENT-DISPATCH-LEDGER.ndjson"}
+  ],
+  "exit_criteria": [
+    {"name":"Feature matrix and triplets complete","status":"PASS"},
+    {"name":"Story DAG and file safety pass","status":"PASS"},
+    {"name":"All LLD evidence ready for CP5","status":"PASS"},
+    {"name":"No implementation authorization consumed","status":"PASS"}
+  ],
+  "deliverables": [
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "docs/features/economic-cost-evidence/",
+    "docs/features/strategy-evidence-envelope/",
+    "docs/features/economic-cost-gate4-projection/",
+    "docs/features/economic-cost-verification/",
+    "process/stories/STORY-CR168-S01-c3-contract-identity-validation.md",
+    "process/stories/STORY-CR168-S02-deterministic-cost-producer.md",
+    "process/stories/STORY-CR168-S03-envelope-multi-strategy-compatibility.md",
+    "process/stories/STORY-CR168-S04-gate4-projection-containment.md",
+    "process/stories/STORY-CR168-S05-fixture-static-verification.md"
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-CR168-CP4-DEVELOPMENT-PLAN-20260714T110000+0800","RE-CR168-CP5-S01-LLD-20260714T114700+0800","RE-CR168-CP5-S02-LLD-20260714T114700+0800","RE-CR168-CP5-S03-LLD-20260714T114700+0800","RE-CR168-CP5-S04-LLD-20260714T114700+0800","RE-CR168-CP5-S05-LLD-20260714T114700+0800"],
+  "decision": "PASS",
+  "manual_gate_status": null,
+  "next_route": "CP5-design-evidence"
+}

@@ -1,0 +1,61 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "verified",
+      "path": "engine/economic_cost_evidence.py"
+    },
+    {
+      "change_type": "verified",
+      "path": "tests/research/test_economic_cost_contracts.py"
+    },
+    {
+      "change_type": "evidence_revision",
+      "path": "process/stories/STORY-CR168-S01-c3-contract-identity-validation-IMPLEMENTATION.md"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python -m py_compile engine/economic_cost_evidence.py tests/research/test_economic_cost_contracts.py",
+      "result": "pass",
+      "summary": "static compilation passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_economic_cost_contracts.py tests/research/test_walk_forward_oos_contracts.py tests/research/test_walk_forward_oos_qac.py",
+      "result": "pass",
+      "summary": "25 passed in 0.10s"
+    },
+    {
+      "command": "rg static forbidden-operation/import scan for economic_cost_evidence.py",
+      "result": "pass",
+      "summary": "no file/network/process/Gate4 private-helper hit"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "summary": "no whitespace error"
+    }
+  ],
+  "cr_id": "CR-168",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/STORY-CR168-S01-c3-contract-identity-validation.CP7.return.json",
+  "risks": [
+    {
+      "acceptance_ref": "CP5 DQ-004 user-approved inline fallback",
+      "id": "R-CR168-VERIFIER-INDEPENDENCE",
+      "owner": "host-orchestrator",
+      "required_follow_up": "CP8 Decision Brief must disclose that CP7 verification was inline, not an independent verifier lane.",
+      "severity": "LOW",
+      "status": "accepted-nonblocking"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR168-S01-c3-contract-identity-validation",
+  "tests": [
+    "tests/research/test_economic_cost_contracts.py",
+    "tests/research/test_walk_forward_oos_contracts.py",
+    "tests/research/test_walk_forward_oos_qac.py"
+  ],
+  "waivers": []
+}

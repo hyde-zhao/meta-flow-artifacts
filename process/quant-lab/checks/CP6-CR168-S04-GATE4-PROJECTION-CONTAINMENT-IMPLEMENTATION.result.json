@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR168-S04-GATE4-PROJECTION-CONTAINMENT-IMPLEMENTATION",
+  "story_id": "CR168-S04-gate4-projection-containment",
+  "cr_id": "CR-168",
+  "checked_at": "2026-07-14T14:05:00+08:00",
+  "check_attempt": 1,
+  "context_ref": "process/context/stories/STORY-CR168-S04-gate4-projection-containment.CP6.work-packet.json",
+  "dispatch_refs": ["AD-CR168-CP6-S04-META-DEV-INLINE-20260714T135800+0800"],
+  "return_packet_ref": "process/returns/STORY-CR168-S04-gate4-projection-containment.CP6.return.json",
+  "evidence_ref": "process/evidence/STORY-CR168-S04-gate4-projection-containment.CP6.index.json",
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR168-S04-gate4-projection-containment.CP6.work-packet.json": "sha256:b692f93cac899ded4a37b437d84eb26a1b2ee84c72f179e1a3ea94ca444dfca6",
+    "process/stories/STORY-CR168-S04-gate4-projection-containment-LLD.md": "sha256:3ba4a6f1425c723694f4eb3138b864fbafac984ce87820b8e88af27f2ce1bd6e",
+    "process/stories/STORY-CR168-S04-gate4-projection-containment.md": "sha256:8e671811f41b6d084deb2dbd1487ae7209b56fe86710d3f34df02f6b9e52c21b",
+    "engine/economic_cost_gate4_projection.py": "sha256:e3c6c51f90bccfc1060cec1369fb99c79869d665b22e821141642c2a34cbb3a5",
+    "tests/research/test_economic_cost_gate4_projection.py": "sha256:eb8f360a11999ee869c708a853b9d9e302ed8d4cad5fde85c64e05d82e164568"
+  },
+  "items": [
+    {"id": "CP6-CR168-S04-01", "category": "implementation", "name": "唯一 C3-to-Gate4 adapter 满足四键重建、八键 presence denylist 与固定 candidate-release", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/stories/STORY-CR168-S04-gate4-projection-containment-IMPLEMENTATION.md"], "owner": "meta-dev-inline", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "C4 ref/reason 完全不进入 payload；escape/C3 unavailable/C4 present/nonzero operation 均在 canonical 前返回。"},
+    {"id": "CP6-CR168-S04-02", "category": "testing", "name": "B01、B02 8/8、public DI doubles 与 postcondition containment 通过", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/evidence/STORY-CR168-S04-gate4-projection-containment.CP6.index.json"], "owner": "meta-dev-inline", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "55/55 targeted tests passed；canonical PASS 与 claims mismatch 都被 adapter BLOCKED。"},
+    {"id": "CP6-CR168-S04-03", "category": "boundary", "name": "canonical Gate4 与 aggregate source 修改数为 0，且无 private helper / monkeypatch / 外部操作", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/returns/STORY-CR168-S04-gate4-projection-containment.CP6.return.json"], "owner": "host-orchestrator", "route_on_fail": "escalate_runtime_high_risk", "waiver_ref": null, "notes": "source diff=0/0；adapter 仅依赖 public validator 并以 keyword-only callable seam 供测试使用。"}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260714T055233Z0000-460c9aaf", "RE-20260714T060200Z0000-ef6974b7"],
+  "decision": "PASS",
+  "next_route": "CP7-CR168-S04-VERIFICATION"
+}

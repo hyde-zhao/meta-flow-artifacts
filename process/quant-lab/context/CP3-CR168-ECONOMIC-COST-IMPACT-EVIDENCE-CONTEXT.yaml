@@ -1,0 +1,158 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR168-ECONOMIC-COST-IMPACT-EVIDENCE-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "CR-168"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "approved-consumed"
+created_at: "2026-07-14T10:05:00+08:00"
+created_by: "host-orchestrator-inline-meta-se-critical"
+source_cr: "CR-168"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  default_instruction: "先读本 capsule、CR168 summary、CP2 approval 和五份 companion design；默认不读 archive、CR166 Story/LLD/test reports 或完整历史会话。"
+
+must_read:
+  - "process/checkpoints/CP2-CR168-REQUIREMENTS-BASELINE.md"
+  - "process/changes/summaries/CR-168.summary.json"
+  - "process/checks/CR168-PRODUCT-BASELINE-EVIDENCE.json"
+  - "docs/design/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+  - "docs/design/ARCHITECTURE-DECISION-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+  - "docs/design/BLUEPRINT-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+  - "docs/design/DOMAIN-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+  - "docs/design/DEPENDENCY-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+
+read_if_needed:
+  - path: "docs/product/REQUIREMENTS.md"
+    trigger: "需要核对 REQ-CR168-001..009、QAC 15/15 或 CP3 obligations 原文"
+  - path: "docs/product/SCENARIOS.yaml"
+    trigger: "需要核对 17 个场景和 B01/B02 原文"
+  - path: "docs/features/strategy-evidence-envelope/DESIGN.md"
+    trigger: "需要审计 CR166 neutral envelope public contract"
+  - path: "docs/features/cross-strategy-reliability-gates/DESIGN.md"
+    trigger: "需要审计 Gate4 family/field contract"
+  - path: "engine/strategy_evidence.py"
+    trigger: "需要核对 catalog/hash/availability 当前源码事实"
+  - path: "engine/cross_strategy_reliability_gates.py"
+    trigger: "需要核对 canonical Gate4 与私有 N/A helper 当前源码事实"
+
+do_not_read_by_default:
+  - "process/STATE.md"
+  - "process/archive/**"
+  - "process/stories/**"
+  - "process/DEVELOPMENT-PLAN.yaml"
+  - "all CR166 Story, LLD, IMPLEMENTATION and test reports"
+  - "complete conversation transcript"
+
+approved_product_baseline:
+  approved_at: "2026-07-14T09:45:10+08:00"
+  decisions:
+    - "DQ-CP2-CR168-METHOD"
+    - "DQ-CP2-CR168-C3-C4"
+    - "DQ-CP2-CR168-GATE4"
+    - "DQ-CP2-CR168-FIXTURE"
+    - "DQ-CP2-CR168-CLAIM"
+  typed_component_and_schema: "1/1"
+  input_field_families: "9/9"
+  p0_input_fail_closed_classes: "10/10"
+  fixture_families: "2/2"
+  scenarios: "17 total; P0=16; P1=1"
+  deterministic_identity: "10 runs -> 1 component hash"
+  gate4_projection: 1
+  canonical_gate4_changes: 0
+  aggregate_orchestration_changes: 0
+  c4_calculators: 0
+
+architecture_recommendation:
+  selected_option: "A-layered-c3-with-guarded-gate4-projection"
+  modules:
+    - "C3 input/normalizer/validator/calculator/producer leaf module"
+    - "existing CR166 neutral StrategyEvidenceEnvelope"
+    - "CR168 guarded C3-to-Gate4 projection adapter"
+  impact_v1:
+    active_family: "square_root"
+    deferred_families: ["almgren_chriss", "gatheral", "custom"]
+    n_a_behavior: "typed_unavailable_or_blocked; never present projection"
+  hash_domains:
+    input: "quant-lab.economic-cost-input.v1; subject-neutral families 2-9 semantic projection"
+    component: "quant-lab.economic-cost-component.v1"
+    inventory: "quant-lab.strategy-evidence-inventory.v1"
+    envelope: "quant-lab.strategy-evidence-envelope.v1; binds manifest/run/strategy/package identity and package/run provenance/auth"
+
+gate4_containment:
+  scope: "CR168 projection adapter only"
+  c3_payload_allowlist:
+    - "impact_model_family"
+    - "impact_model_ref"
+    - "cost_underestimation_status"
+    - "no_real_tca_claim"
+  forbidden_reason_keys:
+    - "adv_participation_ref_na_reason"
+    - "adv_participation_ref_n_a_reason"
+    - "capacity_dollars_ref_na_reason"
+    - "capacity_dollars_ref_n_a_reason"
+    - "liquidity_sizing_refs_na_reason"
+    - "liquidity_sizing_refs_n_a_reason"
+    - "na_reason"
+    - "n_a_reason"
+  match_rule: "key_presence"
+  c4_representation: "three ref keys absent; no reason keys"
+  reason_escape_canonical_invocations: 0
+  release_profile: "candidate-release"
+  safe_absent_postcondition: "canonical Gate4 status=BLOCKED and all three C4 missing claims are present"
+  postcondition_reason_codes:
+    unexpected_pass: "gate4_unexpected_pass"
+    missing_expected_claims: "gate4_postcondition_violation"
+  adapter_external_direct_calls: 0
+  private_helper_runtime_dependency: 0
+  canonical_global_hardening_claimed: false
+  follow_up: "FU-CR161-007 or separate Gate4 remediation CR before any direct caller"
+
+approved_human_decisions:
+  - "DQ-CP3-CR168-ARCH"
+  - "DQ-CP3-CR168-METHOD"
+  - "DQ-CP3-CR168-HEADER"
+  - "DQ-CP3-CR168-GUARD"
+  - "DQ-CP3-CR168-GLOBAL"
+
+cp3_post_approval_actions:
+  - "COMPLETED: 五项 ADR accepted 并同步五份 design 状态。"
+  - "NEXT: 把 formal CR required_evidence 映射为现有 rerun_consistency + admission_package；细粒度 C3 labels 保留在 CP result commitments。"
+  - "NEXT: 进入 CP4 story-planning，形成正式 Story/DAG/file ownership 与全量设计证据；在 CP5 人工门禁停止。"
+  - "不得因 CP3 approve 直接实现 source/test。"
+
+authorization:
+  inline_fallback_approved: true
+  subagent_launch_allowed: false
+  design_only: true
+  not_authorized:
+    - "formal Story decomposition before CP3 approval"
+    - "LLD, source or test implementation before later required gates"
+    - "canonical Gate4 or aggregate orchestration modification"
+    - "C4 calculator, event producer or FU-007 aggregate integration"
+    - "real data/TCA/calibration, lake/NAS/provider/credentials/external framework/runtime"
+    - "broker/QMT/simulation/paper/live/trading/order operations"
+    - "catalog/store/registry/publish/deploy/tag/release/Git remote write"
+    - "Stage3 start, real/runtime readiness or CR155 promotion"
+
+risks:
+  - id: "R-CR168-GATE4-C3-C4-SEMANTIC"
+    status: "controlled_locally_pending_cp3"
+    residual: "direct callers outside CR168 remain unprotected"
+  - id: "R-CR168-COST-UNDERSTATEMENT"
+    status: "controlled_by_square_root_static_limitations"
+  - id: "R-CR168-UNIT-CURRENCY-BASIS"
+    status: "controlled_by_decimal_and_explicit_conversion"
+  - id: "R-CR168-VERIFIER-INDEPENDENCE"
+    status: "open_nonblocking_cp8_disclosure_required"
+
+exit_criteria:
+  - "Five companion design artifacts are internally consistent after A1-E3 review revision."
+  - "9/9 requirements, 17/17 scenarios and 15/15 QAC have architecture owners or validation entry points."
+  - "CP3 automatic result PASS, blockers=0, waivers=0."
+  - "CP3 human gate approved by user; route proceeds to CP4."
+  - "Story/LLD/source/test/verification additions remain 0."

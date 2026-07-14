@@ -1,9 +1,10 @@
 ---
 status: "draft-current-index"
-version: "1.13"
+version: "1.15"
 source_blueprint: "docs/design/BLUEPRINT.md"
-change: "CR-139"
+change: "CR-168"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
+companion_domain_map_cr168: "process/archive/design-cr-docs/DOMAIN-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md"
 archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-lab-project-roadmap-2026-06-26.md"
 ---
 
@@ -27,6 +28,8 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | 1.11 | 2026-06-28 | codex | 增补 ResearchEngineModule、CompatibilityWrapper 和 SharedResearchContract 领域对象；旧 chapter/stage/root 入口只作兼容或归档。 |
 | 1.12 | 2026-06-28 | meta-se | 按 CR-139「Strategy Data Foundation」CP3 增补策略生产数据底座领域对象：写侧（PublishedRelease/LineageChecksum/IncrementalAppendPlan/ConfigFactRelease）、读侧（PITAsOfReader/PanelReader/ReadAuditLog/ReadinessGate/DuckDBReadOnlyAdapter）、ML feature 层（FeatureArtifact/FeatureVersionSchema/LabelArtifact/ModelArtifactHash/SplitManifest）、交易审计链（BrokerLakeAuditChain/BrokerEventRunIdLink/RunEvidenceRunIdLink）、配置类事实源（BenchmarkFactSource/CommissionFactSource/UniversePolicyFactSource/RiskPolicyFactSource/PolicyCycleFactSource/PITUniverseConstituentChain）、schema 契约（SchemaEvolutionRule/SchemaContractFreeze）；补状态机 SM-27..31 与业务规则 RULE-54..60。AGA-1/3/5 推荐方案 CP3 已确认 A1/C1/E1。 |
 | 1.13 | 2026-06-28 | host-orchestrator | CP3 approved，AGA-1/3/5 确认 A1/C1/E1，pending-cp3 → confirmed-cp3。 |
+| 1.14 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR168 companion domain map 草案：C3 input/assumption/breakdown/evidence/projection outcome、Decimal 算术、availability 状态机和 exact 8-key Gate4 guard；待 CP3。 |
+| 1.15 | 2026-07-14 | host-orchestrator inline fallback | CP3 已批准后将 CR168 companion domain map 正文归档到 `process/archive/design-cr-docs/`；长期 index 仅修正状态/路由，不改变领域规则。 |
 
 ## 术语表
 

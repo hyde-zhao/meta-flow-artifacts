@@ -2,7 +2,7 @@
 checkpoint: CP2
 cr_id: CR-168
 title: "Economic Cost / Slippage / Impact Computable Evidence Producer Foundation — 需求、场景与范围基线"
-status: awaiting-user
+status: approved
 gate_profile: architecture-major
 automatic_precheck: PASS
 context_ref: process/context/CP2-CR168-REQUIREMENT-CONTEXT.yaml
@@ -10,14 +10,16 @@ result_ref: process/checks/CP2-CR168-REQUIREMENTS-BASELINE.result.json
 decision_brief_profile: compact
 opened_at: "2026-07-13T17:45:00+08:00"
 opened_by: host-orchestrator
-revision: 2
+revision: 3
 reopened_at: "2026-07-13T22:45:00+08:00"
 previous_user_decision: changes_requested
+approved_at: "2026-07-14T09:45:10+08:00"
+approved_by: user
 ---
 
 # CP2 — CR168 需求 / 场景 / 范围基线人工门禁
 
-自动预检结论：`PASS`。这只表示材料已具备人工审查条件，不等于 CP2 已批准。
+自动预检结论：`PASS`；人工审查结论：`approved`。本次批准只解锁 CP3 solution-design。
 
 ## Decision Brief
 
@@ -36,6 +38,7 @@ previous_user_decision: changes_requested
 - 用户要求正式启动 `FU-CR161-004`，实际未占用编号为 `CR-168`，并连续推进到 CP2。
 - 用户给出的代码评审确认：Gate 4 是 C3+C4 联合门禁；C3 只投影四个 cost/impact 字段，C4 三个 capacity/liquidity 字段保持 `typed_unavailable` 并 fail-closed。
 - 用户随后以 `修改:` 收紧 Gate 4 推荐方案：C4 `reserved/not-built/typed_unavailable` 必须投影为三个 refs absent 且不带字段级/通用 na-reason；任何 reason 逃逸由 projection `BLOCKED/REJECTED`，不得修改 canonical Gate 4 validator 或 aggregate orchestration。
+- 代码事实复核确认 canonical Gate 4 对 absent+na-reason 存在宽松路径；本轮整改限定为 CR168 adapter 的精确 8-key denylist、strict allowlist、调用前拒绝、逃逸路径 canonical 调用数为 0，以及合法 absent 路径调用后的非 PASS 断言。该整改不代表 canonical Gate 4 已全局修复。
 - `cost_underestimation_status` 已进入 C3 输入/输出合同；fixture 已精确为 daily multifactor synthetic 与 daily/ML multi-strategy-type compatibility；跨字段 currency/price-basis/calendar 仅在无显式转换声明时构成失败。
 - 用户明确要求不拉起子 Agent；产品基线由 Host Orchestrator 按批准的 `meta-pm inline-fallback` 完成，handoff/dispatch/ledger 已记录。
 
@@ -215,30 +218,30 @@ Out of Scope：
 
 | # | 检查项 | 审查结果 | 证据 | 审查意见 |
 |---:|---|---|---|---|
-| 1 | 功能需求完整 | 自动 PASS / 人工待审 | REQ-CR168-001..009 |  |
-| 2 | 非功能需求量化 | 自动 PASS / 人工待审 | NFR-CR168-001..004 |  |
-| 3 | In/Out/Deferred 范围清晰 | 自动 PASS / 人工待审 | MVP-SCOPE / BACKLOG |  |
-| 4 | 15 项 QAC 精确 | 自动 PASS / 人工待审 | REQUIREMENTS |  |
-| 5 | 技术/兼容/权限约束完整 | 自动 PASS / 人工待审 | current baseline / claim ceiling |  |
-| 6 | 风险与依赖已识别 | 自动 PASS / 人工待审 | 风险表 / DQ |  |
-| 7 | 需求冲突已解决或进入决策 | 自动 PASS / 人工待审 | conflict precheck / DQ |  |
-| 8 | 变更机制明确 | 自动 PASS / 人工待审 | CR168 / CR-INDEX / ledger |  |
-| 9 | REQUEST→UC→REQ→Scenario→Matrix 可追溯 | 自动 PASS / 人工待审 | 产品证据 |  |
-| 10 | Scenario Gray Areas 已处理 | 自动 PASS / 人工待审 | discussion checkpoint |  |
-| 11 | Deferred Ideas 已隔离 | 自动 PASS / 人工待审 | BACKLOG / follow-up tracking |  |
-| 12 | 用户可见 SGQ 已确认 | 自动 PASS / 人工待审 | SGQ-CR168-000 |  |
-| 13 | 八维扫描后台化 | 自动 PASS / 人工待审 | USE-CASES / discussion |  |
-| 14 | 17 个工程场景可追踪 | 自动 PASS / 人工待审 | SCENARIOS / TEST-MATRIX | 10/10 C3 输入 fail-closed + B01/B02 Gate 4 guard |
-| 15 | MVP 与产品 outcome 可确认且未提前拆 Story | 自动 PASS / 人工待审 | STORY-MAP / MVP / RELEASE-SLICES |  |
+| 1 | 功能需求完整 | APPROVED | REQ-CR168-001..009 | 用户接受修订版推荐范围。 |
+| 2 | 非功能需求量化 | APPROVED | NFR-CR168-001..004 | 保持精确量化。 |
+| 3 | In/Out/Deferred 范围清晰 | APPROVED | MVP-SCOPE / BACKLOG | canonical 全局硬化继续 deferred。 |
+| 4 | 15 项 QAC 精确 | APPROVED | REQUIREMENTS | 数量不变。 |
+| 5 | 技术/兼容/权限约束完整 | APPROVED | current baseline / claim ceiling | 只解锁 CP3。 |
+| 6 | 风险与依赖已识别 | APPROVED | 风险表 / DQ | Gate4 风险采用 adapter-local containment。 |
+| 7 | 需求冲突已解决或进入决策 | APPROVED | conflict precheck / DQ | 五项 DQ 已收敛。 |
+| 8 | 变更机制明确 | APPROVED | CR168 / CR-INDEX / ledger | 后续范围变化需重开相应门禁。 |
+| 9 | REQUEST→UC→REQ→Scenario→Matrix 可追溯 | APPROVED | 产品证据 | 17/17 保持。 |
+| 10 | Scenario Gray Areas 已处理 | APPROVED | discussion checkpoint | remaining gray areas=0。 |
+| 11 | Deferred Ideas 已隔离 | APPROVED | BACKLOG / follow-up tracking | FU005/FU007 未启动。 |
+| 12 | 用户可见 SGQ 已确认 | APPROVED | SGQ-CR168-000..005 | 五项 CP2 DQ 已批准。 |
+| 13 | 八维扫描后台化 | APPROVED | USE-CASES / discussion | CP3 义务已显式。 |
+| 14 | 17 个工程场景可追踪 | APPROVED | SCENARIOS / TEST-MATRIX | 10/10 C3 输入 fail-closed + B01/B02 Gate 4 guard。 |
+| 15 | MVP 与产品 outcome 可确认且未提前拆 Story | APPROVED | STORY-MAP / MVP / RELEASE-SLICES | 正式 Story 仍为 0。 |
 
 ## Exit Criteria
 
 | 条目 | 审查结果 | 证据 | 审查意见 |
 |---|---|---|---|
-| P0/P1 产品基线无阻塞缺口 | 自动 PASS / 人工待审 | CP2 result |  |
-| 五项人工决策收敛 | 待审 | Decision Brief |  |
-| 人工确认完成 | 待审 | 本文件人工审查结果 |  |
-| 只解锁 CP3，不解锁实现 | 待审 | route plan / claim ceiling |  |
+| P0/P1 产品基线无阻塞缺口 | PASS | CP2 result |  |
+| 五项人工决策收敛 | APPROVED | Decision Brief | 五项推荐方案全部接受。 |
+| 人工确认完成 | APPROVED | 本文件人工审查结果 | 2026-07-14。 |
+| 只解锁 CP3，不解锁实现 | APPROVED | route plan / claim ceiling | Story/LLD/实现/验证仍禁止。 |
 
 ## Deliverables
 
@@ -249,7 +252,7 @@ Out of Scope：
 | CP2 Context Capsule | `process/context/CP2-CR168-REQUIREMENT-CONTEXT.yaml` | PASS |  |
 | 产品基线证据 | `process/checks/CR168-PRODUCT-BASELINE-EVIDENCE.json` | PASS |  |
 | Discussion checkpoint | `process/checks/CP2-CR168-DISCUSSION-CHECKPOINT.json` | PASS |  |
-| 人工门禁审查稿 | `process/checkpoints/CP2-CR168-REQUIREMENTS-BASELINE.md` | 待审 |  |
+| 人工门禁审查稿 | `process/checkpoints/CP2-CR168-REQUIREMENTS-BASELINE.md` | APPROVED |  |
 
 ## 人工审查结果
 
@@ -258,19 +261,12 @@ Out of Scope：
 | 时间 | 用户结论 | 处理 | 当前结果 |
 |---|---|---|---|
 | 2026-07-13 | `修改: DQ-CP2-CR168-GATE4 ...` | 已更新需求、场景、矩阵、范围、CR、current baseline、CP3 义务与风险；新增 `SC-CR168-B02`，其余四项 DQ 推荐不变。 | `changes_requested` 已处理；本轮人工结果重置为 `pending`，等待重新 `approve`。 |
+| 2026-07-14 | `按照建议完成整改，整改后批准，并推进到下一个人工门禁。` | 复核 canonical Gate 4 代码事实；把整改限定为 CR168 adapter-local containment；更新产品基线、CP2 证据与后续 CP3 设计义务。 | `approved`；五项 DQ 均按推荐方案接受，仅解锁 CP3。 |
 
-- 结论：`pending`（可回填 `approved | changes_requested | rejected`）
-- 审查人：待用户
-- 审查时间：待用户
-- 修改意见：待用户
-- 风险接受项：待用户
+- 结论：`approved`
+- 审查人：用户
+- 审查时间：`2026-07-14T09:45:10+08:00`
+- 修改意见：按评审建议完成 projection-side 整改，并推进到下一个人工门禁。
+- 风险接受项：接受 CR168 adapter-local containment 和 canonical 全局硬化 deferred；不接受扩大真实数据/runtime/C4/aggregate/Stage3 权限。
 
-可直接回复以下任一整行：
-
-```text
-approve
-修改: <具体修改点>
-reject
-```
-
-注意：此前的 `修改:` 已应用但不是批准。`approve` 只接受本修订版 Decision Brief 的 5 项推荐方案和进入 CP3 的权限，不表示授权任何“不授权项”。
+CP2 已关闭为 approved；后续人工决策在 CP3 审查稿中进行。本次批准不表示授权任何“不授权项”。

@@ -1,0 +1,102 @@
+{
+  "schema_version": "meta-flow.story-cp6-work-packet.v1",
+  "packet_id": "STORY-CR168-S01-CP6-WORK-PACKET",
+  "cr_id": "CR-168",
+  "story_id": "CR168-S01-c3-contract-identity-validation",
+  "stage": "CP6",
+  "created_at": "2026-07-14T12:17:56+08:00",
+  "created_by": "host-orchestrator-inline-fallback",
+  "context_policy": {
+    "read_profile": "compact",
+    "capsule_first": true,
+    "must_read": [
+      "process/stories/STORY-CR168-S01-c3-contract-identity-validation.md",
+      "process/stories/STORY-CR168-S01-c3-contract-identity-validation-LLD.md",
+      "docs/features/economic-cost-evidence/DESIGN.md",
+      "docs/features/economic-cost-evidence/TEST-PLAN.md",
+      "docs/features/economic-cost-evidence/TASKS.md"
+    ],
+    "read_if_needed": [
+      "docs/design/DOMAIN-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md",
+      "docs/design/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md",
+      "engine/strategy_evidence.py",
+      "tests/research/test_strategy_evidence.py"
+    ],
+    "do_not_read_by_default": [
+      "process/archive/**",
+      "process/discussions/**",
+      "docs/design/HLD.md",
+      "docs/quality/**",
+      "all other CR168 Story LLDs"
+    ]
+  },
+  "inputs": {
+    "approved_gate": "CP5",
+    "approved_decision_ids": [
+      "DQ-CP5-CR168-001",
+      "DQ-CP5-CR168-002",
+      "DQ-CP5-CR168-003",
+      "DQ-CP5-CR168-004"
+    ],
+    "design_evidence": "process/stories/STORY-CR168-S01-c3-contract-identity-validation-LLD.md",
+    "review_revision": "CP5 Revision 2; A-D resolved"
+  },
+  "file_ownership": {
+    "primary": [
+      "engine/economic_cost_evidence.py",
+      "tests/research/test_economic_cost_contracts.py"
+    ],
+    "read_only": ["engine/strategy_evidence.py"],
+    "forbidden": [
+      "engine/strategy_evidence.py",
+      "engine/cross_strategy_reliability_gates.py",
+      "engine/strategy_admission_package.py"
+    ]
+  },
+  "implementation_contract": {
+    "objects": [
+      "immutable EconomicCostEvidenceInput / NormalizedEconomicCostInput / AttachmentContext / EconomicCostValidationResult / EconomicCostBuildIssue values",
+      "nine-family normalizer and N01..N10 ordered validator",
+      "subject-neutral semantic projection and domain-separated hash / tamper validation"
+    ],
+    "required_invariants": [
+      "family 1 manifest/run/strategy/package identity is excluded from component semantic projection/hash",
+      "families 2-9 are subject-neutral component semantics",
+      "N01..N10 exact code/order/effect match Domain Map §7",
+      "no binary float, NaN or Infinity accepted",
+      "no I/O, ref dereference, credential/env/provider/lake/NAS access or registry write"
+    ],
+    "not_in_this_story": [
+      "calculator or public producer orchestration (S02)",
+      "catalog attachment (S03)",
+      "Gate4 projection (S04)",
+      "fixtures/QAC/authorization regression (S05)"
+    ]
+  },
+  "validation": {
+    "command": "uv run --python 3.11 pytest -q tests/research/test_economic_cost_contracts.py",
+    "required_assertions": [
+      "9/9 input-family resolution",
+      "N01..N10 fail-closed exact code coverage",
+      "10 same semantic runs yield one component hash",
+      "identity excluded from component hash and tamper blocks",
+      "forbidden operation count remains zero"
+    ]
+  },
+  "authorization": {
+    "repository_local_source_test_fixture_write": true,
+    "local_uv_validation": true,
+    "subagent": false,
+    "real_data_or_credential_or_external_access": false,
+    "canonical_gate4_or_aggregate_modification": false,
+    "registry_write": false,
+    "runtime_or_trading": false,
+    "git_remote_write": false
+  },
+  "return_requirements": {
+    "implementation_evidence": "process/stories/STORY-CR168-S01-c3-contract-identity-validation-IMPLEMENTATION.md",
+    "evidence_index": "process/evidence/STORY-CR168-S01-c3-contract-identity-validation.index.json",
+    "return_packet": "process/returns/STORY-CR168-S01-c3-contract-identity-validation.CP6.return.json",
+    "design_delta": "none unless a long-lived design semantic change is required; then stop and return CP3"
+  }
+}

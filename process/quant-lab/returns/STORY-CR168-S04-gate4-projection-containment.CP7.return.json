@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "STORY-CR168-S04-gate4-projection-containment.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-168",
+  "story_id": "CR168-S04-gate4-projection-containment",
+  "status": "verified",
+  "created_at": "2026-07-14T14:11:00+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR168-S04-gate4-projection-containment.CP7.verify-packet.json",
+  "implementation_ref": "process/stories/STORY-CR168-S04-gate4-projection-containment-IMPLEMENTATION.md",
+  "source_story_ref": "process/stories/STORY-CR168-S04-gate4-projection-containment.md",
+  "source_design_evidence_ref": "process/stories/STORY-CR168-S04-gate4-projection-containment-LLD.md",
+  "cp6_result_ref": "process/checks/CP6-CR168-S04-GATE4-PROJECTION-CONTAINMENT-IMPLEMENTATION.result.json",
+  "touched_files": [{"path": "engine/economic_cost_gate4_projection.py", "change_type": "verified"}, {"path": "tests/research/test_economic_cost_gate4_projection.py", "change_type": "verified"}],
+  "verification_scope": {"mode": "static-only", "requirements": ["REQ-CR168-001", "REQ-CR168-003", "REQ-CR168-005"], "contracts": ["C3+C4 joint Gate4 safety", "reason escape denylist", "candidate-release postcondition", "PASS/claim mismatch containment", "canonical/aggregate source prohibition"], "non_scope": ["canonical global remediation", "C4 calculator", "capacity sizing", "real data/TCA/runtime", "aggregate integration", "registry", "Git remote write"]},
+  "traceability": [
+    {"requirement": "REQ-CR168-003", "contract": "C4 typed unavailable has absent refs/reasons and Gate4 stays blocked", "test": "test_safe_absent_b01_calls_candidate_release_and_requires_exact_c4_missing_claims", "status": "PASS"},
+    {"requirement": "REQ-CR168-003", "contract": "field/general N/A reason escape cannot reach canonical", "test": "test_each_c4_reason_escape_b02_is_blocked_before_canonical_call", "status": "PASS"},
+    {"requirement": "REQ-CR168-005", "contract": "canonical unexpected PASS and incomplete claims are contained without private/canonical/aggregate changes", "test": "test_public_double_unexpected_pass_is_contained; test_public_double_missing_c4_claim_is_postcondition_violation; test_public_adapter_has_one_keyword_only_double_seam_and_no_private_or_aggregate_dependency", "status": "PASS"}
+  ],
+  "verification": {"commands_run": [{"command": "py_compile S04", "result": "pass", "summary": "static compilation passed"}, {"command": "targeted S01/S02/S03/S04/C2 pytest", "result": "pass", "summary": "55 passed in 0.18s"}, {"command": "canonical/aggregate diff and private dependency scan", "result": "pass", "summary": "canonical/aggregate source modifications=0/0; no private helper or aggregate import"}], "tests": ["tests/research/test_economic_cost_gate4_projection.py"], "stage_decision": "PASS_WITH_RISK", "skipped": [{"item": "repository full suite", "reason": "S04 rolling CP7 validates its security-critical subset; CR-wide full-suite attribution is S05's explicit owner."}]},
+  "boundary_check": {"allowed_paths_only": true, "forbidden_paths_touched": [], "unexpected_imports": [], "runtime_touched": false, "credentials_touched": false, "real_lake_read_touched": false, "real_lake_write_touched": false, "provider_fetch_executed": false, "nas_operation_executed": false, "qmt_runtime_executed": false, "simulation_or_live_executed": false, "broker_operation_executed": false, "external_framework_executed": false, "historical_backfill_executed": false, "git_remote_write_executed": false, "publish_executed": false},
+  "open_questions": [],
+  "risks": [{"id": "R-CR168-GATE4-C3-C4-SEMANTIC", "severity": "HIGH", "status": "controlled-by-local-adapter", "required_follow_up": "CP8 must say the local projection guard does not globally remediate canonical direct callers."}, {"id": "R-CR168-VERIFIER-INDEPENDENCE", "severity": "LOW", "status": "accepted-nonblocking", "required_follow_up": "CP8 Decision Brief must disclose inline verification."}],
+  "waivers": [],
+  "design_delta": {"requires_feature_doc_update": false, "requires_architecture_doc_update": false, "requires_hld_update": false, "design_delta_required": false, "design_delta_ref": null, "status": "not_required", "reason": "S04 conforms to the CP5-confirmed local containment contract without modifying canonical source."},
+  "evidence_refs": ["process/evidence/STORY-CR168-S04-gate4-projection-containment.CP7.index.json"],
+  "next_stage_recommendation": "unlock_cr168_s05_cp6",
+  "actor": "host-orchestrator-inline",
+  "decision": "PASS_WITH_RISK"
+}
