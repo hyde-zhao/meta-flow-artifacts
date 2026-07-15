@@ -20,7 +20,7 @@ release_scope:
 quality_summary:
   story_results: "5/5 CP6 PASS; S01 CP7 PASS and S02-S05 CP7 PASS_WITH_RISK"
   target_and_adjacent: "115 passed; 0 failed"
-  repository_total: "2157 passed; 2 precommit artifact-hygiene failures; product-path failures=0"
+  repository_total: "2159 passed; 0 failed after scoped commits; duration=102.45s"
   stage2_exit: "7/7 PASS; stage3_entry_ready=false"
   resolved_findings: 2
   open_blocking_findings: 0
@@ -64,25 +64,26 @@ claim_ceiling:
 risks:
   - id: R-CR169-VERIFIER-INDEPENDENCE
     severity: MEDIUM
-    status: USER_ACCEPTED_AT_CP5_PENDING_CP8_ACKNOWLEDGEMENT
+    status: USER_ACCEPTED_AT_CP8
     summary: "CP7 使用 inline fallback，不具备独立 agent/model 隔离。"
   - id: R-CR169-PRECOMMIT-ARTIFACT-HYGIENE
     severity: MEDIUM
-    status: CP8_LOCAL_COMMIT_DECISION_AND_POST_COMMIT_RERUN_REQUIRED
-    summary: "full suite 仅余两个因当前 CR 资产未提交触发的 artifact-hygiene 断言；提交后必须归零。"
+    status: RESOLVED_POST_COMMIT_FULL_SUITE_2159_0
+    summary: "双仓 scoped commit 后 full suite 为 2159 passed / 0 failed。"
   - id: R-CR169-PROXY-VALIDITY
     severity: HIGH
     status: CONTROLLED_BY_CLAIM_CEILING
     summary: "static proxy 不代表真实 ADV、liquidity 或 capacity readiness。"
 approval:
   checkpoint: CP8-CR169-DELIVERY-READINESS
-  status: PENDING_USER
-  pending_decision_ids:
+  status: APPROVED_READY_WITH_RISK
+  accepted_decision_ids:
     - DQ-CP8-CR169-001
     - DQ-CP8-CR169-002
     - DQ-CP8-CR169-003
 not_authorized:
-  - Git remote push, force push, tag or GitHub release
+  - Git remote writes outside origin/work/cr169-capacity-liquidity-adv-evidence and origin/main
+  - force push, tag or GitHub release
   - publish, deploy or runtime enablement
   - credentials, secrets, account, provider, NAS, lake or real data access
   - real ADV, liquidity, capacity, alpha-decay or calibration
@@ -90,20 +91,20 @@ not_authorized:
   - broker, QMT, simulation, paper, live, trading or order operation
   - Stage3 start or CR155 promotion
 workspace_git_status:
-  checked_at: "2026-07-15T10:15:00+08:00"
+  checked_at: "2026-07-15T10:53:23+08:00"
   quant_lab:
     branch: work/cr169-capacity-liquidity-adv-evidence
-    head: bef0cae
-    upstream: null
-    dirty: true
+    head: c22e9f9
+    upstream: origin/work/cr169-capacity-liquidity-adv-evidence
+    dirty: false
   meta_flow_artifacts:
     branch: main
-    head: 6b2e9d6
+    head: aa05c76
     upstream: origin/main
-    ahead: 0
+    ahead: 1
     behind: 0
-    dirty: true
-  disposition: "两个工作区包含 CR169 授权资产；尚未 commit 或 remote write。"
+    dirty: false
+  disposition: "双仓预关闭提交完成；提交后 full suite 2159/0。用户已授权受控成对推送，关闭态提交与远端核验待执行。"
 release_documents:
   release_notes: process/docs/release/RELEASE-NOTES-CR169.md
   deploy_checklist: process/docs/release/DEPLOY-CHECKLIST-CR169.md

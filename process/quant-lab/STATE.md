@@ -2,12 +2,12 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: documentation
+Phase: delivered
 Blocked: false
-Active CR: CR-169
+Active CR: none
 Active Story: none
 Pending gate: none
-Next action: CP8 已批准；执行双仓 scoped 提交、提交后 full suite，0 failed 后关闭并成对推送。
+Next action: CR-169 已经 CP8 批准并以 READY_WITH_RISK 关闭；Stage 3 尚未启动，FU-006/FU-007/FU-008 仍须独立正式 CR 与授权。
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,7 +20,7 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: process/context/CP8-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE-DELIVERY-CONTEXT.yaml
+- active context: none
 
 Policy refs:
 - NO_CREDENTIAL_READ
@@ -54,6 +54,6 @@ Open risks:
 - {'id': 'R-CR169-VERIFIER-INDEPENDENCE', 'severity': 'medium', 'status': 'accepted_by_user_at_cp5_cp8_disclosure_required'}
 - {'id': 'R-CR169-STAGE2-OVERCLAIM', 'severity': 'high', 'status': 'controlled_by_cp8_7_of_7_result'}
 
-Updated at: 2026-07-15T10:49:24+08:00
+Updated at: 2026-07-15T02:58:54+00:00
 
 <!-- generated-by: meta-flow state render -->

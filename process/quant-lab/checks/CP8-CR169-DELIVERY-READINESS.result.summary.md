@@ -19,9 +19,9 @@ None.
 | CP8-CR169-02 | PASS | BLOCKER | Stage2 七项合同 7/7 PASS 且 Stage3 entry-ready 保持 false |
 | CP8-CR169-03 | PASS | BLOCKER | compact release context、五份 release docs 与五份 quality docs 齐备 |
 | CP8-CR169-04 | PASS | BLOCKER | claim ceiling 与相邻边界显式且没有真实、aggregate、Stage3 或 CR155 overclaim |
-| CP8-CR169-05 | PASS | HIGH | Inline verification 与 precommit artifact-hygiene 风险已提交用户处置 |
+| CP8-CR169-05 | PASS | HIGH | Inline verification 风险已接受且 precommit artifact-hygiene 风险已关闭 |
 | CP8-CR169-06 | PASS | BLOCKER | 双仓工作区和本地/远端 Git 授权边界已记录 |
 
 ## Next
 
-await_user_cp8_decision
+close_cr169_ready_with_risk

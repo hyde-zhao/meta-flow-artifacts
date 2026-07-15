@@ -1,7 +1,7 @@
 ---
 title: "CR-169 验证报告"
-status: "cp7-complete-with-risk"
-version: "1.0"
+status: "cp8-approved-postcommit-green"
+version: "1.1"
 cr_id: "CR-169"
 validation_mode: "static-fixture-repository"
 created_at: "2026-07-15T10:12:00+08:00"
@@ -15,6 +15,7 @@ owner: "host-orchestrator inline meta-qa"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-07-15 | host-orchestrator inline meta-qa | 完成 S01-S05、Stage2 7/7、全仓失败归因与治理整改；结论 PASS_WITH_RISK。 |
+| 1.1 | 2026-07-15 | host-orchestrator | 回填 CP8 批准、双仓提交和提交后全量 `2159 passed / 0 failed`；关闭 hygiene 风险。 |
 
 ## 1. 验证范围与授权边界
 
@@ -30,7 +31,7 @@ owner: "host-orchestrator inline meta-qa"
 | S02 | static ADV/capacity/headroom producer | PASS | PASS_WITH_RISK | Decimal 确定性；无真实流动性。 |
 | S03 | `capacity_liquidity@v1` catalog/envelope | PASS | PASS_WITH_RISK | component/envelope identity 分域。 |
 | S04 | strict C3+C4 Gate4 fixture adapter | PASS | PASS_WITH_RISK | 7-key present path；不修改 canonical/aggregate。 |
-| S05 | fixtures、QAC、claims、Stage2、repository | PASS | PASS_WITH_RISK | 7/7 Stage2；full suite 仅余 2 个 precommit hygiene 风险。 |
+| S05 | fixtures、QAC、claims、Stage2、repository | PASS | PASS_WITH_RISK | 7/7 Stage2；提交后 full suite 2159/0；仅保留 inline verifier 风险。 |
 
 ## 3. 精确覆盖
 
@@ -55,6 +56,7 @@ owner: "host-orchestrator inline meta-qa"
 | 首轮 full suite | 2154 passed / 5 failed |
 | 整改后治理子集 | design/provenance PASS；artifact-hygiene 仅余 2 个工作区敏感失败 |
 | 整改后 full suite | 2157 passed / 2 failed，产品/契约失败=0 |
+| CP8 批准后提交态 full suite | 2159 passed / 0 failed，102.45 秒 |
 | Stage2 checker | 7/7 PASS；操作计数全 0 |
 
 ## 5. 初始失败归因与整改
@@ -63,9 +65,9 @@ owner: "host-orchestrator inline meta-qa"
 |---|---:|---|---|---:|
 | test provenance | 1 | 6 个 CR169 测试未登记 | 更新 `tests/PROVENANCE.yaml` | 0 |
 | design surface | 2 | 5 个 CR 专题副本位于 canonical root | 原文归档并更新 archive index | 0 |
-| artifact hygiene | 2 | 未提交 CR169 source/Feature/process 资产被旧 CR132 检查判 unclassified | 不越界修改旧检查；CP8 后提交并重跑 | 2 |
+| artifact hygiene | 2 | 未提交 CR169 source/Feature/process 资产被旧 CR132 检查判 unclassified | 不修改旧检查；CP8 批准后双仓提交并复跑 | 0 |
 
-剩余 2 项是同一根因的函数/CLI 两个断言，不涉及 CR169 product path。当前没有本地提交授权，因此不能通过提前 commit 消除；报告明确不声称 full suite 全绿。
+此前 2 项是同一根因的函数/CLI 两个断言，不涉及 CR169 product path。用户批准 CP8 并授权双仓提交后，quant-lab `c22e9f9` 与 artifacts `aa05c76` 进入已提交状态，完整复跑为 `2159 passed / 0 failed`，该风险已关闭。
 
 ## 6. Claim ceiling
 
@@ -82,7 +84,7 @@ owner: "host-orchestrator inline meta-qa"
 ## 7. 剩余风险与决定
 
 - `R-CR169-VERIFIER-INDEPENDENCE`：CP5 已接受 inline QA，CP8 必须披露。
-- `R-CR169-PRECOMMIT-ARTIFACT-HYGIENE`：提交后 full-suite 复跑未执行；CP8 后置条件。
+- `R-CR169-PRECOMMIT-ARTIFACT-HYGIENE`：`RESOLVED`；提交后 full suite 为 2159/0。
 - `R-CR169-PROXY-VALIDITY`：fixture proxy 不代表真实容量或流动性。
 
-**阶段决定：PASS_WITH_RISK。** 可打开 CP8，但批准不得被解释为 Stage3、真实 capacity、runtime、远端写入或 CR155 promotion 授权。
+**阶段决定：PASS_WITH_RISK。** CP8 已批准，关闭条件已满足；风险仅保留 inline verifier independence 与 static proxy claim ceiling。用户另行授权了本次两个 Git ref 的受控推送，但这不得解释为 Stage3、真实 capacity、runtime、publish/deploy 或 CR155 promotion 授权。

@@ -45,30 +45,30 @@ do_not_read_by_default:
   - credentials, .env, provider configs, real data and runtime sessions
 key_facts:
   - Five of five Stories completed CP6 and CP7; final CP7 decision is PASS_WITH_RISK with zero blockers.
-  - CR169 targeted suite is 115 passed and zero failed; repository suite has 2157 passed and two precisely attributed precommit artifact-hygiene failures.
+  - CR169 targeted suite is 115 passed and zero failed; after scoped commits the repository suite is 2159 passed and zero failed.
   - Stage2 seven-contract exit result is 7/7 PASS, while stage3_entry_ready remains false.
   - Gate4 fixture PASS is local strict seven-key compatibility only; canonical, CR168 adapter and aggregate modifications are zero.
-  - CP8 approval may authorize scoped local commits and post-commit rerun, but never Git remote write or real/runtime operations.
+  - CP8 was approved; the user separately authorized one paired Git push to the CR169 quant branch and artifacts main, but not force-push/tag/release or real/runtime operations.
 risks_and_decisions:
   - id: DQ-CP8-CR169-001
     type: risk_acceptance
-    status: pending_user
+    status: accepted
   - id: DQ-CP8-CR169-002
     type: closure_protocol
-    status: pending_user
+    status: accepted_and_completed
   - id: DQ-CP8-CR169-003
     type: claim_boundary
-    status: pending_user
+    status: accepted
   - id: R-CR169-VERIFIER-INDEPENDENCE
     status: requires_cp8_acknowledgement
   - id: R-CR169-PRECOMMIT-ARTIFACT-HYGIENE
-    status: requires_cp8_local_commit_decision_and_post_commit_rerun
+    status: resolved_post_commit_2159_passed_0_failed
   - id: R-CR169-PROXY-VALIDITY
     status: controlled_by_claim_ceiling
 downstream_tasks:
   - Await user CP8 decision.
-  - If approved, create scoped local commits in both repositories, rerun full suite, and close only on zero failures.
-  - Do not push, publish, deploy, start Stage3 or expand authorization.
+  - Scoped commits and the required post-commit full suite are complete; close CR169 as READY_WITH_RISK.
+  - Perform only the explicitly authorized paired push; do not force-push, tag/release, publish, deploy, start Stage3 or expand authorization.
 token_control:
   read_profile: compact
   do_not_copy_full_documents: true

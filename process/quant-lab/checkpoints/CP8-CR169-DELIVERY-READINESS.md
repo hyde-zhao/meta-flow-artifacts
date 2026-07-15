@@ -18,11 +18,11 @@ release_context_ref: "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-A
 
 | 预检 | 结论 | 阻断项 | 说明 |
 |---|---|---:|---|
-| 5/5 Story CP6/CP7 | PASS_WITH_RISK | 0 | 所有 Story 已完成；风险为 inline verifier 和 precommit hygiene。 |
+| 5/5 Story CP6/CP7 | PASS_WITH_RISK | 0 | 所有 Story 已完成；仅保留已接受的 inline verifier 风险。 |
 | 量化验收 | PASS | 0 | 2/2 fixture、9/9 REQ、17/17 scenarios、15/15 QAC、12/12 P0、10→1。 |
 | Stage2 exit | PASS | 0 | 7/7 合同 PASS；`stage3_entry_ready=false`。 |
-| repository suite | PASS_WITH_RISK | 0 | 2157 passed / 2 precommit artifact-hygiene failed；产品路径 failure=0。 |
-| 发布执行 | NOT EXECUTED | N/A | 未 commit/push/tag/publish/deploy。 |
+| repository suite | PASS | 0 | 双仓 scoped commit 后 2159 passed / 0 failed。 |
+| 发布执行 | GIT DELIVERY AUTHORIZED | N/A | 本地提交已完成；仅用户指定的两个远端 ref 待推送，不执行 tag/publish/deploy。 |
 
 ## Decision Brief
 
@@ -33,7 +33,7 @@ release_context_ref: "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-A
 | 本次确认服务的整体目标 | 接受或拒绝 fixture/static-only C4 Capacity / Liquidity / ADV evidence foundation 的交付收尾；不是真实容量、Stage3 或 runtime 发布。 |
 | 推荐动作 | 回复 `approve`，接受以下 3 项推荐方案；允许两个仓库做 scoped 本地提交并在提交后重跑 full suite，0 failed 后关闭为 `READY_WITH_RISK`。 |
 | approve 后会发生什么 | 审查两个仓库 staged scope、分别本地提交、重跑 full suite；仅当 0 failed 才同步 CR close/state/ledger。 |
-| approve 不授权什么 | 任何 Git remote push/tag/release、publish/deploy、真实数据/ADV/liquidity/capacity、alpha、canonical global/aggregate、runtime/trading、Stage3 或 CR155 promotion。 |
+| approve 不授权什么 | 默认 approve 不授权远端写入；本次用户另行明确授权两个指定 ref 的受控 push。仍不授权 force-push/tag/release、publish/deploy、真实数据/ADV/liquidity/capacity、alpha、canonical global/aggregate、runtime/trading、Stage3 或 CR155 promotion。 |
 | 不确认会阻塞什么 | CR-169 保持 active、`pending_gate=CP8`；阻塞 scoped 本地提交、提交后全量复跑和 CR 关闭，不执行外部动作。 |
 
 ### Context Capsule Summary
@@ -72,7 +72,7 @@ release_context_ref: "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-A
 | 决策 ID | 决策类型 | 待确认问题 | 推荐方案 | 备选方案 | 优劣分析 | 影响 / 风险 | 回退 / 切换条件 |
 |---|---|---|---|---|---|---|---|
 | DQ-CP8-CR169-001 | `risk_acceptance` | 是否接受 CP7 使用用户批准的 inline fallback，缺少独立 agent/model 隔离？ | 接受并以 `READY_WITH_RISK` 交付。 | 返回 CP7，等待独立 verifier lane。 | 推荐方案保留现有 115 项定向验证和 Stage2 7/7 证据，代价是组织独立性不足；备选独立性更强但当前没有可用 verifier lane。 | 不改变测试事实，只限制独立验证声明；风险持续登记到 FU-CR161-006。 | 用户拒绝该风险或独立 lane 可用时回到 CP7 重验。 |
-| DQ-CP8-CR169-002 | `implementation` | 如何处理 full suite 中只由未提交工作区触发的 2 个 hygiene 断言？ | 授权两个仓库 scoped 本地提交；提交后重跑 full suite，0 failed 才关闭。 | 保持 active、不提交；不推荐带 2 failures 直接关闭。 | 推荐方案让旧 CR132 guard 在真实提交态复核且不修改 guard；代价是需要两次本地提交。备选不改变工作区，但无法取得最终全绿证据。 | 不授权远端 push；若提交后仍失败，CR 不得关闭并返回 CP7。 | staged scope 不纯、提交失败或复跑非 0 failed 时立即停止并回到 CP7。 |
+| DQ-CP8-CR169-002 | `implementation` | 如何处理 full suite 中只由未提交工作区触发的 2 个 hygiene 断言？ | 授权两个仓库 scoped 本地提交；提交后重跑 full suite，0 failed 才关闭。 | 保持 active、不提交；不推荐带 2 failures 直接关闭。 | 推荐方案让旧 CR132 guard 在真实提交态复核且不修改 guard；代价是需要两次本地提交。备选不改变工作区，但无法取得最终全绿证据。 | 已完成：2159/0；用户另行授权两个指定 ref 的受控 push。 | staged scope 不纯、提交失败或复跑非 0 failed 时立即停止并回到 CP7；本次条件未触发。 |
 | DQ-CP8-CR169-003 | `scope` | 是否接受 Stage2 7/7 仅表示合同齐备，而 Stage3 仍不可进入？ | 接受 claim ceiling，并保留 FU-006/FU-007/FU-008。 | 拒绝并另起 CR 重新设计 Stage3 前置。 | 推荐方案保持 CR169 fixture/static 边界且不吞并后续治理；备选可重新定义阶段条件，但必须重新走正式 CR 门禁。 | `stage3_entry_ready=false`；不启动 follow-up、不授权真实能力。 | 若需要 Stage3、真实证据或 aggregate admission，必须启动独立 CR 并取得新授权。 |
 
 ### 量化交付摘要
@@ -86,7 +86,7 @@ release_context_ref: "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-A
 | joint fixture PASS / CR168 absent regression | 1 / 1 |
 | Stage2 contracts / Stage3 ready | 7/7 / false |
 | targeted tests | 115 passed / 0 failed |
-| repository suite | 2157 passed / 2 precommit hygiene failed |
+| repository suite | 2159 passed / 0 failed（提交后） |
 | real/external/runtime/trading/remote operations | 0 |
 
 ### CP8 后续跟踪分流表
@@ -94,7 +94,7 @@ release_context_ref: "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-A
 | 分流类别 | 项目 ID | 状态 | 处理方式 | 台账 / CR 路径 | 说明 |
 |---|---|---|---|---|---|
 | 关闭范围 | CLOSE-CR169-01 | pending-approval | scoped 本地提交、提交后 full suite 0 failed、关闭 CR169 | `process/changes/CR-169.md` | 仅关闭 fixture/static C4 foundation。 |
-| 不授权范围 | NA-CR169-01 | not-authorized | 保持禁止 | 本 checkpoint / Release Context | remote push/tag/release、真实数据、runtime、Stage3、CR155 promotion。 |
+| 不授权范围 | NA-CR169-01 | not-authorized | 保持禁止 | 本 checkpoint / Release Context | 指定 ref 之外的 remote write、force-push/tag/release、真实数据、runtime、Stage3、CR155 promotion。 |
 | 风险接受项 | R-CR169-VERIFIER-INDEPENDENCE | pending-user | 接受则 READY_WITH_RISK；拒绝则回 CP7 | `docs/quality/REVIEW-CR169.md` | 对应 DQ-001。 |
 | 后续 CR 候选项 | FU-CR161-006 | candidate | 真实 evidence 前补独立 verifier lane | follow-up tracking / BACKLOG | 本 CR 不启动。 |
 | 后续 CR 候选项 | FU-CR161-007 | candidate | canonical hardening、C1-C4 aggregate、CR155 regression | follow-up tracking / BACKLOG | 本 CR 不启动。 |
@@ -118,17 +118,17 @@ release_context_ref: "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-A
 | 1 | 5/5 Story 与 9/17/15/12 量化验收闭环 | PASS | Verification/Test report |
 | 2 | Stage2 7/7 且 Stage3 ready=false | PASS | Stage2 result / Release Context |
 | 3 | canonical/CR168/aggregate/CR155/真实操作边界未扩大 | PASS | Review / Release Context |
-| 4 | repository 剩余 2 failures 已精确归因并有提交后复跑协议 | PASS_WITH_RISK | Test report / Fixes |
-| 5 | DQ-001..003 可被用户明确接受、修改或拒绝 | PENDING_USER | 本 Decision Brief |
+| 4 | repository 2 个预提交失败已归因且提交后复跑为 2159/0 | PASS | Test report / Fixes / post-commit result |
+| 5 | DQ-001..003 已由用户接受 | APPROVED | 本 Decision Brief / CP8 approval event |
 
 ## Exit Criteria
 
 | 条目 | 通过条件 |
 |---|---|
 | 用户终验 | 用户回复 `approve`、`修改: <具体修改点>` 或 `reject`。 |
-| 提交条件 | 仅 `approve` 授权两个仓库的 scoped 本地 CR169 commit；不授权 push。 |
-| 关闭条件 | 提交后 full suite=0 failed；否则返回 CP7。 |
-| 不执行条件 | 不执行远端写入、发布、部署、真实数据/runtime、Stage3 或 CR155 promotion。 |
+| 提交条件 | 已完成两个仓库的 scoped CR169 commit。 |
+| 关闭条件 | 已满足：提交后 full suite=2159 passed / 0 failed。 |
+| 不执行条件 | 仅执行用户另行授权的两个 ref 成对 push；不执行 force-push/tag/release、发布、部署、真实数据/runtime、Stage3 或 CR155 promotion。 |
 
 ## Deliverables
 

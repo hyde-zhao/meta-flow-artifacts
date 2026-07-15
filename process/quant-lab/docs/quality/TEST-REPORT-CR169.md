@@ -1,7 +1,7 @@
 ---
 title: "CR-169 测试报告"
-status: "cp7-complete-with-risk"
-version: "1.0"
+status: "cp8-approved-postcommit-green"
+version: "1.1"
 cr_id: "CR-169"
 created_at: "2026-07-15T10:12:00+08:00"
 owner: "host-orchestrator inline meta-qa"
@@ -14,6 +14,7 @@ owner: "host-orchestrator inline meta-qa"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-07-15 | host-orchestrator inline meta-qa | 固化测试资产、精确结果、全仓失败归因与待 CP8 后置复跑。 |
+| 1.1 | 2026-07-15 | host-orchestrator | 回填 CP8 批准后的双仓提交与 repository full suite `2159 passed / 0 failed`。 |
 
 ## 1. 测试资产
 
@@ -34,11 +35,12 @@ owner: "host-orchestrator inline meta-qa"
 - CR-wide targeted：115 passed。
 - full suite 首轮：2154 passed、5 failed。
 - full suite 整改后：2157 passed、2 failed。
+- CP8 批准后双仓提交态 full suite：2159 passed、0 failed（102.45 秒）。
 - 正式 Stage2 result：7 PASS、0 FAIL、0 BLOCKED。
 
 ## 3. 失败归因
 
-已修复 provenance 1 项和 design surface 2 项。剩余 2 项均由 `test_process_artifact_hygiene.py` 对当前未提交文件的同一分类规则触发；不存在 CR169 计算、合同、Gate4、claim 或回归失败。由于它们尚未在提交后复跑归零，报告状态保持 `PASS_WITH_RISK`。
+已修复 provenance 1 项和 design surface 2 项。此前剩余 2 项均由 `test_process_artifact_hygiene.py` 对未提交文件的同一分类规则触发；在 quant-lab `c22e9f9` 与 artifacts `aa05c76` 提交后复跑已归零，证明不存在 CR169 计算、合同、Gate4、claim 或回归失败。`READY_WITH_RISK` 只继续反映用户已接受的 inline verifier independence，而不是测试失败。
 
 ## 4. 未覆盖项
 
@@ -46,4 +48,4 @@ owner: "host-orchestrator inline meta-qa"
 
 ## 5. 结论
 
-CR-169 的已批准 fixture/static 合同满足精确验收；CP8 后若授权提交，必须再次运行完整 suite，期望值为 0 failure。若仍有 artifact-hygiene 失败，返回 CP7。
+CR-169 的已批准 fixture/static 合同满足精确验收；CP8 规定的提交后完整 suite 已达到 `2159 passed / 0 failed`，满足关闭条件。Stage3、真实 capacity 与 runtime 仍未获授权。

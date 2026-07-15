@@ -1,7 +1,7 @@
 ---
 title: "CR-169 Release Notes"
-status: "cp8-draft"
-version: "1.0"
+status: "cp8-approved-ready-with-risk"
+version: "1.1"
 cr_id: "CR-169"
 created_at: "2026-07-15T10:15:00+08:00"
 owner: "host-orchestrator"
@@ -14,6 +14,7 @@ owner: "host-orchestrator"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-07-15 | host-orchestrator | 准备 C4 fixture/static foundation 的 CP8 交付说明、claim ceiling 与剩余风险。 |
+| 1.1 | 2026-07-15 | host-orchestrator | 回填 CP8 批准、双仓提交及提交后 full suite 2159/0。 |
 
 ## 交付内容
 
@@ -29,7 +30,7 @@ owner: "host-orchestrator"
 
 - S01-S05：5/5 CP6 PASS，CP7 最终为 PASS/PASS_WITH_RISK。
 - CR-wide targeted：115 passed。
-- repository full suite：2157 passed / 2 failed；仅余未提交工作区触发的 CR132 artifact-hygiene 两个断言，提交后必须重跑归零。
+- repository full suite：提交后 `2159 passed / 0 failed`；此前两个 CR132 artifact-hygiene 断言已随双仓提交归零。
 - canonical Gate4、CR168 adapter、aggregate/admission 修改数=0；外部/真实/runtime/trading/remote 操作=0。
 
 ## Claim ceiling
@@ -38,4 +39,4 @@ owner: "host-orchestrator"
 
 ## 非授权事项
 
-本说明不执行或授权远端 push/tag/release/publish/deploy，不授权真实数据、provider/lake/NAS/credential、runtime/QMT/trading、canonical global/aggregate、Stage3 或 CR155 promotion。
+用户另行授权本次 CR-169 双仓受控 Git 推送；本说明仍不授权 force push、tag/release、publish/deploy、真实数据、provider/lake/NAS/credential、runtime/QMT/trading、canonical global/aggregate、Stage3 或 CR155 promotion。
