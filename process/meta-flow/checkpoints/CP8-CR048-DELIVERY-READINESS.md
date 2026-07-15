@@ -59,3 +59,12 @@ context_ref: "process/release/RELEASE-CONTEXT-CR048.yaml"
 - 记录时间：`2026-07-15T14:02:04Z`；这是记录时间，不伪造用户消息的精确时间。
 - 接受：DQ-01 `READY_WITH_RISK`；DQ-02 artifact 精确路径普通推送；DQ-03 保留两个远端辅助分支。
 - 不授权：force-push、tag/release、分支删除、runtime、credentials、quant-lab、prelink backup、历史证据改写。
+
+## Artifact readiness publication result
+
+- `meta-flow/main`：`ad3f6f42b179ec4767d29a07b7e9604e1969b8fe`，远端匹配。
+- `meta-flow/integration/cr048-single-source-rules`：同一 merge commit，远端匹配。
+- `meta-flow/fix/claude-md-rule-numbering`：保留在 `d266e05660be2d7b14e74b09ee2819402565103e`。
+- `meta-flow-artifacts/main` readiness commit：`75a91581af04b8d331bc4733cd27f576bd90441d`，远端匹配。
+- readiness commit 只包含 `process/meta-flow/**`；现有 `process/quant-lab/**` 改动未暂存、未提交、未推送。
+- 关闭提交完成后将追加 `process/checks/CR048-PAIRED-PUBLICATION-EVIDENCE.json`，引用可独立验证的关闭提交 hash。
