@@ -16,15 +16,27 @@ owner: "host-orchestrator"
 | `FU-CR161-004` | Economic cost / slippage / impact evidence producer foundation | closed (`CR-168`) | CR-168 于 2026-07-14 经 CP8 批准以 `READY_WITH_RISK` 关闭；交付 fixture/static-only C3 foundation，不授权真实 TCA、C4 计算或 Stage 3。 |
 | `FU-CR161-005` | C4 capacity / liquidity / ADV evidence producer foundation | closed (`CR-169`，CP8 approved，READY_WITH_RISK) | 5/5 Story、CP6/CP7、Stage 2 合同 7/7、CP8 人工批准及提交后 repository suite 2159/0 已完成。真实 ADV/liquidity、canonical Gate 4 全局硬化、aggregate、Stage 3 与 CR-155 promotion 仍须独立 CR 和授权。 |
 | `FU-CR161-006` | Independent CP7 verifier-lane resilience | candidate | A later high-risk CR needs to rely on CR161 CP7, or the CP8 verifier-independence waiver expires. |
-| `FU-CR161-007` | Existing-gate integration and CR155 regression implementation | candidate | C1-C4 producers 的 typed evidence 均稳定后，补齐跨 producer 端到端集成；必须保持 CR155 blocked。 |
+| `FU-CR161-007` | Canonical cross-strategy reliability N/A semantics and admission hardening | active (`CR-170`) | related_active_cr=CR-170；原候选的 canonical-hardening 子切片已转为 `CR-170`；只处理 Gate 1-5 N/A 语义和 Gate 6 admission policy，不承接 aggregate 或 CR155 promotion。 |
 | `FU-CR161-008` | Alpha-decay evidence ownership and C2-adjacent method evaluation | candidate | CR169 CP3 已确认 alpha-decay 不进入 C4 v1；需要冻结预测衰减 owner、OOS/C2 边界、输入窗口与 schema version 时再独立启动。 |
+| `FU-CR161-009` | C1-C4 aggregate integration and CR155 regression (former FU-007 aggregate slice) | candidate | `CR-170` 完成 canonical hardening 后，再通过独立 CR 接入 aggregate orchestration、最终 StrategyAdmissionPackage 与 CR155 regression；不得自动 promotion。 |
 
-These candidates are not active CRs. Starting any item requires a separate CR and explicit authorization.
+除已映射为 active `CR-170` 的 `FU-CR161-007` 外，其余 candidate 均不是 active CR；启动任一 candidate 仍需独立 CR 和明确授权。
 
 ## Structured activation record
 
 ```yaml
 follow_up_items:
+  - id: CR-170
+    title: Canonical cross-strategy reliability N/A semantics and admission hardening
+    kind: requirement-change
+    status: active
+    lifecycle_status: active
+    readiness_status: READY_WITH_RISK
+    gate_status: cp8_pending
+    gate_profile: architecture-major
+    formal_cr_path: process/changes/CR-170.md
+    blocked_by: "source_candidate=FU-CR161-007; blocked_by=cp8_pending"
+    next_action: "等待 CR-170 CP8 人工批准；4/4 Story 已完成，CP8 自动预检 PASS / READY_WITH_RISK；批准前不得提交、关闭或推送。"
   - id: FU-CR161-001
     title: Research-engine trial lineage instrumentation
     kind: implementation-gate
@@ -96,16 +108,19 @@ follow_up_items:
     blocked_by: "A later high-risk verification route requires it"
     next_action: "Activate only through a separate CR and explicit authorization."
   - id: FU-CR161-007
-    title: Existing-gate integration and CR155 regression implementation
+    title: Canonical cross-strategy reliability N/A semantics and admission hardening
     kind: implementation-gate
-    status: candidate
-    lifecycle_status: candidate
-    readiness_status: not_ready
-    gate_status: not_started
+    status: active
+    lifecycle_status: active
+    readiness_status: READY_WITH_RISK
+    gate_status: cp8_pending
     gate_profile: architecture-major
-    formal_cr_path: ""
-    blocked_by: "C1-C4 typed evidence producers are not all available"
-    next_action: "Activate after producer contracts stabilize; preserve CR155 blocked and reuse CR151/CR154."
+    formal_cr_path: process/changes/CR-170.md
+    related_cr: CR-170
+    related_active_cr: "CR-170"
+    source_slice: canonical-hardening
+    blocked_by: "related_active_cr=CR-170; cp8_pending"
+    next_action: "related_active_cr=CR-170；CR-170 4/4 Story 已完成且 CP8 自动预检 PASS / READY_WITH_RISK，当前等待 CP8 人工批准。aggregate/CR155 regression 已拆为 FU-CR161-009。"
   - id: FU-CR161-008
     title: Alpha-decay evidence ownership and C2-adjacent method evaluation
     kind: architecture-realignment
@@ -117,4 +132,17 @@ follow_up_items:
     formal_cr_path: ""
     blocked_by: "CR-169 C4 v1 deliberately excludes alpha-decay; owner, OOS/C2 relation, method assumptions and schema evolution require a separate architecture decision."
     next_action: "Activate only through a separate formal CR, CP0 conflict precheck and explicit user authorization; do not add an alpha-decay calculator to CR-169."
+  - id: FU-CR161-009
+    title: C1-C4 aggregate integration and CR155 regression
+    kind: implementation-gate
+    status: candidate
+    lifecycle_status: candidate
+    readiness_status: not_ready
+    gate_status: not_started
+    gate_profile: architecture-major
+    formal_cr_path: ""
+    parent_candidate: FU-CR161-007
+    former_slice_label: FU-CR161-007b
+    blocked_by: "CR-170 canonical Gate 1-5 N/A semantics and Gate 6 admission policy hardening not yet closed"
+    next_action: "After CR-170 closes, activate only through a separate formal CR, CP0 conflict precheck and explicit user authorization; preserve CR155 BLOCKED until aggregate regression is independently approved."
 ```

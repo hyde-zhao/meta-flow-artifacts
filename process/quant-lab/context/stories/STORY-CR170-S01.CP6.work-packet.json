@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-170",
+  "story_id": "CR170-S01-na-policy-inventory-five-state-contract",
+  "stage": "CP6",
+  "objective": {
+    "summary": "实现 21-unit N/A policy inventory、五态纯函数分类器与稳定 reason ID。",
+    "non_goals": ["不修改 canonical Gate1-6", "不修改 CR168/169 adapters 或 aggregate", "不读取真实数据、凭据、授权系统或 runtime"]
+  },
+  "feature_refs": ["cross-strategy-reliability-gates"],
+  "feature_context": "S01 只建立 private policy contract；Gate consumer 由 S02 串行实现。",
+  "cr_delta": {
+    "summary": "新增 engine/reliability_na_policy.py 与定向单元测试；public export 变化为 0。",
+    "affected_contracts": ["21-unit inventory", "five-state N/A decision", "deterministic reason IDs"]
+  },
+  "acceptance": [
+    "inventory 21/21，Gate 分布 6/6/1/5/3",
+    "hardening direction 15/5/1，disposition 20/1",
+    "five states 5/5，4/4 boundary 与 opaque authorization ref 规则可验证",
+    "同一输入 10 次产生 1 个序列化 decision，public export break=0"
+  ],
+  "dependency_inputs": ["process/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract-LLD.md", "process/checkpoints/CP5-CR170-ALL-STORIES-LLD-BATCH.md"],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract.md", "reason": "story_card", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "process/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract-LLD.md", "reason": "approved_design_contract", "required": true, "mode": "full"},
+    {"path": "docs/features/cross-strategy-reliability-gates/DESIGN.md", "reason": "feature_contract", "required": false, "mode": "full"},
+    {"path": "docs/features/cross-strategy-reliability-gates/TEST-PLAN.md", "reason": "test_contract", "required": false, "mode": "full"}
+  ],
+  "read_if_needed": [],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_implementation_truth"},
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"}
+  ],
+  "allowed_write_paths": [
+    "engine/reliability_na_policy.py",
+    "tests/research/test_reliability_na_policy.py",
+    "process/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract.md",
+    "process/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract-IMPLEMENTATION.md",
+    "process/context/stories/STORY-CR170-S01.CP6.work-packet.json",
+    "process/returns/CR170-S01-na-policy-inventory-five-state-contract.CP6.return.json",
+    "process/evidence/CR170-S01-na-policy-inventory-five-state-contract.CP6.index.json",
+    "process/checks/CP6-CR170-S01-IMPLEMENTATION-DONE.result.json",
+    "process/checks/CP6-CR170-S01-IMPLEMENTATION-DONE.result.summary.md"
+  ],
+  "forbidden_write_paths": ["engine/cross_strategy_reliability_gates.py", "engine/economic_cost_gate4_projection.py", "engine/capacity_liquidity_gate4_projection.py", "engine/strategy_admission_package.py", "process/archive/**"],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_reliability_na_policy.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr170-s01-pycompile uv run --python 3.11 python -m py_compile engine/reliability_na_policy.py tests/research/test_reliability_na_policy.py",
+    "git diff --check -- engine/reliability_na_policy.py tests/research/test_reliability_na_policy.py"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR170-S01-na-policy-inventory-five-state-contract.CP6.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "architecture-major",
+  "parent_context_ref": "process/context/CP5-CR170-CANONICAL-RELIABILITY-DESIGN-EVIDENCE-CONTEXT.yaml",
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["architecture-major"]
+  }
+}

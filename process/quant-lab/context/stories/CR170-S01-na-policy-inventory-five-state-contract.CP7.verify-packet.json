@@ -1,0 +1,225 @@
+{
+  "acceptance": [
+    "独立复跑 16 项 inventory/five-state/boundary/determinism 测试全部通过",
+    "inventory 21/21、direction 15/5/1、five-state 5/5",
+    "canonical/adapters/public export 与外部 operation 变化均为 0"
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 1563,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 219,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_discovery_entry",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1006,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1769,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-170.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 606,
+      "mode": "full",
+      "path": "docs/design/MODULE-BOUNDARIES.yaml",
+      "reason": "module_boundaries",
+      "required": false
+    },
+    {
+      "estimated_tokens": 211,
+      "mode": "full",
+      "path": "docs/design/PACKAGE-IDENTITY.yaml",
+      "reason": "package_identity",
+      "required": false
+    }
+  ],
+  "allowed_write_paths": [
+    "process/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract-VERIFICATION.md",
+    "process/context/stories/CR170-S01-na-policy-inventory-five-state-contract.CP7.verify-packet.json",
+    "process/returns/CR170-S01-na-policy-inventory-five-state-contract.CP7.return.json",
+    "process/evidence/CR170-S01-na-policy-inventory-five-state-contract.CP7.index.json",
+    "process/checks/CP7-CR170-S01-VERIFICATION.result.json",
+    "process/checks/CP7-CR170-S01-VERIFICATION.result.summary.md"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "budget": {
+    "estimated_tokens": 5730,
+    "estimator": "chars_div_4",
+    "max_tokens": 18000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": ["21-unit inventory", "five-state N/A decision", "deterministic reason IDs"],
+    "summary": "独立验证 S01 private policy contract，不修改实现。"
+  },
+  "cr_id": "CR-170",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "dependency_inputs": [
+    "process/returns/CR170-S01-na-policy-inventory-five-state-contract.CP6.return.json",
+    "process/evidence/CR170-S01-na-policy-inventory-five-state-contract.CP6.index.json"
+  ],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary / legacy fallback，不作为 agent 默认机器入口"
+    },
+    {
+      "path_or_pattern": "process/DEVELOPMENT-PLAN.yaml",
+      "reason": "计划长文由 Story packet / context 摘要承载"
+    },
+    {
+      "path_or_pattern": "process/STORY-STATUS.md",
+      "reason": "legacy status 汇总，不作为当前 Story 真相源"
+    },
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "默认读取 CR summary / CR ledger，完整 CR 只用于审计或冲突恢复"
+    },
+    {
+      "path_or_pattern": "process/stories/*-LLD.md",
+      "reason": "默认读取 Story packet / design summary，完整 LLD 按需展开"
+    },
+    {
+      "path_or_pattern": "process/stories/*-IMPLEMENTATION.md",
+      "reason": "实现长证据默认通过 return/evidence index 消费"
+    }
+  ],
+  "expected_return_packet": "process/returns/CR170-S01-na-policy-inventory-five-state-contract.CP7.return.json",
+  "feature_contract_summary": "21-unit inventory、five-state precedence、4/4 boundary 与 opaque authorization ref 必须保持纯函数、确定性且不导出 public API。",
+  "feature_design_refs": [
+    "docs/features/cross-strategy-reliability-gates/DESIGN.md",
+    "docs/features/cross-strategy-reliability-gates/TEST-PLAN.md",
+    "docs/features/cross-strategy-reliability-gates/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "cross.strategy.reliability.na.policy"
+  ],
+  "forbidden_write_paths": ["engine/**", "tests/**", "process/archive/**"],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "implementation_return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR170-S01-na-policy-inventory-five-state-contract.CP6.return.json",
+  "lld_policy": "full-lld",
+  "must_read": [
+    {
+      "estimated_tokens": 1563,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 219,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1006,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    }
+  ],
+  "objective": {
+    "non_goals": [],
+    "summary": "21-unit N/A policy inventory 与五态合同"
+  },
+  "packet_type": "story_verify_packet",
+  "parent_context_ref": "process/context/stories/CR170-S01-na-policy-inventory-five-state-contract.base.context.json",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "quant-lab",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 2742,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract-LLD.md",
+      "reason": "story_lld",
+      "trigger": "full_lld_required_by_policy"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "architecture-major",
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR170-S01-na-policy-inventory-five-state-contract",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract.md",
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_reliability_na_policy.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr170-s01-cp7-pycompile uv run --python 3.11 python -m py_compile engine/reliability_na_policy.py tests/research/test_reliability_na_policy.py",
+    "git diff --check -- engine/reliability_na_policy.py tests/research/test_reliability_na_policy.py"
+  ]
+}

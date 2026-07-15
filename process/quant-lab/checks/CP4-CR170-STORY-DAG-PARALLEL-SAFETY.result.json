@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR170-STORY-DAG-PARALLEL-SAFETY",
+  "cr_id": "CR-170",
+  "checked_at": "2026-07-15T14:44:00+08:00",
+  "context_ref": "process/context/CP3-CR170-CANONICAL-RELIABILITY-CONTEXT.yaml",
+  "dispatch_refs": ["AD-CR170-CP4-META-SE-INLINE-20260715T143500+0800", "AD-CR170-CP5-META-DEV-INLINE-20260715T144000+0800"],
+  "route_plan_ref": "process/checks/CP0-CR170.route-plan.json",
+  "items": [
+    {"id":"CP4-CR170-01","category":"entry","name":"CP3 architecture is approved","status":"PASS","severity":"BLOCKER","evidence_refs":["process/checkpoints/CP3-CR170-CANONICAL-RELIABILITY-HLD-REVIEW.md"],"owner":"host-orchestrator","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"Four architecture DQs approved; only CP4/CP5 design work unlocked."},
+    {"id":"CP4-CR170-02","category":"feature-design","name":"FEAT-15 required increment has complete design triplet","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/FEATURE-DESIGN-MATRIX.md#cr170-cp4-增量canonical-reliability-na-semantics-and-admission-hardening","docs/features/cross-strategy-reliability-gates/DESIGN.md","docs/features/cross-strategy-reliability-gates/TEST-PLAN.md","docs/features/cross-strategy-reliability-gates/TASKS.md"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"Reused canonical owner FEAT-15; triplet=3/3; parallel feature=0."},
+    {"id":"CP4-CR170-03","category":"story","name":"Four Story cards have stable IDs ownership and full-lld policy","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr170_story_planning","process/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract.md","process/stories/STORY-CR170-S02-gate1-5-na-consumer-hardening.md","process/stories/STORY-CR170-S03-admission-worst-state-tier-hardening.md","process/stories/STORY-CR170-S04-compatibility-claim-closure.md"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"Stories=4/4; full-lld=4/4; technical-note/waiver=0."},
+    {"id":"CP4-CR170-04","category":"dag","name":"Scoped Story graph is acyclic and references are valid","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr170_story_planning.dependency_graph"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"nodes=4; typed edges=6; cycles=0; invalid refs=0; merge order S01→S02→S03→S04."},
+    {"id":"CP4-CR170-05","category":"parallel-safety","name":"Four serial Waves have no internal dependency or file conflict","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr170_story_planning.waves"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"One Story per Wave; max parallel LLD/dev/QA=1; within-wave conflicts=0."},
+    {"id":"CP4-CR170-06","category":"file-ownership","name":"Canonical shared file has explicit serial merge ownership","status":"PASS","severity":"BLOCKER","evidence_refs":["process/stories/STORY-CR170-S02-gate1-5-na-consumer-hardening.md","process/stories/STORY-CR170-S03-admission-worst-state-tier-hardening.md"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"S02 writes Gate consumers first; S03 is final merge owner after S02. Adapters/aggregate/runner are forbidden writes."},
+    {"id":"CP4-CR170-07","category":"traceability","name":"Requirements scenarios QAC and CP3 remediation map to Stories","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/product/TEST-MATRIX.md","docs/design/FEATURE-DESIGN-MATRIX.md#cr170-cp4-增量canonical-reliability-na-semantics-and-admission-hardening"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"REQ=9/9; scenarios=20/20; QAC=15/15; uncovered P0=0."},
+    {"id":"CP4-CR170-08","category":"review-remediation","name":"Inventory direction caller contract and T3 zero-diff requirements are explicit","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/features/cross-strategy-reliability-gates/DESIGN.md","process/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract-LLD.md","process/stories/STORY-CR170-S03-admission-worst-state-tier-hardening-LLD.md"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"21-unit baseline path/direction/disposition=100%; 15/5/1; boundary writer only fixture/test; evaluator synthesis=0; T3 production diff=0."},
+    {"id":"CP4-CR170-09","category":"design-evidence","name":"All four full LLDs pass structure validation","status":"PASS","severity":"BLOCKER","evidence_refs":["process/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract-LLD.md","process/stories/STORY-CR170-S02-gate1-5-na-consumer-hardening-LLD.md","process/stories/STORY-CR170-S03-admission-worst-state-tier-hardening-LLD.md","process/stories/STORY-CR170-S04-compatibility-claim-closure-LLD.md"],"owner":"meta-dev","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"lld-check=4/4 OK; confirmed=0 pending CP5; open clarification=0."},
+    {"id":"CP4-CR170-10","category":"authorization","name":"Design-only no-subagent boundary remains explicit","status":"PASS","severity":"BLOCKER","evidence_refs":["process/state/AGENT-DISPATCH-LEDGER.ndjson","process/DEVELOPMENT-PLAN.yaml#cr170_story_planning.authorization_boundary"],"owner":"host-orchestrator","route_on_fail":"escalate_runtime_high_risk","waiver_ref":null,"notes":"Inline fallback user-approved; source/test implementation and added-test execution=0; external/remote operations=0."},
+    {"id":"CP4-CR170-11","category":"legacy","name":"Pre-existing global plan debt is isolated from CR170 scoped validation","status":"PASS","severity":"HIGH","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr170_story_planning.pre_existing_plan_check_failure"],"owner":"host-orchestrator","route_on_fail":"create_followup_candidate","waiver_ref":null,"notes":"Global plan-check fails only inherited CR013 invalid statuses plus legacy reference warnings; CR170 scoped YAML/cards/DAG/Waves/owners pass independently."}
+  ],
+  "entry_criteria": [
+    {"name":"CP3 approved","status":"PASS","evidence_ref":"process/checkpoints/CP3-CR170-CANONICAL-RELIABILITY-HLD-REVIEW.md"},
+    {"name":"CP3 architecture package confirmed","status":"PASS","evidence_ref":"process/archive/design-cr-docs/HLD-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"},
+    {"name":"Inline fallback recorded","status":"PASS","evidence_ref":"process/state/AGENT-DISPATCH-LEDGER.ndjson"}
+  ],
+  "exit_criteria": [
+    {"name":"Feature matrix and triplet complete","status":"PASS"},
+    {"name":"Story DAG and file safety pass","status":"PASS"},
+    {"name":"All LLD evidence ready for CP5","status":"PASS"},
+    {"name":"No implementation authorization consumed","status":"PASS"}
+  ],
+  "deliverables": ["docs/design/FEATURE-DESIGN-MATRIX.md","process/DEVELOPMENT-PLAN.yaml","docs/features/cross-strategy-reliability-gates/DESIGN.md","docs/features/cross-strategy-reliability-gates/TEST-PLAN.md","docs/features/cross-strategy-reliability-gates/TASKS.md","process/stories/STORY-CR170-S01-na-policy-inventory-five-state-contract.md","process/stories/STORY-CR170-S02-gate1-5-na-consumer-hardening.md","process/stories/STORY-CR170-S03-admission-worst-state-tier-hardening.md","process/stories/STORY-CR170-S04-compatibility-claim-closure.md"],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260715T064330Z0000-06c82cf1", "RE-20260715T064330Z0000-a5fea3ab", "RE-20260715T065005Z0000-a2a2d68d", "RE-20260715T065005Z0000-ba285c6b", "RE-20260715T065005Z0000-ed149cde", "RE-20260715T065005Z0000-0bb19eef", "RE-20260715T065005Z0000-4421a2de"],
+  "decision": "PASS",
+  "manual_gate_status": null,
+  "next_route": "CP5-design-evidence"
+}

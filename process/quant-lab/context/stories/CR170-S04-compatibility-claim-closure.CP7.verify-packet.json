@@ -1,0 +1,207 @@
+{
+  "acceptance": ["public compatibility=100%、adapter regression=2/2", "public end-to-end fixture=1/1，PASS=0", "CR155/Stage3/aggregate/operation claim提升=0", "CR170 related subset 与 repository full suite 均无新增失败"],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 1545,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 208,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_discovery_entry",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1131,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR170-S04-compatibility-claim-closure.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1769,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-170.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 606,
+      "mode": "full",
+      "path": "docs/design/MODULE-BOUNDARIES.yaml",
+      "reason": "module_boundaries",
+      "required": false
+    },
+    {
+      "estimated_tokens": 211,
+      "mode": "full",
+      "path": "docs/design/PACKAGE-IDENTITY.yaml",
+      "reason": "package_identity",
+      "required": false
+    }
+  ],
+  "allowed_write_paths": ["process/stories/STORY-CR170-S04-compatibility-claim-closure-VERIFICATION.md", "process/context/stories/CR170-S04-compatibility-claim-closure.CP7.verify-packet.json", "process/returns/CR170-S04-compatibility-claim-closure.CP7.return.json", "process/evidence/CR170-S04-compatibility-claim-closure.CP7.index.json", "process/checks/CP7-CR170-S04-VERIFICATION.result.json", "process/checks/CP7-CR170-S04-VERIFICATION.result.summary.md"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "budget": {
+    "estimated_tokens": 5826,
+    "estimator": "chars_div_4",
+    "max_tokens": 18000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": ["public Gate API", "adapter defense-in-depth", "claim ceiling"],
+    "summary": "独立验证 S04 与 CR-170 全体变更，执行 repository full suite。"
+  },
+  "cr_id": "CR-170",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "dependency_inputs": ["process/returns/CR170-S04-compatibility-claim-closure.CP6.return.json", "process/evidence/CR170-S04-compatibility-claim-closure.CP6.index.json", "process/returns/CR170-S01-na-policy-inventory-five-state-contract.CP7.return.json", "process/returns/CR170-S02-gate1-5-na-consumer-hardening.CP7.return.json", "process/returns/CR170-S03-admission-worst-state-tier-hardening.CP7.return.json"],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary / legacy fallback，不作为 agent 默认机器入口"
+    },
+    {
+      "path_or_pattern": "process/DEVELOPMENT-PLAN.yaml",
+      "reason": "计划长文由 Story packet / context 摘要承载"
+    },
+    {
+      "path_or_pattern": "process/STORY-STATUS.md",
+      "reason": "legacy status 汇总，不作为当前 Story 真相源"
+    },
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "默认读取 CR summary / CR ledger，完整 CR 只用于审计或冲突恢复"
+    },
+    {
+      "path_or_pattern": "process/stories/*-LLD.md",
+      "reason": "默认读取 Story packet / design summary，完整 LLD 按需展开"
+    },
+    {
+      "path_or_pattern": "process/stories/*-IMPLEMENTATION.md",
+      "reason": "实现长证据默认通过 return/evidence index 消费"
+    }
+  ],
+  "expected_return_packet": "process/returns/CR170-S04-compatibility-claim-closure.CP7.return.json",
+  "feature_contract_summary": "CR-170 最终验证必须同时证明 canonical hardening、admission tier、adapter defense-in-depth 和 no-overclaim。",
+  "feature_design_refs": [
+    "docs/features/cross-strategy-reliability-gates/DESIGN.md",
+    "docs/features/cross-strategy-reliability-gates/TEST-PLAN.md",
+    "docs/features/cross-strategy-reliability-gates/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "cross.strategy.reliability.compatibility.claim.guard"
+  ],
+  "forbidden_write_paths": ["engine/**", "tests/**", "process/archive/**"],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "implementation_return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR170-S04-compatibility-claim-closure.CP6.return.json",
+  "lld_policy": "full-lld",
+  "must_read": [
+    {
+      "estimated_tokens": 1545,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 208,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1131,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR170-S04-compatibility-claim-closure.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    }
+  ],
+  "objective": {
+    "non_goals": [],
+    "summary": "Canonical compatibility、adapter 与 claim ceiling 回归"
+  },
+  "packet_type": "story_verify_packet",
+  "parent_context_ref": "process/context/stories/CR170-S04-compatibility-claim-closure.base.context.json",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "quant-lab",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 2408,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR170-S04-compatibility-claim-closure-LLD.md",
+      "reason": "story_lld",
+      "trigger": "full_lld_required_by_policy"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "architecture-major",
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR170-S04-compatibility-claim-closure",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR170-S04-compatibility-claim-closure.md",
+  "verification_plan": ["uv run --python 3.11 pytest -q CR170-related subset", "uv run --python 3.11 pytest -q repository full suite", "py_compile/diff-check/production diff guard", "event/checkpoint/return/evidence consistency checks"]
+}

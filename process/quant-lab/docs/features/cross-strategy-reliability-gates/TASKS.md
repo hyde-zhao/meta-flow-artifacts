@@ -1,14 +1,42 @@
 ---
 feature_id: "FEAT-15"
-change_id: "CR-154"
-status: "cp4-story-planning"
-version: "0.1"
+change_id: "CR-170"
+baseline_change_id: "CR-154"
+status: "ready-for-cp5-review"
+version: "0.3"
 created_at: "2026-07-03T10:40:00+08:00"
 owner: "host-orchestrator"
 implementation_allowed: false
 ---
 
 # Cross-Strategy Reliability Gates Task Plan
+
+## Revision Record
+
+| Version | Date | Author | Change |
+|---|---|---|---|
+| 0.1 | 2026-07-03 | host-orchestrator | CR-154 初始任务计划。 |
+| 0.2 | 2026-07-15 | host-orchestrator（inline meta-se） | CR-170 增量：四个 full-lld Story、四个串行 Wave、21-unit inventory 与 caller/T3/compatibility 任务。 |
+| 0.3 | 2026-07-15 | host-orchestrator（inline meta-dev） | CP5 评审补强：S02 增加 conditional audit-only ref/no-floor 契约，S03 精确到 applicable mandatory unit，S04 增加 public 端到端 fixture 任务。 |
+
+## CR-170 CP5 Design Tasks
+
+| Task ID | Story | 确定性任务 | 设计输出 |
+|---|---|---|---|
+| CR170-T01 | S01 | 创建 21-unit internal policy inventory 与 five-state classifier LLD | 21/21 exact mapping、15/5/1、caller boundary、reason-id contract。 |
+| CR170-T02 | S02 | 修改 Gate1-5 consumer 设计并建立 directional regression | 5/5 Gate、Gate1 3/3、generic/incomplete PASS=0。 |
+| CR170-T03 | S03 | 保护 existing merge 并最小硬化 admission T0/T1/T2 | merge 1/1、T0-T3 4/4、T3 diff=0。 |
+| CR170-T04 | S04 | 创建 compatibility/claim closure 设计 | public 100%、adapter 2/2、CR155/Stage3/real-op 零提升。 |
+| CR170-T05 | S04 | 增加 public-callable evidence→admission 端到端 fixture | n_a_boundaries→Gate NR→merge NR→T1 BLOCKED；PASS=0。 |
+
+## CR-170 Merge Order and File Ownership
+
+1. S01 创建私有 policy contract。
+2. S02 消费 S01 并成为 `engine/cross_strategy_reliability_gates.py` 第一写入方。
+3. S03 在 S02 合并后成为同一 canonical 文件的第二写入方，禁止并行。
+4. S04 只新增回归/claim tests，不修改 CR-168/169 adapters 或 aggregate。
+
+所有 Story 均为 `full-lld`。用户已要求不拉起子 Agent，因此 LLD、开发和验证并发上限均为 `1`；CP5 批准前 implementation/test implementation 均为 `false`。
 
 ## CP5 Design Tasks
 

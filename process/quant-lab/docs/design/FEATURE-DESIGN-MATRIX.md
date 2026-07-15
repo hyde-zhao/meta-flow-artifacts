@@ -1,6 +1,6 @@
 ---
 status: "ready-for-cp5-review"
-version: "1.25"
+version: "1.26"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld:
   - "docs/design/HLD.md"
@@ -8,13 +8,15 @@ source_hld:
   - "process/archive/design-cr-docs/HLD-WALK-FORWARD-OOS-EVIDENCE.md"
   - "process/archive/design-cr-docs/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md"
   - "docs/design/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
+  - "process/archive/design-cr-docs/HLD-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"
 source_adr:
   - "docs/design/ARCHITECTURE-DECISION.md"
   - "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
   - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-WALK-FORWARD-OOS-EVIDENCE.md"
   - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-ECONOMIC-COST-IMPACT-EVIDENCE.md"
   - "docs/design/ARCHITECTURE-DECISION-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
-change: "CR-169"
+  - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"
+change: "CR-170"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 confirmed_by: ""
 confirmed_at: ""
@@ -52,6 +54,7 @@ confirmed_at: ""
 | 1.23 | 2026-07-14 | host-orchestrator inline meta-se | CR168 CP3 revised/approved 后增补 FEAT-168-01..03，并增量复用 FEAT-166-01；五 Story 全部 full-lld、五个串行安全 Wave，固化 component/envelope identity 分域与 Gate4 adapter-local containment。 |
 | 1.24 | 2026-07-14 | host-orchestrator inline fallback | CR168 专题 CP3 正文归档后更新其 HLD/ADR source path；Feature 判定、Story、lld_policy 和实施语义不变。 |
 | 1.25 | 2026-07-14 | host-orchestrator inline meta-se | CR169 CP3 approved 后增补 FEAT-169-01..04、12/12 三件套、5 个串行 Story、13 字段 correlation、strict 7-key joint adapter 与 Stage2 7/7 exit guard。 |
+| 1.26 | 2026-07-15 | host-orchestrator inline meta-se | CR170 CP3 approved 后增量复用 FEAT-15；新增 4 个 full-lld Story、21-unit 五态与 15/5/1 方向清单、受保护 merge、T0-T3 admission 及 caller/T3/adapter 回归义务。 |
 
 ## 适用性判定规则
 
@@ -789,3 +792,66 @@ confirmed_at: ""
 | DAG/Wave | PASS | 5 nodes、10 edges、5 serial Waves、cycles=0、parallel conflicts=0 |
 | CP3 评审补强下沉 | PASS | exact header、callable、Stage2 failure route、FU008、method basis |
 | 授权边界 | PASS | design-only；source/test/external/runtime/remote write=0 |
+
+## CR170 CP4 增量：Canonical Reliability N/A Semantics and Admission Hardening
+
+> 来源：CR170 CP3 approved HLD/ADR。当前只允许 Feature/Story/LLD 设计；CP5 批准前不修改 source/test、不执行新增测试，不触达真实数据、Stage3 runner、aggregate、CR155 promotion、runtime/trading 或 Git remote write。
+
+### Feature 适用性判定
+
+| Feature | 名称 | 判定 | 触发原因 | 三件套 | Stories | lld_policy | 重访条件 |
+|---|---|---|---|---|---|---|---|
+| FEAT-15 | Cross-Strategy Production Reliability Gates | required-increment | 修改 canonical mandatory evidence 语义、Gate1-5 consumer、Gate6 admission policy；涉及公共兼容、安全 fail-closed、跨 Story contract | `docs/features/cross-strategy-reliability-gates/{DESIGN,TEST-PLAN,TASKS}.md` v0.2 | S01,S02,S03,S04 | full-lld | policy unit、五态、public callable/schema、tier、adapter 或 real caller 边界变化 |
+
+不新增平行 Feature：CR-170 修改的是 FEAT-15 的既有 canonical owner。future verifier 属 FU-006，aggregate/adapter simplification 属 FU-007b/FU-009，均不进入本轮。
+
+### Story 下游消费表
+
+| Story | Owner Feature | feature_design_refs | lld_policy | CP5 evidence |
+|---|---|---|---|---|
+| CR170-S01-na-policy-inventory-five-state-contract | FEAT-15 policy contract | FEAT-15 三件套 | full-lld（安全语义、21-unit contract） | Story LLD |
+| CR170-S02-gate1-5-na-consumer-hardening | FEAT-15 Gate consumers | FEAT-15 三件套 | full-lld（canonical shared module、双向爆炸半径） | Story LLD |
+| CR170-S03-admission-worst-state-tier-hardening | FEAT-15 Gate6/admission | FEAT-15 三件套 | full-lld（共享文件、tier、安全兼容） | Story LLD |
+| CR170-S04-compatibility-claim-closure | FEAT-15 compatibility | FEAT-15 DESIGN/TEST-PLAN/TASKS | full-lld（跨组件 claim 回归） | Story LLD |
+
+### CP5 强制注意项
+
+| Attention ID | Story | Requirement |
+|---|---|---|
+| CP5-FOCUS-CR170-001 | S01 | 21/21 exact mapping；Gate 6/6/1/5/3；baseline path type + direction + disposition；15/5/1；five-state 5/5。 |
+| CP5-FOCUS-CR170-002 | S01 | `n_a_boundaries` 当前 writer 仅 fixture/test；evaluator synthesis=0；`authorization_ref` 仅 opaque audit pointer。 |
+| CP5-FOCUS-CR170-003 | S02 | stricter/controlled-widening/preserve 三组分向回归；Gate1 classifier/claim/final status 3/3。 |
+| CP5-FOCUS-CR170-004 | S03 | protected merge 先回归，成功则 production diff=0；T0/T1/T2=NR/BLOCKED/BLOCKED；T3 early-return 1/1 且 diff=0。 |
+| CP5-FOCUS-CR170-005 | S04 | public break=0、adapter 2/2、guard deletion=0、CR155 promotion=0、runner/aggregate/real-op=0。 |
+
+### DAG / Wave / File Owner
+
+| Wave | Story | depends_on | 主要 owner | 并行结论 |
+|---|---|---|---|---|
+| CR170-W1-POLICY | S01 | none | `engine/reliability_na_policy.py` | serial |
+| CR170-W2-GATE-CONSUMERS | S02 | S01 contract | `engine/cross_strategy_reliability_gates.py` | serial |
+| CR170-W3-ADMISSION | S03 | S01+S02 contract/runtime/file-conflict | 同一 canonical 文件，S03 为第二写入方 | serial |
+| CR170-W4-COMPATIBILITY | S04 | S02+S03 runtime | CR170 regression tests | serial |
+
+DAG：4 nodes、5 edges、4 serial Waves、cycles=0、invalid refs=0、parallel file conflicts=0。由于用户禁止子 Agent，`max_parallel_lld/dev/qa=1`。
+
+### First Slice / Deferred / Not Authorized
+
+| 范围 | 状态 | 处理 |
+|---|---|---|
+| 21-unit policy + Gate1-5 consumers + admission hardening | first slice | S01-S03；repository-local、无 IO。 |
+| compatibility/claim closure | first slice | S04；read-only regression，adapter production diff=0。 |
+| independent verifier | deferred | FU-006 future consumer；当前由 Gate maintainer 自验证，CP8 披露。 |
+| aggregate / adapter simplification / Stage3 launch | deferred | FU-007b/FU-009/独立 Stage3 CR。 |
+| real data/runtime/trading/publish/Git remote write | not authorized | 独立人工授权。 |
+
+### CR170 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| Feature owner/三件套 | PASS | FEAT-15 required-increment；v0.2 DESIGN/TEST-PLAN/TASKS = 3/3 |
+| Story refs / lld_policy | PASS | 4/4 full-lld；无 waived/technical-note |
+| Scenario coverage | PASS | 20/20 分配到 S01-S04；REQ 9/9、QAC 15/15 |
+| DAG/Wave | PASS | 4 nodes、5 edges、4 serial Waves、cycles=0、parallel conflicts=0 |
+| 评审整改 | PASS | 21-unit path/direction、caller contract、T3 zero-diff 均下沉到 CP5 focus |
+| 授权边界 | PASS | design-only；source/test/real-data/runtime/remote-write=0 |

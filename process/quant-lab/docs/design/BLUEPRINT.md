@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.18"
+version: "1.19"
 source_use_cases: "process/USE-CASES.md"
 source_requirements: "process/REQUIREMENTS.md"
 source_story_backlog: "process/STORY-BACKLOG.md"
@@ -12,14 +12,17 @@ source_hld:
   - "process/archive/design-cr-docs/HLD-CR051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK.md"
   - "process/archive/design-cr-docs/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md"
   - "process/docs/design/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
+  - "process/archive/design-cr-docs/HLD-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"
 source_adr: "process/ARCHITECTURE-DECISION.md"
-change: "CR-169"
+change: "CR-170"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 companion_adr_cr139: "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
 companion_blueprint_cr168: "process/archive/design-cr-docs/BLUEPRINT-ECONOMIC-COST-IMPACT-EVIDENCE.md"
 companion_hld_cr168: "process/archive/design-cr-docs/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md"
 companion_blueprint_cr169: "process/docs/design/BLUEPRINT-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
 companion_hld_cr169: "process/docs/design/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
+companion_blueprint_cr170: "process/archive/design-cr-docs/BLUEPRINT-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"
+companion_hld_cr170: "process/archive/design-cr-docs/HLD-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"
 superseded_in_scope_hld: "process/HLD-DATA-LAKE.md (CR-018, superseded-in-scope by CR-139 companion HLD)"
 confirmed_by: ""
 confirmed_at: ""
@@ -56,6 +59,8 @@ archived_previous:
 | 1.16 | 2026-07-14 | host-orchestrator inline fallback | CP3 已批准后将 CR168 companion blueprint 正文归档到 `process/archive/design-cr-docs/`；长期 index 保留 approved 入口，不改变能力或 owner 语义。 |
 | 1.17 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR169 companion blueprint 草案：C4 fixture/static producer、C3/C4 correlation boundary、strict joint Gate4 fixture adapter 与 Stage2 exit evidence；不修改 canonical/aggregate，待 CP3。 |
 | 1.18 | 2026-07-14 | host-orchestrator inline meta-se-critical | CR169 companion blueprint 通过 CP3：关联边界冻结为 13 字段 exact match，alpha 后置 FU008，Stage2 历史缺口不由 C4 范围代修。 |
+| 1.19 | 2026-07-15 | host-orchestrator inline meta-se-critical | 登记 CR170 companion blueprint：不新增平行 Feature，把 21-unit canonical N/A policy、five-state decision、admission hardening 和 future-verifier consumer contract 归入 FEAT-14/07/08 现有边界；待 CP3。 |
+| 1.20 | 2026-07-15 | host-orchestrator inline meta-se-critical | 精确化 CR170 CAP-01/04：inventory 增加 baseline path/direction/disposition 与 15/5/1；fixture/test caller 显式 authoring，T3 existing early-return 不重写；待 CP3。 |
 
 ## 蓝图定位
 

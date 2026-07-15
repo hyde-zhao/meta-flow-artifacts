@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-170",
+  "story_id": "CR170-S02-gate1-5-na-consumer-hardening",
+  "stage": "CP6",
+  "objective": {"summary": "让 canonical Gate1-5 局部消费 S01 five-state decision，落实 15/5/1 定向硬化和 conditional audit-only contract。", "non_goals": ["不修改 Gate6 admission resolver", "不修改 global _has_na_reason", "不修改 adapters/aggregate/runner", "不读取真实数据或 runtime"]},
+  "feature_refs": ["cross-strategy-reliability-gates"],
+  "feature_context": "21-unit policy inventory 是单一真相源；Gate-local 只计算 applicability/presence 并消费 typed decision。",
+  "cr_delta": {"summary": "修改 canonical Gate1-5 private consumption 路径及定向回归测试；public signature/schema/Gate ID 保持不变。", "affected_contracts": ["Gate1-5 N/A semantics", "15/5/1 directional behavior", "conditional audit-only ref"]},
+  "acceptance": ["Gate coverage 5/5，policy 21/21，direction 15/5/1", "Gate1 masked escape 3/3，generic/incomplete PASS=0", "conditional not-applicable audit-only ref=1、claim=0、floor=None、status elevation=0", "global helper/adapters/aggregate/public break 均为 0"],
+  "dependency_inputs": ["process/returns/CR170-S01-na-policy-inventory-five-state-contract.CP7.return.json", "process/stories/STORY-CR170-S02-gate1-5-na-consumer-hardening-LLD.md"],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/stories/STORY-CR170-S02-gate1-5-na-consumer-hardening.md", "reason": "story_card", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "process/stories/STORY-CR170-S02-gate1-5-na-consumer-hardening-LLD.md", "reason": "approved_design_contract", "required": true, "mode": "full"},
+    {"path": "engine/reliability_na_policy.py", "reason": "S01 dependency contract", "required": true, "mode": "full"},
+    {"path": "engine/cross_strategy_reliability_gates.py", "reason": "target canonical module", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cross_strategy_reliability_gates.py", "reason": "existing regression", "required": true, "mode": "full"}
+  ],
+  "read_if_needed": [],
+  "do_not_read_by_default": [{"path_or_pattern": "process/archive/**", "reason": "cold_history"}, {"path_or_pattern": "process/discussions/**", "reason": "not_implementation_truth"}],
+  "allowed_write_paths": ["engine/cross_strategy_reliability_gates.py", "tests/research/test_cross_strategy_reliability_gates.py", "process/stories/STORY-CR170-S02-gate1-5-na-consumer-hardening.md", "process/stories/STORY-CR170-S02-gate1-5-na-consumer-hardening-IMPLEMENTATION.md", "process/context/stories/STORY-CR170-S02.CP6.work-packet.json", "process/returns/CR170-S02-gate1-5-na-consumer-hardening.CP6.return.json", "process/evidence/CR170-S02-gate1-5-na-consumer-hardening.CP6.index.json", "process/checks/CP6-CR170-S02-IMPLEMENTATION-DONE.result.json", "process/checks/CP6-CR170-S02-IMPLEMENTATION-DONE.result.summary.md"],
+  "forbidden_write_paths": ["engine/economic_cost_gate4_projection.py", "engine/capacity_liquidity_gate4_projection.py", "engine/strategy_admission_package.py", "engine/mature_multifactor_research.py", "engine/mature_multifactor_framework.py", "process/archive/**"],
+  "verification_plan": ["uv run --python 3.11 pytest -q tests/research/test_cross_strategy_reliability_gates.py", "uv run --python 3.11 pytest -q tests/research/test_reliability_na_policy.py", "py_compile and diff-check"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR170-S02-gate1-5-na-consumer-hardening.CP6.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "architecture-major",
+  "parent_context_ref": "process/context/CP5-CR170-CANONICAL-RELIABILITY-DESIGN-EVIDENCE-CONTEXT.yaml",
+  "context_sufficiency": {"required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"], "strict_profiles": ["architecture-major"]}
+}

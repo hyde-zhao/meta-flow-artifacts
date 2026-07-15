@@ -1,11 +1,12 @@
 ---
 status: "draft-current-index"
-version: "1.17"
+version: "1.18"
 source_blueprint: "docs/design/BLUEPRINT.md"
-change: "CR-169"
+change: "CR-170"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 companion_domain_map_cr168: "process/archive/design-cr-docs/DOMAIN-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md"
 companion_domain_map_cr169: "process/docs/design/DOMAIN-MAP-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
+companion_domain_map_cr170: "process/archive/design-cr-docs/DOMAIN-MAP-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"
 archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-lab-project-roadmap-2026-06-26.md"
 ---
 
@@ -33,6 +34,8 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | 1.15 | 2026-07-14 | host-orchestrator inline fallback | CP3 已批准后将 CR168 companion domain map 正文归档到 `process/archive/design-cr-docs/`；长期 index 仅修正状态/路由，不改变领域规则。 |
 | 1.16 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR169 companion domain map 草案：C4 input/evidence、minimal correlation header、joint fixture outcome 与 Stage2 exit verification；待 CP3。 |
 | 1.17 | 2026-07-14 | host-orchestrator inline meta-se-critical | CR169 companion domain map 通过 CP3：`C3C4CorrelationHeaderV1` 冻结为 13 字段，alpha 后置 FU008，Stage2 7/7 失败分流可审计。 |
+| 1.18 | 2026-07-15 | host-orchestrator inline meta-se-critical | 登记 CR170 companion domain map：`NaPolicySpec`、`NaBoundary`、五态 `NaEvidenceDecision`、protected worst-state 与 tier admission 领域规则；待 CP3。 |
+| 1.19 | 2026-07-15 | host-orchestrator inline meta-se-critical | 精确化 CR170 `NaPolicySpec` 的 baseline path/direction/disposition，新增 `NaBoundaryAuthoringContract`、15/5/1、G1-P06 prohibited、T3 existing-behavior 规则；待 CP3。 |
 
 ## 术语表
 

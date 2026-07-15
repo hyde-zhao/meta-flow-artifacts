@@ -1,7 +1,7 @@
 ---
 status: "current-index"
-version: "1.12"
-change: "CR-169"
+version: "1.13"
+change: "CR-170"
 legacy_source: "process/ARCHITECTURE-DECISION.md"
 current_change_sources:
   - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-CR046.md"
@@ -13,6 +13,7 @@ current_change_sources:
   - "process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md"
   - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-ECONOMIC-COST-IMPACT-EVIDENCE.md"
   - "process/docs/design/ARCHITECTURE-DECISION-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
+  - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"
 ---
 
 # Architecture Decision Current Index
@@ -34,6 +35,8 @@ current_change_sources:
 | 1.10 | 2026-07-14 | host-orchestrator inline fallback | CP3 已批准后将 CR168 ADR 正文归档到 `process/archive/design-cr-docs/`，并将 current index 的状态从 proposed 更新为 accepted；不改变 ADR 技术语义。 |
 | 1.11 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR169 六项 proposed ADR：C4 static proxy、component hash/correlation 分域、strict joint fixture adapter、alpha-decay 后置、Stage2/Stage3 分离和 FU007a/b 非约束性 tracking；待 CP3。 |
 | 1.12 | 2026-07-14 | host-orchestrator inline meta-se-critical | 接受 CR169 ADR-001..006：冻结 13 字段 correlation header、公开 Gate4 callable、alpha `FU-CR161-008` follow-up 和 Stage2 历史缺口分流；不扩大实现或 Stage3 授权。 |
+| 1.13 | 2026-07-15 | host-orchestrator inline meta-se-critical | 登记 CR170 ADR-001..004 proposed：表驱动 five-state policy、complete N/A review 语义、protected merge + admission hardening、公共兼容/adapter/future-verifier 边界；待 CP3。 |
+| 1.14 | 2026-07-15 | host-orchestrator inline meta-se-critical | 精确化 CR170 proposed ADR：inventory 方向 15/5/1、G1-P06 complete N/A prohibited、caller/auth-ref 单向责任、T3 existing early-return 1/1 且 production diff=0；仍待 CP3。 |
 
 ## 定位
 
@@ -60,6 +63,7 @@ current_change_sources:
 | FEAT-03 / FEAT-14 ML Strategy E2E Framework | ADR-CR152-001..004 | CR152 ML first-wave foundation：ML-specific admission gate with shared status adapter、metadata-only TrainingSnapshotSpec / ModelArtifactRef boundary、extend existing contracts rather than parallel ML contract family、deterministic fixture-only validation；不授权真实训练、真实数据、model registry write、store writes、catalog pointer mutation 或 runtime |
 | CR168 Economic Cost / Slippage / Impact Evidence | ADR-CR168-001..005（Accepted，CP3 approved） | `economic_cost@v1` 复用 neutral envelope；v1 只启用显式静态 square-root；最小 C3/C4 shared header；CR168 adapter 使用 strict allowlist、8-key denylist 与 pre/post guard；canonical 全局 hardening、C4 与 aggregate 均 deferred；CP3 approved 不授权真实数据、runtime 或 aggregate。 |
 | CR169 Capacity / Liquidity / ADV Evidence | ADR-CR169-001..006（Accepted，CP3 approved） | C4 `capacity_liquidity@v1` 使用 explicit static proxy；13 字段 correlation header 与 component/envelope hash 分域；CR169 strict joint adapter 只读调用 public Gate4 并仅产出 fixture compatibility outcome；alpha-decay 不进 v1并登记 FU008；`stage3_entry_ready=false` 与 CP8 7/7 exit 核验；FU007a/b 仅为未来 tracking。 |
+| Canonical Reliability N/A Semantics and Admission | ADR-CR170-001..004（Proposed，待 CP3） | 21-unit table-driven internal policy + five-state decision；现有路径/方向/disposition 15/5/1；reviewable complete N/A 仅到 NEEDS_REVIEW、G1-P06 prohibited；保护 merge，只硬化 T0-T2，T3 existing branch 不改；public API/schema/adapters 不变，FU006 verifier 为 future consumer。 |
 
 ## 使用规则
 

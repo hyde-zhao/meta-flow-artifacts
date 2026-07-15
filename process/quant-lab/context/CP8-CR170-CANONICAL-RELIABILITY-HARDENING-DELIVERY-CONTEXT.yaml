@@ -1,0 +1,60 @@
+schema_version: 1
+context_id: CP8-CR170-CANONICAL-RELIABILITY-HARDENING
+cr_id: CR-170
+created_at: "2026-07-15T16:16:00+08:00"
+read_profile: compact
+phase: documentation
+context_type: cp8-delivery
+source_gates:
+  cp3:
+    checkpoint_ref: process/checkpoints/CP3-CR170-CANONICAL-RELIABILITY-HLD-REVIEW.md
+    result_ref: process/checks/CP3-CR170-CANONICAL-RELIABILITY-HLD-CONSISTENCY.result.json
+  cp5:
+    checkpoint_ref: process/checkpoints/CP5-CR170-ALL-STORIES-LLD-BATCH.md
+    result_ref: process/checks/CP5-CR170-LLD-DESIGN-EVIDENCE.result.json
+  cp7:
+    result_ref: process/checks/CP7-CR170-S04-VERIFICATION.result.json
+    evidence_ref: process/evidence/CR170-S04-compatibility-claim-closure.CP7.index.json
+    return_ref: process/returns/CR170-S04-compatibility-claim-closure.CP7.return.json
+release_context_ref: process/release/RELEASE-CONTEXT-CR170-CANONICAL-RELIABILITY-HARDENING.yaml
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+must_read:
+  - process/state/STATE.current.json
+  - process/current/CURRENT.json
+  - process/changes/summaries/CR-170.summary.json
+  - process/release/RELEASE-CONTEXT-CR170-CANONICAL-RELIABILITY-HARDENING.yaml
+  - process/checks/CP7-CR170-S04-VERIFICATION.result.json
+  - process/evidence/CR170-S04-compatibility-claim-closure.CP7.index.json
+  - process/checks/CP8-CR170-DELIVERY-READINESS.result.json
+  - process/checkpoints/CP8-CR170-DELIVERY-READINESS.md
+read_if_needed:
+  - docs/quality/VERIFICATION-REPORT-CR170.md
+  - docs/quality/TEST-REPORT-CR170.md
+  - docs/quality/REVIEW-CR170.md
+  - process/archive/design-cr-docs/HLD-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md
+  - process/archive/design-cr-docs/ARCHITECTURE-DECISION-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md
+do_not_read_by_default:
+  - process/archive/** except the two CR170 design refs above when deep review is required
+  - process/discussions/**
+  - process/stories/*-LLD.md
+  - process/stories/*-IMPLEMENTATION.md
+  - full historical CR bodies
+  - credentials .env provider configs real data and runtime sessions
+key_facts:
+  - Four of four Stories completed CP6 and CP7; final CP7 decision is PASS_WITH_RISK with zero blocker.
+  - Final repository suite is 2195 passed and zero failed; six CR170-introduced governance failures were resolved with unknown attribution zero.
+  - Gate 1-5 policy hardening and admission tier behavior are delivered; current Stage3 runner and aggregate are not integrated.
+  - Approving CP8 may close CR170 as READY_WITH_RISK only after the user decides the closure protocol; it cannot authorize remote write or Stage3.
+risks_and_decisions:
+  - {id: DQ-CP8-CR170-001, type: risk_acceptance, status: pending_user}
+  - {id: DQ-CP8-CR170-002, type: closure_protocol, status: pending_user}
+  - {id: DQ-CP8-CR170-003, type: authorization_boundary, status: pending_user}
+  - {id: R-CR170-VERIFIER-INDEPENDENCE, status: requires_cp8_acceptance}
+  - {id: R-CR170-RUNNER-GAP, status: controlled_out_of_scope}
+downstream_tasks:
+  - Await user CP8 decision.
+  - If approved, execute only the selected scoped closure protocol and post-commit validation; do not push or start Stage3 without separate authorization.
+token_control:
+  read_profile: compact
+  do_not_copy_full_documents: true

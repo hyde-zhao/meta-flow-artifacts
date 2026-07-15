@@ -1,7 +1,7 @@
 ---
 status: "current-index"
-version: "1.17"
-change: "CR-169"
+version: "1.18"
+change: "CR-170"
 legacy_sources:
   - "process/HLD.md"
   - "process/HLD-DATA-LAKE.md"
@@ -15,6 +15,7 @@ current_change_sources:
   - "process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md"
   - "process/archive/design-cr-docs/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md"
   - "process/docs/design/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
+  - "process/archive/design-cr-docs/HLD-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"
 ---
 
 # HLD Current Index
@@ -41,6 +42,8 @@ current_change_sources:
 | 1.15 | 2026-07-14 | host-orchestrator inline fallback | CP3 已批准后将 CR168 专题正文归档到 `process/archive/design-cr-docs/`；长期 index 仅保留已批准状态与入口，不改变技术语义。 |
 | 1.16 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR169 C4 Capacity/Liquidity/ADV companion HLD 草案：fixture/static `capacity_liquidity@v1`、C3/C4 hash/correlation 分域、strict joint Gate4 fixture adapter、alpha-decay 不预占和 Stage2 7/7 exit 核验；待 CP3。 |
 | 1.17 | 2026-07-14 | host-orchestrator inline meta-se-critical | CR169 CP3 已批准：补强 13 字段 correlation header、public Gate4 callable、Stage2 7/7 失败分流、`FU-CR161-008` alpha follow-up 与证据链方法论；仅解锁 CP4/CP5 设计。 |
+| 1.18 | 2026-07-15 | host-orchestrator inline meta-se-critical | 登记 CR170 Canonical Reliability N/A Semantics and Admission companion HLD：21-unit policy、five-state decision、protected bottom-up merge、tier admission 与 future-verifier 边界；待 CP3。 |
+| 1.19 | 2026-07-15 | host-orchestrator inline meta-se-critical | CR170 CP3 深度评审整改：21-unit 增加现有 N/A 路径、hardening direction、complete-N/A disposition，冻结 15/5/1；补 caller/auth-ref 与 T3 existing early-return 零修改义务；仍待 CP3。 |
 
 ## 定位
 
@@ -69,6 +72,7 @@ current_change_sources:
 | ML Strategy E2E Framework | `process/docs/design/HLD-ML-STRATEGY-E2E-FRAMEWORK.md`；FEAT-03 / FEAT-14 研究准入层；UC-59 | CR152 first-wave ML foundation：PIT feature matrix、label policy / leakage guard、purged + embargo CV、training snapshot / model artifact metadata、prediction artifact、ML admission gate；通过 adapter 复用 CR151 四态 status 和 admission package linkage | 不执行真实训练或真实数据验证；不写 feature/label/model/prediction store；不写 model registry、不 publish/promote/upload/set_current、不 mutate catalog pointer；不连接 lake/NAS/provider/QMT/runtime/trading/broker/credential/external framework |
 | Economic Cost / Slippage / Impact Evidence | `process/archive/design-cr-docs/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md`；CR166 neutral envelope + FEAT-15 Gate4 | CR168 fixture/static C3：`economic_cost@v1`、9-family contract、square-root transparent approximation、component/envelope hash domain、C3/C4 owner table、guarded C3-to-Gate4 projection | 不修改 canonical Gate4/aggregate；不实现 C4、真实 TCA/calibration/data/runtime、event producer、Stage3 或 CR155 promotion；CP3 已批准，设计正文转入 archive 保持默认 design surface 纯净。 |
 | Capacity / Liquidity / ADV Evidence | `process/docs/design/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md`；CR166 envelope + CR168 C3 | CR169 approved C4 fixture/static：`capacity_liquidity@v1`、13 字段 C3/C4 correlation header、strict 7-key joint fixture adapter、Stage2 7/7 exit verification | 不读取真实 ADV/liquidity、不做 alpha-decay v1/calibration、不改 canonical Gate4/CR168 adapter/aggregate、不宣称 Stage3 ready 或 CR155 promotion；CP3 approved。 |
+| Canonical Reliability N/A Semantics and Admission | `process/archive/design-cr-docs/HLD-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md`；FEAT-14 canonical gates | CR170 Gate 1-5 `21/21` N/A policy、五态 decision、现有路径与方向 `15/5/1`、Gate 1 三层断言、caller/auth-ref contract、protected merge 与 T0-T2 hardening；T3 只回归不重写 | 不接 current Stage3 runner、不做 aggregate/CR155 promotion、不删除 CR168/169 guard、不实现 FU006 verifier、不授权真实数据/runtime；待 CP3。 |
 
 ## Runner Architecture Authority
 

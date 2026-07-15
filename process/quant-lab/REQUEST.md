@@ -159,3 +159,14 @@ def select_momentum_targets(
 - 评审修正：Gate 4 明确为 C3+C4 联合门禁；C3 只投影 `impact_model_family`、`impact_model_ref`、`cost_underestimation_status`、`no_real_tca_claim`，C4 字段保持 `typed_unavailable` 并 fail-closed；把成本低估风险状态纳入 C3 合同；fixture 调整为 daily multifactor 与 ML 的 multi-strategy-type compatibility；跨字段 currency/price-basis/calendar 混用仅在缺少显式转换声明时触发失败。
 - 授权边界：允许双仓库远端读取/fetch、本地安全分支创建和必要冲突处理；不允许 Git 远端写入、真实数据/凭据访问、真实 TCA/impact calibration、C4 计算、交易/runtime、Stage 3 启动或 CR-155 admission promotion。
 - 编排方式：用户于 2026-07-13 明确要求不拉起子 Agent；产品基线刷新由当前 Host Orchestrator 以内联方式执行，并记录为用户批准的 `meta-pm inline-fallback`。
+
+## CR170 原始请求与评审修正
+
+- 时间：2026-07-15T12:05:00+08:00
+- 请求：核实 FU-CR161-007 canonical-hardening 方案中两个评审关注点，必要时修改范围与实施方案，然后正式开始该 CR。
+- 评审修正一：`build_shared_gate_summary` 已传播 artifact `NEEDS_REVIEW`，因此该底层 merge 必须先回归验证、无失败证据时保持修改数为 0；不能笼统重写 Gate 6。
+- 评审修正二：`resolve_admission_policy` 是独立 admission 集成点；当前 probe 证实 T0/T1/T2 的 mandatory Gate `NEEDS_REVIEW` 均会落到 PASS，CP3 必须冻结 lower-level merge 与 tier/admission decision 的职责边界。
+- 正式范围：Gate 1-5 N/A evidence 五态语义 + Gate 6 admission policy hardening；Gate 2/3/4/5 generic reason escape 已复现，Gate 1 必须采用字段判定、blocked claim、最终 worst-state 三层断言。
+- 跟踪拆分：`FU-CR161-007` 的 canonical-hardening 子切片转为 `CR-170`；aggregate + CR155 regression 剩余切片按数字型规范保留为 `FU-CR161-009`。
+- 授权边界：允许双仓库 fetch/read、本地分支和 fixture/static probe；不授权真实数据、凭据、Stage 3、aggregate、CR155 promotion、runtime/trading、publish/release 或 Git 远端写入。
+- 编排方式：用户此前明确要求不拉起子 Agent，本轮继续使用已批准的 `meta-pm inline-fallback`；不得伪造 subagent dispatch。

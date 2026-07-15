@@ -1,13 +1,16 @@
 ---
 feature_id: "FEAT-15"
 feature_name: "Cross-Strategy Production Reliability Gates"
-change_id: "CR-154"
-status: "cp4-story-planning"
-version: "0.1"
+change_id: "CR-170"
+baseline_change_id: "CR-154"
+status: "ready-for-cp5-review"
+version: "0.3"
 created_at: "2026-07-03T10:40:00+08:00"
 owner: "host-orchestrator"
 source_hld: "process/docs/design/HLD-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md"
 source_adr: "process/docs/design/ARCHITECTURE-DECISION-CROSS-STRATEGY-PRODUCTION-RELIABILITY-GATES.md"
+cr170_source_hld: "process/archive/design-cr-docs/HLD-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"
+cr170_source_adr: "process/archive/design-cr-docs/ARCHITECTURE-DECISION-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"
 implementation_allowed: false
 authorization_boundary: "local/static/fixture-only; no LLD approval, source implementation, tests implementation, real lake/NAS/provider/QMT/runtime/simulation/paper/live/trading/broker/credential/feed/order/reconciliation/store/catalog/registry/publish"
 ---
@@ -25,6 +28,59 @@ This document is a planning artifact only. It does not approve LLD, source chang
 | Version | Date | Author | Change |
 |---|---|---|---|
 | 0.1 | 2026-07-03 | host-orchestrator | Initial CP4 feature design. Incorporates Story split review findings: Gate 5 explicit Story, Phase A runnable fixture schema ownership and Gate 6 tier resolution full-lld. |
+| 0.2 | 2026-07-15 | host-orchestrator（inline meta-se） | CR-170 增量：为 21 个 mandatory evidence policy unit 增加五态判定、15/5/1 方向清单、Gate 1-5 局部消费、受保护 merge 与 T0-T3 admission 契约；明确 caller、T3 和 verifier 边界。 |
+| 0.3 | 2026-07-15 | host-orchestrator（inline meta-dev） | CP5 评审补强：mandatory 精确到 applicable policy unit；conditional not-applicable complete N/A 使用 audit-only NR ref 且不设置 Gate floor；增加 public evidence→admission 端到端 fixture。 |
+
+## CR-170 Increment: Canonical N/A Semantics Hardening
+
+CR-170 复用 FEAT-15，不创建平行 Gate、平行 admission policy 或公共 schema。其目标是修复 canonical Gate 1-5 中 reason 字符串替代 mandatory evidence 的逃逸，并保证 Gate 6 不把 mandatory `NEEDS_REVIEW` 升级为无条件 `PASS`。
+
+### Internal Contract Boundary
+
+| 对象 | 精确职责 | 禁止行为 |
+|---|---|---|
+| `NaPolicySpec` | 记录 21 个 policy unit 的 Gate、evidence/reason keys、适用性、owner、baseline path type、hardening direction、complete-N/A disposition。 | 不暴露为 public API；不替代各 Gate 的数值、shape 或身份校验。 |
+| `NaEvidenceDecision` | 返回五态之一：`PRESENT`、`MISSING`、`NA_WITH_COMPLETE_BOUNDARY`、`NA_WITH_INCOMPLETE_BOUNDARY`、`GENERIC_REASON_ESCAPE`。 | generic reason 不得成为 `PRESENT`；decision 不得直接产生 admission `PASS`。 |
+| `n_a_boundaries[policy_id]` | 由当前 fixture/test caller 显式提供 `reason/owner/scope` 与 `release_profile` 或 `authorization_ref`。 | evaluator 合成 boundary/auth ref 的数量为 `0`；`authorization_ref` 只是 opaque audit pointer，不是凭据或运行授权。 |
+| Gate 1-5 consumer | 在既有 Gate 局部把 decision 合并为 blocked/review claim 与 status floor；floor 只由 applicable mandatory unit 产生。conditional not-applicable complete N/A 只附加 `status=NEEDS_REVIEW` 的 audit-only ref，floor=None。 | 不修改全局 `_has_na_reason` 布尔语义；不让完整 N/A 产生 Gate `PASS`；不让 audit-only ref 单独抬升 Gate summary。 |
+| Gate 6 merge/resolver | 先保护 `build_shared_gate_summary` / `evaluate_shared_contract` 既有 worst-state；仅硬化 `resolve_admission_policy` 对 Gate summary `NEEDS_REVIEW` 的 T0/T1/T2 处理。 | 不把 Gate ID 本身解释为全部 unit mandatory；受保护 merge 通过回归时 production diff 必须为 `0`；T3 early-return production diff 必须为 `0`。 |
+
+### Inventory Direction Contract
+
+| baseline path type | hardening direction | 数量 | 回归方向 |
+|---|---|---:|---|
+| 现有 reason escape | stricter | 15 | 原可放行路径必须变为 `NEEDS_REVIEW/BLOCKED`，无条件 `PASS=0`。 |
+| 原 missing 即 blocked、现引入完整边界 | controlled-widening | 5 | 完整且适用的 N/A 可从 `BLOCKED` 变为可审计 `NEEDS_REVIEW`，但 T1/T2 必须 `BLOCKED` 且 `PASS=0`。 |
+| 固定数值/来源阻断 | preserve | 1（G1-P06） | complete N/A 仍禁止，保持 `BLOCKED`。 |
+
+21 项 exact mapping 由 S01 LLD 冻结并作为单一实现清单；任何数量变化都必须回退 CP3 或以 design delta 重开。
+
+### Admission Tier Contract
+
+| Tier | mandatory `NEEDS_REVIEW` | 兼容要求 |
+|---|---|---|
+| T0 / OPT_IN | `NEEDS_REVIEW` | 仅允许 fixture/static 诊断，不得宣称 admission PASS。 |
+| T1 / DEFAULT_REQUIRED | `BLOCKED` | source rule 必须可审计。 |
+| T2 / RELEASE_BLOCKING | `BLOCKED` | release wording 不得升级。 |
+| T3 / NOT_AUTHORIZED | 保持现有 `BLOCKED + NOT_AUTHORIZED` | 只做 1/1 回归，生产代码修改数 `0`。 |
+
+### CR-170 Story Ownership
+
+| Story | Owner | 主要写入面 | 设计义务 |
+|---|---|---|---|
+| CR170-S01 | policy inventory / five-state contract | `engine/reliability_na_policy.py`、对应 unit tests | 21/21 exact rows、15/5/1、caller contract、deterministic reason IDs。 |
+| CR170-S02 | Gate 1-5 consumers | canonical Gate module + Gate tests | 5/5 Gate、Gate1 三层断言、complete N/A 只到 review、generic escape PASS=0。 |
+| CR170-S03 | protected merge / admission tiers | canonical Gate module + resolver tests | merge diff=0 when regression passes；T0/T1/T2 hardening；T3 diff=0。 |
+| CR170-S04 | compatibility / claim closure | CR170 regression tests | public break=0、adapter 2/2、CR155/Stage3/real-op claim ceiling。 |
+
+### CR-170 Failure and Rollback
+
+| 触发 | 处理 |
+|---|---|
+| controlled-widening unit 产生 Gate/admission `PASS` | 立即回退该 unit 到历史 `BLOCKED`，不得以 waiver 放行。 |
+| protected merge 或 T3 回归失败 | 停止实现并路由 `NEEDS_DESIGN_CLARIFICATION`；未获 design delta 前不得修改生产路径。 |
+| caller 未提供完整 boundary | 判为 `NA_WITH_INCOMPLETE_BOUNDARY`，适用 mandatory unit 非 PASS。 |
+| future aggregate/real caller 需要写 boundary | 由后续 CR 冻结 writer contract；CR-170 不预授权真实 caller。 |
 
 ## Feature Boundary
 

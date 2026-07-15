@@ -1,0 +1,130 @@
+schema_version: 1
+cr_id: CR-170
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+release_execution_status: NOT_EXECUTED
+created_at: "2026-07-15T16:16:00+08:00"
+release_scope:
+  in_scope:
+    - canonical Gate 1-5 21-unit N/A policy inventory and five-state internal decision
+    - Gate-local fail-closed consumption including conditional audit-only N/A boundary
+    - protected Gate summary merge regression and T0-T2 admission policy hardening
+    - public callable CR168/CR169 adapter CR155 and end-to-end compatibility regression
+    - repository governance integration and complete local uv validation
+  out_of_scope:
+    - current Stage3 runner integration and historical Stage3 run revalidation
+    - C1-C4 aggregate orchestration final StrategyAdmissionPackage and CR155 promotion
+    - real evidence data lake NAS provider credential runtime broker QMT or trading
+    - independent verifier lane FU-006 and alpha-decay FU-008
+    - catalog store registry publish deploy tag release or Git remote write outside the two explicitly approved refs
+quality_summary:
+  story_results: "4/4 CP6 PASS; 4/4 CP7 PASS_WITH_RISK"
+  contract_counts: "inventory=21/21; states=5/5; gates=5/5; directions=15/5/1; tier=4/4"
+  related_tests: "91 passed; 0 failed"
+  governance_tests: "27 passed; 0 failed; design-surface errors=0; hygiene unclassified=0"
+  repository_total: "2195 passed; 0 failed; 98.31s"
+  initial_full_suite_failures: 6
+  introduced_failures_resolved: 6
+  unknown_attribution: 0
+  open_blocking_findings: 0
+  waivers: 0
+fact_diff:
+  - promise: "Gate 1-5 mandatory missing generic escape and incomplete boundary cannot produce unconditional PASS"
+    status: DELIVERED
+    evidence_refs:
+      - docs/quality/VERIFICATION-REPORT-CR170.md
+      - process/checks/CP7-CR170-S02-VERIFICATION.result.json
+  - promise: "Applicable complete structured N/A is auditable NEEDS_REVIEW while conditional not-applicable audit refs do not elevate Gate floor"
+    status: DELIVERED
+    evidence_refs:
+      - docs/quality/TEST-REPORT-CR170.md
+  - promise: "Mandatory NEEDS_REVIEW maps to T0 NEEDS_REVIEW and T1/T2 BLOCKED while T3 remains NOT_AUTHORIZED"
+    status: DELIVERED
+    evidence_refs:
+      - process/checks/CP7-CR170-S03-VERIFICATION.result.json
+  - promise: "Public contracts adapters CR155 and no-overclaim boundaries remain compatible"
+    status: DELIVERED
+    evidence_refs:
+      - process/checks/CP7-CR170-S04-VERIFICATION.result.json
+  - promise: "Stage3 runner aggregate real evidence and runtime are not delivered by this CR"
+    status: DELIVERED_AS_NON_CLAIM
+    evidence_refs:
+      - docs/quality/REVIEW-CR170.md
+claim_ceiling:
+  stage2_complete: true
+  stage2_exit_contract_verification_status: passed_7_of_7
+  stage3_started: false
+  stage3_entry_ready: false
+  canonical_gate_1_5_na_semantics_hardened: true
+  gate6_admission_needs_review_hardened: true
+  protected_gate_summary_merge_modified: false
+  current_stage3_runner_integrated: false
+  aggregate_orchestration_implemented: false
+  real_evidence_available: false
+  runtime_ready: false
+  cr155_promoted: false
+risks:
+  - id: R-CR170-VERIFIER-INDEPENDENCE
+    severity: MEDIUM
+    status: REQUIRES_CP8_ACCEPTANCE
+    summary: "CP7 使用用户批准的 Host inline fallback，不构成 FU-006 独立 agent/model 验证。"
+  - id: R-CR170-RUNNER-GAP
+    severity: HIGH
+    status: CONTROLLED_OUT_OF_SCOPE
+    summary: "当前 Stage3 runner 不调用 canonical Gate；独立 Stage3 Launch CR 负责路线、授权、数据/PIT/lineage 与历史 revalidation。"
+  - id: R-CR170-AGGREGATE-GAP
+    severity: HIGH
+    status: CONTROLLED_OUT_OF_SCOPE
+    summary: "FU-CR161-009 负责 aggregate 与 CR155 regression；本 CR promotion=0。"
+approval:
+  checkpoint: CP8-CR170-DELIVERY-READINESS
+  status: PENDING_USER
+  pending_decision_ids: []
+  accepted_decision_ids:
+    - DQ-CP8-CR170-001
+    - DQ-CP8-CR170-002
+    - DQ-CP8-CR170-003
+not_authorized:
+  - Git remote write outside origin/work/cr170-canonical-reliability-na-hardening and origin/main
+  - force-push tag GitHub release publish or deploy
+  - credentials secrets account provider NAS or real data access
+  - Stage3 start runner integration historical revalidation or runtime authorization
+  - aggregate orchestration final admission or CR155 promotion
+  - broker QMT simulation paper live trading or order operation
+workspace_git_status:
+  checked_at: "2026-07-15T16:10:00+08:00"
+  quant_lab:
+    branch: work/cr170-canonical-reliability-na-hardening
+    head: c22e9f9
+    upstream: null
+    dirty: true
+  meta_flow_artifacts:
+    branch: main
+    head: 5fc0934
+    upstream: origin/main
+    ahead: 0
+    behind: 0
+    dirty: true
+  disposition: "CP8 approved; scoped paired commits, zero-failed validation, closure and the two explicitly authorized normal pushes are pending execution."
+release_documents:
+  release_notes: process/docs/release/RELEASE-NOTES-CR170.md
+  deploy_checklist: process/docs/release/DEPLOY-CHECKLIST-CR170.md
+  rollback: process/docs/release/ROLLBACK-CR170.md
+  migration: process/docs/release/MIGRATION-CR170.md
+  feedback: process/docs/release/FEEDBACK-CR170.md
+quality_refs:
+  - docs/quality/TEST-STRATEGY-CR170.md
+  - docs/quality/VERIFICATION-REPORT-CR170.md
+  - docs/quality/TEST-REPORT-CR170.md
+  - docs/quality/REVIEW-CR170.md
+  - docs/quality/FIXES-CR170.md
+follow_up_summary:
+  existing_candidates:
+    - FU-CR161-006
+    - FU-CR161-008
+    - FU-CR161-009
+  new_candidates: []
+  deferred_scope:
+    - FU-006 independent verifier lane before high-risk real evidence admission
+    - FU-009 C1-C4 aggregate and CR155 regression after CR170 closure
+    - independent Stage3 Launch CR for runner route authorization data PIT lineage and legacy revalidation

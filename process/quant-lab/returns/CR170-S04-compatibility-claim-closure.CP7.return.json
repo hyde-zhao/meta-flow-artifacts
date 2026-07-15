@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "CR170-S04-compatibility-claim-closure.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-170",
+  "story_id": "CR170-S04-compatibility-claim-closure",
+  "status": "verified_with_risk",
+  "created_at": "2026-07-15T16:08:00+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/CR170-S04-compatibility-claim-closure.CP7.verify-packet.json",
+  "implementation_ref": "process/stories/STORY-CR170-S04-compatibility-claim-closure-IMPLEMENTATION.md",
+  "verification_ref": "process/stories/STORY-CR170-S04-compatibility-claim-closure-VERIFICATION.md",
+  "source_story_ref": "process/stories/STORY-CR170-S04-compatibility-claim-closure.md",
+  "source_design_evidence_ref": "process/stories/STORY-CR170-S04-compatibility-claim-closure-LLD.md",
+  "touched_files": [{"path": "process/stories/STORY-CR170-S04-compatibility-claim-closure-VERIFICATION.md", "change_type": "created"}],
+  "contract_changes": {"public_api_changed": false, "data_contract_changed": false, "design_delta_required": false, "design_delta_ref": null, "summary": "Verification found no semantic design divergence; repository-governance integration paths were corrected."},
+  "boundary_check": {"allowed_paths_only": true, "forbidden_paths_touched": [], "unexpected_imports": [], "runtime_touched": false, "credentials_touched": false, "real_lake_read_touched": false, "real_lake_write_touched": false, "provider_fetch_executed": false, "nas_operation_executed": false, "qmt_runtime_executed": false, "simulation_or_live_executed": false, "broker_operation_executed": false, "external_framework_executed": false, "historical_backfill_executed": false, "git_remote_write_executed": false, "publish_executed": false},
+  "verification": {
+    "commands_run": [
+      {"command": "uv run --python 3.11 pytest -q CR170-related subset", "result": "pass", "summary": "91 passed in 0.32s"},
+      {"command": "uv run --python 3.11 pytest -q design-surface/test-taxonomy/process-hygiene subset", "result": "pass", "summary": "27 passed in 0.23s"},
+      {"command": "uv run --python 3.11 pytest -q", "result": "pass", "summary": "2195 passed in 98.31s"},
+      {"command": "uv run --python 3.11 python -m py_compile CR170 source/tests", "result": "pass", "summary": "static compile passed"},
+      {"command": "git diff --check -- CR170 source/tests", "result": "pass", "summary": "no whitespace errors"},
+      {"command": "git diff --quiet -- adapters/aggregate/runners", "result": "pass", "summary": "all forbidden production files unchanged"}
+    ],
+    "tests": ["tests/research/test_canonical_reliability_regression.py", "tests/research/test_reliability_na_policy.py", "tests/research/test_cross_strategy_reliability_gates.py", "tests/research/test_reliability_admission_policy.py", "tests/meta_flow/test_design_surface.py", "tests/meta_flow/test_test_file_taxonomy.py", "tests/meta_flow/test_process_artifact_hygiene.py"],
+    "stage_decision": "PASS_WITH_RISK",
+    "skipped": []
+  },
+  "open_questions": [],
+  "risks": [{"id": "R-CR170-VERIFIER-INDEPENDENCE", "severity": "medium", "status": "accepted_at_cp5_disclose_at_cp8"}],
+  "waivers": [],
+  "design_delta": {"requires_feature_doc_update": false, "requires_architecture_doc_update": false, "requires_hld_update": false, "design_delta_required": false, "design_delta_ref": null, "status": "not_required", "reason": "Taxonomy/path corrections do not change the approved behavior contract."},
+  "evidence_refs": ["process/evidence/CR170-S04-compatibility-claim-closure.CP7.index.json"],
+  "next_stage_recommendation": "ready_for_cp8",
+  "actor": "host-orchestrator-inline",
+  "decision": "PASS_WITH_RISK"
+}

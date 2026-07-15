@@ -15,6 +15,7 @@ archive_root: "process/archive/design-cr-docs"
 | 1.0 | 2026-06-23 | host-orchestrator | CR131 新增默认 design root 的归档入口，指向 CR 命名历史设计文档归档区。 |
 | 1.1 | 2026-07-12 | host-orchestrator-inline | CR165 将 32 份非 canonical 设计快照迁入归档区；当前根目录只保留允许的 authority 文件。 |
 | 1.2 | 2026-07-13 | host-orchestrator | CR166 将 5 份 CP3 专题设计基线迁入归档区；Feature Matrix 继续作为 current authority。 |
+| 1.3 | 2026-07-15 | host-orchestrator inline | CR170 将已批准的 canonical reliability N/A semantics HLD/ADR/Blueprint/Domain/Dependency 五件套迁入归档区，默认 design surface 继续只保留 authority 文件。 |
 
 ## 入口
 
@@ -43,3 +44,7 @@ CR 命名历史 HLD、ADR、Feature Matrix 和治理设计说明已从默认 des
 ## CR-166 归档迁移（2026-07-13）
 
 CR166 的 `HLD-WALK-FORWARD-OOS-EVIDENCE.md`、`ARCHITECTURE-DECISION-WALK-FORWARD-OOS-EVIDENCE.md`、`BLUEPRINT-WALK-FORWARD-OOS-EVIDENCE.md`、`DOMAIN-MAP-WALK-FORWARD-OOS-EVIDENCE.md` 与 `DEPENDENCY-MAP-WALK-FORWARD-OOS-EVIDENCE.md` 已迁入 `process/archive/design-cr-docs/`。其批准决策继续作为 CR166 Story 的设计基线，但不替代 current design root 的默认 authority。
+
+## CR-170 归档迁移（2026-07-15）
+
+CR170 的 `HLD-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md`、`ARCHITECTURE-DECISION-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md`、`BLUEPRINT-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md`、`DOMAIN-MAP-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md` 与 `DEPENDENCY-MAP-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md` 已在 CP3 批准后迁入归档。当前 authority 文档通过 archive ref 保留 CR170 设计基线；归档动作不改变已批准架构语义。

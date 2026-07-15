@@ -1,0 +1,64 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "process/stories/STORY-CR170-S04-compatibility-claim-closure-VERIFICATION.md"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q CR170-related subset",
+      "result": "pass",
+      "summary": "91 passed in 0.32s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q design-surface/test-taxonomy/process-hygiene subset",
+      "result": "pass",
+      "summary": "27 passed in 0.23s"
+    },
+    {
+      "command": "uv run --python 3.11 pytest -q",
+      "result": "pass",
+      "summary": "2195 passed in 98.31s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile CR170 source/tests",
+      "result": "pass",
+      "summary": "static compile passed"
+    },
+    {
+      "command": "git diff --check -- CR170 source/tests",
+      "result": "pass",
+      "summary": "no whitespace errors"
+    },
+    {
+      "command": "git diff --quiet -- adapters/aggregate/runners",
+      "result": "pass",
+      "summary": "all forbidden production files unchanged"
+    }
+  ],
+  "cr_id": "CR-170",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR170-S04-compatibility-claim-closure.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR170-VERIFIER-INDEPENDENCE",
+      "severity": "medium",
+      "status": "accepted_at_cp5_disclose_at_cp8"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR170-S04-compatibility-claim-closure",
+  "tests": [
+    "tests/research/test_canonical_reliability_regression.py",
+    "tests/research/test_reliability_na_policy.py",
+    "tests/research/test_cross_strategy_reliability_gates.py",
+    "tests/research/test_reliability_admission_policy.py",
+    "tests/meta_flow/test_design_surface.py",
+    "tests/meta_flow/test_test_file_taxonomy.py",
+    "tests/meta_flow/test_process_artifact_hygiene.py"
+  ],
+  "waivers": []
+}

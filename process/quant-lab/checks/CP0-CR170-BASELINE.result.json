@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR170-BASELINE",
+  "profile": "architecture-major",
+  "story_id": null,
+  "cr_id": "CR-170",
+  "route_plan_ref": "process/checks/CP0-CR170.route-plan.json",
+  "context_ref": "process/context/CP0-CR170.context.json",
+  "dispatch_refs": [],
+  "evidence_ref": "process/checks/CR170-REMOTE-BASELINE-CONFLICT-PRECHECK.json",
+  "items": [
+    {
+      "id": "CP0-01",
+      "category": "request",
+      "name": "Gate 1-5 N/A semantics、Gate 6 admission 边界、停止点与不授权项已登记",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/changes/CR-170.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "本轮只推进到 CP2；CP2 前禁止 HLD、Story、LLD 和源码实现。"
+    },
+    {
+      "id": "CP0-02",
+      "category": "workspace",
+      "name": "process 外置路由、软链接与 artifact 工作区健康",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/.meta-flow-process.yaml", "process/checks/CR170-REMOTE-BASELINE-CONFLICT-PRECHECK.json#process_route"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "未创建本地 process，未重建 STATE.md。"
+    },
+    {
+      "id": "CP0-03",
+      "category": "baseline",
+      "name": "quant-lab 已 fetch、工作区干净并从 CR-169 关闭基线派生",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CR170-REMOTE-BASELINE-CONFLICT-PRECHECK.json#repositories/quant_lab"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "origin/master 落后 120 个提交，未作为开发基线。"
+    },
+    {
+      "id": "CP0-04",
+      "category": "baseline",
+      "name": "meta-flow-artifacts 已 fetch、main 与 origin/main 一致",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CR170-REMOTE-BASELINE-CONFLICT-PRECHECK.json#repositories/meta_flow_artifacts"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "未发生 merge/rebase/冲突处理或远端写入。"
+    },
+    {
+      "id": "CP0-05",
+      "category": "change-control",
+      "name": "CR-170 编号唯一且 scoped active/blocked formal CR 为 0/0",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/changes/CR-170.md", "process/changes/CR-INDEX.json", "process/checks/CR170-REMOTE-BASELINE-CONFLICT-PRECHECK.json#formal_number_precheck"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "既有 CR-032/CR-152 stale ref 与全局历史枚举错误已披露，不构成当前 owner 锁。"
+    },
+    {
+      "id": "CP0-06",
+      "category": "code-fact",
+      "name": "底层 shared merge 与 resolve_admission_policy 的两层事实已用代码和 probe 核实",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["engine/cross_strategy_reliability_gates.py", "process/checks/CR170-REMOTE-BASELINE-CONFLICT-PRECHECK.json#code_fact_probe"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "已有 merge 保留并先验证；admission policy 是 CP3 必须冻结的独立集成边界。"
+    },
+    {
+      "id": "CP0-07",
+      "category": "conflict",
+      "name": "Gate 1-6、CR-168/169 adapters、aggregate、Stage 3 与 CR-155 边界无并行 owner 冲突",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CR170-REMOTE-BASELINE-CONFLICT-PRECHECK.json#conflict_precheck", "process/changes/CR-170.md#正式-cr-冲突预检"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "本 CR 不实现 aggregate、不接 Stage3 runner、不简化 adapter、不提升 CR155。"
+    },
+    {
+      "id": "CP0-08",
+      "category": "routing",
+      "name": "architecture-major route plan 有效，CP2 是下一人工门禁",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP0-CR170.route-plan.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP1 自动完成后必须正式打开 CP2，不能直接进入 CP3。"
+    },
+    {
+      "id": "CP0-09",
+      "category": "tracking",
+      "name": "本 CR scoped tracking 可同步，既有全局 tracking debt 被隔离披露",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/checks/CR170-REMOTE-BASELINE-CONFLICT-PRECHECK.json#known_nonblocking_tracking_debt", "process/state/CR-LEDGER.ndjson"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "不把 CR-010/018/031 等无关历史治理债务纳入 CR-170。"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260715T040411Z0000-b83dcdb3"
+  ],
+  "decision": "PASS",
+  "next_route": "requirement-clarification",
+  "checked_at": "2026-07-15T12:05:00+08:00"
+}

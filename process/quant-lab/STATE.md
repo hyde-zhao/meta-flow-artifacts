@@ -2,12 +2,12 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: delivered
+Phase: documentation
 Blocked: false
-Active CR: none
+Active CR: CR-170
 Active Story: none
 Pending gate: none
-Next action: CR-169 已经 CP8 批准并以 READY_WITH_RISK 关闭；Stage 3 尚未启动，FU-006/FU-007/FU-008 仍须独立正式 CR 与授权。
+Next action: 执行 CR-170 双仓 scoped 提交；提交后 full suite 0 failed 才关闭，并普通推送到两条已授权远端 ref
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,7 +20,7 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: none
+- active context: process/context/CP8-CR170-CANONICAL-RELIABILITY-HARDENING-DELIVERY-CONTEXT.yaml
 
 Policy refs:
 - NO_CREDENTIAL_READ
@@ -43,17 +43,11 @@ Open risks:
 - {'id': 'R-CR158-ADAPTER-CONTRACT-COUPLING', 'severity': 'medium', 'status': 'open'}
 - {'id': 'R-CR158-EVIDENCE-SEMANTIC-OVERFIT', 'severity': 'medium', 'status': 'open'}
 - {'id': 'R-CR158-RUNTIME-OVERCLAIM', 'severity': 'high', 'status': 'open'}
-- {'id': 'R-CR168-GATE4-C3-C4-SEMANTIC', 'severity': 'high', 'status': 'controlled_by_cp3_approved_adapter_contract'}
-- {'id': 'R-CR168-COST-UNDERSTATEMENT', 'severity': 'high', 'status': 'controlled_by_cp3_approved_static_square_root_contract'}
-- {'id': 'R-CR168-UNIT-CURRENCY-BASIS', 'severity': 'high', 'status': 'controlled_by_cp3_approved_decimal_basis_contract'}
-- {'id': 'R-CR168-TRUE-TCA-OVERCLAIM', 'severity': 'high', 'status': 'open_controlled_by_claim_ceiling'}
-- {'id': 'R-CR168-CR155-PROMOTION', 'severity': 'high', 'status': 'open_controlled_by_fail_closed_boundary'}
-- {'id': 'R-CR168-VERIFIER-INDEPENDENCE', 'severity': 'medium', 'status': 'open_nonblocking_cp8_disclosure_required'}
-- {'id': 'R-CR169-PROXY-VALIDITY', 'severity': 'high', 'status': 'open_controlled_by_static_claim_ceiling'}
-- {'id': 'R-CR169-GATE4-N-A', 'severity': 'high', 'status': 'controlled_by_local_strict_adapter_design'}
-- {'id': 'R-CR169-VERIFIER-INDEPENDENCE', 'severity': 'medium', 'status': 'accepted_by_user_at_cp5_cp8_disclosure_required'}
-- {'id': 'R-CR169-STAGE2-OVERCLAIM', 'severity': 'high', 'status': 'controlled_by_cp8_7_of_7_result'}
+- {'id': 'R-CR170-BLAST-RADIUS', 'severity': 'high', 'status': 'resolved_by_15_5_1_directional_regression_and_repository_2195_0'}
+- {'id': 'R-CR170-MERGE-REWRITE', 'severity': 'high', 'status': 'resolved_protected_merge_unchanged_and_regression_passed'}
+- {'id': 'R-CR170-VERIFIER-INDEPENDENCE', 'severity': 'medium', 'status': 'accepted_at_cp8_fu006_future_consumer'}
+- {'id': 'R-CR170-RUNNER-GAP', 'severity': 'high', 'status': 'controlled_out_of_scope_stage3_entry_ready_false'}
 
-Updated at: 2026-07-15T02:58:54+00:00
+Updated at: 2026-07-15T08:39:36+00:00
 
 <!-- generated-by: meta-flow state render -->

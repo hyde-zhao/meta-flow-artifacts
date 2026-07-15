@@ -3,7 +3,7 @@ baseline_id: CURRENT-REQUIREMENT-BASELINE
 project: quant-lab
 status: active
 created_at: "2026-06-19T20:50:00+08:00"
-updated_at: "2026-07-14T17:20:00+08:00"
+updated_at: "2026-07-15T12:25:00+08:00"
 created_by: host-orchestrator
 source_crs:
   - CR-046
@@ -15,6 +15,7 @@ source_crs:
   - CR-166
   - CR-168
   - CR-169
+  - CR-170
 revision_record:
   - version: v0.1
     date: "2026-06-19"
@@ -40,6 +41,10 @@ revision_record:
     date: "2026-07-14"
     author: host-orchestrator-inline
     summary: "CR169 CP2 评审整改与批准：Stage 2 complete 不蕴含 Stage 3 entry-ready；CP8/formal exit 必须核验 7/7 合同，FU-007 007a/007b 只登记为未来提案。"
+  - version: v0.7
+    date: "2026-07-15"
+    author: host-orchestrator-inline-meta-pm
+    summary: "CR170 启动时纠正 CR169 closed/C4 delivered/Stage2 7-of-7 事实，增量追加 Gate1-5 N/A semantics 与 Gate6 admission hardening 基线，并把历史 Stage3 run 标为需独立 Launch CR revalidation。"
 purpose: >
   记录当前可执行需求基线，避免后续 CR 从历史台账中误读已重解释的
   QMT / MiniQMT / runner / strategy package 目标。
@@ -157,7 +162,8 @@ current_baseline:
     claim_ceiling:
       stage2_complete: true
       stage3_started: false
-      c3_fixture_static_foundation: false
+      c3_fixture_static_foundation: true
+      stage3_entry_ready: false
       real_tca_available: false
       real_market_impact_calibrated: false
       real_data_connected: false
@@ -167,7 +173,7 @@ current_baseline:
       cr155_promoted: false
     adjacent_boundaries:
       c4_owner: FU-CR161-005
-      aggregate_integration_owner: FU-CR161-007
+      aggregate_integration_owner: FU-CR161-009
       cr155_lifecycle_status: closed
       cr155_admission_package_status: BLOCKED
       cr155_paper_candidate: false
@@ -197,7 +203,7 @@ current_baseline:
       - docs/features/strategy-evidence-envelope/DESIGN.md
 
   strategy_evidence_c4_capacity_liquidity_adv:
-    requirement_status: confirmed_cp2
+    requirement_status: closed_ready_with_risk
     current_owner: quant_lab_strategy_evidence
     current_change: CR-169
     source_follow_up: FU-CR161-005
@@ -213,7 +219,7 @@ current_baseline:
       parallel_envelopes_gates_registries: 0
     input_contract:
       computational_body: independent_from_c3
-      correlation_header: pending_cp3_freeze
+      correlation_header: frozen_thirteen_field_exact_match
       required_dimensions:
         - strategy_run_manifest_identity
         - synthetic_adv_reference_basis
@@ -236,7 +242,7 @@ current_baseline:
         - adv_participation_ref
         - capacity_dollars_ref
         - liquidity_sizing_refs
-      strict_joint_fixture_adapter: pending_cp2
+      strict_joint_fixture_adapter: delivered
       payload_fields_exactly: 7
       preserves_cr168_c3_only_adapter: true
       canonical_gate4_validator_changes: 0
@@ -247,10 +253,11 @@ current_baseline:
     claim_ceiling:
       stage2_complete: true
       stage2_exit_contract_verification_required: true
-      stage2_exit_contract_verification_status: pending_cp8
+      stage2_exit_contract_verification_status: passed_7_of_7
       stage3_started: false
       stage3_entry_ready: false
-      c4_fixture_static_foundation: false
+      c4_fixture_static_foundation: true
+      gate4_fixture_contract_pass: true
       real_adv_available: false
       real_liquidity_evidence_available: false
       real_capacity_calibrated: false
@@ -259,13 +266,14 @@ current_baseline:
       alpha_decay_implementation: false
       cr155_promoted: false
     adjacent_boundaries:
-      alpha_decay_disposition: pending_cp3
+      alpha_decay_disposition: deferred_to_independent_c2_adjacent_follow_up
+      alpha_decay_follow_up: FU-CR161-008
       independent_verifier_follow_up: FU-CR161-006
-      aggregate_integration_owner: FU-CR161-007
-      proposed_fu007_decomposition:
-        status: nonbinding_follow_up_proposal
-        lane_007a: canonical_gate4_global_na_semantics_hardening
-        lane_007b: aggregate_integration_and_cr155_regression
+      aggregate_integration_owner: FU-CR161-009
+      fu007_decomposition:
+        status: canonical_slice_promoted_and_aggregate_remainder_tracked
+        canonical_hardening_cr: CR-170
+        aggregate_remainder: FU-CR161-009
         activation_preconditions:
           - independent_formal_cr
           - cp0_conflict_precheck
@@ -279,6 +287,60 @@ current_baseline:
       - docs/product/REQUIREMENTS.md
       - docs/product/SCENARIOS.yaml
       - docs/product/TEST-MATRIX.md
+
+  canonical_cross_strategy_reliability_na_semantics:
+    requirement_status: cp2_approved_cp3_pending
+    current_owner: cross_strategy_reliability_gates
+    current_change: CR-170
+    source_follow_up: FU-CR161-007
+    current_target: gate1_5_na_semantics_and_gate6_admission_worst_state_hardening
+    policy_inventory:
+      total_units: 21
+      gate1_units: 6
+      gate2_units: 6
+      gate3_units: 1
+      gate4_units: 5
+      gate5_units: 3
+      rule_coverage_target: "21/21"
+    business_semantics:
+      - PRESENT
+      - MISSING
+      - NA_WITH_COMPLETE_BOUNDARY
+      - NA_WITH_INCOMPLETE_BOUNDARY
+      - GENERIC_REASON_ESCAPE
+    gate6_boundary:
+      lower_level_merge: build_shared_gate_summary
+      lower_level_needs_review_propagation_verified: true
+      lower_level_rewrite_without_failure_evidence: false
+      admission_policy_entry: resolve_admission_policy
+      tier_policy:
+        T0: NEEDS_REVIEW_NO_PASS_CLAIM
+        T1: BLOCKED
+        T2: BLOCKED
+        T3: NOT_AUTHORIZED
+    regression_boundary:
+      cr168_adapter_preserved: true
+      cr169_adapter_preserved: true
+      adapter_simplification_owner: FU-CR161-009
+      current_stage3_runner_integration: false
+      aggregate_orchestration: false
+    claim_ceiling:
+      stage2_complete: true
+      stage3_started: false
+      stage3_entry_ready: false
+      real_data_connected: false
+      runtime_ready: false
+      cr155_promoted: false
+      git_remote_write: false
+    evidence_paths:
+      - process/changes/CR-170.md
+      - process/checks/CR170-REMOTE-BASELINE-CONFLICT-PRECHECK.json
+      - docs/product/USE-CASES.md
+      - docs/product/REQUIREMENTS.md
+      - docs/product/SCENARIOS.yaml
+      - docs/product/TEST-MATRIX.md
+      - process/archive/design-cr-docs/HLD-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md
+      - process/archive/design-cr-docs/ARCHITECTURE-DECISION-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md
 
 not_authorized:
   nas_access: true
