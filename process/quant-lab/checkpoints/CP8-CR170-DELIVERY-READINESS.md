@@ -89,7 +89,7 @@ release_context_ref: "process/release/RELEASE-CONTEXT-CR170-CANONICAL-RELIABILIT
 
 | 分流类别 | 项目 ID | 状态 | 处理方式 | 台账 / CR 路径 | 说明 |
 |---|---|---|---|---|---|
-| 关闭范围 | CLOSE-CR170-01 | approved-in-progress | scoped 双仓提交、提交后 full suite 0 failed、关闭 CR170 并推送两条已授权 ref | `process/changes/CR-170.md` | 只关闭 canonical hardening；不扩大产品能力。 |
+| 关闭范围 | CLOSE-CR170-01 | closed-state-validated-push-pending | scoped 双仓提交、提交后 full suite 0 failed、关闭 CR170 并推送两条已授权 ref | `process/changes/CR-170.md` | CR 已关闭且关闭态 `2195/0`；仅余普通 push。 |
 | 不授权范围 | NA-CR170-01 | not-authorized | 保持禁止 | 本 checkpoint / Release Context | 两条授权 ref 以外的 remote write、force-push/tag/release、Stage3、真实、aggregate、runtime、CR155 promotion。 |
 | 风险接受项 | R-CR170-VERIFIER-INDEPENDENCE | accepted-risk | 以 READY_WITH_RISK 关闭；FU-006 保持 future consumer | `docs/quality/REVIEW-CR170.md` | 用户接受 DQ-001。 |
 | 后续 CR 候选项 | FU-CR161-006 | candidate | 真实 evidence admission 前补独立 verifier lane | follow-up tracking / BACKLOG | 本 CR 不启动。 |

@@ -29,4 +29,4 @@ Stage 3 runner 接线、真实 evidence/data、C1-C4 aggregate、CR155 promotion
 
 ## Readiness
 
-CP8 已接受 verifier independence 与 claim ceiling；按 scoped 双仓提交、提交态全量 `0 failed`、关闭态复核成功后关闭并推送。
+CP8 已接受 verifier independence 与 claim ceiling；scoped 双仓提交、CR 关闭和关闭态全量 `2195 passed / 0 failed` 已完成，仅余两条已授权普通 push 与远端一致性复核。

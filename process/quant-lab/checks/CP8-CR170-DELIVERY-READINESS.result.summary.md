@@ -26,4 +26,4 @@ None.
 
 ## Next
 
-complete_closed_state_validation_and_push_approved_refs
+push_approved_refs_and_verify_remote_parity

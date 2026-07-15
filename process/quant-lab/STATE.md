@@ -7,7 +7,7 @@ Blocked: false
 Active CR: none
 Active Story: none
 Pending gate: none
-Next action: CR-170 status synced as closed; choose next CR.
+Next action: 关闭态 full suite 2195/0 已通过；执行并核对两条已授权普通 push
 
 Refs:
 - state: process/state/STATE.current.json
