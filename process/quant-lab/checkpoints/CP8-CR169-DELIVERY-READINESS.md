@@ -22,7 +22,7 @@ release_context_ref: "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-A
 | 量化验收 | PASS | 0 | 2/2 fixture、9/9 REQ、17/17 scenarios、15/15 QAC、12/12 P0、10→1。 |
 | Stage2 exit | PASS | 0 | 7/7 合同 PASS；`stage3_entry_ready=false`。 |
 | repository suite | PASS | 0 | 双仓 scoped commit 后 2159 passed / 0 failed。 |
-| 发布执行 | GIT DELIVERY AUTHORIZED | N/A | 本地提交已完成；仅用户指定的两个远端 ref 待推送，不执行 tag/publish/deploy。 |
+| 发布执行 | GIT REMOTE DELIVERED | N/A | 用户指定的两个远端 ref 已成对推送并复核 0/0；未执行 tag/publish/deploy。 |
 
 ## Decision Brief
 
@@ -87,7 +87,7 @@ release_context_ref: "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-A
 | Stage2 contracts / Stage3 ready | 7/7 / false |
 | targeted tests | 115 passed / 0 failed |
 | repository suite | 2159 passed / 0 failed（提交后） |
-| real/external/runtime/trading/remote operations | 0 |
+| real data/external runtime/trading/deploy operations | 0；另执行 2 个明确授权 ref 的 Git push |
 
 ### CP8 后续跟踪分流表
 
@@ -148,3 +148,4 @@ release_context_ref: "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-A
 - 修改意见：用户回复“批注，并将quant-lab和artifacts都推送到远端。然后给出下一步推进建议”；结合上一条精确批准提示和明确双仓推送指令，按批准 CP8 并附加本次受控远端写入授权执行。
 - 风险接受项：接受 `DQ-CP8-CR169-001` 的 inline verifier independence 限制；接受 `DQ-CP8-CR169-002` 的双仓 scoped commit、提交后 full suite 0 failed 才关闭协议；接受 `DQ-CP8-CR169-003` 的 `stage3_entry_ready=false` claim boundary。
 - 附加授权：允许将本次 CR-169 受控提交推送到 quant-lab 的 `origin/work/cr169-capacity-liquidity-adv-evidence` 和 meta-flow-artifacts 的 `origin/main`；不授权 force push、tag、GitHub release、publish、deploy、真实数据/runtime、Stage 3 或 CR-155 promotion。
+- 授权执行结果：两个 ref 已完成普通 fast-forward/new-branch push，首次远端复核均为 `0 ahead / 0 behind`；机器证据见 `process/checks/CR169-PAIRED-GIT-DELIVERY.result.json`。
