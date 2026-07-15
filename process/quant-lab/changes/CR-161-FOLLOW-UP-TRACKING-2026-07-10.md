@@ -14,9 +14,10 @@ owner: "host-orchestrator"
 | `FU-CR161-002` | Multiple testing / PBO / DSR computable evidence implementation | closed (`CR-164`) | CR-164 completed CP2-CP8 and closed `READY_WITH_RISK` on 2026-07-12; formal CR: `process/changes/CR-164.md`. |
 | `FU-CR161-003` | Walk-forward / OOS evidence producer foundation | closed (`CR-166`) | CR-166 于 2026-07-13 经 CP8 批准以 `READY_WITH_RISK` 关闭；只交付 fixture/static producer foundation，不连接真实数据湖，Stage 3 未启动。 |
 | `FU-CR161-004` | Economic cost / slippage / impact evidence producer foundation | closed (`CR-168`) | CR-168 于 2026-07-14 经 CP8 批准以 `READY_WITH_RISK` 关闭；交付 fixture/static-only C3 foundation，不授权真实 TCA、C4 计算或 Stage 3。 |
-| `FU-CR161-005` | Capacity / liquidity sizing and alpha decay implementation | candidate | Need capacity curve, ADV participation, liquidity sizing or alpha decay evidence. |
+| `FU-CR161-005` | C4 capacity / liquidity / ADV evidence producer foundation | active (`CR-169`，CP8 awaiting-user) | `related_active_cr=CR-169`。5/5 Story、CP6/CP7、Stage 2 合同 7/7 与 CP8 自动预检已完成；现等待 CP8 的 3 项人工决策。始终不读取真实 ADV/liquidity，不改 canonical Gate 4，不做 aggregate、Stage 3 或 CR-155 promotion。 |
 | `FU-CR161-006` | Independent CP7 verifier-lane resilience | candidate | A later high-risk CR needs to rely on CR161 CP7, or the CP8 verifier-independence waiver expires. |
 | `FU-CR161-007` | Existing-gate integration and CR155 regression implementation | candidate | C1-C4 producers 的 typed evidence 均稳定后，补齐跨 producer 端到端集成；必须保持 CR155 blocked。 |
+| `FU-CR161-008` | Alpha-decay evidence ownership and C2-adjacent method evaluation | candidate | CR169 CP3 已确认 alpha-decay 不进入 C4 v1；需要冻结预测衰减 owner、OOS/C2 边界、输入窗口与 schema version 时再独立启动。 |
 
 These candidates are not active CRs. Starting any item requires a separate CR and explicit authorization.
 
@@ -71,16 +72,18 @@ follow_up_items:
     blocked_by: ""
     next_action: "Closed under CR168 CP8 approval as READY_WITH_RISK. Real TCA, C4 capacity/liquidity, canonical global Gate4/aggregate work and Stage 3 remain separately authorized follow-up scope."
   - id: FU-CR161-005
-    title: Capacity / liquidity / ADV / alpha-decay evidence producer
+    title: C4 capacity / liquidity / ADV evidence producer foundation
     kind: implementation-gate
-    status: candidate
-    lifecycle_status: candidate
-    readiness_status: not_ready
-    gate_status: not_started
+    status: active
+    lifecycle_status: active
+    readiness_status: ready_with_risk
+    gate_status: cp8_pending
     gate_profile: architecture-major
-    formal_cr_path: ""
-    blocked_by: "C4 input contract and independent authorization"
-    next_action: "At CP3 of its future CR, decide whether to share a C3/C4 input-contract wave without merging calculations."
+    formal_cr_path: process/changes/CR-169.md
+    related_cr: CR-169
+    related_active_cr: CR-169
+    blocked_by: "related_active_cr=CR-169; CP8 required human gate is awaiting user decision."
+    next_action: "Review process/checkpoints/CP8-CR169-DELIVERY-READINESS.md and reply approve, 修改: <具体修改点>, or reject; no remote write or Stage3 authorization is implied."
   - id: FU-CR161-006
     title: Independent CP7 verifier-lane resilience
     kind: ledger-maintenance
@@ -103,4 +106,15 @@ follow_up_items:
     formal_cr_path: ""
     blocked_by: "C1-C4 typed evidence producers are not all available"
     next_action: "Activate after producer contracts stabilize; preserve CR155 blocked and reuse CR151/CR154."
+  - id: FU-CR161-008
+    title: Alpha-decay evidence ownership and C2-adjacent method evaluation
+    kind: architecture-realignment
+    status: candidate
+    lifecycle_status: candidate
+    readiness_status: not_ready
+    gate_status: not_started
+    gate_profile: architecture-major
+    formal_cr_path: ""
+    blocked_by: "CR-169 C4 v1 deliberately excludes alpha-decay; owner, OOS/C2 relation, method assumptions and schema evolution require a separate architecture decision."
+    next_action: "Activate only through a separate formal CR, CP0 conflict precheck and explicit user authorization; do not add an alpha-decay calculator to CR-169."
 ```

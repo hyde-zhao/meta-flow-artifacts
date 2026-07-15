@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR169-S05-IMPLEMENTATION-DONE",
+  "story_id": "CR169-S05-fixture-claim-stage2-exit-verification",
+  "cr_id": "CR-169",
+  "checked_at": "2026-07-15T09:59:00+08:00",
+  "check_attempt": 1,
+  "route_plan_ref": "process/checks/CP0-CR169.route-plan.json",
+  "context_ref": "process/context/stories/STORY-CR169-S05.CP6.work-packet.json",
+  "dispatch_refs": ["DISPATCH-CR169-S05-CP6-INLINE-COMPLETED-20260715T095800+0800"],
+  "return_packet_ref": "process/returns/CR169-S05-fixture-claim-stage2-exit-verification.CP6.return.json",
+  "evidence_ref": "process/evidence/CR169-S05-fixture-claim-stage2-exit-verification.CP6.index.json",
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR169-S05.CP6.work-packet.json": "sha256:7cd2cea026ffeb4c312277a8e4a26d403563ca9f2e2f93a162f455e12963f86f",
+    "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-LLD.md": "sha256:99622cc839d45d31d4d456842f9a93ade1a113436e3735c5f9c53318da99fb0a",
+    "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-IMPLEMENTATION.md": "sha256:c32c0b3e62b674b723006c79c1e64e17ad6d05f85ec5274803496b2997266efd",
+    "tests/fixtures/capacity_liquidity/daily_multifactor_v1.json": "sha256:2e51a5d633307aaca49af6100c9a4319bb7a0f345317cfe3c2526c1f8ed208b6",
+    "tests/fixtures/capacity_liquidity/multi_strategy_compatibility_v1.json": "sha256:57c3c60434ff5b9dba7010afd2e236b42fb9a07c31b199703baea6b7794b87e4",
+    "tests/research/test_capacity_liquidity_cr169_qac.py": "sha256:52e2c7b26a77ec934ba7a4151b6267c823fdc0e92658cd0d2b73a78f131cb1df",
+    "tests/research/test_capacity_liquidity_claim_regression.py": "sha256:550b9a85bcaddcfde796757d1d88c40a08c4fa5621dd9e5d51f6dd2c7690c2fd",
+    "scripts/check_stage2_exit_contracts.py": "sha256:9b6ac75eb41212b18c49f4e518baa4139f2d80cf8f8335e97229972df85b567f"
+  },
+  "items": [
+    {
+      "id": "CP6-CR169-S05-01",
+      "category": "implementation",
+      "name": "Two fixtures, exact QAC/claim tests and Stage2 checker match LLD",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-IMPLEMENTATION.md"],
+      "owner": "meta-dev-inline",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "2/2 fixtures, 9/17/15/12 coverage, 10→1 and exact seven-item routing implemented."
+    },
+    {
+      "id": "CP6-CR169-S05-02",
+      "category": "testing",
+      "name": "S05 and CR169/CR168/CR155 regressions pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/evidence/CR169-S05-fixture-claim-stage2-exit-verification.CP6.index.json"],
+      "owner": "meta-dev-inline",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "S05 13 passed; combined targeted suite 115 passed."
+    },
+    {
+      "id": "CP6-CR169-S05-03",
+      "category": "boundary",
+      "name": "Forbidden source modifications and external operations remain zero",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/CR169-S05-fixture-claim-stage2-exit-verification.CP6.return.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "canonical/CR168/aggregate diff=0; runtime/provider/trading/remote operations=0."
+    }
+  ],
+  "blockers": [],
+  "waivers": ["CP5 approved inline-fallback; R-CR169-VERIFIER-INDEPENDENCE must be disclosed at CP8"],
+  "read_expansion_refs": [
+    "RE-20260715T015041Z0000-6ad7bd4c",
+    "RE-20260715T015857Z0000-19e91b9b"
+  ],
+  "decision": "PASS",
+  "next_route": "CP7-CR169-S05-VERIFICATION"
+}

@@ -1,0 +1,74 @@
+schema_version: 1
+context_id: CP8-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE
+cr_id: CR-169
+created_at: "2026-07-15T10:17:00+08:00"
+read_profile: compact
+phase: documentation
+context_type: cp8-delivery
+source_gates:
+  cp3:
+    checkpoint_ref: process/checkpoints/CP3-CR169-CAPACITY-LIQUIDITY-ADV-HLD-REVIEW.md
+    result_ref: process/checks/CP3-CR169-CAPACITY-LIQUIDITY-ADV-HLD-CONSISTENCY.result.json
+  cp5:
+    checkpoint_ref: process/checkpoints/CP5-CR169-ALL-STORIES-LLD-BATCH.md
+    result_ref: process/checks/CP5-CR169-LLD-DESIGN-EVIDENCE.result.json
+  cp7:
+    result_ref: process/checks/CP7-CR169-S05-VERIFICATION.result.json
+    evidence_ref: process/evidence/CR169-S05-fixture-claim-stage2-exit-verification.CP7.index.json
+    return_ref: process/returns/CR169-S05-fixture-claim-stage2-exit-verification.CP7.return.json
+stage2_exit_ref: process/checks/STAGE2-EXIT-VERIFICATION.result.json
+release_context_ref: process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE.yaml
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+must_read:
+  - process/state/STATE.current.json
+  - process/current/CURRENT.json
+  - process/changes/summaries/CR-169.summary.json
+  - process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE.yaml
+  - process/checks/CP7-CR169-S05-VERIFICATION.result.json
+  - process/evidence/CR169-S05-fixture-claim-stage2-exit-verification.CP7.index.json
+  - process/checks/STAGE2-EXIT-VERIFICATION.result.json
+  - process/checks/CP8-CR169-DELIVERY-READINESS.result.json
+  - process/checkpoints/CP8-CR169-DELIVERY-READINESS.md
+read_if_needed:
+  - docs/quality/TEST-STRATEGY-CR169.md
+  - docs/quality/VERIFICATION-REPORT-CR169.md
+  - docs/quality/TEST-REPORT-CR169.md
+  - docs/quality/REVIEW-CR169.md
+  - docs/quality/FIXES-CR169.md
+do_not_read_by_default:
+  - process/archive/**
+  - process/discussions/**
+  - process/stories/*-LLD.md
+  - process/stories/*-IMPLEMENTATION.md
+  - full historical CR bodies
+  - credentials, .env, provider configs, real data and runtime sessions
+key_facts:
+  - Five of five Stories completed CP6 and CP7; final CP7 decision is PASS_WITH_RISK with zero blockers.
+  - CR169 targeted suite is 115 passed and zero failed; repository suite has 2157 passed and two precisely attributed precommit artifact-hygiene failures.
+  - Stage2 seven-contract exit result is 7/7 PASS, while stage3_entry_ready remains false.
+  - Gate4 fixture PASS is local strict seven-key compatibility only; canonical, CR168 adapter and aggregate modifications are zero.
+  - CP8 approval may authorize scoped local commits and post-commit rerun, but never Git remote write or real/runtime operations.
+risks_and_decisions:
+  - id: DQ-CP8-CR169-001
+    type: risk_acceptance
+    status: pending_user
+  - id: DQ-CP8-CR169-002
+    type: closure_protocol
+    status: pending_user
+  - id: DQ-CP8-CR169-003
+    type: claim_boundary
+    status: pending_user
+  - id: R-CR169-VERIFIER-INDEPENDENCE
+    status: requires_cp8_acknowledgement
+  - id: R-CR169-PRECOMMIT-ARTIFACT-HYGIENE
+    status: requires_cp8_local_commit_decision_and_post_commit_rerun
+  - id: R-CR169-PROXY-VALIDITY
+    status: controlled_by_claim_ceiling
+downstream_tasks:
+  - Await user CP8 decision.
+  - If approved, create scoped local commits in both repositories, rerun full suite, and close only on zero failures.
+  - Do not push, publish, deploy, start Stage3 or expand authorization.
+token_control:
+  read_profile: compact
+  do_not_copy_full_documents: true

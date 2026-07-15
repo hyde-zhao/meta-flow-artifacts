@@ -1,0 +1,269 @@
+{
+  "acceptance": [
+    "capacity_liquidity@v1 typed component/schema 数量为 1/1",
+    "C3/C4 correlation header 精确覆盖 13/13 字段且不默认填充",
+    "N01..N12 reason code 12/12 稳定排序并 fail-closed",
+    "相同 computational body 重复 10 次只产生 1 个 semantic hash",
+    "attachment identity 不进入 component hash，非法输入 false PASS 为 0"
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 1710,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_discovery_entry",
+      "required": true
+    },
+    {
+      "estimated_tokens": 712,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S01-capacity-liquidity-contract-validation.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1550,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-169.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 606,
+      "mode": "full",
+      "path": "docs/design/MODULE-BOUNDARIES.yaml",
+      "reason": "module_boundaries",
+      "required": false
+    },
+    {
+      "estimated_tokens": 211,
+      "mode": "full",
+      "path": "docs/design/PACKAGE-IDENTITY.yaml",
+      "reason": "package_identity",
+      "required": false
+    }
+  ],
+  "allowed_write_paths": [
+    "engine/capacity_liquidity_evidence.py",
+    "tests/research/test_capacity_liquidity_contracts.py",
+    "process/stories/STORY-CR169-S01-capacity-liquidity-contract-validation.md",
+    "process/stories/STORY-CR169-S01-capacity-liquidity-contract-validation-IMPLEMENTATION.md",
+    "process/context/stories/STORY-CR169-S01.CP6.work-packet.json",
+    "process/returns/CR169-S01-capacity-liquidity-contract-validation.CP6.return.json",
+    "process/evidence/CR169-S01-capacity-liquidity-contract-validation.CP6.index.json",
+    "process/checks/CP6-CR169-S01-IMPLEMENTATION-DONE.result.json",
+    "process/checks/CP6-CR169-S01-IMPLEMENTATION-DONE.result.summary.md"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "NO_REAL_LAKE_READ_OR_WRITE",
+    "NO_PROVIDER_FETCH",
+    "NO_GIT_REMOTE_WRITE"
+  ],
+  "budget": {
+    "estimated_tokens": 5352,
+    "estimator": "chars_div_4",
+    "max_tokens": 16000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [
+      "capacity_liquidity@v1",
+      "C3C4CorrelationHeaderV1",
+      "capacity-liquidity semantic hash v1",
+      "N01..N12 ordered validation issues"
+    ],
+    "summary": "建立 C4 fixture/static-only 的 typed input、13 字段关联头、稳定校验原因码和 identity/hash 分域；不实现 calculator、envelope activation 或 Gate4 调用。"
+  },
+  "cr_id": "CR-169",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+    ,"process/archive/**",
+    "process/discussions/**"
+  ],
+  "dependency_inputs": [
+    "CR-168 canonical serialization/hash primitives",
+    "CP3 批准的 exact 13-field header 与 identity-domain split",
+    "CP5 批准的 S01 full LLD"
+  ],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary / legacy fallback，不作为 agent 默认机器入口"
+    },
+    {
+      "path_or_pattern": "process/DEVELOPMENT-PLAN.yaml",
+      "reason": "计划长文由 Story packet / context 摘要承载"
+    },
+    {
+      "path_or_pattern": "process/STORY-STATUS.md",
+      "reason": "legacy status 汇总，不作为当前 Story 真相源"
+    },
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "默认读取 CR summary / CR ledger，完整 CR 只用于审计或冲突恢复"
+    },
+    {
+      "path_or_pattern": "process/stories/*-LLD.md",
+      "reason": "默认读取 Story packet / design summary，完整 LLD 按需展开"
+    },
+    {
+      "path_or_pattern": "process/stories/*-IMPLEMENTATION.md",
+      "reason": "实现长证据默认通过 return/evidence index 消费"
+    },
+    {
+      "path_or_pattern": "process/archive/**",
+      "reason": "冷历史归档，仅人工审计或冲突恢复时读取"
+    },
+    {
+      "path_or_pattern": "process/discussions/**",
+      "reason": "讨论记录不作为实现合同真相源"
+    }
+  ],
+  "expected_return_packet": "process/returns/CR169-S01-capacity-liquidity-contract-validation.CP6.return.json",
+  "feature_contract_summary": "C4 v1 只消费显式 synthetic/static liquidity inputs，输出 immutable typed values；13 字段 header 用于 join，component hash 仅覆盖 computational body；N01..N12 稳定排序且所有非法输入 fail-closed。",
+  "feature_design_refs": [
+    "docs/features/capacity-liquidity-evidence/DESIGN.md",
+    "docs/features/capacity-liquidity-evidence/TEST-PLAN.md",
+    "docs/features/capacity-liquidity-evidence/TASKS.md",
+    "docs/features/c3-c4-correlation-boundary/DESIGN.md",
+    "docs/features/c3-c4-correlation-boundary/TEST-PLAN.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "capacity.liquidity.evidence",
+    "c3.c4.correlation.boundary"
+  ],
+  "forbidden_write_paths": [
+    "engine/strategy_evidence.py",
+    "engine/cross_strategy_reliability_gates.py",
+    "engine/economic_cost_gate4_projection.py",
+    "engine/strategy_admission_package.py",
+    "process/archive/**",
+    "process/discussions/**"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "lld_policy": "full-lld",
+  "must_read": [
+    {
+      "estimated_tokens": 1710,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true
+    },
+    {
+      "estimated_tokens": 712,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S01-capacity-liquidity-contract-validation.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    }
+  ],
+  "objective": {
+    "non_goals": [
+      "不实现 C4 calculator/producer",
+      "不激活 neutral envelope catalog",
+      "不调用或修改 canonical Gate4",
+      "不读取真实 ADV/liquidity，不实现 alpha-decay"
+    ],
+    "summary": "C4 合同、关联头与输入校验"
+  },
+  "packet_type": "story_work_packet",
+  "parent_context_ref": "process/context/CP5-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE-CONTEXT.yaml",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "quant-lab",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 1848,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S01-capacity-liquidity-contract-validation-LLD.md",
+      "reason": "story_lld",
+      "trigger": "full_lld_required_by_policy"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "architecture-major",
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR169-S01-capacity-liquidity-contract-validation",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S01-capacity-liquidity-contract-validation.md",
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/research/test_capacity_liquidity_contracts.py",
+    "uv run --python 3.11 python -m py_compile engine/capacity_liquidity_evidence.py tests/research/test_capacity_liquidity_contracts.py",
+    "git diff --check",
+    "静态核对 forbidden_write_paths 与外部 I/O 数量为 0"
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "acceptance": ["37 targeted S01/S02 tests PASS", "formula/cap/HALF_EVEN/3 refs/10→1 全部精确", "no-real/alpha claim ceiling 有独立断言", "forbidden module 和外部 operation 触达为 0"],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 1714,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 221,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_discovery_entry",
+      "required": true
+    },
+    {
+      "estimated_tokens": 548,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S02-deterministic-static-c4-producer.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1550,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-169.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 606,
+      "mode": "full",
+      "path": "docs/design/MODULE-BOUNDARIES.yaml",
+      "reason": "module_boundaries",
+      "required": false
+    },
+    {
+      "estimated_tokens": 211,
+      "mode": "full",
+      "path": "docs/design/PACKAGE-IDENTITY.yaml",
+      "reason": "package_identity",
+      "required": false
+    }
+  ],
+  "allowed_write_paths": ["process/stories/STORY-CR169-S02-deterministic-static-c4-producer-VERIFICATION.md", "process/context/stories/STORY-CR169-S02.CP7.verify-packet.json", "process/returns/CR169-S02-deterministic-static-c4-producer.CP7.return.json", "process/evidence/CR169-S02-deterministic-static-c4-producer.CP7.index.json", "process/checks/CP7-CR169-S02-VERIFICATION.result.json", "process/checks/CP7-CR169-S02-VERIFICATION.result.summary.md"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PROVIDER_FETCH", "NO_GIT_REMOTE_WRITE"],
+  "budget": {
+    "estimated_tokens": 5206,
+    "estimator": "chars_div_4",
+    "max_tokens": 18000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": ["static_adv_cap_v1", "CapacityLiquidityEvidenceV1", "three typed Gate4 refs"],
+    "summary": "独立复核 S02 calculator/producer 与 no-real claim ceiling，不修改实现。"
+  },
+  "cr_id": "CR-169",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md", "process/archive/**", "process/discussions/**"
+  ],
+  "dependency_inputs": ["process/returns/CR169-S02-deterministic-static-c4-producer.CP6.return.json", "process/evidence/CR169-S02-deterministic-static-c4-producer.CP6.index.json"],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary / legacy fallback，不作为 agent 默认机器入口"
+    },
+    {
+      "path_or_pattern": "process/DEVELOPMENT-PLAN.yaml",
+      "reason": "计划长文由 Story packet / context 摘要承载"
+    },
+    {
+      "path_or_pattern": "process/STORY-STATUS.md",
+      "reason": "legacy status 汇总，不作为当前 Story 真相源"
+    },
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "默认读取 CR summary / CR ledger，完整 CR 只用于审计或冲突恢复"
+    },
+    {
+      "path_or_pattern": "process/stories/*-LLD.md",
+      "reason": "默认读取 Story packet / design summary，完整 LLD 按需展开"
+    },
+    {
+      "path_or_pattern": "process/stories/*-IMPLEMENTATION.md",
+      "reason": "实现长证据默认通过 return/evidence index 消费"
+    },
+    {"path_or_pattern": "process/archive/**", "reason": "冷历史归档"},
+    {"path_or_pattern": "process/discussions/**", "reason": "讨论记录不作为验证真相源"}
+  ],
+  "expected_return_packet": "process/returns/CR169-S02-deterministic-static-c4-producer.CP7.return.json",
+  "feature_contract_summary": "static_adv_cap_v1 使用固定 Decimal 公式，present 必须提供 3/3 typed refs 且 real/ready claims 全 false。",
+  "feature_design_refs": [
+    "docs/features/capacity-liquidity-evidence/DESIGN.md",
+    "docs/features/capacity-liquidity-evidence/TEST-PLAN.md",
+    "docs/features/capacity-liquidity-evidence/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "capacity.liquidity.evidence"
+  ],
+  "forbidden_write_paths": ["engine/**", "tests/**", "process/archive/**"],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "implementation_return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR169-S02-deterministic-static-c4-producer.CP6.return.json",
+  "lld_policy": "full-lld",
+  "must_read": [
+    {
+      "estimated_tokens": 1714,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 221,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true
+    },
+    {
+      "estimated_tokens": 548,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S02-deterministic-static-c4-producer.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    }
+  ],
+  "objective": {
+    "non_goals": ["不修改代码/测试", "不验证 S03-S05", "不接真实数据/runtime"],
+    "summary": "确定性 Static C4 Producer"
+  },
+  "packet_type": "story_verify_packet",
+  "parent_context_ref": "process/context/stories/CR169-S02-deterministic-static-c4-producer.base.context.json",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "quant-lab",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 1630,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S02-deterministic-static-c4-producer-LLD.md",
+      "reason": "story_lld",
+      "trigger": "full_lld_required_by_policy"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "architecture-major",
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR169-S02-deterministic-static-c4-producer",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S02-deterministic-static-c4-producer.md",
+  "verification_plan": ["uv run --python 3.11 pytest -q tests/research/test_capacity_liquidity_contracts.py tests/research/test_capacity_liquidity_producer.py", "uv run --python 3.11 python -m py_compile engine/capacity_liquidity_calculator.py engine/capacity_liquidity_evidence.py", "git diff --check", "静态审查 no-I/O、3 refs 和 forbidden module diff"]
+}

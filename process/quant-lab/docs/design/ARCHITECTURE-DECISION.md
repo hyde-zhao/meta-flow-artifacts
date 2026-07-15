@@ -1,7 +1,7 @@
 ---
 status: "current-index"
-version: "1.10"
-change: "CR-168"
+version: "1.12"
+change: "CR-169"
 legacy_source: "process/ARCHITECTURE-DECISION.md"
 current_change_sources:
   - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-CR046.md"
@@ -12,6 +12,7 @@ current_change_sources:
   - "process/docs/design/ARCHITECTURE-DECISION-CR151-STRATEGY-ADMISSION-STATISTICAL-GATE.md"
   - "process/docs/design/ARCHITECTURE-DECISION-ML-STRATEGY-E2E-FRAMEWORK.md"
   - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+  - "process/docs/design/ARCHITECTURE-DECISION-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
 ---
 
 # Architecture Decision Current Index
@@ -31,6 +32,8 @@ current_change_sources:
 | 1.8 | 2026-07-02 | host-orchestrator | 登记 CR152 ML Strategy E2E Framework ADR：ML-specific admission gate + CR151 四态 adapter、metadata-only artifact boundary、extend existing contracts、deterministic fixture-only validation。 |
 | 1.9 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR168 五项 proposed ADR：neutral envelope 叶子扩展、square-root-only v1、最小 shared header、Gate4 adapter-local containment、canonical/aggregate 后置；待 CP3 人工批准。 |
 | 1.10 | 2026-07-14 | host-orchestrator inline fallback | CP3 已批准后将 CR168 ADR 正文归档到 `process/archive/design-cr-docs/`，并将 current index 的状态从 proposed 更新为 accepted；不改变 ADR 技术语义。 |
+| 1.11 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR169 六项 proposed ADR：C4 static proxy、component hash/correlation 分域、strict joint fixture adapter、alpha-decay 后置、Stage2/Stage3 分离和 FU007a/b 非约束性 tracking；待 CP3。 |
+| 1.12 | 2026-07-14 | host-orchestrator inline meta-se-critical | 接受 CR169 ADR-001..006：冻结 13 字段 correlation header、公开 Gate4 callable、alpha `FU-CR161-008` follow-up 和 Stage2 历史缺口分流；不扩大实现或 Stage3 授权。 |
 
 ## 定位
 
@@ -56,6 +59,7 @@ current_change_sources:
 | FEAT-03 / FEAT-14 Strategy Admission Statistical Gate | ADR-CR151-001..004 | CR151 多因子统计准入门：dedicated metadata-only module、Wave A only、PASS/FAIL/NEEDS_REVIEW/BLOCKED fail-closed model、static/fixture-only validation；Wave A 不覆盖 MF-GAP-2 扩展评价统计、MF-GAP-4 regime 分层和 MF-GAP-7 因子相关性聚类 / 去重；不授权真实 lake/NAS/provider/QMT/runtime/trading/broker/credential/external framework |
 | FEAT-03 / FEAT-14 ML Strategy E2E Framework | ADR-CR152-001..004 | CR152 ML first-wave foundation：ML-specific admission gate with shared status adapter、metadata-only TrainingSnapshotSpec / ModelArtifactRef boundary、extend existing contracts rather than parallel ML contract family、deterministic fixture-only validation；不授权真实训练、真实数据、model registry write、store writes、catalog pointer mutation 或 runtime |
 | CR168 Economic Cost / Slippage / Impact Evidence | ADR-CR168-001..005（Accepted，CP3 approved） | `economic_cost@v1` 复用 neutral envelope；v1 只启用显式静态 square-root；最小 C3/C4 shared header；CR168 adapter 使用 strict allowlist、8-key denylist 与 pre/post guard；canonical 全局 hardening、C4 与 aggregate 均 deferred；CP3 approved 不授权真实数据、runtime 或 aggregate。 |
+| CR169 Capacity / Liquidity / ADV Evidence | ADR-CR169-001..006（Accepted，CP3 approved） | C4 `capacity_liquidity@v1` 使用 explicit static proxy；13 字段 correlation header 与 component/envelope hash 分域；CR169 strict joint adapter 只读调用 public Gate4 并仅产出 fixture compatibility outcome；alpha-decay 不进 v1并登记 FU008；`stage3_entry_ready=false` 与 CP8 7/7 exit 核验；FU007a/b 仅为未来 tracking。 |
 
 ## 使用规则
 

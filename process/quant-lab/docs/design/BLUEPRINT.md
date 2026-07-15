@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.16"
+version: "1.18"
 source_use_cases: "process/USE-CASES.md"
 source_requirements: "process/REQUIREMENTS.md"
 source_story_backlog: "process/STORY-BACKLOG.md"
@@ -11,12 +11,15 @@ source_hld:
   - "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
   - "process/archive/design-cr-docs/HLD-CR051-STRATEGY-RESEARCH-LIFECYCLE-FRAMEWORK.md"
   - "process/archive/design-cr-docs/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+  - "process/docs/design/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
 source_adr: "process/ARCHITECTURE-DECISION.md"
-change: "CR-168"
+change: "CR-169"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 companion_adr_cr139: "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
 companion_blueprint_cr168: "process/archive/design-cr-docs/BLUEPRINT-ECONOMIC-COST-IMPACT-EVIDENCE.md"
 companion_hld_cr168: "process/archive/design-cr-docs/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+companion_blueprint_cr169: "process/docs/design/BLUEPRINT-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
+companion_hld_cr169: "process/docs/design/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
 superseded_in_scope_hld: "process/HLD-DATA-LAKE.md (CR-018, superseded-in-scope by CR-139 companion HLD)"
 confirmed_by: ""
 confirmed_at: ""
@@ -51,6 +54,8 @@ archived_previous:
 | 1.14 | 2026-06-28 | host-orchestrator | CP3 approved，AGA-1/3/5 确认 A1/C1/E1，pending-cp3 → confirmed-cp3。 |
 | 1.15 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR168 companion blueprint 草案：FEAT-168-01 C3 evidence 与 FEAT-168-02 guarded projection adapter；复用 FEAT-166-01 neutral envelope，保持 C4/canonical global hardening/aggregate/Stage3 范围外；待 CP3。 |
 | 1.16 | 2026-07-14 | host-orchestrator inline fallback | CP3 已批准后将 CR168 companion blueprint 正文归档到 `process/archive/design-cr-docs/`；长期 index 保留 approved 入口，不改变能力或 owner 语义。 |
+| 1.17 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR169 companion blueprint 草案：C4 fixture/static producer、C3/C4 correlation boundary、strict joint Gate4 fixture adapter 与 Stage2 exit evidence；不修改 canonical/aggregate，待 CP3。 |
+| 1.18 | 2026-07-14 | host-orchestrator inline meta-se-critical | CR169 companion blueprint 通过 CP3：关联边界冻结为 13 字段 exact match，alpha 后置 FU008，Stage2 历史缺口不由 C4 范围代修。 |
 
 ## 蓝图定位
 

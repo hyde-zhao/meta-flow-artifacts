@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "CR169-S02-deterministic-static-c4-producer.CP6",
+  "stage": "CP6",
+  "cr_id": "CR-169",
+  "story_id": "CR169-S02-deterministic-static-c4-producer",
+  "status": "implemented",
+  "created_at": "2026-07-15T09:40:00+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR169-S02.CP6.work-packet.json",
+  "implementation_ref": "process/stories/STORY-CR169-S02-deterministic-static-c4-producer-IMPLEMENTATION.md",
+  "source_story_ref": "process/stories/STORY-CR169-S02-deterministic-static-c4-producer.md",
+  "source_design_evidence_ref": "process/stories/STORY-CR169-S02-deterministic-static-c4-producer-LLD.md",
+  "touched_files": [
+    {"path": "engine/capacity_liquidity_calculator.py", "change_type": "created"},
+    {"path": "engine/capacity_liquidity_evidence.py", "change_type": "modified"},
+    {"path": "tests/research/test_capacity_liquidity_producer.py", "change_type": "created"},
+    {"path": "process/stories/STORY-CR169-S02-deterministic-static-c4-producer-IMPLEMENTATION.md", "change_type": "created"}
+  ],
+  "contract_changes": {"public_api_changed": true, "data_contract_changed": true, "design_delta_required": false, "design_delta_ref": null, "summary": "实现 static_adv_cap_v1、three typed refs、CapacityLiquidityEvidenceV1 和唯一 producer。"},
+  "boundary_check": {"allowed_paths_only": true, "forbidden_paths_touched": [], "unexpected_imports": [], "runtime_touched": false, "credentials_touched": false, "real_lake_read_touched": false, "real_lake_write_touched": false, "provider_fetch_executed": false, "nas_operation_executed": false, "qmt_runtime_executed": false, "simulation_or_live_executed": false, "broker_operation_executed": false, "external_framework_executed": false, "historical_backfill_executed": false, "git_remote_write_executed": false, "publish_executed": false},
+  "verification": {"commands_run": [
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_capacity_liquidity_contracts.py tests/research/test_capacity_liquidity_producer.py", "result": "pass", "summary": "37 passed in 0.09s"},
+    {"command": "uv run --python 3.11 python -m py_compile engine/capacity_liquidity_calculator.py engine/capacity_liquidity_evidence.py tests/research/test_capacity_liquidity_producer.py", "result": "pass", "summary": "compile passed"},
+    {"command": "git diff --check -- CR169 S02 files", "result": "pass", "summary": "clean"}
+  ], "tests": ["tests/research/test_capacity_liquidity_contracts.py", "tests/research/test_capacity_liquidity_producer.py"], "stage_decision": "PASS", "skipped": []},
+  "open_questions": [], "risks": [], "waivers": [],
+  "design_delta": {"requires_feature_doc_update": false, "requires_architecture_doc_update": false, "requires_hld_update": false, "design_delta_required": false, "design_delta_ref": null, "status": "not_required", "reason": "实现与已批准 S02 LLD 一致。"},
+  "evidence_refs": ["process/evidence/CR169-S02-deterministic-static-c4-producer.CP6.index.json"],
+  "next_stage_recommendation": "ready_for_cp7",
+  "actor": "host-orchestrator-inline",
+  "decision": "PASS"
+}

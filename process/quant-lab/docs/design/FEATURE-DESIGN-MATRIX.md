@@ -1,18 +1,20 @@
 ---
 status: "ready-for-cp5-review"
-version: "1.24"
+version: "1.25"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld:
   - "docs/design/HLD.md"
   - "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
   - "process/archive/design-cr-docs/HLD-WALK-FORWARD-OOS-EVIDENCE.md"
   - "process/archive/design-cr-docs/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+  - "docs/design/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
 source_adr:
   - "docs/design/ARCHITECTURE-DECISION.md"
   - "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
   - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-WALK-FORWARD-OOS-EVIDENCE.md"
   - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-ECONOMIC-COST-IMPACT-EVIDENCE.md"
-change: "CR-168"
+  - "docs/design/ARCHITECTURE-DECISION-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
+change: "CR-169"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 confirmed_by: ""
 confirmed_at: ""
@@ -49,6 +51,7 @@ confirmed_at: ""
 | 1.22 | 2026-07-13 | host-orchestrator inline meta-se | CR166 CP3 approved 后增补 FEAT-166-01..05 五套 required Feature 设计；五 Story 全部 full-lld、五个串行安全 Wave，保持 fixture/static 与 no-runtime 边界。 |
 | 1.23 | 2026-07-14 | host-orchestrator inline meta-se | CR168 CP3 revised/approved 后增补 FEAT-168-01..03，并增量复用 FEAT-166-01；五 Story 全部 full-lld、五个串行安全 Wave，固化 component/envelope identity 分域与 Gate4 adapter-local containment。 |
 | 1.24 | 2026-07-14 | host-orchestrator inline fallback | CR168 专题 CP3 正文归档后更新其 HLD/ADR source path；Feature 判定、Story、lld_policy 和实施语义不变。 |
+| 1.25 | 2026-07-14 | host-orchestrator inline meta-se | CR169 CP3 approved 后增补 FEAT-169-01..04、12/12 三件套、5 个串行 Story、13 字段 correlation、strict 7-key joint adapter 与 Stage2 7/7 exit guard。 |
 
 ## 适用性判定规则
 
@@ -730,3 +733,59 @@ confirmed_at: ""
 | A1–E3 revision 下沉 | PASS | 五个 CP5 focus + Feature contract/test/tasks |
 | 相邻边界 | PASS | C4=0、canonical/aggregate changes=0、event=0、CR155 promotion=0 |
 | 授权边界 | PASS | design-only、no-subagent、source/test/external/runtime/write=0 |
+
+## CR169 CP4 增量：Capacity / Liquidity / ADV Evidence Producer Foundation
+
+> 来源：CR169 CP3 v1.1 HLD/ADR 已按用户评审补强后批准。当前只允许 Feature/Story/LLD 设计；CP5 批准前不修改 source/test、不执行新增测试，也不触达真实 ADV/liquidity、canonical Gate4、aggregate、Stage3 或远端 Git。
+
+### Feature 适用性判定
+
+| Feature | 名称 | 判定 | 触发原因 | 三件套 | Stories | lld_policy | 重访条件 |
+|---|---|---|---|---|---|---|---|
+| FEAT-169-01 | Capacity / Liquidity / ADV Fixture Evidence | required | public typed component、Decimal static proxy、12-class fail-closed、hash/availability 被 S01/S02/S03/S05 共享 | `docs/features/capacity-liquidity-evidence/{DESIGN,TEST-PLAN,TASKS}.md` | S01,S02,S03,S05 | full-lld | schema/method/formula/rounding/hash/availability 变化 |
+| FEAT-169-02 | C3/C4 Correlation Boundary | required | exact 13-field join、identity/envelope 分域、fail-before-canonical 属于跨组件安全合同 | `docs/features/c3-c4-correlation-boundary/{DESIGN,TEST-PLAN,TASKS}.md` | S01,S04,S05 | full-lld | header 字段、view 来源、temporal/audit 规则变化 |
+| FEAT-169-03 | Strict C3+C4 Gate4 Fixture Adapter | required | 7-key allowlist、reason escape、public callable DI、postcondition 与 forbidden-write 边界 | `docs/features/capacity-liquidity-gate4-joint-adapter/{DESIGN,TEST-PLAN,TASKS}.md` | S04,S05 | full-lld | canonical public result、Gate4 fields、release profile 或 aggregate caller 变化 |
+| FEAT-169-04 | C4 Fixture Claim / Stage2 Exit Guard | required | 17 scenarios、15 QAC、12/12 P0、CR155/CR168 回归、7/7 exit 证据是 claim-sensitive 跨 Feature 验证 | `docs/features/capacity-liquidity-claim-exit-guard/{DESIGN,TEST-PLAN,TASKS}.md` | S05 | full-lld | Stage2 exit contract、真实数据 lane、independent verifier 或 release claim 变化 |
+
+### Story 下游消费表
+
+| Story | Owner Feature(s) | feature_design_refs | lld_policy | CP5 evidence |
+|---|---|---|---|---|
+| CR169-S01-capacity-liquidity-contract-validation | FEAT-169-01/02 | Evidence + Correlation 三件套 | full-lld（public contract/hash/security） | Story LLD |
+| CR169-S02-deterministic-static-c4-producer | FEAT-169-01 | Evidence 三件套 | full-lld（numeric/public producer） | Story LLD |
+| CR169-S03-neutral-envelope-c4-activation | FEAT-169-01 / CR166 envelope | Evidence 三件套 + existing envelope DESIGN/TEST-PLAN | full-lld（catalog/hash/backward compatibility） | Story LLD |
+| CR169-S04-strict-c3-c4-gate4-joint-adapter | FEAT-169-02/03 | Correlation + Joint Adapter 三件套 | full-lld（security/cross-module/postcondition） | Story LLD |
+| CR169-S05-fixture-claim-stage2-exit-verification | FEAT-169-04/01/02/03 | 四 Feature 的 DESIGN/TEST-PLAN/TASKS | full-lld（cross-feature claim verification） | Story LLD |
+
+### CP5 注意项
+
+| Attention ID | Story | Requirement |
+|---|---|---|
+| CP5-FOCUS-CR169-001 | S01 | N01..N12 精确 reason、13 字段 header、identity 只入 envelope、issue path calculator=0。 |
+| CP5-FOCUS-CR169-002 | S02 | `static_adv_cap_v1` 三条公式、Decimal precision=28、minor-unit HALF_EVEN、cap `(0,1]`、3 refs typed present。 |
+| CP5-FOCUS-CR169-003 | S03 | catalog 仅激活 `capacity_liquidity@v1`；C1/C2/C3 descriptors/hash 不变；daily/ML component/envelope identity 分域。 |
+| CP5-FOCUS-CR169-004 | S04 | 13-field precheck、exact 7-key、reason/extra-key reject、public Protocol DI、candidate-release、non-upgrading postcondition。 |
+| CP5-FOCUS-CR169-005 | S05 | 9/9 REQ、17/17 scenarios、15/15 QAC、12/12 P0、2/2 fixtures、10→1、CR155 blocked、Stage2 exit 7-item result shape。 |
+
+### First Slice / Deferred / Not Authorized
+
+| 范围 | 状态 | 处理 |
+|---|---|---|
+| C4 typed contract + static proxy | first slice | S01/S02；pure repository-local values only。 |
+| Neutral envelope activation | first slice | S03；不修改既有 C1/C2/C3 semantic contracts。 |
+| Strict C3+C4 fixture adapter | first slice | S04；canonical read-only，aggregate=0。 |
+| Fixture/claim/exit verification | first slice | S05；Stage2 result 在 CP8 生成。 |
+| Alpha decay | deferred | FU-CR161-008；calculator=0。 |
+| Canonical global N/A hardening / aggregate / CR155 promotion | deferred | FU007a/b future tracking；不启动。 |
+| Real data/runtime/trading/publish/Git remote write | not authorized | 必须独立授权。 |
+
+### CR169 CP4 自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| Blueprint Feature 判定覆盖 | PASS | FEAT-169-01..04 = 4/4 required |
+| required Feature 三件套 | PASS | 4/4 × 3 = 12/12 |
+| Story refs / lld_policy | PASS | 5/5 full-lld；无 waived/technical-note |
+| DAG/Wave | PASS | 5 nodes、10 edges、5 serial Waves、cycles=0、parallel conflicts=0 |
+| CP3 评审补强下沉 | PASS | exact header、callable、Stage2 failure route、FU008、method basis |
+| 授权边界 | PASS | design-only；source/test/external/runtime/remote write=0 |

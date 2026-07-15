@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR169-DELIVERY-READINESS",
+  "profile": "compact",
+  "story_id": null,
+  "cr_id": "CR-169",
+  "checked_at": "2026-07-15T10:20:00+08:00",
+  "check_attempt": 1,
+  "route_plan_ref": "process/checks/CP0-CR169.route-plan.json",
+  "applicability_ref": "process/checks/CP8-CR169-APPLICABILITY.json",
+  "context_ref": "process/context/CP8-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE-DELIVERY-CONTEXT.yaml",
+  "release_context_ref": "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE.yaml",
+  "dispatch_refs": ["DISPATCH-CR169-S05-CP7-INLINE-COMPLETED-20260715T101100+0800"],
+  "evidence_ref": "process/evidence/CR169-S05-fixture-claim-stage2-exit-verification.CP7.index.json",
+  "input_artifact_hashes": {
+    "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE.yaml": "sha256:b994c39abefb7d89c958179b437517a468f234a4c9a58241139bfc5537ba4f60",
+    "process/context/CP8-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE-DELIVERY-CONTEXT.yaml": "sha256:9673ae1510143e7547d155c656e51da5819ac06394e1f1d8e93259f8920e217c",
+    "process/checks/CP7-CR169-S05-VERIFICATION.result.json": "sha256:b5ea1684df1511686f589499b6e8f7381b5d0902385c0ada3f140234cd6b1847",
+    "process/evidence/CR169-S05-fixture-claim-stage2-exit-verification.CP7.index.json": "sha256:a1b1d205d6036d5ec05b7fcfb63bfb3ba78333ee5ae93315130084e31ee75afc",
+    "process/checks/STAGE2-EXIT-VERIFICATION.result.json": "sha256:a0a1295a81bd8bbedc5a451f33c06186ad47ed0dd5e0300d05c63b4edde83572",
+    "docs/quality/TEST-STRATEGY-CR169.md": "sha256:f1634476e6bcbd0c2f541091100afa51fb935eeadc4447f73f99812d4dbeaad6",
+    "docs/quality/VERIFICATION-REPORT-CR169.md": "sha256:70e02f3ff5a2a7d796f2360c663014be6e03f2c79dd200a5201fc04e90e4503b",
+    "docs/quality/TEST-REPORT-CR169.md": "sha256:d5aa6650a63fa3444ce105bc560dde608b3ee256e4aee1516b1e7b63d71b8644",
+    "docs/quality/REVIEW-CR169.md": "sha256:a0dac4e7e084e5aee2a550944c05aa0fee62fb3d18a1f5790ceccb32079d2ae5",
+    "docs/quality/FIXES-CR169.md": "sha256:c8a101314c85038fc1c51be76134e94142821739938ff0a75083eeef28c52c43",
+    "process/docs/release/RELEASE-NOTES-CR169.md": "sha256:74d2784e2af9fc3b0fe7649169faf2451eebdfc9c71d0cfced5e6c62837c399c",
+    "process/docs/release/DEPLOY-CHECKLIST-CR169.md": "sha256:0ce292a7f0492aa9070c23761c67e892d91bf45dba189978a5a1de666dc74e2b",
+    "process/docs/release/ROLLBACK-CR169.md": "sha256:bad65809525d1ecd6431e3b16e4cc72e2e741d9c601baa7999d26cab911dfd06",
+    "process/docs/release/MIGRATION-CR169.md": "sha256:dead82dffe33d53a517c378fbf5944bf87262878c526f17117424206c77b97ea",
+    "process/docs/release/FEEDBACK-CR169.md": "sha256:a33356986cd2f6d9b2bc3e4ff0e01f213411021b8ea4481f8442109b9e038fbc",
+    "process/checks/CP8-CR169-APPLICABILITY.json": "sha256:6697b6c6709c3cbe07f25f871e22869bd8653d36698faff39923a5e0826843e3"
+  },
+  "items": [
+    {
+      "id": "CP8-CR169-01",
+      "category": "entry",
+      "name": "全部 5/5 Story 已完成 CP6/CP7 且无 blocker",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP7-CR169-S05-VERIFICATION.result.json", "docs/quality/VERIFICATION-REPORT-CR169.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "最终 CP7=PASS_WITH_RISK；targeted 115 passed。"
+    },
+    {
+      "id": "CP8-CR169-02",
+      "category": "stage-transition",
+      "name": "Stage2 七项合同 7/7 PASS 且 Stage3 entry-ready 保持 false",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/STAGE2-EXIT-VERIFICATION.result.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "stage2_complete=true 只表示合同齐备；操作计数全 0。"
+    },
+    {
+      "id": "CP8-CR169-03",
+      "category": "release-context",
+      "name": "compact release context、五份 release docs 与五份 quality docs 齐备",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE.yaml", "process/context/CP8-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE-DELIVERY-CONTEXT.yaml"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "release execution=NOT_EXECUTED；所有质量引用使用 docs/quality。"
+    },
+    {
+      "id": "CP8-CR169-04",
+      "category": "claim",
+      "name": "claim ceiling 与相邻边界显式且没有真实、aggregate、Stage3 或 CR155 overclaim",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE.yaml", "docs/quality/REVIEW-CR169.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "canonical/CR168/aggregate modifications=0；alpha=0；CR155 promotion=false。"
+    },
+    {
+      "id": "CP8-CR169-05",
+      "category": "risk",
+      "name": "Inline verification 与 precommit artifact-hygiene 风险已提交用户处置",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["docs/quality/FIXES-CR169.md", "process/checkpoints/CP8-CR169-DELIVERY-READINESS.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "repository=2157 passed/2 attributed failures；推荐本地提交后重跑 0 failed 再关闭。"
+    },
+    {
+      "id": "CP8-CR169-06",
+      "category": "workspace",
+      "name": "双仓工作区和本地/远端 Git 授权边界已记录",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE.yaml"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "未 commit/push；approve 最多授权 scoped local commits，remote write 仍禁止。"
+    }
+  ],
+  "entry_criteria": [
+    {"id": "EC-1", "description": "S01-S05 CP6/CP7 result/evidence/return artifacts exist and are ledgered.", "status": "PASS", "evidence_ref": "process/state/CHECKPOINT-LEDGER.ndjson"},
+    {"id": "EC-2", "description": "Stage2 exact seven-contract result is PASS and Stage3 entry-ready is false.", "status": "PASS", "evidence_ref": "process/checks/STAGE2-EXIT-VERIFICATION.result.json"},
+    {"id": "EC-3", "description": "Quality review has no open blocker/high finding.", "status": "PASS", "evidence_ref": "docs/quality/REVIEW-CR169.md"},
+    {"id": "EC-4", "description": "Release context is READY_WITH_RISK and execution is NOT_EXECUTED.", "status": "PASS", "evidence_ref": "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE.yaml"}
+  ],
+  "checklist": [
+    {"id": "CL-1", "description": "Five compact release docs and five quality docs are complete.", "status": "PASS", "evidence_ref": "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE.yaml"},
+    {"id": "CL-2", "description": "CR169 targeted tests have 115 passed and zero failed.", "status": "PASS", "evidence_ref": "docs/quality/TEST-REPORT-CR169.md"},
+    {"id": "CL-3", "description": "Two repository failures are exactly attributed to uncommitted-worktree hygiene and have a mandatory post-commit rerun.", "status": "PASS", "evidence_ref": "docs/quality/FIXES-CR169.md"},
+    {"id": "CL-4", "description": "Claim ceiling and all non-authorized operations are explicit.", "status": "PASS", "evidence_ref": "process/checkpoints/CP8-CR169-DELIVERY-READINESS.md"}
+  ],
+  "exit_criteria": [
+    {"id": "XC-1", "description": "READY_WITH_RISK may be submitted to CP8 user review without executing release or remote write.", "status": "PASS"},
+    {"id": "XC-2", "description": "CR may close only after user approval, scoped local commits and post-commit full suite zero failures.", "status": "PENDING_USER"}
+  ],
+  "deliverables": [
+    "process/release/RELEASE-CONTEXT-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE.yaml",
+    "process/context/CP8-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE-DELIVERY-CONTEXT.yaml",
+    "process/docs/release/RELEASE-NOTES-CR169.md",
+    "process/docs/release/DEPLOY-CHECKLIST-CR169.md",
+    "process/docs/release/ROLLBACK-CR169.md",
+    "process/docs/release/MIGRATION-CR169.md",
+    "process/docs/release/FEEDBACK-CR169.md",
+    "docs/quality/TEST-STRATEGY-CR169.md",
+    "docs/quality/VERIFICATION-REPORT-CR169.md",
+    "docs/quality/TEST-REPORT-CR169.md",
+    "docs/quality/REVIEW-CR169.md",
+    "docs/quality/FIXES-CR169.md"
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260715T021911Z0000-de9f968f",
+    "RE-20260715T021911Z0000-d0bd665d",
+    "RE-20260715T021912Z0000-b0fa7dca",
+    "RE-20260715T021912Z0000-5d1ece8d"
+  ],
+  "decision": "PASS",
+  "release_decision": "READY_WITH_RISK",
+  "manual_gate_status": "pending_user",
+  "pending_human_decisions": ["DQ-CP8-CR169-001", "DQ-CP8-CR169-002", "DQ-CP8-CR169-003"],
+  "not_authorized": [
+    "Git remote push/force-push/tag/release",
+    "publish/deploy/runtime enablement",
+    "real data/ADV/liquidity/capacity/alpha/calibration",
+    "canonical global Gate4/aggregate admission",
+    "broker/QMT/simulation/paper/live/trading",
+    "Stage3 start",
+    "CR155 promotion"
+  ],
+  "next_route": "await_user_cp8_decision"
+}

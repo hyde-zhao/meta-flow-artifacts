@@ -1,0 +1,69 @@
+schema_version: 1
+cr_id: CR-169
+stage: CP2
+profile: architecture-major
+status: approved
+context_policy:
+  read_profile: compact
+  must_read:
+    - process/changes/summaries/CR-169.summary.json
+    - process/checks/CP0-CR169-BASELINE.result.json
+    - process/checks/CP1-CR169-USE-CASE-COMPLETENESS.result.json
+    - process/checks/CR169-PRODUCT-BASELINE-EVIDENCE.json
+    - process/checkpoints/CP2-CR169-REQUIREMENTS-BASELINE.md
+  read_if_needed:
+    - process/changes/CR-169.md
+    - docs/product/USE-CASES.md
+    - docs/product/REQUIREMENTS.md
+    - docs/product/SCENARIOS.yaml
+    - docs/product/TEST-MATRIX.md
+  do_not_read_by_default:
+    - process/archive/**
+    - process/discussions/**
+    - complete CR-166/CR-168 Story, LLD, implementation and test reports
+    - complete HLD / BLUEPRINT / DOMAIN-MAP / DEPENDENCY-MAP
+  full_doc_read_reason_required: true
+baseline_summary:
+  formal_cr: "CR-169 C4 Capacity / Liquidity / ADV Evidence Producer Foundation"
+  cp0: PASS
+  cp1: PASS
+  product_counts:
+    use_cases: "1/1"
+    requirements: "9/9"
+    qac: "15/15"
+    scenarios: "17/17 (P0=16, P1=1)"
+    matrix_coverage: "17/17"
+  scope_invariants:
+    stage2_complete: true
+    stage2_exit_contract_verification_required: true
+    stage2_exit_contract_verification_status: pending_cp8
+    stage3_started: false
+    stage3_entry_ready: false
+    cr168_c3_only_adapter_preserved: true
+    canonical_gate4_modifications: 0
+    aggregate_orchestration_modifications: 0
+    cr155_status: "BLOCKED / paper_candidate=false"
+    alpha_decay: "CP3 disposition only"
+decisions:
+  - id: DQ-CP2-CR169-C4-METHOD
+    recommendation: "显式 synthetic/static ADV、participation cap、capacity curve 与 liquidity sizing；真实校准延后。"
+  - id: DQ-CP2-CR169-CORRELATION-HEADER
+    recommendation: "冻结最小 correlation header；计算 body 与 component semantic hash 域独立。"
+  - id: DQ-CP2-CR169-GATE4-COMPOSITION-OWNER
+    recommendation: "新增 strict C3+C4 fixture adapter；CR168 adapter、canonical Gate4 与 aggregate 不变。"
+  - id: DQ-CP2-CR169-ALPHA-DECAY
+    recommendation: "CP3 决定 C4、C2 或独立 CR；CR169 默认不实现。"
+  - id: DQ-CP2-CR169-VERIFIER
+    recommendation: "不阻塞 fixture foundation；若 FU-006 未完成，CP8 最多 READY_WITH_RISK 并披露独立性风险。"
+not_authorized:
+  - real ADV/liquidity/order/book/flow or provider/lake/NAS data
+  - credentials, secrets, external runtime, broker or trading
+  - real capacity calibration or real alpha-decay estimation
+  - canonical Gate4/global hardening or aggregate orchestration
+  - Stage 3 start, real-capacity/runtime readiness claim, CR155 promotion
+  - catalog/store/registry write, publish/deploy/tag/release or Git remote write
+review_remediation:
+  stage2_exit_verification: "CP8/formal Stage 2 exit requires STAGE2-EXIT-VERIFICATION.result.json with 7/7 contract checks."
+  stage3_entry: "false; Stage 2 complete does not grant Stage 3 entry."
+  fu007_proposal: "007a canonical N/A hardening / 007b aggregate+CR155 is nonbinding; each requires a future formal CR, CP0 conflict precheck and user authorization."
+next_exact_prompt: "approve CR-169 CP3，按已批准架构继续推进到下一个人工门禁"

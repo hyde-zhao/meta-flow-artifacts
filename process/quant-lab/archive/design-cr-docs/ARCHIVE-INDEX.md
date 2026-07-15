@@ -1,7 +1,7 @@
 ---
 title: "Archived CR-Named Design Documents"
 status: "current-archive-index"
-version: "1.0"
+version: "1.4"
 source_cr: "CR-131"
 created_at: "2026-06-23T18:05:00+08:00"
 owner: "host-orchestrator"
@@ -17,6 +17,7 @@ owner: "host-orchestrator"
 | 1.1 | 2026-06-30 | host-orchestrator | CR141 继续收敛 CR131 design surface 红基线，将 CR138/CR139 专属 HLD/ADR 从 current design root 归档。 |
 | 1.2 | 2026-07-13 | host-orchestrator | CR166 将 CP3 已批准的 Walk-forward/OOS 专题 HLD、ADR、Blueprint、Domain Map 与 Dependency Map 归档，避免污染 current design surface。 |
 | 1.3 | 2026-07-14 | host-orchestrator inline fallback | CR168 将 CP3 已批准的 Economic Cost 专题 HLD、ADR、Blueprint、Domain Map 与 Dependency Map 归档；正文不变，仅保持 default design surface 的 current-index 语义。 |
+| 1.4 | 2026-07-15 | host-orchestrator inline fallback | CR169 将 CP3 已批准的 Capacity/Liquidity/ADV 专题 HLD、ADR、Blueprint、Domain Map 与 Dependency Map 归档；正文不变，仅保持 default design surface 的 current-index 语义。 |
 
 ## 定位
 
@@ -36,8 +37,10 @@ owner: "host-orchestrator"
 | `ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md` | CR139 Strategy Data Foundation ADR |
 | `ARCHITECTURE-DECISION-WALK-FORWARD-OOS-EVIDENCE.md` | CR166 Walk-forward/OOS evidence ADR |
 | `ARCHITECTURE-DECISION-ECONOMIC-COST-IMPACT-EVIDENCE.md` | CR168 Economic Cost / Slippage / Impact evidence ADR |
+| `ARCHITECTURE-DECISION-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md` | CR169 Capacity / Liquidity / ADV fixture evidence ADR |
 | `BLUEPRINT-WALK-FORWARD-OOS-EVIDENCE.md` | CR166 Walk-forward/OOS evidence Blueprint |
 | `BLUEPRINT-ECONOMIC-COST-IMPACT-EVIDENCE.md` | CR168 Economic Cost / Slippage / Impact evidence Blueprint |
+| `BLUEPRINT-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md` | CR169 Capacity / Liquidity / ADV fixture evidence Blueprint |
 | `CONTEXT-CAPSULE-HUMAN-GATE-CONSISTENCY-CR114.md` | CR114 context / human gate consistency design notes |
 | `CONTEXT-PATH-ALIAS-NORMALIZATION-NOTES-CR117.md` | CR117 path alias normalization notes |
 | `CR-TRACKING-CHECKER-EXPECTATION-NOTES-CR112.md` | CR112 CR tracking checker expectation notes |
@@ -58,10 +61,13 @@ owner: "host-orchestrator"
 | `HLD-STRATEGY-DATA-FOUNDATION.md` | CR139 Strategy Data Foundation HLD |
 | `HLD-WALK-FORWARD-OOS-EVIDENCE.md` | CR166 Walk-forward/OOS evidence HLD |
 | `HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md` | CR168 Economic Cost / Slippage / Impact evidence HLD |
+| `HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md` | CR169 Capacity / Liquidity / ADV fixture evidence HLD |
 | `DOMAIN-MAP-WALK-FORWARD-OOS-EVIDENCE.md` | CR166 Walk-forward/OOS evidence Domain Map |
 | `DOMAIN-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md` | CR168 Economic Cost / Slippage / Impact evidence Domain Map |
+| `DOMAIN-MAP-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md` | CR169 Capacity / Liquidity / ADV fixture evidence Domain Map |
 | `DEPENDENCY-MAP-WALK-FORWARD-OOS-EVIDENCE.md` | CR166 Walk-forward/OOS evidence Dependency Map |
 | `DEPENDENCY-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md` | CR168 Economic Cost / Slippage / Impact evidence Dependency Map |
+| `DEPENDENCY-MAP-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md` | CR169 Capacity / Liquidity / ADV fixture evidence Dependency Map |
 | `HUMAN-GATE-LAUNCH-MESSAGE-CHECKABLE-DRAFT-CONTRACT-CR115.md` | CR115 human gate launch message draft contract |
 | `HUMAN-GATE-LAUNCH-MESSAGE-CHECKER-IMPLEMENTATION-CANDIDATE-CR119.md` | CR119 human gate launch message checker candidate |
 | `PATH-ALIAS-CHECKER-ENFORCEMENT-CANDIDATE-CR118.md` | CR118 path alias checker enforcement candidate |

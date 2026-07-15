@@ -1,0 +1,189 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE-CONTEXT"
+project_id: "quant-lab"
+workflow_id: "CR-169"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "approved-consumed"
+created_at: "2026-07-14T18:08:00+08:00"
+created_by: "host-orchestrator-inline-meta-se-critical"
+storage_route: "external-process-artifact-route"
+source_cr: "CR-169"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  default_instruction: "先读本 capsule、CR169 summary、CP2 approval/result 和五份 companion design；默认不读 archive、历史 Story/LLD/测试报告或完整会话。"
+
+must_read:
+  - "process/checkpoints/CP2-CR169-REQUIREMENTS-BASELINE.md"
+  - "process/checks/CP2-CR169-REQUIREMENTS-BASELINE-PRECHECK.result.json"
+  - "process/changes/summaries/CR-169.summary.json"
+  - "process/changes/CR-169.md"
+  - "docs/design/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
+  - "docs/design/ARCHITECTURE-DECISION-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
+  - "docs/design/BLUEPRINT-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
+  - "docs/design/DOMAIN-MAP-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
+  - "docs/design/DEPENDENCY-MAP-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
+
+read_if_needed:
+  - path: "docs/product/REQUIREMENTS.md"
+    trigger: "需要核对 REQ169、QAC 或 CP3 obligations 原文"
+  - path: "docs/product/SCENARIOS.yaml"
+    trigger: "需要核对 17 个 CR169 场景的 expected behavior"
+  - path: "docs/features/strategy-evidence-envelope/DESIGN.md"
+    trigger: "需要审计 CR166 neutral envelope public contract / ownership"
+  - path: "docs/features/cross-strategy-reliability-gates/DESIGN.md"
+    trigger: "需要审计 Gate4 7-field contract 或 consumer 边界"
+  - path: "engine/strategy_evidence.py"
+    trigger: "需要核对 catalog/hash/availability 当前源码事实"
+  - path: "engine/cross_strategy_reliability_gates.py"
+    trigger: "需要核对 canonical Gate4 public validator 与 N/A 行为"
+  - path: "engine/economic_cost_gate4_projection.py"
+    trigger: "需要核对 CR168 C3-only absent-C4 adapter 不变性"
+
+do_not_read_by_default:
+  - "process/STATE.md"
+  - "process/archive/**"
+  - "process/stories/**"
+  - "process/DEVELOPMENT-PLAN.yaml"
+  - "all CR166/CR168 Story, LLD, IMPLEMENTATION and test reports"
+  - "complete conversation transcript"
+
+approved_product_baseline:
+  cp2_approved_at: "2026-07-14T17:46:00+08:00"
+  decisions:
+    - "DQ-CP2-CR169-METHOD"
+    - "DQ-CP2-CR169-CORRELATION-HEADER"
+    - "DQ-CP2-CR169-GATE4-COMPOSITION-OWNER"
+    - "DQ-CP2-CR169-ALPHA-DECAY"
+    - "DQ-CP2-CR169-VERIFIER"
+  quantitative_contract:
+    c4_typed_component_and_schema: "1/1"
+    gate4_c4_refs: "3/3"
+    p0_fail_closed_classes: "12/12"
+    deterministic_identity: "10 runs -> 1 component hash"
+    joint_fixture_contract_pass: "<=1"
+    canonical_gate4_changes: 0
+    aggregate_orchestration_changes: 0
+    alpha_decay_calculators_until_cp3: 0
+
+review_remediation:
+  review_id: "RV-CR169-CP2-01..03"
+  stage2_exit_verification:
+    required: true
+    result_path: "process/checks/STAGE2-EXIT-VERIFICATION.result.json"
+    exact_contracts:
+      - "FactorSpec"
+      - "FactorRunSpec"
+      - "factor panel"
+      - "label window"
+      - "evaluation"
+      - "portfolio/risk"
+      - "admission package/evidence index"
+  stage3_entry_ready: false
+  future_only_follow_up:
+    fu007a: "canonical Gate4 global N/A hardening candidate; not started"
+    fu007b: "aggregate orchestration + CR155 regression candidate; not started"
+  start_conditions: "Each future item requires a formal CR, CP0 conflict precheck, scope decision and explicit user authorization."
+
+architecture_recommendation:
+  selected_option: "A-static-c4-with-strict-joint-fixture-adapter"
+  selected_components:
+    - "capacity_liquidity@v1 fixture/static typed component"
+    - "minimal C3/C4 correlation header comparison with identity in envelope binding only"
+    - "strict exact-7-key C3+C4 joint Gate4 fixture adapter"
+    - "Stage2 exit claim guard"
+  alpha_decay_recommendation: "Do not implement in C4 v1; route to independent/C2-adjacent follow-up."
+  exact_correlation_header_fields:
+    - "manifest_ref"
+    - "run_ref"
+    - "strategy_ref"
+    - "package_ref"
+    - "price_basis"
+    - "notional_basis"
+    - "currency"
+    - "calendar"
+    - "as_of"
+    - "horizon_start"
+    - "horizon_end"
+    - "lineage_context_ref"
+    - "authorization_context_ref"
+  public_gate4_callable: "validate_gate4_capacity_impact(evidence, *, release_profile='candidate-release', operation_counts=None)"
+  joint_adapter_invariants:
+    c3_fields:
+      - "impact_model_family"
+      - "impact_model_ref"
+      - "cost_underestimation_status"
+      - "no_real_tca_claim"
+    c4_fields:
+      - "adv_participation_ref"
+      - "capacity_dollars_ref"
+      - "liquidity_sizing_refs"
+    rejected_key_patterns:
+      - "*_na_reason"
+      - "*_n_a_reason"
+      - "na_reason"
+      - "n_a_reason"
+    canonical_dependency: "public callable read-only; private helper runtime dependency=0"
+    outcome_ceiling: "gate4_fixture_contract_pass is non-aggregate and cannot imply capacity scalability/admission/real readiness"
+
+required_human_decisions:
+  - id: "DQ-CP3-CR169-METHOD"
+    recommendation: "explicit fixture/static proxy"
+  - id: "DQ-CP3-CR169-HEADER"
+    recommendation: "minimal header; identity only in envelope binding; exact join"
+  - id: "DQ-CP3-CR169-JOINT"
+    recommendation: "CR169 local strict joint adapter and fixture-only outcome"
+  - id: "DQ-CP3-CR169-ALPHA"
+    recommendation: "C4 v1 calculator=0; independent/C2-adjacent follow-up"
+  - id: "DQ-CP3-CR169-TRANSITION"
+    recommendation: "stage3_entry_ready=false; CP8 7/7 result; FU007a/b tracking only"
+
+human_decision:
+  status: "approved-with-review-remediation"
+  decided_by: "user"
+  decided_at: "2026-07-14T18:54:00+08:00"
+  accepted_decisions:
+    - "DQ-CP3-CR169-METHOD"
+    - "DQ-CP3-CR169-HEADER"
+    - "DQ-CP3-CR169-JOINT"
+    - "DQ-CP3-CR169-ALPHA"
+    - "DQ-CP3-CR169-TRANSITION"
+  unlocked_until: "CP5-human-gate"
+
+authorization:
+  inline_fallback_approved: true
+  subagent_launch_allowed: false
+  design_only: true
+  not_authorized:
+    - "Story decomposition, LLD, source/test implementation or verification before CP3 approval"
+    - "real ADV/liquidity, provider, lake, NAS, credentials, TCA/calibration or external framework"
+    - "canonical Gate4 or CR168 C3-only adapter modification"
+    - "aggregate orchestration, StrategyAdmissionPackage modification or CR155 promotion"
+    - "alpha-decay calculator in C4 v1"
+    - "Stage3 start or stage3_entry_ready=true"
+    - "runtime, broker, QMT, simulation, paper/live, trading or order operations"
+    - "catalog/store/registry/publish/deploy/tag/release/Git remote write"
+
+risks:
+  - id: "R-CR169-PROXY-VALIDITY"
+    status: "open-nonblocking"
+    control: "static limitation + no-real-ready claim ceiling"
+  - id: "R-CR169-GATE4-N-A"
+    status: "open-nonblocking"
+    control: "local strict adapter; global remediation only future FU007a candidate"
+  - id: "R-CR169-ALPHA-OWNER"
+    status: "open-cp3"
+    control: "C4 v1 calculator remains 0 pending human decision"
+  - id: "R-CR169-STAGE2-OVERCLAIM"
+    status: "controlled-by-cp8"
+    control: "7/7 stage exit result required"
+
+exit_criteria:
+  - "Five companion design artifacts are internally consistent."
+  - "15/15 CP3 automatic checks PASS; blockers=0; waivers=0."
+  - "Five CP3 decisions are explicitly accepted by the user."
+  - "No Story, LLD, source, test or verification implementation before CP3 approval."

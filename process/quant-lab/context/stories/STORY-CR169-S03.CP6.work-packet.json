@@ -1,0 +1,210 @@
+{
+  "acceptance": ["capacity_liquidity@v1 ACTIVE 唯一为 1", "reserved 不再是 active target", "daily/ML 同 body component hash distinct=1、envelope hash distinct=2", "C1/C2/C3 compatibility failures=0", "parallel envelope/registry/discovery APIs=0"],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 1715,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_discovery_entry",
+      "required": true
+    },
+    {
+      "estimated_tokens": 556,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S03-neutral-envelope-c4-activation.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1550,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-169.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 606,
+      "mode": "full",
+      "path": "docs/design/MODULE-BOUNDARIES.yaml",
+      "reason": "module_boundaries",
+      "required": false
+    },
+    {
+      "estimated_tokens": 211,
+      "mode": "full",
+      "path": "docs/design/PACKAGE-IDENTITY.yaml",
+      "reason": "package_identity",
+      "required": false
+    }
+  ],
+  "allowed_write_paths": ["engine/strategy_evidence.py", "tests/research/test_capacity_liquidity_envelope_compatibility.py", "process/stories/STORY-CR169-S03-neutral-envelope-c4-activation.md", "process/stories/STORY-CR169-S03-neutral-envelope-c4-activation-IMPLEMENTATION.md", "process/context/stories/STORY-CR169-S03.CP6.work-packet.json", "process/returns/CR169-S03-neutral-envelope-c4-activation.CP6.return.json", "process/evidence/CR169-S03-neutral-envelope-c4-activation.CP6.index.json", "process/checks/CP6-CR169-S03-IMPLEMENTATION-DONE.result.json", "process/checks/CP6-CR169-S03-IMPLEMENTATION-DONE.result.summary.md"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PROVIDER_FETCH", "NO_GIT_REMOTE_WRITE"],
+  "budget": {
+    "estimated_tokens": 5201,
+    "estimator": "chars_div_4",
+    "max_tokens": 16000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": ["neutral strategy evidence component catalog", "capacity_liquidity@v1 descriptor", "envelope identity binding"],
+    "summary": "只激活 neutral catalog 的 C4 v1 slot，并验证 attachment/hash 与 C1-C3 向后兼容。"
+  },
+  "cr_id": "CR-169",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md", "process/archive/**", "process/discussions/**"
+  ],
+  "dependency_inputs": ["S01/S02 verified C4 evidence and attachment context", "CR166 neutral envelope public API", "CP5 approved S03 LLD"],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary / legacy fallback，不作为 agent 默认机器入口"
+    },
+    {
+      "path_or_pattern": "process/DEVELOPMENT-PLAN.yaml",
+      "reason": "计划长文由 Story packet / context 摘要承载"
+    },
+    {
+      "path_or_pattern": "process/STORY-STATUS.md",
+      "reason": "legacy status 汇总，不作为当前 Story 真相源"
+    },
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "默认读取 CR summary / CR ledger，完整 CR 只用于审计或冲突恢复"
+    },
+    {
+      "path_or_pattern": "process/stories/*-LLD.md",
+      "reason": "默认读取 Story packet / design summary，完整 LLD 按需展开"
+    },
+    {
+      "path_or_pattern": "process/stories/*-IMPLEMENTATION.md",
+      "reason": "实现长证据默认通过 return/evidence index 消费"
+    },
+    {"path_or_pattern": "process/archive/**", "reason": "冷历史归档"},
+    {"path_or_pattern": "process/discussions/**", "reason": "讨论记录不作为实现合同"}
+  ],
+  "expected_return_packet": "process/returns/CR169-S03-neutral-envelope-c4-activation.CP6.return.json",
+  "feature_contract_summary": "只把 capacity_liquidity@v1 加入既有 static COMPONENT_CATALOG；沿用 neutral builder/validator/hash domain，不新增平行 registry/envelope。",
+  "feature_design_refs": [
+    "docs/features/capacity-liquidity-evidence/DESIGN.md",
+    "docs/features/capacity-liquidity-evidence/TEST-PLAN.md",
+    "docs/features/strategy-evidence-envelope/DESIGN.md",
+    "docs/features/strategy-evidence-envelope/TEST-PLAN.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "capacity.liquidity.evidence",
+    "strategy.evidence.envelope"
+  ],
+  "forbidden_write_paths": ["engine/capacity_liquidity_evidence.py", "engine/capacity_liquidity_calculator.py", "engine/cross_strategy_reliability_gates.py", "engine/economic_cost_gate4_projection.py", "engine/strategy_admission_package.py", "process/archive/**"],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "lld_policy": "full-lld",
+  "must_read": [
+    {
+      "estimated_tokens": 1715,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true
+    },
+    {
+      "estimated_tokens": 556,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S03-neutral-envelope-c4-activation.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    }
+  ],
+  "objective": {
+    "non_goals": ["不修改 C1/C2/C3 schema/hash", "不新增 envelope/registry/discovery API", "不调用 Gate4 或真实数据"],
+    "summary": "Neutral Envelope C4 激活与多策略兼容"
+  },
+  "packet_type": "story_work_packet",
+  "parent_context_ref": "process/context/CP5-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE-CONTEXT.yaml",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "quant-lab",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 1379,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S03-neutral-envelope-c4-activation-LLD.md",
+      "reason": "story_lld",
+      "trigger": "full_lld_required_by_policy"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "architecture-major",
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR169-S03-neutral-envelope-c4-activation",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S03-neutral-envelope-c4-activation.md",
+  "verification_plan": ["uv run --python 3.11 pytest -q tests/research/test_capacity_liquidity_envelope_compatibility.py", "运行 strategy evidence/C2/C3 targeted regression", "uv run --python 3.11 python -m py_compile engine/strategy_evidence.py tests/research/test_capacity_liquidity_envelope_compatibility.py", "git diff --check 与 forbidden diff"]
+}

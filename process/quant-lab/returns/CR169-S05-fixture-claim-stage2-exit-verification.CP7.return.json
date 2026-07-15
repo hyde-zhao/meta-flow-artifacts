@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "return_id": "CR169-S05-fixture-claim-stage2-exit-verification.CP7",
+  "stage": "CP7",
+  "cr_id": "CR-169",
+  "story_id": "CR169-S05-fixture-claim-stage2-exit-verification",
+  "status": "verified_with_risk",
+  "created_at": "2026-07-15T10:09:00+08:00",
+  "created_by": "host-orchestrator-inline",
+  "context_ref": "process/context/stories/STORY-CR169-S05.CP7.verify-packet.json",
+  "implementation_ref": "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-IMPLEMENTATION.md",
+  "verification_ref": "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-VERIFICATION.md",
+  "source_story_ref": "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification.md",
+  "source_design_evidence_ref": "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-LLD.md",
+  "touched_files": [
+    {"path": "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-VERIFICATION.md", "change_type": "created"},
+    {"path": "tests/PROVENANCE.yaml", "change_type": "updated"},
+    {"path": "process/archive/design-cr-docs/ARCHIVE-INDEX.md", "change_type": "updated"},
+    {"path": "process/archive/design-cr-docs/ARCHITECTURE-DECISION-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md", "change_type": "relocated"},
+    {"path": "process/archive/design-cr-docs/BLUEPRINT-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md", "change_type": "relocated"},
+    {"path": "process/archive/design-cr-docs/DEPENDENCY-MAP-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md", "change_type": "relocated"},
+    {"path": "process/archive/design-cr-docs/DOMAIN-MAP-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md", "change_type": "relocated"},
+    {"path": "process/archive/design-cr-docs/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md", "change_type": "relocated"}
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "Verification plus test-provenance and design-surface governance remediation; no product contract change."
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "runtime_touched": false,
+    "credentials_touched": false,
+    "real_lake_read_touched": false,
+    "real_lake_write_touched": false,
+    "provider_fetch_executed": false,
+    "nas_operation_executed": false,
+    "qmt_runtime_executed": false,
+    "simulation_or_live_executed": false,
+    "broker_operation_executed": false,
+    "external_framework_executed": false,
+    "historical_backfill_executed": false,
+    "git_remote_write_executed": false,
+    "publish_executed": false
+  },
+  "verification": {
+    "commands_run": [
+      {"command": "uv run --python 3.11 pytest -q S05 and CR169 targeted regressions", "result": "pass", "summary": "13 and 115 passed"},
+      {"command": "uv run --python 3.11 pytest -q", "result": "pass_with_attributed_risk", "summary": "2157 passed, 2 precommit artifact-hygiene failures"},
+      {"command": "uv run --python 3.11 python scripts/check_stage2_exit_contracts.py ...", "result": "pass", "summary": "7/7 PASS; stage3_entry_ready=false"},
+      {"command": "design surface + provenance + diff/source guards", "result": "pass", "summary": "remediated; forbidden diff=0"}
+    ],
+    "tests": [
+      "tests/research/test_capacity_liquidity_cr169_qac.py",
+      "tests/research/test_capacity_liquidity_claim_regression.py",
+      "tests/meta_flow/test_design_surface.py",
+      "tests/meta_flow/test_test_file_taxonomy.py",
+      "tests/meta_flow/test_process_artifact_hygiene.py"
+    ],
+    "stage_decision": "PASS_WITH_RISK",
+    "skipped": ["post-commit full-suite rerun requires CP8 approval for local commit"]
+  },
+  "open_questions": [],
+  "risks": [
+    {"id": "R-CR169-VERIFIER-INDEPENDENCE", "severity": "medium", "status": "accepted_at_cp5_disclose_at_cp8"},
+    {"id": "R-CR169-PRECOMMIT-ARTIFACT-HYGIENE", "severity": "medium", "status": "cp8_acceptance_and_post_commit_rerun_required"}
+  ],
+  "waivers": [],
+  "design_delta": {
+    "requires_feature_doc_update": false,
+    "requires_architecture_doc_update": false,
+    "requires_hld_update": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "status": "not_required",
+    "reason": "Design copies were relocated unchanged to the existing archive; canonical HLD/ADR already reflect approved design."
+  },
+  "evidence_refs": [
+    "process/evidence/CR169-S05-fixture-claim-stage2-exit-verification.CP7.index.json",
+    "process/checks/STAGE2-EXIT-VERIFICATION.result.json"
+  ],
+  "next_stage_recommendation": "ready_for_cp8_with_risk",
+  "actor": "host-orchestrator-inline",
+  "decision": "PASS_WITH_RISK"
+}

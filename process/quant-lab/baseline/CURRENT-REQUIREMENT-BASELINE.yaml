@@ -3,7 +3,7 @@ baseline_id: CURRENT-REQUIREMENT-BASELINE
 project: quant-lab
 status: active
 created_at: "2026-06-19T20:50:00+08:00"
-updated_at: "2026-07-14T09:45:10+08:00"
+updated_at: "2026-07-14T17:20:00+08:00"
 created_by: host-orchestrator
 source_crs:
   - CR-046
@@ -14,6 +14,7 @@ source_crs:
   - CR-101
   - CR-166
   - CR-168
+  - CR-169
 revision_record:
   - version: v0.1
     date: "2026-06-19"
@@ -31,6 +32,14 @@ revision_record:
     date: "2026-07-14"
     author: host-orchestrator-inline
     summary: "回填 CR168 CP2 批准；将 Gate 4 风险整改限定为 CR168 adapter 的 8-key denylist、strict allowlist、调用前拒绝和调用后非 PASS 断言，并把 canonical 全局语义复核保留给 FU-CR161-007。"
+  - version: v0.5
+    date: "2026-07-14"
+    author: host-orchestrator-inline-meta-pm
+    summary: "增量追加 CR169 fixture/static C4 capacity/liquidity/ADV requirement baseline、strict C3+C4 joint adapter、alpha-decay CP3 disposition 与真实能力 claim ceiling；CR168 C3-only adapter 保持不变。"
+  - version: v0.6
+    date: "2026-07-14"
+    author: host-orchestrator-inline
+    summary: "CR169 CP2 评审整改与批准：Stage 2 complete 不蕴含 Stage 3 entry-ready；CP8/formal exit 必须核验 7/7 合同，FU-007 007a/007b 只登记为未来提案。"
 purpose: >
   记录当前可执行需求基线，避免后续 CR 从历史台账中误读已重解释的
   QMT / MiniQMT / runner / strategy package 目标。
@@ -82,7 +91,7 @@ current_baseline:
       - docs/qmt/CR101-CROSS-PLATFORM-STRATEGY-DELIVERY-ADAPTER-REALIGNMENT-HLD.md
 
   strategy_evidence_c3_economic_cost:
-    requirement_status: cp2_approved_cp3_in_progress
+    requirement_status: closed_ready_with_risk
     current_owner: quant_lab_strategy_evidence
     current_change: CR-168
     source_follow_up: FU-CR161-004
@@ -187,6 +196,90 @@ current_baseline:
       - docs/product/TEST-MATRIX.md
       - docs/features/strategy-evidence-envelope/DESIGN.md
 
+  strategy_evidence_c4_capacity_liquidity_adv:
+    requirement_status: confirmed_cp2
+    current_owner: quant_lab_strategy_evidence
+    current_change: CR-169
+    source_follow_up: FU-CR161-005
+    predecessor_contracts:
+      - CR-166
+      - CR-168
+    current_target: fixture_static_c4_capacity_liquidity_adv_evidence_foundation
+    envelope_contract:
+      component_slot: capacity_liquidity
+      prior_state: reserved
+      target_active_component_types: 1
+      target_active_schema_versions: 1
+      parallel_envelopes_gates_registries: 0
+    input_contract:
+      computational_body: independent_from_c3
+      correlation_header: pending_cp3_freeze
+      required_dimensions:
+        - strategy_run_manifest_identity
+        - synthetic_adv_reference_basis
+        - participation_cap_method
+        - capacity_curve_ref
+        - liquidity_sizing_ref
+        - unit_currency_calendar_as_of_horizon
+        - lineage_provenance_authorization
+      correlation_header_is_component_semantic_hash_domain: false
+    fixture_contract:
+      fixture_families: 2
+      daily_multifactor_synthetic: 1
+      multi_strategy_type_daily_ml_compatibility: 1
+      p0_fail_closed_classes: 12
+      deterministic_runs: 10
+      canonical_hashes_for_equal_normalized_input: 1
+    gate4_contract:
+      gate_kind: c3_c4_joint
+      c4_fields:
+        - adv_participation_ref
+        - capacity_dollars_ref
+        - liquidity_sizing_refs
+      strict_joint_fixture_adapter: pending_cp2
+      payload_fields_exactly: 7
+      preserves_cr168_c3_only_adapter: true
+      canonical_gate4_validator_changes: 0
+      aggregate_orchestration_changes: 0
+      permitted_fixture_contract_passes: 1
+      aggregate_admission_passes: 0
+      real_capacity_claims: 0
+    claim_ceiling:
+      stage2_complete: true
+      stage2_exit_contract_verification_required: true
+      stage2_exit_contract_verification_status: pending_cp8
+      stage3_started: false
+      stage3_entry_ready: false
+      c4_fixture_static_foundation: false
+      real_adv_available: false
+      real_liquidity_evidence_available: false
+      real_capacity_calibrated: false
+      real_data_connected: false
+      runtime_ready: false
+      alpha_decay_implementation: false
+      cr155_promoted: false
+    adjacent_boundaries:
+      alpha_decay_disposition: pending_cp3
+      independent_verifier_follow_up: FU-CR161-006
+      aggregate_integration_owner: FU-CR161-007
+      proposed_fu007_decomposition:
+        status: nonbinding_follow_up_proposal
+        lane_007a: canonical_gate4_global_na_semantics_hardening
+        lane_007b: aggregate_integration_and_cr155_regression
+        activation_preconditions:
+          - independent_formal_cr
+          - cp0_conflict_precheck
+          - explicit_user_authorization
+      cr155_admission_package_status: BLOCKED
+      cr155_paper_candidate: false
+    evidence_paths:
+      - process/changes/CR-169.md
+      - process/checks/CR169-REMOTE-BASELINE-CONFLICT-PRECHECK.json
+      - docs/product/USE-CASES.md
+      - docs/product/REQUIREMENTS.md
+      - docs/product/SCENARIOS.yaml
+      - docs/product/TEST-MATRIX.md
+
 not_authorized:
   nas_access: true
   credential_or_env_read: true
@@ -197,7 +290,8 @@ not_authorized:
   provider_lake_catalog_publish: true
   real_order_fill_quote_book_flow_adv_liquidity_read: true
   real_tca_or_market_impact_calibration: true
-  c4_capacity_liquidity_adv_alpha_decay_calculation: true
+  real_c4_capacity_liquidity_adv_alpha_decay_calculation: true
+  fixture_static_c4_capacity_liquidity_adv_calculation: false
   stage3_start_or_runtime_ready_claim: true
   git_remote_write_publish_deploy_release: true
 

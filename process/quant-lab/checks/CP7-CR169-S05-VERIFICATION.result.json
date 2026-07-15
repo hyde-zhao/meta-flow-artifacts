@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR169-S05-VERIFICATION",
+  "story_id": "CR169-S05-fixture-claim-stage2-exit-verification",
+  "cr_id": "CR-169",
+  "checked_at": "2026-07-15T10:11:00+08:00",
+  "check_attempt": 1,
+  "route_plan_ref": "process/checks/CP0-CR169.route-plan.json",
+  "context_ref": "process/context/stories/STORY-CR169-S05.CP7.verify-packet.json",
+  "dispatch_refs": ["DISPATCH-CR169-S05-CP7-INLINE-COMPLETED-20260715T101100+0800"],
+  "return_packet_ref": "process/returns/CR169-S05-fixture-claim-stage2-exit-verification.CP7.return.json",
+  "evidence_ref": "process/evidence/CR169-S05-fixture-claim-stage2-exit-verification.CP7.index.json",
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR169-S05.CP7.verify-packet.json": "sha256:ce8c32c541e10c973dfa0971966c0a50de4c631e9a21565ac34288765aa85a6e",
+    "process/returns/CR169-S05-fixture-claim-stage2-exit-verification.CP6.return.json": "sha256:07a83ea85354765527edf3e648d2a64caf157b007280fb8393e7e651709d3f74",
+    "process/evidence/CR169-S05-fixture-claim-stage2-exit-verification.CP6.index.json": "sha256:5abac378b8115d73f1045eac039f18942217ccb721ae638c7b4edaa4d9e2b499",
+    "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-LLD.md": "sha256:99622cc839d45d31d4d456842f9a93ade1a113436e3735c5f9c53318da99fb0a",
+    "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-IMPLEMENTATION.md": "sha256:c32c0b3e62b674b723006c79c1e64e17ad6d05f85ec5274803496b2997266efd",
+    "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-VERIFICATION.md": "sha256:3fdebf94f6a1e7f62774374d19fdbb124895431f4f5021799c91b99a102e0f59",
+    "tests/PROVENANCE.yaml": "sha256:b28e32fe4c7409277d2d2a755d75fb7baf4f5880fbbc25b299d2404558db9129",
+    "process/checks/STAGE2-EXIT-VERIFICATION.result.json": "sha256:a0a1295a81bd8bbedc5a451f33c06186ad47ed0dd5e0300d05c63b4edde83572"
+  },
+  "items": [
+    {
+      "id": "CP7-CR169-S05-01",
+      "category": "verification",
+      "name": "Exact fixture, QAC, fail-closed, determinism and claim matrix passes",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-VERIFICATION.md"],
+      "owner": "meta-qa-inline",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "2/2, 9/17/15/12, 10→1, joint/absent 1/1, claims false."
+    },
+    {
+      "id": "CP7-CR169-S05-02",
+      "category": "stage-transition",
+      "name": "Stage2 exact seven-contract exit evidence passes without Stage3 readiness",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/STAGE2-EXIT-VERIFICATION.result.json"],
+      "owner": "meta-qa-inline",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "7/7 PASS; stage2_complete=true; stage3_entry_ready=false; operation counts=0."
+    },
+    {
+      "id": "CP7-CR169-S05-03",
+      "category": "repository-regression",
+      "name": "Repository suite has no CR169 product-path failure; precommit hygiene risk is isolated",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-VERIFICATION.md",
+        "process/evidence/CR169-S05-fixture-claim-stage2-exit-verification.CP7.index.json"
+      ],
+      "owner": "meta-qa-inline",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "2157 passed; only two CR132 artifact-hygiene assertions fail because authorized CR169 files remain uncommitted. Post-commit rerun is mandatory."
+    },
+    {
+      "id": "CP7-CR169-S05-04",
+      "category": "boundary",
+      "name": "Canonical/CR168/aggregate source and authorization boundaries hold",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/CR169-S05-fixture-claim-stage2-exit-verification.CP7.return.json"],
+      "owner": "meta-qa-inline",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "forbidden source modifications=0; real/provider/runtime/trading/remote operations=0."
+    },
+    {
+      "id": "CP7-CR169-S05-05",
+      "category": "risk",
+      "name": "Inline verifier and precommit hygiene risks are retained for CP8",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": ["process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-VERIFICATION.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "R-CR169-VERIFIER-INDEPENDENCE and R-CR169-PRECOMMIT-ARTIFACT-HYGIENE require CP8 disposition."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260715T020816Z0000-a4fe4f11",
+    "RE-20260715T020816Z0000-e3bfbfde"
+  ],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP8-CR169-RELEASE-READINESS"
+}

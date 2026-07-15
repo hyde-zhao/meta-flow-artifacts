@@ -1,0 +1,209 @@
+{
+  "acceptance": ["valid typed pair 产生 exact 7-key payload、canonical calls=1", "13/13 header mismatch 全在 canonical 前 BLOCKED", "3/3 C4 refs absent/non-present 全 BLOCKED", "field/generic reason 与第 8 key 全 REJECTED", "canonical non-PASS 升级数=0", "aggregate/capacity-scalable/real-ready/Stage3 PASS 全为 0"],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 1722,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_discovery_entry",
+      "required": true
+    },
+    {
+      "estimated_tokens": 633,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1550,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-169.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 606,
+      "mode": "full",
+      "path": "docs/design/MODULE-BOUNDARIES.yaml",
+      "reason": "module_boundaries",
+      "required": false
+    },
+    {
+      "estimated_tokens": 211,
+      "mode": "full",
+      "path": "docs/design/PACKAGE-IDENTITY.yaml",
+      "reason": "package_identity",
+      "required": false
+    }
+  ],
+  "allowed_write_paths": ["engine/capacity_liquidity_gate4_projection.py", "tests/research/test_capacity_liquidity_gate4_projection.py", "process/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter.md", "process/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter-IMPLEMENTATION.md", "process/context/stories/STORY-CR169-S04.CP6.work-packet.json", "process/returns/CR169-S04-strict-c3-c4-gate4-joint-adapter.CP6.return.json", "process/evidence/CR169-S04-strict-c3-c4-gate4-joint-adapter.CP6.index.json", "process/checks/CP6-CR169-S04-IMPLEMENTATION-DONE.result.json", "process/checks/CP6-CR169-S04-IMPLEMENTATION-DONE.result.summary.md"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PROVIDER_FETCH", "NO_GIT_REMOTE_WRITE"],
+  "budget": {
+    "estimated_tokens": 5285,
+    "estimator": "chars_div_4",
+    "max_tokens": 16000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": ["strict C3+C4 Gate4 fixture adapter", "exact 7-key payload", "13-field correlation precheck", "local non-upgrading postcondition"],
+    "summary": "新增 CR169-local strict joint adapter，调用 public canonical Gate4 并局部封闭 N/A/reason false-PASS；不修改 canonical、CR168 或 aggregate。"
+  },
+  "cr_id": "CR-169",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md", "process/archive/**", "process/discussions/**"
+  ],
+  "dependency_inputs": ["S01-S03 verified typed C3/C4 contracts and envelope activation", "public validate_gate4_capacity_impact signature", "CP5 approved S04 LLD"],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary / legacy fallback，不作为 agent 默认机器入口"
+    },
+    {
+      "path_or_pattern": "process/DEVELOPMENT-PLAN.yaml",
+      "reason": "计划长文由 Story packet / context 摘要承载"
+    },
+    {
+      "path_or_pattern": "process/STORY-STATUS.md",
+      "reason": "legacy status 汇总，不作为当前 Story 真相源"
+    },
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "默认读取 CR summary / CR ledger，完整 CR 只用于审计或冲突恢复"
+    },
+    {
+      "path_or_pattern": "process/stories/*-LLD.md",
+      "reason": "默认读取 Story packet / design summary，完整 LLD 按需展开"
+    },
+    {
+      "path_or_pattern": "process/stories/*-IMPLEMENTATION.md",
+      "reason": "实现长证据默认通过 return/evidence index 消费"
+    }, {"path_or_pattern":"process/archive/**","reason":"冷历史归档"}, {"path_or_pattern":"process/discussions/**","reason":"讨论记录不作为实现合同"}
+  ],
+  "expected_return_packet": "process/returns/CR169-S04-strict-c3-c4-gate4-joint-adapter.CP6.return.json",
+  "feature_contract_summary": "只接受 self-validated typed C3/C4；13-field exact precheck、7-key allowlist、reason/extra denylist、public candidate-release call、worse-state postcondition。",
+  "feature_design_refs": [
+    "docs/features/c3-c4-correlation-boundary/DESIGN.md",
+    "docs/features/c3-c4-correlation-boundary/TEST-PLAN.md",
+    "docs/features/capacity-liquidity-gate4-joint-adapter/DESIGN.md",
+    "docs/features/capacity-liquidity-gate4-joint-adapter/TEST-PLAN.md",
+    "docs/features/capacity-liquidity-gate4-joint-adapter/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "c3.c4.correlation.boundary",
+    "capacity.liquidity.gate4.joint.adapter"
+  ],
+  "forbidden_write_paths": ["engine/cross_strategy_reliability_gates.py", "engine/economic_cost_gate4_projection.py", "engine/strategy_admission_package.py", "process/archive/**"],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "lld_policy": "full-lld",
+  "must_read": [
+    {
+      "estimated_tokens": 1722,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true
+    },
+    {
+      "estimated_tokens": 633,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    }
+  ],
+  "objective": {
+    "non_goals": ["不修改 canonical Gate4", "不修改 CR168 C3-only adapter", "不做 aggregate/admission integration", "不声明真实 capacity 或 Stage3 ready"],
+    "summary": "Strict C3+C4 Gate4 Joint Fixture Adapter"
+  },
+  "packet_type": "story_work_packet",
+  "parent_context_ref": "process/context/CP5-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE-CONTEXT.yaml",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "quant-lab",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 1797,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter-LLD.md",
+      "reason": "story_lld",
+      "trigger": "full_lld_required_by_policy"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "architecture-major",
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR169-S04-strict-c3-c4-gate4-joint-adapter",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter.md",
+  "verification_plan": ["uv run --python 3.11 pytest -q tests/research/test_capacity_liquidity_gate4_projection.py", "复跑 CR168 Gate4 projection 与 S01-S03 regressions", "py_compile/diff-check", "静态确认 forbidden source changes=0 与 private canonical helper imports=0"]
+}

@@ -7709,7 +7709,7 @@ cr166_story_planning:
 cr168_story_planning:
   change_id: "CR-168"
   title: "Economic Cost / Slippage / Impact Computable Evidence Producer Foundation"
-  status: "cp4-pass-cp5-awaiting-user"
+  status: "cp5-approved-story-execution"
   cp3_review: "process/checkpoints/CP3-CR168-ECONOMIC-COST-IMPACT-EVIDENCE-HLD-REVIEW.md"
   cp4_result: "process/checks/CP4-CR168-STORY-DAG-PARALLEL-SAFETY.result.json"
   feature_design_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md#cr168"
@@ -7845,3 +7845,107 @@ cr168_story_planning:
   pre_existing_plan_check_failure:
     status: "recorded-unrelated"
     details: "Canonical global plan-check retains inherited CR013 legacy statuses/warnings. CR168 scoped YAML, five nodes, ten edges, five serial Waves, refs and file owners pass independently; unrelated historical entries were preserved."
+
+cr169_story_planning:
+  change_id: "CR-169"
+  title: "C4 Capacity / Liquidity / ADV Evidence Producer Foundation"
+  status: "cp7-pass-with-risk-cp8-preparation"
+  cp3_review: "process/checkpoints/CP3-CR169-CAPACITY-LIQUIDITY-ADV-HLD-REVIEW.md"
+  cp4_result: "process/checks/CP4-CR169-STORY-DAG-PARALLEL-SAFETY.result.json"
+  feature_design_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md#cr169-cp4-增量capacity--liquidity--adv-evidence-producer-foundation"
+  story_count: 5
+  wave_count: 5
+  cp5_batch: {id: "CP5-CR169-ALL-STORIES-LLD-BATCH", design_evidence_required: 5, required_level: "full-lld", status: "approved", human_gate: "required", approved_by: "user", approved_at: "2026-07-15T09:16:00+08:00"}
+  authorization_boundary:
+    subagent_allowed: false
+    implementation_allowed_before_cp5_approval: false
+    test_implementation_allowed_before_cp5_approval: false
+    repository_local_implementation_authorized_after_cp5_approval: true
+    local_uv_validation_authorized_after_cp5_approval: true
+    real_adv_liquidity_or_capacity_allowed: false
+    canonical_gate4_cr168_adapter_or_aggregate_modification_allowed: false
+    alpha_decay_calculator_allowed: false
+    runtime_trading_external_operation_allowed: false
+    catalog_store_registry_write_allowed: false
+    git_remote_write_allowed: false
+    stage3_start_or_cr155_promotion_allowed: false
+  parallel_policy:
+    max_parallel_lld: 1
+    max_parallel_dev: 1
+    max_parallel_qa: 1
+    lld_rule: "User forbids subagents; Host inline fallback drafts all five full LLDs serially and CP5 confirms them as one batch."
+    dev_rule: "S01 -> S02 -> S03 -> S04 -> S05; public contract/hash/catalog/security/claim dependencies make every Wave serial."
+  waves:
+    - {id: "CR169-W1-CONTRACT-CORRELATION", stories: ["CR169-S01-capacity-liquidity-contract-validation"], depends_on: []}
+    - {id: "CR169-W2-STATIC-PRODUCER", stories: ["CR169-S02-deterministic-static-c4-producer"], depends_on: ["CR169-W1-CONTRACT-CORRELATION"]}
+    - {id: "CR169-W3-ENVELOPE-ACTIVATION", stories: ["CR169-S03-neutral-envelope-c4-activation"], depends_on: ["CR169-W2-STATIC-PRODUCER"]}
+    - {id: "CR169-W4-STRICT-JOINT-ADAPTER", stories: ["CR169-S04-strict-c3-c4-gate4-joint-adapter"], depends_on: ["CR169-W3-ENVELOPE-ACTIVATION"]}
+    - {id: "CR169-W5-FIXTURE-CLAIM-EXIT", stories: ["CR169-S05-fixture-claim-stage2-exit-verification"], depends_on: ["CR169-W4-STRICT-JOINT-ADAPTER"]}
+  stories:
+    - id: "CR169-S01-capacity-liquidity-contract-validation"
+      card: "process/stories/STORY-CR169-S01-capacity-liquidity-contract-validation.md"
+      status: "verified"
+      wave: "CR169-W1-CONTRACT-CORRELATION"
+      depends_on: []
+      dependency_types: []
+      lld_policy: "full-lld"
+      feature_design_refs: ["docs/features/capacity-liquidity-evidence/DESIGN.md", "docs/features/capacity-liquidity-evidence/TEST-PLAN.md", "docs/features/capacity-liquidity-evidence/TASKS.md", "docs/features/c3-c4-correlation-boundary/DESIGN.md", "docs/features/c3-c4-correlation-boundary/TEST-PLAN.md"]
+      primary_files: ["engine/capacity_liquidity_evidence.py", "tests/research/test_capacity_liquidity_contracts.py"]
+      read_only_files: ["engine/strategy_evidence.py", "engine/economic_cost_evidence.py"]
+    - id: "CR169-S02-deterministic-static-c4-producer"
+      card: "process/stories/STORY-CR169-S02-deterministic-static-c4-producer.md"
+      status: "verified-with-risk"
+      wave: "CR169-W2-STATIC-PRODUCER"
+      depends_on: ["CR169-S01-capacity-liquidity-contract-validation"]
+      dependency_types: ["contract"]
+      lld_policy: "full-lld"
+      feature_design_refs: ["docs/features/capacity-liquidity-evidence/DESIGN.md", "docs/features/capacity-liquidity-evidence/TEST-PLAN.md", "docs/features/capacity-liquidity-evidence/TASKS.md"]
+      primary_files: ["engine/capacity_liquidity_calculator.py", "engine/capacity_liquidity_evidence.py", "tests/research/test_capacity_liquidity_producer.py"]
+    - id: "CR169-S03-neutral-envelope-c4-activation"
+      card: "process/stories/STORY-CR169-S03-neutral-envelope-c4-activation.md"
+      status: "verified-with-risk"
+      wave: "CR169-W3-ENVELOPE-ACTIVATION"
+      depends_on: ["CR169-S01-capacity-liquidity-contract-validation", "CR169-S02-deterministic-static-c4-producer"]
+      dependency_types: ["contract", "runtime"]
+      lld_policy: "full-lld"
+      feature_design_refs: ["docs/features/capacity-liquidity-evidence/DESIGN.md", "docs/features/capacity-liquidity-evidence/TEST-PLAN.md", "docs/features/strategy-evidence-envelope/DESIGN.md", "docs/features/strategy-evidence-envelope/TEST-PLAN.md"]
+      primary_files: ["engine/strategy_evidence.py", "tests/research/test_capacity_liquidity_envelope_compatibility.py"]
+      read_only_files: ["engine/capacity_liquidity_evidence.py", "engine/statistical_evidence.py", "engine/walk_forward_oos_evidence.py", "engine/economic_cost_evidence.py"]
+    - id: "CR169-S04-strict-c3-c4-gate4-joint-adapter"
+      card: "process/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter.md"
+      status: "verified-with-risk"
+      wave: "CR169-W4-STRICT-JOINT-ADAPTER"
+      depends_on: ["CR169-S01-capacity-liquidity-contract-validation", "CR169-S02-deterministic-static-c4-producer", "CR169-S03-neutral-envelope-c4-activation"]
+      dependency_types: ["contract", "runtime", "contract"]
+      lld_policy: "full-lld"
+      feature_design_refs: ["docs/features/c3-c4-correlation-boundary/DESIGN.md", "docs/features/c3-c4-correlation-boundary/TEST-PLAN.md", "docs/features/capacity-liquidity-gate4-joint-adapter/DESIGN.md", "docs/features/capacity-liquidity-gate4-joint-adapter/TEST-PLAN.md", "docs/features/capacity-liquidity-gate4-joint-adapter/TASKS.md"]
+      primary_files: ["engine/capacity_liquidity_gate4_projection.py", "tests/research/test_capacity_liquidity_gate4_projection.py"]
+      read_only_files: ["engine/capacity_liquidity_evidence.py", "engine/economic_cost_evidence.py", "engine/cross_strategy_reliability_gates.py"]
+      forbidden_files: ["engine/cross_strategy_reliability_gates.py", "engine/economic_cost_gate4_projection.py", "engine/strategy_admission_package.py"]
+    - id: "CR169-S05-fixture-claim-stage2-exit-verification"
+      card: "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification.md"
+      status: "verified-with-risk"
+      wave: "CR169-W5-FIXTURE-CLAIM-EXIT"
+      depends_on: ["CR169-S01-capacity-liquidity-contract-validation", "CR169-S02-deterministic-static-c4-producer", "CR169-S03-neutral-envelope-c4-activation", "CR169-S04-strict-c3-c4-gate4-joint-adapter"]
+      dependency_types: ["runtime", "runtime", "runtime", "runtime"]
+      lld_policy: "full-lld"
+      feature_design_refs: ["docs/features/capacity-liquidity-claim-exit-guard/DESIGN.md", "docs/features/capacity-liquidity-claim-exit-guard/TEST-PLAN.md", "docs/features/capacity-liquidity-claim-exit-guard/TASKS.md", "docs/features/capacity-liquidity-evidence/TEST-PLAN.md", "docs/features/c3-c4-correlation-boundary/TEST-PLAN.md", "docs/features/capacity-liquidity-gate4-joint-adapter/TEST-PLAN.md"]
+      primary_files: ["tests/fixtures/capacity_liquidity/", "tests/research/test_capacity_liquidity_cr169_qac.py", "tests/research/test_capacity_liquidity_claim_regression.py", "scripts/check_stage2_exit_contracts.py"]
+      read_only_files: ["engine/capacity_liquidity_evidence.py", "engine/capacity_liquidity_calculator.py", "engine/strategy_evidence.py", "engine/capacity_liquidity_gate4_projection.py", "engine/cross_strategy_reliability_gates.py", "engine/economic_cost_gate4_projection.py", "engine/strategy_admission_package.py"]
+  dependency_graph:
+    nodes: ["CR169-S01-capacity-liquidity-contract-validation", "CR169-S02-deterministic-static-c4-producer", "CR169-S03-neutral-envelope-c4-activation", "CR169-S04-strict-c3-c4-gate4-joint-adapter", "CR169-S05-fixture-claim-stage2-exit-verification"]
+    edges:
+      - ["CR169-S01-capacity-liquidity-contract-validation", "CR169-S02-deterministic-static-c4-producer", "contract"]
+      - ["CR169-S01-capacity-liquidity-contract-validation", "CR169-S03-neutral-envelope-c4-activation", "contract"]
+      - ["CR169-S02-deterministic-static-c4-producer", "CR169-S03-neutral-envelope-c4-activation", "runtime"]
+      - ["CR169-S01-capacity-liquidity-contract-validation", "CR169-S04-strict-c3-c4-gate4-joint-adapter", "contract"]
+      - ["CR169-S02-deterministic-static-c4-producer", "CR169-S04-strict-c3-c4-gate4-joint-adapter", "runtime"]
+      - ["CR169-S03-neutral-envelope-c4-activation", "CR169-S04-strict-c3-c4-gate4-joint-adapter", "contract"]
+      - ["CR169-S01-capacity-liquidity-contract-validation", "CR169-S05-fixture-claim-stage2-exit-verification", "runtime"]
+      - ["CR169-S02-deterministic-static-c4-producer", "CR169-S05-fixture-claim-stage2-exit-verification", "runtime"]
+      - ["CR169-S03-neutral-envelope-c4-activation", "CR169-S05-fixture-claim-stage2-exit-verification", "runtime"]
+      - ["CR169-S04-strict-c3-c4-gate4-joint-adapter", "CR169-S05-fixture-claim-stage2-exit-verification", "runtime"]
+  dag_validation_result: {cycles: [], invalid_references: [], isolated_nodes: [], parallel_internal_dependencies: 0, file_conflicts_within_parallel_wave: 0, conclusion: "PASS", merge_order: "S01 -> S02 -> S03 -> S04 -> S05"}
+  pre_existing_plan_check_failure:
+    status: "recorded-unrelated"
+    details: "Canonical global plan-check retains inherited CR013 legacy statuses/warnings. CR169 scoped YAML, five nodes, ten edges, five serial Waves, refs and file owners pass independently; unrelated historical entries are preserved."

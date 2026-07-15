@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "stage": "CP6",
+  "cr_id": "CR-169",
+  "story_id": "CR169-S05-fixture-claim-stage2-exit-verification",
+  "return_ref": "process/returns/CR169-S05-fixture-claim-stage2-exit-verification.CP6.return.json",
+  "design_delta_ref": null,
+  "changed_files": [
+    {"path": "tests/fixtures/capacity_liquidity/daily_multifactor_v1.json", "change_type": "created"},
+    {"path": "tests/fixtures/capacity_liquidity/multi_strategy_compatibility_v1.json", "change_type": "created"},
+    {"path": "tests/research/test_capacity_liquidity_cr169_qac.py", "change_type": "created"},
+    {"path": "tests/research/test_capacity_liquidity_claim_regression.py", "change_type": "created"},
+    {"path": "scripts/check_stage2_exit_contracts.py", "change_type": "created"},
+    {"path": "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-IMPLEMENTATION.md", "change_type": "created"}
+  ],
+  "tests": [
+    "tests/research/test_capacity_liquidity_cr169_qac.py",
+    "tests/research/test_capacity_liquidity_claim_regression.py"
+  ],
+  "commands": [
+    {"command": "uv run --python 3.11 pytest -q S05 QAC and claim regression", "result": "pass", "summary": "13 passed"},
+    {"command": "uv run --python 3.11 pytest -q CR169 S01-S05 plus CR168/CR155/C2/C3 regressions", "result": "pass", "summary": "115 passed"},
+    {"command": "py_compile + git diff --check + forbidden diff", "result": "pass", "summary": "clean; forbidden changes=0"}
+  ],
+  "artifacts": [
+    "tests/fixtures/capacity_liquidity/daily_multifactor_v1.json",
+    "tests/fixtures/capacity_liquidity/multi_strategy_compatibility_v1.json"
+  ],
+  "risks": ["R-CR169-VERIFIER-INDEPENDENCE"],
+  "waivers": ["CP5 approved inline-fallback; disclose at CP8"]
+}

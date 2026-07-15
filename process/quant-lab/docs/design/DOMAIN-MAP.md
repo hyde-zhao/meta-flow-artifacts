@@ -1,10 +1,11 @@
 ---
 status: "draft-current-index"
-version: "1.15"
+version: "1.17"
 source_blueprint: "docs/design/BLUEPRINT.md"
-change: "CR-168"
+change: "CR-169"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 companion_domain_map_cr168: "process/archive/design-cr-docs/DOMAIN-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+companion_domain_map_cr169: "process/docs/design/DOMAIN-MAP-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
 archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-lab-project-roadmap-2026-06-26.md"
 ---
 
@@ -30,6 +31,8 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | 1.13 | 2026-06-28 | host-orchestrator | CP3 approved，AGA-1/3/5 确认 A1/C1/E1，pending-cp3 → confirmed-cp3。 |
 | 1.14 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR168 companion domain map 草案：C3 input/assumption/breakdown/evidence/projection outcome、Decimal 算术、availability 状态机和 exact 8-key Gate4 guard；待 CP3。 |
 | 1.15 | 2026-07-14 | host-orchestrator inline fallback | CP3 已批准后将 CR168 companion domain map 正文归档到 `process/archive/design-cr-docs/`；长期 index 仅修正状态/路由，不改变领域规则。 |
+| 1.16 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR169 companion domain map 草案：C4 input/evidence、minimal correlation header、joint fixture outcome 与 Stage2 exit verification；待 CP3。 |
+| 1.17 | 2026-07-14 | host-orchestrator inline meta-se-critical | CR169 companion domain map 通过 CP3：`C3C4CorrelationHeaderV1` 冻结为 13 字段，alpha 后置 FU008，Stage2 7/7 失败分流可审计。 |
 
 ## 术语表
 

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR169-STORY-DAG-PARALLEL-SAFETY",
+  "cr_id": "CR-169",
+  "checked_at": "2026-07-14T19:20:00+08:00",
+  "context_ref": "process/context/CP3-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE-CONTEXT.yaml",
+  "dispatch_refs": ["AD-CR169-CP4-META-SE-INLINE-20260714T191800+0800"],
+  "route_plan_ref": "process/checks/CP0-CR169.route-plan.json",
+  "items": [
+    {"id":"CP4-CR169-01","category":"entry","name":"CP3 remediated architecture is approved","status":"PASS","severity":"BLOCKER","evidence_refs":["process/checkpoints/CP3-CR169-CAPACITY-LIQUIDITY-ADV-HLD-REVIEW.md"],"owner":"host-orchestrator","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"Five DQs and five review remediations are approved; only CP4/CP5 design work is unlocked."},
+    {"id":"CP4-CR169-02","category":"feature-design","name":"Four required Features have complete design triplets","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/FEATURE-DESIGN-MATRIX.md#cr169-cp4-增量capacity--liquidity--adv-evidence-producer-foundation","docs/features/capacity-liquidity-evidence/DESIGN.md","docs/features/c3-c4-correlation-boundary/DESIGN.md","docs/features/capacity-liquidity-gate4-joint-adapter/DESIGN.md","docs/features/capacity-liquidity-claim-exit-guard/DESIGN.md"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"Features=4/4; DESIGN/TEST-PLAN/TASKS=12/12; waiver=0."},
+    {"id":"CP4-CR169-03","category":"story","name":"Five Story cards have stable IDs ownership and full-lld policy","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr169_story_planning","process/stories/STORY-CR169-S01-capacity-liquidity-contract-validation.md","process/stories/STORY-CR169-S02-deterministic-static-c4-producer.md","process/stories/STORY-CR169-S03-neutral-envelope-c4-activation.md","process/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter.md","process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification.md"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"Stories=5/5; all full-lld; no technical-note/waiver."},
+    {"id":"CP4-CR169-04","category":"dag","name":"Scoped Story graph is acyclic and all references are valid","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr169_story_planning.dependency_graph"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"nodes=5; edges=10; cycles=0; invalid refs=0; merge order S01→S02→S03→S04→S05."},
+    {"id":"CP4-CR169-05","category":"parallel-safety","name":"Five serial Waves have no internal dependency or file conflict","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr169_story_planning.waves"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"One Story per Wave; max parallel LLD/dev/QA=1; parallel conflicts=0."},
+    {"id":"CP4-CR169-06","category":"file-ownership","name":"Primary read-only and forbidden file ownership is explicit","status":"PASS","severity":"BLOCKER","evidence_refs":["process/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter.md","process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification.md"],"owner":"meta-se","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"S04 owns only the new local adapter; canonical Gate4, CR168 adapter and StrategyAdmissionPackage are forbidden writes."},
+    {"id":"CP4-CR169-07","category":"traceability","name":"Requirements scenarios QAC and CP3 remediations map to Stories","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/product/TEST-MATRIX.md","docs/design/FEATURE-DESIGN-MATRIX.md#cr169-cp4-增量capacity--liquidity--adv-evidence-producer-foundation"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"REQ=9/9; scenarios=17/17; QAC=15/15; P0=12/12; uncovered P0=0."},
+    {"id":"CP4-CR169-08","category":"design-evidence","name":"All five Stories have full LLD evidence ready for CP5","status":"PASS","severity":"BLOCKER","evidence_refs":["process/stories/STORY-CR169-S01-capacity-liquidity-contract-validation-LLD.md","process/stories/STORY-CR169-S02-deterministic-static-c4-producer-LLD.md","process/stories/STORY-CR169-S03-neutral-envelope-c4-activation-LLD.md","process/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter-LLD.md","process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-LLD.md"],"owner":"meta-dev","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"lld-check=5/5 OK; confirmed=0 pending CP5; open clarification=0."},
+    {"id":"CP4-CR169-09","category":"authorization","name":"Design-only no-subagent boundary remains explicit","status":"PASS","severity":"BLOCKER","evidence_refs":["process/state/AGENT-DISPATCH-LEDGER.ndjson","process/DEVELOPMENT-PLAN.yaml#cr169_story_planning.authorization_boundary"],"owner":"host-orchestrator","route_on_fail":"escalate_runtime_high_risk","waiver_ref":null,"notes":"Inline fallback is user-approved; source/test implementation and added-test execution=0; remote/external operations=0."},
+    {"id":"CP4-CR169-10","category":"legacy","name":"Pre-existing global plan debt is isolated from CR169 scoped validation","status":"PASS","severity":"HIGH","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#cr169_story_planning.pre_existing_plan_check_failure"],"owner":"host-orchestrator","route_on_fail":"create_followup_candidate","waiver_ref":null,"notes":"Global plan-check fails only inherited CR013 legacy statuses and existing warnings; CR169 scoped YAML/cards/DAG/Waves/owners are valid and unrelated objects are preserved."},
+    {"id":"CP4-CR169-11","category":"scope-boundary","name":"C4 alpha canonical aggregate Stage3 and CR155 boundaries remain non-overlapping","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md","docs/features/capacity-liquidity-gate4-joint-adapter/DESIGN.md","docs/features/capacity-liquidity-claim-exit-guard/DESIGN.md"],"owner":"host-orchestrator","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"C4 component/schema=1/1; alpha=0; local adapter=1; canonical/CR168/aggregate changes=0; Stage3=false; CR155 promotion=0."}
+  ],
+  "entry_criteria": [
+    {"name":"CP3 approved","status":"PASS","evidence_ref":"process/checkpoints/CP3-CR169-CAPACITY-LIQUIDITY-ADV-HLD-REVIEW.md"},
+    {"name":"CP3 architecture package confirmed","status":"PASS","evidence_ref":"docs/design/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"},
+    {"name":"Inline fallback recorded","status":"PASS","evidence_ref":"process/state/AGENT-DISPATCH-LEDGER.ndjson"}
+  ],
+  "exit_criteria": [
+    {"name":"Feature matrix and triplets complete","status":"PASS"},
+    {"name":"Story DAG and file safety pass","status":"PASS"},
+    {"name":"All LLD evidence ready for CP5","status":"PASS"},
+    {"name":"No implementation authorization consumed","status":"PASS"}
+  ],
+  "deliverables": ["docs/design/FEATURE-DESIGN-MATRIX.md","process/DEVELOPMENT-PLAN.yaml","docs/features/capacity-liquidity-evidence/","docs/features/c3-c4-correlation-boundary/","docs/features/capacity-liquidity-gate4-joint-adapter/","docs/features/capacity-liquidity-claim-exit-guard/","process/stories/STORY-CR169-S01-capacity-liquidity-contract-validation.md","process/stories/STORY-CR169-S02-deterministic-static-c4-producer.md","process/stories/STORY-CR169-S03-neutral-envelope-c4-activation.md","process/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter.md","process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification.md"],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260714T105810Z0000-aa1033b4","RE-20260714T105833Z0000-8415feb3","RE-20260714T112014Z0000-28085264","RE-20260714T112544Z0000-60f1ba16","RE-20260714T112544Z0000-12b56bae","RE-20260714T112544Z0000-7c2c5a0d","RE-20260714T112544Z0000-da2a1d58","RE-20260714T112544Z0000-f5667849"],
+  "decision": "PASS",
+  "manual_gate_status": null,
+  "next_route": "CP5-design-evidence"
+}

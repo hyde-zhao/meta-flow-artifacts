@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR169-BASELINE",
+  "profile": "architecture-major",
+  "story_id": null,
+  "cr_id": "CR-169",
+  "route_plan_ref": "process/checks/CP0-CR169.route-plan.json",
+  "context_ref": "process/context/CP0-CR169.context.json",
+  "dispatch_refs": [],
+  "evidence_ref": "process/checks/CR169-REMOTE-BASELINE-CONFLICT-PRECHECK.json",
+  "items": [
+    {
+      "id": "CP0-01",
+      "category": "request",
+      "name": "C4 fixture/static 目标、评审整改、停止点和授权边界已登记",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/changes/CR-169.md", "process/REQUEST.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "本轮自动推进仅至 CP2；CP2 前禁止 HLD、Story、LLD、实现或验证。"
+    },
+    {
+      "id": "CP0-02",
+      "category": "workspace",
+      "name": "process 外置路由、软链接与工作区健康",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/.meta-flow-process.yaml", "process/checks/CR169-REMOTE-BASELINE-CONFLICT-PRECHECK.json#process_route"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "未创建新的本地 process，也未静默重建 STATE.md。"
+    },
+    {
+      "id": "CP0-03",
+      "category": "baseline",
+      "name": "quant-lab 已 fetch、基线干净且从包含 CR-168 的开发分支派生",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CR169-REMOTE-BASELINE-CONFLICT-PRECHECK.json#repositories/quant_lab"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "选择 work/cr168-economic-cost-impact-evidence@bef0cae3df9d；未从旧 master 启动。"
+    },
+    {
+      "id": "CP0-04",
+      "category": "baseline",
+      "name": "meta-flow-artifacts 已 fetch、基线干净且 main 与 origin/main 一致",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CR169-REMOTE-BASELINE-CONFLICT-PRECHECK.json#repositories/meta_flow_artifacts"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "无 merge/rebase/冲突处理；本轮未执行 remote write。"
+    },
+    {
+      "id": "CP0-05",
+      "category": "change-control",
+      "name": "CR-169 编号唯一且 FU-CR161-005 转换为唯一 active formal CR",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/changes/CR-169.md", "process/changes/CR-INDEX.json", "process/changes/CR-161-FOLLOW-UP-TRACKING-2026-07-10.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "创建前 formal active=0、blocked=0；CR-169 未占用。"
+    },
+    {
+      "id": "CP0-06",
+      "category": "conflict",
+      "name": "C3/C4、CR-168 adapter、Gate 4、FU-007、CR-155 与 alpha-decay 边界已预检",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CR169-REMOTE-BASELINE-CONFLICT-PRECHECK.json#conflict_precheck", "process/changes/CR-169.md#正式-CR-冲突预检"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "新 joint adapter 与 canonical/global/aggregate 的 owner 边界明确；alpha-decay 推迟 CP3。"
+    },
+    {
+      "id": "CP0-07",
+      "category": "risk",
+      "name": "真实 ADV/liquidity、capacity overclaim、verifier 与 capability registry 风险已登记",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/changes/CR-169.md#Claim-Ceiling", "process/checks/CR169-REMOTE-BASELINE-CONFLICT-PRECHECK.json#conflict_precheck"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "registry debt 与 verifier independence 不阻塞 CP0，但分别有 N/A-with-reason 和 CP8 披露义务。"
+    },
+    {
+      "id": "CP0-08",
+      "category": "routing",
+      "name": "architecture-major standard route plan 有效，CP2 是下一人工门禁",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP0-CR169.route-plan.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP1 自动完成后必须打开 CP2；不允许跳入 CP3。"
+    },
+    {
+      "id": "CP0-09",
+      "category": "tracking",
+      "name": "CR-169 专属 tracking 与 conflict check 一致，历史 tracking debt 已隔离",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/checks/CR169-REMOTE-BASELINE-CONFLICT-PRECHECK.json#known_nonblocking_tracking_debt", "process/state/CR-LEDGER.ndjson"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "未把历史 lifecycle/index debt 误判为 CR-169 冲突，也未扩大本 CR 修复范围。"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260714T085937Z0000-a12dcbbc",
+    "RE-20260714T085937Z0000-8528bc21"
+  ],
+  "decision": "PASS",
+  "next_route": "requirement-clarification",
+  "checked_at": "2026-07-14T17:00:00+08:00"
+}

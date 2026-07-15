@@ -1,10 +1,11 @@
 ---
 status: "draft-current-index"
-version: "1.15"
+version: "1.17"
 source_blueprint: "docs/design/BLUEPRINT.md"
-change: "CR-168"
+change: "CR-169"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 companion_dependency_map_cr168: "process/archive/design-cr-docs/DEPENDENCY-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md"
+companion_dependency_map_cr169: "process/docs/design/DEPENDENCY-MAP-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
 archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quant-lab-project-roadmap-2026-06-26.md"
 ---
 
@@ -30,6 +31,8 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | 1.13 | 2026-06-28 | host-orchestrator | CP3 approved，AGA-1/3/5 确认 A1/C1/E1，pending-cp3 → confirmed-cp3。 |
 | 1.14 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR168 companion dependency map 草案：C3→neutral public API、adapter→canonical public validator 单向依赖；禁止 neutral 反向依赖、私有 helper、mapping 透传、C4/aggregate/runtime；待 CP3。 |
 | 1.15 | 2026-07-14 | host-orchestrator inline fallback | CP3 已批准后将 CR168 companion dependency map 正文归档到 `process/archive/design-cr-docs/`；长期 index 仅修正状态/路由，不改变依赖规则。 |
+| 1.16 | 2026-07-14 | host-orchestrator inline meta-se-critical | 登记 CR169 companion dependency map 草案：C4 producer→neutral envelope、strict joint adapter→canonical public validator 的单向依赖；禁止 external data、private helper、canonical/aggregate 写入，待 CP3。 |
+| 1.17 | 2026-07-14 | host-orchestrator inline meta-se-critical | CR169 companion dependency map 通过 CP3：public callable 固定 `validate_gate4_capacity_impact`，alpha 后置 FU008，Stage2 历史缺口只路由 CR157 / 新治理 CR。 |
 
 ## 依赖关系
 

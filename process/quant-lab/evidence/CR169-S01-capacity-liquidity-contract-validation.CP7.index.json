@@ -1,0 +1,43 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "process/stories/STORY-CR169-S01-capacity-liquidity-contract-validation-VERIFICATION.md"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_capacity_liquidity_contracts.py",
+      "result": "pass",
+      "summary": "27 passed in 0.05s"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile engine/capacity_liquidity_evidence.py tests/research/test_capacity_liquidity_contracts.py",
+      "result": "pass",
+      "summary": "static compile passed"
+    },
+    {
+      "command": "git diff --check -- engine/capacity_liquidity_evidence.py tests/research/test_capacity_liquidity_contracts.py",
+      "result": "pass",
+      "summary": "no whitespace errors"
+    }
+  ],
+  "cr_id": "CR-169",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR169-S01-capacity-liquidity-contract-validation.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR169-VERIFIER-INDEPENDENCE",
+      "severity": "medium",
+      "status": "accepted_at_cp5_disclose_at_cp8"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR169-S01-capacity-liquidity-contract-validation",
+  "tests": [
+    "tests/research/test_capacity_liquidity_contracts.py"
+  ],
+  "waivers": []
+}

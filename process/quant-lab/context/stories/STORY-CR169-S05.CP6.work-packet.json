@@ -1,0 +1,276 @@
+{
+  "acceptance": [
+    "fixture families=2/2，requirements=9/9，scenarios=17/17，QAC=15/15，P0 classes=12/12",
+    "同一规范化 C4 输入重复 10 次只产生 1 个 component semantic hash",
+    "strict joint fixture contract PASS=1，CR168 C4-absent fail-closed regression=1",
+    "canonical Gate4、CR168 adapter、aggregate/admission source modifications=0",
+    "CR155 维持 BLOCKED 且 paper_candidate=false；Stage3/real/alpha/external operations=0",
+    "Stage2 exit result 固定 7 项，总 PASS 当且仅当 7/7 PASS，并保留精确失败路由"
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 1725,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_discovery_entry",
+      "required": true
+    },
+    {
+      "estimated_tokens": 693,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1550,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-169.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 606,
+      "mode": "full",
+      "path": "docs/design/MODULE-BOUNDARIES.yaml",
+      "reason": "module_boundaries",
+      "required": false
+    },
+    {
+      "estimated_tokens": 211,
+      "mode": "full",
+      "path": "docs/design/PACKAGE-IDENTITY.yaml",
+      "reason": "package_identity",
+      "required": false
+    }
+  ],
+  "allowed_write_paths": [
+    "tests/fixtures/capacity_liquidity/daily_multifactor_v1.json",
+    "tests/fixtures/capacity_liquidity/multi_strategy_compatibility_v1.json",
+    "tests/research/test_capacity_liquidity_cr169_qac.py",
+    "tests/research/test_capacity_liquidity_claim_regression.py",
+    "tests/PROVENANCE.yaml",
+    "scripts/check_stage2_exit_contracts.py",
+    "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification.md",
+    "process/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-IMPLEMENTATION.md",
+    "process/context/stories/STORY-CR169-S05.CP6.work-packet.json",
+    "process/returns/CR169-S05-fixture-claim-stage2-exit-verification.CP6.return.json",
+    "process/evidence/CR169-S05-fixture-claim-stage2-exit-verification.CP6.index.json",
+    "process/checks/CP6-CR169-S05-IMPLEMENTATION-DONE.result.json",
+    "process/checks/CP6-CR169-S05-IMPLEMENTATION-DONE.result.summary.md"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "NO_REAL_LAKE_READ_OR_WRITE",
+    "NO_PROVIDER_FETCH",
+    "NO_GIT_REMOTE_WRITE"
+  ],
+  "budget": {
+    "estimated_tokens": 5348,
+    "estimator": "chars_div_4",
+    "max_tokens": 16000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [
+      "C4 fixture families and CR169 QAC matrix",
+      "CR168/CR155/claim-ceiling regressions",
+      "Stage2 exact seven-contract exit result and failure routing"
+    ],
+    "summary": "新增纯 fixture/static 的 CR169 量化验收、claim regression 与 Stage2 7/7 核验器；不修改生产合同、canonical Gate4、CR168 adapter 或历史 CR157 产物。"
+  },
+  "cr_id": "CR-169",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "dependency_inputs": [
+    "CR169-S01 CP7 verified typed contract and validation",
+    "CR169-S02 CP7 verified deterministic producer",
+    "CR169-S03 CP7 verified neutral envelope activation",
+    "CR169-S04 CP7 verified strict joint adapter",
+    "CP5 approved S05 LLD"
+  ],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary / legacy fallback，不作为 agent 默认机器入口"
+    },
+    {
+      "path_or_pattern": "process/DEVELOPMENT-PLAN.yaml",
+      "reason": "计划长文由 Story packet / context 摘要承载"
+    },
+    {
+      "path_or_pattern": "process/STORY-STATUS.md",
+      "reason": "legacy status 汇总，不作为当前 Story 真相源"
+    },
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "默认读取 CR summary / CR ledger，完整 CR 只用于审计或冲突恢复"
+    },
+    {
+      "path_or_pattern": "process/stories/*-LLD.md",
+      "reason": "默认读取 Story packet / design summary，完整 LLD 按需展开"
+    },
+    {
+      "path_or_pattern": "process/stories/*-IMPLEMENTATION.md",
+      "reason": "实现长证据默认通过 return/evidence index 消费"
+    },
+    {
+      "path_or_pattern": "process/archive/**",
+      "reason": "冷历史归档"
+    },
+    {
+      "path_or_pattern": "process/discussions/**",
+      "reason": "讨论记录不作为实现合同"
+    }
+  ],
+  "expected_return_packet": "process/returns/CR169-S05-fixture-claim-stage2-exit-verification.CP6.return.json",
+  "feature_contract_summary": "2/2 static fixture、9/17/15/12 exact coverage、10→1 determinism、joint/absent regressions、claim/source guards 与 7-item Stage2 exit result；任何结果下 stage3_entry_ready=false。",
+  "feature_design_refs": [
+    "docs/features/capacity-liquidity-claim-exit-guard/DESIGN.md",
+    "docs/features/capacity-liquidity-claim-exit-guard/TEST-PLAN.md",
+    "docs/features/capacity-liquidity-claim-exit-guard/TASKS.md",
+    "docs/features/capacity-liquidity-evidence/TEST-PLAN.md",
+    "docs/features/c3-c4-correlation-boundary/TEST-PLAN.md",
+    "docs/features/capacity-liquidity-gate4-joint-adapter/TEST-PLAN.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "capacity.liquidity.claim.exit.guard",
+    "capacity.liquidity.evidence",
+    "c3.c4.correlation.boundary",
+    "capacity.liquidity.gate4.joint.adapter"
+  ],
+  "forbidden_write_paths": [
+    "engine/cross_strategy_reliability_gates.py",
+    "engine/economic_cost_gate4_projection.py",
+    "engine/strategy_admission_package.py",
+    "process/archive/**",
+    "process/discussions/**"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "lld_policy": "full-lld",
+  "must_read": [
+    {
+      "estimated_tokens": 1725,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true
+    },
+    {
+      "estimated_tokens": 693,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    }
+  ],
+  "objective": {
+    "non_goals": [
+      "不读取真实 ADV/liquidity/lake/provider/NAS",
+      "不修改 canonical Gate4、CR168 adapter 或 aggregate/admission",
+      "不修补历史 CR157 合同缺口",
+      "不启动 Stage3、不实现 alpha-decay、不提升 CR155"
+    ],
+    "summary": "Fixture、Claim 与 Stage2 Exit 验证"
+  },
+  "packet_type": "story_work_packet",
+  "parent_context_ref": "process/context/CP5-CR169-CAPACITY-LIQUIDITY-ADV-EVIDENCE-CONTEXT.yaml",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "quant-lab",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 1640,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification-LLD.md",
+      "reason": "story_lld",
+      "trigger": "full_lld_required_by_policy"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "architecture-major",
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR169-S05-fixture-claim-stage2-exit-verification",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S05-fixture-claim-stage2-exit-verification.md",
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/research/test_capacity_liquidity_cr169_qac.py tests/research/test_capacity_liquidity_claim_regression.py",
+    "uv run --python 3.11 python -m py_compile scripts/check_stage2_exit_contracts.py",
+    "复跑 S01-S04 与 CR168/CR155 定向回归",
+    "运行 repository full suite 并对任一失败逐项归因",
+    "只读确认三个 forbidden source modifications=0 与外部操作=0"
+  ]
+}

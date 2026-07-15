@@ -1,0 +1,210 @@
+{
+  "acceptance": ["27 S04/108 aggregate targeted tests PASS", "13 mismatch 和 3 missing refs canonical calls=0", "reason/extra presence 全拒绝", "non-PASS upgrade=0、malformed PASS rejected", "四项 readiness/aggregate claims false"],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 1722,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 221,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_discovery_entry",
+      "required": true
+    },
+    {
+      "estimated_tokens": 633,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1550,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-169.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 606,
+      "mode": "full",
+      "path": "docs/design/MODULE-BOUNDARIES.yaml",
+      "reason": "module_boundaries",
+      "required": false
+    },
+    {
+      "estimated_tokens": 211,
+      "mode": "full",
+      "path": "docs/design/PACKAGE-IDENTITY.yaml",
+      "reason": "package_identity",
+      "required": false
+    }
+  ],
+  "allowed_write_paths": ["process/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter-VERIFICATION.md", "process/context/stories/STORY-CR169-S04.CP7.verify-packet.json", "process/returns/CR169-S04-strict-c3-c4-gate4-joint-adapter.CP7.return.json", "process/evidence/CR169-S04-strict-c3-c4-gate4-joint-adapter.CP7.index.json", "process/checks/CP7-CR169-S04-VERIFICATION.result.json", "process/checks/CP7-CR169-S04-VERIFICATION.result.summary.md"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PROVIDER_FETCH", "NO_GIT_REMOTE_WRITE"],
+  "budget": {
+    "estimated_tokens": 5299,
+    "estimator": "chars_div_4",
+    "max_tokens": 18000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": ["strict Gate4 joint fixture adapter", "7-key payload", "13-field precheck", "postcondition"],
+    "summary": "独立复核 S04 false-PASS containment 与 forbidden boundary，不修改实现。"
+  },
+  "cr_id": "CR-169",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md", "process/archive/**", "process/discussions/**"
+  ],
+  "dependency_inputs": ["process/returns/CR169-S04-strict-c3-c4-gate4-joint-adapter.CP6.return.json", "process/evidence/CR169-S04-strict-c3-c4-gate4-joint-adapter.CP6.index.json"],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary / legacy fallback，不作为 agent 默认机器入口"
+    },
+    {
+      "path_or_pattern": "process/DEVELOPMENT-PLAN.yaml",
+      "reason": "计划长文由 Story packet / context 摘要承载"
+    },
+    {
+      "path_or_pattern": "process/STORY-STATUS.md",
+      "reason": "legacy status 汇总，不作为当前 Story 真相源"
+    },
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "默认读取 CR summary / CR ledger，完整 CR 只用于审计或冲突恢复"
+    },
+    {
+      "path_or_pattern": "process/stories/*-LLD.md",
+      "reason": "默认读取 Story packet / design summary，完整 LLD 按需展开"
+    },
+    {
+      "path_or_pattern": "process/stories/*-IMPLEMENTATION.md",
+      "reason": "实现长证据默认通过 return/evidence index 消费"
+    }, {"path_or_pattern":"process/archive/**","reason":"冷历史归档"}, {"path_or_pattern":"process/discussions/**","reason":"讨论记录不作为验证真相源"}
+  ],
+  "expected_return_packet": "process/returns/CR169-S04-strict-c3-c4-gate4-joint-adapter.CP7.return.json",
+  "feature_contract_summary": "strict typed/header/payload prechecks + public candidate-release call + local worse-state postcondition；不修改 canonical/aggregate。",
+  "feature_design_refs": [
+    "docs/features/c3-c4-correlation-boundary/DESIGN.md",
+    "docs/features/c3-c4-correlation-boundary/TEST-PLAN.md",
+    "docs/features/capacity-liquidity-gate4-joint-adapter/DESIGN.md",
+    "docs/features/capacity-liquidity-gate4-joint-adapter/TEST-PLAN.md",
+    "docs/features/capacity-liquidity-gate4-joint-adapter/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "c3.c4.correlation.boundary",
+    "capacity.liquidity.gate4.joint.adapter"
+  ],
+  "forbidden_write_paths": ["engine/**", "tests/**", "process/archive/**"],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "implementation_return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR169-S04-strict-c3-c4-gate4-joint-adapter.CP6.return.json",
+  "lld_policy": "full-lld",
+  "must_read": [
+    {
+      "estimated_tokens": 1722,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 221,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true
+    },
+    {
+      "estimated_tokens": 633,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 356,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    }
+  ],
+  "objective": {
+    "non_goals": ["不修改代码/测试", "不修 canonical 全局 N/A 语义", "不做 aggregate/admission/Stage3"],
+    "summary": "Strict C3+C4 Gate4 Joint Fixture Adapter"
+  },
+  "packet_type": "story_verify_packet",
+  "parent_context_ref": "process/context/stories/CR169-S04-strict-c3-c4-gate4-joint-adapter.base.context.json",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "quant-lab",
+  "read_if_needed": [
+    {
+      "estimated_tokens": 1797,
+      "mode": "full",
+      "path": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter-LLD.md",
+      "reason": "story_lld",
+      "trigger": "full_lld_required_by_policy"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "architecture-major",
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR169-S04-strict-c3-c4-gate4-joint-adapter",
+  "story_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/stories/STORY-CR169-S04-strict-c3-c4-gate4-joint-adapter.md",
+  "verification_plan": ["复跑 108 项 S01-S04/CR168/C2/C3 tests", "py_compile/diff-check", "静态审查 public-only dependency 与 forbidden source diff", "验证 claim ceiling/operation counts"]
+}
