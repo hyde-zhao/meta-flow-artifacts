@@ -1,0 +1,211 @@
+schema_version: 1
+memo_id: STAGE3-LAUNCH-DECISION-MEMO-2026-07-15
+candidate_id: FU-CR161-010
+proposed_cr_id: CR-171
+title: Stage 3 Launch / Real-Lake Entry Decision Gate
+status: candidate_not_authorized
+created_at: "2026-07-15T00:00:00+08:00"
+owner: host-orchestrator
+purpose: >
+  Preserve the reviewed Stage 3 entry decision as a reusable CP0/CP2 input. This is
+  a candidate record, not a formal CR, runtime authorization, real-data-read grant,
+  Stage 3 start, real-computation authorization, or admission decision.
+
+review_disposition:
+  core_positioning: accepted_with_scope_refinements
+  engagement_profile: standard
+  gate_profile: runtime-high-risk
+  proposed_phase_route:
+    - CP0
+    - CP1
+    - CP2
+    - CP3
+    - CP7
+    - CP8
+  checkpoint_applicability_intent:
+    CP4: N/A
+    CP5: N/A
+    CP6: N/A
+  cp4_to_cp6_na_precondition: >
+    CP3 MUST state that revalidation is analysis and controlled reading only, with
+    no new executable tool, producer implementation, repair script, aggregate
+    orchestration or code change. Any proposal to create such an artifact requires
+    route-plan re-evaluation before CP4.
+
+objective: >
+  Decide the approved Stage 3 data-lake entry route, the bounded lake-read contract,
+  the legacy status of historical Stage 3 evidence, the verifier path, and the
+  candidate data readiness set, while preventing historical evidence or a read-only
+  authorization from being misread as real computation, Stage 3 completion, or
+  mature admission approval.
+
+hard_fences:
+  revalidation: >
+    Only classify, annotate and report historical evidence. It may not repair code,
+    refresh or backfill data, rewrite manifests, rerun a strategy, repair lineage,
+    write the lake, or convert a failed/insufficient finding into a pass.
+  lake_read_vs_computation: >
+    A scoped lake-read decision authorizes neither C1-C4 real computation nor a
+    producer binding. Real computation authorization belongs only to the later
+    Real-Evidence Activation CR if the C1-C4 route is selected.
+  historical_claim: >
+    Historical Stage 3 runs remain legacy / require-revalidation and cannot make
+    stage3_started, stage3_entry_ready, real_evidence_available, or mature admission
+    PASS true.
+
+in_scope:
+  - scoped research-data/lake-read authorization decision with deny-default boundaries
+  - route decision: current runner or C1-C4 real-producer
+  - historical Stage 3 evidence classification, legacy annotation and revalidation report
+  - C1-C4 producer input-contract versus frozen-release schema/PIT/lineage feasibility verdict
+  - verifier path decision: FU-006 first or event-bounded waiver
+  - candidate data release/PIT/lineage/readiness inventory and its gap record
+  - machine-readable CR-170 Stage 3 risk alias consumption
+  - itemized disclosure of adjacent historical tracking debt
+
+out_of_scope:
+  - C1-C4 real-data-to-producer mapping, producer binding or real computation authorization
+  - C1-C4 aggregate orchestration, final StrategyAdmissionPackage or CR155 regression/promotion
+  - historical run repair, data backfill, provider fetch, lake/NAS write or catalog/current-pointer mutation
+  - credential/environment read, QMT, broker, simulation, paper, live or trading
+  - FU-006 implementation or FU-008 alpha-decay implementation
+  - cleanup of historical CR tracking/index records
+
+cp2_decisions:
+  - id: CP2-CR171-DQ-ROUTE
+    type: architecture
+    question: Which Stage 3 evidence route will the project use?
+    recommended: c1_c4_real_producer
+    alternatives:
+      - current_runner
+    consequence: >
+      C1-C4 requires a separate Real-Evidence Activation CR before computation;
+      current runner has no activation CR and therefore requires CP3 to freeze its
+      complete read-only execution boundary.
+  - id: CP2-CR171-DQ-VERIFIER
+    type: risk_acceptance
+    question: Does FU-006 block entry, or is it waived only until a mechanical maturity event?
+    recommended: event_bounded_waiver
+    alternatives:
+      - fu006_first
+    waiver_expiry_events:
+      - before any real-evidence admission decision may be PASS or PASS_WITH_RISK
+      - before the Stage 3 exit gate may be launched
+    non_inheritance: >
+      CR-170's CP8 inline-verifier risk acceptance is historical only and cannot
+      authorize or waive CR-171/Stage 3 verification.
+  - id: CP2-CR171-DQ-READ_SCOPE
+    type: runtime_authorization
+    question: What frozen data release, datasets, dates, read identities and output directory are allowed?
+    recommended: scoped_research_data_lake_read_only
+    must_deny:
+      - credentials_or_env_read
+      - provider_fetch
+      - lake_or_nas_write
+      - catalog_or_current_pointer_mutation
+      - runtime_or_trading
+
+route_verifier_matrix:
+  - route: current_runner
+    verifier: event_bounded_waiver
+    entry_cr_count: 1
+    next_formal_cr: none_for_activation
+    mandatory_cp3_condition: >
+      Freeze the existing runner's complete read-only execution boundary, including
+      allowed release/datasets/dates/output directory and all deny-default actions,
+      because no later activation CR will do so.
+    residual_risk: R-CR170-RUNNER-GAP
+  - route: c1_c4_real_producer
+    verifier: event_bounded_waiver
+    entry_cr_count: 2
+    next_formal_cr: Real-Evidence Activation CR
+    recommended: true
+  - route: c1_c4_real_producer
+    verifier: fu006_first
+    entry_cr_count: 3
+    next_formal_cr: FU-006 then Real-Evidence Activation CR
+
+revalidation_contract:
+  output_ref: process/evidence/CR171-HISTORICAL-STAGE3-REVALIDATION.report.json
+  allowed_verdicts:
+    - reaffirmed_as_legacy_only
+    - insufficient_for_current_entry
+    - incompatible_rework_required
+  required_checks:
+    - historical_run_identity_and_provenance
+    - data_release_and_date_range_reference
+    - schema_pit_lineage_claim_consistency
+    - evidence_reference_integrity
+    - claim_ceiling_consistency
+  finding_route: >
+    Any data, schema, PIT, lineage, code, manifest or evidence defect becomes a
+    follow-up candidate or independent formal CR; it is not repaired in CR-171.
+
+candidate_readiness_inventory:
+  freeze_semantics: >
+    The inventory constrains the CR-171 and CR-172 binding search space only. It is
+    not an assertion that each candidate is present, valid or bindable.
+  gap_driven_change: >
+    If CR-172 finds that a frozen candidate cannot satisfy its schema/PIT/lineage
+    contract, create a follow-up CR or return to the appropriate gate; do not expand
+    or replace the inventory in place.
+  required_categories:
+    - data_release
+    - pit_universe_and_listing_delisting
+    - st_suspension_and_price_limits
+    - liquidity_capacity_and_adv
+    - industry_market_cap_and_style
+    - benchmark
+    - fees_slippage_and_impact_model
+    - lineage_and_stage3_run_identity
+
+cp7_verification_objects:
+  - revalidation_report_verdict_is_self_consistent_and_all_blocked_or_insufficient_findings_are_routed
+  - read_boundary_evidence_is_within_frozen_release_dataset_date_and_output_scope_and_deny_default_was_not_breached
+  - waiver_expiry_events_are_machine_determinable_and_have_not_been_crossed
+  - historical_stage3_narrative_is_annotated_as_legacy_require_revalidation
+
+tracking_debt_for_cp0_disclosure:
+  - id: CR-032
+    classification: stale_status_conflict
+    facts: formal_cr_completed_offline_but_cr_index_active
+    treatment: disclose_only_no_index_repair_in_cr171
+  - id: CR-010
+    classification: adjacent_historical_data_lake_close_debt
+    facts: production_data_lake_current_truth_and_close_debt_remain_historical
+    treatment: subject_adjacent_but_authorization_and_actions_must_not_overlap
+  - id: CR-018
+    classification: adjacent_historical_data_lake_closure_debt
+    facts: production_data_lake_closure_record_has_later_gated_pending_close_status
+    treatment: subject_adjacent_but_authorization_and_actions_must_not_overlap
+  - id: CR-031
+    classification: legacy_lifecycle_enum_conflict
+    treatment: disclose_only
+  - id: CR-033
+    classification: legacy_status_shape
+    treatment: disclose_only
+  - id: CR-168
+    classification: closed_formal_cr_with_historical_branch_reference
+    treatment: disclose_only_no_active_owner_lock
+
+machine_policy_refs:
+  risk_id_aliases: process/policies/RISK-ID-ALIASES.yaml
+  source_of_truth_map: process/policies/SOURCE-OF-TRUTH-MAP.yaml
+  cp0_consumption_evidence_required: >
+    CP0 must record a resolved join from R-CR170-STAGE3-OVERCLAIM to
+    R-CR170-RUNNER-GAP using RISK-ID-ALIASES.yaml; merely referencing the
+    policy path is insufficient.
+
+formal_cr_start_condition: >
+  A user explicitly authorizes creation of CR-171. CP0 must then run a fresh conflict
+  precheck against STATE.current.json, CR ledger, CR-INDEX, relevant formal CRs and
+  this memo; this candidate memo does not substitute for CP0.
+
+must_remain_false:
+  - stage3_started
+  - stage3_entry_ready
+  - real_data_read_authorized
+  - real_computation_authorized
+  - aggregate_orchestration_implemented
+  - cr155_promoted
+  - runtime_or_trading_authorized

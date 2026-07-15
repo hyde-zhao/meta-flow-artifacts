@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "check_id": "CR171-STAGE3-LAUNCH-CONFLICT-PRECHECK",
+  "checked_at": "2026-07-15T21:02:12+08:00",
+  "cr_id": "CR-171",
+  "decision": "PASS",
+  "scope": "Fresh formal-CR intake conflict precheck; no data-lake, provider, credentials, runtime, computation or write action was performed.",
+  "formal_cr_allocation": {
+    "id": "CR-171",
+    "result": "allocated_and_active",
+    "evidence_ref": "process/changes/CR-171.md"
+  },
+  "active_owner_check": {
+    "before_activation": "No active or blocked formal CR was present when FU-CR161-010 was reviewed as a candidate.",
+    "after_activation": "CR-171 is the sole active formal CR and owns only the Stage 3 decision/authz/history-reconciliation scope.",
+    "evidence_refs": [
+      "process/state/STATE.current.json",
+      "process/changes/CR-INDEX.json",
+      "process/changes/CR-161-FOLLOW-UP-TRACKING-2026-07-10.md#FU-CR161-010"
+    ]
+  },
+  "adjacent_tracking_debt": [
+    {
+      "id": "CR-032",
+      "classification": "stale_status_conflict",
+      "facts": "formal CR body declares completed-offline while CR-INDEX retains active/not_started/not_ready",
+      "treatment": "disclose only; CR-171 does not repair either record"
+    },
+    {
+      "id": "CR-010",
+      "classification": "subject-adjacent_production_data_lake_close_debt",
+      "facts": "production lake close/current-truth debt is not ready and not started",
+      "treatment": "authorization and actions do not overlap; CR-171 permits no provider/lake write/publish/current-pointer/production close action"
+    },
+    {
+      "id": "CR-018",
+      "classification": "subject-adjacent_production_data_lake_closure_debt",
+      "facts": "production data-lake closure remains a historical later-gated pending-close record",
+      "treatment": "authorization and actions do not overlap; no CR-018 closure work is reopened"
+    },
+    {
+      "id": "CR-031",
+      "classification": "legacy_lifecycle_enum_conflict",
+      "treatment": "disclose only"
+    },
+    {
+      "id": "CR-033",
+      "classification": "legacy_status_shape",
+      "treatment": "disclose only; CR-033 runtime trace follow-up is not activated"
+    },
+    {
+      "id": "CR-168",
+      "classification": "closed_formal_cr_with_historical_branch_reference",
+      "treatment": "disclose only; it creates no active owner lock"
+    }
+  ],
+  "risk_alias_resolution": {
+    "policy_ref": "process/policies/RISK-ID-ALIASES.yaml",
+    "historical_id": "R-CR170-STAGE3-OVERCLAIM",
+    "canonical_id": "R-CR170-RUNNER-GAP",
+    "resolved_join": "PASS",
+    "consumer_evidence": "CR-171 frontmatter and CP0 use R-CR170-RUNNER-GAP; CR-170 historical frontmatter remains unchanged."
+  },
+  "historical_evidence_check": {
+    "finding": "docs/components/MULTIFACTOR-RESEARCH.md:126 says the historical run reached Stage 3 exit standard without a legacy/require-revalidation marker.",
+    "treatment": "CR-171 must only annotate and report a verdict; any repair/backfill/rerun is a follow-up CR."
+  },
+  "authorization_check": {
+    "result": "PASS",
+    "statement": "User authorization created CR-171 and permitted CP0/CP1 progression only. Before CP2, research-lake read remains false; real computation, runtime, credentials, provider fetch, writes, aggregate and trading remain false."
+  },
+  "route_check": {
+    "route_plan_ref": "process/checks/CP0-CR171.route-plan.json",
+    "result": "PASS",
+    "next_human_gate": "CP2",
+    "applicability": "CP4/CP5/CP6 are N/A under the current no-implementation traits; any CP3 proposal for a new executable tool/code requires route-plan re-evaluation before it is created."
+  },
+  "blockers": [],
+  "warnings": [
+    "The global cr-tracking checker retains historical warnings/errors for CR-010, CR-018 and CR-031. They are disclosed debt and not silently repaired in CR-171.",
+    "The existing candidate index convention does not index follow-up rows; FU-CR161-010 has a formal_cr_path and remains visible in its source tracking record."
+  ]
+}

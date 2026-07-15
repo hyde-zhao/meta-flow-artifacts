@@ -1,0 +1,69 @@
+schema_version: 1
+cr_id: CR-171
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+release_execution_status: NOT_EXECUTED
+created_at: "2026-07-15T22:35:00+08:00"
+release_scope:
+  in_scope:
+    - CP3 decision-only HLD/ADR for Stage 3 launch route and authorization boundary
+    - explicit OPEN/RESOLVED residual-item register and per-ADR reopen conditions
+    - static C1-C4 feasibility verdicts, event-bounded FU-006 waiver design and legacy revalidation classification
+  out_of_scope:
+    - any real lake/provider/credential read, write, computation, runtime or trading
+    - real producer activation, aggregate orchestration, CR155 promotion, historical repair/backfill/rerun
+quality_summary:
+  cp7: PASS design-only
+  blockers: 0
+  current_entry_verdict: insufficient_for_current_entry
+  non_blocking_warnings: [LEGACY_INPUT_HASH_UNAVAILABLE, FINAL_ATTEMPT_UNAVAILABLE]
+fact_diff:
+  - promise_ref: CP2 route decision
+    promise: two-CR C1-C4 decision/activation separation
+    status: EXECUTED_POSITIVE_RESULT
+    decision_impact: delivered_design_only
+    evidence_refs: [docs/design/HLD-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md]
+    risk_ref: R-CR170-RUNNER-GAP
+  - promise_ref: CP2 verifier decision
+    promise: E1/E2 event-bounded FU-006 waiver with no inheritance
+    status: EXECUTED_POSITIVE_RESULT
+    decision_impact: delivered_design_only
+    evidence_refs: [docs/design/ARCHITECTURE-DECISION-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md]
+    risk_ref: R-CR171-HISTORICAL-EVIDENCE-OVERCLAIM
+  - promise_ref: CP2 historical evidence decision
+    promise: classify legacy evidence without repair
+    status: EXECUTED_NEGATIVE_RESULT
+    decision_impact: READY_WITH_RISK
+    evidence_refs: [process/checks/CR171-HISTORICAL-STAGE3-REVALIDATION-REPORT.md]
+    risk_ref: R-CR171-HISTORICAL-EVIDENCE-OVERCLAIM
+  - promise_ref: CP2 future read scope
+    promise: five-field candidate and deny-default boundary
+    status: DEFERRED_FOLLOW_UP
+    decision_impact: READY_WITH_RISK
+    evidence_refs: [docs/design/HLD-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md]
+    risk_ref: R-CR171-LAKE-READ-SCOPE-ESCAPE
+claim_ceiling:
+  stage3_started: false
+  stage3_entry_ready: false
+  real_data_read_authorized: false
+  real_computation_authorized: false
+  aggregate_orchestration_implemented: false
+  cr155_promoted: false
+not_authorized:
+  - real lake/NAS/provider/credential/environment access or write
+  - producer/current-runner/aggregate computation, runtime, simulation or trading
+  - repair/backfill/rerun/manifest rewrite, publish/deploy or git remote write
+workspace_git_status:
+  checked_at: "2026-07-15T22:23:38+08:00"
+  quant_lab_dirty: true
+  artifact_dirty: true
+  disposition: CP8 approve must not push or publish; both worktrees require separate commit/push authorization.
+release_documents:
+  release_notes: process/docs/release/RELEASE-NOTES-CR171.md
+  deploy_checklist: process/docs/release/DEPLOY-CHECKLIST-CR171.md
+  rollback: process/docs/release/ROLLBACK-CR171.md
+  migration: process/docs/release/MIGRATION-CR171.md
+  feedback: process/docs/release/FEEDBACK-CR171.md
+follow_up_summary:
+  open_items: [OI-CR171-001, OI-CR171-002, OI-CR171-003, OI-CR171-004, OI-CR171-005]
+  release_closure_meaning: CR-171 decision/verification closure only; not Stage 3 activation or entry readiness.

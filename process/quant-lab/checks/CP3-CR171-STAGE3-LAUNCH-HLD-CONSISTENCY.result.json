@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "check_id": "CP3-CR171-STAGE3-LAUNCH-HLD-CONSISTENCY",
+  "checkpoint": "CP3",
+  "checkpoint_id": "CP3-CR171-STAGE3-LAUNCH-HLD-CONSISTENCY",
+  "profile": "runtime-high-risk",
+  "cr_id": "CR-171",
+  "checked_at": "2026-07-15T22:23:38+08:00",
+  "context_ref": "process/context/CP3-CR171.context.json",
+  "route_plan_ref": "process/checks/CP0-CR171.route-plan.json",
+  "dispatch_refs": ["process/handoffs/CR171-CP3-META-SE-CRITICAL-HANDOFF-2026-07-15.md#dispatch"],
+  "evidence_ref": "process/checks/CP3-CR171-DISCUSSION-CHECKPOINT.json",
+  "items": [
+    {"id":"CP3-CR171-01","category":"entry","name":"CP2 route, verifier and future read-scope decisions are approved","status":"PASS","severity":"BLOCKER","evidence_refs":["process/checks/CP2-CR171-STAGE3-LAUNCH-SCOPE.result.json"],"owner":"meta-se-critical","route_on_fail":"require_user_decision","notes":"C1-C4 route, event-bounded waiver and design-only scoped read candidate are the only accepted CP2 inputs."},
+    {"id":"CP3-CR171-02","category":"discussion","name":"Architecture Gray Areas and advisor table are recorded before HLD","status":"PASS","severity":"BLOCKER","evidence_refs":["process/discussions/CP3-CR171-HLD-DISCUSSION-LOG.md","process/checks/CP3-CR171-DISCUSSION-CHECKPOINT.json"],"owner":"meta-se-critical","route_on_fail":"require_user_decision","notes":"Two-CR boundary, candidate-only read contract, revalidation ceiling and waiver state machine were assessed without claiming extra reviewer lanes."},
+    {"id":"CP3-CR171-03","category":"hld","name":"HLD provides at least two materially different route options and selection/reopen conditions","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/HLD-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#4-architecture-gray-areas-and-advisor-table","docs/design/HLD-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#5-candidate-comparison-and-recommendation"],"owner":"meta-se-critical","route_on_fail":"require_user_decision","notes":"Recommendation preserves C1-C4 activation separation; current runner is a deliberately rejected fallback pending CP2 reopen."},
+    {"id":"CP3-CR171-04","category":"authorization","name":"Five-field read contract remains candidate-only and deny-default classes are explicit","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/HLD-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#7-five-field-future-read-contract-candidate"],"owner":"meta-se-critical","route_on_fail":"escalate_runtime_high_risk","notes":"5/5 values are pending human authorization; 6/6 denied classes are explicit; no read or write is authorized."},
+    {"id":"CP3-CR171-05","category":"feasibility","name":"C1-C4 static input-contract feasibility has one evidence-backed verdict per producer","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/HLD-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#8-c1c4-static-producer-feasibility-matrix"],"owner":"meta-se-critical","route_on_fail":"require_user_decision","notes":"C1/C2/C3 are insufficient and C4 incompatible on declared/static evidence; no real schema, PIT, lineage or data was inspected."},
+    {"id":"CP3-CR171-06","category":"historical_evidence","name":"Revalidation is classification, annotation and report only","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/HLD-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#9-historical-evidence-revalidation-contract","docs/design/ARCHITECTURE-DECISION-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#adr-cr171-003"],"owner":"meta-se-critical","route_on_fail":"require_user_decision","notes":"Current-entry verdict schema is 3/3; repair/backfill/rerun/manifest rewrite is 0."},
+    {"id":"CP3-CR171-07","category":"waiver","name":"FU-006 waiver has two mechanical expiry guards","status":"PASS","severity":"HIGH","evidence_refs":["docs/design/HLD-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#10-event-bounded-fu-006-waiver-state-machine","docs/design/ARCHITECTURE-DECISION-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#adr-cr171-004"],"owner":"meta-se-critical","route_on_fail":"block_release","notes":"E1 blocks first real-evidence admission PASS/PASS_WITH_RISK and E2 blocks Stage 3 exit-gate start when independent FU-006 evidence is absent."},
+    {"id":"CP3-CR171-08","category":"scope","name":"Pure analysis/no executable-tool precommitment preserves CP4-CP6 N/A","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/HLD-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#11-claim-ceiling-and-pure-analysis-precommitment"],"owner":"meta-se-critical","route_on_fail":"escalate_runtime_high_risk","notes":"Any tool, producer, computation or data action requires route reassessment before checkpoint applicability changes."},
+    {"id":"CP3-CR171-09","category":"scenario","name":"Five required design-only scenarios reach their intended safe conclusion","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/HLD-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#13-scenario-simulations"],"owner":"meta-se-critical","route_on_fail":"require_user_decision","notes":"Permitted design, insufficient/incompatible evidence, waiver expiry and denied boundary scenarios all pass without execution."},
+    {"id":"CP3-CR171-10","category":"claim_ceiling","name":"No design artefact authorizes Stage 3, real computation, aggregate, CR155 promotion or runtime/trading","status":"PASS","severity":"BLOCKER","evidence_refs":["docs/design/HLD-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#11-claim-ceiling-and-pure-analysis-precommitment","docs/design/ARCHITECTURE-DECISION-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#not-authorized"],"owner":"meta-se-critical","route_on_fail":"escalate_runtime_high_risk","notes":"All required claim flags remain false."},
+    {"id":"CP3-CR171-11","category":"scope","name":"Residual design items have explicit state closure","status":"PASS","severity":"HIGH","evidence_refs":["docs/design/HLD-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#21-open-items-status-register","process/discussions/CP3-CR171-HLD-DISCUSSION-LOG.md#review-remediation-and-impact-record--2026-07-15"],"owner":"host-orchestrator","route_on_fail":"require_user_decision","notes":"Five residual items are OPEN with owner, date, closure route and blocked effect; the review-remediation item is RESOLVED on 2026-07-15."},
+    {"id":"CP3-CR171-12","category":"architecture","name":"Every CP3 ADR has an explicit reopen condition","status":"PASS","severity":"HIGH","evidence_refs":["docs/design/ARCHITECTURE-DECISION-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#adr-cr171-001","docs/design/ARCHITECTURE-DECISION-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#adr-cr171-002","docs/design/ARCHITECTURE-DECISION-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#adr-cr171-003","docs/design/ARCHITECTURE-DECISION-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#adr-cr171-004"],"owner":"host-orchestrator","route_on_fail":"require_user_decision","notes":"ADR-001 has its original condition; ADR-002..004 now state decision-specific, non-calendar reopen paths that do not grant authorization."}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260715T134400Z0000-cp3reqs","RE-20260715T134400Z0000-cp3uses","RE-20260715T134400Z0000-cp3multi","RE-20260715T135200Z0000-cp3discussion"],
+  "manual_gate_status": "approved",
+  "approved_at": "2026-07-15T22:23:38+08:00",
+  "approved_by": "user",
+  "accepted_human_decisions": [
+    "DQ-CP3-CR171-001",
+    "DQ-CP3-CR171-002",
+    "DQ-CP3-CR171-003",
+    "DQ-CP3-CR171-004"
+  ],
+  "pending_human_decisions": [
+    {"decision_id":"DQ-CP3-CR171-001","decision_type":"architecture","question":"Approve the two-CR boundary and C1-C4 static feasibility disposition?","recommended_option":"Keep CR-171 decision-only; require a later activation CR; retain C1/C2/C3 insufficient and C4 incompatible until separately changed.","alternatives":["Reopen CP2 for current runner","Merge activation into CR-171"],"source_ref":"docs/design/ARCHITECTURE-DECISION-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#adr-cr171-001"},
+    {"decision_id":"DQ-CP3-CR171-002","decision_type":"runtime_authorization","question":"Approve pending-human five-field candidate semantics and 6/6 deny-default boundary?","recommended_option":"Leave all five exact values pending human authorization; no inference from historical data or paths.","alternatives":["Infer historic release/path values","Omit all candidate fields"],"source_ref":"docs/design/ARCHITECTURE-DECISION-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#adr-cr171-002"},
+    {"decision_id":"DQ-CP3-CR171-003","decision_type":"scope","question":"Approve the three-verdict current-entry report ceiling with no repair?","recommended_option":"Use revalidated_for_current_entry / insufficient_for_current_entry / incompatible_rework_required; preserve legacy annotation only.","alternatives":["Repair in CR-171","Treat historical PASS as current readiness"],"source_ref":"docs/design/ARCHITECTURE-DECISION-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#adr-cr171-003"},
+    {"decision_id":"DQ-CP3-CR171-004","decision_type":"risk_acceptance","question":"Approve the event-bounded FU-006 waiver state machine?","recommended_option":"E1/E2 have no extension; absence of independent FU-006 evidence blocks admission/exit action.","alternatives":["Calendar extension","Inherit CR-170 waiver"],"source_ref":"docs/design/ARCHITECTURE-DECISION-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md#adr-cr171-004"}
+  ],
+  "review_remediation": {
+    "source": "user CP3 review",
+    "status": "RESOLVED",
+    "resolved_at": "2026-07-15",
+    "findings": [
+      "HLD lacked an explicit OPEN/RESOLVED residual-item register.",
+      "ADR-002..004 lacked per-decision reopen conditions."
+    ],
+    "impact": "design-document governance only; no requirement, authorization, implementation, runtime or data-scope change"
+  },
+  "authorization_assertions": {"real_lake_read":false,"credentials":false,"provider_fetch":false,"lake_or_nas_write":false,"catalog_or_current_pointer_write":false,"real_computation_or_runtime":false,"aggregate_orchestration":false,"cr155_promotion":false,"trading":false},
+  "decision": "PASS",
+  "next_route": "CP4_NA_then_CP7_design_verification"
+}

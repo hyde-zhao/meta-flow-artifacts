@@ -49,6 +49,10 @@ revision_record:
     date: "2026-07-15"
     author: host-orchestrator
     summary: "回填 CR170 CP8 批准与 READY_WITH_RISK 关闭；21-unit N/A policy、Gate1-5 fail-closed 与 Gate6 admission tier hardening 已交付，Stage3 entry 仍为 false。"
+  - version: v0.9
+    date: "2026-07-15"
+    author: host-orchestrator
+    summary: "固化未授权的 Stage3 Launch 候选决策 memo：C1-C4 real-producer + event-bounded verifier waiver 为推荐 2-CR 入口路线；revalidation 只判定不修复，lake-read 不等于 real computation，并建立 CR170 Stage3 风险 ID alias 的机器策略。"
 purpose: >
   记录当前可执行需求基线，避免后续 CR 从历史台账中误读已重解释的
   QMT / MiniQMT / runner / strategy package 目标。
@@ -345,6 +349,30 @@ current_baseline:
       - docs/product/TEST-MATRIX.md
       - process/archive/design-cr-docs/HLD-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md
       - process/archive/design-cr-docs/ARCHITECTURE-DECISION-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md
+
+  stage3_launch_candidate:
+    requirement_status: candidate_not_authorized
+    proposed_cr_id: CR-171
+    source_follow_up: FU-CR161-010
+    decision_memo_ref: process/plans/STAGE3-LAUNCH-DECISION-MEMO-2026-07-15.yaml
+    risk_alias_policy_ref: process/policies/RISK-ID-ALIASES.yaml
+    recommended_entry_route: c1_c4_real_producer_with_event_bounded_verifier_waiver
+    entry_cr_count_if_recommended: 2
+    claim_ceiling:
+      stage3_started: false
+      stage3_entry_ready: false
+      lake_read_authorized: false
+      real_computation_authorized: false
+      aggregate_orchestration: false
+      cr155_promoted: false
+    hard_fences:
+      revalidation: classify_annotate_report_only_no_repair
+      lake_read: not_real_computation_authorization
+      current_runner_route: cp3_must_freeze_complete_read_only_execution_boundary
+    evidence_paths:
+      - process/plans/STAGE3-LAUNCH-DECISION-MEMO-2026-07-15.yaml
+      - process/changes/CR-161-FOLLOW-UP-TRACKING-2026-07-10.md
+      - process/policies/RISK-ID-ALIASES.yaml
 
 not_authorized:
   nas_access: true

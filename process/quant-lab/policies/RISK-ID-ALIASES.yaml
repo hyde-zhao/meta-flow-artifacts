@@ -1,0 +1,37 @@
+schema_version: 1
+policy_id: RISK-ID-ALIASES
+status: active
+created_at: "2026-07-15T00:00:00+08:00"
+created_by: host-orchestrator
+purpose: >
+  Provide a machine-discoverable reconciliation layer when a closed CR's
+  historical risk identifier differs from the identifier used by current
+  runtime state, review, or release context. This policy never rewrites a
+  closed CR or generated historical summary.
+
+alias_sets:
+  - canonical_id: R-CR170-RUNNER-GAP
+    historical_aliases:
+      - R-CR170-STAGE3-OVERCLAIM
+    status: active
+    semantic_scope: >
+      CR-170 left the current Stage 3 runner outside canonical Gate 1-5 / Gate 6
+      consumption. It must not be represented as Stage 3 entry-ready, real-evidence
+      ready, or a canonical-admission consumer.
+    use_rule: >
+      New CRs, current-state records, decision briefs, revalidation reports and
+      follow-up candidates MUST emit canonical_id. Consumers that read historical
+      CR-170 frontmatter, summaries or archived artifacts MUST resolve each
+      historical_alias to canonical_id before joining risks.
+    source_refs:
+      - process/changes/CR-170.md#risk_refs
+      - process/state/STATE.current.json#open_risks
+      - process/release/RELEASE-CONTEXT-CR170-CANONICAL-RELIABILITY-HARDENING.yaml#risks
+      - docs/quality/REVIEW-CR170.md#risks-and-residual-boundaries
+    historical_mutation_policy: >
+      closed_cr_no_rewrite; do not alter CR-170 frontmatter or generated historical
+      summaries solely to rename the old identifier.
+    owner: host-orchestrator
+    review_trigger: >
+      Before CR-171 CP0 conflict precheck and whenever a new consumer references a
+      CR-170 Stage 3 risk.

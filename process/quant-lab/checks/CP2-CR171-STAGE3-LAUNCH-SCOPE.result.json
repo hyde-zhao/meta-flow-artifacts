@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "check_id": "CP2-CR171-STAGE3-LAUNCH-SCOPE",
+  "checkpoint_id": "CP2-CR171-STAGE3-LAUNCH-SCOPE",
+  "checkpoint": "CP2",
+  "profile": "runtime-high-risk",
+  "cr_id": "CR-171",
+  "checked_at": "2026-07-15T21:38:59+08:00",
+  "context_ref": "process/context/CP2-CR171.context.json",
+  "route_plan_ref": "process/checks/CP0-CR171.route-plan.json",
+  "dispatch_refs": [
+    "AD-CR171-CP1-META-PM-SPAWN-20260715T210900+0800"
+  ],
+  "evidence_ref": "process/checks/CR171-PRODUCT-BASELINE-EVIDENCE.json",
+  "items": [
+    {
+      "id": "CP2-CR171-01",
+      "category": "entry",
+      "name": "CP0 and CP1 passed with high-risk boundary intact",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP0-CR171-STAGE3-LAUNCH-REQUEST-INTAKE.result.json",
+        "process/checks/CP1-CR171-USE-CASE-COMPLETENESS.result.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "notes": "The pre-gate checks are PASS and no real-lake, credential, provider, write, computation, runtime or trading action has occurred."
+    },
+    {
+      "id": "CP2-CR171-02",
+      "category": "architecture",
+      "name": "C1-C4 real-producer route accepted",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR171-STAGE3-LAUNCH-SCOPE.md#人工审查结果"
+      ],
+      "owner": "user",
+      "route_on_fail": "require_user_decision",
+      "notes": "The selected route preserves a separate Real-Evidence Activation CR for producer binding and real computation authorization."
+    },
+    {
+      "id": "CP2-CR171-03",
+      "category": "risk_acceptance",
+      "name": "Event-bounded FU-006 waiver accepted",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checkpoints/CP2-CR171-STAGE3-LAUNCH-SCOPE.md#checklist"
+      ],
+      "owner": "user",
+      "route_on_fail": "block_release",
+      "notes": "The waiver expires before either the first real-evidence admission PASS/PASS_WITH_RISK decision or Stage 3 exit-gate start; the CR-170 waiver cannot be inherited."
+    },
+    {
+      "id": "CP2-CR171-04",
+      "category": "runtime_authorization",
+      "name": "Future scoped read-contract design accepted without execution",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/changes/CR-171.md#structured-authorization-policy",
+        "process/checkpoints/CP2-CR171-STAGE3-LAUNCH-SCOPE.md#人工审查结果"
+      ],
+      "owner": "user",
+      "route_on_fail": "require_user_decision",
+      "notes": "CP3 may specify a five-field candidate contract only. No actual read or real computation authorization is conferred."
+    },
+    {
+      "id": "CP2-CR171-05",
+      "category": "claim_ceiling",
+      "name": "Stage 3 claim ceiling remains false",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml",
+        "process/plans/STAGE3-LAUNCH-DECISION-MEMO-2026-07-15.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "notes": "stage3_started, stage3_entry_ready and real_computation_authorized remain false."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "manual_gate_status": "approved",
+  "approved_at": "2026-07-15T21:38:59+08:00",
+  "approved_by": "user",
+  "accepted_human_decisions": [
+    {
+      "id": "CP2-CR171-DQ-ROUTE",
+      "value": "c1_c4_real_producer"
+    },
+    {
+      "id": "CP2-CR171-DQ-VERIFIER",
+      "value": "event_bounded_waiver"
+    },
+    {
+      "id": "CP2-CR171-DQ-READ-SCOPE",
+      "value": "scoped_research_data_lake_read_only"
+    }
+  ],
+  "waiver_disposition": {
+    "id": "FU-006-EVENT-BOUNDED-WAIVER",
+    "status": "accepted_for_future_design_only",
+    "expiry_events": [
+      "before_first_real_evidence_admission_pass_or_pass_with_risk_decision",
+      "before_stage3_exit_gate_start"
+    ],
+    "inheritance": "CR-170 waiver is not inheritable"
+  },
+  "commitments": {
+    "required_evidence": [
+      {
+        "id": "CP7-CR171-REVALIDATION-VERDICTS",
+        "kind": "historical_revalidation_report",
+        "required_stage": "CP7",
+        "minimum_evidence": {
+          "required_verdicts": [
+            "revalidated_for_current_entry",
+            "insufficient_for_current_entry",
+            "incompatible_rework_required"
+          ],
+          "repair_or_rerun": false
+        }
+      },
+      {
+        "id": "CP7-CR171-DENY-DEFAULT-BOUNDARY",
+        "kind": "authorization_boundary_evidence",
+        "required_stage": "CP7",
+        "minimum_evidence": {
+          "real_lake_read": false,
+          "real_computation": false,
+          "write": false,
+          "runtime": false,
+          "trading": false
+        }
+      }
+    ]
+  },
+  "cp3_attention_items": [
+    {
+      "id": "CP3-CR171-001",
+      "summary": "Produce only an authorization/revalidation architecture contract; it must not authorize or execute lake reads, computation, runtime or write actions."
+    },
+    {
+      "id": "CP3-CR171-002",
+      "summary": "Prepare a human-reviewable concrete five-field read-contract candidate and a per-producer C1-C4 input-contract feasibility verdict, using only declared/static facts."
+    },
+    {
+      "id": "CP3-CR171-003",
+      "summary": "Retain the event-bounded FU-006 expiry triggers, current claim ceiling and revalidation-only-no-repair fence."
+    }
+  ],
+  "authorization_assertions": {
+    "cp3_solution_design": true,
+    "real_lake_read": false,
+    "credentials": false,
+    "provider_fetch": false,
+    "lake_or_nas_write": false,
+    "catalog_or_current_pointer_write": false,
+    "real_computation_or_runtime": false,
+    "aggregate_orchestration": false,
+    "cr155_promotion": false,
+    "trading": false
+  },
+  "read_expansion_refs": [
+    "RE-20260715T130758Z0000-5b241ac7"
+  ],
+  "decision": "PASS",
+  "next_route": "CP3"
+}

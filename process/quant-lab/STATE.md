@@ -7,7 +7,7 @@ Blocked: false
 Active CR: none
 Active Story: none
 Pending gate: none
-Next action: CR-170 已关闭并完成双仓远端交付；选择下一正式 CR
+Next action: CR-171 status synced as closed; choose next CR.
 
 Refs:
 - state: process/state/STATE.current.json
@@ -49,6 +49,6 @@ Open risks:
 - {'id': 'R-CR170-VERIFIER-INDEPENDENCE', 'severity': 'medium', 'status': 'accepted_at_cp8_fu006_future_consumer'}
 - {'id': 'R-CR170-RUNNER-GAP', 'severity': 'high', 'status': 'controlled_out_of_scope_stage3_entry_ready_false'}
 
-Updated at: 2026-07-15T08:49:51+00:00
+Updated at: 2026-07-15T15:02:36+00:00
 
 <!-- generated-by: meta-flow state render -->

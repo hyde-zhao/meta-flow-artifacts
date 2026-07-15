@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR171-STAGE3-LAUNCH-REQUEST-INTAKE",
+  "profile": "runtime-high-risk",
+  "story_id": null,
+  "cr_id": "CR-171",
+  "route_plan_ref": "process/checks/CP0-CR171.route-plan.json",
+  "context_ref": "process/context/CP0-CR171.context.json",
+  "dispatch_refs": [],
+  "evidence_ref": "process/checks/CR171-STAGE3-LAUNCH-CONFLICT-PRECHECK.json",
+  "items": [
+    {
+      "id": "CP0-CR171-01",
+      "category": "workspace",
+      "name": "process 外置路由和状态入口健康",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/.meta-flow-process.yaml", "process/state/STATE.current.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "workspace check PASS；未重建 process 或 STATE。"
+    },
+    {
+      "id": "CP0-CR171-02",
+      "category": "change-control",
+      "name": "FU-CR161-010 已由用户授权转换为唯一 active formal CR-171",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/changes/CR-171.md", "process/changes/CR-161-FOLLOW-UP-TRACKING-2026-07-10.md#FU-CR161-010", "process/checks/CR171-STAGE3-LAUNCH-CONFLICT-PRECHECK.json#active_owner_check"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "启动前无 active/blocked formal owner；CR-171 是当前唯一 owner。"
+    },
+    {
+      "id": "CP0-CR171-03",
+      "category": "tracking-debt",
+      "name": "CR-032、010、018、031、033、168 的历史状态 debt 逐项披露且不在本 CR 修复",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/checks/CR171-STAGE3-LAUNCH-CONFLICT-PRECHECK.json#adjacent_tracking_debt", "process/changes/CR-INDEX.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CR-010/018 主题强邻接但授权和动作无重叠；CR-032 是未结 state conflict，不被误称 closed。"
+    },
+    {
+      "id": "CP0-CR171-04",
+      "category": "risk-alias",
+      "name": "CR-170 历史风险 ID 已按机器 alias policy 解析为 canonical R-CR170-RUNNER-GAP",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/policies/RISK-ID-ALIASES.yaml", "process/policies/SOURCE-OF-TRUTH-MAP.yaml", "process/checks/CR171-STAGE3-LAUNCH-CONFLICT-PRECHECK.json#risk_alias_resolution"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CP0 已记录实际 resolved join，不只引用 policy；不重写关闭的 CR-170 历史 frontmatter。"
+    },
+    {
+      "id": "CP0-CR171-05",
+      "category": "historical-evidence",
+      "name": "MULTIFACTOR-RESEARCH historical Stage 3 narrative 缺 legacy marker，已成为 revalidation 交付范围",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/components/MULTIFACTOR-RESEARCH.md:126", "process/checks/CR171-STAGE3-LAUNCH-CONFLICT-PRECHECK.json#historical_evidence_check", "process/plans/STAGE3-LAUNCH-DECISION-MEMO-2026-07-15.yaml#revalidation_contract"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "revalidation 只判定、标注和报告；任何 repair/backfill/rerun 必须另立 CR。"
+    },
+    {
+      "id": "CP0-CR171-06",
+      "category": "authorization",
+      "name": "创建 CR 与 CP0/CP1 推进不授予 real-lake read、real computation、runtime 或任何写入",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/changes/CR-171.md#结构化权限策略", "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml", "process/checks/CR171-STAGE3-LAUNCH-CONFLICT-PRECHECK.json#authorization_check"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CP2 才可决定一个具体、冻结、只读的 research-lake contract；它也不授权 real computation。"
+    },
+    {
+      "id": "CP0-CR171-07",
+      "category": "route",
+      "name": "runtime-high-risk route plan 明确 CP2 为下一人工门禁，CP4/CP5/CP6 当前 N/A",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP0-CR171.route-plan.json", "process/changes/CR-171.md#Checkpoint-Index"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "若 CP3 要引入任何 executable tool/code，必须先重新计算 route plan，不能把 N/A 静默继承。"
+    },
+    {
+      "id": "CP0-CR171-08",
+      "category": "product-baseline",
+      "name": "产品基线 refresh、meta-pm 调度和 CP2 gate 已被强制为前置条件",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/changes/CR-171.md#产品基线重整门禁", "process/changes/summaries/CR-171.summary.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP2 前不得 Story/LLD/implementation 或真实数据读取；下一步为 CP1 delegated meta-pm work。"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260715T130758Z0000-99c0f6a3",
+    "RE-20260715T130758Z0000-5b241ac7"
+  ],
+  "decision": "PASS",
+  "next_route": "CP1",
+  "checked_at": "2026-07-15T21:02:12+08:00"
+}
