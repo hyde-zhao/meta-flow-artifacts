@@ -22,6 +22,6 @@ created_at: "2026-07-15T16:14:00+08:00"
 | repository suite | PASS | 关闭态 2195/0（99.96s）。 |
 | claim ceiling | PASS | Stage3/runner/aggregate/real/runtime/CR155 均未提升。 |
 | deployment execution | NOT_EXECUTED | 本 CR 无 deploy/runtime 授权。 |
-| Git remote write | AUTHORIZED_SCOPED_PENDING | 用户明确授权普通 push 到 quant-lab `origin/work/cr170-canonical-reliability-na-hardening` 与 artifacts `origin/main`；禁止 force-push/tag/release。 |
+| Git remote write | PASS_DELIVERED | quant-lab `ac5bee5` 与 artifacts `5ba0693` 已推送到精确授权 ref并核对 0/0；禁止 force-push/tag/release。 |
 
-CP8 已批准 scoped 双仓提交与上述两条普通 push；提交态全量 `0 failed`、CR 关闭及关闭态 `2195/0` 复核均已完成，可以执行两条精确 ref 的普通 push。
+CP8 已批准 scoped 双仓提交与上述两条普通 push；提交态全量 `0 failed`、CR 关闭、关闭态 `2195/0` 和首次远端交付均已完成。没有执行 deploy/runtime/release。

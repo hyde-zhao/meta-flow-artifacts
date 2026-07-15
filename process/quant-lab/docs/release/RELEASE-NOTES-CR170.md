@@ -1,6 +1,6 @@
 ---
 title: "CR-170 Release Notes"
-status: "approved-closing"
+status: "closed-git-delivered"
 version: "1.0"
 cr_id: "CR-170"
 created_at: "2026-07-15T16:14:00+08:00"
@@ -29,4 +29,4 @@ Stage 3 runner 接线、真实 evidence/data、C1-C4 aggregate、CR155 promotion
 
 ## Readiness
 
-CP8 已接受 verifier independence 与 claim ceiling；scoped 双仓提交、CR 关闭和关闭态全量 `2195 passed / 0 failed` 已完成，仅余两条已授权普通 push 与远端一致性复核。
+CP8 已接受 verifier independence 与 claim ceiling；scoped 双仓提交、CR 关闭、关闭态全量 `2195 passed / 0 failed`、两条已授权普通 push 和首次远端 `0 ahead / 0 behind` 复核均已完成。
