@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP7",
+  "project_id": "meta-flow",
+  "cr_id": "CR-049",
+  "story_id": "STORY-CR049-S01",
+  "story_ref": "process/stories/STORY-CR049-S01-branch-retirement.md",
+  "objective": {
+    "summary": "Verify remote tag reachability, auxiliary branch absence, main immutability, merge DAG reachability, and workspace boundaries.",
+    "non_goals": [
+      "independent subagent QA",
+      "source-code regression rerun",
+      "release tag creation"
+    ]
+  },
+  "acceptance": [
+    "remote heads contain only main",
+    "local heads contain only main",
+    "both annotated tags peel to exact commits",
+    "fix tip remains a main ancestor",
+    "source worktree remains clean"
+  ],
+  "allowed_write_paths": [
+    "process/returns/**",
+    "process/evidence/**",
+    "process/checks/**",
+    "process/checkpoints/**",
+    "process/release/**",
+    "process/state/**",
+    "process/changes/**",
+    "process/current/**",
+    "process/STATE.md"
+  ],
+  "forbidden_write_paths": [
+    "source tracked files",
+    "process/quant-lab/**",
+    "../meta-flow.process-prelink-backup-20260713T100930/**"
+  ],
+  "verification_plan": [
+    "git status --short --branch",
+    "git for-each-ref refs/heads",
+    "git ls-remote --heads origin",
+    "git ls-remote --tags origin with peeled refs",
+    "git rev-parse main and origin/main",
+    "git merge-base --is-ancestor fix-tip main"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING"
+  ],
+  "expected_return_packet": "process/returns/CR049-S1.CP7.return.json"
+}

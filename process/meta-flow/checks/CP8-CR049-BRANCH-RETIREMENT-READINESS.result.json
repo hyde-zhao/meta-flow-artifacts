@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR049-BRANCH-RETIREMENT-READINESS",
+  "cr_id": "CR-049",
+  "profile": "process-lite",
+  "check_attempt": 1,
+  "context_ref": "process/release/RELEASE-CONTEXT-CR049.yaml",
+  "route_plan_ref": "process/checks/CP0-CR-049.route-plan.json",
+  "evidence_ref": "process/checkpoints/CP8-CR049-BRANCH-RETIREMENT-READINESS.md",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "ad3f6f42b179ec4767d29a07b7e9604e1969b8fe",
+    "invocation": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP8-CR049-BRANCH-RETIREMENT-READINESS.result.json --check-consistency --project-root .",
+    "generated_by": "host-orchestrator-inline",
+    "fallback_used": true,
+    "fallback_reason": "User explicitly required no subagents; CP8 consumes deterministic Git ref evidence and remains capped at READY_WITH_RISK.",
+    "fallback_review_ref": "process/checkpoints/CP8-CR049-BRANCH-RETIREMENT-READINESS.md#人工审查结果"
+  },
+  "release_decision": "READY_WITH_RISK",
+  "fact_diff": [
+    {
+      "promise_ref": "CR049-AC-01",
+      "promise": "The integration branch tip is preserved by an annotated archive tag.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["process/checks/CR049-BRANCH-RETIREMENT-EVIDENCE.json"],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR049-AC-02",
+      "promise": "The fix branch tip is preserved by an annotated archive tag.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["process/checks/CR049-BRANCH-RETIREMENT-EVIDENCE.json"],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "CR049-AC-03..06",
+      "promise": "Only the authorized branches are deleted; main remains unchanged and both commits remain reachable.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["process/evidence/CR049-S1.CP7.index.json"],
+      "risk_ref": ""
+    },
+    {
+      "promise_ref": "independent QA",
+      "promise": "An independent meta-qa subagent verifies the retirement.",
+      "status": "NEEDS_REVIEW",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["IF-CR049-CP7-VERIFICATION"],
+      "risk_ref": "CR049-RISK-NO-INDEPENDENT-QA"
+    }
+  ],
+  "items": [
+    {
+      "id": "CP8-CR049-01",
+      "category": "integrity",
+      "name": "Archive tags and branch-retirement evidence prove every required Git ref invariant",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR049-S1.CP6.index.json",
+        "process/evidence/CR049-S1.CP7.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release"
+    },
+    {
+      "id": "CP8-CR049-02",
+      "category": "boundary",
+      "name": "Main, source tracked files, other branches, tags, quant-lab, and prelink backup remain outside the mutation set",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CR049-BRANCH-RETIREMENT-EVIDENCE.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release"
+    },
+    {
+      "id": "CP8-CR049-03",
+      "category": "risk",
+      "name": "No-independent-QA limitation is disclosed and caps readiness",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/release/RELEASE-CONTEXT-CR049.yaml"],
+      "owner": "user",
+      "route_on_fail": "require_user_decision"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "risks": [
+    "CR049-RISK-NO-INDEPENDENT-QA",
+    "CR049-RISK-ARTIFACT-PUBLICATION-PENDING"
+  ],
+  "decision": "PASS",
+  "next_route": "approved artifact publication then delivered",
+  "checked_at": "2026-07-15T15:12:11Z"
+}

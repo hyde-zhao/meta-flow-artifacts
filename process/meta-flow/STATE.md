@@ -2,12 +2,12 @@
 
 Project: meta-flow
 Workflow mode: standard
-Phase: delivered
+Phase: documentation
 Blocked: false
-Active CR: none
+Active CR: CR-049
 Active Story: none
-Pending gate: none
-Next action: CR-048 status synced as closed; choose next CR.
+Pending gate: CP8
+Next action: Review CR-049 branch-retirement evidence and close the process-lite change at CP8.
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,7 +20,7 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: none
+- active context: process/release/RELEASE-CONTEXT-CR049.yaml
 
 Policy refs:
 - none
@@ -31,6 +31,6 @@ Open risks:
 - CR046-RISK-TOKEN-TELEMETRY-UNAVAILABLE
 - CR046-RISK-REAL-PILOT-UNAUTHORIZED
 
-Updated at: 2026-07-15T14:06:39+00:00
+Updated at: 2026-07-15T15:05:28+00:00
 
 <!-- generated-by: meta-flow state render -->

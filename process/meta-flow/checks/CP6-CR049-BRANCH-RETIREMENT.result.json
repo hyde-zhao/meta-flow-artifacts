@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR049-BRANCH-RETIREMENT",
+  "profile": "process-lite",
+  "story_id": "STORY-CR049-S01",
+  "cr_id": "CR-049",
+  "context_ref": "process/context/stories/CR049-S1.CP6.work-packet.json",
+  "dispatch_refs": [
+    "IF-CR049-CP6-BRANCH-RETIREMENT"
+  ],
+  "evidence_ref": "process/evidence/CR049-S1.CP6.index.json",
+  "route_plan_ref": "process/checks/CP0-CR-049.route-plan.json",
+  "check_attempt": 1,
+  "input_artifact_hashes": {
+    ".git/refs/heads/main": "sha256:a4ec72a975a3eea4bab2152ef5b8bcedc34739db2d738393cc223af6cffcc0a1"
+  },
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "ad3f6f42b179ec4767d29a07b7e9604e1969b8fe",
+    "invocation": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR049-BRANCH-RETIREMENT.result.json --check-consistency --correlation-profile strict --project-root .",
+    "generated_by": "host-orchestrator-inline",
+    "fallback_used": true,
+    "fallback_reason": "User explicitly required no subagents; the process-lite Git ref operation was executed inline under CP2 authorization.",
+    "fallback_review_ref": "process/checkpoints/CP2-CR049-BRANCH-RETIREMENT-SCOPE.md#人工审查结果"
+  },
+  "items": [
+    {
+      "id": "CP6-CR049-01",
+      "category": "implementation",
+      "name": "Two exact annotated archive tags were created and remotely verified before deletion",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/evidence/CR049-S1.CP6.index.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story"
+    },
+    {
+      "id": "CP6-CR049-02",
+      "category": "boundary",
+      "name": "Only the two authorized auxiliary branches were deleted and main remained untouched",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CR049-BRANCH-RETIREMENT-EVIDENCE.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "risks": ["CR049-RISK-NO-INDEPENDENT-QA"],
+  "decision": "PASS",
+  "next_route": "CP7",
+  "checked_at": "2026-07-15T15:05:28Z"
+}

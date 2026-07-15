@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-049",
+  "story_id": "STORY-CR049-S01",
+  "status": "verified_with_risk",
+  "touched_files": [],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {"command": "git for-each-ref refs/heads", "result": "pass", "summary": "only local main remains"},
+      {"command": "git ls-remote --heads origin", "result": "pass", "summary": "only remote main remains"},
+      {"command": "git ls-remote --tags origin <archive-tags>", "result": "pass", "summary": "both annotated tags remain and peel to exact commits"},
+      {"command": "git rev-parse main origin/main", "result": "pass", "summary": "both equal ad3f6f42b179ec4767d29a07b7e9604e1969b8fe"},
+      {"command": "git merge-base --is-ancestor d266e056... main", "result": "pass", "summary": "fix tip remains a main ancestor"},
+      {"command": "git status --short --branch", "result": "pass", "summary": "source worktree clean and main tracks origin/main"}
+    ],
+    "tests": ["CR049 remote ref and reachability matrix"],
+    "skipped": ["independent subagent QA"]
+  },
+  "evidence_refs": [
+    "process/checks/CR049-BRANCH-RETIREMENT-EVIDENCE.json"
+  ],
+  "risks": [
+    {"id": "CR049-RISK-NO-INDEPENDENT-QA", "level": "low", "status": "open", "owner": "user", "detail": "Verification is host inline under the user's no-subagent constraint."}
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp8_with_risk"
+}

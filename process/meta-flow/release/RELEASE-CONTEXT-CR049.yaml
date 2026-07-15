@@ -1,0 +1,81 @@
+schema_version: 1
+cr_id: CR-049
+checkpoint: CP8
+release_artifact_profile: minimal
+release_decision: READY_WITH_RISK
+release_scope:
+  in_scope:
+    - two annotated archive tags for the former CR-048 auxiliary branch tips
+    - deletion of the two exact remote auxiliary branch refs
+    - deletion of the existing local integration auxiliary branch
+  out_of_scope:
+    - source code or documentation changes
+    - main movement or deletion
+    - tag overwrite or deletion
+    - force push or history rewrite
+    - quant-lab and prelink backup
+  user_visible_change: "The remote branch list now contains only main; historical branch tips remain available through two annotated archive tags and the merge DAG."
+version_decision:
+  current_version: unchanged
+  target_version: unchanged
+  semver_impact: none
+  reason: "Git ref hygiene only; no source tree, API, package, installer, schema, or user behavior change."
+quality_summary:
+  cp6: PASS
+  cp7: PASS_WITH_RISK
+  blockers: 0
+  high_findings: 0
+  source_worktree_clean: true
+  local_branch_count: 1
+  remote_branch_count: 1
+  archive_tag_count: 2
+fact_diff:
+  promised_count: 6
+  executed_positive_count: 6
+  missing_required_count: 0
+  needs_review_count: 1
+  needs_review:
+    - promise_ref: independent-QA
+      status: NEEDS_REVIEW
+      decision_impact: READY_WITH_RISK
+      risk_ref: CR049-RISK-NO-INDEPENDENT-QA
+      evidence_refs:
+        - IF-CR049-CP7-VERIFICATION
+affected_surface:
+  git_refs: true
+  source_tree: false
+  package: false
+  installer: false
+  configuration: false
+  permissions: false
+  state_schema: false
+  migration: false
+install_validation_summary:
+  status: N/A
+  reason: "No installable artifact changed."
+release_documents:
+  profile: minimal
+  release_notes: N/A
+  deploy_checklist: N/A
+  rollback: "Recreate a deleted branch from the corresponding verified archive tag."
+  migration: N/A
+  feedback: "Report unexpected missing refs; do not move archive tags."
+artifact_publication_status: pending_process_commit
+risks:
+  - CR049-RISK-NO-INDEPENDENT-QA
+evidence_index_refs:
+  - process/evidence/CR049-S1.CP6.index.json
+  - process/evidence/CR049-S1.CP7.index.json
+  - process/checks/CR049-BRANCH-RETIREMENT-EVIDENCE.json
+non_authorized_items:
+  - main_move_or_delete
+  - force_push
+  - history_rewrite
+  - tag_overwrite_or_delete
+  - other_branch_deletion
+  - source_tree_changes
+  - quant_lab_changes
+  - prelink_backup_changes
+follow_up_summary:
+  candidates: []
+  observation: "Both tags and main should remain reachable; any future cleanup requires a new exact-ref authorization."

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "meta-flow",
+  "cr_id": "CR-049",
+  "story_id": "STORY-CR049-S01",
+  "story_ref": "process/stories/STORY-CR049-S01-branch-retirement.md",
+  "objective": {
+    "summary": "Create and remotely verify two annotated archive tags before retiring two exact merged auxiliary branch refs.",
+    "non_goals": [
+      "move or delete main",
+      "force push or history rewrite",
+      "overwrite or delete tags",
+      "delete other branches",
+      "modify quant-lab or prelink backup"
+    ]
+  },
+  "acceptance": [
+    "archive/cr048-integration-merged-20260715 peels to ad3f6f42b179ec4767d29a07b7e9604e1969b8fe",
+    "archive/fix-claude-md-rule-numbering-20260715 peels to d266e05660be2d7b14e74b09ee2819402565103e",
+    "tag verification precedes branch deletion",
+    "only the two exact auxiliary branch refs are deleted"
+  ],
+  "allowed_write_paths": [
+    ".git/refs/tags/archive/cr048-integration-merged-20260715",
+    ".git/refs/tags/archive/fix-claude-md-rule-numbering-20260715",
+    ".git/refs/heads/integration/cr048-single-source-rules",
+    "process/**"
+  ],
+  "forbidden_write_paths": [
+    ".git/refs/heads/main",
+    ".git/refs/tags/** except the two exact new archive tags",
+    "process/quant-lab/**",
+    "../meta-flow.process-prelink-backup-20260713T100930/**"
+  ],
+  "verification_plan": [
+    "git cat-file -t for annotated tag objects",
+    "git ls-remote --tags with peeled refs",
+    "git push origin --delete for two exact branch names",
+    "git fetch --prune and ref inventory"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING"
+  ],
+  "expected_return_packet": "process/returns/CR049-S1.CP6.return.json"
+}
