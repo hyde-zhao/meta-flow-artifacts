@@ -1,6 +1,6 @@
 ---
 title: "CR-170 Release Notes"
-status: "draft-cp8"
+status: "approved-closing"
 version: "1.0"
 cr_id: "CR-170"
 created_at: "2026-07-15T16:14:00+08:00"
@@ -13,6 +13,7 @@ created_at: "2026-07-15T16:14:00+08:00"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-07-15 | host-orchestrator inline | 形成 canonical reliability N/A semantics 与 admission hardening 的 repository-local 交付说明。 |
+| 1.1 | 2026-07-15 | host-orchestrator | 回填 CP8 批准、scoped 双仓提交和两条精确普通 push 授权；产品发布与运行时仍不执行。 |
 
 ## 已交付
 

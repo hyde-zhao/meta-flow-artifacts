@@ -2,12 +2,12 @@
 
 Project: quant-lab
 Workflow mode: standard
-Phase: documentation
+Phase: delivered
 Blocked: false
-Active CR: CR-170
+Active CR: none
 Active Story: none
 Pending gate: none
-Next action: 执行 CR-170 双仓 scoped 提交；提交后 full suite 0 failed 才关闭，并普通推送到两条已授权远端 ref
+Next action: CR-170 status synced as closed; choose next CR.
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,7 +20,7 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: process/context/CP8-CR170-CANONICAL-RELIABILITY-HARDENING-DELIVERY-CONTEXT.yaml
+- active context: none
 
 Policy refs:
 - NO_CREDENTIAL_READ
@@ -34,7 +34,8 @@ Policy refs:
 - NO_BROKER_WRITE
 - NO_EXTERNAL_FRAMEWORK_RUN
 - NO_CATALOG_POINTER_WRITE
-- NO_GIT_REMOTE_WRITE
+- NO_GIT_REMOTE_WRITE_OUTSIDE_APPROVED_CR170_REFS
+- SCOPED_GIT_REMOTE_WRITE_CR170_APPROVED
 
 Open risks:
 - {'id': 'RISK-GATEB-EVENTS-DUPLICATE-PRIMARY-KEY', 'severity': 'high', 'status': 'decision_approved_but_write_still_blocked_by_full_row_profile_and_dataset_authorization'}
@@ -48,6 +49,6 @@ Open risks:
 - {'id': 'R-CR170-VERIFIER-INDEPENDENCE', 'severity': 'medium', 'status': 'accepted_at_cp8_fu006_future_consumer'}
 - {'id': 'R-CR170-RUNNER-GAP', 'severity': 'high', 'status': 'controlled_out_of_scope_stage3_entry_ready_false'}
 
-Updated at: 2026-07-15T08:39:36+00:00
+Updated at: 2026-07-15T08:49:51+00:00
 
 <!-- generated-by: meta-flow state render -->

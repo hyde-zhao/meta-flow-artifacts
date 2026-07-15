@@ -89,7 +89,7 @@ release_context_ref: "process/release/RELEASE-CONTEXT-CR170-CANONICAL-RELIABILIT
 
 | 分流类别 | 项目 ID | 状态 | 处理方式 | 台账 / CR 路径 | 说明 |
 |---|---|---|---|---|---|
-| 关闭范围 | CLOSE-CR170-01 | pending-approval | scoped 双仓本地提交、提交后 full suite 0 failed、关闭 CR170 | `process/changes/CR-170.md` | 只关闭 canonical hardening。 |
+| 关闭范围 | CLOSE-CR170-01 | approved-in-progress | scoped 双仓提交、提交后 full suite 0 failed、关闭 CR170 并推送两条已授权 ref | `process/changes/CR-170.md` | 只关闭 canonical hardening；不扩大产品能力。 |
 | 不授权范围 | NA-CR170-01 | not-authorized | 保持禁止 | 本 checkpoint / Release Context | 两条授权 ref 以外的 remote write、force-push/tag/release、Stage3、真实、aggregate、runtime、CR155 promotion。 |
 | 风险接受项 | R-CR170-VERIFIER-INDEPENDENCE | accepted-risk | 以 READY_WITH_RISK 关闭；FU-006 保持 future consumer | `docs/quality/REVIEW-CR170.md` | 用户接受 DQ-001。 |
 | 后续 CR 候选项 | FU-CR161-006 | candidate | 真实 evidence admission 前补独立 verifier lane | follow-up tracking / BACKLOG | 本 CR 不启动。 |
@@ -113,7 +113,7 @@ release_context_ref: "process/release/RELEASE-CONTEXT-CR170-CANONICAL-RELIABILIT
 | 1 | 4/4 Story 与 9/20/15/21 量化验收闭环 | PASS | Verification/Test report。 |
 | 2 | initial 6 failures 已整改且 final full suite=2195/0 | PASS | Fixes/Test report。 |
 | 3 | public/adapters/CR155/runner/aggregate claim 边界未扩大 | PASS | Review / Release Context。 |
-| 4 | verifier 风险、local commit 协议与不授权项可由用户决策 | PENDING_USER | 本 Decision Brief。 |
+| 4 | verifier 风险、local commit 协议与不授权项已由用户决策 | PASS | 本 Decision Brief 人工审查结果。 |
 
 ## Exit Criteria
 
@@ -122,7 +122,8 @@ release_context_ref: "process/release/RELEASE-CONTEXT-CR170-CANONICAL-RELIABILIT
 | 用户终验 | 用户回复 `approve CR-170 CP8...`、`修改: <具体修改点>` 或 `reject`。 |
 | 提交条件 | 用户接受 DQ-002 后，仅对两个仓库 CR170 scoped 文件做本地提交。 |
 | 关闭条件 | 提交后 repository full suite 为 0 failed，且 DQ-001..003 全部接受。 |
-| 不执行条件 | 不 push/force-push/tag/release/publish/deploy，不启动 Stage3/aggregate/real/runtime/CR155。 |
+| 远端条件 | 仅允许普通 push 到 quant-lab `origin/work/cr170-canonical-reliability-na-hardening` 和 artifacts `origin/main`；不得 force-push/tag/release。 |
+| 不执行条件 | 不 publish/deploy，不启动 Stage3/aggregate/real/runtime/CR155，不访问真实数据或凭据。 |
 
 ## Deliverables
 

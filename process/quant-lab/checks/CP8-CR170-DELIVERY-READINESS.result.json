@@ -32,8 +32,8 @@
     {"id": "CP8-CR170-03", "category": "repository-regression", "name": "Six CR170-introduced governance failures are resolved and repository suite is green", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["docs/quality/TEST-REPORT-CR170.md", "docs/quality/FIXES-CR170.md"], "owner": "meta-qa-inline", "route_on_fail": "block_release", "waiver_ref": null, "notes": "Initial 2188/6 -> final 2195/0; unknown attribution=0."},
     {"id": "CP8-CR170-04", "category": "release-context", "name": "Compact release context five quality docs and five release docs are complete", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/release/RELEASE-CONTEXT-CR170-CANONICAL-RELIABILITY-HARDENING.yaml", "process/context/CP8-CR170-CANONICAL-RELIABILITY-HARDENING-DELIVERY-CONTEXT.yaml"], "owner": "host-orchestrator", "route_on_fail": "block_release", "waiver_ref": null, "notes": "release execution=NOT_EXECUTED; quality refs all use docs/quality."},
     {"id": "CP8-CR170-05", "category": "claim", "name": "Stage3 runner aggregate real runtime and CR155 claims remain closed", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/release/RELEASE-CONTEXT-CR170-CANONICAL-RELIABILITY-HARDENING.yaml", "docs/quality/REVIEW-CR170.md"], "owner": "host-orchestrator", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "stage3_entry_ready=false; runner=false; aggregate=false; real/runtime=false; CR155=false."},
-    {"id": "CP8-CR170-06", "category": "risk", "name": "Inline verifier limitation and future-consumer boundary are submitted for user acceptance", "status": "PASS", "severity": "HIGH", "evidence_refs": ["docs/quality/REVIEW-CR170.md", "process/checkpoints/CP8-CR170-DELIVERY-READINESS.md"], "owner": "host-orchestrator", "route_on_fail": "waive_with_risk_acceptance", "waiver_ref": null, "notes": "FU-006 is not implemented; readiness must remain READY_WITH_RISK."},
-    {"id": "CP8-CR170-07", "category": "workspace", "name": "Scoped dual-repository local-commit closure protocol and remote-write boundary are explicit", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/checkpoints/CP8-CR170-DELIVERY-READINESS.md", "process/release/RELEASE-CONTEXT-CR170-CANONICAL-RELIABILITY-HARDENING.yaml"], "owner": "host-orchestrator", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "No commit/push executed; recommended closure requires user approval and post-commit full suite 0 failed; push remains unauthorized."}
+    {"id": "CP8-CR170-06", "category": "risk", "name": "Inline verifier limitation and future-consumer boundary are accepted by the user", "status": "PASS", "severity": "HIGH", "evidence_refs": ["docs/quality/REVIEW-CR170.md", "process/checkpoints/CP8-CR170-DELIVERY-READINESS.md"], "owner": "host-orchestrator", "route_on_fail": "waive_with_risk_acceptance", "waiver_ref": null, "notes": "FU-006 is not implemented; user accepted this limitation and readiness remains READY_WITH_RISK."},
+    {"id": "CP8-CR170-07", "category": "workspace", "name": "Scoped dual-repository commit closure protocol and two-ref remote-write boundary are approved", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/checkpoints/CP8-CR170-DELIVERY-READINESS.md", "process/release/RELEASE-CONTEXT-CR170-CANONICAL-RELIABILITY-HARDENING.yaml"], "owner": "host-orchestrator", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "Initial scoped commits and post-commit 2195/0 passed; closure-state validation and ordinary pushes to the exact two approved refs remain."}
   ],
   "entry_criteria": [
     {"id": "EC-1", "description": "S01-S04 CP6/CP7 result evidence and return artifacts exist and are ledgered.", "status": "PASS", "evidence_ref": "process/state/CHECKPOINT-LEDGER.ndjson"},
@@ -47,7 +47,7 @@
     {"id": "CL-4", "description": "User risk closure-protocol and authorization decisions are explicit.", "status": "PASS", "evidence_ref": "process/checkpoints/CP8-CR170-DELIVERY-READINESS.md"}
   ],
   "exit_criteria": [
-    {"id": "XC-1", "description": "READY_WITH_RISK may be submitted to CP8 user review without committing pushing releasing or starting Stage3.", "status": "PASS"}
+    {"id": "XC-1", "description": "User approved READY_WITH_RISK, scoped dual-repository closure and ordinary pushes to the exact two refs; release/Stage3/real/runtime remain unauthorized.", "status": "PASS"}
   ],
   "deliverables": [
     "process/release/RELEASE-CONTEXT-CR170-CANONICAL-RELIABILITY-HARDENING.yaml",
@@ -79,5 +79,5 @@
     "artifacts_ref": "origin/main"
   },
   "not_authorized": ["Git remote writes outside the two approved refs", "force-push/tag/release", "publish/deploy/runtime", "real data/evidence/provider/NAS/credential", "Stage3 start/runner integration", "C1-C4 aggregate", "CR155 promotion", "broker/QMT/simulation/paper/live/trading"],
-  "next_route": "execute_scoped_paired_commit_then_validate_and_close"
+  "next_route": "complete_closed_state_validation_and_push_approved_refs"
 }

@@ -1,6 +1,6 @@
 ---
 title: "CR-170 Deploy Checklist"
-status: "not-executed-cp8"
+status: "git-delivery-authorized-no-deploy"
 version: "1.0"
 cr_id: "CR-170"
 created_at: "2026-07-15T16:14:00+08:00"
@@ -13,11 +13,12 @@ created_at: "2026-07-15T16:14:00+08:00"
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
 | 1.0 | 2026-07-15 | host-orchestrator inline | 记录 repository-local readiness 与禁止的发布/运行步骤。 |
+| 1.1 | 2026-07-15 | host-orchestrator | 回填 CP8 批准与两条精确普通 Git push 授权；deploy/runtime 继续保持 NOT_EXECUTED。 |
 
 | 检查项 | 状态 | 说明 |
 |---|---|---|
 | CP2/CP3/CP5 已批准 | PASS | 仅解锁已批准设计和本地实现。 |
-| S01-S04 CP6/CP7 | PASS_WITH_RISK | 功能全绿；inline verifier 风险待 CP8。 |
+| S01-S04 CP6/CP7 | PASS_WITH_RISK | 功能全绿；inline verifier 风险已在 CP8 接受。 |
 | repository suite | PASS | 2195/0。 |
 | claim ceiling | PASS | Stage3/runner/aggregate/real/runtime/CR155 均未提升。 |
 | deployment execution | NOT_EXECUTED | 本 CR 无 deploy/runtime 授权。 |

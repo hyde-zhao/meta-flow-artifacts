@@ -21,9 +21,9 @@ None.
 | CP8-CR170-03 | PASS | BLOCKER | 六个本轮治理失败已整改且 repository suite 为 2195/0 |
 | CP8-CR170-04 | PASS | BLOCKER | compact release context、五份 quality docs 与五份 release docs 齐备 |
 | CP8-CR170-05 | PASS | BLOCKER | Stage3 runner、aggregate、real/runtime 和 CR155 claim ceiling 未扩大 |
-| CP8-CR170-06 | PASS | HIGH | inline verifier limitation 已提交用户风险接受 |
-| CP8-CR170-07 | PASS | BLOCKER | scoped 双仓本地提交关闭协议与远端写入禁止边界明确 |
+| CP8-CR170-06 | PASS | HIGH | inline verifier limitation 已由用户接受，维持 READY_WITH_RISK |
+| CP8-CR170-07 | PASS | BLOCKER | scoped 双仓关闭协议与两条精确 remote ref 已获批准 |
 
 ## Next
 
-execute_scoped_paired_commit_then_validate_and_close
+complete_closed_state_validation_and_push_approved_refs
