@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR048-DELIVERY-READINESS",
+  "cr_id": "CR-048",
+  "profile": "process-lite",
+  "check_attempt": 1,
+  "context_ref": "process/release/RELEASE-CONTEXT-CR048.yaml",
+  "route_plan_ref": "process/checks/CP0-CR-048.route-plan.json",
+  "evidence_ref": "process/checkpoints/CP8-CR048-DELIVERY-READINESS.md",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "ad3f6f42b179ec4767d29a07b7e9604e1969b8fe",
+    "invocation": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP8-CR048-DELIVERY-READINESS.result.json --project-root .",
+    "generated_by": "host-orchestrator-inline",
+    "fallback_used": true,
+    "fallback_reason": "User required no subagents; CP8 is based on host-inline CP7 and capped at READY_WITH_RISK.",
+    "fallback_review_ref": "process/checkpoints/CP8-CR048-DELIVERY-READINESS.md#人工审查结果"
+  },
+  "release_decision": "READY_WITH_RISK",
+  "fact_diff": [
+    {"promise_ref": "CR048-AC-01", "promise": "Both source branches are preserved in a normal merge commit.", "status": "EXECUTED_POSITIVE_RESULT", "decision_impact": "READY", "evidence_refs": ["process/docs/release/CR048-BRANCH-INTEGRATION-RELEASE.md"], "risk_ref": ""},
+    {"promise_ref": "CR048-AC-02..04", "promise": "Single-source rules and lifecycle-aware evidence checks pass.", "status": "EXECUTED_POSITIVE_RESULT", "decision_impact": "READY", "evidence_refs": ["process/evidence/CR048-S1.CP7.index.json"], "risk_ref": ""},
+    {"promise_ref": "CR048-AC-05", "promise": "Full tests, Ruff, guardrails, Doctor and platform dry-runs pass.", "status": "EXECUTED_POSITIVE_RESULT", "decision_impact": "READY_WITH_RISK", "evidence_refs": ["process/docs/quality/CR048-VERIFICATION-REPORT.md"], "risk_ref": "CR048-RISK-DRY-RUN-ONLY"},
+    {"promise_ref": "source publication", "promise": "meta-flow main and integration branch point to the merge commit.", "status": "EXECUTED_POSITIVE_RESULT", "decision_impact": "READY", "evidence_refs": ["process/docs/release/CR048-BRANCH-INTEGRATION-RELEASE.md"], "risk_ref": ""},
+    {"promise_ref": "independent QA and artifact publication", "promise": "Independent meta-qa evidence exists and artifact main has persisted this closure packet.", "status": "NEEDS_REVIEW", "decision_impact": "READY_WITH_RISK", "evidence_refs": ["process/checkpoints/CP8-CR048-DELIVERY-READINESS.md"], "risk_ref": "CR048-RISK-NO-INDEPENDENT-QA"}
+  ],
+  "items": [
+    {"id": "CP8-CR048-01", "category": "quality", "name": "CP6 and CP7 evidence chains have no functional blocker", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/evidence/CR048-S1.CP6.index.json", "process/evidence/CR048-S1.CP7.index.json"], "owner": "host-orchestrator", "route_on_fail": "block_release"},
+    {"id": "CP8-CR048-02", "category": "publication", "name": "Source main and integration branch are remotely verified at the merge commit", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/docs/release/CR048-BRANCH-INTEGRATION-RELEASE.md"], "owner": "host-orchestrator", "route_on_fail": "block_release"},
+    {"id": "CP8-CR048-03", "category": "risk", "name": "Independent QA, dry-run-only and artifact publication boundaries are disclosed", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/checkpoints/CP8-CR048-DELIVERY-READINESS.md"], "owner": "user", "route_on_fail": "require_user_decision"}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "risks": ["CR048-RISK-NO-INDEPENDENT-QA", "CR048-RISK-DRY-RUN-ONLY", "CR048-RISK-ARTIFACT-PUBLICATION-PENDING"],
+  "decision": "PASS",
+  "next_route": "approved artifact publication then delivered",
+  "checked_at": "2026-07-15T14:02:04Z"
+}
