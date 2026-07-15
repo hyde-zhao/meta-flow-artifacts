@@ -2,12 +2,12 @@
 
 Project: meta-flow
 Workflow mode: standard
-Phase: documentation
+Phase: delivered
 Blocked: false
-Active CR: CR-047
+Active CR: none
 Active Story: none
-Pending gate: CP8
-Next action: Review CR-047 CP8 READY_WITH_RISK decision
+Pending gate: none
+Next action: CR-047 delivered; paired Git push verified; choose next CR.
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,7 +20,7 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: process/release/RELEASE-CONTEXT-CR047.yaml
+- active context: none
 
 Policy refs:
 - none
@@ -30,8 +30,7 @@ Open risks:
 - CR046-RISK-NO-INDEPENDENT-CP7-AGENT
 - CR046-RISK-TOKEN-TELEMETRY-UNAVAILABLE
 - CR046-RISK-REAL-PILOT-UNAUTHORIZED
-- CR046-RISK-WORKING-TREE-ONLY
 
-Updated at: 2026-07-15T12:59:12+00:00
+Updated at: 2026-07-15T13:25:23+00:00
 
 <!-- generated-by: meta-flow state render -->

@@ -9,6 +9,7 @@
 - [x] Post-approval publication preflight：精确事件身份 selector 回归通过，57 objects / 0 findings。
 - [x] 用户批准 CP8 `READY_WITH_RISK`。
 - [x] 用户另行授权 `meta-flow` 与 `meta-flow-artifacts` 配对 commit/push；远端事实在执行后复核。
+- [x] GitHub `main` 已验证：`meta-flow=3e303215692840ec8ac1920a1d3c21c14ea2907b`；artifact delivery=`7c383661abad6aff8b2e94e91f2910ec42e25a11`。
 - [ ] 真实安装、runtime、tag/release 或外部发布仍需独立授权。
 
 本清单不授权 credentials、runtime/SaaS、production write/publish/trading、quant-lab 写入或 prelink backup 操作。

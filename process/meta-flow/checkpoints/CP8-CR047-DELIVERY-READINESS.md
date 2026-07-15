@@ -154,3 +154,10 @@ context_ref: "process/release/RELEASE-CONTEXT-CR047.yaml"
 - 修复：已有 manifest 按精确事件身份复验；新 manifest 按结构化 CR 身份构建，禁止全文字符串归属推断。
 - 最终结果：`401 passed, 70 subtests passed`；Ruff 0；guardrail 通过；57 protected objects / 0 findings。
 - 决策影响：无新增范围、风险接受或授权；CP8 人工批准及 `READY_WITH_RISK` 结论继续有效。
+
+## 配对 Git 留存结果
+
+- `meta-flow/main`：`3e303215692840ec8ac1920a1d3c21c14ea2907b`，远端匹配。
+- `meta-flow-artifacts/main` 交付提交：`7c383661abad6aff8b2e94e91f2910ec42e25a11`，远端匹配。
+- publication evidence：`process/checks/CR047-PAIRED-PUBLICATION-EVIDENCE.json`。
+- artifact 仓的 `process/quant-lab/**` 现有改动未暂存、未提交、未推送；prelink backup 未触碰。
