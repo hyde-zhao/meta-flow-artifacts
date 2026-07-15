@@ -1,0 +1,218 @@
+# PTM Team 工程验证场景
+# 版本: v1.0 · 生成: 2026-06-08
+# 覆盖: ptm-team 全部 6 个 Agent
+
+scenarios:
+  # ============================================================
+  # ptm-tde（已交付）
+  # ============================================================
+  - id: SCN-TDE-001
+    name: "需求文档导入与解析"
+    agent: ptm-tde
+    priority: P0
+    type: happy_path
+    description: "用户导入需求文档（Markdown/Word），feature-parser 正确解析并输出结构化需求"
+    verification: "CP7 CR-011 global PASS"
+
+  - id: SCN-TDE-002
+    name: "场景发现与确认"
+    agent: ptm-tde
+    priority: P0
+    type: happy_path
+    description: "scenario-discovery 从需求中提取三层场景（原理/路径/数据），触发检查点①人工确认"
+    verification: "CP7 CR-011 global PASS"
+
+  - id: SCN-TDE-003
+    name: "M 分析完整流程"
+    agent: ptm-tde
+    priority: P0
+    type: happy_path
+    description: "m-analyzer 执行 10 步场景步骤驱动分析：PPDCS 标注 → CAE 测试点 → 因子库发现 → atomic-ops 消费"
+    verification: "CP7 CR-012 global PASS + CR-016/017 PASS"
+
+  - id: SCN-TDE-004
+    name: "F 分析耦合检测"
+    agent: ptm-tde
+    priority: P0
+    type: happy_path
+    description: "f-analyzer 9 步分析：Excel 批注 + 场景耦合 + 代码依赖 → CAE 耦合测试点"
+    verification: "CP7 CR-012 global PASS"
+
+  - id: SCN-TDE-005
+    name: "Q 分析质量评估"
+    agent: ptm-tde
+    priority: P1
+    type: happy_path
+    description: "q-analyzer 6 步逐 TSP 驱动：HTSM 维度评估 → CAE 质量属性测试点"
+    verification: "CP7 CR-012 global PASS"
+
+  - id: SCN-TDE-006
+    name: "PPDCS 五方法设计"
+    agent: ptm-tde
+    priority: P0
+    type: happy_path
+    description: "8 个设计 Skill 覆盖 PPDCS 五特征：流程图/判定表/等价类边界值/Pairwise/状态图 → 16 列物理用例"
+    verification: "CP7 CR-013 global PASS"
+
+  - id: SCN-TDE-007
+    name: "覆盖率验证与交付"
+    agent: ptm-tde
+    priority: P0
+    type: happy_path
+    description: "coverage-verifier 双层验证（SR→TP→LC→PC）→ deliverable-renderer 输出测试方案+用例"
+    verification: "CP7 CR-013 global PASS"
+
+  - id: SCN-TDE-008
+    name: "需求变更增量分析"
+    agent: ptm-tde
+    priority: P2
+    type: alternative_path
+    description: "change-impact-analyzer 接收变更需求 → 增量 MFQ → 增量设计 → 增量覆盖"
+    verification: "CR 级 LLD 设计证据，待运行时验证"
+
+  - id: SCN-TDE-009
+    name: "问题单回溯盲区定位"
+    agent: ptm-tde
+    priority: P2
+    type: alternative_path
+    description: "bug-gap-analyzer 接收问题单 → 盲区定位 → 用例补充 → 流程优化"
+    verification: "CR 级 LLD 设计证据，待运行时验证"
+
+  - id: SCN-TDE-010
+    name: "异常输入处理"
+    agent: ptm-tde
+    priority: P1
+    type: error_path
+    description: "输入格式错误/空文档/超大文档时，Agent 给出明确错误提示而非崩溃"
+    verification: "CP6 自测覆盖，CP7 全局 PASS"
+
+  - id: SCN-TDE-011
+    name: "AskUserQuestion 交互"
+    agent: ptm-tde
+    priority: P1
+    type: happy_path
+    description: "关键检查点使用 AskUserQuestion 结构化选择，用户回复后继续流程"
+    verification: "CP7 CR-015 PASS"
+
+  # ============================================================
+  # ptm-te（未开始）
+  # ============================================================
+  - id: SCN-TE-001
+    name: "用例解析与执行"
+    agent: ptm-te
+    priority: P0
+    type: happy_path
+    status: planned
+    description: "从禅道领取任务 → 解析用例 → 调用原子能力执行 → 记录结构化执行日志"
+
+  - id: SCN-TE-002
+    name: "Topo 映射与环境准备"
+    agent: ptm-te
+    priority: P0
+    type: happy_path
+    status: planned
+    description: "逻辑 Topo 描述 → 物理资源映射 → 交换机 VLAN 隔离 → 环境就绪"
+
+  - id: SCN-TE-003
+    name: "执行异常与工具缺失反馈"
+    agent: ptm-te
+    priority: P1
+    type: error_path
+    status: planned
+    description: "执行中工具缺失 → 结构化需求描述 → 提交 ptm-tae"
+
+  # ============================================================
+  # ptm-tae（Step 1 进行中）
+  # ============================================================
+  - id: SCN-TAE-001
+    name: "原子能力调用"
+    agent: ptm-tae
+    priority: P0
+    type: happy_path
+    status: in-progress
+    description: "atomic-ops CLI 查询和执行防火墙配置/仪表打流原子操作"
+
+  - id: SCN-TAE-002
+    name: "自动化翻译"
+    agent: ptm-tae
+    priority: P1
+    type: happy_path
+    status: planned
+    description: "读取 ptm-te 执行记录 → 翻译为单文件 Python 脚本 → 验证 → 注册工厂"
+
+  - id: SCN-TAE-003
+    name: "回归触发与失败修复"
+    agent: ptm-tae
+    priority: P1
+    type: happy_path
+    status: planned
+    description: "版本转测 → 自动触发回归 → 失败分析 → 尝试自修复 → 钉钉通知"
+
+  # ============================================================
+  # ptm-tm（未开始）
+  # ============================================================
+  - id: SCN-TM-001
+    name: "测试计划制定与调度"
+    agent: ptm-tm
+    priority: P0
+    type: happy_path
+    status: planned
+    description: "接收项目通知 → 制定测试计划 → 调度下游 Agent → 跟踪进度"
+
+  # ============================================================
+  # ptm-tse（未开始）
+  # ============================================================
+  - id: SCN-TSE-001
+    name: "需求分析与策略制定"
+    agent: ptm-tse
+    priority: P0
+    type: happy_path
+    status: planned
+    description: "需求文档解析 → 特性分解 → 测试策略制定 → 输出评审"
+
+  # ============================================================
+  # ptm-qa（未开始）
+  # ============================================================
+  - id: SCN-QA-001
+    name: "质量审计与趋势报告"
+    agent: ptm-qa
+    priority: P1
+    type: happy_path
+    status: planned
+    description: "过程审计 → 数据采集 → 趋势分析 → 质量报告输出"
+
+  # ============================================================
+  # 跨 Agent 场景
+  # ============================================================
+  - id: SCN-CROSS-001
+    name: "tde → te 用例传递"
+    priority: P0
+    type: integration
+    status: planned
+    description: "ptm-tde 输出测试用例 → ptm-te 解析并执行，格式兼容无信息丢失"
+
+  - id: SCN-CROSS-002
+    name: "te → tae 执行记录传递"
+    priority: P1
+    type: integration
+    status: planned
+    description: "ptm-te 结构化执行日志 → ptm-tae 自动化翻译，字段完整无歧义"
+
+  - id: SCN-CROSS-003
+    name: "tm 全流程调度"
+    priority: P1
+    type: integration
+    status: planned
+    description: "ptm-tm 调度全链路：tse 需求分析 → tde 用例设计 → te 执行 → qa 质量 → 汇总报告"
+
+scenario_summary:
+  total: 22
+  ptm_tde: 11
+  ptm_te: 3
+  ptm_tae: 3
+  ptm_tm: 1
+  ptm_tse: 1
+  ptm_qa: 1
+  cross_agent: 3
+  delivered: 11
+  planned: 11

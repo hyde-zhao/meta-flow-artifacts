@@ -1,0 +1,61 @@
+{
+  "check_id": "CP7-CR-027",
+  "change_id": "CR-027-ptm-te-v1.1-quickfix",
+  "checkpoint": "CP7",
+  "type": "auto",
+  "status": "pass",
+  "validation_mode": "static-only + dry-run-only",
+  "checked_at": "2026-07-13T19:10:00+08:00",
+  "checked_by": "host-orchestrator（主进程）",
+  "note": "用户质疑验证深度后复跑，发现 4 类文档/默认值层遗漏并修复，刷新本 result 如实记录",
+  "checklist": [
+    {"item": "op_mapper.py 语法（py_compile）", "result": "pass", "evidence": "✅ OK"},
+    {"item": "op_mapper validate 映射表一致性", "result": "pass", "evidence": "PASS (8 op_id 全覆盖，三表一致)"},
+    {"item": "F-01 正例 source_network -> --source-network", "result": "pass", "evidence": "map 输出含 --source-network 2 次"},
+    {"item": "F-01 反例旧 key src_addr 失效", "result": "pass", "evidence": "报 required flag --source-network 缺失"},
+    {"item": "P2-11 非法对象名预检", "result": "pass", "evidence": "'INVALID FORMAT' 拦截"},
+    {"item": "P2-11 占位符预检", "result": "pass", "evidence": "'<obj>' 拦截"},
+    {"item": "P2-11 非法 IP 预检", "result": "pass", "evidence": "'not-an-ip' 拦截"},
+    {"item": "P2-11 合法 CIDR 放行", "result": "pass", "evidence": "10.0.0.0/24 放行，输出 --source-network"},
+    {"item": "P2-9 runtime_authorization 签名", "result": "pass", "evidence": "_build_envelope 含该参数"},
+    {"item": "P2-12 NO_PROXY env", "result": "pass", "evidence": "_build_exec_env 含设备 IP + 保留已有 NO_PROXY"},
+    {"item": "P2-10 collect_sysinfo --diff", "result": "pass", "evidence": "cpu.changed=true / memory.changed=false / disk.changed=false"},
+    {"item": "P1-6 SKILL.md paramiko 版本约束", "result": "pass", "evidence": "5 处 paramiko>=3.0,<4.0"},
+    {"item": "P2-8 .gitignore session 规则", "result": "pass", "evidence": "git check-ignore session-*.json 命中"},
+    {"item": "全局残留扫描（复跑后新增）", "result": "pass", "evidence": "op_mapper.py src_addr 残留 0 / session.json 残留 0；agents/ptm-te.md src_addr 仅剩历史说明 1 处（CR-025 前后对比，合规）"}
+  ],
+  "post_repair_log": {
+    "trigger": "用户质疑验证深度，复跑发现功能层通过但文档/默认值层有遗漏",
+    "found_omissions": [
+      "op_mapper.py docstring 示例用旧 key src_addr（F-01 漏改）",
+      "map/execute 子命令 --args help 文本用 src_addr（2 处，F-01 漏改）",
+      "map 子命令 --session-file 默认值 session.json（P2-8 漏改，应为 session-<run-id>.json）",
+      "4 处函数 docstring + execute --session-file help 写 session.json 路径（P2-8 漏改）"
+    ],
+    "repair_result": "4 类遗漏全部修复，复跑确认 src_addr 残留 0 / session.json 残留 0 / 语法 OK / validate PASS / F-01 功能未破坏",
+    "root_cause": "CP7 首轮只跑了功能正反例，未做全局残留扫描（grep 旧 key/旧默认值）"
+  },
+  "not_validated_runtime": {
+    "declaration": "fast-lane 模式 validation_mode=static-only + dry-run-only，以下 runtime 项未验证，留 T-01 follow-up（需 VALIDATION-ENV + approval + 真实设备）",
+    "items": [
+      "runtime 端到端：未在真实设备跑 ptm-atomic 全链路",
+      "P2-9 实际填充：只验签名，未真跑 dry_run=False 看 runtime_authorization 实际值",
+      "P2-12 真实代理环境：只验 _build_exec_env 返回，未在设 HTTPS_PROXY 环境验证实际绕过",
+      "P2-10 真实快照 diff：用构造数据验证，非真实设备快照"
+    ],
+    "declared_n_a": [
+      "P2-11 引用对象存在性（CR-027 声明留 v2，仅静态格式预检）",
+      "P2-11 preconditions 消费（CR-027 声明待 CR-026 契约定稿，F-02 follow-up）"
+    ]
+  },
+  "remaining_risks": [
+    {"risk": "runtime 未验证即标记 delivered", "severity": "medium", "mitigation": "STATE.md 标注 T-01 未完成；上线前必须 runtime 验证", "follow_up": "T-01 runtime 端到端（CR-024 follow-up，CR-027 继承）"},
+    {"risk": "CP7 验证深度不足（无残留扫描）", "severity": "low", "mitigation": "本次补全残留扫描维度；后续 CR 的 CP7 checklist 模板应含此项", "follow_up": "验证 checklist 改进项"}
+  ],
+  "exit_criteria": {
+    "static_validation_passed": true,
+    "dry_run_validation_passed": true,
+    "residual_scan_passed": true,
+    "runtime_validation": "not_required_for_fast_lane_but_declared_unverified"
+  }
+}

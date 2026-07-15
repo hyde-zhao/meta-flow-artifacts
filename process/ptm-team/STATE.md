@@ -4,7 +4,7 @@ status: active
 workflow_mode: standard
 current_phase: delivered
 created_at: "2026-05-20T14:43:38+08:00"
-updated_at: "2026-06-08T02:00:00+08:00"
+updated_at: "2026-07-10T00:00:00+08:00"
 ---
 
 # Workflow State
@@ -16,11 +16,11 @@ updated_at: "2026-06-08T02:00:00+08:00"
 | workflow_id | WF-PTM-TEAM-20260520-001 |
 | current_phase | delivered |
 | engagement_mode | production |
-| active_change | `CR-018-ptm-tde-workflow-compliance-and-workspace-isolation`（ptm-tde 流程合规、安装投影与多特性工作区隔离） |
-| pending_action | CR-018 P2 整改已完成：resource content hash + drift check、Gate 字段级 machine-baseline、正式 unittest 夹具已落地并通过验证。剩余 process 文件提交策略属于仓库治理项，不阻塞 CR-018 工程整改。 |
-| cr_tracking_follow_up | `process/changes/CR-011-FOLLOW-UP-TRACKING-2026-06-02.md`（T-01 断点恢复 + T-02 关键词调优，均为 candidate）；`process/changes/CR-015-FOLLOW-UP-TRACKING-2026-06-04.md`（T-01 已 superseded-by-CR-018） |
-| source_baseline | `process/STORY-STATUS-ptm-tde.md` — ptm-tde 源仓库已 delivered 基线。CR-011 + CR-015 已 commit（基线 commit: 350b1b9）。 |
-| gate_inheritance | ptm-tde 源仓库的 CP0-CP5 门控视为已通过。CR-017 从 `solution-design` 为起点，已完成 HLD v1.0 写作和 CP3 自动预检（33/33 PASS）。 |
+| active_change | CR-028 closed（ptm-te v2 op_mapper 扩展，2026-07-13）；CR-026/027/028 均 closed |
+| pending_action | CR-028 closed：op_mapper 扩展 operation-log/object/interface 3 族（8->15 op，5 族）+ op 覆盖矩阵文档（mapped 15/gap 6/unmapped 97/total 118）。安装版 object 族仅 config，4 gap 待 ptm-atomic 升级。后续：T-01 runtime 验证 / CR-029 object gap 激活。 |
+| cr_tracking_follow_up | CR-024 后续候选：T-01 真实消费 ptm-tde PC / T-02 1900 型号验证 / T-03 managed rule block v2 / T-04 进程管理串口 / T-05 batch policy-route package；CR-027 后续：CR-028 ptm-te v2 op_mapper 扩展（待 CR-026）/ F-02 preconditions 消费（待 CR-026） |
+| source_baseline | ptm-tde 已交付基线（CR-010~017 closed）。CR-024 是 ptm-te 首次实现，消费 ptm-tde PC + ptm-atomic CLI。 |
+| gate_inheritance | 不适用。CR-024 是全新 agent 实现，CP0-CP8 全程走标准门控。 |
 
 ## 项目架构
 
@@ -31,7 +31,7 @@ ptm-team 是一个包含 **6 个 AI Agent 角色** 的 production 项目，产�
 | ptm-tm | 测试经理 / 对外协调 | ⬜ 未开始 |
 | ptm-tse | 测试架构师 / 技术 Owner | ⬜ 未开始 |
 | ptm-tde | 测试设计工程师（MFQ&PPDCS） | ✅ 已交付（CR-010~017） |
-| ptm-te | 测试执行工程师 | ⬜ 未开始 |
+| ptm-te | 测试执行工程师 | ✅ v1.1 交付（CR-024 + CR-027；v1.1：args 对齐 + 依赖声明 + session 隔离 + 授权审计 + snapshot diff + 参数预检 + NO_PROXY） |
 | ptm-tae | 自动化工程师 / 基础设施 | 🔄 Step 1 进行中 |
 | ptm-qa | 质量工程师 | ⬜ 未开始 |
 
@@ -157,15 +157,15 @@ ptm-team 是一个包含 **6 个 AI Agent 角色** 的 production 项目，产�
 
 | Field | Value |
 |---|---|
-| orchestrator_role | meta-po |
-| orchestrator_id | po-zhao |
-| thread_id | current-codex-session |
+| orchestrator_role | host-orchestrator（主进程） |
+| orchestrator_id | main-session |
+| thread_id | current-claude-session |
 | status | active |
-| pending_gate | —（全部 CR 已完成交付） |
+| pending_gate | -（全部 CR 已完成交付） |
 | pending_user_decision | 无 |
-| pending_decision_ids | — |
-| pending_checklist_path | — |
-| resume_instruction | 本工作流 CR-011/CR-015/CR-017/CR-016 全部完成。台账跟踪项：CR-011-FOLLOW-UP (T-01 断点恢复 + T-02 关键词调优) + CR-015-FOLLOW-UP (T-01 Codex 整改)。 |
+| pending_decision_ids | - |
+| pending_checklist_path | - |
+| resume_instruction | CR-024 ptm-te 实现进行中。CP0 PASS，推进 CP1 -> CP2 人工门禁（4 决策）。计划 v4 路径：/home/hyde/.claude/plans/ptm-te-agent-impl.md。 |
 | awaiting_since | — |
 | previous_thread_id | parent-closed-meta-po-session |
 | recovered_at | 2026-05-20T15:03:40+08:00 |
@@ -242,7 +242,7 @@ ptm-team 是一个包含 **6 个 AI Agent 角色** 的 production 项目，产�
 
 | 类别 | 项目 |
 |---|---|
-| active formal CR | `CR-018-ptm-tde-workflow-compliance-and-workspace-isolation` |
+| active formal CR | -（CR-024 closed） |
 | blocked formal CR | 无 |
 | follow_up candidates | CR-011 T-01（断点恢复）、CR-011 T-02（关键词调优）；CR-015 T-01 已并入 CR-018 |
 | spike_candidates | CR-016 atomic-ops aliases 剩余 47 个无歧义 op 按需补充 |
@@ -309,6 +309,20 @@ ptm-team 是一个包含 **6 个 AI Agent 角色** 的 production 项目，产�
 | 2026-06-08T02:00:00+08:00 | meta-po/current session | **P0 文档合规补充完成**：① STATE.md 结构修复（消除 frontmatter/body 阶段冲突、补齐 context_budget/workflow_health/artifacts/cr_tracking 等模板字段、更新 engagement_mode → production、添加六 Agent 项目架构）；② checkpoints 迁移 `./checkpoints/` → `process/checkpoints/`（13 个文件）；③ 创建 `process/context/CP8-DELIVERY-CONTEXT.yaml`（ptm-tde v1.0 终验胶囊）；④ 创建 `process/release/RELEASE-CONTEXT.yaml`（发布决策 READY, compact profile）。 |
 | 2026-06-06T00:00:00+08:00 | meta-dev/current session | **CR-017 实施完成**：6 TASK-ID 全部完成，3 文件 +113/-13 行。CP6 10/10 PASS，CP7 18/18 PASS。commit: befeeb3。CR-017 closed。 |
 | 2026-06-23T00:00:00+08:00 | host-orchestrator | **CR-023 轻量治理整改**：将 `process/` 外置到 `/home/hyde/projects/meta-flow-artifacts/process/ptm-team` 并在当前项目建立相对软链接；写入 `process/.meta-flow-process.yaml`；在 `AGENTS.md` / `CLAUDE.md` 标注 `.claude/.codex` 为本地平台投影，meta-flow Agent canonical source 暂未纳入当前仓库。 |
+
+| 2026-07-10T00:00:00+08:00 | host-orchestrator（主进程） | **CR-024 受理**：创建 CR-024-ptm-te-agent（standard，4 Story/3 Wave），实现 ptm-te agent（设备管理+策略路由执行，ptm-atomic CLI 版）。CP0 auto PASS。计划 v4 过 4 轮评审。切出 feat/ptm-te-agent 分支。4 项决策待 CP2 人工门禁。 |
+
+| 2026-07-10T00:00:00+08:00 | user | **CP2 approved**：用户回复 approve，接受 4 项推荐方案（DQ-01 dry-run 默认门 / DQ-02 hg3250-51 / DQ-03 v1 不注入 / DQ-04 手写最小 PC）。cr status-sync 同步 gate_status=cp2-approved, status=approved。进入 solution-design 阶段。 |
+
+| 2026-07-10T00:00:00+08:00 | user | **CP3 approved**：用户回复 approve，批准 HLD v1.1 + 5 ADR + 三层映射锁定 + inline-fallback。cr status-sync 同步 gate_status=cp3-approved。进入 story-planning 阶段。HLD v1.1 按 CP3 评审意见整改（§4.3 rollback 对齐实测 + 运行目录重设计 + 用例上传目录 cases/upload/）。 |
+
+| 2026-07-10T00:00:00+08:00 | host-orchestrator | **CP5 预检 PASS**：4 Story 设计证据产出（3 full-lld + 1 technical-note），lld-check 4/4 PASS，cp5-context-check OK。S3 发现 O-08（update --id CLI 未暴露，CP7 验证）。CP5 人工门禁发起。 |
+
+| 2026-07-10T00:00:00+08:00 | user | **CP5 approved**：用户回复 approve，批准 4 份设计证据 + inline-fallback。cr status-sync gate_status=cp5-approved。进入 story-execution（CP6 实现）。 |
+
+| 2026-07-10T00:00:00+08:00 | host-orchestrator | **CP6+CP7+CP8 预检完成**：CP6 编码 4 Story（三平台 dry-run PASS）+ CP7 static 12/12 PASS（runtime N/A，PASS_WITH_RISK）+ CP8 预检 PASS_WITH_RISK（READY_WITH_RISK）。CP8 人工门禁发起（2 决策：交付就绪 / runtime 风险接受）。 |
+
+| 2026-07-10T00:00:00+08:00 | user | **CP8 approved + CR-024 closed**：用户 approve ptm-te v1 交付 + runtime 风险接受。cr status-sync status=closed。ptm-te v1 交付（agent + 3 skill + install.py + docs/ptm-te/README v1 + 项目根 README ptm-te 安装段）。runtime 端到端验证留 T-01 follow-up。 |
 
 ## parallel_execution
 
