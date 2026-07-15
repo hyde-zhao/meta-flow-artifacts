@@ -1,0 +1,46 @@
+schema_version: "1.0"
+capsule_id: "CP7-CR047-VERIFICATION-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "verification"
+checkpoint: "CP7"
+status: "verification-active"
+created_at: "2026-07-15T13:12:00Z"
+created_by: "host-orchestrator-inline/meta-qa"
+source_cr: "CR-047"
+gate_profile: "architecture-major"
+read_profile: "compact"
+must_read:
+  - {path: "process/context/CP6-CR047-IMPLEMENTATION-CONTEXT.yaml", reason: "approved implementation boundary and risk ceiling"}
+  - {path: "process/DEVELOPMENT-PLAN.yaml", reason: "seven ready-for-verification Stories and QA waves"}
+  - {path: "process/evidence/ST-WT-*.CP6.index.json", reason: "CP6 implementation evidence"}
+  - {path: "process/evidence/CR047-ST-WT-007.protected-originals.json", reason: "CP7 protected-original recheck baseline"}
+read_if_needed:
+  - {path: "process/stories/STORY-ST-WT-*-IMPLEMENTATION.md", trigger: "evidence conflict or deep review"}
+  - {path: "process/docs/features/cr047-*/TEST-PLAN.md", trigger: "design-contract trace validation"}
+do_not_read_by_default:
+  - "process/archive/**"
+  - "process/discussions/**"
+  - "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**"
+  - "process/quant-lab/**"
+verification_contract:
+  required_gates: ["pytest", "ruff", "delivery-guardrail", "doctor", "cr-tracking"]
+  installer_dry_run_platforms: ["codex", "claude", "qoder"]
+  doctor_baseline: {B0_pre: 21, B0_cp7: "measure-at-CP7", blocking_active_or_default_required: 0, unclassified: 0}
+  firewall: {protected_objects: 57, required_findings: 0, stage: "CP7-recheck"}
+  story_verdict_ceiling: "PASS_WITH_RISK"
+  release_verdict_ceiling: "READY_WITH_RISK"
+open_risks:
+  - "CR047-RISK-NO-INDEPENDENT-CP7-AGENT"
+  - "CR046-RISK-PLATFORM-RECEIPT-UNAVAILABLE"
+  - "CR046-RISK-TOKEN-TELEMETRY-UNAVAILABLE"
+  - "CR046-RISK-REAL-PILOT-UNAUTHORIZED"
+  - "CR046-RISK-WORKING-TREE-ONLY"
+authorization_boundary:
+  allowed: ["read-only/local tests", "fixture", "dry-run", "CR-047 verification and release-readiness artifacts"]
+  forbidden: ["credentials", "external runtime/SaaS", "production write/publish/trading", "CR-046 protected original mutation", "repository commit/push"]
+expected_outputs:
+  - "7 CP7 verify packets, returns, evidence indices and PASS_WITH_RISK results"
+  - "CR047 verification/test/review/fixes reports"
+  - "CP8 release context, result and human Decision Brief"
+read_expansion_log: []

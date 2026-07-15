@@ -1,10 +1,10 @@
 ---
 status: baseline
-version: "1.3"
+version: "1.4"
 created_at: "2026-07-02"
 owner: "meta-pm"
 cr_ref: "CR-037"
-active_change_ref: "CR-046"
+active_change_ref: "CR-047"
 source_story_map: "process/docs/product/STORY-MAP.md"
 source_requirements: "process/docs/product/REQUIREMENTS.md"
 ---
@@ -15,6 +15,7 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 
 | 版本 | 日期 | 修订人 | 变更要点 | 文档处理方式 |
 |---|---|---|---|---|
+| 1.4 | 2026-07-13 | host-orchestrator-inline-fallback | 增量加入 CR-047 workflow-truth、Doctor、guardrail、Ruff、非交互安装和 CR-046 状态收敛范围。 | 原文档增量更新 |
 | 1.0 | 2026-07-02 | meta-pm | 建立本轮实施的 MVP / Out of Scope / Deferred 范围 | 初始化长期可追踪范围基线 |
 | 1.2 | 2026-07-11 | meta-pm | 增量加入 CR-046 evidence-integrity MVP、明确不授权项和 CR-163 append-only pilot；保留全部 PG scope ID | 原文档增量更新 |
 | 1.3 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：把 compaction 语义保持、通用 post-close correction、机器 audit report、null-provenance dogfooding 和 dispatch 披露纳入既有 IN-EI scope | 原文档增量更新 |
@@ -45,6 +46,13 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | IN-EI-005 | 平台 token telemetry 与 unavailable/proxy 分层 | P0 | ST-EI-005 | 提供可信 workflow 成本，不把估算冒充实测。 |
 | IN-EI-006 | checker identity、schema/policy hash、as-executed/current-replay、CR-046 CP1/CP2 null-provenance dogfooding | P0 | ST-EI-006 | 使历史证据在 checker 演进后仍可解释、可复现；缺 provenance 的原始结果不被静默美化。 |
 | IN-EI-007 | 可复用 post-close correction lifecycle 与 quant-lab CR-163 append-only migration/replay fixture | P1 | ST-EI-007 | 先建立通用 correction schema/audit trail，再由 pilot 消费并达成 23/23 current replay，同时保持 lineage 业务源码 diff 为 0。 |
+| IN-WT-001 | State/CURRENT/JSON CR index 一致性与 legacy YAML 迁移 | P0 | ST-WT-001 | 当前 canonical tracking 直接失败。 |
+| IN-WT-002 | portable process/docs 路由与 clean-clone 验证 | P0 | ST-WT-002 | 消除跨设备过程真相漂移。 |
+| IN-WT-003 | Doctor budget、quality source、read-expansion、future Run ledger 收敛 | P0 | ST-WT-003 | 发布质量门当前为红。 |
+| IN-WT-004 | tracked rule source、guardrail clean-clone 与 cache policy | P0 | ST-WT-004 | 当前 ignored root rule 与 guardrail 契约矛盾。 |
+| IN-WT-005 | Ruff 0 与完整回归门 | P0 | ST-WT-005 | 当前 90 项 lint 未闭环。 |
+| IN-WT-006 | 三平台非交互安装示例与 preflight | P1 | ST-WT-006 | README 首入口在非 TTY 失败。 |
+| IN-WT-007 | CR-046 产品矩阵/验证状态收敛 | P0 | ST-WT-007 | 当前文档仍含陈旧状态，但正式 evidence 已存在。 |
 
 ## Out of Scope
 
@@ -60,6 +68,9 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | OUT-EI-002 | 修改 quant-lab lineage contract、recorder、producer、consumer 或 admission 业务代码 | pilot 只验证 process evidence migration | 业务源码 diff 必须为 0；若需业务变更另开 CR |
 | OUT-EI-003 | credentials、runtime、production write、publish、交易、repository commit/push | 当前产品门不授予这些权限 | 需要独立明确授权和安全/回滚边界 |
 | OUT-EI-004 | 把所有 Story QA 合并成单一 batch 结论 | 会丢失 Story 独立结论和路由 | 只允许共享 regression 批量运行，Story verdict 保持独立 |
+| OUT-WT-001 | 删除或处理 `meta-flow.process-prelink-backup-20260713T100930` | 用户明确排除 | 保持原状，不读取、不迁移、不删除 |
+| OUT-WT-002 | 伪造平台 receipt、独立 QA、token telemetry 或历史 run 时间 | 证据不可恢复 | 保持 unavailable/legacy-unverified/READY_WITH_RISK |
+| OUT-WT-003 | 本 CR 内执行 Git commit/push | CP2 只确认范围 | 另需用户明确授权 |
 
 ## Deferred
 
@@ -71,6 +82,8 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | DEF-PG-004 | 长期消费非 YAML capability 来源 | SGA-03 | 不利于稳定 checker | 标准 registry 不能表达某些能力状态时重新设计 |
 | DEF-EI-001 | 跨平台统一加密签名 receipt | SGA-05 | 平台能力不一致，当前 contract 先表达实际可用性 | 所有目标平台提供稳定签名接口后另行设计 |
 | DEF-EI-002 | 基于估算 token 的强制计费/配额门 | SGA-06 | estimate 不能替代平台 measured telemetry | telemetry 覆盖和估算误差模型通过独立验证后重启 |
+| DEF-WT-001 | 真实平台 custom-agent receipt producer | CR-045/046 风险 | 当前平台面未提供 repository-verifiable receipt | 平台提供稳定 discovery/selector/receipt 后独立 CR |
+| DEF-WT-002 | 独立 runtime/SaaS/pilot 验证 | 授权边界 | 当前未授权 runtime、凭据或外部写入 | 用户单独批准 runtime-high-risk CR |
 
 ## 范围边界规则
 

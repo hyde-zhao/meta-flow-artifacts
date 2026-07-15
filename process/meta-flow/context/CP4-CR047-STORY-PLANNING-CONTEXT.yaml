@@ -1,0 +1,47 @@
+schema_version: "1.0"
+capsule_id: "CP4-CR047-STORY-PLANNING-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "story-planning"
+checkpoint: "CP4"
+status: "ready"
+created_at: "2026-07-14T15:46:50Z"
+created_by: "host-orchestrator-inline/meta-se"
+source_cr: "CR-047"
+read_profile: "compact"
+token_control:
+  read_profile: "compact"
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-design-detail"
+must_read:
+  - {path: "process/checkpoints/CP3-CR047-HLD-REVIEW.md", reason: "approved CP3 R2 decisions and authorization boundary"}
+  - {path: "process/changes/summaries/CR-047.summary.json", reason: "active scope and gate status"}
+  - {path: "process/docs/design/CR047-FEATURE-DESIGN-MATRIX.md", reason: "Feature/Story design applicability"}
+  - {path: "process/DEVELOPMENT-PLAN.yaml", reason: "single Story management truth, DAG, waves and ownership"}
+read_if_needed:
+  - {path: "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md", trigger: "approved architecture invariant detail"}
+  - {path: "process/docs/design/CR047-WORKFLOW-TRUTH-ARCHITECTURE-DECISION.md", trigger: "ADR switch condition or risk ceiling detail"}
+  - {path: "process/docs/design/CR047-WORKFLOW-TRUTH-DEPENDENCY-MAP.md", trigger: "DAG or forbidden dependency audit"}
+  - {path: "process/docs/features/cr047-*/DESIGN.md", trigger: "Feature interface and file ownership detail"}
+  - {path: "process/docs/product/TEST-MATRIX.md", trigger: "TC-WT-001..007 trace audit"}
+do_not_read_by_default:
+  - {path_or_pattern: "process/archive/**", reason: "cold history is not a current design input"}
+  - {path_or_pattern: "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**", reason: "explicitly excluded by user"}
+  - {path_or_pattern: "process/quant-lab/**", reason: "out of CR-047 scope"}
+  - {path_or_pattern: "complete conversation transcript", reason: "not a workflow truth source"}
+key_facts:
+  approved_story_ids: ["ST-WT-001", "ST-WT-002", "ST-WT-003", "ST-WT-004", "ST-WT-005", "ST-WT-006", "ST-WT-007"]
+  approved_features: ["FEAT-WT-01", "FEAT-WT-02", "FEAT-WT-03", "FEAT-WT-04", "FEAT-WT-05"]
+  approved_dag: "001,002 roots; 001->003,007; 002->004; 003+004->005; 002+004+005->006"
+  lld_policy: "7/7 full-lld; all Story design evidence must be approved together at CP5"
+  doctor_contract: "B0_pre historical regression anchor plus B0_cp7 dynamic classification anchor; all deltas explainable"
+  firewall_contract: "object identity only; manifest at CP6 pre-implementation; verify at CP6 completion and CP7"
+  conclusion_ceiling: "without independent QA CP7<=PASS_WITH_RISK and CP8<=READY_WITH_RISK; inherited CR-046 risks are additive"
+  authorization_boundary: "No source implementation before CP5 approval; no runtime, credentials, push, backup, quant-lab or protected-original mutation."
+required_outputs:
+  - "process/docs/design/CR047-FEATURE-DESIGN-MATRIX.md"
+  - "process/docs/features/cr047-*/DESIGN.md"
+  - "process/docs/features/cr047-*/TEST-PLAN.md"
+  - "process/docs/features/cr047-*/TASKS.md"
+  - "process/DEVELOPMENT-PLAN.yaml"
+  - "process/stories/STORY-ST-WT-*.md"
+  - "process/checks/CP4-CR047-STORY-DAG-PARALLEL-SAFETY.result.json"

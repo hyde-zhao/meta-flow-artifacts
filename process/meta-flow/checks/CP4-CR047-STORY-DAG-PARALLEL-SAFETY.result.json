@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR047-STORY-DAG-PARALLEL-SAFETY",
+  "cr_id": "CR-047",
+  "profile": "architecture-major",
+  "check_attempt": 1,
+  "context_ref": "process/context/CP4-CR047-STORY-PLANNING-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR047.route-plan.json",
+  "evidence_ref": "process/DEVELOPMENT-PLAN.yaml",
+  "checker_provenance": {
+    "checker_name": "meta-flow story plan-check plus deterministic DAG/coverage review",
+    "checker_commit": "78d5a265b00bde8a7087ace61f6d54d0b151971f",
+    "invocation": "uv run --python 3.11 meta-flow story plan-check --project-root .",
+    "generated_by": "host-orchestrator-inline/meta-se",
+    "fallback_used": true,
+    "fallback_reason": "User explicitly required no subagents and approved inline continuation to the next human gate.",
+    "fallback_review_ref": "process/handoffs/CR047-CP3-CP4-STORY-PLANNING-META-SE.md"
+  },
+  "input_artifact_hashes": {
+    "process/DEVELOPMENT-PLAN.yaml": "sha256:377a2e133bbff337e3b2658345531260f1f0201dc78d295400d789fdd56ea5de",
+    "process/docs/design/CR047-FEATURE-DESIGN-MATRIX.md": "sha256:ef7c77f5ed4a8537b5252dba33c243c566cb1be17bccde34b7366570ddb30ae4",
+    "process/stories/STORY-ST-WT-001-workflow-truth-consistency.md": "sha256:ff78cf77f4cf4b663cefbb6937f1c8cedb307d788a6046aa74b0938b42a67a6c",
+    "process/stories/STORY-ST-WT-002-portable-artifact-routing.md": "sha256:59845ef593dbefcdbbb577e0c892c25ae23f76c09f50ac48b08f4f9b086b46ee",
+    "process/stories/STORY-ST-WT-003-doctor-history-governance.md": "sha256:959ee3cb703559f0abc24012ec03d97e15aa5bcdb1df2064c5e63165832ec0cb",
+    "process/stories/STORY-ST-WT-004-clean-clone-guardrail.md": "sha256:0395c5fc14cd3b12304c8ceaf35a05900536e04b59936dadffbe987473fdbbd7",
+    "process/stories/STORY-ST-WT-005-ruff-regression-gate.md": "sha256:52014b517d4163daf7e157fd8495fae26b70ea5f176aeb12dcfd91789fb11728",
+    "process/stories/STORY-ST-WT-006-noninteractive-install-preflight.md": "sha256:95eddd0fec7a833e43850ed27f3b822b2714ba9ea506fe4598e4e9ce9c5295af",
+    "process/stories/STORY-ST-WT-007-cr046-status-firewall.md": "sha256:06a4767daceed070e45b85dcb04ac9a6721d0c8baefaa26ae672eeb900c42dc2"
+  },
+  "items": [
+    {
+      "id": "CP4-CR047-001",
+      "category": "entry",
+      "name": "CP3 R2 architecture decisions are approved inputs",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checkpoints/CP3-CR047-HLD-REVIEW.md", "process/context/CP4-CR047-STORY-PLANNING-CONTEXT.yaml"],
+      "owner": "host-orchestrator/meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP3-DQ-01..06 approved; authorization excludes source implementation before CP5."
+    },
+    {
+      "id": "CP4-CR047-002",
+      "category": "feature_design",
+      "name": "All required Features have DESIGN, TEST-PLAN and TASKS evidence",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/design/CR047-FEATURE-DESIGN-MATRIX.md", "process/docs/features/cr047-truth/DESIGN.md", "process/docs/features/cr047-routing/DESIGN.md", "process/docs/features/cr047-quality/DESIGN.md", "process/docs/features/cr047-delivery/DESIGN.md", "process/docs/features/cr047-operator-status/DESIGN.md"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Feature coverage=5/5 required; each has DESIGN+TEST-PLAN+TASKS; waived=0."
+    },
+    {
+      "id": "CP4-CR047-003",
+      "category": "story_coverage",
+      "name": "Seven Story cards and full-lld policies cover the accepted scope",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml", "process/stories/STORY-ST-WT-001-workflow-truth-consistency.md", "process/stories/STORY-ST-WT-007-cr046-status-firewall.md", "process/docs/product/TEST-MATRIX.md"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Stories=7/7; full-lld=7/7; TC-WT-001..007=7/7; CP4 does not approve implementation."
+    },
+    {
+      "id": "CP4-CR047-004",
+      "category": "dag",
+      "name": "Story DAG has no cycle or dangling dependency",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml", "process/docs/design/CR047-WORKFLOW-TRUTH-DEPENDENCY-MAP.md"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "nodes=7; edges=8; invalid_refs=0; cycles=0; roots=ST-WT-001,ST-WT-002."
+    },
+    {
+      "id": "CP4-CR047-005",
+      "category": "parallel_safety",
+      "name": "LLD, development and QA waves obey dependencies and file ownership",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml#parallel_policy", "process/DEVELOPMENT-PLAN.yaml#lld_waves", "process/DEVELOPMENT-PLAN.yaml#qa_waves"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "LLD/dev/QA maximums=3/2/2; ST-WT-005 waits for ST-WT-003/004 merges; all shared surfaces have merge owners."
+    },
+    {
+      "id": "CP4-CR047-006",
+      "category": "approved_contracts",
+      "name": "Dynamic Doctor baseline and object-identity firewall remain executable contracts",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-ST-WT-003-doctor-history-governance.md", "process/stories/STORY-ST-WT-007-cr046-status-firewall.md", "process/docs/features/cr047-quality/TEST-PLAN.md", "process/docs/features/cr047-operator-status/TEST-PLAN.md"],
+      "owner": "ST-WT-003/ST-WT-007",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "B0_pre and B0_cp7 are separate; prefix-only identity is forbidden; manifest timing is CP6 pre-implementation/CP6 completion/CP7."
+    },
+    {
+      "id": "CP4-CR047-007",
+      "category": "truth_source",
+      "name": "DEVELOPMENT-PLAN is the Story truth source and plan-check passes",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml", "meta_flow/workflow/story_evidence.py"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "story plan-check=OK; only two unrelated legacy STORY-LLD reference warnings remain."
+    },
+    {
+      "id": "CP4-CR047-008",
+      "category": "authorization_and_attestation",
+      "name": "Planning stayed within authorization and preserved conclusion ceilings",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/handoffs/CR047-CP3-CP4-STORY-PLANNING-META-SE.md", "process/DEVELOPMENT-PLAN.yaml#forbidden_global"],
+      "owner": "host-orchestrator/meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Inline fallback was user-approved; no source implementation, runtime, credentials, backup, quant-lab, protected-original mutation, commit or push; no independent-agent claim."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260714T150415Z0000-5fecf44a",
+    "RE-20260714T150415Z0000-f282686d",
+    "RE-20260714T150415Z0000-afa250e3",
+    "RE-20260714T155343Z0000-c6b844fd"
+  ],
+  "decision": "PASS",
+  "next_route": "CP5-design-evidence-preparation",
+  "checked_at": "2026-07-14T15:48:30Z"
+}

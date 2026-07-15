@@ -1,9 +1,9 @@
 ---
 status: baseline
-version: "1.1"
+version: "1.2"
 created_at: "2026-07-11"
 owner: "meta-pm"
-active_change_ref: "CR-046"
+active_change_ref: "CR-047"
 source_use_cases: "docs/product/USE-CASES.md"
 source_mvp_scope: "docs/product/MVP-SCOPE.md"
 ---
@@ -14,6 +14,7 @@ source_mvp_scope: "docs/product/MVP-SCOPE.md"
 
 | 版本 | 日期 | 修订人 | 变更要点 | 文档处理方式 |
 |---|---|---|---|---|
+| 1.2 | 2026-07-13 | host-orchestrator-inline-fallback | 增量追加 CR-047 deferred、风险和不授权边界。 | 原文档增量更新 |
 | 1.0 | 2026-07-11 | meta-pm | 初始化独立 backlog，保留既有 DEF-PG/DEF 引用并加入 CR-046 deferred/non-authorized 项 | 缺失产物初始化；不重新编号上游 deferred ID |
 | 1.1 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：确认五项 scope finding 均为当前 MVP required，不进入 deferred；保留既有 backlog ID | 原文档增量更新 |
 
@@ -29,6 +30,8 @@ source_mvp_scope: "docs/product/MVP-SCOPE.md"
 |---|---|---|---|---|---|
 | BL-EI-001 | DEF-EI-001 / SGA-05 | 跨平台统一加密签名 receipt | deferred | 当前平台能力不一致，本轮先冻结 evidence-level 与 unavailable 语义 | 所有目标平台提供稳定、可验证、版本化签名 contract |
 | BL-EI-002 | DEF-EI-002 / SGA-06 | 基于估算 token 的强制计费或配额门 | deferred | estimate 不能冒充 measured telemetry | 平台 telemetry 稳定覆盖，且估算误差模型通过独立验证 |
+| BL-WT-001 | DEF-WT-001 | repository-verifiable platform receipt producer | deferred | 当前平台能力不可用，本 CR 只能保留证据上限 | 平台提供稳定 discovery/selector/receipt contract |
+| BL-WT-002 | DEF-WT-002 | 独立 runtime/SaaS/pilot 验证 | deferred | 本 CR 未授权凭据、runtime、SaaS、production write | 独立 runtime-high-risk CR 与用户授权 |
 
 ## 不授权项索引
 
@@ -37,6 +40,8 @@ source_mvp_scope: "docs/product/MVP-SCOPE.md"
 | NA-EI-001 | credentials / runtime / production write / publish / trading | not-authorized | 不进入 CR-046 CP2 或实现默认授权 | 需要独立用户授权、安全边界与回滚方案 |
 | NA-EI-002 | repository commit / push | not-authorized | 本轮只允许本地工件与验证 | 用户明确要求后按仓库发布流程处理 |
 | NA-EI-003 | quant-lab lineage business-code changes | not-authorized | CR-163 仅 process-evidence append-only pilot | 新业务目标、独立 CR、HLD/LLD 与业务验收 |
+| NA-WT-001 | 处理 prelink backup | not-authorized | 用户明确“不需要处理” | 仅用户未来明确要求时 |
+| NA-WT-002 | 子 Agent 调度 | disabled-by-user | CR-047 后续阶段使用审计化 inline fallback | 用户未来撤销该选择时恢复 |
 
 ## Gotchas
 

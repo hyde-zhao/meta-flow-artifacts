@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-047",
+  "story_id": "ST-WT-001",
+  "status": "implemented_with_risk",
+  "touched_files": [
+    {"path": "meta_flow/state/current.py", "change_type": "modified"},
+    {"path": "meta_flow/checks/cr_tracking.py", "change_type": "modified"},
+    {"path": "meta_flow/workflow/cr_lifecycle.py", "change_type": "modified"},
+    {"path": "tests/test_cr047_truth_consistency.py", "change_type": "created"},
+    {"path": "tests/test_cr_lifecycle.py", "change_type": "modified"}
+  ],
+  "contract_changes": {"public_api_changed": false, "data_contract_changed": true, "design_delta_required": false, "design_delta_ref": null},
+  "boundary_check": {"allowed_paths_only": true, "forbidden_paths_touched": [], "unexpected_imports": []},
+  "verification": {
+    "commands_run": [
+      {"command": "uv run --python 3.11 pytest -q tests/test_cr047_truth_consistency.py tests/test_cr_lifecycle.py", "result": "pass", "summary": "38 passed"},
+      {"command": "uv run --python 3.11 meta-flow check cr-tracking --project-root .", "result": "pass", "summary": "CR-047 active; CR-033 candidate; no stale conflicts"}
+    ],
+    "tests": ["TC-WT-001"],
+    "skipped": []
+  },
+  "evidence_refs": ["process/stories/STORY-ST-WT-001-workflow-truth-consistency-IMPLEMENTATION.md", "process/state/AGENT-DISPATCH-LEDGER.ndjson#IF-CR047-CP5-CP6-IMPLEMENTATION-STARTED"],
+  "open_questions": [],
+  "risks": [{"id": "CR047-RISK-INLINE-CP6", "level": "medium", "status": "accepted", "owner": "host-orchestrator", "detail": "User-authorized inline fallback is not independent meta-dev attestation."}],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7_with_inline_fallback_risk"
+}

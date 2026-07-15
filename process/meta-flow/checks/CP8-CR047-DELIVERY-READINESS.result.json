@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR047-DELIVERY-READINESS",
+  "cr_id": "CR-047",
+  "profile": "architecture-major",
+  "check_attempt": 1,
+  "context_ref": "process/release/RELEASE-CONTEXT-CR047.yaml",
+  "route_plan_ref": "process/checks/CP0-CR047.route-plan.json",
+  "evidence_ref": "process/checkpoints/CP8-CR047-DELIVERY-READINESS.md",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "generated_by": "host-orchestrator-inline",
+    "invocation": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP8-CR047-DELIVERY-READINESS.result.json --project-root .",
+    "fallback_used": true,
+    "fallback_reason": "User required no subagents; readiness is prepared inline and capped at READY_WITH_RISK.",
+    "fallback_review_ref": "process/checkpoints/CP8-CR047-DELIVERY-READINESS.md#人工审查结果"
+  },
+  "release_decision": "READY_WITH_RISK",
+  "fact_diff": [
+    {"promise_ref":"REQ-WT-001..003","promise":"State, CR index and CURRENT converge through read-only relation checks.","status":"EXECUTED_POSITIVE_RESULT","decision_impact":"READY","evidence_refs":["process/evidence/ST-WT-001.CP7.index.json"],"risk_ref":""},
+    {"promise_ref":"REQ-WT-004..010","promise":"Portable routing, Doctor governance and clean-clone guardrail pass without rewriting history.","status":"EXECUTED_POSITIVE_RESULT","decision_impact":"READY_WITH_RISK","evidence_refs":["process/evidence/ST-WT-002.CP7.index.json","process/evidence/ST-WT-003.CP7.index.json","process/evidence/ST-WT-004.CP7.index.json"],"risk_ref":"CR047-RISK-LEGACY-WARNINGS"},
+    {"promise_ref":"REQ-WT-011..014","promise":"Ruff/full regression and three-platform noninteractive dry-run pass.","status":"EXECUTED_POSITIVE_RESULT","decision_impact":"READY_WITH_RISK","evidence_refs":["process/evidence/ST-WT-005.CP7.index.json","process/evidence/ST-WT-006.CP7.index.json"],"risk_ref":"CR047-RISK-DRY-RUN-ONLY"},
+    {"promise_ref":"REQ-WT-015..017","promise":"CR-046 current status converges without protected-original mutation.","status":"EXECUTED_POSITIVE_RESULT","decision_impact":"READY_WITH_RISK","evidence_refs":["process/evidence/ST-WT-007.CP7.index.json"],"risk_ref":"CR047-RISK-INHERITED-CR046"},
+    {"promise_ref":"independent CP7/platform attestation","promise":"Independent meta-qa and platform-issued execution receipt are available.","status":"NEEDS_REVIEW","decision_impact":"READY_WITH_RISK","evidence_refs":["process/state/AGENT-DISPATCH-LEDGER.ndjson"],"risk_ref":"CR047-RISK-NO-INDEPENDENT-CP7-AGENT"},
+    {"promise_ref":"repository persistence","promise":"The verified working tree is committed and pushed.","status":"NEEDS_REVIEW","decision_impact":"READY_WITH_RISK","evidence_refs":["process/checkpoints/CP8-CR047-DELIVERY-READINESS.md"],"risk_ref":"CR046-RISK-WORKING-TREE-ONLY"}
+  ],
+  "items": [
+    {"id":"CP8-WT047-01","name":"Seven Story CP6/CP7 evidence chains complete","status":"PASS","severity":"BLOCKER","evidence_refs":["process/checkpoints/CP8-CR047-DELIVERY-READINESS.md"],"owner":"host-orchestrator","route_on_fail":"block_release"},
+    {"id":"CP8-WT047-02","name":"Five release gates and installer matrix pass","status":"PASS","severity":"BLOCKER","evidence_refs":["process/checkpoints/CP8-CR047-DELIVERY-READINESS.md"],"owner":"host-orchestrator","route_on_fail":"block_release"},
+    {"id":"CP8-WT047-03","name":"Open warnings and evidence ceilings are fully disclosed","status":"PASS","severity":"HIGH","evidence_refs":["process/checkpoints/CP8-CR047-DELIVERY-READINESS.md"],"owner":"user","route_on_fail":"require_user_decision"},
+    {"id":"CP8-WT047-04","name":"Approval does not authorize external or repository publication actions","status":"PASS","severity":"BLOCKER","evidence_refs":["process/checkpoints/CP8-CR047-DELIVERY-READINESS.md"],"owner":"host-orchestrator","route_on_fail":"block_release"}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "risks": ["CR047-RISK-NO-INDEPENDENT-CP7-AGENT","CR047-RISK-LEGACY-WARNINGS","CR047-RISK-LOCAL-CACHE-WARN","CR047-RISK-DRY-RUN-ONLY","CR047-RISK-INHERITED-CR046","CR046-RISK-WORKING-TREE-ONLY"],
+  "decision": "PASS",
+  "next_route": "await CP8 human READY_WITH_RISK decision",
+  "checked_at": "2026-07-15T13:30:00Z"
+}

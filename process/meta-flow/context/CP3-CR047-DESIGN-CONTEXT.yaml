@@ -1,0 +1,139 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR047-DESIGN-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready-for-human-gate"
+created_at: "2026-07-13T04:09:26Z"
+created_by: "host-orchestrator-inline"
+refreshed_at: "2026-07-14T15:10:55Z"
+refreshed_by: "host-orchestrator-inline"
+source_cr: "CR-047"
+token_control:
+  read_profile: "compact"
+  max_source_files: 16
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: "deep_review: user-authorized CP3 R2 cross-artifact consistency revision"
+  read_expansion_refs:
+    - "RE-20260713T040926Z0000-424fac23"
+    - "RE-20260713T040926Z0000-5e875854"
+    - "RE-20260713T040926Z0000-5c1aba0c"
+    - "RE-20260713T040926Z0000-4c221e5d"
+    - "RE-20260713T044705Z0000-b8b3e5a0"
+    - "RE-20260714T150414Z0000-eb1d15d7"
+    - "RE-20260714T150414Z0000-6af2e88a"
+    - "RE-20260714T150414Z0000-041842c3"
+    - "RE-20260714T150415Z0000-afa250e3"
+    - "RE-20260714T150415Z0000-5fecf44a"
+    - "RE-20260714T150415Z0000-f282686d"
+  default_instruction: "Read this capsule first; expand only named artifacts for traceability or conflict review and log every full-document expansion."
+allowed_reads:
+  - {path: "process/state/STATE.current.json", reason: "current CR/phase/gate", required: true}
+  - {path: "process/current/CURRENT.json", reason: "current projection", required: true}
+  - {path: "process/changes/summaries/CR-047.summary.json", reason: "compact CR scope/authz", required: true}
+  - {path: "process/checks/CP0-CR047.route-plan.json", reason: "route and human gates", required: true}
+  - {path: "process/checkpoints/CP2-CR047-REQUIREMENTS-BASELINE.md", reason: "approved product decisions", required: true}
+  - {path: "process/docs/design/CR047-WORKFLOW-TRUTH-BLUEPRINT.md", reason: "capability/Feature boundary", required: true}
+  - {path: "process/docs/design/CR047-WORKFLOW-TRUTH-DOMAIN-MAP.md", reason: "domain objects/rules", required: true}
+  - {path: "process/docs/design/CR047-WORKFLOW-TRUTH-DEPENDENCY-MAP.md", reason: "dependency direction", required: true}
+  - {path: "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md", reason: "architecture proposal", required: true}
+  - {path: "process/docs/design/CR047-WORKFLOW-TRUTH-ARCHITECTURE-DECISION.md", reason: "proposed ADRs", required: true}
+  - {path: "process/checks/CP3-CR047-HLD-CONSISTENCY-R2.result.json", reason: "superseding automatic CP3 verdict", required: true}
+  - {path: "process/checkpoints/CP3-CR047-HLD-REVIEW.md", reason: "human Decision Brief", required: true}
+must_read:
+  - {path: "process/state/STATE.current.json", reason: "machine state", required: true}
+  - {path: "process/current/CURRENT.json", reason: "derived discovery state", required: true}
+  - {path: "process/changes/summaries/CR-047.summary.json", reason: "scope/authz", required: true}
+  - {path: "process/checks/CP0-CR047.route-plan.json", reason: "route plan", required: true}
+  - {path: "process/checkpoints/CP2-CR047-REQUIREMENTS-BASELINE.md", reason: "approved CP2 decisions", required: true}
+  - {path: "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md", reason: "CP3 architecture proposal", required: true}
+  - {path: "process/docs/design/CR047-WORKFLOW-TRUTH-ARCHITECTURE-DECISION.md", reason: "CP3 decisions and alternatives", required: true}
+read_if_needed:
+  - {path: "process/docs/product/USE-CASES.md", trigger: "UC traceability audit"}
+  - {path: "process/docs/product/REQUIREMENTS.md", trigger: "REQ acceptance audit"}
+  - {path: "process/docs/product/SCENARIOS.yaml", trigger: "failure-path detail"}
+  - {path: "process/docs/product/TEST-MATRIX.md", trigger: "test mapping"}
+  - {path: "process/docs/product/STORY-MAP.md", trigger: "Story count/wave review"}
+  - {path: "meta_flow/checks/cr_tracking.py", trigger: "current implementation boundary"}
+  - {path: "meta_flow/state/current.py", trigger: "controlled writer/projection boundary"}
+  - {path: "scripts/check_delivery_guardrails.py", trigger: "guardrail boundary"}
+do_not_read_by_default:
+  - {path_or_pattern: "process/STATE.md", reason: "human summary/legacy fallback"}
+  - {path_or_pattern: "process/archive/**", reason: "historical cold zone"}
+  - {path_or_pattern: "process/stories/**", reason: "Story design not authorized before CP3 approval"}
+  - {path_or_pattern: "process/discussions/** except CP3-CR047-HLD-DISCUSSION-LOG.md", reason: "audit only"}
+  - {path_or_pattern: "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**", reason: "user explicitly excluded"}
+  - {path_or_pattern: "../meta-flow-artifacts/process/quant-lab/**", reason: "different project and owner"}
+  - {path_or_pattern: "complete conversation transcript", reason: "not a truth source"}
+key_facts:
+  scope_summary: "Converge State/CR/CURRENT, artifact docs routing, Doctor/history semantics, clean-clone rule/cache/lint/test/install gate and CR-046 current projection without fabricating history or runtime evidence."
+  approved_product_shape: "UC-WT-001..007, REQ-WT-001..017, seven Stories, three release slices."
+  recommended_architecture: "Option A: in-place contract convergence with source-owned truth graph, project-relative artifact docs, severity/lifecycle-aware quality and existing composable preflight."
+  truth_contract: "Workspace health first; State and CR catalog remain separate single writers; CURRENT is a rebuildable projection; consistency/Doctor/preflight are read-only."
+  docs_contract: "Internal product/design/quality/release artifacts are canonical only under process/docs; root docs keeps tracked public entry points."
+  quality_contract: "B0_pre=21 is a historical anchor; CP7 captures dynamic B0_cp7 and reconciles every delta. blocking_active/unclassified must be zero; active/default-required over-budget remains blocking."
+  protected_original_contract: "ST-WT-007 uses object identity, never prefix-only allowlisting; CP6 pre-implementation captures CR-046 originals, CP6 completes first hash check, CP7 rechecks, and any mutation blocks/splits a child CR."
+  delivery_contract: "delivery/rules/AGENTS.md is tracked canonical; root wrapper is generated; tracked/package cache blocks, ignored-only cache warns; Ruff/pytest/3-platform dry-run join existing preflight."
+  hld_split_assessment: "Seven Story split signal was considered; one shared objective, ADR set, owner graph and release gate justify one HLD, with Feature/Story split after CP3."
+  architecture_artifacts:
+    - "process/docs/design/CR047-WORKFLOW-TRUTH-BLUEPRINT.md"
+    - "process/docs/design/CR047-WORKFLOW-TRUTH-DOMAIN-MAP.md"
+    - "process/docs/design/CR047-WORKFLOW-TRUTH-DEPENDENCY-MAP.md"
+    - "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md"
+    - "process/docs/design/CR047-WORKFLOW-TRUTH-ARCHITECTURE-DECISION.md"
+  scenario_simulation: "SIM-WT-01..06 design simulations PASS; these are design reasoning, not CP7 runtime evidence."
+risks_and_decisions:
+  pending_human_decisions:
+    - "CP3-DQ-01: source-owned truth graph vs a new total state or parser-only fix."
+    - "CP3-DQ-02: process/docs-only internal canonical vs compatibility view or source-repo relocation."
+    - "CP3-DQ-03: lifecycle/read-aware Doctor and append-only history vs global budget relaxation."
+    - "CP3-DQ-04: extend existing composable preflight vs new release orchestrator or manual composition."
+    - "CP3-DQ-05: object-identity CR-046 protected-original firewall with CP6/CP7 checks and child-CR routing."
+    - "CP3-DQ-06: accept additive CP7 PASS_WITH_RISK / CP8 READY_WITH_RISK ceilings while independent/inherited evidence risks remain open."
+  accepted_cp2_decisions:
+    - "delivery/rules/AGENTS.md is tracked canonical; root wrapper is generated."
+    - "Doctor green means blocker=0; WARN is counted and disclosed."
+    - "Historical overage uses archive/cold or compact summary/index/hash/correction; no truncation."
+    - "Tracked/package cache blocks; pure ignored local cache warns/preflight."
+  non_authorized_items:
+    - credentials
+    - runtime
+    - SaaS
+    - production_write
+    - publish
+    - trading
+    - repository_commit
+    - repository_push
+    - prelink_backup_changes
+    - quant_lab_changes
+    - real_platform_receipt_claim
+  unresolved_risks:
+    - "Platform receipt, independent QA runtime, token telemetry and real pilot remain unavailable/OPEN."
+    - "Historical ref migration can break audit links unless ref graph/hash checks precede movement."
+    - "A warning category can hide a blocker if current/package/security precedence is not enforced."
+    - "CR-046/047 objects share directories; prefix-only identity can miss or falsely classify protected originals."
+    - "Independent QA, receipt, telemetry, pilot and working-tree risks are independent; closing one does not lift all verdict ceilings."
+downstream_tasks:
+  - "Host validates CP3 R2 result, reopens CP3 human gate with DQ-01..06 and stops."
+  - "Only after CP3 approval: create Feature Design Matrix, Development Plan, Story split/DAG/file ownership and CP4/CP5 package."
+  - "Do not implement code, modify historical evidence in place, touch backup/quant-lab, or commit/push."
+design_decisions:
+  - {id: "ADR-WT-001", status: "proposed", summary: "Source-owned truth graph plus read-only consistency relation"}
+  - {id: "ADR-WT-002", status: "proposed", summary: "Artifact process/docs is the only internal canonical route"}
+  - {id: "ADR-WT-003", status: "proposed", summary: "Severity and lifecycle/read-aware Doctor with append-only history"}
+  - {id: "ADR-WT-004", status: "proposed", summary: "Existing composable preflight with tracked rule/cache classification"}
+  - {id: "ADR-WT-005", status: "proposed", summary: "One CR-scoped HLD, Story/Feature split after CP3"}
+  - {id: "ADR-WT-006", status: "proposed", summary: "Evidence-level and inherited-risk ceilings are calculated independently and additively"}
+execution_constraints:
+  - "No code, Feature design, DEVELOPMENT-PLAN, Story cards or LLD before CP3 approval."
+  - "No runtime, credentials, SaaS, production write, publish, trading, commit/push, backup or quant-lab action."
+validation:
+  product_baseline_status: "CP2-approved"
+  architecture_status: "v1.1-r2-ready; CP3-human-decision-pending"
+  missing_sources: []
+  discussion_log_ref: "process/discussions/CP3-CR047-HLD-DISCUSSION-LOG.md"
+  discussion_checkpoint_ref: "process/checks/CP3-CR047-DISCUSSION-CHECKPOINT.json"
+  cp3_result_ref: "process/checks/CP3-CR047-HLD-CONSISTENCY-R2.result.json"

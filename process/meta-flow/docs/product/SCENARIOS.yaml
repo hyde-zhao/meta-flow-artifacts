@@ -1,10 +1,10 @@
 schema_version: "1"
 status: "baseline"
-version: "1.3"
+version: "1.4"
 created_at: "2026-07-02"
 owner: "host-orchestrator"
 cr_ref: "CR-037"
-active_change_ref: "CR-046"
+active_change_ref: "CR-047"
 source_use_cases: "process/docs/product/USE-CASES.md"
 source_requirements: "process/docs/product/REQUIREMENTS.md"
 coverage_policy:
@@ -12,6 +12,11 @@ coverage_policy:
   blocked_cr_policy: "CR-037 is active after user-authorized pause of unfinished CR-036; scenarios are CP2 baseline inputs, not implementation, CP5, runtime, production write, or quant-lab release repo authorization."
   release_repo_policy: "quant-lab release repo changes are never automated by roadmap refresh."
 revision_history:
+  - version: "1.4"
+    date: "2026-07-13"
+    author: "host-orchestrator-inline-fallback"
+    change: "Append TC-WT-001..007 for CR-047 workflow-truth and delivery-governance remediation; preserve all prior IDs."
+    document_handling: "incremental-update"
   - version: "1.3"
     date: "2026-07-12"
     author: "meta-pm"
@@ -564,13 +569,104 @@ scenarios:
     evidence_type: "dispatch-evidence-level-fixture"
     automation_status: "planned"
 
+  - id: "TC-WT-001"
+    title: "canonical state/current/CR tracking consistency"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-WT-001"]
+    requirements: ["REQ-WT-001", "REQ-WT-002", "REQ-WT-003"]
+    stories: ["ST-WT-001"]
+    preconditions: ["State v2 and CR-INDEX.json exist"]
+    action: "Inject a closed active CR, stale CURRENT ref, legacy YAML index, or missing CR-033 candidate and run tracking/state checks"
+    expected: ["Every conflict is rejected before remediation", "After remediation tracking exits 0 and CR-033 remains candidate"]
+    evidence_type: "state-cr-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-WT-002"
+    title: "clean-clone portable process and document routing"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-WT-002"]
+    requirements: ["REQ-WT-004", "REQ-WT-005"]
+    stories: ["ST-WT-002"]
+    preconditions: ["Both repositories are clean clones placed as siblings"]
+    action: "Run workspace link from the source root and inspect route metadata/canonical document count"
+    expected: ["process_link_health=ok", "metadata uses portable relative anchors", "canonical writable product document count is one"]
+    evidence_type: "clean-clone-routing-test"
+    automation_status: "planned"
+
+  - id: "TC-WT-003"
+    title: "Doctor blocking errors reach zero without rewriting history"
+    type: "failure-recovery"
+    priority: "HIGH"
+    use_cases: ["UC-WT-003"]
+    requirements: ["REQ-WT-006", "REQ-WT-007", "REQ-WT-008", "REQ-WT-017"]
+    stories: ["ST-WT-003"]
+    preconditions: ["Baseline has 21 budget failures, quality-source error, legacy read-expansion failures and empty run-ledger warning"]
+    action: "Apply approved compact/archive/correction policy and rerun doctor all"
+    expected: ["blocking errors=0", "warnings remain counted and explained", "historical hashes/timestamps/receipts are not fabricated"]
+    evidence_type: "doctor-regression"
+    automation_status: "planned"
+
+  - id: "TC-WT-004"
+    title: "clean-clone guardrail uses tracked canonical rules"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-WT-004"]
+    requirements: ["REQ-WT-009", "REQ-WT-010"]
+    stories: ["ST-WT-004"]
+    preconditions: ["A git archive contains no ignored root AGENTS.md"]
+    action: "Run delivery guardrail in archive and in a local tree containing ignored caches"
+    expected: ["clean archive passes", "tracked cache blocks", "ignored local cache follows the approved warning/preflight policy"]
+    evidence_type: "guardrail-clean-clone-test"
+    automation_status: "planned"
+
+  - id: "TC-WT-005"
+    title: "Ruff and full regression quality gate"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-WT-005"]
+    requirements: ["REQ-WT-011", "REQ-WT-012"]
+    stories: ["ST-WT-005"]
+    preconditions: ["Baseline Ruff has 90 findings"]
+    action: "Apply safe fixes, review semantic B/F findings, run Ruff and pytest without cache provider"
+    expected: ["Ruff errors=0", "at least 377 tests and 70 subtests pass"]
+    evidence_type: "lint-regression-gate"
+    automation_status: "planned"
+
+  - id: "TC-WT-006"
+    title: "non-interactive installation and cache preflight"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-WT-006"]
+    requirements: ["REQ-WT-013", "REQ-WT-014"]
+    stories: ["ST-WT-006"]
+    preconditions: ["Non-TTY shell and explicit project directory"]
+    action: "Execute Codex, Claude and Qoder project/full dry-runs from documented commands"
+    expected: ["3/3 dry-runs exit 0", "cache policy does not confuse ignored local files with tracked delivery inputs"]
+    evidence_type: "installer-dry-run-matrix"
+    automation_status: "planned"
+
+  - id: "TC-WT-007"
+    title: "CR-046 closure truth converges without chronology rewrite"
+    type: "precheck"
+    priority: "HIGH"
+    use_cases: ["UC-WT-007"]
+    requirements: ["REQ-WT-015", "REQ-WT-016"]
+    stories: ["ST-WT-007"]
+    preconditions: ["CR-046 formal CR and seven CP7 PASS_WITH_RISK results exist"]
+    action: "Cross-check product/design matrices, Story evidence and release risks"
+    expected: ["7/7 Story status is traceable", "stale CP2-pending/0-implemented statements are removed", "receipt/QA/telemetry/pilot risks remain unavailable or open"]
+    evidence_type: "historical-truth-convergence-check"
+    automation_status: "planned"
+
 coverage_summary:
-  total_scenarios: 36
-  high_priority_scenarios: 32
-  positive_scenarios: 15
-  negative_scenarios: 13
-  boundary_scenarios: 3
+  total_scenarios: 43
+  high_priority_scenarios: 40
+  positive_scenarios: 18
+  negative_scenarios: 14
+  boundary_scenarios: 4
   permission_scenarios: 2
-  failure_recovery_scenarios: 1
-  precheck_scenarios: 2
-  source_requirements_covered: "REQ-PG-001..022, REQ-PG-C001..005, REQ-PG-NF001..004, REQ-EI-001..023, REQ-EI-C001..003 and REQ-EI-NF001..002"
+  failure_recovery_scenarios: 2
+  precheck_scenarios: 3
+  source_requirements_covered: "REQ-PG-001..022, REQ-PG-C001..005, REQ-PG-NF001..004, REQ-EI-001..023, REQ-EI-C001..003, REQ-EI-NF001..002 and REQ-WT-001..017"

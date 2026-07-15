@@ -1,12 +1,12 @@
 ---
 status: baseline
-version: "1.3"
+version: "1.5"
 created_at: "2026-07-02"
 owner: "meta-pm"
 cr_ref: "CR-037"
-active_change_ref: "CR-046"
+active_change_ref: "CR-047"
 ready_for_design: true
-approval_context: "source implementation plan accepted; user authorized pausing unfinished CR-036 and activating CR-037 on 2026-07-02; CR-037 remains CP2 pending and does not authorize implementation, CP5, runtime, production write, or quant-lab release repo changes"
+approval_context: "user approved CR-047 CP2 on 2026-07-13; solution design is authorized, but implementation, runtime, credentials, production write, publish, trading, commit and push remain unauthorized"
 source_use_cases:
   - UC-PG-001
   - UC-PG-002
@@ -20,6 +20,13 @@ source_use_cases:
   - UC-EI-003
   - UC-EI-004
   - UC-EI-005
+  - UC-WT-001
+  - UC-WT-002
+  - UC-WT-003
+  - UC-WT-004
+  - UC-WT-005
+  - UC-WT-006
+  - UC-WT-007
 source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT-IMPLEMENTATION-PLAN-2026-07-02.md"
 ---
 
@@ -29,9 +36,11 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 
 | 版本 | 日期 | 修订人 | 变更要点 | 文档处理方式 |
 |---|---|---|---|---|
+| 1.5 | 2026-07-14 | host-orchestrator-inline / meta-se | CP3 R2 度量精确化：同步修订 REQ-WT-006 与 RA-WT-004，把固定“21”重述为 `B0_pre` 历史快照，并以 CP7 动态 `B0_cp7`、可解释 delta、active/default-required blocker 作为验收契约；不改变 UC、Story、范围或 CP2 批准结论 | 原文档增量更新；无需重开 CP2 |
 | 1.1 | 2026-07-02 | host-orchestrator | 同步 CR-037 已激活、CR-036 暂停未完成和 CP2 pending 不授权实现的状态语义 | 小范围状态语义同步 |
 | 1.2 | 2026-07-11 | meta-pm | 为 CR-046 增量增加 evidence-integrity、replayability、telemetry 和 CR-163 append-only pilot 需求；保留全部 REQ-PG ID | 原文档增量更新 |
 | 1.3 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：新增 REQ-EI-019..023，覆盖 compaction 语义保持、通用 post-close correction、机器 audit report、null-provenance dogfooding 与 dispatch 证据限制；保留全部既有 REQ ID | 原文档增量更新 |
+| 1.4 | 2026-07-13 | meta-pm | 为 CR-047 增量增加 workflow truth、canonical CR tracking、artifact/docs 路由、Doctor、clean-clone guardrail、Ruff、非交互安装和 CR-046 状态收敛需求；记录修复前实测基线并保留全部既有 REQ ID | 原文档增量更新 |
 | 1.0 | 2026-07-02 | meta-pm | 基于已批准实施计划提取产品需求基线 | 初始化长期可追踪需求基线 |
 
 ## 功能需求
@@ -83,6 +92,23 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | REQ-EI-021 | 系统必须从 ledgers/results 机器生成 provenance-bearing audit report，并分离 event-row、attempt、thread、terminal outcome 与 token measurement metrics。 | P0 | Given 含 retry、多 event rows 和混合 measured/proxy/unavailable usage 的已知 fixture When 生成 audit report Then 各维计数与 fixture 100% 一致，checker provenance 与输入 hashes 非空，且不得从 dispatch 行数推断 attempt/thread 或 token 占比。 | UC-EI-001, UC-EI-004 |
 | REQ-EI-022 | CR-046 CP1/CP2 原始 null-provenance results 必须保留为 first-class dogfooding fixtures，并按新 strict profile 失败或报告 legacy/unavailable。 | P0 | Given 原始 R1 CP1/CP2 result 未含 checker_provenance When strict replay/check 执行 Then 原文件 hash 不变，结果不得标 fully replayable；迁移/current result 只能通过 append-only correction 或新结果记录 measured provenance。 | UC-EI-003 |
 | REQ-EI-023 | Dispatch 报告必须披露 session-observed 与 repository-verifiable 的独立状态，以及平台 receipt 不可用时的证明上限。 | P0 | Given agent/thread/tool 仅在当前 Codex session 可观察且仓库无平台 receipt When 生成 dispatch evidence/audit report Then 状态为 `session-observed/repository-unverifiable`，receipt 为 unavailable，且不得声称 repository-verified 或 platform-attested。 | UC-EI-002 |
+| REQ-WT-001 | State/checker 必须优先消费 `process/state/STATE.current.json`，并拒绝 active change 指向 closed/cancelled/superseded 或不存在的 CR。 | P0 | Given state 指向已关闭 CR-037 When 运行 state/cr consistency check Then 检查失败并定位 `active_change` 与正式 CR 生命周期冲突；Given CR-047 active 且存在于 JSON index Then 检查通过。 | UC-WT-001 |
+| REQ-WT-002 | `process/current/CURRENT.json` 必须与 State v2 的 active change、story、context、checkpoint 和 status 一致。 | P0 | Given CURRENT 任一 active ref 与 `STATE.current.json` 不同 When 运行 workspace/state check Then 退出非零并列出冲突字段；一致时冲突数为 0。 | UC-WT-001 |
+| REQ-WT-003 | Canonical CR tracking 必须只使用 `CR-INDEX.json`，迁移 canonical 目录中的 legacy YAML，并把 CR-033 记录为 candidate 而非 active。 | P0 | Given `CR-INDEX.yaml` 与 JSON 并存或 CR-033 缺失 When 运行 `meta-flow check cr-tracking` Then 修复前失败；整改后退出码 0、legacy canonical 文件数为 0、CR-033 candidate 条目为 1。 | UC-WT-001 |
+| REQ-WT-004 | clean clone 必须能通过一次显式 `workspace link` 建立 `process -> <artifact-root>/process/meta-flow`，且路由元数据使用锚点 + 相对路径。 | P0 | Given 两仓 clean clone When 从源码根运行 link/check Then `process_link_health=ok`，actual target 正确，metadata 不含设备绝对路径。 | UC-WT-002 |
+| REQ-WT-005 | Meta Flow 内部产品/设计/质量过程文档必须以 artifact `process/meta-flow/docs` 为 canonical，根 `docs/` 只保留 tracked 公开入口。 | P0 | Given 同一产品文档被更新 When 检查路由 Then canonical 可写副本数量为 1，`process/docs/product/*` 可通过 process link 访问，根 `docs/product` 不被新建。 | UC-WT-002 |
+| REQ-WT-006 | Artifact/Token Doctor 必须按 policy 预算检查活动对象，并通过 compact summary、evidence index、hash/annotation 或 archive 隔离收敛历史超限，不得截断机器结果。 | P0 | Given CR-047 产物生成前历史锚 `B0_pre.observed=21`，且 CP7 开始时采集动态 `B0_cp7`（observed/classified/unclassified/blocking_active/warning） When 整改并重跑 Then `blocking_active=0`、`unclassified=0`、每个对象均有 lifecycle/read class 与 remediation ref、从 `B0_cp7` 到终态的新增/删除/重分类 delta 全部可解释；active/default-required 超预算始终为 blocker，历史机器结果原始 hash 保持或存在 append-only correction ref。 | UC-WT-003 |
+| REQ-WT-007 | Quality model 必须把 `process/state/READ-EXPANSION-LEDGER.ndjson` 列为合法 derived source，并对 6 个历史缺口使用 append-only legacy/unavailable correction。 | P0 | Given 修复前 quality/workflow doctor 报 source 缺失和 6 个 read-expansion 错误 When 整改后重跑 Then source-path error=0、未解释历史错误=0，无法恢复的授权不得标 PASS。 | UC-WT-003 |
+| REQ-WT-008 | `[CP2-DQ-02 approved]` Doctor 绿色定义为 blocking error=0；warning 必须计数和披露，但空/legacy ledger 等 warning 不自动等价于 blocker。 | P0 | Given Doctor 只剩声明为 warning 的 legacy/empty-ledger 项 When 执行组合门 Then 命令退出码为 0 且报告 warning count；Given 任一 blocking item Then 退出码非零。 | UC-WT-003 |
+| REQ-WT-009 | `[CP2-DQ-01 approved]` 根规则 canonical source 为 tracked `delivery/rules/AGENTS.md`；ignored/generated 根 wrapper 由安装器生成，guardrail 验证 tracked source 与 installer dry-run。 | P0 | Given `git archive HEAD` clean tree When 运行 guardrail Then 不因 ignored 根 `AGENTS.md` 缺失产生错误；tracked source 与 generated wrapper 漂移可检测。 | UC-WT-004 |
+| REQ-WT-010 | Delivery guardrail 必须基于 clean/tracked 输入可独立执行，并区分 tracked cache 与 ignored 本机 cache。 | P0 | Given clean archive 与运行过 pytest 的本机 tree When 分别执行 guardrail Then clean archive 退出码 0；tracked cache 仍阻断；ignored cache 按批准策略 warning/清理而不形成永久红灯。 | UC-WT-004, UC-WT-006 |
+| REQ-WT-011 | Ruff 必须达到 error=0，并成为 CI 或发布前组合质量门的一部分。 | P0 | Given 修复前 `ruff check .` 报 90 项、其中 84 项可自动修复 When 完成机械修复与人工 B/F 审查 Then `uv run --python 3.11 ruff check .` 退出码 0。 | UC-WT-005 |
+| REQ-WT-012 | Ruff 修复后必须完整回归现有测试基线。 | P0 | Given lint 修复完成 When 运行 pytest with no cache provider Then 至少 377 tests 与 70 subtests 全部通过，失败数为 0。 | UC-WT-005 |
+| REQ-WT-013 | README 必须为 Codex、Claude、Qoder 提供显式 `--project-dir` 的非交互 project-scope full dry-run 示例。 | P1 | Given 非 TTY 环境按 README 执行 3 条命令 When 安装器 dry-run Then 3/3 退出码 0，且错误信息不再要求补 `--project-dir`。 | UC-WT-006 |
+| REQ-WT-014 | 发布 preflight 必须定义 Python cache 处理策略，避免测试后 ignored cache 持续阻断，同时保留 tracked cache 阻断。 | P1 | Given tree 含 ignored `__pycache__`/`.pyc` When 执行 preflight/guardrail Then ignored cache 被清理或报告 warning；Given cache 被 Git 跟踪或进入打包输入 Then 结论为 blocking。 | UC-WT-006 |
+| REQ-WT-015 | CR-046 产品矩阵与设计状态必须收敛到 `closed / READY_WITH_RISK` 和 7/7 Story `PASS_WITH_RISK`，但不得改写 recovered/post-hoc 时序。 | P0 | Given CR-046 formal CR、7 个 CP7 result 和产品矩阵 When 运行交叉检查 Then 7/7 Story 为 implemented + PASS_WITH_RISK，产品矩阵不再写 CP2 pending/0 implemented，原始历史 hash 不被倒填。 | UC-WT-007 |
+| REQ-WT-016 | CR-045/046 的 platform receipt、独立 QA、token telemetry 与真实 pilot 风险必须保持 unavailable/OPEN/follow-up，直到存在新证据和独立授权。 | P0 | Given fixture 能拒绝伪造 receipt 但平台未签发 receipt When 生成 release 结论 Then 最高为 `READY_WITH_RISK`，不得写 platform-attested 或 independent-runtime-verified。 | UC-WT-007 |
+| REQ-WT-017 | Story/Run ledger 对未来执行必须强制追加真实事件；历史补录只能使用 `recovered/legacy-unverified`，不得伪造运行时间或 receipt。 | P1 | Given修复前 RUN ledger 为空且存在历史执行 When 收敛治理 Then 新验证命令均有 run event；历史事件显式 recovery status，伪造 original timestamp/receipt 的 fixture 100% 被拒绝。 | UC-WT-003, UC-WT-007 |
 
 ## 约束需求
 
@@ -96,6 +122,9 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | REQ-EI-C001 | 不得伪造或推断不存在的 platform receipt、签名、token telemetry 或 checker identity。 | P0 | Given 来源字段缺失 When 生成 evidence Then 使用 unavailable/unknown 的合法表达，不生成看似 verified/measured 的值。 | UC-EI-002, UC-EI-003, UC-EI-004 |
 | REQ-EI-C002 | canonical checker 必须以 canonical JSON CR index 为输入，不得被 legacy YAML 状态干扰。 | P1 | Given JSON 与 legacy YAML 并存或冲突 When 运行 canonical checker Then 只消费 canonical JSON，并对 legacy 干扰给出迁移提示。 | UC-EI-003 |
 | REQ-EI-C003 | CP2 approval 不授权 credentials、runtime、production write、publish、交易、repository publication 或 quant-lab business-code changes。 | P0 | Given 用户批准 CP2 When 检查授权边界 Then 上述动作仍为未授权，必须独立获得授权。 | UC-EI-005 |
+| REQ-WT-C001 | 不得读取、删除、迁移或修改 `/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930`。 | P0 | Given CR-047 任一 Story 执行 When 检查 touched paths Then 该 backup 路径及其子路径变更数为 0。 | 用户显式排除 |
+| REQ-WT-C002 | 不得通过原位改写历史 CP/result/ledger、伪造平台 receipt 或补写虚假原始运行时间来“修绿”治理检查。 | P0 | Given 历史缺口无法恢复 When 生成 correction/summary Then 使用 append-only legacy/unavailable 语义，原始 hash 保留，伪造 fixture 100% 被拒绝。 | UC-WT-003, UC-WT-007 |
+| REQ-WT-C003 | CP2 approval 不授权 credentials、runtime、SaaS、production write、publish、trading、repository commit/push 或 CR-033 runtime follow-up。 | P0 | Given 用户批准 CR-047 CP2 When 审查授权范围 Then上述动作仍为 not-authorized，需独立请求。 | CR-047 不授权范围 |
 
 ## 非功能需求
 
@@ -107,6 +136,9 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | REQ-PG-NF004 | quant-lab 迁移必须可重复验证。 | P2 | Given 迁移完成 When 重新运行 state / capability / feature / capability-claims / stale checks Then 结果与迁移报告一致。 | UC-PG-007 |
 | REQ-EI-NF001 | evidence-integrity checker 失败必须包含对象 ID、失败字段、规则 ID、证据 ref 和安全路由。 | P0 | Given 任一 chronology/provenance/replay/telemetry 检查失败 When 输出 finding Then 审计者可定位原对象、原因与回退/修复入口。 | UC-EI-001..005 |
 | REQ-EI-NF002 | 新 evidence contract 必须具备 versioned schema 和 legacy read-only compatibility fixture。 | P0 | Given 旧证据进入新 checker When 执行兼容检查 Then 可读对象被重放，不兼容对象显式 BLOCKED/WARN，不静默改写。 | UC-EI-003, UC-EI-005 |
+| REQ-WT-NF001 | 同一 Git HEAD 与 artifact commit 在支持环境中必须产生确定的 workspace/state/checker 结果。 | P0 | Given 两台设备的源码与 artifact commit 相同 When 分别 link/check Then routing target 语义、state active refs、CR index decision 和 quality gate decision 差异为 0。 | UC-WT-001, UC-WT-002 |
+| REQ-WT-NF002 | 所有失败必须输出可操作路径、字段、计数、严重度和推荐路由。 | P1 | Given cr-tracking/doctor/guardrail/ruff/install 任一失败 When 查看输出 Then 至少包含失败对象、severity、证据路径或命令以及修复/回退入口。 | UC-WT-001..006 |
+| REQ-WT-NF003 | 全部 Python 检查、测试和脚本示例必须使用 `uv run`，且不得要求裸 pip 或系统 Python。 | P0 | Given README、CI 与 release preflight 被扫描 When 检查 Python 命令 Then裸 `python`/`pip install` 违规数为 0。 | UC-WT-005, UC-WT-006 |
 
 ## 风险与假设
 
@@ -117,6 +149,10 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | RA-PG-003 | RISK | capability ID 归一时真实来源分散，容易误建自由字符串。 | REQ-PG-011, REQ-PG-021 | 只允许 registry 引用；缺失项输出 blocked finding / FU-RF。 |
 | RA-PG-004 | RISK | Roadmap refresh 跨仓边界不清会误改发布库。 | REQ-PG-016, REQ-PG-C002 | 明确自动写入只限过程归档库。 |
 | RA-PG-005 | ASSUMPTION | 已批准实施计划是本轮产品基线事实来源。 | 全部 | 本文档引用 source_plan；若计划变更，必须通过后续 CR 增量更新。 |
+| RA-WT-001 | RISK | 历史 artifact 超预算对象若被原位压缩会破坏证据 hash 与审计时序。 | REQ-WT-006, REQ-WT-C002 | 优先 compact summary + evidence index + archive/annotation；所有修正 append-only。 |
+| RA-WT-002 | RISK | 根规则 source 选择错误会让 clean clone 或本机 wrapper 二选一失败。 | REQ-WT-009, REQ-WT-010 | CP2 显式选择 canonical source，clean archive 与 installed workspace 双路径验证。 |
+| RA-WT-003 | RISK | 把所有 Doctor warning 当 blocker 会导致 legacy/empty ledger 永久阻断；反之忽略 error 会虚假全绿。 | REQ-WT-008 | severity 枚举、exit-code contract 与 warning count 分离验证。 |
+| RA-WT-004 | ASSUMPTION | 修复前实测快照包括 cr-tracking FAIL、Doctor `B0_pre.observed=21`、quality/read-expansion/run-ledger findings、Ruff 90、guardrail cache 阻断；2026-07-14 CP3 评审已观测 Doctor=22，`+1` 为 `CR-047.summary.json`，证明 observed count 会随合规过程产物变化。 | REQ-WT-003, REQ-WT-006..012, REQ-WT-014 | 保留 `B0_pre` 作为历史回归锚；CP7 开始采集 `B0_cp7` 作为分类锚并解释全部 delta。新增 active/default-required 超预算不得因计数漂移而降级为 warning。 |
 
 ## 里程碑建议
 
@@ -129,6 +165,9 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | M3：Reference and Impact Normalization | REQ-PG-010..013, REQ-PG-C004, REQ-PG-NF002 | capability / feature registry 校验、impact surface migration report | M2 |
 | M4：Roadmap Refresh and Follow-up | REQ-PG-014..019, REQ-PG-C002 | ROADMAP-REFRESH result/checker、GATE-LEDGER event、FU-RF 支持、stale check | M3 |
 | M5：quant-lab Migration | REQ-PG-020..022, REQ-PG-NF004 | quant-lab state 清理、capability 归一、impact surface 迁移、stale report | M4 |
+| M-WT1：Canonical Truth and Routing | REQ-WT-001..005, REQ-WT-015, REQ-WT-NF001 | State/CURRENT/CR index 一致性、JSON-only tracking、portable process/docs route、CR-046 status convergence | CR-047 CP2/CP3 |
+| M-WT2：Deterministic Quality Gates | REQ-WT-006..012, REQ-WT-017, REQ-WT-NF002..003 | Doctor、history correction、clean-clone guardrail、Ruff、pytest、Run ledger contract | M-WT1 |
+| M-WT3：Operator Entry and Release Risk | REQ-WT-013..016, REQ-WT-C001..003 | 非交互安装、cache preflight、不授权边界、READY_WITH_RISK 收敛 | M-WT2 |
 
 ## 明确排除项
 

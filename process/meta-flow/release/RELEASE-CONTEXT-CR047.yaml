@@ -1,0 +1,81 @@
+schema_version: "1.0"
+status: "approved-ready-for-publication"
+cr_id: "CR-047"
+release_artifact_profile: "full"
+release_decision: "READY_WITH_RISK"
+created_at: "2026-07-15T13:25:00Z"
+source_gate: "CP8"
+
+release_scope:
+  included_stories: ["ST-WT-001", "ST-WT-002", "ST-WT-003", "ST-WT-004", "ST-WT-005", "ST-WT-006", "ST-WT-007"]
+  included_changes:
+    - "State v2 / CR JSON index / CURRENT relation validation and CR-033 candidate retention"
+    - "Portable idempotent process routing and one internal docs canonical"
+    - "Lifecycle/read-aware Doctor classification and append-only historical corrections"
+    - "Clean-clone root-wrapper/cache guardrail convergence"
+    - "Ruff zero baseline and five-gate preflight"
+    - "Codex/Claude/Qoder noninteractive project dry-run examples"
+    - "CR-046 object-identity protected-original firewall and truthful current projection"
+  excluded_scope: ["prelink backup", "process/quant-lab", "credentials/runtime/SaaS/production write/publish/trading", "CR-046 original mutation", "tag/release/force-push or real release execution"]
+  breaking_changes: []
+
+quality_summary:
+  cp6: "7/7 PASS"
+  cp7: "7/7 PASS_WITH_RISK"
+  pytest: "401 passed, 70 subtests passed (post-approval pre-publication regression)"
+  ruff_errors: 0
+  guardrail: "exit 0; ignored local cache warnings only"
+  doctor: {exit_code: 0, B0_pre: 21, B0_cp7: 21, observed_delta: 0, blocking_active_or_default_required: 0, unclassified: 0}
+  cr_tracking: "exit 0; CR-047 active; CR-033 candidate; stale conflicts=0"
+  installer_dry_runs: "3/3; real target writes=0"
+  protected_originals: {objects: 57, cp6_findings: 0, cp7_findings: 0, final_prepublication_findings: 0}
+  test_report_ref: "process/docs/quality/CR047-TEST-REPORT.md"
+  review_ref: "process/docs/quality/CR047-REVIEW.md"
+
+fact_diff:
+  - {promise_ref: "REQ-WT-001..003", status: "EXECUTED_POSITIVE_RESULT", decision_impact: "READY", evidence_refs: ["process/evidence/ST-WT-001.CP7.index.json"], risk_ref: ""}
+  - {promise_ref: "REQ-WT-004..010", status: "EXECUTED_POSITIVE_RESULT", decision_impact: "READY", evidence_refs: ["process/evidence/ST-WT-002.CP7.index.json", "process/evidence/ST-WT-003.CP7.index.json", "process/evidence/ST-WT-004.CP7.index.json"], risk_ref: "CR047-RISK-LEGACY-WARNINGS"}
+  - {promise_ref: "REQ-WT-011..014", status: "EXECUTED_POSITIVE_RESULT", decision_impact: "READY", evidence_refs: ["process/evidence/ST-WT-005.CP7.index.json", "process/evidence/ST-WT-006.CP7.index.json"], risk_ref: "CR046-RISK-WORKING-TREE-ONLY"}
+  - {promise_ref: "REQ-WT-015..017", status: "EXECUTED_POSITIVE_RESULT", decision_impact: "READY_WITH_RISK", evidence_refs: ["process/evidence/ST-WT-007.CP7.index.json"], risk_ref: "CR047-RISK-INHERITED-CR046"}
+  - {promise_ref: "independent CP7/platform attestation", status: "NEEDS_REVIEW", decision_impact: "READY_WITH_RISK", evidence_refs: ["process/state/AGENT-DISPATCH-LEDGER.ndjson"], risk_ref: "CR047-RISK-NO-INDEPENDENT-CP7-AGENT"}
+  - {promise_ref: "repository persistence", status: "AUTHORIZED_PENDING_EXECUTION", decision_impact: "READY", evidence_refs: ["process/checkpoints/CP8-CR047-DELIVERY-READINESS.md"], risk_ref: ""}
+
+accepted_or_open_risks:
+  - "CR047-RISK-NO-INDEPENDENT-CP7-AGENT"
+  - "CR047-RISK-LEGACY-WARNINGS"
+  - "CR047-RISK-LOCAL-CACHE-WARN"
+  - "CR047-RISK-DRY-RUN-ONLY"
+  - "CR046-RISK-PLATFORM-RECEIPT-UNAVAILABLE"
+  - "CR046-RISK-TOKEN-TELEMETRY-UNAVAILABLE"
+  - "CR046-RISK-REAL-PILOT-UNAUTHORIZED"
+
+release_documents:
+  release_notes: "process/docs/release/CR047-RELEASE-NOTES.md"
+  deploy_checklist: "process/docs/release/CR047-DEPLOY-CHECKLIST.md"
+  rollback: "process/docs/release/CR047-ROLLBACK.md"
+  migration: "process/docs/release/CR047-MIGRATION.md"
+  feedback: "process/docs/release/CR047-FEEDBACK.md"
+
+source_persistence:
+  status: "paired-commit-push-authorized"
+  commit_authorized: true
+  push_authorized: true
+  remote_verified: false
+  project_repo: "meta-flow:main"
+  artifact_repo: "meta-flow-artifacts:main"
+  project_commit: "3e30321"
+  authorization_ref: "user CP8 approval and explicit paired commit/push instruction"
+
+post_approval_prepublication:
+  status: "PASS"
+  finding: "CR-047 gate appends that mentioned CR-046 text triggered a ledger selector false positive"
+  correction: "verify manifested ledger events by exact event identity; build future manifests from structured CR identity"
+  decision_impact: "none; approved scope and READY_WITH_RISK ceiling unchanged"
+  regression: "401 passed, 70 subtests; protected_objects=57; findings=0"
+  evidence_refs: ["tests/test_cr047_operator_status.py", "process/docs/quality/CR047-FIXES.md", "process/state/RUN-LEDGER.ndjson"]
+
+next_gate:
+  checkpoint: "CP8"
+  human_gate: "approved"
+  checklist_ref: "process/checkpoints/CP8-CR047-DELIVERY-READINESS.md"
+  on_approve: "close CR-047 as READY_WITH_RISK and execute the separately authorized paired commit/push"

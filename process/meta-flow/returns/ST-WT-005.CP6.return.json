@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-047",
+  "story_id": "ST-WT-005",
+  "status": "implemented_with_risk",
+  "touched_files": [
+    {"path": "meta_flow", "change_type": "modified"},
+    {"path": "delivery/scripts/install.py", "change_type": "modified"},
+    {"path": "delivery/skills", "change_type": "modified"},
+    {"path": "tests", "change_type": "modified"}
+  ],
+  "contract_changes": {"public_api_changed": false, "data_contract_changed": false, "design_delta_required": false, "design_delta_ref": null},
+  "boundary_check": {"allowed_paths_only": true, "forbidden_paths_touched": [], "unexpected_imports": []},
+  "verification": {
+    "commands_run": [
+      {"command": "uv run --python 3.11 ruff check .", "result": "pass", "summary": "0 errors"},
+      {"command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q", "result": "pass", "summary": "395 passed, 70 subtests in first full run; final CP7 rerun required"}
+    ],
+    "tests": ["TC-WT-005"],
+    "skipped": []
+  },
+  "evidence_refs": ["process/stories/STORY-ST-WT-005-ruff-regression-gate-IMPLEMENTATION.md", "process/state/AGENT-DISPATCH-LEDGER.ndjson#IF-CR047-CP5-CP6-IMPLEMENTATION-STARTED"],
+  "open_questions": [],
+  "risks": [{"id": "CR047-RISK-WORKING-TREE-ONLY", "level": "medium", "status": "open", "owner": "user", "detail": "Verification covers the working tree; no commit or remote publication is authorized."}],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7_with_risk"
+}

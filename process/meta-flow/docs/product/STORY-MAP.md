@@ -1,10 +1,10 @@
 ---
 status: baseline
-version: "1.3"
+version: "1.4"
 created_at: "2026-07-02"
 owner: "meta-pm"
 cr_ref: "CR-037"
-active_change_ref: "CR-046"
+active_change_ref: "CR-047"
 source_use_cases:
   - UC-PG-001
   - UC-PG-002
@@ -18,6 +18,13 @@ source_use_cases:
   - UC-EI-003
   - UC-EI-004
   - UC-EI-005
+  - UC-WT-001
+  - UC-WT-002
+  - UC-WT-003
+  - UC-WT-004
+  - UC-WT-005
+  - UC-WT-006
+  - UC-WT-007
 source_requirements: "process/docs/product/REQUIREMENTS.md"
 ---
 
@@ -27,6 +34,7 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 
 | 版本 | 日期 | 修订人 | 变更要点 | 文档处理方式 |
 |---|---|---|---|---|
+| 1.4 | 2026-07-13 | host-orchestrator-inline-fallback | 增量追加 CR-047 ACT-WT-01..05、ST-WT-001..007 与 SL-WT-01..03；保留既有 Story/Slice ID。 | 原文档增量更新 |
 | 1.0 | 2026-07-02 | meta-pm | 基于产品场景和需求建立用户故事地图 | 初始化长期可追踪产品规划基线 |
 | 1.2 | 2026-07-11 | meta-pm | 增量追加 CR-046 的 5 个活动、7 个 outcome Story 与 release slice；保留 ST-PG-001..013 | 原文档增量更新 |
 | 1.3 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：不新增或重编号 Story，扩展 ST-EI-002/004/006/007 的 requirement refs 与验收语义 | 原文档增量更新 |
@@ -45,6 +53,11 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | ACT-EI-03 | 重放历史证据 | P-05, P-03 | 用已识别 checker 输出 as-executed/current-replay 双口径 | UC-EI-003 |
 | ACT-EI-04 | 度量 workflow 成本 | P-06, P-04 | 区分 measured、estimated 和 unavailable token usage | UC-EI-004 |
 | ACT-EI-05 | 验收 append-only pilot | P-03, P-05 | 在不改业务实现的前提下迁移并重放 CR-163 证据 | UC-EI-005 |
+| ACT-WT-01 | 统一 workflow truth 与路由 | P-01, P-05 | 让不同设备从同一 State/CR/artifact 真相恢复 | UC-WT-001, UC-WT-002 |
+| ACT-WT-02 | 收敛 Doctor 与历史治理 | P-01, P-04 | 消除阻断错误并保留可审计 warning/历史语义 | UC-WT-003 |
+| ACT-WT-03 | 建立 clean-clone 质量门 | P-02, P-04 | 让规则、guardrail、Ruff 与 cache 策略确定执行 | UC-WT-004, UC-WT-005 |
+| ACT-WT-04 | 提供非交互安装入口 | P-03 | 在 CI/Agent 中直接完成三平台 dry-run | UC-WT-006 |
+| ACT-WT-05 | 收敛 CR-046 当前事实 | P-05, P-04 | 让产品矩阵与正式证据一致并保留风险 | UC-WT-007 |
 
 ## Story 列表
 
@@ -70,6 +83,13 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | ST-EI-005 | 作为成本分析者，我要诚实区分 measured、estimated 和 unavailable token usage，以便用可信数据优化上下文和调度。 | P0 | REQ-EI-011..013, REQ-EI-C001 | measurement status 100% 覆盖；估算不冒充实测；成本可归属聚合。 |
 | ST-EI-006 | 作为审计者，我要记录 checker identity 并输出双口径 replay，以便解释 checker 演进而不改写历史。 | P0 | REQ-EI-014, REQ-EI-015, REQ-EI-021, REQ-EI-022, REQ-EI-C002, REQ-EI-NF002 | checker/version/hash 可追踪；as-executed/current-replay 均保留；机器 audit report 的计数维度与 provenance 可复核；CR-046 R1 null-provenance results 保留且 strict profile 不得报 fully replayable。 |
 | ST-EI-007 | 作为迁移执行者，我要以 append-only 方式迁移 quant-lab CR-163 证据，以便用 23/23 replay 验收机制且业务源码不变。 | P1 | REQ-EI-016..020, REQ-EI-NF002 | pilot 消费通用 versioned post-close correction lifecycle；correction 限定允许字段/范围并带 author/reason/evidence/supersedes/audit trail；原历史不变；23/23 PASS；lineage 业务源码 diff 为 0。 |
+| ST-WT-001 | 作为维护者，我要 State、CURRENT 与 JSON CR index 共享一个可校验真相，以免 closed CR 或 legacy index 继续驱动流程。 | P0 | REQ-WT-001..003 | stale/closed/missing active refs 被拒绝；CR-033 为 candidate；cr-tracking 退出 0。 |
+| ST-WT-002 | 作为迁移执行者，我要 clean clone 通过一次 portable link 得到唯一过程/文档真相源。 | P0 | REQ-WT-004..005 | symlink health=ok；metadata 无设备绝对路径；canonical writable docs 副本为 1。 |
+| ST-WT-003 | 作为审批者，我要 Doctor 区分 blocker、warning 与历史 unavailable，以便在不改写历史的前提下判断发布。 | P0 | REQ-WT-006..008, REQ-WT-017 | blocking errors=0；warning 有计数/理由；历史修正 append-only。 |
+| ST-WT-004 | 作为维护者，我要 clean-clone guardrail 使用 tracked canonical rules，并合理处理本机 cache。 | P0 | REQ-WT-009..010 | archive tree pass；tracked cache block；ignored cache 按批准策略 warning/preflight。 |
+| ST-WT-005 | 作为开发者，我要 Ruff 与完整 pytest 成为同一发布质量门。 | P0 | REQ-WT-011..012 | Ruff 0；至少 377 tests + 70 subtests pass。 |
+| ST-WT-006 | 作为自动化调用方，我要 README 提供三平台非交互 dry-run 和 cache preflight。 | P1 | REQ-WT-013..014 | Codex/Claude/Qoder 3/3 dry-run pass。 |
+| ST-WT-007 | 作为审计者，我要 CR-046 产品状态与 7/7 Story evidence 收敛，同时保留 READY_WITH_RISK。 | P0 | REQ-WT-015..016 | 无 CP2-pending/0-implemented 陈旧声明；风险不被虚假关闭。 |
 
 ## 推荐发布切片
 
@@ -85,6 +105,9 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | SL-EI-01 | Evidence Integrity Core | ST-EI-001, ST-EI-002, ST-EI-003, ST-EI-004 | 先让 chronology、dispatch、CP correlation、state/read 边界成为可执行治理 contract | CR-046 CP2/CP3/CP5 |
 | SL-EI-02 | Replay and Cost Observability | ST-EI-005, ST-EI-006 | 在可信核心上补齐 token telemetry 与 checker 双口径重放 | SL-EI-01 |
 | SL-EI-03 | quant-lab CR-163 Acceptance Pilot | ST-EI-007 | 用 append-only 真实样本证明当前 checker 23/23 可重放 | SL-EI-02；独立 pilot 授权 |
+| SL-WT-01 | Truth and Routing Closure | ST-WT-001, ST-WT-002, ST-WT-007 | 先统一机器真相、路由和历史当前状态 | CP2/CP3 |
+| SL-WT-02 | Deterministic Quality Gate | ST-WT-003, ST-WT-004, ST-WT-005 | 让 Doctor、guardrail、lint 和回归形成确定门 | SL-WT-01 |
+| SL-WT-03 | Operator Usability | ST-WT-006 | 提供 CI/Agent 非交互安装与 preflight | SL-WT-02 |
 
 ## 规划边界
 

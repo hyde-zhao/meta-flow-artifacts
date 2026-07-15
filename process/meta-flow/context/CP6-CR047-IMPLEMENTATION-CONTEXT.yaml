@@ -1,0 +1,52 @@
+schema_version: "1.0"
+capsule_id: "CP6-CR047-IMPLEMENTATION-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "story-execution"
+checkpoint: "CP6"
+status: "implementation-active"
+created_at: "2026-07-15T12:05:17Z"
+created_by: "host-orchestrator-inline/meta-dev"
+source_cr: "CR-047"
+gate_profile: "architecture-major"
+read_profile: "compact"
+token_control:
+  read_profile: "compact"
+  max_source_files: 12
+  full_doc_read_policy: "Read the assigned Story card/LLD and owned source first; expand accepted HLD/ADR only for a contract conflict."
+must_read:
+  - {path: "process/DEVELOPMENT-PLAN.yaml", reason: "Story truth, DAG, file ownership and dev gates"}
+  - {path: "process/checkpoints/CP5-CR047-ALL-STORIES-LLD-BATCH.md", reason: "User approval and authorization boundary"}
+  - {path: "process/context/CP5-CR047-LLD-CONTEXT.yaml", reason: "Approved common contracts and risk ceiling"}
+read_if_needed:
+  - {path: "process/stories/STORY-ST-WT-*.md", trigger: "Assigned Story scope, acceptance and write boundary"}
+  - {path: "process/stories/STORY-ST-WT-*-LLD.md", trigger: "Assigned Story implementation contract"}
+  - {path: "process/docs/features/cr047-*/DESIGN.md", trigger: "Cross-Story interface or failure-route detail"}
+  - {path: "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md", trigger: "Architecture invariant conflict only"}
+  - {path: "process/docs/design/CR047-WORKFLOW-TRUTH-ARCHITECTURE-DECISION.md", trigger: "ADR switch condition only"}
+do_not_read_by_default:
+  - "process/archive/**"
+  - "process/discussions/**"
+  - "non-current Story LLDs"
+  - "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**"
+  - "process/quant-lab/**"
+key_facts:
+  cp5_approval: "7/7 full LLDs, DAG and file ownership approved by user at 2026-07-15T12:05:17Z"
+  execution_order: "ST-WT-001/002 roots; then 003/004/007; then 005; then 006"
+  doctor_contract: "B0_pre=21 is historical; B0_cp7 is dynamic; all deltas explained; active/default-required over-budget remains blocker"
+  firewall_contract: "Object identity manifest at ST-WT-007 CP6 pre; verify after CP6 and at CP7; protected original mutation blocks and routes child CR"
+  evidence_ceiling: "No independent QA evidence: CP7<=PASS_WITH_RISK and CP8<=READY_WITH_RISK; inherited CR-046 risks remain additive"
+risks_and_decisions:
+  accepted_decisions: ["CP5-DQ-01", "CP3-DQ-03", "CP3-DQ-05", "CP3-DQ-06"]
+  open_risks: ["CR046-RISK-PLATFORM-RECEIPT-UNAVAILABLE", "CR046-RISK-NO-INDEPENDENT-CP7-AGENT", "CR046-RISK-TOKEN-TELEMETRY-UNAVAILABLE", "CR046-RISK-REAL-PILOT-UNAUTHORIZED", "CR046-RISK-WORKING-TREE-ONLY"]
+  non_authorized_items: ["prelink backup", "process/quant-lab", "credentials", "external runtime/SaaS/production write/publish/trading", "CR-046 protected-original mutation", "repository commit/push", "independent Agent/platform receipt claims"]
+downstream_tasks:
+  - "Implement each Story within its approved write boundary and dependency gate."
+  - "Generate CP6 implementation evidence, return packet, evidence index and result for every Story."
+  - "Do not enter CP7 until the corresponding CP6 result and dispatch evidence pass."
+observability_points:
+  - "process/state/RUN-LEDGER.ndjson"
+  - "process/state/AGENT-DISPATCH-LEDGER.ndjson"
+  - "process/evidence/STORY-ST-WT-*.CP6.index.json"
+  - "process/checks/CP6-CR047-ST-WT-*.result.json"
+read_expansion_log: []

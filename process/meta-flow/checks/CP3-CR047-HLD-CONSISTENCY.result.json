@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3",
+  "checkpoint_id": "CP3-CR047-HLD-CONSISTENCY",
+  "cr_id": "CR-047",
+  "profile": "architecture-major",
+  "check_attempt": 1,
+  "context_ref": "process/context/CP3-CR047-DESIGN-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR047.route-plan.json",
+  "evidence_ref": "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md",
+  "dispatch_refs": ["IF-CR047-CP2-CP3-SOLUTION-DESIGN"],
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "78d5a265b00bde8a7087ace61f6d54d0b151971f",
+    "invocation": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP3-CR047-HLD-CONSISTENCY.result.json --check-consistency --project-root .",
+    "generated_by": "host-orchestrator-inline/meta-se",
+    "fallback_used": true,
+    "fallback_reason": "User explicitly instructed: 不使用子agent，继续推进.",
+    "fallback_review_ref": "process/handoffs/CR047-CP2-CP3-META-SE.md"
+  },
+  "input_artifact_hashes": {
+    "process/context/CP3-CR047-DESIGN-CONTEXT.yaml": "sha256:6f8f911a28ace873182d7e949141692407b0f9d7baad86e101c73dfd59b6874e",
+    "process/docs/design/CR047-WORKFLOW-TRUTH-BLUEPRINT.md": "sha256:2f72395406d437f70b4c973a02179ceaf17e55f4262aaaedf50f9da2f47698fd",
+    "process/docs/design/CR047-WORKFLOW-TRUTH-DOMAIN-MAP.md": "sha256:81ae03edc346062716e792c4fac11b84ee1d4e1e92eda0aafcaaa712311b6e41",
+    "process/docs/design/CR047-WORKFLOW-TRUTH-DEPENDENCY-MAP.md": "sha256:0633cb011539f6ca93f157a9bf5a2e86c9484163dac149124a44cba2f9dc21f8",
+    "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md": "sha256:323fb5b9c6a3bec4be087766029745bb25e98b1bc04d98c520f397e308e84f4e",
+    "process/docs/design/CR047-WORKFLOW-TRUTH-ARCHITECTURE-DECISION.md": "sha256:31cbe868380964e089577c52905d35960b00141e3a2125332b2d8ce98fb24385"
+  },
+  "items": [
+    {
+      "id": "CP3-CR047-001",
+      "category": "blueprint",
+      "name": "Five Feature boundaries, domain owners and dependency directions are explicit and non-cyclic",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR047-WORKFLOW-TRUTH-BLUEPRINT.md",
+        "process/docs/design/CR047-WORKFLOW-TRUTH-DOMAIN-MAP.md",
+        "process/docs/design/CR047-WORKFLOW-TRUTH-DEPENDENCY-MAP.md"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR047-002",
+      "category": "architecture_consistency",
+      "name": "HLD and proposed ADRs agree on source ownership, docs route, historical immutability and preflight composition",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md",
+        "process/docs/design/CR047-WORKFLOW-TRUTH-ARCHITECTURE-DECISION.md"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR047-003",
+      "category": "traceability",
+      "name": "UC-WT-001..007 and REQ-WT-001..017 map to modules, ADRs and TC-WT-001..007",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md#10-use-case--architecture-traceability",
+        "process/docs/product/TEST-MATRIX.md"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR047-004",
+      "category": "decision",
+      "name": "Four architecture gray areas expose recommendation, alternatives, impacts, risks and switch conditions",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/discussions/CP3-CR047-HLD-DISCUSSION-LOG.md",
+        "process/checks/CP3-CR047-DISCUSSION-CHECKPOINT.json",
+        "process/docs/design/CR047-WORKFLOW-TRUTH-ARCHITECTURE-DECISION.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR047-005",
+      "category": "failure_path",
+      "name": "Six design simulations cover stale truth, clean clone, legacy history, cache/rules, full gate and unavailable receipt",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md#11-架构场景模拟"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "These are design simulations and are not represented as CP7 execution evidence."
+    },
+    {
+      "id": "CP3-CR047-006",
+      "category": "hld_split",
+      "name": "The seven-Story split signal is assessed and one-HLD retention has explicit switch conditions",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md#14-hld-拆分评估",
+        "process/docs/design/CR047-WORKFLOW-TRUTH-ARCHITECTURE-DECISION.md#adr-wt-005cr-047-保持一个-hldstory-在-cp3-后拆分"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR047-007",
+      "category": "authorization",
+      "name": "Inline fallback is explicit and code, runtime, Git delivery, backup and quant-lab actions remain unauthorized",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/handoffs/CR047-CP2-CP3-META-SE.md",
+        "process/context/CP3-CR047-DESIGN-CONTEXT.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR047-008",
+      "category": "context",
+      "name": "CP3 compact capsule carries approved decisions, pending DQs, expansion refs and deny-default boundaries",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/context/CP3-CR047-DESIGN-CONTEXT.yaml",
+        "process/state/READ-EXPANSION-LEDGER.ndjson"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260713T040926Z0000-424fac23",
+    "RE-20260713T040926Z0000-5e875854",
+    "RE-20260713T040926Z0000-5c1aba0c",
+    "RE-20260713T040926Z0000-4c221e5d",
+    "RE-20260713T044705Z0000-b8b3e5a0"
+  ],
+  "decision": "PASS",
+  "next_route": "CP3-human-gate",
+  "checked_at": "2026-07-13T04:45:04Z"
+}

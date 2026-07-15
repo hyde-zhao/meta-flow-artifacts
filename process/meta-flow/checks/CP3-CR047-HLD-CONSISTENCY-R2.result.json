@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3",
+  "checkpoint_id": "CP3-CR047-HLD-CONSISTENCY-R2",
+  "cr_id": "CR-047",
+  "profile": "architecture-major",
+  "check_attempt": 2,
+  "context_ref": "process/context/CP3-CR047-DESIGN-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR047.route-plan.json",
+  "evidence_ref": "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md",
+  "supersedes_result_ref": "process/checks/CP3-CR047-HLD-CONSISTENCY.result.json",
+  "dispatch_refs": ["IF-CR047-CP2-CP3-SOLUTION-DESIGN"],
+  "review_ref": "current-user-input:CP3-R2-precision-revision",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "78d5a265b00bde8a7087ace61f6d54d0b151971f",
+    "invocation": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP3-CR047-HLD-CONSISTENCY-R2.result.json --check-consistency --project-root .",
+    "generated_by": "host-orchestrator-inline/meta-se",
+    "fallback_used": true,
+    "fallback_reason": "User required no subagents and explicitly authorized the bounded CP3 R2 revision.",
+    "fallback_review_ref": "process/handoffs/CR047-CP2-CP3-META-SE.md"
+  },
+  "input_artifact_hashes": {
+    "process/context/CP3-CR047-DESIGN-CONTEXT.yaml": "sha256:03295dddbe8cf29d75c557fa276b11f6d99ced887060d814a34f85ade1760e8d",
+    "process/docs/product/REQUIREMENTS.md": "sha256:ead6f4f802eedd7170b6ca7a1e91fee9f6585e08a370f0ed92eeeacd5d9e5116",
+    "process/docs/design/CR047-WORKFLOW-TRUTH-BLUEPRINT.md": "sha256:919b456b916792edf72ce4e9d594eb01d7c3a867cf59e042af6ddc13bbbf3c75",
+    "process/docs/design/CR047-WORKFLOW-TRUTH-DOMAIN-MAP.md": "sha256:13c6f24bd7d295bad46ea173e41219531fab09db297e969f8cd5a798c352b3e2",
+    "process/docs/design/CR047-WORKFLOW-TRUTH-DEPENDENCY-MAP.md": "sha256:af3856fff8153983f6b57ebde92d749331dd688cbe8af6efc42090427b9580a4",
+    "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md": "sha256:6d3c367796b6909270c9512081ad11e439669a36654ced687616b6b73b0523cb",
+    "process/docs/design/CR047-WORKFLOW-TRUTH-ARCHITECTURE-DECISION.md": "sha256:a00cd659ca7a9272dce62846d4b01738ccd51a9ed5a1efe03decfe75c3a4b631"
+  },
+  "items": [
+    {
+      "id": "CP3-CR047-R2-001",
+      "category": "blueprint",
+      "name": "Feature boundaries, object-identity manifest ownership and dependency directions are explicit and non-cyclic",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR047-WORKFLOW-TRUTH-BLUEPRINT.md",
+        "process/docs/design/CR047-WORKFLOW-TRUTH-DOMAIN-MAP.md",
+        "process/docs/design/CR047-WORKFLOW-TRUTH-DEPENDENCY-MAP.md"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR047-R2-002",
+      "category": "architecture_consistency",
+      "name": "HLD v1.1 and ADR v1.1 preserve Option A while adding executable baseline, firewall and evidence-ceiling contracts",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md",
+        "process/docs/design/CR047-WORKFLOW-TRUTH-ARCHITECTURE-DECISION.md"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "HLD size is 20353 bytes, below the 20480-byte budget."
+    },
+    {
+      "id": "CP3-CR047-R2-003",
+      "category": "dynamic_baseline",
+      "name": "REQ-WT-006 and RA-WT-004 use B0_pre history plus dynamic B0_cp7 classification/delta acceptance",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/product/REQUIREMENTS.md#修订记录",
+        "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md#83-historical-doctor-recovery"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "B0_pre=21; CP3 review observed=22 (+1 CR-047.summary.json). Active/default-required over-budget remains blocking."
+    },
+    {
+      "id": "CP3-CR047-R2-004",
+      "category": "protected_original_firewall",
+      "name": "ST-WT-007 uses object identity, CP6 pre-implementation capture, CP6 first check, CP7 recheck and child-CR routing",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR047-WORKFLOW-TRUTH-DOMAIN-MAP.md#领域对象",
+        "process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md#85-st-wt-007-protected-original-firewall",
+        "process/docs/design/CR047-WORKFLOW-TRUTH-ARCHITECTURE-DECISION.md#adr-wt-005cr-047-保持一个-hldstory-在-cp3-后拆分"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Prefix-only identity/allowlisting is explicitly forbidden."
+    },
+    {
+      "id": "CP3-CR047-R2-005",
+      "category": "decision",
+      "name": "DQ-01..06 expose recommendations, alternatives, impacts, risks and switch/rollback conditions",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/discussions/CP3-CR047-HLD-DISCUSSION-LOG.md",
+        "process/checks/CP3-CR047-DISCUSSION-CHECKPOINT.json",
+        "process/checkpoints/CP3-CR047-HLD-REVIEW.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR047-R2-006",
+      "category": "failure_path",
+      "name": "Eight design simulations cover stale truth, clone routing, history, delivery, receipt, hash mutation and count drift",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/docs/design/CR047-WORKFLOW-TRUTH-HLD.md#11-架构场景模拟"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Design simulations are not CP7 runtime evidence."
+    },
+    {
+      "id": "CP3-CR047-R2-007",
+      "category": "authorization_and_ceiling",
+      "name": "Inline fallback is disclosed; CP7/CP8 ceilings are additive and all runtime/Git/backup/quant-lab actions remain unauthorized",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP3-CR047-DESIGN-CONTEXT.yaml",
+        "process/docs/design/CR047-WORKFLOW-TRUTH-ARCHITECTURE-DECISION.md#adr-wt-006验证结论上限按证据层级和继承风险叠加计算"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR047-R2-008",
+      "category": "supersession_and_context",
+      "name": "R2 preserves R1, records changes_requested, refreshes capsule/read-expansion refs and supersedes by explicit result reference",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP3-CR047-HLD-CONSISTENCY.result.json",
+        "process/state/GATE-LEDGER.ndjson#GATE-CR047-CP3-CHANGES-REQUESTED-R2-20260714T151055Z",
+        "process/context/CP3-CR047-DESIGN-CONTEXT.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260713T040926Z0000-424fac23",
+    "RE-20260713T040926Z0000-5e875854",
+    "RE-20260713T040926Z0000-5c1aba0c",
+    "RE-20260713T040926Z0000-4c221e5d",
+    "RE-20260713T044705Z0000-b8b3e5a0",
+    "RE-20260714T150414Z0000-eb1d15d7",
+    "RE-20260714T150414Z0000-6af2e88a",
+    "RE-20260714T150414Z0000-041842c3",
+    "RE-20260714T150415Z0000-afa250e3",
+    "RE-20260714T150415Z0000-5fecf44a",
+    "RE-20260714T150415Z0000-f282686d"
+  ],
+  "decision": "PASS",
+  "next_route": "CP3-human-gate-review-r2",
+  "checked_at": "2026-07-14T15:13:01Z"
+}
