@@ -16,4 +16,4 @@ CR-050 为 Meta Flow 增加显式、可审计的双仓 CR Git 分支生命周期
 
 兼容性：现有 `cr bootstrap`、workspace sync/push 默认行为不变；新命令为 additive。实现复用原生 Git subprocess，不安装 `gb`/Git Town，不调用 forge API。建议在下一次正式包发布采用 MINOR 版本升级；本 CR 不自行修改 `0.4.0` 版本号或创建 tag/release。
 
-质量基线：四个 Story CP6 PASS、CP7 `PASS_WITH_RISK`；447 tests + 70 subtests；Ruff 0；Doctor/guardrail/State/route/event checks 通过；三平台安装 dry-run 3/3。真实远端写、branch protection、平台 receipt 与独立 QA 未验证，因此不得声称 production-ready 或 platform-attested。
+质量基线：四个 Story CP6 PASS、CP7 `PASS_WITH_RISK`；447 tests + 70 subtests；Ruff 0；Doctor/guardrail/State/route/event checks 通过；三平台安装 dry-run 3/3。两仓普通 main 留存已完成，但真实 branch lifecycle、branch protection、平台 receipt 与独立 QA 未验证，因此不得声称 production-ready 或 platform-attested。

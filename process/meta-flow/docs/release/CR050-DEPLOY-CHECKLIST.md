@@ -9,8 +9,9 @@
 - [x] remote mutation 命令无 force、force-with-lease、local merge、rebase、force-delete。
 - [x] release notes、rollback、migration、feedback 与 release context 已生成。
 - [x] CP8 用户已接受 `READY_WITH_RISK` 与 DQ-01..04 推荐方案，并为 DQ-05 选择配对 Git 留存备选。
-- [ ] 当前两仓 `main` 的普通 commit/push 已授权，等待执行和远端 OID 核验。
-- [x] 源码提交已创建：`1373df565417092304ae7b523f529ae878f6931d`；artifact 交付提交与双仓远端核验待完成。
+- [x] 当前两仓 `main` 已完成普通 commit/push 和远端 OID 核验；配对结果为 PASS。
+- [x] 源码提交：`1373df565417092304ae7b523f529ae878f6931d`；artifact 交付提交：`95c7b7eff7c944a8a905637b4a49f57f21f900f5`。
+- [x] 双仓留存证据：`process/checks/CR050-PAIRED-PUBLICATION-EVIDENCE.json`；该证据不代表 branch lifecycle real pilot。
 - [x] CR branch lifecycle 真实试运行、force/history rewrite、tag/release、凭据/forge/runtime、`process/quant-lab/**` 与 prelink backup 仍未授权。
 
 真实使用每次都必须提供与 operation/repository/ref/OID 匹配的 fresh authorization；任何 branch protection 或非 FF 拒绝均保持 BLOCKED/PARTIAL，不得绕过。

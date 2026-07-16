@@ -28,4 +28,4 @@ BLOCKER/未解决实现 finding：0。实现没有引入 GitPython、Git Town �
 
 ## Remaining risks
 
-`CR050-RISK-NO-INDEPENDENT-QA`、`CR050-RISK-BRANCH-PROTECTION`、`CR050-RISK-SQUASH-UNPROVABLE`、真实远端/平台 receipt 未验证和 working-tree-only 仍 OPEN，因此 release ceiling 为 `READY_WITH_RISK`。
+`CR050-RISK-WORKING-TREE-ONLY` 已由两仓普通 main 推送证据解除；`CR050-RISK-NO-INDEPENDENT-QA`、`CR050-RISK-BRANCH-PROTECTION`、`CR050-RISK-SQUASH-UNPROVABLE` 与真实 branch lifecycle/platform receipt 未验证仍 OPEN，因此 release ceiling 保持 `READY_WITH_RISK`。

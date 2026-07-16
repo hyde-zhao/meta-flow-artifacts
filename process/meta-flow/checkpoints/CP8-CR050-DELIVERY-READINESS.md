@@ -135,6 +135,7 @@ context_ref: "process/release/RELEASE-CONTEXT-CR050.yaml"
 | Release docs | `process/docs/release/CR050-*` | complete |
 | CP8 auto result | `process/checks/CP8-CR050-DELIVERY-READINESS.result.json` | PASS |
 | Human result | 本文件 `人工审查结果` | approved |
+| Paired publication evidence | `process/checks/CR050-PAIRED-PUBLICATION-EVIDENCE.json` | complete |
 
 ## 人工审查结果
 
@@ -143,4 +144,5 @@ context_ref: "process/release/RELEASE-CONTEXT-CR050.yaml"
 - 审查时间：`2026-07-16T22:43:48Z`
 - DQ-01..04：接受推荐方案；交付结论保持 `READY_WITH_RISK`，不声称独立 QA、平台 attestation 或真实 lifecycle pilot。
 - DQ-05：选择配对 Git 留存备选；授权当前 `meta-flow:main` 与 `meta-flow-artifacts:main` 的普通 commit/push 和远端 OID 核验。
+- 后置执行结果：两仓交付 OID 均已普通推送并通过 `ls-remote` 精确核验；`CR050-RISK-WORKING-TREE-ONLY` 已解除，但不构成 lifecycle real pilot。
 - 修改意见 / 风险接受：接受无独立 QA、真实 remote lifecycle 未验证、branch protection 未实跑、squash/rebase fail-closed 与历史 CR catalog 债务；不授权 force/history rewrite、tag/release、CR branch open/merge/finish、凭据/forge/runtime、`process/quant-lab/**` 或 prelink backup。
