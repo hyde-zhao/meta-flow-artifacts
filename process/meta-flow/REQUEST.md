@@ -45,3 +45,9 @@ scenario_subject_id: "meta-flow"
    - `STORY-{id}-{story_slug}.md`
    - `STORY-{id}-{story_slug}-LLD.md`
 5. 若用户未显式声明 meta 工作流优化，后续新请求默认仍应回到 `production`，而不是继续沿用当前模式。
+
+## CR-050 增量请求（2026-07-15）
+
+用户要求为 Meta Flow 实现 Git 分支管理：开启 CR 时从远端主分支拉取最新代码并创建 CR branch，提交后推送到远端 branch，在远端 branch 合并后删除 branch；同时要求分析应直接使用 Git 命令还是安装 `gb`。
+
+本轮继续属于 `meta-self-dev`。原始请求确认了完整用户旅程，但没有授权 force、自动解决冲突、自动 merge、forge credential/API，也没有明确 `gb` 的具体实现。相关选择进入 CR-050 CP2 Decision Brief；CP2 前只允许产品基线与检查点产物，不允许源码实现或真实远端 ref mutation。

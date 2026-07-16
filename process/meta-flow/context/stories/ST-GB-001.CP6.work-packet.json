@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "meta-flow",
+  "cr_id": "CR-050",
+  "story_id": "ST-GB-001",
+  "story_ref": "process/stories/STORY-ST-GB-001-paired-branch-open.md",
+  "parent_context_ref": "process/context/CP5-CR050-LLD-CONTEXT.yaml",
+  "risk_profile": "architecture-major",
+  "lld_policy": "full-lld",
+  "objective": {
+    "summary": "Implement the shared native Git branch lifecycle contract and paired branch-open command using only local temporary bare-remote fixtures.",
+    "non_goals": ["real repository mutation", "auto commit", "merge/default write", "branch deletion", "forge API"]
+  },
+  "feature_refs": ["FEAT-GB-01"],
+  "feature_design_refs": [
+    "process/docs/features/cr050-open/DESIGN.md",
+    "process/docs/features/cr050-open/TEST-PLAN.md",
+    "process/docs/features/cr050-open/TASKS.md"
+  ],
+  "feature_contract_summary": "Open discovers the project/artifact pair, performs all-repository preflight, creates branches from exact fresh default OIDs, establishes upstreams, preserves PARTIAL facts and never auto-commits.",
+  "feature_design_summary_ref": "process/docs/features/cr050-open/DESIGN.md",
+  "cr_delta": {
+    "summary": "Adds the first explicit branch lifecycle operation without changing legacy cr bootstrap or workspace push defaults.",
+    "affected_contracts": ["BranchLifecycleIntent", "RepositoryTarget", "RefSnapshot", "BranchOperationAttempt", "branch-open CLI"]
+  },
+  "acceptance": [
+    "Two of two successful repositories use exact remote default OIDs and establish upstreams.",
+    "Any all-repository preflight failure creates zero local or remote refs.",
+    "Dry-run mutates zero refs and implicit commit/force command count is zero.",
+    "TC-GB-001..003/009..010 are represented by automated fixtures."
+  ],
+  "dependency_inputs": ["CP5 R2 approved", "CP3 R3 typed lifecycle and authorization boundaries"],
+  "allowed_reads": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "required": true, "reason": "machine_state", "estimated_tokens": 800},
+    {"path": "process/current/CURRENT.json", "mode": "full", "required": true, "reason": "current_entrypoint", "estimated_tokens": 400},
+    {"path": "process/stories/STORY-ST-GB-001-paired-branch-open.md", "mode": "full", "required": true, "reason": "story_card", "estimated_tokens": 1000},
+    {"path": "process/stories/STORY-ST-GB-001-paired-branch-open-LLD.md", "mode": "full", "required": true, "reason": "approved_full_lld", "estimated_tokens": 2200},
+    {"path": "process/docs/features/cr050-open/DESIGN.md", "mode": "full", "required": true, "reason": "feature_contract", "estimated_tokens": 1200}
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "required": true, "reason": "machine_state", "estimated_tokens": 800},
+    {"path": "process/current/CURRENT.json", "mode": "full", "required": true, "reason": "current_entrypoint", "estimated_tokens": 400},
+    {"path": "process/stories/STORY-ST-GB-001-paired-branch-open.md", "mode": "full", "required": true, "reason": "story_card", "estimated_tokens": 1000}
+  ],
+  "read_if_needed": [
+    {"path": "process/stories/STORY-ST-GB-001-paired-branch-open-LLD.md", "reason": "implementation contract detail"},
+    {"path": "process/docs/features/cr050-open/TEST-PLAN.md", "reason": "fixture detail"}
+  ],
+  "allowed_write_paths": [
+    "meta_flow/workflow/git_branch_lifecycle.py",
+    "meta_flow/workspace/git_sync.py",
+    "meta_flow/workflow/cr_lifecycle.py",
+    "meta_flow/cli.py",
+    "tests/test_git_branch_lifecycle.py"
+  ],
+  "forbidden_write_paths": [
+    "process/quant-lab/**",
+    "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**",
+    "delivery/**",
+    ".git/**"
+  ],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_git_branch_lifecycle.py -k open",
+    "uv run --python 3.11 pytest -q tests/test_workspace_git_sync.py tests/test_cr_lifecycle.py",
+    "git diff --check"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_REPOSITORY_PUBLICATION"],
+  "expected_return_packet": "process/returns/ST-GB-001.CP6.return.json",
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/archive/**", "process/discussions/**"],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human summary"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "audit only"},
+    {"path_or_pattern": "process/quant-lab/**", "reason": "forbidden unrelated project"}
+  ],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "budget": {"estimated_tokens": 5600, "estimator": "chars_div_4", "max_tokens": 16000},
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "design_refs": {
+    "feature_registry": "process/docs/design/CR050-FEATURE-DESIGN-MATRIX.md",
+    "module_boundaries": "process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md"
+  },
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["architecture-major", "product-redesign", "runtime-high-risk"]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR050-STORY-DAG-PARALLEL-SAFETY",
+  "cr_id": "CR-050",
+  "profile": "architecture-major",
+  "check_attempt": 1,
+  "context_ref": "process/context/CP4-CR050-STORY-PLANNING-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR-050.route-plan.json",
+  "evidence_ref": "process/DEVELOPMENT-PLAN.yaml",
+  "checker_provenance": {
+    "checker_name": "meta-flow story plan-check plus deterministic DAG/coverage/security review",
+    "checker_commit": "ad3f6f42b179ec4767d29a07b7e9604e1969b8fe",
+    "invocation": "uv run --python 3.11 meta-flow story plan-check --project-root .",
+    "generated_by": "host-orchestrator-inline/meta-se",
+    "fallback_used": true,
+    "fallback_reason": "User explicitly required no subagents and requested continuation to the next human gate.",
+    "fallback_review_ref": "process/checkpoints/CP3-CR050-GIT-BRANCH-HLD-REVIEW-R3.md"
+  },
+  "input_artifact_hashes": {
+    "process/DEVELOPMENT-PLAN.yaml": "sha256:d8039c17fd874ad6c0169ec1ac148e8f6768b9ca6c8ee3b5d94807c28cdd771d",
+    "process/docs/design/CR050-FEATURE-DESIGN-MATRIX.md": "sha256:636cef984998be33edce9f48408f7b21d341cdee1255963c07832f0425859191",
+    "process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md": "sha256:f12580b21045bd635e5fba9c6d485d4c3a0a14dd1e960661a28e867869868da0",
+    "process/stories/STORY-ST-GB-001-paired-branch-open.md": "sha256:eab85f5b59d4961c602fe2baf85fa99cb1eee25d71563f2d9d36619cf50f8c12",
+    "process/stories/STORY-ST-GB-002-committed-ref-publish.md": "sha256:08ab4578d192b6d797681e1d9810c53d3c04d29b9e7190be1c71b5bcc4d52912",
+    "process/stories/STORY-ST-GB-004-paired-default-fast-forward.md": "sha256:16de694256111db5f8e19dbd350246a7bc38e61c610343a8f06bb29fc9e928db",
+    "process/stories/STORY-ST-GB-003-proof-gated-finish.md": "sha256:91d6ffc950524d062d64a5ec004ba44e7f7c542e9b2845bb320a59f31e9b1472"
+  },
+  "items": [
+    {"id":"CP4-CR050-001","category":"entry","name":"CP3 R3 architecture and projection safety decisions are approved inputs","status":"PASS","severity":"BLOCKER","evidence_refs":["process/checkpoints/CP3-CR050-GIT-BRANCH-HLD-REVIEW-R3.md","process/context/CP4-CR050-STORY-PLANNING-CONTEXT.yaml"],"owner":"host-orchestrator/meta-se","route_on_fail":"require_user_decision","waiver_ref":null},
+    {"id":"CP4-CR050-002","category":"feature_design","name":"All four required Features have DESIGN, TEST-PLAN and TASKS evidence","status":"PASS","severity":"BLOCKER","evidence_refs":["process/docs/design/CR050-FEATURE-DESIGN-MATRIX.md","process/docs/features/cr050-open/DESIGN.md","process/docs/features/cr050-publish/DESIGN.md","process/docs/features/cr050-merge/DESIGN.md","process/docs/features/cr050-finish/DESIGN.md"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"Feature coverage=4/4; required packs=4/4; waived=0."},
+    {"id":"CP4-CR050-003","category":"story_coverage","name":"Four Story cards and full-lld policies cover UC-GB-001..004 and TC-GB-001..017","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml","process/docs/product/TEST-MATRIX.md","process/stories/STORY-ST-GB-004-paired-default-fast-forward.md"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"Stories=4/4; full-lld=4/4; scenarios=17/17."},
+    {"id":"CP4-CR050-004","category":"dag","name":"Stable Story DAG is acyclic with no dangling dependency and explicitly orders 001-002-004-003","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml","process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"nodes=4; edges=3; roots=1; invalid_refs=0; cycles=0."},
+    {"id":"CP4-CR050-005","category":"parallel_safety","name":"Development and QA are serial across the shared lifecycle module while LLD drafting may run in two bounded waves","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#parallel_policy","process/DEVELOPMENT-PLAN.yaml#lld_waves"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"max parallel LLD/dev/QA=2/1/1; every shared surface has a merge owner."},
+    {"id":"CP4-CR050-006","category":"projection_and_command_contract","name":"ST-GB-004 freezes the two-of-two projection firewall and ordinary exact OID ref push without local merge or force","status":"PASS","severity":"BLOCKER","evidence_refs":["process/docs/features/cr050-merge/DESIGN.md","process/stories/STORY-ST-GB-004-paired-default-fast-forward-LLD.md"],"owner":"ST-GB-004","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"Switch to project-first and reopen CP2/CP3 if the projection invariant cannot be implemented."},
+    {"id":"CP4-CR050-007","category":"truth_source","name":"DEVELOPMENT-PLAN is the active Story truth source and plan-check passes","status":"PASS","severity":"HIGH","evidence_refs":["process/DEVELOPMENT-PLAN.yaml","meta_flow/workflow/story_evidence.py"],"owner":"meta-se","route_on_fail":"reopen_cp5_design","waiver_ref":null,"notes":"Only two unrelated legacy STORY-LLD reference warnings remain."},
+    {"id":"CP4-CR050-008","category":"authorization_and_attestation","name":"Planning stayed within authorization and preserved additive verification ceilings","status":"PASS","severity":"BLOCKER","evidence_refs":["process/DEVELOPMENT-PLAN.yaml#forbidden_global","process/checkpoints/CP3-CR050-GIT-BRANCH-HLD-REVIEW-R3.md"],"owner":"host-orchestrator","route_on_fail":"require_user_decision","waiver_ref":null,"notes":"No source implementation, real Git mutation, commit, push, credentials, runtime, quant-lab or backup changes; no independent-agent claim."}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260716T152428Z0000-6d501011", "RE-20260716T152556Z0000-0da8482d"],
+  "decision": "PASS",
+  "next_route": "CP5-design-evidence-preparation",
+  "checked_at": "2026-07-16T15:25:00Z"
+}

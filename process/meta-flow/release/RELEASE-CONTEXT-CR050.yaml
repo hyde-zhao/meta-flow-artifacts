@@ -1,0 +1,76 @@
+schema_version: "1.0"
+status: "approved-publication-pending"
+cr_id: "CR-050"
+release_artifact_profile: "full"
+release_decision: "READY_WITH_RISK"
+created_at: "2026-07-16T16:50:00Z"
+source_gate: "CP8"
+
+release_scope:
+  included_stories: ["ST-GB-001", "ST-GB-002", "ST-GB-004", "ST-GB-003"]
+  included_changes:
+    - "paired CR branch open from fresh exact remote defaults"
+    - "committed-OID-only publish with matching evidence"
+    - "typed-authz paired exact-OID fast-forward with 2/2 projection firewall"
+    - "fresh-proof recovery-first paired branch cleanup"
+  excluded_scope: ["real project/artifact remote mutation", "credentials or forge API", "PR/merge queue", "squash/rebase proof", "tag/release", "runtime/SaaS/production write", "process/quant-lab", "prelink backup"]
+  breaking_changes: []
+
+quality_summary:
+  cp6: "4/4 PASS; latest attempt R2"
+  cp7: "4/4 PASS_WITH_RISK; latest attempt R2"
+  pytest: "447 passed, 70 subtests passed"
+  lifecycle_fixtures: "13/13; TC-GB coverage 17/17"
+  ruff_errors: 0
+  guardrail: "OK; ignored local cache warnings only"
+  doctor: {exit_code: 0, historical_over_budget_warnings: 21, blocking_active_or_default_required: 0, unclassified: 0}
+  state_and_route: "workspace ok; State v2 enforce ok; canonical CR tracking ok"
+  event_ledgers: "checkpoint and gate OK"
+  installer_dry_runs: "Codex/Claude/Qoder 3/3; real writes=0"
+  test_report_ref: "process/docs/quality/CR050-TEST-REPORT.md"
+  review_ref: "process/docs/quality/CR050-REVIEW.md"
+
+fact_diff:
+  - {promise_ref: "REQ-GB-001..004", status: "EXECUTED_POSITIVE_RESULT", decision_impact: "READY_WITH_RISK", evidence_refs: ["process/evidence/ST-GB-001.CP7.index.json"], risk_ref: "CR050-RISK-REAL-REMOTE-UNVERIFIED"}
+  - {promise_ref: "REQ-GB-005..006", status: "EXECUTED_POSITIVE_RESULT", decision_impact: "READY_WITH_RISK", evidence_refs: ["process/evidence/ST-GB-002.CP7.index.json"], risk_ref: "CR050-RISK-REAL-REMOTE-UNVERIFIED"}
+  - {promise_ref: "REQ-GB-011..014", status: "EXECUTED_POSITIVE_RESULT", decision_impact: "READY_WITH_RISK", evidence_refs: ["process/evidence/ST-GB-004.CP7.index.json"], risk_ref: "CR050-RISK-BRANCH-PROTECTION"}
+  - {promise_ref: "REQ-GB-007..010", status: "EXECUTED_POSITIVE_RESULT", decision_impact: "READY_WITH_RISK", evidence_refs: ["process/evidence/ST-GB-003.CP7.index.json"], risk_ref: "CR050-RISK-SQUASH-UNPROVABLE"}
+  - {promise_ref: "independent CP7/platform attestation", status: "NEEDS_REVIEW", decision_impact: "READY_WITH_RISK", evidence_refs: ["process/state/AGENT-DISPATCH-LEDGER.ndjson"], risk_ref: "CR050-RISK-NO-INDEPENDENT-QA"}
+  - {promise_ref: "repository persistence", status: "AUTHORIZED_PENDING_EXECUTION", decision_impact: "READY_WITH_RISK", evidence_refs: ["process/checkpoints/CP8-CR050-DELIVERY-READINESS.md", "process/state/GATE-LEDGER.ndjson"], risk_ref: "CR050-RISK-WORKING-TREE-ONLY"}
+
+accepted_or_open_risks:
+  - "CR050-RISK-NO-INDEPENDENT-QA"
+  - "CR050-RISK-REAL-REMOTE-UNVERIFIED"
+  - "CR050-RISK-BRANCH-PROTECTION"
+  - "CR050-RISK-SQUASH-UNPROVABLE"
+  - "CR050-RISK-WORKING-TREE-ONLY"
+  - "CR050-RISK-LEGACY-CR-INDEX-CHECK"
+
+release_documents:
+  release_notes: "process/docs/release/CR050-RELEASE-NOTES.md"
+  deploy_checklist: "process/docs/release/CR050-DEPLOY-CHECKLIST.md"
+  rollback: "process/docs/release/CR050-ROLLBACK.md"
+  migration: "process/docs/release/CR050-MIGRATION.md"
+  feedback: "process/docs/release/CR050-FEEDBACK.md"
+
+source_persistence:
+  status: "project-committed-artifact-delivery-pending"
+  authorization_ref: "process/state/GATE-LEDGER.ndjson#GATE-CR050-CP8-APPROVED-20260716T224348Z"
+  project_repository: "meta-flow"
+  artifact_repository: "meta-flow-artifacts"
+  target_ref: "refs/heads/main"
+  base_oids:
+    project: "ad3f6f42b179ec4767d29a07b7e9604e1969b8fe"
+    artifact: "cde26cde6587b0c2377054258cc5ce1ac744560d"
+  project_commit_oid: "1373df565417092304ae7b523f529ae878f6931d"
+  commit_authorized: true
+  push_authorized: true
+  force_push_authorized: false
+  tags_or_release_authorized: false
+  remote_verified: false
+
+next_gate:
+  checkpoint: null
+  human_gate: "none"
+  checklist_ref: "process/checkpoints/CP8-CR050-DELIVERY-READINESS.md"
+  on_approve: "close CR-050 as READY_WITH_RISK; execute only the separately authorized paired ordinary commit/push; do not execute the CR branch lifecycle"

@@ -1,10 +1,10 @@
 ---
 status: baseline
-version: "1.4"
+version: "1.6"
 created_at: "2026-07-02"
 owner: "meta-pm"
 cr_ref: "CR-037"
-active_change_ref: "CR-047"
+active_change_ref: "CR-050"
 source_story_map: "process/docs/product/STORY-MAP.md"
 source_requirements: "process/docs/product/REQUIREMENTS.md"
 ---
@@ -16,6 +16,8 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | 版本 | 日期 | 修订人 | 变更要点 | 文档处理方式 |
 |---|---|---|---|---|
 | 1.4 | 2026-07-13 | host-orchestrator-inline-fallback | 增量加入 CR-047 workflow-truth、Doctor、guardrail、Ruff、非交互安装和 CR-046 状态收敛范围。 | 原文档增量更新 |
+| 1.5 | 2026-07-15 | host-orchestrator inline fallback | 增量加入 CR-050 的双仓 CR branch open、committed-ref publish 与 proof-gated cleanup；将 forge receipt、Git Town、自动 merge/commit 保持在范围外或 deferred。 | 原文档增量更新 |
+| 1.6 | 2026-07-16 | host-orchestrator inline fallback | 将独立两仓 fast-forward-only merge 纳入 CR-050 MVP；继续排除隐式 merge、merge commit、rebase/force/自动冲突解决、forge API 与策略绕过；等待 CP2 R2。 | 原文档增量更新；保留 1.5 历史范围 |
 | 1.0 | 2026-07-02 | meta-pm | 建立本轮实施的 MVP / Out of Scope / Deferred 范围 | 初始化长期可追踪范围基线 |
 | 1.2 | 2026-07-11 | meta-pm | 增量加入 CR-046 evidence-integrity MVP、明确不授权项和 CR-163 append-only pilot；保留全部 PG scope ID | 原文档增量更新 |
 | 1.3 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：把 compaction 语义保持、通用 post-close correction、机器 audit report、null-provenance dogfooding 和 dispatch 披露纳入既有 IN-EI scope | 原文档增量更新 |
@@ -23,6 +25,8 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 ## MVP 目标
 
 本轮 MVP 的目标是先把 meta-flow 的轻量状态入口和项目治理状态边界变成可执行、可校验、可迁移的机制，再用 quant-lab 作为真实样本验证。MVP 不追求新增第二套治理体系，而是在既有 state、CR、ledger、context、gate 和 checker 体系上补齐缺口。
+
+CR-050 的增量目标是在既有 `workspace git-status/push` 与 CR route plan 上增加四段式 Git branch lifecycle：两仓安全开启、只发布已提交 refs、独立显式 fast-forward-only merge、合并后以 fresh ancestry/tip 证明清理。它不引入 `gb`/Git Town 必需依赖，也不调用 forge API 或创建 merge commit。
 
 ## In Scope
 
@@ -53,6 +57,10 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | IN-WT-005 | Ruff 0 与完整回归门 | P0 | ST-WT-005 | 当前 90 项 lint 未闭环。 |
 | IN-WT-006 | 三平台非交互安装示例与 preflight | P1 | ST-WT-006 | README 首入口在非 TTY 失败。 |
 | IN-WT-007 | CR-046 产品矩阵/验证状态收敛 | P0 | ST-WT-007 | 当前文档仍含陈旧状态，但正式 evidence 已存在。 |
+| IN-GB-001 | 两仓 CR branch open：precheck、remote default discovery、fetch/prune、ff-only refresh、同名 branch 与 upstream | P0 | ST-GB-001 | 保证源码与过程证据从各自最新主分支开始，并可跨设备一起恢复。 |
+| IN-GB-002 | 只发布已显式提交 refs：clean/wrong-branch/non-fast-forward gate、逐仓 push/OID 核验、dry-run 与 partial result | P0 | ST-GB-002 | 防止工具隐式 stage/commit 或把单仓成功冒充双仓发布完成。 |
+| IN-GB-003 | proof-gated cleanup：exact branch/tip、ancestry、protected ref、remote-auto-delete 幂等与 local `branch -d` | P0 | ST-GB-003 | 只有充分证明已合并时才删除目标 refs；证明不足时 fail closed。 |
+| IN-GB-004 | 显式双仓 merge：preflight-all、artifact→project、fast-forward-only default update、独立授权、逐仓 result、partial retention 与 finish gate | P0 | ST-GB-004 | 完成用户要求的 publish 后合并旅程，同时让 default-branch 写入、分支保护和部分成功保持可审计、可恢复。 |
 
 ## Out of Scope
 
@@ -71,6 +79,11 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | OUT-WT-001 | 删除或处理 `meta-flow.process-prelink-backup-20260713T100930` | 用户明确排除 | 保持原状，不读取、不迁移、不删除 |
 | OUT-WT-002 | 伪造平台 receipt、独立 QA、token telemetry 或历史 run 时间 | 证据不可恢复 | 保持 unavailable/legacy-unverified/READY_WITH_RISK |
 | OUT-WT-003 | 本 CR 内执行 Git commit/push | CP2 只确认范围 | 另需用户明确授权 |
+| OUT-GB-001 | 安装或强制使用 `gb`、Git Town、GitPython、GitHub/GitLab CLI | 原生 Git 已是项目依赖且可直接测试；`gb` 名义不唯一 | 可选 adapter 另行立项，不影响默认 CLI |
+| OUT-GB-002 | `publish`/`finish` 隐式 merge、merge commit、自动审批 PR、自动冲突解决、绕过 branch protection 或 merge queue | 会模糊授权、制造非快进/冲突处理语义，并把工作流治理与 forge 策略耦合 | 本轮只允许独立显式 fast-forward-only merge；保护策略拒绝作为合法 BLOCKED/PARTIAL |
+| OUT-GB-003 | squash/rebase merge 的 patch-id/内容相似度推断 | 不能提供 branch tip 已被主分支包含的确定证明 | 需要未来 forge receipt adapter |
+| OUT-GB-004 | 隐式 `git add -A`、自动 commit/amend 或自动选择提交文件 | 可能夹带无关文件、个人配置或 secret | 提交保持显式；本轮只推送 committed refs |
+| OUT-GB-005 | 跨仓原子 ref transaction | Git 远端不提供 project/artifact 跨仓事务 | 逐仓结果 + partial/blocking + 幂等恢复 |
 
 ## Deferred
 
@@ -84,6 +97,9 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | DEF-EI-002 | 基于估算 token 的强制计费/配额门 | SGA-06 | estimate 不能替代平台 measured telemetry | telemetry 覆盖和估算误差模型通过独立验证后重启 |
 | DEF-WT-001 | 真实平台 custom-agent receipt producer | CR-045/046 风险 | 当前平台面未提供 repository-verifiable receipt | 平台提供稳定 discovery/selector/receipt 后独立 CR |
 | DEF-WT-002 | 独立 runtime/SaaS/pilot 验证 | 授权边界 | 当前未授权 runtime、凭据或外部写入 | 用户单独批准 runtime-high-risk CR |
+| DEF-GB-001 | Forge receipt adapter 支持 squash/rebase merge 清理 | SGA-GB-04 | 需要平台 API、identity、token、PR/merge receipt 与最小权限契约 | 用户选择目标 forge 并批准独立高风险 CR |
+| DEF-GB-002 | Git Town/stacked branch adapter | SGA-GB-01 | 普通 CR branch 不需要额外同步策略和安装面 | 真实 stacked/offline ship 场景出现且原生 Git 不足 |
+| DEF-GB-003 | 自动 stage/commit planner | SGA-GB-05 | 文件选择、secret scan、双仓消息与回滚契约尚未批准 | 用户明确启动后续范围并确认 allowlist/rollback |
 
 ## 范围边界规则
 
@@ -111,3 +127,9 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | MVP-SM-EI-04 | 重放与 pilot | replay provenance 完整或明确 unavailable；CR-163 current replay 23/23 PASS；业务源码 diff 为 0。 |
 | MVP-SM-EI-05 | Compaction 与 correction 语义完整 | compact/restore 前后关系图、terminal selection、correction chain、workflow-health refs 语义差异为 0；非法 post-close 原位改写 100% rejected。 |
 | MVP-SM-EI-06 | Audit report 与 dogfooding 可信 | machine audit report 逐维计数 100% 正确并携带 provenance/input hashes；CR-046 R1 null-provenance results 在 strict profile 下失败或标 legacy/unavailable。 |
+| MVP-SM-GB-01 | 两仓 branch 起点 | 2/2 CR branch base 等于刷新后的 remote default tip，2/2 upstream 正确。 |
+| MVP-SM-GB-02 | 发布边界 | dirty/uncommitted 场景 100% 阻断；合法发布后 2/2 remote CR ref 等于 local HEAD。 |
+| MVP-SM-GB-03 | 删除安全 | non-ancestor、ref drift、protected/mismatched branch 删除执行数为 0；合法目标清理率 100%。 |
+| MVP-SM-GB-04 | 可恢复 partial | 任一仓注入失败时 overall 非 PASS、逐仓 terminal status/OID/恢复路由覆盖率 100%。 |
+| MVP-SM-GB-05 | Dry-run | open/publish/merge/finish 计划覆盖率 100%，local/remote ref、HEAD、index、worktree 变化数为 0。 |
+| MVP-SM-GB-06 | 显式 merge | 2/2 remote default 仅以 fast-forward 更新到 exact published tip；merge commit/rebase/force/自动冲突解决为 0；partial 时 2/2 CR branch 保留且 finish 删除数为 0。 |

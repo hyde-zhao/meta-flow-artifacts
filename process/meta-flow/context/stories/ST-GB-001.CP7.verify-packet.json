@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP7",
+  "project_id": "meta-flow",
+  "cr_id": "CR-050",
+  "story_id": "ST-GB-001",
+  "story_ref": "process/stories/STORY-ST-GB-001-paired-branch-open.md",
+  "parent_context_ref": "process/context/stories/ST-GB-001.CP6.work-packet.json",
+  "risk_profile": "architecture-major",
+  "objective": {"summary": "Independently re-execute the local deterministic branch-open acceptance fixtures and verify fail-closed/security boundaries.", "non_goals": ["real remote mutation", "platform receipt", "credential use"]},
+  "feature_refs": ["FEAT-GB-01"],
+  "feature_design_refs": ["process/docs/features/cr050-open/TEST-PLAN.md"],
+  "feature_contract_summary": "Open must establish exact paired bases/upstreams while dirty/default/ref failures and dry-run cause zero ref mutation.",
+  "cr_delta": {"summary": "Verify the first lifecycle operation without exercising actual project/artifact remotes."},
+  "acceptance": [
+    "TC-GB-001..003/009..010 open subset passes.",
+    "Existing workspace Git and CR lifecycle tests remain green.",
+    "Ruff and diff hygiene pass; real remote commands executed against current repositories equal zero."
+  ],
+  "dependency_inputs": ["CP6-CR050-ST-GB-001-CODING-DONE PASS"],
+  "allowed_reads": [
+    {"path": "process/evidence/ST-GB-001.CP6.index.json", "mode": "full", "required": true, "reason": "implementation evidence", "estimated_tokens": 800},
+    {"path": "process/stories/STORY-ST-GB-001-paired-branch-open-LLD.md", "mode": "full", "required": true, "reason": "approved contract", "estimated_tokens": 2200},
+    {"path": "tests/test_git_branch_lifecycle.py", "mode": "full", "required": true, "reason": "verification object", "estimated_tokens": 3000}
+  ],
+  "must_read": [
+    {"path": "process/evidence/ST-GB-001.CP6.index.json", "mode": "full", "required": true, "reason": "implementation evidence", "estimated_tokens": 800}
+  ],
+  "read_if_needed": [{"path": "process/docs/features/cr050-open/TEST-PLAN.md", "reason": "fixture traceability"}],
+  "allowed_write_paths": ["meta_flow/workflow/git_branch_lifecycle.py", "meta_flow/workspace/git_sync.py", "meta_flow/workflow/cr_lifecycle.py", "tests/test_git_branch_lifecycle.py", "process/docs/quality/CR050-VERIFICATION-REPORT.md", "process/returns/ST-GB-001.CP7.return.json", "process/evidence/ST-GB-001.CP7.index.json", "process/checks/CP7-CR050-ST-GB-001-VERIFICATION-DONE.result.json"],
+  "forbidden_write_paths": ["process/quant-lab/**", "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**", ".git/**"],
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_git_branch_lifecycle.py -k 'canonical_branch_name or open'",
+    "uv run --python 3.11 pytest -q tests/test_workspace_git_sync.py tests/test_cr_lifecycle.py",
+    "uv run --python 3.11 ruff check <CR050 touched Python paths>",
+    "git diff --check"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_REPOSITORY_PUBLICATION"],
+  "expected_return_packet": "process/returns/ST-GB-001.CP7.return.json",
+  "denied_default_reads": ["process/archive/**", "process/discussions/**", "process/quant-lab/**"],
+  "do_not_read_by_default": [{"path_or_pattern": "process/archive/**", "reason": "cold history"}, {"path_or_pattern": "process/quant-lab/**", "reason": "forbidden unrelated project"}],
+  "budget": {"estimated_tokens": 5200, "estimator": "chars_div_4", "max_tokens": 16000},
+  "context_sufficiency": {"required_slots": ["objective.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "expected_return_packet"], "strict_profiles": ["architecture-major"]}
+}

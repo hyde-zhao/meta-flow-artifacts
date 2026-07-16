@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR050-DELIVERY-READINESS",
+  "cr_id": "CR-050",
+  "profile": "architecture-major",
+  "check_attempt": 1,
+  "context_ref": "process/release/RELEASE-CONTEXT-CR050.yaml",
+  "route_plan_ref": "process/checks/CP0-CR-050.route-plan.json",
+  "evidence_ref": "process/checkpoints/CP8-CR050-DELIVERY-READINESS.md",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "generated_by": "host-orchestrator-inline",
+    "invocation": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP8-CR050-DELIVERY-READINESS.result.json --check-consistency --correlation-profile strict --project-root .",
+    "fallback_used": true,
+    "fallback_reason": "User required no subagents; CP7 and readiness were prepared inline and are risk-capped.",
+    "fallback_review_ref": "process/docs/quality/CR050-REVIEW.md"
+  },
+  "release_decision": "READY_WITH_RISK",
+  "fact_diff": [
+    {"promise_ref":"REQ-GB-001..006","promise":"Open and publish use fresh exact refs without implicit commit.","status":"EXECUTED_POSITIVE_RESULT","decision_impact":"READY_WITH_RISK","evidence_refs":["process/evidence/ST-GB-001.CP7.index.json","process/evidence/ST-GB-002.CP7.index.json"],"risk_ref":"CR050-RISK-REAL-REMOTE-UNVERIFIED"},
+    {"promise_ref":"REQ-GB-011..014","promise":"Paired default fast-forward is explicit, typed-authorized and projection-gated.","status":"EXECUTED_POSITIVE_RESULT","decision_impact":"READY_WITH_RISK","evidence_refs":["process/evidence/ST-GB-004.CP7.index.json"],"risk_ref":"CR050-RISK-BRANCH-PROTECTION"},
+    {"promise_ref":"REQ-GB-007..010","promise":"Finish re-proves merge, creates recovery refs and cleans exact branches safely.","status":"EXECUTED_POSITIVE_RESULT","decision_impact":"READY_WITH_RISK","evidence_refs":["process/evidence/ST-GB-003.CP7.index.json"],"risk_ref":"CR050-RISK-SQUASH-UNPROVABLE"},
+    {"promise_ref":"independent CP7/platform attestation","promise":"Independent meta-qa and a real hosted-remote receipt are available.","status":"NEEDS_REVIEW","decision_impact":"READY_WITH_RISK","evidence_refs":["process/state/AGENT-DISPATCH-LEDGER.ndjson"],"risk_ref":"CR050-RISK-NO-INDEPENDENT-QA"},
+    {"promise_ref":"repository persistence","promise":"The verified source and artifact worktrees are committed and pushed.","status":"NEEDS_REVIEW","decision_impact":"READY_WITH_RISK","evidence_refs":["process/checkpoints/CP8-CR050-DELIVERY-READINESS.md"],"risk_ref":"CR050-RISK-WORKING-TREE-ONLY"}
+  ],
+  "items": [
+    {"id":"CP8-GB050-01","name":"Four Story CP6/CP7 R2 evidence chains complete","status":"PASS","severity":"BLOCKER","evidence_refs":["process/docs/quality/CR050-TEST-REPORT.md"],"owner":"host-orchestrator","route_on_fail":"block_release"},
+    {"id":"CP8-GB050-02","name":"Full regression, static, Doctor, route and installer dry-run gates pass","status":"PASS","severity":"BLOCKER","evidence_refs":["process/docs/quality/CR050-TEST-REPORT.md"],"owner":"host-orchestrator","route_on_fail":"block_release"},
+    {"id":"CP8-GB050-03","name":"Remote mutation safety and PARTIAL recovery contracts are proven locally","status":"PASS","severity":"BLOCKER","evidence_refs":["process/docs/quality/CR050-REVIEW.md"],"owner":"host-orchestrator","route_on_fail":"block_release"},
+    {"id":"CP8-GB050-04","name":"Unverified real-remote, independent-QA and persistence limits are disclosed","status":"PASS","severity":"HIGH","evidence_refs":["process/checkpoints/CP8-CR050-DELIVERY-READINESS.md"],"owner":"user","route_on_fail":"require_user_decision"}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "risks": [
+    "CR050-RISK-NO-INDEPENDENT-QA",
+    "CR050-RISK-REAL-REMOTE-UNVERIFIED",
+    "CR050-RISK-BRANCH-PROTECTION",
+    "CR050-RISK-SQUASH-UNPROVABLE",
+    "CR050-RISK-WORKING-TREE-ONLY",
+    "CR050-RISK-LEGACY-CR-INDEX-CHECK"
+  ],
+  "decision": "PASS",
+  "next_route": "await CP8 human READY_WITH_RISK decision",
+  "checked_at": "2026-07-16T16:50:00Z"
+}

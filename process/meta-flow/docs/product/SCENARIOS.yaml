@@ -1,17 +1,27 @@
 schema_version: "1"
 status: "baseline"
-version: "1.4"
+version: "1.6"
 created_at: "2026-07-02"
 owner: "host-orchestrator"
 cr_ref: "CR-037"
-active_change_ref: "CR-047"
+active_change_ref: "CR-050"
 source_use_cases: "process/docs/product/USE-CASES.md"
 source_requirements: "process/docs/product/REQUIREMENTS.md"
 coverage_policy:
   high_priority_minimum: "positive + negative"
-  blocked_cr_policy: "CR-037 is active after user-authorized pause of unfinished CR-036; scenarios are CP2 baseline inputs, not implementation, CP5, runtime, production write, or quant-lab release repo authorization."
+  blocked_cr_policy: "CR-050 scenarios are CP2 R2 candidate-baseline inputs; CP2 R2 does not authorize source implementation, commit, real remote branch/default-branch mutation, forge API, credentials, runtime, production write, or quant-lab changes."
   release_repo_policy: "quant-lab release repo changes are never automated by roadmap refresh."
 revision_history:
+  - version: "1.6"
+    date: "2026-07-16"
+    author: "host-orchestrator-inline-fallback"
+    change: "Append TC-GB-012..017 for explicit paired fast-forward-only merge and update shared lifecycle scenarios; preserve all prior IDs and the CP2 v1.5 baseline."
+    document_handling: "incremental-update"
+  - version: "1.5"
+    date: "2026-07-15"
+    author: "host-orchestrator-inline-fallback"
+    change: "Append TC-GB-001..011 for CR-050 governed paired-repository branch lifecycle; preserve all prior IDs."
+    document_handling: "incremental-update"
   - version: "1.4"
     date: "2026-07-13"
     author: "host-orchestrator-inline-fallback"
@@ -660,13 +670,234 @@ scenarios:
     evidence_type: "historical-truth-convergence-check"
     automation_status: "planned"
 
+  - id: "TC-GB-001"
+    title: "paired CR branches start from refreshed remote default tips"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-GB-001"]
+    requirements: ["REQ-GB-001", "REQ-GB-003", "REQ-GB-004"]
+    stories: ["ST-GB-001"]
+    preconditions: ["project/artifact repositories are clean", "origin HEAD and writable remotes exist", "real push is explicitly authorized"]
+    action: "Open a CR branch across both repositories from their refreshed default branches"
+    expected: ["2/2 bases equal remote default tips", "branch names match the CR contract", "2/2 upstreams point to matching remote CR refs"]
+    evidence_type: "bare-remote-integration-test"
+    automation_status: "planned"
+
+  - id: "TC-GB-002"
+    title: "dirty detached or divergent repository blocks branch open"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-GB-001"]
+    requirements: ["REQ-GB-002", "REQ-GB-003", "REQ-GB-C002"]
+    stories: ["ST-GB-001"]
+    preconditions: ["one repository is dirty, detached, or has divergent default-branch history"]
+    action: "Run CR branch open"
+    expected: ["overall decision is BLOCKED", "new local and remote CR refs equal zero", "no reset/rebase/force command is executed"]
+    evidence_type: "negative-bare-remote-fixture"
+    automation_status: "planned"
+
+  - id: "TC-GB-003"
+    title: "invalid or colliding branch identity is rejected"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-GB-001"]
+    requirements: ["REQ-GB-002", "REQ-GB-004", "REQ-GB-NF002"]
+    stories: ["ST-GB-001"]
+    preconditions: ["branch input contains an invalid ref name or an existing local/remote collision"]
+    action: "Run precheck and open"
+    expected: ["check-ref-format or collision check fails", "the exact repository/ref is reported", "no input is executed through a shell"]
+    evidence_type: "input-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-GB-004"
+    title: "publish pushes only committed CR branch refs"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-GB-002"]
+    requirements: ["REQ-GB-005", "REQ-GB-010"]
+    stories: ["ST-GB-002"]
+    preconditions: ["both repositories are clean and on the expected CR branch", "each repository has an explicit commit"]
+    action: "Publish the paired CR branches"
+    expected: ["2/2 remote CR refs equal local HEAD", "each repository has a terminal PASS result", "no commit content is synthesized"]
+    evidence_type: "bare-remote-push-test"
+    automation_status: "planned"
+
+  - id: "TC-GB-005"
+    title: "publish refuses implicit staging or committing"
+    type: "precheck"
+    priority: "HIGH"
+    use_cases: ["UC-GB-002"]
+    requirements: ["REQ-GB-005", "REQ-GB-C002"]
+    stories: ["ST-GB-002"]
+    preconditions: ["one repository contains staged, unstaged, or untracked changes"]
+    action: "Run publish"
+    expected: ["publish is BLOCKED", "remote refs remain unchanged", "git add/commit/amend execution count is zero"]
+    evidence_type: "dirty-tree-negative-fixture"
+    automation_status: "planned"
+
+  - id: "TC-GB-006"
+    title: "ancestry-preserving merge permits exact branch cleanup"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-GB-003"]
+    requirements: ["REQ-GB-007", "REQ-GB-008", "REQ-GB-010"]
+    stories: ["ST-GB-003"]
+    preconditions: ["both CR tips are ancestors of refreshed remote default branches", "delete authorization exists"]
+    action: "Finish the CR branch lifecycle"
+    expected: ["only the two exact remote CR refs are deleted", "local CR refs are deleted with branch -d", "default branches remain at refreshed non-destructive tips"]
+    evidence_type: "merge-cleanup-integration-test"
+    automation_status: "planned"
+
+  - id: "TC-GB-007"
+    title: "squash rebase non-ancestor or ref drift blocks cleanup"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-GB-003"]
+    requirements: ["REQ-GB-007", "REQ-GB-C002"]
+    stories: ["ST-GB-003"]
+    preconditions: ["branch tip is not a remote default ancestor or changed after verification"]
+    action: "Run finish"
+    expected: ["overall decision is BLOCKED", "local and remote CR refs are retained", "patch-id similarity is not treated as merge proof"]
+    evidence_type: "ancestry-negative-fixture"
+    automation_status: "planned"
+
+  - id: "TC-GB-008"
+    title: "protected and mismatched refs cannot be deleted"
+    type: "permission"
+    priority: "HIGH"
+    use_cases: ["UC-GB-003"]
+    requirements: ["REQ-GB-008", "REQ-GB-NF002"]
+    stories: ["ST-GB-003"]
+    preconditions: ["target is main/master/perennial/protected or does not match the CR identity"]
+    action: "Attempt finish/delete"
+    expected: ["deletion is rejected before push", "deleted ref count is zero", "finding names the protected or mismatched identity"]
+    evidence_type: "authorization-negative-fixture"
+    automation_status: "planned"
+
+  - id: "TC-GB-009"
+    title: "second-repository failure produces recoverable partial result"
+    type: "failure-recovery"
+    priority: "HIGH"
+    use_cases: ["UC-GB-001", "UC-GB-002", "UC-GB-003", "UC-GB-004"]
+    requirements: ["REQ-GB-010", "REQ-GB-014", "REQ-GB-NF001", "REQ-GB-NF003"]
+    stories: ["ST-GB-001", "ST-GB-002", "ST-GB-003", "ST-GB-004"]
+    preconditions: ["the first repository operation succeeds and the second is fault-injected"]
+    action: "Execute open, publish, merge, or finish"
+    expected: ["overall status is PARTIAL/BLOCKED", "both repository terminal states and OIDs are present", "remaining destructive actions stop and an idempotent recovery route is emitted"]
+    evidence_type: "fault-injection-integration-test"
+    automation_status: "planned"
+
+  - id: "TC-GB-010"
+    title: "dry-run prints a deterministic zero-side-effect plan"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-GB-001", "UC-GB-002", "UC-GB-003", "UC-GB-004"]
+    requirements: ["REQ-GB-006", "REQ-GB-NF001"]
+    stories: ["ST-GB-001", "ST-GB-002", "ST-GB-003", "ST-GB-004"]
+    preconditions: ["valid paired repositories and CR input"]
+    action: "Run open, publish, merge, and finish with dry-run"
+    expected: ["ordered per-repository plans are stable across reruns", "local/remote refs, HEAD, index, and worktree change count is zero"]
+    evidence_type: "dry-run-golden-test"
+    automation_status: "planned"
+
+  - id: "TC-GB-011"
+    title: "forge-auto-deleted remote branch still requires a known tip"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-GB-003"]
+    requirements: ["REQ-GB-009", "REQ-GB-010"]
+    stories: ["ST-GB-003"]
+    preconditions: ["remote CR ref is already absent after merge"]
+    action: "Run finish using the local or recorded branch tip"
+    expected: ["known ancestor tip permits local cleanup", "missing local and recorded tip blocks cleanup", "remote absence alone is never reported as sufficient proof"]
+    evidence_type: "idempotence-cleanup-test"
+    automation_status: "planned"
+
+  - id: "TC-GB-012"
+    title: "paired explicit merge fast-forwards both remote default branches"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-GB-004"]
+    requirements: ["REQ-GB-011", "REQ-GB-012", "REQ-GB-013"]
+    stories: ["ST-GB-004"]
+    preconditions: ["both CR branches are published", "each fresh remote default is an ancestor of the exact CR tip", "default-branch write is explicitly authorized"]
+    action: "Explicitly merge the paired CR branches"
+    expected: ["artifact default is fast-forwarded before project", "2/2 remote defaults equal their exact CR tips", "merge commit/rebase/force/conflict-resolution command count is zero"]
+    evidence_type: "bare-remote-fast-forward-integration-test"
+    automation_status: "planned"
+
+  - id: "TC-GB-013"
+    title: "advanced default branch blocks non-fast-forward merge"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-GB-004"]
+    requirements: ["REQ-GB-012", "REQ-GB-013", "REQ-GB-C002"]
+    stories: ["ST-GB-004"]
+    preconditions: ["a remote default branch advanced after publish and is not contained by the CR tip"]
+    action: "Run explicit merge"
+    expected: ["preflight or per-repository execution is BLOCKED before a non-fast-forward update", "no merge commit/rebase/force is attempted", "both CR branches are retained"]
+    evidence_type: "non-fast-forward-negative-fixture"
+    automation_status: "planned"
+
+  - id: "TC-GB-014"
+    title: "missing authorization or branch protection rejects default write"
+    type: "permission"
+    priority: "HIGH"
+    use_cases: ["UC-GB-004"]
+    requirements: ["REQ-GB-011", "REQ-GB-C004"]
+    stories: ["ST-GB-004"]
+    preconditions: ["authorization is absent/mismatched or the remote rejects direct default-branch updates"]
+    action: "Attempt explicit merge"
+    expected: ["the affected repository is BLOCKED", "remote rejection semantics are preserved", "no alternate forge/force/bypass path is used"]
+    evidence_type: "default-branch-authorization-fixture"
+    automation_status: "planned"
+
+  - id: "TC-GB-015"
+    title: "artifact merge success and project failure remains recoverable partial"
+    type: "failure-recovery"
+    priority: "HIGH"
+    use_cases: ["UC-GB-003", "UC-GB-004"]
+    requirements: ["REQ-GB-012", "REQ-GB-014", "REQ-GB-NF003"]
+    stories: ["ST-GB-003", "ST-GB-004"]
+    preconditions: ["artifact fast-forward succeeds", "project update is rejected or fault-injected"]
+    action: "Complete the paired merge attempt"
+    expected: ["overall status is PARTIAL", "both CR branches remain available", "finish is blocked", "result records both default before/after OIDs and an observation-based resume route", "artifact default is not automatically rolled back"]
+    evidence_type: "paired-merge-fault-injection-test"
+    automation_status: "planned"
+
+  - id: "TC-GB-016"
+    title: "merge dry-run has zero default-branch or CR-branch side effects"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-GB-004"]
+    requirements: ["REQ-GB-006", "REQ-GB-012", "REQ-GB-NF003"]
+    stories: ["ST-GB-004"]
+    preconditions: ["valid paired repositories and merge input"]
+    action: "Run explicit merge with dry-run"
+    expected: ["artifact-to-project plan is deterministic", "local/remote default and CR ref change count is zero", "authorization need and protected-branch outcome are reported without mutation"]
+    evidence_type: "merge-dry-run-golden-test"
+    automation_status: "planned"
+
+  - id: "TC-GB-017"
+    title: "finish is gated by two successful current merge observations"
+    type: "precheck"
+    priority: "HIGH"
+    use_cases: ["UC-GB-003", "UC-GB-004"]
+    requirements: ["REQ-GB-007", "REQ-GB-014"]
+    stories: ["ST-GB-003", "ST-GB-004"]
+    preconditions: ["one repository merge is missing, PARTIAL, or stale"]
+    action: "Attempt finish and then resume merge after re-fetching refs"
+    expected: ["finish deletes zero branches until both current ancestry checks pass", "resume re-observes refs instead of trusting the old plan", "after 2/2 merge PASS finish may enter its own delete authorization gate"]
+    evidence_type: "merge-finish-gate-idempotence-test"
+    automation_status: "planned"
+
 coverage_summary:
-  total_scenarios: 43
-  high_priority_scenarios: 40
-  positive_scenarios: 18
-  negative_scenarios: 14
-  boundary_scenarios: 4
-  permission_scenarios: 2
-  failure_recovery_scenarios: 2
-  precheck_scenarios: 3
-  source_requirements_covered: "REQ-PG-001..022, REQ-PG-C001..005, REQ-PG-NF001..004, REQ-EI-001..023, REQ-EI-C001..003, REQ-EI-NF001..002 and REQ-WT-001..017"
+  total_scenarios: 60
+  high_priority_scenarios: 57
+  positive_scenarios: 22
+  negative_scenarios: 17
+  boundary_scenarios: 8
+  permission_scenarios: 4
+  failure_recovery_scenarios: 4
+  precheck_scenarios: 5
+  source_requirements_covered: "REQ-PG-001..022, REQ-PG-C001..005, REQ-PG-NF001..004, REQ-EI-001..023, REQ-EI-C001..003, REQ-EI-NF001..002, REQ-WT-001..017, REQ-GB-001..014, REQ-GB-C001..004 and REQ-GB-NF001..003"

@@ -1,0 +1,44 @@
+schema_version: "1.0"
+capsule_id: "CP4-CR050-STORY-PLANNING-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "story-planning"
+checkpoint: "CP4"
+status: "ready"
+created_at: "2026-07-16T15:25:00Z"
+created_by: "host-orchestrator-inline/meta-se"
+source_cr: "CR-050"
+read_profile: "compact"
+token_control:
+  read_profile: "compact"
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-design-detail"
+must_read:
+  - {path: "process/checkpoints/CP3-CR050-GIT-BRANCH-HLD-REVIEW-R3.md", reason: "approved CP3 R3 decisions and authorization boundary"}
+  - {path: "process/changes/summaries/CR-050.summary.json", reason: "active scope and gate status"}
+  - {path: "process/docs/design/CR050-FEATURE-DESIGN-MATRIX.md", reason: "Feature/Story design applicability"}
+  - {path: "process/DEVELOPMENT-PLAN.yaml", reason: "Story truth, DAG, stable order and ownership; deep-review logged"}
+read_if_needed:
+  - {path: "process/docs/design/CR050-GIT-BRANCH-HLD.md", trigger: "approved projection invariant detail"}
+  - {path: "process/docs/design/CR050-GIT-BRANCH-ARCHITECTURE-DECISION.md", trigger: "switch condition or risk ceiling detail"}
+  - {path: "process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md", trigger: "DAG or forbidden dependency audit"}
+  - {path: "process/docs/features/cr050-*/DESIGN.md", trigger: "Feature interface and file ownership detail"}
+  - {path: "process/docs/product/TEST-MATRIX.md", trigger: "TC-GB-001..017 trace audit"}
+do_not_read_by_default:
+  - {path_or_pattern: "process/archive/**", reason: "cold history is not a current design input"}
+  - {path_or_pattern: "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**", reason: "explicitly excluded"}
+  - {path_or_pattern: "process/quant-lab/**", reason: "out of CR-050 scope"}
+key_facts:
+  approved_story_ids: ["ST-GB-001", "ST-GB-002", "ST-GB-004", "ST-GB-003"]
+  approved_features: ["FEAT-GB-01", "FEAT-GB-02", "FEAT-GB-04", "FEAT-GB-03"]
+  approved_dag: "ST-GB-001 -> ST-GB-002 -> ST-GB-004 -> ST-GB-003"
+  stable_id_note: "004 intentionally precedes 003; do not renumber."
+  projection_contract: "PARTIAL => paired projection, finish and close are false."
+  command_contract: "ordinary exact OID remote ref push; no local merge or force."
+  authorization_boundary: "No source implementation or real Git mutation before CP5 approval."
+read_expansion_refs: ["RE-20260716T152428Z0000-6d501011"]
+required_outputs:
+  - "process/docs/design/CR050-FEATURE-DESIGN-MATRIX.md"
+  - "process/docs/features/cr050-*/{DESIGN,TEST-PLAN,TASKS}.md"
+  - "process/DEVELOPMENT-PLAN.yaml"
+  - "process/stories/STORY-ST-GB-*.md"
+  - "process/checks/CP4-CR050-STORY-DAG-PARALLEL-SAFETY.result.json"

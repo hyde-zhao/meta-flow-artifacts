@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "project_id": "meta-flow",
+  "cr_id": "CR-050",
+  "story_id": null,
+  "stage": "CP2",
+  "profile": "architecture-major",
+  "status": "ready-for-human-gate",
+  "read_profile": "compact",
+  "budget": {
+    "max_tokens": 12000,
+    "estimated_tokens": 6800,
+    "estimator": "chars_div_4"
+  },
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-050.summary.json",
+  "route_plan_ref": "process/checks/CP0-CR-050.route-plan.json",
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "artifact_budgets": "process/policies/ARTIFACT-BUDGETS.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json"
+  },
+  "must_read": [
+    {"estimated_tokens": 650, "mode": "full", "path": "process/state/STATE.current.json", "reason": "machine_state", "required": true},
+    {"estimated_tokens": 800, "mode": "full", "path": "process/changes/summaries/CR-050.summary.json", "reason": "current_cr_summary", "required": true},
+    {"estimated_tokens": 850, "mode": "full", "path": "process/checks/CP1-CR050-GIT-BRANCH-USE-CASE-R2.result.json", "reason": "cp1_r2_result", "required": true},
+    {"estimated_tokens": 900, "mode": "full", "path": "process/checks/CP2-CR050-GIT-BRANCH-BASELINE-R2.result.json", "reason": "cp2_r2_result", "required": true},
+    {"estimated_tokens": 3600, "mode": "full", "path": "process/checkpoints/CP2-CR050-GIT-BRANCH-BASELINE-R2.md", "reason": "active_human_gate", "required": true}
+  ],
+  "allowed_reads": [
+    {"mode": "full", "path": "process/checks/CP0-CR-050.route-plan.json", "reason": "route_plan", "required": true},
+    {"mode": "full", "path": "process/handoffs/CR050-CP1-CP2-META-PM-R2.md", "reason": "inline_fallback_disclosure", "required": true},
+    {"mode": "full", "path": "process/checks/CP2-CR050-DISCUSSION-CHECKPOINT-R2.json", "reason": "scenario_gray_area_checkpoint", "required": true},
+    {"mode": "full", "path": "process/discussions/CP2-CR050-SCENARIO-DISCUSSION-LOG.md", "reason": "scope_change_audit", "required": false}
+  ],
+  "read_if_needed": [
+    {"mode": "summary", "path": "process/docs/product/USE-CASES.md", "reason": "traceability_audit", "required": false},
+    {"mode": "summary", "path": "process/docs/product/REQUIREMENTS.md", "reason": "requirements_audit", "required": false},
+    {"mode": "summary", "path": "process/docs/product/SCENARIOS.yaml", "reason": "coverage_audit", "required": false},
+    {"mode": "summary", "path": "process/docs/product/TEST-MATRIX.md", "reason": "traceability_audit", "required": false},
+    {"mode": "summary", "path": "process/docs/product/STORY-MAP.md", "reason": "story_scope_audit", "required": false},
+    {"mode": "summary", "path": "process/docs/product/MVP-SCOPE.md", "reason": "scope_audit", "required": false}
+  ],
+  "scope_summary": {
+    "use_cases": "UC-GB-001..004",
+    "requirements": "REQ-GB-001..014, REQ-GB-C001..004, REQ-GB-NF001..003",
+    "scenarios": "TC-GB-001..017",
+    "stories": "ST-GB-001..004",
+    "lifecycle": "open -> publish -> explicit merge -> finish",
+    "merge_contract": "paired project+artifact, preflight-all, artifact->project, fast-forward-only, no implicit merge",
+    "partial_contract": "retain both CR branches, block finish, do not auto-rollback a completed default update, resume from fresh observations",
+    "authorization_contract": "CP2 scope approval is not a real default-branch-write authorization; each real merge requires operation-specific authorization"
+  },
+  "decision_ids": ["CP2-R2-DQ-01", "CP2-R2-DQ-02", "CP2-R2-DQ-03", "CP2-R2-DQ-04"],
+  "user_confirmations": [
+    "当前git缺少合并分支操作，需要实现推送后合并",
+    "approve，继续推进到下一个人工门禁",
+    "不使用子agent，继续推进"
+  ],
+  "not_authorized": [
+    "source_implementation_before_CP5",
+    "repository_stage_or_commit",
+    "repository_push",
+    "remote_cr_branch_create_or_delete",
+    "real_default_branch_write",
+    "real_merge_execution",
+    "force_operation",
+    "history_rewrite",
+    "forge_api",
+    "credentials",
+    "runtime",
+    "SaaS",
+    "production_write",
+    "trading",
+    "process_quant_lab_changes",
+    "prelink_backup_changes"
+  ],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human summary / legacy fallback"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold audit history"},
+    {"path_or_pattern": "process/quant-lab/**", "reason": "outside CR-050 scope"},
+    {"path_or_pattern": "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**", "reason": "user excluded backup"}
+  ],
+  "full_doc_read_allowed_when": ["field_conflict", "human_audit", "deep_review", "scope_change"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson"
+}

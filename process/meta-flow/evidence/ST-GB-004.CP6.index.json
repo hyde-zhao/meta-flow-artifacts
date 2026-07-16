@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "stage": "CP6",
+  "cr_id": "CR-050",
+  "story_id": "ST-GB-004",
+  "return_ref": "process/returns/ST-GB-004.CP6.return.json",
+  "changed_files": [
+    {"path": "meta_flow/workflow/git_branch_lifecycle.py", "change_type": "modified"},
+    {"path": "meta_flow/workflow/cr_lifecycle.py", "change_type": "modified"},
+    {"path": "tests/test_git_branch_lifecycle.py", "change_type": "modified"}
+  ],
+  "commands": [
+    {"command": "uv run --python 3.11 pytest -q tests/test_git_branch_lifecycle.py -k merge", "result": "pass", "summary": "3 passed, 8 deselected"},
+    {"command": "legacy regression plus CLI/Ruff/diff", "result": "pass", "summary": "36 tests; 0 static errors"}
+  ],
+  "tests": ["TC-GB-009", "TC-GB-012", "TC-GB-013", "TC-GB-014", "TC-GB-015", "TC-GB-016", "TC-GB-017"],
+  "artifacts": ["process/stories/STORY-ST-GB-004-paired-default-fast-forward-IMPLEMENTATION.md"],
+  "risks": [
+    {"id": "CR050-RISK-INLINE-CP6", "level": "medium", "status": "accepted", "owner": "host-orchestrator", "detail": "Inline fallback."},
+    {"id": "CR050-RISK-BRANCH-PROTECTION", "level": "high", "status": "open", "owner": "CP8 decision owner", "detail": "Real protection unverified."}
+  ],
+  "waivers": [],
+  "design_delta_ref": null
+}

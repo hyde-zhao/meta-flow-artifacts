@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "stage": "CP7",
+  "cr_id": "CR-050",
+  "story_id": "ST-GB-001",
+  "return_ref": "process/returns/ST-GB-001.CP7.return.json",
+  "changed_files": [
+    {"path": "meta_flow/workflow/git_branch_lifecycle.py", "change_type": "verified"},
+    {"path": "meta_flow/workspace/git_sync.py", "change_type": "verified"},
+    {"path": "meta_flow/workflow/cr_lifecycle.py", "change_type": "verified"},
+    {"path": "tests/test_git_branch_lifecycle.py", "change_type": "verified"}
+  ],
+  "commands": [
+    {"command": "uv run --python 3.11 pytest -q tests/test_git_branch_lifecycle.py -k 'canonical_branch_name or open'", "result": "pass", "summary": "4 passed, 7 deselected"},
+    {"command": "uv run --python 3.11 pytest -q tests/test_workspace_git_sync.py tests/test_cr_lifecycle.py", "result": "pass", "summary": "36 passed"},
+    {"command": "touched-path Ruff plus git diff --check", "result": "pass", "summary": "0 errors"}
+  ],
+  "tests": ["TC-GB-001", "TC-GB-002", "TC-GB-003", "TC-GB-009", "TC-GB-010"],
+  "artifacts": ["process/docs/quality/CR050-VERIFICATION-REPORT.md"],
+  "risks": [
+    {"id": "CR050-RISK-NO-INDEPENDENT-CP7-AGENT", "level": "high", "status": "open", "owner": "CP8 decision owner", "detail": "Independent QA unavailable."},
+    {"id": "CR050-RISK-REAL-REMOTE-UNVERIFIED", "level": "high", "status": "open", "owner": "CP8 decision owner", "detail": "Real remote behavior unverified."}
+  ],
+  "waivers": [],
+  "design_delta_ref": null
+}

@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3",
+  "checkpoint_id": "CP3-CR050-GIT-BRANCH-HLD-CONSISTENCY-R3",
+  "cr_id": "CR-050",
+  "profile": "architecture-major",
+  "check_attempt": 3,
+  "supersedes_result_ref": "process/checks/CP3-CR050-GIT-BRANCH-HLD-CONSISTENCY-R2.result.json",
+  "context_ref": "process/context/CP3-CR050-GIT-BRANCH-DESIGN-CONTEXT-R3.yaml",
+  "route_plan_ref": "process/checks/CP0-CR-050.route-plan.json",
+  "evidence_ref": "process/docs/design/CR050-GIT-BRANCH-HLD.md",
+  "review_ref": "process/docs/quality/CR050-CP3-R2-INDEPENDENT-REVIEW.md",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check plus design consistency review",
+    "checker_commit": "ad3f6f42b179ec4767d29a07b7e9604e1969b8fe",
+    "invocation": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP3-CR050-GIT-BRANCH-HLD-CONSISTENCY-R3.result.json --check-consistency --project-root .",
+    "generated_by": "host-orchestrator-inline/meta-se",
+    "fallback_used": true,
+    "fallback_reason": "User required no subagents; Host consumed a user-provided independent review and produced the bounded R3 revision inline.",
+    "fallback_review_ref": "process/docs/quality/CR050-CP3-R2-INDEPENDENT-REVIEW.md"
+  },
+  "input_artifact_hashes": {
+    "process/context/CP3-CR050-GIT-BRANCH-DESIGN-CONTEXT-R3.yaml": "sha256:ad744f6e156cec279b008a591e0736c624f9384d6f2e23023139f465c3fdd532",
+    "process/docs/product/REQUIREMENTS.md": "sha256:c02ac927201ed3d1fc1e429500ff5148b63d392cbee98d1d53375149864a0c18",
+    "process/checkpoints/CP2-CR050-GIT-BRANCH-BASELINE-R2.md": "sha256:090f2e4daf357d220e646731e8090aac6a11a3b03b50f78a3c9252c034e7db12",
+    "process/docs/design/CR050-GIT-BRANCH-BLUEPRINT.md": "sha256:27681deed2f0cc0c4c25a375caa5ebc1053b086811153d2fe9e47ebc8f5823e7",
+    "process/docs/design/CR050-GIT-BRANCH-DOMAIN-MAP.md": "sha256:022e11826cc1aad5aa147d956c94584f411dd3ea40115789b170098ca15b36bc",
+    "process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md": "sha256:f12580b21045bd635e5fba9c6d485d4c3a0a14dd1e960661a28e867869868da0",
+    "process/docs/design/CR050-GIT-BRANCH-HLD.md": "sha256:aa8fd4d8ab91fc4f55d87d716ca9447617f3c9cc9f90292b4a40a93acad0e559",
+    "process/docs/design/CR050-GIT-BRANCH-ARCHITECTURE-DECISION.md": "sha256:8b81fdd79219383e86f1dc54de9a45f5b0cb26b77daaabfff49e4ca5cf6b7a5d",
+    "process/docs/quality/CR050-CP3-R2-INDEPENDENT-REVIEW.md": "sha256:d2d01fd7afa273048e142ab3e1edc304b7b54e848c4495329c6c92133c87dcd4"
+  },
+  "items": [
+    {
+      "id": "CP3-CR050-R3-001",
+      "category": "review_consumption",
+      "name": "The user-provided independent review is formally classified and consumed without claiming runtime attestation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR050-CP3-R2-INDEPENDENT-REVIEW.md", "process/checks/CP3-CR050-DISCUSSION-CHECKPOINT-R3.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR050-R3-002",
+      "category": "partial_recoverability",
+      "name": "Artifact-first is justified as governance write-ahead and cannot advance paired workflow truth after a one-repository success",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/design/CR050-GIT-BRANCH-HLD.md#73-explicit-paired-fast-forward-merge", "process/docs/design/CR050-GIT-BRANCH-ARCHITECTURE-DECISION.md#adr-gb-r2-002paired-merge采用preflight-allartifactproject非补偿partial"],
+      "owner": "meta-se",
+      "route_on_fail": "block_release",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR050-R3-003",
+      "category": "projection_firewall",
+      "name": "A two-of-two Paired Projection Gate keeps PARTIAL from merge PASS, finish eligibility and CR close",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/design/CR050-GIT-BRANCH-DOMAIN-MAP.md#29-pairedmergeprojection", "process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md#43-explicit-merge"],
+      "owner": "meta-se",
+      "route_on_fail": "block_release",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR050-R3-004",
+      "category": "switch_condition",
+      "name": "If CP4 or CP5 cannot guarantee the projection invariant, the design switches to project-first and reopens CP2 and CP3",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/design/CR050-GIT-BRANCH-ARCHITECTURE-DECISION.md#adr-gb-r2-002paired-merge采用preflight-allartifactproject非补偿partial"],
+      "owner": "host-orchestrator/meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR050-R3-005",
+      "category": "traceability",
+      "name": "UC-GB-004 and ST-GB-004 are already present in CR scope and all required product traceability artifacts",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/changes/CR-050.md", "process/docs/product/STORY-MAP.md", "process/docs/product/TEST-MATRIX.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR050-R3-006",
+      "category": "implementation_contract",
+      "name": "Stable Story IDs retain explicit 001-002-004-003 order and CP5 must pin an ordinary exact remote ref update",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/docs/design/CR050-GIT-BRANCH-HLD.md#11-storywave与拆分评估", "process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md#43-explicit-merge"],
+      "owner": "meta-se/meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR050-R3-007",
+      "category": "budget_and_authorization",
+      "name": "HLD remains under 20 KiB and the revision authorizes no source or real Git mutation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/design/CR050-GIT-BRANCH-HLD.md", "process/context/CP3-CR050-GIT-BRANCH-DESIGN-CONTEXT-R3.yaml"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "HLD is 18633 bytes, below 20480 bytes; source repository is clean."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260716T151029Z0000-b8fed6ee"],
+  "decision": "PASS",
+  "next_route": "CP3-R3-human-gate-approved-then-CP4",
+  "checked_at": "2026-07-16T15:08:39Z"
+}

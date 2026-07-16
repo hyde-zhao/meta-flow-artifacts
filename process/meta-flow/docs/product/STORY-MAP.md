@@ -1,10 +1,10 @@
 ---
 status: baseline
-version: "1.4"
+version: "1.6"
 created_at: "2026-07-02"
 owner: "meta-pm"
 cr_ref: "CR-037"
-active_change_ref: "CR-047"
+active_change_ref: "CR-050"
 source_use_cases:
   - UC-PG-001
   - UC-PG-002
@@ -25,6 +25,10 @@ source_use_cases:
   - UC-WT-005
   - UC-WT-006
   - UC-WT-007
+  - UC-GB-001
+  - UC-GB-002
+  - UC-GB-003
+  - UC-GB-004
 source_requirements: "process/docs/product/REQUIREMENTS.md"
 ---
 
@@ -35,6 +39,8 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | 版本 | 日期 | 修订人 | 变更要点 | 文档处理方式 |
 |---|---|---|---|---|
 | 1.4 | 2026-07-13 | host-orchestrator-inline-fallback | 增量追加 CR-047 ACT-WT-01..05、ST-WT-001..007 与 SL-WT-01..03；保留既有 Story/Slice ID。 | 原文档增量更新 |
+| 1.5 | 2026-07-15 | host-orchestrator inline fallback | 增量追加 CR-050 ACT-GB-01..03、ST-GB-001..003 与 SL-GB-01..03；保留全部既有 Activity/Story/Slice ID。 | 原文档增量更新 |
+| 1.6 | 2026-07-16 | host-orchestrator inline fallback | 用户批准将 publish 后的显式 fast-forward-only merge 纳入 CR-050；新增 ACT-GB-04、ST-GB-004 与 SL-GB-04，并将执行顺序明确为 ST-GB-001→002→004→003；不重编号既有 ID，等待 CP2 R2。 | 原文档增量更新 |
 | 1.0 | 2026-07-02 | meta-pm | 基于产品场景和需求建立用户故事地图 | 初始化长期可追踪产品规划基线 |
 | 1.2 | 2026-07-11 | meta-pm | 增量追加 CR-046 的 5 个活动、7 个 outcome Story 与 release slice；保留 ST-PG-001..013 | 原文档增量更新 |
 | 1.3 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：不新增或重编号 Story，扩展 ST-EI-002/004/006/007 的 requirement refs 与验收语义 | 原文档增量更新 |
@@ -58,6 +64,10 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | ACT-WT-03 | 建立 clean-clone 质量门 | P-02, P-04 | 让规则、guardrail、Ruff 与 cache 策略确定执行 | UC-WT-004, UC-WT-005 |
 | ACT-WT-04 | 提供非交互安装入口 | P-03 | 在 CI/Agent 中直接完成三平台 dry-run | UC-WT-006 |
 | ACT-WT-05 | 收敛 CR-046 当前事实 | P-05, P-04 | 让产品矩阵与正式证据一致并保留风险 | UC-WT-007 |
+| ACT-GB-01 | 开启可恢复的 CR 分支 | P-01, P-03 | 从刷新后的远端默认分支为 project/artifact 建立同名 CR branch 与 upstream | UC-GB-001 |
+| ACT-GB-02 | 发布已提交的 CR 变更 | P-01, P-02 | 只把显式提交的两仓 refs 推送到匹配远端 branch，并核验 OID | UC-GB-002 |
+| ACT-GB-03 | 在合并证明后清理分支 | P-01, P-04 | 验证 exact tip/ancestry/protected-ref 后删除目标 remote/local branch | UC-GB-003 |
+| ACT-GB-04 | 显式快进两仓默认分支 | P-01, P-04 | 在独立授权下先预检两仓，再按 artifact→project 把 exact published tip fast-forward 到 remote default | UC-GB-004 |
 
 ## Story 列表
 
@@ -90,6 +100,10 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | ST-WT-005 | 作为开发者，我要 Ruff 与完整 pytest 成为同一发布质量门。 | P0 | REQ-WT-011..012 | Ruff 0；至少 377 tests + 70 subtests pass。 |
 | ST-WT-006 | 作为自动化调用方，我要 README 提供三平台非交互 dry-run 和 cache preflight。 | P1 | REQ-WT-013..014 | Codex/Claude/Qoder 3/3 dry-run pass。 |
 | ST-WT-007 | 作为审计者，我要 CR-046 产品状态与 7/7 Story evidence 收敛，同时保留 READY_WITH_RISK。 | P0 | REQ-WT-015..016 | 无 CP2-pending/0-implemented 陈旧声明；风险不被虚假关闭。 |
+| ST-GB-001 | 作为 Host Orchestrator，我要从两仓刷新后的远端默认分支开启同名 CR branch，以便源码和过程证据在另一设备可一起恢复。 | P0 | REQ-GB-001..004, REQ-GB-006, REQ-GB-C001..002, REQ-GB-NF001..002 | 2/2 branch base/upstream 正确；dirty/detached/divergence/collision 100% 阻断；dry-run 零 ref 变更。 |
+| ST-GB-002 | 作为实现维护者，我要只发布已经显式提交的 CR refs，以便避免隐式 stage/commit 夹带无关文件。 | P0 | REQ-GB-005..006, REQ-GB-010, REQ-GB-C002, REQ-GB-NF001 | clean committed refs 推送后 2/2 remote=local HEAD；dirty 时远端变化为 0；partial 有逐仓恢复入口。 |
+| ST-GB-003 | 作为审批者，我要只在 exact tip 已被远端主分支包含时清理 CR branch，以便不误删未合并、漂移或受保护 refs。 | P0 | REQ-GB-007..010, REQ-GB-C002, REQ-GB-NF001..002 | non-ancestor/squash/ref-drift/protected 100% 阻断；合法目标精确删除；remote 已自动删时仍要求 known tip。 |
+| ST-GB-004 | 作为审批者，我要在 publish 后显式将两仓 CR tip 以 fast-forward-only 方式合入各自远端默认分支，以完成受治理旅程而不绕过远端策略。 | P0 | REQ-GB-006, REQ-GB-011..014, REQ-GB-C002..004, REQ-GB-NF001..003 | preflight-all 后按 artifact→project 执行；2/2 default=CR tip 才 PASS；merge commit/rebase/force/conflict-resolution 为 0；partial 保留两仓 branch 并阻断 finish。 |
 
 ## 推荐发布切片
 
@@ -108,6 +122,10 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | SL-WT-01 | Truth and Routing Closure | ST-WT-001, ST-WT-002, ST-WT-007 | 先统一机器真相、路由和历史当前状态 | CP2/CP3 |
 | SL-WT-02 | Deterministic Quality Gate | ST-WT-003, ST-WT-004, ST-WT-005 | 让 Doctor、guardrail、lint 和回归形成确定门 | SL-WT-01 |
 | SL-WT-03 | Operator Usability | ST-WT-006 | 提供 CI/Agent 非交互安装与 preflight | SL-WT-02 |
+| SL-GB-01 | Safe Paired Branch Open | ST-GB-001 | 源码与过程证据从各自最新主分支进入同名、可恢复 CR branch | CR-050 CP2/CP3/CP5 |
+| SL-GB-02 | Committed Ref Publication | ST-GB-002 | 只发布显式提交事实，并逐仓披露成功/失败 | SL-GB-01 |
+| SL-GB-04 | Explicit Paired Fast-forward Merge | ST-GB-004 | 以独立授权和 fast-forward-only contract 完成两仓 default update，部分成功仍可恢复 | SL-GB-02；default-branch write 单独授权 |
+| SL-GB-03 | Proof-gated Branch Cleanup | ST-GB-003 | merge 后重新观察 ancestry/tip 再安全删除，不把 merge result 当作删除授权 | SL-GB-04；2/2 merge PASS；delete 单独授权 |
 
 ## 规划边界
 
@@ -117,3 +135,5 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 - 任何发布库写入都不由 roadmap refresh 自动授权。
 - CR-046 CP2 只确认产品/场景/范围基线，不授权实现、runtime、credentials、publish、commit/push 或 quant-lab business-code 修改。
 - ST-EI-007 是 append-only process-evidence pilot，不得承担 quant-lab lineage 业务功能重做。
+- CR-050 的 Story 只定义用户 outcome；具体 CLI、result schema、Git command plan 与恢复算法由 CP3/CP5 设计。
+- `ST-GB-002` 不授权隐式 stage/commit；`ST-GB-004` 只允许独立、显式、fast-forward-only merge，不授权 merge commit/force/策略绕过；`ST-GB-003` 不授权 force-delete 或按 patch 相似度猜测已合并。

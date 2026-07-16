@@ -1,9 +1,9 @@
 ---
 status: baseline
-version: "1.2"
+version: "1.4"
 created_at: "2026-07-11"
 owner: "meta-pm"
-active_change_ref: "CR-047"
+active_change_ref: "CR-050"
 source_story_map: "docs/product/STORY-MAP.md"
 ---
 
@@ -14,6 +14,8 @@ source_story_map: "docs/product/STORY-MAP.md"
 | 版本 | 日期 | 修订人 | 变更要点 | 文档处理方式 |
 |---|---|---|---|---|
 | 1.2 | 2026-07-13 | host-orchestrator-inline-fallback | 增量追加 CR-047 SL-WT-01..03，保留 CR-046 与既有切片。 | 原文档增量更新 |
+| 1.3 | 2026-07-15 | host-orchestrator inline fallback | 增量追加 CR-050 SL-GB-01..03，保留全部既有切片和 Story 回链。 | 原文档增量更新 |
+| 1.4 | 2026-07-16 | host-orchestrator inline fallback | 增量追加 SL-GB-04 显式两仓 fast-forward merge，并把既有 SL-GB-03 cleanup 的前置改为 SL-GB-04 2/2 PASS；不重编号历史切片。 | 原文档增量更新；等待 CP2 R2 |
 | 1.0 | 2026-07-11 | meta-pm | 建立独立 release-slice 目录基线；引用既有 SL-PG 切片，并增量记录 CR-046 SL-EI 切片 | 缺失产物初始化；不改变 STORY-MAP 中既有 ID |
 | 1.1 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：扩展既有 SL-EI 切片的 compaction/correction/audit/dogfooding/dispatch 验证入口，不改变 Slice 或 Story ID | 原文档增量更新 |
 
@@ -37,9 +39,20 @@ source_story_map: "docs/product/STORY-MAP.md"
 | SL-WT-02 | 发布前 Doctor/guardrail/Ruff/pytest 可确定判定 | ST-WT-003..005 | SL-WT-01、CP5 | TC-WT-003..005 | warning 语义和规则 source 需 CP2/CP3 决策 |
 | SL-WT-03 | CI/Agent 可按 README 完成三平台 dry-run | ST-WT-006 | SL-WT-02 | TC-WT-006 | 不执行真实用户级安装或发布 |
 
+## CR-050 推荐切片
+
+| Slice ID | 用户价值 | 包含 Story | 前置依赖 | 验证入口 | 风险 / 门控 |
+|---|---|---|---|---|---|
+| SL-GB-01 | 源码与过程证据从各自最新主分支进入同名、可恢复 CR branch | ST-GB-001 | CP2、CP3、全量 CP5 | TC-GB-001..003, TC-GB-010 | remote push 需独立授权；不 reset/rebase/force；双仓不宣称原子 |
+| SL-GB-02 | 只发布显式提交的 refs，并逐仓核验远端 OID | ST-GB-002 | SL-GB-01 | TC-GB-004..005, TC-GB-009..010 | 不隐式 stage/commit；partial 不得冒充 PASS |
+| SL-GB-04 | 通过独立授权把两仓 exact published tip 以 fast-forward-only 更新到 remote default | ST-GB-004 | SL-GB-02；default-branch write 独立授权 | TC-GB-012..017, TC-GB-009..010 | artifact→project；不创建 merge commit/force/策略绕过；partial 保留两仓 branch并阻断 finish |
+| SL-GB-03 | merge 后重新证明 exact tip/ancestry，再清理目标 branch | ST-GB-003 | SL-GB-04 2/2 PASS；delete 独立授权 | TC-GB-006..011, TC-GB-015, TC-GB-017 | merge 结论不是删除授权；squash/rebase 无 receipt 时 BLOCKED；protected ref 不删除 |
+
 ## 切片边界
 
 - 每个 Story 保持独立 CP6/CP7 verdict；共享 regression 可以批量运行，但不合并 Story 结论。
 - CP2 approval 只确认产品/场景/范围，不授权实现、runtime、credentials、publish、commit/push 或 quant-lab business-code 修改。
 - `SL-EI-03` 失败时保留 Meta Flow 已验证切片，pilot 回退到设计澄清或实现回修，不覆盖历史证据。
 - CR-047 使用用户批准的 inline fallback；该授权不等于 CP2、CP3、CP5 或 CP8 批准。
+- CR-050 延续用户“不使用子 Agent”的约束；CP7/CP8 结论上限应显式披露独立 QA 风险。
+- CP2 R2 只确认 CR-050 产品边界，不授权真实 commit/push/default-branch update/delete；真实 Git remote mutation 必须在后续门禁和对应操作的独立显式授权后执行。

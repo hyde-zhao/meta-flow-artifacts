@@ -1,12 +1,12 @@
 ---
 status: baseline
-version: "1.5"
+version: "1.7"
 created_at: "2026-07-02"
 owner: "meta-pm"
 cr_ref: "CR-037"
-active_change_ref: "CR-047"
-ready_for_design: true
-approval_context: "user approved CR-047 CP2 on 2026-07-13; solution design is authorized, but implementation, runtime, credentials, production write, publish, trading, commit and push remain unauthorized"
+active_change_ref: "CR-050"
+ready_for_design: false
+approval_context: "CR-050 CP2 v1.6.1 was approved on 2026-07-15, but the user later approved adding a separate paired fast-forward-only merge operation. This changes the approved product and authorization baseline, so CP3 v1.0 is changes_requested and CP2 R2 approval is required. Source implementation, commit, real remote branch/default-branch mutation, forge API, credentials, runtime, production write, publish and trading remain unauthorized."
 source_use_cases:
   - UC-PG-001
   - UC-PG-002
@@ -27,6 +27,10 @@ source_use_cases:
   - UC-WT-005
   - UC-WT-006
   - UC-WT-007
+  - UC-GB-001
+  - UC-GB-002
+  - UC-GB-003
+  - UC-GB-004
 source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT-IMPLEMENTATION-PLAN-2026-07-02.md"
 ---
 
@@ -37,6 +41,9 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | 版本 | 日期 | 修订人 | 变更要点 | 文档处理方式 |
 |---|---|---|---|---|
 | 1.5 | 2026-07-14 | host-orchestrator-inline / meta-se | CP3 R2 度量精确化：同步修订 REQ-WT-006 与 RA-WT-004，把固定“21”重述为 `B0_pre` 历史快照，并以 CP7 动态 `B0_cp7`、可解释 delta、active/default-required blocker 作为验收契约；不改变 UC、Story、范围或 CP2 批准结论 | 原文档增量更新；无需重开 CP2 |
+| 1.6 | 2026-07-15 | host-orchestrator inline fallback | 为 CR-050 增量加入原生 Git 双仓 CR branch open/publish/finish 契约、fail-closed merge 证明、幂等与 partial failure；保留全部既有 REQ/RA，等待 CP2 确认五项产品边界 | 原文档增量更新 |
+| 1.6.1 | 2026-07-16 | host-orchestrator inline fallback | 记录 CR-050 CP2-DQ-01..05 推荐方案获批并将 `ready_for_design=true`；不修改 REQ/RA/范围，继续保留实现和真实远端 mutation 不授权边界 | CP2 状态同步 |
+| 1.7 | 2026-07-16 | host-orchestrator inline fallback | 用户批准将独立两仓 fast-forward-only merge 纳入 CR-050；新增 REQ-GB-011..014、REQ-GB-C004、REQ-GB-NF003、RA-GB-005..006，并把里程碑调整为 publish→merge→cleanup；`ready_for_design=false`，等待 CP2 R2。 | 原文档增量更新；保留 v1.6.1 与全部既有 REQ/RA |
 | 1.1 | 2026-07-02 | host-orchestrator | 同步 CR-037 已激活、CR-036 暂停未完成和 CP2 pending 不授权实现的状态语义 | 小范围状态语义同步 |
 | 1.2 | 2026-07-11 | meta-pm | 为 CR-046 增量增加 evidence-integrity、replayability、telemetry 和 CR-163 append-only pilot 需求；保留全部 REQ-PG ID | 原文档增量更新 |
 | 1.3 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：新增 REQ-EI-019..023，覆盖 compaction 语义保持、通用 post-close correction、机器 audit report、null-provenance dogfooding 与 dispatch 证据限制；保留全部既有 REQ ID | 原文档增量更新 |
@@ -109,6 +116,20 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | REQ-WT-015 | CR-046 产品矩阵与设计状态必须收敛到 `closed / READY_WITH_RISK` 和 7/7 Story `PASS_WITH_RISK`，但不得改写 recovered/post-hoc 时序。 | P0 | Given CR-046 formal CR、7 个 CP7 result 和产品矩阵 When 运行交叉检查 Then 7/7 Story 为 implemented + PASS_WITH_RISK，产品矩阵不再写 CP2 pending/0 implemented，原始历史 hash 不被倒填。 | UC-WT-007 |
 | REQ-WT-016 | CR-045/046 的 platform receipt、独立 QA、token telemetry 与真实 pilot 风险必须保持 unavailable/OPEN/follow-up，直到存在新证据和独立授权。 | P0 | Given fixture 能拒绝伪造 receipt 但平台未签发 receipt When 生成 release 结论 Then 最高为 `READY_WITH_RISK`，不得写 platform-attested 或 independent-runtime-verified。 | UC-WT-007 |
 | REQ-WT-017 | Story/Run ledger 对未来执行必须强制追加真实事件；历史补录只能使用 `recovered/legacy-unverified`，不得伪造运行时间或 receipt。 | P1 | Given修复前 RUN ledger 为空且存在历史执行 When 收敛治理 Then 新验证命令均有 run event；历史事件显式 recovery status，伪造 original timestamp/receipt 的 fixture 100% 被拒绝。 | UC-WT-003, UC-WT-007 |
+| REQ-GB-001 | 系统必须从 remote symbolic HEAD 识别默认主分支，并允许显式 override；无法唯一识别时必须阻断。 | P0 | Given `origin/HEAD -> origin/main` When 开启 CR Then default branch=`main`；Given remote HEAD 缺失且未提供 override Then 退出非零，不猜测 `main/master`。 | UC-GB-001 |
+| REQ-GB-002 | CR branch open 前必须对 project/artifact 两仓执行 route、Git repo、clean tree、非 detached HEAD、remote、同名 ref 和 branch-name precheck。 | P0 | Given 任一仓 dirty、detached、remote 缺失、同名 branch 存在或 `check-ref-format` 失败 When 执行 open Then 两仓新 local/remote ref 数为 0，并定位失败仓和规则。 | UC-GB-001 |
+| REQ-GB-003 | 两仓默认主分支只能通过 `fetch --prune` 和 `pull --ff-only` 刷新；divergence 不得通过 reset、rebase 或 force 自动消解。 | P0 | Given local default branch behind remote When open Then fast-forward 到 remote tip；Given history diverged Then open BLOCKED，原 refs 不变。 | UC-GB-001 |
+| REQ-GB-004 | 系统必须从两仓刷新后的 exact remote default tip 创建同名、可预测且合法的 CR branch，并使用 `push -u` 建立 upstream。 | P0 | Given `CR-050` 与 slug When open 成功 Then 2/2 local/remote branch 名一致、base OID 等于各自 remote default tip、upstream 建立率 100%。 | UC-GB-001 |
+| REQ-GB-005 | 分支发布必须只推送已经显式提交的 ref；不得隐式 stage、commit、amend 或自动选择文件。 | P0 | Given 任一仓 dirty/uncommitted When publish Then 退出非零且 remote ref 不变；Given 两仓 clean 且有新 commit Then push 后 remote CR ref 等于 local HEAD。 | UC-GB-002 |
+| REQ-GB-006 | open、publish、merge、finish 必须提供 dry-run，输出逐仓、有序、可机器解析的计划且零 local/remote ref 副作用。 | P0 | Given 任一合法 fixture When dry-run Then 计划覆盖率 100%，local branch/HEAD/index/worktree 与 bare remote refs 变化数均为 0。 | UC-GB-001, UC-GB-002, UC-GB-003, UC-GB-004 |
+| REQ-GB-007 | finish 必须重新 fetch 并验证 exact branch identity、tip 未漂移且 CR tip 是 remote default branch 的祖先；证明不足时不得删除。 | P0 | Given ancestry-preserving merge When finish Then ancestry check 通过；Given squash/rebase/non-ancestor 或 tip drift Then remote/local branch 保留且结果 BLOCKED。 | UC-GB-003 |
+| REQ-GB-008 | finish 不得自动或隐式 merge；删除范围只能是经 CR ID/branch contract 精确识别的非 protected branch，且 remote 删除成功后才允许 `branch -d` 删除 local ref。 | P0 | Given target 是 main/master/perennial/protected 或 branch 与 CR 不匹配 When finish Then 100% 拒绝；Given合法目标 Then只删除目标 branch，不触及 tag/其他 ref。 | UC-GB-003 |
+| REQ-GB-009 | 远端托管平台已自动删除 CR branch 时，finish 必须使用仍存在的 local 或已记录 exact tip 完成 ancestry 证明；缺 tip 时不得把“branch 不存在”当作已安全清理。 | P0 | Given remote branch absent、local branch tip 仍存在且已是 remote main 祖先 When finish Then可继续 local cleanup；Given local/recorded tip 均缺失 Then BLOCKED 并要求外部 receipt。 | UC-GB-003 |
+| REQ-GB-010 | 双仓操作必须逐仓记录 terminal status、before/after OID、执行/跳过步骤和恢复入口；不得宣称跨仓原子事务。 | P0 | Given第二仓 push/delete 注入失败 When命令结束 Then overall=`PARTIAL/BLOCKED`，第一仓事实被保留并披露，destructive 后续步骤停止，且每仓均有恢复建议。 | UC-GB-001, UC-GB-002, UC-GB-003 |
+| REQ-GB-011 | 系统必须提供独立显式 `merge` 操作；`publish` 和 `finish` 均不得隐式触发 merge。 | P0 | Given 两仓已 publish When 只执行 publish 或 finish Then default branch OID 不因隐式 merge 改变；Given 操作者显式调用 merge 且提供授权 Then 才进入 merge preflight。 | UC-GB-004 |
+| REQ-GB-012 | merge 必须先对 project/artifact 两仓完成全部只读 preflight，并按 artifact→project 的确定顺序执行 default-branch update。 | P0 | Given 任一仓 remote CR tip/default tip/authorization/policy preflight 失败 When 执行 merge Then 两仓 default branch mutation 数为 0；Given 全部通过 Then artifact 先验证更新，project 后更新，顺序在 result 中 100% 可复核。 | UC-GB-004 |
+| REQ-GB-013 | merge 只允许把 fresh remote default fast-forward 到 exact published CR tip；不得创建 merge commit、rebase、force 或自动解决冲突。 | P0 | Given CR tip 包含 fresh default tip When merge Then remote default 精确等于 CR tip；Given default 已推进且 CR tip 不包含它、需要 merge commit 或发生冲突 Then merge BLOCKED，禁止命令执行数为 0。 | UC-GB-004 |
+| REQ-GB-014 | 双仓 merge 的部分成功必须保留两仓 CR branch、输出逐仓结果并阻断 finish；系统不得自动回滚已经成功的 default-branch fast-forward。 | P0 | Given artifact merge PASS 而 project 被并发推进、branch protection 或权限拒绝 When operation 结束 Then overall=PARTIAL、2/2 CR branch 仍存在、finish 不可执行、结果给出重新观察后的恢复入口，且已更新 default branch 不被自动 reset/force。 | UC-GB-003, UC-GB-004 |
 
 ## 约束需求
 
@@ -125,6 +146,10 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | REQ-WT-C001 | 不得读取、删除、迁移或修改 `/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930`。 | P0 | Given CR-047 任一 Story 执行 When 检查 touched paths Then 该 backup 路径及其子路径变更数为 0。 | 用户显式排除 |
 | REQ-WT-C002 | 不得通过原位改写历史 CP/result/ledger、伪造平台 receipt 或补写虚假原始运行时间来“修绿”治理检查。 | P0 | Given 历史缺口无法恢复 When 生成 correction/summary Then 使用 append-only legacy/unavailable 语义，原始 hash 保留，伪造 fixture 100% 被拒绝。 | UC-WT-003, UC-WT-007 |
 | REQ-WT-C003 | CP2 approval 不授权 credentials、runtime、SaaS、production write、publish、trading、repository commit/push 或 CR-033 runtime follow-up。 | P0 | Given 用户批准 CR-047 CP2 When 审查授权范围 Then上述动作仍为 not-authorized，需独立请求。 | CR-047 不授权范围 |
+| REQ-GB-C001 | 不得要求安装 `gb`、Git Town、GitPython 或 forge CLI 作为 CR branch lifecycle 的必需运行依赖。 | P0 | Given clean supported environment 只有 Git 2.43+ 与 Meta Flow When运行 branch lifecycle fixture Then无需额外 executable/package；可选 adapter 不改变默认契约。 | SGA-GB-01 |
+| REQ-GB-C002 | 不得执行 force-push、force-delete、reset --hard、自动 rebase、自动冲突解决、隐式 merge、merge commit 或未经证明的 branch deletion。 | P0 | Given negative fixture 诱导任一禁止命令 When执行 plan/operation Then禁止命令执行数为 0，并输出 blocking reason。 | UC-GB-001, UC-GB-003, UC-GB-004 |
+| REQ-GB-C003 | CP2 approval 只确认产品/场景/范围，不授权源码实现、commit、真实远端 branch/default-branch mutation、forge API 或凭据。 | P0 | Given用户批准 CR-050 CP2 R2 When检查授权边界 Then上述动作仍需后续门禁或独立显式授权。 | CR-050 不授权范围 |
+| REQ-GB-C004 | 真实 default-branch write 必须有本次操作的独立显式授权并服从远端 branch protection；保护策略拒绝不得被绕过或降级为成功。 | P0 | Given 无授权、授权对象/OID不匹配或远端拒绝 direct update When merge Then对应仓结果为 BLOCKED/PARTIAL，default OID 不被工具以其他路径改写，错误保留远端拒绝语义。 | UC-GB-004 |
 
 ## 非功能需求
 
@@ -139,6 +164,9 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | REQ-WT-NF001 | 同一 Git HEAD 与 artifact commit 在支持环境中必须产生确定的 workspace/state/checker 结果。 | P0 | Given 两台设备的源码与 artifact commit 相同 When 分别 link/check Then routing target 语义、state active refs、CR index decision 和 quality gate decision 差异为 0。 | UC-WT-001, UC-WT-002 |
 | REQ-WT-NF002 | 所有失败必须输出可操作路径、字段、计数、严重度和推荐路由。 | P1 | Given cr-tracking/doctor/guardrail/ruff/install 任一失败 When 查看输出 Then 至少包含失败对象、severity、证据路径或命令以及修复/回退入口。 | UC-WT-001..006 |
 | REQ-WT-NF003 | 全部 Python 检查、测试和脚本示例必须使用 `uv run`，且不得要求裸 pip 或系统 Python。 | P0 | Given README、CI 与 release preflight 被扫描 When 检查 Python 命令 Then裸 `python`/`pip install` 违规数为 0。 | UC-WT-005, UC-WT-006 |
+| REQ-GB-NF001 | 对相同 repo refs/config/input，branch lifecycle plan 与 decision 必须确定；失败必须包含 repo、step、command-safe summary、OID 和恢复路由。 | P0 | Given相同 fixture 重复运行 When比较 JSON result Then计划顺序、decision、OID 和 error code 一致；失败定位字段覆盖率 100%。 | UC-GB-001..004 |
+| REQ-GB-NF002 | branch、remote、CR ID 和 slug 必须作为参数列表传给 Git，不得经 shell 插值；所有 branch 名必须通过 `git check-ref-format --branch`。 | P0 | Given含空格、选项前缀、换行或 shell 元字符的输入 When运行 precheck Then 100% 拒绝且无额外命令执行。 | UC-GB-001..004 |
+| REQ-GB-NF003 | merge plan/result 对相同 fresh refs、policy 与 authorization 必须确定，并完整记录两仓执行顺序、before/after OID、published tip、default tip、decision 和 resume route。 | P0 | Given 相同 bare-remote fixture 重复 dry-run或重放结果 When 对比 Then plan顺序/decision/OID字段一致率100%；缺任一仓 terminal result或恢复入口时检查失败。 | UC-GB-004 |
 
 ## 风险与假设
 
@@ -153,6 +181,12 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | RA-WT-002 | RISK | 根规则 source 选择错误会让 clean clone 或本机 wrapper 二选一失败。 | REQ-WT-009, REQ-WT-010 | CP2 显式选择 canonical source，clean archive 与 installed workspace 双路径验证。 |
 | RA-WT-003 | RISK | 把所有 Doctor warning 当 blocker 会导致 legacy/empty ledger 永久阻断；反之忽略 error 会虚假全绿。 | REQ-WT-008 | severity 枚举、exit-code contract 与 warning count 分离验证。 |
 | RA-WT-004 | ASSUMPTION | 修复前实测快照包括 cr-tracking FAIL、Doctor `B0_pre.observed=21`、quality/read-expansion/run-ledger findings、Ruff 90、guardrail cache 阻断；2026-07-14 CP3 评审已观测 Doctor=22，`+1` 为 `CR-047.summary.json`，证明 observed count 会随合规过程产物变化。 | REQ-WT-003, REQ-WT-006..012, REQ-WT-014 | 保留 `B0_pre` 作为历史回归锚；CP7 开始采集 `B0_cp7` 作为分类锚并解释全部 delta。新增 active/default-required 超预算不得因计数漂移而降级为 warning。 |
+| RA-GB-001 | RISK | project/artifact 两仓没有跨仓原子 ref transaction，第一仓成功、第二仓失败可能产生 partial state。 | REQ-GB-010 | 预检全部仓后再执行；逐仓 terminal result；失败后停止 destructive step，并提供幂等 resume/cleanup 路由。 |
+| RA-GB-002 | RISK | squash/rebase merge 不保留 branch tip ancestry，仅靠 Git DAG 无法证明代码已进入 main。 | REQ-GB-007, REQ-GB-009 | MVP fail closed；未来 forge receipt adapter 需独立 CR 和最小权限授权。 |
+| RA-GB-003 | RISK | 隐式 stage/commit 可能把无关文件、个人配置或 secret 纳入远端分支。 | REQ-GB-005 | MVP 仅推送已提交 refs；提交文件选择保持显式并继续使用现有 secret/guardrail 检查。 |
+| RA-GB-004 | ASSUMPTION | 受支持仓库提供 Git 2.43+、命名 remote 和可解析 symbolic default branch，或操作者显式提供 override。 | REQ-GB-001, REQ-GB-C001 | `git --version` 与 remote HEAD precheck；不满足时 BLOCKED，不安装同名 `gb` 替代。 |
+| RA-GB-005 | RISK | 直接 fast-forward 远端默认分支可能被 branch protection、review requirement 或 merge queue 拒绝。 | REQ-GB-011..013, REQ-GB-C004 | 将远端拒绝视为合法 BLOCKED/PARTIAL；不绕过策略，不自动切 forge API；需要受保护仓 merge 时转未来 forge adapter。 |
+| RA-GB-006 | RISK | artifact default 已更新但 project default 更新失败会造成跨仓 main 短暂不一致。 | REQ-GB-012, REQ-GB-014, REQ-GB-NF003 | preflight-all、artifact→project 确定顺序、逐仓 post-check、保留两仓 CR branch、阻断 finish；恢复前重新观察 refs，不自动回滚已成功事实。 |
 
 ## 里程碑建议
 
@@ -168,6 +202,10 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | M-WT1：Canonical Truth and Routing | REQ-WT-001..005, REQ-WT-015, REQ-WT-NF001 | State/CURRENT/CR index 一致性、JSON-only tracking、portable process/docs route、CR-046 status convergence | CR-047 CP2/CP3 |
 | M-WT2：Deterministic Quality Gates | REQ-WT-006..012, REQ-WT-017, REQ-WT-NF002..003 | Doctor、history correction、clean-clone guardrail、Ruff、pytest、Run ledger contract | M-WT1 |
 | M-WT3：Operator Entry and Release Risk | REQ-WT-013..016, REQ-WT-C001..003 | 非交互安装、cache preflight、不授权边界、READY_WITH_RISK 收敛 | M-WT2 |
+| M-GB1：Safe CR Branch Open | REQ-GB-001..004, REQ-GB-006, REQ-GB-C001..002, REQ-GB-NF001..002 | 双仓 precheck、remote refresh、同名 branch、upstream 与 dry-run | CR-050 CP2/CP3/CP5 |
+| M-GB2：Committed Ref Publication | REQ-GB-005, REQ-GB-006, REQ-GB-010 | 只推送已提交 refs、逐仓核验与 partial result | M-GB1 |
+| M-GB3：Explicit Paired Fast-forward Merge | REQ-GB-011..014, REQ-GB-C002..004, REQ-GB-NF003 | 两仓全量预检、artifact→project fast-forward-only default update、逐仓结果与 partial/resume | M-GB2；default-branch write 独立授权 |
+| M-GB4：Proof-gated Cleanup | REQ-GB-007..010, REQ-GB-014, REQ-GB-C002 | merge 后重新证明 ancestry/tip/protected-ref，并幂等清理 local/remote CR branch | M-GB3；2/2 merge terminal PASS |
 
 ## 明确排除项
 

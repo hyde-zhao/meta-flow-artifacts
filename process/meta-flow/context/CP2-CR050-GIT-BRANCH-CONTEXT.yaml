@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "project_id": "meta-flow",
+  "cr_id": "CR-050",
+  "story_id": null,
+  "stage": "CP2",
+  "profile": "architecture-major",
+  "status": "ready",
+  "read_profile": "compact",
+  "budget": {
+    "max_tokens": 12000,
+    "estimated_tokens": 6766,
+    "estimator": "chars_div_4"
+  },
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-050.summary.json",
+  "story_summary_ref": null,
+  "route_plan_ref": "process/checks/CP0-CR-050.route-plan.json",
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "artifact_budgets": "process/policies/ARTIFACT-BUDGETS.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json"
+  },
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "must_read": [
+    {"estimated_tokens": 599, "mode": "full", "path": "process/state/STATE.current.json", "reason": "machine_state", "required": true},
+    {"estimated_tokens": 198, "mode": "full", "path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true},
+    {"estimated_tokens": 395, "mode": "full", "path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true}
+  ],
+  "allowed_reads": [
+    {"estimated_tokens": 599, "mode": "full", "path": "process/state/STATE.current.json", "reason": "lightweight_runtime_state", "required": true},
+    {"estimated_tokens": 198, "mode": "full", "path": "process/current/CURRENT.json", "reason": "current_discovery_entry", "required": true},
+    {"estimated_tokens": 749, "mode": "full", "path": "process/changes/summaries/CR-050.summary.json", "reason": "current_cr_summary", "required": true},
+    {"estimated_tokens": 395, "mode": "full", "path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true},
+    {"estimated_tokens": 729, "mode": "full", "path": "process/checks/CP0-CR-050.route-plan.json", "reason": "route_plan", "required": true},
+    {"estimated_tokens": 782, "mode": "full", "path": "process/checks/CP1-CR050-GIT-BRANCH-USE-CASE.result.json", "reason": "cp1_result", "required": true},
+    {"estimated_tokens": 709, "mode": "full", "path": "process/checks/CP2-CR050-GIT-BRANCH-BASELINE.result.json", "reason": "cp2_auto_result", "required": true},
+    {"estimated_tokens": 2605, "mode": "full", "path": "process/checkpoints/CP2-CR050-GIT-BRANCH-BASELINE.md", "reason": "human_gate", "required": true}
+  ],
+  "read_if_needed": [
+    {"estimated_tokens": 0, "mode": "summary", "path": "process/docs/product/USE-CASES.md", "reason": "traceability_audit", "required": false},
+    {"estimated_tokens": 0, "mode": "summary", "path": "process/docs/product/REQUIREMENTS.md", "reason": "traceability_audit", "required": false},
+    {"estimated_tokens": 0, "mode": "summary", "path": "process/docs/product/SCENARIOS.yaml", "reason": "coverage_audit", "required": false},
+    {"estimated_tokens": 0, "mode": "summary", "path": "process/docs/product/TEST-MATRIX.md", "reason": "coverage_audit", "required": false},
+    {"estimated_tokens": 0, "mode": "summary", "path": "process/docs/product/STORY-MAP.md", "reason": "scope_audit", "required": false},
+    {"estimated_tokens": 0, "mode": "summary", "path": "process/docs/product/MVP-SCOPE.md", "reason": "scope_audit", "required": false}
+  ],
+  "must_verify": [],
+  "scope_summary": {
+    "use_cases": "UC-GB-001..003",
+    "requirements": "REQ-GB-001..010, REQ-GB-C001..003, REQ-GB-NF001..002",
+    "scenarios": "TC-GB-001..011",
+    "stories": "ST-GB-001..003",
+    "recommended_tool": "native git subprocess boundary; no gb/Git Town runtime dependency",
+    "repository_scope": "project and artifact repositories use the same CR branch name",
+    "merge_contract": "verify external merge by exact ref/tip and Git ancestry; no automatic merge",
+    "commit_contract": "publish only pre-existing commits; no implicit stage or commit"
+  },
+  "decision_ids": ["CP2-DQ-01", "CP2-DQ-02", "CP2-DQ-03", "CP2-DQ-04", "CP2-DQ-05"],
+  "user_confirmations": ["帮我实现git分支管理功能", "不使用子agent，继续推进"],
+  "not_authorized": [
+    "source_implementation_before_CP5",
+    "repository_commit",
+    "repository_push",
+    "remote_branch_create",
+    "remote_branch_delete",
+    "auto_merge",
+    "force_operation",
+    "history_rewrite",
+    "credentials",
+    "runtime",
+    "SaaS",
+    "production_write",
+    "trading"
+  ],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human summary / legacy fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "long plan is not a default CP2 input"},
+    {"path_or_pattern": "process/STORY-STATUS.md", "reason": "legacy status view"},
+    {"path_or_pattern": "process/changes/*.md", "reason": "use CR summary unless deep review is logged"},
+    {"path_or_pattern": "process/stories/*-LLD.md", "reason": "CP5 evidence is not a CP2 input"},
+    {"path_or_pattern": "process/stories/*-IMPLEMENTATION.md", "reason": "implementation does not exist at CP2"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold audit history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "discussion is audit-only unless explicitly expanded"}
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md",
+    "process/archive/**",
+    "process/discussions/**"
+  ],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson"
+}

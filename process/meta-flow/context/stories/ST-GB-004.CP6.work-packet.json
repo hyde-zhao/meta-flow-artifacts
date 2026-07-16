@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "meta-flow",
+  "cr_id": "CR-050",
+  "story_id": "ST-GB-004",
+  "story_ref": "process/stories/STORY-ST-GB-004-paired-default-fast-forward.md",
+  "parent_context_ref": "process/context/stories/ST-GB-002.CP7.verify-packet.json",
+  "risk_profile": "architecture-major",
+  "lld_policy": "full-lld",
+  "objective": {"summary": "Implement explicit typed-authz paired fast-forward with artifact-first execution and an invariant-enforcing two-of-two projection gate.", "non_goals": ["merge commit", "rebase", "force", "automatic rollback", "real default write"]},
+  "feature_refs": ["FEAT-GB-04"],
+  "feature_design_refs": ["process/docs/features/cr050-merge/DESIGN.md", "process/docs/features/cr050-merge/TEST-PLAN.md", "process/docs/features/cr050-merge/TASKS.md"],
+  "feature_contract_summary": "Merge consumes matching publish evidence plus fresh refs and operation/OID-bound authz; it uses ordinary exact ref push artifact then project and advances paired projection only after 2/2 exact success.",
+  "feature_design_summary_ref": "process/docs/features/cr050-merge/DESIGN.md",
+  "cr_delta": {"summary": "Adds the separately authorized default-write stage.", "affected_contracts": ["DefaultWriteAuthorization", "plan_merge", "execute_merge", "PairedMergeProjection", "branch-merge CLI"]},
+  "acceptance": [
+    "2/2 fresh eligible refs fast-forward exactly in artifact-to-project order.",
+    "No merge/rebase/force command is executed.",
+    "Artifact PASS plus project failure is PARTIAL and all projection/finish/close booleans remain false.",
+    "Fresh resume returns artifact NO_CHANGE and can complete project without rollback."
+  ],
+  "dependency_inputs": ["ST-GB-002 CP7 PASS_WITH_RISK", "matching PublishEvidence contract"],
+  "allowed_reads": [
+    {"path": "process/stories/STORY-ST-GB-004-paired-default-fast-forward.md", "mode": "full", "required": true, "reason": "story card", "estimated_tokens": 1000},
+    {"path": "process/stories/STORY-ST-GB-004-paired-default-fast-forward-LLD.md", "mode": "full", "required": true, "reason": "approved LLD", "estimated_tokens": 2400},
+    {"path": "process/evidence/ST-GB-002.CP7.index.json", "mode": "full", "required": true, "reason": "dependency evidence", "estimated_tokens": 800}
+  ],
+  "must_read": [{"path": "process/stories/STORY-ST-GB-004-paired-default-fast-forward.md", "mode": "full", "required": true, "reason": "story card", "estimated_tokens": 1000}, {"path": "process/evidence/ST-GB-002.CP7.index.json", "mode": "full", "required": true, "reason": "dependency evidence", "estimated_tokens": 800}],
+  "read_if_needed": [{"path": "process/docs/features/cr050-merge/TEST-PLAN.md", "reason": "fault/projection fixtures"}],
+  "allowed_write_paths": ["meta_flow/workflow/git_branch_lifecycle.py", "meta_flow/workspace/git_sync.py", "meta_flow/workflow/cr_lifecycle.py", "meta_flow/state/current.py", "meta_flow/cli.py", "tests/test_git_branch_lifecycle.py"],
+  "forbidden_write_paths": ["process/quant-lab/**", "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**", "delivery/**", ".git/**"],
+  "verification_plan": ["uv run --python 3.11 pytest -q tests/test_git_branch_lifecycle.py -k merge", "uv run --python 3.11 pytest -q tests/test_workspace_git_sync.py tests/test_cr_lifecycle.py", "uv run --python 3.11 ruff check <CR050 touched Python paths>", "git diff --check"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_REPOSITORY_PUBLICATION"],
+  "expected_return_packet": "process/returns/ST-GB-004.CP6.return.json",
+  "denied_default_reads": ["process/archive/**", "process/discussions/**", "process/quant-lab/**"],
+  "do_not_read_by_default": [{"path_or_pattern": "process/archive/**", "reason": "cold history"}, {"path_or_pattern": "process/quant-lab/**", "reason": "forbidden"}],
+  "budget": {"estimated_tokens": 6200, "estimator": "chars_div_4", "max_tokens": 18000},
+  "context_sufficiency": {"required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"], "strict_profiles": ["architecture-major"]}
+}

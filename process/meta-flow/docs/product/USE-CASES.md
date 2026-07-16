@@ -1,11 +1,11 @@
 ---
 status: baseline
-version: "1.4"
+version: "1.6"
 created_at: "2026-07-02"
 owner: "meta-pm"
 cr_ref: "CR-037"
 source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT-IMPLEMENTATION-PLAN-2026-07-02.md"
-baseline_note: "正式产品基线；CR-047 已通过 CP2，正在进行 workflow truth 与交付治理的 CP3 架构设计；CR-046 保持 closed / READY_WITH_RISK，历史时序不得改写；当前未授权真实运行、凭据、生产写入、发布、交易或仓库推送。"
+baseline_note: "正式产品基线；CR-047/048/049 已关闭；CR-050 因用户明确要求新增独立 merge 操作而回到 CP2 R2。当前只形成候选产品基线，不授权源码实现、commit 或真实远端 branch/default-branch mutation。"
 engagement_mode: meta-self-dev
 scenario_subject_type: implementation-carrier
 scenario_subject_id: "meta-flow"
@@ -16,8 +16,8 @@ delivery_routing:
   mode: meta-flow-delivery
   output_root: "process/docs/product"
   source: meta-self-dev
-active_change_ref: "CR-047"
-total_use_cases: 19
+active_change_ref: "CR-050"
+total_use_cases: 23
 ---
 
 # Meta Flow 项目治理与状态强制用户场景
@@ -30,6 +30,9 @@ total_use_cases: 19
 | 1.2 | 2026-07-11 | meta-pm | 为 CR-046 增量加入可信时序、平台调度证明、checker 重放、token telemetry 与 append-only 历史迁移场景；保留 UC-PG-001..007 | 原文档增量更新 |
 | 1.3 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：显式加入 compaction 语义保持、通用 post-close correction、机器生成 audit report、null-provenance dogfooding 与 session-observed/repository-unverifiable dispatch 披露；保留全部 UC ID | 原文档增量更新 |
 | 1.4 | 2026-07-13 | meta-pm | 为 CR-047 增量加入跨设备 workflow truth、canonical CR tracking、artifact/docs 路由、Doctor、clean-clone guardrail、Ruff、非交互安装与 CR-046 状态收敛场景；保留全部既有 UC ID | 原文档增量更新 |
+| 1.5 | 2026-07-15 | host-orchestrator inline fallback | 为 CR-050 增量加入双仓 CR 分支开启、已提交 ref 发布、合并证明与安全清理场景；保留全部既有 UC ID，并把 Git/`gb`、双仓、merge 与 commit 边界提交 CP2 | 原文档增量更新 |
+| 1.5.1 | 2026-07-16 | host-orchestrator inline fallback | 记录 SGA-GB-01..05 已由用户在 CP2 批准推荐方案；不改变 UC、指标、Deferred 或不授权范围 | CP2 状态同步 |
+| 1.6 | 2026-07-16 | host-orchestrator inline fallback | 用户澄清 Meta Flow 需要在 publish 后提供独立 merge 能力；新增 UC-GB-004、SGA-GB-06 和量化指标，重开 SGA-GB-03，并将隐式/merge-commit/force 行为继续排除；等待 CP2 R2。 | 原文档增量更新；保留 1.5.1 基线与全部既有 UC ID |
 | 1.0 | 2026-07-02 | meta-pm | 基于已批准实施计划建立产品侧场景基线 | 初始化长期可追踪产品基线 |
 
 ## 用户画像
@@ -67,6 +70,12 @@ total_use_cases: 19
 | SM-WT-06 | Clean-clone guardrail 自洽 | `git archive HEAD` 等价 clean tree 运行 guardrail | 不依赖 ignored 根规则或本机 cache；guardrail 退出码 0 |
 | SM-WT-07 | 非交互安装入口可复现 | Codex / Claude / Qoder project-scope full dry-run | 3/3 命令显式提供 `--project-dir` 且退出码 0 |
 | SM-WT-08 | CR-046 状态收敛诚实 | 对产品矩阵、CR、CP7 与 release 状态做交叉检查 | 7/7 Story 显示 implemented + `PASS_WITH_RISK`；平台 receipt / 独立 QA 不被写成已具备 |
+| SM-GB-01 | CR 分支起点一致 | 对 project/artifact 两仓记录 remote default tip、local branch tip 与 upstream | 2/2 仓 branch tip 等于刷新后的 remote default tip，upstream 建立率 100% |
+| SM-GB-02 | 发布只包含已提交事实 | 比对 local HEAD、remote CR ref、dirty/index 状态 | 2/2 远端 CR ref 等于本地 HEAD；dirty 或未提交变更场景 100% 阻断 |
+| SM-GB-03 | 合并后删除证明充分 | `merge-base --is-ancestor`、exact ref/tip 与删除结果 | 未证明祖先关系的远端删除数为 0；已证明且无漂移的目标分支清理率 100% |
+| SM-GB-04 | 双仓部分失败可恢复 | 注入任一仓 fetch/push/delete 失败并检查结构化结果 | 每仓均有 terminal status、已执行命令和恢复入口；partial success 不被报告为 PASS |
+| SM-GB-05 | Dry-run 零副作用 | dry-run 前后 local/remote refs、HEAD、worktree hash 对比 | local/remote ref 变化数为 0，计划步骤覆盖率 100% |
+| SM-GB-06 | 显式双仓快进合并 | 对两仓 fresh remote default、published CR tip、merge result 与 branch retention 做交叉检查 | 2/2 default branch 仅以 fast-forward 更新；merge commit/rebase/force/自动冲突解决执行数为 0；部分成功时被删 CR branch 数为 0 |
 
 ## 明确排除
 
@@ -79,6 +88,9 @@ total_use_cases: 19
 - 不伪造历史 platform receipt、签名、token telemetry 或 checker identity。
 - 不修改 quant-lab lineage contract、recorder、producer、consumer 或 admission 业务实现。
 - 不让 CP2 approval 隐式授权 credentials、runtime、production write、publish、交易、commit 或 push。
+- 不把 shell alias `gb`、同名 Go 构建工具或 Git Town 设为 Meta Flow 必需依赖。
+- 不把 merge 隐式塞进 `publish` 或 `finish`；不创建 merge commit，不自动审批 PR、调用 forge API、猜测 squash/rebase 已合并或执行 force-push/force-delete。
+- 不隐式 `git add -A`、不替用户选择提交范围；branch publication 只发布已提交 refs。
 
 ## Scenario Gray Areas
 
@@ -98,6 +110,19 @@ total_use_cases: 19
 | SGA-WT-02 | Doctor 的绿色是否要求零 warning，还是只要求零 blocking error 并完整披露 warning | 决定历史兼容提示、空 ledger 等 warning 是否阻断发布 | 验证 / 门控 / 发布结论 | blocking error=0；warning 计数与披露 | resolved-by-user / CP2-DQ-02 |
 | SGA-WT-03 | 历史超预算证据采用 compact summary + archive/hash，还是原位压缩 | 决定历史不可变性、读取预算和恢复成本 | 审计 / 维护 / 回退 | active/default-read 严格预算；closed 历史用 summary/index/hash/correction/archive，不改写 | resolved-by-user / CP2-DQ-03 |
 | SGA-WT-04 | 平台 receipt、独立 QA 与真实 pilot 缺失是否纳入本轮强行“补绿” | 决定是否会把不可用平台事实伪装为仓库证明 | 安全 / 权限 / 发布 | 固定为不伪造；保留 `READY_WITH_RISK` / follow-up，真实运行需独立授权 | resolved |
+| SGA-GB-01 | 使用原生 Git、`gb` 还是 Git Town | 决定安装依赖、跨平台可移植性、同步/force-push 策略和可测试性 | 复杂度 / 验证 / 交付 | 复用现有原生 Git subprocess service；外部工具只保留 adapter 候选 | resolved-by-user / CP2-DQ-01 |
+| SGA-GB-02 | CR 分支只管理源码仓还是 project + artifact 成对管理 | 决定过程证据能否与源码分支在另一设备恢复到同一 CR | 范围 / 失败恢复 / 交付 | 两仓同名 CR 分支；不宣称跨仓原子事务 | resolved-by-user / CP2-DQ-02 |
+| SGA-GB-03 | Meta Flow 是否提供 merge，还是只验证外部 merge 后清理 | 决定完整旅程是否仍需操作者手工完成关键步骤，以及 default branch 写入如何单独授权 | 安全 / 门控 / 回滚 | 提供独立显式 `merge`；不得由 `publish`/`finish` 隐式触发，只允许 fast-forward-only | reopened-by-user / CP2-R2-DQ-01 |
+| SGA-GB-04 | squash/rebase merge 后是否用 patch 相似度猜测已合并 | 决定远端删除是否有充分证明 | 验证 / 数据保留 / 风险 | fail closed；未来由 forge receipt adapter 处理 | resolved-by-user / CP2-DQ-04 |
+| SGA-GB-05 | `cr-publish` 是否隐式 stage/commit 工作树 | 决定提交边界是否可能夹带无关文件或秘密 | 安全 / 可审计性 / 易用性 | 只推送已提交 refs；commit 继续由显式 Git/Host 操作完成 | resolved-by-user / CP2-DQ-05 |
+| SGA-GB-06 | 两仓 merge 的顺序、部分成功和 default-branch 写入授权如何处理 | Git 不提供跨仓事务；第一仓成功后第二仓可能被 branch protection 或并发推进拒绝 | 失败恢复 / 权限 / 删除安全 | 先预检两仓，再按 artifact→project 合并；每仓单独授权/结果；任一失败保留两仓 CR branch，禁止 finish | decision-item / CP2-R2-DQ-02..04 |
+
+## CR-050 用户可见场景确认证据
+
+| Question ID | 问题 | 选项 / 候选理解 | 推荐方案 | 用户回答 | 复述确认 | 影响面 | 来源 | 状态 |
+|---|---|---|---|---|---|---|---|---|
+| SGQ-GB-001 | CR 生命周期是否应覆盖“刷新主分支 → 创建并推送 CR 分支 → 提交后发布 → 远端合并后删除分支”的完整旅程？ | 用户自由表达；安全细节进入 CP2 | 覆盖完整旅程，并对 destructive 步骤 fail closed | “开启cr时从远端主分支拉取最新代码，创建cr分支，然后提交推送到远程分支，然后将远程分支合并到后将分支删除掉” | 核心旅程已由用户明确；工具/双仓/merge 证明/commit 边界由 CP2 决策，不将模糊处静默解释为 force 或自动 merge 授权 | scope / validation / security / gate | 用户请求 / CR-050 | confirmed |
+| SGQ-GB-002 | 当前 Git 生命周期缺少 merge 操作，是否需要让 Meta Flow 在 publish 后显式合并？ | 独立 `merge`、保持外部 merge、或 forge adapter | 增加显式两仓 fast-forward-only merge，默认不隐式触发 | 用户询问“该需要实现后可以支持推送后合并分支吗”，并回复 `approve` 接受推荐边界 | `publish` 仍只推送 CR ref；`merge` 需要独立调用和 default-branch-write 授权；只允许快进，两仓部分成功保留分支并阻断 `finish` | scope / authorization / recovery / gate | 用户对话 / CR-050 CP3 changes requested | confirmed-for-CP2-R2 |
 
 ## Deferred Ideas
 
@@ -111,6 +136,9 @@ total_use_cases: 19
 | DEF-EI-002 | 用估算 token 建立计费或配额门禁 | SGA-06 | 估算不是平台实测，不能成为强制成本决策依据 | 平台 telemetry 覆盖稳定且误差模型经独立验证后重新评审 |
 | DEF-WT-001 | 平台签发的 custom-agent / model / profile receipt 与独立 runtime attestation | CR-045/046 遗留风险、SGA-WT-04 | 当前平台 surface 不提供仓库可验证 receipt，本 CR 不授权真实 runtime 或 SaaS | 平台公开稳定 receipt contract，且用户另行授权真实运行验证 |
 | DEF-WT-002 | CR-033 MF-018 runtime trace / SaaS 真实验证 | follow-up candidate | 缺 C0 runtime target、凭据边界和独立运行授权 | 用户正式启动新 CR，提供 runtime target 与最小权限授权 |
+| DEF-GB-001 | Forge API/receipt adapter 支持 squash/rebase merge 后的可证明清理 | SGA-GB-04 | 需要 GitHub/GitLab 等平台身份、token、PR receipt 与权限模型，本轮不授权 | 用户启动独立 CR，选择目标 forge，并提供最小权限与 receipt contract |
+| DEF-GB-002 | Git Town adapter、stacked branch 和 offline ship 工作流 | SGA-GB-01 | 当前目标是普通 CR 分支；引入 Git Town 会增加配置、同步与升级面 | 出现真实 stacked-branch 需求，且原生 Git adapter 无法满足时重新评审 |
+| DEF-GB-003 | 自动 stage/commit 与提交内容规划 | SGA-GB-05 | 自动收集工作树可能夹带无关文件或敏感内容，且双仓提交消息/范围需要独立契约 | 用户明确要求该能力，并批准 path allowlist、secret scan 与提交回滚策略 |
 
 ## 使用场景列表
 
@@ -342,6 +370,54 @@ total_use_cases: 19
 | 前置条件 | 正式 CR-046 与 CP7 result 可读 |
 | 排除情况 | 不倒填事前批准，不把 fixture rejection 写成真实平台 receipt，不重新打开历史时序 |
 
+### UC-GB-001：从刷新后的远端主分支开启成对 CR 分支
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-01 Host Orchestrator 维护者、P-03 项目迁移执行者 |
+| 触发条件 | 正式 CR 已创建且 route plan 允许进入分支开启动作 |
+| 输入 | CR ID、可选 slug、remote、可选 default-branch override、project/artifact workspace 路由 |
+| 处理逻辑 | 对两仓执行 Git/route/clean/detached/branch-collision precheck；刷新 remote refs；以 remote HEAD 或显式 override 识别主分支；仅允许 `pull --ff-only`；从 exact remote default tip 创建同名 CR branch 并 `push -u`。任一仓失败即输出 partial/blocking result，不执行 force 补偿 |
+| 输出/结果 | 两仓 CR branch、upstream、base OID 和逐仓执行结果可审计；dry-run 只输出计划 |
+| 前置条件 | 两仓 Git repo 与 process route 健康；remote 可读写；工作树 clean；不存在分叉或同名 ref 冲突；真实 push 已单独授权 |
+| 排除情况 | 不 reset/rebase/force；不自动 stash；不处理 `process/quant-lab/**` 或 prelink backup |
+
+### UC-GB-002：发布已经显式提交的 CR 分支变更
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-01 Host Orchestrator 维护者、P-02 功能 Agent / Skill 作者 |
+| 触发条件 | CR branch 上的源码与过程产物已由显式 Git/Host 操作提交，准备发布到同名远端 branch |
+| 输入 | CR ID、预期 branch、两仓 local HEAD/upstream、可选 expected OID |
+| 处理逻辑 | 验证两仓当前分支、upstream、clean 状态和非快进风险；只推送已提交 refs；逐仓核验 remote ref 等于 local HEAD。dirty、detached、wrong branch 或 non-fast-forward 均 fail closed |
+| 输出/结果 | 两仓 remote CR ref 与本地 HEAD 一致，或结构化 partial/failure 结果与恢复建议 |
+| 前置条件 | 提交范围已由显式 `git add`/`git commit` 或等价受控操作决定；repository publication 已授权 |
+| 排除情况 | 不隐式 stage/commit/amend；不自动选择提交文件；不 force-push |
+
+### UC-GB-003：仅在合并证明充分后安全清理 CR 分支
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-01 Host Orchestrator 维护者、P-04 审批者 / Reviewer |
+| 触发条件 | 托管平台或人工 Git 流程已把两仓 CR branch 合入各自远端主分支，准备关闭 CR refs |
+| 输入 | CR ID、branch、remote/default branch、recorded/local/remote tip OID、两仓状态 |
+| 处理逻辑 | 重新 fetch；验证 default branch 受保护、目标 ref 身份和 tip 未漂移；要求 CR tip 是 remote default tip 的祖先；先保留本地恢复指针并删除 exact remote CR ref，再用 `branch -d` 删除 local ref；刷新主分支只允许 ff-only。远端已自动删除时，仍必须由 local/recorded tip 完成 ancestry 证明 |
+| 输出/结果 | 两仓目标 CR refs 不存在、main 未被 destructive 改写、删除证据与逐仓状态可审计；无法证明时 BLOCKED 且 refs 保留 |
+| 前置条件 | 合并采用 ancestry-preserving 方式，或未来存在受信 platform receipt adapter；remote delete 已单独授权 |
+| 排除情况 | `finish` 不自动或隐式 merge；不删除 main/master/perennial/protected refs；不按 patch-id 猜测 squash/rebase 已合并；不 force-delete |
+
+### UC-GB-004：显式把两仓 CR tip 快进到各自远端默认分支
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-01 Host Orchestrator 维护者、P-04 审批者 / Reviewer |
+| 触发条件 | project/artifact 两仓 CR branch 已通过 `publish`，操作者显式请求 merge，并为 default-branch write 提供独立授权 |
+| 输入 | CR ID、两仓已发布 exact tip、fresh remote default tip、remote/default branch、授权引用、可选 expected OID |
+| 处理逻辑 | 先对两仓完成只读 preflight，证明 remote CR ref 等于已发布 tip、default 未漂移且可 fast-forward；随后按 artifact→project 的确定顺序把 exact CR tip fast-forward 到 remote default。每仓操作后重新读取远端 OID；禁止 merge commit、rebase、force、自动冲突解决和隐式分支删除 |
+| 输出/结果 | 2/2 remote default 精确等于各自 CR tip时整体 PASS；第一仓成功、第二仓被并发推进/保护策略/权限拒绝时整体 PARTIAL，保留两仓 CR branch、记录逐仓 before/after OID 和恢复入口，并阻断 `finish` |
+| 前置条件 | 两仓 preflight 全部通过；`publish` 证据可读；真实 default-branch write 已独立授权；远端策略允许 fast-forward direct update |
+| 排除情况 | 不由 `publish`/`finish` 自动触发；不创建 merge commit；不绕过 branch protection/review/merge queue；不自动回滚已经发生的 default-branch fast-forward |
+
 ## 附录：覆盖自检表
 
 | 维度 ID | 维度名称 | 状态 | 涉及场景 | 备注 |
@@ -362,3 +438,11 @@ total_use_cases: 19
 | D6-WT | 方式维度 | 已补充 | UC-WT-001..007 | 通过 JSON truth、symlink metadata、Doctor、Ruff、guardrail、dry-run 和 append-only correction 验证 |
 | D7-WT | 异常维度 | 已补充 | UC-WT-001..007 | 覆盖 closed active CR、legacy index、断链、超预算、missing rule、lint error、缺 project-dir 和 receipt unavailable |
 | D8-WT | 集成维度 | 已补充 | UC-WT-001..007 | 与 state/current/CR index、artifact repo、quality policy、README、CI 与 CR-046 evidence 链衔接 |
+| D1-GB | 用户维度 | 已补充 | UC-GB-001..004 | 覆盖 Host Orchestrator、实现作者、迁移者与审批者 |
+| D2-GB | 任务维度 | 已补充 | UC-GB-001..004 | 覆盖开启、发布、显式合并和关闭四个用户 outcome |
+| D3-GB | 动机维度 | 已补充 | UC-GB-001..004 | 以跨设备可恢复、远端 ref 安全、完整交付旅程和减少手工漂移为目标 |
+| D4-GB | 时间维度 | 已补充 | UC-GB-001..004 | 覆盖 CR 开启、实现提交后、显式 merge、清理和重复执行 |
+| D5-GB | 环境维度 | 已补充 | UC-GB-001..004 | 覆盖双仓、远端默认分支、branch protection、并发推进与 forge 自动删 branch |
+| D6-GB | 方式维度 | 已补充 | UC-GB-001..004 | 使用原生 Git、ff-only、upstream、exact OID、ancestry 与 dry-run |
+| D7-GB | 异常维度 | 已补充 | UC-GB-001..004 | 覆盖 dirty/detached/divergence/collision/partial/non-ancestor/ref drift/默认分支写拒绝 |
+| D8-GB | 集成维度 | 已补充 | UC-GB-001..004 | 与 workspace routing、CR route plan、双仓 push/merge、ledger/result 和 release cleanup 衔接 |

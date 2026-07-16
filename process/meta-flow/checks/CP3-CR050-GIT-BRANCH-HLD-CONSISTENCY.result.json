@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3",
+  "checkpoint_id": "CP3-CR050-GIT-BRANCH-HLD-CONSISTENCY",
+  "cr_id": "CR-050",
+  "profile": "architecture-major",
+  "check_attempt": 1,
+  "context_ref": "process/context/CP3-CR050-GIT-BRANCH-DESIGN-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR-050.route-plan.json",
+  "evidence_ref": "process/docs/design/CR050-GIT-BRANCH-HLD.md",
+  "dispatch_refs": ["IF-CR050-CP2-CP3-SOLUTION-DESIGN"],
+  "review_ref": "process/checkpoints/CP2-CR050-GIT-BRANCH-BASELINE.md#人工审查结果",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "ad3f6f42b179ec4767d29a07b7e9604e1969b8fe",
+    "invocation": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP3-CR050-GIT-BRANCH-HLD-CONSISTENCY.result.json --check-consistency --project-root .",
+    "generated_by": "host-orchestrator-inline/meta-se",
+    "fallback_used": true,
+    "fallback_reason": "User required no subagents; CP3 solution design was produced by the Host Orchestrator using the bounded inline fallback.",
+    "fallback_review_ref": "process/handoffs/CR050-CP2-CP3-META-SE.md"
+  },
+  "input_artifact_hashes": {
+    "process/context/CP3-CR050-GIT-BRANCH-DESIGN-CONTEXT.yaml": "sha256:05a12d163df24214fafca0beab3e520956401dd70b1ec770243300e13502c675",
+    "process/docs/product/REQUIREMENTS.md": "sha256:d8163afb96dfdae5fef1e228f9684fc6de5b85acc97e6e8367efef1c7f8d4d22",
+    "process/checkpoints/CP2-CR050-GIT-BRANCH-BASELINE.md": "sha256:7d4fc8e1f9a6502887efbdb372d9222b9bf6570d4c8a3c28cfcc53a1ce1e5730",
+    "process/docs/design/CR050-GIT-BRANCH-BLUEPRINT.md": "sha256:d07b1db883e7375830df9cde4c72210df1cba53a30f521e60bed1095dc31b82a",
+    "process/docs/design/CR050-GIT-BRANCH-DOMAIN-MAP.md": "sha256:1aa59925d8e94fcb3823d3767c5692736fc1477e7d8a701cb26feb41196650f1",
+    "process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md": "sha256:50d80ce2d7f5cc4a2557755f0544b5a429a20d6062d5d14ef95bf083364aaa40",
+    "process/docs/design/CR050-GIT-BRANCH-HLD.md": "sha256:e8c12302172664f57048eb7dfd4e59952522c69beb3f0944ff93ae8daa97580e",
+    "process/docs/design/CR050-GIT-BRANCH-ARCHITECTURE-DECISION.md": "sha256:ced29e69f136ba88260dcc35a127122df4371fbedae30a63934606fb999ed009"
+  },
+  "items": [
+    {
+      "id": "CP3-CR050-001",
+      "category": "blueprint",
+      "name": "Capability, Feature, domain ownership and dependency boundaries are explicit and acyclic",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR050-GIT-BRANCH-BLUEPRINT.md",
+        "process/docs/design/CR050-GIT-BRANCH-DOMAIN-MAP.md",
+        "process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR050-002",
+      "category": "architecture_options",
+      "name": "HLD compares native Git lifecycle, external tooling and manual commands with measurable applicability",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/design/CR050-GIT-BRANCH-HLD.md#4-候选方案"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Option A is recommended; external tooling remains a conditional future adapter."
+    },
+    {
+      "id": "CP3-CR050-003",
+      "category": "integration_contract",
+      "name": "Explicit CR Start Coordinator resolves CR-first versus artifact clean-precheck ordering without implicit remote writes",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR050-GIT-BRANCH-HLD.md#71-governed-startopen",
+        "process/docs/design/CR050-GIT-BRANCH-ARCHITECTURE-DECISION.md#adr-gb-001使用原生-git-lifecycle-service-与显式-cr-start-coordinator"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR050-004",
+      "category": "failure_path",
+      "name": "Paired-repository execution is preflighted, deterministic, monotonic, non-atomic and recoverable by observation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md#5-operation-dag",
+        "process/docs/design/CR050-GIT-BRANCH-DOMAIN-MAP.md#7-幂等与恢复规则"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR050-005",
+      "category": "evidence_and_truth",
+      "name": "Git refs, workflow state and append-only attempt evidence retain separate owners; cleanup uses a local recovery ref",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR050-GIT-BRANCH-BLUEPRINT.md#6-数据归属",
+        "process/docs/design/CR050-GIT-BRANCH-ARCHITECTURE-DECISION.md#adr-gb-003git-refs-持有事实append-only-attempt-持有证据"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR050-006",
+      "category": "security_and_proof",
+      "name": "Exact identity, protected-ref, tip and Git ancestry checks fail closed; shell, force, auto-merge and implicit commit are forbidden",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR050-GIT-BRANCH-HLD.md#8-安全与失败设计",
+        "process/docs/design/CR050-GIT-BRANCH-DOMAIN-MAP.md#6-核心不变量"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "block_release",
+      "waiver_ref": null
+    },
+    {
+      "id": "CP3-CR050-007",
+      "category": "traceability_and_simulation",
+      "name": "Three use cases, requirements, three Stories and eleven scenarios map to modules and nine architecture simulations",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/docs/design/CR050-GIT-BRANCH-HLD.md#10-use-case--architecture-traceability",
+        "process/docs/design/CR050-GIT-BRANCH-HLD.md#11-架构场景模拟",
+        "process/docs/product/TEST-MATRIX.md#cr-050-场景覆盖矩阵"
+      ],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Design simulations are not CP7 runtime evidence."
+    },
+    {
+      "id": "CP3-CR050-008",
+      "category": "budget_authorization_and_ceiling",
+      "name": "HLD is below 20 KiB; no source implementation or real Git mutation occurred; independent-QA verdict ceiling is explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR050-GIT-BRANCH-HLD.md#14-风险回退与发布上限",
+        "process/context/CP3-CR050-GIT-BRANCH-DESIGN-CONTEXT.yaml"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "HLD size is 17896 bytes; CP7 <= PASS_WITH_RISK and CP8 <= READY_WITH_RISK while independent QA is unavailable."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260715T161255Z0000-6da22cc9",
+    "RE-20260715T161255Z0000-6dbe1257",
+    "RE-20260715T161256Z0000-d12ca215",
+    "RE-20260715T161256Z0000-1dc0735e",
+    "RE-20260715T161256Z0000-6dda3122",
+    "RE-20260715T161256Z0000-f088d867",
+    "RE-20260715T161256Z0000-1469a6dc",
+    "RE-20260715T162641Z0000-699877ae",
+    "RE-20260715T162641Z0000-04b68911",
+    "RE-20260715T162641Z0000-8359943e"
+  ],
+  "decision": "PASS",
+  "next_route": "CP3-human-gate-review",
+  "checked_at": "2026-07-15T16:27:30Z"
+}

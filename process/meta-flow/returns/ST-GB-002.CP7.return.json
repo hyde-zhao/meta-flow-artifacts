@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-050",
+  "story_id": "ST-GB-002",
+  "status": "verified_with_risk",
+  "touched_files": [
+    {"path": "meta_flow/workflow/git_branch_lifecycle.py", "change_type": "verified"},
+    {"path": "meta_flow/workflow/cr_lifecycle.py", "change_type": "verified"},
+    {"path": "tests/test_git_branch_lifecycle.py", "change_type": "verified"}
+  ],
+  "contract_changes": {"public_api_changed": false, "data_contract_changed": false, "design_delta_required": false, "design_delta_ref": null},
+  "boundary_check": {"allowed_paths_only": true, "forbidden_paths_touched": [], "unexpected_imports": []},
+  "verification": {
+    "commands_run": [
+      {"command": "uv run --python 3.11 pytest -q tests/test_git_branch_lifecycle.py -k publish", "result": "pass", "summary": "2 passed, 9 deselected"},
+      {"command": "uv run --python 3.11 pytest -q tests/test_workspace_git_sync.py tests/test_cr_lifecycle.py", "result": "pass", "summary": "36 passed"},
+      {"command": "branch-publish help + touched-path Ruff + git diff --check", "result": "pass", "summary": "0 errors"}
+    ],
+    "tests": ["TC-GB-004", "TC-GB-005", "TC-GB-009", "TC-GB-010"],
+    "skipped": ["Independent meta-qa dispatch", "Real remote policy/receipt"]
+  },
+  "evidence_refs": ["process/docs/quality/CR050-VERIFICATION-REPORT.md", "process/evidence/ST-GB-002.CP6.index.json"],
+  "open_questions": [],
+  "risks": [
+    {"id": "CR050-RISK-NO-INDEPENDENT-CP7-AGENT", "level": "high", "status": "open", "owner": "CP8 decision owner", "detail": "Independent QA attestation unavailable."},
+    {"id": "CR050-RISK-REAL-REMOTE-UNVERIFIED", "level": "high", "status": "open", "owner": "CP8 decision owner", "detail": "Real remote behavior unverified."}
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "advance_to_ST-GB-004_with_additive_risk"
+}

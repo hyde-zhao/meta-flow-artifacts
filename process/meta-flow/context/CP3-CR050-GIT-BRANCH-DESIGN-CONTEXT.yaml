@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "project_id": "meta-flow",
+  "cr_id": "CR-050",
+  "story_id": null,
+  "stage": "CP3",
+  "profile": "architecture-major",
+  "status": "ready-for-human-gate",
+  "read_profile": "compact",
+  "budget": {
+    "max_tokens": 18000,
+    "estimated_tokens": 13750,
+    "estimator": "chars_div_4"
+  },
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-050.summary.json",
+  "story_summary_ref": null,
+  "route_plan_ref": "process/checks/CP0-CR-050.route-plan.json",
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "artifact_budgets": "process/policies/ARTIFACT-BUDGETS.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json"
+  },
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "must_read": [
+    {"estimated_tokens": 700, "mode": "full", "path": "process/state/STATE.current.json", "reason": "machine_state", "required": true},
+    {"estimated_tokens": 250, "mode": "full", "path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true},
+    {"estimated_tokens": 400, "mode": "full", "path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true},
+    {"estimated_tokens": 3200, "mode": "full", "path": "process/checkpoints/CP2-CR050-GIT-BRANCH-BASELINE.md", "reason": "approved_product_decisions", "required": true},
+    {"estimated_tokens": 4500, "mode": "full", "path": "process/docs/design/CR050-GIT-BRANCH-HLD.md", "reason": "architecture_proposal", "required": true},
+    {"estimated_tokens": 1600, "mode": "full", "path": "process/docs/design/CR050-GIT-BRANCH-ARCHITECTURE-DECISION.md", "reason": "architecture_decisions", "required": true}
+  ],
+  "allowed_reads": [
+    {"estimated_tokens": 700, "mode": "full", "path": "process/state/STATE.current.json", "reason": "lightweight_runtime_state", "required": true},
+    {"estimated_tokens": 250, "mode": "full", "path": "process/current/CURRENT.json", "reason": "current_discovery_entry", "required": true},
+    {"estimated_tokens": 1000, "mode": "full", "path": "process/changes/summaries/CR-050.summary.json", "reason": "current_cr_summary", "required": true},
+    {"estimated_tokens": 400, "mode": "full", "path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true},
+    {"estimated_tokens": 750, "mode": "full", "path": "process/checks/CP0-CR-050.route-plan.json", "reason": "route_plan", "required": true},
+    {"estimated_tokens": 3200, "mode": "full", "path": "process/checkpoints/CP2-CR050-GIT-BRANCH-BASELINE.md", "reason": "approved_cp2", "required": true},
+    {"estimated_tokens": 2200, "mode": "full", "path": "process/docs/design/CR050-GIT-BRANCH-BLUEPRINT.md", "reason": "capability_feature_boundary", "required": true},
+    {"estimated_tokens": 2500, "mode": "full", "path": "process/docs/design/CR050-GIT-BRANCH-DOMAIN-MAP.md", "reason": "domain_objects_invariants", "required": true},
+    {"estimated_tokens": 1950, "mode": "full", "path": "process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md", "reason": "dependency_and_file_ownership", "required": true},
+    {"estimated_tokens": 4500, "mode": "full", "path": "process/docs/design/CR050-GIT-BRANCH-HLD.md", "reason": "architecture_proposal", "required": true},
+    {"estimated_tokens": 1600, "mode": "full", "path": "process/docs/design/CR050-GIT-BRANCH-ARCHITECTURE-DECISION.md", "reason": "adr_candidates", "required": true},
+    {"estimated_tokens": 0, "mode": "summary", "path": "process/checks/CP3-CR050-GIT-BRANCH-HLD-CONSISTENCY.result.json", "reason": "cp3_auto_result", "required": false},
+    {"estimated_tokens": 0, "mode": "summary", "path": "process/checkpoints/CP3-CR050-GIT-BRANCH-HLD-REVIEW.md", "reason": "cp3_human_gate", "required": false}
+  ],
+  "read_if_needed": [
+    {"estimated_tokens": 0, "mode": "summary", "path": "process/docs/product/USE-CASES.md", "reason": "uc_traceability_audit", "required": false},
+    {"estimated_tokens": 0, "mode": "summary", "path": "process/docs/product/REQUIREMENTS.md", "reason": "requirement_traceability_audit", "required": false},
+    {"estimated_tokens": 0, "mode": "summary", "path": "process/docs/product/SCENARIOS.yaml", "reason": "failure_path_audit", "required": false},
+    {"estimated_tokens": 0, "mode": "summary", "path": "process/docs/product/TEST-MATRIX.md", "reason": "verification_mapping", "required": false},
+    {"estimated_tokens": 0, "mode": "summary", "path": "meta_flow/workspace/git_sync.py", "reason": "existing_git_adapter_contract", "required": false},
+    {"estimated_tokens": 0, "mode": "summary", "path": "meta_flow/cli.py", "reason": "existing_cli_integration", "required": false},
+    {"estimated_tokens": 0, "mode": "summary", "path": "tests/test_workspace_git_sync.py", "reason": "existing_fixture_contract", "required": false}
+  ],
+  "must_verify": [],
+  "scope_summary": {
+    "use_cases": "UC-GB-001..003",
+    "requirements": "REQ-GB-001..010, REQ-GB-C001..003, REQ-GB-NF001..002",
+    "scenarios": "TC-GB-001..011",
+    "stories": "ST-GB-001..003",
+    "recommended_architecture": "Option A: native Git lifecycle service plus explicit CR Start Coordinator, paired monotonic execution and append-only evidence",
+    "start_contract": "precheck and local branch prepare before existing CR bootstrap, then push tracking refs; old bootstrap has no implicit remote writes",
+    "publication_contract": "only pre-existing committed refs; no stage/commit/amend/force",
+    "cleanup_contract": "exact identity/tip/protected checks plus Git ancestry; local recovery ref before exact delete",
+    "truth_contract": "Git refs own ref facts; CR/state own workflow facts; attempt results and existing ledgers own evidence"
+  },
+  "decision_ids": ["CP3-DQ-01", "CP3-DQ-02", "CP3-DQ-03", "CP3-DQ-04"],
+  "discussion_log_ref": "process/discussions/CP3-CR050-GIT-BRANCH-HLD-DISCUSSION-LOG.md",
+  "discussion_checkpoint_ref": "process/checks/CP3-CR050-DISCUSSION-CHECKPOINT.json",
+  "approved_cp2_decisions": [
+    "native Git subprocess; no required gb/Git Town dependency",
+    "project and artifact repositories use the same CR branch without atomicity claim",
+    "finish verifies external merge and never auto-merges",
+    "squash/rebase without trusted receipt fails closed",
+    "publish never stages or commits implicitly"
+  ],
+  "user_confirmations": ["approve CP2", "不使用子agent，继续推进"],
+  "not_authorized": [
+    "source_implementation_before_CP5",
+    "repository_commit",
+    "real_remote_branch_create_or_push",
+    "real_remote_branch_delete",
+    "automatic_merge",
+    "force_operation",
+    "history_rewrite",
+    "forge_api",
+    "credentials",
+    "runtime",
+    "SaaS",
+    "production_write",
+    "trading",
+    "process_quant_lab_changes",
+    "prelink_backup_changes"
+  ],
+  "risks": [
+    "cross-repository partial state cannot be made atomic",
+    "squash/rebase merge is unprovable with Git ancestry alone",
+    "remote branch deletion requires exact proof and explicit authorization",
+    "local recovery refs need future retention policy",
+    "independent QA is unavailable while subagents remain disabled"
+  ],
+  "read_expansion_refs": [
+    "RE-20260715T161255Z0000-6da22cc9",
+    "RE-20260715T161255Z0000-6dbe1257",
+    "RE-20260715T161256Z0000-d12ca215",
+    "RE-20260715T161256Z0000-1dc0735e",
+    "RE-20260715T161256Z0000-6dda3122",
+    "RE-20260715T161256Z0000-f088d867",
+    "RE-20260715T161256Z0000-1469a6dc",
+    "RE-20260715T162641Z0000-699877ae",
+    "RE-20260715T162641Z0000-04b68911",
+    "RE-20260715T162641Z0000-8359943e"
+  ],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human summary / legacy fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "Story planning not approved before CP3"},
+    {"path_or_pattern": "process/stories/**", "reason": "LLD/implementation not approved before CP3"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold audit history"},
+    {"path_or_pattern": "process/discussions/** except CP3-CR050-GIT-BRANCH-HLD-DISCUSSION-LOG.md", "reason": "audit-only"},
+    {"path_or_pattern": "process/quant-lab/**", "reason": "different project and explicitly excluded"},
+    {"path_or_pattern": "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**", "reason": "explicitly excluded"}
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/stories/**",
+    "process/archive/**",
+    "process/discussions/**",
+    "process/quant-lab/**",
+    "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**"
+  ],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson"
+}

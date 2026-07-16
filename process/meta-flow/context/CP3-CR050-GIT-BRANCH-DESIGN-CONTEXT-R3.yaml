@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "project_id": "meta-flow",
+  "cr_id": "CR-050",
+  "story_id": null,
+  "stage": "CP3",
+  "profile": "architecture-major",
+  "status": "approved",
+  "read_profile": "compact",
+  "budget": {"max_tokens": 18000, "estimated_tokens": 15600, "estimator": "chars_div_4"},
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-050.summary.json",
+  "route_plan_ref": "process/checks/CP0-CR-050.route-plan.json",
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "artifact_budgets": "process/policies/ARTIFACT-BUDGETS.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json"
+  },
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true},
+    {"path": "process/checkpoints/CP2-CR050-GIT-BRANCH-BASELINE-R2.md", "reason": "approved_product_order_and_authz_boundary", "required": true},
+    {"path": "process/docs/design/CR050-GIT-BRANCH-HLD.md", "reason": "v1.2_architecture_contract", "required": true},
+    {"path": "process/docs/design/CR050-GIT-BRANCH-ARCHITECTURE-DECISION.md", "reason": "accepted_adr_and_switch_conditions", "required": true},
+    {"path": "process/docs/quality/CR050-CP3-R2-INDEPENDENT-REVIEW.md", "reason": "formalized_review_input", "required": true}
+  ],
+  "allowed_reads": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true},
+    {"path": "process/current/CURRENT.json", "reason": "current_projection", "required": true},
+    {"path": "process/docs/design/CR050-GIT-BRANCH-BLUEPRINT.md", "reason": "capability_and_projection_ownership", "required": true},
+    {"path": "process/docs/design/CR050-GIT-BRANCH-DOMAIN-MAP.md", "reason": "domain_invariants", "required": true},
+    {"path": "process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md", "reason": "dependency_and_command_boundary", "required": true},
+    {"path": "process/docs/design/CR050-GIT-BRANCH-HLD.md", "reason": "architecture_contract", "required": true},
+    {"path": "process/docs/design/CR050-GIT-BRANCH-ARCHITECTURE-DECISION.md", "reason": "accepted_decisions", "required": true},
+    {"path": "process/docs/quality/CR050-CP3-R2-INDEPENDENT-REVIEW.md", "reason": "review_input", "required": true}
+  ],
+  "read_if_needed": [
+    {"path": "process/docs/product/TEST-MATRIX.md", "reason": "UC_ST_TC_traceability_audit", "required": false},
+    {"path": "process/changes/CR-050.md", "reason": "CR_frontmatter_traceability_audit", "required": false}
+  ],
+  "must_verify": [
+    {"id": "MV-01", "kind": "architecture_budget", "required_stage": "CP7", "assertion": "HLD byte size is <= 20480", "evidence_ref": "process/docs/design/CR050-GIT-BRANCH-HLD.md"},
+    {"id": "MV-02", "kind": "projection_safety", "required_stage": "CP7", "assertion": "artifact-first PARTIAL cannot advance paired workflow projection", "evidence_ref": "process/docs/design/CR050-GIT-BRANCH-DOMAIN-MAP.md#29-pairedmergeprojection"},
+    {"id": "MV-03", "kind": "traceability", "required_stage": "CP7", "assertion": "UC-GB-004 and ST-GB-004 traceability is complete", "evidence_ref": "process/docs/quality/CR050-CP3-R2-INDEPENDENT-REVIEW.md"},
+    {"id": "MV-04", "kind": "authorization_boundary", "required_stage": "CP7", "assertion": "source repository remains clean and no real Git ref mutation was executed", "evidence_ref": "process/checkpoints/CP3-CR050-GIT-BRANCH-HLD-REVIEW-R3.md"}
+  ],
+  "scope_summary": {
+    "use_cases": "UC-GB-001..004",
+    "requirements": "REQ-GB-001..014, REQ-GB-C001..004, REQ-GB-NF001..003",
+    "scenarios": "TC-GB-001..017",
+    "stories": "ST-GB-001, ST-GB-002, ST-GB-004, ST-GB-003",
+    "projection_contract": "Only two-of-two PASS/NO_CHANGE may advance merge PASS, finish eligibility or CR close; PARTIAL stays active.",
+    "switch_condition": "If CP4/CP5 cannot guarantee the projection invariant, change to project-first and reopen CP2/CP3.",
+    "merge_command_contract": "CP5 pins ordinary exact OID remote ref update; no local merge and no force."
+  },
+  "decision_ids": ["CP3-R3-DQ-01", "CP3-R3-DQ-02", "CP3-R3-DQ-03", "CP3-R3-DQ-04", "CP3-R3-DQ-05"],
+  "user_confirmations": ["Modify the reviewed issue, approve the design, and continue to the next human gate.", "Do not use subagents."],
+  "not_authorized": ["source_implementation_before_CP5", "repository_stage_or_commit_or_push", "real_remote_ref_mutation", "force_or_history_rewrite", "forge_api", "credentials", "runtime", "SaaS", "production_write", "process_quant_lab_changes", "prelink_backup_changes"],
+  "risks": ["paired default updates remain non-atomic", "native direct default update may be rejected by remote protection", "independent QA is unavailable", "real default-write pilot is not authorized"],
+  "read_expansion_refs": ["RE-20260716T151029Z0000-b8fed6ee"],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human summary and legacy fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "story plan is not a CP3 default input"},
+    {"path_or_pattern": "process/stories/**", "reason": "story design starts only after CP3 approval"},
+    {"path_or_pattern": "process/archive/**", "reason": "superseded history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "audit only"},
+    {"path_or_pattern": "process/quant-lab/**", "reason": "different project and excluded"},
+    {"path_or_pattern": "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**", "reason": "explicitly excluded"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/stories/**", "process/archive/**", "process/discussions/**", "process/quant-lab/**", "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**"],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson"
+}
