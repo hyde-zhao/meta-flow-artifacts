@@ -1,218 +1,237 @@
-# PTM Team 工程验证场景
-# 版本: v1.0 · 生成: 2026-06-08
-# 覆盖: ptm-team 全部 6 个 Agent
-
+status: draft
+version: "1.5"
+source_requirements:
+  - docs/product/REQUIREMENTS.md
+source_use_cases:
+  - docs/product/USE-CASES.md
 scenarios:
-  # ============================================================
-  # ptm-tde（已交付）
-  # ============================================================
-  - id: SCN-TDE-001
-    name: "需求文档导入与解析"
-    agent: ptm-tde
-    priority: P0
-    type: happy_path
-    description: "用户导入需求文档（Markdown/Word），feature-parser 正确解析并输出结构化需求"
-    verification: "CP7 CR-011 global PASS"
-
-  - id: SCN-TDE-002
-    name: "场景发现与确认"
-    agent: ptm-tde
-    priority: P0
-    type: happy_path
-    description: "scenario-discovery 从需求中提取三层场景（原理/路径/数据），触发检查点①人工确认"
-    verification: "CP7 CR-011 global PASS"
-
-  - id: SCN-TDE-003
-    name: "M 分析完整流程"
-    agent: ptm-tde
-    priority: P0
-    type: happy_path
-    description: "m-analyzer 执行 10 步场景步骤驱动分析：PPDCS 标注 → CAE 测试点 → 因子库发现 → atomic-ops 消费"
-    verification: "CP7 CR-012 global PASS + CR-016/017 PASS"
-
-  - id: SCN-TDE-004
-    name: "F 分析耦合检测"
-    agent: ptm-tde
-    priority: P0
-    type: happy_path
-    description: "f-analyzer 9 步分析：Excel 批注 + 场景耦合 + 代码依赖 → CAE 耦合测试点"
-    verification: "CP7 CR-012 global PASS"
-
-  - id: SCN-TDE-005
-    name: "Q 分析质量评估"
-    agent: ptm-tde
-    priority: P1
-    type: happy_path
-    description: "q-analyzer 6 步逐 TSP 驱动：HTSM 维度评估 → CAE 质量属性测试点"
-    verification: "CP7 CR-012 global PASS"
-
-  - id: SCN-TDE-006
-    name: "PPDCS 五方法设计"
-    agent: ptm-tde
-    priority: P0
-    type: happy_path
-    description: "8 个设计 Skill 覆盖 PPDCS 五特征：流程图/判定表/等价类边界值/Pairwise/状态图 → 16 列物理用例"
-    verification: "CP7 CR-013 global PASS"
-
-  - id: SCN-TDE-007
-    name: "覆盖率验证与交付"
-    agent: ptm-tde
-    priority: P0
-    type: happy_path
-    description: "coverage-verifier 双层验证（SR→TP→LC→PC）→ deliverable-renderer 输出测试方案+用例"
-    verification: "CP7 CR-013 global PASS"
-
-  - id: SCN-TDE-008
-    name: "需求变更增量分析"
-    agent: ptm-tde
-    priority: P2
-    type: alternative_path
-    description: "change-impact-analyzer 接收变更需求 → 增量 MFQ → 增量设计 → 增量覆盖"
-    verification: "CR 级 LLD 设计证据，待运行时验证"
-
-  - id: SCN-TDE-009
-    name: "问题单回溯盲区定位"
-    agent: ptm-tde
-    priority: P2
-    type: alternative_path
-    description: "bug-gap-analyzer 接收问题单 → 盲区定位 → 用例补充 → 流程优化"
-    verification: "CR 级 LLD 设计证据，待运行时验证"
-
-  - id: SCN-TDE-010
-    name: "异常输入处理"
-    agent: ptm-tde
-    priority: P1
-    type: error_path
-    description: "输入格式错误/空文档/超大文档时，Agent 给出明确错误提示而非崩溃"
-    verification: "CP6 自测覆盖，CP7 全局 PASS"
-
-  - id: SCN-TDE-011
-    name: "AskUserQuestion 交互"
-    agent: ptm-tde
-    priority: P1
-    type: happy_path
-    description: "关键检查点使用 AskUserQuestion 结构化选择，用户回复后继续流程"
-    verification: "CP7 CR-015 PASS"
-
-  # ============================================================
-  # ptm-te（未开始）
-  # ============================================================
-  - id: SCN-TE-001
-    name: "用例解析与执行"
-    agent: ptm-te
-    priority: P0
-    type: happy_path
-    status: planned
-    description: "从禅道领取任务 → 解析用例 → 调用原子能力执行 → 记录结构化执行日志"
-
-  - id: SCN-TE-002
-    name: "Topo 映射与环境准备"
-    agent: ptm-te
-    priority: P0
-    type: happy_path
-    status: planned
-    description: "逻辑 Topo 描述 → 物理资源映射 → 交换机 VLAN 隔离 → 环境就绪"
-
-  - id: SCN-TE-003
-    name: "执行异常与工具缺失反馈"
-    agent: ptm-te
-    priority: P1
-    type: error_path
-    status: planned
-    description: "执行中工具缺失 → 结构化需求描述 → 提交 ptm-tae"
-
-  # ============================================================
-  # ptm-tae（Step 1 进行中）
-  # ============================================================
-  - id: SCN-TAE-001
-    name: "原子能力调用"
-    agent: ptm-tae
-    priority: P0
-    type: happy_path
-    status: in-progress
-    description: "atomic-ops CLI 查询和执行防火墙配置/仪表打流原子操作"
-
-  - id: SCN-TAE-002
-    name: "自动化翻译"
-    agent: ptm-tae
-    priority: P1
-    type: happy_path
-    status: planned
-    description: "读取 ptm-te 执行记录 → 翻译为单文件 Python 脚本 → 验证 → 注册工厂"
-
-  - id: SCN-TAE-003
-    name: "回归触发与失败修复"
-    agent: ptm-tae
-    priority: P1
-    type: happy_path
-    status: planned
-    description: "版本转测 → 自动触发回归 → 失败分析 → 尝试自修复 → 钉钉通知"
-
-  # ============================================================
-  # ptm-tm（未开始）
-  # ============================================================
-  - id: SCN-TM-001
-    name: "测试计划制定与调度"
-    agent: ptm-tm
-    priority: P0
-    type: happy_path
-    status: planned
-    description: "接收项目通知 → 制定测试计划 → 调度下游 Agent → 跟踪进度"
-
-  # ============================================================
-  # ptm-tse（未开始）
-  # ============================================================
-  - id: SCN-TSE-001
-    name: "需求分析与策略制定"
-    agent: ptm-tse
-    priority: P0
-    type: happy_path
-    status: planned
-    description: "需求文档解析 → 特性分解 → 测试策略制定 → 输出评审"
-
-  # ============================================================
-  # ptm-qa（未开始）
-  # ============================================================
-  - id: SCN-QA-001
-    name: "质量审计与趋势报告"
-    agent: ptm-qa
-    priority: P1
-    type: happy_path
-    status: planned
-    description: "过程审计 → 数据采集 → 趋势分析 → 质量报告输出"
-
-  # ============================================================
-  # 跨 Agent 场景
-  # ============================================================
-  - id: SCN-CROSS-001
-    name: "tde → te 用例传递"
-    priority: P0
-    type: integration
-    status: planned
-    description: "ptm-tde 输出测试用例 → ptm-te 解析并执行，格式兼容无信息丢失"
-
-  - id: SCN-CROSS-002
-    name: "te → tae 执行记录传递"
-    priority: P1
-    type: integration
-    status: planned
-    description: "ptm-te 结构化执行日志 → ptm-tae 自动化翻译，字段完整无歧义"
-
-  - id: SCN-CROSS-003
-    name: "tm 全流程调度"
-    priority: P1
-    type: integration
-    status: planned
-    description: "ptm-tm 调度全链路：tse 需求分析 → tde 用例设计 → te 执行 → qa 质量 → 汇总报告"
-
-scenario_summary:
-  total: 22
-  ptm_tde: 11
-  ptm_te: 3
-  ptm_tae: 3
-  ptm_tm: 1
-  ptm_tse: 1
-  ptm_qa: 1
-  cross_agent: 3
-  delivered: 11
-  planned: 11
+  - id: SCN-RA-01
+    title: "测试经理决定为已恢复 P1 事故启动系统性预防"
+    type: positive
+    priority: HIGH
+    persona: P-RA-01
+    source_refs: {requirements: [REQ-RA-001, REQ-RA-002, REQ-RA-003], use_cases: [UC-RA-01]}
+    trigger: "测试经理收到已恢复 P1 事故的影响摘要、恢复状态和证据保全状态"
+    context: "测试经理需要在资源有限时区分“服务已恢复”与“复发风险已受控”；MVP 只接受文件化、脱敏、离线输入"
+    preconditions: ["事件为现网问题", "状态为已恢复", "存在人工提供的事件摘要"]
+    steps:
+      - action: "测试经理审查严重度、业务影响、恢复状态和证据保全状态，并指定是否启动和分析责任人"
+        expected: "P1 获得必须启动的决定、责任人和 72 小时启动目标；P2 可被明确选择；证据不足只形成待补清单，不阻止启动事实梳理"
+    evidence_type: review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现 Agent/Skill fixture"
+  - id: SCN-RA-02
+    title: "测试架构师在证据不足时向团队明确不能下结论"
+    type: negative
+    priority: HIGH
+    persona: P-RA-02
+    source_refs: {requirements: [REQ-RA-002, REQ-RA-010], use_cases: [UC-RA-02]}
+    trigger: "测试架构师发现五条证据线少于三条有效线，或关键时间线缺失"
+    context: "架构师要为跨团队讨论建立可信事实，而非让 AI 用推测填补空白"
+    preconditions: ["已启动的 RA 记录或合格事件摘要存在"]
+    steps:
+      - action: "架构师将已知事实、假设和未知项分开，并向相应责任人提出具体证据缺口"
+        expected: "用户获得可审计的缺口、补充 Owner 和待澄清状态；根因结论不能被标记为已确认"
+    evidence_type: review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现契约校验"
+  - id: SCN-RA-03
+    title: "测试架构师与团队确认问题为何发生且为何没有更早被拦住"
+    type: positive
+    priority: HIGH
+    persona: P-RA-02
+    source_refs: {requirements: [REQ-RA-003, REQ-RA-004, REQ-RA-005, REQ-RA-006], use_cases: [UC-RA-03]}
+    trigger: "事实基线达到三条有效证据线，且跨团队 reviewer 可参与评审"
+    context: "测试架构师需要把根因、触发器、促成因素、引入点和控制失效讲清楚，帮助团队选择最早且最经济的预防点"
+    preconditions: ["SCN-RA-02 已形成事实/假设/未知项边界"]
+    steps:
+      - action: "架构师组织时间线和可证伪候选解释，团队 review 并确认或修正结论"
+        expected: "团队得到经人工确认的根因、触发器、促成因素、引入点、流出路径和最近可拦截点；不同意时保持草案"
+    evidence_type: manual
+    automation_status: planned
+    gap_reason: "需人工 reviewer fixture"
+  - id: SCN-RA-04
+    title: "测试设计负责人将已批准教训转成可验证的测试改进"
+    type: positive
+    priority: HIGH
+    persona: P-RA-03
+    source_refs: {requirements: [REQ-RA-007, REQ-RA-008], use_cases: [UC-RA-04]}
+    trigger: "reviewer 已批准 CA/PA，且改进目标为测试设计、测试执行、自动化或质量活动"
+    context: "负责人需要可消费的改进输入，而不是一句无法验收的“补测试”；仅文件化交接，不直接创建下游任务"
+    preconditions: ["SCN-RA-03 已确认"]
+    steps:
+      - action: "测试设计负责人检查批准输入的来源、范围、验收、优先级和限制，并形成自己的改进工作及回链"
+        expected: "用户获得可验证、可追溯且有优先级的改进输入；未经批准或字段缺失的输入被退回补充"
+    evidence_type: review
+    automation_status: planned
+    gap_reason: "跨 Agent 契约待 CP3"
+  - id: SCN-RA-05
+    title: "质量负责人依据有效性和观察证据决定是否关闭"
+    type: boundary
+    priority: HIGH
+    persona: P-RA-04
+    source_refs: {requirements: [REQ-RA-009, REQ-RA-013], use_cases: [UC-RA-05]}
+    trigger: "CA/PA 已有实施反馈，或测试经理请求关闭 RA"
+    context: "质量负责人要判断风险是否真的降低，而不是把行动项完成率当成关闭依据"
+    preconditions: ["行动项均有 Owner 和期限"]
+    steps:
+      - action: "质量负责人审查短期验证、Owner 完成情况、30 天观察窗和同类复发指标"
+        expected: "用户得到可解释的关闭/保持开放决定；任一条件不足时保留风险、缺口和后续行动"
+    evidence_type: review
+    automation_status: planned
+    gap_reason: "30 天观察窗以 fixture/dry-run 代替真实时间"
+  - id: SCN-RA-06
+    title: "安全/合规负责人阻止分析越过数据与操作权限边界"
+    type: permission
+    priority: HIGH
+    persona: P-RA-05
+    source_refs: {requirements: [REQ-RA-011], use_cases: [UC-RA-06]}
+    trigger: "有人请求读取 secret、连接生产系统、读取外部证据源或直接执行修复"
+    context: "安全/合规负责人需要让团队继续从事故学习，同时保持 deny-by-default 边界"
+    preconditions: []
+    steps:
+      - action: "负责人核对授权范围，拒绝越权请求并要求改为脱敏摘要/索引或独立发起 runtime/security CR"
+        expected: "用户获得可审计的拒绝和合规替代路径；不会发生凭据读取、外部访问或生产操作"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: "待 CP5 后实现禁止能力测试"
+  - id: SCN-RA-07
+    title: "测试经理识别内部问题不适用现网逆向分析旅程"
+    type: precheck
+    priority: MEDIUM
+    persona: P-RA-01
+    source_refs: {requirements: [REQ-RA-012], use_cases: [UC-RA-06]}
+    trigger: "测试经理提交的问题来自测试、预发布或内部演练"
+    context: "内部问题的用户影响和流出终点不同，不能伪装成现网事故闭环"
+    preconditions: []
+    steps:
+      - action: "测试经理确认问题来源并查看适用性说明"
+        expected: "用户获得不适用与重新立项条件，不套用现网流出模型或生成虚假分析"
+    evidence_type: automated
+    automation_status: planned
+    gap_reason: "待 CP5 后实现边界测试"
+  - id: SCN-RA-08
+    title: "测试架构师受控获取并保存 ITR 现网问题单"
+    type: positive
+    priority: HIGH
+    persona: P-RA-02
+    source_refs: {requirements: [REQ-RA-011, REQ-RA-014, REQ-RA-015], use_cases: [UC-RA-07]}
+    trigger: "CP2 已批准固定 ITR 来源，测试架构师以产品、时间范围和分页范围发起拉取"
+    context: "只允许用户指定 ITR URL 的 HTTP GET；无凭据、无认证头推断、无写入；原始快照和规范化记录均须可追溯"
+    preconditions: ["ITR 读取/保存授权已记录", "数据保存区不在 Git 或 process 目录", "请求参数通过 allowlist 校验"]
+    steps:
+      - action: "发起 GET，校验响应状态和 schema，并保存来源请求、拉取时间、payload hash、snapshot ref、schema version 与同步状态"
+        expected: "架构师看到已摄取数量、数据质量提示和可追溯记录；未知字段不会被静默丢失或当作规范字段"
+    evidence_type: fixture_and_manual_review
+    automation_status: planned
+    gap_reason: "响应 schema、数据分类和存储保留策略待 CP2 后一次受控探测确认"
+  - id: SCN-RA-09
+    title: "ITR 摄取失败时保护已有问题单和分析结论"
+    type: negative
+    priority: HIGH
+    persona: P-RA-02
+    source_refs: {requirements: [REQ-RA-016, REQ-RA-017], use_cases: [UC-RA-07]}
+    trigger: "网络/HTTP 失败、schema 不匹配、字段缺失、重复、数据分类未确认或持久化失败"
+    context: "失败不能转化为虚假的问题单、总结或改进措施"
+    preconditions: ["存在历史摄取记录或用户正尝试首次摄取"]
+    steps:
+      - action: "处理异常响应或保存异常"
+        expected: "输出失败原因、受影响范围和重试/人工导入条件；不覆盖历史快照、不访问其他系统、不产出已确认结论"
+    evidence_type: fixture
+    automation_status: planned
+    gap_reason: "待 CP5 后实现异常 fixture"
+  - id: SCN-RA-10
+    title: "测试架构师从问题单输出逐单总结、批量趋势和改进候选"
+    type: positive
+    priority: HIGH
+    persona: P-RA-02
+    source_refs: {requirements: [REQ-RA-017, REQ-RA-018], use_cases: [UC-RA-07, UC-RA-04]}
+    trigger: "一个或多个 ITR 问题单已成功保存，测试架构师选择分析范围"
+    context: "总结必须区分事实、假设、反证和人工确认；改进措施仅为待批准 CA/PA 候选"
+    preconditions: ["问题单记录可回链到来源快照", "分析输入满足最低证据规则或明确标记缺口"]
+    steps:
+      - action: "执行逐单和批量分析，生成总结、重复模式、风险优先级及带依据的 CA/PA 候选"
+        expected: "用户得到可审计总结和未批准的改进候选；reviewer 批准前不分发、不建任务、不执行任何动作"
+    evidence_type: fixture_and_manual_review
+    automation_status: planned
+    gap_reason: "分析 schema、总结模板和改进措施契约待 CP3/CP5"
+  - id: SCN-RA-11
+    title: "数据质量不达标时阻断可信分析"
+    type: negative
+    priority: HIGH
+    persona: P-RA-02
+    source_refs: {requirements: [REQ-RA-015, REQ-RA-016], use_cases: [UC-RA-07, UC-RA-08]}
+    trigger: "清洗发现空值、异常、重复或冲突超过 LLD 质量阈值"
+    context: "质量报告是 analysis_run 的前置条件"
+    preconditions: ["摄取批次已生成"]
+    steps: [{action: "生成 IngestionQualityReport 并尝试创建分析运行", expected: "质量状态为 blocked；不发布可信报告或措施候选"}]
+    evidence_type: fixture
+    automation_status: planned
+    gap_reason: "CP5 实现质量阈值 fixture"
+  - id: SCN-RA-12
+    title: "无可信分母或控制证据时降级分析结论"
+    type: boundary
+    priority: HIGH
+    persona: P-RA-02
+    source_refs: {requirements: [REQ-RA-017, REQ-RA-021], use_cases: [UC-RA-07, UC-RA-08]}
+    trigger: "请求缺少质量分母、完整比较窗口或控制层证据"
+    context: "不以数量冒充密度，不以文本推测冒充确认流出层"
+    preconditions: ["存在可分析记录"]
+    steps: [{action: "生成产品质量、趋势和流出分析", expected: "输出数量/占比/Pareto/趋势或 candidate escape layer；缺失项为 N/A 并附原因"}]
+    evidence_type: fixture_and_manual_review
+    automation_status: planned
+    gap_reason: "CP5 实现指标和证据降级 fixture"
+  - id: SCN-RA-13
+    title: "更新分析缺少措施基线或含未分类敏感字段"
+    type: security
+    priority: HIGH
+    persona: P-RA-05
+    source_refs: {requirements: [REQ-RA-022, REQ-RA-011], use_cases: [UC-RA-08, UC-RA-06]}
+    trigger: "S2 刷新缺少已批准 MeasureBaseline，或记录含未分类字段"
+    context: "敏感字段不进 LLM/报告；无基线不判措施失效"
+    preconditions: ["存在 change set"]
+    steps: [{action: "尝试生成措施刷新和报告", expected: "措施标记 needs-baseline；未分类字段被阻断/脱敏且不写入报告正文"}]
+    evidence_type: fixture_and_manual_review
+    automation_status: planned
+    gap_reason: "CP5 实现字段分类和措施基线 fixture"
+  - id: SCN-RA-14
+    title: "测试架构师核验已安装项目的运行数据治理状态"
+    type: positive
+    priority: HIGH
+    persona: P-RA-02
+    source_refs: {requirements: [REQ-RA-023, REQ-RA-024, REQ-RA-025], use_cases: [UC-RA-09]}
+    trigger: "已安装 ptm-tse 项目存在 SQLite、快照或分析产物，测试架构师在摄取后或升级前请求安全核验"
+    context: "项目级安装已验证；本场景只核验运行数据分类、Owner、来源、权限和保留状态，不执行真实数据修改"
+    preconditions: ["已安装项目根可读取", "使用脱敏 fixture 或只读元数据清单", "未请求真实 ITR 拉取、chmod、删除或生产动作"]
+    steps:
+      - action: "枚举受管路径并按运行数据/support 分类，核验目录与文件模式、support 来源和保留状态"
+        expected: "SQLite、WAL/SHM、原始/派生快照及清单均有类别/Owner/来源/保留状态；仅受控 support 具有版本来源；不执行任何真实修复"
+    evidence_type: governance_fixture_and_read_only_audit
+    automation_status: planned
+    gap_reason: "CR-031 CP2 后设计数据清单、分类字典、权限核验与只读 fixture"
+  - id: SCN-RA-15
+    title: "运行数据权限、分类或生命周期不合格时阻断操作"
+    type: negative
+    priority: HIGH
+    persona: P-RA-02
+    source_refs: {requirements: [REQ-RA-023, REQ-RA-024, REQ-RA-025, REQ-RA-026], use_cases: [UC-RA-09]}
+    trigger: "受管数据文件模式宽于 0600、目录模式宽于 0700、数据未分类、support 来源缺失，或请求未获数据 Owner 授权的清理"
+    context: "任何治理不合格项必须保持真实数据不变，不能继续发布分析、自动 chmod、删除或迁移"
+    preconditions: ["构造权限/分类/保留策略失败 fixture", "无真实问题单数据写入"]
+    steps:
+      - action: "尝试发布分析、自动修复权限或执行清理"
+        expected: "操作被阻断并给出类别、路径类型和授权缺口；不修改真实 SQLite/WAL/SHM/快照，不删除或迁移数据"
+    evidence_type: governance_negative_fixture
+    automation_status: planned
+    gap_reason: "CR-031 CP2 后设计权限失败分类、数据 Owner 授权和生命周期 fixture"
+coverage_summary:
+  total: 15
+  high_priority_positive_and_negative_covered: false
+  gaps:
+    - "真实外部系统/生产证据集成：明确不在本 CR 授权范围"
+    - "ITR 是唯一已批准的外部只读来源；字段映射、阈值和数据保留细节待 LLD"
+    - "CR-031：既有运行数据的分类、权限核验、support 来源与保留/清理授权待 CP2/CP3/CP5 验证"
+revision:
+  source_revision: "CR-031"
+  reason: "CR-031 scope reframe：项目级安装已验证，SCN-RA-14/15 改为既有运行数据治理成功与失败阻断；既有 CR-030 的 13 个场景保持其已完成验证结论。"
+  cp2_confirmation_required: true

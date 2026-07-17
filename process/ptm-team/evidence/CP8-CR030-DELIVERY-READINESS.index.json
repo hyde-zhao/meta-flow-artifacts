@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-030",
+  "stage": "CP8",
+  "artifacts": [
+    "process/checks/CP7-CR030.result.json",
+    "process/release/RELEASE-CONTEXT-CR-030.yaml",
+    "docs/ptm-tse/USER-MANUAL.md",
+    "script/install.py",
+    "script/ptm_team/install.py"
+  ],
+  "commands": [
+    {"command": "uv run --python 3.11 ptm-team install codex --agent ptm-tse --dry-run", "result": "pass"},
+    {"command": "uv run --python 3.11 ptm-team install claude --agent tse --dry-run", "result": "pass"},
+    {"command": "uv run --python 3.11 python script/install.py install qoder --agent tse --dry-run", "result": "pass"},
+    {"command": "meta-flow cp result-check --result process/checks/CP7-CR030.result.json --project-root .", "result": "pass"}
+  ],
+  "risks": ["RISK-CR030-01", "RISK-CR030-02", "RISK-CR030-03"]
+}

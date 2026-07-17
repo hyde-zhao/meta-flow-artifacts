@@ -1,77 +1,48 @@
-# PTM Team 领域地图
-
-> 版本：v1.0 · 更新：2026-06-08 · 覆盖：全部 6 个 Agent 领域边界
-
+---
+status: draft
+version: "1.0"
+source_cr: "CR-030"
 ---
 
-## 领域划分
+# ptm-tse 逆向分析领域地图
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        PTM Team 领域                             │
-│                                                                  │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐   │
-│  │ 项目管理域    │  │ 技术决策域    │  │ 设计交付域            │   │
-│  │ ptm-tm       │  │ ptm-tse      │  │ ptm-tde              │   │
-│  │              │  │              │  │                      │   │
-│  │ · 测试计划   │  │ · 需求分析   │  │ · MFQ 三维分析       │   │
-│  │ · 进度跟踪   │  │ · 策略制定   │  │ · PPDCS 五方法设计   │   │
-│  │ · 风险上报   │  │ · 用例评审   │  │ · 覆盖率验证         │   │
-│  │ · 对外协调   │  │ · 工具评估   │  │ · 交付物生成         │   │
-│  └──────┬───────┘  └──────┬───────┘  └──────────┬───────────┘   │
-│         │                 │                     │               │
-│         │    调度/报告    │    评审意见          │  用例+任务    │
-│         ▼                 ▼                     ▼               │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │                    执行与基础设施域                        │   │
-│  │                                                          │   │
-│  │  ┌──────────────────┐  ┌──────────────────────────────┐  │   │
-│  │  │ 执行域 ptm-te     │  │ 基础设施域 ptm-tae            │  │   │
-│  │  │                  │  │                              │  │   │
-│  │  │ · 用例解析       │  │ · 原子能力开发               │  │   │
-│  │  │ · 环境准备       │  │ · 自动化框架                 │  │   │
-│  │  │ · 配置下发       │  │ · 工具开发                   │  │   │
-│  │  │ · 流量发送       │  │ · 公共 Skill 维护            │  │   │
-│  │  │ · 结果判定       │  │ · 自动化翻译                 │  │   │
-│  │  │ · 执行记录       │  │ · 回归执行                   │  │   │
-│  │  └──────────────────┘  └──────────────────────────────┘  │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │                    质量感知域                              │   │
-│  │  ptm-qa                                                   │   │
-│  │  · 质量策划  · 过程审计  · 数据采集  · 趋势报告           │   │
-│  └──────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
-```
+## 术语表
 
----
-
-## 领域职责边界
-
-| 领域 | Agent | 核心职责 | 禁止越界 |
+| Term | 定义 | 来源 | 备注 |
 |---|---|---|---|
-| 项目管理 | ptm-tm | 计划、调度、报告 | 不直接修改用例/代码/工具 |
-| 技术决策 | ptm-tse | 分析、策略、评审 | 不直接执行测试 |
-| 设计交付 | ptm-tde | 设计、输出用例 | 不执行测试、不开发工具 |
-| 执行 | ptm-te | 执行用例、记录结果 | 不修改用例设计 |
-| 基础设施 | ptm-tae | 开发工具、维护 Skill | 不制定测试策略 |
-| 质量感知 | ptm-qa | 审计、度量、报告 | 不直接修改测试产物 |
+| RA Report | 对一个已恢复现网问题的结构化逆向分析记录 | UC-RA-01..05 | 根因结论、CA/PA 与关闭状态可审计 |
+| Evidence Line | 流量、策略、状态、资源、变更中的一条证据维度 | REQ-RA-002 | 至少三条有效才可确认根因 |
+| Introduction Point | 问题最早被引入的阶段与证据锚点 | REQ-RA-005 | 需求/设计/实现/变更/运营 |
+| Escape Point | 允许问题流入现网的失效控制点 | REQ-RA-006 | 必须识别最近可拦截点 |
+| CA / PA | 纠正措施 / 预防措施 | REQ-RA-007 | 皆为草案直至人工批准 |
+| Approved Improvement Input | 经过批准、可供下游只读消费的改进记录 | REQ-RA-008 | 不等同下游任务或外部工单 |
 
----
+## 领域对象
 
-## 跨域交互契约
+| Object ID | 对象 | Owner Feature | 关键字段 / 属性 | 状态 | 规则来源 |
+|---|---|---|---|---|---|
+| OBJ-RA-01 | RA Report | FEAT-RA-ANALYSIS | ra_id、event_ref、severity、evidence_refs、facts、hypotheses、review_status | draft → analysis-confirmed → improvement-approved → tracking → closed | REQ-001–006,010 |
+| OBJ-RA-02 | Evidence Assessment | FEAT-RA-ANALYSIS | line、validity、reference、gap、classification | pending / valid / insufficient | REQ-002,003 |
+| OBJ-RA-03 | CA/PA Proposal | FEAT-RA-IMPROVEMENT | id、kind、owner、due_date、validation、side_effect、approval | draft / approved / rejected | REQ-007,010 |
+| OBJ-RA-04 | Approved Improvement Input | FEAT-RA-IMPROVEMENT | source_ra、proposal_id、target_agent、acceptance、constraints、approval_ref | pending-consumer / consumed / blocked | REQ-008,011 |
+| OBJ-RA-05 | Action Item | FEAT-RA-TRACKING | id、owner、due_date、status、blockers | not-started / in-progress / done / overdue | REQ-009 |
+| OBJ-RA-06 | Effectiveness Check | FEAT-RA-TRACKING | method、window、result、recurrence_measure | planned / passed / failed / inconclusive | REQ-009,013 |
 
-| 上游 → 下游 | 交互内容 | 契约格式 |
-|---|---|---|
-| tm → tse | 需求分析任务 | 项目上下文 + 需求文档 |
-| tse → tm | 测试策略 | 策略文档 |
-| tm → tde | 用例设计任务 | 测试策略 + 需求分析 |
-| tde → te | 测试用例 | 16 列物理用例（PC 格式） |
-| te → tae | 执行记录 | 结构化日志（配置/流量/结果/异常） |
-| tae → te | 工具/Skill | 原子能力 + 公共 Skill |
-| qa → tm | 质量报告 | 审计报告 + 趋势报告 |
+## 状态机
 
----
+| State Machine ID | 对象 | 状态 | 合法转换 | 非法转换处理 |
+|---|---|---|---|---|
+| SM-RA-01 | RA Report | draft → evidence-sufficient → analysis-confirmed → improvement-approved → tracking → closed | 每次转换均需前置状态与人工确认引用；closed 另需所有关闭条件 | 拒绝转换并记录缺失条件 |
+| SM-RA-02 | CA/PA Proposal | draft → approved/rejected → pending-consumer → consumed/blocked | approved 仅由人工 reviewer 写入 | 未批准禁止分发 |
+| SM-RA-03 | Action Item | not-started → in-progress → done/overdue | done 需验证记录；RA closed 需全部适用项 done | 保持开放并列出阻塞 |
 
-*本地图为 ptm-team 六 Agent 的领域边界和交互契约。详细架构见 `docs/ptm-team-blueprint.md`。*
+## 业务规则
+
+| Rule ID | 规则 | Owner | 影响场景 | 验证入口 |
+|---|---|---|---|---|
+| RULE-RA-01 | P1 已恢复且证据保全完成才可自动建议创建；P2 要显式选择 | ANALYSIS | SCN-RA-01 | eligibility fixture |
+| RULE-RA-02 | 少于三条有效证据线时，禁止根因状态为 confirmed | ANALYSIS | SCN-RA-02 | threshold fixture |
+| RULE-RA-03 | AI 草案与人工确认必须可区分 | ANALYSIS | SCN-RA-03 | report schema review |
+| RULE-RA-04 | 未批准 CA/PA 不得生成消费者输入 | IMPROVEMENT | SCN-RA-04 | contract fixture |
+| RULE-RA-05 | 未完成关闭条件不得关闭 RA | TRACKING | SCN-RA-05 | closure fixture |
+| RULE-RA-06 | 涉及凭据、外部读取或生产写入的请求必须拒绝并转独立 CR | ANALYSIS | SCN-RA-06 | forbidden-path test |

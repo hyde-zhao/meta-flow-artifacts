@@ -1,105 +1,34 @@
-# PTM Team 依赖地图
-
-> 版本：v1.0 · 更新：2026-06-08 · 覆盖：全部 6 个 Agent 及外部依赖
-
+---
+status: draft
+version: "1.0"
+source_cr: "CR-030"
 ---
 
-## Agent 间依赖关系
+# ptm-tse 逆向分析依赖地图
 
-```
-                    ┌─────────┐
-                    │ ptm-tm  │ 测试经理（调度核心，Step 3）
-                    └────┬────┘
-                         │ 调度/任务下发
-            ┌────────────┼────────────┐
-            ▼            ▼            ▼
-      ┌─────────┐  ┌─────────┐  ┌─────────┐
-      │ ptm-tse │  │ ptm-tde │  │ ptm-qa  │
-      │ 架构师  │  │ 设计    │  │ 质量    │
-      │ Step 3  │  │ ✅ v1.0 │  │ Step 3  │
-      └────┬────┘  └────┬────┘  └─────────┘
-           │ 评审       │ 用例
-           ▼            ▼
-      ┌──────────────────────┐
-      │       ptm-te         │ 测试执行（Step 2）
-      └──────────┬───────────┘
-                 │ 执行记录 + 工具需求
-                 ▼
-      ┌──────────────────────┐
-      │       ptm-tae        │ 自动化工程师（Step 1-2）
-      │  🔄 Step 1 进行中    │
-      └──────────────────────┘
-                 │
-                 │ 公共 Skill + 工具
-                 ▼
-            全部 Agent
-```
+## 依赖关系
 
----
+| From | To | 依赖类型 | 允许方向 | 原因 | 验证 / 监控 |
+|---|---|---|---|---|---|
+| FEAT-RA-ANALYSIS | 脱敏事件摘要 | read | allowed | 分析只消费用户/上游提供的摘要和索引 | input fixture |
+| FEAT-RA-IMPROVEMENT | FEAT-RA-ANALYSIS | read | allowed | CA/PA 只能基于人工确认分析 | approval-state fixture |
+| FEAT-RA-TRACKING | FEAT-RA-IMPROVEMENT | read | allowed | 跟踪只消费已批准改进输入 | provenance fixture |
+| ptm-tm | ptm-tse | file / handoff | allowed | 提供合格事件触发与协调信息 | contract review |
+| ptm-tse | ptm-tde/te/tae/qa | file / handoff | allowed, approval-gated | 只输出已批准改进输入 | contract fixture |
+| ptm-qa | FEAT-RA-TRACKING | read | allowed | 消费聚合度量，不拥有 RA 行动状态 | metric review |
 
-## 依赖类型
+## 禁止依赖
 
-| 上游 | 下游 | 依赖类型 | 状态 | 说明 |
-|---|---|---|---|---|
-| ptm-tm | ptm-tse | runtime | ⬜ planned | Step 3 调度 |
-| ptm-tm | ptm-tde | runtime | ⬜ planned | Step 3 调度 |
-| ptm-tm | ptm-te | runtime | ⬜ planned | Step 3 调度 |
-| ptm-tm | ptm-qa | runtime | ⬜ planned | Step 3 调度 |
-| ptm-tse | ptm-tde | contract | ⬜ planned | 评审用例覆盖度 |
-| ptm-tse | ptm-te | contract | ⬜ planned | 评审执行策略 |
-| ptm-tse | ptm-tae | contract | ⬜ planned | 评审工具框架 |
-| ptm-tde | ptm-te | contract | ✅ verified | 用例输出格式（16 列 PC） |
-| ptm-te | ptm-tae | runtime | ⬜ planned | 执行记录 + 工具需求 |
-| ptm-tae | 全部 | contract | 🔄 in-progress | 公共 Skill + 原子能力 |
+| Forbidden ID | From | To | 禁止原因 | 替代路径 | 违反风险 |
+|---|---|---|---|---|---|
+| FD-RA-01 | 任一 RA Feature | 设备/日志/TAC/工单外部系统 | 本 CR 未授权外部读取或凭据 | 人工提供脱敏摘要/索引 | 数据泄露、越权运行 |
+| FD-RA-02 | FEAT-RA-ANALYSIS | ptm-tde/te/tae/qa 交付文件 | 分析与下游实现必须解耦 | 生成 Approved Improvement Input | 覆盖其他 Agent owner |
+| FD-RA-03 | FEAT-RA-TRACKING | RA 根因字段 | 跟踪不能修改已确认分析 | 新建 clarification / re-analysis 记录 | 审计链失真 |
+| FD-RA-04 | 下游消费者 | 未批准 CA/PA | 未确认建议不可执行 | 只读已批准输入 | 误修复、不可追溯 |
 
----
+## 循环风险
 
-## 外部依赖
-
-| 依赖 | 类型 | 提供方 | 状态 | 说明 |
-|---|---|---|---|---|
-| Claude Code | runtime | Anthropic | ✅ | Agent/Skill 运行平台 |
-| Codex | runtime | OpenAI | ✅ | Agent/Skill 运行平台 |
-| Qoder | runtime | Qoder | ✅ | Agent/Skill 运行平台 |
-| atomic-ops CLI | runtime | ptm-tae | ✅ | 79 个原子操作 |
-| 因子库 YAML | data | ptm-tde/ptm-tae | 🔄 | 策略路由因子等 |
-| 禅道 API | runtime | 外部平台 | ⬜ | 任务管理集成 |
-| 钉钉 API | runtime | 外部平台 | ⬜ | 通知推送 |
-| BPS/IXIA 仪表 | runtime | 硬件 | 🔄 | 流量生成 |
-| 防火墙硬件 | runtime | 硬件 | 🔄 | 测试目标设备 |
-
----
-
-## 文件所有权（ptm-tde 部分）
-
-| 文件/目录 | primary | shared | forbidden |
+| Cycle ID | 涉及对象 | 风险 | 当前处理 |
 |---|---|---|---|
-| `agents/ptm-tde.md` | ptm-tde | — | 其他 Agent |
-| `skills/m-analyzer/` | ptm-tde | ptm-tae（atomic-ops 集成） | ptm-te |
-| `skills/f-analyzer/` | ptm-tde | — | — |
-| `skills/q-analyzer/` | ptm-tde | — | — |
-| `skills/ppdcs/` | ptm-tde | — | — |
-| `docs/ptm-tde/` | ptm-tde | meta-po（文档维护） | — |
-| `resource/` | ptm-tae（维护） | ptm-tde（消费） | — |
-
----
-
-## 关键路径
-
-```
-Step 1 完成（当前）：
-  ptm-tae 原子能力就绪 → ptm-te 执行可用 → tde→te→tae 闭环
-
-Step 2 完成：
-  ptm-te 执行就绪 → 自动化翻译 → 回归运行 → 最小闭环验证
-
-Step 3 完成：
-  ptm-te 闭环成熟 → ptm-tm 调度 + ptm-tse 评审 + ptm-qa 审计 → 六 Agent 协同
-
-Step 4 完成：
-  六 Agent 协同成熟 → 全自动 → 人工监督
-```
-
----
-
-*本地图跟踪 ptm-team 的全部依赖关系。随项目进展动态更新。*
+| CYCLE-RA-01 | ANALYSIS → IMPROVEMENT → TRACKING → ANALYSIS | 跟踪失败可能需要重新分析 | 通过新 revision/clarification 记录回到 ANALYSIS，不回写既有 confirmed 事实 | eliminated |
+| CYCLE-RA-02 | ptm-tse ↔ 下游 Agent | 双向改文件会产生所有权冲突 | 单向 Approved Improvement Input；下游结果通过独立 evidence ref 回链 | eliminated |

@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP2",
+  "checkpoint_id": "CP2-CR031-PRODUCT-BASELINE",
+  "cr_id": "CR-031",
+  "story_id": null,
+  "profile": "architecture-major",
+  "route_plan_ref": "process/checks/CP0-CR031.route-plan.json",
+  "context_ref": "process/context/CP2-CR031.context.json",
+  "evidence_ref": "docs/product/REQUIREMENTS.md",
+  "dispatch_refs": [],
+  "checked_at": "2026-07-17T07:35:00Z",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator",
+    "checker_version": "meta-flow",
+    "invocation": "CP2 automatic precheck for CR-031 product baseline",
+    "generated_by": "host-orchestrator inline fallback",
+    "fallback_used": true,
+    "fallback_reason": "The user explicitly prohibited subagents; the precheck is a deterministic cross-document review performed inline.",
+    "fallback_review_ref": "process/checkpoints/CP2-CR031-PRODUCT-BASELINE.md"
+  },
+  "items": [
+    {
+      "id": "CP2-CR031-01",
+      "category": "traceability",
+      "name": "The confirmed install-root semantics trace through product artifacts",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/product/USE-CASES.md#UC-RA-09：测试架构师在项目目录安装 ptm-tse 并获得隔离的分析数据区", "docs/product/REQUIREMENTS.md#REQ-RA-023", "docs/product/REQUIREMENTS.md#REQ-RA-024", "docs/product/SCENARIOS.yaml#SCN-RA-14", "docs/product/MVP-SCOPE.md#IN-RA-07", "docs/product/STORY-MAP.md#ST-RA-07"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "The default installation project root, explicit target override, default runtime root, and first-run data location are consistently stated."
+    },
+    {
+      "id": "CP2-CR031-02",
+      "category": "failure-path",
+      "name": "Invalid root, incomplete support, and source/global fallback are explicitly blocked",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/product/REQUIREMENTS.md#REQ-RA-024", "docs/product/REQUIREMENTS.md#REQ-RA-025", "docs/product/SCENARIOS.yaml#SCN-RA-15", "docs/product/TEST-MATRIX.md#GAP-RA-07", "docs/product/STORY-MAP.md#ST-NRA-04"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "The product baseline requires stop-and-explain behavior with no partial database and no fallback to ptm-team/data, global user storage, or arbitrary CWD."
+    },
+    {
+      "id": "CP2-CR031-03",
+      "category": "scope",
+      "name": "Source-root support cleanup is sequenced after isolation validation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["docs/product/REQUIREMENTS.md#REQ-RA-026", "docs/product/MVP-SCOPE.md#GOAL-RA-08", "process/changes/CR-031.md#根目录盘点与清理边界"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "data/schema.sql and data/dao.py are delivery support assets, not disposable runtime data. Cleanup cannot occur until the new package, path isolation, permissions, and rollback are verified."
+    },
+    {
+      "id": "CP2-CR031-04",
+      "category": "authorization",
+      "name": "Path confirmation does not broaden operational authority",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/changes/CR-031.md#不授权范围", "docs/product/REQUIREMENTS.md#REQ-RA-024", "process/checks/CP2-CR031-DISCUSSION-CHECKPOINT.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "No external request, credential access, actual ticket persistence, production action, automatic reviewer action, or release is authorized by this gate."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260717T073117Z0000-e7403009", "RE-20260717T073117Z0000-c741721a"],
+  "decision": "PASS",
+  "next_route": "CP2 required human gate"
+}

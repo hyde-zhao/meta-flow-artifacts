@@ -1,0 +1,184 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR030-requirement"
+project_id: "ptm-team"
+workflow_id: "WF-PTM-TEAM-20260520-001"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-07-15T08:45:00+00:00"
+created_by: "host-orchestrator"
+source_cr: "CR-030"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 8
+  max_summary_items: 16
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只读 allowed_reads / must_read。完整文档只在 capsule 缺失、字段冲突、人工审计、深度评审或 schema 校验失败时读取，并写入 read_expansion_log。"
+
+allowed_reads:
+  - path: "process/state/STATE.current.json"
+    reason: "当前阶段、活跃 CR、门禁和授权摘要"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "当前 process 发现入口"
+    required: true
+  - path: "process/REQUEST-CR-030.md"
+    reason: "用户请求、参考事实摘要、范围与禁止能力"
+    required: true
+  - path: "process/changes/summaries/CR-030.summary.json"
+    reason: "机器可读 CR 范围、路由与审批焦点"
+    required: true
+  - path: "agents/ptm-tse.md"
+    reason: "既有 ptm-tse 角色基线"
+    required: true
+  - path: "docs/ptm-tse/README.md"
+    reason: "既有 ptm-tse 文档基线和演进路线"
+    required: true
+  - path: "docs/ptm-team-blueprint.md"
+    reason: "六 Agent 协作中的既有职责与用户已加入的逆向分析草案"
+    required: true
+  - path: "process/policies/READ-POLICY.json"
+    reason: "deny-by-default 读取策略"
+    required: true
+
+must_read:
+  - path: "process/state/STATE.current.json"
+    reason: "轻量运行态"
+    required: true
+  - path: "process/REQUEST-CR-030.md"
+    reason: "事实化请求与安全边界"
+    required: true
+  - path: "process/changes/summaries/CR-030.summary.json"
+    reason: "CR 路由、范围和不授权项"
+    required: true
+  - path: "agents/ptm-tse.md"
+    reason: "避免覆盖既有 Agent 基线"
+    required: true
+
+read_if_needed:
+  - path: "process/changes/CR-030-ptm-tse-reverse-analysis-capability.md"
+    trigger: "字段冲突、人工审计或需要核对完整 CR 文档处理决策"
+  - path: "/home/hyde/projects/llm-wiki/llm-wiki/work/studies/ptm-team/sources/ptm-tse/"
+    trigger: "请求摘要缺少某项方法论事实且需 deep_review；只读，不复制原文，必须在 read_expansion_log 记录"
+  - path: "docs/product/USE-CASES.md"
+    trigger: "核对 user-centered 场景、人工审计或字段冲突时"
+  - path: "docs/product/REQUIREMENTS.md"
+    trigger: "核对用户目标到验收条件的追溯时"
+  - path: "docs/product/SCENARIOS.yaml"
+    trigger: "核对用户旅程到工程验证场景的追溯时"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "人类摘要，不是机器状态入口"
+  - path_or_pattern: "process/changes/CR-*.md"
+    reason: "默认使用 CR summary；完整 CR 仅按触发条件读取"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档与本 CR 无关"
+  - path_or_pattern: "process/stories/**"
+    reason: "CP2 前不得进入 Story 或 LLD"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "不作为下游输入"
+
+key_facts:
+  scope_summary: "为 planned 的 ptm-tse 增加恢复后现网问题的逆向分析能力；在新的 CP2 确认后，它可从用户指定 ITR 来源 GET-only 地获取并保存问题单，帮助五类用户做可审计的预防决策，不执行生产动作。"
+  accepted_decisions:
+    - "RCA 是逆向分析的子步骤；本期必须覆盖根因、引入点、流出点、CA/PA、有效性与复发监控。"
+    - "本期只消费授权且脱敏的证据摘要/索引；不直接连接外部系统。"
+    - "用户已提出 ITR 问题单摄取、保存、分析总结与改进措施需求；它取代上一条的绝对外部读取禁令，但仅作为待 CP2 决策的单一受控例外。"
+    - "内部问题逆向分析、自动恢复和自动修复均不在本 CR 范围。"
+  active_constraints:
+    - "CP2 未批准前不得进入 Story、LLD 或实现。"
+    - "用户场景必须以真实用户的目标、触发、决策、协作、痛点和可观察结果为中心；Agent/Skill 流程只能作为支撑实现。"
+    - "仅允许用户批准的固定 ITR GET；不得读取凭据或认证头，不得访问其他来源或写入任何外部系统。"
+    - "用户的现有 docs/ptm-team-blueprint.md 改动必须保留，后续仅作增量对齐。"
+    - "所有场景灰区必须分类；标准流程至少需要一条 SGQ 用户可见确认。"
+  downstream_tasks:
+    - "inline fallback：形成用户中心场景、需求、工程验证场景、MVP 边界、CP1/CP2 自动检查输入与待决策项；用户已明确不拉子 agent。"
+    - "meta-se（CP2 后）：定义能力边界、数据归属、跨 Agent 契约、HLD/ADR 与 Story。"
+  traceability:
+    requirements: ["REQ-RA-001..018（draft v1.2）"]
+    use_cases: ["UC-RA-01..07（draft v1.2，含 ITR 摄取/总结用户旅程，待用户确认）"]
+    scenarios: ["SCN-RA-01..10（draft v1.2，含受控摄取、失败保护和总结/措施）"]
+    stories: ["CP2 后才允许生成"]
+    features: ["CP3 后才允许生成"]
+
+risks_and_decisions:
+  pending_human_decisions:
+    - decision_id: "CP2-DQ-CR030-REV01-01"
+      decision_type: "scope"
+      question: "七个场景是否准确代表测试经理、测试架构师、测试设计负责人、质量负责人和安全/合规负责人的目标、协作和成功结果？"
+      recommended_option: "确认以 USE-CASES.md v1.2 的七个用户旅程作为 CR-030 的需求/场景基线。"
+      alternatives:
+        - "指出需要新增、合并、删除或调整的用户画像、目标、触发或协作关系。"
+        - "暂缓确认，保持 v1.0 历史基线仅供追溯，不进入设计。"
+      impact: "决定 SCENARIOS、TEST-MATRIX、MVP-SCOPE 的有效性，以及后续 HLD/CP3 是否可以重建。"
+      rollback: "不确认则保持 requirement-clarification；不刷新 HLD/BLUEPRINT/ADR。"
+    - decision_id: "CP2-DQ-CR030-REV02-01"
+      decision_type: "runtime_authorization"
+      question: "是否允许读取用户指定的 ITR 问题单接口？"
+      recommended_option: "仅允许固定 allowlist URL 的 GET；无凭据、无认证头推断、无写入；CP2 后先做一次受控 schema 探测。"
+      alternatives:
+        - "继续只接受人工提供的脱敏问题单摘要。"
+        - "将接口读取单独拆为 runtime 授权 CR。"
+      impact: "决定 ptm-tse 是否能获取用户指定的真实问题单，以及后续存储/分析契约。"
+      rollback: "HTTP、schema 或数据分类不满足条件时回退人工脱敏输入。"
+    - decision_id: "CP2-DQ-CR030-REV02-02"
+      decision_type: "security"
+      question: "如何保存可能含敏感信息的问题单？"
+      recommended_option: "原始快照引用和规范化记录只存放在非 Git、访问受限的数据区；保留期和脱敏规则由数据 Owner 确认后配置。"
+      alternatives:
+        - "仅保存脱敏的规范化字段。"
+        - "不保存原始响应，只消费一次性人工摘要。"
+      impact: "决定审计可追溯性、数据最小化、保留和实现路径。"
+      rollback: "数据分类或保存控制不明确时禁止原始响应持久化。"
+    - decision_id: "CP2-DQ-CR030-REV02-03"
+      decision_type: "scope"
+      question: "问题单总结和改进措施可以自动做到什么程度？"
+      recommended_option: "自动输出逐单/批量总结和 CA/PA 候选；人工 reviewer 才能确认、分发或关闭。"
+      alternatives:
+        - "只输出总结，不输出改进候选。"
+        - "自动创建下游任务。"
+      impact: "决定下游消费契约、人工责任和自动化风险。"
+      rollback: "reviewer 未确认时保留草案，不分发、不创建任务、不执行动作。"
+  non_authorized_items:
+    - "凭据、秘密、认证头推断、ITR 以外的外部系统读取"
+    - "生产设备/策略/配置/工单写入"
+    - "自动缓解、修复、发布或 TAC 开单"
+    - "内部问题逆向分析"
+  risk_acceptance_items: []
+  open_questions:
+    - "CP2 已批准 v1.2 的五类用户画像与七个用户旅程。"
+    - "CP2 已批准固定 ITR GET、非 Git 受限保存和人工确认的总结/改进候选边界。"
+    - "CP3：Approved Improvement Input 的精确 schema、持久化位置和消费者边界。"
+  n_a_or_waived_items:
+    - "Runtime integration: N/A，本期无 runtime 授权。"
+
+handoff:
+  target_agent: "host-orchestrator inline fallback"
+  expected_output:
+    - "增量 user-centered USE-CASES / REQUIREMENTS / SCENARIOS / TEST-MATRIX / STORY-MAP / MVP-SCOPE 草案（包含 ITR 摄取、保存、总结和改进候选）"
+    - "SGQ 讨论记录和 CP2 discussion checkpoint"
+    - "CP1/CP2 自动检查输入及 return summary"
+  exit_criteria:
+    - "CP2 批准已回填；下一阶段基于真实 ITR schema 形成 HLD/CP3 材料"
+    - "BLOCKING 场景/范围问题为 0 或进入待人工决策清单"
+    - "用户确认草案可提交给 host-orchestrator"
+  blocked_if_missing:
+    - "用户不确认 user-centered 场景基线或 MVP 边界时，不得通过 CP2"
+
+read_expansion_log: []
+
+validation:
+  generated_from_sources:
+    - "process/REQUEST-CR-030.md"
+    - "process/changes/summaries/CR-030.summary.json"
+    - "agents/ptm-tse.md"
+    - "docs/ptm-tse/README.md"
+    - "docs/ptm-team-blueprint.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "用户已批准 CR-030 REV-02 CP2；一次受控 ITR schema 探测返回 HTTP 200、81 条记录，顶层为 status/total/current/pageSize/data。该 capsule 不替代正式产品文档。"

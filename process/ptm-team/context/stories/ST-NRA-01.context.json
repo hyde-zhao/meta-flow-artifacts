@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_verify_packet",
+  "stage": "CP7",
+  "story_id": "ST-NRA-01",
+  "cr_id": "CR-030",
+  "project_id": "ptm-team",
+  "story_ref": "process/stories/STORY-NRA-01-insufficient-evidence-guard.md",
+  "parent_context_ref": "process/context/CP7-CR030-VERIFICATION-CONTEXT.yaml",
+  "expected_return_packet": "process/returns/STORY-ST-NRA-01-CP7.return.json",
+  "feature_refs": [
+    null
+  ],
+  "feature_design_refs": [
+    null
+  ],
+  "feature_contract_summary": "CR-030 undefined contract: static-only verification of the approved Story acceptance criteria and security boundaries.",
+  "objective": {
+    "summary": "Verify ST-NRA-01 against its CP6 result, Story acceptance criteria, and approved design contract.",
+    "non_goals": [
+      "No ITR network call",
+      "No credential access",
+      "No external write or reviewer-state change"
+    ]
+  },
+  "cr_delta": {
+    "summary": "CR-030 adds controlled ITR ingestion, reverse analysis, and improvement-tracking design artifacts to ptm-tse.",
+    "affected_contracts": []
+  },
+  "dependency_inputs": [
+    null
+  ],
+  "acceptance": [],
+  "verification_plan": [
+    {
+      "method": "static-contract-review"
+    },
+    {
+      "method": "return-packet-validation",
+      "evidence": "process/returns/STORY-ST-NRA-01-CP7.return.json"
+    }
+  ],
+  "allowed_reads": [
+    {
+      "path": "process/stories/STORY-NRA-01-insufficient-evidence-guard.md",
+      "required": true,
+      "reason": "story acceptance and scope"
+    },
+    {
+      "required": true,
+      "reason": "feature design contract"
+    },
+    {
+      "required": true,
+      "reason": "CP6 implementation conclusion"
+    },
+    {
+      "required": true,
+      "reason": "CP7 static verification record"
+    }
+  ],
+  "must_read": [
+    {
+      "path": "process/stories/STORY-NRA-01-insufficient-evidence-guard.md",
+      "mode": "full",
+      "estimated_tokens": 500,
+      "required": true,
+      "reason": "story_card"
+    },
+    {
+      "mode": "full",
+      "estimated_tokens": 500,
+      "required": true,
+      "reason": "cp7_check"
+    }
+  ],
+  "read_if_needed": [],
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "legacy human summary"
+    },
+    {
+      "path_or_pattern": "process/archive/**",
+      "reason": "historical archive"
+    },
+    {
+      "path_or_pattern": "process/discussions/**",
+      "reason": "audit only"
+    }
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/archive/**",
+    "process/discussions/**"
+  ],
+  "allowed_write_paths": [
+    "process/returns/**",
+    "process/evidence/**",
+    "process/checks/**"
+  ],
+  "forbidden_write_paths": [
+    "docs/product/**",
+    "docs/design/**",
+    "skills/**",
+    "data/**",
+    "agents/**"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "ITR_READ_GET_ONLY",
+    "NO_PRODUCTION_WRITE",
+    "NO_EXTERNAL_PUBLISH"
+  ],
+  "lld_policy": "technical-note",
+  "risk_profile": "standard-code",
+  "budget": {
+    "estimated_tokens": 1800,
+    "estimator": "chars_div_4",
+    "max_tokens": 8000
+  },
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ]
+}

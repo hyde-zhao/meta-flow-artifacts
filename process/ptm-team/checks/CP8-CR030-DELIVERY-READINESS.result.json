@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR030-DELIVERY-READINESS",
+  "profile": "compact-release",
+  "story_id": null,
+  "cr_id": "CR-030",
+  "context_ref": "process/context/CP8-CR030-DELIVERY-CONTEXT.json",
+  "dispatch_refs": ["ADE-CR030-META-QA-CP7-001"],
+  "evidence_ref": "process/evidence/CP8-CR030-DELIVERY-READINESS.index.json",
+  "items": [
+    {
+      "id": "CP8-01",
+      "category": "verification",
+      "name": "All CR-030 Stories have valid CP7 static verification evidence",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP7-CR030.result.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "14/14 Story return packets and evidence indexes validate."
+    },
+    {
+      "id": "CP8-02",
+      "category": "documentation",
+      "name": "User-facing installation and operating documentation is present",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["README.md", "docs/ptm-tse/README.md", "docs/ptm-tse/USER-MANUAL.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Documentation describes S1/S2, reviewer ownership, installation and runtime authorization boundary."
+    },
+    {
+      "id": "CP8-03",
+      "category": "installation",
+      "name": "ptm-tse installer aliases and three-platform dry-run pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["script/install.py", "script/ptm_team/install.py", "process/evidence/CP8-CR030-DELIVERY-READINESS.index.json#commands"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Both direct-script and packaged ptm-team entry points resolve tse/ptm-tse."
+    },
+    {
+      "id": "CP8-04",
+      "category": "release",
+      "name": "Release context, fact diff and compact release documents are complete",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/release/RELEASE-CONTEXT-CR-030.yaml", "docs/release/RELEASE-NOTES.md", "docs/release/DEPLOY-CHECKLIST.md", "docs/release/ROLLBACK.md", "docs/release/MIGRATION.md", "docs/release/FEEDBACK.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "Fact differences intentionally route runtime limits to READY_WITH_RISK."
+    },
+    {
+      "id": "CP8-05",
+      "category": "runtime",
+      "name": "Runtime ITR, SQLite write, S1/S2 and reviewer verification remains outside this authorization",
+      "status": "N/A",
+      "severity": "HIGH",
+      "evidence_refs": ["process/release/RELEASE-CONTEXT-CR-030.yaml#fact_diff", "process/changes/CR-030-FOLLOW-UP-TRACKING-2026-07-16.md"],
+      "owner": "user",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Not a false PASS: CP8-DQ-CR030-01 asks for explicit risk acceptance; runtime still requires separate authorization."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260716T090459Z0000-7e836a4a",
+    "RE-20260716T090459Z0000-7f317c46"
+  ],
+  "decision": "PASS",
+  "next_route": "human_gate",
+  "checked_at": "2026-07-16T17:15:00+08:00",
+  "release_decision": "READY_WITH_RISK",
+  "fact_diff_ref": "process/release/RELEASE-CONTEXT-CR-030.yaml#fact_diff",
+  "route_plan_ref": "process/checks/CP0-CR030.route-plan.json",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator",
+    "checker_version": "meta-flow 1.0.0",
+    "generated_by": "host-orchestrator inline fallback",
+    "invocation": "CP8 CR-030 delivery-readiness precheck after CP7 protocol remediation and three-platform installer dry-run",
+    "fallback_used": true,
+    "fallback_reason": "User explicitly prohibited subagent dispatch for this CR.",
+    "fallback_review_ref": "process/checks/CP7-CR030.result.json"
+  }
+}

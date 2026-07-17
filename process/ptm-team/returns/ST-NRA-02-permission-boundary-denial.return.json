@@ -1,0 +1,88 @@
+{
+  "story_id": "ST-NRA-02",
+  "story_slug": "permission-boundary-denial",
+  "canonical_story_id": "ST-NRA-02",
+  "stage": "implementation",
+  "feature": "FEAT-RA-ANALYSIS",
+  "wave": 2,
+  "source_cr": "CR-030",
+  "cp6_result": "PASS",
+  "executed_by": "meta-dev",
+  "executed_at": "2026-07-16T00:00:00+00:00",
+  "design_evidence_ref": "process/checkpoints/CP5-CR030-DESIGN-EVIDENCE-BATCH.md",
+  "design_evidence_type": "technical-note",
+  "implementation_summary": {
+    "pattern": "skill-text-section-append",
+    "rationale": "ST-NRA-02 为 deny-by-default 负向防护逻辑，不新增分析功能。实现方式为在已有 SKILL.md §1-§7 之后替换 §8 占位符为完整权限边界拒绝与越权保护章，包含 deny-by-default 总则、外部访问拒绝 3 类（外部连接/凭据/HTTP 写入）、生产操作拒绝 3 类（自动分发 CA/PA/下游任务/关闭工单）、越权检测与阻断 10 项规则、审计日志格式、拒绝矩阵速查 9 类和禁止行为扩展 P-12 至 P-19。",
+    "risk_level": "low"
+  },
+  "output_files": [
+    {
+      "path": "skills/reverse-analysis/SKILL.md",
+      "operation": "modified",
+      "approx_lines": 370,
+      "section_added": "§8 权限边界拒绝与越权保护（替换原占位符）",
+      "subsections": [
+        "8.1 deny-by-default 总则（四类操作 + 三层防护 + 三类越权）",
+        "8.2 外部访问拒绝类别（8.2.1 外部系统连接 / 8.2.2 凭据读取 / 8.2.3 HTTP 写入）",
+        "8.3 生产操作拒绝类别（8.3.1 自动分发 CA/PA / 8.3.2 自动创建下游任务 / 8.3.3 自动关闭工单）",
+        "8.4 越权检测与阻断（二次越权检查 3 时机 + 10 项检测规则 + 拒绝响应结构）",
+        "8.5 权限边界审计日志（denial_record 格式 + 存储位置 + §7 协同 + P-12~P-19 禁止行为扩展）",
+        "8.6 拒绝矩阵速查（9 类请求的拒绝条件、响应码、替代路径）",
+        "8.7 适用范围",
+        "8.8 与其他章节的关系（§1/§2/§3-§5/§6/§7/安全与禁止事项）",
+        "8.9 正向 LLD 覆盖追溯（ST-RA-01/ST-RA-05.1/ST-RA-03/ST-RA-02 覆盖位置、测试 ID、接口定义）"
+      ],
+      "frontmatter_changes": {
+        "version": "1.3 → 1.4",
+        "shared_writers": "ST-NRA-02 描述更新为「权限边界拒绝与越权保护」",
+        "source_lld": "追加 ST-NRA-02 technical-note 引用",
+        "implementation_status": "追加 ST-NRA-02 已完成标记",
+        "revision_record": "追加 v1.4 行"
+      }
+    }
+  ],
+  "task_completion": {
+    "ST-NRA-02-SINGLE": { "status": "done", "output": "SKILL.md §8 权限边界拒绝与越权保护完整章节（9 个小节）" }
+  },
+  "acceptance_criteria_coverage": {
+    "AC1": { "status": "covered", "location": "SKILL.md §8.2.2 禁止凭据读取 — 检测 credential/token/api_key/password 输入并拒绝" },
+    "AC2": { "status": "covered", "location": "SKILL.md §8.2.1 禁止外部系统连接 + §8.2.3 禁止 HTTP 写入 — 检测 http/https URL 并拒绝" },
+    "AC3": { "status": "covered", "location": "SKILL.md §8.3 生产操作拒绝 3 类 + §8.4.2 检测规则表 DENIED-CAPA-DISTRIBUTION/DENIED-DOWNSTREAM-TASK/DENIED-TICKET-CLOSURE" },
+    "AC4": { "status": "covered", "location": "SKILL.md §8.4.3 denial_record 结构（含 alternative_path + cr_suggestion 字段）+ §8.6 拒绝矩阵速查（每类含替代路径 + CR 建议）" }
+  },
+  "design_gaps": [],
+  "open_items": [
+    {
+      "ref": "OPEN-NRA02-01",
+      "description": "§8 是纯文本防护定义。越权检测的运行时执行由 ptm-tse Agent 负责（Skill 输出标准化 denial_record 作为检测依据），Skill 自身不执行代码级检测。"
+    },
+    {
+      "ref": "OPEN-NRA02-02",
+      "description": "§8.4.2 检测规则表中的部分检测项（如 HTTP 写入检测 HTTP 方法、凭据读取检测认证头模式）依赖调用方（ptm-tse Agent）在调用 Skill 前进行输入过滤——Skill 层面为文本契约声明。"
+    }
+  ],
+  "cp7_handoff_notes": {
+    "verification_type": "static-review",
+    "key_checkpoints": [
+      "§8.1 deny-by-default 四类操作总则与 §安全与禁止事项 允许/禁止事项表一致",
+      "§8.2 外部访问拒绝 3 类（外部连接/凭据/HTTP 写入）均有独立检测逻辑和拒绝响应",
+      "§8.3 生产操作拒绝 3 类（CA/PA 分发/下游任务/关闭工单）均有独立检测逻辑和拒绝响应",
+      "§8.4.1 三次越权检查（分析入口/输出前/报告生成后）覆盖完整生命周期",
+      "§8.4.2 10 项检测规则表的 denial_type 和拒绝响应码与其他章节一致",
+      "§8.4.3 denial_record 格式与 Story 技术说明的拒绝记录格式一致",
+      "§8.5.3 与 §7 的协同优先级：§8 优先于 §7",
+      "§8.5.4 新增 P-12~P-19 共 8 项禁止行为已在禁止事项表中反映",
+      "§8.6 拒绝矩阵速查覆盖全部 9 类请求 + type + 响应码 + 替代路径",
+      "§8.9 正向 LLD 覆盖追溯表引用 ST-RA-01/05.1/03/02 的测试 ID 和接口定义",
+      "SKILL.md version 已更新至 1.4，修订记录已追加",
+      "§1-§7 未被修改，§9 保持原占位符"
+    ],
+    "risks_for_qa": [
+      "§8 是纯文本定义，无可执行代码或测试 fixture，验证只能靠静态审查",
+      "越权检测的运行时执行依赖 ptm-tse Agent 调用 Skill 前后的输入过滤，Skill 自身不执行代码级检测",
+      "P-12~P-19 禁止行为的违规检测属于 Agent 层职责而非 Skill 自检——此为设计决策",
+      "§8.5.3 与 §7 的协同优先级为 §8 > §7，需确认越权请求不会跳过 §8 进入 §7 证据不足检查"
+    ]
+  }
+}

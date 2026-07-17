@@ -1,0 +1,81 @@
+{
+  "story_id": "ST-NRA-01",
+  "story_slug": "evidence-threshold-guard",
+  "canonical_story_id": "ST-NRA-01",
+  "stage": "implementation",
+  "feature": "FEAT-RA-ANALYSIS",
+  "wave": 2,
+  "source_cr": "CR-030",
+  "cp6_result": "PASS",
+  "executed_by": "meta-dev",
+  "executed_at": "2026-07-16T00:00:00+00:00",
+  "design_evidence_ref": "process/checkpoints/CP5-CR030-DESIGN-EVIDENCE-BATCH.md",
+  "design_evidence_type": "technical-note",
+  "implementation_summary": {
+    "pattern": "skill-text-section-append",
+    "rationale": "ST-NRA-01 为负向防护逻辑，不新增分析功能。实现方式为在已有 SKILL.md §1-§6 之后追加 §7 证据不足保护章节，包含阈值硬阻断二次校验、缺失证据四类 gap_source 扩展、证据不足报告结构定义和 11 项禁止行为清单。",
+    "risk_level": "low"
+  },
+  "output_files": [
+    {
+      "path": "skills/reverse-analysis/SKILL.md",
+      "operation": "modified",
+      "approx_lines": 200,
+      "section_added": "§7 证据不足保护（替换原占位符）",
+      "subsections": [
+        "7.1 证据线阈值硬阻断（二次校验步骤 + 阈值不可降级）",
+        "7.2 缺失证据分类（gap_source 四类：ITR缺失/测试缺失/流程缺失/外部依赖）",
+        "7.3 证据不足降级输出（insufficient_evidence 报告结构 + 重新分析触发条件）",
+        "7.4 禁止行为清单（P-01~P-11 共 11 项）",
+        "7.5 适用范围",
+        "7.6 与其他章节的关系"
+      ],
+      "frontmatter_changes": {
+        "version": "1.2 → 1.3",
+        "implementation_status": "追加 ST-NRA-01 已完成标记",
+        "revision_record": "追加 v1.3 行"
+      },
+      "other_changes": [
+        "实现状态章节追加 ST-NRA-01 完成标记",
+        "禁止事项表追加 §7 相关 8 项禁止操作",
+        "修订记录追加 v1.3 行"
+      ]
+    }
+  ],
+  "task_completion": {
+    "ST-NRA-01-SINGLE": { "status": "done", "output": "SKILL.md §7 证据不足保护完整章节（6 个小节）" }
+  },
+  "acceptance_criteria_coverage": {
+    "AC1": { "status": "covered", "location": "SKILL.md §7.1 证据线阈值硬阻断 — valid_count < 3 时二次校验禁止根因状态超过 ai_candidate" },
+    "AC2": { "status": "covered", "location": "SKILL.md §7.2 缺失证据分类 — gap_source 四类（ITR缺失/测试缺失/流程缺失/外部依赖）+ gap_owner 扩展" },
+    "AC3": { "status": "covered", "location": "SKILL.md §7.3 证据不足降级输出 — insufficient_evidence 报告结构替代伪造结论" },
+    "AC4": { "status": "covered", "location": "SKILL.md §7.4 禁止行为清单 — P-01~P-11 共 11 项硬禁止规则" }
+  },
+  "design_gaps": [],
+  "open_items": [
+    {
+      "ref": "OPEN-NRA01-01",
+      "description": "§7.1 P-04（valid_count<3 禁止生成 CA/PA）与 §3.2.5 Step IMP-1 前置条件双重门控，实际执行时重复检查但无冲突"
+    },
+    {
+      "ref": "OPEN-NRA01-02",
+      "description": "§7.5 声明 S2 不覆盖但 S2 继承 evidence_set 分类规则应继承 §7 硬阻断——需 ST-RA-06.2 实现时确认"
+    }
+  ],
+  "cp7_handoff_notes": {
+    "verification_type": "static-review",
+    "key_checkpoints": [
+      "§7.1 二次校验的两个时机（分析输出前 + report_refs 写入前）是否正确覆盖",
+      "§7.2.1 gap_source 四类分类与 §2.3.2 gap_owner 不冲突，互补关系",
+      "§7.3.1 insufficient_evidence 报告结构完整且与标准 ra-report 不重合",
+      "§7.4 禁止行为清单 P-01~P-11 是否全部在禁止事项表中反映",
+      "§7.6 章节关系矩阵与 §2.4/§4.3/§5.2 的引用正确",
+      "SKILL.md version 已更新至 1.3，修订记录已追加"
+    ],
+    "risks_for_qa": [
+      "§7 是纯文本定义，无可执行代码或测试 fixture，验证只能靠静态审查",
+      "OPEN-NRA01-02：S2 增量分析继承 §7 硬阻断需 ST-RA-06.2 确认",
+      "禁止行为清单 P-01~P-11 的违规检测由 ptm-tse Agent 执行而非 Skill 自检——此为设计决策"
+    ]
+  }
+}

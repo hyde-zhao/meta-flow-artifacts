@@ -1,0 +1,69 @@
+{
+  "story_id": "ST-NRA-02",
+  "story_slug": "permission-boundary-denial",
+  "canonical_story_id": "ST-NRA-02",
+  "feature": "FEAT-RA-ANALYSIS",
+  "wave": 2,
+  "source_cr": "CR-030",
+  "stage": "implementation",
+  "cp6_result": "PASS",
+  "executed_by": "meta-dev",
+  "executed_at": "2026-07-16T00:00:00+00:00",
+  "evidence_items": [
+    {
+      "evidence_id": "EV-NRA02-01",
+      "type": "deliverable",
+      "description": "reverse-analysis Skill §8 权限边界拒绝与越权保护 — 完整章节追加（替换原占位符）",
+      "path": "skills/reverse-analysis/SKILL.md",
+      "operation": "modified",
+      "approx_lines_added": 370,
+      "sections_added": {
+        "implemented": ["§8 权限边界拒绝与越权保护（完整 9 小节）"],
+        "replaced_placeholder": ["原 §8 越权拒绝与权限边界占位符"]
+      },
+      "key_rules": [
+        "deny-by-default 四类操作：外部系统连接、凭据读取、生产数据写入、自动化操作分发",
+        "三层防护：§1 入口资格 → §7 证据保护 → §8 权限边界（顺序执行，任一层拒绝则后续不执行）",
+        "外部访问拒绝 3 类：禁止外部系统连接（§8.2.1）、禁止凭据读取（§8.2.2）、禁止 HTTP 写入（§8.2.3）",
+        "生产操作拒绝 3 类：禁止自动分发 CA/PA（§8.3.1）、禁止自动创建下游任务（§8.3.2）、禁止自动关闭工单（§8.3.3）",
+        "越权检测 10 项规则：DENIED-RAW-JSON-READ / DENIED-TICKET-WRITE / DENIED-CREDENTIAL-READ / DENIED-HTTP-ACCESS / DENIED-CAPA-DISTRIBUTION / DENIED-HTTP-WRITE / DENIED-DOWNSTREAM-TASK / DENIED-TICKET-CLOSURE / DENIED-SENSITIVE-OUTPUT / DENIED-AUTO-CONFIRM",
+        "denial_record 标准化拒绝响应格式：id/type/denial_code/requested_action/reason/alternative_path/cr_suggestion/timestamp/policy_ref/rule_ref/ticket_context/analysis_run_id",
+        "P-12~P-19 共 8 项禁止行为扩展：禁网络连接(P-12)、禁凭据读取(P-13)、禁自动分发 CA/PA(P-14)、禁写入源数据(P-15)、禁读 raw_json(P-16)、禁输出敏感字段(P-17)、禁自动创建下游任务(P-18)、禁修改工单状态(P-19)",
+        "拒绝矩阵速查 9 类：凭据/外部系统访问/HTTP 写入/CA-PA 分发/下游任务/关闭工单/自动确认/raw_json/敏感字段"
+      ]
+    },
+    {
+      "evidence_id": "EV-NRA02-02",
+      "type": "checkpoint",
+      "description": "CP6 编码完成检查",
+      "path": "process/checks/CP6-ST-NRA-02-permission-boundary-denial-CODING-DONE.md",
+      "operation": "created",
+      "result": "PASS"
+    },
+    {
+      "evidence_id": "EV-NRA02-03",
+      "type": "return_packet",
+      "description": "Story Return Packet — 实现摘要与交接信息",
+      "path": "process/returns/ST-NRA-02-permission-boundary-denial.return.json",
+      "operation": "created"
+    },
+    {
+      "evidence_id": "EV-NRA02-04",
+      "type": "dev_log",
+      "description": "DEV-LOG 追加 ST-NRA-02 实现记录",
+      "path": "process/DEV-LOG.md",
+      "operation": "appended"
+    }
+  ],
+  "task_coverage": {
+    "ST-NRA-02-SINGLE": { "status": "done", "evidence": ["EV-NRA02-01", "EV-NRA02-02"] }
+  },
+  "acceptance_coverage": {
+    "AC1": { "status": "covered", "evidence": ["EV-NRA02-01"], "note": "§8.2.2 凭据/认证头请求被拒绝" },
+    "AC2": { "status": "covered", "evidence": ["EV-NRA02-01"], "note": "§8.2.1 + §8.2.3 外部系统访问请求被拒绝" },
+    "AC3": { "status": "covered", "evidence": ["EV-NRA02-01"], "note": "§8.3 生产操作 3 类拒绝 + §8.4.2 10 项检测规则" },
+    "AC4": { "status": "covered", "evidence": ["EV-NRA02-01"], "note": "§8.4.3 denial_record 含 alternative_path + cr_suggestion" }
+  },
+  "design_gaps": [],
+  "cp7_handoff_hint": "静态审查验证。检查 SKILL.md §8 是否完整替换原占位符（9 个小节）、denial_record 格式是否与 Story 技术说明一致、外部访问与生产操作拒绝类别是否各有 3 类独立检测逻辑和拒绝响应、10 项越权检测规则表是否完整、P-12~P-19 禁止行为是否已在禁止事项表中反映、§8 与 §7 的协同优先级是否正确。注意：§8 是纯文本防护逻辑定义，无可执行代码验证。"
+}

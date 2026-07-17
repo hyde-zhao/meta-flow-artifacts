@@ -1,0 +1,106 @@
+{
+  "story_id": "ST-RA-01",
+  "story_slug": "qualification-evidence",
+  "canonical_story_id": "ST-RA-01",
+  "feature": "FEAT-RA-ANALYSIS",
+  "wave": 2,
+  "source_cr": "CR-030",
+  "stage": "implementation",
+  "cp6_result": "PASS",
+  "executed_by": "meta-dev",
+  "executed_at": "2026-07-16T00:00:00+00:00",
+  "evidence_items": [
+    {
+      "evidence_id": "EV-RA01-01",
+      "type": "deliverable",
+      "description": "reverse-analysis Skill 主文件 — 资格检查与可信输入建立",
+      "path": "skills/reverse-analysis/SKILL.md",
+      "operation": "created",
+      "approx_lines": 360,
+      "sections": {
+        "implemented": ["§1 资格检查", "§2 可信输入建立"],
+        "placeholder": ["§3 根因四层", "§4 六维分析", "§5 Report 生成", "§6 三线阈值阻断", "§7 越权拒绝", "§8 Artifact 交付"]
+      },
+      "key_rules": [
+        "P1→eligible, P2→eligible_on_request, P3/P4→rejected",
+        "is_internal=true→deferred",
+        "quality_flag=blocked→blocked",
+        "fact/hypothesis/unknown/gap 四类证据分类",
+        "valid_count>=3 → threshold=passed, <3 → insufficient"
+      ]
+    },
+    {
+      "evidence_id": "EV-RA01-02",
+      "type": "deliverable",
+      "description": "ptm-tse Agent 定义 — reverse-analysis Skill 引用与调用流程",
+      "path": "agents/ptm-tse.md",
+      "operation": "modified",
+      "approx_lines": 180,
+      "changes": [
+        "skills: [reverse-analysis]",
+        "新增 §逆向分析职责 和 §逆向分析流程",
+        "新增 §权限边界（8 项）",
+        "新增 §调用 reverse-analysis Skill 详细说明"
+      ]
+    },
+    {
+      "evidence_id": "EV-RA01-03",
+      "type": "checkpoint",
+      "description": "CP6 编码完成检查",
+      "path": "process/checks/CP6-ST-RA-01-qualification-evidence-CODING-DONE.md",
+      "operation": "created",
+      "result": "PASS"
+    },
+    {
+      "evidence_id": "EV-RA01-04",
+      "type": "return_packet",
+      "description": "Story Return Packet — 实现摘要与交接信息",
+      "path": "process/returns/ST-RA-01-qualification-evidence.return.json",
+      "operation": "created"
+    },
+    {
+      "evidence_id": "EV-RA01-05",
+      "type": "infrastructure",
+      "description": "reverse-analysis 模板目录（空，供下游 Story 使用）",
+      "path": "skills/reverse-analysis/templates/",
+      "operation": "created_dir",
+      "note": "模板文件由 ST-RA-05.3 写入"
+    }
+  ],
+  "task_coverage": {
+    "TASK-ANL-01": { "status": "done", "evidence": ["EV-RA01-01", "EV-RA01-05"] },
+    "TASK-ANL-02": { "status": "done", "evidence": ["EV-RA01-01"] },
+    "TASK-ANL-03": { "status": "done", "evidence": ["EV-RA01-01"] },
+    "TASK-ANL-04": { "status": "done", "evidence": ["EV-RA01-01"] },
+    "TASK-ANL-05": { "status": "done", "evidence": ["EV-RA01-01"] },
+    "TASK-ANL-06": { "status": "done", "evidence": ["EV-RA01-02"] }
+  },
+  "acceptance_coverage": {
+    "AC1": { "status": "covered", "evidence": ["EV-RA01-01"] },
+    "AC2": { "status": "covered", "evidence": ["EV-RA01-01"] },
+    "AC3": { "status": "covered", "evidence": ["EV-RA01-01"] },
+    "AC4": { "status": "covered", "evidence": ["EV-RA01-01"] },
+    "AC5": { "status": "covered", "evidence": ["EV-RA01-02"] }
+  },
+  "design_gaps": [
+    {
+      "id": "GAP-RA01-01",
+      "description": "quality_flag 枚举值与 LLD 不一致",
+      "severity": "low",
+      "resolution": "Skill 使用实际 schema 值（clean/incomplete/anomaly/blocked）"
+    },
+    {
+      "id": "GAP-RA01-02",
+      "description": "is_internal 列缺失",
+      "severity": "medium",
+      "resolution": "Skill 标注降级策略（视为 false），需上游补充"
+    },
+    {
+      "id": "GAP-RA01-03",
+      "description": "severity 列无 CHECK 约束",
+      "severity": "low",
+      "resolution": "Skill 定义降级策略（非 P1-P4 → rejected）"
+    }
+  ],
+  "cp7_handoff_hint": "静态审查验证。检查 Skill 文本中的资格判定矩阵、证据分类规则和禁止操作声明是否与 LLD 契约一致。注意 is_internal 缺失和 quality_flag 枚举不一致是已知设计缺口，不是实现缺陷。"
+}
