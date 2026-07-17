@@ -1,47 +1,27 @@
-# PTM Team Backlog
-
-> 版本：v1.0 · 更新：2026-06-08
-
+---
+status: draft
+version: "1.2"
 ---
 
-## Active（当前活跃）
+# ptm-tse 逆向分析 — 用户价值 Backlog
 
-| ID | 标题 | Agent | 优先级 | 状态 |
-|---|---|---|---|---|
-| — | 原子能力框架完善 | ptm-tae | P0 | 🔄 进行中 |
-| — | 防火墙配置原子能力补齐 | ptm-tae | P0 | 🔄 进行中 |
-| — | Topo 管理（大网+交换机隔离） | ptm-tae | P0 | 🔄 进行中 |
+## 修订记录
 
-## Candidate（候选，待启动）
-
-| ID | 标题 | Agent | 优先级 | 来源 |
-|---|---|---|---|---|
-| C-001 | ptm-te Agent 开发 | ptm-te | P0 | Slice 2 |
-| C-002 | 用例解析与执行 Skill | ptm-te | P0 | Slice 2 |
-| C-003 | 禅道任务集成（领取+回写） | ptm-te | P1 | Slice 2 |
-| C-004 | 自动化翻译（执行记录→脚本） | ptm-tae | P1 | Slice 2 |
-| C-005 | 回归触发 + 失败自修复 | ptm-tae | P1 | Slice 2 |
-| C-006 | tde→te→tae 最小闭环端到端 | 跨 Agent | P0 | Slice 2 |
-| C-007 | ptm-tm Agent 开发 | ptm-tm | P1 | Slice 3 |
-| C-008 | ptm-tse Agent 开发 | ptm-tse | P1 | Slice 3 |
-| C-009 | ptm-qa Agent 开发 | ptm-qa | P2 | Slice 3 |
-
-## Deferred（延后）
-
-| ID | 标题 | 来源 | 跟踪 |
+| 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
-| D-001 | 断点恢复机制 | CR-011-T-01 | `process/changes/CR-011-FOLLOW-UP-TRACKING-2026-06-02.md` |
-| D-002 | 关键词调优 | CR-011-T-02 | 同上 |
-| D-003 | Codex 平台整改 | CR-015-T-01 | `process/changes/CR-015-FOLLOW-UP-TRACKING-2026-06-04.md` |
+| 1.0 | 2026-07-15 | host-orchestrator | 初始延后项。 |
+| 1.1 | 2026-07-15 | host-orchestrator | 补充每项的真实受益用户，保持在本 CR 范围外。 |
+| 1.2 | 2026-07-15 | host-orchestrator | 将非 ITR 外部来源与更高自动化级别保留为独立后续项。 |
 
-## Spike Candidate（调研候选）
+| Item ID | 类型 | 受益用户 | 来源 | 内容 | 当前状态 | 延后原因 | 重启条件 |
+|---|---|---|---|---|---|---|---|
+| BL-RA-01 | enhancement | 测试经理、质量负责人 | DEF-RA-01 | 到期提醒与复发告警，减少人工追踪观察窗 | candidate | 需要通知和运行授权 | MVP 稳定且批准 runtime CR |
+| BL-RA-02 | enhancement | 测试设计/执行/自动化负责人 | DEF-RA-02 | 下游 Agent 自动消费已批准改进输入 | candidate | 首版需先验证低耦合契约 | 至少 5 个报告完成闭环 |
+| BL-RA-03 | spike_candidate | 测试架构师、测试设计负责人 | DEF-RA-03 | 内部问题阶段前移分析模型 | candidate | 与现网流出模型不同 | 现网流程完成 2–3 迭代 |
+| BL-RA-04 | experiment | 质量负责人、测试经理 | SCN-RA-05 | 用真实样本校准指标阈值和 30 天观察窗 | candidate | 需要真实历史样本 | 首批 3 份 RA 报告可用 |
+| BL-RA-05 | enhancement | 测试架构师、质量负责人 | UC-RA-07 | 接入 ITR 以外的工单、日志、TAC 或知识库来源 | candidate | 每个来源都有独立认证、数据分类、保留与运行风险 | ITR 单一来源稳定且独立 CR 获批准 |
+| BL-RA-06 | enhancement | 测试设计/执行/自动化负责人 | UC-RA-04 | 根据已批准改进候选自动创建下游任务 | candidate | 会引入跨 Agent 写入、权限和回滚风险 | 至少 5 个报告人工闭环并通过独立授权 |
 
-| ID | 标题 | 说明 |
-|---|---|---|
-| S-001 | atomic-ops aliases 补充（47 ops） | 剩余无歧义 op 按需补充 |
-| S-002 | 应用层流量模拟方案调研 | HTTP/FTP/DNS 等 L7 协议模拟 |
-| S-003 | WPS/文档在线协作集成 | docx/xlsx ↔ Markdown 双向转换 |
+## 台账边界
 
----
-
-*Backlog 随项目进展动态更新。正式启动的候选 Story 通过 CR 流程管理。*
+本 Backlog 是产品规划输入，不等同 CP8 follow-up tracking。只有后续用户决定启动某项时，才新建正式 CR。

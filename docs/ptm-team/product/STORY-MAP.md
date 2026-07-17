@@ -1,99 +1,73 @@
-# PTM Team Story Map
-
-> 版本：v1.0 · 更新：2026-06-08 · 基于四步演进路线
-
+---
+status: draft
+version: "1.5"
+source_use_cases: ["docs/product/USE-CASES.md"]
+source_scenarios: ["docs/product/SCENARIOS.yaml"]
+source_requirements: ["docs/product/REQUIREMENTS.md"]
+confirmed_by: ""
+confirmed_at: ""
 ---
 
-## 用户活动全景
+# ptm-tse 逆向分析 — 用户故事地图
 
-```
-┌────────────────────────────────────────────────────────────────────┐
-│                        PTM Team 测试工作流                           │
-├──────────┬──────────┬──────────┬──────────┬──────────┬─────────────┤
-│ 项目接入 │ 需求分析 │ 用例设计 │ 用例执行 │ 自动化   │ 质量度量    │
-│ ptm-tm   │ ptm-tse  │ ptm-tde  │ ptm-te   │ ptm-tae  │ ptm-qa      │
-├──────────┼──────────┼──────────┼──────────┼──────────┼─────────────┤
-│          │          │          │          │          │             │
-│ Step 4   │ Step 4   │ ✅ 已交付 │ Step 2   │ Step 2   │ Step 4      │
-│ Autopilot│ Autopilot│ Step 1   │ Copilot  │ Copilot  │ Autopilot   │
-│          │          │ 完成     │ 人工主导  │ 人工主导  │             │
-│          │          │          │          │          │             │
-└──────────┴──────────┴──────────┴──────────┴──────────┴─────────────┘
-```
+## 修订记录
 
-> **当前进度**（2026-07-06）：ptm-tde ✅ Step 1 已交付；ptm-tae 🔄 Step 1 进行中（38%）；ptm-te ⬜ Step 1 待启动。表中"Step X"表示 Agent 的目标就绪阶段，非当前进度。
+| 版本 | 日期 | 修订人 | 变更要点 | 来源 |
+|---|---|---|---|---|
+| 1.0 | 2026-07-15 | host-orchestrator | 流程中心 Story Map | 已被 REV-01 取代 |
+| 1.1 | 2026-07-15 | host-orchestrator | 以用户任务、收益和失败体验重写 | USE-CASES v1.1 |
+| 1.2 | 2026-07-15 | host-orchestrator | 新增受控 ITR 问题单摄取、保存和批量分析用户任务；待 CP2 确认读取/保存边界 | USE-CASES v1.2、CR-030 REV-02 |
+| 1.3 | 2026-07-16 | host-orchestrator | REV-03：新增 S2 更新分析、变更检测、合并、差异报告和措施刷新 Story | USE-CASES/REQUIREMENTS v1.3 |
+| 1.4 | 2026-07-17 | host-orchestrator | CR-031：新增项目级安装、运行根隔离与不允许源码根回退的 Story 候选 | USE-CASES/REQUIREMENTS v1.4 |
+| 1.5 | 2026-07-17 | host-orchestrator | CR-031 scope reframe：项目级安装已验证；Story 候选改为既有运行数据的权限、分类、来源和生命周期治理 | USE-CASES/REQUIREMENTS v1.5 |
 
----
+## 用户活动
 
-## 按 Step 分层的 Story Map
+| Activity ID | 用户活动 | 目标用户 | 用户要达成的结果 | 来源 |
+|---|---|---|---|---|
+| ACT-RA-01 | 决定是否把一次事故变为预防工作 | 测试经理 | 在资源有限时优先处理高风险复发 | UC-RA-01 |
+| ACT-RA-02 | 为团队建立可信解释 | 测试架构师 | 用事实解释为什么发生、为什么漏过 | UC-RA-02、03 |
+| ACT-RA-03 | 将教训转成各专业的改进 | 测试设计/执行/自动化/质量负责人 | 获得可验收、可追溯的输入 | UC-RA-04 |
+| ACT-RA-04 | 证明风险真的降低 | 质量负责人、测试经理 | 基于有效性而不是完成率关闭 | UC-RA-05 |
+| ACT-RA-05 | 守住分析权限边界 | 安全/合规负责人 | 在学习事故时不扩大生产访问 | UC-RA-06 |
+| ACT-RA-06 | 从真实问题单中形成风险全景 | 测试架构师、测试经理 | 获得可追溯的单问题单结论和批量趋势，决定预防投入 | UC-RA-07 |
+| ACT-RA-07 | 刷新风险全景并解释变化 | 测试架构师、测试经理、质量负责人 | 区分新增/变更、可信趋势和受影响措施 | UC-RA-08 |
+| ACT-RA-08 | 治理已安装项目中的运行数据 | 测试架构师、数据 Owner、安全/合规负责人 | 让问题单数据可安全保留、审计和受控清理 | UC-RA-09 |
 
-### Step 1 — Copilot 准备阶段（当前）
+## 用户任务与 Story
 
-**目标**：搭建 ptm-tde / ptm-te / ptm-tae 三个核心 Agent 及底层工具能力
+| Story ID | Activity ID | 用户任务 | Story | 优先级 | 验收摘要 | 来源 |
+|---|---|---|---|---|---|---|
+| ST-RA-01 | ACT-RA-01 | 识别应分析事故并建立可信输入 | 作为测试经理，我希望判断一次已恢复事故是否值得启动逆向分析，以便把团队资源投入最可能复发或影响最大的风险。 | P0 | P1/P2 决策、证据缺口、越权/内部问题拒绝对用户可见。 | UC-RA-01、02、06；REQ-001–003,010–012 |
+| ST-RA-02 | ACT-RA-02 | 解释事故发生和逃逸的原因 | 作为测试架构师，我希望与团队确认根因、引入点和流出点，以便选择最早且最经济的预防控制。 | P0 | 结论、反证、引入点和控制失效均可审计。 | UC-RA-03；REQ-004–006 |
+| ST-RA-03 | ACT-RA-03 | 将已确认教训转成可消费输入 | 作为测试设计负责人，我希望收到经过批准的改进输入，以便把事故教训转化为可验证的测试改进。 | P0 | 未批准不交接；已批准输入含来源、范围、验收和限制。 | UC-RA-04；REQ-007–008 |
+| ST-RA-04 | ACT-RA-04 | 用有效性证据决定关闭 | 作为质量负责人，我希望审查行动和观察证据，以便只在风险确实降低后同意关闭。 | P1 | 关闭条件、观察窗、指标和阻塞状态完整。 | UC-RA-05；REQ-009,013 |
+| ST-RA-05 | ACT-RA-06 | 受控摄取、保存并理解问题单 | 作为测试架构师，我希望从被批准的 ITR 来源获取并保存现网问题单，以便基于可追溯事实输出逐单总结、批量风险趋势和改进候选。 | P0 | 固定 GET/no-credential/no-write；摄取可审计；schema/保存失败不覆盖历史；总结和措施保持人工确认。 | UC-RA-07；REQ-011,014–018 |
+| ST-RA-06 | ACT-RA-07 | 更新分析与差异解释 | 作为测试架构师，我希望将新批次与已保存版本比较并安全合并，以便解释风险、趋势和措施相对上次的变化。 | P0 | quality/manifest/稳定 ID/冲突队列完整；无可信分母降级；无基线不判措施失效。 | UC-RA-08；REQ-015,017,019–022 |
+| ST-RA-07 | ACT-RA-08 | 核验并治理运行数据 | 作为测试架构师，我希望核验已安装项目中的 SQLite、快照和元数据是否受一致治理，以便安全地继续分析而不泄露或误删问题单数据。 | P0 | 每项数据有类别/Owner/来源/保留状态；目录 0700、受管数据文件 0600；support 具有版本来源。 | UC-RA-09；REQ-023–025；SCN-RA-14 |
 
-| 用户活动 | Story | Agent | 状态 |
+## 负向 / 边界 Story
+
+| Story ID | 触发场景 | 用户可见结果 | 验收摘要 | 来源 |
+|---|---|---|---|---|
+| ST-NRA-01 | 证据不足或团队对结论不同意 | 架构师得到缺口/待澄清，而非虚假根因 | 不能跨越确认门 | UC-RA-02、03 |
+| ST-NRA-02 | 请求外部访问或生产操作 | 安全负责人得到拒绝和替代路径 | 不发生外部读取/写入 | UC-RA-06 |
+| ST-NRA-03 | ITR 响应异常、schema 不匹配、数据分类未确认或保存失败 | 测试架构师得到可恢复的失败说明，历史快照和结论不被覆盖 | 不生成伪造总结，不扩大到其他来源 | UC-RA-07 |
+| ST-NRA-04 | 数据权限不合格、未分类、support 来源缺失或无清理授权 | 测试架构师得到可修复的阻断说明；真实数据保持不变 | 不发布分析、不自动 chmod/删除/迁移；记录路径类型、缺口和所需 Owner 授权 | UC-RA-09；REQ-023–026；SCN-RA-15 |
+
+## 非目标
+
+- 不把用户故事写成“新建文件/调用 Skill/修改函数”。
+- 不把事故现场恢复、外部系统连接或内部问题流程纳入本 MVP。
+
+## 追溯矩阵
+
+| 来源 ID | 覆盖 Story | 覆盖状态 | 缺口 / 说明 |
 |---|---|---|---|
-| **用例设计** | 三阶段框架搭建（KYM → MFQ → PPDCS） | ptm-tde | ✅ CR-010 |
-| | KYM 阶段（GATE-1/2 + 方法论确认） | ptm-tde | ✅ CR-011 |
-| | MFQ 阶段（M/F/Q 三维分析） | ptm-tde | ✅ CR-012 |
-| | PPDCS 阶段（五方法设计 + GATE-4/5） | ptm-tde | ✅ CR-013 |
-| | AskUserQuestion 交互增强 | ptm-tde | ✅ CR-015 |
-| | 原子操作集成（atomic-ops CLI + 语义匹配） | ptm-tde | ✅ CR-016 |
-| | 因子库发现（自动加载 + 四级分级） | ptm-tde | ✅ CR-017 |
-| **基础设施** | 原子能力框架（atomic-ops CLI） | ptm-tae | 🔄 进行中 |
-| | 防火墙配置原子能力补齐 | ptm-tae | 🔄 进行中 |
-| | 数通仪表打流能力 | ptm-tae | 🔄 进行中 |
-| | Topo 管理（逻辑 Topo 规范 + 大网建设） | ptm-tae | 🔄 进行中 |
-| | 因子库建设（策略路由因子等） | ptm-tde/ptm-tae | 🔄 部分完成 |
-| **工具开发** | 自动化工厂维护（auto_factory_agent） | ptm-tae | 🔄 进行中 |
-| | 设备安装 Skill（PXE 裸机安装） | ptm-tae | 🔄 初版完成 |
-
-### Step 2 — Copilot 人工主导
-
-**目标**：人工主导，ptm-tde / ptm-te / ptm-tae 打通全链路
-
-| 用户活动 | Story | Agent | 状态 |
-|---|---|---|---|
-| **用例执行** | ptm-te Agent 开发（解析→配置→打流→判定） | ptm-te | ⬜ planned |
-| | 禅道任务集成（领取+回写） | ptm-te | ⬜ planned |
-| | Topo 映射（逻辑→物理自动匹配） | ptm-te/ptm-tae | ⬜ planned |
-| **自动化翻译** | 执行记录→Python 脚本翻译 | ptm-tae | ⬜ planned |
-| | 脚本验证与工厂注册 | ptm-tae | ⬜ planned |
-| | 回归触发 + 失败自修复 | ptm-tae | ⬜ planned |
-| **闭环验证** | tde → te → tae 最小闭环端到端 | 跨 Agent | ⬜ planned |
-
-### Step 3 — Copilot Agent 主导
-
-**目标**：开发 ptm-tm / ptm-tse / ptm-qa，六 Agent 协同
-
-| 用户活动 | Story | Agent | 状态 |
-|---|---|---|---|
-| **项目接入** | ptm-tm Agent 开发（计划+调度+报告） | ptm-tm | ⬜ planned |
-| **需求分析** | ptm-tse Agent 开发（需求分析+策略制定） | ptm-tse | ⬜ planned |
-| | ptm-tse 评审链（用例/执行/工具） | ptm-tse | ⬜ planned |
-| **质量度量** | ptm-qa Agent 开发（审计+采集+报告） | ptm-qa | ⬜ planned |
-| **协同调度** | tm→tse→tde→te→qa 全链路调度 | 跨 Agent | ⬜ planned |
-
-### Step 4 — Autopilot
-
-**目标**：全自动运行，人工仅处理异常
-
-| 用户活动 | Story | Agent | 状态 |
-|---|---|---|---|
-| **全自动闭环** | 禅道自动触发 → 全流程自动执行 | 全部 | ⬜ planned |
-| | 异常自动处理（已知异常自修复） | 全部 | ⬜ planned |
-| | 人工监督面板（每日执行摘要） | ptm-tm | ⬜ planned |
-
----
-
-## 统计
-
-| Step | Agent | Stories 完成 | Stories 规划中 |
-|---|---|---|---|
-| Step 1 | ptm-tde | 7 CR (23 Stories) | 0 |
-| Step 1 | ptm-tae | 部分 | 3 |
-| Step 1 | ptm-te | 0 | 2 |
-| Step 2 | ptm-te/ptm-tae | 0 | 5 |
-| Step 3 | ptm-tm/tse/qa | 0 | 4 |
-| Step 4 | 全部 | 0 | 3 |
-| **合计** | | **23** | **17** |
+| UC-RA-01、02、06 | ST-RA-01 | draft | 待新的 CP2 确认 |
+| UC-RA-03 | ST-RA-02 | draft | 待新的 CP2 确认 |
+| UC-RA-04 | ST-RA-03 | draft | 待新的 CP2 确认 |
+| UC-RA-05 | ST-RA-04 | draft | 待新的 CP2 确认 |
+| UC-RA-07 | ST-RA-05 | draft | 待新的 CP2 确认 ITR 读取/保存边界 |
+| UC-RA-08 | ST-RA-06 | pending CR-031 | 既有更新分析能力已交付；运行数据治理随 CR-031 重新确认 |
+| UC-RA-09 | ST-RA-07、ST-NRA-04 | pending CP2 | 已安装实例为事实基线；需确认数据权限、分类、来源和生命周期后才可做 HLD/Story 拆解 |

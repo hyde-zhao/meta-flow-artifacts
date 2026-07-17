@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "story_id": "ST-RA-INGEST-DB",
+  "cr_id": "CR-030",
+  "stage": "CP7",
+  "return_ref": "process/returns/STORY-ST-RA-INGEST-DB-CP7.return.json",
+  "changed_files": [],
+  "commands": [
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile data/dao.py",
+      "result": "pass"
+    },
+    {
+      "command": "sqlite3 ':memory:' executescript(data/schema.sql)",
+      "result": "pass"
+    }
+  ],
+  "tests": [],
+  "artifacts": [
+    "process/evidence/STORY-ST-NRA-01-CP7.index.json",
+    "process/evidence/STORY-ST-NRA-02-CP7.index.json",
+    "process/evidence/STORY-ST-NRA-03-CP7.index.json",
+    "process/evidence/STORY-ST-RA-01-CP7.index.json",
+    "process/evidence/STORY-ST-RA-02-CP7.index.json",
+    "process/evidence/STORY-ST-RA-03-CP7.index.json",
+    "process/evidence/STORY-ST-RA-04-CP7.index.json",
+    "process/evidence/STORY-ST-RA-05.1-INGEST-CP7.index.json",
+    "process/evidence/STORY-ST-RA-05.2-CLEAN-CP7.index.json",
+    "process/evidence/STORY-ST-RA-05.3-ANALYZE-CP7.index.json",
+    "process/evidence/STORY-ST-RA-06.1-DETECT-CP7.index.json",
+    "process/evidence/STORY-ST-RA-06.2-REFRESH-CP7.index.json",
+    "process/evidence/STORY-ST-RA-06.3-TRACK-CP7.index.json",
+    "process/evidence/STORY-ST-RA-INGEST-DB-CP7.index.json"
+  ],
+  "risks": [
+    "Runtime ITR, real-data, and reviewer interaction verification remains unexecuted by authorization boundary."
+  ],
+  "waivers": [],
+  "design_delta_ref": null
+}

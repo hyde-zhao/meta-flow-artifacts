@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR031-PROMPT-CONTRACT",
+  "cr_id": "CR-031",
+  "story_id": null,
+  "profile": "docs-lite",
+  "route_plan_ref": "process/checks/CP0-CR031.route-plan.json",
+  "context_ref": "process/context/CP8-CR031-PROMPT-CONTRACT.context.json",
+  "evidence_ref": "process/release/RELEASE-CONTEXT-CR031.yaml",
+  "dispatch_refs": [],
+  "checked_at": "2026-07-17T08:46:00Z",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator",
+    "checker_version": "meta-flow",
+    "invocation": "CR-031 prompt-contract static delivery precheck",
+    "generated_by": "host-orchestrator inline",
+    "fallback_used": false,
+    "fallback_reason": null,
+    "fallback_review_ref": null
+  },
+  "items": [
+    {
+      "id": "CP8-CR031-01",
+      "category": "scope",
+      "name": "Delivery contains the target Agent and Skill prompt contracts plus only the user-authorized untracked source-root cleanup",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/changes/CR-031.md#文档处理决策", "agents/ptm-tse.md", "skills/itr-ticket-ingestion/SKILL.md", "skills/reverse-analysis/SKILL.md", "skills/improvement-tracker/SKILL.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "No installation, tracked DAO/schema/manifest, or installed-project data change belongs to this CR. The cleanup removed only untracked source-root artifacts."
+    },
+    {
+      "id": "CP8-CR031-02",
+      "category": "integration-contract",
+      "name": "All four prompts define the same installed runtime root and data root",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["agents/ptm-tse.md#运行数据治理契约", "skills/itr-ticket-ingestion/SKILL.md#运行数据治理契约", "skills/reverse-analysis/SKILL.md#运行数据治理契约", "skills/improvement-tracker/SKILL.md#运行数据治理契约"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "runtime_root is the installed ptm-tse project root and data_root is <runtime-root>/data; source/global/CWD fallback is denied."
+    },
+    {
+      "id": "CP8-CR031-03",
+      "category": "security",
+      "name": "Sensitive data handling and local remediation authorization are explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["agents/ptm-tse.md#运行数据治理契约", "skills/itr-ticket-ingestion/SKILL.md#运行数据治理契约", "skills/reverse-analysis/SKILL.md#运行数据治理契约", "skills/improvement-tracker/SKILL.md#运行数据治理契约"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Sensitive runtime files are 0600 under 0700 directories; noncompliance blocks processing; existing-file remediation requires explicit authorization in the installed project."
+    },
+    {
+      "id": "CP8-CR031-04",
+      "category": "validation",
+      "name": "Static contract and Markdown structure checks pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["git diff --check", "targeted rg contract check", "targeted awk fenced-code check"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Validation is intentionally static. No installed data, external endpoint, credential, or runtime operation was accessed."
+    },
+    {
+      "id": "CP8-CR031-06",
+      "category": "repository-hygiene",
+      "name": "Untracked runtime, build, cache, legacy-process, and empty-input directories are absent from the ptm-team source root",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["directory absence check: data, .venv, build, ptm_team.egg-info, checkpoints, process.before-artifact-routing-20260623, .input", "git status --short"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Cleanup is limited to user-authorized, untracked local artifacts. Source agents/skills, the real process symlink, and /home/hyde/projects/ptm-tse are outside the deletion set."
+    },
+    {
+      "id": "CP8-CR031-05",
+      "category": "release",
+      "name": "Runtime release and installation verification are not part of this prompt-only CR",
+      "status": "N/A",
+      "severity": "HIGH",
+      "evidence_refs": ["process/changes/CR-031.md#不授权范围", "process/release/RELEASE-CONTEXT-CR031.yaml"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "The existing project-level installation was previously verified and is not revalidated or altered by this CR."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260717T073117Z0000-e7403009"],
+  "decision": "PASS",
+  "next_route": "CP8 required human delivery confirmation"
+}
