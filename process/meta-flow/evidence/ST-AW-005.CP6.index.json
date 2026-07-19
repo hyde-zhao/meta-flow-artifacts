@@ -1,0 +1,115 @@
+{
+  "artifacts": [
+    "meta_flow/workspace/artifact_migration.py",
+    "tests/test_artifact_migration.py",
+    "process/stories/STORY-ST-AW-005-read-only-migration-handoff-IMPLEMENTATION.md"
+  ],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "meta_flow/workspace/artifact_migration.py"
+    },
+    {
+      "change_type": "created",
+      "path": "tests/test_artifact_migration.py"
+    },
+    {
+      "change_type": "created",
+      "path": "process/stories/STORY-ST-AW-005-read-only-migration-handoff-IMPLEMENTATION.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/ST-AW-005.CP6.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/ST-AW-005.CP6.index.json"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_migration.py",
+      "result": "pass: 23 passed in 0.10s"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_migration.py tests/test_cr051_project_artifact_routing.py tests/test_cr051_project_worktree.py",
+      "result": "pass: 92 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_migration.py tests/test_cr051_project_artifact_routing.py tests/test_cr051_project_worktree.py tests/test_artifact_leg_lifecycle.py tests/test_artifact_aggregate.py tests/test_git_branch_lifecycle.py tests/test_workspace_git_sync.py tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "result": "pass: 277 passed, 9 subtests passed in 5.21s"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff check meta_flow/workspace/artifact_migration.py tests/test_artifact_migration.py",
+      "result": "pass: All checks passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff format --check meta_flow/workspace/artifact_migration.py tests/test_artifact_migration.py",
+      "result": "pass: 2 files already formatted"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr051-staw005-cp6-pycompile uv run --python 3.11 python -m py_compile meta_flow/workspace/artifact_migration.py tests/test_artifact_migration.py",
+      "result": "pass"
+    },
+    {
+      "command": "scoped git diff/no-index whitespace and dangerous API/import audit",
+      "result": "pass: no whitespace diagnostics; no filesystem mutator, subprocess, Git/worktree/ref/remote/helper/scheduler executor import/call"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/STORY-ST-AW-005.CP6.work-packet.json --return process/returns/ST-AW-005.CP6.return.json --project-root .",
+      "result": "pass: Story Return Packet Check OK; logical expected-path warning only because process is an external symlink"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/ST-AW-005.CP6.index.json --project-root .",
+      "result": "pass: Evidence Index Check OK"
+    }
+  ],
+  "cr_id": "CR-051",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/returns/ST-AW-005.CP6.return.json",
+  "risks": [
+    {
+      "detail": "regular-file no-follow 已关闭 lstat→open swap；目录枚举仍只在静态/非对抗 fixture 验证。未来允许不可信并发 rename/replace 时必须升级 full-lld 并采用 dirfd/openat 全链路 no-follow 设计。",
+      "id": "R-AW005-DIR-ENUM-TOCTOU",
+      "level": "medium",
+      "owner": "CP8 decision owner / future migration CR",
+      "status": "open-follow-up"
+    },
+    {
+      "detail": "真实文件迁移、软链接挂接、worktree/ref/remote mutation 未授权、未执行。",
+      "id": "CR051-RISK-REAL-MIGRATION-UNVERIFIED",
+      "level": "medium",
+      "owner": "future project migration CR",
+      "status": "open-not-authorized"
+    },
+    {
+      "detail": "Windows native no-follow/symlink/permission 行为未实机验证；无可靠能力时当前实现 fail closed。",
+      "id": "CR051-RISK-WINDOWS-NATIVE-NOFOLLOW",
+      "level": "low",
+      "owner": "CP7/CP8 decision owner",
+      "status": "open"
+    },
+    {
+      "detail": "真实托管 remote、credentials、branch protection 与 publication 未授权、未验证。",
+      "id": "CR051-RISK-REMOTE-UNVERIFIED",
+      "level": "medium",
+      "owner": "CP8 decision owner",
+      "status": "open-not-authorized"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "ST-AW-005",
+  "tests": [
+    "11 immutable manifest sections and canonical serialization",
+    "portable source/target mapping, count/size/hash and cross-runtime-root digest",
+    "route/runtime root binding and denied quant-lab scope before enumeration",
+    "EACCES, broken/out-of-scope symlink and sibling sentinel no-follow",
+    "regular-file lstat-to-open symlink swap blocked by O_NOFOLLOW plus fstat",
+    "platform without reliable O_NOFOLLOW fails closed",
+    "target root/mapping missing never READY",
+    "before/after snapshot unchanged and Path/os mutation spy count zero",
+    "O-AW-03 T1/T2/T3 strict boundaries, insufficient-data and one deduplicated non-executable candidate"
+  ],
+  "waivers": []
+}

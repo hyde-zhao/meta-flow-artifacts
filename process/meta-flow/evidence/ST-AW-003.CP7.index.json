@@ -1,0 +1,112 @@
+{
+  "artifacts": [
+    "process/docs/quality/CR051-ST-AW-003-VERIFICATION-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-003-TEST-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-003-REVIEW.md",
+    "process/docs/quality/CR051-ST-AW-003-FIXES.md"
+  ],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-003-VERIFICATION-REPORT.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-003-TEST-REPORT.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-003-REVIEW.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-003-FIXES.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/ST-AW-003.CP7.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/ST-AW-003.CP7.index.json"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_leg_lifecycle.py",
+      "result": "pass",
+      "summary": "38 passed in 0.29s。"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_leg_lifecycle.py tests/test_git_branch_lifecycle.py tests/test_workspace_git_sync.py",
+      "result": "pass",
+      "summary": "56 passed in 4.18s。"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff check meta_flow/workflow/artifact_leg_lifecycle.py tests/test_artifact_leg_lifecycle.py",
+      "result": "pass",
+      "summary": "All checks passed。"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff format --check meta_flow/workflow/artifact_leg_lifecycle.py tests/test_artifact_leg_lifecycle.py",
+      "result": "pass",
+      "summary": "2 files already formatted。"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr051-staw003-cp7-pycompile uv run --python 3.11 python -m py_compile meta_flow/workflow/artifact_leg_lifecycle.py tests/test_artifact_leg_lifecycle.py",
+      "result": "pass",
+      "summary": "Python 3.11 compilation passed；cache 隔离到 /tmp。"
+    },
+    {
+      "command": "git diff --check / no-index --check limited to ST-AW-003 primary paths",
+      "result": "pass",
+      "summary": "无 whitespace diagnostics；两个 primary 为 CP6 声明的 created/untracked 文件。"
+    },
+    {
+      "command": "scoped dangerous argv, forbidden API/import and artifact-main/control/cross-leg static audit",
+      "result": "pass",
+      "summary": "SUT 无 subprocess/os.system/shell=True 或 unexpected import；destructive Git tokens 仅位于 denylist。"
+    },
+    {
+      "command": "default-clock in-memory observer/runner-spy reproduction for execute_leg(now=None)",
+      "result": "fail",
+      "summary": "BLOCKED(stale_observation), mutation_count=0, runner_calls=0；合法 fresh observer 被较早 executed_at 上界误拒绝。"
+    }
+  ],
+  "cr_id": "CR-051",
+  "design_delta_ref": null,
+  "return_ref": "process/returns/ST-AW-003.CP7.return.json",
+  "risks": [
+    {
+      "detail": "默认时钟路径把 observer 在函数入口后生成的合法 fresh observation 误判 stale，non-dry-run leg 无法到达 runner。",
+      "id": "REV-AW003-001",
+      "level": "high",
+      "owner": "meta-dev",
+      "status": "open-blocking"
+    },
+    {
+      "detail": "只验证临时 bare remote；真实 shared remote、凭据、网络与 branch protection 未授权。",
+      "id": "CR051-RISK-REMOTE-UNVERIFIED",
+      "level": "medium",
+      "owner": "CP8 decision owner",
+      "status": "open-not-authorized"
+    },
+    {
+      "detail": "当前 Linux 环境未执行 Windows native Git argv/path pilot。",
+      "id": "CR051-RISK-WINDOWS-NATIVE-GIT-PILOT",
+      "level": "low",
+      "owner": "CP7/CP8 decision owner",
+      "status": "open"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "ST-AW-003",
+  "tests": [
+    "38 directed tests passed",
+    "56 directed-plus-adjacent regression tests passed",
+    "exact target/authz/health/OID/publication/recovery matrices passed under fixed clock",
+    "default-clock fresh-observer runtime boundary failed"
+  ],
+  "waivers": []
+}

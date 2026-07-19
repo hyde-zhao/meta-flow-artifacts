@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP2",
+  "cr_id": "CR-051",
+  "status": "confirmed",
+  "confirmed_at": "2026-07-18T02:55:21Z",
+  "confirmation_source": "current-user-conversation",
+  "supersedes_checkpoint": "process/checkpoints/CP2-CR051-PROJECT-FIRST-WORKTREE-BASELINE-R2.md",
+  "decisions": [
+    {
+      "decision_id": "CP2-DQ-01",
+      "status": "resolved-by-user",
+      "selected": "idle projects/<project>/integration; active projects/<project>/cr/<cr-id>-<slug>; shared main retained as the cross-project baseline"
+    },
+    {
+      "decision_id": "CP2-DQ-02",
+      "status": "superseded-by-user",
+      "superseded_by": "CP2-DQ-04",
+      "previous_selected": "merge fresh origin/main into the current artifact CR branch",
+      "reason": "artifact CR must not perform shared-main synchronization"
+    },
+    {
+      "decision_id": "CP2-DQ-03",
+      "status": "resolved-by-user",
+      "selected": "existing control checkout plus configurable sibling project worktree root, namespace/sparse and owned-path gates"
+    },
+    {
+      "decision_id": "CP2-DQ-04",
+      "status": "resolved-by-user",
+      "selected": "one logical CR with heterogeneous source and artifact legs; source uses source default as base/target, artifact uses project integration as base/target; no per-CR interaction with artifact main"
+    },
+    {
+      "decision_id": "CP2-DQ-05",
+      "status": "resolved-by-user",
+      "selected": "single aggregate completion gate with precedence BLOCKED > FAIL > IN_PROGRESS > PASS; PARTIAL is progress/effect only; no cross-repository atomicity or automatic rollback"
+    },
+    {
+      "decision_id": "CP2-DQ-06",
+      "status": "resolved-by-user",
+      "selected": "create a missing project integration ref from fresh origin/main exact OID with create-only semantics; never orphan/reset an existing integration; main synchronization is manual and outside CR"
+    }
+  ],
+  "pending_decision_items": [],
+  "non_authorized_items": [
+    "source implementation or CP3/CP5 bypass",
+    "real artifact file migration or symlink change",
+    "real worktree/branch/ref creation or deletion",
+    "real main-integration synchronization, commit, push or default-branch update",
+    "force, rebase, automatic conflict resolution, credentials, runtime or production write"
+  ]
+}

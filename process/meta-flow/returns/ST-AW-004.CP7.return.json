@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-004",
+  "status": "verified_with_risk",
+  "touched_files": [
+    {
+      "path": "process/docs/quality/CR051-ST-AW-004-VERIFICATION-REPORT.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/docs/quality/CR051-ST-AW-004-TEST-REPORT.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/docs/quality/CR051-ST-AW-004-REVIEW.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/docs/quality/CR051-ST-AW-004-FIXES.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/ST-AW-004.CP7.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/ST-AW-004.CP7.index.json",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "CP7 只验证已批准实现与边界；未修改代码、测试、设计或验收契约。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "forbidden_runtime_calls": [],
+    "notes": "仅创建 packet 允许的四份质量报告、CP7 return 与 evidence index；未执行 Git/worktree/manual sync/close/status-sync/rollback，未写源码/测试或真实 artifact/remote 目标。"
+  },
+  "verification": {
+    "decision": "PASS_WITH_RISK",
+    "validation_mode": "mixed",
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_leg_lifecycle.py tests/test_artifact_aggregate.py tests/test_git_branch_lifecycle.py tests/test_workspace_git_sync.py tests/test_state_v2.py tests/test_cr_lifecycle.py",
+        "result": "pass: 179 passed, 9 subtests passed in 4.54s"
+      },
+      {
+        "command": "pytest -q -vv tests/test_artifact_aggregate.py -k fixed_precedence_covers_all_16_status_combinations",
+        "result": "pass: 16 passed, 46 deselected"
+      },
+      {
+        "command": "pytest -q -vv tests/test_artifact_aggregate.py -k invalid_or_unpublished_handles_are_rejected_before_aggregate",
+        "result": "pass: 14 passed, 48 deselected"
+      },
+      {
+        "command": "pytest -q -vv tests/test_artifact_aggregate.py -k non_pass_results_persist_but_never_call_projection",
+        "result": "pass: 15 passed, 47 deselected"
+      },
+      {
+        "command": "pytest -q -vv tests/test_artifact_aggregate.py -k 'aggregate_digest_omits_only_its_own_digest_and_binds_nested_leg_digests or stale_persisted_pass_is_held_before_projector_call'",
+        "result": "pass: 2 passed, 60 deselected"
+      },
+      {
+        "command": "published=false fail-closed runtime probe",
+        "result": "pass: validated=false; code=unpublished-result"
+      },
+      {
+        "command": "readback/current/conflict/failed projection-receipt runtime probe",
+        "result": "pass: 4/4 HOLD; projector calls=0"
+      },
+      {
+        "command": "uv run --python 3.11 ruff check meta_flow/workflow/artifact_aggregate.py tests/test_artifact_aggregate.py meta_flow/workflow/cr_lifecycle.py meta_flow/state/current.py",
+        "result": "pass: All checks passed"
+      },
+      {
+        "command": "uv run --python 3.11 ruff format --check meta_flow/workflow/artifact_aggregate.py tests/test_artifact_aggregate.py",
+        "result": "pass: 2 files already formatted"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr051-staw004-cp7-pycompile uv run --python 3.11 python -m py_compile meta_flow/workflow/artifact_aggregate.py meta_flow/workflow/cr_lifecycle.py meta_flow/state/current.py tests/test_artifact_aggregate.py",
+        "result": "pass"
+      },
+      {
+        "command": "aggregate forbidden dependency scan",
+        "result": "pass: Git/worktree/subprocess/manual-sync/rollback/close/status-sync matches=0"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/STORY-ST-AW-004.CP7.verify-packet.json --return process/returns/ST-AW-004.CP7.return.json --project-root .",
+        "result": "pass: Story Return Packet Check OK; logical expected path warning due external process symlink"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/ST-AW-004.CP7.index.json --project-root .",
+        "result": "pass: Evidence Index Check OK"
+      }
+    ],
+    "tests": [
+      "source/artifact 4x4 fixed precedence matrix: 16/16",
+      "invalid/unpublished published-handle fail-closed before persist/project",
+      "aggregate own digest top-level-only omission and nested leg digest binding",
+      "immutable append, readback, same-input idempotency and conflicting payload rejection",
+      "selector CAS and concurrent last-write-wins=0",
+      "persisted/readback/current 2/2 PASS projection hard gate",
+      "15 non-PASS, stale, readback/current/conflict/failure projector calls=0",
+      "controlled current/CR ledger projection without close/status-sync/rollback",
+      "CR aggregate CLI dry-run writes=0",
+      "state v2, CR lifecycle and producer/consumer adjacent regressions"
+    ],
+    "skipped": [
+      {
+        "check": "native Windows cross-process selector lock crash fixture",
+        "reason": "当前环境为 Linux；保留为 CP8 风险披露，不放宽 fail-closed。"
+      },
+      {
+        "check": "real hosted remote/worktree",
+        "reason": "NO_RUNTIME / NO_REPOSITORY_PUBLICATION；明确不授权且不属于本 Story。"
+      },
+      {
+        "check": "Git diff",
+        "reason": "本轮任务明确禁止执行 Git；复用 CP6 evidence 中已通过的 touched-files diff check。"
+      },
+      {
+        "check": "workflow eval",
+        "reason": "Story verify packet 明确 workflow_eval_required=false；使用原生组合回归、静态检查与 fixture 证据。"
+      }
+    ]
+  },
+  "artifacts": [
+    "process/docs/quality/CR051-ST-AW-004-VERIFICATION-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-004-TEST-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-004-REVIEW.md",
+    "process/docs/quality/CR051-ST-AW-004-FIXES.md"
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "R-AW004-LOCK-CRASH",
+      "summary": "selector writer crash 可能遗留 lock directory；后续 writer fail closed，需人工诊断或受控恢复。",
+      "blocking": false
+    },
+    {
+      "id": "CR051-RISK-WINDOWS-CROSS-PROCESS-LOCK",
+      "summary": "native Windows 跨进程 lock crash 行为未在本轮 Linux 环境执行。",
+      "blocking": false
+    },
+    {
+      "id": "CR051-RISK-REMOTE-UNVERIFIED",
+      "summary": "真实托管 remote/worktree 未授权且未验证；本 Story 不执行或拥有这些能力。",
+      "blocking": false
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp8_with_risk",
+  "cp7_approval": "not_granted_by_meta_qa"
+}

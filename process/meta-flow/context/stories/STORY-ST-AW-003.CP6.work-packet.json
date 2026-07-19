@@ -1,0 +1,195 @@
+{
+  "acceptance": ["source/artifact required legs base/target 正确率 2/2，artifact main/default/control/sibling mutation=0", "每个 logical attempt 恰好 source/artifact 各 1 个 validated immutable payload/PublishedLegResultHandle", "artifact 仅消费 HEALTHY+non-null observation+digest match，复制平铺 observation 字段数=0", "dirty/identity/OID/authz/非法 ref 在 mutation 前阻断率 100%，sibling dirty 误阻断=0", "dry-run mutation=0、cross-leg rollback/危险恢复=0、适用 TC-AW 覆盖率 100%"],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 822,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_discovery_entry",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1927,
+      "mode": "full",
+      "path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 364,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 934,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-051.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {"estimated_tokens": 0, "mode": "full", "path": "process/returns/ST-AW-002.CP7.return.json", "reason": "upstream_verified_worktree_contract", "required": true},
+    {"estimated_tokens": 0, "mode": "full", "path": "process/docs/features/cr051-legs/DESIGN.md", "reason": "feature_contract", "required": true},
+    {"estimated_tokens": 0, "mode": "full", "path": "process/docs/features/cr051-legs/TEST-PLAN.md", "reason": "feature_test_contract", "required": true}
+  ],
+  "allowed_write_paths": ["meta_flow/workflow/artifact_leg_lifecycle.py", "tests/test_artifact_leg_lifecycle.py", "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-IMPLEMENTATION.md", "process/returns/ST-AW-003.CP6.return.json", "process/evidence/ST-AW-003.CP6.index.json"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_REPOSITORY_PUBLICATION", "FIXTURE_ONLY_GIT_REMOTE"],
+  "budget": {
+    "estimated_tokens": 4254,
+    "estimator": "chars_div_4",
+    "max_tokens": 16000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": ["LegRequest/Plan/Attempt/Result", "LegResultPayload/WriteReceipt/PublishedLegResultHandle", "heterogeneous target/authz policy"],
+    "summary": "实现 source-default 与 artifact-integration 两条独立 legs；artifact target 固定 project integration，不接触 artifact main，结果经 external receipt/validated handle 发布。"
+  },
+  "cr_id": "CR-051",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md",
+    "process/archive/**",
+    "process/discussions/**"
+  ],
+  "dependency_inputs": ["ST-AW-002 CP7 PASS_WITH_RISK；只消费 WorktreeHealth.observation，真实 remote 仍未授权。", "ST-AW-004 published handle/aggregate contract 已在 CP5 R2 冻结，primary 文件不重叠。"],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary / legacy fallback，不作为 agent 默认机器入口"
+    },
+    {
+      "path_or_pattern": "process/DEVELOPMENT-PLAN.yaml",
+      "reason": "计划长文由 Story packet / context 摘要承载"
+    },
+    {
+      "path_or_pattern": "process/STORY-STATUS.md",
+      "reason": "legacy status 汇总，不作为当前 Story 真相源"
+    },
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "默认读取 CR summary / CR ledger，完整 CR 只用于审计或冲突恢复"
+    },
+    {
+      "path_or_pattern": "process/stories/*-LLD.md",
+      "reason": "默认读取 Story packet / design summary，完整 LLD 按需展开"
+    },
+    {
+      "path_or_pattern": "process/stories/*-IMPLEMENTATION.md",
+      "reason": "实现长证据默认通过 return/evidence index 消费"
+    },
+    {
+      "path_or_pattern": "process/archive/**",
+      "reason": "历史归档属于冷区，默认禁止读取"
+    },
+    {
+      "path_or_pattern": "process/discussions/**",
+      "reason": "讨论日志只用于审计 / 恢复，不替代正式产物"
+    }
+  ],
+  "expected_return_packet": "process/returns/ST-AW-003.CP6.return.json",
+  "feature_contract_summary": "FEAT-AW-03 执行异构 source-default/artifact-integration legs，并以 expected OID、typed authz、fresh health、immutable payload + external receipt fail closed。",
+  "feature_design_refs": [
+    "process/docs/features/cr051-legs/DESIGN.md",
+    "process/docs/features/cr051-legs/TEST-PLAN.md",
+    "process/docs/features/cr051-legs/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": ["FEAT-AW-03"],
+  "forbidden_write_paths": ["meta_flow/workspace/git_sync.py", "meta_flow/workflow/git_branch_lifecycle.py", "meta_flow/cli.py", "meta_flow/workflow/artifact_aggregate.py", "artifact main/default", "real Git/ref/remote/worktree targets", ".git/** outside fixtures", "process/quant-lab/**"],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "lld_policy": "full-lld",
+  "must_read": [
+    {
+      "estimated_tokens": 822,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1927,
+      "mode": "full",
+      "path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 364,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    }
+  ],
+  "objective": {
+    "non_goals": ["不自动同步 artifact main", "不做跨 leg rollback", "不修改 CLI/aggregate/shared Git 原语；不足时返回 design delta + 单写窗口"],
+    "summary": "执行 source-default 与 artifact-integration 异构 Git legs"
+  },
+  "packet_type": "story_work_packet",
+  "parent_context_ref": "process/context/CP6-CR051-IMPLEMENTATION-CONTEXT.yaml",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "meta-flow",
+  "read_if_needed": [{"path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md", "trigger": "deep_review", "reason": "实现前必须展开并写 read-log"}, {"path": "meta_flow/workspace/git_sync.py", "trigger": "field_conflict", "reason": "只读核对 ST-AW-002 原语；不足时停止并返回 design delta"}, {"path": "meta_flow/workflow/git_branch_lifecycle.py", "trigger": "field_conflict", "reason": "只读复用 CR-050 行为"}],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "runtime-high-risk",
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "ST-AW-003",
+  "story_ref": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs.md",
+  "verification_plan": ["pytest -q tests/test_artifact_leg_lifecycle.py tests/test_git_branch_lifecycle.py tests/test_workspace_git_sync.py", "验证 target/authz/OID/dirty/illegal-ref/dry-run/partial/evidence-only retry/no-cross-rollback", "ruff + py_compile + forbidden import/argv + git diff"]
+}

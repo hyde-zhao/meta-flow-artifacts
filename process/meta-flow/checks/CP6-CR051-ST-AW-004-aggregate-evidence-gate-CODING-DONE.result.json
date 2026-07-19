@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR051-ST-AW-004-aggregate-evidence-gate-CODING-DONE",
+  "story_id": "ST-AW-004",
+  "cr_id": "CR-051",
+  "profile": "runtime-high-risk",
+  "check_attempt": 1,
+  "context_ref": "process/context/stories/STORY-ST-AW-004.CP6.work-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "dispatch_refs": ["EVENT-CR051-ST-AW-004-CP6-DEV-COMPLETED-20260718T141100Z"],
+  "return_packet_ref": "process/returns/ST-AW-004.CP6.return.json",
+  "evidence_ref": "process/evidence/ST-AW-004.CP6.index.json",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator CP6 aggregate evidence-gate correlation",
+    "checker_commit": "working-tree",
+    "invocation": "179-test combined suite + canonical nested-digest regression + ruff + py_compile + return/evidence + forbidden-import audit",
+    "generated_by": "host-orchestrator",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/returns/ST-AW-004.CP6.return.json": "available-in-evidence-index",
+    "process/evidence/ST-AW-004.CP6.index.json": "self-validated"
+  },
+  "items": [
+    {
+      "id": "CP6-AW004-E01",
+      "category": "entry",
+      "name": "Frozen published-handle contract and ST-AW-004 packet/LLD gate are valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/context/stories/STORY-ST-AW-004.CP6.work-packet.json", "process/checkpoints/CP5-CR051-ALL-STORIES-LLD-BATCH.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "W3 contract dependency was frozen at CP5 and primary paths remained disjoint."
+    },
+    {
+      "id": "CP6-AW004-01",
+      "category": "validation-aggregate",
+      "name": "Published handles are reread and the fixed 4x4 precedence matrix is complete",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["meta_flow/workflow/artifact_aggregate.py", "tests/test_artifact_aggregate.py"],
+      "owner": "meta-dev/host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Raw, missing, duplicate, stale, wrong-correlation/mode/ref/digest/key/receipt inputs block before persistence; only 2/2 terminal PASS is eligible."
+    },
+    {
+      "id": "CP6-AW004-02",
+      "category": "persistence-concurrency",
+      "name": "Immutable append/readback and selector CAS are idempotent and fail closed on conflict",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-ST-AW-004-aggregate-evidence-gate-IMPLEMENTATION.md", "tests/test_artifact_aggregate.py"],
+      "owner": "meta-dev/host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "No last-write-wins; conflicting payload or current selector remains BLOCKED."
+    },
+    {
+      "id": "CP6-AW004-03",
+      "category": "projection-boundary",
+      "name": "Only persisted/readback/current 2/2 PASS can record a completion candidate",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["meta_flow/state/current.py", "meta_flow/workflow/cr_lifecycle.py", "tests/test_artifact_aggregate.py"],
+      "owner": "meta-dev/host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Projection keeps active CR/story/phase and never calls close, status-sync, rollback, Git or worktree code."
+    },
+    {
+      "id": "CP6-AW004-04",
+      "category": "canonical-integrity",
+      "name": "Aggregate own digest is omitted only at the top level while nested leg digests remain bound",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-ST-AW-004-aggregate-evidence-gate-IMPLEMENTATION.md#修订记录", "tests/test_artifact_aggregate.py"],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Host combined run exposed the recursive-omit defect before CP6; it was fixed and a nested-digest tamper regression was added."
+    },
+    {
+      "id": "CP6-AW004-05",
+      "category": "regression-boundary",
+      "name": "Combined suite, CLI dry-run, static and forbidden-import checks pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/evidence/ST-AW-004.CP6.index.json", "tests/test_artifact_aggregate.py"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "179 tests and 9 subtests pass; aggregate Git/worktree/subprocess/manual-sync/producer-primary imports are zero."
+    },
+    {
+      "id": "CP6-AW004-X01",
+      "category": "exit",
+      "name": "ST-AW-004 is ready for independent CP7 verification",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/ST-AW-004.CP6.return.json", "process/evidence/ST-AW-004.CP6.index.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Implementation, return and evidence index are valid after the combined-regression repair; no design delta or waiver."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260718T133253Z0000-staw004", "RE-20260718T141200Z0000-942804b0"],
+  "risks": [
+    {
+      "id": "R-AW004-LOCK-CRASH",
+      "severity": "LOW",
+      "status": "open-for-cp7-review",
+      "owner": "meta-qa",
+      "summary": "A crashed selector writer can leave a lock directory; subsequent writes fail closed pending diagnosis."
+    },
+    {
+      "id": "CR051-RISK-WINDOWS-CROSS-PROCESS-LOCK",
+      "severity": "LOW",
+      "status": "open-for-cp7-review",
+      "owner": "meta-qa",
+      "summary": "Windows cross-process lock crash behavior was not executed on native Windows."
+    },
+    {
+      "id": "CR051-RISK-REMOTE-UNVERIFIED",
+      "severity": "MEDIUM",
+      "status": "accepted-boundary",
+      "owner": "CP8 decision owner",
+      "summary": "Aggregate does not execute real hosted remote/worktree operations."
+    }
+  ],
+  "decision": "PASS",
+  "next_route": "CP7-ST-AW-004-meta-qa-critical",
+  "checked_at": "2026-07-18T14:14:00Z"
+}

@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR051-ST-AW-005-read-only-migration-handoff-CODING-DONE-R2",
+  "story_id": "ST-AW-005",
+  "cr_id": "CR-051",
+  "profile": "runtime-high-risk",
+  "check_attempt": 2,
+  "supersedes_result_ref": "process/checks/CP6-CR051-ST-AW-005-read-only-migration-handoff-CODING-DONE.result.json",
+  "context_ref": "process/context/stories/STORY-ST-AW-005.CP6-R2.work-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "dispatch_refs": ["EVENT-CR051-ST-AW-005-CP6-R2-DEV-COMPLETED-20260718T162700Z"],
+  "return_packet_ref": "process/returns/ST-AW-005.CP6-R2.return.json",
+  "evidence_ref": "process/evidence/ST-AW-005.CP6-R2.index.json",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator CP6-R2 denied-descendant finding closure correlation",
+    "checker_commit": "working-tree",
+    "invocation": "3 red-to-green denied descendant probes + 26 directed + 95 adjacent + 280 combined/9 subtests + ruff/format/pycompile/return/evidence/boundary",
+    "generated_by": "host-orchestrator from actual meta-dev-debugger return",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/returns/ST-AW-005.CP6-R2.return.json": "available-in-evidence-index",
+    "process/evidence/ST-AW-005.CP6-R2.index.json": "self-validated"
+  },
+  "items": [
+    {
+      "id": "CP6-AW005-R2-E01",
+      "category": "entry",
+      "name": "REV-AW005-001 has validated CP7 evidence and a bounded rework packet",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP7-CR051-ST-AW-005-read-only-migration-handoff-VERIFICATION-DONE.result.json", "process/context/stories/STORY-ST-AW-005.CP6-R2.work-packet.json", "process/docs/quality/CR051-ST-AW-005-FIXES.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Rework scope is limited to per-object denied descendant guards and three regression classes."
+    },
+    {
+      "id": "CP6-AW005-R2-01",
+      "category": "finding-closure",
+      "name": "Wide-root denied source and target descendants are blocked before any object probe or mapping",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-ST-AW-005-read-only-migration-handoff-IMPLEMENTATION.md", "tests/test_artifact_migration.py", "process/returns/ST-AW-005.CP6-R2.return.json"],
+      "owner": "meta-dev-debugger/host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Source or mapped-target deny match skips lstat/open/hash/mapping/descend and produces non-READY reasons."
+    },
+    {
+      "id": "CP6-AW005-R2-02",
+      "category": "symlink-boundary",
+      "name": "Relative symlink targets normalized into a denied descendant are redacted and never probed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["meta_flow/workspace/artifact_migration.py", "tests/test_artifact_migration.py"],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Both source and mapped-target portable prefixes are checked; output is relative-denied with link_target=null."
+    },
+    {
+      "id": "CP6-AW005-R2-03",
+      "category": "regression",
+      "name": "Directed, adjacent and combined CR-051 suites plus static checks pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/evidence/ST-AW-005.CP6-R2.index.json", "process/returns/ST-AW-005.CP6-R2.return.json#verification"],
+      "owner": "meta-dev-debugger/host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "3 red-to-green probes, 26 directed, 95 adjacent and 280 combined tests plus 9 subtests pass; Ruff/format/pycompile pass."
+    },
+    {
+      "id": "CP6-AW005-R2-04",
+      "category": "contract-boundary",
+      "name": "Manifest schema, glob semantics, no-follow, O-AW-03 and zero-mutation contracts remain unchanged",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/ST-AW-005.CP6-R2.return.json#contract_changes", "process/returns/ST-AW-005.CP6-R2.return.json#boundary_check"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "No public API/data contract change, design delta, shared/CLI write or real migration/publication."
+    },
+    {
+      "id": "CP6-AW005-R2-X01",
+      "category": "exit",
+      "name": "REV-AW005-001 is fixed in implementation and ready for independent CP7-R2",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/ST-AW-005.CP6-R2.return.json", "process/evidence/ST-AW-005.CP6-R2.index.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Return/evidence checkers pass; final closure still requires independent meta-qa-critical."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260718T161516Z0000-ae5b5455", "RE-20260718T162746Z0000-ae2294cc"],
+  "risks": [
+    {"id": "R-AW005-DIR-ENUM-TOCTOU", "severity": "MEDIUM", "status": "open-follow-up", "owner": "CP8 decision owner / future migration CR", "summary": "Adversarial concurrent directory replacement still needs future full-lld dirfd/openat design."},
+    {"id": "CR051-RISK-REAL-MIGRATION-UNVERIFIED", "severity": "MEDIUM", "status": "open-not-authorized", "owner": "future migration CR", "summary": "Real migration/link/worktree/ref/remote mutation remains unauthorized."},
+    {"id": "CR051-RISK-WINDOWS-NATIVE-NOFOLLOW", "severity": "LOW", "status": "open", "owner": "CP7/CP8 decision owner", "summary": "Windows native no-follow behavior was not piloted."},
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "severity": "MEDIUM", "status": "open-not-authorized", "owner": "CP8 decision owner", "summary": "Hosted remote and publication remain unverified."}
+  ],
+  "decision": "PASS",
+  "next_route": "CP7-R2-ST-AW-005-meta-qa-critical",
+  "checked_at": "2026-07-18T16:27:00Z"
+}

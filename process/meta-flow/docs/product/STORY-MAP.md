@@ -1,10 +1,10 @@
 ---
 status: baseline
-version: "1.6"
+version: "1.9"
 created_at: "2026-07-02"
 owner: "meta-pm"
 cr_ref: "CR-037"
-active_change_ref: "CR-050"
+active_change_ref: "CR-051"
 source_use_cases:
   - UC-PG-001
   - UC-PG-002
@@ -29,6 +29,11 @@ source_use_cases:
   - UC-GB-002
   - UC-GB-003
   - UC-GB-004
+  - UC-AW-001
+  - UC-AW-002
+  - UC-AW-003
+  - UC-AW-004
+  - UC-AW-005
 source_requirements: "process/docs/product/REQUIREMENTS.md"
 ---
 
@@ -41,6 +46,9 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | 1.4 | 2026-07-13 | host-orchestrator-inline-fallback | 增量追加 CR-047 ACT-WT-01..05、ST-WT-001..007 与 SL-WT-01..03；保留既有 Story/Slice ID。 | 原文档增量更新 |
 | 1.5 | 2026-07-15 | host-orchestrator inline fallback | 增量追加 CR-050 ACT-GB-01..03、ST-GB-001..003 与 SL-GB-01..03；保留全部既有 Activity/Story/Slice ID。 | 原文档增量更新 |
 | 1.6 | 2026-07-16 | host-orchestrator inline fallback | 用户批准将 publish 后的显式 fast-forward-only merge 纳入 CR-050；新增 ACT-GB-04、ST-GB-004 与 SL-GB-04，并将执行顺序明确为 ST-GB-001→002→004→003；不重编号既有 ID，等待 CP2 R2。 | 原文档增量更新 |
+| 1.7 | 2026-07-17 | meta-pm | 增量追加 CR-051 ACT-AW-01..04、ST-AW-001..005 与 SL-AW-01..04；保留全部既有 Activity/Story/Slice ID，并明确真实迁移是后续项目级工作。 | 原文档增量更新 |
+| 1.8 | 2026-07-17 | meta-pm | CR-051 CP2 R2：不新增或重编号 Activity/Story/Slice，修订 ST-AW-002..004 与 SL-AW-02..03 的 branch lifecycle，明确项目长期 integration、每 CR 短期 branch、shared main、显式 merge-main 和 finish/abort 回归语义。 | 原文档增量更新；R2总体门仍待approve |
+| 1.9 | 2026-07-18 | meta-pm | CR-051 CP2 R3：保持 ACT-AW/ST-AW/SL-AW ID 与数量不变，将当前旅程修订为integration create-only bootstrap、异构source/artifact双leg、单一聚合门和CR外人工main/integration同步。 | 原文档增量更新；R2历史保留，R3总体门仍待approve |
 | 1.0 | 2026-07-02 | meta-pm | 基于产品场景和需求建立用户故事地图 | 初始化长期可追踪产品规划基线 |
 | 1.2 | 2026-07-11 | meta-pm | 增量追加 CR-046 的 5 个活动、7 个 outcome Story 与 release slice；保留 ST-PG-001..013 | 原文档增量更新 |
 | 1.3 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：不新增或重编号 Story，扩展 ST-EI-002/004/006/007 的 requirement refs 与验收语义 | 原文档增量更新 |
@@ -68,6 +76,10 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | ACT-GB-02 | 发布已提交的 CR 变更 | P-01, P-02 | 只把显式提交的两仓 refs 推送到匹配远端 branch，并核验 OID | UC-GB-002 |
 | ACT-GB-03 | 在合并证明后清理分支 | P-01, P-04 | 验证 exact tip/ancestry/protected-ref 后删除目标 remote/local branch | UC-GB-003 |
 | ACT-GB-04 | 显式快进两仓默认分支 | P-01, P-04 | 在独立授权下先预检两仓，再按 artifact→project 把 exact published tip fast-forward 到 remote default | UC-GB-004 |
+| ACT-AW-01 | 定位当前项目 artifact | P-01, P-03 | 按 project identity 和 layout version 唯一解析当前项目 docs/process，同时兼容未迁移布局 | UC-AW-001 |
+| ACT-AW-02 | 管理项目独立 worktree | P-01, P-03 | 创建、检查、列举和安全移除长期项目 worktree；空闲驻留项目 integration，CR 期间切换到项目命名的短期 branch | UC-AW-002 |
+| ACT-AW-03 | 执行并聚合异构 Git legs | P-01, P-02, P-04 | source leg 从/回源码默认分支，artifact leg 从/回项目integration；逐leg产出结果并由单一聚合门判定逻辑CR完成，shared main同步留在CR外 | UC-AW-003, UC-AW-004 |
+| ACT-AW-04 | 准备逐项目迁移交接 | P-03, P-04 | 生成只读 migration manifest、验证和回滚清单，由用户后续逐项目执行 | UC-AW-005 |
 
 ## Story 列表
 
@@ -104,6 +116,11 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | ST-GB-002 | 作为实现维护者，我要只发布已经显式提交的 CR refs，以便避免隐式 stage/commit 夹带无关文件。 | P0 | REQ-GB-005..006, REQ-GB-010, REQ-GB-C002, REQ-GB-NF001 | clean committed refs 推送后 2/2 remote=local HEAD；dirty 时远端变化为 0；partial 有逐仓恢复入口。 |
 | ST-GB-003 | 作为审批者，我要只在 exact tip 已被远端主分支包含时清理 CR branch，以便不误删未合并、漂移或受保护 refs。 | P0 | REQ-GB-007..010, REQ-GB-C002, REQ-GB-NF001..002 | non-ancestor/squash/ref-drift/protected 100% 阻断；合法目标精确删除；remote 已自动删时仍要求 known tip。 |
 | ST-GB-004 | 作为审批者，我要在 publish 后显式将两仓 CR tip 以 fast-forward-only 方式合入各自远端默认分支，以完成受治理旅程而不绕过远端策略。 | P0 | REQ-GB-006, REQ-GB-011..014, REQ-GB-C002..004, REQ-GB-NF001..003 | preflight-all 后按 artifact→project 执行；2/2 default=CR tip 才 PASS；merge commit/rebase/force/conflict-resolution 为 0；partial 保留两仓 branch 并阻断 finish。 |
+| ST-AW-001 | 作为维护者，我要按 project identity 和显式 layout version 唯一解析 artifact docs/process，以便新旧布局共存时不会写错项目。 | P0 | REQ-AW-001..003, REQ-AW-013, REQ-AW-NF001..002 | project-first解析唯一；legacy dual-read可控；歧义写目标100%阻断；metadata跨设备可移植。 |
+| ST-AW-002 | 作为迁移执行者，我要管理长期、独立、项目命名的 artifact worktree，并安全初始化缺失的integration，以便后续软链接稳定且不同项目不争用checkout/index/branch。 | P0 | REQ-AW-004..007, REQ-AW-013, REQ-AW-C002..003, REQ-AW-NF003..005 | integration缺失时从fresh `origin/main` exact OID create-only；存在时不recreate/reset/orphan；idle/active分支角色精确；危险remove为0。 |
+| ST-AW-003 | 作为Host Orchestrator，我要让一个逻辑CR使用异构source/artifact legs，以便source回源码default、artifact只回项目integration且不把跨项目main同步塞进单CR。 | P0 | REQ-AW-008..011, REQ-AW-013, REQ-AW-016, REQ-AW-C003..005, REQ-AW-NF003..004 | 两leg base/target精确；sibling dirty可继续；artifact main/control/sibling mutation为0；integration expected-OID漂移阻断artifact finish。 |
+| ST-AW-004 | 作为审批者，我要由单一协调者聚合两个leg的独立结果，以便仅在全PASS时完成逻辑CR，并在部分失败时保留真实成功事实和恢复入口。 | P0 | REQ-AW-011..013, REQ-AW-016..017, REQ-AW-C004, REQ-AW-NF001, REQ-AW-NF005 | 聚合优先级=`BLOCKED > FAIL > IN_PROGRESS > PASS`；PARTIAL仅progress/effect；失败不自动关闭/回滚；main↔integration同步仅在CR外人工执行。 |
+| ST-AW-005 | 作为迁移执行者，我要获得逐项目migration preflight和交接清单，以便后续自行搬迁文件和挂接软链接且本轮不发生真实迁移。 | P1 | REQ-AW-014..017, REQ-AW-C001, REQ-AW-NF005 | manifest含mapping/hash/link/readiness/验证/回滚；CR-051真实文件/link/worktree/ref变化为0。 |
 
 ## 推荐发布切片
 
@@ -126,6 +143,10 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | SL-GB-02 | Committed Ref Publication | ST-GB-002 | 只发布显式提交事实，并逐仓披露成功/失败 | SL-GB-01 |
 | SL-GB-04 | Explicit Paired Fast-forward Merge | ST-GB-004 | 以独立授权和 fast-forward-only contract 完成两仓 default update，部分成功仍可恢复 | SL-GB-02；default-branch write 单独授权 |
 | SL-GB-03 | Proof-gated Branch Cleanup | ST-GB-003 | merge 后重新观察 ancestry/tip 再安全删除，不把 merge result 当作删除授权 | SL-GB-04；2/2 merge PASS；delete 单独授权 |
+| SL-AW-01 | Project-first Routing Compatibility | ST-AW-001 | 让每个项目只解析到自己的docs/process，并为后续逐项目迁移保留legacy兼容 | CR-051 CP2/CP3/CP5 |
+| SL-AW-02 | Persistent Worktree and Integration Bootstrap | ST-AW-002 | 为每项目提供稳定working tree、长期integration、短期CR branch identity和create-only初始化 | SL-AW-01；CP2-DQ-01/03/06 resolved；待CP3/CP5 |
+| SL-AW-03 | Heterogeneous Legs and Aggregate Gate | ST-AW-003, ST-AW-004 | 让多个项目并行执行source-default与artifact-integration双leg，并以单一聚合门完成逻辑CR，不触碰artifact main | SL-AW-02；CP2-DQ-04/05 resolved；待CP3/CP5 |
+| SL-AW-04 | Migration Handoff without Mutation | ST-AW-005 | 给用户后续逐项目迁移提供manifest/checklist，同时保持本CR真实迁移为0 | SL-AW-03 |
 
 ## 规划边界
 
@@ -137,3 +158,6 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 - ST-EI-007 是 append-only process-evidence pilot，不得承担 quant-lab lineage 业务功能重做。
 - CR-050 的 Story 只定义用户 outcome；具体 CLI、result schema、Git command plan 与恢复算法由 CP3/CP5 设计。
 - `ST-GB-002` 不授权隐式 stage/commit；`ST-GB-004` 只允许独立、显式、fast-forward-only merge，不授权 merge commit/force/策略绕过；`ST-GB-003` 不授权 force-delete 或按 patch 相似度猜测已合并。
+- `ST-AW-*` 是CR-051产品候选Story，不是CP4正式Story卡片；R3 pending decision items=0，但CP2 R3总体门未approve前不得据此生成HLD/LLD或实现。
+- `ST-AW-005` 只交付migration preflight/manifest/手册；真实文件迁移、软链接挂接、真实worktree/ref操作由用户后续逐项目启动和授权。
+- artifact branch必须带project identity，因为不同项目的CR ID可重复；产品层已冻结idle=`projects/<project-name>/integration`、active=`projects/<project-name>/cr/<cr-id>-<slug>`；artifact leg只回integration，shared main同步在CR外。CP3只细化attach/switch/finish/abort、expected OID、leg correlation、聚合schema、bootstrap CAS和branch cleanup。

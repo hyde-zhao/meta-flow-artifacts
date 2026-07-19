@@ -1,0 +1,126 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR051-DESIGN-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-human-gate"
+status: "ready-for-human-gate"
+created_at: "2026-07-18T04:27:02Z"
+created_by: "host-orchestrator"
+source_cr: "CR-051"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 18
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  default_instruction: "先读本 capsule、HLD、ADR 与 CP3 machine result；只有审计或冲突排查才展开 discussion/product 全文，并记录 read expansion。"
+
+must_read:
+  - path: "process/context/CP3-CR051-DESIGN-CONTEXT.yaml"
+    reason: "CP3 人工门最小上下文"
+    required: true
+  - path: "process/state/STATE.current.json"
+    reason: "确认 CR-051 当前停在 CP3 人工门"
+    required: true
+  - path: "process/checkpoints/CP2-CR051-PROJECT-FIRST-WORKTREE-BASELINE-R3.md"
+    reason: "已批准产品基线与 CP3-DC-01"
+    required: true
+  - path: "process/docs/design/CR051-ARTIFACT-WORKTREE-HLD.md"
+    reason: "待批准推荐架构、失败路径和 NFR"
+    required: true
+  - path: "process/docs/design/CR051-ARTIFACT-WORKTREE-ARCHITECTURE-DECISION.md"
+    reason: "七项 proposed ADR 与三项人工决策"
+    required: true
+  - path: "process/checks/CP3-CR051-HLD-CONSISTENCY.result.json"
+    reason: "CP3 自动预检机器真相源"
+    required: true
+
+allowed_reads:
+  - path: "process/docs/design/CR051-ARTIFACT-WORKTREE-BLUEPRINT.md"
+    reason: "Feature/能力边界"
+    required: true
+  - path: "process/docs/design/CR051-ARTIFACT-WORKTREE-DOMAIN-MAP.md"
+    reason: "状态机与唯一 owner"
+    required: true
+  - path: "process/docs/design/CR051-ARTIFACT-WORKTREE-DEPENDENCY-MAP.md"
+    reason: "允许/禁止依赖和断环"
+    required: true
+  - path: "process/checks/CP3-CR051-DISCUSSION-CHECKPOINT.json"
+    reason: "Architecture Gray Areas 结构化分类"
+    required: true
+  - path: "process/checks/CP3-CR051-HLD-CONSISTENCY.summary.md"
+    reason: "自动预检人类摘要"
+    required: true
+  - path: "process/handoffs/CR051-CP3-META-SE-RETURN-SUMMARY.md"
+    reason: "阶段交还摘要"
+    required: true
+
+read_if_needed:
+  - path: "process/discussions/CP3-CR051-HLD-DISCUSSION-LOG.md"
+    trigger: "需要审计 advisor 方案比较和恢复点时，使用 deep_review 并记录 read expansion"
+  - path: "process/docs/product/REQUIREMENTS.md"
+    trigger: "需要逐项核对 27 条 REQ-AW 时"
+  - path: "process/docs/product/SCENARIOS.yaml"
+    trigger: "需要逐项核对 15 条 TC-AW 时"
+  - path: "process/docs/product/TEST-MATRIX.md"
+    trigger: "需要核对测试追溯时"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "generated human summary"
+  - path_or_pattern: "process/DEVELOPMENT-PLAN.yaml"
+    reason: "CP3 尚未批准"
+  - path_or_pattern: "process/stories/**"
+    reason: "CP3 尚未批准 Story planning"
+  - path_or_pattern: "process/archive/**"
+    reason: "冷历史证据"
+  - path_or_pattern: "../meta-flow-artifacts/process/quant-lab/**"
+    reason: "sibling project boundary"
+
+decision_summary:
+  recommended_architecture: "扩展既有 typed native-Git lifecycle，增加 project context、可恢复 worktree controller、异构双 leg、单写 aggregate gate 和只读 migration handoff。"
+  pending_human_decisions:
+    - id: "CP3-CR051-DQ-01"
+      recommendation: "worktree 外 durable intent + fresh observation + conditional rollback/recovery-required"
+      fallback: "禁用自动 switch，改为人工操作/检查"
+    - id: "CP3-CR051-DQ-02"
+      recommendation: "shared envelope + typed append-only evidence DAG + aggregate 单写"
+      fallback: "Feature 独立 schema；或后续外部不可变账本"
+    - id: "CP3-CR051-DQ-03"
+      recommendation: "project lock + exact ordinary ref update + fresh postcheck；manual-sync CR 外显式人工执行"
+      fallback: "后续 forge API/merge-queue adapter"
+  non_blocking_open:
+    - id: "O-AW-01"
+      route: "FEAT-AW-02 Feature Design / CP5 fixture"
+      fail_behavior: "估算无法证明时 fail closed"
+
+key_invariants:
+  - "artifact CR 只从/回 projects/<project>/integration，不触碰 shared main。"
+  - "source/artifact required legs 仅全部 PASS 时 overall PASS；PARTIAL 非成功终态。"
+  - "integration 仅缺失时从 fresh origin/main exact OID create-only 初始化。"
+  - "git switch 退出码不是成功证明；必须 durable intent 与 fresh post-observation。"
+  - "不安全时保留现场并 RECOVERY_REQUIRED/BLOCKED；禁止 reset/clean/stash/force/delete/overwrite。"
+  - "shared main ↔ integration 同步在 CR 外、人工、独立授权。"
+
+approval_effect:
+  allows:
+    - "冻结 HLD/ADR 推荐架构"
+    - "进入 story-planning、Feature Design、CP4 和 CP5 设计证据准备"
+  does_not_allow:
+    - "源码实现或测试修改"
+    - "真实文件迁移或软链接变更"
+    - "真实 Git worktree/branch/ref/remote mutation"
+    - "真实 main↔integration 同步、commit、push 或 publish"
+    - "credentials、runtime、SaaS、production write、trading"
+
+validation:
+  auto_result: "PASS"
+  checklist: "17 PASS / 0 FAIL / 0 WAIVED"
+  blockers: 0
+  pending_decisions: 3
+  read_expansion_refs:
+    - "RE-20260718T042656Z0000-620c98a6"
+  source_mutation: "0"
+  real_git_mutation: "0"

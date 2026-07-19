@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP5",
+  "checkpoint_id": "CP5-CR051-ST-AW-003-LLD-IMPLEMENTABILITY-R2",
+  "story_id": "ST-AW-003",
+  "cr_id": "CR-051",
+  "profile": "architecture-major",
+  "check_attempt": 2,
+  "context_ref": "process/context/CP5-CR051-LLD-CONTEXT.yaml",
+  "dispatch_refs": [
+    "process/handoffs/CR051-CP5-R2-META-DEV-LANE-C.md"
+  ],
+  "evidence_ref": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md",
+  "supersedes_result_ref": "process/checks/CP5-CR051-ST-AW-003-LLD-IMPLEMENTABILITY.result.json",
+  "finding_refs": [
+    "process/docs/quality/CR051-CP5-INDEPENDENT-REVIEW-FINDINGS.md#f02",
+    "process/docs/quality/CR051-CP5-INDEPENDENT-REVIEW-FINDINGS.md#f03"
+  ],
+  "repair_scope": "CP5-QA-R1-F02 consumer-side and CP5-QA-R1-F03: consume only WorktreeHealth.observation and freeze non-self-referential published leg result DAG",
+  "checker_provenance": {
+    "checker_name": "meta-flow story lld-check plus CP5 R2 16-item implementability review",
+    "checker_commit": "1373df565417092304ae7b523f529ae878f6931d",
+    "checker_version": "0.4.0",
+    "invocation": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story lld-check --project-root . --lld process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md --evidence-type full-lld",
+    "generated_by": "meta-dev-debugger/lane-c",
+    "lld_structure_check": "PASS",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md": "sha256:90886ff23b0627fce0fb870f03084d81a814fa342e9d57045a10395641fe9571",
+    "process/stories/STORY-ST-AW-003-heterogeneous-git-legs.md": "sha256:26f891af648dcc0bf8853cbcd0f1bb9426faed98feb3a31c31762f03c41378e4",
+    "process/docs/features/cr051-legs/DESIGN.md": "sha256:0100d591d4d4de68f29c085ae476a20c2623f2ae043f6f46b27f8ac4ae96e6be",
+    "process/docs/features/cr051-legs/TEST-PLAN.md": "sha256:466d81beaf3163e06d69bf187493715d6ad64da83f6d0b257907ff3c6f107a00",
+    "process/context/CP5-CR051-LLD-CONTEXT.yaml": "sha256:2785ba700d6d2ae9b9d0def21341d2ee933c42fcb78d2d3fcd6e656e1093a0ac",
+    "process/DEVELOPMENT-PLAN.yaml": "sha256:3110d73b13484f0bb496c0fbe3874e1e7fd2b3bdf0d45d38b48f2c5088a7dfc6",
+    "process/checks/CP4-CR051-STORY-DAG-PARALLEL-SAFETY.result.json": "sha256:e61c562ddf754c0322be631af0d1245e40ab6106f9ebef03c7af7e774ac08f0a",
+    "process/checks/CP5-CR051-ST-AW-003-LLD-IMPLEMENTABILITY.result.json": "sha256:59b509eb7e705f88c6870735d51d1b67772d924f9e8409211fdad2919a935ebe"
+  },
+  "items": [
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-001",
+      "category": "entry",
+      "name": "R2 scope, process route, CP4 gate and full-lld inputs are ready",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/handoffs/CR051-CP5-R2-META-DEV-LANE-C.md",
+        "process/checks/CP4-CR051-STORY-DAG-PARALLEL-SAFETY.result.json",
+        "process/context/CP5-CR051-LLD-CONTEXT.yaml"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "R2 only repairs F02 consumer-side and F03; R1 result remains immutable and this result supersedes it."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-002",
+      "category": "acceptance_coverage",
+      "name": "R2 keeps heterogeneous-leg acceptance coverage and adds publication invariants",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#2-requirements--需求functional--non-functional",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#10-测试设计",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#14-definition-of-donedod"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Target/authz/fresh-proof/no-main/no-sibling/no-cross-leg requirements remain; F02/F03 add nested health and published-handle proofs."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-003",
+      "category": "architecture_consistency",
+      "name": "Source-default and artifact-integration policy remains aligned with HLD and ADR",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-legs/DESIGN.md",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#8-技术细节与设计取舍"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Artifact main/default remains unreachable and aggregate/projection ownership remains ST-AW-004."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-004",
+      "category": "interface_contract",
+      "name": "F02 consumer uses the Lane B frozen nested observation port only",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-legs/DESIGN.md#3-公开契约",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#5-数据模型与持久化设计",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#6-api--interface-设计"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Artifact precheck only reads health.observation; HEALTHY requires non-null observation and exact recomputed observation digest match; copied flat health fields are forbidden."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-005",
+      "category": "data_contract",
+      "name": "Immutable LegResultPayload has a prewrite digest and no append-time self-reference",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-legs/DESIGN.md#3-公开契约",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#5-数据模型与持久化设计"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Payload excludes its own result_ref, append/write receipt, receipt_digest, writer_id and written_at; canonical digest is determined before writer invocation."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-006",
+      "category": "publication_contract",
+      "name": "External receipt and runtime PublishedLegResultHandle close F03 without payload rewrite",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-legs/DESIGN.md#3-公开契约",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#6-api--interface-设计"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "LegResultWriter writes the immutable payload once and returns external receipt; handle is runtime/evidence-index composition and is never persisted back into payload."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-007",
+      "category": "failure_recovery",
+      "name": "Writer failure cannot publish a PASS handle and evidence-only retry never reruns Git",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#7-核心处理流程",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#10-测试设计"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Failure returns UnpublishedLegResultOutcome/evidence-pending; retry submits byte-identical payload and single-write key with Git calls fixed at zero."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-008",
+      "category": "dependency_contract",
+      "name": "ST-AW-004 receives only reread-validatable published handles",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-legs/DESIGN.md#6-下游消费契约",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#6-api--interface-设计"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Validator rereads payload from result_ref and checks receipt/ref/payload digest/receipt digest/derived key/correlation; raw or unpublished input is rejected."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-009",
+      "category": "file_impact",
+      "name": "Primary, read-only and forbidden file boundaries remain deterministic",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#4-代码结构与文件影响范围",
+        "process/handoffs/CR051-CP5-R2-META-DEV-LANE-C.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "R2 changed only Lane C allowed design/story/check files; no source, test, shared plan/state/ledger/checkpoint or other Story writes."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-010",
+      "category": "concurrency_consistency",
+      "name": "Single-write key, same-digest idempotency and conflicting-digest rejection are explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#5-数据模型与持久化设计",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#10-测试设计"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Same key and digest returns the same external receipt; same key with different digest blocks; payload append count remains one."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-011",
+      "category": "security",
+      "name": "Nested health fail-closed, typed authz and no-forbidden-mutation boundaries are preserved",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#9-安全与性能设计",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#12-风险难点与预研建议"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Unknown/null/mismatched health never authorizes mutation; main/sibling/reset/clean/stash/rebase/force/cross-leg mutation remains zero."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-012",
+      "category": "testability",
+      "name": "F02/F03 consumer, payload, receipt, handle and retry failure paths have deterministic tests",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-legs/TEST-PLAN.md",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#10-测试设计"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "TP-AW03-017..020 and TP-03-019..021 cover forbidden fields, digest timing, tamper rejection, nested health, unpublished outcomes and Git=0 retry."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-013",
+      "category": "dev_gate",
+      "name": "Development gate remains closed and computable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs.md#dev_gate",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#14-definition-of-donedod"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Story remains ready-for-review, confirmed=false and dependencies_satisfied=false; R2 PASS neither approves CP5 nor authorizes Git/source implementation."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-014",
+      "category": "clarification_convergence",
+      "name": "F02/F03 repair adds no unresolved user decision or waiver",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP5-CR051-LLD-CONTEXT.yaml",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md#12-风险难点与预研建议"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Clarification queue remains clear; findings are implementability defects with a fixed repair contract, not a new scope/architecture choice."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-015",
+      "category": "deliverables",
+      "name": "Feature design, test plan, Story card and full LLD are mutually aligned",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/docs/features/cr051-legs/DESIGN.md",
+        "process/docs/features/cr051-legs/TEST-PLAN.md",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs.md",
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "All four artifacts use the same health.observation and payload -> external receipt -> published handle contract."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-003-R2-016",
+      "category": "exit",
+      "name": "ST-AW-003 R2 full LLD is structurally valid and ready for independent re-review",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md",
+        "process/checks/CP5-CR051-ST-AW-003-LLD-IMPLEMENTABILITY.result.json"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "lld-check returned OK; R2 supersedes R1, keeps confirmed=false and routes to CP5 R2 batch independent review."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T070828Z0000-9e83da4b",
+    "RE-20260718T071723Z0000-c99442d7"
+  ],
+  "decision": "PASS",
+  "next_route": "CP5-r2-batch-independent-review",
+  "checked_at": "2026-07-18T07:45:49Z"
+}

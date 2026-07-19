@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "stage": "CP3",
+  "profile": "architecture-major",
+  "project_id": "meta-flow",
+  "cr_id": "CR-051",
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-051.summary.json",
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "artifact_budgets": "process/policies/ARTIFACT-BUDGETS.json"
+  },
+  "budget": {"max_tokens": 30000, "estimated_tokens": 11000, "estimator": "bounded-summary"},
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "active CR and solution-design state", "required": true},
+    {"path": "process/current/CURRENT.json", "reason": "current discovery entry", "required": true},
+    {"path": "process/changes/summaries/CR-051.summary.json", "reason": "CR-051 current summary", "required": true},
+    {"path": "process/context/CP3-CR051-DESIGN-INPUT.yaml", "reason": "CP3 compact design capsule", "required": true},
+    {"path": "process/checkpoints/CP2-CR051-PROJECT-FIRST-WORKTREE-BASELINE-R3.md", "reason": "approved CP2 baseline and CP3-DC-01", "required": true},
+    {"path": "process/checks/CP3-CR051-ARCHITECTURE-INPUTS.json", "reason": "structured CP3 constraints", "required": true},
+    {"path": "process/handoffs/CR051-CP2-CP3-META-SE.md", "reason": "write scope and exit criteria", "required": true}
+  ],
+  "allowed_reads": [
+    {"path": "process/docs/product/USE-CASES.md", "reason": "5 CR-051 use cases", "required": true},
+    {"path": "process/docs/product/REQUIREMENTS.md", "reason": "27 CR-051 requirements", "required": true},
+    {"path": "process/docs/product/SCENARIOS.yaml", "reason": "15 CR-051 scenarios", "required": true},
+    {"path": "process/docs/product/TEST-MATRIX.md", "reason": "traceability", "required": true},
+    {"path": "process/docs/product/STORY-MAP.md", "reason": "capability journey only", "required": true},
+    {"path": "process/docs/product/MVP-SCOPE.md", "reason": "scope boundary", "required": true},
+    {"path": "process/docs/product/RELEASE-SLICES.md", "reason": "phased landing input", "required": false},
+    {"path": "process/docs/product/BACKLOG.md", "reason": "deferred boundary", "required": false},
+    {"path": "meta_flow/workflow/git_branch_lifecycle.py", "reason": "current implementation facts, read-only", "required": true},
+    {"path": "meta_flow/workspace/git_sync.py", "reason": "current workspace Git facts, read-only", "required": true},
+    {"path": "meta_flow/workspace/routing.py", "reason": "current routing facts, read-only", "required": true},
+    {"path": "tests/test_git_branch_lifecycle.py", "reason": "existing contract facts, read-only", "required": false},
+    {"path": "tests/test_workspace_git_sync.py", "reason": "existing contract facts, read-only", "required": false},
+    {"path": "process/docs/design/CR050-GIT-BRANCH-HLD.md", "reason": "paired-default compatibility analysis", "required": false},
+    {"path": "process/docs/design/CR050-GIT-BRANCH-ARCHITECTURE-DECISION.md", "reason": "prior ADR applicability analysis", "required": false}
+  ],
+  "read_if_needed": [
+    {"path": "process/docs/design/CR050-GIT-BRANCH-BLUEPRINT.md", "reason": "old boundary conflict only", "required": false},
+    {"path": "process/docs/design/CR050-GIT-BRANCH-DOMAIN-MAP.md", "reason": "old domain conflict only", "required": false},
+    {"path": "process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md", "reason": "old dependency conflict only", "required": false}
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/**",
+    "process/archive/**",
+    "process/discussions/**"
+  ],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "generated human summary"},
+    {"path_or_pattern": "process/archive/**", "reason": "historical cold evidence"},
+    {"path_or_pattern": "process/stories/**", "reason": "CP3 not approved"},
+    {"path_or_pattern": "../meta-flow-artifacts/process/quant-lab/**", "reason": "sibling project boundary"},
+    {"path_or_pattern": "完整会话 transcript", "reason": "user constraint is structured"}
+  ],
+  "full_doc_read_allowed_when": ["field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson"
+}

@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR051-ST-AW-005-read-only-migration-handoff-CODING-DONE",
+  "story_id": "ST-AW-005",
+  "cr_id": "CR-051",
+  "profile": "standard",
+  "check_attempt": 1,
+  "context_ref": "process/context/stories/STORY-ST-AW-005.CP6.work-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "dispatch_refs": ["EVENT-CR051-ST-AW-005-CP6-DEV-COMPLETED-20260718T154700Z"],
+  "return_packet_ref": "process/returns/ST-AW-005.CP6.return.json",
+  "evidence_ref": "process/evidence/ST-AW-005.CP6.index.json",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator ST-AW-005 CP6 implementation correlation",
+    "checker_commit": "working-tree",
+    "invocation": "23 directed + 92 adjacent + 277 combined/9 subtests (agent), 305 combined/9 subtests (host) + ruff/format/return/evidence/boundary review",
+    "generated_by": "host-orchestrator from actual meta-dev return and host deep review",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/returns/ST-AW-005.CP6.return.json": "available-in-evidence-index",
+    "process/evidence/ST-AW-005.CP6.index.json": "self-validated"
+  },
+  "items": [
+    {
+      "id": "CP6-AW005-E01",
+      "category": "entry",
+      "name": "CP5 technical-note approval and verified W4 runtime dependencies are present",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checkpoints/CP5-CR051-ALL-STORIES-LLD-BATCH.md", "process/returns/ST-AW-003.CP7-R2.return.json", "process/returns/ST-AW-004.CP7.return.json", "process/context/stories/STORY-ST-AW-005.CP6.work-packet.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Both upstream runtime contracts are verified-with-risk; no mutation authorization was added."
+    },
+    {
+      "id": "CP6-AW005-01",
+      "category": "manifest-contract",
+      "name": "Immutable portable MigrationManifest implements all 11 approved sections",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-ST-AW-005-read-only-migration-handoff-IMPLEMENTATION.md#设计契约映射", "tests/test_artifact_migration.py", "process/evidence/ST-AW-005.CP6.index.json"],
+      "owner": "meta-dev/host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Runtime roots stay in input-only value objects; canonical manifest fields use anchors and relative paths."
+    },
+    {
+      "id": "CP6-AW005-02",
+      "category": "read-scope",
+      "name": "Allowlisted reads, symlink no-follow and fail-closed readiness are implemented",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["meta_flow/workspace/artifact_migration.py", "tests/test_artifact_migration.py", "process/returns/ST-AW-005.CP6.return.json#verification"],
+      "owner": "meta-dev/host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Missing target is never READY; regular-file symlink-swap is closed with O_NOFOLLOW+fstat; unreadable or ambiguous paths fail closed."
+    },
+    {
+      "id": "CP6-AW005-03",
+      "category": "deny-mutation",
+      "name": "Target, sibling, Git/worktree/ref/remote/helper/scheduler mutation remains zero",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/ST-AW-005.CP6.return.json#boundary_check", "process/stories/STORY-ST-AW-005-read-only-migration-handoff-IMPLEMENTATION.md#验证结果"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Only the two primary code/test files and three CP6 evidence files were created; CLI/shared writers were untouched."
+    },
+    {
+      "id": "CP6-AW005-04",
+      "category": "operations-follow-up",
+      "name": "O-AW-03 thresholds produce only one deduplicated non-executable follow-up candidate",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["tests/test_artifact_migration.py", "process/stories/STORY-ST-AW-005-read-only-migration-handoff-IMPLEMENTATION.md#设计契约映射"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "T1/T2/T3 strict boundaries and insufficient-data behavior pass; helper/scheduler/remote-write fields remain false/zero."
+    },
+    {
+      "id": "CP6-AW005-05",
+      "category": "regression",
+      "name": "Directed, adjacent and combined CR-051 regressions plus static checks pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/evidence/ST-AW-005.CP6.index.json", "process/returns/ST-AW-005.CP6.return.json#verification"],
+      "owner": "meta-dev/host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Agent: 23 directed, 92 adjacent, 277 combined + 9 subtests. Host expanded combined suite: 305 passed + 9 subtests. Ruff and format pass."
+    },
+    {
+      "id": "CP6-AW005-X01",
+      "category": "exit",
+      "name": "Implementation evidence is complete and ready for independent CP7",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/ST-AW-005.CP6.return.json", "process/evidence/ST-AW-005.CP6.index.json", "process/handoffs/CR051-ST-AW-005-CP6-META-DEV.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Return/evidence checkers pass; all residual risks are explicit and require independent QA/CP8 routing."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260718T154843Z0000-7e356170"],
+  "risks": [
+    {"id": "R-AW005-DIR-ENUM-TOCTOU", "severity": "MEDIUM", "status": "open-follow-up", "owner": "CP8 decision owner / future migration CR", "summary": "Adversarial concurrent directory rename/replace requires a future full-lld dirfd/openat design; current static read-only fixture does not prove it."},
+    {"id": "CR051-RISK-REAL-MIGRATION-UNVERIFIED", "severity": "MEDIUM", "status": "open-not-authorized", "owner": "future project migration CR", "summary": "Real migration/link/worktree/ref/remote mutation remains unauthorized and unexecuted."},
+    {"id": "CR051-RISK-WINDOWS-NATIVE-NOFOLLOW", "severity": "LOW", "status": "open", "owner": "CP7/CP8 decision owner", "summary": "Windows native no-follow/symlink/permission behavior was not piloted; implementation fails closed without O_NOFOLLOW."},
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "severity": "MEDIUM", "status": "open-not-authorized", "owner": "CP8 decision owner", "summary": "Hosted remote, credentials, branch protection and publication remain unverified."}
+  ],
+  "decision": "PASS",
+  "next_route": "CP7-ST-AW-005-meta-qa-critical",
+  "checked_at": "2026-07-18T15:47:00Z"
+}

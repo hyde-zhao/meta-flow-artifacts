@@ -1,0 +1,304 @@
+{
+  "acceptance": [
+    "integration 缺失 fixture 恰好执行 1 次 exact-OID create-only；已存在/并发同值路径 recreate/reset/orphan 次数为 0",
+    "两项目 fixture 的 idle/active branch role 命名匹配率 100%，main 作为 working branch、index.lock 争用、cross-project touched path 均为 0",
+    "CAP-01..11 对适用 bounded profile 实现 false-safe=0、underestimate=0；不可估算场景 100% 在 mutation 前 BLOCKED",
+    "DUR-01..14 覆盖至少 8 类故障，提前 Git mutation=0，重复 resume 终态一致率=100%",
+    "每次 switch/rollback attempt 均有 durable intent 与 fresh post-observation；命令退出码单独产生 PASS 的次数为 0",
+    "dirty/unknown/active/recovery-required remove 负例删除次数为 0；危险恢复 argv 次数为 0",
+    "worktree pack P0/P1 fixture 与适用 TC-AW 覆盖率 100%，真实 artifact 变更数为 0"
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 822,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_discovery_entry",
+      "required": true
+    },
+    {
+      "estimated_tokens": 2090,
+      "mode": "full",
+      "path": "process/stories/STORY-ST-AW-002-recoverable-project-worktree.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 364,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 934,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-051.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/returns/ST-AW-001.CP7.return.json",
+      "reason": "upstream_verified_contract",
+      "required": true
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/docs/features/cr051-worktree/DESIGN.md",
+      "reason": "feature_contract",
+      "required": true
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/docs/features/cr051-worktree/TEST-PLAN.md",
+      "reason": "feature_test_contract",
+      "required": true
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/docs/features/cr051-worktree/TASKS.md",
+      "reason": "feature_tasks",
+      "required": true
+    }
+  ],
+  "allowed_write_paths": [
+    "meta_flow/workspace/project_worktree.py",
+    "meta_flow/workspace/worktree_capacity.py",
+    "meta_flow/workspace/worktree_journal.py",
+    "meta_flow/workspace/git_sync.py",
+    "tests/test_cr051_project_worktree.py",
+    "tests/test_cr051_worktree_faults.py",
+    "tests/test_workspace_git_sync.py",
+    "tests/test_git_branch_lifecycle.py",
+    "process/stories/STORY-ST-AW-002-recoverable-project-worktree-IMPLEMENTATION.md",
+    "process/returns/ST-AW-002.CP6.return.json",
+    "process/evidence/ST-AW-002.CP6.index.json"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "NO_REPOSITORY_PUBLICATION",
+    "FIXTURE_ONLY_GIT_WORKTREE_REMOTE"
+  ],
+  "budget": {
+    "estimated_tokens": 4417,
+    "estimator": "chars_div_4",
+    "max_tokens": 16000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [
+      "WorktreeRegistration",
+      "WorktreeObservation",
+      "WorktreeHealth",
+      "CapacityDecision",
+      "DurableSwitchIntent",
+      "ProjectContext/RouteDecision consumer",
+      "exact-OID create-only integration bootstrap"
+    ],
+    "summary": "实现长期项目 worktree 的本地生命周期、project-scoped integration、短期 CR branch switch 与可恢复 intent；任何容量、durability、权限、identity 或 fresh observation 不确定都在 Git mutation 前 fail closed。"
+  },
+  "cr_id": "CR-051",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md",
+    "process/archive/**",
+    "process/discussions/**"
+  ],
+  "dependency_inputs": [
+    "硬门：ST-AW-001 CP7 必须为 PASS 或 PASS_WITH_RISK，且 ProjectContext/RouteDecision 公共 contract 不变；未满足前不得启动本实现。"
+  ],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary / legacy fallback，不作为 agent 默认机器入口"
+    },
+    {
+      "path_or_pattern": "process/DEVELOPMENT-PLAN.yaml",
+      "reason": "计划长文由 Story packet / context 摘要承载"
+    },
+    {
+      "path_or_pattern": "process/STORY-STATUS.md",
+      "reason": "legacy status 汇总，不作为当前 Story 真相源"
+    },
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "默认读取 CR summary / CR ledger，完整 CR 只用于审计或冲突恢复"
+    },
+    {
+      "path_or_pattern": "process/stories/*-LLD.md",
+      "reason": "默认读取 Story packet / design summary，完整 LLD 按需展开"
+    },
+    {
+      "path_or_pattern": "process/stories/*-IMPLEMENTATION.md",
+      "reason": "实现长证据默认通过 return/evidence index 消费"
+    },
+    {
+      "path_or_pattern": "process/archive/**",
+      "reason": "历史归档属于冷区，默认禁止读取"
+    },
+    {
+      "path_or_pattern": "process/discussions/**",
+      "reason": "讨论日志只用于审计 / 恢复，不替代正式产物"
+    }
+  ],
+  "expected_return_packet": "process/returns/ST-AW-002.CP6.return.json",
+  "feature_contract_summary": "FEAT-AW-02 管理 existing-control + sibling project worktree；idle 驻留 projects/<project>/integration，active 切换至 projects/<project>/cr/<cr-id>-<slug>，使用 capacity precheck、durable intent、fresh observation 和非破坏恢复。",
+  "feature_design_refs": [
+    "process/docs/features/cr051-worktree/DESIGN.md",
+    "process/docs/features/cr051-worktree/TEST-PLAN.md",
+    "process/docs/features/cr051-worktree/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": [
+    "FEAT-AW-02"
+  ],
+  "forbidden_write_paths": [
+    "meta_flow/cli.py",
+    "meta_flow/workspace/project_artifact_routing.py",
+    "meta_flow/workflow/artifact_leg_lifecycle.py",
+    "meta_flow/workflow/artifact_aggregate.py",
+    "process/quant-lab/**",
+    "../meta-flow-artifacts/process/* except process/meta-flow/**",
+    ".git/** outside temporary fixtures",
+    "real Git/worktree/ref/remote/link/migration targets",
+    "artifact main per-CR update",
+    "destructive recovery/reset-hard/clean/stash/force/branch-delete"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "lld_policy": "full-lld",
+  "must_read": [
+    {
+      "estimated_tokens": 822,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true
+    },
+    {
+      "estimated_tokens": 2090,
+      "mode": "full",
+      "path": "process/stories/STORY-ST-AW-002-recoverable-project-worktree.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 364,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    }
+  ],
+  "objective": {
+    "non_goals": [
+      "不修改 ST-AW-001 primary 文件",
+      "不接线 meta_flow/cli.py；CLI merge owner 是 ST-AW-004",
+      "不执行真实 artifact worktree/ref/remote mutation",
+      "不实现 artifact main 自动同步"
+    ],
+    "summary": "管理可恢复的长期项目 worktree 与 create-only integration"
+  },
+  "packet_type": "story_work_packet",
+  "parent_context_ref": "process/context/CP6-CR051-IMPLEMENTATION-CONTEXT.yaml",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "meta-flow",
+  "read_if_needed": [
+    {
+      "path": "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md",
+      "trigger": "deep_review",
+      "reason": "non-atomic state machine、CAP/DUR 证明和 recovery contract 实现前必须展开；先写 deep_review read-log"
+    },
+    {
+      "path": "meta_flow/workspace/git_sync.py",
+      "trigger": "field_conflict",
+      "reason": "仅在进入 shared 单写窗口时读取和修改"
+    },
+    {
+      "path": "tests/test_workspace_git_sync.py",
+      "trigger": "field_conflict",
+      "reason": "shared primitive regression"
+    },
+    {
+      "path": "tests/test_git_branch_lifecycle.py",
+      "trigger": "field_conflict",
+      "reason": "branch lifecycle regression"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "runtime-high-risk",
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "ST-AW-002",
+  "story_ref": "process/stories/STORY-ST-AW-002-recoverable-project-worktree.md",
+  "verification_plan": [
+    "uv run --python 3.11 pytest -q tests/test_cr051_project_worktree.py tests/test_cr051_worktree_faults.py tests/test_workspace_git_sync.py tests/test_git_branch_lifecycle.py",
+    "逐项证明 CAP-01..11：false-safe=0、underestimate=0、unknown/error 均 pre-mutation BLOCKED",
+    "逐项证明 DUR-01..14：ENOSPC/EACCES/file-fsync/replace/dir-fsync/torn/corrupt/process-kill/cross-device 与 idempotent resume",
+    "验证 WT-01..14、TC-AW-004/005/007/010..012/014/015 和危险 argv=0",
+    "uv run --python 3.11 ruff check meta_flow/workspace/project_worktree.py meta_flow/workspace/worktree_capacity.py meta_flow/workspace/worktree_journal.py meta_flow/workspace/git_sync.py tests/test_cr051_project_worktree.py tests/test_cr051_worktree_faults.py",
+    "uv run --python 3.11 python -m py_compile meta_flow/workspace/project_worktree.py meta_flow/workspace/worktree_capacity.py meta_flow/workspace/worktree_journal.py meta_flow/workspace/git_sync.py",
+    "git diff --check"
+  ]
+}

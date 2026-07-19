@@ -1,11 +1,11 @@
 ---
 status: baseline
-version: "1.6"
+version: "1.9"
 created_at: "2026-07-02"
 owner: "meta-pm"
 cr_ref: "CR-037"
 source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT-IMPLEMENTATION-PLAN-2026-07-02.md"
-baseline_note: "正式产品基线；CR-047/048/049 已关闭；CR-050 因用户明确要求新增独立 merge 操作而回到 CP2 R2。当前只形成候选产品基线，不授权源码实现、commit 或真实远端 branch/default-branch mutation。"
+baseline_note: "正式产品基线；CR-047/048/049/050 已关闭。CR-051 R3 当前候选基线为：一个逻辑 CR 使用异构 source/artifact 双 leg；source leg 从 fresh 源码默认分支创建并回到该默认分支，artifact leg 从 fresh 项目 integration 创建并只回到同一 integration；共享 artifact main 同步完全在 CR 外人工执行；单一聚合门仅在全部必需 leg PASS 时完成。CP2 R3 总体门仍待 approve，且不授权设计、实现、真实 artifact 迁移、软链接变更或任何真实 Git/ref mutation。"
 engagement_mode: meta-self-dev
 scenario_subject_type: implementation-carrier
 scenario_subject_id: "meta-flow"
@@ -16,8 +16,8 @@ delivery_routing:
   mode: meta-flow-delivery
   output_root: "process/docs/product"
   source: meta-self-dev
-active_change_ref: "CR-050"
-total_use_cases: 23
+active_change_ref: "CR-051"
+total_use_cases: 28
 ---
 
 # Meta Flow 项目治理与状态强制用户场景
@@ -33,6 +33,9 @@ total_use_cases: 23
 | 1.5 | 2026-07-15 | host-orchestrator inline fallback | 为 CR-050 增量加入双仓 CR 分支开启、已提交 ref 发布、合并证明与安全清理场景；保留全部既有 UC ID，并把 Git/`gb`、双仓、merge 与 commit 边界提交 CP2 | 原文档增量更新 |
 | 1.5.1 | 2026-07-16 | host-orchestrator inline fallback | 记录 SGA-GB-01..05 已由用户在 CP2 批准推荐方案；不改变 UC、指标、Deferred 或不授权范围 | CP2 状态同步 |
 | 1.6 | 2026-07-16 | host-orchestrator inline fallback | 用户澄清 Meta Flow 需要在 publish 后提供独立 merge 能力；新增 UC-GB-004、SGA-GB-06 和量化指标，重开 SGA-GB-03，并将隐式/merge-commit/force 行为继续排除；等待 CP2 R2。 | 原文档增量更新；保留 1.5.1 基线与全部既有 UC ID |
+| 1.7 | 2026-07-17 | meta-pm | 为 CR-051 增量加入 project-first artifact、每项目独立 worktree、项目作用域 Git 生命周期、共享 main 刷新与迁移前交接场景；保留全部既有 UC/SGA/SGQ/Deferred ID。 | 原文档增量更新；CR-050 历史事实不改写 |
+| 1.8 | 2026-07-17 | meta-pm | CR-051 CP2 changes_requested R2：按用户决策把 idle detached 候选修订为长期 `projects/<project-name>/integration`，明确每 CR 使用 `projects/<project-name>/cr/<cr-id>-<slug>`、`main` 保持共享集成基线，并确认显式 merge-main refresh 与 existing-control+sibling-worktree 拓扑；既有 UC/REQ/TC/Story/Slice ID 不变。 | 原文档增量更新；保留 R1 与既有历史正文 |
+| 1.9 | 2026-07-18 | meta-pm | CR-051 CP2 changes_requested R3：不新增 UC/SGA/SGQ/Deferred ID；以异构 source/artifact 双 leg、单一聚合门、integration create-only 初始化和 CR 外人工 main/integration 同步替代 R2 的 per-CR artifact main refresh 当前语义；R2 决策保留为历史并标注 superseded。 | 原文档增量更新；保留 R1/R2 历史追溯，R3 为当前候选基线 |
 | 1.0 | 2026-07-02 | meta-pm | 基于已批准实施计划建立产品侧场景基线 | 初始化长期可追踪产品基线 |
 
 ## 用户画像
@@ -76,6 +79,12 @@ total_use_cases: 23
 | SM-GB-04 | 双仓部分失败可恢复 | 注入任一仓 fetch/push/delete 失败并检查结构化结果 | 每仓均有 terminal status、已执行命令和恢复入口；partial success 不被报告为 PASS |
 | SM-GB-05 | Dry-run 零副作用 | dry-run 前后 local/remote refs、HEAD、worktree hash 对比 | local/remote ref 变化数为 0，计划步骤覆盖率 100% |
 | SM-GB-06 | 显式双仓快进合并 | 对两仓 fresh remote default、published CR tip、merge result 与 branch retention 做交叉检查 | 2/2 default branch 仅以 fast-forward 更新；merge commit/rebase/force/自动冲突解决执行数为 0；部分成功时被删 CR branch 数为 0 |
+| SM-AW-01 | 项目路由唯一性 | 对 project identity、layout version、worktree registry 与解析结果做交叉检查 | 每个已登记项目恰好解析到 1 个 `<project>/docs` 和 1 个 `<project>/process`；歧义解析 100% 阻断 |
+| SM-AW-02 | 项目 worktree 隔离 | 在两个项目 worktree 中并行执行 integration→CR→integration 的本地 fixture Git 周期 | 两个 idle worktree 均驻留各自 `projects/<project>/integration`；活动 CR 分支均匹配 `projects/<project>/cr/<cr-id>-<slug>`；sibling dirty 错误阻断、跨项目 touched path/branch/ref 和 index lock 争用均为 0 |
+| SM-AW-03 | 当前项目保护 | 对当前项目 worktree dirty、identity/path mismatch 与 branch collision 负例执行 preflight | 危险 mutation 前阻断率 100%；误操作其他项目 worktree/ref 数为 0 |
+| SM-AW-04 | 异构双 leg 聚合确定 | 注入 source/artifact leg 的 PASS、FAIL、BLOCKED、IN_PROGRESS 组合及 artifact integration expected-OID 漂移 | 聚合优先级严格为 `BLOCKED > FAIL > IN_PROGRESS > PASS`；仅全部必需 leg PASS 才整体完成；`PARTIAL` 只表达进度/影响，失败不自动回滚或关闭已成功 leg |
+| SM-AW-05 | Legacy 兼容确定性 | 对未迁移 `process/<project>` / `docs/<project>` 与新 `<project>/process|docs` fixture 重放 | legacy/new layout 均可按显式版本解析；同一配置重复解析结果一致率 100%；不静默切换写目标 |
+| SM-AW-06 | 能力开发零真实迁移 | 对 CR-051 touched paths、真实 artifact tree、软链接和 worktree/ref 快照做前后比较 | 现有 artifact 文件搬迁数、软链接变更数、真实 worktree/branch/ref mutation 数均为 0 |
 
 ## 明确排除
 
@@ -91,6 +100,9 @@ total_use_cases: 23
 - 不把 shell alias `gb`、同名 Go 构建工具或 Git Town 设为 Meta Flow 必需依赖。
 - 不把 merge 隐式塞进 `publish` 或 `finish`；不创建 merge commit，不自动审批 PR、调用 forge API、猜测 squash/rebase 已合并或执行 force-push/force-delete。
 - 不隐式 `git add -A`、不替用户选择提交范围；branch publication 只发布已提交 refs。
+- 不在 CR-051 中搬迁任何现有 artifact 文件、修改现有软链接，或在真实 `meta-flow-artifacts` 上创建/删除 worktree、branch、commit、tag 或 remote ref。
+- 不让 sibling project 的 dirty 状态、branch 或 index 成为当前项目的默认阻断条件；也不允许当前项目命令读取、暂存、提交或清理 sibling project 路径。
+- 不把 project-first 解释为“每项目独立 artifact 仓库”；共享 Git object database 与 remote 仍保留，每项目通过 namespace、worktree 和 branch identity 隔离。
 
 ## Scenario Gray Areas
 
@@ -116,6 +128,10 @@ total_use_cases: 23
 | SGA-GB-04 | squash/rebase merge 后是否用 patch 相似度猜测已合并 | 决定远端删除是否有充分证明 | 验证 / 数据保留 / 风险 | fail closed；未来由 forge receipt adapter 处理 | resolved-by-user / CP2-DQ-04 |
 | SGA-GB-05 | `cr-publish` 是否隐式 stage/commit 工作树 | 决定提交边界是否可能夹带无关文件或秘密 | 安全 / 可审计性 / 易用性 | 只推送已提交 refs；commit 继续由显式 Git/Host 操作完成 | resolved-by-user / CP2-DQ-05 |
 | SGA-GB-06 | 两仓 merge 的顺序、部分成功和 default-branch 写入授权如何处理 | Git 不提供跨仓事务；第一仓成功后第二仓可能被 branch protection 或并发推进拒绝 | 失败恢复 / 权限 / 删除安全 | 先预检两仓，再按 artifact→project 合并；每仓单独授权/结果；任一失败保留两仓 CR branch，禁止 finish | decision-item / CP2-R2-DQ-02..04 |
+| SGA-AW-01 | artifact 继续按类型优先 `docs/<project>` / `process/<project>`，还是迁移到项目优先 `<project>/docs` / `<project>/process` | 决定所有路由、ownership、迁移和文档发现契约 | 范围 / 兼容 / 交付出口 | 用户选择 project-first；当前只开发能力，真实迁移后续逐项目执行 | resolved-by-user / SGQ-AW-001 |
+| SGA-AW-02 | 每项目 worktree 长期常驻、每 CR 临时创建，还是二者混合 | 决定软链接稳定性、清理成本、并发模型和 branch 占用 | 复杂度 / 维护 / 失败恢复 / 后续门控 | 长期保留每项目 worktree；空闲驻留 `projects/<project-name>/integration`，CR 期间使用 `projects/<project-name>/cr/<cr-id>-<slug>`；`main` 只作为共享集成基线 | resolved-by-user / CP2-R2-DQ-01 |
+| SGA-AW-03 | 一个逻辑 CR 的 source/artifact legs 是否采用相同 base/target，以及如何判定整体完成 | 决定 artifact CR 是否错误接触 shared main、部分成功是否被误报完成，以及失败时是否发生跨仓回滚 | 安全 / 可恢复性 / 验证 / 后续门控 | source leg 从/回源码默认分支；artifact leg 从/回项目 integration；单一协调者按 `BLOCKED > FAIL > IN_PROGRESS > PASS` 聚合，仅全 PASS 完成，`PARTIAL` 不是终态 | resolved-by-user / CP2-DQ-04..05；supersedes CP2-DQ-02 |
+| SGA-AW-04 | project integration 如何首次建立，以及 shared main 与 integration 如何同步 | 决定首次接入是否覆盖既有项目历史、main divergence 是否错误阻断 CR、同步是否越过当前 CR 授权 | 兼容 / 运维 / 回退 / 授权 | integration 缺失时从 fresh `origin/main` exact OID create-only 初始化；已存在时禁止 recreate/reset/orphan；双向同步仅由 CR 外人工维护，默认要求该项目无活跃 artifact CR；existing control+sibling-root 拓扑继续有效 | resolved-by-user / CP2-DQ-03/06 |
 
 ## CR-050 用户可见场景确认证据
 
@@ -123,6 +139,18 @@ total_use_cases: 23
 |---|---|---|---|---|---|---|---|---|
 | SGQ-GB-001 | CR 生命周期是否应覆盖“刷新主分支 → 创建并推送 CR 分支 → 提交后发布 → 远端合并后删除分支”的完整旅程？ | 用户自由表达；安全细节进入 CP2 | 覆盖完整旅程，并对 destructive 步骤 fail closed | “开启cr时从远端主分支拉取最新代码，创建cr分支，然后提交推送到远程分支，然后将远程分支合并到后将分支删除掉” | 核心旅程已由用户明确；工具/双仓/merge 证明/commit 边界由 CP2 决策，不将模糊处静默解释为 force 或自动 merge 授权 | scope / validation / security / gate | 用户请求 / CR-050 | confirmed |
 | SGQ-GB-002 | 当前 Git 生命周期缺少 merge 操作，是否需要让 Meta Flow 在 publish 后显式合并？ | 独立 `merge`、保持外部 merge、或 forge adapter | 增加显式两仓 fast-forward-only merge，默认不隐式触发 | 用户询问“该需要实现后可以支持推送后合并分支吗”，并回复 `approve` 接受推荐边界 | `publish` 仍只推送 CR ref；`merge` 需要独立调用和 default-branch-write 授权；只允许快进，两仓部分成功保留分支并阻断 `finish` | scope / authorization / recovery / gate | 用户对话 / CR-050 CP3 changes requested | confirmed-for-CP2-R2 |
+
+## CR-051 用户可见场景确认证据
+
+**Discussion Log**：`process/discussions/CP2-CR051-SCENARIO-DISCUSSION-LOG.md`
+
+**Checkpoint**：`process/checks/CP2-CR051-DISCUSSION-CHECKPOINT.json`
+
+| Question ID | 问题 | 选项 / 候选理解 | 推荐方案 | 用户回答 | 复述确认 | 影响面 | 来源 | 状态 |
+|---|---|---|---|---|---|---|---|---|
+| SGQ-AW-001 | 多项目共享 artifact 时，是否改为 project-first 并让不同项目使用独立 worktree？ | A. `<project>/docs|process` + 每项目 worktree；B. 保持 `docs|process/<project>` + 单 worktree；C. 每项目独立仓库 | A：共享仓库保留、项目 namespace 与 working tree 隔离 | “方案就按项目优先的方案来做……meta-flow-artfacts 的目录采用不同的 worktree” | 目标语义冻结为 `<project_name>/docs` 与 `<project_name>/process`；不同项目不再共享同一 checkout/index/branch，但仍共享 artifact Git 仓库和 remote | scope / compatibility / validation / delivery | 用户对话 / CR-051 | confirmed |
+| SGQ-AW-002 | 本轮是立即迁移所有 artifact 和软链接，还是先交付能力再逐项目迁移？ | A. 先开发能力、后逐项目迁移；B. 能力与全量迁移一次完成；C. 仅写迁移文档 | A：先完成 meta-flow 能力，真实迁移独立执行 | “后续我逐个项目完成 meta-flow-artfacts 文件迁移和软连接挂接” | CR-051 只交付路由、worktree、Git 周期、兼容读取、preflight 与迁移手册；真实文件搬迁、软链接挂接和真实 ref mutation均不在本轮授权内 | scope / authorization / rollback / gate | 用户对话 / CR-051 | confirmed |
+| SGQ-AW-003 | 长期项目 worktree、每 CR 分支、source/artifact 双 leg 与共享 `main` 应分别承担什么职责？ | A. 异构双 leg：source 默认分支↔source CR，artifact integration↔artifact CR，shared main 同步在 CR 外；B. 两 leg 都回各自 default/main；C. artifact CR 内刷新 shared main | A：保持项目稳定 integration、隔离跨项目同步责任，并以单一聚合门维持逻辑 CR 完整性 | R2 先确认长期 integration、短期 CR 与 existing-control+sibling-root；R3 用户进一步明确“按照这个方案，实施”：source 从/回源码默认分支，artifact 从/回项目 integration，不接触 artifact main；采用单一聚合门与 create-only integration 初始化 | 当前生效理解为异构双 leg；CP2-DQ-02 的 per-CR merge-main 仅保留历史并由 CP2-DQ-04 supersede；聚合仅全 PASS 完成，shared main↔integration 同步为 CR 外人工维护 | architecture boundary / lifecycle / recovery / validation / authorization | 用户对话 / CR-051 CP2 changes_requested R2-R3 / `CP2-CR051-R3-USER-DECISIONS.json` | confirmed-for-CP2-R3 |
 
 ## Deferred Ideas
 
@@ -139,6 +167,9 @@ total_use_cases: 23
 | DEF-GB-001 | Forge API/receipt adapter 支持 squash/rebase merge 后的可证明清理 | SGA-GB-04 | 需要 GitHub/GitLab 等平台身份、token、PR receipt 与权限模型，本轮不授权 | 用户启动独立 CR，选择目标 forge，并提供最小权限与 receipt contract |
 | DEF-GB-002 | Git Town adapter、stacked branch 和 offline ship 工作流 | SGA-GB-01 | 当前目标是普通 CR 分支；引入 Git Town 会增加配置、同步与升级面 | 出现真实 stacked-branch 需求，且原生 Git adapter 无法满足时重新评审 |
 | DEF-GB-003 | 自动 stage/commit 与提交内容规划 | SGA-GB-05 | 自动收集工作树可能夹带无关文件或敏感内容，且双仓提交消息/范围需要独立契约 | 用户明确要求该能力，并批准 path allowlist、secret scan 与提交回滚策略 |
+| DEF-AW-001 | 全量自动迁移所有项目 artifact 与软链接 | SGQ-AW-002 | 用户选择能力先行、逐项目人工受控迁移；一次性迁移会扩大回滚和跨项目污染面 | 用户启动具体项目迁移 CR，并确认源/目标 mapping、备份与回滚 |
+| DEF-AW-002 | 将现有 control checkout 转为 bare control repo | SGA-AW-04 备选 | 迁移前优先兼容现有 clone，避免本轮先重构仓库存储形态 | sibling worktree 模式被证明确有 control checkout 污染或运维成本问题 |
+| DEF-AW-003 | 自动执行 shared main↔project integration 同步，或以 rebase/force-with-lease 改写项目历史 | SGA-AW-03/04 未选备选 | 当前基线把同步明确放在 CR 外人工维护；自动化会扩大跨项目、force 与回滚授权面 | 人工同步成本经真实多项目试点证明不可接受，且用户通过新 CR 批准同步策略、活跃 CR 门与 branch-scoped 高风险授权 |
 
 ## 使用场景列表
 
@@ -418,6 +449,66 @@ total_use_cases: 23
 | 前置条件 | 两仓 preflight 全部通过；`publish` 证据可读；真实 default-branch write 已独立授权；远端策略允许 fast-forward direct update |
 | 排除情况 | 不由 `publish`/`finish` 自动触发；不创建 merge commit；不绕过 branch protection/review/merge queue；不自动回滚已经发生的 default-branch fast-forward |
 
+### UC-AW-001：按项目身份解析 project-first artifact 路由
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-01 Host Orchestrator 维护者、P-03 项目迁移执行者 |
+| 触发条件 | 初始化、恢复、检查或 Git 生命周期需要定位当前项目的 docs/process artifact |
+| 输入 | project root、project name、artifact control repo、layout version、worktree registry 与 legacy routing metadata |
+| 处理逻辑 | 先验证 project identity，再按显式 layout version 解析当前项目 worktree 内 `<project>/docs` 和 `<project>/process`；未迁移项目可 dual-read `docs/<project>` / `process/<project>`，但写目标不得在无显式配置时静默切换；冲突或多解时 fail closed |
+| 输出/结果 | 唯一、可移植、可审计的 project docs/process 路由，或包含冲突候选和修复入口的 BLOCKED 结果 |
+| 前置条件 | control repo、project metadata 与当前设备路径可读；真实 link/migration 另行授权 |
+| 排除情况 | 不自动移动文件、创建软链接或把 artifact repo root 当作当前项目工作区 |
+
+### UC-AW-002：管理长期常驻的每项目 artifact worktree
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-01 Host Orchestrator 维护者、P-03 项目迁移执行者 |
+| 触发条件 | 为项目准备、检查、列举、修复提示或安全移除独立 artifact working tree |
+| 输入 | control repo、project name、可配置 sibling worktree parent、长期 integration branch、短期 CR branch、layout/sparse/owned-path policy 与 dry-run 标志 |
+| 处理逻辑 | 验证 common Git dir、目标路径、project identity、branch 占用和禁止嵌套规则；保留现有 control checkout，在 sibling root 创建/登记只暴露当前 project namespace 的长期 worktree；仅当远端 `projects/<project-name>/integration` 不存在时，才从 fresh `origin/main` exact OID 以 create-only 语义初始化，已存在时禁止 recreate/reset/orphan；空闲驻留 integration，CR 激活时切换到短期分支；check/list 返回 branch role、健康和 expected-OID 漂移状态；finish/abort 后回到同一 integration；remove 仅在精确身份、clean 与 ref/恢复条件满足时执行 |
+| 输出/结果 | 可被源码项目稳定引用的 project worktree、机器可读 registry/health，或零副作用的失败/修复建议 |
+| 前置条件 | CP2 已冻结分支职责与拓扑边界，CP3 冻结 attach/switch/finish/abort 的具体状态机；真实 worktree mutation 另行授权 |
+| 排除情况 | 不删除未知目录、不复用 sibling project branch、不在 control checkout 内创建嵌套工作树 |
+
+### UC-AW-003：在当前项目作用域执行源码与 artifact Git 周期
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-01 Host Orchestrator 维护者、P-02 功能 Agent / Skill 作者 |
+| 触发条件 | 当前项目 CR 进入 open、publish、merge、finish 或等价检查阶段 |
+| 输入 | project identity、source repo、当前 project artifact worktree、长期 integration branch、短期 CR branch、shared-main OID、expected OID 与操作授权 |
+| 处理逻辑 | 将一个逻辑 CR 拆为异构且关联的 source/artifact legs：source leg 从 fresh 源码 `main/master` 创建 CR branch，完成后进入同一源码默认分支；artifact leg 从 fresh 项目 integration 创建短期 CR branch，完成后只进入同一 integration，不 refresh、不 merge、不直接更新 artifact shared `main`；两 leg 共享 CR ID/attempt correlation，分别输出终态；只检查当前项目 dirty/branch/ref/path，sibling dirty 不阻断，任何跨项目路径/ref/index 访问则 fail closed |
+| 输出/结果 | 当前项目两条异构 Git leg 的逐 leg 计划、终态与恢复入口；并行项目之间无 checkout、index、branch 或 shared-main 污染 |
+| 前置条件 | 当前 project worktree identity 和 owned paths 校验通过；真实 remote mutation仍需操作级授权 |
+| 排除情况 | 不读取、stage、commit、merge、clean 或删除 sibling project namespace/ref；不宣称跨仓原子事务 |
+
+### UC-AW-004：聚合异构 source/artifact legs 并隔离 shared main 同步
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-01 Host Orchestrator 维护者、P-04 审批者 / Reviewer |
+| 触发条件 | 一个逻辑 CR 的任一必需 leg 更新状态，或协调者准备判定整体完成 |
+| 输入 | CR ID、attempt correlation、source leg result、artifact leg result、artifact integration expected/current OID、聚合优先级与不授权边界 |
+| 处理逻辑 | 单一协调者验证两 leg 归属同一 CR/attempt，并按 `BLOCKED > FAIL > IN_PROGRESS > PASS` 聚合；仅全部必需 leg PASS 才整体完成；`PARTIAL` 只记录进度/影响，失败不自动关闭 CR，也不回滚已成功 leg；artifact expected integration OID 漂移阻断 artifact finish，而 shared main/integration divergence 本身不是单个 CR blocker；shared main↔integration 双向同步只能由 CR 外人工流程执行，默认要求该项目无活跃 artifact CR |
+| 输出/结果 | 两 leg 独立结果、aggregate decision、progress/effect、阻断原因、correlation refs 与安全恢复入口 |
+| 前置条件 | leg result 可验证且归属一致；artifact finish 使用 fresh integration expected OID；任何真实同步/remote mutation均另行授权 |
+| 排除情况 | 不在单个 CR 内 refresh/merge artifact main；不声明跨仓原子性；不自动 rollback、merge、rebase、force、解冲突或关闭失败 CR |
+
+### UC-AW-005：生成逐项目迁移前检查与交接包
+
+| 字段 | 内容 |
+|---|---|
+| 使用角色 | P-03 项目迁移执行者、P-04 审批者 / Reviewer |
+| 触发条件 | CR-051 能力完成后，用户准备逐个项目搬迁 artifact 并重挂软链接 |
+| 输入 | legacy/new 路径映射、project worktree health、文件清单/hash、link target、branch/ref 状态与迁移授权状态 |
+| 处理逻辑 | 只读检查源/目标冲突、project ownership、worktree/branch readiness、软链接计划、备份/回滚入口和验证命令；生成 per-project manifest/checklist；未获得独立迁移授权时 mutation plan 保持 blocked/dry-run |
+| 输出/结果 | 可由用户逐项目执行的迁移交接包和可复跑验收清单；本 CR 结束时真实迁移数为 0 |
+| 前置条件 | 路由/worktree/Git 周期能力已验证；每个项目迁移单独启动并确认 |
+| 排除情况 | 不批量搬迁所有项目、不自动重挂软链接、不自动提交或发布迁移结果 |
+
 ## 附录：覆盖自检表
 
 | 维度 ID | 维度名称 | 状态 | 涉及场景 | 备注 |
@@ -446,3 +537,11 @@ total_use_cases: 23
 | D6-GB | 方式维度 | 已补充 | UC-GB-001..004 | 使用原生 Git、ff-only、upstream、exact OID、ancestry 与 dry-run |
 | D7-GB | 异常维度 | 已补充 | UC-GB-001..004 | 覆盖 dirty/detached/divergence/collision/partial/non-ancestor/ref drift/默认分支写拒绝 |
 | D8-GB | 集成维度 | 已补充 | UC-GB-001..004 | 与 workspace routing、CR route plan、双仓 push/merge、ledger/result 和 release cleanup 衔接 |
+| D1-AW | 用户维度 | 已补充 | UC-AW-001..005 | 覆盖维护者、功能作者、迁移执行者与审批者 |
+| D2-AW | 任务维度 | 已补充 | UC-AW-001..005 | 覆盖项目路由、worktree 管理、异构双 leg、单一聚合门、integration bootstrap 和迁移交接 |
+| D3-AW | 动机维度 | 已补充 | UC-AW-001..005 | 避免共享 checkout/index/branch 污染，同时保留单仓共享与逐项目可管理性 |
+| D4-AW | 时间维度 | 已补充 | UC-AW-002..005 | 覆盖 integration 首次 create-only 初始化、CR 短期激活、双 leg 独立终态、聚合、finish/abort 回归、CR 外人工同步和后续逐项目迁移 |
+| D5-AW | 环境维度 | 已补充 | UC-AW-001..005 | 覆盖 existing clone、sibling worktree、legacy/new layout、local bare remote fixture 与跨设备路径 |
+| D6-AW | 方式维度 | 已补充 | UC-AW-001..005 | 通过 metadata/schema、Git worktree、sparse namespace、namespaced branch、dry-run 和 manifest 验证 |
+| D7-AW | 异常维度 | 已补充 | UC-AW-001..005 | 覆盖歧义路由、dirty current、dirty sibling、branch collision、integration expected-OID 漂移、leg 部分失败、断链与 stale registry |
+| D8-AW | 集成维度 | 已补充 | UC-AW-001..005 | 与 workspace routing、git lifecycle、CR gates、artifact ownership、迁移手册和后续项目 CR 衔接 |

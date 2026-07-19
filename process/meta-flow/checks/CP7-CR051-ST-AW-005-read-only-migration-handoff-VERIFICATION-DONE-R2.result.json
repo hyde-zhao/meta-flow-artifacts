@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR051-ST-AW-005-read-only-migration-handoff-VERIFICATION-DONE-R2",
+  "story_id": "ST-AW-005",
+  "cr_id": "CR-051",
+  "profile": "runtime-high-risk",
+  "check_attempt": 2,
+  "supersedes_result_ref": "process/checks/CP7-CR051-ST-AW-005-read-only-migration-handoff-VERIFICATION-DONE.result.json",
+  "context_ref": "process/context/stories/STORY-ST-AW-005.CP7-R2.verify-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "dispatch_refs": ["EVENT-CR051-ST-AW-005-CP7-R2-QA-COMPLETED-20260718T163900Z"],
+  "return_packet_ref": "process/returns/ST-AW-005.CP7-R2.return.json",
+  "evidence_ref": "process/evidence/ST-AW-005.CP7-R2.index.json",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator correlation of actual meta-qa-critical ST-AW-005 CP7-R2 verification",
+    "checker_commit": "working-tree",
+    "invocation": "3 independent closure probes + 26 directed + 95 adjacent + 280 combined/9 subtests + ruff/format/pycompile/diff/boundary + return/evidence checks",
+    "generated_by": "host-orchestrator from actual meta-qa-critical return",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/returns/ST-AW-005.CP7-R2.return.json": "available-in-evidence-index",
+    "process/evidence/ST-AW-005.CP7-R2.index.json": "self-validated"
+  },
+  "items": [
+    {
+      "id": "CP7-AW005-R2-E01",
+      "category": "entry",
+      "name": "CP6-R2 PASS, verify packet and resumed independent QA dispatch are valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP6-CR051-ST-AW-005-read-only-migration-handoff-CODING-DONE-R2.result.json", "process/context/stories/STORY-ST-AW-005.CP7-R2.verify-packet.json", "process/handoffs/CR051-ST-AW-005-CP7-R2-META-QA-CRITICAL.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "The same QA lane that discovered the original finding independently reconstructed the R2 closure probes."
+    },
+    {
+      "id": "CP7-AW005-R2-F01",
+      "category": "finding-closure",
+      "name": "REV-AW005-001 denied descendant read/mapping bypass is independently closed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-005-REVIEW-R2.md", "process/docs/quality/CR051-ST-AW-005-VERIFICATION-REPORT-R2.md", "process/evidence/ST-AW-005.CP7-R2.index.json"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Three independently constructed probes show denied object probes/mapping/leak=0 and non-READY results."
+    },
+    {
+      "id": "CP7-AW005-R2-02",
+      "category": "symlink-redaction",
+      "name": "Relative symlink targets normalized into denied descendants are not probed or leaked",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-005-TEST-REPORT-R2.md", "process/returns/ST-AW-005.CP7-R2.return.json#verification"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "link_target=null, class=relative-denied, denied target probe=0 and payload has no original target/sentinel."
+    },
+    {
+      "id": "CP7-AW005-R2-03",
+      "category": "regression",
+      "name": "Exact directed, adjacent and combined suites plus static checks pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-005-TEST-REPORT-R2.md", "process/evidence/ST-AW-005.CP7-R2.index.json"],
+      "owner": "meta-qa-critical/host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "26 directed, 95 adjacent and 280 combined tests plus 9 subtests pass; Ruff/format/pycompile/diff/dangerous API checks pass."
+    },
+    {
+      "id": "CP7-AW005-R2-04",
+      "category": "boundary",
+      "name": "QA re-verification performed no source/test or real migration/repository mutation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/ST-AW-005.CP7-R2.return.json#boundary_check"],
+      "owner": "host-orchestrator/meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Only R2 quality reports and return/evidence were written; all real mutation counts remain zero."
+    },
+    {
+      "id": "CP7-AW005-R2-X01",
+      "category": "exit",
+      "name": "All blocking findings are closed and residual risks are explicitly routed to CP8",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-005-FIXES-R2.md", "process/returns/ST-AW-005.CP7-R2.return.json#risks"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "No open implementation blocker remains; directory TOCTOU, real migration, Windows no-follow and hosted remote risks remain for CP8."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "risks": [
+    {"id": "R-AW005-DIR-ENUM-TOCTOU", "severity": "MEDIUM", "status": "open-follow-up", "owner": "CP8 decision owner / future migration CR", "summary": "Adversarial concurrent directory replacement needs future full-lld dirfd/openat design."},
+    {"id": "CR051-RISK-REAL-MIGRATION-UNVERIFIED", "severity": "MEDIUM", "status": "open-not-authorized", "owner": "future migration CR", "summary": "Real migration/link/worktree/ref/remote mutation remains unauthorized and unexecuted."},
+    {"id": "CR051-RISK-WINDOWS-NATIVE-NOFOLLOW", "severity": "LOW", "status": "open", "owner": "CP8 decision owner", "summary": "Windows native no-follow behavior was not piloted; unsupported capability fails closed."},
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "severity": "MEDIUM", "status": "open-not-authorized", "owner": "CP8 decision owner", "summary": "Hosted remote, credentials, branch protection and publication remain unverified."}
+  ],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "documentation-and-release-readiness-then-CP8",
+  "checked_at": "2026-07-18T16:39:00Z"
+}

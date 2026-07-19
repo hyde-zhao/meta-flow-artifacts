@@ -40,3 +40,32 @@
 - `SGQ-GB-001` 以用户原始自由表达确认核心旅程；`SGA-GB-01..05` 进入 CP2 Decision Brief。
 - forge receipt adapter、Git Town/stacked branch adapter 和自动 commit planner 进入 Deferred/Backlog，不扩大 MVP。
 - BLOCKING 信息缺口为 0；五项范围/风险选择等待 CP2 人工确认，`ready_for_design=false` 直到 CP2 approved。
+
+## CR-051 调研与场景发现摘要（2026-07-17）
+
+### 已确认真实意图
+
+- 用户选择project-first artifact语义：`<project_name>/docs`与`<project_name>/process`。
+- 用户选择不同项目使用独立worktree，保留共享artifact Git仓库，消除共享checkout/index/branch约束。
+- 当前先完成Meta Flow的project-first路由、worktree管理和项目作用域Git周期能力；真实文件迁移与软链接挂接由用户后续逐项目执行。
+
+### 现有能力与适用性修正
+
+- CR-050已建立open/publish/merge/finish的Git安全契约，可继续复用preflight、exact OID、dry-run、partial result与proof-gated cleanup。
+- CR-050把artifact侧视为整体独占working tree；在shared multi-project artifact模式下，该假设由CR-051限定为“当前project artifact worktree + owned namespace”，历史正文不改写。
+- 同一artifact repo内不同项目的CR ID可重复，artifact branch必须全局携带project identity。
+
+### Scenario Gray Areas处理
+
+- `SGQ-AW-001`：用户已确认project-first + per-project worktree，状态`confirmed`。
+- `SGQ-AW-002`：用户已确认能力先行、迁移后置，状态`confirmed`。
+- `SGA-AW-02`：persistent还是ephemeral worktree，进入`CP2-DQ-01`；推荐persistent，idle态候选由CP3冻结。
+- `SGA-AW-03`：shared main前进后的refresh进入`CP2-DQ-02`；推荐显式merge fresh main到project branch，冲突fail-closed。
+- `SGA-AW-04`：control repo/worktree拓扑进入`CP2-DQ-03`；推荐existing control checkout + configurable sibling worktree root + project namespace/sparse policy。
+
+### 产品基线增量
+
+- 新增`UC-AW-001..005`、`REQ-AW-*`、`TC-AW-001..015`、`ST-AW-001..005`、`SL-AW-01..04`。
+- 15/15工程验证场景覆盖positive、negative、boundary、permission、failure-recovery和precheck；真实remote验证保持deferred。
+- BLOCKING信息缺口为0；三项架构策略等待CP2人工确认，`ready_for_design=false`直到CP2 approved。
+- CP2批准不授权HLD门禁跳过、源码实现、真实artifact迁移、软链接变更或任何真实Git/worktree/ref mutation。

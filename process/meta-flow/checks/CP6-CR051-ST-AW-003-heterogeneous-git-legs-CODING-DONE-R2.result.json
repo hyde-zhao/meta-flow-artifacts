@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR051-ST-AW-003-heterogeneous-git-legs-CODING-DONE-R2",
+  "story_id": "ST-AW-003",
+  "cr_id": "CR-051",
+  "profile": "runtime-high-risk",
+  "check_attempt": 2,
+  "supersedes_result_ref": "process/checks/CP6-CR051-ST-AW-003-heterogeneous-git-legs-CODING-DONE.result.json",
+  "context_ref": "process/context/stories/STORY-ST-AW-003.CP6-R2.work-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "dispatch_refs": ["EVENT-CR051-ST-AW-003-CP6-R2-DEV-COMPLETED-20260718T150300Z"],
+  "return_packet_ref": "process/returns/ST-AW-003.CP6-R2.return.json",
+  "evidence_ref": "process/evidence/ST-AW-003.CP6-R2.index.json",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator CP6-R2 default-clock finding closure correlation",
+    "checker_commit": "working-tree",
+    "invocation": "6 default-clock tests + 44 directed + 62 adjacent + 185 combined + ruff + format + py_compile + return/evidence + boundary audit",
+    "generated_by": "host-orchestrator",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/returns/ST-AW-003.CP6-R2.return.json": "available-in-evidence-index",
+    "process/evidence/ST-AW-003.CP6-R2.index.json": "self-validated"
+  },
+  "items": [
+    {
+      "id": "CP6-AW003-R2-E01",
+      "category": "entry",
+      "name": "REV-AW003-001 has validated CP7 evidence and a bounded rework packet",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP7-CR051-ST-AW-003-heterogeneous-git-legs-VERIFICATION-DONE.result.json", "process/context/stories/STORY-ST-AW-003.CP6-R2.work-packet.json", "process/docs/quality/CR051-ST-AW-003-FIXES.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Rework scope is limited to default-clock freshness sampling and regression coverage."
+    },
+    {
+      "id": "CP6-AW003-R2-01",
+      "category": "finding-closure",
+      "name": "Default-clock source, artifact, ordinary-resume and post-observe paths accept valid fresh snapshots",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-ST-AW-003-heterogeneous-git-legs-IMPLEMENTATION.md#15-CP6-R2REV-AW003-001-回修", "tests/test_artifact_leg_lifecycle.py"],
+      "owner": "meta-dev-debugger/host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Four now=None positive paths failed before the patch and pass after per-observer dynamic validation-time sampling."
+    },
+    {
+      "id": "CP6-AW003-R2-02",
+      "category": "fail-closed-regression",
+      "name": "Genuine stale and future-clock-skew observations remain blocked before runner mutation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["tests/test_artifact_leg_lifecycle.py", "process/returns/ST-AW-003.CP6-R2.return.json"],
+      "owner": "meta-dev-debugger/host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Freshness validation itself was not relaxed; both negative cases remain BLOCKED with runner=0."
+    },
+    {
+      "id": "CP6-AW003-R2-03",
+      "category": "regression",
+      "name": "All directed, adjacent and combined W3 regression suites pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/evidence/ST-AW-003.CP6-R2.index.json", "process/evidence/ST-AW-004.CP7.index.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "6 default-clock, 44 directed, 62 adjacent, and 185 combined tests plus 9 subtests pass."
+    },
+    {
+      "id": "CP6-AW003-R2-04",
+      "category": "contract-boundary",
+      "name": "Explicit now, target, authz, health, publication, recovery and file ownership contracts remain unchanged",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/ST-AW-003.CP6-R2.return.json#contract_changes", "process/returns/ST-AW-003.CP6-R2.return.json#boundary_check"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "No public API/data contract change, design delta, shared/CLI/aggregate write or real publication."
+    },
+    {
+      "id": "CP6-AW003-R2-X01",
+      "category": "exit",
+      "name": "REV-AW003-001 is resolved in implementation and ready for independent CP7-R2",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/ST-AW-003.CP6-R2.return.json", "process/evidence/ST-AW-003.CP6-R2.index.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Return/evidence checkers pass; final finding closure still requires independent QA."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260718T144845Z0000-staw003-r2", "RE-20260718T150409Z0000-0803be44"],
+  "risks": [
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "severity": "MEDIUM", "status": "open-for-cp7-r2-review", "owner": "meta-qa-critical", "summary": "Hosted remote behavior remains unauthorized and unverified."},
+    {"id": "CR051-RISK-WINDOWS-NATIVE-GIT-PILOT", "severity": "LOW", "status": "open-for-cp7-r2-review", "owner": "meta-qa-critical", "summary": "Windows native Git pilot was not executed."}
+  ],
+  "decision": "PASS",
+  "next_route": "CP7-R2-ST-AW-003-meta-qa-critical",
+  "checked_at": "2026-07-18T15:04:30Z"
+}

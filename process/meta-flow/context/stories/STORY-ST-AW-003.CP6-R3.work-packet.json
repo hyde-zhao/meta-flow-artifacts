@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "meta-flow",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-003",
+  "story_ref": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs.md",
+  "parent_context_ref": "process/context/CP6-CR051-IMPLEMENTATION-CONTEXT.yaml",
+  "risk_profile": "runtime-high-risk",
+  "lld_policy": "full-lld",
+  "objective": {"summary": "补齐 ST-AW-003 高优回归并以 containment + exact-OID CAS 收紧 artifact finish cleanup", "non_goals": ["不触碰 artifact main", "不执行真实 remote/ref mutation"]},
+  "acceptance": ["TP-AW03-004/006/008/014 全部自动化", "producer/consumer 使用共享 canonical policy", "非 containment/错 ref/OID 的 cleanup mutation=0", "design delta merged", "legacy regression 通过"],
+  "feature_refs": ["FEAT-AW-03"],
+  "feature_design_refs": ["process/docs/features/cr051-legs/DESIGN.md", "process/docs/features/cr051-legs/TEST-PLAN.md", "process/docs/features/cr051-legs/TASKS.md"],
+  "expected_return_packet": "process/returns/ST-AW-003.CP6-R3.return.json",
+  "allowed_write_paths": ["meta_flow/workflow/artifact_policy.py", "meta_flow/workflow/artifact_leg_lifecycle.py", "tests/test_artifact_leg_lifecycle.py", "process/docs/features/cr051-legs/**", "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md", "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-IMPLEMENTATION.md", "process/design-deltas/ST-AW-003.delta.json", "process/returns/ST-AW-003.CP6-R3.return.json", "process/evidence/ST-AW-003.CP6-R3.index.json"],
+  "forbidden_write_paths": [".git/**", "process/quant-lab/**", "real artifact/worktree/ref/remote/link/migration targets"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_REPOSITORY_PUBLICATION", "FIXTURE_ONLY_GIT_WORKTREE_REMOTE"],
+  "verification_plan": ["运行 4 个高优测试与完整 leg 回归", "运行 CR-050/aggregate 相邻回归", "验证 Ruff/compile/guardrail/diff/delta/LLD", "输出 R3 return/evidence"]
+}

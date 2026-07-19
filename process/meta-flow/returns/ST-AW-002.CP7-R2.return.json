@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-002",
+  "status": "verified_with_risk",
+  "touched_files": [
+    {"path": "process/returns/ST-AW-002.CP7-R2.return.json", "change_type": "created"},
+    {"path": "process/evidence/ST-AW-002.CP7-R2.index.json", "change_type": "created"}
+  ],
+  "contract_changes": {"public_api_changed": false, "data_contract_changed": false, "design_delta_required": false, "design_delta_ref": null, "summary": "CP7 只验证已合并的 ST-AW-002 R2 实现与设计证据。"},
+  "boundary_check": {"allowed_paths_only": true, "forbidden_paths_touched": [], "unexpected_imports": [], "notes": "Host inline-fallback；未修改源码/测试，真实 runtime/repository mutation=0。"},
+  "verification": {"decision": "PASS_WITH_RISK", "validation_mode": "mixed-inline-fallback", "commands_run": [
+    {"command": "pytest -q ST-AW-002 rework suite", "result": "pass", "summary": "74 passed"},
+    {"command": "pytest -q CR-051 cross-module suite", "result": "pass", "summary": "307 passed, 58 subtests passed"},
+    {"command": "pytest -q", "result": "pass", "summary": "697 passed, 70 subtests passed"},
+    {"command": "ruff check + scoped format + py_compile + delivery guardrail + git diff --check", "result": "pass", "summary": "all gates passed"},
+    {"command": "design delta-check --require-merged + story lld-check", "result": "pass", "summary": "delta merged and LLD valid"}
+  ], "tests": ["typed proof binding/expiry/revocation", "owner/calibration persistence", "record identity/phase", "fresh observation/terminal idempotency"], "skipped": ["independent meta-qa subagent prohibited by user", "real remote/worktree/ref/link/migration not authorized"]},
+  "evidence_refs": ["process/docs/quality/CR051-CP8-REWORK-VERIFICATION-REPORT.md", "process/docs/quality/CR051-CP8-REWORK-TEST-REPORT.md", "process/docs/quality/CR051-CP8-REWORK-REVIEW.md", "process/docs/quality/CR051-CP8-REWORK-FIXES.md"],
+  "artifacts": ["process/docs/quality/CR051-CP8-REWORK-VERIFICATION-REPORT.md", "process/docs/quality/CR051-CP8-REWORK-TEST-REPORT.md"],
+  "risks": [
+    {"id": "CR051-RISK-INLINE-QA-SEPARATION", "level": "medium", "status": "open-for-cp8-risk-acceptance"},
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "level": "medium", "status": "open-not-authorized"},
+    {"id": "CR051-RISK-WINDOWS-NATIVE", "level": "low", "status": "open"}
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp8_with_risk",
+  "cp7_approval": "host-inline-fallback-does-not-approve-human-gate"
+}

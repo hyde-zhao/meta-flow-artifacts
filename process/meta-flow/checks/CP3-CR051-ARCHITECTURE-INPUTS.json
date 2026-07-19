@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3",
+  "cr_id": "CR-051",
+  "created_at": "2026-07-18T03:37:15Z",
+  "created_by": "host-orchestrator",
+  "source": "user-current-instruction",
+  "accepted_design_constraints": [
+    {
+      "id": "CP3-DC-01",
+      "title": "Recoverable non-atomic worktree branch switch",
+      "status": "accepted-design-constraint",
+      "classification": "CP3-design-detail-nonblocking-for-CP2",
+      "problem": "git worktree branch switch is not an atomic transaction; disk exhaustion, permission failure or process termination may leave observable intermediate state.",
+      "required_protocol": {
+        "precheck": [
+          "project/worktree identity and owned-path match",
+          "exclusive operation lock is acquired",
+          "worktree is clean including staged, unstaged and untracked files",
+          "no Git operation such as merge, rebase, cherry-pick, bisect or sequencer is active",
+          "original and target symbolic refs and expected OIDs are observed",
+          "worktree and gitdir permissions are writable",
+          "worktree and gitdir filesystems each satisfy required_free_bytes=max(512MiB,1.5*estimated_checkout_write_bytes); estimation failure is fail-closed"
+        ],
+        "intent": "persist operation/attempt ID, project, worktree path, original branch/OID, target branch/OID, expected integration OID and phase outside the target worktree before invoking git switch",
+        "postcheck": "command exit success is insufficient; re-observe symbolic HEAD, HEAD OID, worktree registration and clean status before VERIFIED/PASS",
+        "failure_observation": "after any error or interruption, re-observe actual repository state and never infer the current branch from the last attempted step",
+        "conditional_rollback": "automatic return to integration is allowed only when the worktree is clean, no Git operation is active, original integration ref/OID has not drifted, and permission/space prechecks pass again",
+        "unsafe_recovery": "otherwise preserve the worktree and CR branch, set RECOVERY_REQUIRED/BLOCKED, and emit observation-based manual recovery guidance",
+        "forbidden_recovery": ["reset --hard", "git clean", "automatic stash", "force", "branch deletion", "overwriting user files"],
+        "idempotency": "resume/recover must be re-runnable and may only report already-recovered, recovery-in-progress or still-blocked based on fresh observations"
+      },
+      "cp3_acceptance": [
+        "HLD, ADR, state machine and failure-path simulation explicitly consume this constraint",
+        "CP3 must not claim git switch itself is atomic",
+        "uncertain state cannot be reported as integration-idle or PASS"
+      ]
+    }
+  ],
+  "architecture_gray_area_candidates": [
+    "metadata/path schema, portable anchors and control-vs-project-worktree ownership",
+    "namespace/sparse/owned-path enforcement and sibling isolation",
+    "heterogeneous source-default/artifact-integration leg commands, expected OIDs and cleanup",
+    "leg result/aggregate result correlation, single-writer ledger and receipt/OID self-reference avoidance",
+    "integration create-only bootstrap CAS, remote-ref race and idempotency",
+    "CR-external manual main/integration synchronization precheck, direction, mutual exclusion and recovery",
+    "aggregate resume/abort after partial success without automatic rollback or close"
+  ],
+  "non_authorized": [
+    "source implementation",
+    "story decomposition before CP3 approval",
+    "real artifact migration or symlink mutation",
+    "real worktree, branch, ref, commit or remote mutation",
+    "real main/integration synchronization",
+    "credentials, runtime, SaaS, production write, publish or trading"
+  ]
+}

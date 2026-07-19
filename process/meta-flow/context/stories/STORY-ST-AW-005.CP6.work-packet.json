@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "meta-flow",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-005",
+  "story_ref": "process/stories/STORY-ST-AW-005-read-only-migration-handoff.md",
+  "parent_context_ref": "process/context/CP6-CR051-IMPLEMENTATION-CONTEXT.yaml",
+  "risk_profile": "standard",
+  "lld_policy": "technical-note",
+  "objective": {
+    "summary": "实现显式单项目、零 mutation 的只读 migration preflight、11 分区 manifest 与 O-AW-03 candidate-only 评估器",
+    "non_goals": ["不执行或生成可执行迁移脚本", "不修改目标项目文件、链接、worktree、ref 或 remote", "不接线 CLI", "不启用 sync helper 或 scheduler"]
+  },
+  "acceptance": [
+    "MigrationManifest 的 identity/scope/mapping/summary/link plan/worktree-ref readiness/readiness/validation/rollback/ops follow-up/evidence 11 类分区覆盖率 100%",
+    "只使用 allowlisted lstat/enumeration/hash/count；越界、broken、不可读、枚举不完整均 fail closed 或 MANUAL_REVIEW，误报 READY=0",
+    "sibling、process/quant-lab/** 与未显式目标内容读取数=0；symlink 不跟随到 scope 外",
+    "portable mapping 不含设备绝对路径；相同相对布局在不同临时根生成相同 canonical digest",
+    "O-AW-03 三阈值边界 100% 正确；任一命中仅生成一个去重 follow-up candidate，helper/scheduler/remote 调用=0",
+    "before/after snapshot 差异=0；write/move/copy/delete/chmod/symlink/worktree/ref/commit/push/publish 调用=0"
+  ],
+  "feature_refs": ["FEAT-AW-05"],
+  "feature_contract_summary": "FEAT-AW-05 只读消费已验证 route/worktree/leg/aggregate 事实，为一个显式项目输出 portable manifest 与人工 handoff；任何不确定性 fail closed，任何 mutation 或自动同步能力均触发 full-lld 重访。",
+  "feature_design_refs": ["process/docs/features/cr051-migration/DESIGN.md", "process/docs/features/cr051-migration/TEST-PLAN.md", "process/docs/features/cr051-migration/TASKS.md"],
+  "cr_delta": {
+    "summary": "CR-051 只交付 read-only preflight 能力，不执行真实文件迁移、软链接挂接、worktree/ref/remote 变更或 main→integration 同步。",
+    "affected_contracts": ["MigrationManifest", "allowlisted read scope", "portable mapping", "manual handoff", "O-AW-03 follow-up candidate"]
+  },
+  "dependency_inputs": ["ST-AW-003 CP7-R2 必须先 PASS_WITH_RISK 或 PASS", "ST-AW-004 CP7 PASS_WITH_RISK", "ST-AW-001/002 route/worktree contracts 已验证"],
+  "expected_return_packet": "process/returns/ST-AW-005.CP6.return.json",
+  "allowed_reads": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "reason": "runtime_state", "required": true, "estimated_tokens": 900},
+    {"path": "process/current/CURRENT.json", "mode": "full", "reason": "current_discovery_entry", "required": true, "estimated_tokens": 220},
+    {"path": "process/policies/READ-POLICY.json", "mode": "full", "reason": "read_policy", "required": true, "estimated_tokens": 400},
+    {"path": "process/stories/STORY-ST-AW-005-read-only-migration-handoff.md", "mode": "full", "reason": "technical_note_and_story_contract", "required": true, "estimated_tokens": 5600},
+    {"path": "process/docs/features/cr051-migration/DESIGN.md", "mode": "full", "reason": "feature_contract", "required": true, "estimated_tokens": 5000},
+    {"path": "process/docs/features/cr051-migration/TEST-PLAN.md", "mode": "full", "reason": "test_contract", "required": true, "estimated_tokens": 3300},
+    {"path": "process/docs/features/cr051-migration/TASKS.md", "mode": "full", "reason": "task_dag", "required": true, "estimated_tokens": 2300},
+    {"path": "process/returns/ST-AW-003.CP7-R2.return.json", "mode": "full", "reason": "verified_leg_dependency", "required": true, "estimated_tokens": 1500},
+    {"path": "process/returns/ST-AW-004.CP7.return.json", "mode": "full", "reason": "verified_aggregate_dependency", "required": true, "estimated_tokens": 1500},
+    {"path": "meta_flow/workspace/project_artifact_routing.py", "mode": "full", "reason": "route_contract_read_only", "required": true, "estimated_tokens": 9000},
+    {"path": "meta_flow/workspace/project_worktree.py", "mode": "full", "reason": "health_contract_read_only", "required": true, "estimated_tokens": 16000}
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "reason": "machine_state", "required": true, "estimated_tokens": 900},
+    {"path": "process/current/CURRENT.json", "mode": "full", "reason": "current_entrypoint", "required": true, "estimated_tokens": 220},
+    {"path": "process/policies/READ-POLICY.json", "mode": "full", "reason": "read_policy", "required": true, "estimated_tokens": 400},
+    {"path": "process/stories/STORY-ST-AW-005-read-only-migration-handoff.md", "mode": "full", "reason": "approved_technical_note", "required": true, "estimated_tokens": 5600},
+    {"path": "process/docs/features/cr051-migration/TEST-PLAN.md", "mode": "full", "reason": "required_fixtures", "required": true, "estimated_tokens": 3300},
+    {"path": "process/returns/ST-AW-003.CP7-R2.return.json", "mode": "full", "reason": "runtime_dependency_gate", "required": true, "estimated_tokens": 1500},
+    {"path": "process/returns/ST-AW-004.CP7.return.json", "mode": "full", "reason": "runtime_dependency_gate", "required": true, "estimated_tokens": 1500}
+  ],
+  "read_if_needed": [
+    {"path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-IMPLEMENTATION.md", "trigger": "dependency_contract_conflict", "reason": "return/evidence 不足时写 deep_review read-log 后展开"},
+    {"path": "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-IMPLEMENTATION.md", "trigger": "dependency_contract_conflict", "reason": "return/evidence 不足时写 deep_review read-log 后展开"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "其他 Story/LLD/IMPLEMENTATION", "process/archive/**", "process/discussions/**", "process/quant-lab/**", "sibling project content"],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human summary / legacy fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "packet 已提供 W4 依赖和边界"},
+    {"path_or_pattern": "process/quant-lab/**", "reason": "禁止跨项目内容读取"},
+    {"path_or_pattern": "其他 Story/LLD/IMPLEMENTATION", "reason": "避免跨 Story 扩张"}
+  ],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "allowed_write_paths": [
+    "meta_flow/workspace/artifact_migration.py",
+    "tests/test_artifact_migration.py",
+    "process/stories/STORY-ST-AW-005-read-only-migration-handoff-IMPLEMENTATION.md",
+    "process/returns/ST-AW-005.CP6.return.json",
+    "process/evidence/ST-AW-005.CP6.index.json"
+  ],
+  "forbidden_write_paths": ["meta_flow/cli.py", "meta_flow/workspace/project_artifact_routing.py", "meta_flow/workspace/project_worktree.py", "其他源码/测试", "process/quant-lab/**", "sibling project content", ".git/** outside temporary fixtures", "real artifact/worktree/ref/remote/link/migration targets"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_REPOSITORY_PUBLICATION", "FIXTURE_ONLY_GIT_WORKTREE_REMOTE"],
+  "verification_plan": [
+    "TDD 实现 immutable manifest schema、portable canonical digest 与 allowlisted lstat/hash/count",
+    "以临时 filesystem fixture 覆盖 permission、broken/out-of-scope symlink、sibling sentinel、snapshot 与 mutation spy",
+    "实现并验证 O-AW-03 T1/T2/T3 boundary、insufficient-data 与 candidate 去重",
+    "运行定向与相邻回归、Ruff、format、py_compile、diff、危险 API/import、return/evidence check"
+  ],
+  "budget": {"estimated_tokens": 42000, "estimator": "chars_div_4", "max_tokens": 56000},
+  "context_sufficiency": {"required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"], "strict_profiles": []},
+  "policy_refs": {"authz_policy": "process/policies/AUTHZ-POLICY.json", "gate_profiles": "process/policies/GATE-PROFILES.json", "read_policy": "process/policies/READ-POLICY.json"}
+}

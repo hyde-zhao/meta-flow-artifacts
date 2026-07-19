@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3",
+  "checkpoint_id": "CP3-CR051-DISCUSSION-CHECKPOINT",
+  "cr_id": "CR-051",
+  "phase": "solution-design",
+  "status": "ready-for-cp3-decision",
+  "context_ref": "process/context/CP3-CR051-DESIGN-INPUT.context.json",
+  "discussion_ref": "process/discussions/CP3-CR051-HLD-DISCUSSION-LOG.md",
+  "created_at": "2026-07-18T04:10:00Z",
+  "created_by": "meta-se",
+  "architecture_gray_areas": [
+    {
+      "id": "AGA-CR051-01",
+      "title": "Recoverable non-atomic worktree switch",
+      "classification": "decision-item",
+      "decision_id": "CP3-CR051-DQ-01",
+      "recommended_option": "durable external intent + fresh observation + conditional rollback + recovery-required",
+      "alternatives": ["disable automatic switching and require manual operation", "command-result-only recovery (not recommended)"],
+      "canonical_refs": ["CP3-DC-01", "REQ-AW-004", "REQ-AW-NF005", "TC-AW-004", "TC-AW-009", "TC-AW-015"]
+    },
+    {
+      "id": "AGA-CR051-02",
+      "title": "Evidence schemas, single writers and OID self-reference avoidance",
+      "classification": "decision-item",
+      "decision_id": "CP3-CR051-DQ-02",
+      "recommended_option": "shared envelope + typed append-only payloads + single-writer aggregate + later publication binding",
+      "alternatives": ["per-feature schemas", "single mutable lifecycle state"],
+      "canonical_refs": ["REQ-AW-012", "REQ-AW-016", "REQ-AW-NF001", "TC-AW-008", "TC-AW-012", "TC-AW-014"]
+    },
+    {
+      "id": "AGA-CR051-03",
+      "title": "Integration create-only CAS and out-of-CR manual synchronization",
+      "classification": "decision-item",
+      "decision_id": "CP3-CR051-DQ-03",
+      "recommended_option": "project-scoped lease + exact ordinary ref update + fresh postcheck + explicit sync direction",
+      "alternatives": ["future forge adapter", "automatic history rewrite (forbidden)"],
+      "canonical_refs": ["REQ-AW-004", "REQ-AW-011", "REQ-AW-C004", "TC-AW-004", "TC-AW-009"]
+    },
+    {
+      "id": "AGA-CR051-04",
+      "title": "Control/project worktree and portable ownership isolation",
+      "classification": "resolved-by-user",
+      "decision_id": null,
+      "recommended_option": "existing control checkout + configurable sibling project worktree + portable registry + owned-path hard gate",
+      "alternatives": ["bare control repository in a future CR"],
+      "canonical_refs": ["CP2-DQ-03", "SGQ-AW-001", "SGQ-AW-003", "REQ-AW-001", "REQ-AW-003", "REQ-AW-010"]
+    }
+  ],
+  "decision_items": ["CP3-CR051-DQ-01", "CP3-CR051-DQ-02", "CP3-CR051-DQ-03"],
+  "blocking_items": [],
+  "non_blocking_open_items": [],
+  "converted_to_spike_items": [],
+  "n_a_items": [],
+  "user_interaction": {
+    "mode": "direct-to-cp3-gate",
+    "instruction": "Form real architecture trade-offs as decision items; only stop for blockers without a safe option.",
+    "cp2_choices_reused": ["CP2-DQ-03", "CP2-DQ-04", "CP2-DQ-05", "CP2-DQ-06"],
+    "cp3_decisions_pending": true
+  },
+  "resume_point": "hld-design",
+  "ready": true
+}

@@ -1,0 +1,104 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "meta_flow/workspace/project_worktree.py"
+    },
+    {
+      "change_type": "created",
+      "path": "meta_flow/workspace/worktree_capacity.py"
+    },
+    {
+      "change_type": "created",
+      "path": "meta_flow/workspace/worktree_journal.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "meta_flow/workspace/git_sync.py"
+    },
+    {
+      "change_type": "created",
+      "path": "tests/test_cr051_project_worktree.py"
+    },
+    {
+      "change_type": "created",
+      "path": "tests/test_cr051_worktree_faults.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "tests/test_workspace_git_sync.py"
+    },
+    {
+      "change_type": "created",
+      "path": "process/stories/STORY-ST-AW-002-recoverable-project-worktree-IMPLEMENTATION.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/ST-AW-002.CP6.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/ST-AW-002.CP6.index.json"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr051_project_worktree.py tests/test_cr051_worktree_faults.py tests/test_workspace_git_sync.py tests/test_git_branch_lifecycle.py",
+      "result": "pass",
+      "summary": "83 passed in 4.60s"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff check meta_flow/workspace/project_worktree.py meta_flow/workspace/worktree_capacity.py meta_flow/workspace/worktree_journal.py meta_flow/workspace/git_sync.py tests/test_cr051_project_worktree.py tests/test_cr051_worktree_faults.py tests/test_workspace_git_sync.py tests/test_git_branch_lifecycle.py",
+      "result": "pass",
+      "summary": "All checks passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python -m py_compile meta_flow/workspace/project_worktree.py meta_flow/workspace/worktree_capacity.py meta_flow/workspace/worktree_journal.py meta_flow/workspace/git_sync.py",
+      "result": "pass",
+      "summary": "exit 0"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "summary": "exit 0"
+    }
+  ],
+  "cr_id": "CR-051",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/returns/ST-AW-002.CP6.return.json",
+  "risks": [
+    {
+      "detail": "真实 shared remote/worktree pilot 未授权；不影响 fixture-only CAP/DUR/WT 证明，不得据此启用真实 auto switch。",
+      "id": "CR051-RISK-REMOTE-UNVERIFIED",
+      "level": "medium",
+      "owner": "CP7/CP8 decision owner",
+      "status": "open"
+    },
+    {
+      "detail": "Windows handle lock 与 directory fsync 真实平台验证未执行；能力不可证明时实现 fail closed。",
+      "id": "CR051-RISK-WINDOWS-DURABILITY-PILOT",
+      "level": "low",
+      "owner": "CP7/CP8 decision owner",
+      "status": "open"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "ST-AW-002",
+  "tests": [
+    "PORT-W-01..08",
+    "CAP-01..11",
+    "DUR-01..14",
+    "WT-01..14",
+    "TC-AW-004",
+    "TC-AW-005",
+    "TC-AW-007",
+    "TC-AW-010",
+    "TC-AW-011",
+    "TC-AW-012",
+    "TC-AW-014",
+    "TC-AW-015"
+  ],
+  "waivers": []
+}

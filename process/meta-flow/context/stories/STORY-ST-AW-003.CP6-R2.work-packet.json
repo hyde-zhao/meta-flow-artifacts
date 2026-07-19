@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "meta-flow",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-003",
+  "story_ref": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs.md",
+  "parent_context_ref": "process/context/CP6-CR051-IMPLEMENTATION-CONTEXT.yaml",
+  "risk_profile": "runtime-high-risk",
+  "lld_policy": "full-lld",
+  "objective": {
+    "summary": "关闭 REV-AW003-001：修正 execute_leg 默认时钟 freshness 采样顺序，同时保留真正 stale/future skew 的 fail-closed 边界",
+    "non_goals": ["不改变 frozen target/authz/publication/recovery 契约", "不修改 shared/CLI/aggregate", "不执行真实 remote/worktree/ref/link mutation"]
+  },
+  "acceptance": [
+    "now=None 的 source complete、artifact complete、ordinary resume、post-observe 四条合法 fresh 路径全部可到达 runner/post-proof 并按契约完成",
+    "真正 stale 与 future-clock-skew 仍 BLOCKED，runner mutation=0",
+    "既有 target/authz/health/publication/recovery/no-cross-leg-rollback 测试全部不回归",
+    "定向、相邻回归、Ruff、format、py_compile、diff 和危险 argv/import 审计通过",
+    "真实 repository publication=0，设计 delta=0"
+  ],
+  "feature_refs": ["FEAT-AW-03"],
+  "feature_contract_summary": "FEAT-AW-03 的 fresh proof 应拒绝陈旧或不可接受的未来 skew，但 observer 在函数调用期间正常生成的更新鲜快照必须可用；其他 exact-target、typed-authz、immutable evidence 和 no-cross-leg-rollback 契约不变。",
+  "feature_design_refs": ["process/docs/features/cr051-legs/DESIGN.md", "process/docs/features/cr051-legs/TEST-PLAN.md", "process/docs/features/cr051-legs/TASKS.md"],
+  "cr_delta": {"summary": "仅修复 CP7 finding REV-AW003-001 和测试缺口 GAP-AW003-001，不改变需求、HLD、LLD 或 public data contract。", "affected_contracts": ["execute_leg freshness sampling", "default clock regression"]},
+  "dependency_inputs": ["ST-AW-003 CP7 NEEDS_REWORK；ST-AW-004 已 PASS_WITH_RISK，不受本回修影响。"],
+  "expected_return_packet": "process/returns/ST-AW-003.CP6-R2.return.json",
+  "allowed_reads": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "reason": "runtime_state", "required": true, "estimated_tokens": 900},
+    {"path": "process/current/CURRENT.json", "mode": "full", "reason": "current_discovery_entry", "required": true, "estimated_tokens": 220},
+    {"path": "process/policies/READ-POLICY.json", "mode": "full", "reason": "read_policy", "required": true, "estimated_tokens": 400},
+    {"path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs.md", "mode": "full", "reason": "story_card", "required": true, "estimated_tokens": 2400},
+    {"path": "process/docs/quality/CR051-ST-AW-003-FIXES.md", "mode": "full", "reason": "rework_input", "required": true, "estimated_tokens": 900},
+    {"path": "process/docs/quality/CR051-ST-AW-003-REVIEW.md", "mode": "full", "reason": "finding_evidence", "required": true, "estimated_tokens": 1900},
+    {"path": "process/returns/ST-AW-003.CP7.return.json", "mode": "full", "reason": "verification_return", "required": true, "estimated_tokens": 1400},
+    {"path": "meta_flow/workflow/artifact_leg_lifecycle.py", "mode": "full", "reason": "primary_sut", "required": true, "estimated_tokens": 17000},
+    {"path": "tests/test_artifact_leg_lifecycle.py", "mode": "full", "reason": "primary_test", "required": true, "estimated_tokens": 9000}
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "reason": "machine_state", "required": true, "estimated_tokens": 900},
+    {"path": "process/current/CURRENT.json", "mode": "full", "reason": "current_entrypoint", "required": true, "estimated_tokens": 220},
+    {"path": "process/policies/READ-POLICY.json", "mode": "full", "reason": "read_policy", "required": true, "estimated_tokens": 400},
+    {"path": "process/docs/quality/CR051-ST-AW-003-FIXES.md", "mode": "full", "reason": "rework_input", "required": true, "estimated_tokens": 900}
+  ],
+  "read_if_needed": [
+    {"path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-IMPLEMENTATION.md", "trigger": "deep_review", "reason": "更新修订记录和验证证据前展开并写 read-log"},
+    {"path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md", "trigger": "contract_conflict", "reason": "仅当修复需改变 frozen freshness 语义时展开；若发生必须 design delta"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "其他 Story/LLD/IMPLEMENTATION", "process/archive/**", "process/discussions/**"],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human summary / legacy fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "packet 已提供回修上下文"},
+    {"path_or_pattern": "其他 Story/LLD/IMPLEMENTATION", "reason": "避免跨 Story 扩张"}
+  ],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "allowed_write_paths": [
+    "meta_flow/workflow/artifact_leg_lifecycle.py",
+    "tests/test_artifact_leg_lifecycle.py",
+    "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-IMPLEMENTATION.md",
+    "process/returns/ST-AW-003.CP6-R2.return.json",
+    "process/evidence/ST-AW-003.CP6-R2.index.json"
+  ],
+  "forbidden_write_paths": ["meta_flow/workspace/git_sync.py", "meta_flow/workflow/git_branch_lifecycle.py", "meta_flow/cli.py", "meta_flow/workflow/artifact_aggregate.py", "其他源码/测试", ".git/** outside temporary fixtures", "real artifact/worktree/ref/remote/link/migration targets"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_REPOSITORY_PUBLICATION", "FIXTURE_ONLY_GIT_WORKTREE_REMOTE"],
+  "verification_plan": [
+    "先添加 now=None source/artifact/resume/post-observe 红灯与 genuine skew 负向测试",
+    "做最小 freshness clock-order 修复并同步模块 docstring",
+    "运行定向、相邻回归、Ruff、format、py_compile、diff、安全边界和 return/evidence check",
+    "更新 IMPLEMENTATION 修订记录和 CP6-R2 return/evidence；不批准 CP6"
+  ],
+  "budget": {"estimated_tokens": 34000, "estimator": "chars_div_4", "max_tokens": 48000},
+  "context_sufficiency": {"required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"], "strict_profiles": ["runtime-high-risk"]},
+  "policy_refs": {"authz_policy": "process/policies/AUTHZ-POLICY.json", "gate_profiles": "process/policies/GATE-PROFILES.json", "read_policy": "process/policies/READ-POLICY.json"}
+}

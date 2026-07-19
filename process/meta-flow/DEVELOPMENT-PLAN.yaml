@@ -1,51 +1,99 @@
 schema_version: "1.0"
 project_id: "meta-flow"
 workflow_id: "meta-flow-self-dev"
-cr_id: "CR-050"
-version: 1
-status: "delivered-with-risk"
+cr_id: "CR-051"
+version: 2
+status: "cp8-pending-human-review"
+cp4_result_ref: "process/checks/CP4-CR051-STORY-DAG-PARALLEL-SAFETY.result.json"
 story_management_truth_source: "process/DEVELOPMENT-PLAN.yaml"
-source_hld: "process/docs/design/CR050-GIT-BRANCH-HLD.md"
-source_feature_matrix: "process/docs/design/CR050-FEATURE-DESIGN-MATRIX.md"
-approved_dag: "ST-GB-001 -> ST-GB-002 -> ST-GB-004 -> ST-GB-003"
-stable_story_order_note: "IDs remain stable; merge Story 004 intentionally executes before finish Story 003."
-created_at: "2026-07-16T15:20:00Z"
-created_by: "host-orchestrator-inline/meta-se"
+source_hld: "process/docs/design/CR051-ARTIFACT-WORKTREE-HLD.md"
+source_feature_matrix: "process/docs/design/CR051-FEATURE-DESIGN-MATRIX.md"
+context_ref: "process/context/CP8-CR051-DELIVERY-CONTEXT.yaml"
+approved_dag: "ST-AW-001 -contract-> ST-AW-002 -runtime-> ST-AW-003 -contract-> ST-AW-004; ST-AW-003 + ST-AW-004 -runtime-> ST-AW-005"
+critical_path: ["ST-AW-001", "ST-AW-002", "ST-AW-003", "ST-AW-004", "ST-AW-005"]
+created_at: "2026-07-18T06:30:00Z"
+created_by: "meta-se-critical"
+cp5_approved_at: "2026-07-18T10:59:12Z"
+cp5_approval_ref: "process/checkpoints/CP5-CR051-ALL-STORIES-LLD-BATCH.md"
+all_stories_cp7_completed_at: "2026-07-18T16:39:00Z"
+updated_at: "2026-07-18T17:07:29Z"
+cp8_result_ref: "process/checks/CP8-CR051-DELIVERY-READINESS.result.json"
+cp8_checkpoint_ref: "process/checkpoints/CP8-CR051-DELIVERY-READINESS.md"
+cp8_release_decision: "READY_WITH_RISK"
 
 parallel_policy:
-  max_parallel_lld: 2
-  max_parallel_dev: 1
-  max_parallel_qa: 1
-  wave_is_scheduling_hint: false
+  max_parallel_lld: 3
+  max_parallel_dev: 2
+  max_parallel_qa: 2
+  wave_is_scheduling_hint: true
   all_story_design_before_dev: true
-  rationale: "All Stories modify the shared lifecycle module/types/result schema; development is serial even though LLD drafting may be parallel."
+  contract_dependency_parallelism: "Allowed only after the referenced Feature/Story contract is frozen by CP5."
+  runtime_dependency_policy: "Downstream development waits for upstream verified unless an explicit equivalent fixture is approved."
+  shared_file_policy: "Primary paths never overlap. meta_flow/cli.py has one CR-051 merge owner, ST-AW-004; other Stories submit wiring serially and do not write it in parallel."
+  rationale: "LLD may be drafted in two batches. Development follows W1->W2->W3->W4; ST-AW-003/004 may run in parallel only with frozen LegResult contract and disjoint primary files."
+
+dependency_edges:
+  - {from: "ST-AW-001", to: "ST-AW-002", type: "contract", lld_gate: "route/context contract declared", dev_gate: "ProjectContext and RouteDecision frozen at CP5"}
+  - {from: "ST-AW-002", to: "ST-AW-003", type: "runtime", lld_gate: "worktree-health contract declared", dev_gate: "worktree lifecycle verified or approved equivalent fixture available"}
+  - {from: "ST-AW-003", to: "ST-AW-004", type: "contract", lld_gate: "LegResult schema declared", dev_gate: "LegResult schema frozen at CP5; primary files disjoint"}
+  - {from: "ST-AW-003", to: "ST-AW-005", type: "runtime", lld_gate: "leg handoff fields declared", dev_gate: "heterogeneous legs verified"}
+  - {from: "ST-AW-004", to: "ST-AW-005", type: "runtime", lld_gate: "aggregate/readiness contract declared", dev_gate: "aggregate gate verified"}
 
 lld_waves:
-  - {id: "LW1", stories: ["ST-GB-001", "ST-GB-002"], parallel: true, note: "Both consume CP3 contracts; publish LLD depends on the declared open result contract, not implementation."}
-  - {id: "LW2", stories: ["ST-GB-004", "ST-GB-003"], parallel: true, note: "Finish LLD consumes the declared merge projection contract; implementation remains serial."}
+  - id: "LW1"
+    stories: ["ST-AW-001", "ST-AW-002", "ST-AW-003"]
+    parallel: true
+    note: "All consume approved CP3 and required Feature packs; downstream runtime dependencies do not block early full-LLD drafting."
+  - id: "LW2"
+    stories: ["ST-AW-004", "ST-AW-005"]
+    parallel: true
+    note: "ST-AW-004 consumes the declared LegResult contract; ST-AW-005 already carries its read-only technical-note draft."
 
 qa_waves:
-  - {id: "QW1", stories: ["ST-GB-001"], parallel: false}
-  - {id: "QW2", stories: ["ST-GB-002"], parallel: false}
-  - {id: "QW3", stories: ["ST-GB-004"], parallel: false}
-  - {id: "QW4", stories: ["ST-GB-003"], parallel: false}
+  - {id: "QW1", stories: ["ST-AW-001"], parallel: false}
+  - {id: "QW2", stories: ["ST-AW-002"], parallel: false}
+  - {id: "QW3", stories: ["ST-AW-003", "ST-AW-004"], parallel: true, note: "Separate target matrix and pure aggregate suites; shared integration regression may run once and be referenced by both independent verdicts."}
+  - {id: "QW4", stories: ["ST-AW-005"], parallel: false}
 
 forbidden_global:
-  - "/home/hyde/workspace/meta-flow.process-prelink-backup-20260713T100930/**"
   - "process/quant-lab/**"
+  - "../meta-flow-artifacts/process/* except the routed meta-flow process namespace"
+  - "real meta-flow-artifacts file migration or existing symlink mutation"
+  - "real Git worktree/branch/ref/remote mutation, commit, push, publish or main-sync before explicit post-CP5 operation authorization"
   - "credentials/runtime/SaaS/production-write/trading"
-  - "repository commit/push or real branch/default mutation during CP4/CP5"
-  - "force/reset/rebase/merge-commit/auto-commit/policy-bypass"
+  - "reset --hard/clean/automatic stash/rebase/force/force-with-lease/automatic conflict resolution/branch delete as recovery"
+  - "artifact shared main as a per-CR base, target or working branch"
+  - "sibling project owned paths, refs, worktrees or index"
 
 lld_design_batch:
-  batch_id: "CR050-all-stories"
+  batch_id: "CR051-all-stories"
   source: "change"
   status: "approved"
+  batch_result_ref: "process/checks/CP5-CR051-ALL-STORIES-LLD-IMPLEMENTABILITY-R2.result.json"
+  human_checkpoint_ref: "process/checkpoints/CP5-CR051-ALL-STORIES-LLD-BATCH.md"
+  human_gate_status: "approved"
   items:
-    - {story_id: "ST-GB-001", design_evidence_type: "full-lld", lld_policy_required_level: "full-lld", evidence_path: "process/stories/STORY-ST-GB-001-paired-branch-open-LLD.md"}
-    - {story_id: "ST-GB-002", design_evidence_type: "full-lld", lld_policy_required_level: "full-lld", evidence_path: "process/stories/STORY-ST-GB-002-committed-ref-publish-LLD.md"}
-    - {story_id: "ST-GB-004", design_evidence_type: "full-lld", lld_policy_required_level: "full-lld", evidence_path: "process/stories/STORY-ST-GB-004-paired-default-fast-forward-LLD.md"}
-    - {story_id: "ST-GB-003", design_evidence_type: "full-lld", lld_policy_required_level: "full-lld", evidence_path: "process/stories/STORY-ST-GB-003-proof-gated-finish-LLD.md"}
+    - {story_id: "ST-AW-001", design_evidence_type: "full-lld", lld_policy_required_level: "full-lld", evidence_path: "process/stories/STORY-ST-AW-001-project-first-routing-LLD.md", evidence_status: "approved"}
+    - {story_id: "ST-AW-002", design_evidence_type: "full-lld", lld_policy_required_level: "full-lld", evidence_path: "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md", evidence_status: "approved"}
+    - {story_id: "ST-AW-003", design_evidence_type: "full-lld", lld_policy_required_level: "full-lld", evidence_path: "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md", evidence_status: "approved"}
+    - {story_id: "ST-AW-004", design_evidence_type: "full-lld", lld_policy_required_level: "full-lld", evidence_path: "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md", evidence_status: "approved"}
+    - {story_id: "ST-AW-005", design_evidence_type: "technical-note", lld_policy_required_level: "technical-note", evidence_path: "process/stories/STORY-ST-AW-005-read-only-migration-handoff.md#技术说明", evidence_status: "approved"}
+  independent_review:
+    status: "r2-proceed"
+    handoff_ref: "process/handoffs/CR051-CP5-META-QA-CRITICAL-REVIEW.md"
+    findings_ref: "process/docs/quality/CR051-CP5-INDEPENDENT-REVIEW-FINDINGS.md"
+    summary_ref: "process/docs/quality/CR051-CP5-INDEPENDENT-REVIEW-SUMMARY.md"
+    r2_revision_handoffs:
+      - "process/handoffs/CR051-CP5-R2-META-DEV-LANE-A.md"
+      - "process/handoffs/CR051-CP5-R2-META-DEV-LANE-B.md"
+      - "process/handoffs/CR051-CP5-R2-META-DEV-LANE-C.md"
+    r2_review_handoff_ref: "process/handoffs/CR051-CP5-R2-META-QA-CRITICAL-REVIEW.md"
+    r2_findings_ref: "process/docs/quality/CR051-CP5-R2-INDEPENDENT-REVIEW-FINDINGS.md"
+    r2_summary_ref: "process/docs/quality/CR051-CP5-R2-INDEPENDENT-REVIEW-SUMMARY.md"
+    r2_return_ref: "process/handoffs/CR051-CP5-R2-META-QA-CRITICAL-REVIEW-RETURN.md"
+    r2_decision: "proceed"
+    r2_findings: {blocking: 0, required: 0, optional: 0}
+    read_expansion_correction_ref: "process/checks/CR051-READ-EXPANSION-REASON-CORRECTION.json"
 
 lld_clarification_queue:
   status: "clear"
@@ -55,118 +103,160 @@ lld_clarification_queue:
 
 waves:
   - wave: "W1"
-    name: "Paired Branch Open"
+    name: "Project-first Routing Contract"
     parallel_lld: true
     parallel_dev: false
     parallel_qa: false
     stories:
-      - story_id: "ST-GB-001"
-        title: "从两仓远端默认分支开启同名CR分支"
-        story_slug: "paired-branch-open"
+      - story_id: "ST-AW-001"
+        title: "唯一解析 project-first artifact 路由并保留显式 legacy 兼容"
+        story_slug: "project-first-routing"
         status: "verified-with-risk"
         priority: "P0"
         depends_on: []
         dependency_contracts: []
-        feature_design_refs: ["process/docs/features/cr050-open/DESIGN.md", "process/docs/features/cr050-open/TEST-PLAN.md", "process/docs/features/cr050-open/TASKS.md"]
-        lld_policy: {required_level: "full-lld", trigger_reasons: ["cross-repo", "shared-contract", "remote-write"], evidence_path: "process/stories/STORY-ST-GB-001-paired-branch-open-LLD.md", revisit_condition: "Bootstrap writer cannot be reused without implicit remote side effects"}
+        feature_design_refs: ["process/docs/features/cr051-routing/DESIGN.md", "process/docs/features/cr051-routing/TEST-PLAN.md", "process/docs/features/cr051-routing/TASKS.md"]
+        lld_policy: {required_level: "full-lld", trigger_reasons: ["portable-schema", "legacy-write-conflict", "cross-module-contract"], evidence_path: "process/stories/STORY-ST-AW-001-project-first-routing-LLD.md", revisit_condition: "Resolver cannot provide one write target without changing the approved layout boundary"}
         file_ownership:
-          primary: ["meta_flow/workflow/git_branch_lifecycle.py", "tests/test_git_branch_lifecycle.py"]
-          shared: ["meta_flow/workspace/git_sync.py", "meta_flow/workflow/cr_lifecycle.py", "meta_flow/cli.py"]
-          merge_owner: "ST-GB-001"
-          forbidden: ["process/quant-lab/**", "prelink backup", "force/history rewrite", "real remote operations during implementation"]
-        lld_gate: {design_evidence_type: "full-lld", design_evidence_path: "process/stories/STORY-ST-GB-001-paired-branch-open-LLD.md", status: "approved", confirmed: true}
+          primary: ["meta_flow/workspace/project_artifact_routing.py", "tests/test_cr051_project_artifact_routing.py"]
+          shared: ["meta_flow/workspace/routing.py", "tests/test_workspace_routing.py"]
+          merge_owner: "ST-AW-001"
+          forbidden: ["meta_flow/workflow/artifact_leg_lifecycle.py", "meta_flow/workflow/artifact_aggregate.py", "sibling project content", "Git/worktree mutation"]
+        lld_gate: {design_evidence_type: "full-lld", design_evidence_path: "process/stories/STORY-ST-AW-001-project-first-routing-LLD.md", status: "approved", confirmed: true}
         dev_gate: {design_evidence_confirmed: true, dependencies_satisfied: true, file_conflict_free: true}
-        implementation_gate: {evidence_required: true, evidence_path: "process/stories/STORY-ST-GB-001-paired-branch-open-IMPLEMENTATION.md", status: "completed", cp6_result: "process/checks/CP6-CR050-ST-GB-001-CODING-DONE-R2.result.json"}
-        verification_gate: {validation_mode: "mixed", cp7_result: "process/checks/CP7-CR050-ST-GB-001-VERIFICATION-DONE-R2.result.json", status: "pass-with-risk"}
+        implementation_gate: {evidence_required: true, evidence_path: "process/stories/STORY-ST-AW-001-project-first-routing-IMPLEMENTATION.md", result_ref: "process/checks/CP6-CR051-ST-AW-001-project-first-routing-CODING-DONE-R2.result.json", return_ref: "process/returns/ST-AW-001.CP6-R2.return.json", evidence_ref: "process/evidence/ST-AW-001.CP6-R2.index.json", status: "PASS-R2"}
+        verification_gate: {validation_mode: "mixed", result_ref: "process/checks/CP7-CR051-ST-AW-001-project-first-routing-VERIFICATION-DONE-R2.result.json", return_ref: "process/returns/ST-AW-001.CP7-R2.return.json", evidence_ref: "process/evidence/ST-AW-001.CP7-R2.index.json", closed_findings: ["CP7-AW-001-F01", "CP7-AW-001-F02"], status: "PASS_WITH_RISK"}
         tasks:
-          - {task_id: "TASK-GB-001-01", status: "completed", depends_on: []}
-          - {task_id: "TASK-GB-001-02", status: "completed", depends_on: ["TASK-GB-001-01"]}
-          - {task_id: "TASK-GB-001-03", status: "completed", depends_on: ["TASK-GB-001-02"]}
+          - {task_id: "TASK-AW-R01", status: "completed", depends_on: []}
+          - {task_id: "TASK-AW-R02", status: "completed", depends_on: ["TASK-AW-R01"]}
+          - {task_id: "TASK-AW-R03", status: "completed", depends_on: ["TASK-AW-R02"]}
+          - {task_id: "TASK-AW-R04", status: "completed", depends_on: ["TASK-AW-R02"]}
+          - {task_id: "TASK-AW-R05", status: "completed", depends_on: ["TASK-AW-R03", "TASK-AW-R04"]}
+          - {task_id: "TASK-AW-R06", status: "completed", depends_on: ["TASK-AW-R05"]}
 
   - wave: "W2"
-    name: "Committed Ref Publish"
+    name: "Recoverable Project Worktree"
     parallel_lld: true
     parallel_dev: false
     parallel_qa: false
     stories:
-      - story_id: "ST-GB-002"
-        title: "只发布调用前已有提交并生成matching evidence"
-        story_slug: "committed-ref-publish"
+      - story_id: "ST-AW-002"
+        title: "管理可恢复的长期项目 worktree 与 create-only integration"
+        story_slug: "recoverable-project-worktree"
         status: "verified-with-risk"
         priority: "P0"
-        depends_on: ["ST-GB-001"]
-        dependency_contracts: [{story_id: "ST-GB-001", type: "contract", lld_gate: "declared-contract", dev_gate: "upstream-merged"}]
-        feature_design_refs: ["process/docs/features/cr050-publish/DESIGN.md", "process/docs/features/cr050-publish/TEST-PLAN.md", "process/docs/features/cr050-publish/TASKS.md"]
-        lld_policy: {required_level: "full-lld", trigger_reasons: ["remote-write", "evidence", "security"], evidence_path: "process/stories/STORY-ST-GB-002-committed-ref-publish-LLD.md", revisit_condition: "A future requirement authorizes path-allowlisted commit creation"}
+        depends_on: ["ST-AW-001"]
+        dependency_contracts: [{story_id: "ST-AW-001", type: "contract", lld_gate: "declared-contract", dev_gate: "upstream-contract-frozen"}]
+        feature_design_refs: ["process/docs/features/cr051-worktree/DESIGN.md", "process/docs/features/cr051-worktree/TEST-PLAN.md", "process/docs/features/cr051-worktree/TASKS.md"]
+        lld_policy: {required_level: "full-lld", trigger_reasons: ["non-atomic-state-machine", "concurrency", "filesystem", "remote-ref", "recovery"], evidence_path: "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md", revisit_condition: "O-AW-01/02 cannot prove bounded capacity and durable recovery; disable auto switch"}
         file_ownership:
-          primary: ["meta_flow/workflow/git_branch_lifecycle.py", "tests/test_git_branch_lifecycle.py"]
-          shared: ["meta_flow/workspace/git_sync.py", "meta_flow/cli.py"]
-          merge_owner: "ST-GB-002"
-          forbidden: ["git add/commit/amend", "force", "credentials", "real remote operations during implementation"]
-        lld_gate: {design_evidence_type: "full-lld", design_evidence_path: "process/stories/STORY-ST-GB-002-committed-ref-publish-LLD.md", status: "approved", confirmed: true}
+          primary: ["meta_flow/workspace/project_worktree.py", "meta_flow/workspace/worktree_capacity.py", "meta_flow/workspace/worktree_journal.py", "tests/test_cr051_project_worktree.py", "tests/test_cr051_worktree_faults.py"]
+          shared: ["meta_flow/workspace/git_sync.py", "tests/test_workspace_git_sync.py", "tests/test_git_branch_lifecycle.py", "meta_flow/cli.py"]
+          merge_owner: "ST-AW-002"
+          shared_merge_owners: {"meta_flow/workspace/git_sync.py": "ST-AW-002", "tests/test_workspace_git_sync.py": "ST-AW-002", "tests/test_git_branch_lifecycle.py": "ST-AW-002", "meta_flow/cli.py": "ST-AW-004"}
+          forbidden: ["artifact main per-CR update", "sibling project paths/refs/index", "destructive recovery", "real worktree/ref mutation during implementation"]
+        lld_gate: {design_evidence_type: "full-lld", design_evidence_path: "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md", status: "approved", confirmed: true}
         dev_gate: {design_evidence_confirmed: true, dependencies_satisfied: true, file_conflict_free: true}
-        implementation_gate: {evidence_required: true, evidence_path: "process/stories/STORY-ST-GB-002-committed-ref-publish-IMPLEMENTATION.md", status: "completed", cp6_result: "process/checks/CP6-CR050-ST-GB-002-CODING-DONE-R2.result.json"}
-        verification_gate: {validation_mode: "mixed", cp7_result: "process/checks/CP7-CR050-ST-GB-002-VERIFICATION-DONE-R2.result.json", status: "pass-with-risk"}
+        implementation_gate: {evidence_required: true, evidence_path: "process/stories/STORY-ST-AW-002-recoverable-project-worktree-IMPLEMENTATION.md", result_ref: "process/checks/CP6-CR051-ST-AW-002-recoverable-project-worktree-CODING-DONE.result.json", return_ref: "process/returns/ST-AW-002.CP6.return.json", evidence_ref: "process/evidence/ST-AW-002.CP6.index.json", status: "PASS"}
+        verification_gate: {validation_mode: "mixed", result_ref: "process/checks/CP7-CR051-ST-AW-002-recoverable-project-worktree-VERIFICATION-DONE.result.json", return_ref: "process/returns/ST-AW-002.CP7.return.json", evidence_ref: "process/evidence/ST-AW-002.CP7.index.json", status: "PASS_WITH_RISK"}
         tasks:
-          - {task_id: "TASK-GB-002-01", status: "completed", depends_on: ["TASK-GB-001-03"]}
-          - {task_id: "TASK-GB-002-02", status: "completed", depends_on: ["TASK-GB-002-01"]}
-          - {task_id: "TASK-GB-002-03", status: "completed", depends_on: ["TASK-GB-002-02"]}
+          - {task_id: "TASK-AW-W01", status: "completed", depends_on: []}
+          - {task_id: "TASK-AW-W02", status: "completed", depends_on: ["TASK-AW-W01"]}
+          - {task_id: "TASK-AW-W03", status: "completed", depends_on: ["TASK-AW-W01"]}
+          - {task_id: "TASK-AW-W04", status: "completed", depends_on: ["TASK-AW-W01"]}
+          - {task_id: "TASK-AW-W05", status: "completed", depends_on: ["TASK-AW-W02"]}
+          - {task_id: "TASK-AW-W06", status: "completed", depends_on: ["TASK-AW-W02", "TASK-AW-W05"]}
+          - {task_id: "TASK-AW-W07", status: "completed", depends_on: ["TASK-AW-W04", "TASK-AW-W05", "TASK-AW-W06"]}
+          - {task_id: "TASK-AW-W08", status: "completed", depends_on: ["TASK-AW-W02", "TASK-AW-W03", "TASK-AW-W04", "TASK-AW-W05"]}
+          - {task_id: "TASK-AW-W09", status: "completed", depends_on: ["TASK-AW-W06", "TASK-AW-W07", "TASK-AW-W08"]}
+          - {task_id: "TASK-AW-W10", status: "completed", depends_on: ["TASK-AW-W09"]}
+          - {task_id: "TASK-AW-W11", status: "completed", depends_on: ["TASK-AW-W10"]}
 
   - wave: "W3"
-    name: "Explicit Paired Default Fast-forward"
+    name: "Heterogeneous Legs and Aggregate Gate"
     parallel_lld: true
-    parallel_dev: false
-    parallel_qa: false
+    parallel_dev: true
+    parallel_qa: true
+    parallel_condition: "LegResult contract frozen at CP5; ST-AW-003/004 primary paths disjoint; meta_flow/cli.py written only by ST-AW-004."
     stories:
-      - story_id: "ST-GB-004"
-        title: "以独立授权快进两仓默认分支并守住2/2投影门"
-        story_slug: "paired-default-fast-forward"
+      - story_id: "ST-AW-003"
+        title: "执行 source-default 与 artifact-integration 异构 Git legs"
+        story_slug: "heterogeneous-git-legs"
         status: "verified-with-risk"
         priority: "P0"
-        depends_on: ["ST-GB-002"]
-        dependency_contracts: [{story_id: "ST-GB-002", type: "contract", lld_gate: "declared-contract", dev_gate: "upstream-merged"}]
-        feature_design_refs: ["process/docs/features/cr050-merge/DESIGN.md", "process/docs/features/cr050-merge/TEST-PLAN.md", "process/docs/features/cr050-merge/TASKS.md"]
-        lld_policy: {required_level: "full-lld", trigger_reasons: ["default-write", "authorization", "cross-repo-partial", "workflow-projection"], evidence_path: "process/stories/STORY-ST-GB-004-paired-default-fast-forward-LLD.md", revisit_condition: "PARTIAL cannot be isolated from paired workflow projection"}
+        depends_on: ["ST-AW-002"]
+        dependency_contracts: [{story_id: "ST-AW-002", type: "runtime", lld_gate: "declared-worktree-health-contract", dev_gate: "upstream-verified"}]
+        feature_design_refs: ["process/docs/features/cr051-legs/DESIGN.md", "process/docs/features/cr051-legs/TEST-PLAN.md", "process/docs/features/cr051-legs/TASKS.md"]
+        lld_policy: {required_level: "full-lld", trigger_reasons: ["cross-repo", "authorization", "expected-oid", "shared-contract", "recovery"], evidence_path: "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md", revisit_condition: "Implementation would touch artifact main or inherit paired-default target semantics"}
         file_ownership:
-          primary: ["meta_flow/workflow/git_branch_lifecycle.py", "tests/test_git_branch_lifecycle.py"]
-          shared: ["meta_flow/workspace/git_sync.py", "meta_flow/workflow/cr_lifecycle.py", "meta_flow/state/current.py", "meta_flow/cli.py"]
-          merge_owner: "ST-GB-004"
-          forbidden: ["local git merge", "force/force-with-lease", "auto rollback", "single-repo PASS projection", "real default write during implementation"]
-        lld_gate: {design_evidence_type: "full-lld", design_evidence_path: "process/stories/STORY-ST-GB-004-paired-default-fast-forward-LLD.md", status: "approved", confirmed: true}
+          primary: ["meta_flow/workflow/artifact_leg_lifecycle.py", "tests/test_artifact_leg_lifecycle.py"]
+          shared: ["meta_flow/workspace/git_sync.py", "meta_flow/workflow/git_branch_lifecycle.py", "meta_flow/cli.py"]
+          merge_owner: "ST-AW-004"
+          forbidden: ["artifact main/default target", "control/sibling checkout mutation", "cross-leg rollback", "meta_flow/workflow/artifact_aggregate.py"]
+        lld_gate: {design_evidence_type: "full-lld", design_evidence_path: "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md", status: "approved", confirmed: true}
         dev_gate: {design_evidence_confirmed: true, dependencies_satisfied: true, file_conflict_free: true}
-        implementation_gate: {evidence_required: true, evidence_path: "process/stories/STORY-ST-GB-004-paired-default-fast-forward-IMPLEMENTATION.md", status: "completed", cp6_result: "process/checks/CP6-CR050-ST-GB-004-CODING-DONE-R2.result.json"}
-        verification_gate: {validation_mode: "mixed", cp7_result: "process/checks/CP7-CR050-ST-GB-004-VERIFICATION-DONE-R2.result.json", status: "pass-with-risk"}
+        implementation_gate: {evidence_required: true, evidence_path: "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-IMPLEMENTATION.md", result_ref: "process/checks/CP6-CR051-ST-AW-003-heterogeneous-git-legs-CODING-DONE-R2.result.json", return_ref: "process/returns/ST-AW-003.CP6-R2.return.json", evidence_ref: "process/evidence/ST-AW-003.CP6-R2.index.json", status: "PASS-R2"}
+        verification_gate: {validation_mode: "mixed", result_ref: "process/checks/CP7-CR051-ST-AW-003-heterogeneous-git-legs-VERIFICATION-DONE-R2.result.json", return_ref: "process/returns/ST-AW-003.CP7-R2.return.json", evidence_ref: "process/evidence/ST-AW-003.CP7-R2.index.json", closed_findings: ["REV-AW003-001"], superseded_result_ref: "process/checks/CP7-CR051-ST-AW-003-heterogeneous-git-legs-VERIFICATION-DONE.result.json", status: "PASS_WITH_RISK"}
         tasks:
-          - {task_id: "TASK-GB-004-01", status: "completed", depends_on: ["TASK-GB-002-03"]}
-          - {task_id: "TASK-GB-004-02", status: "completed", depends_on: ["TASK-GB-004-01"]}
-          - {task_id: "TASK-GB-004-03", status: "completed", depends_on: ["TASK-GB-004-02"]}
-          - {task_id: "TASK-GB-004-04", status: "completed", depends_on: ["TASK-GB-004-03"]}
+          - {task_id: "TASK-AW-003-01", status: "completed", depends_on: []}
+          - {task_id: "TASK-AW-003-02", status: "completed", depends_on: ["TASK-AW-003-01"]}
+          - {task_id: "TASK-AW-003-03", status: "completed", depends_on: ["TASK-AW-003-01"]}
+          - {task_id: "TASK-AW-003-04", status: "completed", depends_on: ["TASK-AW-003-02", "TASK-AW-003-03"]}
+          - {task_id: "TASK-AW-003-05", status: "completed", depends_on: ["TASK-AW-003-04"]}
+
+      - story_id: "ST-AW-004"
+        title: "以单写 evidence gate 聚合全部 required legs"
+        story_slug: "aggregate-evidence-gate"
+        status: "verified-with-risk"
+        priority: "P0"
+        depends_on: ["ST-AW-003"]
+        dependency_contracts: [{story_id: "ST-AW-003", type: "contract", lld_gate: "LegResult-declared", dev_gate: "LegResult-frozen-at-CP5"}]
+        feature_design_refs: ["process/docs/features/cr051-aggregate/DESIGN.md", "process/docs/features/cr051-aggregate/TEST-PLAN.md", "process/docs/features/cr051-aggregate/TASKS.md"]
+        lld_policy: {required_level: "full-lld", trigger_reasons: ["single-writer", "correlation", "evidence-dag", "workflow-projection"], evidence_path: "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md", revisit_condition: "Matching 2/2 PASS cannot be isolated from Git execution or controlled projection"}
+        file_ownership:
+          primary: ["meta_flow/workflow/artifact_aggregate.py", "tests/test_artifact_aggregate.py"]
+          shared: ["meta_flow/cli.py", "meta_flow/workflow/cr_lifecycle.py", "meta_flow/state/current.py"]
+          merge_owner: "ST-AW-004"
+          forbidden: ["meta_flow/workflow/artifact_leg_lifecycle.py", "Git/worktree executor calls", "artifact main/manual sync", "automatic close/rollback for non-PASS"]
+        lld_gate: {design_evidence_type: "full-lld", design_evidence_path: "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md", status: "approved", confirmed: true}
+        dev_gate: {design_evidence_confirmed: true, dependencies_satisfied: true, file_conflict_free: true}
+        implementation_gate: {evidence_required: true, evidence_path: "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-IMPLEMENTATION.md", result_ref: "process/checks/CP6-CR051-ST-AW-004-aggregate-evidence-gate-CODING-DONE.result.json", return_ref: "process/returns/ST-AW-004.CP6.return.json", evidence_ref: "process/evidence/ST-AW-004.CP6.index.json", status: "PASS"}
+        verification_gate: {validation_mode: "mixed", result_ref: "process/checks/CP7-CR051-ST-AW-004-aggregate-evidence-gate-VERIFICATION-DONE.result.json", return_ref: "process/returns/ST-AW-004.CP7.return.json", evidence_ref: "process/evidence/ST-AW-004.CP7.index.json", status: "PASS_WITH_RISK"}
+        tasks:
+          - {task_id: "TASK-AW-004-01", status: "completed", depends_on: []}
+          - {task_id: "TASK-AW-004-02", status: "completed", depends_on: ["TASK-AW-004-01"]}
+          - {task_id: "TASK-AW-004-03", status: "completed", depends_on: ["TASK-AW-004-01"]}
+          - {task_id: "TASK-AW-004-04", status: "completed", depends_on: ["TASK-AW-004-02", "TASK-AW-004-03"]}
+          - {task_id: "TASK-AW-004-05", status: "completed", depends_on: ["TASK-AW-004-04"]}
 
   - wave: "W4"
-    name: "Proof-gated Finish"
+    name: "Read-only Migration Handoff"
     parallel_lld: true
     parallel_dev: false
     parallel_qa: false
     stories:
-      - story_id: "ST-GB-003"
-        title: "重新证明合并事实后安全删除CR分支"
-        story_slug: "proof-gated-finish"
+      - story_id: "ST-AW-005"
+        title: "生成零 mutation 的逐项目 migration manifest 与人工交接"
+        story_slug: "read-only-migration-handoff"
         status: "verified-with-risk"
-        priority: "P0"
-        depends_on: ["ST-GB-004"]
-        dependency_contracts: [{story_id: "ST-GB-004", type: "runtime", lld_gate: "declared-contract", dev_gate: "upstream-verified"}]
-        feature_design_refs: ["process/docs/features/cr050-finish/DESIGN.md", "process/docs/features/cr050-finish/TEST-PLAN.md", "process/docs/features/cr050-finish/TASKS.md"]
-        lld_policy: {required_level: "full-lld", trigger_reasons: ["remote-delete", "fresh-proof", "recovery-ref", "protected-ref"], evidence_path: "process/stories/STORY-ST-GB-003-proof-gated-finish-LLD.md", revisit_condition: "Git ancestry cannot prove an approved squash/rebase merge"}
+        priority: "P1"
+        depends_on: ["ST-AW-003", "ST-AW-004"]
+        dependency_contracts:
+          - {story_id: "ST-AW-003", type: "runtime", lld_gate: "leg-handoff-contract-declared", dev_gate: "upstream-verified"}
+          - {story_id: "ST-AW-004", type: "runtime", lld_gate: "aggregate-readiness-contract-declared", dev_gate: "upstream-verified"}
+        feature_design_refs: ["process/docs/features/cr051-migration/DESIGN.md", "process/docs/features/cr051-migration/TEST-PLAN.md", "process/docs/features/cr051-migration/TASKS.md"]
+        lld_policy: {required_level: "technical-note", trigger_reasons: ["read-only-migration", "manifest-schema", "deny-mutation", "follow-up-tracking"], evidence_path: "process/stories/STORY-ST-AW-005-read-only-migration-handoff.md#技术说明", revisit_condition: "Any file/link/worktree/ref/remote mutation, automatic sync, executable migration script or cross-Story mutation contract is introduced"}
         file_ownership:
-          primary: ["meta_flow/workflow/git_branch_lifecycle.py", "tests/test_git_branch_lifecycle.py"]
-          shared: ["meta_flow/workspace/git_sync.py", "meta_flow/workflow/cr_lifecycle.py", "meta_flow/cli.py"]
-          merge_owner: "ST-GB-003"
-          forbidden: ["force-delete", "CR closed as proof", "patch similarity proof", "automatic recovery-ref push/delete", "real remote delete during implementation"]
-        lld_gate: {design_evidence_type: "full-lld", design_evidence_path: "process/stories/STORY-ST-GB-003-proof-gated-finish-LLD.md", status: "approved", confirmed: true}
-        dev_gate: {design_evidence_confirmed: true, dependencies_satisfied: true, file_conflict_free: true}
-        implementation_gate: {evidence_required: true, evidence_path: "process/stories/STORY-ST-GB-003-proof-gated-finish-IMPLEMENTATION.md", status: "completed", cp6_result: "process/checks/CP6-CR050-ST-GB-003-CODING-DONE-R2.result.json"}
-        verification_gate: {validation_mode: "mixed", cp7_result: "process/checks/CP7-CR050-ST-GB-003-VERIFICATION-DONE-R2.result.json", status: "pass-with-risk"}
+          primary: ["meta_flow/workspace/artifact_migration.py", "tests/test_artifact_migration.py"]
+          shared: ["meta_flow/workspace/project_artifact_routing.py", "meta_flow/workspace/project_worktree.py", "meta_flow/cli.py"]
+          merge_owner: "ST-AW-004"
+          forbidden: ["target project file/link/worktree/ref mutation", "artifact main/remote/scheduler", "process/quant-lab/**", "sibling content", "sync helper enable/invoke"]
+        lld_gate: {design_evidence_type: "technical-note", design_evidence_path: "process/stories/STORY-ST-AW-005-read-only-migration-handoff.md#技术说明", status: "approved", confirmed: true}
+        dev_gate: {design_evidence_confirmed: true, dependencies_satisfied: false, file_conflict_free: true}
+        implementation_gate: {evidence_required: true, evidence_path: "process/stories/STORY-ST-AW-005-read-only-migration-handoff-IMPLEMENTATION.md", result_ref: "process/checks/CP6-CR051-ST-AW-005-read-only-migration-handoff-CODING-DONE-R2.result.json", return_ref: "process/returns/ST-AW-005.CP6-R2.return.json", evidence_ref: "process/evidence/ST-AW-005.CP6-R2.index.json", status: "PASS-R2"}
+        verification_gate: {validation_mode: "mixed", result_ref: "process/checks/CP7-CR051-ST-AW-005-read-only-migration-handoff-VERIFICATION-DONE-R2.result.json", return_ref: "process/returns/ST-AW-005.CP7-R2.return.json", evidence_ref: "process/evidence/ST-AW-005.CP7-R2.index.json", closed_findings: ["REV-AW005-001"], superseded_result_ref: "process/checks/CP7-CR051-ST-AW-005-read-only-migration-handoff-VERIFICATION-DONE.result.json", status: "PASS_WITH_RISK"}
         tasks:
-          - {task_id: "TASK-GB-003-01", status: "completed", depends_on: ["TASK-GB-004-04"]}
-          - {task_id: "TASK-GB-003-02", status: "completed", depends_on: ["TASK-GB-003-01"]}
-          - {task_id: "TASK-GB-003-03", status: "completed", depends_on: ["TASK-GB-003-02"]}
+          - {task_id: "TASK-AW-005-01", status: "completed", depends_on: []}
+          - {task_id: "TASK-AW-005-02", status: "completed", depends_on: ["TASK-AW-005-01"]}
+          - {task_id: "TASK-AW-005-03", status: "completed", depends_on: ["TASK-AW-005-01"]}
+          - {task_id: "TASK-AW-005-04", status: "completed", depends_on: ["TASK-AW-005-02", "TASK-AW-005-03"]}

@@ -1,0 +1,296 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP5",
+  "checkpoint_id": "CP5-CR051-ST-AW-004-LLD-IMPLEMENTABILITY-R2",
+  "story_id": "ST-AW-004",
+  "cr_id": "CR-051",
+  "profile": "architecture-major",
+  "check_attempt": 2,
+  "context_ref": "process/context/CP5-CR051-LLD-CONTEXT.yaml",
+  "dispatch_refs": [
+    "process/handoffs/CR051-CP5-R2-META-DEV-LANE-C.md"
+  ],
+  "evidence_ref": "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md",
+  "supersedes_result_ref": "process/checks/CP5-CR051-ST-AW-004-LLD-IMPLEMENTABILITY.result.json",
+  "finding_refs": [
+    "process/docs/quality/CR051-CP5-INDEPENDENT-REVIEW-FINDINGS.md#f03"
+  ],
+  "repair_scope": "CP5-QA-R1-F03 aggregate consumer-side: accept only reread-validated PublishedLegResultHandle inputs and freeze exact non-self-referential evidence DAG",
+  "checker_provenance": {
+    "checker_name": "meta-flow story lld-check plus CP5 R2 16-item implementability review",
+    "checker_commit": "1373df565417092304ae7b523f529ae878f6931d",
+    "checker_version": "0.4.0",
+    "invocation": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story lld-check --project-root . --lld process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md --evidence-type full-lld",
+    "generated_by": "meta-dev-debugger/lane-c",
+    "lld_structure_check": "PASS",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md": "sha256:c8abbe42964145a53f617b116025aa4b814156fc182ab15b3ccaf80901f181bf",
+    "process/stories/STORY-ST-AW-004-aggregate-evidence-gate.md": "sha256:1a808f06fc1d2eb23a963249fe7743037a2226638913882684b44f0823825ddf",
+    "process/docs/features/cr051-aggregate/DESIGN.md": "sha256:557c8c3eb3699fe9850bea9bce75e45b9fcbf10d92d985bc395aab3c0de6aa0d",
+    "process/docs/features/cr051-aggregate/TEST-PLAN.md": "sha256:b7fb7fe56040cc9b65bff5120903f31aff48d63ab0f527bdcf1e589a2ace5da0",
+    "process/docs/features/cr051-legs/DESIGN.md": "sha256:0100d591d4d4de68f29c085ae476a20c2623f2ae043f6f46b27f8ac4ae96e6be",
+    "process/context/CP5-CR051-LLD-CONTEXT.yaml": "sha256:2785ba700d6d2ae9b9d0def21341d2ee933c42fcb78d2d3fcd6e656e1093a0ac",
+    "process/DEVELOPMENT-PLAN.yaml": "sha256:3110d73b13484f0bb496c0fbe3874e1e7fd2b3bdf0d45d38b48f2c5088a7dfc6",
+    "process/checks/CP4-CR051-STORY-DAG-PARALLEL-SAFETY.result.json": "sha256:e61c562ddf754c0322be631af0d1245e40ab6106f9ebef03c7af7e774ac08f0a",
+    "process/checks/CP5-CR051-ST-AW-004-LLD-IMPLEMENTABILITY.result.json": "sha256:26975f3d425c2f5dc6be2fdc9b8b254ddd44167abb5389217bdb33b86df53fa8"
+  },
+  "items": [
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-001",
+      "category": "entry",
+      "name": "R2 scope, process route, CP4 gate and aggregate design inputs are ready",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/handoffs/CR051-CP5-R2-META-DEV-LANE-C.md",
+        "process/checks/CP4-CR051-STORY-DAG-PARALLEL-SAFETY.result.json",
+        "process/context/CP5-CR051-LLD-CONTEXT.yaml"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "R2 repairs F03 only; R1 result remains immutable and this result supersedes it."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-002",
+      "category": "acceptance_coverage",
+      "name": "Only two matching validated published payloads with PASS/PASS can produce aggregate PASS",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#2-requirements--需求functional--non-functional",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#81-固定决策表",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#14-definition-of-donedod"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "The 4x4 table remains complete; raw/unpublished, missing, invalid, non-terminal and non-PASS inputs cannot reach aggregate PASS or projection."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-003",
+      "category": "consumer_contract",
+      "name": "Aggregate accepts exactly two PublishedLegResultHandle inputs and rejects raw or unpublished payloads",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-aggregate/DESIGN.md",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#5-数据模型与持久化设计"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "AggregateRequest carries source/artifact published handles; no raw payload, unpublished outcome, directory scan or latest-result inference is accepted."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-004",
+      "category": "validation_contract",
+      "name": "Validator rereads each payload and checks receipt, ref, digest, key and correlation before compute",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-aggregate/DESIGN.md",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#6-api--interface-设计",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#7-核心处理流程"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Result_ref is the read source; payload digest, receipt digest, writer receipt fields, derived single-write key and five-key correlation must all match."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-005",
+      "category": "evidence_dag",
+      "name": "The exact no-self-reference published-result and aggregate DAG is frozen",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-aggregate/DESIGN.md",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#52-canonicalization-与-evidence-dag"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "LegResultPayload -> LegResultWriteReceipt -> validated PublishedLegResultHandle -> immutable AggregateResult -> AggregateWriteReceipt -> controlled projection, with no edge pointing back to a payload."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-006",
+      "category": "aggregate_data_contract",
+      "name": "Immutable AggregateResult digest is fixed before write and its receipt remains external",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#5-数据模型与持久化设计",
+        "process/docs/features/cr051-aggregate/TEST-PLAN.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Aggregate payload excludes its own aggregate_ref, append/write receipt, receipt_digest, writer_id, written_at and projection receipt; external receipt is never written back."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-007",
+      "category": "projection_boundary",
+      "name": "Controlled projection starts only from a reread-valid aggregate receipt and never invokes Git or worktree",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#83-projection-二阶段门",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#9-安全与性能设计"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Non-PASS/stale/persist-failed inputs hold with writer calls zero; aggregate has no Git/worktree/manual-sync import or runtime call."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-008",
+      "category": "concurrency_consistency",
+      "name": "Deterministic aggregate identity, immutable append and current-selector CAS prevent overwrite",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#52-canonicalization-与-evidence-dag",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#10-测试设计"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Same validated inputs are idempotent; conflicting digest/current selector is BLOCKED; last-write-wins and payload overwrite are forbidden."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-009",
+      "category": "dependency_contract",
+      "name": "ST-AW-003 producer and ST-AW-004 consumer use the same payload, receipt and handle protocol",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-legs/DESIGN.md",
+        "process/docs/features/cr051-aggregate/DESIGN.md",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#84-兼容性与依赖选择"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Producer returns external receipt/handle; consumer rereads and validates it; neither side owns or imports the other's executor/persistence implementation."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-010",
+      "category": "testability",
+      "name": "Raw/unpublished, tamper, no-self-reference and exact-DAG paths have deterministic tests",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-aggregate/TEST-PLAN.md",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#10-测试设计"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "TP-AW04-017..020 cover input kind, handle/receipt/ref tamper, aggregate forbidden fields and the exact evidence/projection sequence."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-011",
+      "category": "file_impact",
+      "name": "Aggregate ownership and Lane C allowed-write boundaries remain deterministic",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#4-代码结构与文件影响范围",
+        "process/handoffs/CR051-CP5-R2-META-DEV-LANE-C.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "R2 changed only allowed Feature/Story/check files; no source, test, shared plan/state/ledger/checkpoint or other Story writes."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-012",
+      "category": "security",
+      "name": "Untrusted evidence cannot be downgraded into a business status or controlled projection",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#9-安全与性能设计",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#12-风险难点与预研建议"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Invalid publication evidence blocks before precedence; no automatic close, rollback, sync, Git or worktree action is available."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-013",
+      "category": "dev_gate",
+      "name": "Development gate remains closed and computable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate.md#lld_gate",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#14-definition-of-donedod"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Story remains ready-for-review and confirmed=false; R2 PASS neither approves CP5 nor authorizes source/projection/runtime writes."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-014",
+      "category": "clarification_convergence",
+      "name": "F03 repair adds no unresolved user decision, OPEN, Spike or waiver",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP5-CR051-LLD-CONTEXT.yaml",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#121-实现灰区与取舍记录"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "The independent review supplied a fixed non-self-referential contract; clarification queue remains clear."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-015",
+      "category": "deliverables",
+      "name": "Aggregate Feature design, test plan, Story card and full LLD are mutually aligned",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/docs/features/cr051-aggregate/DESIGN.md",
+        "process/docs/features/cr051-aggregate/TEST-PLAN.md",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate.md",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "All four artifacts consume published handles and define the same reread validator, external receipt and exact no-self-reference DAG."
+    },
+    {
+      "id": "CP5-CR051-ST-AW-004-R2-016",
+      "category": "exit",
+      "name": "ST-AW-004 R2 full LLD is structurally valid and ready for independent re-review",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md",
+        "process/checks/CP5-CR051-ST-AW-004-LLD-IMPLEMENTABILITY.result.json"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "lld-check returned OK; R2 supersedes R1, keeps confirmed=false and routes to CP5 R2 batch independent review."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T064828Z0000-6b6f1f25",
+    "RE-20260718T071723Z0000-d55c2fef"
+  ],
+  "decision": "PASS",
+  "next_route": "CP5-r2-batch-independent-review",
+  "checked_at": "2026-07-18T07:45:49Z"
+}

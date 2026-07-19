@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-051",
+  "correction_type": "current-working-tree-enum-field-normalization",
+  "corrected_at": "2026-07-18T08:20:00Z",
+  "target": {
+    "path": "process/state/READ-EXPANSION-LEDGER.ndjson",
+    "source_sha256_before": "sha256:6c668b01d8b3b1f6b1834690643b893790c9ca23452d45a1790f37373dccce31",
+    "repository_state": "uncommitted-current-CR-working-tree"
+  },
+  "event_ids": [
+    "RE-20260718T064828Z0000-6b6f1f25",
+    "RE-20260718T065656Z0000-0533b178",
+    "RE-20260718T065656Z0000-9744d7bc",
+    "RE-20260718T070828Z0000-9e83da4b",
+    "RE-20260718T071723Z0000-60e96340",
+    "RE-20260718T071723Z0000-eb5d1bf6",
+    "RE-20260718T071723Z0000-02e97ad6",
+    "RE-20260718T071723Z0000-c99442d7",
+    "RE-20260718T071723Z0000-d55c2fef",
+    "RE-20260718T071723Z0000-e2c28ff7",
+    "RE-20260718T075424Z0000-cb0db480",
+    "RE-20260718T075424Z0000-af954ec7",
+    "RE-20260718T075424Z0000-b6af13b8",
+    "RE-20260718T075424Z0000-5f24fe6c",
+    "RE-20260718T075424Z0000-b77b318b",
+    "RE-20260718T075424Z0000-c08aa822"
+  ],
+  "before": {
+    "reason": "free-form review description",
+    "allowed_by_policy": false,
+    "authorization_reason": null,
+    "expansion_authorized_for_deny_default_reads": false
+  },
+  "after": {
+    "reason": "deep_review",
+    "allowed_by_policy": true,
+    "authorization_reason_for_deny_default_reads": "deep_review",
+    "expansion_authorized": true,
+    "detailed_reason_location": "notes"
+  },
+  "semantic_change": false,
+  "historical_mutation": false,
+  "reason": "The direct read-log validator consumes each row and has no supersession mechanism. These uncommitted CR-051 events already represented CP5 deep reviews, but the producer placed the review description in the enum field instead of notes. Normalize the enum and derived authorization fields while preserving event identity, requested path, actor, timestamps, context, estimates and the detailed reason.",
+  "verification": [
+    "meta-flow context read-log-check --project-root .",
+    "all 16 target events have reason=deep_review and allowed_by_policy=true",
+    "all deny-default target events have authorization_reason=deep_review and expansion_authorized=true"
+  ]
+}

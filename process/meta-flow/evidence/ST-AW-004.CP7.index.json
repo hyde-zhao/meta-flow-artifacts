@@ -1,0 +1,124 @@
+{
+  "artifacts": [
+    "process/docs/quality/CR051-ST-AW-004-VERIFICATION-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-004-TEST-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-004-REVIEW.md",
+    "process/docs/quality/CR051-ST-AW-004-FIXES.md"
+  ],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-004-VERIFICATION-REPORT.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-004-TEST-REPORT.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-004-REVIEW.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-004-FIXES.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/ST-AW-004.CP7.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/ST-AW-004.CP7.index.json"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_leg_lifecycle.py tests/test_artifact_aggregate.py tests/test_git_branch_lifecycle.py tests/test_workspace_git_sync.py tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "result": "pass: 179 passed, 9 subtests passed in 4.54s"
+    },
+    {
+      "command": "pytest -q -vv tests/test_artifact_aggregate.py -k fixed_precedence_covers_all_16_status_combinations",
+      "result": "pass: 16 passed, 46 deselected"
+    },
+    {
+      "command": "pytest -q -vv tests/test_artifact_aggregate.py -k invalid_or_unpublished_handles_are_rejected_before_aggregate",
+      "result": "pass: 14 passed, 48 deselected"
+    },
+    {
+      "command": "pytest -q -vv tests/test_artifact_aggregate.py -k non_pass_results_persist_but_never_call_projection",
+      "result": "pass: 15 passed, 47 deselected"
+    },
+    {
+      "command": "pytest -q -vv tests/test_artifact_aggregate.py -k 'aggregate_digest_omits_only_its_own_digest_and_binds_nested_leg_digests or stale_persisted_pass_is_held_before_projector_call'",
+      "result": "pass: 2 passed, 60 deselected"
+    },
+    {
+      "command": "published=false fail-closed runtime probe",
+      "result": "pass: validated=false; code=unpublished-result"
+    },
+    {
+      "command": "readback/current/conflict/failed projection-receipt runtime probe",
+      "result": "pass: 4/4 HOLD; projector calls=0"
+    },
+    {
+      "command": "uv run --python 3.11 ruff check meta_flow/workflow/artifact_aggregate.py tests/test_artifact_aggregate.py meta_flow/workflow/cr_lifecycle.py meta_flow/state/current.py",
+      "result": "pass: All checks passed"
+    },
+    {
+      "command": "uv run --python 3.11 ruff format --check meta_flow/workflow/artifact_aggregate.py tests/test_artifact_aggregate.py",
+      "result": "pass: 2 files already formatted"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr051-staw004-cp7-pycompile uv run --python 3.11 python -m py_compile meta_flow/workflow/artifact_aggregate.py meta_flow/workflow/cr_lifecycle.py meta_flow/state/current.py tests/test_artifact_aggregate.py",
+      "result": "pass"
+    },
+    {
+      "command": "aggregate forbidden dependency scan",
+      "result": "pass: Git/worktree/subprocess/manual-sync/rollback/close/status-sync matches=0"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/STORY-ST-AW-004.CP7.verify-packet.json --return process/returns/ST-AW-004.CP7.return.json --project-root .",
+      "result": "pass: Story Return Packet Check OK; logical expected path warning due external process symlink"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/ST-AW-004.CP7.index.json --project-root .",
+      "result": "pass: Evidence Index Check OK"
+    }
+  ],
+  "cr_id": "CR-051",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/returns/ST-AW-004.CP7.return.json",
+  "risks": [
+    {
+      "blocking": false,
+      "id": "R-AW004-LOCK-CRASH",
+      "summary": "selector writer crash 可能遗留 lock directory；后续 writer fail closed，需人工诊断或受控恢复。"
+    },
+    {
+      "blocking": false,
+      "id": "CR051-RISK-WINDOWS-CROSS-PROCESS-LOCK",
+      "summary": "native Windows 跨进程 lock crash 行为未在本轮 Linux 环境执行。"
+    },
+    {
+      "blocking": false,
+      "id": "CR051-RISK-REMOTE-UNVERIFIED",
+      "summary": "真实托管 remote/worktree 未授权且未验证；本 Story 不执行或拥有这些能力。"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "ST-AW-004",
+  "tests": [
+    "source/artifact 4x4 fixed precedence matrix: 16/16",
+    "invalid/unpublished published-handle fail-closed before persist/project",
+    "aggregate own digest top-level-only omission and nested leg digest binding",
+    "immutable append, readback, same-input idempotency and conflicting payload rejection",
+    "selector CAS and concurrent last-write-wins=0",
+    "persisted/readback/current 2/2 PASS projection hard gate",
+    "15 non-PASS, stale, readback/current/conflict/failure projector calls=0",
+    "controlled current/CR ledger projection without close/status-sync/rollback",
+    "CR aggregate CLI dry-run writes=0",
+    "state v2, CR lifecycle and producer/consumer adjacent regressions"
+  ],
+  "waivers": []
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-002",
+  "status": "verified_with_risk",
+  "touched_files": [
+    {"path": "process/docs/quality/CR051-ST-AW-002-VERIFICATION-REPORT.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-002-TEST-REPORT.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-002-REVIEW.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-002-FIXES.md", "change_type": "created"},
+    {"path": "process/returns/ST-AW-002.CP7.return.json", "change_type": "created"},
+    {"path": "process/evidence/ST-AW-002.CP7.index.json", "change_type": "created"}
+  ],
+  "contract_changes": {"public_api_changed": false, "data_contract_changed": false, "design_delta_required": false, "design_delta_ref": null},
+  "boundary_check": {"allowed_paths_only": true, "forbidden_paths_touched": [], "unexpected_imports": []},
+  "verification": {
+    "commands_run": [
+      {"command": "pytest ST-AW-002 CAP/DUR/WT/PORT suite", "result": "pass", "summary": "83 passed"},
+      {"command": "ruff + py_compile + git diff", "result": "pass", "summary": "all pass"},
+      {"command": "dangerous argv audit", "result": "pass", "summary": "executable dangerous argv count 0"}
+    ],
+    "tests": ["CAP-01..11", "DUR-01..14", "WT-01..14", "PORT-W-01..08", "TC-AW-004/005/007/010/011/012/014/015"],
+    "skipped": ["real shared remote/worktree pilot not authorized", "Windows durability pilot not executed"]
+  },
+  "evidence_refs": ["process/docs/quality/CR051-ST-AW-002-VERIFICATION-REPORT.md", "process/docs/quality/CR051-ST-AW-002-TEST-REPORT.md", "process/docs/quality/CR051-ST-AW-002-REVIEW.md", "process/checks/CP6-CR051-ST-AW-002-recoverable-project-worktree-CODING-DONE.result.json"],
+  "open_questions": [],
+  "risks": [
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "level": "medium", "status": "open", "owner": "CP8 decision owner", "detail": "real shared remote/worktree pilot not authorized"},
+    {"id": "CR051-RISK-WINDOWS-DURABILITY-PILOT", "level": "low", "status": "open", "owner": "CP8 decision owner", "detail": "Windows fsync/locking pilot not executed"}
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "W3_READY_WITH_RISK"
+}

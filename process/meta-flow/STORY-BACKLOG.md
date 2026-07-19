@@ -1,9 +1,11 @@
 ---
-version: "1.1"
+version: "1.2"
 confirmed: true
 confirmed_by: "meta-po-delegated"
 confirmed_at: "2026-04-23T11:47:36+08:00"
-last_updated: "2026-05-15T00:00:00+08:00"
+last_updated: "2026-07-18T06:40:00Z"
+active_change_ref: "CR-051"
+active_change_status: "ready-for-cp4"
 ---
 
 # Story Backlog
@@ -14,6 +16,7 @@ last_updated: "2026-05-15T00:00:00+08:00"
 |---|---|---|---|
 | 1.0 | 2026-04-23 | meta-se | 基于 3 份 HLD 生成 12 Story / 6 Wave 基线 |
 | 1.1 | 2026-05-15 | meta-po | CR-004：追加 Codex agent 生命周期、安装组件、确认协议与交付路由综合修订，不重排既有 Story 编号 |
+| 1.2 | 2026-07-18 | meta-se-critical | 增量追加 CR-051 的 5 个固定 Story、4 个开发 Wave、typed DAG、Feature refs、LLD policy、文件所有权和 CP5 evidence 路径；保留既有 Story。 |
 
 ## Story 列表
 
@@ -83,3 +86,41 @@ last_updated: "2026-05-15T00:00:00+08:00"
 | CR037-S11 | FU-RF tracking support | ST-PG-010 | roadmap-follow-up-tracking | technical-note | P1 | CR037-W4 | CR037-S09 | CR-G-S01 | dev-ready |
 | CR037-S12 | project stale-check | ST-PG-010 | project-stale-check | full-lld | P1 | CR037-W4 | CR037-S09,CR037-S11 | CR-G-S02 | dev-ready |
 | CR037-S13 | quant-lab migration dry-run and reports | ST-PG-011 | quant-lab-migration-readiness | full-lld | P2 | CR037-W5 | CR037-S01,CR037-S05,CR037-S07,CR037-S08,CR037-S09,CR037-S10,CR037-S11,CR037-S12 | CR-H-S01 | dev-ready |
+
+## CR-051 Project-first Artifact Worktree Story
+
+> 本节是 CR-051 CP4 core planning 真相摘要。Feature 级实现设计均为 required；ST-AW-001..004 使用 full LLD，ST-AW-005 仅在当前纯只读 migration handoff 边界下使用 technical-note。CP4 通过不授权源码实现或任何真实 Git/worktree/ref/remote/link/migration/main-sync mutation。
+
+| Story ID | 标题 | Feature 设计引用 | lld_policy | 优先级 | Wave | depends_on / type | 状态 | CP5 evidence path |
+|---|---|---|---|---|---|---|---|---|
+| ST-AW-001 | 唯一解析 project-first artifact 路由并保留显式 legacy 兼容 | `cr051-routing/{DESIGN,TEST-PLAN,TASKS}.md` | full-lld | P0 | W1 | — | lld-ready | `process/stories/STORY-ST-AW-001-project-first-routing-LLD.md` |
+| ST-AW-002 | 管理可恢复的长期项目 worktree 与 create-only integration | `cr051-worktree/{DESIGN,TEST-PLAN,TASKS}.md` | full-lld | P0 | W2 | ST-AW-001 / contract | lld-ready | `process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md` |
+| ST-AW-003 | 执行 source-default 与 artifact-integration 异构 Git legs | `cr051-legs/{DESIGN,TEST-PLAN,TASKS}.md` | full-lld | P0 | W3 | ST-AW-002 / runtime | lld-ready | `process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md` |
+| ST-AW-004 | 以单写 evidence gate 聚合全部 required legs | `cr051-aggregate/{DESIGN,TEST-PLAN,TASKS}.md` | full-lld | P0 | W3 | ST-AW-003 / contract | lld-ready | `process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md` |
+| ST-AW-005 | 生成零 mutation 的逐项目 migration manifest 与人工交接 | `cr051-migration/{DESIGN,TEST-PLAN,TASKS}.md` | technical-note | P1 | W4 | ST-AW-003/runtime、ST-AW-004/runtime | lld-ready-for-review | `process/stories/STORY-ST-AW-005-read-only-migration-handoff.md#技术说明` |
+
+### CR-051 DAG 与 Wave
+
+```text
+ST-AW-001 -contract-> ST-AW-002 -runtime-> ST-AW-003 -contract-> ST-AW-004
+                                                     \                 /
+                                                      +----runtime----+
+                                                            |
+                                                            v
+                                                       ST-AW-005
+```
+
+| Wave | Stories | 开发并行 | 门控 |
+|---|---|---|---|
+| W1 | ST-AW-001 | 否 | CP5 full LLD confirmed |
+| W2 | ST-AW-002 | 否 | ST-AW-001 contract frozen；O-AW-01/02 纳入 LLD/fixture |
+| W3 | ST-AW-003、ST-AW-004 | 条件是 | LegResult contract CP5 frozen、primary 文件不重叠、CLI 仅 ST-AW-004 合并 |
+| W4 | ST-AW-005 | 否 | ST-AW-003/004 verified；technical-note 仍保持纯只读 |
+
+### CR-051 开放义务
+
+| Open ID | Story | 状态 | 处理 |
+|---|---|---|---|
+| O-AW-01 | ST-AW-002 | non-blocking-open / CP5 obligation | bounded capacity 与 0 false-safe/underestimate；失败则禁用 auto switch |
+| O-AW-02 | ST-AW-002 | non-blocking-open / CP5 obligation | durable store fault matrix；任一 persistence fault 在 Git mutation 前 BLOCKED |
+| O-AW-03 | ST-AW-005 | non-blocking-open / follow-up | 三个固定阈值只生成条件式同步助手 CR candidate，不启用自动 sync |

@@ -1,0 +1,93 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "meta_flow/workspace/project_artifact_routing.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "meta_flow/workspace/routing.py"
+    },
+    {
+      "change_type": "created",
+      "path": "tests/test_cr051_project_artifact_routing.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "tests/test_workspace_routing.py"
+    },
+    {
+      "change_type": "created",
+      "path": "process/stories/STORY-ST-AW-001-project-first-routing-IMPLEMENTATION.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/ST-AW-001.CP6.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/ST-AW-001.CP6.index.json"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr051_project_artifact_routing.py tests/test_workspace_routing.py",
+      "exit_code": 0,
+      "result": "PASS",
+      "summary": "36 passed in 0.13s"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff check meta_flow/workspace/project_artifact_routing.py meta_flow/workspace/routing.py tests/test_cr051_project_artifact_routing.py tests/test_workspace_routing.py",
+      "exit_code": 0,
+      "result": "PASS",
+      "summary": "All checks passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python -m py_compile meta_flow/workspace/project_artifact_routing.py",
+      "exit_code": 0,
+      "result": "PASS",
+      "summary": "exit 0"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS",
+      "summary": "exit 0"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow check module-boundaries --project-root .",
+      "exit_code": 1,
+      "result": "N/A",
+      "summary": "checker prerequisite missing: docs/design/MODULE-BOUNDARIES.yaml; not introduced by ST-AW-001"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow check imports --project-root .",
+      "exit_code": 1,
+      "result": "N/A",
+      "summary": "same pre-existing checker applicability gap"
+    }
+  ],
+  "cr_id": "CR-051",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/returns/ST-AW-001.CP6.return.json",
+  "risks": [
+    {
+      "id": "ST-AW-001-RISK-MODULE-MANIFEST-MISSING",
+      "mitigation": "Host/QA 恢复 canonical manifest 或登记 waiver 后重跑；本 Story 不越权创建。",
+      "severity": "medium",
+      "summary": "仓库级 module-boundaries/import checker 因 docs/design/MODULE-BOUNDARIES.yaml 缺失未进入代码分析。"
+    },
+    {
+      "id": "ST-AW-001-RISK-YAML-SUBSET",
+      "mitigation": "metadata 生成方使用 canonical schema；复杂 YAML fail closed。",
+      "severity": "low",
+      "summary": "内置 YAML parser 仅支持 portable route schema 所需 mapping/scalar/scalar-list 子集。"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "ST-AW-001",
+  "tests": [],
+  "waivers": []
+}

@@ -1,0 +1,107 @@
+{
+  "artifacts": [
+    "process/docs/quality/CR051-ST-AW-003-VERIFICATION-REPORT-R2.md",
+    "process/docs/quality/CR051-ST-AW-003-TEST-REPORT-R2.md",
+    "process/docs/quality/CR051-ST-AW-003-REVIEW-R2.md",
+    "process/docs/quality/CR051-ST-AW-003-FIXES-R2.md"
+  ],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-003-VERIFICATION-REPORT-R2.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-003-TEST-REPORT-R2.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-003-REVIEW-R2.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-003-FIXES-R2.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/ST-AW-003.CP7-R2.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/ST-AW-003.CP7-R2.index.json"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_leg_lifecycle.py -k default_clock",
+      "result": "pass",
+      "summary": "6 passed, 38 deselected；4 条合法 now=None PASS，2 条 genuine stale/future 正确 BLOCKED、runner=0。"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_leg_lifecycle.py",
+      "result": "pass",
+      "summary": "44 passed。"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_leg_lifecycle.py tests/test_git_branch_lifecycle.py tests/test_workspace_git_sync.py",
+      "result": "pass",
+      "summary": "62 passed。"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_leg_lifecycle.py tests/test_artifact_aggregate.py tests/test_git_branch_lifecycle.py tests/test_workspace_git_sync.py tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "result": "pass",
+      "summary": "185 passed, 9 subtests passed。"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff check meta_flow/workflow/artifact_leg_lifecycle.py tests/test_artifact_leg_lifecycle.py",
+      "result": "pass",
+      "summary": "All checks passed。"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff format --check meta_flow/workflow/artifact_leg_lifecycle.py tests/test_artifact_leg_lifecycle.py",
+      "result": "pass",
+      "summary": "2 files already formatted。"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr051-staw003-cp7-r2-pycompile uv run --python 3.11 python -m py_compile meta_flow/workflow/artifact_leg_lifecycle.py tests/test_artifact_leg_lifecycle.py",
+      "result": "pass",
+      "summary": "Python 3.11 compilation passed；cache 隔离到 /tmp。"
+    },
+    {
+      "command": "scoped git diff/no-index whitespace + dangerous API/argv/forbidden import audit",
+      "result": "pass",
+      "summary": "无 whitespace diagnostics、unexpected import、subprocess/os.system/shell=True/eval/exec；destructive Git tokens 仅在 denylist。"
+    }
+  ],
+  "cr_id": "CR-051",
+  "design_delta_ref": null,
+  "return_ref": "process/returns/ST-AW-003.CP7-R2.return.json",
+  "risks": [
+    {
+      "detail": "Hosted shared remote、network、credentials 与 branch protection 未授权、未验证。",
+      "id": "CR051-RISK-REMOTE-UNVERIFIED",
+      "level": "medium",
+      "owner": "CP8 decision owner",
+      "status": "open-not-authorized"
+    },
+    {
+      "detail": "当前 Linux 环境未执行 Windows native Git argv/path pilot。",
+      "id": "CR051-RISK-WINDOWS-NATIVE-GIT-PILOT",
+      "level": "low",
+      "owner": "CP7/CP8 decision owner",
+      "status": "open"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "ST-AW-003",
+  "tests": [
+    "4 valid now=None paths passed",
+    "2 genuine stale/future paths blocked before runner",
+    "44 directed passed",
+    "62 adjacent passed",
+    "185 tests and 9 subtests combined passed",
+    "REV-AW003-001 independently closed"
+  ],
+  "waivers": []
+}

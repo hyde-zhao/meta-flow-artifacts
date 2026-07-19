@@ -1,17 +1,32 @@
 schema_version: "1"
 status: "baseline"
-version: "1.6"
+version: "1.9"
 created_at: "2026-07-02"
 owner: "host-orchestrator"
 cr_ref: "CR-037"
-active_change_ref: "CR-050"
+active_change_ref: "CR-051"
 source_use_cases: "process/docs/product/USE-CASES.md"
 source_requirements: "process/docs/product/REQUIREMENTS.md"
 coverage_policy:
   high_priority_minimum: "positive + negative"
-  blocked_cr_policy: "CR-050 scenarios are CP2 R2 candidate-baseline inputs; CP2 R2 does not authorize source implementation, commit, real remote branch/default-branch mutation, forge API, credentials, runtime, production write, or quant-lab changes."
+  blocked_cr_policy: "CR-051 scenarios are CP2 candidate-baseline inputs; CP2 does not authorize HLD bypass, source implementation, real artifact migration/link/worktree/branch/ref mutation, remote publication, credentials, runtime, production write, or trading."
   release_repo_policy: "quant-lab release repo changes are never automated by roadmap refresh."
 revision_history:
+  - version: "1.9"
+    date: "2026-07-18"
+    author: "meta-pm"
+    change: "Revise existing TC-AW scenarios for heterogeneous source/artifact legs, single aggregate completion, create-only integration bootstrap and manual out-of-CR main/integration synchronization; preserve all 75 scenario IDs and counts."
+    document_handling: "incremental-update-after-cp2-changes-requested-r3"
+  - version: "1.8"
+    date: "2026-07-17"
+    author: "meta-pm"
+    change: "Revise TC-AW-004/007/008/009/011/012/014/015 for the accepted durable project integration branch, short-lived namespaced CR branch, shared main baseline, explicit merge-main refresh and existing-control+sibling-worktree topology; preserve all 75 scenario IDs and counts."
+    document_handling: "incremental-update-after-cp2-changes-requested"
+  - version: "1.7"
+    date: "2026-07-17"
+    author: "meta-pm"
+    change: "Append TC-AW-001..015 for project-first routing, persistent per-project worktrees, project-scoped Git lifecycle, explicit shared-main refresh and migration preflight; preserve all prior IDs."
+    document_handling: "incremental-update"
   - version: "1.6"
     date: "2026-07-16"
     author: "host-orchestrator-inline-fallback"
@@ -891,13 +906,208 @@ scenarios:
     evidence_type: "merge-finish-gate-idempotence-test"
     automation_status: "planned"
 
+  - id: "TC-AW-001"
+    title: "project-first layout resolves one current-project docs/process target"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-AW-001"]
+    requirements: ["REQ-AW-001", "REQ-AW-003", "REQ-AW-NF002"]
+    stories: ["ST-AW-001"]
+    preconditions: ["project-first metadata names the current project and sibling worktree root"]
+    action: "Resolve docs/process routing for meta-flow"
+    expected: ["exactly meta-flow/docs and meta-flow/process inside the registered project worktree are returned", "no sibling path is returned", "persisted canonical metadata contains no device-specific absolute path"]
+    evidence_type: "routing-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-AW-002"
+    title: "legacy layout remains explicit read-compatible"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-AW-001"]
+    requirements: ["REQ-AW-002", "REQ-AW-003"]
+    stories: ["ST-AW-001"]
+    preconditions: ["layout version explicitly selects legacy docs/<project> and process/<project>"]
+    action: "Resolve a not-yet-migrated project"
+    expected: ["legacy targets remain readable", "write target follows explicit layout version", "no file or symlink is moved"]
+    evidence_type: "legacy-compatibility-fixture"
+    automation_status: "planned"
+
+  - id: "TC-AW-003"
+    title: "ambiguous legacy and project-first write targets fail closed"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-AW-001"]
+    requirements: ["REQ-AW-002", "REQ-AW-NF001"]
+    stories: ["ST-AW-001"]
+    preconditions: ["legacy and project-first paths coexist without an authoritative layout version"]
+    action: "Resolve a write target"
+    expected: ["decision is BLOCKED", "both candidates and the required repair/configuration are reported", "write count is zero"]
+    evidence_type: "routing-ambiguity-negative-fixture"
+    automation_status: "planned"
+
+  - id: "TC-AW-004"
+    title: "create-only bootstrap of a missing project integration branch"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-AW-002"]
+    requirements: ["REQ-AW-004", "REQ-AW-005", "REQ-AW-006", "REQ-AW-007"]
+    stories: ["ST-AW-002"]
+    preconditions: ["temporary existing control checkout is valid", "configurable sibling worktree parent is empty/owned", "fresh origin/main exact OID is observed", "project namespace/sparse/owned-path policy is explicit"]
+    action: "Create and register the meta-flow project worktree, bootstrapping integration only if its remote ref is missing"
+    expected: ["a missing projects/meta-flow/integration is created exactly from fresh origin/main OID", "an existing integration is never recreated, reset or orphaned", "idle worktree checks out projects/meta-flow/integration", "an active CR uses projects/meta-flow/cr/<cr-id>-<slug>", "main is not a per-CR target", "check/list returns healthy branch-role evidence"]
+    evidence_type: "git-worktree-integration-test"
+    automation_status: "planned"
+
+  - id: "TC-AW-005"
+    title: "dirty sibling project does not block the current project"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-AW-002", "UC-AW-003"]
+    requirements: ["REQ-AW-008", "REQ-AW-009", "REQ-AW-C003", "REQ-AW-NF003"]
+    stories: ["ST-AW-002", "ST-AW-003"]
+    preconditions: ["quant-lab worktree has uncommitted changes", "meta-flow worktree is clean and identity-valid"]
+    action: "Run meta-flow lifecycle preflight and local fixture operation"
+    expected: ["meta-flow is not blocked by quant-lab dirty state", "quant-lab files/index/ref remain unchanged", "no shared index.lock contention occurs"]
+    evidence_type: "multi-worktree-isolation-test"
+    automation_status: "planned"
+
+  - id: "TC-AW-006"
+    title: "dirty current project worktree blocks risky mutation"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-AW-003"]
+    requirements: ["REQ-AW-009", "REQ-AW-013"]
+    stories: ["ST-AW-003"]
+    preconditions: ["current meta-flow artifact worktree is dirty"]
+    action: "Attempt source/artifact leg open, publish, finish, aggregate, bootstrap, or remove"
+    expected: ["decision is BLOCKED before risky mutation", "dirty paths are scoped to current project", "local/remote ref change count is zero"]
+    evidence_type: "current-worktree-dirty-negative-test"
+    automation_status: "planned"
+
+  - id: "TC-AW-007"
+    title: "repeated CR IDs remain globally unique through project branch names"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-AW-002", "UC-AW-003"]
+    requirements: ["REQ-AW-007", "REQ-AW-NF004"]
+    stories: ["ST-AW-002", "ST-AW-003"]
+    preconditions: ["meta-flow and quant-lab both use CR-051"]
+    action: "Generate and validate artifact branch names"
+    expected: ["durable branches are projects/meta-flow/integration and projects/quant-lab/integration", "repeated CR IDs produce distinct projects/meta-flow/cr/CR-051-<slug> and projects/quant-lab/cr/CR-051-<slug> branches", "all generated names pass check-ref-format", "unsafe project/CR/slug input is rejected", "main is not classified as either project's owned branch"]
+    evidence_type: "branch-namespace-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-AW-008"
+    title: "heterogeneous source and artifact legs use distinct base and target branches"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-AW-004"]
+    requirements: ["REQ-AW-011", "REQ-AW-012", "REQ-AW-016"]
+    stories: ["ST-AW-004"]
+    preconditions: ["source default and project integration are fresh and observed", "both short-lived CR branches are clean", "shared artifact main may independently diverge"]
+    action: "Run one logical CR through its source-default leg and artifact-integration leg"
+    expected: ["source leg starts from and completes to the source default branch", "artifact leg starts from and completes only to the same project integration", "artifact shared main is not refreshed, merged or updated", "both leg results share CR ID and attempt correlation"]
+    evidence_type: "heterogeneous-dual-leg-integration-test"
+    automation_status: "planned"
+
+  - id: "TC-AW-009"
+    title: "integration expected-OID drift blocks artifact finish while main divergence does not"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-AW-004"]
+    requirements: ["REQ-AW-012", "REQ-AW-C004", "REQ-AW-NF005"]
+    stories: ["ST-AW-004"]
+    preconditions: ["shared main differs from project integration", "a concurrent artifact CR advances project integration beyond the captured expected OID"]
+    action: "Attempt artifact leg finish and aggregate the logical CR"
+    expected: ["shared main/integration divergence alone is non-blocking", "integration expected-OID drift makes artifact leg and aggregate BLOCKED", "no automatic merge/rebase/force/reset or cross-leg rollback occurs", "successful source leg remains recorded", "resume/abort guidance is explicit"]
+    evidence_type: "integration-oid-drift-failure-recovery-test"
+    automation_status: "planned"
+
+  - id: "TC-AW-010"
+    title: "project/worktree identity mismatch blocks all mutation"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-AW-001", "UC-AW-002", "UC-AW-003"]
+    requirements: ["REQ-AW-001", "REQ-AW-005", "REQ-AW-008", "REQ-AW-010"]
+    stories: ["ST-AW-001", "ST-AW-002", "ST-AW-003"]
+    preconditions: ["metadata claims meta-flow but resolved path/branch/owned namespace belongs to quant-lab"]
+    action: "Run routing or lifecycle preflight"
+    expected: ["decision is BLOCKED", "mismatched identity fields are listed", "files/worktrees/refs remain unchanged"]
+    evidence_type: "identity-mismatch-negative-fixture"
+    automation_status: "planned"
+
+  - id: "TC-AW-011"
+    title: "unsafe worktree removal requires exact clean and recovery proof"
+    type: "permission"
+    priority: "HIGH"
+    use_cases: ["UC-AW-002"]
+    requirements: ["REQ-AW-006", "REQ-AW-C002", "REQ-AW-C003"]
+    stories: ["ST-AW-002"]
+    preconditions: ["target is dirty, unknown, identity-mismatched, still on an active short-lived CR branch, or its branch/ref is still required"]
+    action: "Request project worktree removal"
+    expected: ["removal is BLOCKED", "no recursive delete or sibling cleanup occurs", "idle-integration or active-cr branch role is reported", "required finish/abort/recovery proof and authorization are reported"]
+    evidence_type: "worktree-remove-authorization-negative-test"
+    automation_status: "planned"
+
+  - id: "TC-AW-012"
+    title: "all worktree and lifecycle dry-runs have zero side effects"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-AW-001", "UC-AW-002", "UC-AW-003", "UC-AW-004", "UC-AW-005"]
+    requirements: ["REQ-AW-013", "REQ-AW-016"]
+    stories: ["ST-AW-001", "ST-AW-002", "ST-AW-003", "ST-AW-004", "ST-AW-005"]
+    preconditions: ["valid temporary multi-project repository fixture"]
+    action: "Dry-run route, create-only bootstrap, source/artifact leg open/finish/abort, aggregate, remove and migration preflight plans"
+    expected: ["ordered plans and branch-role transitions are deterministic", "file/link/worktree/branch/index/local-ref/remote-ref mutation count is zero"]
+    evidence_type: "dry-run-golden-test"
+    automation_status: "planned"
+
+  - id: "TC-AW-013"
+    title: "migration preflight emits a complete manifest without migration"
+    type: "precheck"
+    priority: "HIGH"
+    use_cases: ["UC-AW-005"]
+    requirements: ["REQ-AW-014", "REQ-AW-015", "REQ-AW-C001"]
+    stories: ["ST-AW-005"]
+    preconditions: ["legacy project paths and proposed project-first target are readable", "no migration authorization exists"]
+    action: "Generate per-project migration preflight/manifest"
+    expected: ["mapping/hash/count/link plan/readiness/verification/rollback fields are present", "actual file move, symlink and real Git mutation counts are zero"]
+    evidence_type: "migration-preflight-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-AW-014"
+    title: "two projects aggregate heterogeneous legs concurrently without crossover"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-AW-002", "UC-AW-003", "UC-AW-004"]
+    requirements: ["REQ-AW-007", "REQ-AW-008", "REQ-AW-009", "REQ-AW-010", "REQ-AW-017", "REQ-AW-NF003"]
+    stories: ["ST-AW-002", "ST-AW-003", "ST-AW-004"]
+    preconditions: ["temporary bare remote, source defaults, shared main and two independent project integrations are ready"]
+    action: "Run two project-namespaced logical CRs with interleaved source/artifact leg outcomes and aggregate each CR"
+    expected: ["each artifact leg uses only its own integration and short-lived CR branch", "each source leg targets its own source default", "aggregate precedence is BLOCKED > FAIL > IN_PROGRESS > PASS and only all-leg PASS completes", "PARTIAL is progress/effect only", "shared main and sibling paths remain unchanged", "branch collisions/index.lock/cross-project touched paths are zero"]
+    evidence_type: "concurrent-multi-project-integration-test"
+    automation_status: "planned"
+
+  - id: "TC-AW-015"
+    title: "stale worktree registry is diagnosed without destructive repair"
+    type: "failure-recovery"
+    priority: "HIGH"
+    use_cases: ["UC-AW-002", "UC-AW-005"]
+    requirements: ["REQ-AW-006", "REQ-AW-014", "REQ-AW-NF005"]
+    stories: ["ST-AW-002", "ST-AW-005"]
+    preconditions: ["registry path is missing, prunable, moved, stuck on an ended CR branch, or branch role/occupancy differs from metadata"]
+    action: "Run check/list and migration preflight"
+    expected: ["health is non-PASS with exact stale fields and expected integration/CR role", "safe inspect/prune/relink/return-to-integration suggestions are emitted", "automatic delete/recreate/branch-switch/migration count is zero"]
+    evidence_type: "stale-registry-recovery-fixture"
+    automation_status: "planned"
+
 coverage_summary:
-  total_scenarios: 60
-  high_priority_scenarios: 57
-  positive_scenarios: 22
-  negative_scenarios: 17
-  boundary_scenarios: 8
-  permission_scenarios: 4
-  failure_recovery_scenarios: 4
-  precheck_scenarios: 5
-  source_requirements_covered: "REQ-PG-001..022, REQ-PG-C001..005, REQ-PG-NF001..004, REQ-EI-001..023, REQ-EI-C001..003, REQ-EI-NF001..002, REQ-WT-001..017, REQ-GB-001..014, REQ-GB-C001..004 and REQ-GB-NF001..003"
+  total_scenarios: 75
+  high_priority_scenarios: 72
+  positive_scenarios: 28
+  negative_scenarios: 21
+  boundary_scenarios: 10
+  permission_scenarios: 5
+  failure_recovery_scenarios: 5
+  precheck_scenarios: 6
+  source_requirements_covered: "REQ-PG-001..022, REQ-PG-C001..005, REQ-PG-NF001..004, REQ-EI-001..023, REQ-EI-C001..003, REQ-EI-NF001..002, REQ-WT-001..017, REQ-GB-001..014, REQ-GB-C001..004, REQ-GB-NF001..003, REQ-AW-001..017, REQ-AW-C001..005 and REQ-AW-NF001..005"

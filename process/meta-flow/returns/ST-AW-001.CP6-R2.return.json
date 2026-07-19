@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "story_id": "ST-AW-001",
+  "cr_id": "CR-051",
+  "stage": "CP6",
+  "status": "implemented_with_risk",
+  "source_packet_ref": "process/context/stories/STORY-ST-AW-001.CP6-R2.work-packet.json",
+  "implementation_ref": "process/stories/STORY-ST-AW-001-project-first-routing-IMPLEMENTATION.md",
+  "evidence_refs": [
+    "process/stories/STORY-ST-AW-001-project-first-routing-IMPLEMENTATION.md",
+    "process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-001-FIXES.md"
+  ],
+  "touched_files": [
+    {
+      "path": "meta_flow/workspace/project_artifact_routing.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "meta_flow/workspace/routing.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "tests/test_cr051_project_artifact_routing.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "tests/test_workspace_routing.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/stories/STORY-ST-AW-001-project-first-routing-IMPLEMENTATION.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/returns/ST-AW-001.CP6-R2.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/ST-AW-001.CP6-R2.index.json",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "layout_changed": false,
+    "schema_changed": false,
+    "stable_error_codes_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "closed_findings": [
+      "CP7-AW-001-F01",
+      "CP7-AW-001-F02"
+    ]
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "sibling_paths_touched": [],
+    "real_git_worktree_ref_remote_link_migration_mutations": 0,
+    "notes": [
+      "R2 只修改两个 finding 对应的 adapter、owned-path validator 和两个回归测试。",
+      "更新 IMPLEMENTATION 前按 handoff 追加 deep_review read-log；未读取完整 LLD。",
+      "未修改 layout/schema/13 个稳定错误码、其他 Story、长期设计或真实 runtime target。"
+    ]
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr051_project_artifact_routing.py::test_legacy_non_string_owned_path_uses_structured_error tests/test_workspace_routing.py::test_project_route_projection_rejects_cross_project_decision",
+        "exit_code": 1,
+        "result": "EXPECTED_FAIL",
+        "summary": "测试先行：2 failed；复现 bare TypeError 与跨项目 health.ok=True"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr051_project_artifact_routing.py::test_legacy_non_string_owned_path_uses_structured_error tests/test_workspace_routing.py::test_project_route_projection_rejects_cross_project_decision",
+        "exit_code": 0,
+        "result": "PASS",
+        "summary": "2 passed in 0.06s"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr051_project_artifact_routing.py tests/test_workspace_routing.py",
+        "exit_code": 0,
+        "result": "PASS",
+        "summary": "38 passed in 0.14s；原 36 项保持通过"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff check meta_flow/workspace/project_artifact_routing.py meta_flow/workspace/routing.py tests/test_cr051_project_artifact_routing.py tests/test_workspace_routing.py",
+        "exit_code": 0,
+        "result": "PASS",
+        "summary": "All checks passed"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python -m py_compile meta_flow/workspace/project_artifact_routing.py meta_flow/workspace/routing.py",
+        "exit_code": 0,
+        "result": "PASS",
+        "summary": "exit 0"
+      },
+      {
+        "command": "git diff --check",
+        "exit_code": 0,
+        "result": "PASS",
+        "summary": "exit 0"
+      }
+    ],
+    "tests": [
+      "CP7-AW-001-F01",
+      "CP7-AW-001-F02",
+      "TC-AW-001",
+      "TC-AW-002",
+      "TC-AW-003",
+      "TC-AW-010",
+      "TC-AW-012"
+    ],
+    "evidence_refs": [
+      "process/stories/STORY-ST-AW-001-project-first-routing-IMPLEMENTATION.md"
+    ],
+    "skipped": [
+      "module-boundaries/import check: canonical docs/design/MODULE-BOUNDARIES.yaml remains absent",
+      "real cross-device portability pilot: runtime authorization remains unavailable"
+    ]
+  },
+  "design_delta_refs": [],
+  "risks": [
+    {
+      "id": "CR051-RISK-MODULE-BOUNDARIES-MANIFEST",
+      "severity": "medium",
+      "status": "open-for-cp8-review",
+      "owner": "CP8 decision owner",
+      "summary": "仓库级 module/import checker 的 canonical manifest 仍缺失；非 ST-AW-001 R2 引入。"
+    },
+    {
+      "id": "CR051-RISK-REAL-CROSS-DEVICE-PILOT",
+      "severity": "low",
+      "status": "open",
+      "owner": "meta-qa/human",
+      "summary": "真实跨设备 portability pilot 未授权；临时双根 relocation fixture 已通过。"
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "HOST_CP6_R2_AUTO_CHECK_THEN_CP7_REVERIFY"
+}

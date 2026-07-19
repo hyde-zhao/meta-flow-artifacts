@@ -1,0 +1,183 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR051-REQUIREMENT-CONTEXT-R2"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-07-17T09:02:59Z"
+created_by: "host-orchestrator"
+source_cr: "CR-051"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 12
+  max_summary_items: 16
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "Agent 必须先读取本 capsule，并且只读取 allowed_reads / must_read；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+
+allowed_reads:
+  - path: "process/state/STATE.current.json"
+    reason: "轻量运行态、当前变更和 CP2 R2 门禁"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "当前发现入口"
+    required: false
+  - path: "process/changes/summaries/CR-051.summary.json"
+    reason: "当前 CR 轻量摘要"
+    required: true
+  - path: "process/checks/CP0-CR-051.route-plan.json"
+    reason: "阶段适用性与禁止提前实现约束"
+    required: true
+  - path: "process/checks/CP2-CR051-REQUIREMENTS-BASELINE-R2.result.json"
+    reason: "CP2 R2 自动预检机器真相源"
+    required: true
+  - path: "process/handoffs/CR051-CP2-R2-META-PM-RETURN-SUMMARY.md"
+    reason: "R2 产品修订、计数和剩余设计细化摘要"
+    required: true
+  - path: "process/checks/CP2-CR051-DISCUSSION-CHECKPOINT.json"
+    reason: "SGQ-AW-003 与 DQ-01..03 resolved-by-user 结构化证据"
+    required: true
+  - path: "process/docs/product/USE-CASES.md"
+    reason: "人工审查需要时核对用户意图和 SGQ 证据"
+    required: false
+  - path: "process/docs/product/REQUIREMENTS.md"
+    reason: "人工审查需要时核对分支角色与验收契约"
+    required: false
+  - path: "process/docs/product/SCENARIOS.yaml"
+    reason: "人工审查需要时核对 15 个 CR-051 场景"
+    required: false
+  - path: "process/docs/product/TEST-MATRIX.md"
+    reason: "人工审查需要时核对追溯覆盖"
+    required: false
+  - path: "process/docs/product/MVP-SCOPE.md"
+    reason: "人工审查需要时核对能力与迁移边界"
+    required: false
+
+must_read:
+  - path: "process/context/CP2-CR051-REQUIREMENT-CONTEXT-R2.yaml"
+    reason: "R2 阶段最小事实与读取边界"
+    required: true
+  - path: "process/state/STATE.current.json"
+    reason: "验证 active CR、阶段和 pending gate"
+    required: true
+  - path: "process/checks/CP2-CR051-REQUIREMENTS-BASELINE-R2.result.json"
+    reason: "确认自动预检 PASS、blocker=0、waiver=0"
+    required: true
+  - path: "process/handoffs/CR051-CP2-R2-META-PM-RETURN-SUMMARY.md"
+    reason: "消费增量修订和计数摘要"
+    required: true
+  - path: "process/checks/CP2-CR051-DISCUSSION-CHECKPOINT.json"
+    reason: "消费三项已解决用户决策"
+    required: true
+
+read_if_needed:
+  - path: "process/changes/CR-051.md"
+    trigger: "CR summary 缺少五维影响或文档处理决策；读取后必须记录 read expansion"
+  - path: "process/docs/product/*"
+    trigger: "人工审查需要核对正式条目、计数冲突或 R2 追溯时"
+  - path: "process/discussions/CP2-CR051-SCENARIO-DISCUSSION-LOG.md"
+    trigger: "需要审计 SGQ-AW-003 对话恢复证据时；读取后必须记录 read expansion"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "生成的人类摘要，不作为机器入口"
+  - path_or_pattern: "process/DEVELOPMENT-PLAN.yaml"
+    reason: "CP2 批准前禁止复用旧开发计划"
+  - path_or_pattern: "process/changes/CR-*.md"
+    reason: "默认读取 CR summary；全文只在冲突或审计时展开"
+  - path_or_pattern: "process/stories/**"
+    reason: "CP2 批准前禁止 Story/LLD 消费"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不属于当前门禁默认上下文"
+  - path_or_pattern: "process/discussions/**"
+    reason: "讨论日志仅用于人工审计和恢复"
+  - path_or_pattern: "../meta-flow-artifacts/process/quant-lab/**"
+    reason: "其他项目运行态，禁止读取和修改"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "当前决策已进入正式产品文档和 discussion checkpoint"
+
+key_facts:
+  scope_summary: "在 meta-flow 中开发 project-first artifact 路由、每项目独立 worktree 和项目作用域 Git 生命周期能力；真实文件迁移、软链接重挂和真实 Git/remote mutation 后置。"
+  accepted_decisions:
+    - "project-first：目标语义为 <project_name>/docs 与 <project_name>/process。"
+    - "每项目长期 projects/<project-name>/integration；项目 worktree 空闲时驻留该分支。"
+    - "每个 CR 使用 projects/<project-name>/cr/<cr-id>-<slug> 短期分支；main 保留为共享集成基线。"
+    - "显式 merge fresh origin/main；冲突 fail closed；禁止静默 rebase、force 或自动解冲突。"
+    - "保留 existing control checkout；项目 worktree 位于 configurable sibling root，执行 namespace/sparse/owned-path gate。"
+    - "能力先行；真实迁移和软链接挂接由用户后续逐项目实施。"
+  active_constraints:
+    - "main 不作为任一项目 owned/idle working branch。"
+    - "finish/abort 后不得让 worktree 滞留在已结束短期 CR branch。"
+    - "其他项目 dirty 不阻断当前项目；当前项目 worktree dirty 按操作风险阻断。"
+    - "CP2 R2 总体 approve 前不得进入 CP3、Story、LLD 或实现。"
+    - "真实 Git/worktree/link/remote mutation 当前授权数量为 0。"
+  downstream_tasks:
+    - "用户 approve CP2 R2 后调度 meta-se 生成 BLUEPRINT、DOMAIN-MAP、DEPENDENCY-MAP、HLD 和 ADR。"
+    - "CP3 冻结 metadata/path schema、owned-path gate、attach/switch/finish/abort、OID 状态机、冲突恢复与 sparse 行为。"
+    - "CP3 前不生成正式 Story 或修改源码。"
+  traceability:
+    requirements: ["REQ-AW-001..017", "REQ-AW-C001..005", "REQ-AW-NF001..005"]
+    use_cases: ["UC-AW-001..005"]
+    scenarios: ["TC-AW-001..015"]
+    stories: ["ST-AW-001..005（产品候选，非 CP4 Story 卡片）"]
+    features: ["M-AW1..4（产品里程碑，Feature 边界待 CP3/CP4）"]
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "无未解决 DQ；仅待用户对 CP2 R2 整体产品基线回复 approve / 修改 / reject。"
+  non_authorized_items:
+    - "源码实现或跳过 CP3/CP5"
+    - "真实 meta-flow-artifacts 文件迁移或软链接变更"
+    - "真实 worktree/branch/ref 创建、删除、提交或推送"
+    - "remote fetch/push/default update/delete、force、凭据、runtime 或 production write"
+  risk_acceptance_items: []
+  open_questions:
+    - "仅 CP3 设计细化：metadata/path schema、owned-path gate 落点、attach/switch/finish/abort、精确 Git/OID 状态机、冲突恢复、branch cleanup 与 sparse 行为。"
+  n_a_or_waived_items: []
+
+handoff:
+  target_agent: "meta-se（仅 CP2 R2 approve 后）"
+  expected_output:
+    - "process/docs/design/BLUEPRINT.md"
+    - "process/docs/design/DOMAIN-MAP.md"
+    - "process/docs/design/DEPENDENCY-MAP.md"
+    - "process/docs/design/HLD.md"
+    - "process/docs/design/ARCHITECTURE-DECISION.md"
+    - "process/checks/CP3-CR051-*.result.json"
+  exit_criteria:
+    - "CP3 HLD/ADR 覆盖全部 27 条 AW 需求和 15 个场景"
+    - "integration↔CR↔main 状态机、失败路径和授权边界可审查"
+    - "未提前进入实现"
+  blocked_if_missing:
+    - "CP2 R2 尚未 approved"
+    - "分支角色或 shared main 契约与产品基线冲突"
+
+read_expansion_log:
+  - at: "2026-07-17T08:46:24Z"
+    actor: "host-orchestrator"
+    expanded_to: "process/changes/CR-051.md"
+    reason: "field_conflict；回写 CP2 changes_requested 的五维影响和修订记录，ledger event=RE-20260717T084624Z0000-a76f6628。"
+
+validation:
+  generated_from_sources:
+    - "process/state/STATE.current.json"
+    - "process/changes/summaries/CR-051.summary.json"
+    - "process/checks/CP0-CR-051.route-plan.json"
+    - "process/checks/CP2-CR051-REQUIREMENTS-BASELINE-R2.result.json"
+    - "process/handoffs/CR051-CP2-R2-META-PM-RETURN-SUMMARY.md"
+    - "process/checks/CP2-CR051-DISCUSSION-CHECKPOINT.json"
+    - "process/docs/product/USE-CASES.md"
+    - "process/docs/product/REQUIREMENTS.md"
+    - "process/docs/product/SCENARIOS.yaml"
+    - "process/docs/product/TEST-MATRIX.md"
+    - "process/docs/product/STORY-MAP.md"
+    - "process/docs/product/MVP-SCOPE.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "R2 自动预检 PASS；UC=5、REQ=27、TC-AW=15/全局75、候选 Story=5、Slice=4。"
+    - "DQ-01..03 均 resolved-by-user；CP2 整体人工门仍 pending。"
+    - "源码仓 clean；真实 worktree/link/branch/ref/remote mutation 为 0。"

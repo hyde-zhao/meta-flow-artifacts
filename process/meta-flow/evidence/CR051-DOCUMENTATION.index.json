@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "evidence_type": "documentation",
+  "stage": "documentation",
+  "workflow_id": "meta-flow-self-dev",
+  "cr_id": "CR-051",
+  "return_ref": "process/returns/CR051-DOCUMENTATION.return.json",
+  "status": "completed_with_risk",
+  "artifacts": [
+    {
+      "path": "delivery/README.md",
+      "sha256": "878061d51ee73435359d4c3f37cd868178104131550e7004555d4d47733eef2c",
+      "change_summary": "新增双仓库 Git 周期、项目优先 topology、worktree / 双 leg / CLI / 授权边界摘要"
+    },
+    {
+      "path": "delivery/doc/USER-MANUAL.md",
+      "sha256": "29a9be1cf93b4083dfd29b6022eb9410907a82f4d1c3bfeab48e54eecf812298",
+      "change_summary": "替换旧成对提交推送说明，补充 source / artifact 分层操作契约与故障边界"
+    }
+  ],
+  "claims": [
+    {
+      "id": "DOC-AW-REPO-SEPARATION",
+      "status": "documented",
+      "summary": "源码仓库和共享 artifacts 仓库是独立 Git 仓库，目标分支不同。"
+    },
+    {
+      "id": "DOC-AW-PROJECT-FIRST",
+      "status": "documented-offline-fixture-only",
+      "summary": "shared main + per-project integration + per-CR branch；CR 只从最新 integration 创建并回合。"
+    },
+    {
+      "id": "DOC-AW-MANUAL-SYNC",
+      "status": "documented-not-authorized",
+      "summary": "main 与项目 integration 的双向同步是 CR 外人工操作。"
+    },
+    {
+      "id": "DOC-AW-WORKTREE",
+      "status": "documented-offline-fixture-only",
+      "summary": "worktree 空闲驻留 integration，活动期驻留 CR 分支；异常 fail-closed 并 fresh observe。"
+    },
+    {
+      "id": "DOC-AW-DUAL-LEG",
+      "status": "documented-offline-fixture-only",
+      "summary": "source / artifact leg 共用 CR ID，整体取 BLOCKED > FAIL > IN_PROGRESS > PASS，2/2 terminal PASS 才完成。"
+    },
+    {
+      "id": "DOC-AW-MIGRATION",
+      "status": "documented-library-only",
+      "summary": "migration preflight 只有 Python library / API，不存在用户 migration CLI。"
+    }
+  ],
+  "validation_evidence": [
+    {
+      "check": "delivery_guardrails",
+      "status": "PASS_WITH_WARNINGS",
+      "summary": "OK；仅有 ignored local python cache warnings"
+    },
+    {
+      "check": "readme_capability_claims",
+      "status": "BLOCKED",
+      "summary": "docs/design/CAPABILITY-STATUS.yaml missing"
+    },
+    {
+      "check": "user_manual_capability_claims",
+      "status": "BLOCKED",
+      "summary": "docs/design/CAPABILITY-STATUS.yaml missing"
+    },
+    {
+      "check": "cli_surface_audit",
+      "status": "PASS",
+      "summary": "workspace check/git-status/push and cr aggregate --dry-run confirmed from actual help"
+    },
+    {
+      "check": "diff_check",
+      "status": "PASS",
+      "summary": "no whitespace errors"
+    }
+  ],
+  "open_gaps": [
+    {
+      "id": "DOC-CR051-CAPABILITY-REGISTRY-MISSING",
+      "severity": "REQUIRED",
+      "status": "open-outside-write-boundary",
+      "owner": "host-orchestrator / meta-qa CP8"
+    }
+  ],
+  "non_authorized_operations_observed": []
+}

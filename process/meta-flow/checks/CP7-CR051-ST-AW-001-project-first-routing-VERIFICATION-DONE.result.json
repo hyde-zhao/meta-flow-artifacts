@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR051-ST-AW-001-project-first-routing-VERIFICATION-DONE",
+  "profile": "architecture-major",
+  "story_id": "ST-AW-001",
+  "cr_id": "CR-051",
+  "check_attempt": 1,
+  "context_ref": "process/context/stories/STORY-ST-AW-001.CP7.verify-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "dispatch_refs": [
+    "EVENT-CR051-ST-AW-001-CP7-QA-FINDINGS-CAPTURED-20260718T120200Z"
+  ],
+  "evidence_ref": "process/evidence/ST-AW-001.CP7.index.json",
+  "return_packet_ref": "process/returns/ST-AW-001.CP7.return.json",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator CP7 verification evidence correlation",
+    "checker_commit": "working-tree",
+    "invocation": "meta-flow story return-check + story evidence-check + independent meta-qa verification",
+    "generated_by": "host-orchestrator from actual meta-qa-critical return",
+    "fallback_used": false
+  },
+  "promise_evidence_alignment": [
+    {
+      "promise_ref": "ST-AW-001-AC-ROUTING",
+      "evidence_status": "EXECUTED_POSITIVE_RESULT",
+      "result": "PASS",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-001-TEST-REPORT.md"]
+    },
+    {
+      "promise_ref": "ST-AW-001-AC-CROSS-PROJECT-FAIL-CLOSED",
+      "evidence_status": "EXECUTED_NEGATIVE_RESULT",
+      "result": "FAIL",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT.md#cp7-aw-001-f01--blocker--adapter-未校验-configdecision-项目身份一致性"]
+    },
+    {
+      "promise_ref": "ST-AW-001-AC-STRUCTURED-ERROR",
+      "evidence_status": "EXECUTED_NEGATIVE_RESULT",
+      "result": "FAIL",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT.md#cp7-aw-001-f02--major--legacy-owned_paths-类型错误未结构化"]
+    }
+  ],
+  "items": [
+    {
+      "id": "CP7-AW001-E01",
+      "category": "entry",
+      "name": "CP6 result, return and evidence are valid and independent QA was dispatched",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-CR051-ST-AW-001-project-first-routing-CODING-DONE.result.json",
+        "process/handoffs/CR051-ST-AW-001-CP7-META-QA-CRITICAL.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CP7 entry criteria were satisfied."
+    },
+    {
+      "id": "CP7-AW001-01",
+      "category": "regression",
+      "name": "Targeted routing regression and static checks pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-001-TEST-REPORT.md"],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "36 tests, Ruff, py_compile and diff checks pass."
+    },
+    {
+      "id": "CP7-AW001-02",
+      "category": "cross-project-safety",
+      "name": "Config and RouteDecision project identity mismatch fails closed",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT.md",
+        "process/docs/quality/CR051-ST-AW-001-REVIEW.md"
+      ],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "project-a config plus project-b decision is incorrectly accepted as healthy."
+    },
+    {
+      "id": "CP7-AW001-03",
+      "category": "error-contract",
+      "name": "Malformed legacy owned_paths yields a structured routing error",
+      "status": "FAIL",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT.md",
+        "process/docs/quality/CR051-ST-AW-001-FIXES.md"
+      ],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "A non-string legacy owned path leaks bare TypeError."
+    },
+    {
+      "id": "CP7-AW001-04",
+      "category": "boundary",
+      "name": "QA touched no implementation, sibling or real runtime target",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/ST-AW-001.CP7.return.json#boundary_check",
+        "process/evidence/ST-AW-001.CP7.index.json"
+      ],
+      "owner": "host-orchestrator/meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Real Git/worktree/ref/remote/link/migration mutation count is zero."
+    },
+    {
+      "id": "CP7-AW001-05",
+      "category": "repository-health",
+      "name": "Module boundary and import checker applicability is explicit",
+      "status": "N/A",
+      "severity": "MEDIUM",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT.md"],
+      "owner": "CP8 decision owner",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "Canonical MODULE-BOUNDARIES.yaml is absent; no false PASS is recorded."
+    },
+    {
+      "id": "CP7-AW001-06",
+      "category": "evidence",
+      "name": "CP7 return packet and evidence index are valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/ST-AW-001.CP7.return.json",
+        "process/evidence/ST-AW-001.CP7.index.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "return-check and evidence-check are OK."
+    },
+    {
+      "id": "CP7-AW001-X01",
+      "category": "exit",
+      "name": "ST-AW-001 verification is complete enough to choose its next route",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-001-REVIEW.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Two implementation findings require same-Story rework; W2 stays blocked."
+    }
+  ],
+  "blockers": ["CP7-AW-001-F01", "CP7-AW-001-F02"],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "risks": [
+    {
+      "id": "CR051-RISK-MODULE-BOUNDARIES-MANIFEST",
+      "severity": "MEDIUM",
+      "status": "open-for-cp8-review",
+      "owner": "CP8 decision owner",
+      "summary": "Repository-wide module/import checks cannot enter code analysis without the canonical manifest."
+    }
+  ],
+  "decision": "NEEDS_REWORK",
+  "next_route": "rework_same_story",
+  "checked_at": "2026-07-18T12:02:00Z"
+}

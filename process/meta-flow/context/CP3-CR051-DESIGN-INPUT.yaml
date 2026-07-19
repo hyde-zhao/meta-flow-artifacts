@@ -1,0 +1,170 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR051-DESIGN-INPUT"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design-input"
+status: "ready"
+created_at: "2026-07-18T03:37:15Z"
+created_by: "host-orchestrator"
+source_cr: "CR-051"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 20
+  max_summary_items: 20
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "meta-se 先读本 capsule 与 machine context；只在架构事实缺失、冲突、审计或深度评审时扩展，并记录 read expansion。"
+
+must_read:
+  - path: "process/context/CP3-CR051-DESIGN-INPUT.yaml"
+    reason: "CP3 最小设计输入"
+    required: true
+  - path: "process/state/STATE.current.json"
+    reason: "确认 CR-051、solution-design 与授权边界"
+    required: true
+  - path: "process/changes/summaries/CR-051.summary.json"
+    reason: "CR-051 影响与 CP3 路由摘要"
+    required: true
+  - path: "process/checkpoints/CP2-CR051-PROJECT-FIRST-WORKTREE-BASELINE-R3.md"
+    reason: "CP2 approved 基线与 CP3-DC-01"
+    required: true
+  - path: "process/checks/CP3-CR051-ARCHITECTURE-INPUTS.json"
+    reason: "worktree switch 非原子恢复约束和灰区候选"
+    required: true
+  - path: "process/docs/product/REQUIREMENTS.md"
+    reason: "27 条 AW 需求及验收契约"
+    required: true
+  - path: "process/docs/product/USE-CASES.md"
+    reason: "5 个 UC 与用户目标"
+    required: true
+
+allowed_reads:
+  - path: "process/docs/product/SCENARIOS.yaml"
+    reason: "15 个 TC-AW 关键场景模拟"
+    required: true
+  - path: "process/docs/product/TEST-MATRIX.md"
+    reason: "Use Case/Requirement/Scenario 追溯"
+    required: true
+  - path: "process/docs/product/STORY-MAP.md"
+    reason: "候选能力与旅程；不是正式 Story 拆解授权"
+    required: true
+  - path: "process/docs/product/MVP-SCOPE.md"
+    reason: "In/Out/Deferred 边界"
+    required: true
+  - path: "process/docs/product/RELEASE-SLICES.md"
+    reason: "架构落地顺序输入"
+    required: false
+  - path: "process/docs/product/BACKLOG.md"
+    reason: "后置迁移与 pilot 边界"
+    required: false
+  - path: "meta_flow/workflow/git_branch_lifecycle.py"
+    reason: "当前源码事实；只读，不授权实现"
+    required: true
+  - path: "meta_flow/workspace/git_sync.py"
+    reason: "当前 workspace/git sync 事实；只读"
+    required: true
+  - path: "meta_flow/workspace/routing.py"
+    reason: "当前 artifact routing 事实；只读"
+    required: true
+  - path: "tests/test_git_branch_lifecycle.py"
+    reason: "既有行为与 CR-050 契约事实；只读"
+    required: false
+  - path: "tests/test_workspace_git_sync.py"
+    reason: "既有 workspace sync 测试事实；只读"
+    required: false
+  - path: "process/docs/design/CR050-GIT-BRANCH-HLD.md"
+    reason: "paired-default 历史架构，只用于兼容/冲突分析"
+    required: false
+  - path: "process/docs/design/CR050-GIT-BRANCH-ARCHITECTURE-DECISION.md"
+    reason: "CR-050 ADR 适用前提和 supersession 分析"
+    required: false
+
+read_if_needed:
+  - path: "process/docs/design/CR050-GIT-BRANCH-BLUEPRINT.md"
+    trigger: "需要核对既有模块边界时"
+  - path: "process/docs/design/CR050-GIT-BRANCH-DOMAIN-MAP.md"
+    trigger: "需要核对旧领域对象与状态时"
+  - path: "process/docs/design/CR050-GIT-BRANCH-DEPENDENCY-MAP.md"
+    trigger: "需要核对旧依赖方向时"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "生成的人类摘要"
+  - path_or_pattern: "process/DEVELOPMENT-PLAN.yaml"
+    reason: "CP3 批准前禁止进入 Story 计划"
+  - path_or_pattern: "process/stories/**"
+    reason: "CP3 批准前禁止 Story/LLD 消费"
+  - path_or_pattern: "process/archive/**"
+    reason: "冷历史证据"
+  - path_or_pattern: "process/discussions/**"
+    reason: "仅人工审计和恢复；当前决策已结构化"
+  - path_or_pattern: "../meta-flow-artifacts/process/quant-lab/**"
+    reason: "sibling project 边界"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "用户输入已写入 CP2 checkpoint 和 architecture inputs"
+
+key_facts:
+  scope_summary: "设计 meta-flow 对 project-first shared artifact、每项目独立 worktree、异构 source/artifact Git legs 和 CR 外人工 main/integration 同步的管理能力；不实现、不迁移。"
+  accepted_decisions:
+    - "artifact idle=projects/<project>/integration；active=projects/<project>/cr/<cr-id>-<slug>。"
+    - "source leg 从/回源码默认分支；artifact leg 从/回项目 integration，单 CR 不接触 shared main。"
+    - "单一 aggregate gate，仅所有必需 leg PASS 才整体完成；PARTIAL 非成功终态。"
+    - "integration 缺失时从 fresh origin/main exact OID create-only 初始化；存在时禁止 recreate/reset/orphan。"
+    - "main/integration 同步在 CR 外人工执行，默认无活跃 artifact CR。"
+    - "CP3-DC-01：Git switch 非原子，必须设计可判定/可恢复/fail-closed 协议。"
+  active_constraints:
+    - "不得恢复 R2 per-CR artifact main refresh。"
+    - "不得把 Git switch 命令成功等同于操作事务成功。"
+    - "状态不确定时必须 RECOVERY_REQUIRED/BLOCKED，禁止破坏性自动恢复。"
+    - "CP3 仅设计；源码、Story、真实 Git/迁移/同步均未授权。"
+  downstream_tasks:
+    - "输出 CR051 专属 BLUEPRINT、DOMAIN-MAP、DEPENDENCY-MAP、HLD 和 ARCHITECTURE-DECISION。"
+    - "输出 CP3 Architecture Gray Areas discussion log/checkpoint、CP3 result/summary 与 meta-se return summary。"
+    - "Host 在交还后生成 CP3 Decision Brief 并停在人工门。"
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "由 meta-se 从 Architecture Gray Areas 形成；若无新增架构取舍，必须说明零项原因。"
+  non_authorized_items:
+    - "源码实现、Story 拆解、真实 migration/link/worktree/ref/remote/main-sync mutation"
+    - "credentials、runtime、SaaS、production write、publish、trading"
+  risk_acceptance_items: []
+  open_questions:
+    - "operation journal/ledger/receipt schema 与单写边界"
+    - "bootstrap CAS、manual sync precheck、aggregate resume/abort 和 sparse/owned-path 精确状态机"
+  n_a_or_waived_items: []
+
+handoff:
+  target_agent: "meta-se"
+  expected_output:
+    - "process/docs/design/CR051-ARTIFACT-WORKTREE-BLUEPRINT.md"
+    - "process/docs/design/CR051-ARTIFACT-WORKTREE-DOMAIN-MAP.md"
+    - "process/docs/design/CR051-ARTIFACT-WORKTREE-DEPENDENCY-MAP.md"
+    - "process/docs/design/CR051-ARTIFACT-WORKTREE-HLD.md"
+    - "process/docs/design/CR051-ARTIFACT-WORKTREE-ARCHITECTURE-DECISION.md"
+    - "process/checks/CP3-CR051-HLD-CONSISTENCY.result.json"
+  exit_criteria:
+    - "17 项 CP3 checklist 全部 PASS 或有合法 N/A/WAIVED，blockers=0。"
+    - "至少 2 个候选架构、3-4 个 Architecture Gray Areas、3 个关键 UC 场景模拟。"
+    - "CP3-DC-01 被 HLD、ADR、状态机和失败路径明确消费。"
+    - "未进入 Story 拆分或实现。"
+  blocked_if_missing:
+    - "CP2 R3 approved 证据缺失"
+    - "CP3-DC-01 被降级或 Git switch 被宣称为原子"
+
+validation:
+  generated_from_sources:
+    - "process/state/STATE.current.json"
+    - "process/changes/summaries/CR-051.summary.json"
+    - "process/checkpoints/CP2-CR051-PROJECT-FIRST-WORKTREE-BASELINE-R3.md"
+    - "process/checks/CP3-CR051-ARCHITECTURE-INPUTS.json"
+    - "process/docs/product/USE-CASES.md"
+    - "process/docs/product/REQUIREMENTS.md"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "CP2 R3 approved；CP3 solution-design 可启动。"
+    - "真实 Git/worktree/link/remote/main-sync mutation 为 0。"

@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "packet_type": "release_readiness_return_packet",
+  "stage": "CP8-preparation",
+  "workflow_id": "meta-flow-self-dev",
+  "cr_id": "CR-051",
+  "canonical_role": "meta-qa",
+  "codex_agent_name": "meta-qa-critical",
+  "status": "ready_with_risk",
+  "release_decision": "READY_WITH_RISK",
+  "release_artifact_profile": "full",
+  "completed_at": "2026-07-18T16:55:34Z",
+  "context_ref": "process/context/CP8-CR051-RELEASE-READINESS-CONTEXT.yaml",
+  "handoff_ref": "process/handoffs/CR051-CP8-META-QA-CRITICAL.md",
+  "release_context_ref": "process/release/RELEASE-CONTEXT-CR051.yaml",
+  "quality_refs": [
+    "process/docs/quality/CR051-VERIFICATION-REPORT.md",
+    "process/docs/quality/CR051-TEST-REPORT.md",
+    "process/docs/quality/CR051-REVIEW.md",
+    "process/docs/quality/CR051-FIXES.md"
+  ],
+  "release_document_refs": [
+    "process/docs/release/CR051-RELEASE-NOTES.md",
+    "process/docs/release/CR051-DEPLOY-CHECKLIST.md",
+    "process/docs/release/CR051-ROLLBACK.md",
+    "process/docs/release/CR051-MIGRATION.md",
+    "process/docs/release/CR051-FEEDBACK.md"
+  ],
+  "story_results": [
+    {
+      "story_id": "ST-AW-001",
+      "decision": "PASS_WITH_RISK",
+      "result_ref": "process/checks/CP7-CR051-ST-AW-001-project-first-routing-VERIFICATION-DONE-R2.result.json",
+      "return_ref": "process/returns/ST-AW-001.CP7-R2.return.json",
+      "qa_provenance": "bounded-host-fallback-after-qa-timeout"
+    },
+    {
+      "story_id": "ST-AW-002",
+      "decision": "PASS_WITH_RISK",
+      "result_ref": "process/checks/CP7-CR051-ST-AW-002-recoverable-project-worktree-VERIFICATION-DONE.result.json",
+      "return_ref": "process/returns/ST-AW-002.CP7.return.json",
+      "qa_provenance": "bounded-host-fallback-after-qa-timeout"
+    },
+    {
+      "story_id": "ST-AW-003",
+      "decision": "PASS_WITH_RISK",
+      "result_ref": "process/checks/CP7-CR051-ST-AW-003-heterogeneous-git-legs-VERIFICATION-DONE-R2.result.json",
+      "return_ref": "process/returns/ST-AW-003.CP7-R2.return.json",
+      "qa_provenance": "actual-independent-qa-r2"
+    },
+    {
+      "story_id": "ST-AW-004",
+      "decision": "PASS_WITH_RISK",
+      "result_ref": "process/checks/CP7-CR051-ST-AW-004-aggregate-evidence-gate-VERIFICATION-DONE.result.json",
+      "return_ref": "process/returns/ST-AW-004.CP7.return.json",
+      "qa_provenance": "actual-independent-qa"
+    },
+    {
+      "story_id": "ST-AW-005",
+      "decision": "PASS_WITH_RISK",
+      "result_ref": "process/checks/CP7-CR051-ST-AW-005-read-only-migration-handoff-VERIFICATION-DONE-R2.result.json",
+      "return_ref": "process/returns/ST-AW-005.CP7-R2.return.json",
+      "qa_provenance": "actual-qa-finding-host-bounded-materialization-same-qa-lane-independent-r2"
+    }
+  ],
+  "quality_summary": {
+    "story_count": 5,
+    "cp7_pass_with_risk": 5,
+    "open_blockers": 0,
+    "open_high_findings": 0,
+    "closed_high_findings": [
+      "REV-AW003-001",
+      "REV-AW005-001"
+    ],
+    "aggregate_regression": {
+      "executor": "host-orchestrator",
+      "result": "680 passed, 70 subtests passed in 6.83s",
+      "counting_note": "overlaps Story suites and is not added as a unique test total"
+    },
+    "aggregate_static_checks": {
+      "ruff_check": "PASS",
+      "delivery_guardrail": "PASS_WITH_WARNINGS",
+      "git_diff_check": "PASS",
+      "repo_wide_ruff_format": "NON_BLOCKING_BASELINE_DEBT: 98 would reformat, 15 already formatted; no bulk rewrite"
+    },
+    "capability_claims_validated": false,
+    "capability_claims_risk": "DOC-CR051-CAPABILITY-REGISTRY-MISSING"
+  },
+  "provenance_notes": [
+    "ST-AW-001 R2 and ST-AW-002 used bounded Host fallback after QA timeout; all-five independent QA is not claimed.",
+    "ST-AW-005 original HIGH finding was found by actual QA; Host only materialized bounded report files after timeout; the same QA lane independently verified and closed R2."
+  ],
+  "open_risks": [
+    "CR051-RISK-PARTIAL-INDEPENDENT-QA",
+    "DOC-CR051-CAPABILITY-REGISTRY-MISSING",
+    "CR051-RISK-REMOTE-UNVERIFIED",
+    "CR051-RISK-WINDOWS-NATIVE-PILOTS",
+    "R-AW004-LOCK-CRASH",
+    "R-AW005-DIR-ENUM-TOCTOU",
+    "CR051-RISK-REAL-MIGRATION-UNVERIFIED",
+    "CR051-RISK-MODULE-BOUNDARIES-MANIFEST"
+  ],
+  "blockers": [],
+  "non_authorized_operations": [
+    "git commit/push/merge/rebase/branch/worktree/ref mutation",
+    "hosted remote, credentials, branch protection, network API or publication",
+    "main-to-integration or integration-to-main synchronization",
+    "artifact migration, copy, move, delete or symlink relink"
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "source_or_test_files_touched": [],
+    "state_ledger_checkpoint_or_cp_result_touched": [],
+    "real_git_worktree_ref_remote_operation_count": 0,
+    "real_migration_link_publish_operation_count": 0
+  },
+  "validation": {
+    "yaml_safe_load": "PASS",
+    "json_parse": "PASS",
+    "trailing_whitespace_scan": "PASS",
+    "dangerous_command_and_prompt_injection_scan": "PASS; no actionable matches",
+    "authorization_boundary_presence": "PASS",
+    "source_artifact_lifecycle_separation": "PASS",
+    "documentation_capability_claims": "BLOCKED_RISK; canonical registry missing",
+    "validation_limitations": [
+      "global ruff format baseline is not green: 98 files would be reformatted and 15 are already formatted",
+      "the baseline format debt was not mechanically rewritten; directed CR-051 Story format checks passed",
+      "no real hosted remote, Windows native, worktree/ref, synchronization, migration, link or publication validation was authorized"
+    ]
+  },
+  "evidence_ref": "process/evidence/CR051.CP8-PREP.index.json",
+  "next_stage_recommendation": "host_orchestrator_prepare_cp8_human_gate"
+}

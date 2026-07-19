@@ -1,10 +1,10 @@
 ---
 status: baseline
-version: "1.9"
+version: "2.2"
 created_at: "2026-07-02"
 owner: "host-orchestrator"
 cr_ref: "CR-037"
-active_change_ref: "CR-050"
+active_change_ref: "CR-051"
 source_scenarios: "process/docs/product/SCENARIOS.yaml"
 source_requirements: "process/docs/product/REQUIREMENTS.md"
 source_story_map: "process/docs/product/STORY-MAP.md"
@@ -21,6 +21,9 @@ source_story_map: "process/docs/product/STORY-MAP.md"
 | 1.7.1 | 2026-07-16 | host-orchestrator inline fallback | 记录 CR-050 CP2 已批准并进入 CP3；11/11 场景仍为 planned，未生成实现或验证证据。 |
 | 1.8 | 2026-07-16 | host-orchestrator inline fallback | 用户将独立两仓 fast-forward-only merge 纳入 CR-050；新增 TC-GB-012..017 与 ST-GB-004 映射，旧 CP3 转 changes_requested，覆盖状态回到 CP2 R2 pending。 |
 | 1.9 | 2026-07-16 | host-orchestrator-inline/meta-qa | CR-050 TC-GB-001..017 全部映射到 13 个 bare-remote/negative/freshness fixture；四个 Story CP7 R2 均为 `PASS_WITH_RISK`，真实远端、独立 QA 与平台 receipt 风险保留。 |
+| 2.0 | 2026-07-17 | meta-pm | 增量追加 CR-051 TC-AW-001..015 的需求/候选 Story/验证层映射；保留既有60个场景和验证事实，CR-051自动化保持planned/CP2 pending。 |
+| 2.1 | 2026-07-17 | meta-pm | CR-051 CP2 R2：不新增 TC/REQ/Story ID，更新既有15个AW场景的当前基线，覆盖长期项目integration、短期CR分支、shared main、显式merge-main refresh、finish/abort回归与existing-control+sibling-worktree边界。 |
+| 2.2 | 2026-07-18 | meta-pm | CR-051 CP2 R3：保持15个TC-AW及其REQ/Story回链不变，当前基线改为异构双leg、单一聚合门、integration create-only初始化和CR外人工main/integration同步；R2 per-CR refresh仅保留历史。 |
 | 1.5 | 2026-07-15 | host-orchestrator-inline/meta-qa | 将 CR-046 18 个 TC 投影为 7/7 CP7 `PASS_WITH_RISK`；登记 CR-047 7/7 CP6/CP7 实证与五门结果。 |
 | 1.4 | 2026-07-13 | host-orchestrator-inline-fallback | 纠正 CR-046 当前实现/验证状态，追加 CR-047 TC-WT-001..007 修复前基线与验收矩阵。 |
 | 1.1 | 2026-07-02 | host-orchestrator | 同步 CR-037 已激活但 CP2 pending，自动化 planned 原因改为尚未通过 CP2/CP3/CP5。 |
@@ -32,11 +35,11 @@ source_story_map: "process/docs/product/STORY-MAP.md"
 
 | 指标 | 数值 | 说明 |
 |---|---:|---|
-| 场景总数 | 60 | `TC-PG-001..018` + `TC-EI-001..018` + `TC-WT-001..007` + `TC-GB-001..017` |
-| 已映射 Story 的场景 | 60 | 60/60 TC 至少回链一个 Story |
-| 已映射需求的场景 | 60 | 60/60 TC 至少回链一个 Requirement |
-| 自动化状态 | CR-046/047 已交付带风险；CR-050 17/17 planned | CR-050 CP2 R2 pending、尚未实现；既有 401+70 只代表前序基线 |
-| 覆盖结论 | CR050_CP2_R2_PENDING | merge 范围已结构化；CP2 R2 未批准前不得修订架构、拆 Story 设计或实现，真实 remote mutation 未授权 |
+| 场景总数 | 75 | 既有60个场景 + `TC-AW-001..015` |
+| 已映射 Story 的场景 | 75 | 75/75 TC 至少回链一个产品候选 Story |
+| 已映射需求的场景 | 75 | 75/75 TC 至少回链一个 Requirement |
+| 自动化状态 | CR-046/047/050 已交付带风险；CR-051 15/15 planned | CR-051 DQ-01/03/04/05/06 resolved-by-user、DQ-02 superseded-by-user；R3总体门仍pending，尚未设计/实现；既有401+70及CR-050 fixture只代表前序基线 |
+| 覆盖结论 | CR051_CP2_R3_PENDING | project-first、heterogeneous dual legs、aggregate gate、create-only integration bootstrap与CR外同步边界已结构化；CP2 R3未批准前不得进入HLD/Story设计/实现，真实迁移、软链接和Git/ref mutation未授权 |
 
 ## 场景覆盖矩阵
 
@@ -150,7 +153,8 @@ source_story_map: "process/docs/product/STORY-MAP.md"
 | CR-037 历史 planned 行仍保留 | HISTORICAL | 不改写旧行；以关闭 CR 与后续 CP evidence 解释当前状态 |
 | CR-046 Story 验证 | COMPLETED_WITH_RISK | 7/7 CP7 result 为 PASS_WITH_RISK；不得写成未实现，也不得升级为无风险 |
 | CR-047 自动化与 Story 验证 | DELIVERED_WITH_RISK | 7/7 CP6 PASS、7/7 CP7 PASS_WITH_RISK；CP8 approved；publication preflight 401+70 |
-| CR-050 branch lifecycle 自动化 | PLANNED_CP2_R2_PENDING | 17/17 场景已回链 4 个 Story；旧 CP3 因 merge 范围变化被退回；CP2 R2 前不得修订架构，CP5 前不得写源码；真实远端 branch/default mutation 仍需显式授权 |
+| CR-050 branch lifecycle 自动化 | DELIVERED_WITH_RISK | 17/17场景已回链4个Story并完成本地bare-remote验证；真实远端、独立QA和平台receipt风险按既有证据保留，不改写历史 |
+| CR-051 project-first/worktree 自动化 | PLANNED_CP2_R3_PENDING | 15/15场景已回链5个候选Story；DQ-04..06承接R3当前语义，DQ-02已superseded；R3总体门仍待approve；CP3/CP5前不得设计落地或写源码，真实artifact迁移、软链接和Git/ref mutation为0 |
 | platform receipt 或 token telemetry 可能不可用 | ACCEPTED-DEGRADATION | 必须显式 unavailable；不得合成或标记为 verified/measured |
 | 当前 Codex meta-pm dispatch 无 repository-verifiable platform receipt | OBSERVED-LIMITATION | CP2 披露为 `session-observed/repository-unverifiable`；后续 receipt 只能追加升级证据 |
 | CR-046 R1 CP1/CP2 checker provenance 为空 | REQUIRED-DOGFOOD | 保留原始 result/hash，作为 TC-EI-017 strict negative fixture；不得静默重写 |
@@ -224,3 +228,55 @@ source_story_map: "process/docs/product/STORY-MAP.md"
 | REQ-GB-NF001 | TC-GB-009, TC-GB-010 |
 | REQ-GB-NF002 | TC-GB-003, TC-GB-008 |
 | REQ-GB-NF003 | TC-GB-009, TC-GB-012, TC-GB-015, TC-GB-016 |
+
+## CR-051 场景覆盖矩阵
+
+| TC ID | 类型 | 优先级 | 覆盖 UC | 覆盖需求 | 覆盖 Story | 测试层级 | 自动化状态 | 当前基线 |
+|---|---|---|---|---|---|---|---|---|
+| TC-AW-001 | positive | HIGH | UC-AW-001 | REQ-AW-001,003, REQ-AW-NF002 | ST-AW-001 | routing contract | planned | CP2 R2 pending；只验证临时fixture/纯解析 |
+| TC-AW-002 | positive | HIGH | UC-AW-001 | REQ-AW-002..003 | ST-AW-001 | legacy compatibility | planned | dual-read、explicit-write；真实迁移0 |
+| TC-AW-003 | negative | HIGH | UC-AW-001 | REQ-AW-002, REQ-AW-NF001 | ST-AW-001 | ambiguity negative | planned | 多写目标必须BLOCKED |
+| TC-AW-004 | positive | HIGH | UC-AW-002 | REQ-AW-004..007 | ST-AW-002 | git worktree integration | planned | integration缺失时从fresh `origin/main` exact OID create-only；存在时不recreate/reset/orphan；命令序列待CP3 |
+| TC-AW-005 | positive | HIGH | UC-AW-002..003 | REQ-AW-008..009, REQ-AW-C003, REQ-AW-NF003 | ST-AW-002..003 | multi-worktree isolation | planned | sibling dirty不阻断；跨项目mutation=0 |
+| TC-AW-006 | negative | HIGH | UC-AW-003 | REQ-AW-009,013 | ST-AW-003 | current-dirty negative | planned | current dirty阻断所有有风险mutation |
+| TC-AW-007 | boundary | HIGH | UC-AW-002..003 | REQ-AW-007, REQ-AW-NF004 | ST-AW-002..003 | branch namespace contract | planned | integration/CR模式精确；同CR ID跨项目branch全局唯一；main非项目owned branch |
+| TC-AW-008 | positive | HIGH | UC-AW-003..004 | REQ-AW-008,011..012,016 | ST-AW-003..004 | heterogeneous dual-leg integration | planned | source从/回源码default，artifact从/回项目integration；artifact main mutation=0；leg correlation完整 |
+| TC-AW-009 | negative | HIGH | UC-AW-004 | REQ-AW-011..012, REQ-AW-C004, REQ-AW-NF005 | ST-AW-004 | integration OID drift/recovery | planned | main/integration divergence非单CR blocker；integration expected-OID漂移使artifact leg与aggregate BLOCKED；无自动回滚/同步 |
+| TC-AW-010 | negative | HIGH | UC-AW-001..003 | REQ-AW-001,005,008,010 | ST-AW-001..003 | identity mismatch | planned | project/path/branch/ownership不一致即0 mutation |
+| TC-AW-011 | permission | HIGH | UC-AW-002 | REQ-AW-006, REQ-AW-C002..003 | ST-AW-002 | remove authorization | planned | 未知/dirty/active-CR/需恢复目标不得remove |
+| TC-AW-012 | boundary | HIGH | UC-AW-001..005 | REQ-AW-013,016 | ST-AW-001..005 | dry-run golden | planned | route/create-only bootstrap/双leg/aggregate/finish/abort计划确定；文件/link/worktree/ref变化=0 |
+| TC-AW-013 | precheck | HIGH | UC-AW-005 | REQ-AW-014..015, REQ-AW-C001 | ST-AW-005 | migration preflight | planned | manifest完整；真实迁移/link/ref变化=0 |
+| TC-AW-014 | positive | HIGH | UC-AW-002..004 | REQ-AW-007..012,016..017, REQ-AW-NF003 | ST-AW-002..004 | concurrent aggregate integration | planned | 两项目双leg独立；聚合优先级和仅全PASS完成可复算；PARTIAL仅进度；shared main/branch/index/path crossover=0 |
+| TC-AW-015 | failure-recovery | HIGH | UC-AW-002,005 | REQ-AW-006,014, REQ-AW-NF005 | ST-AW-002,005 | stale registry recovery | planned | 识别stale branch role/ended-CR占用，只诊断/建议，不破坏性repair或自动switch |
+
+## CR-051 Requirement 覆盖索引
+
+| Requirement | 覆盖 TC |
+|---|---|
+| REQ-AW-001 | TC-AW-001, TC-AW-010 |
+| REQ-AW-002 | TC-AW-002, TC-AW-003 |
+| REQ-AW-003 | TC-AW-001, TC-AW-002 |
+| REQ-AW-004 | TC-AW-004 |
+| REQ-AW-005 | TC-AW-004, TC-AW-010 |
+| REQ-AW-006 | TC-AW-004, TC-AW-011, TC-AW-015 |
+| REQ-AW-007 | TC-AW-004, TC-AW-007, TC-AW-014 |
+| REQ-AW-008 | TC-AW-005, TC-AW-010, TC-AW-014 |
+| REQ-AW-009 | TC-AW-005, TC-AW-006, TC-AW-014 |
+| REQ-AW-010 | TC-AW-010, TC-AW-014 |
+| REQ-AW-011 | TC-AW-008 |
+| REQ-AW-012 | TC-AW-008, TC-AW-009 |
+| REQ-AW-013 | TC-AW-006, TC-AW-012 |
+| REQ-AW-014 | TC-AW-013, TC-AW-015 |
+| REQ-AW-015 | TC-AW-013 |
+| REQ-AW-016 | TC-AW-008, TC-AW-012 |
+| REQ-AW-017 | TC-AW-014 |
+| REQ-AW-C001 | TC-AW-013 + CR-051 touched-path/ref audit |
+| REQ-AW-C002 | TC-AW-011 |
+| REQ-AW-C003 | TC-AW-005, TC-AW-011 |
+| REQ-AW-C004 | TC-AW-009 |
+| REQ-AW-C005 | CP2 human-gate authorization check |
+| REQ-AW-NF001 | TC-AW-003, TC-AW-012 |
+| REQ-AW-NF002 | TC-AW-001 |
+| REQ-AW-NF003 | TC-AW-005, TC-AW-014 |
+| REQ-AW-NF004 | TC-AW-007, TC-AW-010 |
+| REQ-AW-NF005 | TC-AW-009, TC-AW-015 |

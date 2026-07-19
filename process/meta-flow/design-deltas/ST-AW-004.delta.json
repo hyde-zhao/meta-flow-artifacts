@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "story_id": "ST-AW-004",
+  "feature_id": "cr051-aggregate",
+  "delta_type": "patch",
+  "target_doc": "process/docs/features/cr051-aggregate/DESIGN.md",
+  "changes": [
+    {
+      "section": "ValidatedLegSet",
+      "operation": "add",
+      "summary": "aggregate 对 reread payload 独立执行 canonical mode/target/active-ref policy 校验，拒绝 producer/consumer mode 漂移和错误 target。"
+    },
+    {
+      "section": "单写与调用契约",
+      "operation": "replace",
+      "summary": "投影写入改为 staged state→ledger→current CAS；ledger/current 失败且 state 已写入时返回 PARTIAL 并保留可重试 receipt，coordinator 不再把部分效果折叠为 FAILED。"
+    },
+    {
+      "section": "风险与 Gotchas",
+      "operation": "add",
+      "summary": "固定 source-default 与 shared-artifact-project-first 两种 canonical mode，CLI 不再暴露可漂移的默认 mode。"
+    }
+  ],
+  "requires_feature_doc_update": true,
+  "status": "merged",
+  "merged_ref": "process/docs/features/cr051-aggregate/DESIGN.md#10-cp8-终验回修设计增量st-aw-004",
+  "deferred_reason": null
+}

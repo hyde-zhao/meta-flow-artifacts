@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP5",
+  "checkpoint_id": "CP5-CR051-ST-AW-002-LLD-IMPLEMENTABILITY-R2",
+  "story_id": "ST-AW-002",
+  "cr_id": "CR-051",
+  "profile": "architecture-major",
+  "check_attempt": 2,
+  "context_ref": "process/context/CP5-CR051-LLD-CONTEXT.yaml",
+  "dispatch_refs": [
+    "process/handoffs/CR051-CP5-R2-META-DEV-LANE-B.md"
+  ],
+  "evidence_ref": "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md",
+  "supersedes_result_ref": "process/checks/CP5-CR051-ST-AW-002-LLD-IMPLEMENTABILITY.result.json",
+  "finding_refs": [
+    "process/docs/quality/CR051-CP5-INDEPENDENT-REVIEW-FINDINGS.md#f-002-worktreehealth-producer--consumer-port-未冻结"
+  ],
+  "repair_scope": "CP5-QA-R1-F02 producer-side only: freeze WorktreeObservation -> WorktreeHealth(observation) public port",
+  "checker_provenance": {
+    "checker_name": "meta-flow story lld-check plus CP5 R2 16-item implementability review",
+    "checker_version": "0.4.0",
+    "invocation": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story lld-check --project-root . --lld process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md --evidence-type full-lld",
+    "generated_by": "meta-dev-debugger/lane-b",
+    "lld_structure_check": "PASS",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md": "sha256:743fe7b5ca941882f18935125284e7536ad58a6ee2b74e121ba5f3f2587b2c8a",
+    "process/stories/STORY-ST-AW-002-recoverable-project-worktree.md": "sha256:d6616e755cf7ad43d8547c13165743a153c4b51323be82abe63ced0f9ebffadc",
+    "process/context/CP5-CR051-LLD-CONTEXT.yaml": "sha256:2785ba700d6d2ae9b9d0def21341d2ee933c42fcb78d2d3fcd6e656e1093a0ac",
+    "process/DEVELOPMENT-PLAN.yaml": "sha256:3110d73b13484f0bb496c0fbe3874e1e7fd2b3bdf0d45d38b48f2c5088a7dfc6",
+    "process/docs/design/CR051-FEATURE-DESIGN-MATRIX.md": "sha256:c2023650350639fa60bceadc0890dae02cd187c7eacd2e21c0f87107d11a38a7",
+    "process/checks/CP4-CR051-STORY-DAG-PARALLEL-SAFETY.result.json": "sha256:e61c562ddf754c0322be631af0d1245e40ab6106f9ebef03c7af7e774ac08f0a",
+    "process/docs/features/cr051-worktree/DESIGN.md": "sha256:3f12344a05b4809a0682c0f69f6291f40cbc91c2a79a92516cc6fd83f577059f",
+    "process/docs/features/cr051-worktree/TEST-PLAN.md": "sha256:b80178ec8b21e40e7347245baabc51e1283e8684307cae2eca657f7d987d9f32",
+    "process/docs/features/cr051-worktree/TASKS.md": "sha256:cfebd1d919f2b802c86d4d1895d0aa4e5537eef7abce899b97d13778de4d0b37",
+    "process/checks/CP5-CR051-ST-AW-002-LLD-IMPLEMENTABILITY.result.json": "sha256:bce761034c0eb87733f184c8bc29c9172b5b4d51586b7211c9d8b095f855bb34"
+  },
+  "items": [
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-001",
+      "category": "acceptance_coverage",
+      "name": "设计证据覆盖 AC 且 R2 不弱化既有证明义务",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree.md",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#2-需求与非功能约束",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#10-测试设计与验证矩阵"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "FR-AW2-01–08、CAP-01–11、DUR-01–14、WT-01–14 与六项量化成功标准保持完整；R2 仅追加 PORT-W-01–08。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-002",
+      "category": "architecture_consistency",
+      "name": "R2 保持 HLD/ADR 与 non-waivable safety boundary",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-worktree/DESIGN.md",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#0-工程依据与上游契约",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#13-发布回滚与恢复策略"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "sibling worktree、create-only、deny-default、durable-before-mutation、无破坏恢复及 O-AW-01/02 均未改变。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-003",
+      "category": "file_impact",
+      "name": "文件影响范围和 Lane B 允许路径明确",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#4-文件影响范围",
+        "process/handoffs/CR051-CP5-R2-META-DEV-LANE-B.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "R2 只修改 Lane B 允许的 Feature/Story/LLD/check/return；未修改 ST-AW-003、共享计划、STATE、ledger、源码或测试。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-004",
+      "category": "interface_contract",
+      "name": "唯一 WorktreeObservation -> WorktreeHealth(observation) public port 已冻结",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-worktree/DESIGN.md#api--接口设计",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#6-api--接口设计"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "observe_worktree 只返回 rich immutable WorktreeObservation；evaluate_worktree_health 是 pure evaluator 并通过 health.observation 原样封装 snapshot；Health 不平铺第二套字段。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-005",
+      "category": "data_contract",
+      "name": "Observation 与 Health schema、digest 和 unknown 语义完整",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-worktree/DESIGN.md#数据模型与状态",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#51-核心类型"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "snapshot 覆盖 project/repo/worktree identity、common-dir、HEAD/ref/OID、dirty/staged/untracked、Git-op、registry/role、observed_at 与 digest；probe unknown 为 typed value 并 fail closed。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-006",
+      "category": "control_flow",
+      "name": "Observation 与 health evaluation 的因果和失败路径明确",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-worktree/DESIGN.md#关键流程",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#7-核心流程"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "先生成 snapshot，再以纯函数评估 health；observation 缺失、mismatch、stale 或 unknown 均非 HEALTHY，且不产生 mutation。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-007",
+      "category": "dependency_contract",
+      "name": "ST-AW-002 producer 输出契约可供消费侧唯一对齐",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#02-上下游与所有权",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree.md#开发上下文dev_context"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "下游只能读取 health.observation；ST-AW-002 不再暴露或承诺平铺的 HEAD/OID/common-dir/clean Health schema。消费侧修订由 Lane C 独立完成。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-008",
+      "category": "concurrency_consistency",
+      "name": "snapshot immutable、digest binding 与 pure evaluation 可并发复算",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#51-核心类型",
+        "process/docs/features/cr051-worktree/TEST-PLAN.md#worktree-observation--health-public-port-矩阵"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "frozen dataclass、canonical observation digest、identity/project/route/freshness checks 和 PORT-W-07 重复评估约束消除隐式 probe 与竞态。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-009",
+      "category": "security",
+      "name": "非 HEALTHY、unknown 与 mismatch 均不授权 mutation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#5-数据模型与持久化",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#9-安全权限与性能设计"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Health 仅为诊断 envelope；真实 mutation 仍要求当次 typed authz、fresh precheck、capacity proof 与 durable intent。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-010",
+      "category": "testability",
+      "name": "Public port contract tests 与既有 CAP/DUR/WT fixtures 完整",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-worktree/TEST-PLAN.md#worktree-observation--health-public-port-矩阵",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#10-测试设计与验证矩阵"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "PORT-W-01–08 覆盖字段、unknown、HEALTHY digest、不匹配、无 snapshot、pure evaluation 与 consumer-only health.observation；CAP/DUR/WT 数量和语义不变。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-011",
+      "category": "dev_gate",
+      "name": "dev_gate 继续关闭且可计算",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#111-dev_gate-与设计偏差记录",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Story 仍为 ready-for-review、confirmed=false、lld_confirmed=false、dependencies_satisfied=false；R2 PASS 不授权实现。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-012",
+      "category": "design_delta",
+      "name": "R2 修订记录与后续偏差规则完整",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#修订记录",
+        "process/docs/features/cr051-worktree/DESIGN.md#修订记录",
+        "process/docs/features/cr051-worktree/TEST-PLAN.md#修订记录"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "LLD v1.1.0、Feature DESIGN/TEST-PLAN v1.1 精确记录 F02 producer-side 修复；未来跨 Story port 偏差必须返回 CP5。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-013",
+      "category": "cp4_traceability",
+      "name": "CP4 DAG、owner 与 R2 目标边界保持一致",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP4-CR051-STORY-DAG-PARALLEL-SAFETY.result.json",
+        "process/DEVELOPMENT-PLAN.yaml",
+        "process/handoffs/CR051-CP5-R2-META-DEV-LANE-B.md"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "ST-AW-001 -> ST-AW-002 -> ST-AW-003 DAG 与文件 owner 不变；Lane B 不修改共享 plan/status/state。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-014",
+      "category": "clarification_convergence",
+      "name": "F02 producer-side 修复无需新增用户决策",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP5-CR051-LLD-CONTEXT.yaml",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#122-灰区分类与澄清队列"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "clarification queue=clear、blocking_items=0；本修复是 implementation design default repair，不新增 DQ，CP5-CR051-DQ-01 仍由 Host 管理。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-015",
+      "category": "lld_policy",
+      "name": "full-lld 分级仍与高风险边界一致",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR051-FEATURE-DESIGN-MATRIX.md",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "跨 Story public port、非原子 Git/FS、并发、远端竞态、容量与崩溃恢复继续要求 Tier L full-lld；无降级或 waiver。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-R2-016",
+      "category": "feature_design_consumption",
+      "name": "Feature DESIGN/TEST-PLAN 与 LLD 的 public port 完全对齐",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-worktree/DESIGN.md",
+        "process/docs/features/cr051-worktree/TEST-PLAN.md",
+        "process/docs/features/cr051-worktree/TASKS.md",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#01-读取基线"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Feature 与 Story 均声明同一 observe/evaluate port、同一嵌套 observation schema 和 PORT-W-01–08；W01–W11 ID 未改变。"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T071723Z0000-60e96340",
+    "RE-20260718T071723Z0000-02e97ad6"
+  ],
+  "decision": "PASS",
+  "next_route": "CP5-r2-batch-independent-review",
+  "checked_at": "2026-07-18T07:38:01Z"
+}

@@ -1,0 +1,103 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "modified",
+      "path": "meta_flow/workspace/project_artifact_routing.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "meta_flow/workspace/routing.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "tests/test_cr051_project_artifact_routing.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "tests/test_workspace_routing.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "process/stories/STORY-ST-AW-001-project-first-routing-IMPLEMENTATION.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/ST-AW-001.CP6-R2.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/ST-AW-001.CP6-R2.index.json"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr051_project_artifact_routing.py::test_legacy_non_string_owned_path_uses_structured_error tests/test_workspace_routing.py::test_project_route_projection_rejects_cross_project_decision",
+      "exit_code": 1,
+      "result": "EXPECTED_FAIL",
+      "summary": "测试先行：2 failed；复现 bare TypeError 与跨项目 health.ok=True"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr051_project_artifact_routing.py::test_legacy_non_string_owned_path_uses_structured_error tests/test_workspace_routing.py::test_project_route_projection_rejects_cross_project_decision",
+      "exit_code": 0,
+      "result": "PASS",
+      "summary": "2 passed in 0.06s"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_cr051_project_artifact_routing.py tests/test_workspace_routing.py",
+      "exit_code": 0,
+      "result": "PASS",
+      "summary": "38 passed in 0.14s；原 36 项保持通过"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff check meta_flow/workspace/project_artifact_routing.py meta_flow/workspace/routing.py tests/test_cr051_project_artifact_routing.py tests/test_workspace_routing.py",
+      "exit_code": 0,
+      "result": "PASS",
+      "summary": "All checks passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 python -m py_compile meta_flow/workspace/project_artifact_routing.py meta_flow/workspace/routing.py",
+      "exit_code": 0,
+      "result": "PASS",
+      "summary": "exit 0"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "PASS",
+      "summary": "exit 0"
+    }
+  ],
+  "cr_id": "CR-051",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/returns/ST-AW-001.CP6-R2.return.json",
+  "risks": [
+    {
+      "id": "CR051-RISK-MODULE-BOUNDARIES-MANIFEST",
+      "owner": "CP8 decision owner",
+      "severity": "medium",
+      "status": "open-for-cp8-review",
+      "summary": "仓库级 module/import checker 的 canonical manifest 仍缺失；非 ST-AW-001 R2 引入。"
+    },
+    {
+      "id": "CR051-RISK-REAL-CROSS-DEVICE-PILOT",
+      "owner": "meta-qa/human",
+      "severity": "low",
+      "status": "open",
+      "summary": "真实跨设备 portability pilot 未授权；临时双根 relocation fixture 已通过。"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "ST-AW-001",
+  "tests": [
+    "CP7-AW-001-F01",
+    "CP7-AW-001-F02",
+    "TC-AW-001",
+    "TC-AW-002",
+    "TC-AW-003",
+    "TC-AW-010",
+    "TC-AW-012"
+  ],
+  "waivers": []
+}

@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR051-DELIVERY-READINESS",
+  "cr_id": "CR-051",
+  "profile": "architecture-major",
+  "check_attempt": 1,
+  "context_ref": "process/release/RELEASE-CONTEXT-CR051.yaml",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "evidence_ref": "process/checkpoints/CP8-CR051-DELIVERY-READINESS.md",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check",
+    "checker_commit": "working-tree",
+    "generated_by": "host-orchestrator",
+    "invocation": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP8-CR051-DELIVERY-READINESS.result.json --check-consistency --correlation-profile strict --project-root .",
+    "fallback_used": false
+  },
+  "release_decision": "READY_WITH_RISK",
+  "fact_diff": [
+    {
+      "promise_ref": "REQ-AW-001..017 and REQ-AW-C001..C005",
+      "promise": "Project-first routing, recoverable worktree switching, heterogeneous legs, aggregate gate and read-only migration preflight are implemented.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/returns/ST-AW-001.CP7-R2.return.json", "process/returns/ST-AW-002.CP7.return.json", "process/returns/ST-AW-003.CP7-R2.return.json", "process/returns/ST-AW-004.CP7.return.json", "process/returns/ST-AW-005.CP7-R2.return.json"],
+      "risk_ref": "CR051-RISK-REMOTE-UNVERIFIED"
+    },
+    {
+      "promise_ref": "CR-051 aggregate regression",
+      "promise": "The complete current repository test suite remains green after all five Stories.",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/docs/quality/CR051-TEST-REPORT.md", "process/returns/CR051.CP8-PREP.return.json"],
+      "risk_ref": "CR051-RISK-REPO-FORMAT-BASELINE"
+    },
+    {
+      "promise_ref": "all-five independent QA and capability claim attestation",
+      "promise": "All Story verdicts are independently attested and public capability claims have a canonical registry check.",
+      "status": "NEEDS_REVIEW",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/docs/quality/CR051-REVIEW.md", "process/returns/CR051-DOCUMENTATION.return.json"],
+      "risk_ref": "CR051-RISK-PARTIAL-INDEPENDENT-QA"
+    },
+    {
+      "promise_ref": "real hosted environment and per-project migration",
+      "promise": "Hosted remote, branch protection, Windows native behavior and real migration/worktree/link operations are verified.",
+      "status": "NEEDS_REVIEW",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/docs/release/CR051-DEPLOY-CHECKLIST.md", "process/docs/release/CR051-MIGRATION.md"],
+      "risk_ref": "CR051-RISK-REAL-MIGRATION-UNVERIFIED"
+    },
+    {
+      "promise_ref": "repository persistence",
+      "promise": "The verified source and artifact changes are committed and pushed.",
+      "status": "NEEDS_REVIEW",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/checkpoints/CP8-CR051-DELIVERY-READINESS.md"],
+      "risk_ref": "CR051-RISK-WORKING-TREE-UNPUBLISHED"
+    }
+  ],
+  "items": [
+    {
+      "id": "CP8-AW051-01",
+      "name": "CP5 is approved and five Story CP6/CP7 evidence chains are complete",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checkpoints/CP5-CR051-ALL-STORIES-LLD-BATCH.md", "process/returns/CR051.CP8-PREP.return.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release"
+    },
+    {
+      "id": "CP8-AW051-02",
+      "name": "All current repository tests and lint checks pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-TEST-REPORT.md", "process/evidence/CR051.CP8-PREP.index.json"],
+      "owner": "host-orchestrator/meta-qa-critical",
+      "route_on_fail": "block_release"
+    },
+    {
+      "id": "CP8-AW051-03",
+      "name": "Two HIGH findings are closed and no open BLOCKER or HIGH remains",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-REVIEW.md", "process/docs/quality/CR051-FIXES.md"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story"
+    },
+    {
+      "id": "CP8-AW051-04",
+      "name": "User documentation and full-profile release artifacts are complete",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/returns/CR051-DOCUMENTATION.return.json", "process/release/RELEASE-CONTEXT-CR051.yaml"],
+      "owner": "meta-doc/meta-qa-critical",
+      "route_on_fail": "block_release"
+    },
+    {
+      "id": "CP8-AW051-05",
+      "name": "Residual verification, platform, migration and persistence limits are disclosed",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/docs/quality/CR051-REVIEW.md", "process/checkpoints/CP8-CR051-DELIVERY-READINESS.md"],
+      "owner": "user",
+      "route_on_fail": "require_user_decision"
+    },
+    {
+      "id": "CP8-AW051-06",
+      "name": "CP8 applicability aggregate matches the architecture-major route plan",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP8-CR051.applicability.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "risks": [
+    "CR051-RISK-PARTIAL-INDEPENDENT-QA",
+    "DOC-CR051-CAPABILITY-REGISTRY-MISSING",
+    "CR051-RISK-REMOTE-UNVERIFIED",
+    "CR051-RISK-WINDOWS-NATIVE-PILOTS",
+    "R-AW004-LOCK-CRASH",
+    "R-AW005-DIR-ENUM-TOCTOU",
+    "CR051-RISK-REAL-MIGRATION-UNVERIFIED",
+    "CR051-RISK-MODULE-BOUNDARIES-MANIFEST",
+    "CR051-RISK-WORKING-TREE-UNPUBLISHED",
+    "CR051-RISK-REPO-FORMAT-BASELINE",
+    "CR051-RISK-LEGACY-CR-INDEX-CHECK",
+    "CR051-RISK-APPEND-ONLY-EVENT-LEDGER-COMPAT"
+  ],
+  "decision": "PASS",
+  "next_route": "await CP8 human READY_WITH_RISK decision",
+  "checked_at": "2026-07-18T17:07:29Z"
+}

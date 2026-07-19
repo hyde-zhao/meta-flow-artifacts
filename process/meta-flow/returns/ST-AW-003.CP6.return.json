@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-003",
+  "status": "implemented_with_risk",
+  "touched_files": [
+    {
+      "path": "meta_flow/workflow/artifact_leg_lifecycle.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/test_artifact_leg_lifecycle.py",
+      "change_type": "created"
+    },
+    {
+      "path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-IMPLEMENTATION.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/ST-AW-003.CP6.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/ST-AW-003.CP6.index.json",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "新增异构 leg schema/policy/executor 与 immutable payload → external receipt → reread-validated published handle API；未改变 HLD/ADR/Feature DESIGN。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_leg_lifecycle.py",
+        "result": "pass",
+        "summary": "38 passed；含临时 bare remote、command spy、target/authz/health/publication/recovery。"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_leg_lifecycle.py tests/test_git_branch_lifecycle.py tests/test_workspace_git_sync.py",
+        "result": "pass",
+        "summary": "56 passed；ST-AW-003 定向测试与 CR-050/git_sync legacy regression 全绿。"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff check meta_flow/workflow/artifact_leg_lifecycle.py tests/test_artifact_leg_lifecycle.py",
+        "result": "pass",
+        "summary": "All checks passed。"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr051-staw003-pycompile uv run --python 3.11 python -m py_compile meta_flow/workflow/artifact_leg_lifecycle.py tests/test_artifact_leg_lifecycle.py",
+        "result": "pass",
+        "summary": "Python 3.11 compilation passed；pycache 隔离到 /tmp。"
+      },
+      {
+        "command": "git diff --check -- ST-AW-003 allowed paths + ruff format/check for untracked primary",
+        "result": "pass",
+        "summary": "目标文件无 whitespace/format 问题。"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/STORY-ST-AW-003.CP6.work-packet.json --return process/returns/ST-AW-003.CP6.return.json --project-root .",
+        "result": "pass",
+        "summary": "Story Return Packet Check: OK；process 为外置 symlink，checker 的 resolved-path 比较产生非阻断 warning。"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/ST-AW-003.CP6.index.json --project-root .",
+        "result": "pass",
+        "summary": "Evidence Index Check: OK；return_ref 已归一化为 project-root 相对路径。"
+      }
+    ],
+    "tests": [
+      "TP-AW03-001..020",
+      "TP-03-001..021 applicable assertions",
+      "TC-AW-005..010/012/014 applicable assertions",
+      "target-mode-matrix",
+      "typed-authz-mismatch-matrix",
+      "nested-worktree-health-matrix",
+      "payload-receipt-handle-tamper-matrix",
+      "single-write-threaded-idempotency",
+      "evidence-only-retry-no-git",
+      "resume-abort-no-cross-leg-rollback",
+      "temporary-bare-remote-source-complete",
+      "CR-050-and-git-sync-legacy-regression"
+    ],
+    "skipped": [
+      "real shared remote / forge branch protection pilot not authorized",
+      "Windows native Git pilot not executed",
+      "CLI / aggregate end-to-end belongs to ST-AW-004"
+    ]
+  },
+  "evidence_refs": [
+    "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-IMPLEMENTATION.md",
+    "tests/test_artifact_leg_lifecycle.py"
+  ],
+  "artifacts": [
+    "meta_flow/workflow/artifact_leg_lifecycle.py",
+    "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-IMPLEMENTATION.md"
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "CR051-RISK-REMOTE-UNVERIFIED",
+      "level": "medium",
+      "status": "open",
+      "owner": "CP8 decision owner",
+      "detail": "仅验证临时 bare remote；真实 shared remote、凭据、网络与 branch protection 未获授权。"
+    },
+    {
+      "id": "CR051-RISK-WINDOWS-NATIVE-GIT-PILOT",
+      "level": "low",
+      "status": "open",
+      "owner": "CP7/CP8 decision owner",
+      "detail": "当前 Linux 环境未执行 Windows native Git argv/path pilot。"
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7"
+}

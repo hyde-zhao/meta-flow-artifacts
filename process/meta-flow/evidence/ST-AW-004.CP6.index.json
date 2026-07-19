@@ -1,0 +1,101 @@
+{
+  "artifacts": [
+    "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-IMPLEMENTATION.md"
+  ],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "meta_flow/workflow/artifact_aggregate.py"
+    },
+    {
+      "change_type": "created",
+      "path": "tests/test_artifact_aggregate.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "meta_flow/cli.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "meta_flow/workflow/cr_lifecycle.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "meta_flow/state/current.py"
+    },
+    {
+      "change_type": "created",
+      "path": "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-IMPLEMENTATION.md"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_leg_lifecycle.py tests/test_artifact_aggregate.py tests/test_git_branch_lifecycle.py tests/test_workspace_git_sync.py tests/test_state_v2.py tests/test_cr_lifecycle.py",
+      "result": "pass: 179 passed, 9 subtests passed"
+    },
+    {
+      "command": "uv run --python 3.11 ruff check meta_flow/workflow/artifact_aggregate.py tests/test_artifact_aggregate.py meta_flow/cli.py meta_flow/workflow/cr_lifecycle.py meta_flow/state/current.py",
+      "result": "pass: All checks passed"
+    },
+    {
+      "command": "uv run --python 3.11 ruff format --check meta_flow/workflow/artifact_aggregate.py tests/test_artifact_aggregate.py",
+      "result": "pass: 2 files already formatted"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr051-staw004-pycompile uv run --python 3.11 python -m py_compile meta_flow/workflow/artifact_aggregate.py meta_flow/cli.py meta_flow/workflow/cr_lifecycle.py meta_flow/state/current.py tests/test_artifact_aggregate.py",
+      "result": "pass"
+    },
+    {
+      "command": "forbidden import scan on artifact_aggregate.py",
+      "result": "pass: Git/worktree/subprocess/manual-sync/producer-primary imports=0"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow cr aggregate --help",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check -- ST-AW-004 touched files",
+      "result": "pass"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/STORY-ST-AW-004.CP6.work-packet.json --return process/returns/ST-AW-004.CP6.return.json --project-root .",
+      "result": "pass_with_warning: logical expected path matches; external process symlink resolves to physical artifact path"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/ST-AW-004.CP6.index.json --project-root .",
+      "result": "pass: Evidence Index Check OK"
+    }
+  ],
+  "cr_id": "CR-051",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/returns/ST-AW-004.CP6.return.json",
+  "risks": [
+    {
+      "blocking": false,
+      "id": "R-AW004-LOCK-CRASH",
+      "summary": "selector writer crash 可能遗留 lock directory；后续 writer fail closed，需人工诊断后恢复。"
+    },
+    {
+      "blocking": false,
+      "id": "CR051-RISK-REMOTE-UNVERIFIED",
+      "summary": "真实托管 remote/worktree 未授权且未验证；本 Story 不执行这些能力。"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "ST-AW-004",
+  "tests": [
+    "source/artifact 4x4 fixed precedence matrix",
+    "raw/missing/duplicate/stale/wrong-correlation/mode/schema/ref/digest/key/receipt rejection",
+    "immutable aggregate no-self-reference and deterministic digest",
+    "aggregate own digest top-level omission while nested leg payload digests remain bound",
+    "same-input idempotency and conflicting payload/current-selector CAS",
+    "persist/readback/current 2/2 PASS projection hard gate",
+    "15 non-PASS combinations project calls=0",
+    "stale aggregate and projection failure retry behavior",
+    "controlled current/CR ledger projection without close/status-sync",
+    "cr aggregate CLI dry-run writes=0",
+    "state v2 and CR lifecycle adjacent regressions"
+  ],
+  "waivers": []
+}

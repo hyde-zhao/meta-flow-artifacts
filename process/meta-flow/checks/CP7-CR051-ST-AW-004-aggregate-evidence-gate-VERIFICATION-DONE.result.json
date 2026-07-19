@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR051-ST-AW-004-aggregate-evidence-gate-VERIFICATION-DONE",
+  "story_id": "ST-AW-004",
+  "cr_id": "CR-051",
+  "profile": "runtime-high-risk",
+  "check_attempt": 1,
+  "context_ref": "process/context/stories/STORY-ST-AW-004.CP7.verify-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "dispatch_refs": ["EVENT-CR051-ST-AW-004-CP7-QA-COMPLETED-20260718T143323Z"],
+  "return_packet_ref": "process/returns/ST-AW-004.CP7.return.json",
+  "evidence_ref": "process/evidence/ST-AW-004.CP7.index.json",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator correlation of actual meta-qa-critical ST-AW-004 verification",
+    "checker_commit": "working-tree",
+    "invocation": "179-test combined suite + decision/invalid/non-PASS/canonical/CAS probes + static/boundary + return/evidence checks",
+    "generated_by": "host-orchestrator from actual qa-yan return",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/returns/ST-AW-004.CP7.return.json": "available-in-evidence-index",
+    "process/evidence/ST-AW-004.CP7.index.json": "self-validated"
+  },
+  "items": [
+    {
+      "id": "CP7-AW004-E01",
+      "category": "entry",
+      "name": "CP6 PASS, verify packet and independent QA dispatch are valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP6-CR051-ST-AW-004-aggregate-evidence-gate-CODING-DONE.result.json", "process/context/stories/STORY-ST-AW-004.CP7.verify-packet.json", "process/handoffs/CR051-ST-AW-004-CP7-META-QA-CRITICAL.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Actual meta-qa-critical lane completed and returned validated evidence."
+    },
+    {
+      "id": "CP7-AW004-01",
+      "category": "aggregate-validation",
+      "name": "4x4 fixed precedence and invalid/unpublished handle fail-closed matrix pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-004-VERIFICATION-REPORT.md", "process/evidence/ST-AW-004.CP7.index.json"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "16/16 decisions and all invalid/unpublished probes pass before persistence/projection."
+    },
+    {
+      "id": "CP7-AW004-02",
+      "category": "canonical-cas",
+      "name": "Top-level-only digest omission, nested leg binding and selector CAS pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-004-REVIEW.md", "tests/test_artifact_aggregate.py"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Nested leg digest tampering changes aggregate digest; same input is idempotent and conflicting current never uses last-write-wins."
+    },
+    {
+      "id": "CP7-AW004-03",
+      "category": "projection-boundary",
+      "name": "Only persisted/readback/current 2/2 PASS can record a completion candidate",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-004-VERIFICATION-REPORT.md#4-验证追踪矩阵", "process/docs/quality/CR051-ST-AW-004-TEST-REPORT.md"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "15 non-PASS, stale and four invalid-receipt probes call projector zero times; no close/status-sync/rollback/Git/worktree."
+    },
+    {
+      "id": "CP7-AW004-04",
+      "category": "regression-boundary",
+      "name": "Combined regression, CLI dry-run and forbidden dependency checks pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/evidence/ST-AW-004.CP7.index.json", "process/returns/ST-AW-004.CP7.return.json#boundary_check"],
+      "owner": "host-orchestrator/meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "179 tests plus 9 subtests pass; QA wrote only allowed report/evidence files and executed no real runtime operations."
+    },
+    {
+      "id": "CP7-AW004-X01",
+      "category": "exit",
+      "name": "No blocking findings remain and residual risks are explicitly tracked",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-004-FIXES.md", "process/docs/quality/CR051-ST-AW-004-REVIEW.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Zero implementation rework items; native lock-crash/platform and hosted-remote risks remain visible."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260718T144007Z0000-08a1fe93", "RE-20260718T144007Z0000-8ab3769f"],
+  "risks": [
+    {"id": "R-AW004-LOCK-CRASH", "severity": "LOW", "status": "open-fail-closed", "owner": "CP8 decision owner", "summary": "A crashed selector writer may leave a lock directory requiring diagnosis."},
+    {"id": "CR051-RISK-WINDOWS-CROSS-PROCESS-LOCK", "severity": "LOW", "status": "open", "owner": "CP8 decision owner", "summary": "Native Windows cross-process lock/crash behavior was not executed."},
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "severity": "MEDIUM", "status": "accepted-boundary", "owner": "CP8 decision owner", "summary": "Real hosted remote/worktree remains unauthorized and outside aggregate scope."}
+  ],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "ST-AW-004-verified-with-risk-await-W4",
+  "checked_at": "2026-07-18T14:35:30Z"
+}

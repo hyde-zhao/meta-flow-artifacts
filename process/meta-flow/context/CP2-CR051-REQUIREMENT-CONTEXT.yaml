@@ -1,0 +1,203 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR051-REQUIREMENT-CONTEXT"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-07-17T07:47:17Z"
+created_by: "host-orchestrator"
+source_cr: "CR-051"
+updated_at: "2026-07-17T08:12:28Z"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 12
+  max_summary_items: 16
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "Agent 必须先读取本 capsule，并且只读取 allowed_reads / must_read；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+
+allowed_reads:
+  - path: "process/state/STATE.current.json"
+    reason: "轻量运行态、当前变更和阶段"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "当前发现入口"
+    required: true
+  - path: "process/changes/summaries/CR-051.summary.json"
+    reason: "当前 CR 轻量摘要"
+    required: true
+  - path: "process/checks/CP0-CR-051.route-plan.json"
+    reason: "CP0-CP8 适用性与阶段约束"
+    required: true
+  - path: "process/docs/product/USE-CASES.md"
+    reason: "增量维护共享 artifact 与 Git 生命周期用例"
+    required: false
+  - path: "process/docs/product/REQUIREMENTS.md"
+    reason: "增量维护 project-first/worktree 需求"
+    required: false
+  - path: "process/docs/product/SCENARIOS.yaml"
+    reason: "增量维护工程验证场景"
+    required: false
+  - path: "process/docs/product/TEST-MATRIX.md"
+    reason: "增量维护场景覆盖追踪"
+    required: false
+  - path: "process/docs/product/STORY-MAP.md"
+    reason: "增量维护用户旅程和 Story 候选"
+    required: false
+  - path: "process/docs/product/MVP-SCOPE.md"
+    reason: "冻结能力开发与真实迁移边界"
+    required: false
+  - path: "process/docs/product/RELEASE-SLICES.md"
+    reason: "定义能力交付切片"
+    required: false
+  - path: "process/docs/product/BACKLOG.md"
+    reason: "记录逐项目迁移和真实远端验证后续项"
+    required: false
+
+must_read:
+  - path: "process/context/CP2-CR051-REQUIREMENT-CONTEXT.yaml"
+    reason: "本阶段最小事实与读边界"
+    required: true
+  - path: "process/state/STATE.current.json"
+    reason: "验证 active change 与阶段"
+    required: true
+  - path: "process/changes/summaries/CR-051.summary.json"
+    reason: "当前 CR 的机器摘要"
+    required: true
+  - path: "process/checks/CP0-CR-051.route-plan.json"
+    reason: "禁止提前设计或实现的路由约束"
+    required: true
+
+read_if_needed:
+  - path: "process/changes/CR-051.md"
+    trigger: "summary 缺少文档处理决策或需要 deep_review；读取后必须记录 read expansion"
+  - path: "process/docs/product/*.md"
+    trigger: "仅打开本次增量修改所需章节；不得整体替换既有基线"
+  - path: "process/docs/product/SCENARIOS.yaml"
+    trigger: "生成或校验 CR-051 场景 ID 时"
+  - path: "meta_flow/workflow/git_branch_lifecycle.py"
+    trigger: "仅为确认既有能力边界，不得修改源码"
+  - path: "meta_flow/workspace/git_sync.py"
+    trigger: "仅为确认既有 artifact root 解析缺陷，不得修改源码"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "人类摘要和 legacy fallback，不作为 agent 默认机器入口"
+  - path_or_pattern: "process/DEVELOPMENT-PLAN.yaml"
+    reason: "CP2 前禁止复用旧开发计划"
+  - path_or_pattern: "process/changes/CR-*.md"
+    reason: "默认只读 CR-051 summary；完整 CR 只在深度审计时读取"
+  - path_or_pattern: "process/stories/**"
+    reason: "CP2 前禁止 Story/LLD 消费"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不属于当前阶段"
+  - path_or_pattern: "process/discussions/**"
+    reason: "除本轮新建 CP2 discussion 证据外，旧讨论只用于人工审计"
+  - path_or_pattern: "../meta-flow-artifacts/process/quant-lab/**"
+    reason: "其他项目运行态，禁止读取和修改"
+  - path_or_pattern: "../meta-flow-artifacts/docs/**"
+    reason: "本轮不迁移真实 artifact 文档"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "只消费当前用户方向摘要，不把会话作为下游真相源"
+
+key_facts:
+  scope_summary: "在 meta-flow 中开发 project-first artifact 路由、每项目独立 worktree 管理和项目作用域 Git 生命周期；本 CR 不迁移现有 artifact 文件、不改变软链接、不写真实远端。"
+  accepted_decisions:
+    - "用户选择 project-first：目标语义为 <project_name>/docs 与 <project_name>/process。"
+    - "用户选择不同项目使用独立 worktree。"
+    - "当前先完成能力开发，真实文件迁移和软链接挂接后续逐项目执行。"
+  active_constraints:
+    - "保留既有产品文档 ID、正文和修订记录，全部采用增量更新。"
+    - "CR-050 是历史事实，不改写；CR-051 通过新需求/ADR 限定或 supersede 其整仓独占假设。"
+    - "其他项目 dirty 不应阻断当前项目；当前项目 worktree dirty 仍需按操作风险阻断。"
+    - "CP2 前不得进行 HLD、Story 拆解、LLD 或源码实现。"
+    - "任何真实 Git/worktree/remote mutation 均不在本阶段授权范围。"
+  downstream_tasks:
+    - "8 份产品基线文档已增量更新；旧 ID、正文与修订记录保留。"
+    - "SGQ-AW-001/002、discussion log 与 checkpoint 已完成。"
+    - "CP1 与 CP2 machine result、human summary 和 meta-pm return summary 已完成并通过校验。"
+    - "host-orchestrator 发起 CP2-DQ-01..03 人工门；用户决定前不得推进 CP3。"
+  traceability:
+    requirements: ["REQ-AW-001..017", "REQ-AW-C001..005", "REQ-AW-NF001..005"]
+    use_cases: ["UC-AW-001..005"]
+    scenarios: ["TC-AW-001..015"]
+    stories: ["ST-AW-001..005 (产品候选，非 CP4 Story 卡片)"]
+    features: ["M-AW1..4 (产品里程碑，Feature 边界待 CP3/CP4)"]
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "CP2-DQ-01：推荐长期常驻 per-project worktree；每 CR 临时和 hybrid 为备选。"
+    - "CP2-DQ-02：推荐显式 merge fresh origin/main 到当前项目 CR branch；rebase+force-with-lease 和重建/cherry-pick 为备选。"
+    - "CP2-DQ-03：推荐保留现有 control checkout，项目 worktree 放在可配置 sibling root 并采用 project namespace/sparse policy；bare control 或 full worktree 为备选。"
+  non_authorized_items:
+    - "真实 meta-flow-artifacts 文件迁移或软链接变更"
+    - "真实 worktree/branch/ref 创建、删除、提交或推送"
+    - "remote default branch update、force push、凭据读取或托管平台策略绕过"
+  risk_acceptance_items: []
+  open_questions:
+    - "CP2 决定三项产品策略；CP3 冻结 idle detached 细节、路径 schema、owned-path gate、refresh 状态机和失败恢复。"
+  n_a_or_waived_items: []
+
+handoff:
+  target_agent: "meta-pm"
+  expected_output:
+    - "process/docs/product/USE-CASES.md"
+    - "process/docs/product/REQUIREMENTS.md"
+    - "process/docs/product/SCENARIOS.yaml"
+    - "process/docs/product/TEST-MATRIX.md"
+    - "process/docs/product/STORY-MAP.md"
+    - "process/docs/product/MVP-SCOPE.md"
+    - "process/docs/product/RELEASE-SLICES.md"
+    - "process/docs/product/BACKLOG.md"
+    - "process/checks/CP1-CR051-*.result.json"
+    - "process/checks/CP2-CR051-*.result.json"
+    - "process/handoffs/CR051-CP1-CP2-META-PM-RETURN-SUMMARY.md"
+  exit_criteria:
+    - "产品文档增量更新且旧基线未丢失"
+    - "SGQ 证据、CP1/CP2 预检和待决策项完整"
+    - "明确交还 host-orchestrator，未启动 CP3"
+  blocked_if_missing:
+    - "无法证明用户选择 project-first + per-project worktree"
+    - "产品基线存在无法安全增量更新的结构冲突"
+
+read_expansion_log:
+  - path: "process/REQUEST.md"
+    full_doc_read_reason: "schema_validation_failed"
+    reason: "use-case-discovery 与 requirement-extraction 把 REQUEST.md 定义为必须输入，但 capsule allowed_reads 未列出；仅读取当前请求入口以满足技能输入契约。"
+    requested_by: "meta-pm"
+    recorded_at: "2026-07-17T08:00:00Z"
+  - path: "process/changes/CR-051.md"
+    full_doc_read_reason: "deep_review"
+    reason: "CR summary 未包含文档处理决策与旧基线映射；CR 触发的产品基线增量更新必须核对这两项。"
+    requested_by: "meta-pm"
+    recorded_at: "2026-07-17T08:00:00Z"
+  - path: "delivery/skills/checkpoint-manager/schemas/CP-RESULT.schema.json"
+    full_doc_read_reason: "schema_validation_failed"
+    reason: "capsule 要求生成 CP1/CP2 machine result，但未把 CP result schema 列入 allowed_reads；读取 canonical schema 以避免产出不可校验结果。"
+    requested_by: "meta-pm"
+    recorded_at: "2026-07-17T08:00:00Z"
+
+validation:
+  generated_from_sources:
+    - "process/state/STATE.current.json"
+    - "process/changes/summaries/CR-051.summary.json"
+    - "process/checks/CP0-CR-051.route-plan.json"
+    - "当前用户对 project-first、独立 worktree 和后续迁移责任的明确选择"
+    - "process/docs/product/USE-CASES.md"
+    - "process/docs/product/REQUIREMENTS.md"
+    - "process/docs/product/SCENARIOS.yaml"
+    - "process/docs/product/TEST-MATRIX.md"
+    - "process/docs/product/STORY-MAP.md"
+    - "process/docs/product/MVP-SCOPE.md"
+    - "process/docs/product/RELEASE-SLICES.md"
+    - "process/docs/product/BACKLOG.md"
+    - "process/handoffs/CR051-CP1-CP2-META-PM-RETURN-SUMMARY.md"
+    - "process/checks/CP1-CR051-USE-CASE-COMPLETENESS.result.json"
+    - "process/checks/CP2-CR051-REQUIREMENTS-BASELINE.result.json"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "workspace route health 已通过；artifact_git_dirty 来自共享仓库其他项目，不是 CR-051 的启动阻断。"

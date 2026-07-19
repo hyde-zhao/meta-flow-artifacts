@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-005",
+  "status": "verified_with_risk",
+  "touched_files": [
+    {"path": "process/docs/quality/CR051-ST-AW-005-VERIFICATION-REPORT-R2.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-005-TEST-REPORT-R2.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-005-REVIEW-R2.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-005-FIXES-R2.md", "change_type": "created"},
+    {"path": "process/returns/ST-AW-005.CP7-R2.return.json", "change_type": "created"},
+    {"path": "process/evidence/ST-AW-005.CP7-R2.index.json", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "CP7-R2 只验证并关闭 REV-AW005-001；没有修改实现、测试、manifest schema、glob 语义、readiness enum 或 O-AW-03。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "forbidden_runtime_calls": [],
+    "target_mutation_count": 0,
+    "git_worktree_ref_remote_call_count": 0,
+    "helper_scheduler_call_count": 0,
+    "denied_descendant_content_read_count": 0,
+    "denied_descendant_mapping_count": 0,
+    "notes": "QA 仅写入验证包允许的四份 R2 报告与 return/evidence；独立 fixture 只使用临时目录。"
+  },
+  "verification": {
+    "validation_mode": "mixed",
+    "commands_run": [
+      {"command": "independent wide-source-root denied-descendant fixture", "result": "pass: MANUAL_REVIEW; denied probe/mapping/leak=0"},
+      {"command": "independent mapped-target-denied fixture", "result": "pass: MANUAL_REVIEW; denied source/target probe/mapping/leak=0"},
+      {"command": "independent relative-symlink-to-denied fixture", "result": "pass: MANUAL_REVIEW; target probe/leak=0; link_target=null; class=relative-denied"},
+      {"command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_migration.py -k 'denied_descendant or denied_target_descendant or relative_symlink_to_denied'", "result": "pass: 3 passed, 23 deselected"},
+      {"command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_migration.py", "result": "pass: 26 passed in 0.13s"},
+      {"command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_migration.py tests/test_cr051_project_artifact_routing.py tests/test_cr051_project_worktree.py", "result": "pass: 95 passed in 0.52s"},
+      {"command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_migration.py tests/test_cr051_project_artifact_routing.py tests/test_cr051_project_worktree.py tests/test_artifact_leg_lifecycle.py tests/test_artifact_aggregate.py tests/test_git_branch_lifecycle.py tests/test_workspace_git_sync.py tests/test_state_v2.py tests/test_cr_lifecycle.py", "result": "pass: 280 passed, 9 subtests passed in 5.20s"},
+      {"command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff check meta_flow/workspace/artifact_migration.py tests/test_artifact_migration.py", "result": "pass: All checks passed"},
+      {"command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff format --check meta_flow/workspace/artifact_migration.py tests/test_artifact_migration.py", "result": "pass: 2 files already formatted"},
+      {"command": "PYTHONPYCACHEPREFIX=/tmp/cr051-staw005-cp7-r2-pycompile uv run --python 3.11 python -m py_compile meta_flow/workspace/artifact_migration.py tests/test_artifact_migration.py", "result": "pass"},
+      {"command": "git diff --check -- meta_flow/workspace/artifact_migration.py tests/test_artifact_migration.py", "result": "pass"},
+      {"command": "scoped dangerous filesystem mutator/subprocess API rg audit", "result": "pass: no matches"}
+    ],
+    "tests": [
+      "independent wide source root denied descendant",
+      "independent mapped target denied descendant",
+      "independent relative symlink target denied descendant",
+      "26 directed manifest/no-follow/zero-mutation/O-AW-03 tests",
+      "95 adjacent routing/worktree tests",
+      "280 combined tests plus 9 subtests"
+    ],
+    "skipped": [
+      {"check": "real project migration/link/worktree/ref/remote pilot", "reason": "NO_RUNTIME / NO_PRODUCTION_WRITE / NO_REPOSITORY_PUBLICATION；not authorized"},
+      {"check": "native Windows no-follow/symlink/permission pilot", "reason": "current environment is Linux；existing fail-closed behavior retained"},
+      {"check": "adversarial concurrent directory rename/replace", "reason": "explicit R2 non-goal；retained as R-AW005-DIR-ENUM-TOCTOU"}
+    ]
+  },
+  "evidence_refs": [
+    "process/docs/quality/CR051-ST-AW-005-VERIFICATION-REPORT-R2.md",
+    "process/docs/quality/CR051-ST-AW-005-TEST-REPORT-R2.md",
+    "process/docs/quality/CR051-ST-AW-005-REVIEW-R2.md",
+    "process/docs/quality/CR051-ST-AW-005-FIXES-R2.md",
+    "meta_flow/workspace/artifact_migration.py",
+    "tests/test_artifact_migration.py"
+  ],
+  "artifacts": [
+    "process/docs/quality/CR051-ST-AW-005-VERIFICATION-REPORT-R2.md",
+    "process/docs/quality/CR051-ST-AW-005-TEST-REPORT-R2.md",
+    "process/docs/quality/CR051-ST-AW-005-REVIEW-R2.md",
+    "process/docs/quality/CR051-ST-AW-005-FIXES-R2.md"
+  ],
+  "resolved_findings": [
+    {"id": "REV-AW005-001", "status": "closed-r2", "summary": "Three independent denied-descendant probes and exact regression suites prove zero denied object probes, mapping and leakage with non-READY results."}
+  ],
+  "open_questions": [],
+  "risks": [
+    {"id": "R-AW005-DIR-ENUM-TOCTOU", "level": "medium", "status": "open-follow-up", "owner": "CP8 decision owner / future migration CR", "detail": "未来不可信并发目录 rename/replace 需要 full-lld 与 dirfd/openat 全链路设计；当前静态只读 fixture 不证明该场景。"},
+    {"id": "CR051-RISK-REAL-MIGRATION-UNVERIFIED", "level": "medium", "status": "open-not-authorized", "owner": "future project migration CR", "detail": "真实迁移、软链接、worktree/ref/remote mutation 未授权、未执行。"},
+    {"id": "CR051-RISK-WINDOWS-NATIVE-NOFOLLOW", "level": "low", "status": "open", "owner": "CP8 decision owner", "detail": "Windows native no-follow 行为未实机验证；当前能力缺失时 fail closed。"},
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "level": "medium", "status": "open-not-authorized", "owner": "CP8 decision owner", "detail": "托管 remote、credentials、branch protection 与 publication 未授权、未验证。"}
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp7_r2_result_assembly"
+}

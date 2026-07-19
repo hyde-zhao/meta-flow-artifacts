@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR051-ST-AW-002-recoverable-project-worktree-CODING-DONE",
+  "story_id": "ST-AW-002",
+  "cr_id": "CR-051",
+  "profile": "runtime-high-risk",
+  "check_attempt": 1,
+  "context_ref": "process/context/stories/STORY-ST-AW-002.CP6.work-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "dispatch_refs": ["EVENT-CR051-ST-AW-002-CP6-DEV-COMPLETED-20260718T125000Z"],
+  "return_packet_ref": "process/returns/ST-AW-002.CP6.return.json",
+  "evidence_ref": "process/evidence/ST-AW-002.CP6.index.json",
+  "checker_provenance": {"checker_name": "host-orchestrator CP6 worktree evidence correlation", "checker_commit": "working-tree", "invocation": "83-test CAP/DUR/WT suite + ruff + py_compile + return/evidence + diff", "generated_by": "host-orchestrator", "fallback_used": false},
+  "input_artifact_hashes": {"process/returns/ST-AW-002.CP6.return.json": "available-in-evidence-index", "process/evidence/ST-AW-002.CP6.index.json": "self-validated"},
+  "items": [
+    {"id": "CP6-AW002-E01", "category": "entry", "name": "ST-AW-001 verified and ST-AW-002 packet/LLD gate are valid", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/checks/CP7-CR051-ST-AW-001-project-first-routing-VERIFICATION-DONE-R2.result.json", "process/context/stories/STORY-ST-AW-002.CP6.work-packet.json"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "W2 runtime gate satisfied."},
+    {"id": "CP6-AW002-01", "category": "capacity", "name": "CAP-01..11 bounded estimate is fail-closed and non-underestimating", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/stories/STORY-ST-AW-002-recoverable-project-worktree-IMPLEMENTATION.md", "tests/test_cr051_worktree_faults.py"], "owner": "meta-dev-debugger", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "false-safe=0 and underestimate=0; unknown/error blocks before mutation; failure policy disables auto switch."},
+    {"id": "CP6-AW002-02", "category": "durability", "name": "DUR-01..14 durable intent and recovery failure matrix pass", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/stories/STORY-ST-AW-002-recoverable-project-worktree-IMPLEMENTATION.md", "tests/test_cr051_worktree_faults.py"], "owner": "meta-dev-debugger", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Faults block before Git mutation and resume is idempotent; failure policy disables auto switch."},
+    {"id": "CP6-AW002-03", "category": "worktree-state-machine", "name": "WT-01..14 and exact-OID create-only integration semantics pass", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["tests/test_cr051_project_worktree.py", "tests/test_workspace_git_sync.py"], "owner": "meta-dev-debugger", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Fresh observation is required; main is not a working branch; destructive recovery argv count is zero."},
+    {"id": "CP6-AW002-04", "category": "regression", "name": "Full authorized fixture suite and static checks pass", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/evidence/ST-AW-002.CP6.index.json"], "owner": "host-orchestrator/meta-dev-debugger", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "83 tests pass; Ruff, py_compile and diff pass."},
+    {"id": "CP6-AW002-05", "category": "boundary", "name": "Only temporary fixtures/local bare remotes are mutated", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/returns/ST-AW-002.CP6.return.json#boundary_check"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Real artifact/worktree/ref/remote/link/migration and cli.py writes are zero."},
+    {"id": "CP6-AW002-06", "category": "evidence", "name": "Implementation, return and evidence index are valid", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/stories/STORY-ST-AW-002-recoverable-project-worktree-IMPLEMENTATION.md", "process/returns/ST-AW-002.CP6.return.json", "process/evidence/ST-AW-002.CP6.index.json"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "return-check/evidence-check pass; no design delta or waiver."},
+    {"id": "CP6-AW002-X01", "category": "exit", "name": "ST-AW-002 is ready for independent CP7 verification", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/handoffs/CR051-ST-AW-002-CP6-META-DEV-DEBUGGER.md", "process/evidence/ST-AW-002.CP6.index.json"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "CAP/DUR obligations are not waived and have executable fixture evidence."}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260718T124135Z0000-staw002", "RE-20260718T131421Z0000-0669b38b"],
+  "risks": [
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "severity": "MEDIUM", "status": "open-for-cp7-review", "owner": "meta-qa", "summary": "Real shared remote/worktree pilot is not authorized."},
+    {"id": "CR051-RISK-WINDOWS-DURABILITY-PILOT", "severity": "LOW", "status": "open-for-cp7-review", "owner": "meta-qa", "summary": "Windows directory fsync/locking pilot is not executed; unsupported capability remains fail-closed."}
+  ],
+  "decision": "PASS",
+  "next_route": "CP7-ST-AW-002-meta-qa-critical",
+  "checked_at": "2026-07-18T12:50:00Z"
+}

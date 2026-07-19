@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR051-ST-AW-001-project-first-routing-VERIFICATION-DONE-R2",
+  "profile": "runtime-high-risk",
+  "story_id": "ST-AW-001",
+  "cr_id": "CR-051",
+  "check_attempt": 2,
+  "supersedes_result_ref": "process/checks/CP7-CR051-ST-AW-001-project-first-routing-VERIFICATION-DONE.result.json",
+  "context_ref": "process/context/stories/STORY-ST-AW-001.CP7-R2.verify-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "dispatch_refs": ["DISPATCH-CR051-ST-AW-001-CP7-R2-HOST-FALLBACK"],
+  "evidence_ref": "process/evidence/ST-AW-001.CP7-R2.index.json",
+  "return_packet_ref": "process/returns/ST-AW-001.CP7-R2.return.json",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator CP7-R2 authorized inline fallback",
+    "checker_commit": "working-tree",
+    "invocation": "finding-specific + 38 targeted tests + ruff + py_compile + contract constants + diff + return/evidence checks",
+    "generated_by": "host-orchestrator",
+    "fallback_used": true,
+    "fallback_reason": "real meta-qa-critical repeatedly timed out before evidence materialization; Host reran only the authorized local CP7-R2 verification packet",
+    "fallback_review_ref": "process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT-R2.md"
+  },
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-ST-AW-001.CP7-R2.verify-packet.json": "sha256:faf235cecd80e0e6d688238ea6380e5557b899b330b987b6b42ea4a383aea6ff",
+    "process/returns/ST-AW-001.CP7-R2.return.json": "sha256:5baa924e89d779c15456e4a8d6df0b9d6c3a12724b6c46ef6d1c07b0eec2216e",
+    "process/evidence/ST-AW-001.CP7-R2.index.json": "sha256:5662464f54b429c721afc5a60e6db444e483f93bdae494eab1d7b4ab08fade10",
+    "process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT-R2.md": "sha256:986a4c64416b1264542e918270b3fdb6ee55bf63d7c60cfd5bf9c64453abf798"
+  },
+  "items": [
+    {
+      "id": "CP7-AW001-R2-E01",
+      "category": "entry",
+      "name": "CP6-R2 and finding closure evidence are valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP6-CR051-ST-AW-001-project-first-routing-CODING-DONE-R2.result.json", "process/docs/quality/CR051-ST-AW-001-FIXES.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "R2 entry criteria pass."
+    },
+    {
+      "id": "CP7-AW001-R2-01",
+      "category": "finding-closure",
+      "name": "F01 cross-project decision mismatch is fail-closed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT-R2.md", "tests/test_workspace_routing.py"],
+      "owner": "host-orchestrator/meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "health is not OK and no target is exposed."
+    },
+    {
+      "id": "CP7-AW001-R2-02",
+      "category": "finding-closure",
+      "name": "F02 malformed legacy owned_paths is structured",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT-R2.md", "tests/test_cr051_project_artifact_routing.py"],
+      "owner": "host-orchestrator/meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "RoutingValidationError route_conflict with indexed field is returned."
+    },
+    {
+      "id": "CP7-AW001-R2-03",
+      "category": "regression",
+      "name": "Finding-specific and full targeted regression pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-001-TEST-REPORT-R2.md", "process/evidence/ST-AW-001.CP7-R2.index.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "2/2 and 38/38 pass; static checks pass."
+    },
+    {
+      "id": "CP7-AW001-R2-04",
+      "category": "contract-boundary",
+      "name": "Public routing contract and zero-mutation boundary remain intact",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/ST-AW-001.CP7-R2.return.json#contract_changes", "process/returns/ST-AW-001.CP7-R2.return.json#boundary_check"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Schema 1, two layouts, 13 errors and real mutation=0."
+    },
+    {
+      "id": "CP7-AW001-R2-05",
+      "category": "dispatch-governance",
+      "name": "QA timeout fallback is explicit and user-authorized",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/state/AGENT-DISPATCH-LEDGER.ndjson#DISPATCH-CR051-ST-AW-001-CP7-R2-HOST-FALLBACK"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Real QA dispatch timed out; fallback is narrow, auditable and limited to authorized local checks."
+    },
+    {
+      "id": "CP7-AW001-R2-X01",
+      "category": "exit",
+      "name": "ST-AW-001 is verified and W2 may start fixture-only implementation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-001-REVIEW-R2.md", "process/evidence/ST-AW-001.CP7-R2.index.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Residual risks do not authorize real runtime mutation."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "risks": [
+    {"id": "CR051-RISK-MODULE-BOUNDARIES-MANIFEST", "severity": "MEDIUM", "status": "open-for-cp8-review", "owner": "CP8 decision owner", "summary": "Canonical module manifest is absent."},
+    {"id": "CR051-RISK-CROSS-DEVICE-PILOT", "severity": "LOW", "status": "open-for-cp8-review", "owner": "CP8 decision owner", "summary": "Real cross-device pilot is not authorized."}
+  ],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP6-ST-AW-002-meta-dev-debugger",
+  "checked_at": "2026-07-18T12:35:00Z"
+}

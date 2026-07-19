@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "stage": "CP7",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-005",
+  "return_ref": "process/returns/ST-AW-005.CP7.return.json",
+  "artifacts": [
+    "process/docs/quality/CR051-ST-AW-005-VERIFICATION-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-005-TEST-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-005-REVIEW.md",
+    "process/docs/quality/CR051-ST-AW-005-FIXES.md"
+  ],
+  "changed_files": [
+    {"path": "process/docs/quality/CR051-ST-AW-005-VERIFICATION-REPORT.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-005-TEST-REPORT.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-005-REVIEW.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-005-FIXES.md", "change_type": "created"},
+    {"path": "process/returns/ST-AW-005.CP7.return.json", "change_type": "created"},
+    {"path": "process/evidence/ST-AW-005.CP7.index.json", "change_type": "created"}
+  ],
+  "commands": [
+    {"command": "pytest -q tests/test_artifact_migration.py", "result": "pass: 23 passed"},
+    {"command": "independent CP7 adjacent packet suite", "result": "pass: 254 passed, 9 subtests passed"},
+    {"command": "ruff/format/diff-check", "result": "pass"},
+    {"command": "nested denied-subtree runtime probe", "result": "fail: REV-AW005-001 reproduced"}
+  ],
+  "tests": [
+    "23 directed pass",
+    "254 adjacent + 9 subtests pass",
+    "nested denied descendant isolation fails"
+  ],
+  "risks": [
+    {"id": "REV-AW005-001", "blocking": true, "summary": "Denied descendant is read and mapped under wider root."},
+    {"id": "R-AW005-DIR-ENUM-TOCTOU", "blocking": false, "summary": "Future adversarial directory replacement risk."}
+  ],
+  "design_delta_ref": null,
+  "waivers": [],
+  "provenance": {
+    "independent_probe_by": "meta-qa-critical:/root/cr051_staw005_qa",
+    "evidence_materialized_by": "host-orchestrator inline fallback after two timed-out QA write attempts",
+    "semantic_change": false,
+    "source_or_test_mutation": false
+  }
+}

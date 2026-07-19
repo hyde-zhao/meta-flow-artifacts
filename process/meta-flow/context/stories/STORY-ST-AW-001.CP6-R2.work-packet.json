@@ -1,0 +1,275 @@
+{
+  "acceptance": [
+    "CP7-AW-001-F01：config.project_id 与 decision.project_id 不一致时 health.ok=false，跨项目 target 不被采用为授权",
+    "CP7-AW-001-F02：legacy 非字符串 owned_paths 返回既有稳定 RoutingValidationError，字段精确到 owned_paths.<index>，不泄漏裸 TypeError",
+    "两个新增负例与原 36 个 routing/compatibility 测试全部通过",
+    "公共 schema/layout/错误码集合不变，无 design delta",
+    "sibling/真实 Git/worktree/link/remote/migration mutation 次数为 0"
+  ],
+  "allowed_reads": [
+    {
+      "estimated_tokens": 843,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_discovery_entry",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1884,
+      "mode": "full",
+      "path": "process/stories/STORY-ST-AW-001-project-first-routing.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 364,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    },
+    {
+      "estimated_tokens": 934,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-051.summary.json",
+      "reason": "cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT.md",
+      "reason": "cp7_rework_findings",
+      "required": true
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/docs/quality/CR051-ST-AW-001-FIXES.md",
+      "reason": "cp7_fix_contract",
+      "required": true
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/returns/ST-AW-001.CP7.return.json",
+      "reason": "cp7_return",
+      "required": true
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "process/checks/CP7-CR051-ST-AW-001-project-first-routing-VERIFICATION-DONE.result.json",
+      "reason": "cp7_result",
+      "required": true
+    }
+  ],
+  "allowed_write_paths": [
+    "meta_flow/workspace/project_artifact_routing.py",
+    "meta_flow/workspace/routing.py",
+    "tests/test_cr051_project_artifact_routing.py",
+    "tests/test_workspace_routing.py",
+    "process/stories/STORY-ST-AW-001-project-first-routing-IMPLEMENTATION.md",
+    "process/returns/ST-AW-001.CP6-R2.return.json",
+    "process/evidence/ST-AW-001.CP6-R2.index.json"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "NO_REPOSITORY_PUBLICATION"
+  ],
+  "budget": {
+    "estimated_tokens": 4232,
+    "estimator": "chars_div_4",
+    "max_tokens": 16000
+  },
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": [
+      "architecture-major",
+      "product-redesign",
+      "runtime-high-risk"
+    ]
+  },
+  "cr_delta": {
+    "affected_contracts": [
+      "project_route_to_process_health identity guard",
+      "legacy owned_paths structured validation"
+    ],
+    "summary": "仅回修 CP7-AW-001-F01/F02：阻断 config/decision 跨项目混用，并把 legacy malformed owned_paths 转为既有结构化路由错误；不改变 project-first 拓扑、schema 或错误码集合。"
+  },
+  "cr_id": "CR-051",
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md",
+    "process/archive/**",
+    "process/discussions/**"
+  ],
+  "dependency_inputs": [
+    "初次 CP7 NEEDS_REWORK result、return 和 FIXES；ST-AW-001 是 DAG root，W2 在本回修通过前保持关闭。"
+  ],
+  "design_refs": {
+    "capability_status": "docs/design/CAPABILITY-STATUS.yaml",
+    "concept_owners": "docs/design/CONCEPT-OWNERS.yaml",
+    "feature_registry": "docs/design/FEATURE-REGISTRY.yaml",
+    "module_boundaries": "docs/design/MODULE-BOUNDARIES.yaml",
+    "package_identity": "docs/design/PACKAGE-IDENTITY.yaml"
+  },
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary / legacy fallback，不作为 agent 默认机器入口"
+    },
+    {
+      "path_or_pattern": "process/DEVELOPMENT-PLAN.yaml",
+      "reason": "计划长文由 Story packet / context 摘要承载"
+    },
+    {
+      "path_or_pattern": "process/STORY-STATUS.md",
+      "reason": "legacy status 汇总，不作为当前 Story 真相源"
+    },
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "默认读取 CR summary / CR ledger，完整 CR 只用于审计或冲突恢复"
+    },
+    {
+      "path_or_pattern": "process/stories/*-LLD.md",
+      "reason": "默认读取 Story packet / design summary，完整 LLD 按需展开"
+    },
+    {
+      "path_or_pattern": "process/stories/*-IMPLEMENTATION.md",
+      "reason": "实现长证据默认通过 return/evidence index 消费"
+    },
+    {
+      "path_or_pattern": "process/archive/**",
+      "reason": "历史归档属于冷区，默认禁止读取"
+    },
+    {
+      "path_or_pattern": "process/discussions/**",
+      "reason": "讨论日志只用于审计 / 恢复，不替代正式产物"
+    }
+  ],
+  "expected_return_packet": "process/returns/ST-AW-001.CP6-R2.return.json",
+  "feature_contract_summary": "FEAT-AW-01 路由 adapter 与 resolver 必须维持同一 project identity，并对所有不可信输入返回结构化 fail-closed 结果。",
+  "feature_design_refs": [
+    "process/docs/features/cr051-routing/DESIGN.md",
+    "process/docs/features/cr051-routing/TEST-PLAN.md",
+    "process/docs/features/cr051-routing/TASKS.md"
+  ],
+  "feature_design_summary_ref": "",
+  "feature_refs": ["FEAT-AW-01"],
+  "forbidden_write_paths": [
+    "meta_flow/workspace/project_worktree.py",
+    "meta_flow/workspace/worktree_capacity.py",
+    "meta_flow/workspace/worktree_journal.py",
+    "meta_flow/workflow/artifact_leg_lifecycle.py",
+    "meta_flow/workflow/artifact_aggregate.py",
+    "process/quant-lab/**",
+    ".git/**",
+    "real Git/worktree/ref/remote/link/migration targets"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "lld_policy": "full-lld-no-delta-expected",
+  "must_read": [
+    {
+      "estimated_tokens": 843,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 207,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1884,
+      "mode": "full",
+      "path": "process/stories/STORY-ST-AW-001-project-first-routing.md",
+      "reason": "story_card",
+      "required": true
+    },
+    {
+      "estimated_tokens": 364,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    }
+  ],
+  "objective": {
+    "non_goals": [
+      "不重构无关 routing 代码",
+      "不改变公共 layout/schema/error-code 集合",
+      "不执行任何真实 Git/worktree/ref/remote/link/migration mutation"
+    ],
+    "summary": "唯一解析 project-first artifact 路由并保留显式 legacy 兼容"
+  },
+  "packet_type": "story_work_packet",
+  "parent_context_ref": "process/context/CP6-CR051-IMPLEMENTATION-CONTEXT.yaml",
+  "policy_refs": {
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "project_id": "meta-flow",
+  "read_if_needed": [
+    {
+      "path": "process/stories/STORY-ST-AW-001-project-first-routing-LLD.md",
+      "trigger": "field_conflict",
+      "reason": "仅当 FIXES 与已批准契约冲突时展开；读取前写 deep_review read-log"
+    },
+    {
+      "path": "process/stories/STORY-ST-AW-001-project-first-routing-IMPLEMENTATION.md",
+      "trigger": "deep_review",
+      "reason": "更新实现映射与回修证据；读取前写 deep_review read-log"
+    }
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "risk_profile": "runtime-high-risk",
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "ST-AW-001",
+  "story_ref": "process/stories/STORY-ST-AW-001-project-first-routing.md",
+  "verification_plan": [
+    "先补 project identity mismatch 与 legacy malformed owned_paths 两个失败测试，再最小修复",
+    "uv run --python 3.11 pytest -q tests/test_cr051_project_artifact_routing.py tests/test_workspace_routing.py",
+    "uv run --python 3.11 ruff check meta_flow/workspace/project_artifact_routing.py meta_flow/workspace/routing.py tests/test_cr051_project_artifact_routing.py tests/test_workspace_routing.py",
+    "uv run --python 3.11 python -m py_compile meta_flow/workspace/project_artifact_routing.py meta_flow/workspace/routing.py",
+    "git diff --check"
+  ]
+}

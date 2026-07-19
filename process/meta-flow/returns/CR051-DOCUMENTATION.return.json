@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "packet_type": "documentation_return_packet",
+  "stage": "documentation",
+  "workflow_id": "meta-flow-self-dev",
+  "cr_id": "CR-051",
+  "canonical_role": "meta-doc",
+  "codex_agent_name": "doc-cao",
+  "status": "completed_with_risk",
+  "completed_at": "2026-07-18T16:51:29Z",
+  "context_ref": "process/context/CR051-DOCUMENTATION-CONTEXT.yaml",
+  "handoff_ref": "process/handoffs/CR051-CP8-META-DOC.md",
+  "doc_paths": [
+    "delivery/README.md",
+    "delivery/doc/USER-MANUAL.md"
+  ],
+  "touched_files": [
+    {
+      "path": "delivery/README.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "delivery/doc/USER-MANUAL.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/returns/CR051-DOCUMENTATION.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR051-DOCUMENTATION.index.json",
+      "change_type": "created"
+    }
+  ],
+  "summary": "增量修正文档中的双仓库 Git 周期：源码 leg 以 default branch 为基线和完成目标；artifact leg 使用 shared main、项目 integration 与项目命名空间短期 CR 分支，CR 只回合到 integration，main 与 integration 的双向同步均为 CR 外人工操作。同步记录 worktree 驻留/切换、双 leg 聚合、现有 workspace 命令边界和离线 fixture / not-authorized 能力状态。",
+  "contract_coverage": {
+    "source_artifact_repository_separation": true,
+    "project_first_topology": true,
+    "artifact_cr_from_latest_project_integration": true,
+    "artifact_cr_targets_project_integration_only": true,
+    "manual_main_project_sync_outside_cr": true,
+    "worktree_idle_active_contract": true,
+    "dual_leg_worst_status_aggregation": true,
+    "existing_cli_only": true,
+    "migration_cli_not_claimed": true,
+    "offline_fixture_and_not_authorized_boundaries": true
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "implementation_or_test_files_touched": [],
+    "state_ledger_checkpoint_release_files_touched": [],
+    "git_worktree_ref_remote_mutation_count": 0,
+    "migration_link_publish_mutation_count": 0
+  },
+  "validation": {
+    "commands": [
+      {
+        "command": "git diff --check -- delivery/README.md delivery/doc/USER-MANUAL.md",
+        "status": "PASS",
+        "summary": "no whitespace errors"
+      },
+      {
+        "command": "uv run --python 3.11 python scripts/check_delivery_guardrails.py",
+        "status": "PASS_WITH_WARNINGS",
+        "summary": "OK；仅报告已忽略的本地 __pycache__ 目录"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow check capability-claims --artifact delivery/README.md --project-root .",
+        "status": "BLOCKED",
+        "summary": "检查器固定前置文件 docs/design/CAPABILITY-STATUS.yaml 不存在"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow check capability-claims --artifact delivery/doc/USER-MANUAL.md --project-root .",
+        "status": "BLOCKED",
+        "summary": "检查器固定前置文件 docs/design/CAPABILITY-STATUS.yaml 不存在"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow workspace --help",
+        "status": "PASS",
+        "summary": "确认 workspace check、git-status 与 push 是当前真实 CLI"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow cr aggregate --help",
+        "status": "PASS",
+        "summary": "确认 aggregate 的 id、operation-id、attempt、双 handle 与 dry-run 参数真实存在"
+      }
+    ],
+    "capability_claims_validated": false,
+    "capability_claims_blocker_ref": "DOC-CR051-CAPABILITY-REGISTRY-MISSING"
+  },
+  "documentation_gaps": [
+    {
+      "id": "DOC-CR051-CAPABILITY-REGISTRY-MISSING",
+      "severity": "REQUIRED",
+      "status": "open-outside-write-boundary",
+      "impact": "两份用户文档无法通过 capability-claims 自动检查，CP8 必须如实保留该验证缺口或由有权 owner 恢复 canonical registry 后重跑。",
+      "recommended_route": "由 host-orchestrator / meta-qa 在 CP8 核对 CAPABILITY-STATUS canonical 路由；不得由 meta-doc 越界创建 registry。"
+    }
+  ],
+  "risks": [
+    {
+      "id": "CR051-DOC-RUNTIME-CLAIMS",
+      "level": "medium",
+      "status": "controlled-by-explicit-labels",
+      "detail": "真实 hosted remote、branch protection、Windows native、worktree/ref、迁移、软链接和发布未授权、未执行；文档均标注 offline fixture 或 not-authorized。"
+    }
+  ],
+  "evidence_ref": "process/evidence/CR051-DOCUMENTATION.index.json",
+  "release_context_ref": null,
+  "next_stage_recommendation": "host_orchestrator_and_meta_qa_prepare_cp8_with_capability_registry_gap_explicit"
+}

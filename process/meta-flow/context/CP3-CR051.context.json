@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "stage": "CP3",
+  "profile": "architecture-major",
+  "status": "ready-for-human-gate",
+  "project_id": "meta-flow",
+  "cr_id": "CR-051",
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-051.summary.json",
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "artifact_budgets": "process/policies/ARTIFACT-BUDGETS.json"
+  },
+  "budget": {
+    "max_tokens": 30000,
+    "estimated_tokens": 18500,
+    "estimator": "bounded-summary"
+  },
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "active CR and CP3 gate state", "required": true},
+    {"path": "process/current/CURRENT.json", "reason": "current discovery entry", "required": true},
+    {"path": "process/context/CP3-CR051-DESIGN-CONTEXT.yaml", "reason": "compact human gate capsule", "required": true},
+    {"path": "process/checkpoints/CP2-CR051-PROJECT-FIRST-WORKTREE-BASELINE-R3.md", "reason": "approved product baseline and CP3-DC-01", "required": true},
+    {"path": "process/docs/design/CR051-ARTIFACT-WORKTREE-HLD.md", "reason": "architecture proposal", "required": true},
+    {"path": "process/docs/design/CR051-ARTIFACT-WORKTREE-ARCHITECTURE-DECISION.md", "reason": "proposed ADRs and decisions", "required": true},
+    {"path": "process/checks/CP3-CR051-HLD-CONSISTENCY.result.json", "reason": "CP3 machine truth", "required": true}
+  ],
+  "allowed_reads": [
+    {"path": "process/docs/design/CR051-ARTIFACT-WORKTREE-BLUEPRINT.md", "reason": "capability and Feature boundaries", "required": true},
+    {"path": "process/docs/design/CR051-ARTIFACT-WORKTREE-DOMAIN-MAP.md", "reason": "domain objects and state machine", "required": true},
+    {"path": "process/docs/design/CR051-ARTIFACT-WORKTREE-DEPENDENCY-MAP.md", "reason": "dependency directions", "required": true},
+    {"path": "process/checks/CP3-CR051-DISCUSSION-CHECKPOINT.json", "reason": "structured Architecture Gray Areas", "required": true},
+    {"path": "process/checks/CP3-CR051-HLD-CONSISTENCY.summary.md", "reason": "human-readable auto-check summary", "required": true},
+    {"path": "process/handoffs/CR051-CP3-META-SE-RETURN-SUMMARY.md", "reason": "stage return summary", "required": true}
+  ],
+  "read_if_needed": [
+    {"path": "process/docs/product/REQUIREMENTS.md", "reason": "27-item requirement audit", "required": false},
+    {"path": "process/docs/product/SCENARIOS.yaml", "reason": "15-item scenario audit", "required": false},
+    {"path": "process/docs/product/TEST-MATRIX.md", "reason": "traceability audit", "required": false}
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/stories/**",
+    "process/archive/**",
+    "process/discussions/**"
+  ],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "generated human summary"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "CP3 not approved"},
+    {"path_or_pattern": "process/stories/**", "reason": "Story planning not approved"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold evidence"},
+    {"path_or_pattern": "../meta-flow-artifacts/process/quant-lab/**", "reason": "sibling project boundary"}
+  ],
+  "full_doc_read_allowed_when": ["field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "read_expansion_refs": ["RE-20260718T042656Z0000-620c98a6"],
+  "decision_ids": ["CP3-CR051-DQ-01", "CP3-CR051-DQ-02", "CP3-CR051-DQ-03"],
+  "scope_summary": {
+    "architecture": "extend typed native-Git lifecycle with project context, recoverable worktree, heterogeneous legs, aggregate gate and read-only migration handoff",
+    "switch_contract": "precheck -> external durable intent -> switch attempt -> fresh observation -> verified target/original or conditional rollback/recovery-required",
+    "leg_contract": "source default and artifact project integration are heterogeneous targets; artifact CR never touches shared main",
+    "aggregate_contract": "BLOCKED > FAIL > IN_PROGRESS > PASS; only all required legs PASS completes; PARTIAL is not terminal success",
+    "sync_contract": "shared main and project integration synchronization is CR-external, manual and independently authorized"
+  },
+  "not_authorized": [
+    "source_implementation_or_test_change",
+    "real_artifact_file_migration",
+    "symlink_mutation",
+    "real_worktree_branch_ref_remote_mutation",
+    "real_main_integration_synchronization",
+    "commit_push_publish",
+    "force_or_history_rewrite",
+    "credentials_runtime_saas_production_write_trading",
+    "process_quant_lab_changes"
+  ],
+  "risks": [
+    "non-atomic switch can leave a third state and therefore fails closed",
+    "remote bootstrap and manual sync races require exact OID and fresh postcheck",
+    "evidence multi-writer or self-reference can break audit truth",
+    "checkout write-byte estimator remains a CP5-calibrated non-blocking detail"
+  ]
+}

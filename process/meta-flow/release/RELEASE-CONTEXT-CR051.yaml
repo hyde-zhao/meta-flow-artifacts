@@ -1,0 +1,237 @@
+schema_version: "1.0"
+status: ready-for-human-gate
+cr_id: CR-051
+release_artifact_profile: full
+release_decision: READY_WITH_RISK
+created_at: "2026-07-18T16:55:34Z"
+updated_at: "2026-07-18T16:55:34Z"
+source_gate: CP8
+
+release_scope:
+  current_version: "0.4.0"
+  target_version: "0.5.0 (proposed; not materialized or published)"
+  included_features:
+    - project-first artifact routing and project-owned-path isolation
+    - recoverable artifact worktree switch with capacity estimate and durable intent
+    - heterogeneous source/artifact CR legs with typed worst-status aggregation
+    - fail-closed completion selector persistence and CAS
+    - read-only migration preflight manifest and handoff
+  included_stories:
+    - ST-AW-001
+    - ST-AW-002
+    - ST-AW-003
+    - ST-AW-004
+    - ST-AW-005
+  excluded_scope:
+    - real hosted remote, credentials, branch protection or publication
+    - real project worktree/ref/branch switch outside temporary fixtures
+    - main-to-integration or integration-to-main manual synchronization
+    - real artifact migration, copy, move, delete or symlink relink
+    - Windows native Git, durability, cross-process lock or no-follow pilots
+    - source or artifact repository commit, push, merge or release
+  user_visible_changes:
+    - source repository and artifact repository now have explicitly different CR lifecycles
+    - artifact worktree idles on project integration and uses project-namespaced short CR branches
+    - overall CR completion requires both source and artifact legs to pass
+  internal_changes:
+    - project routing, worktree recovery, durable intent, typed leg lifecycle and aggregate selector modules
+    - immutable read-only migration manifest with deny descendant and no-follow controls
+  breaking_changes: []
+  known_risks:
+    - CR051-RISK-PARTIAL-INDEPENDENT-QA
+    - DOC-CR051-CAPABILITY-REGISTRY-MISSING
+    - CR051-RISK-REMOTE-UNVERIFIED
+    - CR051-RISK-WINDOWS-NATIVE-PILOTS
+    - R-AW004-LOCK-CRASH
+    - R-AW005-DIR-ENUM-TOCTOU
+    - CR051-RISK-REAL-MIGRATION-UNVERIFIED
+    - CR051-RISK-MODULE-BOUNDARIES-MANIFEST
+
+version_decision:
+  current_version: "0.4.0"
+  target_version: "0.5.0"
+  version_applied: false
+  change_type: MINOR
+  compatibility: compatible
+  reason: >-
+    CR-051 adds a substantial project-first artifact lifecycle while retaining the source default-branch
+    lifecycle and existing public workspace commands. 0.5.0 is a CP8 recommendation only; no package
+    metadata, tag, commit or publication was authorized.
+
+quality_summary:
+  cp7_results:
+    - story_id: ST-AW-001
+      decision: PASS_WITH_RISK
+      result_ref: process/checks/CP7-CR051-ST-AW-001-project-first-routing-VERIFICATION-DONE-R2.result.json
+      qa_provenance: bounded-host-fallback-after-qa-timeout
+    - story_id: ST-AW-002
+      decision: PASS_WITH_RISK
+      result_ref: process/checks/CP7-CR051-ST-AW-002-recoverable-project-worktree-VERIFICATION-DONE.result.json
+      qa_provenance: bounded-host-fallback-after-qa-timeout
+    - story_id: ST-AW-003
+      decision: PASS_WITH_RISK
+      result_ref: process/checks/CP7-CR051-ST-AW-003-heterogeneous-git-legs-VERIFICATION-DONE-R2.result.json
+      qa_provenance: actual-independent-qa-r2
+    - story_id: ST-AW-004
+      decision: PASS_WITH_RISK
+      result_ref: process/checks/CP7-CR051-ST-AW-004-aggregate-evidence-gate-VERIFICATION-DONE.result.json
+      qa_provenance: actual-independent-qa
+    - story_id: ST-AW-005
+      decision: PASS_WITH_RISK
+      result_ref: process/checks/CP7-CR051-ST-AW-005-read-only-migration-handoff-VERIFICATION-DONE-R2.result.json
+      qa_provenance: actual-qa-finding-host-bounded-materialization-same-qa-lane-independent-r2
+  test_report_path: process/docs/quality/CR051-TEST-REPORT.md
+  review_path: process/docs/quality/CR051-REVIEW.md
+  verification_report_path: process/docs/quality/CR051-VERIFICATION-REPORT.md
+  fixes_path: process/docs/quality/CR051-FIXES.md
+  blocker_count: 0
+  open_high_count: 0
+  closed_high_count: 2
+  closed_high_findings:
+    - REV-AW003-001
+    - REV-AW005-001
+  aggregate_regression:
+    executor: host-orchestrator
+    command: PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q
+    result: 680 passed, 70 subtests passed in 6.83s
+    note: Story and aggregate counts overlap and must not be summed as unique tests
+  aggregate_static_checks:
+    - "PASS: ruff check meta_flow tests"
+    - "PASS: delivery guardrail; ignored local __pycache__ warnings only"
+    - "PASS: git diff --check"
+    - "NON_BLOCKING_BASELINE_DEBT: ruff format --check meta_flow tests reports 98 files would be reformatted and 15 already formatted"
+  accepted_risk_ids:
+    - CR051-RISK-PARTIAL-INDEPENDENT-QA
+  unresolved_findings:
+    - DOC-CR051-CAPABILITY-REGISTRY-MISSING
+    - CR051-RISK-REMOTE-UNVERIFIED
+    - CR051-RISK-WINDOWS-NATIVE-PILOTS
+    - R-AW004-LOCK-CRASH
+    - R-AW005-DIR-ENUM-TOCTOU
+    - CR051-RISK-REAL-MIGRATION-UNVERIFIED
+    - CR051-RISK-MODULE-BOUNDARIES-MANIFEST
+
+affected_surface:
+  platforms:
+    - Linux fixture validation
+    - Windows contract only, native pilot not executed
+  components:
+    - meta_flow.workspace project routing, worktree, capacity, journal and migration modules
+    - meta_flow.workflow artifact leg lifecycle and aggregate selector
+    - meta_flow.state controlled completion projection
+    - delivery README and user manual
+  install_scopes: []
+  config_changes:
+    - future project artifact routing metadata; no real project configuration changed
+  permission_changes: []
+  migration_required: false
+  external_interfaces:
+    - hosted Git remote is future separately authorized integration
+  state_schema_changes:
+    - typed artifact-leg and aggregate evidence structures; no production state migration executed
+  command_parameter_changes:
+    - cr aggregate CLI exists; no migration CLI is delivered
+
+install_validation_summary:
+  commands:
+    - uv run --python 3.11 python scripts/check_delivery_guardrails.py
+    - uv run --python 3.11 meta-flow workspace --help
+    - uv run --python 3.11 meta-flow cr aggregate --help
+  results:
+    - PASS_WITH_WARNINGS: delivery guardrail OK; ignored local __pycache__ only
+    - PASS: current workspace CLI surface confirmed
+    - PASS: aggregate CLI surface confirmed
+    - BLOCKED_RISK: capability-claims checker cannot run because canonical registry is absent
+  log_paths:
+    - process/returns/CR051-DOCUMENTATION.return.json
+  skipped_with_reason:
+    - package install/upgrade/idempotency is not an affected CR-051 surface
+    - repository git-status and paired push were not run because real Git/repository operations are explicitly not authorized in this gate preparation
+    - no real worktree/ref/remote/migration/link/publish operation was run
+    - global ruff format baseline was not mechanically rewritten; directed CR-051 format checks passed and the 98-file baseline debt is recorded as a validation limitation
+
+repository_lifecycles:
+  source_repository:
+    baseline: default branch (main or master)
+    cr_start: short CR branch from latest default branch
+    cr_completion_target: default branch
+    current_execution: not-authorized-unexecuted
+  artifact_repository:
+    shared_baseline: main retained
+    project_idle_branch: projects/<project>/integration
+    cr_start: project-namespaced short CR branch from latest project integration
+    cr_completion_target: same project integration only
+    shared_main_sync: manual outside CR in both directions
+    current_execution: not-authorized-unexecuted
+
+release_documents:
+  release_notes:
+    path: process/docs/release/CR051-RELEASE-NOTES.md
+    status: ready
+    na_reason: ""
+  deploy_checklist:
+    path: process/docs/release/CR051-DEPLOY-CHECKLIST.md
+    status: ready-with-not-authorized-runtime-items
+    na_reason: ""
+  rollback:
+    path: process/docs/release/CR051-ROLLBACK.md
+    status: ready-procedural-only
+    na_reason: ""
+  migration:
+    path: process/docs/release/CR051-MIGRATION.md
+    status: ready-current-execution-na
+    na_reason: no real migration is authorized in CR-051
+  feedback:
+    path: process/docs/release/CR051-FEEDBACK.md
+    status: ready
+    na_reason: ""
+
+non_authorized_items:
+  - id: NA-CR051-001
+    operation: git commit, push, merge, rebase, branch, worktree or ref mutation
+    reason: CP8 preparation validates readiness only
+    required_authorization: explicit repository operation authorization after CP8
+  - id: NA-CR051-002
+    operation: hosted remote, credentials, branch protection, network API, publish or release
+    reason: external runtime and publication are outside current authorization
+    required_authorization: explicit runtime and publication authorization
+  - id: NA-CR051-003
+    operation: main-to-integration or integration-to-main manual synchronization
+    reason: project boundary synchronization is a CR-external human operation
+    required_authorization: per-operation human approval and clean-state precheck
+  - id: NA-CR051-004
+    operation: artifact copy, move, delete, migration or symlink relink
+    reason: ST-AW-005 delivers read-only preflight only
+    required_authorization: per-project migration CR and runtime write approval
+
+follow_up_summary:
+  observation_items:
+    - fail-closed worktree recovery and selector lock residue
+    - dual-leg aggregate consistency and stale handle rejection
+    - documentation capability claim drift
+  feedback_items:
+    - project bootstrap friction and manual synchronization cost
+    - Windows native behavior
+  follow_up_candidates:
+    - FU-CR051-001 capability registry restoration
+    - FU-CR051-002 canonical module boundary manifest
+    - FU-CR051-003 Windows native pilots
+    - FU-CR051-004 selector stale-lock recovery design
+    - FU-CR051-005 directory enumeration TOCTOU full-LLD
+    - FU-CR051-006 per-project real migration pilot
+  risk_acceptance_items:
+    - CR051-RISK-PARTIAL-INDEPENDENT-QA
+    - offline-fixture-only and not-authorized delivery boundary
+  tracking_state: candidates-only-no-new-cr-created
+
+token_control:
+  default_read_mode: capsule-first
+  copied_long_text: false
+  allowed_payload: summary, count, risk id, decision id, evidence path
+  full_doc_read_triggers:
+    - capsule_missing
+    - field_conflict
+    - human_audit
+    - deep_review
+    - schema_validation_failed
+  read_expansion_log: []

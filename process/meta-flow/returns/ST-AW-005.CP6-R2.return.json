@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-005",
+  "status": "implemented",
+  "touched_files": [
+    {
+      "path": "meta_flow/workspace/artifact_migration.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "tests/test_artifact_migration.py",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/stories/STORY-ST-AW-005-read-only-migration-handoff-IMPLEMENTATION.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/returns/ST-AW-005.CP6-R2.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/ST-AW-005.CP6-R2.index.json",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "仅关闭 REV-AW005-001：将既有 deny policy 前移到每个 source/target portable descendant 的 filesystem probe/mapping 前门，并对 relative symlink target 同时应用 source/mapped-target portable prefix；manifest schema、glob 语义、readiness enum、no-follow 与 O-AW-03 不变。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "forbidden_runtime_calls": [],
+    "target_mutation_count": 0,
+    "git_worktree_ref_remote_call_count": 0,
+    "helper_scheduler_call_count": 0,
+    "denied_descendant_content_read_count": 0,
+    "denied_descendant_mapping_count": 0,
+    "notes": "只修改 packet 允许的 SUT、定向测试、既有 IMPLEMENTATION，并创建 CP6-R2 return/evidence；未写 CLI/shared module，未读取 quant-lab/sibling真实内容，未执行真实 migration/Git/worktree/ref/remote/link mutation。"
+  },
+  "verification": {
+    "validation_mode": "mixed",
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_migration.py -k 'denied_descendant or denied_target_descendant or relative_symlink_to_denied'",
+        "result": "red: 3 failed, 23 deselected；三例均错误 READY，精确复现 REV-AW005-001"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_migration.py -k 'denied_descendant or denied_target_descendant or relative_symlink_to_denied'",
+        "result": "pass after bounded fix: 3 passed, 23 deselected"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_migration.py",
+        "result": "pass: 26 passed in 0.13s"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_migration.py tests/test_cr051_project_artifact_routing.py tests/test_cr051_project_worktree.py",
+        "result": "pass: 95 passed in 0.48s"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/test_artifact_migration.py tests/test_cr051_project_artifact_routing.py tests/test_cr051_project_worktree.py tests/test_artifact_leg_lifecycle.py tests/test_artifact_aggregate.py tests/test_git_branch_lifecycle.py tests/test_workspace_git_sync.py tests/test_state_v2.py tests/test_cr_lifecycle.py",
+        "result": "pass: 280 passed, 9 subtests passed in 5.22s"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff check meta_flow/workspace/artifact_migration.py tests/test_artifact_migration.py",
+        "result": "pass: All checks passed"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 ruff format --check meta_flow/workspace/artifact_migration.py tests/test_artifact_migration.py",
+        "result": "pass: 2 files already formatted"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr051-staw005-cp6-r2-pycompile uv run --python 3.11 python -m py_compile meta_flow/workspace/artifact_migration.py tests/test_artifact_migration.py",
+        "result": "pass"
+      },
+      {
+        "command": "scoped git diff/no-index whitespace and dangerous API/import audit",
+        "result": "pass: no whitespace diagnostics; no filesystem mutator, subprocess, Git/worktree/ref/remote/helper/scheduler executor import/call"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story return-check --packet process/context/stories/STORY-ST-AW-005.CP6-R2.work-packet.json --return process/returns/ST-AW-005.CP6-R2.return.json --project-root .",
+        "result": "pass: Story Return Packet Check OK; logical expected-path warning only because process is an external symlink"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story evidence-check --index process/evidence/ST-AW-005.CP6-R2.index.json --project-root .",
+        "result": "pass: Evidence Index Check OK"
+      }
+    ],
+    "tests": [
+      "wide source root with denied source descendant: denied subtree lstat/open/hash/mapping/descend=0 and non-READY",
+      "source allowed with denied mapped target descendant: guard fires before source lstat/hash and mapping=0",
+      "relative symlink target denied only under mapped target prefix: denied target lstat/open=0, link_target omitted, relative-denied and non-READY",
+      "existing 23 schema/no-follow/missing-target/portability/zero-mutation/O-AW-03 tests unchanged",
+      "routing/worktree and CR-051 cross-Story regression unchanged"
+    ],
+    "skipped": [
+      {
+        "check": "real project migration/link/worktree/ref/remote pilot",
+        "reason": "NO_RUNTIME / NO_PRODUCTION_WRITE / NO_REPOSITORY_PUBLICATION；not authorized and explicitly out of scope"
+      },
+      {
+        "check": "native Windows no-follow/symlink/permission pilot",
+        "reason": "current environment is Linux; existing fail-closed behavior unchanged"
+      },
+      {
+        "check": "adversarial concurrent directory rename/replace with dirfd/openat chain",
+        "reason": "explicit R2 non-goal；remains R-AW005-DIR-ENUM-TOCTOU and requires future full-lld"
+      }
+    ]
+  },
+  "evidence_refs": [
+    "process/stories/STORY-ST-AW-005-read-only-migration-handoff-IMPLEMENTATION.md",
+    "tests/test_artifact_migration.py",
+    "process/docs/quality/CR051-ST-AW-005-FIXES.md",
+    "process/docs/quality/CR051-ST-AW-005-REVIEW.md"
+  ],
+  "artifacts": [
+    "meta_flow/workspace/artifact_migration.py",
+    "tests/test_artifact_migration.py",
+    "process/stories/STORY-ST-AW-005-read-only-migration-handoff-IMPLEMENTATION.md"
+  ],
+  "resolved_findings": [
+    {
+      "id": "REV-AW005-001",
+      "status": "fixed-pending-independent-cp7-r2",
+      "summary": "Denied descendants are rejected before source/target object probe, mapping or descend; relative symlink targets are checked against both portable prefixes and redacted before denied target probe."
+    }
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "R-AW005-DIR-ENUM-TOCTOU",
+      "level": "medium",
+      "status": "open-follow-up",
+      "owner": "CP8 decision owner / future migration CR",
+      "detail": "regular-file no-follow 仍关闭 lstat→open swap；目录枚举继续仅在静态/非对抗 fixture验证。未来允许不可信并发 rename/replace时必须升级 full-lld并采用dirfd/openat全链路 no-follow设计。"
+    },
+    {
+      "id": "CR051-RISK-REAL-MIGRATION-UNVERIFIED",
+      "level": "medium",
+      "status": "open-not-authorized",
+      "owner": "future project migration CR",
+      "detail": "真实文件迁移、软链接挂接、worktree/ref/remote mutation未授权、未执行。"
+    },
+    {
+      "id": "CR051-RISK-WINDOWS-NATIVE-NOFOLLOW",
+      "level": "low",
+      "status": "open",
+      "owner": "CP7/CP8 decision owner",
+      "detail": "Windows native no-follow/symlink/permission行为未实机验证；现有fail-closed策略不变。"
+    },
+    {
+      "id": "CR051-RISK-REMOTE-UNVERIFIED",
+      "level": "medium",
+      "status": "open-not-authorized",
+      "owner": "CP8 decision owner",
+      "detail": "真实托管remote、credentials、branch protection与publication未授权、未验证。"
+    }
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_cp6_r2_result_assembly"
+}

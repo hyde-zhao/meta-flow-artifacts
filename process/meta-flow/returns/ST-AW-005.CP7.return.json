@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-005",
+  "status": "needs_rework",
+  "touched_files": [
+    {"path": "process/docs/quality/CR051-ST-AW-005-VERIFICATION-REPORT.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-005-TEST-REPORT.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-005-REVIEW.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-005-FIXES.md", "change_type": "created"},
+    {"path": "process/returns/ST-AW-005.CP7.return.json", "change_type": "created"},
+    {"path": "process/evidence/ST-AW-005.CP7.index.json", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "CP7 仅验证并记录 denied descendant read-scope 缺陷；未修改实现、测试或设计。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "forbidden_runtime_calls": [],
+    "notes": "实际 meta-qa-critical 执行只读 fixture 与静态检查；报告物化由 host inline fallback 完成。未修改源码/测试，未执行真实 migration/Git/worktree/ref/remote/link mutation。"
+  },
+  "verification": {
+    "decision": "NEEDS_REWORK",
+    "validation_mode": "mixed",
+    "commands_run": [
+      {"command": "pytest -q tests/test_artifact_migration.py", "result": "pass: 23 passed"},
+      {"command": "independent CP7 adjacent packet suite", "result": "pass: 254 passed, 9 subtests passed"},
+      {"command": "ruff/format/diff-check", "result": "pass"},
+      {"command": "independent nested denied-subtree runtime probe", "result": "fail: denied process/quant-lab subtree read and mapped; readiness READY"}
+    ],
+    "tests": [
+      "11-section manifest and portability fixtures pass",
+      "static symlink and regular-file symlink-swap no-follow fixtures pass",
+      "missing target and O-AW-03 fixtures pass",
+      "nested denied descendant isolation fails with REV-AW005-001"
+    ],
+    "skipped": [
+      {"check": "real project migration/link/worktree/ref/remote", "reason": "not authorized and out of scope"},
+      {"check": "Windows native no-follow pilot", "reason": "current environment is Linux"},
+      {"check": "adversarial concurrent directory rename/replace", "reason": "tracked as R-AW005-DIR-ENUM-TOCTOU"}
+    ]
+  },
+  "artifacts": [
+    "process/docs/quality/CR051-ST-AW-005-VERIFICATION-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-005-TEST-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-005-REVIEW.md",
+    "process/docs/quality/CR051-ST-AW-005-FIXES.md"
+  ],
+  "findings": [
+    {"id": "REV-AW005-001", "severity": "HIGH", "blocking": true, "summary": "Denied descendant under a wider allowlisted root is enumerated/read/mapped and can produce READY."}
+  ],
+  "open_questions": [],
+  "risks": [
+    {"id": "R-AW005-DIR-ENUM-TOCTOU", "blocking": false, "summary": "Adversarial concurrent directory replacement needs future full-lld dirfd/openat design."},
+    {"id": "CR051-RISK-REAL-MIGRATION-UNVERIFIED", "blocking": false, "summary": "Real migration/link/worktree/ref/remote mutation was not authorized or executed."},
+    {"id": "CR051-RISK-WINDOWS-NATIVE-NOFOLLOW", "blocking": false, "summary": "Windows native no-follow behavior was not piloted."},
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "blocking": false, "summary": "Hosted remote and publication remain unverified."}
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "rework_same_story_REV-AW005-001",
+  "cp7_approval": "not_granted"
+}

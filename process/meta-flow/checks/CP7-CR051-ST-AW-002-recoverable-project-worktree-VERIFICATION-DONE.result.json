@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR051-ST-AW-002-recoverable-project-worktree-VERIFICATION-DONE",
+  "profile": "runtime-high-risk",
+  "story_id": "ST-AW-002",
+  "cr_id": "CR-051",
+  "context_ref": "process/context/stories/STORY-ST-AW-002.CP7.verify-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "dispatch_refs": ["DISPATCH-CR051-ST-AW-002-CP7-HOST-FALLBACK"],
+  "evidence_ref": "process/evidence/ST-AW-002.CP7.index.json",
+  "return_packet_ref": "process/returns/ST-AW-002.CP7.return.json",
+  "checker_provenance": {"checker_name": "host-orchestrator CP7 authorized inline fallback", "checker_commit": "working-tree", "invocation": "83-test CAP/DUR/WT/PORT suite + static + boundary + return/evidence", "generated_by": "host-orchestrator", "fallback_used": true, "fallback_reason": "real meta-qa-critical timed out before evidence materialization", "fallback_review_ref": "process/docs/quality/CR051-ST-AW-002-VERIFICATION-REPORT.md"},
+  "input_artifact_hashes": {"process/returns/ST-AW-002.CP7.return.json": "recorded-by-evidence-index", "process/evidence/ST-AW-002.CP7.index.json": "self-validated"},
+  "items": [
+    {"id": "CP7-AW002-E01", "category": "entry", "name": "CP6/packet/return/evidence and runtime boundary are valid", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/checks/CP6-CR051-ST-AW-002-recoverable-project-worktree-CODING-DONE.result.json", "process/context/stories/STORY-ST-AW-002.CP7.verify-packet.json"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Entry passes."},
+    {"id": "CP7-AW002-01", "category": "capacity", "name": "CAP-01..11 non-waivable proof passes", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/docs/quality/CR051-ST-AW-002-VERIFICATION-REPORT.md", "tests/test_cr051_worktree_faults.py"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "false-safe=0, underestimate=0, unknown/error pre-mutation blocked."},
+    {"id": "CP7-AW002-02", "category": "durability", "name": "DUR-01..14 non-waivable proof passes", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/docs/quality/CR051-ST-AW-002-VERIFICATION-REPORT.md", "tests/test_cr051_worktree_faults.py"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Fault order and resume idempotency pass."},
+    {"id": "CP7-AW002-03", "category": "state-machine", "name": "WT/PORT/TC-AW and destructive-command guardrails pass", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/docs/quality/CR051-ST-AW-002-TEST-REPORT.md", "process/evidence/ST-AW-002.CP7.index.json"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "83 tests pass and executable dangerous argv count is zero."},
+    {"id": "CP7-AW002-04", "category": "boundary", "name": "Only temporary fixtures/local bare remotes are mutated", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/returns/ST-AW-002.CP7.return.json#boundary_check"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Real runtime mutation=0."},
+    {"id": "CP7-AW002-05", "category": "risk", "name": "Unverified real/Windows pilots stay fail-closed and visible", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/docs/quality/CR051-ST-AW-002-REVIEW.md"], "owner": "CP8 decision owner", "route_on_fail": "block_release", "waiver_ref": null, "notes": "PASS_WITH_RISK does not authorize real auto switch."},
+    {"id": "CP7-AW002-X01", "category": "exit", "name": "ST-AW-002 is verified and W3 fixture-only work may start", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/evidence/ST-AW-002.CP7.index.json"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "Runtime dependency for ST-AW-003 is satisfied."}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "risks": [
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "severity": "MEDIUM", "status": "open-for-cp8-review", "owner": "CP8 decision owner", "summary": "Real shared remote/worktree pilot not authorized."},
+    {"id": "CR051-RISK-WINDOWS-DURABILITY-PILOT", "severity": "LOW", "status": "open-for-cp8-review", "owner": "CP8 decision owner", "summary": "Windows durability pilot not executed."}
+  ],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "W3-ST-AW-003-and-ST-AW-004",
+  "checked_at": "2026-07-18T13:05:00Z"
+}

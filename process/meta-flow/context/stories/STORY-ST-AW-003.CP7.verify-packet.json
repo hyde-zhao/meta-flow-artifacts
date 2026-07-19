@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_verify_packet",
+  "stage": "CP7",
+  "project_id": "meta-flow",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-003",
+  "story_ref": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs.md",
+  "parent_context_ref": "process/context/CP7-CR051-VERIFICATION-CONTEXT.yaml",
+  "risk_profile": "runtime-high-risk",
+  "lld_policy": "full-lld",
+  "objective": {
+    "summary": "独立验证 source-default / artifact-integration 异构 legs 的 exact target、typed authz、fresh proof、不可变发布和非破坏恢复",
+    "non_goals": ["不修改实现或测试", "不执行真实 remote/worktree/ref/link mutation", "不验证 aggregate 投影实现"]
+  },
+  "acceptance": [
+    "source 与 artifact target matrix 100% 通过；artifact main/default/control/sibling mutation=0",
+    "authz/OID/health/drift 任一不满足时 runner mutation=0",
+    "immutable payload、external receipt、reread handle tamper 拒绝率=100%",
+    "evidence-only retry Git=0；ordinary resume 使用新 attempt；abort/cross-leg rollback Git=0",
+    "ST-AW-003 定向与相邻回归通过；真实仓库 publication=0"
+  ],
+  "feature_refs": ["FEAT-AW-03"],
+  "feature_contract_summary": "FEAT-AW-03 为同一逻辑 CR 提供 source-default 与 artifact-integration 两条独立 leg；typed authz、fresh proof 和 immutable published handle 是硬门，任何失败只保留本 leg 事实且禁止跨 leg 回滚。",
+  "feature_design_refs": [
+    "process/docs/features/cr051-legs/DESIGN.md",
+    "process/docs/features/cr051-legs/TEST-PLAN.md",
+    "process/docs/features/cr051-legs/TASKS.md"
+  ],
+  "cr_delta": {
+    "summary": "验证一个逻辑 CR 的两条异构 Git leg；artifact 只允许项目 integration target，且任何一条失败不得回滚另一条。",
+    "affected_contracts": ["LegRequest/Plan", "LegAuthorization", "WorktreeHealth observation", "LegResultPayload/Receipt/Handle", "resume/abort"]
+  },
+  "dependency_inputs": ["ST-AW-002 CP7 PASS_WITH_RISK；ST-AW-003 CP6 PASS。"],
+  "implementation_return_ref": "process/returns/ST-AW-003.CP6.return.json",
+  "expected_return_packet": "process/returns/ST-AW-003.CP7.return.json",
+  "allowed_reads": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "reason": "runtime_state", "required": true, "estimated_tokens": 900},
+    {"path": "process/current/CURRENT.json", "mode": "full", "reason": "current_discovery_entry", "required": true, "estimated_tokens": 220},
+    {"path": "process/policies/READ-POLICY.json", "mode": "full", "reason": "read_policy", "required": true, "estimated_tokens": 400},
+    {"path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs.md", "mode": "full", "reason": "story_card", "required": true, "estimated_tokens": 2300},
+    {"path": "process/returns/ST-AW-003.CP6.return.json", "mode": "full", "reason": "implementation_return", "required": true, "estimated_tokens": 1400},
+    {"path": "process/evidence/ST-AW-003.CP6.index.json", "mode": "full", "reason": "implementation_evidence", "required": true, "estimated_tokens": 1000},
+    {"path": "process/checks/CP6-CR051-ST-AW-003-heterogeneous-git-legs-CODING-DONE.result.json", "mode": "full", "reason": "cp6_result", "required": true, "estimated_tokens": 1800},
+    {"path": "process/docs/features/cr051-legs/TEST-PLAN.md", "mode": "full", "reason": "test_contract", "required": true, "estimated_tokens": 2600},
+    {"path": "meta_flow/workflow/artifact_leg_lifecycle.py", "mode": "full", "reason": "sut", "required": true, "estimated_tokens": 17000},
+    {"path": "tests/test_artifact_leg_lifecycle.py", "mode": "full", "reason": "test_source", "required": true, "estimated_tokens": 9000}
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "reason": "machine_state", "required": true, "estimated_tokens": 900},
+    {"path": "process/current/CURRENT.json", "mode": "full", "reason": "current_entrypoint", "required": true, "estimated_tokens": 220},
+    {"path": "process/policies/READ-POLICY.json", "mode": "full", "reason": "read_policy", "required": true, "estimated_tokens": 400},
+    {"path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs.md", "mode": "full", "reason": "story_card", "required": true, "estimated_tokens": 2300}
+  ],
+  "read_if_needed": [
+    {"path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-IMPLEMENTATION.md", "trigger": "deep_review", "reason": "return/evidence 不足以回答契约映射时展开并写 read-log"},
+    {"path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md", "trigger": "contract_conflict", "reason": "仅在测试计划与实现契约冲突时展开并写 read-log"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "其他 Story/LLD/IMPLEMENTATION", "process/archive/**", "process/discussions/**"],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human summary / legacy fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "Story packet 已提供验证上下文"},
+    {"path_or_pattern": "其他 Story/LLD/IMPLEMENTATION", "reason": "避免跨 Story 上下文扩张"}
+  ],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "allowed_write_paths": [
+    "process/docs/quality/CR051-ST-AW-003-VERIFICATION-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-003-TEST-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-003-REVIEW.md",
+    "process/docs/quality/CR051-ST-AW-003-FIXES.md",
+    "process/returns/ST-AW-003.CP7.return.json",
+    "process/evidence/ST-AW-003.CP7.index.json"
+  ],
+  "forbidden_write_paths": ["meta_flow/**", "tests/**", "delivery/**", ".git/** outside temporary fixtures", "real artifact/worktree/ref/remote/link/migration targets"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_REPOSITORY_PUBLICATION", "FIXTURE_ONLY_GIT_WORKTREE_REMOTE"],
+  "verification_plan": [
+    "复核 target/authz/freshness/publication/recovery 追踪矩阵",
+    "运行 tests/test_artifact_leg_lifecycle.py、tests/test_git_branch_lifecycle.py、tests/test_workspace_git_sync.py",
+    "运行 Ruff、py_compile、diff 与危险 argv/forbidden import 审计",
+    "确认真实 mutation=0 并输出四份质量报告及 CP7 return/evidence"
+  ],
+  "budget": {"estimated_tokens": 36000, "estimator": "chars_div_4", "max_tokens": 48000},
+  "context_sufficiency": {"required_slots": ["objective.summary", "feature_refs", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"], "strict_profiles": ["runtime-high-risk"]},
+  "policy_refs": {"authz_policy": "process/policies/AUTHZ-POLICY.json", "gate_profiles": "process/policies/GATE-PROFILES.json", "read_policy": "process/policies/READ-POLICY.json"}
+}

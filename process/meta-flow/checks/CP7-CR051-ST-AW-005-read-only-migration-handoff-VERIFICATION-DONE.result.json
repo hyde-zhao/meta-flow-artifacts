@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR051-ST-AW-005-read-only-migration-handoff-VERIFICATION-DONE",
+  "story_id": "ST-AW-005",
+  "cr_id": "CR-051",
+  "profile": "runtime-high-risk",
+  "check_attempt": 1,
+  "context_ref": "process/context/stories/STORY-ST-AW-005.CP7.verify-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "dispatch_refs": ["EVENT-CR051-ST-AW-005-CP7-QA-INTERRUPTED-20260718T160700Z", "EVENT-CR051-ST-AW-005-CP7-HOST-FALLBACK-20260718T160800Z"],
+  "return_packet_ref": "process/returns/ST-AW-005.CP7.return.json",
+  "evidence_ref": "process/evidence/ST-AW-005.CP7.index.json",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator correlation of actual meta-qa-critical finding with inline evidence materialization",
+    "checker_commit": "working-tree",
+    "invocation": "23 directed + 254 adjacent/9 subtests + static checks + independent nested denied-subtree runtime probe",
+    "generated_by": "actual meta-qa-critical probe; host-orchestrator materialized reports after QA write timeout",
+    "fallback_used": true,
+    "fallback_reason": "Actual QA reproduced and reported REV-AW005-001 but did not materialize the six packet outputs after two bounded write attempts; Host wrote only the allowed evidence files.",
+    "fallback_review_ref": "process/docs/quality/CR051-ST-AW-005-REVIEW.md"
+  },
+  "input_artifact_hashes": {
+    "process/returns/ST-AW-005.CP7.return.json": "available-in-evidence-index",
+    "process/evidence/ST-AW-005.CP7.index.json": "self-validated"
+  },
+  "items": [
+    {
+      "id": "CP7-AW005-E01",
+      "category": "entry",
+      "name": "CP6 PASS, verify packet and actual independent QA dispatch are valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP6-CR051-ST-AW-005-read-only-migration-handoff-CODING-DONE.result.json", "process/context/stories/STORY-ST-AW-005.CP7.verify-packet.json", "process/handoffs/CR051-ST-AW-005-CP7-META-QA-CRITICAL.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Actual QA performed the independent probe and reported the blocker; only report-file materialization used inline fallback."
+    },
+    {
+      "id": "CP7-AW005-01",
+      "category": "baseline-regression",
+      "name": "Existing manifest, no-follow, missing-target and O-AW-03 fixtures pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-005-TEST-REPORT.md", "process/evidence/ST-AW-005.CP7.index.json"],
+      "owner": "meta-qa-critical/host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "23 directed and 254 adjacent tests plus 9 subtests pass; static checks pass."
+    },
+    {
+      "id": "CP7-AW005-F01",
+      "category": "read-scope-isolation",
+      "name": "Denied descendants under a wider allowlisted root are blocked before read/map",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-005-REVIEW.md#rev-aw005-001--denied-descendant-未在逐对象读取前阻断", "process/docs/quality/CR051-ST-AW-005-FIXES.md#边界"],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "With root=process and deny=process/quant-lab/**, the subtree is enumerated/read/mapped and readiness incorrectly becomes READY."
+    },
+    {
+      "id": "CP7-AW005-03",
+      "category": "boundary",
+      "name": "Verification performed no source/test or real repository/migration mutation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/ST-AW-005.CP7.return.json#boundary_check"],
+      "owner": "host-orchestrator/meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Only quality reports and CP7 return/evidence were created; source/test and real targets were untouched."
+    },
+    {
+      "id": "CP7-AW005-X01",
+      "category": "exit",
+      "name": "All blocking findings are closed",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-005-FIXES.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "REV-AW005-001 remains open and is not risk-acceptable."
+    }
+  ],
+  "blockers": [
+    {"id": "REV-AW005-001", "severity": "HIGH", "owner": "meta-dev-debugger", "summary": "Denied descendant content can be read and mapped under a wider allowlisted root, with a false READY result."}
+  ],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "risks": [
+    {"id": "R-AW005-DIR-ENUM-TOCTOU", "severity": "MEDIUM", "status": "open-follow-up", "owner": "CP8 decision owner / future migration CR", "summary": "Adversarial concurrent directory replacement still needs future full-lld dirfd/openat design."},
+    {"id": "CR051-RISK-REAL-MIGRATION-UNVERIFIED", "severity": "MEDIUM", "status": "open-not-authorized", "owner": "future migration CR", "summary": "Real migration/link/worktree/ref/remote mutation remains unauthorized."},
+    {"id": "CR051-RISK-WINDOWS-NATIVE-NOFOLLOW", "severity": "LOW", "status": "open", "owner": "CP8 decision owner", "summary": "Windows native no-follow behavior was not piloted."},
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "severity": "MEDIUM", "status": "open-not-authorized", "owner": "CP8 decision owner", "summary": "Hosted remote and publication remain unverified."}
+  ],
+  "decision": "NEEDS_REWORK",
+  "next_route": "ST-AW-005-meta-dev-debugger-rework-REV-AW005-001",
+  "checked_at": "2026-07-18T16:08:00Z"
+}

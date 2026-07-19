@@ -1,12 +1,12 @@
 ---
 status: baseline
-version: "1.7"
+version: "2.0"
 created_at: "2026-07-02"
 owner: "meta-pm"
 cr_ref: "CR-037"
-active_change_ref: "CR-050"
+active_change_ref: "CR-051"
 ready_for_design: false
-approval_context: "CR-050 CP2 v1.6.1 was approved on 2026-07-15, but the user later approved adding a separate paired fast-forward-only merge operation. This changes the approved product and authorization baseline, so CP3 v1.0 is changes_requested and CP2 R2 approval is required. Source implementation, commit, real remote branch/default-branch mutation, forge API, credentials, runtime, production write, publish and trading remain unauthorized."
+approval_context: "CR-051 CP2 changes_requested R3 当前候选基线：一个逻辑 CR 使用异构 source/artifact 双 leg；source leg 从 fresh 源码默认分支创建并回到该默认分支，artifact leg 从 fresh 项目 integration 创建并只回到同一 integration，绝不在 per-CR 生命周期 refresh/merge/update artifact shared main；单一聚合门按 BLOCKED > FAIL > IN_PROGRESS > PASS，且仅全部必需 leg PASS 才完成；integration 缺失时从 fresh origin/main exact OID create-only 初始化；shared main↔integration 同步完全在 CR 外人工执行。R3 产品基线仍待 CP2 总体 approve，ready_for_design=false；不授权 HLD、Story、LLD、源码实现、真实 artifact 文件/软链接/worktree/branch/ref mutation、remote publication、credentials、runtime、production write、publish 或 trading。"
 source_use_cases:
   - UC-PG-001
   - UC-PG-002
@@ -31,6 +31,11 @@ source_use_cases:
   - UC-GB-002
   - UC-GB-003
   - UC-GB-004
+  - UC-AW-001
+  - UC-AW-002
+  - UC-AW-003
+  - UC-AW-004
+  - UC-AW-005
 source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT-IMPLEMENTATION-PLAN-2026-07-02.md"
 ---
 
@@ -44,6 +49,9 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | 1.6 | 2026-07-15 | host-orchestrator inline fallback | 为 CR-050 增量加入原生 Git 双仓 CR branch open/publish/finish 契约、fail-closed merge 证明、幂等与 partial failure；保留全部既有 REQ/RA，等待 CP2 确认五项产品边界 | 原文档增量更新 |
 | 1.6.1 | 2026-07-16 | host-orchestrator inline fallback | 记录 CR-050 CP2-DQ-01..05 推荐方案获批并将 `ready_for_design=true`；不修改 REQ/RA/范围，继续保留实现和真实远端 mutation 不授权边界 | CP2 状态同步 |
 | 1.7 | 2026-07-16 | host-orchestrator inline fallback | 用户批准将独立两仓 fast-forward-only merge 纳入 CR-050；新增 REQ-GB-011..014、REQ-GB-C004、REQ-GB-NF003、RA-GB-005..006，并把里程碑调整为 publish→merge→cleanup；`ready_for_design=false`，等待 CP2 R2。 | 原文档增量更新；保留 v1.6.1 与全部既有 REQ/RA |
+| 1.8 | 2026-07-17 | meta-pm | 为 CR-051 增量新增 REQ-AW-001..017、约束/NFR/风险和里程碑；将 CR-050 “artifact 整仓工作树”限定为 legacy/dedicated-artifact 适用前提，shared-artifact 模式改为当前 project worktree；保留全部既有 REQ/RA。 | 原文档增量更新；不改写 CR-050 历史正文 |
+| 1.9 | 2026-07-17 | meta-pm | CR-051 CP2 R2：按 DQ-01..03 用户决策修订 REQ-AW-003..012/016、NFR、风险与里程碑，冻结长期项目 integration 分支、短期 CR 分支、shared main、显式 merge-main refresh 与 existing-control+sibling-worktree 边界；REQ/RA/里程碑 ID 均不变。 | 原文档增量更新；R1 保留为 superseded 自动预检证据 |
+| 2.0 | 2026-07-18 | meta-pm | CR-051 CP2 R3：保持 27 个 REQ-AW ID 不变，修订为异构 source/artifact 双 leg、单一聚合门、integration create-only 初始化与 CR 外人工 main/integration 同步；CP2-DQ-02 保留历史并由 DQ-04 supersede。 | 原文档增量更新；R1/R2 历史追溯保留，R3 为当前候选基线 |
 | 1.1 | 2026-07-02 | host-orchestrator | 同步 CR-037 已激活、CR-036 暂停未完成和 CP2 pending 不授权实现的状态语义 | 小范围状态语义同步 |
 | 1.2 | 2026-07-11 | meta-pm | 为 CR-046 增量增加 evidence-integrity、replayability、telemetry 和 CR-163 append-only pilot 需求；保留全部 REQ-PG ID | 原文档增量更新 |
 | 1.3 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：新增 REQ-EI-019..023，覆盖 compaction 语义保持、通用 post-close correction、机器 audit report、null-provenance dogfooding 与 dispatch 证据限制；保留全部既有 REQ ID | 原文档增量更新 |
@@ -51,6 +59,8 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | 1.0 | 2026-07-02 | meta-pm | 基于已批准实施计划提取产品需求基线 | 初始化长期可追踪需求基线 |
 
 ## 功能需求
+
+> CR-051 适用性规则：`REQ-GB-*` 的安全输入、显式授权、逐仓结果与 fail-closed 契约继续有效，但 `REQ-GB-011..014` 的 paired-default merge 仅适用于 source + dedicated/legacy artifact 两仓各自 default 分支的前提。shared-artifact 模式显式覆盖该前提：source leg 的目标仍是源码默认分支，artifact leg 的目标是当前项目 integration；任何要求 artifact default/main merge 的旧契约在该模式下不适用。control checkout 或整个 shared working tree 均不得成为当前项目写入面。
 
 | ID | 需求描述 | 优先级 | 验收条件 | 来源场景 |
 |---|---|---|---|---|
@@ -130,6 +140,36 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | REQ-GB-012 | merge 必须先对 project/artifact 两仓完成全部只读 preflight，并按 artifact→project 的确定顺序执行 default-branch update。 | P0 | Given 任一仓 remote CR tip/default tip/authorization/policy preflight 失败 When 执行 merge Then 两仓 default branch mutation 数为 0；Given 全部通过 Then artifact 先验证更新，project 后更新，顺序在 result 中 100% 可复核。 | UC-GB-004 |
 | REQ-GB-013 | merge 只允许把 fresh remote default fast-forward 到 exact published CR tip；不得创建 merge commit、rebase、force 或自动解决冲突。 | P0 | Given CR tip 包含 fresh default tip When merge Then remote default 精确等于 CR tip；Given default 已推进且 CR tip 不包含它、需要 merge commit 或发生冲突 Then merge BLOCKED，禁止命令执行数为 0。 | UC-GB-004 |
 | REQ-GB-014 | 双仓 merge 的部分成功必须保留两仓 CR branch、输出逐仓结果并阻断 finish；系统不得自动回滚已经成功的 default-branch fast-forward。 | P0 | Given artifact merge PASS 而 project 被并发推进、branch protection 或权限拒绝 When operation 结束 Then overall=PARTIAL、2/2 CR branch 仍存在、finish 不可执行、结果给出重新观察后的恢复入口，且已更新 default branch 不被自动 reset/force。 | UC-GB-003, UC-GB-004 |
+| REQ-AW-001 | 系统必须以 project identity 为第一路由键，把目标 artifact 语义表达为 `<project_name>/docs` 与 `<project_name>/process`。 | P0 | Given project=`meta-flow` 且 layout version 为 project-first When 解析 artifact routing Then 恰好返回当前 project worktree 内 `meta-flow/docs` 与 `meta-flow/process`，不得返回 sibling namespace。 | UC-AW-001 |
+| REQ-AW-002 | 系统必须为 project-first 与 legacy `docs/<project>` / `process/<project>` 提供显式版本化 dual-read；写目标不得因路径存在性静默切换。 | P0 | Given legacy/new 路径同时存在或 metadata 缺 layout version When 解析写目标 Then 结果 BLOCKED 并列出冲突；Given 显式版本唯一 When 解析 Then 重复结果一致。 | UC-AW-001 |
+| REQ-AW-003 | artifact 路由元数据必须记录 existing control checkout、configurable sibling worktree parent、project worktree、project namespace、layout/sparse/owned-path policy、integration/CR/shared-main branch role，以及 integration 初始化来源与 expected OID 的锚点 + 相对路径语义。 | P0 | Given 同一仓库移到另一设备 When 重新解析 metadata Then 不依赖原设备绝对路径，project identity、目标语义、branch role与可验证 OID 语义不变。 | UC-AW-001, UC-AW-002 |
+| REQ-AW-004 | 系统必须管理长期常驻的每项目 worktree；worktree 空闲时必须驻留 `projects/<project-name>/integration`，CR 活跃时使用 `projects/<project-name>/cr/<cr-id>-<slug>` 短期分支；仅当远端 integration ref 不存在时，才允许从 fresh `origin/main` exact OID create-only 初始化，已存在时禁止 recreate/reset/orphan。 | P0 | Given integration 缺失且已观察 fresh `origin/main` exact OID When 初始化 Then 恰好创建目标 integration 且基准 OID 一致；Given integration 已存在 When create/check Then保持原 ref，不 recreate/reset/orphan；Given CR finish/abort Then worktree 回到同一 integration 且不得滞留已结束 CR branch。 | UC-AW-002 |
+| REQ-AW-005 | worktree create 前必须验证 common Git dir、control repo identity、目标路径、branch 占用、project name/ref 合法性和禁止嵌套边界。 | P0 | Given 目标在 control checkout 内、branch 已被其他 worktree 占用、identity 不匹配或目标非空未知目录 When create Then mutation 数为 0，结果定位失败规则和目标。 | UC-AW-002 |
+| REQ-AW-006 | 系统必须提供 per-project worktree 的 create/check/list/remove plan 与结构化 health，并报告 `idle-integration` / `active-cr` 等 branch role；remove 必须满足精确身份、clean、branch/ref 和恢复证明。 | P0 | Given 两个已登记项目 When list/check Then 各自 path/layout/branch/branch-role/health 可区分；Given remove 目标 dirty、未知、仍在 active CR 或 ref 仍需恢复 Then 目录/ref 删除数为 0。 | UC-AW-002 |
+| REQ-AW-007 | 每项目长期分支必须精确匹配 `projects/<project-name>/integration`，每 CR 短期分支必须匹配 `projects/<project-name>/cr/<cr-id>-<slug>`；二者均须通过 Git ref-format、project identity 与 collision 检查，`main` 不得被登记为项目 owned/idle branch。 | P0 | Given meta-flow 与 quant-lab 同时存在 `CR-051` When 生成 artifact branch Then得到不同的 `projects/meta-flow/cr/CR-051-<slug>` 与 `projects/quant-lab/cr/CR-051-<slug>`，各自可回链 integration/project/CR；非法 project/CR/slug 100%拒绝。 | UC-AW-002, UC-AW-003 |
+| REQ-AW-008 | shared-artifact 模式下，一个逻辑 CR 必须使用异构 source/artifact 双 leg：source leg 从 fresh 源码默认分支创建并完成到同一默认分支；artifact leg 从 fresh 项目 integration 创建并只完成到同一 integration；不得使用 artifact control checkout 或 shared main 作为 per-CR 写入目标。 | P0 | Given route 指向 shared artifact control repo When open/publish/finish/abort preflight Then source/artifact base 与 target 分别解析为 source default 和 project integration，artifact main mutation plan 为 0，control checkout mutation 数为 0。 | UC-AW-003 |
+| REQ-AW-009 | sibling project dirty、checkout branch 或 index 状态不得阻断当前项目；当前 project worktree dirty 或 identity/path mismatch 必须阻断有风险 mutation。 | P0 | Given sibling dirty/current clean When preflight Then 当前项目可继续且 sibling touched paths 为 0；Given current dirty When preflight Then后续 ref/worktree mutation 数为 0。 | UC-AW-003 |
+| REQ-AW-010 | 每个 project worktree 必须声明 owned path；Git 周期的 changed/staged/committed paths 越过 ownership 时必须 fail closed。 | P0 | Given当前 branch 含 sibling project path change When publish/merge precheck Then结果 BLOCKED并列出越界路径，不推送或更新 default。 | UC-AW-003 |
+| REQ-AW-011 | artifact leg 必须从已观察的 fresh project integration exact OID 建立短期 CR branch，并仅在当前 integration 仍匹配 expected OID 时完成回该 integration；shared main/integration divergence 本身不得阻断单个 CR。 | P0 | Given shared main 已推进但 project integration 未漂移 When artifact leg open/finish Then 不因 main divergence 阻断；Given current integration 不等于 expected OID When finish Then BLOCKED、integration/main mutation 数为0，并要求重新观察与安全恢复。 | UC-AW-003, UC-AW-004 |
+| REQ-AW-012 | 一个逻辑 CR 的必需 legs 必须独立输出结果并由单一协调者聚合；优先级必须为 `BLOCKED > FAIL > IN_PROGRESS > PASS`，仅全部必需 leg PASS 才整体完成；`PARTIAL` 只能表达 progress/effect。 | P0 | Given 任一 leg BLOCKED/FAIL/IN_PROGRESS When 聚合 Then overall 分别按最高优先级取值且 CR 不自动关闭；Given 全部必需 leg PASS Then overall=PASS；任一失败不得自动回滚已成功 leg。 | UC-AW-004 |
+| REQ-AW-013 | worktree、异构双 leg、integration bootstrap 与 aggregate gate 必须提供 dry-run，输出确定、有序、可机器解析的计划且不改变文件、link、worktree、branch、index 或 remote ref。 | P0 | Given合法与负例 fixture When dry-run Then计划字段覆盖率100%，所有本地/远端 mutation计数为0。 | UC-AW-001..005 |
+| REQ-AW-014 | 系统必须提供逐项目 migration preflight/manifest，记录 legacy→project-first mapping、hash/数量、link plan、worktree/ref readiness、验证和回滚入口。 | P1 | Given未迁移项目 When生成 preflight Then manifest完整且可复跑；未授权状态下文件搬迁与link/ref变更数为0。 | UC-AW-005 |
+| REQ-AW-015 | migration preflight 不得自动执行文件搬迁、软链接创建/替换、worktree/ref mutation、commit 或 remote publication。 | P0 | Given用户只调用preflight或CR-051测试 When结束 Then真实 artifact tree、软链接和Git refs快照无变化。 | UC-AW-005 |
+| REQ-AW-016 | leg result 与 aggregate gate 必须共享 CR ID/attempt correlation，并逐 leg 记录 repo role、base/target、expected/current OID、terminal status、executed/skipped steps 和 resume/abort route；ledger 单写、receipt/OID 防自引用的精确 schema 留 CP3。 | P0 | Given任一步骤失败或partial When检查结果 Then source/current-artifact 两 leg 均有独立终态且 aggregate 可复算，不会把 sibling/control/shared main 冒充 artifact target。 | UC-AW-001..004 |
+| REQ-AW-017 | 验证必须使用临时仓库、本地 bare remote 与至少两个项目 namespace/worktree，覆盖 integration create-only、异构双 leg、聚合优先级、expected-OID 漂移和 CR 外人工同步边界；真实 remote 只作为后续独立 pilot。 | P0 | Given自动验证完成 When检查证据 Then至少2个项目可并行走完 fixture lifecycle，聚合组合覆盖完整、跨项目/shared-main mutation=0；真实remote未验证被显式披露。 | UC-AW-002..005 |
+
+### CR-051 CP2 R3 已解决产品决策
+
+| 决策 ID | 用户选择 | 产品契约 | 状态 | 设计阶段仍需细化 |
+|---|---|---|---|---|
+| CP2-DQ-01 | 每项目长期 integration + 每 CR 短期 branch + shared main | idle=`projects/<project-name>/integration`；active=`projects/<project-name>/cr/<cr-id>-<slug>`；`main`=共享集成基线 | resolved-by-user | attach/switch/finish/abort 的命令、expected OID 与清理状态机 |
+| CP2-DQ-02 | R2 曾接受显式 merge-main 推荐 | R2 历史语义不再是当前基线 | superseded-by-user / CP2-DQ-04 | 不得在 CP3 恢复为 per-CR artifact main refresh |
+| CP2-DQ-03 | 接受 existing-control+sibling-worktree 推荐 | 保留现有 control checkout；worktree 位于 configurable sibling root；执行 namespace/sparse/owned-path gate | resolved-by-user | metadata/path schema、sparse 行为、owned-path gate 落点与健康修复策略 |
+| CP2-DQ-04 | 一个逻辑 CR 使用异构 source/artifact legs | source 从/回源码默认分支；artifact 从/回项目 integration；artifact CR 不接触 shared main | resolved-by-user | 精确命令、expected OID、状态机与安全恢复 |
+| CP2-DQ-05 | 单一 aggregate completion gate | `BLOCKED > FAIL > IN_PROGRESS > PASS`；仅全 PASS 完成；`PARTIAL` 仅为 progress/effect；不自动回滚或关闭 | resolved-by-user | leg result correlation、receipt/OID 防自引用与聚合 schema |
+| CP2-DQ-06 | integration create-only 初始化与 CR 外人工同步 | integration 缺失时从 fresh `origin/main` exact OID 创建；存在时不 recreate/reset/orphan；main↔integration 同步仅在 CR 外人工执行 | resolved-by-user | 初始化 CAS、人工同步 precheck 与“无活跃 artifact CR”检查 |
+
+> 六项 DQ 均已分类，当前 pending decision items=0；DQ-02 仅为 superseded 历史，其余为 resolved-by-user。CP2 R3 总体基线仍须由用户 `approve`，且该批准不授权任何真实 Git/worktree/link/remote mutation。
 
 ## 约束需求
 
@@ -150,6 +190,11 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | REQ-GB-C002 | 不得执行 force-push、force-delete、reset --hard、自动 rebase、自动冲突解决、隐式 merge、merge commit 或未经证明的 branch deletion。 | P0 | Given negative fixture 诱导任一禁止命令 When执行 plan/operation Then禁止命令执行数为 0，并输出 blocking reason。 | UC-GB-001, UC-GB-003, UC-GB-004 |
 | REQ-GB-C003 | CP2 approval 只确认产品/场景/范围，不授权源码实现、commit、真实远端 branch/default-branch mutation、forge API 或凭据。 | P0 | Given用户批准 CR-050 CP2 R2 When检查授权边界 Then上述动作仍需后续门禁或独立显式授权。 | CR-050 不授权范围 |
 | REQ-GB-C004 | 真实 default-branch write 必须有本次操作的独立显式授权并服从远端 branch protection；保护策略拒绝不得被绕过或降级为成功。 | P0 | Given 无授权、授权对象/OID不匹配或远端拒绝 direct update When merge Then对应仓结果为 BLOCKED/PARTIAL，default OID 不被工具以其他路径改写，错误保留远端拒绝语义。 | UC-GB-004 |
+| REQ-AW-C001 | CR-051 不得搬迁真实 `meta-flow-artifacts` 文件、修改任何现有软链接，或在真实仓创建/删除 worktree、branch、commit、tag、stash 或 remote ref。 | P0 | Given CR-051 touched-path/ref audit When验证 Then上述真实对象变化数为0；仅临时fixture允许Git mutation。 | 用户明确范围 / UC-AW-005 |
+| REQ-AW-C002 | 不得在 artifact control checkout 内嵌套 project worktree，也不得把未知/非空目录当作可安全覆盖目标。 | P0 | Given目标位于control worktree内部或含未知文件 When create/remove plan Then结果BLOCKED且文件删除/覆盖数为0。 | UC-AW-002 |
+| REQ-AW-C003 | 不得读取、stage、commit、merge、reset、clean、remove或删除 sibling project owned path/ref/worktree。 | P0 | Given sibling含dirty/untracked/active branch When当前项目执行任何生命周期动作 Then sibling文件/ref/index变化数为0。 | UC-AW-003 |
+| REQ-AW-C004 | 单个 artifact CR 不得 refresh、merge 或直接更新 shared main，也不得自动执行 main↔integration 同步、stash、rebase、force/force-with-lease、解决冲突、选择提交文件或跨 leg 回滚。 | P0 | Given负例诱导上述行为 When执行plan/operation Then禁止命令执行数为0，并返回显式 CR 外人工同步或安全恢复入口。 | UC-AW-003, UC-AW-004 |
+| REQ-AW-C005 | CP2 approval 只确认产品/场景/范围，不授权HLD后续门禁跳过、源码实现、真实迁移、软链接变更、repository publication、default write、delete、credentials或runtime。 | P0 | Given用户批准CR-051 CP2 When检查授权边界 Then上述动作仍需CP3/CP5及对应操作级授权。 | CR-051不授权范围 |
 
 ## 非功能需求
 
@@ -167,6 +212,11 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | REQ-GB-NF001 | 对相同 repo refs/config/input，branch lifecycle plan 与 decision 必须确定；失败必须包含 repo、step、command-safe summary、OID 和恢复路由。 | P0 | Given相同 fixture 重复运行 When比较 JSON result Then计划顺序、decision、OID 和 error code 一致；失败定位字段覆盖率 100%。 | UC-GB-001..004 |
 | REQ-GB-NF002 | branch、remote、CR ID 和 slug 必须作为参数列表传给 Git，不得经 shell 插值；所有 branch 名必须通过 `git check-ref-format --branch`。 | P0 | Given含空格、选项前缀、换行或 shell 元字符的输入 When运行 precheck Then 100% 拒绝且无额外命令执行。 | UC-GB-001..004 |
 | REQ-GB-NF003 | merge plan/result 对相同 fresh refs、policy 与 authorization 必须确定，并完整记录两仓执行顺序、before/after OID、published tip、default tip、decision 和 resume route。 | P0 | Given 相同 bare-remote fixture 重复 dry-run或重放结果 When 对比 Then plan顺序/decision/OID字段一致率100%；缺任一仓 terminal result或恢复入口时检查失败。 | UC-GB-004 |
+| REQ-AW-NF001 | 对相同metadata、repo refs、project identity、leg results与filesystem fixture，路由/worktree/heterogeneous-leg/aggregate plan和decision必须确定。 | P0 | Given同一fixture重复执行 When比较结果 Thenresolved path、步骤顺序、leg/aggregate decision、OID和error code一致率100%。 | UC-AW-001..004 |
+| REQ-AW-NF002 | project-first路由元数据必须跨设备可移植，不得持久化设备相关绝对路径作为canonical contract。 | P0 | Givenworkspace整体搬迁 When重新check Then锚点+相对路径可解析，设备绝对前缀违规数为0。 | UC-AW-001, UC-AW-002 |
+| REQ-AW-NF003 | 多项目并发隔离必须避免共享checkout、index与项目branch；并行fixture中的每个 worktree 必须只在自身 integration/CR branch 间切换，共享 `main` 不得成为项目 working branch。 | P0 | Given两个项目并行执行本地fixture lifecycle When完成 Thenindex.lock争用数、wrong-branch写入数、shared-main checkout占用数和cross-project touched paths均为0。 | UC-AW-002, UC-AW-003 |
+| REQ-AW-NF004 | Git参数必须以argv列表传递并执行project/path/ref输入校验；错误必须包含project、repo role、step、safe command summary、OID和恢复路由。 | P0 | Given含路径穿越、选项前缀、换行或shell元字符的输入 Whenprecheck Then100%拒绝且无额外命令执行。 | UC-AW-001..004 |
+| REQ-AW-NF005 | create/check/list/remove/bootstrap/leg-preflight/aggregate必须可重入；重复执行不得静默改变已确认路由、重建既有 integration 或删除恢复证据。 | P1 | Given相同成功/失败操作重复执行 When比较 Then返回PASS/NO_CHANGE/BLOCKED等稳定状态，非预期mutation为0。 | UC-AW-002, UC-AW-004, UC-AW-005 |
 
 ## 风险与假设
 
@@ -187,6 +237,12 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | RA-GB-004 | ASSUMPTION | 受支持仓库提供 Git 2.43+、命名 remote 和可解析 symbolic default branch，或操作者显式提供 override。 | REQ-GB-001, REQ-GB-C001 | `git --version` 与 remote HEAD precheck；不满足时 BLOCKED，不安装同名 `gb` 替代。 |
 | RA-GB-005 | RISK | 直接 fast-forward 远端默认分支可能被 branch protection、review requirement 或 merge queue 拒绝。 | REQ-GB-011..013, REQ-GB-C004 | 将远端拒绝视为合法 BLOCKED/PARTIAL；不绕过策略，不自动切 forge API；需要受保护仓 merge 时转未来 forge adapter。 |
 | RA-GB-006 | RISK | artifact default 已更新但 project default 更新失败会造成跨仓 main 短暂不一致。 | REQ-GB-012, REQ-GB-014, REQ-GB-NF003 | preflight-all、artifact→project 确定顺序、逐仓 post-check、保留两仓 CR branch、阻断 finish；恢复前重新观察 refs，不自动回滚已成功事实。 |
+| RA-AW-001 | RISK | control repo、project worktree与namespace identity若解析错误，会让当前项目命令修改其他项目。 | REQ-AW-001..010, REQ-AW-C003 | project identity、common Git dir、worktree path、owned path四重校验；歧义fail closed。 |
+| RA-AW-002 | RISK | 长期常驻worktree可能残留stale integration/CR branch、prunable metadata、已结束CR占用或断链。 | REQ-AW-004..006, REQ-AW-NF005 | check/list校验branch role；repair只输出显式建议；finish/abort后的integration回归、remove与CR branch清理均要求clean/ref/恢复证明。 |
+| RA-AW-003 | RISK | shared main 与 project integration 可能长期分歧；若把该分歧误作单 CR blocker会重新引入跨项目耦合，若忽略 integration expected-OID 漂移又会覆盖并发结果。 | REQ-AW-011..012 | main/integration divergence 仅由 CR 外人工维护；单 CR 只以 integration expected OID 判定 artifact finish；漂移 fail closed，不自动 merge/rebase/force/回滚。 |
+| RA-AW-004 | RISK | legacy与project-first布局共存可能形成两个可写真相源。 | REQ-AW-002..003, REQ-AW-NF001..002 | layout version和write target显式化；多解BLOCKED；迁移manifest记录切换点与回滚。 |
+| RA-AW-005 | RISK | 能力实现误调用真实artifact仓会提前触发用户计划外迁移或ref变更。 | REQ-AW-013..015, REQ-AW-C001 | 默认dry-run/fixture；真实路径denylist与touched-ref审计；任何真实mutation需独立授权。 |
+| RA-AW-006 | ASSUMPTION | 用户将逐项目执行真实artifact迁移和软链接挂接，本CR只交付能力与交接包。 | REQ-AW-014..015 | 在MVP、Backlog、迁移手册和CP8不授权项中持续保留边界。 |
 
 ## 里程碑建议
 
@@ -206,6 +262,10 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | M-GB2：Committed Ref Publication | REQ-GB-005, REQ-GB-006, REQ-GB-010 | 只推送已提交 refs、逐仓核验与 partial result | M-GB1 |
 | M-GB3：Explicit Paired Fast-forward Merge | REQ-GB-011..014, REQ-GB-C002..004, REQ-GB-NF003 | 两仓全量预检、artifact→project fast-forward-only default update、逐仓结果与 partial/resume | M-GB2；default-branch write 独立授权 |
 | M-GB4：Proof-gated Cleanup | REQ-GB-007..010, REQ-GB-014, REQ-GB-C002 | merge 后重新证明 ancestry/tip/protected-ref，并幂等清理 local/remote CR branch | M-GB3；2/2 merge terminal PASS |
+| M-AW1：Project-first Routing Compatibility | REQ-AW-001..003, REQ-AW-013, REQ-AW-NF001..002 | layout schema、project identity、legacy dual-read、portable metadata与dry-run解析 | CR-051 CP2/CP3/CP5 |
+| M-AW2：Per-project Worktree Management | REQ-AW-004..007, REQ-AW-013, REQ-AW-C002, REQ-AW-NF003..005 | create/check/list/remove计划、registry/health、长期integration与短期CR分支命名、existing-control+sibling-root拓扑及多项目隔离fixture | M-AW1；CP2-R2-DQ-01/03 resolved；待CP3/CP5 |
+| M-AW3：Heterogeneous Legs and Aggregate Gate | REQ-AW-008..013, REQ-AW-016..017, REQ-AW-C003..005 | source-default leg、artifact-integration leg、expected-OID门、单一聚合、结构化结果和并发fixture | M-AW2；CP2-DQ-04..06 resolved；待CP3/CP5 |
+| M-AW4：Migration Handoff without Mutation | REQ-AW-014..015, REQ-AW-C001, REQ-AW-NF005 | per-project migration preflight/manifest、验证/回滚checklist与用户手册；真实迁移0 | M-AW3 |
 
 ## 明确排除项
 
@@ -213,3 +273,5 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 - 不在本轮产品文档中修改已批准设计文档。
 - 不把 quant-lab 迁移和 capability 新能力实现混为同一个交付范围。
 - 不把发布库 stale finding 自动升级为发布库写入授权。
+- 不把 CR-051 能力开发扩成真实 `meta-flow-artifacts` 目录迁移、软链接挂接、control repo 转 bare、真实远端试运行或批量项目切换。
+- 不在产品阶段冻结具体Python模块、CLI参数名、metadata字段类型或Git命令序列；这些由CP3/CP5在上述安全契约内设计。

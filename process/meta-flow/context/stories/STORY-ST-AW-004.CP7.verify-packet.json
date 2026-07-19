@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_verify_packet",
+  "stage": "CP7",
+  "project_id": "meta-flow",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-004",
+  "story_ref": "process/stories/STORY-ST-AW-004-aggregate-evidence-gate.md",
+  "parent_context_ref": "process/context/CP7-CR051-VERIFICATION-CONTEXT.yaml",
+  "risk_profile": "runtime-high-risk",
+  "lld_policy": "full-lld",
+  "objective": {
+    "summary": "独立验证双 leg 可信证据聚合、不可变持久化、single-writer CAS 与仅 2/2 PASS 的受控投影边界",
+    "non_goals": ["不修改实现或测试", "不执行 Git/worktree/manual sync", "不关闭 CR 或投影 delivered"]
+  },
+  "acceptance": [
+    "4x4 状态组合 16/16 确定，只有 PASS/PASS eligible；所有 invalid/unpublished 输入在写入前 BLOCKED",
+    "aggregate own digest 仅顶层 omit，嵌套 leg digest 篡改必须改变 canonical digest",
+    "same-input 幂等、冲突输入/selector CAS fail closed，last-write-wins=0",
+    "仅 persisted/readback/current 2/2 PASS 调用 projector；15 个 non-PASS、stale、conflict、failure 调用数=0",
+    "受控投影不 close/status-sync/rollback/Git/worktree；CLI dry-run 写入=0"
+  ],
+  "feature_refs": ["FEAT-AW-04"],
+  "feature_contract_summary": "FEAT-AW-04 只消费重读校验后的 source/artifact published handles，以固定优先级生成 immutable aggregate；只有持久化、重读、current selector 均成立的 2/2 PASS 才能记录完成候选。",
+  "feature_design_refs": ["process/docs/features/cr051-aggregate/DESIGN.md", "process/docs/features/cr051-aggregate/TEST-PLAN.md", "process/docs/features/cr051-aggregate/TASKS.md"],
+  "cr_delta": {
+    "summary": "验证 published handle 重读、固定优先级聚合、immutable store、selector CAS 和 completion-candidate 投影；不执行或拥有 Git/worktree。",
+    "affected_contracts": ["PublishedLegResult consumer", "AggregateResult", "AggregateWriteReceipt", "selector CAS", "AggregateCompletionProjector", "cr aggregate CLI"]
+  },
+  "dependency_inputs": ["ST-AW-003 CP6 PASS；published payload/receipt/handle contract 已冻结。"],
+  "implementation_return_ref": "process/returns/ST-AW-004.CP6.return.json",
+  "expected_return_packet": "process/returns/ST-AW-004.CP7.return.json",
+  "allowed_reads": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "reason": "runtime_state", "required": true, "estimated_tokens": 900},
+    {"path": "process/current/CURRENT.json", "mode": "full", "reason": "current_discovery_entry", "required": true, "estimated_tokens": 220},
+    {"path": "process/policies/READ-POLICY.json", "mode": "full", "reason": "read_policy", "required": true, "estimated_tokens": 400},
+    {"path": "process/stories/STORY-ST-AW-004-aggregate-evidence-gate.md", "mode": "full", "reason": "story_card", "required": true, "estimated_tokens": 2500},
+    {"path": "process/returns/ST-AW-004.CP6.return.json", "mode": "full", "reason": "implementation_return", "required": true, "estimated_tokens": 1500},
+    {"path": "process/evidence/ST-AW-004.CP6.index.json", "mode": "full", "reason": "implementation_evidence", "required": true, "estimated_tokens": 1100},
+    {"path": "process/checks/CP6-CR051-ST-AW-004-aggregate-evidence-gate-CODING-DONE.result.json", "mode": "full", "reason": "cp6_result", "required": true, "estimated_tokens": 1900},
+    {"path": "process/docs/features/cr051-aggregate/TEST-PLAN.md", "mode": "full", "reason": "test_contract", "required": true, "estimated_tokens": 2600},
+    {"path": "meta_flow/workflow/artifact_aggregate.py", "mode": "full", "reason": "sut", "required": true, "estimated_tokens": 14000},
+    {"path": "meta_flow/state/current.py", "mode": "full", "reason": "controlled_projection_writer", "required": true, "estimated_tokens": 16000},
+    {"path": "meta_flow/workflow/cr_lifecycle.py", "mode": "full", "reason": "cr_projection_cli", "required": true, "estimated_tokens": 22000},
+    {"path": "tests/test_artifact_aggregate.py", "mode": "full", "reason": "test_source", "required": true, "estimated_tokens": 7000}
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "reason": "machine_state", "required": true, "estimated_tokens": 900},
+    {"path": "process/current/CURRENT.json", "mode": "full", "reason": "current_entrypoint", "required": true, "estimated_tokens": 220},
+    {"path": "process/policies/READ-POLICY.json", "mode": "full", "reason": "read_policy", "required": true, "estimated_tokens": 400},
+    {"path": "process/stories/STORY-ST-AW-004-aggregate-evidence-gate.md", "mode": "full", "reason": "story_card", "required": true, "estimated_tokens": 2500}
+  ],
+  "read_if_needed": [
+    {"path": "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-IMPLEMENTATION.md", "trigger": "deep_review", "reason": "return/evidence 不足以回答 canonical/CAS/projection 映射时展开并写 read-log"},
+    {"path": "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md", "trigger": "contract_conflict", "reason": "仅在测试计划与实现契约冲突时展开并写 read-log"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "其他 Story/LLD/IMPLEMENTATION", "process/archive/**", "process/discussions/**"],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human summary / legacy fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "Story packet 已提供验证上下文"},
+    {"path_or_pattern": "其他 Story/LLD/IMPLEMENTATION", "reason": "避免跨 Story 上下文扩张"}
+  ],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "allowed_write_paths": [
+    "process/docs/quality/CR051-ST-AW-004-VERIFICATION-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-004-TEST-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-004-REVIEW.md",
+    "process/docs/quality/CR051-ST-AW-004-FIXES.md",
+    "process/returns/ST-AW-004.CP7.return.json",
+    "process/evidence/ST-AW-004.CP7.index.json"
+  ],
+  "forbidden_write_paths": ["meta_flow/**", "tests/**", "delivery/**", ".git/**", "real artifact/worktree/ref/remote/link/migration targets"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_REPOSITORY_PUBLICATION", "FIXTURE_ONLY_FILESYSTEM"],
+  "verification_plan": [
+    "复核 16 组合、invalid handle、canonical nested-digest、CAS 和 projection guard 矩阵",
+    "运行 aggregate、state v2、CR lifecycle 与 producer/consumer 组合回归",
+    "运行 Ruff、py_compile、diff、forbidden import/call 与 CLI dry-run 审计",
+    "确认 close/status-sync/rollback/Git/worktree 调用=0 并输出四份质量报告及 CP7 return/evidence"
+  ],
+  "budget": {"estimated_tokens": 60000, "estimator": "chars_div_4", "max_tokens": 64000},
+  "context_sufficiency": {"required_slots": ["objective.summary", "feature_refs", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"], "strict_profiles": ["runtime-high-risk"]},
+  "policy_refs": {"authz_policy": "process/policies/AUTHZ-POLICY.json", "gate_profiles": "process/policies/GATE-PROFILES.json", "read_policy": "process/policies/READ-POLICY.json"}
+}

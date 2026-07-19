@@ -1,0 +1,157 @@
+{
+  "checkpoint_id": "CP2-CR051-DISCUSSION",
+  "checkpoint": "CP2",
+  "cr_id": "CR-051",
+  "status": "completed",
+  "selected_gray_areas": [
+    "SGA-AW-01",
+    "SGA-AW-02",
+    "SGA-AW-03",
+    "SGA-AW-04"
+  ],
+  "completed_gray_areas": [
+    "SGA-AW-01",
+    "SGA-AW-02",
+    "SGA-AW-03",
+    "SGA-AW-04"
+  ],
+  "remaining_gray_areas": [],
+  "deferred_ideas": [
+    "DEF-AW-001",
+    "DEF-AW-002",
+    "DEF-AW-003"
+  ],
+  "scenario_confirmation_interactions": [
+    {
+      "question_id": "SGQ-AW-001",
+      "question": "多项目共享artifact时，是否改为project-first并为每项目提供独立worktree？",
+      "options": [
+        "project-first + per-project worktree",
+        "type-first + single working tree",
+        "separate artifact repositories"
+      ],
+      "recommendation": "project-first + per-project worktree",
+      "user_response": "选择项目优先，并要求artifact目录采用不同worktree管理。",
+      "confirmed_understanding": "目标语义为<project>/docs|process；每项目隔离checkout/index/branch，但共享artifact Git仓库和remote。",
+      "impact_surface": [
+        "scope",
+        "compatibility",
+        "validation",
+        "delivery"
+      ],
+      "source_refs": [
+        "process/changes/CR-051.md",
+        "process/docs/product/USE-CASES.md#cr-051-用户可见场景确认证据"
+      ],
+      "status": "confirmed"
+    },
+    {
+      "question_id": "SGQ-AW-002",
+      "question": "本轮立即迁移所有artifact/软链接，还是先交付能力再逐项目迁移？",
+      "options": [
+        "capability first, per-project migration later",
+        "capability and full migration together",
+        "documentation only"
+      ],
+      "recommendation": "capability first, per-project migration later",
+      "user_response": "先完成Meta Flow Git周期和artifact worktree能力；后续逐项目迁移文件并挂软链接。",
+      "confirmed_understanding": "CR-051只交付能力、fixture、preflight/manifest和手册；真实文件/link/worktree/ref变化为0。",
+      "impact_surface": [
+        "scope",
+        "authorization",
+        "rollback",
+        "follow_up_tracking"
+      ],
+      "source_refs": [
+        "process/changes/CR-051.md",
+        "process/docs/product/MVP-SCOPE.md"
+      ],
+      "status": "confirmed"
+    },
+    {
+      "question_id": "SGQ-AW-003",
+      "question": "项目worktree空闲、CR活动、source/artifact双leg和跨项目集成时分别应使用什么分支与完成门？",
+      "options": [
+        "heterogeneous source-default/artifact-integration legs + aggregate gate + out-of-CR main sync",
+        "both legs target their repository default/main branches",
+        "artifact CR refreshes shared main before finish"
+      ],
+      "recommendation": "heterogeneous source-default/artifact-integration legs + aggregate gate + out-of-CR main sync",
+      "user_response": "R2确认长期integration、短期CR和existing-control+sibling-root；R3进一步确认source从/回源码默认分支，artifact从/回项目integration、不接触artifact main，并采用单一聚合门与create-only integration初始化；用户回复‘按照这个方案，实施’。",
+      "confirmed_understanding": "one logical CR has heterogeneous correlated legs; source targets source default, artifact targets project integration only; aggregate precedence is BLOCKED > FAIL > IN_PROGRESS > PASS and only all PASS completes; project integration is create-only from fresh origin/main exact OID when missing; shared main synchronization is manual and outside CR.",
+      "impact_surface": [
+        "branch_lifecycle",
+        "recovery",
+        "validation",
+        "architecture_boundary"
+      ],
+      "source_refs": [
+        "process/docs/product/USE-CASES.md#cr-051-用户可见场景确认证据",
+        "process/discussions/CP2-CR051-SCENARIO-DISCUSSION-LOG.md#cp2-changes_requested-r2-决策回填"
+      ],
+      "status": "confirmed-for-CP2-R3"
+    }
+  ],
+  "decision_items": [],
+  "resolved_decision_items": [
+    {
+      "decision_id": "CP2-DQ-01",
+      "status": "resolved-by-user",
+      "selected": "projects/<project-name>/integration for idle; projects/<project-name>/cr/<cr-id>-<slug> for active CR; main is shared integration baseline"
+    },
+    {
+      "decision_id": "CP2-DQ-02",
+      "status": "superseded-by-user",
+      "selected": "historical R2 per-CR merge-main semantics no longer apply",
+      "superseded_by": "CP2-DQ-04"
+    },
+    {
+      "decision_id": "CP2-DQ-03",
+      "status": "resolved-by-user",
+      "selected": "existing control checkout + configurable sibling worktree root + project namespace/sparse policy + owned-path gate"
+    },
+    {
+      "decision_id": "CP2-DQ-04",
+      "status": "resolved-by-user",
+      "selected": "one logical CR with heterogeneous source-default and artifact-integration legs; artifact CR never interacts with shared main"
+    },
+    {
+      "decision_id": "CP2-DQ-05",
+      "status": "resolved-by-user",
+      "selected": "single aggregate gate with BLOCKED > FAIL > IN_PROGRESS > PASS; only all PASS completes; PARTIAL is progress/effect only; no automatic rollback or close"
+    },
+    {
+      "decision_id": "CP2-DQ-06",
+      "status": "resolved-by-user",
+      "selected": "missing integration is created from fresh origin/main exact OID with create-only semantics; existing integration is never recreated/reset/orphaned; main synchronization is manual outside CR"
+    }
+  ],
+  "canonical_refs": [
+    "process/changes/CR-051.md",
+    "process/docs/product/USE-CASES.md",
+    "process/docs/product/REQUIREMENTS.md",
+    "process/docs/product/MVP-SCOPE.md",
+    "process/discussions/CP2-CR051-SCENARIO-DISCUSSION-LOG.md"
+  ],
+  "last_user_confirmation": "2026-07-18 CP2 R3: user said '按照这个方案，实施' for heterogeneous source/artifact legs, aggregate completion gate, create-only integration bootstrap and manual out-of-CR main synchronization.",
+  "cp2_overall_gate": "pending-r3-approve",
+  "remaining_design_details": [
+    "metadata/path schema",
+    "owned-path gate enforcement",
+    "worktree attach/switch/finish/abort mechanics",
+    "source-default and artifact-integration exact Git commands and expected-OID behavior",
+    "leg result/aggregate correlation schema and receipt/OID anti-self-reference",
+    "integration bootstrap CAS and existing-ref behavior",
+    "manual main-integration synchronization precheck, active-artifact-CR gate and recovery",
+    "conflict abort/resume and branch cleanup",
+    "sparse behavior"
+  ],
+  "authorization_classification": {
+    "pending_decision_items": 0,
+    "resolved_by_user": ["CP2-DQ-01", "CP2-DQ-03", "CP2-DQ-04", "CP2-DQ-05", "CP2-DQ-06"],
+    "superseded_by_user": ["CP2-DQ-02"],
+    "non_authorized": ["real Git/worktree/ref/remote mutation", "real artifact migration or symlink change", "real main-integration synchronization", "credentials/runtime/production/publish/trading"],
+    "non_blocking_open": ["remaining_design_details"]
+  },
+  "updated_at": "2026-07-18"
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-002",
+  "status": "implemented_with_risk",
+  "touched_files": [
+    {"path": "meta_flow/workspace/project_worktree.py", "change_type": "modified"},
+    {"path": "meta_flow/workspace/worktree_capacity.py", "change_type": "modified"},
+    {"path": "meta_flow/workspace/worktree_journal.py", "change_type": "modified"},
+    {"path": "tests/test_cr051_project_worktree.py", "change_type": "modified"},
+    {"path": "tests/test_cr051_worktree_faults.py", "change_type": "modified"},
+    {"path": "process/docs/features/cr051-worktree/DESIGN.md", "change_type": "modified"},
+    {"path": "process/docs/features/cr051-worktree/TEST-PLAN.md", "change_type": "modified"},
+    {"path": "process/docs/features/cr051-worktree/TASKS.md", "change_type": "modified"},
+    {"path": "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md", "change_type": "modified"},
+    {"path": "process/stories/STORY-ST-AW-002-recoverable-project-worktree-IMPLEMENTATION.md", "change_type": "modified"},
+    {"path": "process/design-deltas/ST-AW-002.delta.json", "change_type": "created"},
+    {"path": "process/returns/ST-AW-002.CP6-R2.return.json", "change_type": "created"},
+    {"path": "process/evidence/ST-AW-002.CP6-R2.index.json", "change_type": "created"}
+  ],
+  "contract_changes": {"public_api_changed": true, "data_contract_changed": true, "design_delta_required": true, "design_delta_ref": "process/design-deltas/ST-AW-002.delta.json", "summary": "保守 resume、typed proof、owner/calibration 与显式 phase 已回写长期设计。"},
+  "boundary_check": {"allowed_paths_only": true, "forbidden_paths_touched": [], "unexpected_imports": []},
+  "verification": {"commands_run": [
+    {"command": "pytest -q ST-AW-002 rework suite", "result": "pass", "summary": "74 passed"},
+    {"command": "pytest -q CR-051 cross-module suite", "result": "pass", "summary": "307 passed, 58 subtests passed"},
+    {"command": "pytest -q", "result": "pass", "summary": "697 passed, 70 subtests passed"},
+    {"command": "ruff check + scoped format + py_compile + delivery guardrail + git diff --check", "result": "pass", "summary": "all scoped gates passed"},
+    {"command": "design delta-check --require-merged + story lld-check", "result": "pass", "summary": "merged delta and LLD structure valid"}
+  ], "tests": ["typed proof binding/expiry/revocation", "owner/calibration persistence", "record identity/phase", "switch final idempotency"], "skipped": ["real remote/worktree/ref/link/migration not authorized"]},
+  "evidence_refs": ["process/stories/STORY-ST-AW-002-recoverable-project-worktree-IMPLEMENTATION.md", "process/docs/quality/CR051-CP8-REWORK-VERIFICATION-REPORT.md"],
+  "risks": [{"id": "CR051-RISK-REMOTE-UNVERIFIED", "level": "medium", "status": "open-not-authorized"}],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_inline_cp7_reverification"
+}

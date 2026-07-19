@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-003",
+  "status": "implemented_with_risk",
+  "touched_files": [
+    {"path": "meta_flow/workflow/artifact_policy.py", "change_type": "created"},
+    {"path": "meta_flow/workflow/artifact_leg_lifecycle.py", "change_type": "modified"},
+    {"path": "tests/test_artifact_leg_lifecycle.py", "change_type": "modified"},
+    {"path": "process/docs/features/cr051-legs/DESIGN.md", "change_type": "modified"},
+    {"path": "process/docs/features/cr051-legs/TEST-PLAN.md", "change_type": "modified"},
+    {"path": "process/docs/features/cr051-legs/TASKS.md", "change_type": "modified"},
+    {"path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-LLD.md", "change_type": "modified"},
+    {"path": "process/stories/STORY-ST-AW-003-heterogeneous-git-legs-IMPLEMENTATION.md", "change_type": "modified"},
+    {"path": "process/design-deltas/ST-AW-003.delta.json", "change_type": "created"},
+    {"path": "process/returns/ST-AW-003.CP6-R3.return.json", "change_type": "created"},
+    {"path": "process/evidence/ST-AW-003.CP6-R3.index.json", "change_type": "created"}
+  ],
+  "contract_changes": {"public_api_changed": true, "data_contract_changed": false, "design_delta_required": true, "design_delta_ref": "process/design-deltas/ST-AW-003.delta.json", "summary": "共享 canonical policy 与 scoped cleanup CAS 已回写长期设计。"},
+  "boundary_check": {"allowed_paths_only": true, "forbidden_paths_touched": [], "unexpected_imports": []},
+  "verification": {"commands_run": [
+    {"command": "pytest -q ST-AW-003/legacy/ST-AW-004 suite", "result": "pass", "summary": "127 passed"},
+    {"command": "pytest -q CR-051 cross-module suite", "result": "pass", "summary": "307 passed, 58 subtests passed"},
+    {"command": "pytest -q", "result": "pass", "summary": "697 passed, 70 subtests passed"},
+    {"command": "ruff check + scoped format + py_compile + delivery guardrail + git diff --check", "result": "pass", "summary": "all scoped gates passed"},
+    {"command": "design delta-check --require-merged + story lld-check", "result": "pass", "summary": "merged delta and LLD structure valid"}
+  ], "tests": ["TP-AW03-004", "TP-AW03-006", "TP-AW03-008", "TP-AW03-014", "exact expected-OID CAS deny matrix"], "skipped": ["real remote/ref/worktree mutation not authorized"]},
+  "evidence_refs": ["process/stories/STORY-ST-AW-003-heterogeneous-git-legs-IMPLEMENTATION.md", "process/docs/quality/CR051-CP8-REWORK-VERIFICATION-REPORT.md"],
+  "risks": [{"id": "CR051-RISK-REMOTE-UNVERIFIED", "level": "medium", "status": "open-not-authorized"}],
+  "waivers": [],
+  "next_stage_recommendation": "ready_for_inline_cp7_reverification"
+}

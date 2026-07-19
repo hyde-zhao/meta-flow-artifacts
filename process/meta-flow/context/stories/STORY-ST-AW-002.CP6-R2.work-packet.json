@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "meta-flow",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-002",
+  "story_ref": "process/stories/STORY-ST-AW-002-recoverable-project-worktree.md",
+  "parent_context_ref": "process/context/CP6-CR051-IMPLEMENTATION-CONTEXT.yaml",
+  "risk_profile": "runtime-high-risk",
+  "lld_policy": "full-lld",
+  "objective": {"summary": "关闭 CP8 终验发现的 ST-AW-002 design-delta、proof、owner/calibration 和显式恢复状态缺口", "non_goals": ["不启用自动 rollback", "不执行真实 worktree/ref/remote/link/migration"]},
+  "acceptance": ["只读 resume mutation=0", "mutation attempt 使用持久化 typed CapacityProof 并同锁重验", "owner/calibration/revocation/phase chain 可持久化校验", "design delta merged", "全量回归通过"],
+  "feature_refs": ["FEAT-AW-02"],
+  "feature_design_refs": ["process/docs/features/cr051-worktree/DESIGN.md", "process/docs/features/cr051-worktree/TEST-PLAN.md", "process/docs/features/cr051-worktree/TASKS.md"],
+  "expected_return_packet": "process/returns/ST-AW-002.CP6-R2.return.json",
+  "allowed_write_paths": ["meta_flow/workspace/project_worktree.py", "meta_flow/workspace/worktree_capacity.py", "meta_flow/workspace/worktree_journal.py", "tests/test_cr051_project_worktree.py", "tests/test_cr051_worktree_faults.py", "process/docs/features/cr051-worktree/**", "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md", "process/stories/STORY-ST-AW-002-recoverable-project-worktree-IMPLEMENTATION.md", "process/design-deltas/ST-AW-002.delta.json", "process/returns/ST-AW-002.CP6-R2.return.json", "process/evidence/ST-AW-002.CP6-R2.index.json"],
+  "forbidden_write_paths": [".git/**", "process/quant-lab/**", "real artifact/worktree/ref/remote/link/migration targets"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_REPOSITORY_PUBLICATION", "FIXTURE_ONLY_GIT_WORKTREE_REMOTE"],
+  "verification_plan": ["运行 ST-AW-002 定向回归", "运行跨模块与全仓回归", "验证 Ruff/compile/guardrail/diff/delta/LLD", "输出 R2 return/evidence"]
+}

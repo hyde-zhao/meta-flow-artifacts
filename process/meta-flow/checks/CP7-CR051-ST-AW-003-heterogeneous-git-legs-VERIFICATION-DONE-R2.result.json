@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR051-ST-AW-003-heterogeneous-git-legs-VERIFICATION-DONE-R2",
+  "story_id": "ST-AW-003",
+  "cr_id": "CR-051",
+  "profile": "runtime-high-risk",
+  "check_attempt": 2,
+  "supersedes_result_ref": "process/checks/CP7-CR051-ST-AW-003-heterogeneous-git-legs-VERIFICATION-DONE.result.json",
+  "context_ref": "process/context/stories/STORY-ST-AW-003.CP7-R2.verify-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "dispatch_refs": ["EVENT-CR051-ST-AW-003-CP7-R2-QA-COMPLETED-20260718T152000Z"],
+  "return_packet_ref": "process/returns/ST-AW-003.CP7-R2.return.json",
+  "evidence_ref": "process/evidence/ST-AW-003.CP7-R2.index.json",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator correlation of actual meta-qa-critical ST-AW-003 CP7-R2 verification",
+    "checker_commit": "working-tree",
+    "invocation": "6 default-clock + 44 directed + 62 adjacent + 185 combined/9 subtests + ruff/format/pycompile/boundary + return/evidence checks",
+    "generated_by": "host-orchestrator from actual meta-qa-critical return",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/returns/ST-AW-003.CP7-R2.return.json": "available-in-evidence-index",
+    "process/evidence/ST-AW-003.CP7-R2.index.json": "self-validated"
+  },
+  "items": [
+    {
+      "id": "CP7-AW003-R2-E01",
+      "category": "entry",
+      "name": "CP6-R2 PASS, verify packet and resumed independent QA dispatch are valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP6-CR051-ST-AW-003-heterogeneous-git-legs-CODING-DONE-R2.result.json", "process/context/stories/STORY-ST-AW-003.CP7-R2.verify-packet.json", "process/handoffs/CR051-ST-AW-003-CP7-R2-META-QA-CRITICAL.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "The original independent QA lane was resumed with bounded finding-closure scope and returned validated R2 evidence."
+    },
+    {
+      "id": "CP7-AW003-R2-F01",
+      "category": "finding-closure",
+      "name": "REV-AW003-001 default-clock happy paths are executable without weakening genuine skew rejection",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-003-REVIEW-R2.md", "process/docs/quality/CR051-ST-AW-003-VERIFICATION-REPORT-R2.md", "process/evidence/ST-AW-003.CP7-R2.index.json"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Four valid now=None paths PASS; genuine stale/future observations remain BLOCKED before runner with mutation=0. REV-AW003-001 is closed."
+    },
+    {
+      "id": "CP7-AW003-R2-02",
+      "category": "regression",
+      "name": "Directed, adjacent and exact combined W3 suites pass",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-003-TEST-REPORT-R2.md", "process/returns/ST-AW-003.CP7-R2.return.json"],
+      "owner": "meta-qa-critical/host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "6 default-clock, 44 directed, 62 adjacent and 185 combined tests plus 9 subtests pass under the exact CP6-R2 file list."
+    },
+    {
+      "id": "CP7-AW003-R2-03",
+      "category": "contract-boundary",
+      "name": "Target, authz, health, publication, recovery and no-cross-leg-rollback contracts remain intact",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-003-REVIEW-R2.md", "process/returns/ST-AW-003.CP7-R2.return.json#contract_changes"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "No public API/data contract change or design delta; explicit-now semantics are unchanged."
+    },
+    {
+      "id": "CP7-AW003-R2-04",
+      "category": "boundary",
+      "name": "QA re-verification performed no source/test or real repository mutation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/ST-AW-003.CP7-R2.return.json#boundary_check", "process/evidence/ST-AW-003.CP7-R2.index.json"],
+      "owner": "host-orchestrator/meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Only R2 quality reports and return/evidence were written; real publication count is zero."
+    },
+    {
+      "id": "CP7-AW003-R2-X01",
+      "category": "exit",
+      "name": "All blocking findings are closed and residual platform risks are explicitly routed to CP8",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-003-FIXES-R2.md", "process/returns/ST-AW-003.CP7-R2.return.json#risks"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "No open implementation blocker remains; hosted remote and Windows-native pilot risks stay open for CP8."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "risks": [
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "severity": "MEDIUM", "status": "open-not-authorized", "owner": "CP8 decision owner", "summary": "Hosted shared remote, network, credentials and branch protection remain unverified."},
+    {"id": "CR051-RISK-WINDOWS-NATIVE-GIT-PILOT", "severity": "LOW", "status": "open", "owner": "CP8 decision owner", "summary": "Windows native Git argv/path pilot was not executed."}
+  ],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "W4-ST-AW-005-read-only-migration-handoff",
+  "checked_at": "2026-07-18T15:20:00Z"
+}

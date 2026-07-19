@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP5",
+  "checkpoint_id": "CP5-CR051-ST-AW-004-LLD-IMPLEMENTABILITY",
+  "story_id": "ST-AW-004",
+  "cr_id": "CR-051",
+  "profile": "architecture-major",
+  "check_attempt": 1,
+  "context_ref": "process/context/CP5-CR051-LLD-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "evidence_ref": "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md",
+  "checker_provenance": {
+    "checker_name": "meta-flow story lld-check plus deterministic Story implementability review",
+    "checker_commit": "1373df565417092304ae7b523f529ae878f6931d",
+    "invocation": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story lld-check --lld process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md --evidence-type full-lld --project-root .",
+    "generated_by": "meta-dev-critical",
+    "fallback_used": false
+  },
+  "items": [
+    {
+      "id": "CP5-AW004-01",
+      "category": "entry",
+      "name": "Story is lld-ready-for-review and all required design inputs are readable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate.md",
+        "process/context/CP5-CR051-LLD-CONTEXT.yaml",
+        "process/docs/design/CR051-FEATURE-DESIGN-MATRIX.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Process route is healthy; CP4 PASS; lld_policy=full-lld; required Feature pack is complete."
+    },
+    {
+      "id": "CP5-AW004-02",
+      "category": "checklist-structure",
+      "name": "Full LLD contains the required 0-14 sections and semantic evidence",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md"],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "meta-flow story lld-check --evidence-type full-lld returned OK; tier=L; confirmed=false."
+    },
+    {
+      "id": "CP5-AW004-03",
+      "category": "checklist-traceability",
+      "name": "Requirements, acceptance criteria, interfaces, tests and TASK-AW-004-01..05 are bidirectionally traceable",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#10-测试设计",
+        "process/docs/features/cr051-aggregate/TASKS.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Every interface has a test entry and every file impact is owned by a TASK-ID."
+    },
+    {
+      "id": "CP5-AW004-04",
+      "category": "checklist-aggregate-contract",
+      "name": "Matching required source plus artifact 2/2 terminal PASS is the only overall PASS path",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#81-固定决策表",
+        "process/docs/features/cr051-aggregate/TEST-PLAN.md"
+      ],
+      "owner": "ST-AW-004",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "All 16 combinations are explicit; validation errors BLOCK before precedence; PARTIAL is progress/effect only."
+    },
+    {
+      "id": "CP5-AW004-05",
+      "category": "checklist-evidence-single-writer",
+      "name": "Immutable evidence DAG, deterministic aggregate identity, readback and current-selector CAS are implementable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#5-数据模型与持久化设计"],
+      "owner": "ST-AW-004",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "No last-write-wins and no future commit OID self-reference; projection begins only after append/readback/CAS."
+    },
+    {
+      "id": "CP5-AW004-06",
+      "category": "checklist-boundary",
+      "name": "Aggregate is isolated from Git worktree artifact-main manual-sync and non-PASS automatic completion",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#9-安全与性能设计",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate.md#文件所有权"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Git/worktree/manual-sync imports and calls are fixed at zero; ST-AW-004 is the sole CR-051 CLI merge owner."
+    },
+    {
+      "id": "CP5-AW004-07",
+      "category": "checklist-dependency",
+      "name": "ST-AW-003 LegResult contract gate and W3 file ownership permit bounded parallel implementation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/DEVELOPMENT-PLAN.yaml",
+        "process/checks/CP4-CR051-STORY-DAG-PARALLEL-SAFETY.result.json"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Development remains gated on CP5-frozen LegResult; primary paths are disjoint."
+    },
+    {
+      "id": "CP5-AW004-08",
+      "category": "checklist-clarification",
+      "name": "Implementation tradeoffs are recorded and the Host clarification queue has zero blocking items",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md#121-实现灰区与取舍记录",
+        "process/context/CP5-CR051-LLD-CONTEXT.yaml"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "No OPEN or Spike; any future contract break routes NEEDS_DESIGN_CLARIFICATION."
+    },
+    {
+      "id": "CP5-AW004-09",
+      "category": "exit",
+      "name": "ST-AW-004 design evidence is implementable and ready for the CP5 batch human gate",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "This PASS does not confirm the LLD and does not authorize implementation."
+    },
+    {
+      "id": "CP5-AW004-10",
+      "category": "deliverables",
+      "name": "Story card full LLD and Story-scoped CP5 result/summary deliverables are complete",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate.md",
+        "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md",
+        "process/checks/CP5-CR051-ST-AW-004-LLD-IMPLEMENTABILITY.result.summary.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Human batch checkpoint remains a Host-owned downstream deliverable."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T063607Z0000-c4cdeb6a",
+    "RE-20260718T064828Z0000-6b6f1f25"
+  ],
+  "decision": "PASS",
+  "next_route": "CP5-batch-human-gate",
+  "checked_at": "2026-07-18T06:55:00Z"
+}

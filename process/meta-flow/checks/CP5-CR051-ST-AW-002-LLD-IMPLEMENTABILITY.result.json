@@ -1,0 +1,292 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP5",
+  "checkpoint_id": "CP5-CR051-ST-AW-002-LLD-IMPLEMENTABILITY",
+  "story_id": "ST-AW-002",
+  "cr_id": "CR-051",
+  "profile": "architecture-major",
+  "context_ref": "process/context/CP5-CR051-LLD-CONTEXT.yaml",
+  "dispatch_refs": [
+    "process/handoffs/CR051-CP5-META-DEV-LANE-B.md"
+  ],
+  "evidence_ref": "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md",
+  "checker_provenance": {
+    "checker_name": "meta-flow story lld-check plus CP5 16-item implementability review",
+    "checker_version": "0.4.0",
+    "invocation": "PYTHONDONTWRITEBYTECODE=1 uv run --python 3.11 meta-flow story lld-check --project-root . --lld process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md --evidence-type full-lld",
+    "generated_by": "meta-dev/lane-b",
+    "lld_structure_check": "PASS",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md": "sha256:e177a1f76e6701c68214b170d2c76c91ca63760609b25347615585efcc7fbad6",
+    "process/context/CP5-CR051-LLD-CONTEXT.yaml": "sha256:f36581243735d4f4be1966bf23792eee50070839d973263c9bc8e21d1d3539c9",
+    "process/DEVELOPMENT-PLAN.yaml": "sha256:cc23d871b65bd6a3f15c3b1e3ff44e88d5351c0f1576fe5a331a6ec03661f8f8",
+    "process/docs/design/CR051-FEATURE-DESIGN-MATRIX.md": "sha256:c2023650350639fa60bceadc0890dae02cd187c7eacd2e21c0f87107d11a38a7",
+    "process/checks/CP4-CR051-STORY-DAG-PARALLEL-SAFETY.result.json": "sha256:e61c562ddf754c0322be631af0d1245e40ab6106f9ebef03c7af7e774ac08f0a",
+    "process/docs/features/cr051-worktree/DESIGN.md": "sha256:da2be6326c215bb830066b93753bae59f2ca7f6736932323a97ddda282c86b87",
+    "process/docs/features/cr051-worktree/TEST-PLAN.md": "sha256:a8f1e31f92269d670ce9a5ae8b6352539dbe6cba1f57952379e2f5c3d63ca2f1",
+    "process/docs/features/cr051-worktree/TASKS.md": "sha256:cfebd1d919f2b802c86d4d1895d0aa4e5537eef7abce899b97d13778de4d0b37"
+  },
+  "items": [
+    {
+      "id": "CP5-CR051-ST-AW-002-001",
+      "category": "acceptance_coverage",
+      "name": "设计证据覆盖 AC",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree.md",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#2-需求与非功能约束",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#10-测试设计与验证矩阵"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "FR-AW2-01–08、六项量化成功标准以及 CAP-01–11、DUR-01–14、WT-01–14 覆盖 Story AC；O-AW-01/02 明确不可豁免。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-002",
+      "category": "architecture_consistency",
+      "name": "与 HLD 一致",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR051-ARTIFACT-WORKTREE-HLD.md",
+        "process/docs/design/CR051-ARTIFACT-WORKTREE-ARCHITECTURE-DECISION.md",
+        "process/docs/features/cr051-worktree/DESIGN.md",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#0-工程依据与上游契约"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "保持 sibling worktree、create-only integration、deny-default 自动切换、durable-before-mutation 与无破坏恢复边界，未削弱 HLD/ADR。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-003",
+      "category": "file_impact",
+      "name": "文件影响范围明确",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#4-文件影响范围",
+        "process/DEVELOPMENT-PLAN.yaml"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "3 个新增运行模块、2 个新增测试文件、3 个共享修改文件均使用确定性动作；CLI 明确不修改且归 ST-AW-004。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-004",
+      "category": "interface_contract",
+      "name": "接口契约完整",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#6-api--接口设计",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#10-测试设计与验证矩阵"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "九个接口逐项定义输入、输出、前置、typed failure、timeout/竞争处理、兼容/降级边界和测试映射。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-005",
+      "category": "data_contract",
+      "name": "数据结构明确",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#5-数据模型与持久化"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "identity、observation、capacity、plan、result、health、operation state、journal schema/chain/seal 与 unknown fail-closed 语义完整。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-006",
+      "category": "control_flow",
+      "name": "控制流明确",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#7-核心流程",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#84-rollback-资格决策"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "主流程、bootstrap 竞争、switch kill/timeout、resume、rollback eligibility 与 safe remove 失败路径明确；无盲重放。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-007",
+      "category": "dependency_contract",
+      "name": "依赖输入明确",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-routing/DESIGN.md",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#02-上下游与所有权",
+        "process/DEVELOPMENT-PLAN.yaml"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "ST-AW-001 RouteDecision PASS/config digest/owned-target proof 是强制前置；ST-AW-002 输出 WorktreeHealth 给 ST-AW-003。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-008",
+      "category": "concurrency_consistency",
+      "name": "并发和一致性考虑",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#52-durable-journal-布局o-aw-02不可豁免",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#83-bootstrap-竞争算法",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#85-幂等与-reason-code"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "每项目 OS handle lock、unique append-only journal、checksum chain/seal、create-only race 和 fresh-observation 幂等均已设计。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-009",
+      "category": "security",
+      "name": "安全设计明确",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#9-安全权限与性能设计",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#13-发布回滚与恢复策略"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "argv-only、target identity、project isolation、secret exclusion、remote create-only、independent remove authorization 和禁止 destructive recovery 均显式。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-010",
+      "category": "testability",
+      "name": "可测试性明确",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#10-测试设计与验证矩阵",
+        "process/docs/features/cr051-worktree/TEST-PLAN.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "接口到 CAP/DUR/WT 的映射、fake Git runner、temp FS、deterministic fault adapter、mutation counter 和隔离 bare remote 均明确。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-011",
+      "category": "dev_gate",
+      "name": "dev_gate 可计算",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#111-dev_gate-与设计偏差记录",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree.md",
+        "process/DEVELOPMENT-PLAN.yaml"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "lld_confirmed、dependencies_satisfied、Wave 前置、file_conflict_free 和 merge order 条件可判定；当前 confirmed=false，因此 gate 正确冻结。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-012",
+      "category": "design_delta",
+      "name": "偏差记录机制明确",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#111-dev_gate-与设计偏差记录"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "实现偏差必须记录 Story design delta；高风险/跨 Story contract 偏差返回 CP5 澄清，不允许静默代码漂移。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-013",
+      "category": "cp4_traceability",
+      "name": "CP4 摘要已纳入",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP4-CR051-STORY-DAG-PARALLEL-SAFETY.result.json",
+        "process/context/CP5-CR051-LLD-CONTEXT.yaml",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#0-工程依据与上游契约",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#4-文件影响范围"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "CP4 PASS 的 Story 边界、DAG、文件 owner、merge order 和并行安全已经由 capsule 输入并落到 LLD；本 result 为 Host 批量 Decision Brief 提供可直接汇总的 Story 摘要。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-014",
+      "category": "clarification_convergence",
+      "name": "clarification 队列已收敛",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP5-CR051-LLD-CONTEXT.yaml",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#122-灰区分类与澄清队列"
+      ],
+      "owner": "host-orchestrator/meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "blocks_lld 未回答项=0、LCQ=0；O-AW-01/02 为 non-blocking proof obligation 且不可豁免，CP5-CR051-DQ-01 保持 Host 批量决策项。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-015",
+      "category": "lld_policy",
+      "name": "lld_policy 分级合理",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/design/CR051-FEATURE-DESIGN-MATRIX.md",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree.md",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "非原子 Git/文件系统动作、并发、远端 race、崩溃恢复和不可豁免容量/持久化义务要求 Tier L full-lld；未降级、未 waived。"
+    },
+    {
+      "id": "CP5-CR051-ST-AW-002-016",
+      "category": "feature_design_consumption",
+      "name": "Feature 设计输入被消费",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/docs/features/cr051-worktree/DESIGN.md",
+        "process/docs/features/cr051-worktree/TEST-PLAN.md",
+        "process/docs/features/cr051-worktree/TASKS.md",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#01-读取基线",
+        "process/stories/STORY-ST-AW-002-recoverable-project-worktree-LLD.md#11-实施步骤与-task-id"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "三项 feature_design_refs 在 frontmatter 与正文显式引用；W01–W11、CAP/DUR/WT 契约逐项消费。"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T063607Z0000-c4cdeb6a",
+    "RE-20260718T065656Z0000-9744d7bc"
+  ],
+  "decision": "PASS",
+  "next_route": "CP5-batch-human-review",
+  "checked_at": "2026-07-18T06:58:32Z"
+}

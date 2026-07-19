@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR051-DELIVERY-READINESS-R2",
+  "cr_id": "CR-051",
+  "profile": "architecture-major",
+  "check_attempt": 2,
+  "supersedes_result_ref": "process/checks/CP8-CR051-DELIVERY-READINESS.result.json",
+  "context_ref": "process/release/RELEASE-CONTEXT-CR051-R2.yaml",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "evidence_ref": "process/checkpoints/CP8-CR051-DELIVERY-READINESS-R2.md",
+  "checker_provenance": {
+    "checker_name": "meta-flow cp result-check + Host CP8 R2 readiness correlation",
+    "checker_commit": "working-tree",
+    "generated_by": "host-orchestrator-inline-fallback",
+    "invocation": "697 tests/70 subtests + CP6/CP7 R2/R3 + design delta/LLD/static/release correlation",
+    "fallback_used": true,
+    "fallback_reason": "User explicitly instructed not to spawn subagents for this terminal rework.",
+    "fallback_review_ref": "current-user-input:完成你建议完成的项，不要拉起子agent。"
+  },
+  "input_artifact_hashes": {
+    "process/release/RELEASE-CONTEXT-CR051-R2.yaml": "b71770d01a8c61ebe4305450c946dfbc07ac5fb4fc3c9f552345ca977652d6d9",
+    "process/docs/quality/CR051-CP8-REWORK-VERIFICATION-REPORT.md": "3fa4db4e69b71682dc1dd0d40887f93b86c998e92ae6aff7bb4259d8f6ba2625",
+    "process/docs/quality/CR051-CP8-REWORK-TEST-REPORT.md": "6fe4d73b5cb2b4dcf2900c7beeb442a9ba4332ea20d3baf6e8e60d1d326a6400",
+    "process/docs/quality/CR051-CP8-REWORK-REVIEW.md": "6516c512bc2e58c04f1ae044e1935663179c9c685af9f8a9eea96c53821af6ce",
+    "process/docs/quality/CR051-CP8-REWORK-FIXES.md": "9ff29673f42e8dd262e9782fff34b64fe71bc67bb777d8721a31825ab708cbd6"
+  },
+  "release_decision": "READY_WITH_RISK",
+  "fact_diff": [
+    {
+      "promise_ref": "CP8-R2-ST-AW-002..004-terminal-rework",
+      "promise": "终验发现的 design delta、durability、leg regression/cleanup 和 aggregate target/PARTIAL 缺口在当前 CR 内关闭。",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/docs/quality/CR051-CP8-REWORK-VERIFICATION-REPORT.md", "process/docs/quality/CR051-CP8-REWORK-REVIEW.md"],
+      "risk_ref": "CR051-RISK-INLINE-QA-SEPARATION"
+    },
+    {
+      "promise_ref": "CR-051-full-regression-R2",
+      "promise": "当前完整仓库回归、静态、编译、guardrail、delta/LLD 与 whitespace gates 通过。",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/docs/quality/CR051-CP8-REWORK-TEST-REPORT.md"],
+      "risk_ref": "CR051-RISK-REPO-FORMAT-BASELINE"
+    },
+    {
+      "promise_ref": "independent-qa-separation-R2",
+      "promise": "终验回修由独立 meta-qa 子 Agent 复验。",
+      "status": "NEEDS_REVIEW",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/handoffs/CR051-CP8-REWORK-INLINE-META-QA.md"],
+      "risk_ref": "CR051-RISK-INLINE-QA-SEPARATION"
+    },
+    {
+      "promise_ref": "real-hosted-runtime-and-migration",
+      "promise": "真实 hosted remote、Windows native、真实 worktree/ref/link/migration 与 repository publication 已验证。",
+      "status": "NEEDS_REVIEW",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/docs/release/CR051-DEPLOY-CHECKLIST.md", "process/docs/release/CR051-MIGRATION.md"],
+      "risk_ref": "CR051-RISK-REAL-MIGRATION-UNVERIFIED"
+    }
+  ],
+  "items": [
+    {"id": "CP8-AW051-R2-01", "name": "ST-AW-002/003/004 最新 CP6/CP7 R2/R3 证据链完成", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/release/RELEASE-CONTEXT-CR051-R2.yaml"], "owner": "host-orchestrator", "route_on_fail": "block_release"},
+    {"id": "CP8-AW051-R2-02", "name": "三份 design delta merged 且三份 LLD 结构有效", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/design-deltas/ST-AW-002.delta.json", "process/design-deltas/ST-AW-003.delta.json", "process/design-deltas/ST-AW-004.delta.json"], "owner": "host-orchestrator", "route_on_fail": "reopen_cp5_design"},
+    {"id": "CP8-AW051-R2-03", "name": "697 tests、70 subtests 与静态/guardrail gates 全部通过", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["process/docs/quality/CR051-CP8-REWORK-TEST-REPORT.md"], "owner": "host-orchestrator-inline-fallback", "route_on_fail": "rework_same_story"},
+    {"id": "CP8-AW051-R2-04", "name": "终验新增 blocker/high finding 为 0，FU-007..009 已在当前 CR 关闭", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/docs/quality/CR051-CP8-REWORK-REVIEW.md", "process/docs/quality/CR051-CP8-REWORK-FIXES.md"], "owner": "host-orchestrator", "route_on_fail": "rework_same_story"},
+    {"id": "CP8-AW051-R2-05", "name": "Host inline-fallback、真实 runtime 与历史基线风险已完整披露", "status": "PASS", "severity": "HIGH", "evidence_refs": ["process/release/RELEASE-CONTEXT-CR051-R2.yaml", "process/checkpoints/CP8-CR051-DELIVERY-READINESS-R2.md"], "owner": "user", "route_on_fail": "require_user_decision"}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "risks": [
+    "CR051-RISK-INLINE-QA-SEPARATION",
+    "DOC-CR051-CAPABILITY-REGISTRY-MISSING",
+    "CR051-RISK-REMOTE-UNVERIFIED",
+    "CR051-RISK-WINDOWS-NATIVE-PILOTS",
+    "R-AW004-LOCK-CRASH",
+    "R-AW005-DIR-ENUM-TOCTOU",
+    "CR051-RISK-REAL-MIGRATION-UNVERIFIED",
+    "CR051-RISK-MODULE-BOUNDARIES-MANIFEST",
+    "CR051-RISK-WORKING-TREE-UNPUBLISHED",
+    "CR051-RISK-REPO-FORMAT-BASELINE",
+    "CR051-RISK-LEGACY-CR-INDEX-CHECK",
+    "CR051-RISK-APPEND-ONLY-EVENT-LEDGER-COMPAT"
+  ],
+  "decision": "PASS",
+  "next_route": "await CP8 R2 human READY_WITH_RISK decision",
+  "checked_at": "2026-07-19T00:00:00Z"
+}

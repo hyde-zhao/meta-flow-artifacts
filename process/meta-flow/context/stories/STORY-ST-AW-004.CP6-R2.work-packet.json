@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "stage": "CP6",
+  "project_id": "meta-flow",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-004",
+  "story_ref": "process/stories/STORY-ST-AW-004-aggregate-evidence-gate.md",
+  "parent_context_ref": "process/context/CP6-CR051-IMPLEMENTATION-CONTEXT.yaml",
+  "risk_profile": "runtime-high-risk",
+  "lld_policy": "full-lld",
+  "objective": {"summary": "关闭 ST-AW-004 target-policy、PARTIAL production 和 dependency/DAG 回归缺口", "non_goals": ["不执行 Git/worktree/manual sync", "不放宽 2/2 PASS gate"]},
+  "acceptance": ["consumer 独立验证 canonical target policy", "PARTIAL staged projection 保留 receipt 且可幂等 retry", "dependency spy 与 exact DAG 通过", "design delta merged", "全量回归通过"],
+  "feature_refs": ["FEAT-AW-04"],
+  "feature_design_refs": ["process/docs/features/cr051-aggregate/DESIGN.md", "process/docs/features/cr051-aggregate/TEST-PLAN.md", "process/docs/features/cr051-aggregate/TASKS.md"],
+  "expected_return_packet": "process/returns/ST-AW-004.CP6-R2.return.json",
+  "allowed_write_paths": ["meta_flow/workflow/artifact_aggregate.py", "meta_flow/workflow/cr_lifecycle.py", "meta_flow/cli.py", "tests/test_artifact_aggregate.py", "process/docs/features/cr051-aggregate/**", "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-LLD.md", "process/stories/STORY-ST-AW-004-aggregate-evidence-gate-IMPLEMENTATION.md", "process/design-deltas/ST-AW-004.delta.json", "process/returns/ST-AW-004.CP6-R2.return.json", "process/evidence/ST-AW-004.CP6-R2.index.json"],
+  "forbidden_write_paths": [".git/**", "process/quant-lab/**", "real artifact/worktree/ref/remote/link/migration targets"],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_PRODUCTION_WRITE", "NO_REPOSITORY_PUBLICATION", "FIXTURE_ONLY_GIT_WORKTREE_REMOTE"],
+  "verification_plan": ["运行 target-policy/PARTIAL/dependency/DAG 定向回归", "运行跨模块与全仓回归", "验证 Ruff/compile/guardrail/diff/delta/LLD", "输出 R2 return/evidence"]
+}

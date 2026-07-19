@@ -1,0 +1,98 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-001-TEST-REPORT.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-001-REVIEW.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/docs/quality/CR051-ST-AW-001-FIXES.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/ST-AW-001.CP7.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/ST-AW-001.CP7.index.json"
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest -q tests/test_cr051_project_artifact_routing.py tests/test_workspace_routing.py",
+      "result": "pass",
+      "summary": "36 passed"
+    },
+    {
+      "command": "uv run --python 3.11 ruff check <ST-AW-001 files>",
+      "result": "pass",
+      "summary": "All checks passed"
+    },
+    {
+      "command": "uv run --python 3.11 python -m py_compile <ST-AW-001 modules>",
+      "result": "pass",
+      "summary": "exit 0"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "summary": "exit 0"
+    },
+    {
+      "command": "cross-project config/decision identity negative probe",
+      "result": "fail",
+      "summary": "health.ok=True and project-b target accepted"
+    },
+    {
+      "command": "legacy non-string owned_paths negative probe",
+      "result": "fail",
+      "summary": "bare TypeError escaped"
+    }
+  ],
+  "cr_id": "CR-051",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/meta-flow/returns/ST-AW-001.CP7.return.json",
+  "risks": [
+    {
+      "detail": "cross-project config/decision mismatch is not rejected",
+      "id": "CP7-AW-001-F01",
+      "level": "blocker",
+      "owner": "meta-dev-debugger",
+      "status": "open"
+    },
+    {
+      "detail": "legacy malformed owned_paths escapes bare TypeError",
+      "id": "CP7-AW-001-F02",
+      "level": "major",
+      "owner": "meta-dev-debugger",
+      "status": "open"
+    },
+    {
+      "detail": "canonical module boundary manifest absent",
+      "id": "CR051-RISK-MODULE-BOUNDARIES-MANIFEST",
+      "level": "medium",
+      "owner": "CP8 decision owner",
+      "status": "open"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "ST-AW-001",
+  "tests": [
+    "TC-AW-001",
+    "TC-AW-002",
+    "TC-AW-003",
+    "TC-AW-010",
+    "TC-AW-012"
+  ],
+  "waivers": []
+}

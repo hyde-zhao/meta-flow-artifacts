@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-051",
+  "story_id": "ST-AW-001",
+  "status": "needs_rework",
+  "touched_files": [
+    {"path": "process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-001-TEST-REPORT.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-001-REVIEW.md", "change_type": "created"},
+    {"path": "process/docs/quality/CR051-ST-AW-001-FIXES.md", "change_type": "created"},
+    {"path": "process/returns/ST-AW-001.CP7.return.json", "change_type": "created"},
+    {"path": "process/evidence/ST-AW-001.CP7.index.json", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {"command": "uv run --python 3.11 pytest -q tests/test_cr051_project_artifact_routing.py tests/test_workspace_routing.py", "result": "pass", "summary": "36 passed"},
+      {"command": "uv run --python 3.11 ruff check <ST-AW-001 files>", "result": "pass", "summary": "All checks passed"},
+      {"command": "uv run --python 3.11 python -m py_compile <ST-AW-001 modules>", "result": "pass", "summary": "exit 0"},
+      {"command": "git diff --check", "result": "pass", "summary": "exit 0"},
+      {"command": "cross-project config/decision identity negative probe", "result": "fail", "summary": "health.ok=True and project-b target accepted"},
+      {"command": "legacy non-string owned_paths negative probe", "result": "fail", "summary": "bare TypeError escaped"}
+    ],
+    "tests": ["TC-AW-001", "TC-AW-002", "TC-AW-003", "TC-AW-010", "TC-AW-012"],
+    "skipped": [
+      "module-boundaries/import check: canonical docs/design/MODULE-BOUNDARIES.yaml missing",
+      "real cross-device portability pilot: runtime authorization unavailable"
+    ]
+  },
+  "evidence_refs": [
+    "process/docs/quality/CR051-ST-AW-001-VERIFICATION-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-001-TEST-REPORT.md",
+    "process/docs/quality/CR051-ST-AW-001-REVIEW.md",
+    "process/docs/quality/CR051-ST-AW-001-FIXES.md",
+    "process/checks/CP6-CR051-ST-AW-001-project-first-routing-CODING-DONE.result.json"
+  ],
+  "open_questions": [],
+  "risks": [
+    {"id": "CP7-AW-001-F01", "level": "blocker", "status": "open", "owner": "meta-dev-debugger", "detail": "cross-project config/decision mismatch is not rejected"},
+    {"id": "CP7-AW-001-F02", "level": "major", "status": "open", "owner": "meta-dev-debugger", "detail": "legacy malformed owned_paths escapes bare TypeError"},
+    {"id": "CR051-RISK-MODULE-BOUNDARIES-MANIFEST", "level": "medium", "status": "open", "owner": "CP8 decision owner", "detail": "canonical module boundary manifest absent"}
+  ],
+  "waivers": [],
+  "next_stage_recommendation": "NEEDS_REWORK"
+}

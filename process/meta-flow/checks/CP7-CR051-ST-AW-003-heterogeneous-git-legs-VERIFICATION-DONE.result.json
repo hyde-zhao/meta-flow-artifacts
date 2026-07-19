@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR051-ST-AW-003-heterogeneous-git-legs-VERIFICATION-DONE",
+  "story_id": "ST-AW-003",
+  "cr_id": "CR-051",
+  "profile": "runtime-high-risk",
+  "check_attempt": 1,
+  "context_ref": "process/context/stories/STORY-ST-AW-003.CP7.verify-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR-051.route-plan.json",
+  "dispatch_refs": ["EVENT-CR051-ST-AW-003-CP7-QA-COMPLETED-20260718T143453Z"],
+  "return_packet_ref": "process/returns/ST-AW-003.CP7.return.json",
+  "evidence_ref": "process/evidence/ST-AW-003.CP7.index.json",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator correlation of actual meta-qa-critical ST-AW-003 verification",
+    "checker_commit": "working-tree",
+    "invocation": "38 directed + 56 adjacent regression + default-clock runtime probe + static/boundary + return/evidence checks",
+    "generated_by": "host-orchestrator from actual qa-cao return",
+    "fallback_used": false
+  },
+  "input_artifact_hashes": {
+    "process/returns/ST-AW-003.CP7.return.json": "available-in-evidence-index",
+    "process/evidence/ST-AW-003.CP7.index.json": "self-validated"
+  },
+  "items": [
+    {
+      "id": "CP7-AW003-E01",
+      "category": "entry",
+      "name": "CP6 PASS, verify packet and independent QA dispatch are valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP6-CR051-ST-AW-003-heterogeneous-git-legs-CODING-DONE.result.json", "process/context/stories/STORY-ST-AW-003.CP7.verify-packet.json", "process/handoffs/CR051-ST-AW-003-CP7-META-QA-CRITICAL.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Actual meta-qa-critical lane completed and returned validated evidence."
+    },
+    {
+      "id": "CP7-AW003-01",
+      "category": "target-authorization-publication",
+      "name": "Exact targets, typed authorization, immutable publication and no-cross-leg rollback pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-003-VERIFICATION-REPORT.md", "process/evidence/ST-AW-003.CP7.index.json"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "38 directed and 56 adjacent tests pass under controlled clocks; dangerous argv and real publication count are zero."
+    },
+    {
+      "id": "CP7-AW003-F01",
+      "category": "runtime-freshness",
+      "name": "Default-clock fresh observer path remains executable",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-003-REVIEW.md#REV-AW003-001", "process/docs/quality/CR051-ST-AW-003-FIXES.md#FIX-AW003-001"],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "execute_leg samples executed_at before observer; a normal now=None observer returns a later fresh timestamp that is misclassified as stale_observation, so runner calls remain zero."
+    },
+    {
+      "id": "CP7-AW003-03",
+      "category": "boundary",
+      "name": "QA verification performed no source/test or real runtime mutation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/ST-AW-003.CP7.return.json#boundary_check"],
+      "owner": "host-orchestrator/meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Only four quality reports plus CP7 return/evidence were written."
+    },
+    {
+      "id": "CP7-AW003-X01",
+      "category": "exit",
+      "name": "All blocking findings are closed",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/docs/quality/CR051-ST-AW-003-FIXES.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "REV-AW003-001 remains open and is not risk-acceptable."
+    }
+  ],
+  "blockers": [
+    {
+      "id": "REV-AW003-001",
+      "severity": "HIGH",
+      "owner": "meta-dev-debugger",
+      "summary": "Default live-clock observations are generated after an earlier freshness upper-bound and are falsely rejected, making required non-dry-run legs unusable."
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260718T144058Z0000-2ff8d8b1", "RE-20260718T144058Z0000-b9c6d1ad"],
+  "risks": [
+    {"id": "CR051-RISK-REMOTE-UNVERIFIED", "severity": "MEDIUM", "status": "open-not-authorized", "owner": "CP8 decision owner", "summary": "Hosted remote policy and credentials remain unverified."},
+    {"id": "CR051-RISK-WINDOWS-NATIVE-GIT-PILOT", "severity": "LOW", "status": "open", "owner": "CP7/CP8 decision owner", "summary": "Windows native Git pilot was not executed."}
+  ],
+  "decision": "NEEDS_REWORK",
+  "next_route": "ST-AW-003-meta-dev-debugger-rework-REV-AW003-001",
+  "checked_at": "2026-07-18T14:35:30Z"
+}
