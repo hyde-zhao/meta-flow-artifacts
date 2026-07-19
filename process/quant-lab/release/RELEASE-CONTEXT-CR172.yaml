@@ -1,11 +1,11 @@
 schema_version: "1.0"
-status: ready_for_human_gate
+status: delivered
 release_artifact_profile: full
 release_decision: READY_WITH_RISK
-manual_gate_status: pending
-pending_human_decisions: 3
+manual_gate_status: approved
+pending_human_decisions: 0
 created_at: "2026-07-19T01:51:00+08:00"
-updated_at: "2026-07-19T01:51:00+08:00"
+updated_at: "2026-07-19T09:29:15+08:00"
 source_gate: CP8
 cr_id: CR-172
 
@@ -36,7 +36,8 @@ release_scope:
   not_authorized:
     - "real lake/NAS/execution-host access"
     - "multi-trial runtime, trial-return generation and empirical-R computation"
-    - "signal transport, trading, deployment, publish/live and Git remote write"
+    - "signal transport, trading, deployment and publish/live"
+    - "Git remote write outside the explicitly approved quant-lab source and artifact process/quant-lab/** scope"
   user_visible_changes:
     - "Reviewable repository contracts and deterministic QAC for PATH-I"
   internal_changes:
@@ -55,7 +56,7 @@ version_decision:
   target_version: "CR-172-PATH-I-rc.1"
   change_type: rc
   compatibility: compatible_repository_contract_runtime_unknown
-  reason: "Five Story contracts are verified, but three risk decisions remain pending and no real release is authorized."
+  reason: "Five Story contracts are verified and the three CP8 risk decisions were accepted; runtime deployment and real-data activation remain unauthorized."
 
 quality_summary:
   cp5_result: process/checks/CP5-CR172-LLD-DESIGN-EVIDENCE.result.json
@@ -196,10 +197,22 @@ operation_boundary:
 
 post_cp8_git_delivery:
   authorization_source: "explicit user message at 2026-07-19T09:18:36+08:00"
-  status: authorized_pending_execution
+  status: completed
+  completed_at: "2026-07-19T09:29:15+08:00"
   source_repository_scope: "all quant-lab-related changes in /home/hyde/workspace/quant-lab"
   artifact_repository_scope: "process/quant-lab/** only"
   excluded_artifact_scope: "process/meta-flow/**"
+  source_branch: master
+  source_commit: fc8b7c4e0c934f40d17ca1bcc0079f07d58b32bb
+  source_remote_ref: origin/master
+  source_remote_verified: true
+  artifact_branch: main
+  artifact_content_commit: 562872610d17458bf6f37d1c6cb32a2377d10644
+  artifact_remote_ref_after_content_push: origin/main
+  artifact_content_remote_verified: true
+  force_push: false
+  tag_created: false
+  evidence_ref: process/checks/CR172-PAIRED-GIT-DELIVERY.result.json
   does_not_authorize: [real_data, lake_or_nas_operation, runtime, signal, trading, deployment, path_c_or_a_resume]
 
 affected_surface:
@@ -220,7 +233,8 @@ install_validation_summary:
   results:
     - "process_link_health=ok"
     - "At CP8 review: project_dirty=true; artifact_dirty=true; ahead/behind=0/0; no commit or push executed"
-    - "After CP8 approval: scoped paired Git commit/push explicitly authorized; execution evidence pending"
+    - "After CP8 approval: quant-lab fc8b7c4e0c934f40d17ca1bcc0079f07d58b32bb reached origin/master and artifact content 562872610d17458bf6f37d1c6cb32a2377d10644 reached origin/main"
+    - "Artifact process/meta-flow/** remained excluded and locally uncommitted; no force push or tag was used"
     - "checkpoint ledger affected duplicate event_ids=10; extra conflicting rows=12; full event check=FAIL; final result refs remain unambiguous; no append-only rewrite executed"
   log_paths: []
   skipped_with_reason:
