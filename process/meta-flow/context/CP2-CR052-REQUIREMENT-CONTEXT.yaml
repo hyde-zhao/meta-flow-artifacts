@@ -1,0 +1,189 @@
+schema_version: "1.0"
+capsule_id: "CAPSULE-CR052-CP2-REQUIREMENT-R1"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready-for-human-gate"
+created_at: "2026-07-19T05:30:36Z"
+created_by: "host-orchestrator"
+source_cr: "CR-052"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 14
+  max_summary_items: 40
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "Agent 必须先读取本 capsule，并且只读取 allowed_reads / must_read；只有触发 full_doc_read_policy 时才读取完整正式文档，并在 read_expansion_log 记录原因。"
+
+allowed_reads:
+  - path: "process/state/STATE.current.json"
+    reason: "轻量运行态、活跃 CR 与阶段"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "当前文件系统入口和 handoff 指针"
+    required: true
+  - path: "process/changes/summaries/CR-052.summary.json"
+    reason: "CR-052 范围、traits、授权与产品基线要求"
+    required: true
+  - path: "process/checks/CP0-CR-052.route-plan.json"
+    reason: "CP0-CP8 实际适用性和硬门"
+    required: true
+  - path: "process/docs/product/USE-CASES.md"
+    reason: "增量刷新迁移准备用户场景"
+    required: true
+  - path: "process/docs/product/REQUIREMENTS.md"
+    reason: "增量刷新量化需求和 AC"
+    required: true
+  - path: "process/docs/product/SCENARIOS.yaml"
+    reason: "新增正向、负向、边界、权限和失败恢复场景"
+    required: true
+  - path: "process/docs/product/TEST-MATRIX.md"
+    reason: "建立 CR-052 需求/场景/验证追踪"
+    required: true
+  - path: "process/docs/product/STORY-MAP.md"
+    reason: "刷新 readiness journey 和候选切片"
+    required: true
+  - path: "process/docs/product/MVP-SCOPE.md"
+    reason: "冻结 CR-052/CR-053 In/Out/Deferred"
+    required: true
+  - path: "process/docs/product/RELEASE-SLICES.md"
+    reason: "形成能力交付切片"
+    required: true
+  - path: "process/docs/product/BACKLOG.md"
+    reason: "登记 CR-053/shared README/其他项目迁移后续"
+    required: true
+  - path: "process/REQUEST.md"
+    reason: "CR-052 原始用户指令与不授权边界"
+    required: true
+
+must_read:
+  - path: "process/state/STATE.current.json"
+    reason: "确认 active_change=CR-052 与 requirement-clarification"
+    required: true
+  - path: "process/changes/summaries/CR-052.summary.json"
+    reason: "默认 CR 真相入口"
+    required: true
+  - path: "process/checks/CP0-CR-052.route-plan.json"
+    reason: "确认 CP1/CP2 required 且后续门禁受阻"
+    required: true
+  - path: "process/docs/product/USE-CASES.md"
+    reason: "保留旧基线并增量更新"
+    required: true
+  - path: "process/docs/product/REQUIREMENTS.md"
+    reason: "量化需求和验收标准"
+    required: true
+  - path: "process/docs/product/SCENARIOS.yaml"
+    reason: "工程验证场景"
+    required: true
+  - path: "process/docs/product/TEST-MATRIX.md"
+    reason: "追踪矩阵"
+    required: true
+  - path: "process/docs/product/MVP-SCOPE.md"
+    reason: "范围边界"
+    required: true
+
+read_if_needed:
+  - path: "process/changes/CR-052.md"
+    trigger: "summary 字段不足、决策语义冲突、人工审计或需要读取完整风险表"
+  - path: "process/changes/CR-051.md"
+    trigger: "需要核对 CR-051 已关闭 Out of Scope 或历史约束；读取时必须记 read expansion"
+  - path: "meta_flow/workspace/project_artifact_routing.py"
+    trigger: "产品需求的技术可验证性存在事实冲突"
+  - path: "meta_flow/workflow/artifact_aggregate.py"
+    trigger: "evidence store 产品边界需要代码事实确认"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "人类摘要和 legacy fallback"
+  - path_or_pattern: "process/DEVELOPMENT-PLAN.yaml"
+    reason: "CP2 前不得消费或生成正式 Story 计划"
+  - path_or_pattern: "process/changes/CR-*.md"
+    reason: "默认读取 summary；完整 CR 仅按 read_if_needed 展开"
+  - path_or_pattern: "process/stories/**"
+    reason: "CP2 前不得进入 Story/LLD"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不属于当前阶段默认上下文"
+  - path_or_pattern: "process/ptm-team/**|process/ptm-atomic/**|process/quant-lab/**"
+    reason: "兄弟项目不在 CR-052 范围且禁止内容发现"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "只消费 REQUEST、CR summary 和当前用户批准事实"
+
+key_facts:
+  scope_summary: "CR-052 只补齐并在临时三并列 Git 拓扑验证迁移能力；CR-053 才触碰真实 meta-flow artifact 布局。"
+  accepted_decisions:
+    - "保留 CR-052/CR-053 拆分"
+    - "不全局放宽 ..；external anchor 必须可移植且 fail closed"
+    - "临时仓真实 mutation E2E 强制；真实仓布局 mutation 禁止"
+    - "ptm-team、ptm-atomic、quant-lab 不迁移、不读取、不修改"
+  active_constraints:
+    - "CP2 approved 前不得 Story decomposition、LLD 或源码实现"
+    - "repository publication 和真实仓 mutation 未授权"
+    - "产品文档只增量更新，保留旧 UC/REQ/TC/ST 与修订记录"
+    - "CR-052 legacy process 审计写入不等同 project-first artifact leg"
+  downstream_tasks:
+    - "增量刷新八份产品基线"
+    - "生成 Scenario Gray Areas 讨论证据和至少一条 SGQ 用户确认"
+    - "生成 CP1 result、CP2 precheck 输入与 meta-pm return summary"
+    - "整理 DQ52-1..10 的产品语义，不发起正式 CP2 审批"
+  traceability:
+    requirements: ["REQ-AW-*", "REQ-MR-001..021", "REQ-MR-C001..005", "REQ-MR-NF001..005"]
+    use_cases: ["UC-AW-001", "UC-AW-002", "UC-AW-003", "UC-AW-004", "UC-AW-005", "UC-MR-001..007"]
+    scenarios: ["TC-AW-*", "TC-MR-001..022"]
+    stories: []
+    features: []
+
+risks_and_decisions:
+  pending_human_decisions: ["DQ52-1", "DQ52-2", "DQ52-3", "DQ52-4", "DQ52-5", "DQ52-6", "DQ52-7", "DQ52-8", "DQ52-9", "DQ52-10"]
+  non_authorized_items:
+    - "真实 meta-flow artifact 文件/软链接/layout mutation"
+    - "真实 integration/worktree/ref mutation"
+    - "repository publication/shared-main content write"
+    - "force/tag/reset/rebase/orphan/自动 merge"
+    - "credentials/runtime/production/publish/live/trading"
+  risk_acceptance_items:
+    - "临时仓允许真实 mutation；真实仓仅 dry-run/read-only"
+    - "CR-053 使用 transitional CP0，不宣称 first-write native"
+  open_questions:
+    - "evidence backend 的跨进程与跨机器 durability 边界需 CP3 冻结"
+    - "workspace_parent 不满足未来拓扑时切换显式 workspace_root 的条件需量化"
+  n_a_or_waived_items: []
+
+handoff:
+  target_agent: "meta-pm"
+  expected_output:
+    - "八份增量产品基线"
+    - "process/discussions/CP2-SCENARIO-DISCUSSION-LOG.md"
+    - "process/checks/CP2-DISCUSSION-CHECKPOINT.json"
+    - "process/checks/CP1-CR052-USE-CASE-COMPLETENESS.result.json"
+    - "process/checks/CP2-CR052-REQUIREMENTS-BASELINE.result.json"
+    - "process/handoffs/CR052-CP1-CP2-META-PM-RETURN-SUMMARY.md"
+  exit_criteria:
+    - "P0/P1 场景与需求可验证且 traceability 完整"
+    - "至少一条 SGQ 记录用户回答‘按照你的计划实施’并复述影响面"
+    - "所有灰区已分类为 decision-item/resolved/non-blocking/spike/N/A"
+    - "不生成 Story/LLD、不修改源码、不发起正式 CP2 gate"
+  blocked_if_missing:
+    - "无法保留旧基线或修订记录"
+    - "产品语义与当前仓库事实冲突且无法从 allowed_reads 解决"
+
+read_expansion_log:
+  - agent: "meta-pm"
+    path: "process/changes/CR-052.md"
+    reason: "deep_review"
+    audit_ref: "process/state/READ-EXPANSION-LEDGER.ndjson"
+
+validation:
+  generated_from_sources:
+    - "process/REQUEST.md"
+    - "process/changes/summaries/CR-052.summary.json"
+    - "process/checks/CP0-CR-052.route-plan.json"
+    - "process/docs/product/*"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "meta-pm 已完成八份产品基线增量刷新；CP1 与 CP2 自动预检均通过。"
+    - "机器 context pack 必须显式使用 --project-root . 校验，因为 process 是外置软链接，禁止依赖 resolve 后的根目录推断。"
+    - "正式 CP2 人工门仍待用户结论；ready_for_design=false。"

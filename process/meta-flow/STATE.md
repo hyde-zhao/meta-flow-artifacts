@@ -2,12 +2,12 @@
 
 Project: meta-flow
 Workflow mode: standard
-Phase: documentation
+Phase: requirement-clarification
 Blocked: false
-Active CR: CR-051
+Active CR: CR-052
 Active Story: none
-Pending gate: CP8
-Next action: 等待用户审查 process/checkpoints/CP8-CR051-DELIVERY-READINESS-R2.md，并对 CP8-CR051-R2-DQ-01..03 回复 approve、修改或 reject。
+Pending gate: CP2
+Next action: 审查 CR-052 vNext R2 CP2 Decision Brief；等待 approve、修改或 reject。
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,7 +20,7 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: process/context/CP8-CR051-DELIVERY-CONTEXT-R2.yaml
+- active context: process/context/CP2-CR052-VNEXT-REFRAME-CONTEXT.yaml
 
 Policy refs:
 - NO_CREDENTIAL_READ
@@ -30,20 +30,13 @@ Policy refs:
 - NO_REPOSITORY_PUBLICATION
 
 Open risks:
-- CR051-RISK-INLINE-QA-SEPARATION
-- CR051-RISK-PARTIAL-INDEPENDENT-QA
-- DOC-CR051-CAPABILITY-REGISTRY-MISSING
-- CR051-RISK-REMOTE-UNVERIFIED
-- CR051-RISK-WINDOWS-NATIVE-PILOTS
-- R-AW004-LOCK-CRASH
-- R-AW005-DIR-ENUM-TOCTOU
-- CR051-RISK-REAL-MIGRATION-UNVERIFIED
-- CR051-RISK-MODULE-BOUNDARIES-MANIFEST
-- CR051-RISK-WORKING-TREE-UNPUBLISHED
-- CR051-RISK-REPO-FORMAT-BASELINE
-- CR051-RISK-LEGACY-CR-INDEX-CHECK
-- CR051-RISK-APPEND-ONLY-EVENT-LEDGER-COMPAT
+- CR052-RISK-PROCESS-MAIN-CONCURRENCY
+- CR052-RISK-CROSS-REPO-PARTIAL-SUCCESS
+- CR052-RISK-LEGACY-DUAL-STACK
+- CR052-RISK-ACTIVE-WORK-MIGRATION
+- CR052-RISK-TOKEN-BUDGET-UNDERFIT
+- CR052-RISK-PRODUCTION-MUTATION
 
-Updated at: 2026-07-19T00:00:00+00:00
+Updated at: 2026-07-19T09:23:52+00:00
 
 <!-- generated-by: meta-flow state render -->

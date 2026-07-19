@@ -1,17 +1,43 @@
 schema_version: "1"
 status: "baseline"
-version: "1.9"
+version: "3.0"
 created_at: "2026-07-02"
 owner: "host-orchestrator"
 cr_ref: "CR-037"
-active_change_ref: "CR-051"
+active_change_ref: "CR-052"
+current_baseline: "CR-052-VNEXT-R2-candidate"
 source_use_cases: "process/docs/product/USE-CASES.md"
 source_requirements: "process/docs/product/REQUIREMENTS.md"
 coverage_policy:
   high_priority_minimum: "positive + negative"
-  blocked_cr_policy: "CR-051 scenarios are CP2 candidate-baseline inputs; CP2 does not authorize HLD bypass, source implementation, real artifact migration/link/worktree/branch/ref mutation, remote publication, credentials, runtime, production write, or trading."
+  blocked_cr_policy: "CR-052 scenarios are CP2 candidate-baseline inputs; CP2 precheck PASS does not authorize HLD bypass, Story/LLD, source implementation, real artifact migration/link/worktree/branch/ref mutation, sibling-project reads, remote publication, credentials, runtime, production write, publish, live or trading."
   release_repo_policy: "quant-lab release repo changes are never automated by roadmap refresh."
+historical_baseline_status:
+  - ids: "TC-PG-*, TC-EI-*, TC-WT-*"
+    status: "reframed"
+    handling: "Preserve historical evidence; reuse only through Work scope and vNext four-layer governance."
+  - ids: "TC-GB-*, TC-AW-*, TC-MR-*"
+    status: "superseded"
+    handling: "Preserve IDs/results for audit; shared artifact worktree and migration-readiness are not the current CR-052 target."
+  - ids: "historical-split, lossless-conversion, distributed-auto-merge, batch-migration"
+    status: "deferred"
+    handling: "No first-version execution; restart only through a new scope decision."
 revision_history:
+  - version: "3.0"
+    date: "2026-07-19"
+    author: "meta-pm"
+    change: "Append TC-VNEXT-001..020 for per-project dual-repo isolation, four-layer governance, Work lifecycle, G0/G1/G2, scoped read/write/check/token, expected-OID CAS, snapshot migration and 2x2 pilot; preserve all 97 prior scenario IDs and mark legacy groups reframed/superseded/deferred."
+    document_handling: "incremental-vnext-r2-reframe"
+  - version: "2.1"
+    date: "2026-07-19"
+    author: "host-orchestrator"
+    change: "Broaden TC-MR-021 frozen fingerprint from CR catalog only to global CR catalog and event-ledger governance checks after observing one pre-existing HANDOFF-LEDGER context_ref error; preserve all scenario IDs and counts."
+    document_handling: "incremental-cp2-prelaunch-correction"
+  - version: "2.0"
+    date: "2026-07-19"
+    author: "meta-pm"
+    change: "Append TC-MR-001..022 for external route schema v2, health modes, seed normalization, durable evidence, transitional bootstrap, typed runner, real temporary-topology E2E, scoped CR check and CR-053 readiness; preserve all 75 prior scenario IDs."
+    document_handling: "incremental-update-for-cr052"
   - version: "1.9"
     date: "2026-07-18"
     author: "meta-pm"
@@ -1101,13 +1127,559 @@ scenarios:
     evidence_type: "stale-registry-recovery-fixture"
     automation_status: "planned"
 
+  - id: "TC-MR-001"
+    title: "schema v2 external anchor resolves a portable sibling worktree"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-MR-001"]
+    requirements: ["REQ-MR-001", "REQ-MR-002", "REQ-MR-NF001"]
+    stories: ["ST-MR-001"]
+    preconditions: ["source, artifact control and project worktree are siblings under a temporary workspace parent"]
+    action: "Write a v2 route with workspace_parent anchor, relocate the whole fixture, and resolve it in a new process"
+    expected: ["the project route is unique before and after relocation", "canonical metadata contains no device-specific absolute path", "new writes remain schema v2"]
+    evidence_type: "portable-route-integration-test"
+    automation_status: "planned"
+
+  - id: "TC-MR-002"
+    title: "traversal absolute and undeclared external routes fail closed"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-MR-001"]
+    requirements: ["REQ-MR-003", "REQ-MR-005", "REQ-MR-C003"]
+    stories: ["ST-MR-001"]
+    preconditions: ["fixtures contain ../../, absolute paths, symlink escapes and undeclared anchors"]
+    action: "Run route parse, workspace check and runner preflight"
+    expected: ["all unsafe inputs are rejected", "conflict findings include candidates and repair guidance", "fixture-external reads and writes equal zero"]
+    evidence_type: "route-security-negative-fixture"
+    automation_status: "planned"
+
+  - id: "TC-MR-003"
+    title: "legacy v1 and v2 dual-read never permits legacy writes to masquerade as v2"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-MR-001"]
+    requirements: ["REQ-MR-002", "REQ-MR-004"]
+    stories: ["ST-MR-001"]
+    preconditions: ["legacy, v1, v2 and unknown-version fixtures exist"]
+    action: "Read every fixture and attempt a normalized write"
+    expected: ["legacy/v1/v2 use their own reader contracts", "normalized output is v2-only", "unknown versions are BLOCKED", "no silent target switch occurs"]
+    evidence_type: "route-version-compatibility-matrix"
+    automation_status: "planned"
+
+  - id: "TC-MR-004"
+    title: "legacy-compatible workspace is reported as not migrated"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-MR-001"]
+    requirements: ["REQ-MR-004", "REQ-MR-005"]
+    stories: ["ST-MR-001"]
+    preconditions: ["legacy process link and metadata are healthy but no project-first route is active"]
+    action: "Run workspace health repeatedly"
+    expected: ["mode is legacy-compatible-not-migrated", "exit code follows the documented non-conflict contract", "the output never claims project-first-migrated"]
+    evidence_type: "workspace-health-mode-test"
+    automation_status: "planned"
+
+  - id: "TC-MR-005"
+    title: "validated project-first route is reported as migrated"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-MR-001"]
+    requirements: ["REQ-MR-001", "REQ-MR-004"]
+    stories: ["ST-MR-001"]
+    preconditions: ["v2 route, project identity, worktree registry and steady ownership receipt all agree"]
+    action: "Run workspace health in a new process"
+    expected: ["mode is project-first-migrated", "resolved target and project identity are unique", "repeated checks return the same mode and exit code"]
+    evidence_type: "workspace-health-mode-test"
+    automation_status: "planned"
+
+  - id: "TC-MR-006"
+    title: "route conflict blocks all migration writes"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-MR-001"]
+    requirements: ["REQ-MR-004", "REQ-MR-005", "REQ-MR-NF004"]
+    stories: ["ST-MR-001"]
+    preconditions: ["legacy symlink, v2 metadata and project identity disagree"]
+    action: "Run health, bootstrap and runner preflight"
+    expected: ["mode is route-conflict with nonzero exit", "all conflicting truth sources are named", "file/link/worktree/ref mutation count is zero"]
+    evidence_type: "route-conflict-negative-fixture"
+    automation_status: "planned"
+
+  - id: "TC-MR-007"
+    title: "manifest-bound seed prune deletes exactly inherited seed"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-MR-004"]
+    requirements: ["REQ-MR-006", "REQ-MR-007", "REQ-MR-008"]
+    stories: ["ST-MR-002"]
+    preconditions: ["a frozen manifest records inherited seed paths, hashes, counts and OIDs"]
+    action: "Execute authorized prune and then activate steady ownership"
+    expected: ["actual deletions equal the manifest allowlist", "unexpected add/modify/delete equals zero", "shared-main and sibling refs/OIDs remain unchanged", "steady route activates only after receipt validation"]
+    evidence_type: "seed-normalization-integration-test"
+    automation_status: "planned"
+
+  - id: "TC-MR-008"
+    title: "manifest drift or sibling content blocks prune"
+    type: "permission"
+    priority: "HIGH"
+    use_cases: ["UC-MR-004"]
+    requirements: ["REQ-MR-006", "REQ-MR-007", "REQ-MR-C002"]
+    stories: ["ST-MR-002"]
+    preconditions: ["a manifest path hash changed or an unlisted sibling object would be deleted"]
+    action: "Attempt prune with typed authorization"
+    expected: ["prune is BLOCKED before the unexpected deletion", "the mismatch and expected/current OID are reported", "real sibling project content is never discovered or read"]
+    evidence_type: "prune-authorization-negative-fixture"
+    automation_status: "planned"
+
+  - id: "TC-MR-009"
+    title: "steady ownership cannot activate before a valid prune receipt"
+    type: "precheck"
+    priority: "HIGH"
+    use_cases: ["UC-MR-004"]
+    requirements: ["REQ-MR-008", "REQ-MR-NF003"]
+    stories: ["ST-MR-002"]
+    preconditions: ["prune is not started, partial, or has an invalid receipt"]
+    action: "Attempt to activate the project-first write route and steady docs/process ownership"
+    expected: ["activation is BLOCKED", "write target remains unchanged", "the required receipt and resume step are reported"]
+    evidence_type: "ownership-stage-precheck"
+    automation_status: "planned"
+
+  - id: "TC-MR-010"
+    title: "durable leg evidence survives writer process termination"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-MR-002"]
+    requirements: ["REQ-MR-009", "REQ-MR-NF002"]
+    stories: ["ST-MR-003"]
+    preconditions: ["a filesystem/content-addressed evidence backend is configured in the temporary fixture"]
+    action: "Write source and artifact leg results, terminate the writer, and read opaque handles from a new process"
+    expected: ["both results read back with matching digest/CR/attempt", "tampered and cross-CR handles are rejected", "no in-memory fallback is reported as durable"]
+    evidence_type: "cross-process-evidence-readback-test"
+    automation_status: "planned"
+
+  - id: "TC-MR-011"
+    title: "aggregate readback and state projection consume durable opaque handles"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-MR-002"]
+    requirements: ["REQ-MR-010", "REQ-MR-011"]
+    stories: ["ST-MR-003"]
+    preconditions: ["durable leg handles belong to one CR/attempt and the aggregate store is empty"]
+    action: "Compute, persist, read back and project an aggregate result from a separate process"
+    expected: ["aggregate is reproducible from handles", "authorized out-of-band evidence refs are accepted", "projection references durable evidence and does not copy full bodies"]
+    evidence_type: "aggregate-evidence-integration-test"
+    automation_status: "planned"
+
+  - id: "TC-MR-012"
+    title: "audit-tail failure preserves execution truth and exposes recovery"
+    type: "failure-recovery"
+    priority: "HIGH"
+    use_cases: ["UC-MR-002"]
+    requirements: ["REQ-MR-011", "REQ-MR-014", "REQ-MR-C004"]
+    stories: ["ST-MR-003", "ST-MR-004"]
+    preconditions: ["leg/aggregate execution evidence is durable but project-local audit-tail write or commit is fault-injected"]
+    action: "Attempt tail write, restart, read execution evidence and resume only the tail step"
+    expected: ["execution completion remains separately readable", "tail state is PARTIAL/receipt-pending rather than PASS", "parent/target OIDs remain auditable", "no cross-leg rollback occurs"]
+    evidence_type: "evidence-tail-failure-recovery-test"
+    automation_status: "planned"
+
+  - id: "TC-MR-013"
+    title: "transitional bootstrap completes through intent receipts and CP0 import"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-MR-003"]
+    requirements: ["REQ-MR-012", "REQ-MR-013", "REQ-MR-015"]
+    stories: ["ST-MR-004"]
+    preconditions: ["a temporary not-yet-migrated project has a valid immutable plan, fresh OIDs and typed authorization"]
+    action: "Persist intent, execute bootstrap steps, persist receipts and import the final receipt into a simulated CR-053 CP0"
+    expected: ["intent precedes every mutation", "each step has a receipt", "CP0 records transitional attribution", "native health runs only after import"]
+    evidence_type: "transitional-bootstrap-e2e"
+    automation_status: "planned"
+
+  - id: "TC-MR-014"
+    title: "bootstrap resumes idempotently from every third-state"
+    type: "failure-recovery"
+    priority: "HIGH"
+    use_cases: ["UC-MR-003"]
+    requirements: ["REQ-MR-013", "REQ-MR-014", "REQ-MR-NF003"]
+    stories: ["ST-MR-004"]
+    preconditions: ["fault injection is available after intent and after each mutation/receipt boundary"]
+    action: "Fail at each boundary, restart the process and invoke resume twice"
+    expected: ["third-state is unique and complete", "only missing authorized steps execute", "duplicate destructive mutations equal zero", "stale OID blocks safely"]
+    evidence_type: "bootstrap-third-state-fault-matrix"
+    automation_status: "planned"
+
+  - id: "TC-MR-015"
+    title: "invalid stale or mismatched bootstrap receipt is rejected by CP0"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-MR-003", "UC-MR-007"]
+    requirements: ["REQ-MR-015", "REQ-MR-NF004"]
+    stories: ["ST-MR-004", "ST-MR-007"]
+    preconditions: ["receipt is missing, expired, tampered, or bound to another project/OID/plan"]
+    action: "Attempt transitional receipt import"
+    expected: ["CP0 is BLOCKED", "the mismatched field and evidence ref are reported", "no native-first history or PASS is synthesized"]
+    evidence_type: "cp0-receipt-negative-fixture"
+    automation_status: "planned"
+
+  - id: "TC-MR-016"
+    title: "migration runner dry-run is deterministic and side-effect free"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-MR-005"]
+    requirements: ["REQ-MR-016", "REQ-MR-NF001"]
+    stories: ["ST-MR-005"]
+    preconditions: ["valid route, manifest, fresh OIDs and action set exist"]
+    action: "Run engine and thin CLI dry-run twice"
+    expected: ["plan order/digest/decision match", "file/link/worktree/local/remote ref changes equal zero", "CLI and engine expose one state machine"]
+    evidence_type: "migration-plan-golden-test"
+    automation_status: "planned"
+
+  - id: "TC-MR-017"
+    title: "typed authorization rejects wrong expired and replayed actions"
+    type: "permission"
+    priority: "HIGH"
+    use_cases: ["UC-MR-005"]
+    requirements: ["REQ-MR-017", "REQ-MR-C003", "REQ-MR-NF004"]
+    stories: ["ST-MR-005"]
+    preconditions: ["authorization fixtures vary action, repo/ref/path, OID, plan digest, expiry and consumed state"]
+    action: "Attempt ref, worktree, prune, link and push execution with each invalid token"
+    expected: ["all mismatches/expired/replays are rejected", "one action token cannot authorize another", "mutation count is zero", "safe findings reveal no credential content"]
+    evidence_type: "typed-authorization-negative-matrix"
+    automation_status: "planned"
+
+  - id: "TC-MR-018"
+    title: "three-sibling temporary topology completes real mutation E2E"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-MR-006"]
+    requirements: ["REQ-MR-018", "REQ-MR-NF005"]
+    stories: ["ST-MR-006"]
+    preconditions: ["temporary source, artifact control, project worktree sibling root and local bare remote are isolated"]
+    action: "Execute route, bootstrap, prune, worktree/ref/link, evidence and scoped-check mutations end to end"
+    expected: ["all required steps have terminal evidence", "the migrated temporary project is healthy", "fixture-external paths and refs are unchanged", "cleanup/retention result is explicit"]
+    evidence_type: "real-mutation-temporary-topology-e2e"
+    automation_status: "planned"
+
+  - id: "TC-MR-019"
+    title: "half-push stale OID and reader restart remain recoverable"
+    type: "failure-recovery"
+    priority: "HIGH"
+    use_cases: ["UC-MR-006"]
+    requirements: ["REQ-MR-019", "REQ-MR-C004", "REQ-MR-NF003"]
+    stories: ["ST-MR-006"]
+    preconditions: ["the temporary topology supports fault injection at remote update, OID observation and evidence readback"]
+    action: "Inject each failure, restart, re-observe and resume"
+    expected: ["overall is never false PASS", "successful facts remain recorded", "resume is evidence-only and idempotent", "no force or cross-leg rollback occurs"]
+    evidence_type: "temporary-topology-fault-injection-suite"
+    automation_status: "planned"
+
+  - id: "TC-MR-020"
+    title: "real repositories and sibling projects remain mutation-denied"
+    type: "permission"
+    priority: "HIGH"
+    use_cases: ["UC-MR-005", "UC-MR-006", "UC-MR-007"]
+    requirements: ["REQ-MR-C001", "REQ-MR-C002", "REQ-MR-C004", "REQ-MR-C005"]
+    stories: ["ST-MR-005", "ST-MR-006", "ST-MR-007"]
+    preconditions: ["a plan points at real meta-flow/artifact or named sibling project targets without operation authorization"]
+    action: "Run preflight/dry-run and attempt execute"
+    expected: ["execute is BLOCKED", "real layout/link/worktree/ref/publication mutations equal zero", "ptm-team/ptm-atomic/quant-lab content reads equal zero", "independent authorization requirements are reported"]
+    evidence_type: "production-mutation-denylist-test"
+    automation_status: "planned"
+
+  - id: "TC-MR-021"
+    title: "scoped governance checks pass without hiding historical fingerprints"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-MR-007"]
+    requirements: ["REQ-MR-020", "REQ-MR-NF004"]
+    stories: ["ST-MR-006", "ST-MR-007"]
+    preconditions: ["the global CR catalog and event-ledger historical error fingerprints are frozen before CR-052 changes"]
+    action: "Run CR-052 scoped checks plus global CR catalog and event-ledger fingerprint delta checks"
+    expected: ["CR-052 scoped blockers equal zero", "new global fingerprints equal zero", "the 19 pre-existing CR lifecycle errors and one HANDOFF-LEDGER context_ref error retain IDs/evidence and are not rewritten", "a synthetic new error fails the delta check"]
+    evidence_type: "scoped-governance-check-fingerprint-test"
+    automation_status: "planned"
+
+  - id: "TC-MR-022"
+    title: "CR-053 readiness handoff blocks when a migration-critical capability is missing"
+    type: "precheck"
+    priority: "HIGH"
+    use_cases: ["UC-MR-007"]
+    requirements: ["REQ-MR-021", "REQ-MR-C005", "REQ-MR-NF005"]
+    stories: ["ST-MR-007"]
+    preconditions: ["candidate handoff references route, evidence, bootstrap, runner, E2E and remaining-risk evidence"]
+    action: "Validate a complete handoff and then remove each critical reference in turn"
+    expected: ["complete handoff is readiness-eligible", "every missing critical capability/evidence yields NOT_READY", "handoff never grants real mutation/publication authority or adds core logic"]
+    evidence_type: "readiness-handoff-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-001"
+    title: "each project resolves to exactly one release repo and one independent process repo"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-001"]
+    requirements: ["REQ-VNEXT-001", "REQ-VNEXT-003", "REQ-VNEXT-NF001"]
+    stories: ["ST-VNEXT-001"]
+    preconditions: ["two pilot project identities and their existing release repositories are registered"]
+    action: "Resolve release/process bindings twice in separate processes"
+    expected: ["each project has exactly one release route and one process route", "no third repository is created", "routing decisions and digests are identical"]
+    evidence_type: "dual-repo-routing-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-002"
+    title: "switching active projects leaves the sibling process repository unchanged"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-001"]
+    requirements: ["REQ-VNEXT-002", "REQ-VNEXT-NF002"]
+    stories: ["ST-VNEXT-001", "ST-VNEXT-006"]
+    preconditions: ["two projects each have an independent process repository and active Work fixture"]
+    action: "Alternate G0/G1 Work execution and process-main publication between the projects"
+    expected: ["sibling path/ref/index/state/hash changes equal zero", "shared process working-tree/index/branch count is zero", "cross-project access is rejected"]
+    evidence_type: "two-project-isolation-integration-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-003"
+    title: "missing or ambiguous repository bindings fail before any write"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-001"]
+    requirements: ["REQ-VNEXT-001", "REQ-VNEXT-002", "REQ-VNEXT-003"]
+    stories: ["ST-VNEXT-001"]
+    preconditions: ["fixtures contain zero or multiple release/process routes or overlapping ownership"]
+    action: "Run Work precheck and attempt a process publication plan"
+    expected: ["decision is BLOCKED", "conflicting routes and ownership are reported", "repository and file mutations equal zero"]
+    evidence_type: "repo-binding-negative-matrix"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-004"
+    title: "Project Roadmap Phase and Work form one complete governance chain"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-002"]
+    requirements: ["REQ-VNEXT-004", "REQ-VNEXT-005"]
+    stories: ["ST-VNEXT-002"]
+    preconditions: ["a project has one Roadmap one Phase and one planned Work"]
+    action: "Validate forward and reverse parent references"
+    expected: ["all four layers resolve", "every non-root object has exactly one parent", "orphan multi-parent skip-level and cyclic references equal zero"]
+    evidence_type: "four-layer-governance-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-005"
+    title: "Work completion writes only minimal Phase and Roadmap projections"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-002", "UC-VNEXT-003"]
+    requirements: ["REQ-VNEXT-006", "REQ-VNEXT-NF004"]
+    stories: ["ST-VNEXT-002", "ST-VNEXT-003"]
+    preconditions: ["an active Work has outcome evidence decision and risk refs"]
+    action: "Complete the Work and compare long-lived objects before and after"
+    expected: ["at most one owning Phase and one Roadmap projection change", "Work body copy count is zero", "all required completion evidence classes are present"]
+    evidence_type: "work-projection-boundary-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-006"
+    title: "invalid Work transition and stale resume remain recoverable"
+    type: "failure-recovery"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-003"]
+    requirements: ["REQ-VNEXT-007", "REQ-VNEXT-016", "REQ-VNEXT-NF003"]
+    stories: ["ST-VNEXT-003"]
+    preconditions: ["transition fixtures include invalid jumps blocked/resume and stale expected OID"]
+    action: "Attempt every transition then re-read and resume valid blocked Work"
+    expected: ["all undeclared transitions are rejected", "one current status remains", "stale OID never overwrites", "fresh resume route is actionable"]
+    evidence_type: "work-lifecycle-failure-recovery-matrix"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-007"
+    title: "a low-risk Work stays within the G0 default envelope"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-004", "UC-VNEXT-005"]
+    requirements: ["REQ-VNEXT-008", "REQ-VNEXT-009", "REQ-VNEXT-012", "REQ-VNEXT-015"]
+    stories: ["ST-VNEXT-004", "ST-VNEXT-005"]
+    preconditions: ["Work has no G2 trigger and declares no more than 8 reads 8 writes 3 check groups and 32000 tokens"]
+    action: "Route and execute the scoped Work"
+    expected: ["profile is uniquely G0", "actual usage stays within all four limits", "scope violations and silent token overruns equal zero"]
+    evidence_type: "g0-envelope-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-008"
+    title: "G0 budget expansion upgrades to G1 before execution continues"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-004", "UC-VNEXT-005"]
+    requirements: ["REQ-VNEXT-009", "REQ-VNEXT-010", "REQ-VNEXT-012", "REQ-VNEXT-015"]
+    stories: ["ST-VNEXT-004", "ST-VNEXT-005"]
+    preconditions: ["an active G0 Work requests a ninth read file or a fourth check group"]
+    action: "Request expansion and attempt to continue before and after profile update"
+    expected: ["continuation before update is blocked", "expansion reason and new scope are recorded", "eligible Work becomes G1", "silent G0 overflow count is zero"]
+    evidence_type: "g0-to-g1-escalation-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-009"
+    title: "a standard Work stays within the G1 default envelope"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-004", "UC-VNEXT-005"]
+    requirements: ["REQ-VNEXT-008", "REQ-VNEXT-010", "REQ-VNEXT-012", "REQ-VNEXT-013", "REQ-VNEXT-014", "REQ-VNEXT-015"]
+    stories: ["ST-VNEXT-004", "ST-VNEXT-005"]
+    preconditions: ["Work has no G2 trigger and declares no more than 20 reads 24 writes 8 check groups and 96000 tokens"]
+    action: "Route execute and audit the Work"
+    expected: ["profile is uniquely G1", "all declared and actual counters stay within limits", "unrelated full-suite checks do not run"]
+    evidence_type: "g1-envelope-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-010"
+    title: "G1 overflow or high-risk trigger cannot continue without G2"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-004"]
+    requirements: ["REQ-VNEXT-010", "REQ-VNEXT-011", "REQ-VNEXT-C005"]
+    stories: ["ST-VNEXT-004"]
+    preconditions: ["fixtures exceed a G1 limit or request security external write migration production or publication"]
+    action: "Attempt to retain G0/G1 and continue execution"
+    expected: ["G0/G1 acceptance count is zero", "G2 and required human gate are reported", "high-risk operation execution count is zero"]
+    evidence_type: "g2-routing-negative-matrix"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-011"
+    title: "out-of-scope and deny-default reads are rejected"
+    type: "permission"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-005"]
+    requirements: ["REQ-VNEXT-012", "REQ-VNEXT-NF003"]
+    stories: ["ST-VNEXT-005"]
+    preconditions: ["Work attempts to read an undeclared file another project process repo or deny-default history"]
+    action: "Perform the read through the scoped execution boundary"
+    expected: ["actual unauthorized read count is zero", "finding names Work rule target and expansion route", "no sibling content is returned"]
+    evidence_type: "work-read-scope-permission-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-012"
+    title: "out-of-scope writes and touched-file drift are rejected"
+    type: "permission"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-001", "UC-VNEXT-005", "UC-VNEXT-006"]
+    requirements: ["REQ-VNEXT-003", "REQ-VNEXT-013", "REQ-VNEXT-019"]
+    stories: ["ST-VNEXT-001", "ST-VNEXT-005", "ST-VNEXT-006"]
+    preconditions: ["Work attempts to modify an undeclared path sibling process repo or old shared process repo"]
+    action: "Run write precheck and return touched-file validation"
+    expected: ["all forbidden writes are rejected", "target changes equal zero", "old shared repository remains read-only", "ownership mismatch is explicit"]
+    evidence_type: "work-write-scope-permission-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-013"
+    title: "G0 and G1 run only required checks within their limits"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-005"]
+    requirements: ["REQ-VNEXT-009", "REQ-VNEXT-010", "REQ-VNEXT-014"]
+    stories: ["ST-VNEXT-005"]
+    preconditions: ["required_checks contains scoped checks and the repository also exposes unrelated full suites"]
+    action: "Execute G0 and G1 validation plans"
+    expected: ["G0 check groups are at most 3", "G1 check groups are at most 8", "undeclared full-suite executions equal zero", "triggered full-suite needs G2 or explicit scope"]
+    evidence_type: "scoped-check-plan-golden-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-014"
+    title: "token telemetry remains honest and budget overflow stops"
+    type: "boundary"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-005"]
+    requirements: ["REQ-VNEXT-015", "REQ-VNEXT-NF003"]
+    stories: ["ST-VNEXT-005"]
+    preconditions: ["fixtures provide measured proxy or unavailable telemetry and approach profile limits"]
+    action: "Record usage and request another execution step"
+    expected: ["measurement status coverage is complete", "proxy never becomes measured", "execution stops before silent overflow", "upgrade or budget-decision route is emitted"]
+    evidence_type: "work-token-budget-boundary-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-015"
+    title: "single publisher commits process-main with fresh expected OID"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-003"]
+    requirements: ["REQ-VNEXT-016", "REQ-VNEXT-017"]
+    stories: ["ST-VNEXT-003"]
+    preconditions: ["one Work has a valid scope digest and fresh process-main OID"]
+    action: "Publish its process result then replay the same request"
+    expected: ["the first publish advances main once", "one receipt records before/after OID and Work", "identical replay creates no new commit"]
+    evidence_type: "process-main-cas-integration-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-016"
+    title: "concurrent stale expected OID fails without merge or overwrite"
+    type: "failure-recovery"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-003"]
+    requirements: ["REQ-VNEXT-016", "REQ-VNEXT-017", "REQ-VNEXT-C003"]
+    stories: ["ST-VNEXT-003"]
+    preconditions: ["two publisher attempts share one expected process-main OID"]
+    action: "Complete the first then attempt the second and re-observe"
+    expected: ["exactly one initial publish succeeds", "stale attempt is BLOCKED", "force auto-merge and silent overwrite counts are zero", "fresh retry route is available"]
+    evidence_type: "process-main-cas-concurrency-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-017"
+    title: "snapshot migration initializes current governance without rewriting history"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-006"]
+    requirements: ["REQ-VNEXT-018", "REQ-VNEXT-021", "REQ-VNEXT-C001", "REQ-VNEXT-C002"]
+    stories: ["ST-VNEXT-006"]
+    preconditions: ["a project has a frozen current snapshot old-history source index backup and rollback target"]
+    action: "Build and validate the candidate independent-process-repo snapshot"
+    expected: ["current object coverage is 100 percent", "snapshot/pre-cutover hashes and rollback are present", "history split and lossless conversion counts are zero"]
+    evidence_type: "snapshot-migration-contract-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-018"
+    title: "old shared process repository rejects post-cutover writes and semantic conversion"
+    type: "negative"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-006"]
+    requirements: ["REQ-VNEXT-018", "REQ-VNEXT-019", "REQ-VNEXT-C001", "REQ-VNEXT-C002"]
+    stories: ["ST-VNEXT-006"]
+    preconditions: ["cutover fixture points history lookup to the old read-only repository"]
+    action: "Attempt a new Work write and an old CP/CR/Story lossless conversion"
+    expected: ["old repository new writes equal zero", "new Work writes resolve only to the independent process repo", "automatic semantic conversions equal zero", "history remains queryable by source ref"]
+    evidence_type: "legacy-read-only-negative-test"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-019"
+    title: "two projects complete two G0 and G1 pilot cycles each"
+    type: "positive"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-001", "UC-VNEXT-004", "UC-VNEXT-006"]
+    requirements: ["REQ-VNEXT-002", "REQ-VNEXT-020", "REQ-VNEXT-021", "REQ-VNEXT-NF002", "REQ-VNEXT-NF004"]
+    stories: ["ST-VNEXT-001", "ST-VNEXT-004", "ST-VNEXT-006"]
+    preconditions: ["two isolated pilot projects each define one G0 and one G1 Work"]
+    action: "Run create execute complete archive and evidence audit for all four cycles"
+    expected: ["project count is 2 and completed cycle count is at least 4", "each project has at least one G0 and one G1 cycle", "cross-project changes equal zero", "completion evidence coverage is 100 percent"]
+    evidence_type: "two-project-two-cycle-pilot"
+    automation_status: "planned"
+
+  - id: "TC-VNEXT-020"
+    title: "CP2 baseline approval does not authorize migration publication or runtime"
+    type: "permission"
+    priority: "HIGH"
+    use_cases: ["UC-VNEXT-001", "UC-VNEXT-006"]
+    requirements: ["REQ-VNEXT-C004", "REQ-VNEXT-C005", "REQ-VNEXT-C006", "REQ-VNEXT-NF005"]
+    stories: ["ST-VNEXT-006"]
+    preconditions: ["CP2 is approved in a simulated gate but no operation-specific authorization exists"]
+    action: "Attempt batch migration repository push production/runtime or formal Story/LLD generation before their gates"
+    expected: ["all actions are rejected", "execution and generated formal downstream artifacts equal zero", "required future gate and authorization are named", "the vNext coverage check reports five scenario types and zero uncovered P0/P1 requirements"]
+    evidence_type: "cp2-authorization-boundary-test"
+    automation_status: "planned"
+
 coverage_summary:
-  total_scenarios: 75
-  high_priority_scenarios: 72
-  positive_scenarios: 28
-  negative_scenarios: 21
-  boundary_scenarios: 10
-  permission_scenarios: 5
-  failure_recovery_scenarios: 5
-  precheck_scenarios: 6
-  source_requirements_covered: "REQ-PG-001..022, REQ-PG-C001..005, REQ-PG-NF001..004, REQ-EI-001..023, REQ-EI-C001..003, REQ-EI-NF001..002, REQ-WT-001..017, REQ-GB-001..014, REQ-GB-C001..004, REQ-GB-NF001..003, REQ-AW-001..017, REQ-AW-C001..005 and REQ-AW-NF001..005"
+  total_scenarios: 117
+  high_priority_scenarios: 114
+  positive_scenarios: 43
+  negative_scenarios: 28
+  boundary_scenarios: 17
+  permission_scenarios: 11
+  failure_recovery_scenarios: 10
+  precheck_scenarios: 8
+  source_requirements_covered: "REQ-PG-001..022, REQ-PG-C001..005, REQ-PG-NF001..004, REQ-EI-001..023, REQ-EI-C001..003, REQ-EI-NF001..002, REQ-WT-001..017, REQ-GB-001..014, REQ-GB-C001..004, REQ-GB-NF001..003, REQ-AW-001..017, REQ-AW-C001..005, REQ-AW-NF001..005, REQ-MR-001..021, REQ-MR-C001..005, REQ-MR-NF001..005, REQ-VNEXT-001..021, REQ-VNEXT-C001..006 and REQ-VNEXT-NF001..005"

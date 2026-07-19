@@ -1,53 +1,121 @@
 {
-  "canonical_refs": [
-    "process/changes/CR-036.md",
-    "process/USE-CASES.md",
-    "process/discussions/CP2-SCENARIO-DISCUSSION-LOG.md"
-  ],
+  "schema_version": 1,
   "checkpoint_id": "CP2-DISCUSSION",
+  "change_id": "CR-052",
+  "status": "completed",
+  "selected_gray_areas": [
+    "SGA-MR-01"
+  ],
   "completed_gray_areas": [
-    "SGA-CR036-01",
-    "SGA-CR036-02",
-    "SGA-CR036-03"
+    "SGA-MR-01",
+    "SGA-MR-02",
+    "SGA-MR-03",
+    "SGA-MR-04"
+  ],
+  "remaining_gray_areas": [],
+  "gray_area_classifications": [
+    {
+      "gray_area_id": "SGA-MR-01",
+      "classification": "decision-item",
+      "decision_refs": ["DQ52-1"],
+      "confirmation_ref": "SGQ-MR-001"
+    },
+    {
+      "gray_area_id": "SGA-MR-02",
+      "classification": "decision-item",
+      "decision_refs": ["DQ52-2"]
+    },
+    {
+      "gray_area_id": "SGA-MR-03",
+      "classification": "decision-item",
+      "decision_refs": ["DQ52-4"]
+    },
+    {
+      "gray_area_id": "SGA-MR-04",
+      "classification": "decision-item",
+      "decision_refs": ["DQ52-3", "DQ52-5", "DQ52-8", "DQ52-9"]
+    }
   ],
   "deferred_ideas": [
     {
-      "id": "DEF-CR036-01",
-      "item": "将 UC-05 至 UC-07 继续展开为 REQUIREMENTS、Decision Brief 模板和 human gate checker 修改",
-      "restart_condition": "用户确认进入需求提取或实现设计"
+      "id": "DEF-MR-001",
+      "item": "CR-053真实meta-flow artifact迁移与link swap",
+      "restart_condition": "CR-052 CP8 READY/READY_WITH_RISK且用户正式启动CR-053"
+    },
+    {
+      "id": "DEF-MR-002",
+      "item": "显式workspace_root支持非同父目录拓扑",
+      "restart_condition": "真实拓扑不能由project_root.parent唯一定位"
+    },
+    {
+      "id": "DEF-MR-003",
+      "item": "shared-main README-only合规更新",
+      "restart_condition": "用户批准具体内容、target ref/OID与publication边界"
+    },
+    {
+      "id": "DEF-MR-004",
+      "item": "ptm-team、ptm-atomic、quant-lab逐项目迁移",
+      "restart_condition": "每个项目分别启动独立迁移CR"
+    },
+    {
+      "id": "DEF-MR-005",
+      "item": "evidence backend跨机器共享/复制协议",
+      "restart_condition": "CR-053多设备恢复成为强制需求"
     }
   ],
-  "last_user_confirmation": "用户接受建议，并要求先输出 / 刷新 use-case，说明影响哪些 use-case 以及 use-case 汇总体验变化。",
-  "remaining_gray_areas": [],
   "scenario_confirmation_interactions": [
     {
-      "confirmed_understanding": "将 CR 拆分和人工确认体验作为 meta-flow 正式用户场景刷新，当前先更新 use-case，不直接实施 checker / 模板 / delivery 修改。",
+      "question_id": "SGQ-MR-001",
+      "question": "是否按整改计划把迁移能力补齐与临时真实演练放在CR-052，把真实meta-flow artifact布局迁移放在CR-053？",
+      "options": [
+        "A（推荐）：拆分CR-052/CR-053，并要求CR-052临时拓扑真实mutation E2E",
+        "B：CR-052合并能力建设与真实布局迁移",
+        "C：CR-052仅dry-run/mock，不执行临时真实mutation"
+      ],
+      "recommendation": "A",
+      "user_response": "按照你的计划实施",
+      "confirmed_understanding": "允许启动CR-052、生成产品/设计/Story/检查点产物，并在临时仓执行受控真实mutation测试；不表示DQ52-1..10或CP2/CP3/CP5/CP8正式批准，不授权真实仓布局/link/worktree/ref mutation或push。除此之外没有记录或推断其他用户回答。",
       "impact_surface": [
         "scope",
         "validation",
+        "authorization",
         "gate",
-        "user-experience"
+        "rollback"
       ],
-      "options": [
-        "A: 目标导向 CR 包 + 审批者摘要 + 风险分级确认",
-        "B: 只优化文案",
-        "C: 保持现状，仅补模板字段"
-      ],
-      "question": "是否接受将 CR 拆分和人工确认体验作为 meta-flow 的正式用户场景刷新？",
-      "question_id": "SGQ-CR036-001",
-      "recommendation": "A",
       "source_refs": [
-        "current conversation",
-        "process/changes/CR-036.md"
+        "process/REQUEST.md#CR-052-增量请求-2026-07-19",
+        "process/changes/CR-052.md#CP2-待确认方向",
+        "process/docs/product/USE-CASES.md#CR-052-用户可见场景确认证据",
+        "process/discussions/CP2-SCENARIO-DISCUSSION-LOG.md#CR-052Migration-Readiness-Hardening-场景刷新"
       ],
-      "status": "confirmed",
-      "user_response": "可以接受你的建议，你先输出use-case即用户场景..."
+      "status": "confirmed"
     }
   ],
-  "selected_gray_areas": [
-    "SGA-CR036-01",
-    "SGA-CR036-02",
-    "SGA-CR036-03"
+  "decision_items": [
+    {"decision_id": "DQ52-1", "decision_type": "scope", "classification": "decision-item"},
+    {"decision_id": "DQ52-2", "decision_type": "architecture", "classification": "decision-item"},
+    {"decision_id": "DQ52-3", "decision_type": "architecture", "classification": "decision-item"},
+    {"decision_id": "DQ52-4", "decision_type": "architecture", "classification": "decision-item"},
+    {"decision_id": "DQ52-5", "decision_type": "implementation", "classification": "decision-item"},
+    {"decision_id": "DQ52-6", "decision_type": "runtime_authorization", "classification": "decision-item"},
+    {"decision_id": "DQ52-7", "decision_type": "scope", "classification": "decision-item"},
+    {"decision_id": "DQ52-8", "decision_type": "risk_acceptance", "classification": "decision-item"},
+    {"decision_id": "DQ52-9", "decision_type": "security", "classification": "decision-item"},
+    {"decision_id": "DQ52-10", "decision_type": "follow_up_tracking", "classification": "decision-item"}
   ],
-  "status": "completed"
+  "canonical_refs": [
+    "process/REQUEST.md",
+    "process/changes/CR-052.md",
+    "process/docs/product/USE-CASES.md",
+    "process/docs/product/REQUIREMENTS.md",
+    "process/discussions/CP2-SCENARIO-DISCUSSION-LOG.md"
+  ],
+  "last_user_confirmation": "用户原答‘按照你的计划实施’；仅确认计划启动与SGQ-MR-001场景基线，不是正式CP2批准或真实仓/publication授权。",
+  "previous_checkpoint": {
+    "change_id": "CR-036",
+    "status": "completed",
+    "scenario_confirmation_ref": "SGQ-CR036-001",
+    "preservation_note": "历史内容继续保留在process/discussions/CP2-SCENARIO-DISCUSSION-LOG.md，本current checkpoint已切换为CR-052。"
+  },
+  "updated_at": "2026-07-19T00:00:00+08:00"
 }

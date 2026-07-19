@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "CR-052",
+  "title": "Meta Flow vNext 简化治理整改",
+  "status": "active",
+  "lifecycle_status": "active",
+  "readiness": "NOT_READY",
+  "gate_status": "cp2_rework",
+  "cr_type": "architecture",
+  "gate_profile": "architecture-major",
+  "goal_statement": "把 Meta Flow 改造为每项目双库隔离、长期治理清晰、按风险选流程且读写检查受范围与 token 预算约束的 vNext",
+  "scope_summary": [
+    "每项目一个发布库和一个过程库；发布库优先复用现有项目源码/交付仓，不新增第三个仓库。",
+    "过程库使用 Project/Roadmap/Phase/Work 四层治理，工作流使用 G0/G1/G2，所有读写检查由 Work scope 和 token budget 约束。",
+    "旧共享过程仓只读保留；不重写历史、不做旧 CP/CR/Story 无损自动转换、不批量迁移其他项目。"
+  ],
+  "accepted_user_directions": [
+    "简单、可靠、后续治理成本低",
+    "优先消除跨项目分支切换导致的过程文档版本联动",
+    "归档写入、文档读取、检查校验必须同时减负",
+    "开始实施前创建整改前源码 tag"
+  ],
+  "recommended_defaults": {
+    "release_repo": "reuse-existing-project-source-or-delivery-repository",
+    "process_repo": "one-independent-main-only-repository-per-project",
+    "process_writer": "single-publisher-with-expected-oid-cas",
+    "migration": "snapshot-current-state-and-keep-old-shared-repo-read-only",
+    "legacy_conversion": "history-index-only-no-lossless-semantic-conversion",
+    "pilot_projects": 2,
+    "pilot_cycles_per_project": 2,
+    "risk_profiles": ["G0", "G1", "G2"]
+  },
+  "product_baseline_refresh_required": true,
+  "required_phase": "requirement-clarification",
+  "required_agent": "meta-pm",
+  "required_gate": "CP2",
+  "block_story_decomposition_until": "CP2-approved",
+  "affected_product_docs": [
+    "process/docs/product/USE-CASES.md",
+    "process/docs/product/REQUIREMENTS.md",
+    "process/docs/product/SCENARIOS.yaml",
+    "process/docs/product/TEST-MATRIX.md",
+    "process/docs/product/STORY-MAP.md",
+    "process/docs/product/MVP-SCOPE.md",
+    "process/docs/product/RELEASE-SLICES.md",
+    "process/docs/product/BACKLOG.md"
+  ],
+  "affected_use_cases": ["UC-VNEXT-001", "UC-VNEXT-002", "UC-VNEXT-003", "UC-VNEXT-004", "UC-VNEXT-005", "UC-VNEXT-006"],
+  "impact_surface": ["product-baseline", "architecture", "workflow", "repository-boundary", "state", "context-budget", "checks", "migration", "compatibility", "verification"],
+  "risk_refs": [
+    "CR052-RISK-PROCESS-MAIN-CONCURRENCY",
+    "CR052-RISK-CROSS-REPO-PARTIAL-SUCCESS",
+    "CR052-RISK-LEGACY-DUAL-STACK",
+    "CR052-RISK-ACTIVE-WORK-MIGRATION",
+    "CR052-RISK-TOKEN-BUDGET-UNDERFIT",
+    "CR052-RISK-PRODUCTION-MUTATION"
+  ],
+  "not_authorized_by_current_instruction": [
+    "repository push/publication",
+    "batch migration of other projects",
+    "legacy Git history rewrite",
+    "distributed automatic merge",
+    "force/reset/rebase/orphan",
+    "credentials/runtime/production/publish/trading"
+  ],
+  "baseline_tag": "pre-vnext-simplification-20260719",
+  "baseline_oid": "435434bfde536edcf5eabae95985062e1060c02f",
+  "full_ref": "process/changes/CR-052.md",
+  "updated_at": "2026-07-19T08:44:54Z"
+}

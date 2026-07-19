@@ -1,10 +1,11 @@
 ---
 status: baseline
-version: "1.9"
+version: "3.0"
 created_at: "2026-07-02"
 owner: "meta-pm"
 cr_ref: "CR-037"
-active_change_ref: "CR-051"
+active_change_ref: "CR-052"
+current_baseline: "CR-052-VNEXT-R2-candidate"
 source_use_cases:
   - UC-PG-001
   - UC-PG-002
@@ -34,6 +35,19 @@ source_use_cases:
   - UC-AW-003
   - UC-AW-004
   - UC-AW-005
+  - UC-MR-001
+  - UC-MR-002
+  - UC-MR-003
+  - UC-MR-004
+  - UC-MR-005
+  - UC-MR-006
+  - UC-MR-007
+  - UC-VNEXT-001
+  - UC-VNEXT-002
+  - UC-VNEXT-003
+  - UC-VNEXT-004
+  - UC-VNEXT-005
+  - UC-VNEXT-006
 source_requirements: "process/docs/product/REQUIREMENTS.md"
 ---
 
@@ -43,17 +57,27 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 
 | 版本 | 日期 | 修订人 | 变更要点 | 文档处理方式 |
 |---|---|---|---|---|
+| 3.0 | 2026-07-19 | meta-pm | CR-052 vNext R2：新增 ACT-VNEXT-01..05、ST-VNEXT-001..006 与 SL-VNEXT-A..D；保留全部历史 Activity/Story/Slice ID，将 PG/EI/WT 标记 reframed、GB/AW/MR 标记 superseded，并明确 ST-VNEXT 只是 CP2 产品候选。 | 原文档增量 reframe；CP2 人工门待批准 |
 | 1.4 | 2026-07-13 | host-orchestrator-inline-fallback | 增量追加 CR-047 ACT-WT-01..05、ST-WT-001..007 与 SL-WT-01..03；保留既有 Story/Slice ID。 | 原文档增量更新 |
 | 1.5 | 2026-07-15 | host-orchestrator inline fallback | 增量追加 CR-050 ACT-GB-01..03、ST-GB-001..003 与 SL-GB-01..03；保留全部既有 Activity/Story/Slice ID。 | 原文档增量更新 |
 | 1.6 | 2026-07-16 | host-orchestrator inline fallback | 用户批准将 publish 后的显式 fast-forward-only merge 纳入 CR-050；新增 ACT-GB-04、ST-GB-004 与 SL-GB-04，并将执行顺序明确为 ST-GB-001→002→004→003；不重编号既有 ID，等待 CP2 R2。 | 原文档增量更新 |
 | 1.7 | 2026-07-17 | meta-pm | 增量追加 CR-051 ACT-AW-01..04、ST-AW-001..005 与 SL-AW-01..04；保留全部既有 Activity/Story/Slice ID，并明确真实迁移是后续项目级工作。 | 原文档增量更新 |
 | 1.8 | 2026-07-17 | meta-pm | CR-051 CP2 R2：不新增或重编号 Activity/Story/Slice，修订 ST-AW-002..004 与 SL-AW-02..03 的 branch lifecycle，明确项目长期 integration、每 CR 短期 branch、shared main、显式 merge-main 和 finish/abort 回归语义。 | 原文档增量更新；R2总体门仍待approve |
 | 1.9 | 2026-07-18 | meta-pm | CR-051 CP2 R3：保持 ACT-AW/ST-AW/SL-AW ID 与数量不变，将当前旅程修订为integration create-only bootstrap、异构source/artifact双leg、单一聚合门和CR外人工main/integration同步。 | 原文档增量更新；R2历史保留，R3总体门仍待approve |
+| 2.0 | 2026-07-19 | meta-pm | 为 CR-052 增量新增 ACT-MR-01..06、ST-MR-001..007 与 SL-MR-01..06；保留全部 CR-051 Activity/Story/Slice ID，并明确 ST-MR 只是 CP2 产品候选，不是 CP4 正式 Story。 | 原文档增量更新；CR-052 CP2 人工门待批准 |
 | 1.0 | 2026-07-02 | meta-pm | 基于产品场景和需求建立用户故事地图 | 初始化长期可追踪产品规划基线 |
 | 1.2 | 2026-07-11 | meta-pm | 增量追加 CR-046 的 5 个活动、7 个 outcome Story 与 release slice；保留 ST-PG-001..013 | 原文档增量更新 |
 | 1.3 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：不新增或重编号 Story，扩展 ST-EI-002/004/006/007 的 requirement refs 与验收语义 | 原文档增量更新 |
 
 ## 用户活动与任务
+
+### vNext 历史规划状态
+
+| 历史范围 | vNext 状态 | 规划处理 |
+|---|---|---|
+| ACT/ST/SL-PG、EI、WT | reframed | 保留历史 outcome 与验证事实；后续能力只作为 vNext Work scoped 依赖，不按原大链路整体重做 |
+| ACT/ST/SL-GB、AW、MR | superseded | 保留 ID 与审计；共享 artifact worktree / migration-readiness 不再进入 CR-052 当前 release slices |
+| ACT/ST/SL-VNEXT | current-candidate | 当前 CP2 产品规划输入；CP2 approved 前不得转为正式 Story 卡片或 LLD |
 
 | Activity ID | 用户活动 | 目标用户 | 用户任务 | 来源场景 |
 |---|---|---|---|---|
@@ -80,6 +104,17 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | ACT-AW-02 | 管理项目独立 worktree | P-01, P-03 | 创建、检查、列举和安全移除长期项目 worktree；空闲驻留项目 integration，CR 期间切换到项目命名的短期 branch | UC-AW-002 |
 | ACT-AW-03 | 执行并聚合异构 Git legs | P-01, P-02, P-04 | source leg 从/回源码默认分支，artifact leg 从/回项目integration；逐leg产出结果并由单一聚合门判定逻辑CR完成，shared main同步留在CR外 | UC-AW-003, UC-AW-004 |
 | ACT-AW-04 | 准备逐项目迁移交接 | P-03, P-04 | 生成只读 migration manifest、验证和回滚清单，由用户后续逐项目执行 | UC-AW-005 |
+| ACT-MR-01 | 建立可移植 route truth | P-01, P-03, P-07 | 用 schema v2 external anchor 和 health mode table 区分 legacy、migrated 与 conflict | UC-MR-001 |
+| ACT-MR-02 | 规范 seed 与 ownership | P-03, P-04, P-07 | 冻结 manifest，只 prune inherited seed，并在 receipt 后激活 steady ownership | UC-MR-004 |
+| ACT-MR-03 | 持久化执行证据 | P-05, P-06, P-07 | 跨进程写读 leg/aggregate evidence，并把 audit tail 与执行完成事实分离 | UC-MR-002 |
+| ACT-MR-04 | 协调 transitional bootstrap | P-01, P-04, P-07 | 以 intent/receipt/third-state/resume 完成首次迁移前置，并由 CP0 显式 import | UC-MR-003 |
+| ACT-MR-05 | 受权执行 migration plan | P-04, P-07 | 用通用 engine 和逐动作 typed authorization 计划/执行/refuse 高风险 mutation | UC-MR-005 |
+| ACT-MR-06 | 证明 readiness 并交接真实迁移 | P-04, P-05, P-07 | 在临时三并列拓扑真实演练、故障恢复、scoped check，并生成 CR-053 handoff | UC-MR-006, UC-MR-007 |
+| ACT-VNEXT-01 | 隔离每个项目的发布与过程真相 | P-08, P-01 | 复用现有发布仓，并为每项目绑定唯一独立过程仓，证明跨项目变化为0 | UC-VNEXT-001 |
+| ACT-VNEXT-02 | 维护长期治理骨架 | P-08, P-04 | 用 Project/Roadmap/Phase 表达长期方向，用 Work 承载一次执行并克制回写投影 | UC-VNEXT-002, UC-VNEXT-003 |
+| ACT-VNEXT-03 | 为 Work 选择风险等级 | P-08, P-04 | 按范围和风险把 Work 唯一路由到 G0/G1/G2，并在风险/预算扩大时升级 | UC-VNEXT-004 |
+| ACT-VNEXT-04 | 约束 Work 的读取、写入、检查和 token | P-08, P-02, P-05 | 只执行声明 scope，达到上限前停止并记录扩展或升级 | UC-VNEXT-005 |
+| ACT-VNEXT-05 | 快照迁移并完成隔离试点 | P-03, P-04, P-08 | 只迁当前态、旧仓只读，以2项目×2周期证明隔离、预算和回滚 | UC-VNEXT-006 |
 
 ## Story 列表
 
@@ -121,6 +156,19 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | ST-AW-003 | 作为Host Orchestrator，我要让一个逻辑CR使用异构source/artifact legs，以便source回源码default、artifact只回项目integration且不把跨项目main同步塞进单CR。 | P0 | REQ-AW-008..011, REQ-AW-013, REQ-AW-016, REQ-AW-C003..005, REQ-AW-NF003..004 | 两leg base/target精确；sibling dirty可继续；artifact main/control/sibling mutation为0；integration expected-OID漂移阻断artifact finish。 |
 | ST-AW-004 | 作为审批者，我要由单一协调者聚合两个leg的独立结果，以便仅在全PASS时完成逻辑CR，并在部分失败时保留真实成功事实和恢复入口。 | P0 | REQ-AW-011..013, REQ-AW-016..017, REQ-AW-C004, REQ-AW-NF001, REQ-AW-NF005 | 聚合优先级=`BLOCKED > FAIL > IN_PROGRESS > PASS`；PARTIAL仅progress/effect；失败不自动关闭/回滚；main↔integration同步仅在CR外人工执行。 |
 | ST-AW-005 | 作为迁移执行者，我要获得逐项目migration preflight和交接清单，以便后续自行搬迁文件和挂接软链接且本轮不发生真实迁移。 | P1 | REQ-AW-014..017, REQ-AW-C001, REQ-AW-NF005 | manifest含mapping/hash/link/readiness/验证/回滚；CR-051真实文件/link/worktree/ref变化为0。 |
+| ST-MR-001 | 作为维护者，我要用 schema v2 external anchor 与事实驱动 health mode 唯一识别 legacy/project-first/conflict，以便兼容可读不会冒充已迁移。 | P0 | REQ-MR-001..005, REQ-MR-C003, REQ-MR-NF001,004 | v2 route可移植；legacy/v1/v2 dual-read、v2-only write；traversal/多解100%阻断；三种mode与exit-code确定。 |
+| ST-MR-002 | 作为迁移执行者，我要先按冻结manifest规范 inherited seed，再激活 steady ownership，以便不会越界删除 sibling 内容或制造双写真相源。 | P0 | REQ-MR-006..008, REQ-MR-C002, REQ-MR-NF003 | exact prune集合=manifest；unexpected=0；shared-main/sibling ref/OID/hash不变；receipt前route activation=0。 |
+| ST-MR-003 | 作为审计者，我要 leg/aggregate evidence 跨进程持久化并安全追加audit tail，以便进程重启后仍能重算且target OID不自引用。 | P0 | REQ-MR-009..011, REQ-MR-NF002,004 | opaque handle跨进程readback=100%；错归属/篡改拒绝；aggregate可复算；tail parent/target OID可验证。 |
+| ST-MR-004 | 作为迁移准备协调者，我要以 intent、receipt、third-state 和幂等resume执行 transitional bootstrap，以便CR-053不会伪造native-first CP0。 | P0 | REQ-MR-012..015, REQ-MR-NF003,004 | intent先于mutation；逐步receipt完整；每故障点可resume且重复mutation=0；CP0显式import并保留transitional attribution。 |
+| ST-MR-005 | 作为审批者，我要通用migration engine默认只plan，并以逐动作单次typed authorization控制execute，以便错OID、错digest、过期或重放不能触碰真实对象。 | P0 | REQ-MR-016..017, REQ-MR-C001,003..005, REQ-MR-NF001,004 | dry-run副作用0；错误授权拒绝率100%；真实仓mutation/publication默认禁用；CLI不复制状态机。 |
+| ST-MR-006 | 作为迁移准备协调者，我要在临时三并列拓扑执行真实mutation和故障恢复，以便migration-ready结论不是只由mock/dry-run推断。 | P0 | REQ-MR-018..020, REQ-MR-C001..004, REQ-MR-NF003..005 | 临时E2E完整；half-push/staleOID/reader restart可恢复；fixture外mutation=0；scoped blocker=0且全局新增fingerprint=0。 |
+| ST-MR-007 | 作为审批者，我要一份只引用已交付能力与证据的CR-053 readiness handoff，以便真实迁移缺少任何关键前置时自动NOT_READY。 | P0 | REQ-MR-015,020..021, REQ-MR-C001..005, REQ-MR-NF005 | critical refs覆盖率100%；缺任一能力/E2E证据即NOT_READY；handoff不新增核心逻辑、不授权真实mutation或publication。 |
+| ST-VNEXT-001 | 作为项目负责人，我要每个项目恰好拥有一个现有发布库和一个独立过程库，以便切换项目时 sibling 的文档、ref、index 和状态变化为 0。 | P0 | REQ-VNEXT-001..003, REQ-VNEXT-NF001..002 | 两项目路由各为1+1、第三仓0、跨项目变化0、ownership错误0。 |
+| ST-VNEXT-002 | 作为项目负责人，我要用 Project/Roadmap/Phase/Work 四层维护长期目标和单次交付，以便项目多年演进而不把每次执行全文写回长期对象。 | P0 | REQ-VNEXT-004..006, REQ-VNEXT-NF004 | 4/4层可解析、唯一父引用；每Work最多1个Phase+1个Roadmap投影，全文复制0。 |
+| ST-VNEXT-003 | 作为 Host Orchestrator，我要以受控 Work 生命周期和过程 main expected-OID CAS 发布结果，以便并发写入不静默覆盖或自动 merge。 | P0 | REQ-VNEXT-007..008, REQ-VNEXT-016..017, REQ-VNEXT-C003, REQ-VNEXT-NF003 | 非法转移100%拒绝；并发恰好1成功1stale；唯一receipt；重复请求新commit0。 |
+| ST-VNEXT-004 | 作为审批者，我要每个 Work 唯一路由到 G0/G1/G2，以便简单任务走轻流程，高风险任务仍有必要门禁。 | P0 | REQ-VNEXT-008..011, DQ-VNEXT-04 | G0/G1四项上限精确；高风险和G1超限100%转G2；静默降级0。 |
+| ST-VNEXT-005 | 作为执行者和审计者，我要读写检查与 token 都受 Work scope 约束，以便上下文和验证成本随风险增长而不是默认全量。 | P0 | REQ-VNEXT-012..015, REQ-VNEXT-NF003..005 | scope外读写/检查0；G0≤8/8/3/32k、G1≤20/24/8/96k；telemetry诚实。 |
+| ST-VNEXT-006 | 作为迁移执行者，我要只迁当前快照并保留旧共享仓只读，再完成2项目×2周期试点，以便低风险切换且不重写历史。 | P1 | REQ-VNEXT-018..021, REQ-VNEXT-C001..006, REQ-VNEXT-NF002,004..005 | 当前快照100%；旧仓新增写入0；历史拆分/无损转换0；至少4周期且每项目G0/G1各≥1。 |
 
 ## 推荐发布切片
 
@@ -147,6 +195,16 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 | SL-AW-02 | Persistent Worktree and Integration Bootstrap | ST-AW-002 | 为每项目提供稳定working tree、长期integration、短期CR branch identity和create-only初始化 | SL-AW-01；CP2-DQ-01/03/06 resolved；待CP3/CP5 |
 | SL-AW-03 | Heterogeneous Legs and Aggregate Gate | ST-AW-003, ST-AW-004 | 让多个项目并行执行source-default与artifact-integration双leg，并以单一聚合门完成逻辑CR，不触碰artifact main | SL-AW-02；CP2-DQ-04/05 resolved；待CP3/CP5 |
 | SL-AW-04 | Migration Handoff without Mutation | ST-AW-005 | 给用户后续逐项目迁移提供manifest/checklist，同时保持本CR真实迁移为0 | SL-AW-03 |
+| SL-MR-01 | External Route and Health Truth | ST-MR-001 | 先让系统正确区分“兼容可读”“已迁移”和“冲突”，为所有mutation建立fail-closed入口 | CR-052 CP2/CP3/CP5 |
+| SL-MR-02 | Seed Normalization and Ownership Stage | ST-MR-002 | 把一次性 inherited seed prune 与长期 steady ownership 分离，避免越界删除和双写 | SL-MR-01；DQ52-5 |
+| SL-MR-03 | Durable Evidence and Audit Tail | ST-MR-003 | 让leg/aggregate事实可跨进程恢复，同时不让证据尾写入污染完成语义 | SL-MR-01；DQ52-4 |
+| SL-MR-04 | Transitional Bootstrap Coordinator | ST-MR-004 | 以显式transitional CP0解决route尚未原生化的bootstrap悖论，并支持故障续跑 | SL-MR-02, SL-MR-03；DQ52-3 |
+| SL-MR-05 | Guarded Migration Runner | ST-MR-005 | 通过确定plan和逐动作单次授权控制ref/worktree/prune/link/push风险 | SL-MR-04；DQ52-9 |
+| SL-MR-06 | Real Temporary E2E and CR-053 Handoff | ST-MR-006, ST-MR-007 | 用真实临时mutation、故障恢复和scoped check证明readiness，再把真实布局迁移交给CR-053 | SL-MR-05；DQ52-1/7/8/10；CP7/CP8 |
+| SL-VNEXT-A | Per-project Dual-repo Isolation | ST-VNEXT-001, ST-VNEXT-003 | 先消除跨项目过程仓/working-tree联动，并以单写CAS提供可恢复写入基础 | CR-052 vNext CP2/CP3/CP5 |
+| SL-VNEXT-B | Long-lived Governance and Work | ST-VNEXT-002 | 在隔离过程库上建立四层长期真相和克制投影，让日常工作可持续积累 | SL-VNEXT-A |
+| SL-VNEXT-C | Risk-scoped Execution | ST-VNEXT-004, ST-VNEXT-005 | 让G0/G1真正减读、减写、减检查、减token，同时把高风险准确升级G2 | SL-VNEXT-B；DQ-VNEXT-04 |
+| SL-VNEXT-D | Snapshot Migration and 2x2 Pilot | ST-VNEXT-006 | 用只迁当前态、旧仓只读和4个完整周期证明可切换、可回滚、跨项目变化0 | SL-VNEXT-C；DQ-VNEXT-01..05；独立迁移/远端授权 |
 
 ## 规划边界
 
@@ -161,3 +219,9 @@ source_requirements: "process/docs/product/REQUIREMENTS.md"
 - `ST-AW-*` 是CR-051产品候选Story，不是CP4正式Story卡片；R3 pending decision items=0，但CP2 R3总体门未approve前不得据此生成HLD/LLD或实现。
 - `ST-AW-005` 只交付migration preflight/manifest/手册；真实文件迁移、软链接挂接、真实worktree/ref操作由用户后续逐项目启动和授权。
 - artifact branch必须带project identity，因为不同项目的CR ID可重复；产品层已冻结idle=`projects/<project-name>/integration`、active=`projects/<project-name>/cr/<cr-id>-<slug>`；artifact leg只回integration，shared main同步在CR外。CP3只细化attach/switch/finish/abort、expected OID、leg correlation、聚合schema、bootstrap CAS和branch cleanup。
+- `ST-MR-*` 是 CR-052 产品候选 Story，不是 CP4 Story 卡片；DQ52-1..10 与 CP2 总体门未批准前不得形成正式 Feature/Story/LLD 或修改源码。
+- CR-052 的“真实 mutation”只指隔离临时目录/local bare remote fixture；真实 meta-flow artifact 布局、link、worktree/ref、publication和 sibling项目内容始终在当前范围外。
+- `ST-MR-007` 交付 readiness/handoff，不执行 CR-053；若缺任一 critical capability 或 E2E evidence，结论必须 NOT_READY。
+- `ST-VNEXT-*` 是 CR-052 vNext R2 产品候选 Story，不是 CP4 Story 卡片；DQ-VNEXT-01..05 与 CP2 总体门未批准前不得进入 HLD、正式 Story、LLD 或源码实现。
+- `SL-VNEXT-A..D` supersede `SL-MR-01..06` 作为 CR-052 当前候选交付顺序；旧切片只保留历史审计，不得并行实施。
+- `SL-VNEXT-D` 只定义逐项目快照试点 outcome；CP2 不授权创建仓库、迁移文件、commit/push 或 production cutover。

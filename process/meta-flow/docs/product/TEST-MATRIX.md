@@ -1,10 +1,11 @@
 ---
 status: baseline
-version: "2.2"
+version: "3.0"
 created_at: "2026-07-02"
 owner: "host-orchestrator"
 cr_ref: "CR-037"
-active_change_ref: "CR-051"
+active_change_ref: "CR-052"
+current_baseline: "CR-052-VNEXT-R2-candidate"
 source_scenarios: "process/docs/product/SCENARIOS.yaml"
 source_requirements: "process/docs/product/REQUIREMENTS.md"
 source_story_map: "process/docs/product/STORY-MAP.md"
@@ -16,6 +17,8 @@ source_story_map: "process/docs/product/STORY-MAP.md"
 
 | 版本 | 日期 | 修订人 | 变更要点 |
 |---|---|---|---|
+| 3.0 | 2026-07-19 | meta-pm | CR-052 vNext R2：新增 TC-VNEXT-001..020 与 REQ-VNEXT/ST-VNEXT 回链，覆盖每项目双库、四层治理、Work 生命周期、G0/G1/G2、scope/token、process-main CAS、快照/只读历史和 2×2 试点；保留既有 97 个 TC 和验证事实，并将旧 PG/EI/WT 标记 reframed、GB/AW/MR 标记 superseded。 |
+| 2.4 | 2026-07-19 | host-orchestrator | 不新增 TC/REQ/Story ID；将 TC-MR-021 扩为 CR catalog + event-ledger scoped/delta fingerprint，冻结 19+1 历史错误并要求 CR-052 新增错误为 0。 |
 | 1.6 | 2026-07-15 | host-orchestrator | CP8 批准后增加 ledger 对象身份 selector 回归；最终 401+70，57-object firewall=0，状态投影为 delivered。 |
 | 1.7 | 2026-07-15 | host-orchestrator inline fallback | 增量追加 CR-050 TC-GB-001..011 的需求/Story/验证层映射；保留 CR-046/047 delivered-with-risk 历史结论，当前自动化保持 planned/CP2 pending。 |
 | 1.7.1 | 2026-07-16 | host-orchestrator inline fallback | 记录 CR-050 CP2 已批准并进入 CP3；11/11 场景仍为 planned，未生成实现或验证证据。 |
@@ -24,6 +27,7 @@ source_story_map: "process/docs/product/STORY-MAP.md"
 | 2.0 | 2026-07-17 | meta-pm | 增量追加 CR-051 TC-AW-001..015 的需求/候选 Story/验证层映射；保留既有60个场景和验证事实，CR-051自动化保持planned/CP2 pending。 |
 | 2.1 | 2026-07-17 | meta-pm | CR-051 CP2 R2：不新增 TC/REQ/Story ID，更新既有15个AW场景的当前基线，覆盖长期项目integration、短期CR分支、shared main、显式merge-main refresh、finish/abort回归与existing-control+sibling-worktree边界。 |
 | 2.2 | 2026-07-18 | meta-pm | CR-051 CP2 R3：保持15个TC-AW及其REQ/Story回链不变，当前基线改为异构双leg、单一聚合门、integration create-only初始化和CR外人工main/integration同步；R2 per-CR refresh仅保留历史。 |
+| 2.3 | 2026-07-19 | meta-pm | 增量追加 CR-052 TC-MR-001..022 的 REQ-MR、候选 ST-MR 与验证层映射；保留既有 75 个场景和全部历史验证事实，CR-052 自动化保持 planned/CP2 human gate pending。 |
 | 1.5 | 2026-07-15 | host-orchestrator-inline/meta-qa | 将 CR-046 18 个 TC 投影为 7/7 CP7 `PASS_WITH_RISK`；登记 CR-047 7/7 CP6/CP7 实证与五门结果。 |
 | 1.4 | 2026-07-13 | host-orchestrator-inline-fallback | 纠正 CR-046 当前实现/验证状态，追加 CR-047 TC-WT-001..007 修复前基线与验收矩阵。 |
 | 1.1 | 2026-07-02 | host-orchestrator | 同步 CR-037 已激活但 CP2 pending，自动化 planned 原因改为尚未通过 CP2/CP3/CP5。 |
@@ -35,11 +39,19 @@ source_story_map: "process/docs/product/STORY-MAP.md"
 
 | 指标 | 数值 | 说明 |
 |---|---:|---|
-| 场景总数 | 75 | 既有60个场景 + `TC-AW-001..015` |
-| 已映射 Story 的场景 | 75 | 75/75 TC 至少回链一个产品候选 Story |
-| 已映射需求的场景 | 75 | 75/75 TC 至少回链一个 Requirement |
-| 自动化状态 | CR-046/047/050 已交付带风险；CR-051 15/15 planned | CR-051 DQ-01/03/04/05/06 resolved-by-user、DQ-02 superseded-by-user；R3总体门仍pending，尚未设计/实现；既有401+70及CR-050 fixture只代表前序基线 |
-| 覆盖结论 | CR051_CP2_R3_PENDING | project-first、heterogeneous dual legs、aggregate gate、create-only integration bootstrap与CR外同步边界已结构化；CP2 R3未批准前不得进入HLD/Story设计/实现，真实迁移、软链接和Git/ref mutation未授权 |
+| 场景总数 | 117 | 既有 97 个场景 + `TC-VNEXT-001..020`；旧 ID 不重编号 |
+| 已映射 Story 的场景 | 117 | 117/117 TC 至少回链一个历史或产品候选 Story；ST-VNEXT 仍非 CP4 正式 Story |
+| 已映射需求的场景 | 117 | 117/117 TC 至少回链一个 Requirement；REQ-VNEXT P0/P1 回链率 100% |
+| 自动化状态 | CR-046/047/050 历史交付带风险；旧 CR-051/052 MR 主线保留；vNext 20/20 planned | DQ-VNEXT-01..05 为 decision-item；新场景只是 CP2 候选基线，不代表设计/实现/迁移授权 |
+| 覆盖结论 | CR052_VNEXT_R2_CP2_PRECHECK_READY | 双库隔离、四层治理、G0/G1/G2、Work scope/token、process-main expected-OID CAS、快照/只读历史和 2×2 试点均有五类工程场景；CP2 未批准前正式 Story/LLD/源码/真实迁移数必须为 0 |
+
+## 历史场景状态映射
+
+| TC 范围 | vNext 状态 | 当前解释 |
+|---|---|---|
+| `TC-PG-*`、`TC-EI-*`、`TC-WT-*` | reframed | 历史结果和能力事实继续可审计；未来仅在 vNext Work scope 内按需复用 |
+| `TC-GB-*`、`TC-AW-*`、`TC-MR-*` | superseded | 保留原始验证状态，不继续作为 CR-052 当前实现目标或 vNext 拓扑验收 |
+| `TC-VNEXT-*` | current-candidate | vNext R2 当前 CP2 候选覆盖；自动化仍 planned，人工门 pending |
 
 ## 场景覆盖矩阵
 
@@ -155,6 +167,8 @@ source_story_map: "process/docs/product/STORY-MAP.md"
 | CR-047 自动化与 Story 验证 | DELIVERED_WITH_RISK | 7/7 CP6 PASS、7/7 CP7 PASS_WITH_RISK；CP8 approved；publication preflight 401+70 |
 | CR-050 branch lifecycle 自动化 | DELIVERED_WITH_RISK | 17/17场景已回链4个Story并完成本地bare-remote验证；真实远端、独立QA和平台receipt风险按既有证据保留，不改写历史 |
 | CR-051 project-first/worktree 自动化 | PLANNED_CP2_R3_PENDING | 15/15场景已回链5个候选Story；DQ-04..06承接R3当前语义，DQ-02已superseded；R3总体门仍待approve；CP3/CP5前不得设计落地或写源码，真实artifact迁移、软链接和Git/ref mutation为0 |
+| CR-052 migration-readiness 自动化 | PLANNED_CP2_HUMAN_GATE_PENDING | 22/22 场景已回链 7 个候选 ST-MR；六类工程场景均覆盖且真实临时拓扑 E2E 为强制项；DQ52-1..10 待 CP2 决策，源码实现和真实仓 mutation/publication 均未授权 |
+| CR-052 vNext R2 自动化 | PLANNED_CP2_HUMAN_GATE_PENDING | 20/20 场景已回链 6 个候选 ST-VNEXT；旧 MR 主线已 superseded；DQ-VNEXT-01..05 待 CP2 决策，正式 Story/LLD/源码/真实迁移/publication 均未授权 |
 | platform receipt 或 token telemetry 可能不可用 | ACCEPTED-DEGRADATION | 必须显式 unavailable；不得合成或标记为 verified/measured |
 | 当前 Codex meta-pm dispatch 无 repository-verifiable platform receipt | OBSERVED-LIMITATION | CP2 披露为 `session-observed/repository-unverifiable`；后续 receipt 只能追加升级证据 |
 | CR-046 R1 CP1/CP2 checker provenance 为空 | REQUIRED-DOGFOOD | 保留原始 result/hash，作为 TC-EI-017 strict negative fixture；不得静默重写 |
@@ -280,3 +294,124 @@ source_story_map: "process/docs/product/STORY-MAP.md"
 | REQ-AW-NF003 | TC-AW-005, TC-AW-014 |
 | REQ-AW-NF004 | TC-AW-007, TC-AW-010 |
 | REQ-AW-NF005 | TC-AW-009, TC-AW-015 |
+
+## CR-052 场景覆盖矩阵
+
+| TC ID | 类型 | 优先级 | 覆盖 UC | 覆盖需求 | 覆盖 Story | 测试层级 | 自动化状态 | 当前基线 |
+|---|---|---|---|---|---|---|---|---|
+| TC-MR-001 | positive | HIGH | UC-MR-001 | REQ-MR-001..002, REQ-MR-NF001 | ST-MR-001 | portable route integration | planned | v2 external anchor、relocation、v2-only write；CP2待批准 |
+| TC-MR-002 | negative | HIGH | UC-MR-001 | REQ-MR-003,005, REQ-MR-C003 | ST-MR-001 | route security negative | planned | traversal/absolute/undeclared anchor 100%阻断 |
+| TC-MR-003 | boundary | HIGH | UC-MR-001 | REQ-MR-002,004 | ST-MR-001 | version compatibility matrix | planned | legacy/v1/v2 dual-read、unknown BLOCKED、无静默切写目标 |
+| TC-MR-004 | positive | HIGH | UC-MR-001 | REQ-MR-004..005 | ST-MR-001 | health mode | planned | legacy-compatible-not-migrated 不冒充已迁移 |
+| TC-MR-005 | positive | HIGH | UC-MR-001 | REQ-MR-001,004 | ST-MR-001 | health mode | planned | receipt/identity/route一致后才 project-first-migrated |
+| TC-MR-006 | negative | HIGH | UC-MR-001 | REQ-MR-004..005, REQ-MR-NF004 | ST-MR-001 | route conflict | planned | 冲突退出非零且所有mutation=0 |
+| TC-MR-007 | positive | HIGH | UC-MR-004 | REQ-MR-006..008 | ST-MR-002 | seed normalization integration | planned | exact prune、unexpected=0、receipt后激活ownership |
+| TC-MR-008 | permission | HIGH | UC-MR-004 | REQ-MR-006..007, REQ-MR-C002 | ST-MR-002 | prune authorization negative | planned | manifest/hash/OID漂移阻断，不读真实 sibling 内容 |
+| TC-MR-009 | precheck | HIGH | UC-MR-004 | REQ-MR-008, REQ-MR-NF003 | ST-MR-002 | ownership-stage precheck | planned | 无有效prune receipt不得切换write route |
+| TC-MR-010 | positive | HIGH | UC-MR-002 | REQ-MR-009, REQ-MR-NF002 | ST-MR-003 | cross-process evidence | planned | writer退出后opaque handle可readback，篡改/错归属拒绝 |
+| TC-MR-011 | positive | HIGH | UC-MR-002 | REQ-MR-010..011 | ST-MR-003 | aggregate evidence integration | planned | out-of-band evidence可聚合、readback和projection |
+| TC-MR-012 | failure-recovery | HIGH | UC-MR-002 | REQ-MR-011,014, REQ-MR-C004 | ST-MR-003..004 | evidence-tail recovery | planned | execution truth与tail状态分离，无自引用/跨leg回滚 |
+| TC-MR-013 | positive | HIGH | UC-MR-003 | REQ-MR-012..013,015 | ST-MR-004 | transitional bootstrap E2E | planned | intent先于mutation、receipt完整、CP0显式import |
+| TC-MR-014 | failure-recovery | HIGH | UC-MR-003 | REQ-MR-013..014, REQ-MR-NF003 | ST-MR-004 | third-state fault matrix | planned | 每边界可resume，重复destructive mutation=0 |
+| TC-MR-015 | negative | HIGH | UC-MR-003,007 | REQ-MR-015, REQ-MR-NF004 | ST-MR-004,007 | CP0 receipt negative | planned | 缺失/过期/错项目/OID/digest receipt不得生成PASS |
+| TC-MR-016 | boundary | HIGH | UC-MR-005 | REQ-MR-016, REQ-MR-NF001 | ST-MR-005 | migration plan golden | planned | engine/CLI同一状态机，dry-run副作用0 |
+| TC-MR-017 | permission | HIGH | UC-MR-005 | REQ-MR-017, REQ-MR-C003, REQ-MR-NF004 | ST-MR-005 | typed authorization negative | planned | 错动作/对象/OID/digest/过期/重放全部阻断 |
+| TC-MR-018 | positive | HIGH | UC-MR-006 | REQ-MR-018, REQ-MR-NF005 | ST-MR-006 | real temporary topology E2E | planned | 三并列目录+local bare真实mutation，fixture外变化0 |
+| TC-MR-019 | failure-recovery | HIGH | UC-MR-006 | REQ-MR-019, REQ-MR-C004, REQ-MR-NF003 | ST-MR-006 | fault injection suite | planned | half-push/staleOID/reader restart可fresh resume且无误报PASS |
+| TC-MR-020 | permission | HIGH | UC-MR-005..007 | REQ-MR-C001..002,004..005 | ST-MR-005..007 | production denylist | planned | 真实layout/link/worktree/ref/publication和sibling读取变化0 |
+| TC-MR-021 | boundary | HIGH | UC-MR-007 | REQ-MR-020, REQ-MR-NF004 | ST-MR-006..007 | scoped governance/fingerprint | planned | scoped blocker=0、CR catalog与event-ledger新增fingerprint=0、19+1历史错误不改写 |
+| TC-MR-022 | precheck | HIGH | UC-MR-007 | REQ-MR-021, REQ-MR-C005, REQ-MR-NF005 | ST-MR-007 | readiness handoff contract | planned | 缺migration-critical能力/evidence即NOT_READY，不隐含授权 |
+
+## CR-052 Requirement 覆盖索引
+
+| Requirement | 覆盖 TC |
+|---|---|
+| REQ-MR-001 | TC-MR-001, TC-MR-005 |
+| REQ-MR-002 | TC-MR-001, TC-MR-003 |
+| REQ-MR-003 | TC-MR-002 |
+| REQ-MR-004 | TC-MR-003..006 |
+| REQ-MR-005 | TC-MR-002, TC-MR-004, TC-MR-006 |
+| REQ-MR-006 | TC-MR-007, TC-MR-008 |
+| REQ-MR-007 | TC-MR-007, TC-MR-008 |
+| REQ-MR-008 | TC-MR-007, TC-MR-009 |
+| REQ-MR-009 | TC-MR-010 |
+| REQ-MR-010 | TC-MR-011 |
+| REQ-MR-011 | TC-MR-011, TC-MR-012 |
+| REQ-MR-012 | TC-MR-013 |
+| REQ-MR-013 | TC-MR-013, TC-MR-014 |
+| REQ-MR-014 | TC-MR-012, TC-MR-014 |
+| REQ-MR-015 | TC-MR-013, TC-MR-015 |
+| REQ-MR-016 | TC-MR-016 |
+| REQ-MR-017 | TC-MR-017 |
+| REQ-MR-018 | TC-MR-018 |
+| REQ-MR-019 | TC-MR-019 |
+| REQ-MR-020 | TC-MR-021 |
+| REQ-MR-021 | TC-MR-022 |
+| REQ-MR-C001 | TC-MR-020 + CR-052 touched-path/ref/link audit |
+| REQ-MR-C002 | TC-MR-008, TC-MR-020 |
+| REQ-MR-C003 | TC-MR-002, TC-MR-017 |
+| REQ-MR-C004 | TC-MR-012, TC-MR-019, TC-MR-020 |
+| REQ-MR-C005 | TC-MR-020, TC-MR-022 + CP2 human-gate authorization check |
+| REQ-MR-NF001 | TC-MR-001, TC-MR-016 |
+| REQ-MR-NF002 | TC-MR-010 |
+| REQ-MR-NF003 | TC-MR-009, TC-MR-014, TC-MR-019 |
+| REQ-MR-NF004 | TC-MR-006, TC-MR-015, TC-MR-017, TC-MR-021 |
+| REQ-MR-NF005 | TC-MR-018, TC-MR-022 |
+
+## CR-052 vNext R2 场景覆盖矩阵
+
+| TC ID | 类型 | 优先级 | 覆盖 UC | 覆盖需求 | 覆盖 Story | 测试层级 | 自动化状态 | 当前基线 |
+|---|---|---|---|---|---|---|---|---|
+| TC-VNEXT-001 | positive | HIGH | UC-VNEXT-001 | REQ-VNEXT-001,003, REQ-VNEXT-NF001 | ST-VNEXT-001 | route contract | planned | 每项目恰好1个release+1个process route，第三仓0 |
+| TC-VNEXT-002 | negative | HIGH | UC-VNEXT-001 | REQ-VNEXT-002, REQ-VNEXT-NF002 | ST-VNEXT-001,006 | two-project isolation | planned | 项目切换时 sibling path/ref/index/state/hash变化0 |
+| TC-VNEXT-003 | negative | HIGH | UC-VNEXT-001 | REQ-VNEXT-001..003 | ST-VNEXT-001 | binding/ownership negative | planned | 缺失/多解/ownership重叠在写前BLOCKED |
+| TC-VNEXT-004 | positive | HIGH | UC-VNEXT-002 | REQ-VNEXT-004..005 | ST-VNEXT-002 | governance contract | planned | Project→Roadmap→Phase→Work 4/4层、唯一父引用 |
+| TC-VNEXT-005 | boundary | HIGH | UC-VNEXT-002..003 | REQ-VNEXT-006, REQ-VNEXT-NF004 | ST-VNEXT-002,003 | projection boundary | planned | 每Work最多1个Phase+1个Roadmap投影，全文复制0 |
+| TC-VNEXT-006 | failure-recovery | HIGH | UC-VNEXT-003 | REQ-VNEXT-007,016, REQ-VNEXT-NF003 | ST-VNEXT-003 | lifecycle/recovery | planned | 非法状态跳转100%拒绝，stale OID不覆盖，可fresh resume |
+| TC-VNEXT-007 | positive | HIGH | UC-VNEXT-004..005 | REQ-VNEXT-008..009,012,015 | ST-VNEXT-004,005 | G0 envelope | planned | ≤8读/8写/3检查/32k token，高风险触发0 |
+| TC-VNEXT-008 | boundary | HIGH | UC-VNEXT-004..005 | REQ-VNEXT-009..010,012,015 | ST-VNEXT-004,005 | G0→G1 escalation | planned | 超G0前停止，扩展有记录，符合条件时升级G1 |
+| TC-VNEXT-009 | positive | HIGH | UC-VNEXT-004..005 | REQ-VNEXT-008,010,012..015 | ST-VNEXT-004,005 | G1 envelope | planned | ≤20读/24写/8检查/96k token，不运行无关全量检查 |
+| TC-VNEXT-010 | negative | HIGH | UC-VNEXT-004 | REQ-VNEXT-010..011, REQ-VNEXT-C005 | ST-VNEXT-004 | G2 routing negative | planned | G1超限或高风险100%转G2，未授权执行0 |
+| TC-VNEXT-011 | permission | HIGH | UC-VNEXT-005 | REQ-VNEXT-012, REQ-VNEXT-NF003 | ST-VNEXT-005 | read-scope permission | planned | scope外/其他项目/deny-default实际读取0 |
+| TC-VNEXT-012 | permission | HIGH | UC-VNEXT-001,005,006 | REQ-VNEXT-003,013,019 | ST-VNEXT-001,005,006 | write-scope permission | planned | scope外/sibling/旧共享仓写入0，touched files全量核对 |
+| TC-VNEXT-013 | boundary | HIGH | UC-VNEXT-005 | REQ-VNEXT-009..010,014 | ST-VNEXT-005 | scoped check plan | planned | G0≤3、G1≤8，未声明全量检查0 |
+| TC-VNEXT-014 | boundary | HIGH | UC-VNEXT-005 | REQ-VNEXT-015, REQ-VNEXT-NF003 | ST-VNEXT-005 | token budget | planned | telemetry诚实，静默超限0，升级/扩容路由明确 |
+| TC-VNEXT-015 | positive | HIGH | UC-VNEXT-003 | REQ-VNEXT-016..017 | ST-VNEXT-003 | process-main CAS | planned | fresh OID单次推进、唯一receipt、重复请求新commit0 |
+| TC-VNEXT-016 | failure-recovery | HIGH | UC-VNEXT-003 | REQ-VNEXT-016..017, REQ-VNEXT-C003 | ST-VNEXT-003 | CAS concurrency | planned | 两并发恰好1成功1stale，自动merge/force/覆盖0 |
+| TC-VNEXT-017 | positive | HIGH | UC-VNEXT-006 | REQ-VNEXT-018,021, REQ-VNEXT-C001..002 | ST-VNEXT-006 | snapshot migration contract | planned | 当前快照100%，历史拆分/无损转换0，回滚字段齐全 |
+| TC-VNEXT-018 | negative | HIGH | UC-VNEXT-006 | REQ-VNEXT-018..019, REQ-VNEXT-C001..002 | ST-VNEXT-006 | legacy read-only negative | planned | cutover后旧仓新增写入0，历史只读可索引 |
+| TC-VNEXT-019 | positive | HIGH | UC-VNEXT-001,004,006 | REQ-VNEXT-002,020..021, REQ-VNEXT-NF002,004 | ST-VNEXT-001,004,006 | 2×2 pilot | planned | 2项目、至少4周期、每项目G0/G1各≥1、跨项目变化0 |
+| TC-VNEXT-020 | permission | HIGH | UC-VNEXT-001,006 | REQ-VNEXT-C004..006, REQ-VNEXT-NF005 | ST-VNEXT-006 | CP2 authorization/coverage boundary | planned | 批量迁移/push/runtime/正式Story/LLD提前执行0；P0/P1未覆盖0 |
+
+## CR-052 vNext R2 Requirement 覆盖索引
+
+| Requirement | 覆盖 TC |
+|---|---|
+| REQ-VNEXT-001 | TC-VNEXT-001,003 |
+| REQ-VNEXT-002 | TC-VNEXT-002,019 |
+| REQ-VNEXT-003 | TC-VNEXT-001,003,012 |
+| REQ-VNEXT-004..005 | TC-VNEXT-004 |
+| REQ-VNEXT-006 | TC-VNEXT-005 |
+| REQ-VNEXT-007 | TC-VNEXT-006 |
+| REQ-VNEXT-008 | TC-VNEXT-007,009 |
+| REQ-VNEXT-009 | TC-VNEXT-007,008,013 |
+| REQ-VNEXT-010 | TC-VNEXT-008,009,010,013 |
+| REQ-VNEXT-011 | TC-VNEXT-010 |
+| REQ-VNEXT-012 | TC-VNEXT-007..009,011 |
+| REQ-VNEXT-013 | TC-VNEXT-009,012 |
+| REQ-VNEXT-014 | TC-VNEXT-009,013 |
+| REQ-VNEXT-015 | TC-VNEXT-007..009,014 |
+| REQ-VNEXT-016 | TC-VNEXT-006,015,016 |
+| REQ-VNEXT-017 | TC-VNEXT-015,016 |
+| REQ-VNEXT-018 | TC-VNEXT-017,018 |
+| REQ-VNEXT-019 | TC-VNEXT-012,018 |
+| REQ-VNEXT-020 | TC-VNEXT-019 |
+| REQ-VNEXT-021 | TC-VNEXT-017,019 |
+| REQ-VNEXT-C001..002 | TC-VNEXT-017,018 |
+| REQ-VNEXT-C003 | TC-VNEXT-016 |
+| REQ-VNEXT-C004..006 | TC-VNEXT-020 |
+| REQ-VNEXT-NF001 | TC-VNEXT-001 |
+| REQ-VNEXT-NF002 | TC-VNEXT-002,019 |
+| REQ-VNEXT-NF003 | TC-VNEXT-006,011,014 |
+| REQ-VNEXT-NF004 | TC-VNEXT-005,019 |
+| REQ-VNEXT-NF005 | TC-VNEXT-001..020 |

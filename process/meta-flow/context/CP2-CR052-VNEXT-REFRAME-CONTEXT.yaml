@@ -1,0 +1,162 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR052-VNEXT-REFRAME"
+project_id: "meta-flow"
+workflow_id: "meta-flow-self-dev"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-07-19T08:44:54Z"
+created_by: "host-orchestrator"
+source_cr: "CR-052"
+
+token_control:
+  read_profile: "minimal"
+  max_source_files: 8
+  max_summary_items: 16
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读取本 capsule；只读取 allowed_reads/must_read。只有字段缺失、冲突、人工审计或深度评审才扩读，并把原因写入返回摘要。"
+
+allowed_reads:
+  - path: "process/changes/summaries/CR-052.vnext-reframe.summary.json"
+    reason: "当前 vNext 目标、推荐默认和不授权边界"
+    required: true
+  - path: "process/REQUEST.md"
+    reason: "用户原始目标与 vNext 重解释请求"
+    required: true
+  - path: "process/state/STATE.current.json"
+    reason: "轻量运行态与阶段门控"
+    required: true
+  - path: "process/docs/product/USE-CASES.md"
+    reason: "旧产品基线；仅增量 supersede，不删除历史"
+    required: true
+  - path: "process/docs/product/REQUIREMENTS.md"
+    reason: "旧需求基线；建立新 REQ-VNEXT 映射"
+    required: true
+  - path: "process/docs/product/MVP-SCOPE.md"
+    reason: "重定 In/Out/Deferred 与发布切片"
+    required: true
+
+must_read:
+  - path: "process/changes/summaries/CR-052.vnext-reframe.summary.json"
+    reason: "当前唯一有效简化整改摘要"
+    required: true
+  - path: "process/REQUEST.md"
+    reason: "用户核心诉求与明确授权边界"
+    required: true
+  - path: "process/state/STATE.current.json"
+    reason: "CP2 rework 和单写边界"
+    required: true
+
+read_if_needed:
+  - path: "process/changes/CR-052.md"
+    trigger: "summary 无法解释历史决策或需要审计 v1.1 被重解释范围"
+  - path: "process/docs/product/SCENARIOS.yaml"
+    trigger: "增量编写 TC-VNEXT 和失败恢复场景"
+  - path: "process/docs/product/TEST-MATRIX.md"
+    trigger: "建立 UC/REQ/TC/MVP 追溯"
+  - path: "process/docs/product/STORY-MAP.md"
+    trigger: "形成四阶段发布切片和候选 Story"
+  - path: "process/docs/product/RELEASE-SLICES.md"
+    trigger: "固化 A-D 交付顺序"
+  - path: "process/docs/product/BACKLOG.md"
+    trigger: "登记历史拆分、批量迁移和全量退役 deferred"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "人类摘要，不作为机器真相源"
+  - path_or_pattern: "process/checkpoints/CP2-CR052-MIGRATION-READINESS-BASELINE.md"
+    reason: "旧 v1.1 人工门已 changes_requested"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不属于当前产品重构输入"
+  - path_or_pattern: "process/stories/**"
+    reason: "CP2 前禁止 Story/LLD 输入污染范围"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "不得作为下游默认上下文"
+
+key_facts:
+  scope_summary: "每项目双库隔离 + Project/Roadmap/Phase/Work + G0/G1/G2 + Work-scoped read/write/check/token；旧共享过程仓只读。"
+  accepted_decisions:
+    - "发布库优先复用项目现有源码/交付仓"
+    - "过程库每项目独立、main-only、单写 publisher + expected-OID CAS"
+    - "快照迁移当前状态，不重写历史"
+    - "两个试点项目，每项目至少两个工作周期"
+  active_constraints:
+    - "CP2 approved 前不得拆 Story、写 LLD 或修改实现代码"
+    - "不得 push、批量迁移、历史重写或执行 runtime/production 写入"
+    - "产品文档增量更新，保留历史 ID 和修订记录"
+  downstream_tasks:
+    - "建立 UC-VNEXT/REQ-VNEXT/TC-VNEXT 与量化成功指标"
+    - "重写 MVP、Release Slices、Backlog 的当前生效范围"
+    - "生成新的 CP1/CP2 自动预检和 meta-pm return summary"
+  traceability:
+    requirements: ["REQ-VNEXT-*"]
+    use_cases: ["UC-VNEXT-001..006"]
+    scenarios: ["TC-VNEXT-*"]
+    stories: []
+    features: []
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "发布库是否复用现有源码/交付仓"
+    - "过程库 main-only 的单写 publisher/CAS 模型"
+    - "旧历史只读保留而不拆史"
+    - "旧 CP/CR/Story 不做无损自动转换"
+    - "两个试点和兼容期边界"
+  non_authorized_items:
+    - "repository push/publication"
+    - "批量迁移其他项目"
+    - "历史重写或分布式自动 merge"
+    - "force/reset/rebase/orphan/credentials/runtime/production/publish/trading"
+  risk_acceptance_items: []
+  open_questions: []
+  n_a_or_waived_items: []
+
+handoff:
+  target_agent: "meta-pm"
+  expected_output:
+    - "八份产品基线的 vNext 增量更新"
+    - "CP1/CP2 自动预检机器结果和人类摘要"
+    - "Scenario Gray Areas/SGQ 审计与返回摘要"
+  exit_criteria:
+    - "P0 场景和量化需求无阻断缺口"
+    - "CP2 待决策项完整、去重且有推荐/备选/风险/回退"
+    - "未修改源码、CR、state、ledger、context 或 checkpoint"
+  blocked_if_missing:
+    - "无法明确发布库/过程库边界"
+    - "无法给 G0/G1/G2 或 token budget 可验证下限"
+
+read_expansion_log:
+  - at: "2026-07-19T09:15:23Z"
+    actor: "meta-pm"
+    expanded_to: "process/docs/product/SCENARIOS.yaml"
+    reason: "deep_review：增量编写 TC-VNEXT、保留旧 TC 并校验 ID/类型"
+  - at: "2026-07-19T09:15:23Z"
+    actor: "meta-pm"
+    expanded_to: "process/docs/product/TEST-MATRIX.md"
+    reason: "deep_review：建立 UC/REQ/TC/候选 Story/切片追溯"
+  - at: "2026-07-19T09:15:23Z"
+    actor: "meta-pm"
+    expanded_to: "process/docs/product/STORY-MAP.md"
+    reason: "deep_review：显式 supersede 旧 MR 规划并形成 vNext 候选 Story"
+  - at: "2026-07-19T09:15:23Z"
+    actor: "meta-pm"
+    expanded_to: "process/docs/product/RELEASE-SLICES.md"
+    reason: "deep_review：固化 A-D 发布顺序并保留旧切片"
+  - at: "2026-07-19T09:15:23Z"
+    actor: "meta-pm"
+    expanded_to: "process/docs/product/BACKLOG.md"
+    reason: "deep_review：隔离拆史、转换、自动 merge、批量迁移和 publication"
+
+validation:
+  generated_from_sources:
+    - "process/REQUEST.md"
+    - "process/changes/CR-052.md"
+    - "process/changes/summaries/CR-052.vnext-reframe.summary.json"
+    - "process/state/STATE.current.json"
+  missing_sources: []
+  consistency_status: "pass"
+  notes:
+    - "旧 CP2 checkpoint 已标 changes_requested；该 capsule 不复用旧 PASS 结论。"
+    - "meta-pm 为完成八份正式对象和跨文档追溯扩读 5 个 read_if_needed 文件；事实源总数 12，超 max_source_files=8 的 4 个来源均已写入 READ-EXPANSION-LEDGER。"

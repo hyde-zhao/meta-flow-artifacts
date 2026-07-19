@@ -1,12 +1,12 @@
 ---
 status: baseline
-version: "2.0"
+version: "3.1"
 created_at: "2026-07-02"
 owner: "meta-pm"
 cr_ref: "CR-037"
-active_change_ref: "CR-051"
-ready_for_design: false
-approval_context: "CR-051 CP2 changes_requested R3 当前候选基线：一个逻辑 CR 使用异构 source/artifact 双 leg；source leg 从 fresh 源码默认分支创建并回到该默认分支，artifact leg 从 fresh 项目 integration 创建并只回到同一 integration，绝不在 per-CR 生命周期 refresh/merge/update artifact shared main；单一聚合门按 BLOCKED > FAIL > IN_PROGRESS > PASS，且仅全部必需 leg PASS 才完成；integration 缺失时从 fresh origin/main exact OID create-only 初始化；shared main↔integration 同步完全在 CR 外人工执行。R3 产品基线仍待 CP2 总体 approve，ready_for_design=false；不授权 HLD、Story、LLD、源码实现、真实 artifact 文件/软链接/worktree/branch/ref mutation、remote publication、credentials、runtime、production write、publish 或 trading。"
+active_change_ref: "CR-052"
+ready_for_design: true
+approval_context: "用户已确认 CR-052 vNext R3.2.1 的 UC-VNEXT-UJ-001..016，并明确授权按精简 Meta Flow 流程开始本地、可逆实现。当前规范采用每项目独立发布库/过程库、可选 Roadmap/Phase、Work 默认与重大变化 CR、G0/G1/G2、Work-scoped read/write/check/token、证据化复盘和有界自进化。该授权不包含真实项目迁移/软链接切换、commit/push/tag、repository publication、credentials、runtime/production 或破坏性 Git。"
 source_use_cases:
   - UC-PG-001
   - UC-PG-002
@@ -36,6 +36,29 @@ source_use_cases:
   - UC-AW-003
   - UC-AW-004
   - UC-AW-005
+  - UC-MR-001
+  - UC-MR-002
+  - UC-MR-003
+  - UC-MR-004
+  - UC-MR-005
+  - UC-MR-006
+  - UC-MR-007
+  - UC-VNEXT-UJ-001
+  - UC-VNEXT-UJ-002
+  - UC-VNEXT-UJ-003
+  - UC-VNEXT-UJ-004
+  - UC-VNEXT-UJ-005
+  - UC-VNEXT-UJ-006
+  - UC-VNEXT-UJ-007
+  - UC-VNEXT-UJ-008
+  - UC-VNEXT-UJ-009
+  - UC-VNEXT-UJ-010
+  - UC-VNEXT-UJ-011
+  - UC-VNEXT-UJ-012
+  - UC-VNEXT-UJ-013
+  - UC-VNEXT-UJ-014
+  - UC-VNEXT-UJ-015
+  - UC-VNEXT-UJ-016
 source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT-IMPLEMENTATION-PLAN-2026-07-02.md"
 ---
 
@@ -45,6 +68,9 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 
 | 版本 | 日期 | 修订人 | 变更要点 | 文档处理方式 |
 |---|---|---|---|---|
+| 3.1 | 2026-07-19 | host-orchestrator | 根据用户确认的 `UC-VNEXT-UJ-001..016` 补入 R3.2.1 最小可执行契约：把强制四层改为 Roadmap/Phase 可选，补齐问询、Work/CR、执行/交接、评审、验证、独立推送/恢复、查询、复盘和有界自进化；用户已授权本地实现。 | 仅增量更新当前契约并保留 R2 历史；不重跑八份产品基线，不授权真实迁移或远端写入 |
+| 3.0 | 2026-07-19 | meta-pm | CR-052 vNext R2：新增 REQ-VNEXT-001..021、REQ-VNEXT-C001..006、REQ-VNEXT-NF001..005、RA-VNEXT-001..006 和 DQ-VNEXT-01..05；用双库隔离、四层治理、G0/G1/G2、Work scope/token、main expected-OID CAS 与快照迁移 supersede 旧共享 artifact migration-readiness 当前语义。保留全部既有 REQ/RA/里程碑 ID 与历史正文。 | 原文档增量 reframe；CP2 人工门待批准 |
+| 2.2 | 2026-07-19 | host-orchestrator | CP2 开门前实测发现除 19 个历史 CR catalog 错误外，HANDOFF-LEDGER 还有 1 条历史 `context_ref` 缺口；将 REQ-MR-020、DQ52-7 与 RA-MR-007 的 frozen fingerprint 从 catalog 扩为治理检查集合，CR-052 新增错误仍必须为 0。 | 原文档增量修订；不原位修复历史账本 |
 | 1.5 | 2026-07-14 | host-orchestrator-inline / meta-se | CP3 R2 度量精确化：同步修订 REQ-WT-006 与 RA-WT-004，把固定“21”重述为 `B0_pre` 历史快照，并以 CP7 动态 `B0_cp7`、可解释 delta、active/default-required blocker 作为验收契约；不改变 UC、Story、范围或 CP2 批准结论 | 原文档增量更新；无需重开 CP2 |
 | 1.6 | 2026-07-15 | host-orchestrator inline fallback | 为 CR-050 增量加入原生 Git 双仓 CR branch open/publish/finish 契约、fail-closed merge 证明、幂等与 partial failure；保留全部既有 REQ/RA，等待 CP2 确认五项产品边界 | 原文档增量更新 |
 | 1.6.1 | 2026-07-16 | host-orchestrator inline fallback | 记录 CR-050 CP2-DQ-01..05 推荐方案获批并将 `ready_for_design=true`；不修改 REQ/RA/范围，继续保留实现和真实远端 mutation 不授权边界 | CP2 状态同步 |
@@ -52,6 +78,7 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | 1.8 | 2026-07-17 | meta-pm | 为 CR-051 增量新增 REQ-AW-001..017、约束/NFR/风险和里程碑；将 CR-050 “artifact 整仓工作树”限定为 legacy/dedicated-artifact 适用前提，shared-artifact 模式改为当前 project worktree；保留全部既有 REQ/RA。 | 原文档增量更新；不改写 CR-050 历史正文 |
 | 1.9 | 2026-07-17 | meta-pm | CR-051 CP2 R2：按 DQ-01..03 用户决策修订 REQ-AW-003..012/016、NFR、风险与里程碑，冻结长期项目 integration 分支、短期 CR 分支、shared main、显式 merge-main refresh 与 existing-control+sibling-worktree 边界；REQ/RA/里程碑 ID 均不变。 | 原文档增量更新；R1 保留为 superseded 自动预检证据 |
 | 2.0 | 2026-07-18 | meta-pm | CR-051 CP2 R3：保持 27 个 REQ-AW ID 不变，修订为异构 source/artifact 双 leg、单一聚合门、integration create-only 初始化与 CR 外人工 main/integration 同步；CP2-DQ-02 保留历史并由 DQ-04 supersede。 | 原文档增量更新；R1/R2 历史追溯保留，R3 为当前候选基线 |
+| 2.1 | 2026-07-19 | meta-pm | 为 CR-052 增量新增 REQ-MR-001..021、REQ-MR-C001..005、REQ-MR-NF001..005、RA-MR-001..008 和 DQ52-1..10 产品决策语义；保留全部 CR-051 REQ/RA/里程碑 ID 与历史。 | 原文档增量更新；CR-052 CP2 人工门待批准 |
 | 1.1 | 2026-07-02 | host-orchestrator | 同步 CR-037 已激活、CR-036 暂停未完成和 CP2 pending 不授权实现的状态语义 | 小范围状态语义同步 |
 | 1.2 | 2026-07-11 | meta-pm | 为 CR-046 增量增加 evidence-integrity、replayability、telemetry 和 CR-163 append-only pilot 需求；保留全部 REQ-PG ID | 原文档增量更新 |
 | 1.3 | 2026-07-12 | meta-pm | CR-046 CP2 scope rework R2：新增 REQ-EI-019..023，覆盖 compaction 语义保持、通用 post-close correction、机器 audit report、null-provenance dogfooding 与 dispatch 证据限制；保留全部既有 REQ ID | 原文档增量更新 |
@@ -59,6 +86,63 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | 1.0 | 2026-07-02 | meta-pm | 基于已批准实施计划提取产品需求基线 | 初始化长期可追踪需求基线 |
 
 ## 功能需求
+
+### CR-052 vNext R3.2.1 当前可执行需求
+
+> 本节是 CR-052 当前唯一规范性实现输入，优先级高于后续保留的 R2 历史条款。R2 的 `REQ-VNEXT-001..021`、`REQ-VNEXT-C001..006`、`REQ-VNEXT-NF001..005` 继续保留用于追溯，但其中“只能四层”、旧场景映射、固定 CP2 pending 和双 leg/aggregate 延续语义均不得进入新实现。架构与实施细化见 `process/docs/design/CR052-VNEXT-HLD-AND-IMPLEMENTATION-PLAN.md`。
+
+| 需求 ID | 需求 | 优先级 | 量化验收 | 场景来源 |
+|---|---|---:|---|---|
+| REQ-VNEXT-UJ-001 | 新项目必须绑定恰好一个发布库和一个独立过程库；两仓不得共享 Git working tree、index、branch 或 common dir，发布库 `process` 默认使用相对软链接。 | P0 | 两项目 fixture 中 A 切分支后 B 的 HEAD/index/status/process hash 变化数=`0`；每项目 process 写路由数=`1`。 | UC-VNEXT-UJ-001 |
+| REQ-VNEXT-UJ-002 | 已有项目接入必须先生成只读快照 manifest，只复制用户确认的当前有效 Project/Phase/Work 和旧来源索引；真实复制、切换、commit 和远端写入分别授权。 | P0 | dry-run mutation=`0`；旧历史重写=`0`；双写=`0`；缺 manifest/OID/rollback 任一项时 apply=`BLOCKED`。 | UC-VNEXT-UJ-002 |
+| REQ-VNEXT-UJ-003 | 长期治理采用弹性 `Project -> [Roadmap] -> [Phase] -> Work`；Roadmap 与 Phase 均可选，Project、Roadmap、Phase 只保存目标、状态和引用。 | P0 | `Project->Work`、`Project->Phase->Work`、完整四层三类 fixture 全部 PASS；孤儿/跨项目/循环引用拒绝率=`100%`。 | UC-VNEXT-UJ-003 |
+| REQ-VNEXT-UJ-004 | 未确认请求不得进入实现；需求确认必须至少有一次高价值问询或复述确认，并只生成当前 Work 的最小 REQUEST。 | P0 | 确认记录覆盖率=`100%`；默认读取对象数≤`8`、写入需求对象数=`1`、全量产品基线自动生成数=`0`。 | UC-VNEXT-UJ-004 |
+| REQ-VNEXT-UJ-005 | 局部日常变化使用 Work；公共契约/架构、安全/权限、不可逆迁移、生产写、强审计、风险接受或跨阶段重构使用正式 CR；未知高风险阻断低档执行。 | P0 | 每类重大触发 fixture 的 CR/G2 路由率=`100%`；只因文件数多而误判 CR 数=`0`。 | UC-VNEXT-UJ-005 |
+| REQ-VNEXT-UJ-006 | 每个 Work/CR 必须有唯一 G0/G1/G2、可解释理由、allowed reads/writes、required checks 和 token 上限；G0=`8/8/3/32k`，G1=`20/24/8/96k`，G2 四项显式批准。 | P0 | 缺任一对象或超任一上限时执行步骤=`0`；G2 无显式预算时状态=`BLOCKED`；静默降级/超限=`0`。 | UC-VNEXT-UJ-006 |
+| REQ-VNEXT-UJ-007 | Work 必须支持开始、暂停、恢复、阻塞、取消和完成；暂停/交接只记录已完成、未完成、阻塞、下一步、源码/过程 OID 和最小证据 ref。 | P0 | 非法状态转移拒绝率=`100%`；恢复时重复全文扫描=`0`；OID/scope 冲突时写入=`0`。 | UC-VNEXT-UJ-007 |
+| REQ-VNEXT-UJ-008 | 评审强度必须随 G 档变化：G0 独立设计评审=`0`；G1 默认最多一次当前 Work 范围评审；G2 强制 HLD/ADR 和人工设计门。 | P1 | G0/G1 越档评审数=`0`；Reviewer 范围外读取未经扩读批准数=`0`。 | UC-VNEXT-UJ-008 |
+| REQ-VNEXT-UJ-009 | 验证必须在执行前声明与风险的映射；G0 目标测试/检查+diff/status，G1 增加必要构建/定向检查，G2 执行经批准的全量和独立验证。 | P0 | 未执行项误报 PASS=`0`；G0/G1 检查组分别≤`3/8`；每个新增检查均有风险映射。 | UC-VNEXT-UJ-009 |
+| REQ-VNEXT-UJ-010 | 发布库和过程库必须独立 commit/push、独立五态记录和独立恢复；只提交 Work allowlist，使用 expected remote OID 和 FF-only，不使用双 leg/aggregate。 | P0 | partial success 不误报整体 PASS；隐式 add-all/merge/force/tag/rebase/跨仓自动回滚=`0`。 | UC-VNEXT-UJ-010 |
+| REQ-VNEXT-UJ-011 | Work 关闭只写短结果与证据 refs，并最多投影到一个 Phase 和一个 Roadmap；完整 REQUEST/diff/test log/transcript 不得复制进长期对象。 | P1 | 默认写对象数≤`3`；完成态缺结果/风险处置/验证状态的接受数=`0`。 | UC-VNEXT-UJ-011 |
+| REQ-VNEXT-UJ-012 | 失败恢复必须先只读重观测，再枚举已完成/未执行/失败/未知；只重试失败步骤，不盲重放、不自动合并或回滚成功侧。 | P0 | 重复 mutation、静默覆盖、误报 PASS=`0`；状态 unknown 时后续写入=`0`。 | UC-VNEXT-UJ-012 |
+| REQ-VNEXT-UJ-013 | 状态查询默认从 Project/Phase/Work 轻量 refs 回答；只有用户追问或索引冲突时说明理由后扩读。 | P1 | 默认直接读取对象≤`5`、全文扫描=`0`、跨项目读取=`0`。 | UC-VNEXT-UJ-013 |
+| REQ-VNEXT-UJ-014 | Project/切片/Phase/异常 Work 复盘必须覆盖价值、规范/证据、质量/恢复、流动效率、token/context、Meta Flow 适配性六维，并区分事实/推断/人工判断与 measured/proxy/unavailable。 | P1 | 六维覆盖率=`100%`；unavailable 记为 `0` 的次数=`0`；报告触发实现/外部写入=`0`。 | UC-VNEXT-UJ-014 |
+| REQ-VNEXT-UJ-015 | 每条改进建议必须单独审议为 accepted/changed/deferred/rejected；accepted 项形成未执行的有界进化包，并把事实确认、建议批准、实现授权和外部写入授权分开。 | P0 | 四类授权语义合并数=`0`；无来源证据/scope/budget/acceptance/rollback 的 package 接受数=`0`。 | UC-VNEXT-UJ-015 |
+| REQ-VNEXT-UJ-016 | 已批准进化包必须作为一个正常 Work/CR 实现，先重现问题，再做 fixture/dogfood/canary 回测；失败停止推广，且不得递归自动触发下一轮自进化。 | P0 | 直接从复盘改源码=`0`；未达阈值仍推广=`0`；自动递归进化=`0`。 | UC-VNEXT-UJ-016 |
+
+### R3.2.1 当前约束与非功能需求
+
+| 需求 ID | 契约 | 验收 |
+|---|---|---|
+| REQ-VNEXT-UJ-C001 | 当前授权只覆盖本地、可逆源码/测试/文档实现；真实迁移、链接切换、commit/push/tag、publication、runtime/production、凭据和破坏性 Git 仍需独立授权。 | 未授权动作实际执行数=`0`。 |
+| REQ-VNEXT-UJ-C002 | 旧共享过程仓和旧 CP/CR/Story 只读保留；不得重写历史、自动语义转换或批量迁移项目。 | history rewrite/force/orphan/批量迁移=`0`。 |
+| REQ-VNEXT-UJ-C003 | vNext 默认路径不得调用双 leg、aggregate 或 shared project worktree；旧能力只允许 legacy 显式入口和历史审计。 | vNext 调用图中旧 lifecycle 依赖数=`0`。 |
+| REQ-VNEXT-UJ-NF001 | 相同 project identity、risk facts、scope、budget 和 OID 输入必须产生相同 plan/decision/digest。 | 两进程重复结果差异=`0`。 |
+| REQ-VNEXT-UJ-NF002 | scope/budget/OID/route 失败必须包含 project/Work、规则、声明值/实际值和安全恢复入口，不得泄露凭据。 | 适用定位字段覆盖率=`100%`，敏感原文泄露=`0`。 |
+| REQ-VNEXT-UJ-NF003 | 每个对象使用 schema/version、relative ref、unknown-field deny 和大小预算；默认查询/交接不得复制全文证据。 | 非法 ref/unknown key/超预算拒绝率=`100%`。 |
+
+### R2 条款的当前状态
+
+| R2 范围 | 当前状态 | R3.2.1 承接 |
+|---|---|---|
+| `REQ-VNEXT-001..003` 双库隔离 | reframed | `REQ-VNEXT-UJ-001..002` |
+| `REQ-VNEXT-004..008` 强制四层与旧 Work 状态 | superseded | `REQ-VNEXT-UJ-003..007`，Roadmap/Phase 改为可选 |
+| `REQ-VNEXT-009..015` G 档/scope/token | reframed | `REQ-VNEXT-UJ-006/008/009/013` |
+| `REQ-VNEXT-016..017` publisher/CAS | reframed | `REQ-VNEXT-UJ-010/012`，两仓独立结果，不采用 aggregate |
+| `REQ-VNEXT-018..021` 迁移/试点 | deferred from local implementation | `REQ-VNEXT-UJ-002` 与独立真实迁移人工门 |
+| `REQ-VNEXT-C006` CP2 pending 禁止源码实现 | superseded by user authorization | `REQ-VNEXT-UJ-C001`；本地实现已授权，外部 mutation 仍禁止 |
+
+### CR-052 vNext R2 历史需求状态映射
+
+### CR-052 vNext R2 历史需求状态映射
+
+| 历史需求范围 | vNext 状态 | 当前处理 | vNext 承接 |
+|---|---|---|---|
+| `REQ-PG-*`、`REQ-EI-*`、`REQ-WT-*` | reframed | 保留已交付的状态、证据、检查和路由能力事实；后续只在 Work scope 与四层治理内按需复用 | REQ-VNEXT-004..017 |
+| `REQ-GB-*` | superseded | 分支生命周期保留历史能力；过程库日常治理改为 main-only 单写 publisher + expected-OID CAS | REQ-VNEXT-016..017 |
+| `REQ-AW-*` | superseded | 共享 artifact 仓的 project-first namespace/worktree 不再是 vNext 目标拓扑 | REQ-VNEXT-001..003, REQ-VNEXT-018..021 |
+| `REQ-MR-*` | superseded | 迁移准备主线退出 CR-052 当前范围；只保留快照、校验和恢复经验 | REQ-VNEXT-018..021 |
+| 历史拆分、无损转换、自动 merge、批量迁移 | deferred | 不进入首版 P0/P1；有独立重启条件 | REQ-VNEXT-C001..005 |
 
 > CR-051 适用性规则：`REQ-GB-*` 的安全输入、显式授权、逐仓结果与 fail-closed 契约继续有效，但 `REQ-GB-011..014` 的 paired-default merge 仅适用于 source + dedicated/legacy artifact 两仓各自 default 分支的前提。shared-artifact 模式显式覆盖该前提：source leg 的目标仍是源码默认分支，artifact leg 的目标是当前项目 integration；任何要求 artifact default/main merge 的旧契约在该模式下不适用。control checkout 或整个 shared working tree 均不得成为当前项目写入面。
 
@@ -157,6 +241,48 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | REQ-AW-015 | migration preflight 不得自动执行文件搬迁、软链接创建/替换、worktree/ref mutation、commit 或 remote publication。 | P0 | Given用户只调用preflight或CR-051测试 When结束 Then真实 artifact tree、软链接和Git refs快照无变化。 | UC-AW-005 |
 | REQ-AW-016 | leg result 与 aggregate gate 必须共享 CR ID/attempt correlation，并逐 leg 记录 repo role、base/target、expected/current OID、terminal status、executed/skipped steps 和 resume/abort route；ledger 单写、receipt/OID 防自引用的精确 schema 留 CP3。 | P0 | Given任一步骤失败或partial When检查结果 Then source/current-artifact 两 leg 均有独立终态且 aggregate 可复算，不会把 sibling/control/shared main 冒充 artifact target。 | UC-AW-001..004 |
 | REQ-AW-017 | 验证必须使用临时仓库、本地 bare remote 与至少两个项目 namespace/worktree，覆盖 integration create-only、异构双 leg、聚合优先级、expected-OID 漂移和 CR 外人工同步边界；真实 remote 只作为后续独立 pilot。 | P0 | Given自动验证完成 When检查证据 Then至少2个项目可并行走完 fixture lifecycle，聚合组合覆盖完整、跨项目/shared-main mutation=0；真实remote未验证被显式披露。 | UC-AW-002..005 |
+| REQ-MR-001 | 系统必须提供 schema v2 external anchor，以可移植锚点 + 受 containment 校验的相对路径表达源码项目外部 sibling artifact worktree。 | P0 | Given source 与 artifact/project worktree 位于同一 workspace parent 下 When 写入并重放 v2 route Then 解析结果唯一、跨设备前缀变化不改变目标语义，canonical metadata 中设备绝对路径违规数为 0。 | UC-MR-001 |
+| REQ-MR-002 | route reader 必须兼容 legacy、v1 与 v2，writer 只能产生 v2；合法值不得继续标为 v1，未知版本必须 fail closed。 | P0 | Given legacy/v1/v2 fixture When read Then 各自按版本契约解析；Given 新 route write Then schema_version 恒为 2；Given unknown version Then decision=BLOCKED 且 mutation=0。 | UC-MR-001 |
+| REQ-MR-003 | external route 不得通过全局放宽 `..`、任意绝对路径或未声明 anchor 实现；所有 escape/traversal 输入必须在解析前被拒绝。 | P0 | Given `../../`、绝对路径、symlink escape、选项前缀或未声明 anchor fixture When route check Then 拒绝率 100%，fixture 外读写数为 0。 | UC-MR-001 |
+| REQ-MR-004 | workspace health 必须以事实区分 `legacy-compatible-not-migrated`、`project-first-migrated` 和 `route-conflict`，并提供稳定机器退出码。 | P0 | Given 三类布局矩阵重复运行 health When 比较 Then mode/exit-code 一致率 100%；legacy 兼容可读不得被标 migrated；conflict 退出码恒非零。 | UC-MR-001 |
+| REQ-MR-005 | route-conflict 必须列出冲突真相源、候选 target、project identity 和安全修复入口，并在任何写入前阻断。 | P0 | Given legacy/new metadata、symlink 和 STATE 线索相互冲突 When check/link/runner preflight Then decision=BLOCKED、定位字段完整率 100%、mutation=0。 | UC-MR-001 |
+| REQ-MR-006 | seed normalization 必须在 mutation 前冻结 manifest，记录允许删除的 path/hash/count、source/target OID 和 project ownership。 | P0 | Given inherited sibling seed fixture When plan Then manifest 在首个删除前已 durable readback，且每个允许删除对象均有 path/hash/count/OID 证据。 | UC-MR-004 |
+| REQ-MR-007 | prune 只能删除 manifest 精确列出的 inherited seed；sibling add/modify、unexpected delete 或 shared-main/ref/OID/hash 变化必须 fail closed。 | P0 | Given manifest 外对象或 hash/OID 漂移 When prune Then unexpected mutation 执行数为 0；Given合法 manifest Then实际删除集合与允许集合完全相等。 | UC-MR-004 |
+| REQ-MR-008 | steady `docs`/`process` ownership 和 project-first write route 只能在 prune receipt 验证通过后激活。 | P0 | Given prune 未开始、PARTIAL 或 receipt 无效 When activate route/ownership Then decision=BLOCKED、写目标不切换；Given receipt 完整 Then只激活当前 project leaf ownership。 | UC-MR-004 |
+| REQ-MR-009 | 系统必须提供 filesystem/opaque durable leg result writer/reader；进程内 store 不得作为 migration-ready 唯一 backend。 | P0 | Given writer 进程终止 When 独立 reader 以 opaque handle 读取 Then 适用 leg result readback 成功率 100%；缺失/篡改/错 CR/attempt handle 拒绝率 100%。 | UC-MR-002 |
+| REQ-MR-010 | aggregate store/readback 与 state projection 必须消费 durable evidence handle，并支持 project-local 路由之外的受控 evidence ref。 | P0 | Given source/artifact leg evidence 位于获准 out-of-band store When aggregate/readback/projection Then结果可复算且 ref 不因 project-local allowlist 被误拒；未授权 ref 仍 fail closed。 | UC-MR-002 |
+| REQ-MR-011 | evidence-tail receipt 必须记录 execution evidence digest、aggregate decision、parent/target OID 和写入后 worktree 状态，不得形成自引用或改变已完成 target 的语义。 | P0 | Given aggregate 完成后追加 audit tail When checker 重放 Then parent/target OID 和 digest 可复核，audit-tail commit/dirty state 与 execution completion 分栏，错误 tail 不得投影 PASS。 | UC-MR-002 |
+| REQ-MR-012 | transitional bootstrap 必须在首个 mutation 前持久化 immutable intent、plan digest、fresh OID 和授权引用。 | P0 | Given bootstrap execute When 首个 mutation 发生 Then intent 已由独立 reader 验证；缺 intent、OID/digest 漂移或授权不匹配时 mutation=0。 | UC-MR-003 |
+| REQ-MR-013 | coordinator 必须为每步写 receipt，并用可枚举 third-state 表达 intent-only、partial-mutation、receipt-pending 等中间状态。 | P0 | Given 每个步骤边界故障注入 When 观察结果 Then third-state 唯一、已执行/未执行步骤完整、不得把 PARTIAL 写成 PASS。 | UC-MR-003 |
+| REQ-MR-014 | resume 必须重新观察 route/OID/receipt，只执行未完成且仍获授权的步骤；重复 resume 必须幂等。 | P0 | Given任一 third-state重复 resume 两次 When完成 Then重复 destructive mutation数为0、terminal result一致、stale OID时BLOCKED并给出安全恢复入口。 | UC-MR-003 |
+| REQ-MR-015 | CR-053 CP0 必须显式 import 并验证 CR-052 coordinator 产生的 transitional receipt，不得追溯伪造 native-first CP0。 | P0 | Given receipt 缺失、过期、digest/OID/项目不匹配 When CP0 import Then CP0=BLOCKED；Given合法 receipt Then可进入 native route health 检查并保留 transitional attribution。 | UC-MR-003, UC-MR-007 |
+| REQ-MR-016 | 系统必须提供通用 migration engine 与薄 CLI；相同输入的 plan/decision/步骤顺序必须确定，dry-run 必须零副作用。 | P0 | Given相同 route/manifest/OID/policy输入重复 plan/dry-run When比较 Then计划与decision一致率100%，文件/link/worktree/local/remote ref变化数为0。 | UC-MR-005 |
+| REQ-MR-017 | execute 必须默认禁用，并按 ref、worktree、prune、link、push 分动作校验单次 typed authorization，绑定 repo/path/ref、fresh OID、plan digest、expiry 和消费状态。 | P0 | Given缺失、错动作/对象/OID/digest、过期或已消费 authorization When execute Then拒绝率100%、mutation=0；授权不得跨动作复用。 | UC-MR-005 |
+| REQ-MR-018 | CR-052 必须在临时 source/artifact-control/project-worktree 三并列目录与 local bare remote 执行真实 mutation E2E。 | P0 | Given临时拓扑 When执行route/bootstrap/prune/worktree/ref/link/evidence/scoped-check旅程 Then所有规定步骤产生terminal evidence，临时fixture外mutation=0。 | UC-MR-006 |
+| REQ-MR-019 | E2E 必须覆盖 intent、mutation、evidence-tail、reader restart、stale OID、half-push/partial 等故障并证明可恢复。 | P0 | Given故障矩阵逐点注入 When重新启动进程并resume Then每点均有BLOCKED/FAIL/PARTIAL终态和可执行恢复路由，误报PASS与自动跨leg回滚数为0。 | UC-MR-006 |
+| REQ-MR-020 | `cr check --id CR-052` 必须形成 scoped contract；全局 CR catalog 与 event-ledger 检查只要求冻结 error fingerprint 无新增，不要求本轮修复全部历史治理错误。 | P0 | Given CR-052 产物完成 When运行scoped/global governance checks Then scoped blocker=0、全局新增fingerprint=0；既有 19 个 CR catalog 错误和 1 个 handoff ledger `context_ref` 缺口保持原ID/证据且不被静默改写。 | UC-MR-007 |
+| REQ-MR-021 | CR-052 必须生成 CR-053 readiness handoff，引用已实现能力版本、E2E/evidence、remaining risks、真实 mutation denylist、授权/回滚前置；CR-053 不得现场新增核心迁移逻辑。 | P0 | Given CR-052 CP8 前 When检查handoff Then必需引用覆盖率100%，缺任一migration-critical能力或临时E2E evidence时readiness=NOT_READY。 | UC-MR-007 |
+| REQ-VNEXT-001 | 每个项目必须绑定恰好一个发布库和一个独立过程库；发布库默认复用现有源码/交付仓，不新增第三仓。 | P0 | Given 任一试点项目 When 解析 repo binding Then release repo route 数=1、process repo route 数=1、项目新增第三仓数=0；任一多解/缺失在写前 BLOCKED。 | UC-VNEXT-001 |
+| REQ-VNEXT-002 | 不同项目的过程库、working tree、index、branch/ref 与写入面必须物理隔离。 | P0 | Given 两个项目交替激活 Work When 比较未激活项目的 path/ref/index/state/hash Then 变化数=0、共享过程 working tree/index/branch 数=0。 | UC-VNEXT-001 |
+| REQ-VNEXT-003 | 发布库与过程库必须使用互斥 ownership：发布代码/用户文档进入发布库，Work/决策/检查/证据进入过程库。 | P0 | Given 同一 Work 同时产生产品变更和过程证据 When 检查 touched paths Then 归属错误数=0；同一 canonical 对象可写副本数=1。 | UC-VNEXT-001, UC-VNEXT-005 |
+| REQ-VNEXT-004 | 长期治理对象必须且只能采用 `Project -> Roadmap -> Phase -> Work` 四层。 | P0 | Given 任一有效项目快照 When 执行层级检查 Then 4/4 层枚举存在；第五层、跳层父子关系和未知层接受数=0。 | UC-VNEXT-002 |
+| REQ-VNEXT-005 | 每个 Roadmap、Phase 和 Work 必须恰好有一个有效父对象，且父子引用可双向校验。 | P0 | Given 含孤儿、多父、跨项目或循环引用 fixture When 检查 Then 拒绝率=100%；合法对象父引用唯一数=1。 | UC-VNEXT-002 |
+| REQ-VNEXT-006 | Roadmap/Phase 必须保存长期目标与进度真相；单次 Work 关闭时只允许更新一个所属 Phase 投影和一个 Roadmap 进度投影。 | P0 | Given Work 完成/取消 When 写回长期对象 Then 被更新 Phase 数≤1、Roadmap 数≤1、复制 Work 全文次数=0，且投影含 outcome/evidence ref。 | UC-VNEXT-002, UC-VNEXT-003 |
+| REQ-VNEXT-007 | Work 生命周期必须使用 `planned / active / blocked / completed / cancelled / archived`，并只允许声明的状态转移。 | P0 | Given 全部状态对组合 When 运行 transition checker Then 未声明转移拒绝率=100%；任一时刻 current status 数=1；blocked 可恢复到 active。 | UC-VNEXT-003 |
+| REQ-VNEXT-008 | 每个 active Work 必须恰好绑定一个 G0/G1/G2 profile 和一个 versioned Work scope。 | P0 | Given Work 准备执行 When precheck Then profile 数=1、scope 数=1；缺失、多值或过期对象时执行步骤数=0。 | UC-VNEXT-003, UC-VNEXT-004, UC-VNEXT-005 |
+| REQ-VNEXT-009 | G0 默认上限必须为读取文件≤8、允许写入文件≤8、检查组≤3、总 token≤32,000，且不得包含权限提升、外部写入、迁移、production/publication。 | P0 | Given 候选 G0 Work When route check Then全部四项预算在上限内且高风险标志数=0才可选G0；任一不满足时G0接受数=0并升级G1/G2。 | UC-VNEXT-004, UC-VNEXT-005 |
+| REQ-VNEXT-010 | G1 默认上限必须为读取文件≤20、允许写入文件≤24、检查组≤8、总 token≤96,000，且不得绕过 G2 高风险触发。 | P0 | Given 候选 G1 Work When route check Then全部四项预算在上限内且G2触发数=0才可选G1；超限时静默继续数=0。 | UC-VNEXT-004, UC-VNEXT-005 |
+| REQ-VNEXT-011 | 涉及 security/permission、credentials、external write、repository publication、迁移 cutover、runtime/production/live/trading 或超过 G1 默认上限的 Work 必须路由 G2。 | P0 | Given 每类 G2 触发 fixture When route check Then G2 路由率=100%；G0/G1 误接收数=0；G2 仍须显式声明 scope 和 token budget。 | UC-VNEXT-004 |
+| REQ-VNEXT-012 | Work 读取必须 deny-default，只能访问 `allowed_reads`；扩读前必须记录原因、目标和 profile/budget 变化。 | P0 | Given scope 外文件或 deny-default 文档 When 尝试读取 Then实际读取数=0；Given 获批扩读 Then expansion 记录覆盖率=100%且新总数不超过当前 profile。 | UC-VNEXT-005 |
+| REQ-VNEXT-013 | Work 写入必须 deny-default，只能修改 `allowed_writes`，并在返回时核对 touched files。 | P0 | Given scope 外路径、其他项目过程库或旧共享过程仓 When 尝试写入 Then变更数=0；合法 Work 的 touched-file 覆盖检查率=100%。 | UC-VNEXT-001, UC-VNEXT-005, UC-VNEXT-006 |
+| REQ-VNEXT-014 | Work 只能执行 `required_checks`；G0/G1 不得默认运行与 scope 无关的全量检查。 | P1 | Given G0/G1 Work When 执行检查 Then未声明检查数=0、检查组分别≤3/≤8；全量检查仅在 scope 命中或升级 G2 后执行。 | UC-VNEXT-005 |
+| REQ-VNEXT-015 | token usage 必须按 measured/proxy/unavailable 诚实记录；预计超预算或实际达到上限时必须停止并升级/扩容。 | P0 | Given usage 达到 profile 上限或平台无 telemetry When 执行 Then静默超限数=0、measurement status 覆盖率=100%、proxy 冒充 measured 数=0。 | UC-VNEXT-005 |
+| REQ-VNEXT-016 | 每个过程库 `main` 必须只有一个逻辑 publisher，写入必须绑定 fresh expected OID 并使用 CAS。 | P0 | Given 两个并发 publisher attempt 使用同一 expected OID When 依次提交 Then恰好1个成功、1个stale失败；静默覆盖、force和自动merge数=0。 | UC-VNEXT-003 |
+| REQ-VNEXT-017 | 成功的过程写入必须产生唯一 publisher receipt，记录 Work、before/after OID、scope digest 和 terminal status；重复提交必须幂等。 | P0 | Given 成功写入或重复相同请求 When 重放 Then每次成功恰有1个receipt、重复内容新commit数=0、before/after OID链断点数=0。 | UC-VNEXT-003, UC-VNEXT-005 |
+| REQ-VNEXT-018 | vNext 首版迁移必须只复制当前 Project/Roadmap/Phase/active Work 快照和旧历史来源索引。 | P0 | Given 目标项目迁移清单 When 生成新过程库初始快照 Then当前对象覆盖率=100%、旧 Git 历史拆分数=0、旧 CP/CR/Story 无损转换数=0。 | UC-VNEXT-006 |
+| REQ-VNEXT-019 | cutover 后所有新过程写入只能进入项目独立过程库，旧共享过程仓必须只读。 | P0 | Given cutover 后执行 G0/G1 Work 和旧仓写入负例 When 审计 Then新过程库写入路由唯一数=1、旧共享过程仓新增写入数=0、双写数=0。 | UC-VNEXT-006 |
+| REQ-VNEXT-020 | vNext 必须以 2 个项目、每项目至少 2 个完整 Work 周期完成试点；每个项目至少覆盖 1 个 G0 和 1 个 G1 Work。 | P1 | Given 试点完成 When 汇总 evidence Then项目数=2、总完整周期数≥4、每项目G0周期≥1且G1周期≥1、跨项目变化数=0。 | UC-VNEXT-001, UC-VNEXT-004, UC-VNEXT-006 |
+| REQ-VNEXT-021 | 每个项目 cutover 必须具有 snapshot hash、pre-cutover OID、回滚目标和观察期；首版推荐观察期为 30 天且覆盖 2×2 试点。 | P1 | Given cutover 或回滚 When 检查 migration record Then四类字段覆盖率=100%；观察期内旧仓写入数=0；缺任一前置时cutover执行数=0。 | UC-VNEXT-006 |
 
 ### CR-051 CP2 R3 已解决产品决策
 
@@ -170,6 +296,35 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | CP2-DQ-06 | integration create-only 初始化与 CR 外人工同步 | integration 缺失时从 fresh `origin/main` exact OID 创建；存在时不 recreate/reset/orphan；main↔integration 同步仅在 CR 外人工执行 | resolved-by-user | 初始化 CAS、人工同步 precheck 与“无活跃 artifact CR”检查 |
 
 > 六项 DQ 均已分类，当前 pending decision items=0；DQ-02 仅为 superseded 历史，其余为 resolved-by-user。CP2 R3 总体基线仍须由用户 `approve`，且该批准不授权任何真实 Git/worktree/link/remote mutation。
+
+### CR-052 CP2 待人工决策产品语义
+
+> 用户原答“按照你的计划实施”确认启动计划和 SGQ-MR-001 场景理解，但不是 CP2 正式审批。因此 DQ52-1..10 均保留为 `decision-item`，由 host-orchestrator 汇总到正式 CP2 Decision Brief；本表不发起 gate。
+
+| 决策 ID | 类型 | 分类 | 推荐产品语义 | 备选 / 取舍 | 影响与切换条件 |
+|---|---|---|---|---|---|
+| DQ52-1 | scope | decision-item | CR-052 建设并临时真实演练能力；CR-053 才迁移真实布局 | 合并可减少 CR 数，但混合授权/回滚；native-first 会迫使部分迁移前移 | 若用户要求 CR-053 第一写原生且不接受 transitional CP0，回到需求/架构重切范围 |
+| DQ52-2 | architecture | decision-item | schema v2 + `workspace_parent=project_root.parent`，legacy/v1/v2 dual-read、v2-only write | 显式 workspace_root 覆盖更多拓扑，但增加配置与错误面 | 真实目标不满足同父目录或无法唯一解析时切换显式 workspace_root |
+| DQ52-3 | architecture | decision-item | CR-053 使用显式 transitional CP0，并消费 CR-052 coordinator/receipt | native-first 叙事更简洁，但产生 bootstrap 悖论或需 CR 外 Change Package | 若不接受 transitional attribution，必须扩大 CR-052 或建立独立 Change Package |
+| DQ52-4 | architecture | decision-item | out-of-band content-addressed execution store + project-local audit-tail receipt | 纯 tracked store 更直观，但 aggregate 后必然产生 dirty/evidence tail | CP3 必须冻结 durability、parent/target OID、自引用防护和跨机器边界 |
+| DQ52-5 | implementation | decision-item | manifest-bound seed prune 完成后再激活 steady ownership | prune 前激活 route 需扩 schema exclusion，split-brain 风险更高 | 若无法在 manifest 中精确枚举 seed，停止 mutation并回 CP3/Spike，不扩大删除范围 |
+| DQ52-6 | runtime_authorization | decision-item | CR-052 允许当前 legacy audit persistence；commit/push 按 exact OID 在后续独立授权 | local-only 可避免 publication 风险，但不能提供远端恢复 | CP2 只确认“不授权 commit/push”；需要远端持久化时由 host 在 CP5/CP8 另行询问 |
+| DQ52-7 | scope | decision-item | scoped/delta governance checks + frozen global fingerprint；历史 CR catalog 与 ledger 修复做 follow-up | 全量修复可获得全局绿色，但显著扩大范围并改写历史噪声治理 | 仅当既有历史错误直接阻断 scoped contract 时，经新决策扩大范围 |
+| DQ52-8 | risk_acceptance | decision-item | 临时仓真实 mutation E2E 强制；真实 meta-flow/artifacts mutation禁止 | 临时环境只 dry-run 风险更低，但不能声称 migration-ready | 若安全环境不能真实 mutation，则 CP8 结论必须 NOT_READY，不得降级冒充通过 |
+| DQ52-9 | security | decision-item | ref/worktree/prune/link/push逐动作单次授权，绑定OID/plan digest/expiry | 单个总授权操作简单，但重放与越权面过大 | 只有动作集合风险等价且授权不可重放得到证明时才重新评审合并授权 |
+| DQ52-10 | follow_up_tracking | decision-item | CR-053、shared-main README 和其他项目迁移进入有 owner/触发条件的 follow-up | 立即修改 README/其他项目可减少文档欠账，但越过当前 mutation/publication边界 | 获得目标项目或 shared-main README-only 独立授权后启动对应 follow-up |
+
+### CR-052 vNext R2 CP2 待人工决策产品语义
+
+> SGQ-VNEXT-001 只证明用户接受推荐方向并要求进入正式流程，不等于以下决策已批准。host-orchestrator 必须将 DQ-VNEXT-01..05 汇入 CP2 Decision Brief；本表不发起 gate。
+
+| 决策 ID | 类型 | 分类 | 推荐产品语义 | 备选 / 取舍 | 影响与切换条件 |
+|---|---|---|---|---|---|
+| DQ-VNEXT-01 | architecture | decision-item | 发布库复用项目现有源码/交付仓；每项目只新增 1 个独立过程库，总计恰好 2 个逻辑仓库 | 新建专用发布仓边界更纯，但增加第三仓迁移、同步和维护成本 | 仅当现有仓无法容纳发布资产且有明确 owner/同步契约时切换专用发布仓 |
+| DQ-VNEXT-02 | architecture | decision-item | 过程库 main-only、单写 publisher、每次写入 expected-OID CAS；不为 Work 建分支、不自动 merge | per-Work branch 熟悉但恢复分支治理；多 publisher 自动 merge 吞吐高但冲突语义复杂 | 单 publisher 连续两个试点周期违反已批准 SLO 时再评审队列化/分片，不直接启用自动 merge |
+| DQ-VNEXT-03 | scope | decision-item | 首版只迁当前快照，旧共享仓永久只读索引；不拆历史、不无损转换旧 CP/CR/Story | 历史拆分便于单库检索，但成本高且可能破坏审计语义 | 只有只读索引无法满足强制审计/恢复，且存在版本化转换契约时启动后续 CR |
+| DQ-VNEXT-04 | implementation | decision-item | G0=8读/8写/3检查/32k token；G1=20读/24写/8检查/96k token；超限或高风险进入 G2 | 更低上限成本更小但易 underfit；更高上限减少升级但削弱减负目标 | 2×2 试点中任一 profile 超限率>20%或产出质量失败率>10%时，以实测数据调整并重走范围门 |
+| DQ-VNEXT-05 | scope | decision-item | 2 个试点项目×每项目至少 2 个周期，每项目覆盖 G0/G1；旧仓保持只读，观察期推荐 30 天 | 单项目试点更快但不能证明隔离；更大批次覆盖高但扩大风险 | 4 个周期未全部通过时不扩大项目数；30 天内出现恢复缺口则延长只读兼容，不执行退役 |
 
 ## 约束需求
 
@@ -195,6 +350,17 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | REQ-AW-C003 | 不得读取、stage、commit、merge、reset、clean、remove或删除 sibling project owned path/ref/worktree。 | P0 | Given sibling含dirty/untracked/active branch When当前项目执行任何生命周期动作 Then sibling文件/ref/index变化数为0。 | UC-AW-003 |
 | REQ-AW-C004 | 单个 artifact CR 不得 refresh、merge 或直接更新 shared main，也不得自动执行 main↔integration 同步、stash、rebase、force/force-with-lease、解决冲突、选择提交文件或跨 leg 回滚。 | P0 | Given负例诱导上述行为 When执行plan/operation Then禁止命令执行数为0，并返回显式 CR 外人工同步或安全恢复入口。 | UC-AW-003, UC-AW-004 |
 | REQ-AW-C005 | CP2 approval 只确认产品/场景/范围，不授权HLD后续门禁跳过、源码实现、真实迁移、软链接变更、repository publication、default write、delete、credentials或runtime。 | P0 | Given用户批准CR-051 CP2 When检查授权边界 Then上述动作仍需CP3/CP5及对应操作级授权。 | CR-051不授权范围 |
+| REQ-MR-C001 | CR-052 不得迁移真实 meta-flow artifact 文件、创建/替换真实软链接，或创建/切换/删除真实 project integration、worktree、branch/ref、commit/tag/stash。 | P0 | Given CR-052 touched-path/ref/link audit When验证 Then上述真实对象变化数为0；真实mutation只允许在临时fixture。 | UC-MR-006, UC-MR-007 |
+| REQ-MR-C002 | CR-052 不得读取、发现、迁移或修改 ptm-team、ptm-atomic、quant-lab 内容、路径、ref、worktree或链接。 | P0 | Given任一CR-052计划/执行/测试 When审查read/write/touched refs Then三个项目真实路径和ref访问/变化数均为0；隔离验证只使用合成namespace。 | 用户明确排除 / UC-MR-006 |
+| REQ-MR-C003 | 不得全局放宽 `..`、接受任意绝对路径、使用单个总授权、或执行 force/tag/reset/rebase/orphan/自动merge/冲突解决。 | P0 | Given负例诱导上述输入/动作 Whenplan/execute Then拒绝率100%，禁止动作执行数为0。 | UC-MR-001, UC-MR-005 |
+| REQ-MR-C004 | 不得在CR-052执行repository publication、shared-main内容写入、main↔integration同步或跨leg自动回滚。 | P0 | Givenpartial/half-push/evidence-tail故障 When恢复 Then保留真实成功事实和分步resume，shared-main/publication/cross-leg rollback执行数为0。 | UC-MR-002, UC-MR-006 |
+| REQ-MR-C005 | CP2 approval 只确认产品/场景/范围和推荐方向，不授权源码实现、真实仓mutation、commit/push、credentials、runtime、production、publish、live/trading。 | P0 | Given用户后续批准CP2 When检查授权边界 Then上述动作仍由CP3/CP5和独立operation authorization控制。 | CR-052不授权范围 |
+| REQ-VNEXT-C001 | vNext 首版不得拆分或重写旧共享过程仓 Git 历史。 | P0 | Given migration plan/diff When 审查 Then历史 rewrite、filter、orphan、force 数=0；旧仓只读来源引用覆盖率=100%。 | UC-VNEXT-006 |
+| REQ-VNEXT-C002 | vNext 首版不得做旧 CP/CR/Story 无损自动转换或把未知字段推断为等价新语义。 | P0 | Given 异构旧对象 fixture When迁移 Then自动语义转换数=0、unknown→confirmed 推断数=0，只生成只读索引。 | UC-VNEXT-006 |
+| REQ-VNEXT-C003 | 不得实现多 publisher 分布式自动 merge 或在 expected-OID 冲突后 force 覆盖。 | P0 | Given并发CAS冲突 When处理 Then自动merge/force/rebase/reset数=0，失败返回fresh-read重试入口。 | UC-VNEXT-003 |
+| REQ-VNEXT-C004 | 不得批量迁移其他项目；每个项目必须有独立快照、授权、回滚和cutover记录。 | P0 | Given批量项目列表或无项目级记录 When执行precheck Then迁移执行数=0；单项目四类前置覆盖率须=100%。 | UC-VNEXT-006 |
+| REQ-VNEXT-C005 | 未经独立授权不得执行 repository publication、remote push、runtime、production、publish、live 或 trading。 | P0 | Given CP2 approve 或普通 Work scope When检查授权 Then上述动作仍为not-authorized，实际执行数=0。 | UC-VNEXT-001..006 |
+| REQ-VNEXT-C006 | CP2 通过前不得生成正式 Feature/Story/LLD、修改源码或执行真实仓迁移。 | P0 | Given产品基线和CP2预检完成但人工门pending When审计 Then正式CP4 Story数=0、LLD数=0、源码/真实迁移变更数=0。 | 当前门控边界 |
 
 ## 非功能需求
 
@@ -217,6 +383,16 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | REQ-AW-NF003 | 多项目并发隔离必须避免共享checkout、index与项目branch；并行fixture中的每个 worktree 必须只在自身 integration/CR branch 间切换，共享 `main` 不得成为项目 working branch。 | P0 | Given两个项目并行执行本地fixture lifecycle When完成 Thenindex.lock争用数、wrong-branch写入数、shared-main checkout占用数和cross-project touched paths均为0。 | UC-AW-002, UC-AW-003 |
 | REQ-AW-NF004 | Git参数必须以argv列表传递并执行project/path/ref输入校验；错误必须包含project、repo role、step、safe command summary、OID和恢复路由。 | P0 | Given含路径穿越、选项前缀、换行或shell元字符的输入 Whenprecheck Then100%拒绝且无额外命令执行。 | UC-AW-001..004 |
 | REQ-AW-NF005 | create/check/list/remove/bootstrap/leg-preflight/aggregate必须可重入；重复执行不得静默改变已确认路由、重建既有 integration 或删除恢复证据。 | P1 | Given相同成功/失败操作重复执行 When比较 Then返回PASS/NO_CHANGE/BLOCKED等稳定状态，非预期mutation为0。 | UC-AW-002, UC-AW-004, UC-AW-005 |
+| REQ-MR-NF001 | 对相同 schema/route/manifest/OID/evidence/policy 输入，mode、plan、decision、evidence digest 和 resume route 必须确定。 | P0 | Given相同fixture在新进程重复执行 When比较 Then适用字段一致率100%；差异必须由fresh OID、时间有效期或明确外部输入解释。 | UC-MR-001..007 |
+| REQ-MR-NF002 | durable evidence 至少必须跨进程存活、可校验完整性和归属；跨机器复制/共享边界必须在CP3显式定义，不得默认为已支持。 | P0 | Givenwriter退出后新进程readback When验证 Then成功率100%；若跨机器未验证，文档/结果明确标为unsupported或deferred而非durable-global。 | UC-MR-002 |
+| REQ-MR-NF003 | bootstrap、prune、runner、evidence-tail和scoped check必须可重入；失败恢复不得依赖隐式会话记忆。 | P0 | Given每个故障点重复resume/recheck When比较 Then重复destructive mutation=0，恢复所需输入均来自durable intent/receipt/evidence。 | UC-MR-003..007 |
+| REQ-MR-NF004 | 所有失败必须包含project/repo role、action、path/ref、expected/current OID、rule ID、evidence ref和安全恢复路由；敏感内容不得进入safe summary。 | P0 | Given任一negative/failure fixture When查看结果 Then适用定位字段覆盖率100%，secret/credential原文泄露数为0。 | UC-MR-001..007 |
+| REQ-MR-NF005 | CR-052验证必须覆盖正向、负向、边界、权限、失败恢复和precheck，且每个HIGH需求至少有正向或precheck与负向/权限/恢复证据组合。 | P0 | GivenTEST-MATRIX完成 When覆盖检查 Then全部REQ-MR有TC回链，高优先级缺口数为0，N/A项均有原因。 | UC-MR-001..007 |
+| REQ-VNEXT-NF001 | 对相同 project identity、repo bindings、层级对象、Work scope、risk profile 和 OID 输入，route/plan/decision 必须确定。 | P0 | Given相同fixture跨两个新进程重复执行 When比较 Thenroute唯一数均=1、plan/decision/digest差异数=0。 | UC-VNEXT-001..006 |
+| REQ-VNEXT-NF002 | 跨项目隔离必须在 2 项目并行/交替 fixture 中保持 sibling read/write/ref/index 变化为 0。 | P0 | Given两个项目各执行G0/G1周期 When审计 Thencross-project read、write、ref、index-lock和state变化数均=0。 | UC-VNEXT-001, UC-VNEXT-006 |
+| REQ-VNEXT-NF003 | Scope/CAS/预算失败必须包含 Work ID、project、规则、声明/实际值、expected/current OID（适用时）和安全恢复路由。 | P0 | Given任一负例 When查看finding Then适用定位字段覆盖率=100%，secret/credential原文泄露数=0。 | UC-VNEXT-003..005 |
+| REQ-VNEXT-NF004 | 每个完成/取消的 Work 必须留下 scope、usage、check、publisher receipt 和长期投影证据。 | P1 | Given试点至少4个周期 When审计 Then五类证据覆盖率=100%，缺失任一类的Work完成判定数=0。 | UC-VNEXT-002..006 |
+| REQ-VNEXT-NF005 | vNext 产品验收必须覆盖正向、负向、边界、权限和失败恢复；全部 REQ-VNEXT P0/P1 必须有 TC 回链。 | P0 | GivenTEST-MATRIX完成 When覆盖检查 ThenREQ-VNEXT回链率=100%、P0/P1未覆盖数=0、场景类型至少覆盖5类。 | UC-VNEXT-001..006 |
 
 ## 风险与假设
 
@@ -243,6 +419,20 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | RA-AW-004 | RISK | legacy与project-first布局共存可能形成两个可写真相源。 | REQ-AW-002..003, REQ-AW-NF001..002 | layout version和write target显式化；多解BLOCKED；迁移manifest记录切换点与回滚。 |
 | RA-AW-005 | RISK | 能力实现误调用真实artifact仓会提前触发用户计划外迁移或ref变更。 | REQ-AW-013..015, REQ-AW-C001 | 默认dry-run/fixture；真实路径denylist与touched-ref审计；任何真实mutation需独立授权。 |
 | RA-AW-006 | ASSUMPTION | 用户将逐项目执行真实artifact迁移和软链接挂接，本CR只交付能力与交接包。 | REQ-AW-014..015 | 在MVP、Backlog、迁移手册和CP8不授权项中持续保留边界。 |
+| RA-MR-001 | RISK | schema v2 external anchor 若仍复用v1语义或全局放宽`..`，会形成reader/writer split-brain和路径逃逸。 | REQ-MR-001..005 | dual-read/v2-only write、声明式anchor、containment与恶意路径fixture；冲突fail closed。 |
+| RA-MR-002 | RISK | 进程内或纯tracked evidence会在aggregate后产生dirty tail、丢失跨进程恢复或自引用target OID。 | REQ-MR-009..011, REQ-MR-NF002 | 两阶段content-addressed store + audit-tail receipt；CP3冻结durability与OID契约。 |
+| RA-MR-003 | RISK | route尚未原生化时依赖native CP0会产生bootstrap悖论，失败后无法判断已执行步骤。 | REQ-MR-012..015 | transitional coordinator、immutable intent/receipt、third-state、resume与CP0 import。 |
+| RA-MR-004 | RISK | inherited sibling seed prune可能被误报为“sibling change=0”，也可能越界删除真实内容。 | REQ-MR-006..008 | mutation前freeze manifest；只允许exact deletion；unexpected=0；steady ownership后置激活。 |
+| RA-MR-005 | RISK | runner在真实仓或错误OID上execute会造成不可逆ref/worktree/link/文件变化。 | REQ-MR-016..019, REQ-MR-C001..003 | execute默认禁用；逐动作单次typed auth；真实仓denylist；真实mutation仅临时拓扑。 |
+| RA-MR-006 | RISK | source/artifact/evidence-tail任一步partial可能被误投影为整体PASS或触发错误跨leg回滚。 | REQ-MR-011, REQ-MR-013..014, REQ-MR-019 | 每步terminal evidence、fresh readback、partial状态矩阵、evidence-only resume；禁止自动跨leg回滚。 |
+| RA-MR-007 | RISK | 全局历史 CR catalog/ledger 错误会淹没 CR-052 新增回归，或被本轮静默“修绿”。 | REQ-MR-020 | scoped PASS + frozen fingerprint delta=0；冻结基线为 CR lifecycle 19 条和 HANDOFF-LEDGER 1 条，历史修复独立 follow-up。 |
+| RA-MR-008 | ASSUMPTION | 用户“按照你的计划实施”授权启动CR-052和临时受控测试，但不构成正式CP2批准或真实仓/publication授权。 | REQ-MR-C001..005, 全部REQ-MR | discussion log保留原答与复述边界；DQ52-1..10继续由host在CP2统一决策。 |
+| RA-VNEXT-001 | RISK | 双库路由若多解或仍复用共享过程 working tree，会保留跨项目联动。 | REQ-VNEXT-001..003, REQ-VNEXT-NF001..002 | 路由唯一数=1、物理隔离检查、冲突写前阻断；2项目交替fixture。 |
+| RA-VNEXT-002 | RISK | main-only 单写 publisher 可能形成吞吐瓶颈，CAS 冲突也可能诱发 force/自动merge。 | REQ-VNEXT-016..017, REQ-VNEXT-C003 | 单写队列+fresh OID重试；先以2×2试点测量，不以复杂多写者提前优化。 |
+| RA-VNEXT-003 | RISK | G0/G1 上限过低会 underfit，过高则无法减负。 | REQ-VNEXT-009..015, DQ-VNEXT-04 | 量化超限率/质量失败率；超过20%/10%阈值才回CP2/CR调整，不静默扩容。 |
+| RA-VNEXT-004 | RISK | 快照迁移可能遗漏恢复所需历史，双写兼容又会形成两个真相源。 | REQ-VNEXT-018..021, REQ-VNEXT-C001..004 | 当前快照100%覆盖、旧仓只读索引、30天观察期、双写=0、项目级回滚。 |
+| RA-VNEXT-005 | RISK | Work 长期投影若复制过多会再次膨胀 Roadmap/Phase，过少则丢失决策脉络。 | REQ-VNEXT-006, REQ-VNEXT-NF004 | 每Work最多1个Phase+1个Roadmap投影，只保存outcome/evidence/decision/risk refs并做完整性检查。 |
+| RA-VNEXT-006 | ASSUMPTION | 用户接受 vNext 推荐方向和正式流程启动，但 DQ-VNEXT-01..05 尚需 CP2 统一批准。 | 全部REQ-VNEXT | SGQ-VNEXT-001只标confirmed-for-scenario-baseline；ready_for_design=false，host统一发起人工门。 |
 
 ## 里程碑建议
 
@@ -266,6 +456,16 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 | M-AW2：Per-project Worktree Management | REQ-AW-004..007, REQ-AW-013, REQ-AW-C002, REQ-AW-NF003..005 | create/check/list/remove计划、registry/health、长期integration与短期CR分支命名、existing-control+sibling-root拓扑及多项目隔离fixture | M-AW1；CP2-R2-DQ-01/03 resolved；待CP3/CP5 |
 | M-AW3：Heterogeneous Legs and Aggregate Gate | REQ-AW-008..013, REQ-AW-016..017, REQ-AW-C003..005 | source-default leg、artifact-integration leg、expected-OID门、单一聚合、结构化结果和并发fixture | M-AW2；CP2-DQ-04..06 resolved；待CP3/CP5 |
 | M-AW4：Migration Handoff without Mutation | REQ-AW-014..015, REQ-AW-C001, REQ-AW-NF005 | per-project migration preflight/manifest、验证/回滚checklist与用户手册；真实迁移0 | M-AW3 |
+| M-MR1：External Route Truth | REQ-MR-001..005, REQ-MR-C003, REQ-MR-NF001 | schema v2、legacy/v1/v2 dual-read、v2-only write、health mode table与route-conflict输出 | CR-052 CP2/CP3/CP5 |
+| M-MR2：Seed Normalization and Ownership | REQ-MR-006..008, REQ-MR-C002, REQ-MR-NF003 | frozen manifest、exact prune、unexpected=0、steady ownership activation receipt | M-MR1 |
+| M-MR3：Durable Evidence and Audit Tail | REQ-MR-009..011, REQ-MR-NF002, REQ-MR-NF004 | filesystem/content-addressed store、opaque handle、aggregate readback/projection、audit-tail OID contract | M-MR1；DQ52-4/CP3 |
+| M-MR4：Transitional Bootstrap | REQ-MR-012..015, REQ-MR-NF003 | intent、receipt、third-state、idempotent resume、CP0 import | M-MR2, M-MR3；DQ52-3 |
+| M-MR5：Guarded Migration Runner | REQ-MR-016..017, REQ-MR-C003..005, REQ-MR-NF001, REQ-MR-NF004 | deterministic engine/plan、薄CLI、逐动作typed authorization与production deny-default | M-MR4；DQ52-9 |
+| M-MR6：Real Temporary E2E and Readiness | REQ-MR-018..021, REQ-MR-C001..005, REQ-MR-NF005 | 三并列临时拓扑真实mutation、故障注入/resume、scoped check、fingerprint delta、CR-053 handoff | M-MR5；CP7/CP8 |
+| M-VNEXT-A：Per-project Dual-repo Isolation | REQ-VNEXT-001..003, REQ-VNEXT-016..017, REQ-VNEXT-NF001..003 | 每项目双库绑定、互斥ownership、过程main单写publisher、expected-OID CAS与跨项目隔离契约 | CR-052 vNext CP2/CP3/CP5 |
+| M-VNEXT-B：Long-lived Governance and Work | REQ-VNEXT-004..008, REQ-VNEXT-NF004 | Project/Roadmap/Phase/Work四层、唯一父子关系、Work生命周期和克制投影 | M-VNEXT-A |
+| M-VNEXT-C：Risk-scoped Execution | REQ-VNEXT-009..015, REQ-VNEXT-NF003..005 | G0/G1/G2路由、read/write/check scope、token budget与升级/阻断 | M-VNEXT-B |
+| M-VNEXT-D：Snapshot Pilot and Cutover Evidence | REQ-VNEXT-018..021, REQ-VNEXT-C001..006, REQ-VNEXT-NF002,004..005 | 当前快照、旧仓只读、2项目×2周期、30天观察与逐项目回滚证据 | M-VNEXT-C；独立迁移/远端授权 |
 
 ## 明确排除项
 
@@ -274,4 +474,12 @@ source_plan: "process/docs/design/META-FLOW-PROJECT-GOVERNANCE-STATE-ENFORCEMENT
 - 不把 quant-lab 迁移和 capability 新能力实现混为同一个交付范围。
 - 不把发布库 stale finding 自动升级为发布库写入授权。
 - 不把 CR-051 能力开发扩成真实 `meta-flow-artifacts` 目录迁移、软链接挂接、control repo 转 bare、真实远端试运行或批量项目切换。
+- 不把 CR-052 migration-readiness 扩成 CR-053 的真实 meta-flow artifact 布局迁移、link swap、真实 integration/worktree/ref 创建或切换。
+- 不读取或迁移 ptm-team、ptm-atomic、quant-lab；不以 sibling discovery 为名扫描这些项目内容。
+- 不在产品阶段决定具体 Python 文件、CLI flag、schema 字段类型或 Git 命令序列；CP3/CP5必须在REQ-MR安全契约内细化。
+- 不修复全部 CR-001..033 历史 catalog 错误或既有 handoff ledger 缺口；只要求 CR-052 scoped contract PASS 和全局治理检查新增 fingerprint=0。
+- 不把 shared-main README、repository publication、真实 remote pilot、force/tag/reset/rebase/orphan/自动merge、credentials/runtime/production/publish/live/trading纳入本轮授权。
 - 不在产品阶段冻结具体Python模块、CLI参数名、metadata字段类型或Git命令序列；这些由CP3/CP5在上述安全契约内设计。
+- vNext 首版不拆旧共享过程仓历史、不做旧 CP/CR/Story 无损语义转换、不实现分布式多写者自动 merge、不批量迁移项目。
+- 不把旧 GB/AW/MR 候选 Story 或 migration-readiness 里程碑继续当作 CR-052 当前实施范围；它们只保留历史追溯和可复用经验。
+- 不在 CP2 阶段创建真实过程仓、执行快照 cutover、提交/推送或触碰任何 runtime/production 环境。
