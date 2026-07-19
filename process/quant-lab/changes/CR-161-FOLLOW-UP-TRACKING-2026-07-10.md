@@ -19,7 +19,7 @@ owner: "host-orchestrator"
 | `FU-CR161-007` | Canonical cross-strategy reliability N/A semantics and admission hardening | closed (`CR-170`，CP8 approved，READY_WITH_RISK) | `CR-170` 已关闭 canonical-hardening 子切片；Gate 1-5 N/A 语义和 Gate 6 admission policy 已交付，aggregate 与 CR155 regression 仍由 `FU-CR161-009` 承接。 |
 | `FU-CR161-008` | Alpha-decay evidence ownership and C2-adjacent method evaluation | candidate | CR169 CP3 已确认 alpha-decay 不进入 C4 v1；需要冻结预测衰减 owner、OOS/C2 边界、输入窗口与 schema version 时再独立启动。 |
 | `FU-CR161-009` | C1-C4 aggregate integration and CR155 regression (former FU-007 aggregate slice) | candidate | `CR-170` 完成 canonical hardening 后，再通过独立 CR 接入 aggregate orchestration、最终 StrategyAdmissionPackage 与 CR155 regression；不得自动 promotion。 |
-| `FU-CR161-010` | Stage 3 Launch / Real-Lake Entry Decision Gate | active (`CR-171`, CP0/CP1 in progress) | 已完成范围评审并固化在 `process/plans/STAGE3-LAUNCH-DECISION-MEMO-2026-07-15.yaml`；`CR-171` 已由用户明确授权创建。CP2 前不授予 lake-read、real computation、Stage 3 start、aggregate、CR155 promotion 或 runtime。 |
+| `FU-CR161-010` | Stage 3 Launch / Real-Lake Entry Decision Gate | closed (`CR-171`, CP8 approved) | `CR-171` 已于 2026-07-15 以 `closed/cp8_closed/not_ready` 关闭；该 design-only decision gate 不产生 Stage 3 readiness。后续 activation 由独立 CR-172 候选承接，仍不继承 lake-read、real computation、aggregate、CR155 promotion 或 runtime 授权。 |
 
 当前无 active formal CR；所有剩余 candidate 均未启动，启动任一 candidate 仍需独立 CR、CP0 冲突预检和明确授权。
 
@@ -149,16 +149,18 @@ follow_up_items:
   - id: FU-CR161-010
     title: Stage 3 Launch / Real-Lake Entry Decision Gate
     kind: runtime-authorization
-    status: active
-    lifecycle_status: active
+    status: closed
+    lifecycle_status: closed
     readiness_status: not_ready
-    gate_status: cp2_pending
+    gate_status: cp8_closed
     gate_profile: runtime-high-risk
     formal_cr_path: process/changes/CR-171.md
-    related_active_cr: CR-171
+    related_active_cr: ""
+    closed_by: CR-171
+    closed_at: "2026-07-15T15:02:36+00:00"
     proposed_cr_id: CR-171
     decision_memo_ref: process/plans/STAGE3-LAUNCH-DECISION-MEMO-2026-07-15.yaml
     risk_alias_policy_ref: process/policies/RISK-ID-ALIASES.yaml
-    blocked_by: "related_active_cr=CR-171; CP0 conflict precheck and CP1 product-baseline refresh must pass; CP2 route/verifier/read-scope approval remains mandatory."
-    next_action: "related_active_cr=CR-171; CR-171 is active. Do not treat its creation or CP0/CP1 progress as lake-read, real-computation, Stage 3, aggregate, CR155 or runtime authorization."
+    blocked_by: ""
+    next_action: "Closed by CR-171. Any activation must use a new formal CR with fresh CP0 conflict precheck and CP2 scope/authorization approval; do not inherit runtime authority from CR-171."
 ```

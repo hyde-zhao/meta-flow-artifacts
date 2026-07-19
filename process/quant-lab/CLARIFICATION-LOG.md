@@ -26,6 +26,9 @@ created_by: "meta-pm"
 | 2026-05-31 | meta-po | CR-025 CP2 修改意见：production-grade research-to-execution 目标澄清 | 用户澄清目标不是开发框架级 Backtrader/lightweight 回测框架，而是生产级策略研究回测、模拟盘和实盘框架；CR-025 修订为研究执行语义对照与 target portfolio / order intent 衔接，QMT 真实运行仍由 CR-020..CR-024 承接 |
 | 2026-06-01 | meta-po | CR-025 CP2 approved 与 Backtrader 本地项目 HLD 分析要求 | 用户批准推进 CR-025，并要求 meta-se 在 CP3/HLD 充分分析 `/home/hyde/download/backtrader`，对比可借鉴、可适配、可移植和禁止移植模块；源码级移植只作为 HLD 决策项，不构成实现授权 |
 | 2026-07-13 | host-orchestrator-inline | CR168 C3 economic-cost 产品基线增量澄清 | 已按用户评审修正 Gate 4 联合门禁、成本低估状态、multi-strategy fixture 与跨字段 basis 条件；5 个方法/共享合同/集成/fixture/claim 决策保留给 CP2，ready_for_design=false。 |
+| 2026-07-16 | meta-pm（pm-wu） | CR172 C1-first activation 增量澄清 | 用户确认 PATH-C 默认倾向与三项评审整改；8 个正式 DQ 留 CP2，CP1 阻断项为 0，未授权任何真实数据或 runtime。 |
+| 2026-07-16 | meta-pm（pm-wu） | CR172 UC-58 业务视角整改 | 用户确认以“策略 X 需要真实数据证据”为旅程第 0 步，补齐业务动机、fixture 痛点与未来 C1 evidence 使用价值；8 个 DQ 和授权边界保持不变。 |
+| 2026-07-16 | meta-pm（pm-wu） | CR172 策略占位与 evidence anchor 契约 | 用户确认“策略 X”仅为业务示例、PATH-B 策略无关；未来 PATH-C/A 在 CP3 冻结策略身份、CP6 锚定 C1 evidence，缺失/不一致 fail-closed；不新增 DQ。 |
 
 ## CR168 第 1 轮增量澄清（2026-07-13）
 
@@ -454,3 +457,64 @@ created_by: "meta-pm"
 | A-029 | CR-016 默认按 shadow、模拟盘、实盘只读、小资金实盘、资金放大顺序推进，每次真实 QMT 操作都需要 per-run 授权。 | REQ-112 - REQ-120 |
 | A-030 | CR-017 不阻断 CR-016 技术模拟盘，但在实现验证前阻断生产策略复权治理完成声明和资金放大。 | REQ-118 - REQ-120 |
 | A-031 | 本轮 meta-pm 不修改代码、不读取 `.env` / token / 账户信息、不真实抓取、不写湖、不发单。 | REQ-104, REQ-110, REQ-114 |
+
+## CR172 增量澄清与场景发现摘要（2026-07-16）
+
+### 用户回答证据
+
+- `SGQ-CR172-001`：用户明确表示五字段可冻结时倾向 PATH-C（C1-first）而不是把 PATH-A 作为默认，并要求补齐 PATH-B 衔接、C2/C3 后续治理与 joint approval ledger 后推进到下一个人工门禁。
+- 复述确认：PATH-C 只作为 CP2 默认推荐；五字段具体值、data/methodology owner identity、最终 PATH、三 producer blast-radius 风险接受仍未由用户正式批准。
+- `SGQ-CR172-002`：用户在 CP2 业务视角评审中明确要求补齐业务动机、用户痛点、使用价值，并在 activation 半径选择前增加“策略 X 需要真实数据证据”的旅程第 0 步。
+- 复述确认：业务价值是研究员获得可用于真实 multiple-testing / overfit 评估的 C1 typed evidence，并为 mature SAP 提供证据基础；PATH、blast radius、有限授权与审批合同是实现约束。该 evidence 本身不构成 admission `PASS/PASS_WITH_RISK`。
+- `SGQ-CR172-003`：用户在 CP2 自由文本评审中明确要求“策略 X”只作为占位；PATH-B offline estimator 不要求或推断具体策略；未来 PATH-C/A 在 CP3 Entry 冻结 `strategy_id + strategy_name`，CP6 C1 evidence 携带同一身份并与 five-field scope、run identity、PIT/lineage 一致。
+- 复述确认：当前 CP2 不批准真实策略身份；未来身份必须非空、无通配符、可审计，缺失或不一致全部 fail-closed。该契约不新增 requirement、scenario 或 DQ。
+
+### 本轮已解决的产品灰区
+
+| Gray Area | 结论 | 状态 |
+|---|---|---|
+| PATH-B 衔接 | estimator 是 activation 前置而非替代；完成后仍须恢复 PATH-C/A。 | RESOLVED-CONTRACT |
+| PATH-C 后 C2/C3 | 默认两个独立 runtime-high-risk CR，总 activation CR 数预计为 3。 | RESOLVED-RECOMMENDATION |
+| joint approval | 两位 owner 对同 revision/hash 分别写 approved ledger，风险/权限取交集；partial approval 时拆分。 | RESOLVED-CONTRACT |
+| 首次 blast radius | 五字段可冻结但未明确接受 C1-C3 时默认 PATH-C。 | USER-PREFERENCE-CONFIRMED / FINAL-CP2-OPEN |
+
+### 澄清状态
+
+- BLOCKING_FOR_CP1：`0`。
+- UC-58 业务视角明示：`4/4`（业务动机、用户痛点、使用价值、业务触发）。
+- 用户可见场景确认：`3/3`（`SGQ-CR172-001..003`），均已回答并复述确认。
+- 策略占位契约：`4/4`（placeholder、CP3 identity freeze、CP6 evidence anchor、mismatch fail-closed）；PATH-B strategy-agnostic=`1/1`。
+- OPEN_FOR_CP2：`8`，即 `DQ-CR172-001..008`。
+- REQUIRED 默认假设：PATH-C 是推荐而非批准；C1 支持 typed-unavailable；OI-005/E1/C4/FU-006/aggregate 保持独立边界。
+- `ready_for_design=false`，必须由 Host Orchestrator 发起并回填 CP2 后才能进入 solution-design。
+- 讨论日志：`process/discussions/CP2-CR172-SCENARIO-DISCUSSION-LOG.md`。
+- 恢复点：`process/checks/CP2-CR172-DISCUSSION-CHECKPOINT.json`。
+- 本轮真实数据、credential、provider、write、runtime/trading 操作：`0/0/0/0/0`。
+
+## CR173 增量澄清与场景发现摘要（2026-07-16）
+
+### 用户回答证据
+
+- `SGQ-CR173-001`：用户已批准 CR172 PATH-B，并要求自动推进到下一个人工门禁；该自由文本确认直接授权把独立 methodology predecessor 正式化为 CR173，但不等于批准 CR173 的 8 个 CP2 产品决策。
+- 复述确认：CR173 只做 strategy-agnostic offline estimator；不是 CR172 activation 的替代，不读取真实数据、不冻结策略身份、不产生 admission/Stage3 声明。
+
+### 本轮产品灰区
+
+| Gray Area | 推荐结论 | 状态 |
+|---|---|---|
+| estimand 与算法门禁 | CP2 冻结 non-alias estimand 和可观察行为，算法/输入合同留 CP3。 | OPEN-CP2 |
+| 失败语义 | 缺失/不足 typed_unavailable；矛盾/篡改 blocked；永不回退 raw。 | OPEN-CP2 |
+| 策略身份 | strategy-agnostic；真实身份归未来 CR172 activation。 | RESOLVED-BY-PATH-B |
+| CR172 恢复 | 不自动恢复；five fields + fresh precheck + CR172 CP2 三项均需满足。 | RESOLVED-CONTRACT / OPEN-CP2-CONFIRMATION |
+
+### 澄清状态
+
+- BLOCKING_FOR_CP1：`0`。
+- 业务动机/痛点/使用价值/业务触发：`4/4`。
+- 用户可见场景确认：`1/1`，已回答并复述确认。
+- P0 requirements/scenarios/DQ：`8/8/8`；六类场景：`6/6`；schema：`7/7`。
+- OPEN_FOR_CP2：`8`，即 `DQ-CR173-001..008`。
+- `ready_for_design=false`；CP2 只批准产品范围，算法/HLD 仍需 CP3。
+- 讨论日志：`process/discussions/CP2-CR173-SCENARIO-DISCUSSION-LOG.md`。
+- 恢复点：`process/checks/CP2-CR173-DISCUSSION-CHECKPOINT.json`。
+- 真实数据、credential、provider、write、runtime/trading、Git remote write 操作：`0/0/0/0/0/0`。

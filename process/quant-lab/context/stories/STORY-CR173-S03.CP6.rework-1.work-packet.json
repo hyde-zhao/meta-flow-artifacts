@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_rework_packet",
+  "profile": "standard-code",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-173.summary.json",
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "story_id": "CR173-S03-golden-failure-boundary-verification",
+  "story_ref": "process/stories/STORY-CR173-S03-golden-failure-boundary-verification.md",
+  "stage": "CP6",
+  "objective": {
+    "summary": "修复 F-CP7-S03-001：授权 AST guard 对真实 credential/network/filesystem/runtime/Git/public alias 形态的假阴性，同时保持普通字符串和普通 replace 零误报。",
+    "non_goals": ["不修改 fixture/QAC/S01/S02/engine/public/既有 expected", "不扩大授权或创建 runtime scanner", "不执行真实外部操作"]
+  },
+  "feature_refs": ["effective.trial.offline.estimator"],
+  "feature_context": "S03 CP7 首轮 NEEDS_REWORK；自动 376/376 仍绿，但静态授权守卫可被简单别名和限定名绕过。",
+  "feature_contract_summary": "AST-only test guard 必须解析 import alias、qualified call 与 subprocess argv；真实形态命中唯一 NP/public class，普通字符串/str.replace保持0。",
+  "cr_delta": {"summary": "仅回修 S03 authorization test guard 与相应回修证据。", "affected_contracts": ["authorization guard adversarial completeness"]},
+  "acceptance": [
+    "urllib.request.urlopen 命中 NP-04",
+    "subprocess.run(['git','push']) 命中 NP-09，其他 subprocess runtime 命中 NP-06",
+    "os.replace/write 形态命中 NP-05，os.environ.get/getenv 命中 NP-01",
+    "public module import alias 和 aliased call 分别使 public dependency/call 非0",
+    "普通字符串、str.replace、无执行语义 token 的误报仍为0",
+    "新增对抗性回归覆盖上述正负样本；原 targeted/public combined 全绿",
+    "production/public/expected/real/runtime/remote write=0"
+  ],
+  "dependency_inputs": ["process/checks/CP7-CR173-S03-VERIFICATION.result.json", "process/returns/CR173-S03-golden-failure-boundary-verification.CP7.return.json"],
+  "must_read": [
+    {"path":"process/state/STATE.current.json","reason":"machine_state","required":true,"mode":"full"},
+    {"path":"process/current/CURRENT.json","reason":"current_entrypoint","required":true,"mode":"full"},
+    {"path":"process/checks/CP7-CR173-S03-VERIFICATION.result.json","reason":"blocking_finding","required":true,"mode":"full"},
+    {"path":"process/returns/CR173-S03-golden-failure-boundary-verification.CP7.return.json","reason":"reproduction_evidence","required":true,"mode":"full"}
+  ],
+  "allowed_reads": [
+    {"path":"tests/research/test_effective_trial_authorization.py","reason":"rework_target","required":true,"mode":"full"},
+    {"path":"tests/research/test_effective_trial_cr173_qac.py","reason":"regression_only","required":true,"mode":"full"},
+    {"path":"tests/fixtures/effective_trial/golden_vectors_v1.json","reason":"regression_only","required":true,"mode":"full"}
+  ],
+  "read_if_needed": [],
+  "allowed_write_paths": [
+    "tests/research/test_effective_trial_authorization.py",
+    "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-IMPLEMENTATION.md",
+    "process/returns/CR173-S03-golden-failure-boundary-verification.CP6R1.return.json",
+    "process/evidence/CR173-S03-golden-failure-boundary-verification.CP6R1.index.json",
+    "process/checks/CP6-CR173-S03-REWORK-1.result.json",
+    "process/checks/CP6-CR173-S03-REWORK-1.result.summary.md"
+  ],
+  "forbidden_write_paths": ["engine/**", "tests/fixtures/**", "tests/research/test_effective_trial_cr173_qac.py", "docs/**", "process/archive/**"],
+  "do_not_read_by_default": [{"path_or_pattern":"process/STATE.md","reason":"human_summary_fallback"},{"path_or_pattern":"process/archive/**","reason":"cold_history"}],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/archive/**", "process/discussions/**"],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "verification_plan": [
+    "pytest CR173 targeted 4 + public 12 modules",
+    "adversarial inline positive/negative AST cases",
+    "py_compile and git diff --check"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ","NO_RUNTIME","NO_REAL_LAKE_READ_OR_WRITE","NO_PRODUCTION_WRITE","NO_TRADING","NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR173-S03-golden-failure-boundary-verification.CP6R1.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "methodology-high",
+  "parent_context_ref": "process/context/stories/STORY-CR173-S03.CP7.verify-packet.json",
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "budget": {"estimated_tokens":8000,"estimator":"manual_compact","max_tokens":18000},
+  "policy_refs": {"read_policy":"process/policies/READ-POLICY.json","authz_policy":"process/policies/AUTHZ-POLICY.json","gate_profiles":"process/policies/GATE-PROFILES.json"},
+  "context_sufficiency": {"required_slots":["objective.summary","feature_refs","feature_context","cr_delta.summary","acceptance","dependency_inputs","allowed_write_paths","forbidden_write_paths","verification_plan","authz_policy_refs","expected_return_packet"],"strict_profiles":["methodology-high"]}
+}

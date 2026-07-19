@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_verify_packet",
+  "profile": "standard-code",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-173.summary.json",
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "story_id": "CR173-S03-golden-failure-boundary-verification",
+  "story_ref": "process/stories/STORY-CR173-S03-golden-failure-boundary-verification.md",
+  "stage": "CP7",
+  "objective": {
+    "summary": "独立验证 S03 golden/failure/recovery/authorization/public-boundary 证据的真实性、覆盖完整性和无越权边界。",
+    "non_goals": [
+      "不修改 fixture、tests、engine 或 docs",
+      "不创建 public projection/adapter/migration",
+      "不执行真实数据、runtime、credential、provider、publish/deploy 或 Git remote 操作"
+    ]
+  },
+  "feature_refs": ["effective.trial.offline.estimator"],
+  "feature_design_refs": [
+    "docs/features/effective-trial-offline-estimator/DESIGN.md",
+    "docs/features/effective-trial-offline-estimator/TEST-PLAN.md",
+    "docs/features/effective-trial-offline-estimator/TASKS.md"
+  ],
+  "feature_context": "S03 CP6 主进程复跑 combined 376/376 PASS；CP7 必须独立确认 oracle 非自证、零操作守卫真实有效、12/12 回归仍证明 C1 unavailable。",
+  "feature_contract_summary": "6×3 golden、8×7 fail basis、7-field mutation、append-only recovery、NP-01..09 zero、public new-code four-zero、12/12 read-only regression、C1/CR172 claims false。",
+  "cr_delta": {
+    "summary": "独立验证 fixture/test-only 交付，不写工程资产；任一 public contract 需求、oracle 自证或授权旁路均需 NEEDS_REWORK/CLARIFICATION/BLOCKED。",
+    "affected_contracts": ["golden oracle integrity", "fail-closed recovery", "authorization guard", "public claim ceiling"]
+  },
+  "acceptance": [
+    "fixture schema 和 raw/expected view 隔离，expected oracle 进入 execution/finalizer 次数=0",
+    "golden 6/6×3/3；stable computation/evidence=1/1、external audits=3/3",
+    "F01-F08 8/8、returned basis=8×7、7-field deletion=7/7、F03→F04/estimator calls=0/0",
+    "append-only recovery 覆盖旧 attempt 数=0，parent/supersedes linkage正确",
+    "NP-01..09 9/9各0且 public 六项独立、重复计数=0",
+    "8 个 production path diff/write=0；new-code dependency/call=0/0",
+    "12/12 read-only public regressions全部通过、expected edits=0、current C1 unavailable/worst-state不改善",
+    "combined 376/376、pycompile/diff PASS；findings/blockers/waivers明确",
+    "public_effective_trial_count_populatable=false、c1_computable=false、CR172 auto-resume/close=0/0"
+  ],
+  "dependency_inputs": [
+    "process/checks/CP6-CR173-S03-IMPLEMENTATION-DONE.result.json",
+    "process/returns/CR173-S03-golden-failure-boundary-verification.CP6.return.json",
+    "process/evidence/CR173-S03-golden-failure-boundary-verification.CP6.index.json"
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"},
+    {"path": "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-LLD.md", "reason": "approved_full_lld_verification_contract", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "process/checks/CP6-CR173-S03-IMPLEMENTATION-DONE.result.json", "reason": "implementation_result", "required": true, "mode": "full"},
+    {"path": "process/returns/CR173-S03-golden-failure-boundary-verification.CP6.return.json", "reason": "implementation_return", "required": true, "mode": "full"},
+    {"path": "process/evidence/CR173-S03-golden-failure-boundary-verification.CP6.index.json", "reason": "implementation_evidence", "required": true, "mode": "full"},
+    {"path": "tests/fixtures/effective_trial/golden_vectors_v1.json", "reason": "verification_target", "required": true, "mode": "full"},
+    {"path": "tests/research/test_effective_trial_cr173_qac.py", "reason": "verification_target", "required": true, "mode": "full"},
+    {"path": "tests/research/test_effective_trial_authorization.py", "reason": "verification_target", "required": true, "mode": "full"},
+    {"path": "engine/effective_trial_evidence.py", "reason": "read_only_sut", "required": true, "mode": "full"},
+    {"path": "engine/effective_trial_estimator.py", "reason": "read_only_sut", "required": true, "mode": "full"}
+  ],
+  "read_if_needed": [
+    {"path": "docs/features/effective-trial-offline-estimator/TEST-PLAN.md", "reason": "coverage_matrix", "trigger": "deep_review", "mode": "sections"},
+    {"path": "docs/design/DEPENDENCY-MAP-EFFECTIVE-TRIAL-OFFLINE-METHODOLOGY.md", "reason": "public_inventory", "trigger": "field_conflict", "mode": "sections"}
+  ],
+  "allowed_write_paths": [
+    "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md",
+    "process/returns/CR173-S03-golden-failure-boundary-verification.CP7.return.json",
+    "process/evidence/CR173-S03-golden-failure-boundary-verification.CP7.index.json",
+    "process/checks/CP7-CR173-S03-VERIFICATION.result.json",
+    "process/checks/CP7-CR173-S03-VERIFICATION.result.summary.md"
+  ],
+  "forbidden_write_paths": ["engine/**", "tests/**", "docs/**", "process/archive/**"],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "long_plan_not_verification_truth"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_verification_truth"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/archive/**", "process/discussions/**"],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q <CR173 targeted 4 + authoritative public 12 modules>",
+    "PYTHONPYCACHEPREFIX=/tmp/cr173-s03-cp7-pycompile uv run --python 3.11 python -m py_compile tests/research/test_effective_trial_cr173_qac.py tests/research/test_effective_trial_authorization.py",
+    "git diff --check",
+    "independent oracle-integrity and authorization-guard adversarial review"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR173-S03-golden-failure-boundary-verification.CP7.return.json",
+  "implementation_return_ref": "process/returns/CR173-S03-golden-failure-boundary-verification.CP6.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "methodology-high",
+  "parent_context_ref": "process/context/stories/STORY-CR173-S03.CP6.work-packet.json",
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "budget": {"estimated_tokens": 14000, "estimator": "manual_full", "max_tokens": 30000},
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json"
+  },
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["methodology-high", "architecture-major"]
+  }
+}

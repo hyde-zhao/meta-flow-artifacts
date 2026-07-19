@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S05-path-i-integration-claim-zero-operation-verification",
+  "stage": "CP6",
+  "rework_attempt": 1,
+  "status": "implemented",
+  "decision": "PASS",
+  "summary": "CP6R1 已最小关闭 F-001：SC-CR172-021 精确绑定 REQ-CR172-013，显式语义错配为 0，REQ-CR172-006 仍由 SC-CR172-006 权威覆盖；27/27 与 154/154 回归通过，零真实操作且 8/8 上游哈希不变。",
+  "work_packet_ref": "process/context/stories/STORY-CR172-S05.CP6.rework-1.work-packet.json",
+  "work_packet_sha256": "f096f2417dc2d6fd805e1e5a1d624f4936a119c66b02998a5a05d72d14fb2e43",
+  "touched_files": [
+    "tests/fixtures/cr172_path_i/scenario_catalog.json",
+    "tests/research/test_cr172_path_i_claim_regression.py",
+    "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification.md",
+    "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-IMPLEMENTATION.md"
+  ],
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_integration.py tests/research/test_cr172_path_i_authorization.py tests/research/test_cr172_path_i_claim_regression.py",
+        "status": "passed",
+        "result": "27 passed / 0 failed / 0 skipped"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py tests/research/test_cr172_execution_materialization.py tests/research/test_cr172_path_i_integration.py tests/research/test_cr172_path_i_authorization.py tests/research/test_cr172_path_i_claim_regression.py",
+        "status": "passed",
+        "result": "154 passed / 0 failed / 0 skipped"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s05-cp6r1-pycompile uv run --python 3.11 python -m py_compile tests/research/test_cr172_path_i_claim_regression.py",
+        "status": "passed",
+        "result": "exit_code=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null tests/fixtures/cr172_path_i/scenario_catalog.json",
+        "status": "passed",
+        "result": "whitespace diagnostics=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null tests/research/test_cr172_path_i_claim_regression.py",
+        "status": "passed",
+        "result": "whitespace diagnostics=0"
+      }
+    ],
+    "evidence_refs": [
+      "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification.md",
+      "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-IMPLEMENTATION.md",
+      "tests/fixtures/cr172_path_i/scenario_catalog.json",
+      "tests/research/test_cr172_path_i_claim_regression.py"
+    ]
+  },
+  "contract_changes": {
+    "changed": false,
+    "summary": "仅修复测试目录中的语义追踪绑定与回归断言；行为合同、生产实现和公共边界均未改变。",
+    "refs": []
+  },
+  "boundary_check": {
+    "allowed_write_paths_respected": true,
+    "forbidden_write_paths_touched": [],
+    "unexpected_imports": [],
+    "real_actions_executed": []
+  },
+  "design_delta": {
+    "required": false,
+    "refs": [],
+    "reason": "无长期 Feature DESIGN、ADR 或 HLD 变更。"
+  },
+  "unexpected_imports": [],
+  "forbidden_path_writes": [],
+  "next_route": "CP7R1",
+  "completed_at": "2026-07-19T01:07:35+08:00"
+}

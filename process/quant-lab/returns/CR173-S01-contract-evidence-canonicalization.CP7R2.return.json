@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "story_id": "CR173-S01-contract-evidence-canonicalization",
+  "stage": "CP7",
+  "attempt": 3,
+  "status": "verified",
+  "work_packet_ref": "process/context/stories/CR173-S01-contract-evidence-canonicalization.CP7.reverify-2.packet.json",
+  "summary": "CP7 最终复验 2 PASS：60/60 回归通过，7 个 non-canonical/unhashable identifier 相邻变体稳定映射 F01/F02/F06 且异常逸出为 0，forged root/recovery/constructor audit ref 接受数为 0；F-002/F-003 关闭。",
+  "touched_files": [
+    {
+      "path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md",
+      "operation": "modify",
+      "purpose": "追加 CP7R2 独立复验结论与 finding closure"
+    },
+    {
+      "path": "process/returns/CR173-S01-contract-evidence-canonicalization.CP7R2.return.json",
+      "operation": "create",
+      "purpose": "CP7R2 Story return packet"
+    },
+    {
+      "path": "process/evidence/CR173-S01-contract-evidence-canonicalization.CP7R2.index.json",
+      "operation": "create",
+      "purpose": "CP7R2 evidence index"
+    },
+    {
+      "path": "process/checks/CP7-CR173-S01-REVERIFY-2.result.json",
+      "operation": "create",
+      "purpose": "CP7R2 machine result"
+    },
+    {
+      "path": "process/checks/CP7-CR173-S01-REVERIFY-2.result.summary.md",
+      "operation": "create",
+      "purpose": "CP7R2 human summary"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "allowed_write_paths_only": true,
+    "unexpected_write_paths": [],
+    "forbidden_paths_touched": [],
+    "forbidden_write_paths_touched": [],
+    "unexpected_imports": [],
+    "public_c1_changes": 0,
+    "real_data_operations": 0,
+    "runtime_operations": 0,
+    "credential_operations": 0,
+    "git_remote_operations": 0
+  },
+  "verification_commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "60 passed in 0.11s"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s01-cp7r2-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "2/2 modules compiled"
+    },
+    {
+      "command": "git diff --check -- engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "whitespace errors=0"
+    },
+    {
+      "command": "independent adjacent identifier and forged audit probes",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "identifier machine reasons=7/7, exception escapes=0; forged audit accepts=0/3"
+    }
+  ],
+  "verification": {
+    "result": "PASS",
+    "commands_run": [
+      {
+        "command": "targeted pytest",
+        "result": "PASS",
+        "exit_code": 0,
+        "summary": "60/60"
+      },
+      {
+        "command": "py_compile and diff hygiene",
+        "result": "PASS",
+        "exit_code": 0,
+        "summary": "2/2 compiled; whitespace errors=0"
+      },
+      {
+        "command": "same-cause adjacent adversarial probes",
+        "result": "PASS",
+        "exit_code": 0,
+        "summary": "10/10 expected reject/fail-closed outcomes"
+      }
+    ],
+    "evidence_refs": [
+      "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md#18-最终结论"
+    ]
+  },
+  "finding_closure": [
+    {
+      "finding_id": "F-CP7-S01-001",
+      "status": "closed",
+      "evidence": "CP6R1 closure retained; full 60-test regression remains PASS"
+    },
+    {
+      "finding_id": "F-CP7-S01-002",
+      "status": "closed",
+      "evidence": "family/lineage bytearray or memoryview and trial list/dict/set all map to F01/F02/F06; exception escapes=0"
+    },
+    {
+      "finding_id": "F-CP7-S01-003",
+      "status": "closed",
+      "evidence": "forged constructor/root/recovery audit ref accepts=0/3; constructor and log both recompute content identity"
+    }
+  ],
+  "design_delta_refs": [],
+  "contract_changes": {
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "独立复验无工程修改；schema/hash domain/identity/failure mapping/claim/authz 设计变化数=0"
+  },
+  "risks": [
+    "S02 exact estimator 的 exact-integer growth 与性能边界待 S02 验证",
+    "S03 golden/repeat/audit linkage 与 12/12 public read-only regression 待 S03 验证"
+  ],
+  "waivers": [],
+  "next_route": "CR173-S02-IMPLEMENTATION",
+  "completed_at": "2026-07-17T10:59:08+08:00"
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "story_id": "CR173-S01-contract-evidence-canonicalization",
+  "story_ref": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md",
+  "stage": "CP6",
+  "objective": {
+    "summary": "关闭 CP7R1 尚未封口的 F-002 bytes fail-closed 与 F-003 forged audit identity 两个旁路。",
+    "non_goals": ["不重构既有合同", "不改变 LLD/hash domain/claim", "不触达 S02/public/real/runtime/remote"]
+  },
+  "feature_refs": ["effective.trial.offline.estimator"],
+  "feature_design_refs": ["docs/features/effective-trial-offline-estimator/DESIGN.md", "docs/features/effective-trial-offline-estimator/TEST-PLAN.md", "docs/features/effective-trial-offline-estimator/TASKS.md"],
+  "feature_context": "第二轮同 Story 实现回修，触发 meta-dev-debugger 高推理 profile。",
+  "feature_contract_summary": "所有非 canonical identifier 必须稳定映射 machine reason；每条 audit ref 必须由自身内容复算并与声明值一致。",
+  "cr_delta": {
+    "summary": "仅在原 S01 source/test 内补 2 类对抗回归和最小 guard，design delta=0。",
+    "affected_contracts": ["typed fail-closed identifiers", "content-addressed audit identity"]
+  },
+  "acceptance": [
+    "bytes family/trial/lineage 不逸出异常并稳定映射 F01/F06",
+    "格式合法但内容伪造的 audit ref 接受数=0",
+    "原 53 项及新增对抗测试全部 PASS",
+    "design delta/public/real/runtime/remote=0"
+  ],
+  "dependency_inputs": ["process/checks/CP7-CR173-S01-REVERIFY-1.result.json", "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md"],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/checks/CP7-CR173-S01-REVERIFY-1.result.json", "reason": "remaining_findings", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md", "reason": "adversarial_reproduction", "required": true, "mode": "full"},
+    {"path": "engine/effective_trial_evidence.py", "reason": "rework_target", "required": true, "mode": "full"},
+    {"path": "tests/research/test_effective_trial_evidence_contracts.py", "reason": "regression_target", "required": true, "mode": "full"}
+  ],
+  "read_if_needed": [
+    {"path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-LLD.md", "reason": "approved_contract", "trigger": "deep_review", "mode": "full"},
+    {"path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-IMPLEMENTATION.md", "reason": "prior_rework_evidence", "trigger": "field_conflict", "mode": "full"}
+  ],
+  "allowed_write_paths": [
+    "engine/effective_trial_evidence.py",
+    "tests/research/test_effective_trial_evidence_contracts.py",
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md",
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-IMPLEMENTATION.md",
+    "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json",
+    "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R2.index.json",
+    "process/checks/CP6-CR173-S01-REWORK-2.result.json",
+    "process/checks/CP6-CR173-S01-REWORK-2.result.summary.md"
+  ],
+  "forbidden_write_paths": ["engine/experiment_family_lineage.py", "engine/experiment_family_lineage_store.py", "engine/strategy_admission_statistical_gate.py", "engine/statistical_evidence.py", "engine/multiple_testing_evidence.py", "engine/overfit_evidence.py", "engine/cross_strategy_reliability_gates.py", "engine/strategy_admission_package.py", "process/archive/**"],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "long_plan_not_rework_truth"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_rework_truth"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/archive/**", "process/discussions/**", "process/stories/*-LLD.md", "process/stories/*-IMPLEMENTATION.md"],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr173-s01-r2-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+    "git diff --check -- engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "methodology-high",
+  "parent_context_ref": "process/context/stories/CR173-S01-contract-evidence-canonicalization.CP7.reverify-1.packet.json",
+  "budget": {"estimated_tokens": 6500, "estimator": "manual_compact", "max_tokens": 14000},
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["methodology-high", "architecture-major"]
+  }
+}

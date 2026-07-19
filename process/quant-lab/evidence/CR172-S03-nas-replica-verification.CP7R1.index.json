@@ -1,0 +1,36 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {"change_type": "modified", "path": "process/stories/STORY-CR172-S03-nas-replica-verification-VERIFICATION.md"},
+    {"change_type": "created", "path": "process/returns/CR172-S03-nas-replica-verification.CP7R1.return.json"},
+    {"change_type": "created", "path": "process/evidence/CR172-S03-nas-replica-verification.CP7R1.index.json"},
+    {"change_type": "created", "path": "process/checks/CP7-CR172-S03-REVERIFY-1.result.json"},
+    {"change_type": "created", "path": "process/checks/CP7-CR172-S03-REVERIFY-1.result.summary.md"}
+  ],
+  "commands": [
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_nas_replica_verification.py", "result": "pass: 27 passed in 0.46s; failed/skipped=0/0"},
+    {"command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py", "result": "pass: 108 passed in 0.65s; failed/skipped=0/0"},
+    {"command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s03-cp7r1-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py tests/research/test_cr172_nas_replica_verification.py", "result": "pass: exit=0"},
+    {"command": "git diff --no-index --check /dev/null engine/research_artifact_replica.py", "result": "pass: exit=1 expected diff; whitespace diagnostics=0"},
+    {"command": "git diff --no-index --check /dev/null tests/research/test_cr172_nas_replica_verification.py", "result": "pass: exit=1 expected diff; whitespace diagnostics=0"},
+    {"command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S03.CP6.rework-1.work-packet.json --return process/returns/CR172-S03-nas-replica-verification.CP6R1.return.json", "result": "pass: Story Return Packet Check OK; one non-blocking expected-path warning"},
+    {"command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S03-REWORK-1.result.json --check-consistency --correlation-profile audit", "result": "pass: CP Result Check OK; non-blocking path/final-attempt warnings recorded"}
+  ],
+  "cr_id": "CR-172",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR172-S03-nas-replica-verification.CP7R1.return.json",
+  "risks": [
+    {"id": "R-CR172-SYNC-REPLICA-STALE", "note": "S03 freshness/CAS contract verified; real adapter activation remains separately gated", "status": "repository_contract_verified"},
+    {"id": "R-CR172-REAL-OPERATIONS", "note": "real NAS/network/env/credential/lake/runtime actions executed=0", "status": "not_authorized"}
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "reverify_attempt": 1,
+  "story_id": "CR172-S03-nas-replica-verification",
+  "tests": [
+    {"failed": 0, "passed": 27, "path": "tests/research/test_cr172_nas_replica_verification.py", "role": "S03 fresh decision, concurrent CAS, original seal, receipt, selected read and zero-operation regression", "skipped": 0},
+    {"failed": 0, "passed": 46, "path": "tests/research/test_cr172_path_i_governance.py", "role": "S01 authorization regression", "skipped": 0},
+    {"failed": 0, "passed": 35, "path": "tests/research/test_cr172_trial_return_artifact.py", "role": "S02 original seal and verifier regression", "skipped": 0}
+  ],
+  "waivers": []
+}

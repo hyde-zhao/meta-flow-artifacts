@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S04-execution-cache-materialization",
+  "status": "needs_rework",
+  "allowed_statuses": [
+    "implemented",
+    "implemented_with_risk",
+    "verified",
+    "verified_with_risk",
+    "partial",
+    "blocked",
+    "needs_design_clarification",
+    "needs_user_decision",
+    "needs_rework",
+    "no_op",
+    "superseded",
+    "waived"
+  ],
+  "touched_files": [
+    {
+      "path": "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/CR172-S04-execution-cache-materialization.CP7.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR172-S04-execution-cache-materialization.CP7.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S04-VERIFICATION.result.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S04-VERIFICATION.result.summary.md",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "notes": "CP7 only；未修改源码、测试、设计或验收目标。三个 finding 均路由回同一 Story 实现/测试回修。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "sha256sum engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py engine/research_artifact_materialization.py tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py tests/research/test_cr172_execution_materialization.py",
+        "result": "pass: all 8 hashes recomputed; 5 CP6-recorded hashes match"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_execution_materialization.py",
+        "result": "pass: 16 passed in 0.53s; failed/skipped=0/0"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py tests/research/test_cr172_execution_materialization.py",
+        "result": "pass: 124 passed in 0.87s; failed/skipped=0/0"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s04-cp7-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py engine/research_artifact_materialization.py tests/research/test_cr172_execution_materialization.py",
+        "result": "pass: exit=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null engine/research_artifact_materialization.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null tests/research/test_cr172_execution_materialization.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S04.CP6.work-packet.json --return process/returns/CR172-S04-execution-cache-materialization.CP6.return.json",
+        "result": "pass: Story Return Packet Check OK; one non-blocking expected-return path warning"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S04-IMPLEMENTATION-DONE.result.json --check-consistency --correlation-profile audit",
+        "result": "pass: CP Result Check OK; existing audit warnings only"
+      },
+      {
+        "command": "synthetic rotated-evidence idempotent-reuse receipt-correlation probe",
+        "result": "fail contract: second_status=MATERIALIZED; selection_receipt_is_stored=false"
+      },
+      {
+        "command": "synthetic forged/non-current selection handle-resolution probe",
+        "result": "fail contract: forged_is_current=false; handle_resolved=true"
+      },
+      {
+        "command": "synthetic credential-marker canonical-receipt probe",
+        "result": "fail contract: status=MATERIALIZED; token_marker_in_canonical_receipt=true"
+      }
+    ],
+    "tests": [
+      {
+        "path": "tests/research/test_cr172_execution_materialization.py",
+        "passed": 16,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S04 scoped regression; three independent semantic probes expose uncovered acceptance failures"
+      },
+      {
+        "path": "tests/research/test_cr172_path_i_governance.py",
+        "passed": 46,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S01 authorization regression"
+      },
+      {
+        "path": "tests/research/test_cr172_trial_return_artifact.py",
+        "passed": 35,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S02 verifier regression"
+      },
+      {
+        "path": "tests/research/test_cr172_nas_replica_verification.py",
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S03 selected-read regression"
+      }
+    ],
+    "skipped": [
+      {
+        "check": "real NAS/lake/execution-host/runtime/network/environment/credential/signal/trading/deploy/Git remote integration",
+        "reason": "verify packet explicitly forbids real operations; authorization/executed=0"
+      },
+      {
+        "check": "S05",
+        "reason": "S04 CP7 NEEDS_REWORK；S05 remains locked and was not started"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "severity": "BLOCKER",
+      "status": "OPEN",
+      "blocking": true,
+      "summary": "Same-bytes idempotent reuse can advance selection to a materialization receipt that is not stored with the immutable cache entry.",
+      "evidence_ref": "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md#f-001"
+    },
+    {
+      "id": "F-002",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "blocking": true,
+      "summary": "Public resolver accepts forged or non-current ExecutionCacheSelectionV1 values and returns a local handle.",
+      "evidence_ref": "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md#f-002"
+    },
+    {
+      "id": "F-003",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "blocking": true,
+      "summary": "Synthetic token credential markers are accepted into canonical materialization receipt identity.",
+      "evidence_ref": "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md#f-003"
+    }
+  ],
+  "zero_operation_evidence": {
+    "real_nas": 0,
+    "real_lake": 0,
+    "execution_host": 0,
+    "runtime": 0,
+    "network": 0,
+    "credential_read": 0,
+    "signal": 0,
+    "trading": 0,
+    "deploy": 0,
+    "git_remote": 0,
+    "upstream_pointer_mutations": 0,
+    "s05_operations": 0
+  },
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "R-CP7-S04-RECEIPT-CORRELATION",
+      "status": "open_blocking",
+      "note": "F-001 requires same-story rework and negative regression."
+    },
+    {
+      "id": "R-CP7-S04-UNSELECTED-HANDLE",
+      "status": "open_blocking",
+      "note": "F-002 requires current-selection/capability binding."
+    },
+    {
+      "id": "R-CP7-S04-CREDENTIAL-IDENTITY",
+      "status": "open_blocking",
+      "note": "F-003 requires credential-marker fail-closed validation."
+    },
+    {
+      "id": "R-CR172-RUNTIME-AUTHORIZATION-GAP",
+      "status": "not_authorized",
+      "note": "Repository fixture evidence never authorizes real NAS/execution/runtime operations."
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "read_expansion_notes": "Packet contract was sufficient; deny-default LLD was not expanded.",
+  "dispatch_refs": [
+    "AD-CR172-S04-CP7-META-QA-CRITICAL-20260718T224101+0800"
+  ],
+  "next_stage_recommendation": "rework_same_story"
+}

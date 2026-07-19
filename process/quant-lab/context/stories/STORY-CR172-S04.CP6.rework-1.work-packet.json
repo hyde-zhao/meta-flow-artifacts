@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S04-execution-cache-materialization",
+  "story_ref": "process/stories/STORY-CR172-S04-execution-cache-materialization.md",
+  "stage": "CP6",
+  "rework_attempt": 1,
+  "objective": {
+    "summary": "在同一 S04 内关闭 F-001/F-002/F-003：保证 selection 引用的 receipt 已不可变持久化；public resolver 只解析 storage current exact selection；credential-like marker 在 canonical receipt 形成前 fail closed。",
+    "non_goals": [
+      "不改变 S01-S03 public contracts、S04 主链或已批准 LLD",
+      "不修改 S05、HLD、ADR、Feature 或 LLD",
+      "不新增真实 NAS、execution host、runtime、network、credential 或 deployment adapter",
+      "不弱化 immutable、fresh authorization、CAS、4/4 或 claim ceiling"
+    ]
+  },
+  "feature_refs": ["trial-return.artifact.pipeline", "research-artifact.replica-materialization", "path-i.authorization.claim.governance"],
+  "feature_design_refs": [
+    "docs/features/research-artifact-replica-materialization/DESIGN.md",
+    "docs/features/research-artifact-replica-materialization/TEST-PLAN.md",
+    "docs/features/path-i-authorization-claim-governance/DESIGN.md"
+  ],
+  "feature_context": "CP7 NEEDS_REWORK，但 16/16 scoped 与 S01-S04 124/124 既有测试均通过。独立语义 probe 发现三个窄实现缺口：同 bytes + rotated evidence 会让 selection 指向未持久化 receipt；resolver 不校验 storage current exact selection；credential marker policy 漏掉 token。三项均可由 packet 合同裁决，无设计澄清。Workflow health 本 Story rework/retry=1/1，未超过阈值。",
+  "feature_contract_summary": "F-001：幂等复用是完整 immutable entry 语义；selection 所引 materialization_receipt_sha256 在 CAS 前必须可从持久化层精确读取。可选择按 receipt hash 独立不可变持久化，或同 key 不同 receipt fail closed，但不得指向未存 receipt。F-002：resolver 必须消费 storage/current-selection capability 并 exact equality；old/fake/uncommitted selection 均拒绝。F-003：canonical evidence refs 统一拒绝 password/passwd/secret/token/credential，且在 persist/CAS 前失败。",
+  "cr_delta": {
+    "summary": "只修复 S04 receipt correlation、current resolver binding 和 credential marker allowlist，并补相应负向回归；不改变设计或真实授权。",
+    "affected_contracts": ["immutable cache receipt correlation", "selected local handle current capability", "canonical receipt credential exclusion"]
+  },
+  "acceptance": [
+    "F-001 closed_pending_cp7r1：same bytes + same receipt 幂等成功；same bytes + rotated receipt 只有在新 receipt 已独立不可变持久化且可精确读取时才可推进，否则零推进",
+    "receipt persistence failure、immutable conflict、CAS conflict 下 selection/handle=None，previous current 100% 保留；selection 引用的 receipt 可读匹配=100%",
+    "F-002 closed_pending_cp7r1：resolver 输入必须与 storage/current selection exact equality；old selection、forged revision/hash、uncommitted selection accepted=0/3，current exact selection accepted=1",
+    "resolver 仍只返回 source_kind=execution_local_immutable_cache 的 local handle；不得接受 path/latest/receipt-only capability",
+    "F-003 closed_pending_cp7r1：password/passwd/secret/token/credential 出现在 preflight 或 commit evidence refs 时均在 persist/CAS 前 fail closed",
+    "canonical receipt/selection 中上述 marker count=0；合法 opaque refs 回归继续通过",
+    "原 S04 16 项、三组新增负向用例、S01-S04 组合回归、py_compile、whitespace、return/result checks PASS",
+    "S01-S03/S05/设计/真实 NAS/lake/execution/runtime/network/credential/signal/trading/deploy/Git remote touch/execution=0",
+    "若 CP7R1 仍 NEEDS_REWORK，先更新 health；仅在计数超过阈值时停止自动回修并升级人工/设计路由"
+  ],
+  "dependency_inputs": [
+    "process/checks/CP7-CR172-S04-VERIFICATION.result.json",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md",
+    "process/returns/CR172-S04-execution-cache-materialization.CP7.return.json",
+    "process/evidence/CR172-S04-execution-cache-materialization.CP7.index.json"
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/checks/CP7-CR172-S04-VERIFICATION.result.json", "reason": "rework_findings", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "engine/research_artifact_materialization.py", "reason": "rework_target", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_execution_materialization.py", "reason": "regression_target", "required": true, "mode": "full"},
+    {"path": "engine/path_i_governance.py", "reason": "credential_and_authorization_policy_reference", "required": true, "mode": "full"},
+    {"path": "engine/trial_return_artifact.py", "reason": "verifier_contract", "required": true, "mode": "full"},
+    {"path": "engine/research_artifact_replica.py", "reason": "current_selection_contract", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_path_i_governance.py", "reason": "upstream_regression", "required": false, "mode": "full"},
+    {"path": "tests/research/test_cr172_trial_return_artifact.py", "reason": "upstream_regression", "required": false, "mode": "full"},
+    {"path": "tests/research/test_cr172_nas_replica_verification.py", "reason": "upstream_regression", "required": false, "mode": "full"},
+    {"path": "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md", "reason": "finding_detail", "required": true, "mode": "sections"},
+    {"path": "process/returns/CR172-S04-execution-cache-materialization.CP7.return.json", "reason": "verification_return", "required": true, "mode": "full"},
+    {"path": "process/evidence/CR172-S04-execution-cache-materialization.CP7.index.json", "reason": "verification_evidence", "required": true, "mode": "full"}
+  ],
+  "read_if_needed": [],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "host_owned_plan"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_rework_truth"},
+    {"path_or_pattern": "process/stories/*-LLD.md", "reason": "no_design_clarification_required"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/archive/**", "process/discussions/**", "process/stories/*-LLD.md"],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "allowed_write_paths": [
+    "engine/research_artifact_materialization.py",
+    "tests/research/test_cr172_execution_materialization.py",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization.md",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization-IMPLEMENTATION.md",
+    "process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json",
+    "process/evidence/CR172-S04-execution-cache-materialization.CP6R1.index.json",
+    "process/checks/CP6-CR172-S04-REWORK-1.result.json",
+    "process/checks/CP6-CR172-S04-REWORK-1.result.summary.md"
+  ],
+  "forbidden_write_paths": [
+    "engine/path_i_governance.py", "engine/trial_return_artifact.py", "engine/research_artifact_replica.py",
+    "tests/research/test_cr172_path_i_governance.py", "tests/research/test_cr172_trial_return_artifact.py", "tests/research/test_cr172_nas_replica_verification.py",
+    "tests/research/test_cr172_path_i_integration.py", "tests/research/test_cr172_path_i_authorization.py", "tests/research/test_cr172_path_i_claim_regression.py", "tests/fixtures/cr172_path_i/**",
+    "engine/mature_multifactor_research.py", "engine/experiment_family_lineage.py", "engine/effective_trial_evidence.py", "engine/effective_trial_estimator.py",
+    "docs/**", "process/archive/**", "process/state/**", "process/current/**", "process/DEVELOPMENT-PLAN.yaml"
+  ],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py tests/research/test_cr172_execution_materialization.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr172-s04-cp6r1-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py engine/research_artifact_materialization.py tests/research/test_cr172_execution_materialization.py",
+    "git diff --no-index --check /dev/null engine/research_artifact_materialization.py",
+    "git diff --no-index --check /dev/null tests/research/test_cr172_execution_materialization.py"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PRODUCTION_WRITE", "NO_NAS_SYNC_OR_WRITE", "NO_EXECUTION_HOST_WRITE", "NO_SIGNAL_TRANSPORT", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "runtime-high-risk-design",
+  "parent_context_ref": "process/context/stories/STORY-CR172-S04.CP7.verify-packet.json",
+  "budget": {"estimated_tokens": 8000, "estimator": "manual_compact", "max_tokens": 17000},
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["runtime-high-risk-design", "architecture-major"]
+  }
+}

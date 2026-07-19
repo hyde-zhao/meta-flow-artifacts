@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP5",
+  "checkpoint_id": "CP5-CR172-LLD-DESIGN-EVIDENCE",
+  "cr_id": "CR-172",
+  "checked_at": "2026-07-18T13:49:27+08:00",
+  "context_ref": "process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "human_gate_status": "approved",
+  "human_gate_decision_ref": "process/checkpoints/CP5-CR172-ALL-STORIES-LLD-BATCH.md",
+  "dispatch_refs": [
+    "AD-CR172-CP5-LLD-BATCH-A-20260718T104848+0800",
+    "AD-CR172-CP5-LLD-BATCH-B-20260718T104848+0800",
+    "AD-CR172-CP5-LLD-BATCH-C-20260718T104848+0800",
+    "AD-CR172-CP5-INDEPENDENT-LLD-REVIEW-R1-20260718T110729+0800",
+    "AD-CR172-CP5-LLD-R2-ARCH-CORRECTION-20260718T112042+0800",
+    "AD-CR172-CP5-INDEPENDENT-LLD-REVIEW-R2-20260718T115336+0800",
+    "AD-CR172-CP5-LLD-R3-ARCH-CORRECTION-20260718T121100+0800",
+    "AD-CR172-CP5-INDEPENDENT-LLD-REVIEW-R3-20260718T123547+0800",
+    "AD-CR172-CP5-LLD-R4-UPPER-CONTRACT-CORRECTION-20260718T124205+0800",
+    "AD-CR172-CP5-INDEPENDENT-LLD-REVIEW-R4-20260718T124705+0800"
+  ],
+  "items": [
+    {
+      "id": "CP5-CR172-01",
+      "category": "entry",
+      "name": "CP3 approved and CP4 Story planning PASS",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checkpoints/CP3-CR172-PATH-I-HLD-REVIEW.md", "process/checks/CP4-CR172-PATH-I-STORY-DAG-PARALLEL-SAFETY.result.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "CP3 froze ReturnDefinition ownership, native-producer design obligation and the six-action eligibility DAG; CP4 froze 3 Features, 5 serial full-LLD Stories and 20 Tasks."
+    },
+    {
+      "id": "CP5-CR172-02",
+      "category": "context",
+      "name": "CP5 capsule and full design batch are complete",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "expected/completed/confirmed=5/5/5; clarification=0; human confirmation approved."
+    },
+    {
+      "id": "CP5-CR172-03",
+      "category": "design-evidence",
+      "name": "Five of five independent full LLDs are approved and confirmed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP5-CR172-LLD-R3-CROSS-CONTRACT-CORRELATION.result.json"],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "LLD v1.3=5/5; lld-check=5/5 OK; confirmed=true and open_items=0 for 5/5; pointer-only normative delta=0."
+    },
+    {
+      "id": "CP5-CR172-04",
+      "category": "independent-review",
+      "name": "Independent meta-qa-critical Round 4 permits CP5 preparation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP5-CR172-LLD-REVIEW-R4-FINDINGS.md", "process/checks/CP5-CR172-LLD-REVIEW-R4-SUMMARY.md"],
+      "owner": "meta-qa",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "decision=proceed; blocking/required/optional=0/0/1. R1-R3 required findings are closed; remaining optional is authority pointer freshness only."
+    },
+    {
+      "id": "CP5-CR172-05",
+      "category": "authorization",
+      "name": "Current-v1 trusted approval adapter remains unavailable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-LLD.md", "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-LLD.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "approved-ledger current-v1 authorized/eligible=0/0 for 6/6 actions; stable reason=APPROVED_LEDGER_ADAPTER_UNAVAILABLE; no caller self-assertion unlock."
+    },
+    {
+      "id": "CP5-CR172-06",
+      "category": "return-semantics",
+      "name": "Trial-return v1 is a pure fixture contract and rejects the forward-label proxy",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-LLD.md"],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "canonical payload columns timestamp/simple_return=2/2; existing runner/lineage diffs=0/0; forward_label_proxy accepted as trial-return/empirical-R/effective-count=0/0/0."
+    },
+    {
+      "id": "CP5-CR172-07",
+      "category": "replica-materialization",
+      "name": "S02-S03-S04 has one selected bytes verification chain",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md", "process/stories/STORY-CR172-S03-nas-replica-verification-LLD.md", "process/stories/STORY-CR172-S04-execution-cache-materialization-LLD.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S03 current selection is the only data source; S04 directly calls S02 unique verifier once; S03 verifier facade/digest/data bypass=0/0/0; tampered seal pointer=0; S04 IDs=16/16/0."
+    },
+    {
+      "id": "CP5-CR172-08",
+      "category": "failure-recovery",
+      "name": "Append-only partial lineage remains blocked audit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-LLD.md", "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-LLD.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "partial state=partial_lineage_blocked_audit; erase/fake rollback/canonical selection advance=0/0/0; atomicity claim=0."
+    },
+    {
+      "id": "CP5-CR172-09",
+      "category": "claim-ceiling",
+      "name": "REQ-013 and PATH-I claim ceilings remain honest",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md", "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-LLD.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "REQ013=contract_ready/runtime_enforcement_deferred; current runner diff/default switch/runtime enforcement/runtime delivered=0/0/0/0; CP8 maximum path_i_design_ready only."
+    },
+    {
+      "id": "CP5-CR172-10",
+      "category": "coverage-ownership",
+      "name": "Requirements scenarios outcomes DAG and owners are complete",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/checks/CP4-CR172-PATH-I-STORY-DAG-PARALLEL-SAFETY.result.json", "process/DEVELOPMENT-PLAN.yaml"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "REQ/scenario/outcome=15/15,27/27,11/11; primary paths=12 with duplicates=0; serial DAG nodes/edges=5/10 and cycles=0."
+    },
+    {
+      "id": "CP5-CR172-11",
+      "category": "authorization-boundary",
+      "name": "CP5 preparation used no implementation or real authority",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml", "process/state/AGENT-DISPATCH-LEDGER.ndjson"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "source/test/fixture implementation=0/0/0; real lake/NAS/runtime/trial-return/R/signal/trading/migration/deploy/remote operations=0."
+    },
+    {
+      "id": "CP5-CR172-12",
+      "category": "remaining-prerequisites",
+      "name": "Real activation prerequisites remain explicit and separate",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md", "process/changes/CR-172.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "real native period-return producer, atomic lineage/correction, runtime path enforcement, trusted approval adapter, real NAS/execution adapters, empirical-R v2 and public C1 projection remain future prerequisites."
+    },
+    {
+      "id": "CP5-CR172-13",
+      "category": "pointer-freshness",
+      "name": "LLD authority pointer freshness is closed before CP6",
+      "status": "PASS",
+      "severity": "LOW",
+      "evidence_refs": ["process/checks/CP5-CR172-LLD-REVIEW-R4-SUMMARY.md"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Five LLD section-0 pointers now name HLD/ADR v1.4; S01 F-04 uses complete action kinds and S05 I01 TEST-PLAN names v1.2. The refresh changed no normative contract."
+    }
+  ],
+  "entry_criteria": [
+    {"name": "CP3 approved and CP4 PASS", "status": "PASS", "evidence_ref": "process/checks/CP4-CR172-PATH-I-STORY-DAG-PARALLEL-SAFETY.result.json"},
+    {"name": "CP5 capsule ready", "status": "PASS", "evidence_ref": "process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml"},
+    {"name": "Five LLD structure checks OK", "status": "PASS", "evidence_ref": "process/checks/CP5-CR172-LLD-R3-CROSS-CONTRACT-CORRELATION.result.json"},
+    {"name": "Independent review blocking and required findings are zero", "status": "PASS", "evidence_ref": "process/checks/CP5-CR172-LLD-REVIEW-R4-SUMMARY.md"}
+  ],
+  "exit_criteria": [
+    {"name": "All five design evidence items are ready for human review", "status": "PASS"},
+    {"name": "No blocking clarification or required review finding", "status": "PASS"},
+    {"name": "Authorization and claim ceilings are explicit", "status": "PASS"},
+    {"name": "Human decision recorded", "status": "PASS", "evidence_ref": "process/checkpoints/CP5-CR172-ALL-STORIES-LLD-BATCH.md"}
+  ],
+  "deliverables": [
+    "process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml",
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-LLD.md",
+    "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-LLD.md",
+    "process/stories/STORY-CR172-S03-nas-replica-verification-LLD.md",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization-LLD.md",
+    "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-LLD.md",
+    "process/checks/CP5-CR172-LLD-REVIEW-R4-SUMMARY.md",
+    "process/checkpoints/CP5-CR172-ALL-STORIES-LLD-BATCH.md"
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T035505Z0000-8fad99ce",
+    "RE-20260718T035505Z0000-c55679a7",
+    "RE-20260718T035505Z0000-0bf31d96",
+    "RE-20260718T035506Z0000-3eab9d50",
+    "RE-20260718T035506Z0000-6e6c1019",
+    "RE-20260718T030551Z0000-7269f3fb",
+    "RE-20260717T061934Z0000-c7d192ad"
+  ],
+  "pending_human_decisions": [
+    {
+      "decision_id": "DQ-CP5-CR172-IMPLEMENTATION-CONTRACT",
+      "decision_type": "implementation",
+      "status": "approved",
+      "question": "Approve the five full LLDs as the CR172 PATH-I implementation contract?",
+      "recommended_option": "Approved S01-S05 v1.3 after pointer-only refresh with normative delta=0.",
+      "source_ref": "process/checkpoints/CP5-CR172-ALL-STORIES-LLD-BATCH.md"
+    },
+    {
+      "decision_id": "DQ-CP5-CR172-WAVES-OWNERSHIP",
+      "decision_type": "implementation",
+      "status": "approved",
+      "question": "Approve the five serial Waves and twelve uniquely owned repository paths?",
+      "recommended_option": "Approve S01 to S02 to S03 to S04 to S05, one Story per Wave, with twelve of twelve primary paths uniquely owned.",
+      "source_ref": "process/checkpoints/CP5-CR172-ALL-STORIES-LLD-BATCH.md"
+    },
+    {
+      "decision_id": "DQ-CP5-CR172-LOCAL-AUTHORIZATION",
+      "decision_type": "security",
+      "status": "approved",
+      "question": "Authorize only the twelve planned repository-local code test and fixture paths plus local uv validation?",
+      "recommended_option": "Authorize only pure contracts, repository fixture ports and local uv-run tests; retain every real, runtime, external and remote denial.",
+      "source_ref": "process/checkpoints/CP5-CR172-ALL-STORIES-LLD-BATCH.md"
+    },
+    {
+      "decision_id": "DQ-CP5-CR172-CLAIM-AND-RUNTIME-BOUNDARY",
+      "decision_type": "risk_acceptance",
+      "status": "approved",
+      "question": "Accept fixture-only verification and the PATH-I design-ready claim ceiling?",
+      "recommended_option": "Accept that current-v1 real actions remain unavailable, REQ013 runtime delivery is deferred, and CP8 can claim path_i_design_ready only.",
+      "source_ref": "process/checkpoints/CP5-CR172-ALL-STORIES-LLD-BATCH.md"
+    }
+  ],
+  "manual_gate_status": "approved",
+  "decision": "PASS",
+  "next_route": "CP6"
+}

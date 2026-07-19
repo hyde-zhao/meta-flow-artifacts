@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S02-trial-return-artifact-native-hook",
+  "status": "needs_rework",
+  "allowed_statuses": [
+    "implemented",
+    "implemented_with_risk",
+    "verified",
+    "verified_with_risk",
+    "partial",
+    "blocked",
+    "needs_design_clarification",
+    "needs_user_decision",
+    "needs_rework",
+    "no_op",
+    "superseded",
+    "waived"
+  ],
+  "artifacts": [
+    {
+      "kind": "verification-execution-and-review",
+      "path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md"
+    },
+    {
+      "kind": "cp-result",
+      "path": "process/checks/CP7-CR172-S02-VERIFICATION.result.json"
+    },
+    {
+      "kind": "cp-result-summary",
+      "path": "process/checks/CP7-CR172-S02-VERIFICATION.result.summary.md"
+    }
+  ],
+  "touched_files": [
+    {
+      "path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP7.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP7.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S02-VERIFICATION.result.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S02-VERIFICATION.result.summary.md",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "notes": "CP7 只读验证；源码、测试和长期设计修改为 0。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: 58 passed, 0 failed, 0 skipped"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s02-cp7-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: exit=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null engine/trial_return_artifact.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S02.CP6.work-packet.json --return process/returns/CR172-S02-trial-return-artifact-native-hook.CP6.return.json",
+        "result": "pass_with_note: Story Return Packet Check OK; expected-path symlink warning only"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S02-IMPLEMENTATION-DONE.result.json --check-consistency --correlation-profile audit",
+        "result": "pass_with_note: CP Result Check OK; route/hash-path/final-attempt warnings only"
+      },
+      {
+        "command": "repository-local in-memory unbound structural-port conformance probe",
+        "result": "fail: accepted_unbound_structural_port=1"
+      },
+      {
+        "command": "repository-local in-memory record-then-fail port conformance probe",
+        "result": "fail: wrapped_failure=true; retained_record_count=1"
+      },
+      {
+        "command": "SHA-256 correlation for S01/S02 source and tests",
+        "result": "pass: 4/4 hashes equal CP6 result"
+      },
+      {
+        "command": "uv run --python 3.11 python -c 'import pyarrow; print(pyarrow.__version__)'",
+        "result": "pass: 16.1.0 matches producer contract"
+      }
+    ],
+    "tests": [
+      {
+        "path": "tests/research/test_cr172_trial_return_artifact.py",
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S02 exact contract and fixture regression"
+      },
+      {
+        "path": "tests/research/test_cr172_path_i_governance.py",
+        "passed": 46,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S01 upstream regression"
+      },
+      {
+        "path": "CP7 neutral in-memory port conformance probes",
+        "passed": 0,
+        "failed": 2,
+        "skipped": 0,
+        "role": "independent authorization-boundary and failure-closure review"
+      }
+    ],
+    "skipped": [
+      {
+        "check": "real runner, lineage, lake, NAS, runtime, R, signal, trading, deploy, credentials and remote integration",
+        "reason": "verify packet 和 authz policy 明确禁止；真实操作计数=0"
+      },
+      {
+        "check": "LLD full read",
+        "reason": "packet、TEST-PLAN、CP6 结构化证据和源码/测试已足以判定；deep_review expansion 未触发"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-CR172-S02-CP7-001",
+      "severity": "BLOCKER",
+      "status": "OPEN",
+      "category": "authorization-boundary-and-failure-closure",
+      "evidence_refs": [
+        "engine/trial_return_artifact.py:358",
+        "engine/trial_return_artifact.py:493",
+        "engine/trial_return_artifact.py:538",
+        "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md#review-findings"
+      ],
+      "impact": "fixture port 未与 decision/context/URI 绑定，且异常包装不能证明失败时 selection 未推进；零真实操作边界无法闭环。",
+      "recommendation": "同 Story 增加 repository-owned 可验证 port binding/capability、pre-side-effect guard 和未绑定/失败原子性负向测试。",
+      "owner": "meta-dev"
+    }
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "R-CR172-S02-PORT-BINDING",
+      "status": "open_blocking",
+      "note": "Injected port capability domain and failure atomicity are not runtime-verifiable."
+    },
+    {
+      "id": "R-CR172-TRIAL-RETURN-SOURCE-ABSENT",
+      "status": "design_deferred_fail_closed",
+      "note": "Fixture PASS does not prove a real native period-return producer."
+    },
+    {
+      "id": "R-CR172-PATH-IDENTITY-DRIFT",
+      "status": "controlled_for_fixture_only",
+      "note": "Real stable URI remains a later design prerequisite."
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "read_audit": {
+    "preferred_agent_paths_missing": [
+      "agents/meta-qa.md",
+      ".agents/agents/meta-qa.md"
+    ],
+    "approved_fallback_fully_read": ".claude/agents/meta-qa.md",
+    "denied_default_reads_opened": [],
+    "full_doc_read_reason": null
+  },
+  "dispatch_refs": [
+    "AD-CR172-S02-CP7-META-QA-CRITICAL-20260718T191243+0800",
+    "AD-CR172-S02-CP7-META-QA-CRITICAL-STARTED-20260718T191243+0800",
+    "/root/cr172_s02_cp7_meta_qa_critical"
+  ],
+  "next_stage_recommendation": "route_meta_dev_rework_same_story_do_not_start_s03"
+}

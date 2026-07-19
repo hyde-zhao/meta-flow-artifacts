@@ -1,6 +1,6 @@
 ---
-status: "ready-for-cp5-review"
-version: "1.26"
+status: "cr172-path-i-cp5-r3-minimal-correction-ready"
+version: "1.30"
 source_blueprint: "docs/design/BLUEPRINT.md"
 source_hld:
   - "docs/design/HLD.md"
@@ -9,6 +9,8 @@ source_hld:
   - "process/archive/design-cr-docs/HLD-ECONOMIC-COST-IMPACT-EVIDENCE.md"
   - "docs/design/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
   - "process/archive/design-cr-docs/HLD-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"
+  - "docs/design/HLD-EFFECTIVE-TRIAL-OFFLINE-METHODOLOGY.md"
+  - "docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md"
 source_adr:
   - "docs/design/ARCHITECTURE-DECISION.md"
   - "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
@@ -16,7 +18,9 @@ source_adr:
   - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-ECONOMIC-COST-IMPACT-EVIDENCE.md"
   - "docs/design/ARCHITECTURE-DECISION-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
   - "process/archive/design-cr-docs/ARCHITECTURE-DECISION-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"
-change: "CR-170"
+  - "docs/design/ARCHITECTURE-DECISION-EFFECTIVE-TRIAL-OFFLINE-METHODOLOGY.md"
+  - "docs/design/ARCHITECTURE-DECISION-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md"
+change: "CR-172"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 confirmed_by: ""
 confirmed_at: ""
@@ -55,6 +59,10 @@ confirmed_at: ""
 | 1.24 | 2026-07-14 | host-orchestrator inline fallback | CR168 专题 CP3 正文归档后更新其 HLD/ADR source path；Feature 判定、Story、lld_policy 和实施语义不变。 |
 | 1.25 | 2026-07-14 | host-orchestrator inline meta-se | CR169 CP3 approved 后增补 FEAT-169-01..04、12/12 三件套、5 个串行 Story、13 字段 correlation、strict 7-key joint adapter 与 Stage2 7/7 exit guard。 |
 | 1.26 | 2026-07-15 | host-orchestrator inline meta-se | CR170 CP3 approved 后增量复用 FEAT-15；新增 4 个 full-lld Story、21-unit 五态与 15/5/1 方向清单、受保护 merge、T0-T3 admission 及 caller/T3/adapter 回归义务。 |
+| 1.27 | 2026-07-16 | meta-se-critical | CR173 CP3 approved 后新增 FEAT-173-01 estimator-only Feature 三件套、3 个 full-lld Story、3 个串行 Wave；冻结 exact-rational spectral estimator、七字段 evidence、6×3 golden/授权守卫，public C1 projection Story=0。 |
+| 1.28 | 2026-07-18 | meta-se-critical | CR172 PATH-I CP3 approved 后新增 3 个 required Feature、5 个 full-lld Story 与 5 个串行 Wave；初始 producer feasibility 口径已由 v1.29 的 source audit 安全收窄。 |
+| 1.29 | 2026-07-18 | meta-se-critical | CR172 CP5 R1 安全收窄：I01/S02 改为 pure contract + fixture producer port，现有 runner/lineage diff=`0/0`；forward-label proxy 禁入；fixture/real binding 与 verified seal digest 上移为 public contract；真实 producer/原子 lineage 转独立前置 CR。 |
+| 1.30 | 2026-07-18 | meta-se-critical | CR172 CP5 R2 最小整改：approved-ledger current-v1 双 false；S04 允许 S02 verifier-library dependency 但必须从 S03 selection 取数；evidence_kind 第二真相=0；REQ-013=contract-ready/runtime-enforcement-deferred。 |
 
 ## 适用性判定规则
 
@@ -855,3 +863,172 @@ DAG：4 nodes、5 edges、4 serial Waves、cycles=0、invalid refs=0、parallel 
 | DAG/Wave | PASS | 4 nodes、5 edges、4 serial Waves、cycles=0、parallel conflicts=0 |
 | 评审整改 | PASS | 21-unit path/direction、caller contract、T3 zero-diff 均下沉到 CP5 focus |
 | 授权边界 | PASS | design-only；source/test/real-data/runtime/remote-write=0 |
+
+## CR173 CP4 增量：Effective-Trial Offline Estimator
+
+> 来源：CR173 CP3 用户批准的 `spectral_participation_ratio` 限定 claim 与 estimator-only split。当前只准备 Feature/Story/CP5 设计证据队列；不创建 LLD，不修改源码/测试/fixture，不发起 CP5，不触达 public C1、真实数据或 runtime。
+
+### Feature 适用性判定
+
+| Feature | 名称 | 判定 | 触发原因 | 三件套 | Stories | lld_policy | 重访条件 |
+|---|---|---|---|---|---|---|---|
+| FEAT-173-01 | Effective-Trial Offline Estimator | required | 新 typed input/evidence schema、exact-rational PSD/numeric algorithm、versioned serialization、fail-closed/append-only contract 被 3 个 Story 共享 | `docs/features/effective-trial-offline-estimator/{DESIGN,TEST-PLAN,TASKS}.md` | S01,S02,S03 | full-lld | estimand、matrix representation、numeric/PSD、七字段、reason/hash、fixture schema、authorization 或 public boundary 变化 |
+
+只创建一个 estimator-only Feature。public C1 projection 已按 CP3 `PASS_BY_SPLIT` 留在后续 CR 候选，不是 FEAT-173-01 的 capability、Story、task 或实现文件；production projection Story 数=`0`。
+
+### Story 下游消费表
+
+| Story | Owner Feature | feature_design_refs | lld_policy | CP5 evidence | 说明 |
+|---|---|---|---|---|---|
+| CR173-S01-contract-evidence-canonicalization | FEAT-173-01 contract/evidence | FEAT-173-01 三件套 | full-lld（schema/serialization/security/shared contract） | Story LLD | 冻结 immutable input/method/7-field evidence、8 failure reason、canonical bytes/hash；public write=0。 |
+| CR173-S02-exact-spectral-estimator | FEAT-173-01 estimator | FEAT-173-01 三件套 | full-lld（exact numeric/PSD/public method semantics） | Story LLD | 只消费 S01 contract；exact rational LDLT、`n²/ΣRij²`、一次舍入与双 invariant。 |
+| CR173-S03-golden-failure-boundary-verification | FEAT-173-01 verification | FEAT-173-01 三件套 | full-lld（cross-story validation/authorization/claim ceiling） | Story LLD | 6×3、8 failures、append-only recovery、8+12 public inventory、zero-operation guard；无 projection。 |
+
+本轮只登记 `lld_policy` 与未来 evidence path；实际 LLD 文件数=`0`，CP5 人工门禁发起数=`0`。
+
+### CP5 强制注意项
+
+| Attention ID | Story | Requirement |
+|---|---|---|
+| CP5-FOCUS-CR173-001 | S01 | 七字段 `7/7`、present/null/ref规则、8 failure reason、append-only recovery 与 canonical domain 必须逐项可执行；`Decimal→float=0`。 |
+| CP5-FOCUS-CR173-002 | S02 | pivot comparator/zero-pivot residual coupling 必须有确定伪代码；exact rational/tolerance=0；未舍入+舍入后范围检查 `2/2`；禁止 clamp。 |
+| CP5-FOCUS-CR173-003 | S03 | golden `6/6×3/3`、failure `8/8`、public inventory `8+12`、forbidden counters 全为 0；static guard 不得创建 public adapter。 |
+| CP5-FOCUS-CR173-004 | ALL | public C1/Gate1/statistical summary/DSR/admission production diff/call=`0/0`；strategy/real/provider/credential/runtime/write/trading/remote=`0`。 |
+| CP5-FOCUS-CR173-005 | ALL | `offline_method_ready` 不得提升为 public computable、Stage3、admission 或 CR172 auto-resume；public projection Story/Feature/task=`0/0/0`。 |
+
+### DAG / Wave / File Owner
+
+| Wave | Story | depends_on | dependency type | 主要 owner | 并行结论 |
+|---|---|---|---|---|---|
+| CR173-W1-CONTRACT-EVIDENCE | S01 | none | none | `engine/effective_trial_evidence.py` + contract tests | serial |
+| CR173-W2-EXACT-ESTIMATOR | S02 | S01 | contract | `engine/effective_trial_estimator.py` + estimator tests | serial after S01 contract |
+| CR173-W3-GOLDEN-BOUNDARY | S03 | S01,S02 | runtime,runtime | CR173 fixture/QAC/authorization tests | serial after S01/S02 evidence |
+
+DAG：3 nodes、3 edges、3 serial Waves、cycles=0、invalid refs=0、isolated nodes=0、parallel internal dependencies=0、same-wave file conflicts=0。merge order=`S01 → S02 → S03`。
+
+### REQ / SC / Outcome 覆盖
+
+| Story | REQ-CR173 | SC-CR173 | Product outcomes |
+|---|---|---|---|
+| S01 | 001,002,003,004,005,007 | Q01,F01,N01,B01,C01 | O01,O02,O04 |
+| S02 | 001,002,003,005,006 | P01,Q01,F01,B01,D01 | O01,O03 |
+| S03 | 003,004,005,006,007,008 | F01,N01,B01,D01,C01,A01 | O02,O03,O04 |
+
+并集：REQ `8/8=100%`，SC `8/8=100%`，Outcome `4/4=100%`。SC-C01 是 public-boundary stop 的 negative/static guard，不是 projection Story。
+
+### First Slice / Deferred / Not Authorized
+
+| 范围 | 状态 | 处理 |
+|---|---|---|
+| contract/evidence + exact estimator + fixture verification | first slice | S01→S02→S03；仅 CP5 后 repository-local fixture 实现。 |
+| empirical matrix/stability/alpha-tail calibration | deferred | future methodology Spike/activation evidence；CR173 实现数=0。 |
+| public C1 versioned projection/migration | deferred-split | future独立 CR；当前 Feature/Story/task/write/call均为0。 |
+| real data/strategy/provider/credential/runtime/trading/publish/remote write | not authorized | 不建 Story、不建 task、不执行。 |
+
+### CR173 CP4 准备自检与建议
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| Feature owner/三件套 | PASS | FEAT-173-01 required；DESIGN/TEST-PLAN/TASKS=`3/3` |
+| Feature/Story/Wave/Task 一致 | PASS | `1/3/3/12`，三件套、Story cards、DEVELOPMENT-PLAN一致 |
+| Story refs / lld_policy / acceptance / failure route | PASS | `3/3` full-lld；必填消费字段与门控齐备；LLD实际文件=0 |
+| REQ/SC/Outcome coverage | PASS | `8/8`、`8/8`、`4/4`，未覆盖=0 |
+| DAG/Wave/file owner | PASS | 3 nodes、3 edges、3 Waves、cycle/ref/conflict=`0/0/0` |
+| public projection split | PASS | projection Feature/Story/task/production write/call=`0/0/0/0/0` |
+| 授权边界 | PASS | design-only；source/test/fixture/real/runtime/public/remote write=`0` |
+
+meta-se 对 Host 的 CP4 建议：`PASS`，blocker=`0`。正式 CP4 result/context/checkpoint ledger 由 Host Orchestrator 生成；本增量不发起 CP5 门禁。
+
+## CR172 PATH-I CP4 增量：Trial-Return 与跨机部署合同
+
+> 来源：CR172 PATH-I HLD/ADR v1.3（CP5 R2 minimal correction）。本增量只准备 Feature/Story/CP5 设计证据队列和 repository-local fixture 计划；不修改现有 runner/lineage，不执行六类真实动作，不恢复 PATH-C/A。
+
+### Feature 适用性判定
+
+| Feature | 名称 | 判定 | 触发原因 | 三件套 | Stories | lld_policy |
+|---|---|---|---|---|---|---|
+| FEAT-CR172-I01 | Trial Return Artifact Pipeline | required | 新 immutable schema、fixture producer port、manifest/seal/verifier、partial-lineage BLOCKED audit | `docs/features/trial-return-artifact-pipeline/{DESIGN,TEST-PLAN,TASKS}.md` | S02,S05 | full-lld |
+| FEAT-CR172-I02 | Research Artifact Replica and Materialization | required | 跨机副本、receipt、原子 pointer、执行机 immutable cache 与恢复 | `docs/features/research-artifact-replica-materialization/{DESIGN,TEST-PLAN,TASKS}.md` | S03,S04,S05 | full-lld |
+| FEAT-CR172-I03 | PATH-I Authorization and Claim Governance | required | 六动作分权/执行资格 DAG、empirical/path/signal/claim shared contract | `docs/features/path-i-authorization-claim-governance/{DESIGN,TEST-PLAN,TASKS}.md` | S01,S05 | full-lld |
+
+判定结果：required/waived/n/a=`3/0/0`；三件套=`9/9`。Signal detailed exchange/intraday、FU-CR173-001 v2、external import activation、真实 migration/runtime 的 Feature/Story/task=`0/0/0`。
+
+### Story 下游消费表
+
+| Story | Owner Feature | feature_design_refs | lld_policy | CP5 evidence | 主要文件 owner |
+|---|---|---|---|---|---|
+| CR172-S01-action-authorization-eligibility-governance | I03 | I03 三件套 | full-lld | Story LLD | `engine/path_i_governance.py` |
+| CR172-S02-trial-return-artifact-native-hook | I01+I03 | I01/I03 六件 | full-lld R2 | Story LLD | `engine/trial_return_artifact.py`；历史 ID 保留，runner diff=0 |
+| CR172-S03-nas-replica-verification | I02+I03 | I02/I03 六件 | full-lld | Story LLD | `engine/research_artifact_replica.py` |
+| CR172-S04-execution-cache-materialization | I01+I02+I03 | I01/I02/I03 九件 | full-lld R3 | Story LLD | `engine/research_artifact_materialization.py` |
+| CR172-S05-path-i-integration-claim-zero-operation-verification | I01+I02+I03 | 三 Feature 九件 | full-lld | Story LLD | CR172 test/fixture paths only |
+
+实际 LLD 文件数=`0`；CP5 人工门禁发起数=`0`。五个 Story 全部 `lld-ready`，但实现/测试在 CP5 批准前均 blocked。
+
+### `DO-CR172-CP5-001` 安全收窄闭环
+
+| 义务 | CP4 冻结值 | 证据 |
+|---|---|---|
+| current source disposition | native multi-trial period-return producer=`0`；existing runner hook/diff=`0/0` | I01 DESIGN §2/§3；ADR-011 |
+| semantic guard | `forward_label_proxy@v1`→trial-return/empirical-R/effective-count accepted=`0/0/0` | I01 DESIGN §2/§6 |
+| source/file-owner inventory | `100%/100%`；planned touched code/test `2/2`，duplicate primary owner=0 | I01 DESIGN §3；S02 |
+| fixture binding | decision-origin/target-kind=`2/2`；fixture+real accepted=0 | I01 DESIGN §5；I03 DESIGN §3 |
+| seal handoff | canonical bytes/digest/verifier truth=`1/1/1`；S03 secondary digest=0 | I01 DESIGN §4；I02 DESIGN §2/§3 |
+| lineage failure | partial success→`partial_lineage_blocked_audit`；canonical selection advance=0 | I01 DESIGN §6；ADR-009/011 |
+
+### CP5 R3 四项机械闭环
+
+| 项 | 冻结值 |
+|---|---|
+| approved-ledger | current-v1 authorized/eligible=`false/false`；reason=`APPROVED_LEDGER_ADAPTER_UNAVAILABLE`；caller self-assert unlock=0 |
+| S04 seal verification | data source=S03 selected replica；verifier=S02唯一 library/窄 facade；bypass/secondary digest=`0/0` |
+| fixture provenance | 唯一来源=`ActionDecisionV1.decision_origin + ActionScopeContextV1.target_kind + fixture URI/port`；`evidence_kind` truth=`0` |
+| REQ-013 | `contract_ready/runtime_enforcement_deferred`；current default switch/enforcement=`0/0`；future native-producer path-enforcement required |
+
+真实 producer/instrumentation 与原子 lineage/correction 均为独立前置 CR；不得从历史 Story ID 恢复 runner hook。
+
+### DAG / Wave / File Owner
+
+| Wave | Story | depends_on | dependency type | 主要 owner |
+|---|---|---|---|---|
+| CR172-W1-GOVERNANCE-CONTRACT | S01 | none | none | governance contract/tests |
+| CR172-W2-TRIAL-RETURN-HOOK | S02 | S01 | contract | artifact module + fixture port；历史 Wave ID 保留，runner diff=0 |
+| CR172-W3-NAS-REPLICA | S03 | S01,S02 | contract,runtime | replica module/tests |
+| CR172-W4-EXECUTION-MATERIALIZATION | S04 | S01,S02,S03 | contract,verifier-library,runtime-selection | materialization module/tests |
+| CR172-W5-INTEGRATED-VERIFICATION | S05 | S01,S02,S03,S04 | runtime×4 | test/fixture only |
+
+DAG=`5 nodes/10 edges/5 serial Waves`；cycles/invalid refs/isolated/same-wave conflicts=`0/0/0/0`；merge order=`S01→S02→S03→S04→S05`。
+
+### REQ / Scenario / Outcome 覆盖
+
+| Story | Requirement | Scenario | Outcome |
+|---|---|---|---|
+| S01 | 001～008,011,013～015 | P01,P02,N01,B01,F01,Q01,A01,G01,A02,Q02,G02,C02,S01～S06 | O01～O04,O07,O09～O11 |
+| S02 | 009,011,013,014 | I01,N02,N04,B02,G02,Q02 | O05,O09,O11 |
+| S03 | 010～012 | I02,N03,B02,B03,A02,F02 | O06～O08,O11 |
+| S04 | 010～012 | I02,N03,B02,B03,A02,F02 | O06～O08,O11 |
+| S05 | 001～015 | all CR172 P0 scenarios | O01～O11 |
+
+并集：REQ=`15/15=100%`、Scenario=`27/27=100%`、Outcome=`11/11=100%`；uncovered=`0/0/0`。
+
+### CP5 强制注意项
+
+1. S01 必须分别表达 `authorized` 与 `eligible_to_execute`；DAG edges `5/5`，runtime-without-read launch/workspace/pointer=`0/0/0`。
+2. S02 必须保持 current runner/lineage diff=`0/0`、v1 exact 两列、forward-label accepted=0、fixture binding、verified seal public contract 与 partial-lineage BLOCKED audit。
+3. S03 必须精确消费 S02 verified result；S04 只能从 S03 selection 取数，但必须复用唯一 verifier 做 bytes-level 复验；bypass/re-seal/secondary digest/direct-NAS/pointer escape=0。
+4. S05 provenance 只消费 decision origin + target kind + fixture URI/port，`evidence_kind`=0；approved-ledger 双 false；REQ-013 runtime delivered claim=0。
+5. Signal detailed/FU-v2/external import/real runtime/migration Story 数持续为 0；发现需要即回独立 CR/设计澄清。
+
+### CR172 CP4 自检与建议
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| Feature/三件套 | PASS | `3/9`（3 Feature、9 files） |
+| Story/Wave/Task | PASS | `5/5/20`；全部 full-lld；LLD actual=0 |
+| coverage | PASS | REQ/SC/Outcome=`15/27/11` 全覆盖 |
+| DAG/file owner | PASS | 5 nodes、9 edges；cycle/ref/conflict/duplicate owner=0 |
+| source disposition | PASS | current runner hook/diff=`0/0`；forward proxy accepted=0；future producer/atomic lineage prerequisites registered |
+| R3 minimal guards | PASS | approved-ledger accepted/eligible=0/0；S04 verifier chain=1；evidence_kind=0；REQ-013 runtime enforcement=deferred |
+| authorization/scope | PASS | authorized/executed=`0/6`,`0/6`；deferred scope Story=0 |
+
+meta-se 对 Host 的 CP4 建议：`PASS`，blocker/waiver/新人工决策=`0/0/0`；下一步由 Host 在 CP4 PASS 后调度 5 份 full LLD 并发/串行策略，不在本增量发起 CP5。

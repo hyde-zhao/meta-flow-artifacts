@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S01-action-authorization-eligibility-governance",
+  "status": "needs_rework",
+  "allowed_statuses": [
+    "implemented",
+    "implemented_with_risk",
+    "verified",
+    "verified_with_risk",
+    "partial",
+    "blocked",
+    "needs_design_clarification",
+    "needs_user_decision",
+    "needs_rework",
+    "no_op",
+    "superseded",
+    "waived"
+  ],
+  "touched_files": [
+    {
+      "path": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S01-VERIFICATION.result.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S01-VERIFICATION.result.summary.md",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py",
+        "result": "pass: 28 passed in 0.06s"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s01-cp7-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py tests/research/test_cr172_path_i_governance.py",
+        "result": "pass"
+      },
+      {
+        "command": "git diff --check -- engine/path_i_governance.py tests/research/test_cr172_path_i_governance.py",
+        "result": "pass_with_note: targets are untracked"
+      },
+      {
+        "command": "git diff --no-index --check for each untracked target",
+        "result": "pass: no whitespace diagnostics"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S01.CP6.work-packet.json --return process/returns/CR172-S01-action-authorization-eligibility-governance.CP6.return.json",
+        "result": "pass_with_warn"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S01-IMPLEMENTATION-DONE.result.json --check-consistency --correlation-profile audit",
+        "result": "pass_with_warn"
+      },
+      {
+        "command": "repository-local import, operation-symbol and provenance-alias static scans",
+        "result": "pass"
+      },
+      {
+        "command": "caller-constructed/replaced decision invariant contract check",
+        "result": "fail: F-CP7-001 reproduced"
+      },
+      {
+        "command": "logical URI canonicalization and percent-encoding prefix-consistency contract check",
+        "result": "fail: F-CP7-002 reproduced"
+      }
+    ],
+    "tests": [
+      {
+        "path": "tests/research/test_cr172_path_i_governance.py",
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0,
+        "duration_seconds": 0.06
+      },
+      {
+        "path": "adversarial-contract:F-CP7-001",
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "duration_seconds": 0.0
+      },
+      {
+        "path": "adversarial-contract:F-CP7-002",
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "duration_seconds": 0.0
+      }
+    ],
+    "skipped": [
+      {
+        "check": "repository-wide regression and runtime integration",
+        "reason": "outside the CP7 verify-packet allowed read/verification scope; S02 and real runtime remain blocked"
+      },
+      {
+        "check": "platform/install dry-run",
+        "reason": "S01 does not modify platform or installer assets"
+      }
+    ]
+  },
+  "open_questions": [],
+  "findings": [
+    {
+      "id": "F-CP7-001",
+      "severity": "BLOCKER",
+      "status": "OPEN",
+      "owner": "meta-dev",
+      "summary": "Caller-constructed or replaced ActionDecisionV1 is not defensively revalidated against current-v1 hard-deny invariants by the consumer guard.",
+      "evidence_ref": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#11-问题清单"
+    },
+    {
+      "id": "F-CP7-002",
+      "severity": "BLOCKER",
+      "status": "OPEN",
+      "owner": "meta-dev",
+      "summary": "Logical URI validation and allow/deny prefix matching do not use one canonical percent-encoding representation.",
+      "evidence_ref": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#11-问题清单"
+    }
+  ],
+  "risks": [
+    {
+      "id": "R-CP7-001",
+      "status": "open_blocking",
+      "note": "Existing 28 tests do not cover caller construction/replace/empty-ref invariants or canonical path equivalence."
+    },
+    {
+      "id": "R-CP7-002",
+      "status": "controlled_non_blocking",
+      "note": "The packet git diff --check is empty for untracked files; supplemental no-index check found no whitespace diagnostics."
+    },
+    {
+      "id": "R-CR172-RUNTIME-AUTHORIZATION-GAP",
+      "status": "controlled_by_hard_deny_but_rework_required",
+      "note": "No real adapter or operation was used; current-v1 consumer invariants must be repaired before any downstream claim."
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T063743Z0000-cr172s01cp7lld"
+  ],
+  "dispatch_refs": [
+    "AD-CR172-S01-CP7-META-QA-CRITICAL-20260718T143559+0800",
+    "AD-CR172-S01-CP7-META-QA-CRITICAL-STARTED-20260718T143559+0800"
+  ],
+  "next_stage_recommendation": "needs_rework_same_story_then_rerun_cp6_cp7"
+}

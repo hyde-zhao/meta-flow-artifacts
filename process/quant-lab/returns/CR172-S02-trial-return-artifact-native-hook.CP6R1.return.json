@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "rework_attempt": 1,
+  "cr_id": "CR-172",
+  "story_id": "CR172-S02-trial-return-artifact-native-hook",
+  "status": "implemented",
+  "allowed_statuses": [
+    "implemented",
+    "implemented_with_risk",
+    "verified",
+    "verified_with_risk",
+    "partial",
+    "blocked",
+    "needs_design_clarification",
+    "needs_user_decision",
+    "needs_rework",
+    "no_op",
+    "superseded",
+    "waived"
+  ],
+  "touched_files": [
+    {"path": "engine/trial_return_artifact.py", "change_type": "modified"},
+    {"path": "tests/research/test_cr172_trial_return_artifact.py", "change_type": "modified"},
+    {"path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook.md", "change_type": "modified"},
+    {"path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-IMPLEMENTATION.md", "change_type": "modified"},
+    {"path": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP6R1.return.json", "change_type": "created"},
+    {"path": "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP6R1.index.json", "change_type": "created"},
+    {"path": "process/checks/CP6-CR172-S02-REWORK-1.result.json", "change_type": "created"},
+    {"path": "process/checks/CP6-CR172-S02-REWORK-1.result.summary.md", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "notes": "只强化既有 repository fixture port 的 nominal binding 与原子失败实现；public 3/3+3/3、schema/hash/seal/verifier 不变。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: 29 passed, 0 failed, 0 skipped"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: 75 passed, 0 failed, 0 skipped"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s02-cp6r1-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: exit=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null engine/trial_return_artifact.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "nominal port binding and atomic failure conformance inventory",
+        "result": "pass: structural/record-then-fail called=0/0; binding drift cases=13/13 blocked; build-time drift call=0; success commit=1; controlled failure selection advance=0"
+      }
+    ],
+    "tests": [
+      {
+        "path": "tests/research/test_cr172_trial_return_artifact.py",
+        "passed": 29,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S02 original contract plus CP7 blocker regressions"
+      },
+      {
+        "path": "tests/research/test_cr172_path_i_governance.py",
+        "passed": 46,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S01 upstream regression"
+      }
+    ],
+    "skipped": [
+      {
+        "check": "real runner, lineage, lake, NAS, runtime, credentials, R, signal, trading, deploy and remote integration",
+        "reason": "rework packet 明确禁止；回修只使用 repository-local nominal in-memory port"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-CR172-S02-CP7-001",
+      "status": "closed_in_implementation_pending_cp7r1",
+      "evidence_ref": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-IMPLEMENTATION.md#12-cp6r1-finding-回修"
+    }
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "R-CR172-S02-PORT-BINDING",
+      "status": "closed_in_implementation_pending_cp7r1",
+      "note": "exact nominal type、immutable binding、双 pre-call guard 与模块自有 atomic commit 已实现。"
+    },
+    {
+      "id": "R-CR172-TRIAL-RETURN-SOURCE-ABSENT",
+      "status": "design_deferred_fail_closed",
+      "note": "fixture PASS 仍不证明真实 native producer。"
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "dispatch_refs": [
+    "AD-CR172-S02-CP6R1-META-DEV-20260718T193433+0800"
+  ],
+  "next_stage_recommendation": "host_dispatch_meta_qa_for_cp7r1"
+}

@@ -1,8 +1,10 @@
 ---
 status: "draft-current-index"
-version: "1.18"
+version: "1.20"
 source_blueprint: "docs/design/BLUEPRINT.md"
-change: "CR-170"
+change: "CR-172"
+companion_hld_cr172: "docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md"
+companion_adr_cr172: "docs/design/ARCHITECTURE-DECISION-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 companion_dependency_map_cr168: "process/archive/design-cr-docs/DEPENDENCY-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md"
 companion_dependency_map_cr169: "process/docs/design/DEPENDENCY-MAP-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
@@ -36,6 +38,7 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | 1.17 | 2026-07-14 | host-orchestrator inline meta-se-critical | CR169 companion dependency map 通过 CP3：public callable 固定 `validate_gate4_capacity_impact`，alpha 后置 FU008，Stage2 历史缺口只路由 CR157 / 新治理 CR。 |
 | 1.18 | 2026-07-15 | host-orchestrator inline meta-se-critical | 登记 CR170 companion dependency map：Gate validators→internal policy、summaries→protected merge→admission resolver 单向依赖；禁止 global bool helper 充当 mandatory 充分条件、runner/aggregate 与 adapter/private-helper 耦合；待 CP3。 |
 | 1.19 | 2026-07-15 | host-orchestrator inline meta-se-critical | 精确化 CR170 fixture/test caller→boundary/auth-ref→evaluator 单向依赖；禁止 evaluator 合成授权或重写 T3 existing early-return；待 CP3。 |
+| 1.20 | 2026-07-17 | meta-se-critical | 按 CR-172 PATH-I 增补 trial-return→seal→replica→materialization→local runtime 单向依赖、六动作 authorization guard、empirical disposition 与 signal scope ceiling；新增禁止 direct-NAS、NAS canonical、GitHub payload、权限并集和 deferred 反向扩张。 |
 
 ## 依赖关系
 
@@ -279,3 +282,72 @@ archived_previous: "process/archive/design-blueprints/DEPENDENCY-MAP-before-quan
 | 禁止依赖写明替代路径和违反风险 | PASS | FD-CR158-01..05 |
 | 循环风险已状态化 | PASS | CYCLE-CR158-01..03 |
 | 未新增运行授权 | PASS | FD-CR158-01 / 02 / 04 |
+
+## CR-172 增量：PATH-I Trial-Return 与部署依赖边界
+
+### 依赖关系增量
+
+| From | To | 依赖类型 | 允许方向 | 原因 | 验证 / 监控 |
+|---|---|---|---|---|---|
+| FEAT-CR172-I01 Trial Return Artifact | FEAT-CR172-I03 ActionAuthorizationGuard | policy input / guard | allowed | dereference/runtime-write/generation 前必须消费单 action deny-default decision | SC-A02/Q02、auth matrix |
+| FEAT-CR172-I01 ManifestSeal | future producer/import candidate | validate / transform | allowed | candidate 只有通过 source/schema/identity/time/value/lineage 校验才可 manifest/seal | SC-I01/N02/N04 |
+| FEAT-CR172-I02 ReplicaVerifier | FEAT-CR172-I01 sealed artifact | read / verify | allowed | 只读 immutable payload/manifest/seal 和 expected release；不改 canonical | SC-I02/N03/B03/F02 |
+| FEAT-CR172-I02 ReplicaVerifier | FEAT-CR172-I03 ActionAuthorizationGuard | guard | allowed | NAS staging/write/pointer 前必须有 `nas_replica_sync` 单项允许 | SC-A02 |
+| FEAT-CR172-I02 Materializer | FEAT-CR172-I02 verified replica receipt | read / verify | allowed | execution pull 只能从 verified expected release 开始 | SC-I02/F02 |
+| FEAT-CR172-I02 Materializer | FEAT-CR172-I03 ActionAuthorizationGuard | guard | allowed | NAS read/pull、execution staging/pointer 前需 `execution_pull_verify_materialize` | SC-A02 |
+| FEAT-CR172-I03 EmpiricalEligibilityGuard | FEAT-CR172-I01 sealed trial refs | read / classify | allowed | empirical disposition 必须引用 sealed same-family/run artifacts，不读 payload 以外对象冒充 | SC-N02/N04/C02 |
+| FEAT-CR172-I03 EmpiricalEligibilityGuard | `FU-CR173-001` status / method evidence refs | read / gate | allowed | positive empirical claim 需 v2+hash/uncertainty/domain/bias/independent validation；降级设计不依赖其完成 | SC-Q02/C02 |
+| GitHub metadata surface | FEAT-CR172-I01/I02 manifests/hashes/receipts refs | metadata reference | allowed | GitHub 只保存 code/schema/docs/manifest/hash/pointer/release metadata | SC-N05 |
+| future execution runtime | FEAT-CR172-I02 local immutable cache selection | local read-only | allowed-after-future-authorization | runtime 只读本地 selected cache，不建立 NAS runtime dependency | SC-I02/A02 |
+
+### 禁止依赖增量
+
+| Forbidden ID | From | To | 禁止原因 | 替代路径 | 违反风险 |
+|---|---|---|---|---|---|
+| FD-CR172-I-01 | execution runtime | NAS replica / research-local canonical | shared/direct remote read 扩大故障域并绕过 materialization receipt | verified local immutable cache | stale/partial 被消费、runtime 不可用、权限越界 |
+| FD-CR172-I-02 | NAS replica/distribution pointer | research canonical authority | NAS 只是副本，不能反向覆盖/提升 canonical | research-local selection 只由 sealed local artifact 推进 | 双 canonical、identity 漂移、错误恢复 |
+| FD-CR172-I-03 | replica/materializer | 重新 seal / 修改 manifest/hash | 跨机复制必须保持原 identity，不产生新 canonical seal | verify original seal + typed receipt | 同一 artifact 跨机身份分叉 |
+| FD-CR172-I-04 | GitHub metadata surface | real dataset/return payload、credential、account/order payload | 违反 GitHub data ceiling | refs/hash/manifest/release metadata only | 数据/凭据泄漏、仓库污染 |
+| FD-CR172-I-05 | trial-return source resolver | CR-163 metadata/ref、`layered_returns.csv`、scalar metric、declared dependency R | 这些对象不是 per-trial portfolio return series | native producer；approved import contract；typed_unavailable | 伪 empirical R、C1 overclaim |
+| FD-CR172-I-06 | authorization decision | 其他 action 的 approval / permission union | 六动作必须独立 owner/scope/hash/path/expiry/revoke | one action request→one decision | blast radius 扩大、无法归因/撤销 |
+| FD-CR172-I-07 | EmpiricalEligibilityGuard | declared_exact→empirical relabel、silent repair、raw alias | 分类/provenance/repair/auth 不得推断 | typed_unavailable 或 BLOCKED | sampling-error/方法有效域 overclaim |
+| FD-CR172-I-08 | new run path contract | legacy write/move/rename/recanonicalize/manifest rewrite | 破坏历史审计与 stable identity | semantic new root；migration 独立 CR | 历史链断裂、双默认 |
+| FD-CR172-I-09 | SignalBatchBoundaryV1 | mailbox path/state/ack/idempotency/replay/exchange/consumer/intraday module | PATH-I 只批准 exact 8-slot boundary | deferred candidate / independent CR | scope inflation、交易/运行权限扩大 |
+| FD-CR172-I-10 | CP3 HLD/ADR | source/test/fixture implementation、目录创建、runner/default 修改 | CP3 design-only | CP3 approved→CP4/CP5 | 绕过设计证据与人工门禁 |
+| FD-CR172-I-11 | CP3/CP8 wording | Stage3/C1/real-data/multi-trial/signal authorization=true | PATH-I 最高 contract-ready，不是 activation | 保持五项 false；future runtime-high-risk gate | 发布 overclaim、未授权真实运行 |
+
+### 循环风险增量
+
+| Cycle ID | 涉及对象 | 风险 | 当前处理 |
+|---|---|---|---|
+| CYCLE-CR172-I-01 | research canonical ↔ NAS replica | stale NAS 为“恢复”反向覆盖 local canonical | eliminated：单向 local→replica；NAS receipt 无 canonical write authority |
+| CYCLE-CR172-I-02 | NAS replica ↔ execution runtime | runtime 为便利直读 NAS，反向依赖共享盘 freshness | eliminated：authorized pull→local immutable cache；runtime local-only |
+| CYCLE-CR172-I-03 | action authorization ↔ operation evidence | 某 action PASS 被用来隐含批准其他 action | eliminated：single action envelope/decision；no permission union |
+| CYCLE-CR172-I-04 | empirical disposition ↔ declared-exact fixture | 为产生 positive result 将 fixture R 重标 empirical | eliminated：四态分类；pre-v2/缺 provenance unavailable，冲突 BLOCKED |
+| CYCLE-CR172-I-05 | Signal boundary ↔ exchange implementation | 8-slot contract 反向驱动 mailbox/ack/replay/intraday Story | eliminated：Signal detailed module/Story/implementation=`0/0/0`，路由 deferred |
+
+### 无环数据流
+
+```text
+future source candidate
+  -> FEAT-I01 validate/manifest/seal/research selection
+  -> FEAT-I02 NAS staging/verify/replica receipt
+  -> FEAT-I02 execution staging/verify/materialization receipt/local cache
+  -> future execution runtime (local read-only)
+
+FEAT-I03 authorization guard -> 每个 action 的前置 decision（不接收下游反向授权）
+FEAT-I03 empirical guard <- sealed refs + FU status（只输出 disposition，不写 trial artifact）
+```
+
+上述图不存在从 execution/NAS/GitHub/claim guard 回写 research canonical 的边；因此 DAG 无环。
+
+### CR-172 依赖自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| 允许方向覆盖 source→seal→replica→materialize→local runtime | PASS | 依赖关系增量 `10` 条 |
+| 数据 owner 与写权限唯一 | PASS | FEAT-I01 canonical、FEAT-I02 receipts、FEAT-I03 governance |
+| direct-NAS/NAS canonical/GitHub payload/权限并集明确禁止 | PASS | FD-CR172-I-01～06 |
+| empirical/signal/CP3 scope 反向扩张被阻断 | PASS | FD-CR172-I-07～11 |
+| 循环风险已消除 | PASS | CYCLE-CR172-I-01～05；无环数据流 |
+| 真实动作与运行声明未放大 | PASS | real action auth/exec=`0/6`；五项 flag=false |

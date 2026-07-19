@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "project_id": "quant-lab",
+  "stage": "CP1",
+  "profile": "standard-code",
+  "cr_id": "CR-173",
+  "story_id": null,
+  "state_ref": "process/state/STATE.current.json",
+  "cr_summary_ref": "process/changes/summaries/CR-173.summary.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "route_plan_ref": "process/checks/CP0-CR173.route-plan.json",
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "must_read": [
+    {
+      "path": "process/state/STATE.current.json",
+      "mode": "full",
+      "reason": "machine_state",
+      "required": true,
+      "estimated_tokens": 2800
+    },
+    {
+      "path": "process/current/CURRENT.json",
+      "mode": "full",
+      "reason": "current_entrypoint",
+      "required": true,
+      "estimated_tokens": 300
+    },
+    {
+      "path": "process/changes/summaries/CR-173.summary.json",
+      "mode": "full",
+      "reason": "current_cr_summary",
+      "required": true,
+      "estimated_tokens": 2000
+    },
+    {
+      "path": "process/checks/CP0-CR173-REQUEST-INTAKE.result.json",
+      "mode": "full",
+      "reason": "entry_checkpoint",
+      "required": true,
+      "estimated_tokens": 1600
+    },
+    {
+      "path": "process/checks/CP0-CR173.route-plan.json",
+      "mode": "full",
+      "reason": "checkpoint_route",
+      "required": true,
+      "estimated_tokens": 800
+    }
+  ],
+  "allowed_reads": [
+    {
+      "path": "process/state/STATE.current.json",
+      "mode": "full",
+      "reason": "machine_state",
+      "required": true,
+      "estimated_tokens": 2800
+    },
+    {
+      "path": "process/current/CURRENT.json",
+      "mode": "full",
+      "reason": "current_entrypoint",
+      "required": true,
+      "estimated_tokens": 300
+    },
+    {
+      "path": "process/changes/summaries/CR-173.summary.json",
+      "mode": "full",
+      "reason": "current_cr_summary",
+      "required": true,
+      "estimated_tokens": 2000
+    },
+    {
+      "path": "process/checks/CP0-CR173-REQUEST-INTAKE.result.json",
+      "mode": "full",
+      "reason": "entry_checkpoint",
+      "required": true,
+      "estimated_tokens": 1600
+    },
+    {
+      "path": "process/checks/CR173-CONFLICT-PRECHECK.json",
+      "mode": "full",
+      "reason": "scope_and_authorization_boundary",
+      "required": true,
+      "estimated_tokens": 1400
+    }
+  ],
+  "read_if_needed": [
+    {
+      "path": "docs/product/USE-CASES.md",
+      "mode": "full",
+      "reason": "incremental CR173 use-case update; log expansion first",
+      "estimated_tokens": 0
+    },
+    {
+      "path": "docs/product/REQUIREMENTS.md",
+      "mode": "full",
+      "reason": "incremental CR173 requirements update; log expansion first",
+      "estimated_tokens": 0
+    },
+    {
+      "path": "docs/product/SCENARIOS.yaml",
+      "mode": "full",
+      "reason": "incremental scenario expansion; log expansion first",
+      "estimated_tokens": 0
+    },
+    {
+      "path": "docs/product/TEST-MATRIX.md",
+      "mode": "full",
+      "reason": "incremental traceability update; log expansion first",
+      "estimated_tokens": 0
+    },
+    {
+      "path": "docs/product/STORY-MAP.md",
+      "mode": "full",
+      "reason": "incremental offline prerequisite release slice; log expansion first",
+      "estimated_tokens": 0
+    },
+    {
+      "path": "docs/product/MVP-SCOPE.md",
+      "mode": "full",
+      "reason": "incremental estimator scope; log expansion first",
+      "estimated_tokens": 0
+    },
+    {
+      "path": "docs/product/RELEASE-SLICES.md",
+      "mode": "full",
+      "reason": "incremental PATH-B predecessor slice; log expansion first",
+      "estimated_tokens": 0
+    },
+    {
+      "path": "docs/product/BACKLOG.md",
+      "mode": "full",
+      "reason": "FU-CR164-004 to CR173 lifecycle mapping; log expansion first",
+      "estimated_tokens": 0
+    }
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/archive/**",
+    "process/discussions/**",
+    "process/changes/*.md",
+    "docs/design/**",
+    "process/stories/**"
+  ],
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/archive/**",
+      "reason": "historical archive is not needed for incremental product discovery"
+    },
+    {
+      "path_or_pattern": "process/discussions/**",
+      "reason": "read only the CR173 discussion files created by this delegated task"
+    },
+    {
+      "path_or_pattern": "docs/design/**",
+      "reason": "CP2 has not approved product scope; HLD is forbidden"
+    },
+    {
+      "path_or_pattern": "process/stories/**",
+      "reason": "Story decomposition is blocked until CP2 approval"
+    }
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "must_verify": [],
+  "budget": {
+    "estimated_tokens": 10900,
+    "max_tokens": 16000,
+    "estimator": "chars_div_4"
+  },
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "artifact_budgets": "process/policies/ARTIFACT-BUDGETS.json"
+  }
+}

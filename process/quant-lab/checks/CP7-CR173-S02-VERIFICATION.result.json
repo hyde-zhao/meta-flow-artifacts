@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR173-S02-VERIFICATION",
+  "profile": "standard-code",
+  "story_id": "CR173-S02-exact-spectral-estimator",
+  "cr_id": "CR-173",
+  "context_ref": "process/context/stories/STORY-CR173-S02.CP7.verify-packet.json",
+  "dispatch_refs": [
+    "AD-CR173-S02-CP7-META-QA-CRITICAL-COMPLETED-20260717T112906+0800"
+  ],
+  "evidence_ref": "process/evidence/CR173-S02-exact-spectral-estimator.CP7.index.json",
+  "check_attempt": 1,
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR173-S02.CP7.verify-packet.json": "sha256:7449eca93dbd6a5a4677b2589213e72c82dc9d3d6f0eef157750321363f9f8f2",
+    "process/checks/CP6-CR173-S02-IMPLEMENTATION-DONE.result.json": "sha256:755540dbde43c2c306d5196e3f1dcad415d35cd71626b2dd15e52f83c50539b2",
+    "engine/effective_trial_evidence.py": "sha256:7ff5ebf9bc273375344e40c54903a2e3bc4605cdc8c931fcc97882c0fe84217d",
+    "engine/effective_trial_estimator.py": "sha256:fbdd1835883ca554fd9185826107efc3efb96ae646bb3b9cc93d80795e0b1f72",
+    "tests/research/test_effective_trial_evidence_contracts.py": "sha256:1bd059c585e7e477429b6f68a7c172178b7a3a22ae47d9b8546bd316ba495aca",
+    "tests/research/test_effective_trial_estimator.py": "sha256:d46616fb4347c58138c4f6aa880eb8c43ecfc2e7c20c72f1742d67bb27277918"
+  },
+  "items": [
+    {
+      "id": "CP7-S02-01",
+      "category": "entry",
+      "name": "CP6 PASS、独立 QA dispatch 与 fixture-only 授权成立",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-CR173-S02-IMPLEMENTATION-DONE.result.json",
+        "process/context/stories/STORY-CR173-S02.CP7.verify-packet.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "process health=ok；真实数据/runtime/credential/remote 授权=0"
+    },
+    {
+      "id": "CP7-S02-02",
+      "category": "numeric-contract",
+      "name": "Exact parser、F03/F04 precedence 与 matrix domain 互斥",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S02-exact-spectral-estimator-VERIFICATION.md#5-设计契约验证"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "noncanonical 9 类只命中 F03；finite exact invalid 5 类只命中 F04；overlap=0"
+    },
+    {
+      "id": "CP7-S02-03",
+      "category": "numeric-contract",
+      "name": "Deterministic fraction-free LDLT 与 exact PSD oracle 一致",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S02-exact-spectral-estimator-VERIFICATION.md#6-分层验证与执行证据"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "analytic branch=4/4；穷举 n=3 125 + n=4 729，principal-minor mismatch=0"
+    },
+    {
+      "id": "CP7-S02-04",
+      "category": "numeric-contract",
+      "name": "Formula、once-only half-even 与双范围 invariant",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S02-exact-spectral-estimator-VERIFICATION.md#5-设计契约验证"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "analytic exact=4/4；renderer calls=1；pre/post range=2/2；internal contradiction→F08"
+    },
+    {
+      "id": "CP7-S02-05",
+      "category": "identity",
+      "name": "Method/hash/input lineage 与 computation/evidence identity 稳定",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S02-exact-spectral-estimator-VERIFICATION.md#4-验证追踪矩阵"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "3/3 repeat 的 exact result/computation/evidence identity=1/1/1；unapproved method 被拒"
+    },
+    {
+      "id": "CP7-S02-06",
+      "category": "tests",
+      "name": "Targeted tests、syntax 与 diff hygiene 通过",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S02-exact-spectral-estimator-VERIFICATION.md#6-分层验证与执行证据"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "87/87 PASS；py_compile=3/3；whitespace errors=0"
+    },
+    {
+      "id": "CP7-S02-07",
+      "category": "authorization",
+      "name": "Numeric/public/runtime deny-default 边界为零",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR173-S02-exact-spectral-estimator.CP7.return.json#boundary_check"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "float/tolerance/clamp/random/public/real/runtime/credential/remote path or operation=0"
+    },
+    {
+      "id": "CP7-S02-08",
+      "category": "risk",
+      "name": "Exact integer growth 保持 fixture-only/no-production-SLA",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S02-exact-spectral-estimator-VERIFICATION.md#8-剩余风险与知情边界"
+      ],
+      "owner": "strategy-admission methodology owner",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "当前 fixture 最大 n=4；无 cap/优化/SLA 新合同；PATH-C/A 或真实规模目标前重评"
+    },
+    {
+      "id": "CP7-S02-09",
+      "category": "evidence",
+      "name": "Verification report、return packet 与 evidence index 可审计",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR173-S02-exact-spectral-estimator.CP7.return.json",
+        "process/evidence/CR173-S02-exact-spectral-estimator.CP7.index.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "allowed write paths only=true；findings=0；waivers=0"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "CR173-S03-CP6-IMPLEMENTATION",
+  "checked_at": "2026-07-17T11:26:07+08:00"
+}

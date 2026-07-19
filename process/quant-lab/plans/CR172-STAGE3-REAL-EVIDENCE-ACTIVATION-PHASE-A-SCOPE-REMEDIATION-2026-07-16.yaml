@@ -1,0 +1,529 @@
+schema_version: 1
+memo_id: CR172-STAGE3-REAL-EVIDENCE-ACTIVATION-PHASE-A-SCOPE-REMEDIATION-2026-07-16
+title: "Proposed CR-172 Stage 3 Real-Evidence Activation Phase A — Scope Remediation"
+status: formal_cr_started_cp0_passed
+created_at: "2026-07-16T09:23:18+08:00"
+created_by: host-orchestrator
+
+candidate_identity:
+  proposed_cr_id: CR-172
+  goal_ref: DF-CR171-REAL-EVIDENCE-ACTIVATION
+  parent_decision_cr: CR-171
+  parent_decision_status: closed
+  parent_gate_status: cp8_closed
+  candidate_only: false
+  formal_cr_created: true
+  formal_cr_ref: process/changes/CR-172.md
+  formal_cr_start_authorized: true
+  formal_cr_start_authorization_source: "用户于 2026-07-16 明确要求完成整改后推进到下一个人工门禁。"
+  product_baseline_mutated: false
+  real_data_or_runtime_authorized: false
+  cp0_result_ref: process/checks/CP0-CR172-REQUEST-INTAKE.result.json
+  cp0_decision: PASS
+
+purpose: >-
+  固化对拟议 CR-172 范围与目标的评审整改，使未来 CP0 能在不混合审批人、
+  不扩大真实数据授权、不中断 fail-closed 语义的前提下，选择 C1-C3 Phase A、
+  C1-first 或先行 effective-trial 离线 CR。本文不是正式 CR、CP0 result、
+  五字段授权、真实数据读取许可、计算许可或 Stage 3 启动声明。
+
+source_refs:
+  - process/changes/summaries/CR-171.summary.json
+  - process/changes/CR-161-FOLLOW-UP-TRACKING-2026-07-10.md
+  - process/changes/CR-164-FOLLOW-UP-TRACKING-2026-07-12.md
+  - docs/design/HLD-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md
+  - docs/design/ARCHITECTURE-DECISION-STAGE3-LAUNCH-REAL-LAKE-ENTRY-DECISION-GATE.md
+  - docs/product/BACKLOG.md
+  - docs/product/MVP-SCOPE.md
+
+verified_facts:
+  - id: FACT-CR172-001
+    statement: "CR-171 已 closed / cp8_closed；它是 design-only decision gate，不产出 Stage 3 readiness。"
+  - id: FACT-CR172-002
+    statement: "CR-171 已选择 C1-C4 real-producer 路线，并把真实 mapping、binding、computation authorization 与 run identity 留给后续 activation。"
+  - id: FACT-CR172-003
+    statement: "C1/C2/C3 的当前 verdict 为 insufficient；C4 为 incompatible，必须独立 rework / authorization CR。"
+  - id: FACT-CR172-004
+    statement: "OI-CR171-001 与 OI-CR171-002 的 owner 包含 future Real-Evidence Activation CR。"
+  - id: FACT-CR172-005
+    statement: "OI-CR171-005 属于 separately authorized revalidation/audit lane，不属于 activation implementation。"
+  - id: FACT-CR172-006
+    statement: "E1 是未来首次 real-evidence admission PASS/PASS_WITH_RISK 前的事件，不由 activation CR 的 CP8 自动触发。"
+  - id: FACT-CR172-007
+    statement: "FU-CR161-010 台账仍 active/cp2_pending，但关联正式 CR-171 已关闭；未来 CP0 必须先同步。"
+
+identifier_correction:
+  review_text_incorrect_id: FU-CR164-001
+  review_text_incorrect_title: "Effective-trial estimator"
+  canonical_effective_trial_candidate_id: FU-CR164-004
+  canonical_effective_trial_candidate_title: "Effective-trial estimation and C1 computation"
+  canonical_owner: strategy-admission methodology owner
+  canonical_source_boundary: "CR164 effective fields remain typed_unavailable"
+  rule: >-
+    所有后续 memo、formal CR、route plan、Story、LLD、checkpoint 和 ledger
+    必须引用 FU-CR164-004；FU-CR164-001 只表示 Independent Agent/model verification，
+    不得作为 estimator 前置项。
+
+review_disposition:
+  accepted:
+    - id: REM-CR172-001
+      change: "effective-trial 从默认并入改为 CP0 强制归属与审批边界判定。"
+    - id: REM-CR172-002
+      change: "C1 binding 必须支持 effective_trial_count=typed_unavailable 的合法降级路径。"
+    - id: REM-CR172-003
+      change: "OI-CR171-005 显式列入 Out of Scope，保持独立 audit lane。"
+    - id: REM-CR172-004
+      change: "CP2/CP3 冻结 E1/E2 触发时点，CR-172 CP8 本身不触发 E1。"
+    - id: REM-CR172-005
+      change: "C1/C2/C3 拆为独立 Story、独立 evidence index、独立 CP6/CP7 fail-closed 结论。"
+    - id: REM-CR172-006
+      change: "CP0 先修复 FU-CR161-010 与 CR-171 的 active/closed 状态冲突。"
+    - id: REM-CR172-007
+      change: "PATH-B 显式定义为 activation 前置路径而非替代路径；完成后仍需在五字段可冻结时恢复 PATH-C/A。"
+    - id: REM-CR172-008
+      change: "PATH-C 默认把 C2、C3 分别治理为后续独立 runtime-high-risk CR；仅 CP2 显式批准且满足同审批/风险/回滚边界时才可改为同一 parent 下的顺序 slice。"
+    - id: REM-CR172-009
+      change: "为 effective-trial 联合审批增加双 owner、同 revision、风险交集和 ledger 双记录契约，禁止仅以自然语言声称 joint approval。"
+  rejected: []
+  corrections:
+    - id: CORR-CR172-001
+      change: "评审中的 FU-CR164-001 estimator 编号统一纠正为 FU-CR164-004。"
+
+recommended_positioning:
+  name: "Stage 3 Real-Evidence Activation Phase A"
+  cr_type_if_started: runtime
+  gate_profile_if_started: runtime-high-risk
+  workflow_mode_if_started: standard
+  product_baseline_refresh_required_if_started: true
+  required_phase_if_started: requirement-clarification
+  required_agent_if_started: meta-pm
+  required_gate_if_started: CP2
+  block_story_decomposition_until: CP2-approved
+  impact_level: high
+  decision_burden: high
+  primary_goal: >-
+    在人工冻结的有限五字段合同内，让 C1-C3 各自具备可审计、可独立失败的
+    real-input binding 与 typed-evidence 生产路径；不得由任一局部成功推导
+    Stage 3 entry-ready、mature admission、aggregate 完成或 CR155 promotion。
+
+cp0_mandatory_prechecks:
+  - id: PRE-CR172-001
+    check: "同步 FU-CR161-010 为 closed / closed_by=CR-171 / gate_status=cp8_closed。"
+    failure_behavior: block_formalization
+  - id: PRE-CR172-002
+    check: "运行 fresh CR conflict precheck，覆盖 active/blocked formal CR、CR ledger、CR-INDEX、follow-up tracking、权限与文件 owner。"
+    failure_behavior: block_or_request_merge_split_decision
+  - id: PRE-CR172-003
+    check: "确认 data owner 能否在 CP2 冻结五字段有限值与验收标准。"
+    failure_behavior: choose_path_b_effective_trial_offline
+  - id: PRE-CR172-004
+    check: "确认 FU-CR164-004 的审批人、风险授权、发布节奏与 activation 是否相同。"
+    failure_behavior: split_effective_trial_from_activation
+  - id: PRE-CR172-005
+    check: "确认首次真实数据 CR 是否接受 C1-C3 三 producer 的 blast radius。"
+    failure_behavior: choose_path_c_c1_first
+  - id: PRE-CR172-006
+    check: "确认拟议编号 CR-172 尚未占用；未获用户明确启动授权前只保留 candidate memo。"
+    failure_behavior: keep_candidate_only
+  - id: PRE-CR172-007
+    check: "冻结 PATH-B 完成后的 activation 恢复契约：PATH-B 不关闭 activation；五字段可冻结后必须恢复 CR-172 并重新确认 PATH-C/A。"
+    failure_behavior: block_path_b_handoff
+  - id: PRE-CR172-008
+    check: "冻结 PATH-C 的 C2/C3 治理形态；推荐 C2、C3 各自成为独立 runtime-high-risk follow-up CR。"
+    failure_behavior: block_path_c_scope_approval
+  - id: PRE-CR172-009
+    check: "若 estimator 与 activation owner 不同但拟联合审批，确认 gate ledger 可记录两位 owner 对同一 revision 的独立批准及风险边界交集。"
+    failure_behavior: split_effective_trial_from_activation
+
+scope_decision_tree:
+  entry_question: "五字段具体值当前是否可由授权 data owner 冻结并在 CP2 审批？"
+  branches:
+    - id: PATH-B
+      name: "Effective-trial offline first"
+      when_any:
+        - five_field_values_not_freezable
+        - effective_trial_requires_distinct_methodology_approval_and_project_requires_c1_computable_before_activation
+      next_candidate: FU-CR164-004
+      proposed_cr_shape: "独立纯离线 methodology / implementation CR"
+      scope:
+        - effective-count method and assumptions
+        - non-alias schema
+        - deterministic golden vectors
+        - validation and consumer projection
+      excludes:
+        - real data read
+        - five-field authorization
+        - provider/lake/NAS access
+        - activation binding
+      recommendation: >-
+        五字段不可冻结时采用。该路径可立即推进但不会关闭 OI-CR171-001/002，
+        也不会授权 Stage 3 activation。
+      post_completion_handoff:
+        activation_complete: false
+        stage3_activation_authorized: false
+        activation_cr_state: "若 CR-172 已正式启动，则保持 blocked/deferred；不得以 PATH-B CP8 关闭 activation 范围。"
+        resume_trigger_all:
+          - FU-CR164-004 completed and independently verified
+          - five-field values freezable by authorized data owner
+          - fresh CR conflict precheck passes
+        next_required_action: "恢复 CR-172 的 requirement-clarification，并重新生成/重开 CP2 以在 PATH-C 与 PATH-A 中选择。"
+
+    - id: PATH-C
+      name: "C1-first bounded activation"
+      when_all:
+        - five_field_values_freezable
+        - user_prefers_minimum_first_real_data_blast_radius
+      proposed_cr_shape: "CR-172 只做 C1 binding；C2、C3 默认分别进入独立后续 runtime-high-risk CR。"
+      scope:
+        - five-field contract freeze
+        - C1 release/schema/PIT/lineage/run-identity binding
+        - typed_unavailable downgrade when effective count remains unavailable
+      recommendation: >-
+        首次真实数据访问希望最小化 blast radius 时采用。该路径只部分关闭
+        OI-CR171-002，不得把 C1 单通道成功解释为 Phase A 全部完成。
+      c2_c3_governance:
+        default: independent_followup_crs
+        projected_cr_count_including_cr172: 3
+        projected_followups:
+          - "C2 real-evidence activation CR"
+          - "C3 real-evidence activation CR"
+        why: >-
+          C1 首次真实接触先验证 authorization contract、run identity、PIT/lineage、
+          typed evidence 与 rollback 全链；C2/C3 各自重新做冲突、授权和验证门，
+          避免 C1 通过被解释为对后续 producer 的预授权。
+        alternative: sequential_slices_under_same_parent
+        alternative_requires_cp2_explicit_approval: true
+        alternative_conditions_all_required:
+          - same_exact_five_field_contract_revision
+          - same_approvers_and_risk_acceptance_boundary
+          - c1_cp7_verified_without_unresolved_high_risk
+          - separate_slice_context_return_evidence_and_cp6_cp7
+          - rollback_can_disable_each_slice_independently
+          - no_new_runtime_permission_or_file_owner_conflict
+
+    - id: PATH-A
+      name: "C1-C3 Phase A"
+      when_all:
+        - five_field_values_freezable
+        - user_accepts_three_producer_blast_radius
+      proposed_cr_shape: "一个 runtime-high-risk parent CR，三个独立 producer Stories"
+      scope:
+        - five-field contract freeze
+        - C1 binding
+        - C2 binding
+        - C3 binding
+        - shared run identity and evidence contract
+      effective_trial_rule: >-
+        FU-CR164-004 不默认并入。只有 owner、审批、风险授权、发布节奏和回滚边界
+        与 activation 一致时，才可作为 C1 Story 纳入；否则保持独立 CR，C1 以
+        effective_trial_count=typed_unavailable 合法降级。
+      recommendation: >-
+        五字段可冻结且用户接受 C1-C3 blast radius 时采用；CP4/CP5 必须证明
+        三个 Story 可独立实现、验证和回修。
+
+default_selection_policy:
+  if_five_fields_unknown_or_unavailable: PATH-B
+  if_five_fields_ready_and_minimum_blast_radius_preferred: PATH-C
+  if_five_fields_ready_and_three_producer_scope_accepted: PATH-A
+  if_five_fields_ready_without_explicit_three_producer_acceptance: PATH-C
+  preferred_first_real_data_path: PATH-C
+  no_implicit_default_to_path_a: true
+
+base_in_scope_if_path_a:
+  - "增量产品基线：bounded research-lake read、producer-local failure 和 claim-ceiling 场景。"
+  - "五字段有限值：data_release、datasets、date_range、read_identity、output_directory。"
+  - "六类 deny-default：credential/env、provider fetch、lake/NAS write、catalog/current-pointer mutation、runtime/trading、publish/deploy。"
+  - "C1 release/schema/PIT/lineage/run-identity binding；effective count 可保持 typed_unavailable。"
+  - "C2 fold/OOS release/schema/PIT/lineage/run-identity binding。"
+  - "C3 cost/slippage/impact input/calibration release/schema/PIT/lineage/run-identity binding。"
+  - "三个 producer 独立 context、return packet、evidence index、CP6 和 CP7 结论。"
+  - "共享授权合同和共享 run identity 的完整审计，但不共享 producer-local PASS/FAIL。"
+  - "仅在 CP2 明确批准后执行有限 read/computation；输出写权限必须与 read 权限分开表达。"
+
+conditional_effective_trial_scope:
+  candidate_ref: FU-CR164-004
+  default: separate_or_deferred
+  cp0_merge_conditions_all_required:
+    - same_business_goal
+    - same_approver_or_explicit_joint_approval
+    - same_risk_authorization_boundary
+    - same_release_cadence
+    - compatible_rollback_boundary
+    - no_file_owner_conflict
+  explicit_joint_approval_contract:
+    applicable_when: "data/activation owner 与 strategy-admission methodology owner 不同，但拟把 FU-CR164-004 纳入 CR-172。"
+    gate_ledger_ref: process/state/GATE-LEDGER.ndjson
+    approval_group_required_fields:
+      - approval_group_id
+      - checkpoint
+      - cr_id
+      - exact_scope_revision
+      - exact_scope_hash
+      - required_approver_roles
+      - risk_boundary_intersection
+      - rollback_boundary
+      - status
+    individual_approval_required_fields:
+      - approver_identity
+      - approver_role
+      - approved_scope_revision
+      - approved_scope_hash
+      - accepted_risks
+      - rejected_or_non_authorized_actions
+      - approved_at
+      - approval_source
+    completion_rule: >-
+      data/activation owner 与 methodology owner 必须分别对同一 scope revision/hash
+      写入 approved 事件；两条批准均存在且 approval_group 状态为 approved 后才成立。
+    effective_risk_boundary_rule: "取两位 owner 授权边界的交集与更严格约束，不得取并集扩大权限。"
+    revision_change_rule: "五字段、method、claim ceiling、read/write 或 rollback 任一变化都会使旧 joint approval 失效并要求重新批准。"
+    missing_or_partial_approval_behavior: split_effective_trial_from_activation
+  c1_degraded_contract:
+    effective_trial_count: typed_unavailable
+    effective_trial_ref: empty
+    effective_trial_method: empty
+    raw_trial_count_alias_allowed: false
+    c1_channel_binding_allowed: true
+    c1_computable_claim_allowed: false
+    admission_pass_claim_allowed: false
+  split_effect: >-
+    拆分 FU-CR164-004 不阻塞 C1 输入通道、release/PIT/lineage/run identity binding；
+    但缺少有效 effective count 时，所有依赖 C1 computable/effective-count 的 claim
+    必须保持 typed_unavailable 或 blocked。
+
+independent_fail_closed_contract:
+  shared_blockers_that_block_all_producers:
+    - five-field authorization missing_or_ambiguous
+    - read identity unauthorized
+    - release/date scope escape
+    - shared PIT or lineage contract invalid
+    - forbidden operation attempted
+  producer_local_failures:
+    C1:
+      effect: "C1 typed_unavailable/blocked；不得阻止 C2/C3 在共享前置条件满足时生成自身 evidence。"
+    C2:
+      effect: "C2 typed_unavailable/blocked；不得阻止 C1/C3 在共享前置条件满足时生成自身 evidence。"
+    C3:
+      effect: "C3 typed_unavailable/blocked；不得阻止 C1/C2 在共享前置条件满足时生成自身 evidence。"
+  aggregate_effect: >-
+    任一 producer 未达到后续 aggregate contract 要求时，整体 admission/aggregate
+    继续 blocked；producer-local 隔离不等于 OR-pass。
+
+explicit_out_of_scope:
+  - id: OOS-CR172-001
+    item: "C4 real producer、C4 contract reconstruction、Gate 4 aggregate"
+    owner: "future C4-specific rework / authorization CR"
+  - id: OOS-CR172-002
+    item: "FU-CR161-009 aggregate orchestration、final StrategyAdmissionPackage、CR155 regression/promotion"
+    owner: FU-CR161-009
+  - id: OOS-CR172-003
+    item: "FU-006 independent verifier implementation"
+    owner: FU-CR161-006
+  - id: OOS-CR172-004
+    item: "OI-CR171-005 historical evidence classification/revalidation audit"
+    owner: separately_authorized_revalidation_audit_lane
+    note: "classification 也明确排除，不只排除 repair/backfill/rerun。"
+  - id: OOS-CR172-005
+    item: "historical evidence repair、backfill、rerun、manifest rewrite"
+    owner: future_historical_remediation_cr
+  - id: OOS-CR172-006
+    item: "alpha-decay / FU-CR161-008"
+    owner: FU-CR161-008
+  - id: OOS-CR172-007
+    item: "provider fetch、lake/NAS write、catalog/current-pointer mutation"
+    owner: separately_authorized_data_write_or_publish_gate
+  - id: OOS-CR172-008
+    item: "credential、secret、env、account 原文读取"
+    owner: not_authorized
+  - id: OOS-CR172-009
+    item: "QMT、broker、simulation、paper、live、trading、publish、deploy、Git remote write"
+    owner: separately_authorized_runtime_release_gate
+
+waiver_timing_contract:
+  fu006_ref: FU-CR161-006
+  e1_definition: "before first future real-evidence admission decision may be PASS or PASS_WITH_RISK"
+  e2_definition: "before Stage 3 exit gate may start"
+  cr172_cp8_triggers_e1: false
+  cr172_component_generation_triggers_e1: false
+  cr172_may_claim_admission_pass: false
+  required_cp2_cp3_wording: >-
+    CR-172 只生成 producer-level typed evidence 和 binding 事实；其 CP8 不执行
+    admission decision。FU-006 必须在后续 admission CR 试图给出 PASS/PASS_WITH_RISK
+    前完成，或在 Stage 3 exit gate 启动前完成；不得使用日历延期或继承 CR-170 waiver。
+
+goals_after_remediation:
+  path_a:
+    - "关闭 OI-CR171-001：5/5 finite authorization values 与验收标准被人工冻结。"
+    - "关闭 OI-CR171-002：C1-C3 3/3 输入绑定可各自产生真实 typed evidence 或 truthful blocked/unavailable。"
+    - "不关闭 OI-CR171-003/004/005。"
+    - "stage3_started=false、stage3_entry_ready=false、mature_admission_pass=false。"
+  path_c:
+    - "关闭 OI-CR171-001。"
+    - "只部分推进 OI-CR171-002：C1 binding 完成，C2/C3 仍 OPEN。"
+    - "不关闭 OI-CR171-003/004/005。"
+  path_b:
+    - "完成 FU-CR164-004 的方法、schema、验证和 consumer projection。"
+    - "不关闭 OI-CR171-001/002/003/004/005。"
+
+quantitative_acceptance_criteria_if_path_a:
+  five_field_contract_finite_values: "5/5"
+  deny_default_classes_explicit: "6/6"
+  c1_c2_c3_binding_contracts: "3/3"
+  producer_specific_context_return_evidence_cp6_cp7: "3/3"
+  raw_to_effective_alias_count: 0
+  wildcard_or_implicit_authorization_count: 0
+  producer_local_negative_cases_fail_closed: "100%"
+  forbidden_operation_count: 0
+  stage3_started_true_count: 0
+  stage3_entry_ready_true_count: 0
+  admission_pass_decision_count: 0
+  aggregate_or_cr155_promotion_count: 0
+  repository_regression_new_failures: 0
+
+five_dimensional_impact:
+  requirements:
+    impacted: true
+    reason: "新增 activation、producer-local degradation、五字段授权与 claim-ceiling 需求。"
+    action_if_started: "增量更新产品基线并保留 CR-171 历史基线。"
+  scenarios:
+    impacted: true
+    reason: "新增有限读取、越界拒绝、共享 blocker、producer-local failure 和恢复场景。"
+    action_if_started: "更新 SCENARIOS/TEST-MATRIX；CP2 前不得拆 Story。"
+  planning:
+    impacted: true
+    reason: "PATH-A/B/C 会改变 CR、Story、owner、Wave 和依赖图。"
+    action_if_started: "CP0 先选路径；PATH-A 的 C1/C2/C3 必须为独立 Story。"
+  security:
+    impacted: true
+    reason: "涉及首次受控 real-lake read 与 computation 候选授权。"
+    action_if_started: "runtime-high-risk、deny-default、有限值、read/write 分离、逐 run 证据。"
+  delivery:
+    impacted: true
+    reason: "需要 producer evidence、return/evidence indexes、CP7 独立验证和 CP8 claim ceiling。"
+    action_if_started: "不得把局部 producer evidence 提升为 Stage 3 release readiness。"
+
+document_handling_decision_at_candidate_stage:
+  process_plan:
+    path: process/plans/CR172-STAGE3-REAL-EVIDENCE-ACTIVATION-PHASE-A-SCOPE-REMEDIATION-2026-07-16.yaml
+    decision: add_candidate_memo
+  formal_cr:
+    decision: created_after_user_explicit_start_authorization
+    path: process/changes/CR-172.md
+  product_documents:
+    decision: unchanged
+    reason: "候选范围整改不改产品基线；正式 CR 创建并通过 CP0 后才由 meta-pm 增量更新。"
+  cr171_historical_artifacts:
+    decision: unchanged
+    reason: "CR-171 已关闭；新评审不改写历史正文。"
+  follow_up_tracking_and_index:
+    decision: cp0_sync_complete
+    reason: "FU-CR161-010 已同步为 closed-by-CR171；CR-172 已登记 active；CP0 result 已校验并追加 checkpoint ledger。"
+
+mandatory_human_decisions_for_future_cp0_cp2:
+  - id: DQ-CR172-001
+    question: "五字段具体值当前是否可由授权 data owner 冻结？"
+    recommendation: "不能冻结则选择 PATH-B，不创建/启动 activation implementation。"
+  - id: DQ-CR172-002
+    question: "FU-CR164-004 是否需要独立方法学审批、风险授权、发布节奏或回滚？"
+    recommendation: "默认视为独立；只有全部 merge conditions 满足时才并入 C1 Story。"
+  - id: DQ-CR172-003
+    question: "C1 是否支持 effective_trial_count=typed_unavailable 的合法降级？"
+    recommendation: "必须支持；binding 可完成，但 C1 computable/admission claim 保持 false。"
+  - id: DQ-CR172-004
+    question: "用户是否接受 C1-C3 三 producer 首次真实数据 blast radius？"
+    recommendation: "不接受则选择 PATH-C；接受才选择 PATH-A。"
+  - id: DQ-CR172-005
+    question: "E1 是否明确只在后续 admission CR 试图给出 PASS/PASS_WITH_RISK 前触发？"
+    recommendation: "必须明确；CR-172 CP8 和 component generation 均不触发 E1。"
+  - id: DQ-CR172-006
+    question: "OI-CR171-005 classification/revalidation 是否显式排除？"
+    recommendation: "排除并保持独立 audit lane。"
+  - id: DQ-CR172-007
+    question: "若选择 PATH-C，C2/C3 是否按推荐各自建立独立 runtime-high-risk CR？"
+    recommendation: "推荐独立 CR，总 CR 数为 3；只有同一五字段 revision、同审批/风险边界且 C1 CP7 通过时才考虑顺序 slice。"
+  - id: DQ-CR172-008
+    question: "若 effective-trial 与 activation owner 不同但拟合并，是否接受 ledger 双批准与风险边界取交集？"
+    recommendation: "必须接受；否则拆分 FU-CR164-004。"
+
+route_intent_if_path_a_is_authorized:
+  cr_type: runtime
+  gate_profile: runtime-high-risk
+  expected_checkpoints:
+    - CP0
+    - CP1
+    - CP2
+    - CP3
+    - CP4
+    - CP5
+    - CP6
+    - CP7
+    - CP8
+  human_gates:
+    - CP2
+    - CP3
+    - CP5
+    - CP8
+  cp4_cp6_na_allowed: false
+  cp7_waiver_allowed: false
+  real_read_before_cp2_approved: false
+  implementation_before_cp5_approved: false
+
+stage3_remaining_chain_after_path_a:
+  - order: 1
+    item: "C4-specific rework / authorization CR"
+    closes: OI-CR171-003
+    not_authorized_here: true
+  - order: 2
+    item: "FU-006 independent verifier lane"
+    closes: OI-CR171-004
+    must_complete_before: "E1 or E2"
+    not_authorized_here: true
+  - order: 3
+    item: "FU-CR161-009 aggregate + final SAP + CR155 regression/promotion decision"
+    closes: "aggregate/maturity exit gap"
+    not_authorized_here: true
+  - order: 4
+    item: "OI-CR171-005 independent historical evidence revalidation/audit lane"
+    closes: OI-CR171-005
+    sequencing: "independent; does not merge into activation"
+    not_authorized_here: true
+
+claim_ceiling:
+  stage3_started: false
+  stage3_entry_ready: false
+  mature_admission_pass: false
+  aggregate_orchestration_implemented: false
+  cr155_promoted: false
+  c4_compatible: false
+  historical_evidence_revalidated: false
+  fu006_independent_evidence_complete: false
+
+gotchas:
+  - "FU-CR164-004 才是 effective-trial；FU-CR164-001 是 independent Agent/model verification。"
+  - "C1 channel binding 可在 effective count 不可用时完成，但不能声明 C1 computable。"
+  - "producer-local failure isolation 不是 OR-pass；整体 admission 仍可被任一缺失项阻断。"
+  - "五字段中的 output_directory 不等于写授权；任何 write 必须单独列明。"
+  - "CR-172 CP8 不触发 E1，也不授权 Stage 3 exit gate。"
+  - "OI-CR171-005 的 classification 与 repair 都不属于 activation。"
+  - "正式 CR 只因用户于 2026-07-16 明确授权推进到下一人工门禁而创建；该授权仍不包含真实数据或 runtime 操作。"
+  - "PATH-B 是 activation 前置而非替代；estimator 完成后仍需在五字段可冻结时恢复 PATH-C/A。"
+  - "PATH-C 默认产生 C1、C2、C3 三个独立 activation CR；改为同 parent slices 必须在 CP2 显式批准。"
+  - "joint approval 必须有两位 owner 对同一 revision/hash 的 ledger 事件，权限按交集解释。"
+
+revision_history:
+  - version: "1.0"
+    date: "2026-07-16"
+    author: host-orchestrator
+    changes:
+      - "采纳范围评审六项整改。"
+      - "纠正 FU-CR164-001/FU-CR164-004 编号。"
+      - "加入 PATH-A/B/C 决策树、C1 typed_unavailable 降级和 producer-local fail-closed。"
+      - "显式排除 OI-CR171-005，并冻结 E1 触发语义。"
+  - version: "1.1"
+    date: "2026-07-16"
+    author: host-orchestrator
+    changes:
+      - "明确 PATH-B 完成后的 activation 恢复链，禁止把 estimator 完成误作 activation 完成。"
+      - "冻结 PATH-C 默认 C2/C3 独立 CR，并给出同 parent 顺序 slice 的严格切换条件。"
+      - "定义 effective-trial 联合审批 ledger、同 revision 双批准与风险边界交集契约。"
+      - "五字段可冻结但未显式接受三 producer 时，默认推荐 PATH-C。"

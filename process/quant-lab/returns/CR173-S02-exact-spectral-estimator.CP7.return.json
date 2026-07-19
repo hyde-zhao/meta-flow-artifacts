@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "story_id": "CR173-S02-exact-spectral-estimator",
+  "stage": "CP7",
+  "attempt": 1,
+  "status": "verified",
+  "work_packet_ref": "process/context/stories/STORY-CR173-S02.CP7.verify-packet.json",
+  "summary": "独立验证 exact-rational estimator：S01+S02 87/87 PASS，exact PSD 对抗穷举 854/854 与 principal-minor oracle 一致，数值、确定性、fail-closed 和 fixture-only 边界均通过。",
+  "touched_files": [
+    {
+      "path": "process/stories/STORY-CR173-S02-exact-spectral-estimator-VERIFICATION.md",
+      "operation": "create",
+      "purpose": "S02 CP7 独立验证、追踪矩阵与风险结论"
+    },
+    {
+      "path": "process/returns/CR173-S02-exact-spectral-estimator.CP7.return.json",
+      "operation": "create",
+      "purpose": "CP7 Story return packet"
+    },
+    {
+      "path": "process/evidence/CR173-S02-exact-spectral-estimator.CP7.index.json",
+      "operation": "create",
+      "purpose": "CP7 evidence index"
+    },
+    {
+      "path": "process/checks/CP7-CR173-S02-VERIFICATION.result.json",
+      "operation": "create",
+      "purpose": "CP7 machine result"
+    },
+    {
+      "path": "process/checks/CP7-CR173-S02-VERIFICATION.result.summary.md",
+      "operation": "create",
+      "purpose": "CP7 human summary"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "allowed_write_paths_only": true,
+    "unexpected_write_paths": [],
+    "forbidden_paths_touched": [],
+    "forbidden_write_paths_touched": [],
+    "unexpected_imports": [],
+    "public_c1_changes": 0,
+    "public_dependency_edges": 0,
+    "public_calls": 0,
+    "real_data_operations": 0,
+    "runtime_operations": 0,
+    "credential_operations": 0,
+    "git_remote_operations": 0
+  },
+  "verification_commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py tests/research/test_effective_trial_estimator.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "87 passed in 0.18s"
+    },
+    {
+      "command": "inline exact principal-minor PSD oracle scan",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "n=3 checked=125 mismatch=0；n=4 checked=729 mismatch=0"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s02-cp7-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py engine/effective_trial_estimator.py tests/research/test_effective_trial_estimator.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "3/3 modules compiled"
+    },
+    {
+      "command": "git diff --check -- engine/effective_trial_evidence.py engine/effective_trial_estimator.py tests/research/test_effective_trial_evidence_contracts.py tests/research/test_effective_trial_estimator.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "whitespace errors=0"
+    },
+    {
+      "command": "S02 forbidden numeric/public/runtime static scan",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "float/tolerance/clamp/random/numpy/scipy/public/real/runtime/credential/remote path=0"
+    }
+  ],
+  "verification": {
+    "result": "PASS",
+    "commands_run": [
+      {
+        "command": "S01+S02 targeted pytest",
+        "result": "PASS",
+        "exit_code": 0,
+        "summary": "87/87"
+      },
+      {
+        "command": "exact PSD adversarial oracle",
+        "result": "PASS",
+        "exit_code": 0,
+        "summary": "854/854；mismatch=0"
+      },
+      {
+        "command": "syntax/diff/static boundary",
+        "result": "PASS",
+        "exit_code": 0,
+        "summary": "compile=3/3；whitespace/forbidden path=0"
+      }
+    ],
+    "evidence_refs": [
+      "process/stories/STORY-CR173-S02-exact-spectral-estimator-VERIFICATION.md"
+    ]
+  },
+  "read_expansion_refs": [],
+  "design_delta_refs": [],
+  "contract_changes": {
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "验证未修改实现或已批准合同；pointer-only refresh 和 fixture-only integer-growth 边界保持不变"
+  },
+  "risks": [
+    "R-CR173-EXACT-INTEGER-GROWTH：CP5 已接受 fixture-only/no-production-SLA；CR172 PATH-C/A 或真实规模目标前重评",
+    "R-CR173-SECOND-ORDER-MODEL-BIAS：仅二阶相关结构有效维度，不用于 FWER/DSR/admission calibration"
+  ],
+  "waivers": [],
+  "open_questions": [],
+  "next_route": "CR173-S03-CP6-IMPLEMENTATION",
+  "completed_at": "2026-07-17T11:26:07+08:00"
+}

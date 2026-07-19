@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR173-S01-VERIFICATION",
+  "story_id": "CR173-S01-contract-evidence-canonicalization",
+  "cr_id": "CR-173",
+  "context_ref": "process/context/stories/CR173-S01-contract-evidence-canonicalization.CP7.verify-packet.json",
+  "dispatch_refs": [
+    "AD-CR173-S01-CP7-META-QA-CRITICAL-COMPLETED-20260717T101506+0800"
+  ],
+  "return_packet_ref": "process/returns/CR173-S01-contract-evidence-canonicalization.CP7.return.json",
+  "evidence_ref": "process/evidence/CR173-S01-contract-evidence-canonicalization.CP7.index.json",
+  "checked_at": "2026-07-17T10:08:19+08:00",
+  "check_attempt": 1,
+  "route_plan_ref": "process/checks/CP0-CR173.route-plan.json",
+  "input_artifact_hashes": {
+    "process/context/stories/CR173-S01-contract-evidence-canonicalization.CP7.verify-packet.json": "sha256:365df623f8b753a2617a035b12d431218448d9d73a8fb2cb585bee312190f4bb",
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-LLD.md": "sha256:bf284efefa2fbe7775f2323e03ab2cf713d4b6c388ad53ce7cfef849c263bda3",
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md": "sha256:61c24dc25b2eb6437af4af138111c0f3128cb727705765c10ae7770a28cf695e",
+    "engine/effective_trial_evidence.py": "sha256:e8430e178a691ff1d40d37f5fe3a06b3a032ea25b7b6764f6f9ce23616dbec45",
+    "tests/research/test_effective_trial_evidence_contracts.py": "sha256:1ff9364f9e7ad0b830ce7534be7ee809e47b2679759bfb6d930eeb8b46ee746d",
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-IMPLEMENTATION.md": "sha256:0f19463cbdda547fd61821aeeebd5a8e007abc9ee6cb3e39cdfdc34e17845952",
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md": "sha256:229ba3da5eb38b6280630db480b1afda6ed9db1b3fda39e700db100bbb9edb9e",
+    "process/returns/CR173-S01-contract-evidence-canonicalization.CP7.return.json": "sha256:e3845eb53c1bf2c3f00fa163bc186d32114887eca057cdf06faa16f72799299e",
+    "process/evidence/CR173-S01-contract-evidence-canonicalization.CP7.index.json": "sha256:bc9e5b4aafaab29f40bf62af5ea9d4d722d81231146c962ee418dfede2e675f8"
+  },
+  "items": [
+    {
+      "id": "CP7-ENTRY-01",
+      "category": "entry",
+      "name": "Story ready for verification and CP6 PASS",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md",
+        "process/checks/CP6-CR173-S01-IMPLEMENTATION-DONE.result.json"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Story=ready-for-verification；CP6 decision=PASS。"
+    },
+    {
+      "id": "CP7-ENTRY-02",
+      "category": "entry",
+      "name": "Real meta-qa-critical dispatch exists",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["AD-CR173-S01-CP7-META-QA-CRITICAL-20260717T100136+0800"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "真实独立 reviewer 子 agent；terminal event 由 Host 在 return 后收口。"
+    },
+    {
+      "id": "CP7-01",
+      "category": "test",
+      "name": "Required native contract tests pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/evidence/CR173-S01-contract-evidence-canonicalization.CP7.index.json#commands"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "45/45 PASS；py_compile/diff check PASS。"
+    },
+    {
+      "id": "CP7-02",
+      "category": "traceability",
+      "name": "Seven-field and F01-F08 positive contracts trace",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md#4-追踪矩阵"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "7/7 schema、8/8 state/reason、canonical numeric/hash 正向均通过。"
+    },
+    {
+      "id": "CP7-03",
+      "category": "contract",
+      "name": "Approved method trust binding rejects unapproved descriptor",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md#f-cp7-s01-001--high--blocking--evidence-builder-接受未批准-method-descriptor"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "未批准但自洽的 descriptor 被 evidence builder 接受。"
+    },
+    {
+      "id": "CP7-04",
+      "category": "contract",
+      "name": "Typed identity and lineage reject wrong runtime types",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md#f-cp7-s01-002--high--blocking--typed-identityinput-合同未落实运行时类型约束"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "int family ref/trial ID/lineage 可被 validator 判为 valid。"
+    },
+    {
+      "id": "CP7-05",
+      "category": "recovery",
+      "name": "Append-only recovery rejects split and orphan chains",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md#f-cp7-s01-003--high--blocking--append-only-recovery-可形成分叉或-orphan-初始链"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "split parent/supersedes 与 initial orphan 均被接受。"
+    },
+    {
+      "id": "CP7-06",
+      "category": "boundary",
+      "name": "Strategy/public/IO/runtime authorization boundary",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/CR173-S01-contract-evidence-canonicalization.CP7.return.json#boundary_check"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "public dependency/call/diff/write 与 real/runtime/credential/remote 均为 0。"
+    },
+    {
+      "id": "CP7-07",
+      "category": "quality",
+      "name": "Independent semantic review complete",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md#7-人工--语义质量审查"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "审查 1138 行实现、469 行测试；发现 3 个 existing-suite 未覆盖的 required findings。"
+    },
+    {
+      "id": "CP7-08",
+      "category": "process",
+      "name": "CP6 return and evidence trace",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/returns/CR173-S01-contract-evidence-canonicalization.CP6.return.json",
+        "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6.index.json"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "return-check OK；路径 warning 不影响本次缺陷判断。"
+    },
+    {
+      "id": "CP7-09",
+      "category": "design_delta",
+      "name": "Design delta required",
+      "status": "N/A",
+      "severity": "LOW",
+      "evidence_refs": ["process/returns/CR173-S01-contract-evidence-canonicalization.CP7.return.json#design_delta_refs"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": null,
+      "waiver_ref": null,
+      "notes": "required findings 均是实现未满足既有 LLD，design delta=0。"
+    },
+    {
+      "id": "CP7-EXIT-01",
+      "category": "exit",
+      "name": "No blocking verification finding",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/CR173-S01-contract-evidence-canonicalization.CP7.return.json#findings"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "blocking findings=3。"
+    },
+    {
+      "id": "CP7-EXIT-02",
+      "category": "exit",
+      "name": "Story may advance to verified",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md#9-路由"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "S01 不得 verified；S02 不得解锁。"
+    },
+    {
+      "id": "CP7-DELIVERABLE-01",
+      "category": "deliverable",
+      "name": "Story verification report",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "created"
+    },
+    {
+      "id": "CP7-DELIVERABLE-02",
+      "category": "deliverable",
+      "name": "Return packet and evidence index",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR173-S01-contract-evidence-canonicalization.CP7.return.json",
+        "process/evidence/CR173-S01-contract-evidence-canonicalization.CP7.index.json"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "created；checker 结果在 Host terminal dispatch 收口后复核。"
+    }
+  ],
+  "blockers": [
+    "F-CP7-S01-001",
+    "F-CP7-S01-002",
+    "F-CP7-S01-003"
+  ],
+  "waivers": [],
+  "read_expansion_refs": [
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md#2-验证范围与非范围"
+  ],
+  "decision": "NEEDS_REWORK",
+  "next_route": "meta-dev"
+}

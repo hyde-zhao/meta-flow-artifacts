@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S01-action-authorization-eligibility-governance",
+  "story_ref": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance.md",
+  "stage": "CP6",
+  "rework_attempt": 1,
+  "objective": {
+    "summary": "在同一 S01 内修复 F-CP7-001 decision/consumer invariant 与 F-CP7-002 URI canonicalization 两个 fail-closed blocker。",
+    "non_goals": [
+      "不改变六动作、12-field record、5-edge DAG、Signal/claim/path delivery ceiling",
+      "不连接真实 approved-ledger、数据湖、NAS、执行机、runtime 或 trading",
+      "不修改 HLD、ADR、Feature、LLD 或任何 S02-S05 文件",
+      "不引入 permissive percent-decoding 或新的授权语义"
+    ]
+  },
+  "feature_refs": ["path-i.authorization.claim.governance"],
+  "feature_design_refs": [
+    "docs/features/path-i-authorization-claim-governance/DESIGN.md",
+    "docs/features/path-i-authorization-claim-governance/TEST-PLAN.md",
+    "docs/features/path-i-authorization-claim-governance/TASKS.md"
+  ],
+  "feature_context": "CP7 结论 NEEDS_REWORK；两个 finding 均是既有 F-02/F-06/F-12/NFR-03 合同的实现缺口，无设计澄清。只允许在 S01 owner 文件内修复并补回归。",
+  "feature_contract_summary": "单一 decision invariant validator 必须同时被构造期与 consumer guard 使用；current-v1 approved_ledger 永远双 false。URI request/allow/deny 必须共享唯一 canonical representation；v1 最小安全策略拒绝非 canonical percent-encoding。",
+  "cr_delta": {
+    "summary": "修改 S01 production/test 并更新本 Story 实现证据；不修改其他工程或长期设计合同。",
+    "affected_contracts": ["ActionDecisionV1 invariants", "first-side-effect consumer guard", "canonical logical URI and deny-first prefix matching"]
+  },
+  "acceptance": [
+    "F-CP7-001 CLOSED：direct construction、dataclasses.replace、eligible_without_authorized、empty refs、invalid origin-target 均在构造期或 guard 被拒绝",
+    "approved_ledger current-v1 对 6/6 actions 保持 authorized/eligible=0/0 且唯一 unavailable reason",
+    "single invariant validator 被 ActionDecisionV1.__post_init__ 与 require_action_eligible 共同调用；第二真相 validator=0",
+    "F-CP7-002 CLOSED：request/allow/deny/prefix 使用同一 canonical representation；所有非 canonical percent-encoding 在 v1 fail-closed 拒绝",
+    "encoded-unreserved/separator/dot/glob 拒绝，plain allowed control 允许，plain denied subtree 仍 deny-first",
+    "原 28 tests 全部保持通过，新增 finding 回归全部通过；真实 IO/network/env/runtime/NAS/trading=0",
+    "六动作/12 fields/5 edges/4 states/8 signal slots/5 claims ceiling 数量不变"
+  ],
+  "dependency_inputs": [
+    "process/checks/CP7-CR172-S01-VERIFICATION.result.json",
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md",
+    "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7.return.json",
+    "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7.index.json"
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/checks/CP7-CR172-S01-VERIFICATION.result.json", "reason": "blocking_findings", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "engine/path_i_governance.py", "reason": "rework_target", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_path_i_governance.py", "reason": "regression_target", "required": true, "mode": "full"},
+    {"path": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md", "reason": "finding_detail", "required": true, "mode": "sections"},
+    {"path": "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7.return.json", "reason": "verification_return", "required": true, "mode": "full"},
+    {"path": "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7.index.json", "reason": "verification_evidence", "required": true, "mode": "full"}
+  ],
+  "read_if_needed": [
+    {"path": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-LLD.md", "reason": "existing_contract_anchor", "trigger": "field_conflict", "mode": "sections"}
+  ],
+  "allowed_write_paths": [
+    "engine/path_i_governance.py",
+    "tests/research/test_cr172_path_i_governance.py",
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance.md",
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-IMPLEMENTATION.md",
+    "process/returns/CR172-S01-action-authorization-eligibility-governance.CP6R1.return.json",
+    "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP6R1.index.json",
+    "process/checks/CP6-CR172-S01-REWORK-1.result.json",
+    "process/checks/CP6-CR172-S01-REWORK-1.result.summary.md"
+  ],
+  "forbidden_write_paths": [
+    "engine/trial_return_artifact.py", "engine/research_artifact_replica.py", "engine/research_artifact_materialization.py",
+    "tests/research/test_cr172_trial_return_artifact.py", "tests/research/test_cr172_nas_replica_verification.py", "tests/research/test_cr172_execution_materialization.py",
+    "tests/research/test_cr172_path_i_integration.py", "tests/research/test_cr172_path_i_authorization.py", "tests/research/test_cr172_path_i_claim_regression.py",
+    "tests/fixtures/cr172_path_i/**", "engine/mature_multifactor_research.py", "engine/experiment_family_lineage.py",
+    "engine/effective_trial_evidence.py", "engine/effective_trial_estimator.py", "docs/**", "process/archive/**", "process/state/**", "process/current/**", "process/DEVELOPMENT-PLAN.yaml"
+  ],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr172-s01-cp6r1-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py tests/research/test_cr172_path_i_governance.py",
+    "git diff --no-index --check /dev/null engine/path_i_governance.py",
+    "git diff --no-index --check /dev/null tests/research/test_cr172_path_i_governance.py"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PRODUCTION_WRITE", "NO_NAS_SYNC_OR_WRITE", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR172-S01-action-authorization-eligibility-governance.CP6R1.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "runtime-high-risk-design",
+  "parent_context_ref": "process/context/stories/STORY-CR172-S01.CP7.verify-packet.json",
+  "budget": {"estimated_tokens": 8500, "estimator": "manual_compact", "max_tokens": 18000},
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["runtime-high-risk-design", "architecture-major"]
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "artifacts": [
+    {
+      "kind": "verification-execution-and-review",
+      "path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md"
+    },
+    {
+      "kind": "cp-result",
+      "path": "process/checks/CP7-CR172-S02-VERIFICATION.result.json"
+    },
+    {
+      "kind": "cp-result-summary",
+      "path": "process/checks/CP7-CR172-S02-VERIFICATION.result.summary.md"
+    }
+  ],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP7.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP7.index.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/checks/CP7-CR172-S02-VERIFICATION.result.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/checks/CP7-CR172-S02-VERIFICATION.result.summary.md"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: 58 passed, 0 failed, 0 skipped"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s02-cp7-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: exit=0"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null engine/trial_return_artifact.py",
+      "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S02.CP6.work-packet.json --return process/returns/CR172-S02-trial-return-artifact-native-hook.CP6.return.json",
+      "result": "pass_with_note: Story Return Packet Check OK; expected-path symlink warning only"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S02-IMPLEMENTATION-DONE.result.json --check-consistency --correlation-profile audit",
+      "result": "pass_with_note: CP Result Check OK; route/hash-path/final-attempt warnings only"
+    },
+    {
+      "command": "repository-local in-memory unbound structural-port conformance probe",
+      "result": "fail: accepted_unbound_structural_port=1"
+    },
+    {
+      "command": "repository-local in-memory record-then-fail port conformance probe",
+      "result": "fail: wrapped_failure=true; retained_record_count=1"
+    },
+    {
+      "command": "SHA-256 correlation for S01/S02 source and tests",
+      "result": "pass: 4/4 hashes equal CP6 result"
+    },
+    {
+      "command": "uv run --python 3.11 python -c 'import pyarrow; print(pyarrow.__version__)'",
+      "result": "pass: 16.1.0 matches producer contract"
+    }
+  ],
+  "cr_id": "CR-172",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR172-S02-trial-return-artifact-native-hook.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CR172-S02-PORT-BINDING",
+      "note": "Injected port capability domain and failure atomicity are not runtime-verifiable.",
+      "status": "open_blocking"
+    },
+    {
+      "id": "R-CR172-TRIAL-RETURN-SOURCE-ABSENT",
+      "note": "Fixture PASS does not prove a real native period-return producer.",
+      "status": "design_deferred_fail_closed"
+    },
+    {
+      "id": "R-CR172-PATH-IDENTITY-DRIFT",
+      "note": "Real stable URI remains a later design prerequisite.",
+      "status": "controlled_for_fixture_only"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR172-S02-trial-return-artifact-native-hook",
+  "tests": [
+    {
+      "failed": 0,
+      "passed": 12,
+      "path": "tests/research/test_cr172_trial_return_artifact.py",
+      "role": "S02 exact contract and fixture regression",
+      "skipped": 0
+    },
+    {
+      "failed": 0,
+      "passed": 46,
+      "path": "tests/research/test_cr172_path_i_governance.py",
+      "role": "S01 upstream regression",
+      "skipped": 0
+    },
+    {
+      "failed": 2,
+      "passed": 0,
+      "path": "CP7 neutral in-memory port conformance probes",
+      "role": "independent authorization-boundary and failure-closure review",
+      "skipped": 0
+    }
+  ],
+  "waivers": []
+}

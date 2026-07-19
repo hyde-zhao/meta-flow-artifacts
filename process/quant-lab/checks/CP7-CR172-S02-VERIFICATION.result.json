@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR172-S02-VERIFICATION",
+  "profile": "runtime-high-risk-design",
+  "story_id": "CR172-S02-trial-return-artifact-native-hook",
+  "cr_id": "CR-172",
+  "context_ref": "process/context/stories/STORY-CR172-S02.CP7.verify-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "dispatch_refs": [
+    "AD-CR172-S02-CP7-META-QA-CRITICAL-20260718T191243+0800"
+  ],
+  "return_ref": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP7.return.json",
+  "evidence_ref": "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP7.index.json",
+  "verification_ref": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md",
+  "result_summary_ref": "process/checks/CP7-CR172-S02-VERIFICATION.result.summary.md",
+  "items": [
+    {
+      "id": "CP7-S02-ENTRY-01",
+      "category": "entry-criteria",
+      "name": "Process route, active Story/context, CP6 PASS and independent QA dispatch are ready",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/current/CURRENT.json",
+        "process/checks/CP6-CR172-S02-IMPLEMENTATION-DONE.result.json",
+        "AD-CR172-S02-CP7-META-QA-CRITICAL-STARTED-20260718T191243+0800"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CURRENT.health=ok; active story/context exact; CP6 PASS; terminal dispatch event is host-owned correlation pending."
+    },
+    {
+      "id": "CP7-S02-SCHEMA-01",
+      "category": "design-contract",
+      "name": "Exact payload, manifest, seal and public contract shapes are independently verified",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md#5-设计契约验证清单",
+        "tests/research/test_cr172_trial_return_artifact.py"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "payload=2/2, manifest/seal=15/15 and 8/8, public types/functions=3/3 and 3/3."
+    },
+    {
+      "id": "CP7-S02-INTEGRITY-01",
+      "category": "integrity-contract",
+      "name": "Canonical seal bytes, digest and verifier single truth plus verified-then-commit order pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/trial_return_artifact.py:413",
+        "engine/trial_return_artifact.py:432",
+        "engine/trial_return_artifact.py:438",
+        "engine/trial_return_artifact.py:525"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "bytes/digest/verifier defs=1/1/1; direct verified constructor denied; commit call site=1 and occurs after verifier return."
+    },
+    {
+      "id": "CP7-S02-AUTHZ-PORT-01",
+      "category": "authorization-boundary",
+      "name": "Fixture decision, context, URI and injected port are bound before first side effect",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/trial_return_artifact.py:358",
+        "engine/trial_return_artifact.py:493",
+        "engine/trial_return_artifact.py:538",
+        "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md#11-问题清单"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Decision/context/URI guards pass, but port validation is only structural method presence. An unbound in-memory port was invoked once."
+    },
+    {
+      "id": "CP7-S02-FAILURE-01",
+      "category": "failure-contract",
+      "name": "Proxy, partial, tamper, lineage and port failures all close without selection advance",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "tests/research/test_cr172_trial_return_artifact.py",
+        "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md#4-验证追踪矩阵"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Proxy/partial/tamper/lineage and cooperative port failure pass. Independent record-then-fail in-memory probe returned wrapped failure while retaining one record, so port-failure selection=0 is not proven for accepted structural ports."
+    },
+    {
+      "id": "CP7-S02-ZERO-OP-01",
+      "category": "authorization-ceiling",
+      "name": "Direct real-operation surface is zero and injected side-effect boundary is closed",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/trial_return_artifact.py",
+        "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md#10-人工--语义质量审查"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Forbidden direct imports/integrations and real operations executed are 0, but an unbound injected port remains callable; boundary cannot be certified."
+    },
+    {
+      "id": "CP7-S02-VERIFY-01",
+      "category": "automated-verification",
+      "name": "Independent regression, compile, whitespace, hash and CP6 consistency checks complete",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP7.index.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "S01+S02=58/58; py_compile exit=0; whitespace diagnostics=0/2; source/test hashes match CP6 4/4; CP6 return/result checks OK with host-owned warnings."
+    },
+    {
+      "id": "CP7-S02-BOUNDARY-01",
+      "category": "file-boundary",
+      "name": "CP7 writes are limited to the five verify-packet output paths",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR172-S02-trial-return-artifact-native-hook.CP7.return.json#boundary_check"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Source/tests/docs/state/current writes=0; true real operations=0; only five allowed CP7 artifacts written."
+    },
+    {
+      "id": "CP7-S02-DELIVERABLES-01",
+      "category": "deliverables",
+      "name": "Verification, return, evidence, result and summary are present",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md",
+        "process/returns/CR172-S02-trial-return-artifact-native-hook.CP7.return.json",
+        "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP7.index.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "All packet-required CP7 artifacts are generated; decision remains NEEDS_REWORK."
+    }
+  ],
+  "entry_criteria": [
+    {
+      "name": "Process route health and active Story/context are confirmed",
+      "status": "PASS",
+      "evidence_ref": "process/current/CURRENT.json"
+    },
+    {
+      "name": "CP6 implementation result is PASS with return/evidence",
+      "status": "PASS",
+      "evidence_ref": "process/checks/CP6-CR172-S02-IMPLEMENTATION-DONE.result.json"
+    },
+    {
+      "name": "Independent meta-qa-critical dispatch is present",
+      "status": "PASS",
+      "evidence_ref": "AD-CR172-S02-CP7-META-QA-CRITICAL-STARTED-20260718T191243+0800"
+    },
+    {
+      "name": "Equivalent repository-local validation is authorized while real runtime remains prohibited",
+      "status": "PASS",
+      "evidence_ref": "process/context/stories/STORY-CR172-S02.CP7.verify-packet.json"
+    }
+  ],
+  "exit_criteria": [
+    {
+      "name": "Exact schema, canonical integrity and verified-then-commit order pass",
+      "status": "PASS"
+    },
+    {
+      "name": "All blocking authorization, port failure and zero-operation contracts pass",
+      "status": "FAIL"
+    },
+    {
+      "name": "Independent regression and structured evidence checks pass",
+      "status": "PASS"
+    },
+    {
+      "name": "Story may be marked verified and S03 may start",
+      "status": "FAIL"
+    }
+  ],
+  "deliverables": [
+    "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md",
+    "process/returns/CR172-S02-trial-return-artifact-native-hook.CP7.return.json",
+    "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP7.index.json",
+    "process/checks/CP7-CR172-S02-VERIFICATION.result.json",
+    "process/checks/CP7-CR172-S02-VERIFICATION.result.summary.md"
+  ],
+  "blockers": [
+    {
+      "id": "F-CR172-S02-CP7-001",
+      "severity": "BLOCKER",
+      "category": "authorization-boundary-and-failure-closure",
+      "owner": "meta-dev",
+      "status": "OPEN",
+      "evidence_ref": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md#11-问题清单",
+      "route": "rework_same_story"
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "read_audit": {
+    "preferred_agent_paths_missing": [
+      "agents/meta-qa.md",
+      ".agents/agents/meta-qa.md"
+    ],
+    "approved_fallback_fully_read": ".claude/agents/meta-qa.md",
+    "denied_default_reads_opened": [],
+    "lld_expansion_requested": false
+  },
+  "decision": "NEEDS_REWORK",
+  "stop_reason": "needs_rework",
+  "next_route": "meta_dev_rework_same_story_do_not_start_s03",
+  "checked_at": "2026-07-18T19:20:54+08:00",
+  "check_attempt": 1,
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR172-S02.CP7.verify-packet.json": "sha256:7ecf14ef101c400f1a5fdf6ebcac55b63afe96077cdce44f991c448e919d4534",
+    "process/checks/CP6-CR172-S02-IMPLEMENTATION-DONE.result.json": "sha256:44c6b8d76b15097ad33eeb4f3e7643766b7665f6a8c8676804173256c1ab84bc",
+    "process/returns/CR172-S02-trial-return-artifact-native-hook.CP6.return.json": "sha256:f15c4e4a6630f3340d33a7e9aef9756865567f82d5e1ce6cdb95c83d1a6058ab",
+    "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP6.index.json": "sha256:460c6c582053bda5eb06a34cd933cec92b5605cb0c5738e08a6cbf097907a73a",
+    "engine/path_i_governance.py": "sha256:bc6abc95a0e660d71fce5567195ef6bff037e0919403b5d400841c579cc82abf",
+    "engine/trial_return_artifact.py": "sha256:b10cfe338ffcaa707229f118cb335ec91030bace5417ab763536b2852be13c6e",
+    "tests/research/test_cr172_path_i_governance.py": "sha256:ef4284860453c55a0b9a59357b13a5343ad88c488d5a7ac3fec63ab732de12f9",
+    "tests/research/test_cr172_trial_return_artifact.py": "sha256:60307bc6dc3e78e9f3a0082051b42c7ef4e5e63773b1da26ea3d5a2b326f6489",
+    "docs/features/trial-return-artifact-pipeline/TEST-PLAN.md": "sha256:7614673be742dea76c9747cbbc30a445a05e8b2220543a3fc838aab72ec0b7d4"
+  }
+}

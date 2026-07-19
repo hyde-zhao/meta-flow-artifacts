@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "story_id": "CR173-S01-contract-evidence-canonicalization",
+  "stage": "CP7",
+  "status": "needs_rework",
+  "source_packet_ref": "process/context/stories/CR173-S01-contract-evidence-canonicalization.CP7.reverify-1.packet.json",
+  "completed_at": "2026-07-17T10:34:41+08:00",
+  "supersedes_result_ref": "process/checks/CP7-CR173-S01-VERIFICATION.result.json",
+  "summary": "CP7R1：53/53 与原 4 条对抗复现通过，但 F-002 仍有 non-canonical typed identifier 逸出，F-003 仍接受 forged content-addressed audit ref；结论 NEEDS_REWORK。",
+  "touched_files": [
+    {"path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md", "action": "updated", "owner": "meta-qa-critical"},
+    {"path": "process/returns/CR173-S01-contract-evidence-canonicalization.CP7R1.return.json", "action": "created", "owner": "meta-qa-critical"},
+    {"path": "process/evidence/CR173-S01-contract-evidence-canonicalization.CP7R1.index.json", "action": "created", "owner": "meta-qa-critical"},
+    {"path": "process/checks/CP7-CR173-S01-REVERIFY-1.result.json", "action": "created", "owner": "meta-qa-critical"},
+    {"path": "process/checks/CP7-CR173-S01-REVERIFY-1.result.summary.md", "action": "created", "owner": "meta-qa-critical"}
+  ],
+  "contract_changes": {
+    "changed": false,
+    "summary": "复验未修改合同或工程文件；remaining findings 要求继续落实批准 LLD。",
+    "normative_ref": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-LLD.md",
+    "public_contract_change": false
+  },
+  "finding_closure": [
+    {"id": "F-CP7-S01-001", "status": "CLOSED", "blocking": false, "evidence": "UNAPPROVED_METHOD_REJECTED"},
+    {"id": "F-CP7-S01-002", "status": "OPEN_PARTIAL", "blocking": true, "evidence": "BYTES_FAMILY_ESCAPED_EXCEPTION CanonicalizationError; BYTES_TRIAL_ESCAPED_EXCEPTION CanonicalizationError"},
+    {"id": "F-CP7-S01-003", "status": "OPEN_PARTIAL", "blocking": true, "evidence": "FORGED_AUDIT_REF_ACCEPTED 1"}
+  ],
+  "boundary_check": {
+    "allowed_write_paths_only": true,
+    "forbidden_write_count": 0,
+    "implementation_write_count": 0,
+    "public_production_diff_count": 0,
+    "public_dependency_edge_count": 0,
+    "public_call_count": 0,
+    "real_data_operation_count": 0,
+    "credential_operation_count": 0,
+    "runtime_operation_count": 0,
+    "trading_operation_count": 0,
+    "publish_deploy_operation_count": 0,
+    "git_remote_write_count": 0
+  },
+  "verification_commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py",
+      "status": "PASS",
+      "summary": "53 passed in 0.10s"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s01-cp7r1-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+      "status": "PASS",
+      "summary": "exit_code=0"
+    },
+    {
+      "command": "git diff --check -- engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+      "status": "PASS",
+      "summary": "exit_code=0"
+    },
+    {"command": "original adversarial: unapproved method", "status": "PASS", "summary": "UNAPPROVED_METHOD_REJECTED"},
+    {"command": "original adversarial: int typed contract", "status": "PASS", "summary": "UNTYPED_CONTRACT_REJECTED True F01"},
+    {"command": "original adversarial: split recovery", "status": "PASS", "summary": "SPLIT_RECOVERY_REJECTED"},
+    {"command": "original adversarial: initial orphan", "status": "PASS", "summary": "ORPHAN_INITIAL_LOG_REJECTED"},
+    {"command": "variant adversarial: bytes identifiers stable mapping", "status": "FAIL", "summary": "2/2 escaped CanonicalizationError instead of F01/F06"},
+    {"command": "variant adversarial: forged audit ref", "status": "FAIL", "summary": "FORGED_AUDIT_REF_ACCEPTED 1"}
+  ],
+  "verification": {
+    "status": "NEEDS_REWORK",
+    "validation_mode": "mixed",
+    "commands_run": [
+      {"command": "targeted pytest", "result": "PASS", "evidence": "53 passed in 0.10s"},
+      {"command": "py_compile + diff check", "result": "PASS", "evidence": "exit_code=0/0"},
+      {"command": "original four adversarial probes", "result": "PASS", "evidence": "4/4 rejected"},
+      {"command": "same-class bypass probes", "result": "FAIL", "evidence": "typed exception escapes=2; forged audit accepts=1"}
+    ],
+    "tests_passed": 53,
+    "tests_failed": 0,
+    "original_findings_closed": 1,
+    "original_findings_partially_closed": 2,
+    "blocking_findings": 2,
+    "summary": "Existing suite is green, but F-002/F-003 remain open under same-class adversarial variants."
+  },
+  "evidence_refs": [
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md#cp7-复验-1cp7r1",
+    "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R1.return.json",
+    "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R1.index.json",
+    "tests/research/test_effective_trial_evidence_contracts.py"
+  ],
+  "risks": [
+    {"id": "R-CR173-METHOD-NONDETERMINISM", "status": "approved_method_binding_closed_at_s01_boundary"},
+    {"id": "R-CR173-TYPED-FAILURE-MAPPING", "status": "open_blocking_under_noncanonical_identifier_types"},
+    {"id": "R-CR173-AUDIT-IDENTITY-INTEGRITY", "status": "open_blocking_forged_content_ref_accepted"}
+  ],
+  "waivers": [],
+  "design_delta_refs": [],
+  "open_questions": [],
+  "next_route": "meta-dev",
+  "next_stage_recommendation": "rework_same_story"
+}

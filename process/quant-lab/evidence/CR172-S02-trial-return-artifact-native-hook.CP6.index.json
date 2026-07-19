@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "stage": "CP6",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S02-trial-return-artifact-native-hook",
+  "return_ref": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP6.return.json",
+  "artifacts": [
+    {
+      "kind": "implementation-execution",
+      "path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-IMPLEMENTATION.md"
+    },
+    {
+      "kind": "cp-result",
+      "path": "process/checks/CP6-CR172-S02-IMPLEMENTATION-DONE.result.json"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "engine/trial_return_artifact.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/research/test_cr172_trial_return_artifact.py",
+      "change_type": "created"
+    },
+    {
+      "path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-IMPLEMENTATION.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP6.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP6.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP6-CR172-S02-IMPLEMENTATION-DONE.result.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP6-CR172-S02-IMPLEMENTATION-DONE.result.summary.md",
+      "change_type": "created"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: 12 passed, 0 failed, 0 skipped"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: 58 passed, 0 failed, 0 skipped"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s02-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: exit=0"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null engine/trial_return_artifact.py",
+      "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+    },
+    {
+      "command": "AST/static zero-operation and exact public contract inventory",
+      "result": "pass: public types/functions=3/3; seal bytes/digest/verifier defs=1/1/1; forbidden imports=0; fixture commit call sites=1"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S02.CP6.work-packet.json --return process/returns/CR172-S02-trial-return-artifact-native-hook.CP6.return.json",
+      "result": "pass_with_note: Story Return Packet Check OK; symlink expected-path warning only"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S02-IMPLEMENTATION-DONE.result.json --check-consistency --correlation-profile audit",
+      "result": "pass_with_note: CP Result Check OK; artifact-route path and final-attempt warnings only"
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/research/test_cr172_trial_return_artifact.py",
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 0.43,
+      "feature_cases_covered": 10,
+      "public_and_static_nodes": 2
+    },
+    {
+      "path": "tests/research/test_cr172_path_i_governance.py",
+      "passed": 46,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 0.03,
+      "role": "upstream regression"
+    }
+  ],
+  "risks": [
+    {
+      "id": "R-CR172-TRIAL-RETURN-SOURCE-ABSENT",
+      "status": "design_deferred_fail_closed"
+    },
+    {
+      "id": "R-CR172-RETURN-DEFINITION-DRIFT",
+      "status": "controlled_by_exact_v1_contract"
+    },
+    {
+      "id": "R-CR172-PATH-IDENTITY-DRIFT",
+      "status": "controlled_for_fixture_only"
+    }
+  ],
+  "waivers": [],
+  "design_delta_ref": null
+}

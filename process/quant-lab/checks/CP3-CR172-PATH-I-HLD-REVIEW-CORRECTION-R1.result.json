@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3",
+  "checkpoint_id": "CP3-CR172-PATH-I-HLD-REVIEW-CORRECTION-R1",
+  "profile": "runtime-high-risk-design-correction",
+  "story_id": null,
+  "cr_id": "CR-172",
+  "context_ref": "process/context/CP3-CR172-PATH-I-DESIGN-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "dispatch_refs": [
+    "process/handoffs/CR172-CP3-REVIEW-CORRECTION-R1-META-SE-HANDOFF-2026-07-18.md",
+    "AD-CR172-CP3-REVIEW-CORRECTION-R1-20260718T100037+0800"
+  ],
+  "evidence_ref": "process/checks/CP3-CR172-PATH-I-DISCUSSION-CHECKPOINT.json",
+  "items": [
+    {
+      "id": "CORR-CR172-CP3-R1-01",
+      "category": "return-definition-ownership",
+      "name": "ReturnDefinitionV1 ownership and versioned schema evolution are explicit",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md#return-definitionv1-归属与演进",
+        "docs/design/ARCHITECTURE-DECISION-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md#12-adr-cr172-i-010returndefinitionv1-归属与-schema-演进"
+      ],
+      "owner": "meta-se-critical",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CP3 architecture owner owns business semantics/schema identity/evolution; v1 canonical columns are exactly timestamp/simple_return; CP5 silent net/gross/nav addition=0; field evolution requires versioned ADR and schema bump, with independent CR for owner/runtime/comparability/empirical-statistics impact."
+    },
+    {
+      "id": "CORR-CR172-CP3-R1-02",
+      "category": "native-producer-cp5-obligation",
+      "name": "Native producer instrumentation is a mandatory verifiable CP5 design obligation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md#94-cp5-native-producer-插桩设计义务",
+        "docs/design/ARCHITECTURE-DECISION-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md#3-adr-cr172-i-001选择-native-sealed-artifact-pipeline"
+      ],
+      "owner": "meta-se-critical",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "DO-CR172-CP5-001 requires one integration point, 100% source/file-owner inventory, 7/7 integration contract, authorization order, 5/5 failure paths and 3/3 test/merge/rollback evidence. Unproven location cannot enter implementation."
+    },
+    {
+      "id": "CORR-CR172-CP3-R1-03",
+      "category": "authorization-execution-prerequisites",
+      "name": "Independent authorization records and execution-eligibility prerequisite DAG are both explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md#授权独立与执行资格依赖-dag",
+        "docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md#7-关键场景模拟",
+        "docs/design/ARCHITECTURE-DECISION-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md#7-adr-cr172-i-005六类真实动作独立授权与判定"
+      ],
+      "owner": "meta-se-critical",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "DAG has 5/5 edges; records remain independently approvable/revocable and permission union=0. SIM-CR172-I-06 proves runtime own authorization without same-scope data_lake_read yields eligible=false and runner/workspace/pointer=0/0/0."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "entry_criteria": [
+    {
+      "name": "Original CP3 automatic HLD consistency result is PASS",
+      "status": "PASS",
+      "evidence_ref": "process/checks/CP3-CR172-PATH-I-HLD-CONSISTENCY.result.json"
+    },
+    {
+      "name": "User review supplied exactly three non-scope-expanding correction items",
+      "status": "PASS",
+      "evidence_ref": "process/handoffs/CR172-CP3-REVIEW-CORRECTION-R1-META-SE-HANDOFF-2026-07-18.md"
+    },
+    {
+      "name": "Process route health is valid and CP3 remains design-only",
+      "status": "PASS",
+      "evidence_ref": "process/.meta-flow-process.yaml"
+    }
+  ],
+  "checklist": {
+    "total": 3,
+    "pass": 3,
+    "fail": 0,
+    "blocked": 0,
+    "waived": 0
+  },
+  "exit_criteria": [
+    {
+      "name": "All three review corrections are closed",
+      "status": "PASS"
+    },
+    {
+      "name": "Original four CP3 decision items and PATH-I scope are unchanged",
+      "status": "PASS"
+    },
+    {
+      "name": "No implementation or real operation authorization is granted",
+      "status": "PASS"
+    }
+  ],
+  "deliverables": [
+    {
+      "path": "docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md",
+      "status": "PASS"
+    },
+    {
+      "path": "docs/design/ARCHITECTURE-DECISION-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md",
+      "status": "PASS"
+    },
+    {
+      "path": "process/discussions/CP3-CR172-PATH-I-HLD-DISCUSSION-LOG.md",
+      "status": "PASS"
+    },
+    {
+      "path": "process/checks/CP3-CR172-PATH-I-DISCUSSION-CHECKPOINT.json",
+      "status": "PASS"
+    },
+    {
+      "path": "process/checks/CP3-CR172-PATH-I-HLD-REVIEW-CORRECTION-R1.result.json",
+      "status": "PASS"
+    },
+    {
+      "path": "process/handoffs/CR172-CP3-REVIEW-CORRECTION-R1-RETURN-SUMMARY.md",
+      "status": "PASS"
+    }
+  ],
+  "metrics": {
+    "review_corrections": "3/3",
+    "canonical_v1_columns": "2/2",
+    "silent_return_field_additions_allowed": 0,
+    "cp5_native_producer_design_obligations": "6/6",
+    "authorization_prerequisite_dag_edges": "5/5",
+    "negative_runtime_without_data_read_simulations": "1/1",
+    "original_cp3_decision_items": "4/4-unchanged",
+    "scope_expansions": 0,
+    "new_blocking_human_decisions": 0
+  },
+  "real_operation_counts": {
+    "directory_create": 0,
+    "runner_or_default_path_modification": 0,
+    "real_lake_read": 0,
+    "real_lake_write": 0,
+    "nas_read": 0,
+    "nas_write": 0,
+    "nas_replica_sync": 0,
+    "execution_pull_verify_materialize": 0,
+    "multi_trial_runtime": 0,
+    "trial_return_generation": 0,
+    "empirical_R_computation": 0,
+    "signal_generation": 0,
+    "signal_transport_or_consume": 0,
+    "trading_or_broker_write": 0,
+    "migration": 0,
+    "publish_or_deploy": 0,
+    "git_remote_write": 0,
+    "six_real_actions_authorized": "0/6",
+    "six_real_actions_executed": "0/6"
+  },
+  "claim_ceiling": {
+    "path_i_hld_review_ready": true,
+    "path_i_design_ready": false,
+    "stage3_entry_ready": false,
+    "c1_computable": false,
+    "real_data_authorized": false,
+    "multi_trial_runtime_authorized": false,
+    "signal_transport_authorized": false
+  },
+  "decision": "PASS",
+  "next_route": "HOST_CP3_REVIEW_CORRECTION_ACCEPTANCE",
+  "checked_at": "2026-07-18T10:05:36+08:00"
+}

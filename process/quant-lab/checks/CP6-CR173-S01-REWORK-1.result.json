@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR173-S01-REWORK-1",
+  "story_id": "CR173-S01-contract-evidence-canonicalization",
+  "cr_id": "CR-173",
+  "context_ref": "process/context/stories/STORY-CR173-S01.CP6.rework-1.work-packet.json",
+  "dispatch_refs": [
+    "AD-CR173-S01-CP6R1-META-DEV-COMPLETED-20260717T102808+0800"
+  ],
+  "return_packet_ref": "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R1.return.json",
+  "evidence_ref": "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R1.index.json",
+  "checked_at": "2026-07-17T10:25:13+08:00",
+  "check_attempt": 2,
+  "supersedes_result_ref": "process/checks/CP6-CR173-S01-IMPLEMENTATION-DONE.result.json",
+  "route_plan_ref": "process/checks/CP0-CR173.route-plan.json",
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR173-S01.CP6.rework-1.work-packet.json": "sha256:278cd8d452d821e41aa988b4a53cba92b09d49b827aa893f3ca2b979aac12832",
+    "process/checks/CP7-CR173-S01-VERIFICATION.result.json": "sha256:dc618fd691ed5da91826bde5fa279f8abc6a9253c713aa1b62746f3768cddc2c",
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md": "sha256:4f1995f288106b02204c063363e6f6e6d7243c68f9d531cca385a38510160fb9",
+    "engine/effective_trial_evidence.py": "sha256:2b72a89a6dc4b25929dbcb87065a0cd21d24c94869d914c860d8a87a54aa70fc",
+    "tests/research/test_effective_trial_evidence_contracts.py": "sha256:8469375457752c6b7071f6cf8a1563b24cf5be7dacf2f1e0ca868df83f65dc98",
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-IMPLEMENTATION.md": "sha256:24b349f690564cefe5b555788dc1543f36b729c87813c14000afe0e1b8df0eb1",
+    "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R1.return.json": "sha256:ec24c8cd0c8b92d55fe861722399e3244fb1fe5e4a33dfab8a66d09044353f51",
+    "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R1.index.json": "sha256:5b3bbbdd89b218719851d0527ce0ca627087362db5df23f5618899a7204c7f82"
+  },
+  "items": [
+    {
+      "id": "CP6R1-ENTRY-01",
+      "category": "entry",
+      "name": "CP7 rework findings and scope are explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP7-CR173-S01-VERIFICATION.result.json",
+        "process/context/stories/STORY-CR173-S01.CP6.rework-1.work-packet.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "仅回修 F-CP7-S01-001/002/003；allowed_write_paths 与禁止边界已冻结。"
+    },
+    {
+      "id": "CP6R1-ENTRY-02",
+      "category": "entry",
+      "name": "Real meta-dev rework dispatch exists",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "AD-CR173-S01-CP6R1-META-DEV-20260717T101609+0800"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "复用真实 meta-dev 子 agent；terminal dispatch 由 Host Orchestrator 在消费 return 后收口。"
+    },
+    {
+      "id": "CP6R1-CHECK-01",
+      "category": "implementation",
+      "name": "Approved method binding closes F-CP7-S01-001",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R1.index.json#commands"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "未批准但自洽的 method descriptor/hash 接受数=0；approved descriptor/hash 双绑定。"
+    },
+    {
+      "id": "CP6R1-CHECK-02",
+      "category": "implementation",
+      "name": "Typed string identifiers close F-CP7-S01-002",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R1.index.json#commands"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "family_ref、lineage、trial IDs 的非字符串/空字符串/混合类型接受数=0；稳定映射 F01/F02/F06。"
+    },
+    {
+      "id": "CP6R1-CHECK-03",
+      "category": "implementation",
+      "name": "Audit single-chain closes F-CP7-S01-003",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R1.index.json#commands"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "split parent/supersedes、orphan、forward reference、已 superseded 节点分支接受数=0；初始 entries 与 append 使用同一 replay 校验。"
+    },
+    {
+      "id": "CP6R1-CHECK-04",
+      "category": "test",
+      "name": "Adversarial tests fail before and pass after minimal fix",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-IMPLEMENTATION.md",
+        "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R1.index.json#commands"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "修复前 8 failed、原 45 passed；修复后 53/53 PASS。"
+    },
+    {
+      "id": "CP6R1-CHECK-05",
+      "category": "quality",
+      "name": "Original regression and code checks remain green",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R1.index.json#commands"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "原 45 项保持全绿；py_compile 与 git diff --check PASS。"
+    },
+    {
+      "id": "CP6R1-CHECK-06",
+      "category": "boundary",
+      "name": "Write scope and non-authorization boundaries remain intact",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R1.return.json#boundary_check",
+        "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R1.index.json#changed_files"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "仅写 allowed_write_paths；S02/public/real/runtime/credential/remote 触达数=0。"
+    },
+    {
+      "id": "CP6R1-CHECK-07",
+      "category": "design_delta",
+      "name": "No normative design delta introduced",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R1.return.json#design_delta_refs"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "实现缺陷回修；design_delta_required=false，design delta=0。"
+    },
+    {
+      "id": "CP6R1-CHECK-08",
+      "category": "return_packet",
+      "name": "CP6R1 return packet validates",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R1.return.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "meta-flow story return-check=OK；仅保留外置 process 物理路径等价 warning。"
+    },
+    {
+      "id": "CP6R1-CHECK-09",
+      "category": "evidence_index",
+      "name": "CP6R1 evidence index validates",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R1.index.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "meta-flow story evidence-check=OK。"
+    },
+    {
+      "id": "CP6R1-EXIT-01",
+      "category": "exit",
+      "name": "All three CP7 findings are closed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R1.return.json#resolved_findings"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "F-CP7-S01-001/002/003 均有失败复现、最小修复和回归关闭证据。"
+    },
+    {
+      "id": "CP6R1-EXIT-02",
+      "category": "exit",
+      "name": "Story is ready for independent CP7 reverification",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md",
+        "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R1.return.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Story status=ready-for-verification；next route=CP7。"
+    },
+    {
+      "id": "CP6R1-DELIVERABLE-01",
+      "category": "deliverable",
+      "name": "Minimal implementation and adversarial regressions",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/effective_trial_evidence.py",
+        "tests/research/test_effective_trial_evidence_contracts.py"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "source/test 已按回修包限定范围更新。"
+    },
+    {
+      "id": "CP6R1-DELIVERABLE-02",
+      "category": "deliverable",
+      "name": "Implementation handoff, return packet and evidence index",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-IMPLEMENTATION.md",
+        "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R1.return.json",
+        "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R1.index.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CP6R1 交接证据齐备。"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260717T022132Z0000-0f42cbcc"
+  ],
+  "decision": "PASS",
+  "next_route": "CP7"
+}

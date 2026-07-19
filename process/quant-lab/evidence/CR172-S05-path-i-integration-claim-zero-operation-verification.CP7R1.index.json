@@ -1,0 +1,82 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md",
+    "process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.return.json",
+    "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.index.json",
+    "process/checks/CP7-CR172-S05-REVERIFY-1.result.json",
+    "process/checks/CP7-CR172-S05-REVERIFY-1.result.summary.md"
+  ],
+  "commands": [
+    {
+      "command": "independent semantic probe over scenario_catalog and AST-collected S05 test definitions",
+      "result": "SC-006->REQ-006 exact; SC-021->REQ-013 exact; 15/27/11; unknown/duplicate/uncovered/semantic mismatch=0",
+      "status": "passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_integration.py tests/research/test_cr172_path_i_authorization.py tests/research/test_cr172_path_i_claim_regression.py",
+      "result": "27 passed in 0.50s / 0 failed / 0 skipped",
+      "status": "passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py tests/research/test_cr172_execution_materialization.py tests/research/test_cr172_path_i_integration.py tests/research/test_cr172_path_i_authorization.py tests/research/test_cr172_path_i_claim_regression.py",
+      "result": "154 passed in 0.95s / 0 failed / 0 skipped",
+      "status": "passed"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s05-cp7r1-pycompile uv run --python 3.11 python -m py_compile tests/research/test_cr172_path_i_claim_regression.py",
+      "result": "exit_code=0",
+      "status": "passed"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null tests/fixtures/cr172_path_i/scenario_catalog.json",
+      "result": "expected diff exit=1; whitespace diagnostics=0",
+      "status": "passed"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null tests/research/test_cr172_path_i_claim_regression.py",
+      "result": "expected diff exit=1; whitespace diagnostics=0",
+      "status": "passed"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S05.CP6.rework-1.work-packet.json --return process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP6R1.return.json",
+      "result": "Story Return Packet Check: OK; one expected symlink path warning",
+      "status": "passed_with_warnings"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S05-REWORK-1.result.json --check-consistency --correlation-profile audit",
+      "result": "CP Result Check: OK; only existing input-path, final-attempt and route-plan warnings",
+      "status": "passed_with_warnings"
+    },
+    {
+      "command": "sha256 correlation for 8 production/upstream and 9 S05 assets",
+      "result": "production/upstream=8/8 final CP7 baseline; CP6R1 delta=2/2; unchanged S05 assets=7/7",
+      "status": "passed"
+    }
+  ],
+  "cr_id": "CR-172",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.return.json",
+  "risks": [
+    {
+      "id": "R-CP7-S05-TRACE-SEMANTIC-MISBINDING",
+      "note": "F-001 closed by explicit semantic regression assertion and independent CP7R1 probe.",
+      "status": "closed"
+    },
+    {
+      "id": "R-CR172-RUNTIME-AUTHORIZATION-GAP",
+      "note": "Repository fixtures do not authorize any real action.",
+      "status": "deferred_not_authorized"
+    },
+    {
+      "id": "R-CR172-REAL-R-DOMAIN-MISMATCH",
+      "note": "Positive empirical-R and effective-count paths remain outside S05.",
+      "status": "deferred"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR172-S05-path-i-integration-claim-zero-operation-verification",
+  "tests": [],
+  "waivers": []
+}

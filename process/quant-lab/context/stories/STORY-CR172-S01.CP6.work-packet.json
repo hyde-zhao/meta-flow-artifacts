@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S01-action-authorization-eligibility-governance",
+  "story_ref": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance.md",
+  "stage": "CP6",
+  "objective": {
+    "summary": "实现 repository-local、无 I/O 的 PATH-I 六动作授权、执行资格 DAG、empirical-R disposition、路径/信号边界与 claim ceiling 合同。",
+    "non_goals": [
+      "不连接真实 approved-ledger backend，不读取凭据、环境变量、真实数据或真实路径",
+      "不启动 multi-trial runtime，不生成 trial-return，不计算 empirical R，不同步 NAS",
+      "不修改既有 runner、lineage、CR173 estimator、public C1 或 admission 合同",
+      "不实现信号传输、ack/replay、交易、迁移、部署或 Git remote 操作"
+    ]
+  },
+  "feature_refs": ["path-i.authorization.claim.governance"],
+  "feature_design_refs": [
+    "docs/features/path-i-authorization-claim-governance/DESIGN.md",
+    "docs/features/path-i-authorization-claim-governance/TEST-PLAN.md",
+    "docs/features/path-i-authorization-claim-governance/TASKS.md"
+  ],
+  "feature_context": "S01 是 PATH-I 的首个强制前置：它只交付纯值对象、纯判定函数和 deterministic fixture。S02-S05 只能在 S01 CP7 PASS 后消费其合同，不能据此声称真实授权或运行能力。",
+  "feature_contract_summary": "六个 action kind 与五条直接依赖边固定；12-field authorization record 不变；current-v1 approved_ledger 永远 authorized=false、eligible_to_execute=false；repository fixture 只能绑定 fixture target/URI/port；所有高阶 claim 保持 false。",
+  "cr_delta": {
+    "summary": "新增一个 repository-local governance 模块和一个定向测试模块，不修改任何真实 producer、数据湖、NAS、执行机或公共 C1 路径。",
+    "affected_contracts": [
+      "six-action authorization record and decision",
+      "execution eligibility DAG and predecessor evidence",
+      "empirical-R four-state disposition",
+      "RunPathDecisionV1 contract-only boundary",
+      "SignalBatch eight-slot semantic boundary",
+      "PATH-I claim ceiling"
+    ]
+  },
+  "acceptance": [
+    "action kinds/records/enforcement points=6/6/6，approval union=0；DAG nodes/edges=6/5",
+    "approval record fields=12/12；decision_origin/target_kind 仅存在于 decision/context，provenance alias=0",
+    "current-v1 approved_ledger 对六动作 authorized/eligible=0/0，稳定 reason=APPROVED_LEDGER_ADAPTER_UNAVAILABLE",
+    "repository fixture + real target accepted/side-effect=0/0；runtime-without-read authorized=true、eligible=false，runner/workspace/pointer=0/0/0",
+    "empirical disposition states=4/4；FU-v2 前 positive effective count/C1=0/0",
+    "RunPath contract ready=1，但 runner diff/default switch/runtime enforcement/runtime delivered=0/0/0/0",
+    "SignalBatch semantic slots=8/8，wire/mailbox/state/ack/replay/transport=0",
+    "stage3_entry_ready、c1_computable、real_data_authorized、multi_trial_runtime_authorized、signal_transport_authorized 全 false",
+    "production/test 模块的真实 IO/network/env/credential/lake/NAS/runtime/R/signal/trading 操作=0"
+  ],
+  "dependency_inputs": [
+    "process/checks/CP5-CR172-LLD-DESIGN-EVIDENCE.result.json",
+    "process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml"
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance.md", "reason": "story_card", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "docs/features/path-i-authorization-claim-governance/DESIGN.md", "reason": "approved_feature_contract", "required": true, "mode": "full"},
+    {"path": "docs/features/path-i-authorization-claim-governance/TEST-PLAN.md", "reason": "approved_test_contract", "required": true, "mode": "full"},
+    {"path": "docs/features/path-i-authorization-claim-governance/TASKS.md", "reason": "approved_task_contract", "required": false, "mode": "full"},
+    {"path": "docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md", "reason": "authority_sections_for_governance_contract", "required": false, "mode": "sections"},
+    {"path": "docs/design/ARCHITECTURE-DECISION-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md", "reason": "ADR-005_to_ADR-009", "required": false, "mode": "sections"}
+  ],
+  "read_if_needed": [
+    {"path": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-LLD.md", "reason": "confirmed_full_lld", "trigger": "implementation_contract_detail_required", "mode": "full"}
+  ],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_implementation_truth"},
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "host_owned_plan"}
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/archive/**",
+    "process/discussions/**",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "allowed_write_paths": [
+    "engine/path_i_governance.py",
+    "tests/research/test_cr172_path_i_governance.py",
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance.md",
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-IMPLEMENTATION.md",
+    "process/returns/CR172-S01-action-authorization-eligibility-governance.CP6.return.json",
+    "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP6.index.json",
+    "process/checks/CP6-CR172-S01-IMPLEMENTATION-DONE.result.json",
+    "process/checks/CP6-CR172-S01-IMPLEMENTATION-DONE.result.summary.md"
+  ],
+  "forbidden_write_paths": [
+    "engine/trial_return_artifact.py",
+    "engine/research_artifact_replica.py",
+    "engine/research_artifact_materialization.py",
+    "tests/research/test_cr172_trial_return_artifact.py",
+    "tests/research/test_cr172_nas_replica_verification.py",
+    "tests/research/test_cr172_execution_materialization.py",
+    "tests/research/test_cr172_path_i_integration.py",
+    "tests/research/test_cr172_path_i_authorization.py",
+    "tests/research/test_cr172_path_i_claim_regression.py",
+    "tests/fixtures/cr172_path_i/**",
+    "engine/mature_multifactor_research.py",
+    "engine/experiment_family_lineage.py",
+    "engine/effective_trial_evidence.py",
+    "engine/effective_trial_estimator.py",
+    "engine/cross_strategy_reliability_gates.py",
+    "engine/strategy_admission_package.py",
+    "process/archive/**"
+  ],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr172-s01-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py tests/research/test_cr172_path_i_governance.py",
+    "git diff --check -- engine/path_i_governance.py tests/research/test_cr172_path_i_governance.py"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_REAL_LAKE_READ_OR_WRITE",
+    "NO_PRODUCTION_WRITE",
+    "NO_NAS_SYNC_OR_WRITE",
+    "NO_TRADING",
+    "NO_GIT_REMOTE_WRITE"
+  ],
+  "expected_return_packet": "process/returns/CR172-S01-action-authorization-eligibility-governance.CP6.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "runtime-high-risk-design",
+  "parent_context_ref": "process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml",
+  "budget": {"estimated_tokens": 11000, "estimator": "manual_compact", "max_tokens": 18000},
+  "context_sufficiency": {
+    "required_slots": [
+      "objective.summary",
+      "feature_refs",
+      "feature_context",
+      "cr_delta.summary",
+      "acceptance",
+      "dependency_inputs",
+      "allowed_write_paths",
+      "forbidden_write_paths",
+      "verification_plan",
+      "authz_policy_refs",
+      "expected_return_packet"
+    ],
+    "strict_profiles": ["runtime-high-risk-design", "architecture-major"]
+  }
+}

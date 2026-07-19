@@ -1,0 +1,522 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR172-PATH-I-DELIVERY-READINESS",
+  "profile": "runtime-high-risk-release-readiness",
+  "story_id": null,
+  "cr_id": "CR-172",
+  "context_ref": "process/context/CP8-CR172-PATH-I-DELIVERY-CONTEXT.yaml",
+  "preparation_context_ref": "process/context/CP8-CR172-PATH-I-PREPARATION-CONTEXT.json",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "release_context_ref": "process/release/RELEASE-CONTEXT-CR172.yaml",
+  "manual_checkpoint_ref": "process/checkpoints/CP8-CR172-PATH-I-DELIVERY-READINESS.md",
+  "result_summary_ref": "process/checks/CP8-CR172-PATH-I-DELIVERY-READINESS.result.summary.md",
+  "dispatch_refs": [
+    "AD-CR172-CP8-META-QA-CRITICAL-COMPLETED-20260719T020451+0800"
+  ],
+  "dispatch_status": "completed",
+  "items": [
+    {
+      "id": "CP8-CR172-ENTRY-01",
+      "category": "entry-criteria",
+      "name": "Process route, active CP8 preparation context and runtime-high-risk release profile are healthy",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/state/STATE.current.json",
+        "process/current/CURRENT.json",
+        "process/context/CP8-CR172-PATH-I-PREPARATION-CONTEXT.json"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "workspace check reports process_link_health=ok; active context is exact; release profile=full because runtime/security boundaries are high risk."
+    },
+    {
+      "id": "CP8-CR172-STORIES-01",
+      "category": "story-closure",
+      "name": "All five PATH-I Stories have final independent CP7 PASS results",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP7-CR172-S01-REVERIFY-1.result.json",
+        "process/checks/CP7-CR172-S02-REVERIFY-2.result.json",
+        "process/checks/CP7-CR172-S03-REVERIFY-1.result.json",
+        "process/checks/CP7-CR172-S04-REVERIFY-1.result.json",
+        "process/checks/CP7-CR172-S05-REVERIFY-1.result.json"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "PASS=5/5; blockers=0; waivers=0; nine historical findings are preserved as CLOSED."
+    },
+    {
+      "id": "CP8-CR172-EVIDENCE-01",
+      "category": "structured-evidence",
+      "name": "Five CP7 Evidence Indexes are machine-consumable",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7R1.index.json",
+        "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP7R2.index.json",
+        "process/evidence/CR172-S03-nas-replica-verification.CP7R1.index.json",
+        "process/evidence/CR172-S04-execution-cache-materialization.CP7R1.index.json",
+        "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.index.json"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "meta-flow story evidence-check=OK for 5/5 indexes."
+    },
+    {
+      "id": "CP8-CR172-QUALITY-01",
+      "category": "quality-review",
+      "name": "CR-scoped verification, test, review and historical fixes reports are complete",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/quality/VERIFICATION-REPORT-CR172.md",
+        "docs/quality/TEST-REPORT-CR172.md",
+        "docs/quality/REVIEW-CR172.md",
+        "docs/quality/FIXES-CR172.md"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "Repository verification=PASS_WITH_RISK; open blocker=0; active fix=0; waiver=0; review protocol validator=OK."
+    },
+    {
+      "id": "CP8-CR172-FACT-DIFF-01",
+      "category": "release-readiness",
+      "name": "Fact diff distinguishes delivered, deferred and not-authorized scope without missing required evidence",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR172.yaml#fact_diff"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "promised=8; delivered=5; deferred/READY_WITH_RISK=3; missing_required=0; not_ready=0."
+    },
+    {
+      "id": "CP8-CR172-CLAIM-01",
+      "category": "claim-ceiling",
+      "name": "The highest positive claim is repository-contract-ready and all nine runtime claims remain false",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR172.yaml#claim_ceiling",
+        "docs/quality/VERIFICATION-REPORT-CR172.md#5-九项必须保持-false-的能力声明"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "path_i_repository_contract_ready=true is the only positive claim; Stage3/C1/real-data/runtime/signal/PATH-C-A/public-C1/effective-count remain false."
+    },
+    {
+      "id": "CP8-CR172-ZERO-OP-01",
+      "category": "authorization-boundary",
+      "name": "Six real actions and all external or high-risk operations remain zero",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR172.yaml#operation_boundary",
+        "process/checks/CP7-CR172-S05-REVERIFY-1.result.json#operation_counts"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "authorized/executed=0/6,0/6; lake/NAS/runtime/network/credential/signal/trading/deploy/Git remote=0."
+    },
+    {
+      "id": "CP8-CR172-RELEASE-DOCS-01",
+      "category": "deliverables",
+      "name": "Full-profile release notes, deploy checklist, rollback, migration and feedback documents are ready",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/release/RELEASE-NOTES-CR172.md",
+        "docs/release/DEPLOY-CHECKLIST-CR172.md",
+        "docs/release/ROLLBACK-CR172.md",
+        "docs/release/MIGRATION-CR172.md",
+        "docs/release/FEEDBACK-CR172.md"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "migration=none; deployment=not-authorized; rollback is repository-local only; observation is integrated into feedback."
+    },
+    {
+      "id": "CP8-CR172-WORKSPACE-01",
+      "category": "delivery-state",
+      "name": "Source and artifact repository state is recorded without claiming release execution",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/release/DEPLOY-CHECKLIST-CR172.md#2-发布候选快照"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Both repositories are dirty with ahead/behind=0/0; this is a READY_WITH_RISK delivery condition. No clean, commit, push or remote write was executed."
+    },
+    {
+      "id": "CP8-CR172-HUMAN-01",
+      "category": "human-gate",
+      "name": "Three human decisions are fully specified and explicitly approved",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checkpoints/CP8-CR172-PATH-I-DELIVERY-READINESS.md",
+        "process/context/CP8-CR172-PATH-I-DELIVERY-CONTEXT.yaml#decision_brief"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "manual_gate_status=approved; DQ-CP8-CR172-001..003 accepted by the user at 2026-07-19T09:18:36+08:00. The same user message separately authorizes quant-lab dual-repository Git commit/push; it does not authorize real data, runtime, NAS, signal, trading or deployment."
+    },
+    {
+      "id": "CP8-CR172-BOUNDARY-01",
+      "category": "permission-boundary",
+      "name": "Only fourteen CP8 packet paths are written and no forbidden or real operation occurs",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/CP8-CR172-PATH-I-PREPARATION-CONTEXT.json#allowed_write_paths"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Implementation/tests/product/design/Story/CR/state/current/returns/evidence/handoff/ledger writes=0; exactly fourteen authorized paths are used."
+    },
+    {
+      "id": "CP8-CR172-LEDGER-01",
+      "category": "process-audit-risk",
+      "name": "Checkpoint retry event identity debt is disclosed without rewriting append-only history",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/quality/REVIEW-CR172.md"
+      ],
+      "owner": "meta-flow maintainer",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Full CHECKPOINT-LEDGER event check reports 10 affected duplicate retry event IDs and 12 extra conflicting rows because the default generator omits attempt/result identity. Final events remain distinguishable by checked_at/result_ref/context_ref. DQ-001 risk acceptance and FU-CR172-LEDGER-001 are required; current CP8 performs no ledger rewrite."
+    },
+    {
+      "id": "CP8-CR172-EXIT-01",
+      "category": "exit-criteria",
+      "name": "Automatic release-readiness precheck passes and the CP8 human gate is approved",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR172.yaml",
+        "process/checkpoints/CP8-CR172-PATH-I-DELIVERY-READINESS.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "decision=PASS; release_decision=READY_WITH_RISK; manual gate approved with all three recommended decisions accepted."
+    }
+  ],
+  "entry_criteria": [
+    {
+      "name": "Process symlink routing is healthy and CP8 preparation context is active",
+      "status": "PASS",
+      "evidence_ref": "process/current/CURRENT.json"
+    },
+    {
+      "name": "CP5 approved design gate is readable",
+      "status": "PASS",
+      "evidence_ref": "process/checkpoints/CP5-CR172-ALL-STORIES-LLD-BATCH.md"
+    },
+    {
+      "name": "All five final CP7 results and evidence indexes pass basic machine validation",
+      "status": "PASS",
+      "evidence_ref": "docs/quality/VERIFICATION-REPORT-CR172.md"
+    },
+    {
+      "name": "Release Context and full-profile release documents are available",
+      "status": "PASS",
+      "evidence_ref": "process/release/RELEASE-CONTEXT-CR172.yaml"
+    }
+  ],
+  "exit_criteria": [
+    {
+      "name": "Automatic CP8 checks have no unwaived FAIL or blocker",
+      "status": "PASS"
+    },
+    {
+      "name": "Release decision is READY_WITH_RISK and not RELEASED",
+      "status": "PASS"
+    },
+    {
+      "name": "Manual gate is approved with exactly three accepted decisions",
+      "status": "PASS"
+    },
+    {
+      "name": "Activation remains deferred and PATH-C/A is not resumed",
+      "status": "PASS"
+    },
+    {
+      "name": "No real operation, deployment, publication or remote write was executed",
+      "status": "PASS"
+    }
+  ],
+  "deliverables": [
+    "docs/quality/VERIFICATION-REPORT-CR172.md",
+    "docs/quality/TEST-REPORT-CR172.md",
+    "docs/quality/REVIEW-CR172.md",
+    "docs/quality/FIXES-CR172.md",
+    "docs/release/RELEASE-NOTES-CR172.md",
+    "docs/release/DEPLOY-CHECKLIST-CR172.md",
+    "docs/release/ROLLBACK-CR172.md",
+    "docs/release/MIGRATION-CR172.md",
+    "docs/release/FEEDBACK-CR172.md",
+    "process/release/RELEASE-CONTEXT-CR172.yaml",
+    "process/context/CP8-CR172-PATH-I-DELIVERY-CONTEXT.yaml",
+    "process/checks/CP8-CR172-PATH-I-DELIVERY-READINESS.result.json",
+    "process/checks/CP8-CR172-PATH-I-DELIVERY-READINESS.result.summary.md",
+    "process/checkpoints/CP8-CR172-PATH-I-DELIVERY-READINESS.md"
+  ],
+  "findings": [
+    {"id": "F-CP7-S01-001", "story": "S01", "status": "CLOSED", "blocking": false},
+    {"id": "F-CP7-S01-002", "story": "S01", "status": "CLOSED", "blocking": false},
+    {"id": "F-CR172-S02-CP7-001", "story": "S02", "status": "CLOSED", "blocking": false},
+    {"id": "F-CP7-S03-001", "story": "S03", "status": "CLOSED", "blocking": false},
+    {"id": "F-CP7-S03-002", "story": "S03", "status": "CLOSED", "blocking": false},
+    {"id": "F-CP7-S04-001", "story": "S04", "status": "CLOSED", "blocking": false},
+    {"id": "F-CP7-S04-002", "story": "S04", "status": "CLOSED", "blocking": false},
+    {"id": "F-CP7-S04-003", "story": "S04", "status": "CLOSED", "blocking": false},
+    {"id": "F-CP7-S05-001", "story": "S05", "status": "CLOSED", "blocking": false},
+    {"id": "REV-CR172-001", "severity": "HIGH", "status": "ACCEPTED_RISK", "blocking": false, "route": "require_user_decision"},
+    {"id": "REV-CR172-002", "severity": "HIGH", "status": "ACCEPTED_DEFERRED", "blocking": false, "route": "require_user_decision"},
+    {"id": "REV-CR172-003", "severity": "HIGH", "status": "ACCEPTED_FOR_SEPARATE_GIT_DELIVERY", "blocking": false, "route": "require_user_decision"},
+    {"id": "REV-CR172-004", "severity": "HIGH", "status": "ACCEPTED_PROCESS_AUDIT_RISK", "blocking": false, "route": "require_user_decision"}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "release_artifact_profile": "full",
+  "release_decision": "READY_WITH_RISK",
+  "manual_gate_status": "approved",
+  "pending_human_decisions": 0,
+  "pending_human_decision_items": [
+    {
+      "decision_id": "DQ-CP8-CR172-001",
+      "decision_type": "risk_acceptance",
+      "status": "accepted",
+      "recommended_option": "Accept PATH-I repository-local contract delivery as READY_WITH_RISK, including disclosed dual-repository dirty state and checkpoint retry event-ID tooling debt; do not claim ledger-wide PASS."
+    },
+    {
+      "decision_id": "DQ-CP8-CR172-002",
+      "decision_type": "risk_acceptance",
+      "status": "accepted",
+      "recommended_option": "Accept non-activation, real actions 0/6 and deferred PATH-C/A."
+    },
+    {
+      "decision_id": "DQ-CP8-CR172-003",
+      "decision_type": "follow_up_tracking",
+      "status": "accepted",
+      "recommended_option": "Keep empirical-R/public C1/real adapters/runtime/signal as future prerequisites."
+    }
+  ],
+  "fact_diff": [
+    {
+      "promise_ref": "CR172-S01",
+      "promise": "Six-action authorization/eligibility deny-default repository contract",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["process/checks/CP7-CR172-S01-REVERIFY-1.result.json"],
+      "risk_ref": "R-CR172-RUNTIME-AUTHORIZATION-GAP"
+    },
+    {
+      "promise_ref": "CR172-S02",
+      "promise": "Sealed trial-return artifact and unique verifier repository contract",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["process/checks/CP7-CR172-S02-REVERIFY-2.result.json"],
+      "risk_ref": "R-CR172-TRIAL-RETURN-SOURCE-ABSENT"
+    },
+    {
+      "promise_ref": "CR172-S03",
+      "promise": "Replica freshness, immutable receipt and concurrent CAS contract",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["process/checks/CP7-CR172-S03-REVERIFY-1.result.json"],
+      "risk_ref": "R-CR172-SYNC-REPLICA-STALE"
+    },
+    {
+      "promise_ref": "CR172-S04",
+      "promise": "Current-exact execution-local materialization capability contract",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["process/checks/CP7-CR172-S04-REVERIFY-1.result.json"],
+      "risk_ref": "R-CP7R1-S04-REAL-ADAPTER-UNVERIFIED"
+    },
+    {
+      "promise_ref": "CR172-S05",
+      "promise": "15/27/11 semantic trace, integrated failure recovery, claim and zero-op QAC",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["process/checks/CP7-CR172-S05-REVERIFY-1.result.json"],
+      "risk_ref": "R-CP7-S05-TRACE-SEMANTIC-MISBINDING-CLOSED"
+    },
+    {
+      "promise_ref": "CR172-ACTIVATION",
+      "promise": "Real activation, trusted adapters and six real operations",
+      "status": "DEFERRED_FOLLOW_UP",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/context/CP8-CR172-PATH-I-PREPARATION-CONTEXT.json"],
+      "risk_ref": "R-CR172-RUNTIME-AUTHORIZATION-GAP"
+    },
+    {
+      "promise_ref": "CR172-C1",
+      "promise": "Positive empirical-R/effective-count/public C1 projection",
+      "status": "DEFERRED_FOLLOW_UP",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/changes/summaries/CR-172.summary.json"],
+      "risk_ref": "R-CR172-REAL-R-DOMAIN-MISMATCH"
+    },
+    {
+      "promise_ref": "CR172-PATH-C-A-SIGNAL",
+      "promise": "PATH-C/A resume and signal transport",
+      "status": "DEFERRED_FOLLOW_UP",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/context/CP8-CR172-PATH-I-PREPARATION-CONTEXT.json"],
+      "risk_ref": "R-CR172-SIGNAL-TRANSFER-AMBIGUITY"
+    }
+  ],
+  "fact_diff_summary": {
+    "promised_count": 8,
+    "delivered_count": 5,
+    "deferred_follow_up_count": 3,
+    "missing_required_count": 0,
+    "not_ready_count": 0,
+    "ref": "process/release/RELEASE-CONTEXT-CR172.yaml#fact_diff"
+  },
+  "claim_ceiling": {
+    "path_i_repository_contract_ready": true,
+    "stage3_started": false,
+    "stage3_entry_ready": false,
+    "c1_computable": false,
+    "real_data_authorized": false,
+    "multi_trial_runtime_authorized": false,
+    "signal_transport_authorized": false,
+    "path_c_or_a_resumed": false,
+    "public_c1_projection_ready": false,
+    "empirical_r_effective_count_ready": false
+  },
+  "operation_counts": {
+    "stories_final_pass": 5,
+    "story_blockers_open": 0,
+    "story_waivers": 0,
+    "historical_findings_closed": 9,
+    "requirements_total": 15,
+    "requirements_semantic_mismatch": 0,
+    "scenarios_total": 27,
+    "scenarios_semantic_mismatch": 0,
+    "outcomes_total": 11,
+    "real_action_authorized": 0,
+    "real_action_total": 6,
+    "real_action_executed": 0,
+    "network": 0,
+    "credential_read": 0,
+    "lake": 0,
+    "nas": 0,
+    "runtime": 0,
+    "signal_transport": 0,
+    "trading": 0,
+    "deploy": 0,
+    "git_remote_write": 0,
+    "checkpoint_ledger_duplicate_event_ids": 10,
+    "checkpoint_ledger_extra_conflicting_rows": 12,
+    "checkpoint_ledger_full_check_pass": 0,
+    "checkpoint_ledger_final_event_ambiguity": 0,
+    "forbidden_write": 0,
+    "allowed_write_paths_used": 14
+  },
+  "workspace_status": {
+    "process_link_health": "ok",
+    "source_repository_dirty": true,
+    "artifact_repository_dirty": true,
+    "source_ahead": 0,
+    "source_behind": 0,
+    "artifact_ahead": 0,
+    "artifact_behind": 0,
+    "commit_executed": false,
+    "push_executed": false,
+    "checkpoint_ledger_duplicate_event_ids": 10,
+    "checkpoint_ledger_extra_conflicting_rows": 12,
+    "checkpoint_ledger_full_check": "FAIL_DISCLOSED_AS_READY_WITH_RISK",
+    "checkpoint_ledger_final_event_ambiguity": 0,
+    "checkpoint_ledger_rewrite_executed": false
+  },
+  "migration": "none",
+  "deployment": "not-authorized",
+  "decision": "PASS",
+  "stop_reason": "delivered",
+  "next_route": "delivered",
+  "checked_at": "2026-07-19T01:55:00+08:00",
+  "approved_at": "2026-07-19T09:18:36+08:00",
+  "approved_by": "user",
+  "approval_source": "explicit-user-message",
+  "accepted_decision_ids": [
+    "DQ-CP8-CR172-001",
+    "DQ-CP8-CR172-002",
+    "DQ-CP8-CR172-003"
+  ],
+  "separate_git_delivery_authorization": {
+    "authorized": true,
+    "scope": [
+      "quant-lab source repository quant-lab-related changes",
+      "meta-flow-artifacts process/quant-lab/** changes"
+    ],
+    "excluded": [
+      "meta-flow-artifacts process/meta-flow/**",
+      "real data or lake operations",
+      "NAS or execution-host operations",
+      "runtime, signal, trading or deployment operations"
+    ]
+  },
+  "host_follow_up_actions": [
+    "append terminal meta-qa-critical dispatch event and patch dispatch_refs",
+    "append checkpoint/dispatch/gate ledgers after final validation",
+    "set STATE/CURRENT pending CP8 gate and next_action.type=await_user",
+    "run CR status-sync to replace stale summary gate status",
+    "generate and validate the human-gate launch message",
+    "after user reply, backfill the checkpoint manual result; do not infer release authorization"
+  ],
+  "input_artifact_hashes": {
+    "process/context/CP8-CR172-PATH-I-PREPARATION-CONTEXT.json": "sha256:ec95c74cba7ff0b3db58154b142b125e81fcd1f82a0d46ad8d81db20b0ae95bb",
+    "process/handoffs/CR172-CP8-META-QA-CRITICAL-HANDOFF-2026-07-19.md": "sha256:d44ceb6d4da4436d31224e56188fea20a63ad0c35abc20427db30875959e521c",
+    "process/state/STATE.current.json": "sha256:b8144f3ccf579d9f8297b148d20c21c1535654956d341ade5601694cdca92119",
+    "process/current/CURRENT.json": "sha256:33343eda3044b954daaf4b1c2877416225856df9f5eb6537d38177e3d39a8ff9",
+    "process/changes/summaries/CR-172.summary.json": "sha256:200f69968c1b5478f306e99abd32b052d45f094f3525fd7b590f6228ba2e774a",
+    "process/checks/CP0-CR172.route-plan.json": "sha256:df20d64250c701f6e4f57ce68a397fddf94af4506ebb05d2fb1e38eed4445be8",
+    "process/checkpoints/CP5-CR172-ALL-STORIES-LLD-BATCH.md": "sha256:7dfa63900de45e0c87192f8a0a40919d85a673570d6cbf0d7df2843d50b70f38",
+    "process/checks/CP5-CR172-LLD-DESIGN-EVIDENCE.result.json": "sha256:acf4ac46010bc0339c111fe97d0472b9c5e7c294ca026efce4385ec65ed8f723",
+    "process/checks/CP7-CR172-S01-REVERIFY-1.result.json": "sha256:3db3f198e2a7279798b227c138afff8e56840c31280fb7d40a99dfa07f13acbd",
+    "process/checks/CP7-CR172-S02-REVERIFY-2.result.json": "sha256:6174e3cd807a1db04833b49d96b3f6616a22b7606f159ab1afe439ddacf0ee70",
+    "process/checks/CP7-CR172-S03-REVERIFY-1.result.json": "sha256:c6777852eb9813b5549de761550fb26009331e8d6a18c5a2fccf9d2862d36967",
+    "process/checks/CP7-CR172-S04-REVERIFY-1.result.json": "sha256:0a383c8e0e7da9eab881994632a391dc4e099e83591f3cc240a75be6da145726",
+    "process/checks/CP7-CR172-S05-REVERIFY-1.result.json": "sha256:847b9806dc5c14de3ad0f4731847d8085f117324978a9036ddcb8d87d550f968",
+    "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7R1.index.json": "sha256:8c8d6f2b7330af7223c89c6faa2c09f49960599f3d0321c39a592f6fe2e996d7",
+    "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP7R2.index.json": "sha256:e53df1278c7aaae7b5769e2b2249d0015add54dca640c2c22f8550480b3a15ad",
+    "process/evidence/CR172-S03-nas-replica-verification.CP7R1.index.json": "sha256:771882ef0e5c97a5597db0c8bbc93880ec5ca03c6f17540d201547c6fa86b66e",
+    "process/evidence/CR172-S04-execution-cache-materialization.CP7R1.index.json": "sha256:eaa096a3d46c8d4e7e71863d4478d696f201cdb052b9e8983f78380dab3b899e",
+    "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.index.json": "sha256:1720eada2b0f9e31a690e036b98924858f9e091d6dc2c9aa7e61189d58d44a15",
+    "docs/quality/VERIFICATION-REPORT-CR172.md": "sha256:1af8a5bbc0d0d3cf0d18af9fa2e004877c4500f908aeffef9123be8a6f110323",
+    "docs/quality/TEST-REPORT-CR172.md": "sha256:c61409336a4e494e2a6de21bffb7f48d83e80cbdd7944ca3d49824b4a9d97a58",
+    "docs/quality/REVIEW-CR172.md": "sha256:1d57cb9ca055052bfbca29abcc3753c0429b568d7a51006e725c1ec4ccb1db37",
+    "docs/quality/FIXES-CR172.md": "sha256:5d60fc6658b391d11799482da8aa84ee2272f8dba8784ffb92ada75b43294d2c",
+    "docs/release/RELEASE-NOTES-CR172.md": "sha256:cfe57d906d410921f1f789cae678c83cbf661c61f301f03ae817ffb4327e3b4d",
+    "docs/release/DEPLOY-CHECKLIST-CR172.md": "sha256:84c4fe8b22d28810203715dc5cd58ae3251df444e124c6e2ed5ad6c3c22208ae",
+    "docs/release/ROLLBACK-CR172.md": "sha256:e917c155f9d1e64d5058507551d3f42887e80bd7bdb7bcd50ef33c9ab4370a87",
+    "docs/release/MIGRATION-CR172.md": "sha256:7f8ea329984e12e0a0d90bed3fdeb1414fd873b8f063324aee375c216ed5269f",
+    "docs/release/FEEDBACK-CR172.md": "sha256:b5add9067eba26725b795607ec2c58629dde882f045d72a7e6c64c829618e121",
+    "process/release/RELEASE-CONTEXT-CR172.yaml": "sha256:c2ec9357b4266dd766e43ac939586286c54ab1a8b9c9436083f925bc0d3a73ed",
+    "process/context/CP8-CR172-PATH-I-DELIVERY-CONTEXT.yaml": "sha256:beb484559c3ecd344b585bf8bce22ad670e27117de5f692a0d024faee9f5dd59"
+  }
+}

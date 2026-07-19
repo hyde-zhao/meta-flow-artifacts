@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S04-execution-cache-materialization",
+  "status": "implemented",
+  "allowed_statuses": [
+    "implemented",
+    "implemented_with_risk",
+    "verified",
+    "verified_with_risk",
+    "partial",
+    "blocked",
+    "needs_design_clarification",
+    "needs_user_decision",
+    "needs_rework",
+    "no_op",
+    "superseded",
+    "waived"
+  ],
+  "touched_files": [
+    {"path": "engine/research_artifact_materialization.py", "change_type": "created"},
+    {"path": "tests/research/test_cr172_execution_materialization.py", "change_type": "created"},
+    {"path": "process/stories/STORY-CR172-S04-execution-cache-materialization.md", "change_type": "modified"},
+    {"path": "process/stories/STORY-CR172-S04-execution-cache-materialization-IMPLEMENTATION.md", "change_type": "created"},
+    {"path": "process/returns/CR172-S04-execution-cache-materialization.CP6.return.json", "change_type": "created"},
+    {"path": "process/evidence/CR172-S04-execution-cache-materialization.CP6.index.json", "change_type": "created"},
+    {"path": "process/checks/CP6-CR172-S04-IMPLEMENTATION-DONE.result.json", "change_type": "created"},
+    {"path": "process/checks/CP6-CR172-S04-IMPLEMENTATION-DONE.result.summary.md", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "notes": "新增已批准的 S04 repository-local public value objects、nominal fixture port 与 materialization orchestration；未改变 S01/S02/S03、Feature/HLD/ADR 或真实 runtime contract。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_execution_materialization.py",
+        "result": "pass: 16 passed in 0.51s; failed/skipped=0/0"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py tests/research/test_cr172_execution_materialization.py",
+        "result": "pass: 124 passed in 0.79s; failed/skipped=0/0"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s04-cp6-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py engine/research_artifact_materialization.py tests/research/test_cr172_execution_materialization.py",
+        "result": "pass: exit=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null engine/research_artifact_materialization.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null tests/research/test_cr172_execution_materialization.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S04.CP6.work-packet.json --return process/returns/CR172-S04-execution-cache-materialization.CP6.return.json",
+        "result": "pass: Story Return Packet Check OK"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S04-IMPLEMENTATION-DONE.result.json --check-consistency --correlation-profile audit",
+        "result": "pass: CP Result Check OK"
+      }
+    ],
+    "tests": [
+      {"path": "tests/research/test_cr172_execution_materialization.py", "passed": 16, "failed": 0, "skipped": 0, "role": "S04 16 unique LLD IDs: selected read, exactly-once verifier, 4/4, immutable receipt/cache, fresh guard, CAS, local-only handle and zero-operation boundary"},
+      {"path": "tests/research/test_cr172_path_i_governance.py", "passed": 46, "failed": 0, "skipped": 0, "role": "S01 authorization regression"},
+      {"path": "tests/research/test_cr172_trial_return_artifact.py", "passed": 35, "failed": 0, "skipped": 0, "role": "S02 sealed bundle and unique verifier regression"},
+      {"path": "tests/research/test_cr172_nas_replica_verification.py", "passed": 27, "failed": 0, "skipped": 0, "role": "S03 current selection, receipt and selected-read regression"}
+    ],
+    "skipped": [
+      {"check": "real NAS/lake/execution-host/runtime/network/environment/credential/signal/trading/deploy/Git remote integration", "reason": "work packet explicitly forbids real operations; executed=0"},
+      {"check": "future runtime consumer and S05", "reason": "S04 only produces a typed local handle; Host owns later route/unlock"}
+    ]
+  },
+  "contract_evidence": {
+    "s03_current_selection_data_sources": 1,
+    "s02_verifier_call_sites": 1,
+    "verification_vector": "4/4",
+    "typed_staging_output": "3/3",
+    "bypass_s03": 0,
+    "receipt_only_trust": 0,
+    "secondary_seal_digest_or_facade": 0,
+    "cas_per_commit_max": 1,
+    "test_ids_unique": "16/16",
+    "test_id_duplicates": 0,
+    "local_handle_source_kind": "execution_local_immutable_cache"
+  },
+  "zero_operation_evidence": {
+    "real_nas": 0,
+    "real_lake": 0,
+    "execution_host": 0,
+    "runtime": 0,
+    "network": 0,
+    "credential": 0,
+    "signal": 0,
+    "trading": 0,
+    "deploy": 0,
+    "git_remote": 0,
+    "upstream_pointer_mutations": 0,
+    "s05_operations": 0
+  },
+  "open_questions": [],
+  "risks": [
+    {"id": "R-CR172-SYNC-REPLICA-STALE", "status": "repository_contract_controlled", "note": "preflight correlation + commit current-selection exact recheck implemented; real adapter remains separately gated"},
+    {"id": "R-CR172-RUNTIME-AUTHORIZATION-GAP", "status": "not_authorized", "note": "fixture origin/target only; no real execution adapter or runtime consumer"},
+    {"id": "R-CR172-PATH-IDENTITY-DRIFT", "status": "repository_contract_controlled", "note": "receipt/cache selection canonical identity excludes all deployment handles, host, mount and credential"},
+    {"id": "R-CR172-REAL-OPERATIONS", "status": "not_authorized", "note": "real NAS/lake/execution/runtime/network/credential/signal/trading/deploy/Git remote actions executed=0"}
+  ],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260718T135844Z0000-fe3e2b3f"],
+  "read_expansion_notes": "S04 lld_policy=full-lld；按已登记 deep-review expansion 完整读取 approved LLD v1.3 后实现。",
+  "dispatch_refs": [
+    "AD-CR172-S04-CP6-META-DEV-20260718T220202+0800",
+    "AD-CR172-S04-CP6-META-DEV-COMPLETED-20260718T223510+0800",
+    "process/handoffs/CR172-S04-CP6-META-DEV-HANDOFF-2026-07-18.md",
+    "/root/cr172_s04_cp6_meta_dev"
+  ],
+  "next_stage_recommendation": "ready_for_cp7"
+}

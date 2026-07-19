@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "stage": "CP6",
+  "rework_attempt": 2,
+  "cr_id": "CR-172",
+  "story_id": "CR172-S02-trial-return-artifact-native-hook",
+  "return_ref": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP6R2.return.json",
+  "artifacts": [
+    {
+      "kind": "implementation-execution",
+      "path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-IMPLEMENTATION.md"
+    },
+    {
+      "kind": "cp-result",
+      "path": "process/checks/CP6-CR172-S02-REWORK-2.result.json"
+    }
+  ],
+  "changed_files": [
+    {"path": "engine/trial_return_artifact.py", "change_type": "modified"},
+    {"path": "tests/research/test_cr172_trial_return_artifact.py", "change_type": "modified"},
+    {"path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook.md", "change_type": "modified"},
+    {"path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-IMPLEMENTATION.md", "change_type": "modified"},
+    {"path": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP6R2.return.json", "change_type": "created"},
+    {"path": "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP6R2.index.json", "change_type": "created"},
+    {"path": "process/checks/CP6-CR172-S02-REWORK-2.result.json", "change_type": "created"},
+    {"path": "process/checks/CP6-CR172-S02-REWORK-2.result.summary.md", "change_type": "created"}
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: 35 passed, 0 failed, 0 skipped"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: 81 passed, 0 failed, 0 skipped"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s02-cp6r2-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: exit=0"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null engine/trial_return_artifact.py",
+      "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+    },
+    {
+      "command": "authorization-evidence exact-correlation conformance inventory",
+      "result": "pass: exact ordered tuple equality=2/2; five direct mismatch variants and publisher post-verifier drift blocked before call/commit/selection mutation"
+    }
+  ],
+  "tests": [
+    {
+      "path": "tests/research/test_cr172_trial_return_artifact.py",
+      "passed": 35,
+      "failed": 0,
+      "skipped": 0,
+      "role": "S02 contracts plus CP6R1/CP6R2 regressions"
+    },
+    {
+      "path": "tests/research/test_cr172_path_i_governance.py",
+      "passed": 46,
+      "failed": 0,
+      "skipped": 0,
+      "role": "S01 upstream regression"
+    }
+  ],
+  "artifact_hashes": {
+    "engine/path_i_governance.py": "sha256:bc6abc95a0e660d71fce5567195ef6bff037e0919403b5d400841c579cc82abf",
+    "engine/trial_return_artifact.py": "sha256:923fc5e5baaafea88b6cb98d26de5d95b5d43d848fcf0cd51fc41a1190b645f0",
+    "tests/research/test_cr172_path_i_governance.py": "sha256:ef4284860453c55a0b9a59357b13a5343ad88c488d5a7ac3fec63ab732de12f9",
+    "tests/research/test_cr172_trial_return_artifact.py": "sha256:4497e7b03920e239df752031b1564c09ef16c73687aa455485c6571d5b346969"
+  },
+  "risks": [
+    {"id": "R-CR172-S02-PORT-BINDING", "status": "closed_in_implementation_pending_cp7r2"},
+    {"id": "R-CR172-TRIAL-RETURN-SOURCE-ABSENT", "status": "design_deferred_fail_closed"}
+  ],
+  "waivers": [],
+  "design_delta_ref": null
+}

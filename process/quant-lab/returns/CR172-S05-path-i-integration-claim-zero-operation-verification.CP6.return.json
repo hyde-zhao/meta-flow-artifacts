@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "story_id": "CR172-S05-path-i-integration-claim-zero-operation-verification",
+  "cr_id": "CR-172",
+  "stage": "CP6",
+  "status": "implemented",
+  "decision": "PASS",
+  "context_ref": "process/context/stories/STORY-CR172-S05.CP6.work-packet.json",
+  "implementation_ref": "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-IMPLEMENTATION.md",
+  "evidence_ref": "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP6.index.json",
+  "result_ref": "process/checks/CP6-CR172-S05-IMPLEMENTATION-DONE.result.json",
+  "touched_files": [
+    "tests/fixtures/cr172_path_i/README.md",
+    "tests/fixtures/cr172_path_i/scenario_catalog.json",
+    "tests/fixtures/cr172_path_i/sealed_chain_v1.json",
+    "tests/fixtures/cr172_path_i/failure_mutations_v1.json",
+    "tests/fixtures/cr172_path_i/zero_operation_oracle_v1.json",
+    "tests/fixtures/cr172_path_i/path_i_fixture.py",
+    "tests/research/test_cr172_path_i_integration.py",
+    "tests/research/test_cr172_path_i_authorization.py",
+    "tests/research/test_cr172_path_i_claim_regression.py",
+    "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification.md",
+    "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-IMPLEMENTATION.md",
+    "process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP6.return.json",
+    "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP6.index.json",
+    "process/checks/CP6-CR172-S05-IMPLEMENTATION-DONE.result.json",
+    "process/checks/CP6-CR172-S05-IMPLEMENTATION-DONE.result.summary.md"
+  ],
+  "contract_changes": {
+    "production_contract_changed": false,
+    "items": [
+      {
+        "contract": "S05 repository-local test-only verification",
+        "change": "Added deterministic fixtures and 27 QAC tests only; no production contract changed.",
+        "compatibility": "S01-S04 public contracts consumed unchanged"
+      }
+    ]
+  },
+  "boundary_check": {
+    "allowed_write_paths_ok": true,
+    "forbidden_write_paths_touched": [],
+    "unexpected_imports": [],
+    "production_source_modified": 0,
+    "upstream_tests_modified": 0,
+    "mature_runner_modified": 0,
+    "lineage_modified": 0,
+    "credential_reads": 0,
+    "network_operations": 0,
+    "subprocess_operations": 0,
+    "mount_operations": 0,
+    "signal_operations": 0,
+    "trading_operations": 0,
+    "deploy_operations": 0,
+    "git_remote_operations": 0,
+    "real_action_authorized": 0,
+    "real_action_executed": 0,
+    "cache_artifacts": 0
+  },
+  "coverage": {
+    "requirements": {"covered": 15, "total": 15, "unknown": 0, "duplicate": 0, "uncovered": 0},
+    "scenarios": {"covered": 27, "total": 27, "unknown": 0, "duplicate": 0, "uncovered": 0},
+    "outcomes": {"covered": 11, "total": 11, "unknown": 0, "duplicate": 0, "uncovered": 0}
+  },
+  "operation_counts": {
+    "data_lake_read_authorized": 0,
+    "data_lake_read_executed": 0,
+    "multi_trial_runtime_authorized": 0,
+    "multi_trial_runtime_executed": 0,
+    "trial_return_generation_authorized": 0,
+    "trial_return_generation_executed": 0,
+    "empirical_r_computation_authorized": 0,
+    "empirical_r_computation_executed": 0,
+    "nas_replica_sync_authorized": 0,
+    "nas_replica_sync_executed": 0,
+    "execution_materialization_authorized": 0,
+    "execution_materialization_executed": 0,
+    "high_order_claims_true": 0
+  },
+  "tests": [
+    {
+      "path": "tests/research/test_cr172_path_i_integration.py",
+      "role": "S02-S04 artifact chain, failure recovery and provenance",
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/research/test_cr172_path_i_authorization.py",
+      "role": "six-action authorization, DAG and caller-report rejection",
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "tests/research/test_cr172_path_i_claim_regression.py",
+      "role": "15/27/11 trace, claim ceiling, deferred and zero-operation boundaries",
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "path": "S01-S05 combined regression",
+      "role": "upstream 127 retained plus S05 27",
+      "passed": 154,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "verification": {
+    "commands_run": [
+      {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_integration.py tests/research/test_cr172_path_i_authorization.py tests/research/test_cr172_path_i_claim_regression.py",
+      "result": "PASS: 27 passed, 0 failed, 0 skipped"
+      },
+      {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py tests/research/test_cr172_execution_materialization.py tests/research/test_cr172_path_i_integration.py tests/research/test_cr172_path_i_authorization.py tests/research/test_cr172_path_i_claim_regression.py",
+      "result": "PASS: 154 passed, 0 failed, 0 skipped"
+      },
+      {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s05-cp6-pycompile uv run --python 3.11 python -m py_compile tests/research/test_cr172_path_i_integration.py tests/research/test_cr172_path_i_authorization.py tests/research/test_cr172_path_i_claim_regression.py",
+      "result": "PASS: exit 0"
+      },
+      {
+      "command": "git diff --no-index --check /dev/null <each S05 test module>",
+      "result": "PASS: expected diff exit 1; whitespace diagnostics 0/3"
+      }
+    ],
+    "evidence_refs": [
+      "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-IMPLEMENTATION.md",
+      "tests/fixtures/cr172_path_i/scenario_catalog.json",
+      "tests/fixtures/cr172_path_i/zero_operation_oracle_v1.json"
+    ]
+  },
+  "input_artifact_hashes": {
+    "engine/path_i_governance.py": "sha256:bc6abc95a0e660d71fce5567195ef6bff037e0919403b5d400841c579cc82abf",
+    "engine/trial_return_artifact.py": "sha256:923fc5e5baaafea88b6cb98d26de5d95b5d43d848fcf0cd51fc41a1190b645f0",
+    "engine/research_artifact_replica.py": "sha256:533d34f79e6481dd4bb2bcdb45776c186cb6e3f1a1f6994640f3382f6e466026",
+    "engine/research_artifact_materialization.py": "sha256:72541d73cff02bfbd0e20deb19141df63a9ac68389707f97ce4e252d829d008a",
+    "tests/research/test_cr172_path_i_governance.py": "sha256:ef4284860453c55a0b9a59357b13a5343ad88c488d5a7ac3fec63ab732de12f9",
+    "tests/research/test_cr172_trial_return_artifact.py": "sha256:4497e7b03920e239df752031b1564c09ef16c73687aa455485c6571d5b346969",
+    "tests/research/test_cr172_nas_replica_verification.py": "sha256:37c25a7a01bf46ba4fe121f25b57f9f95961e7eb155cb7e0eb49452c2621fd9b",
+    "tests/research/test_cr172_execution_materialization.py": "sha256:f58d71fd9f3cd7045d1cf645cea38e62370c0a705efbc3f627ed0f0a32be7049"
+  },
+  "design_delta_ref": null,
+  "risks": [
+    {
+      "id": "R-CR172-RUNTIME-AUTHORIZATION-GAP",
+      "status": "deferred_not_authorized",
+      "note": "Repository fixtures do not authorize any real action."
+    },
+    {
+      "id": "R-CR172-REAL-R-DOMAIN-MISMATCH",
+      "status": "deferred",
+      "note": "Positive empirical-R and effective-count paths remain outside S05."
+    }
+  ],
+  "waivers": [],
+  "next_route": "CP7-verification",
+  "completed_at": "2026-07-19T12:00:00+08:00"
+}

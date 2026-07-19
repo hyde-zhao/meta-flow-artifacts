@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR172-S04-REVERIFY-1",
+  "profile": "runtime-high-risk-design",
+  "story_id": "CR172-S04-execution-cache-materialization",
+  "cr_id": "CR-172",
+  "context_ref": "process/context/stories/STORY-CR172-S04.CP7.reverify-1.packet.json",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "dispatch_refs": [
+    "AD-CR172-S04-CP7R1-META-QA-CRITICAL-20260718T233437+0800"
+  ],
+  "return_ref": "process/returns/CR172-S04-execution-cache-materialization.CP7R1.return.json",
+  "evidence_ref": "process/evidence/CR172-S04-execution-cache-materialization.CP7R1.index.json",
+  "verification_ref": "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md",
+  "result_summary_ref": "process/checks/CP7-CR172-S04-REVERIFY-1.result.summary.md",
+  "supersedes_result_ref": "process/checks/CP7-CR172-S04-VERIFICATION.result.json",
+  "items": [
+    {
+      "id": "CP7R1-S04-ENTRY-01",
+      "category": "entry-criteria",
+      "name": "Healthy S04 route, authoritative CP7R1 packet, CP6R1 PASS and independent critical QA dispatch are confirmed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/stories/STORY-CR172-S04.CP7.reverify-1.packet.json",
+        "process/checks/CP6-CR172-S04-REWORK-1.result.json"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CURRENT health=ok; workflow health story_rework/cp_retry=1/1 below threshold; S05 remained locked during verification."
+    },
+    {
+      "id": "CP7R1-S04-F001-01",
+      "category": "design-contract",
+      "name": "Selection receipt is exact-readable and all persistence, immutable and CAS conflicts preserve the previous selection",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md#63-独立-probe-证据",
+        "tests/research/test_cr172_execution_materialization.py#test_cp6r1_f001_receipt_is_exact_readable_before_selection_cas"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Same and rotated receipts exact-read successfully; receipt persistence and immutable failures have CAS delta=0; CAS conflict performs one failed CAS; all failure paths return no selection/handle and preserve previous current."
+    },
+    {
+      "id": "CP7R1-S04-F002-01",
+      "category": "runtime-boundary",
+      "name": "Resolver accepts only storage current exact selection and rejects all stale, forged or insufficient capabilities",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md#63-独立-probe-证据",
+        "tests/research/test_cr172_execution_materialization.py#test_cp6r1_f002_resolver_requires_current_exact_selection_capability"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Old, forged revision, forged receipt hash, uncommitted, mapping-only and receipt-only inputs accepted=0/6; storage current exact accepted=1/1 and resolves local-only handle."
+    },
+    {
+      "id": "CP7R1-S04-F003-01",
+      "category": "security-boundary",
+      "name": "All sensitive evidence marker combinations fail closed before pull, persist and CAS",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md#63-独立-probe-证据",
+        "tests/research/test_cr172_execution_materialization.py#test_cp6r1_f003_all_sensitive_evidence_markers_fail_before_persist"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "password/passwd/secret/token/credential across preflight/commit approval/evidence refs accepted=0/20; invalid pull/persist/CAS=0; legal opaque refs pass; canonical marker count=0."
+    },
+    {
+      "id": "CP7R1-S04-UPSTREAM-01",
+      "category": "design-contract",
+      "name": "S03 current selected source, S02 verifier exactly once, typed non-runtime staging and bytes-level 4/4 remain intact",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/research_artifact_materialization.py",
+        "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md#62-验收追踪矩阵"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Selected-read call point=1; imported S02 verifier call point=1; content/manifest/release/seal=4/4; tamper and mismatch produce zero cache, receipt and pointer advance."
+    },
+    {
+      "id": "CP7R1-S04-REGRESSION-01",
+      "category": "automated-verification",
+      "name": "S04 and S01-S04 regression, compile, whitespace, CP6R1 machine checks and hash correlation pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR172-S04-execution-cache-materialization.CP7R1.index.json",
+        "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md#64-自动化机械检查与-hash-证据"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "S04 19/19; S01-S04 127/127; compile exit=0; whitespace diagnostics=0/2; CP6R1 Return/Result checks OK; eight source/test hashes match CP6R1 baseline."
+    },
+    {
+      "id": "CP7R1-S04-BOUNDARY-01",
+      "category": "permission-boundary",
+      "name": "Only five authorized CP7R1 artifacts are written and all real, forbidden and S05 operations remain zero",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR172-S04-execution-cache-materialization.CP7R1.return.json#boundary_check"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Source/tests/docs/state/current/plan/ledgers/LLD/S05 untouched; real NAS/lake/execution/runtime/network/credential/signal/trading/deploy/Git remote=0."
+    },
+    {
+      "id": "CP7R1-S04-ROUTE-01",
+      "category": "stage-decision",
+      "name": "All three findings are closed and S04 returns PASS for Host terminal audit and story transition",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md#65-findings-关闭表",
+        "process/returns/CR172-S04-execution-cache-materialization.CP7R1.return.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "F-001/F-002/F-003 status=CLOSED and blocking=false; Host owns terminal dispatch event, final audit/ledger, state transition and any S05 unlock."
+    }
+  ],
+  "entry_criteria": [
+    {
+      "name": "Process health, active S04 CP7R1 context and authoritative reverify packet are confirmed",
+      "status": "PASS",
+      "evidence_ref": "process/context/stories/STORY-CR172-S04.CP7.reverify-1.packet.json"
+    },
+    {
+      "name": "CP6R1 implementation result, return and evidence are PASS and hash-correlated",
+      "status": "PASS",
+      "evidence_ref": "process/checks/CP6-CR172-S04-REWORK-1.result.json"
+    },
+    {
+      "name": "Independent meta-qa-critical dispatch exists and workflow health threshold is not reached",
+      "status": "PASS",
+      "evidence_ref": "AD-CR172-S04-CP7R1-META-QA-CRITICAL-20260718T233437+0800"
+    }
+  ],
+  "exit_criteria": [
+    {
+      "name": "F-001 receipt exact-read and zero erroneous advance behavior pass",
+      "status": "PASS"
+    },
+    {
+      "name": "F-002 current exact capability passes and all six invalid capability classes are rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "F-003 twenty sensitive-marker combinations reject before pull, persist and CAS; canonical marker count is zero",
+      "status": "PASS"
+    },
+    {
+      "name": "S03 sole selected source, S02 verifier once, typed non-runtime staging and bytes 4/4 remain intact",
+      "status": "PASS"
+    },
+    {
+      "name": "S04 19/19, S01-S04 127/127, compile, whitespace, machine checks and source/test hash correlation pass",
+      "status": "PASS"
+    },
+    {
+      "name": "No forbidden write, real operation, Design Delta, state mutation or S05 start occurred",
+      "status": "PASS"
+    }
+  ],
+  "deliverables": [
+    "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md",
+    "process/returns/CR172-S04-execution-cache-materialization.CP7R1.return.json",
+    "process/evidence/CR172-S04-execution-cache-materialization.CP7R1.index.json",
+    "process/checks/CP7-CR172-S04-REVERIFY-1.result.json",
+    "process/checks/CP7-CR172-S04-REVERIFY-1.result.summary.md"
+  ],
+  "findings": [
+    {
+      "id": "F-001",
+      "severity": "BLOCKER",
+      "status": "CLOSED",
+      "blocking": false,
+      "route": "host_terminal_audit"
+    },
+    {
+      "id": "F-002",
+      "severity": "HIGH",
+      "status": "CLOSED",
+      "blocking": false,
+      "route": "host_terminal_audit"
+    },
+    {
+      "id": "F-003",
+      "severity": "HIGH",
+      "status": "CLOSED",
+      "blocking": false,
+      "route": "host_terminal_audit"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS",
+  "stop_reason": "no_remaining_route",
+  "next_route": "host_terminal_audit_then_story_transition",
+  "checked_at": "2026-07-18T23:46:24+08:00",
+  "check_attempt": 2,
+  "workflow_health": {
+    "story_rework_count": 1,
+    "cp_retry_count": 1,
+    "threshold_reached": false,
+    "threshold_route_triggered": false,
+    "reason": "First same-story rework and first CP7 reverification close all three findings; no workflow-health threshold is reached."
+  },
+  "zero_operation_evidence": {
+    "real_nas": 0,
+    "real_lake": 0,
+    "execution_host": 0,
+    "runtime": 0,
+    "network": 0,
+    "credential_read": 0,
+    "signal": 0,
+    "trading": 0,
+    "deploy": 0,
+    "git_remote": 0,
+    "s05_operations": 0
+  },
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR172-S04.CP7.reverify-1.packet.json": "sha256:db5ce5d8d09b382a4c521818558b0265cce8b016b8fe79ba6c8a65aad948a0ff",
+    "process/state/STATE.current.json": "sha256:c1feafbcea7204c112ad726aeecf305dab0f7f02f105a220ae4aee291a1b37af",
+    "process/current/CURRENT.json": "sha256:7c57a35fc215bf7d9807747802c329f38be38309ec38ed82db6ecc1bd10403c5",
+    "process/policies/READ-POLICY.json": "sha256:c6206fa94b4b4ffe00dc98b0e73442bd10f6dd5895d6cf84db9659ea870e0e19",
+    "process/state/WORKFLOW-HEALTH.json": "sha256:7832a7e28ca85d1c6d723070fea0891fb0648436a59c51b886dc80151668e062",
+    "process/checks/CP6-CR172-S04-REWORK-1.result.json": "sha256:0a1ee1035215379d517aab4db82621f7a4e1e27d04400ab9b257b6127613c14a",
+    "process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json": "sha256:033784242e985538b3aaf3ede784673592ccf75dcaee9a547bbb29f3c3930364",
+    "process/evidence/CR172-S04-execution-cache-materialization.CP6R1.index.json": "sha256:0f8fde86dc9b2abfcf077067f0359f9407ba9dfcd5d85b25851700dfb00093a3",
+    "engine/path_i_governance.py": "sha256:bc6abc95a0e660d71fce5567195ef6bff037e0919403b5d400841c579cc82abf",
+    "engine/trial_return_artifact.py": "sha256:923fc5e5baaafea88b6cb98d26de5d95b5d43d848fcf0cd51fc41a1190b645f0",
+    "engine/research_artifact_replica.py": "sha256:533d34f79e6481dd4bb2bcdb45776c186cb6e3f1a1f6994640f3382f6e466026",
+    "engine/research_artifact_materialization.py": "sha256:72541d73cff02bfbd0e20deb19141df63a9ac68389707f97ce4e252d829d008a",
+    "tests/research/test_cr172_path_i_governance.py": "sha256:ef4284860453c55a0b9a59357b13a5343ad88c488d5a7ac3fec63ab732de12f9",
+    "tests/research/test_cr172_trial_return_artifact.py": "sha256:4497e7b03920e239df752031b1564c09ef16c73687aa455485c6571d5b346969",
+    "tests/research/test_cr172_nas_replica_verification.py": "sha256:37c25a7a01bf46ba4fe121f25b57f9f95961e7eb155cb7e0eb49452c2621fd9b",
+    "tests/research/test_cr172_execution_materialization.py": "sha256:f58d71fd9f3cd7045d1cf645cea38e62370c0a705efbc3f627ed0f0a32be7049",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md": "sha256:4110f7ab55de5350ebd7180e239616eb9f209407984ec237cb3f67e74cb20bb5",
+    "process/returns/CR172-S04-execution-cache-materialization.CP7R1.return.json": "sha256:6dc839a51a7a7be16ca166de8b910443ae1cc9049f4686d13e0e097bbd3147b8",
+    "process/evidence/CR172-S04-execution-cache-materialization.CP7R1.index.json": "sha256:eaa096a3d46c8d4e7e71863d4478d696f201cdb052b9e8983f78380dab3b899e"
+  }
+}

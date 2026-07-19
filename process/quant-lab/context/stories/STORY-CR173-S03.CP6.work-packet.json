@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "profile": "standard-code",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-173.summary.json",
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "story_id": "CR173-S03-golden-failure-boundary-verification",
+  "story_ref": "process/stories/STORY-CR173-S03-golden-failure-boundary-verification.md",
+  "stage": "CP6",
+  "objective": {
+    "summary": "实现 S03 的 synthetic golden fixture、QAC、授权零操作和 12/12 只读公共回归守卫，完成 estimator-only 交付边界证明。",
+    "non_goals": [
+      "不修改 S01/S02 source、public production 或既有 public regression expected",
+      "不创建 public C1 projection/adapter/migration",
+      "不读取真实数据、credential、provider、lake/NAS，不执行 runtime/trading/publish/deploy/Git remote"
+    ]
+  },
+  "feature_refs": ["effective.trial.offline.estimator"],
+  "feature_design_refs": [
+    "docs/features/effective-trial-offline-estimator/DESIGN.md",
+    "docs/features/effective-trial-offline-estimator/TEST-PLAN.md",
+    "docs/features/effective-trial-offline-estimator/TASKS.md"
+  ],
+  "feature_context": "S01/S02 CP7 已 PASS；S03 只新增 1 个 synthetic fixture 和 2 个 test modules，对 estimator-only 合同做集成与边界验证。",
+  "feature_contract_summary": "6/6 golden×3/3、8/8 fail-closed、7-field schema、外置 append-only audit、NP-01..09 各0、public new-code四项0、既有回归12/12且expected edits=0、C1仍不可计算。",
+  "cr_delta": {
+    "summary": "新增 fixture/test-only 验证资产；production source、public contract、真实 activation 和 runtime 权限变化均为0。",
+    "affected_contracts": [
+      "golden and failure oracle",
+      "append-only recovery and audit identity",
+      "authorization zero-operation inventory",
+      "public claim-ceiling regression"
+    ]
+  },
+  "acceptance": [
+    "golden classes 6/6，每类 repeats 3/3；每组 stable computation/evidence=1/1、external audit refs=3/3",
+    "fail-closed F01-F08 8/8；returned basis 8×7；available/PASS/raw fallback=0",
+    "strategy identity required/inferred、real input、raw alias=0",
+    "standalone evidence=1；public projection/competing gate/overclaim=0/0/0",
+    "NP-01..09 inventory=9/9、各 counter=0、duplicate/missing/extra=0/0/0",
+    "public new-code edge/call/diff/write=0/0/0/0，与 NP inventory 重复计数=0",
+    "既有 public regression inventory=12/12、existing expected edits=0，current C1 unavailable/worst-state不改善",
+    "public_effective_trial_count_populatable=false、c1_computable=false、CR172 auto-resume/close=0/0"
+  ],
+  "dependency_inputs": [
+    "process/checks/CP7-CR173-S01-REVERIFY-2.result.json",
+    "process/checks/CP7-CR173-S02-VERIFICATION.result.json",
+    "process/returns/CR173-S01-contract-evidence-canonicalization.CP7R2.return.json",
+    "process/returns/CR173-S02-exact-spectral-estimator.CP7.return.json"
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"},
+    {"path": "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-LLD.md", "reason": "approved_full_lld_implementation_contract", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "process/stories/STORY-CR173-S03-golden-failure-boundary-verification.md", "reason": "story_contract", "required": true, "mode": "full"},
+    {"path": "docs/features/effective-trial-offline-estimator/TEST-PLAN.md", "reason": "verification_matrix", "required": true, "mode": "sections"},
+    {"path": "process/checks/CP7-CR173-S01-REVERIFY-2.result.json", "reason": "upstream_contract_pass", "required": true, "mode": "full"},
+    {"path": "process/checks/CP7-CR173-S02-VERIFICATION.result.json", "reason": "upstream_estimator_pass", "required": true, "mode": "full"},
+    {"path": "engine/effective_trial_evidence.py", "reason": "read_only_upstream_contract", "required": true, "mode": "full"},
+    {"path": "engine/effective_trial_estimator.py", "reason": "read_only_upstream_estimator", "required": true, "mode": "full"}
+  ],
+  "read_if_needed": [
+    {"path": "docs/design/DEPENDENCY-MAP-EFFECTIVE-TRIAL-OFFLINE-METHODOLOGY.md", "reason": "authoritative_public_inventory", "trigger": "field_conflict", "mode": "sections"}
+  ],
+  "allowed_write_paths": [
+    "tests/fixtures/effective_trial/golden_vectors_v1.json",
+    "tests/research/test_effective_trial_cr173_qac.py",
+    "tests/research/test_effective_trial_authorization.py",
+    "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-IMPLEMENTATION.md",
+    "process/returns/CR173-S03-golden-failure-boundary-verification.CP6.return.json",
+    "process/evidence/CR173-S03-golden-failure-boundary-verification.CP6.index.json",
+    "process/checks/CP6-CR173-S03-IMPLEMENTATION-DONE.result.json",
+    "process/checks/CP6-CR173-S03-IMPLEMENTATION-DONE.result.summary.md"
+  ],
+  "forbidden_write_paths": [
+    "engine/**",
+    "tests/research/test_experiment_family_lineage_contracts.py",
+    "tests/research/test_trial_lineage_integrity.py",
+    "tests/research/test_trial_lineage_authorization.py",
+    "tests/research/test_trial_lineage_admission_projection.py",
+    "tests/research/test_trial_lineage_legacy_admission_regression.py",
+    "tests/research/test_cross_strategy_reliability_gates.py",
+    "tests/research/test_statistical_evidence_projection.py",
+    "tests/research/test_statistical_evidence_contracts.py",
+    "tests/research/test_statistical_evidence_qac.py",
+    "tests/research/test_statistical_evidence_cr155_regression.py",
+    "tests/research/test_overfit_evidence.py",
+    "tests/research/test_statistical_evidence_authorization.py",
+    "docs/**",
+    "process/archive/**"
+  ],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "long_plan_not_execution_truth"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_execution_truth"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/archive/**", "process/discussions/**"],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py tests/research/test_effective_trial_estimator.py tests/research/test_effective_trial_cr173_qac.py tests/research/test_effective_trial_authorization.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr173-s03-cp6-pycompile uv run --python 3.11 python -m py_compile tests/research/test_effective_trial_cr173_qac.py tests/research/test_effective_trial_authorization.py",
+    "git diff --check"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR173-S03-golden-failure-boundary-verification.CP6.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "methodology-high",
+  "parent_context_ref": "process/context/CP6-CR173.context.json",
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "budget": {"estimated_tokens": 14000, "estimator": "manual_full", "max_tokens": 30000},
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json"
+  },
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["methodology-high", "architecture-major"]
+  }
+}

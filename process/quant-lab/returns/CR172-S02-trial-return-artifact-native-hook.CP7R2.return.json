@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "reverify_attempt": 2,
+  "cr_id": "CR-172",
+  "story_id": "CR172-S02-trial-return-artifact-native-hook",
+  "status": "verified",
+  "allowed_statuses": [
+    "implemented",
+    "implemented_with_risk",
+    "verified",
+    "verified_with_risk",
+    "partial",
+    "blocked",
+    "needs_design_clarification",
+    "needs_user_decision",
+    "needs_rework",
+    "no_op",
+    "superseded",
+    "waived"
+  ],
+  "touched_files": [
+    {
+      "path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP7R2.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP7R2.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S02-REVERIFY-2.result.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S02-REVERIFY-2.result.summary.md",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "notes": "CP7R2 为只读独立复验；未修改源码、测试或设计。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: 35 passed in 0.43s; failed/skipped=0/0"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: 81 passed in 0.46s; failed/skipped=0/0"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s02-cp7r2-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: exit=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null engine/trial_return_artifact.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S02.CP6.rework-2.work-packet.json --return process/returns/CR172-S02-trial-return-artifact-native-hook.CP6R2.return.json",
+        "result": "pass_with_note: OK; expected-return path warning only"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S02-REWORK-2.result.json --check-consistency --correlation-profile audit",
+        "result": "pass_with_note: OK; input-path/final-attempt warnings only"
+      },
+      {
+        "command": "repository-local independent authorization-ref exact-correlation probe",
+        "result": "pass: direct mismatch 5/5 plus publisher drift 1/1 rejected with call/commit/selection=0/0/0; legal direct/publisher=1/1/1"
+      },
+      {
+        "command": "AST/source contract inventory",
+        "result": "pass: verified guard definition=1; call owner=commit_verified only; publisher direct duplicate=0; binding=13; double port guard=2; Protocol/hasattr=0/0; canonical defs=1/1/1"
+      }
+    ],
+    "tests": [
+      {
+        "path": "tests/research/test_cr172_trial_return_artifact.py",
+        "passed": 35,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S02 original contracts plus CP6R1/CP6R2 authorization-ref regressions"
+      },
+      {
+        "path": "tests/research/test_cr172_path_i_governance.py",
+        "passed": 46,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S01 upstream regression"
+      }
+    ],
+    "skipped": [
+      {
+        "check": "real runner, lineage, lake, NAS, runtime, credentials, R, signal, trading, deploy, publish, live and remote integration",
+        "reason": "CP7R2 packet 明确禁止；本轮只使用 repository-local in-memory fixture contract"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-CR172-S02-CP7-001",
+      "status": "closed",
+      "evidence_ref": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md#5-设计契约验证清单"
+    }
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "R-CR172-S02-PORT-BINDING",
+      "status": "closed",
+      "note": "Nominal capability、exact ordered seal authorization refs、双 guard 与原子提交合同均已独立复验。"
+    },
+    {
+      "id": "R-CR172-TRIAL-RETURN-SOURCE-ABSENT",
+      "status": "design_deferred_fail_closed",
+      "note": "Fixture PASS 不证明或授权真实 native producer。"
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "workflow_health": {
+    "story_rework_count": 2,
+    "cp_retry_count": 2,
+    "threshold_reached": true,
+    "threshold_route_triggered": false,
+    "reason": "CP7R2 decision=PASS"
+  },
+  "dispatch_refs": [
+    "AD-CR172-S02-CP7R2-META-QA-CRITICAL-20260718T201728+0800",
+    "AD-CR172-S02-CP7R2-META-QA-CRITICAL-STARTED-20260718T201728+0800",
+    "/root/cr172_s02_cp7_meta_qa_critical"
+  ],
+  "next_stage_recommendation": "host_finalize_cp7r2_then_unlock_s03"
+}

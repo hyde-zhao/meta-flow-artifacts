@@ -1,8 +1,10 @@
 ---
 status: "draft-current-index"
-version: "1.18"
+version: "1.20"
 source_blueprint: "docs/design/BLUEPRINT.md"
-change: "CR-170"
+change: "CR-172"
+companion_hld_cr172: "docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md"
+companion_adr_cr172: "docs/design/ARCHITECTURE-DECISION-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 companion_domain_map_cr168: "process/archive/design-cr-docs/DOMAIN-MAP-ECONOMIC-COST-IMPACT-EVIDENCE.md"
 companion_domain_map_cr169: "process/docs/design/DOMAIN-MAP-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
@@ -36,6 +38,7 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | 1.17 | 2026-07-14 | host-orchestrator inline meta-se-critical | CR169 companion domain map 通过 CP3：`C3C4CorrelationHeaderV1` 冻结为 13 字段，alpha 后置 FU008，Stage2 7/7 失败分流可审计。 |
 | 1.18 | 2026-07-15 | host-orchestrator inline meta-se-critical | 登记 CR170 companion domain map：`NaPolicySpec`、`NaBoundary`、五态 `NaEvidenceDecision`、protected worst-state 与 tier admission 领域规则；待 CP3。 |
 | 1.19 | 2026-07-15 | host-orchestrator inline meta-se-critical | 精确化 CR170 `NaPolicySpec` 的 baseline path/direction/disposition，新增 `NaBoundaryAuthoringContract`、15/5/1、G1-P06 prohibited、T3 existing-behavior 规则；待 CP3。 |
+| 1.20 | 2026-07-17 | meta-se-critical | 按 CR-172 PATH-I 增补 trial-return payload/manifest/seal、canonical selection、replica/materialization receipt、六动作授权、empirical disposition、SignalBatch 8-slot boundary 的术语、对象、状态机与规则。 |
 
 ## 术语表
 
@@ -407,3 +410,77 @@ archived_previous: "process/archive/design-blueprints/DOMAIN-MAP-before-quant-la
 | RULE-58 | 配置类事实源（benchmark/commission/universe·risk policy/政策周期）必须带 version + effective_from + release_id；缺版本阻断复现声明 | FEAT-02/12/14/03 | UC-56、F1-F4 | F1-F4 version tests |
 | RULE-59 | schema 契约必须在模拟盘前冻结；reader 必须按 SchemaEvolutionRule 兼容回退；未冻结不得进模拟盘 | FEAT-02/03 | UC-57、HIGH3 | V4 freeze tests |
 | RULE-60 | Wave1 任何结构性变更（V1/C1/R1/C2b/N1）必须在 T8 清册 → T7 黄金值基线 → C2a 重复画像三步完成后才允许执行；物理分区迁移后置到基线冻结之后 | FEAT-02 | UC-51/52、REQ-247 | Wave1 baseline gate tests |
+
+## CR-172 增量：PATH-I Trial-Return 与部署领域模型
+
+### 术语增量
+
+| Term | 定义 | 来源 | 备注 |
+|---|---|---|---|
+| trial-return source | 能产生每个 trial 有序 portfolio simple-return series 的合格上游；CR-163 metadata/ref、`layered_returns.csv`、scalar metrics、declared dependency matrix 均不是 source | REQ-CR172-009 | 当前真实 source absent；只冻结 future contract |
+| `trial_portfolio_return_series@v1` | 由 `timestamp` 与 `simple_return` 两列组成的 per-trial immutable payload，带 family/run/trial identity、basis、lineage、hash 与 seal | REQ-009 / HLD §10.1 | `timestamp` 严格递增唯一；`simple_return` finite 且 `>= -1.0` |
+| artifact manifest | 描述 logical identity、source lineage、row/window、content hash、producer contract 与 release 的不可变 metadata body | REQ-009/010 | manifest 存在不等于 sealed |
+| artifact seal | 同时引用 logical URI、payload hash、manifest hash 和 release 的不可变完成记录 | HLD §10.2 | seal 必须先于 replica；副本不重新 seal |
+| research-local active canonical | 研究机本地 immutable versions 中由 current selection 指定的唯一 active canonical | DQ-010/012 | NAS replica 不拥有 canonical authority |
+| verified replica | sealed bundle 在 NAS non-distributable staging 通过 release/manifest/seal/content/freshness 校验后形成的 immutable replica | REQ-010 | partial/stale/mismatch 不可分发 |
+| immutable materialization | 执行机从 verified replica 拉到 non-runtime staging，复验后原子形成的本地只读 cache version | REQ-010/012 | runtime 只消费 local cache，不直读 NAS |
+| logical artifact identity | stable logical URI + payload content SHA-256 | REQ-010 | host absolute path 只属于 deployment mapping |
+| action authorization envelope | 针对单一 action_kind 的 owner/scope revision+hash/allow-deny logical paths/有效期撤销/approval-evidence refs | REQ-011 | 6 类独立；不得权限并集 |
+| empirical R disposition | `declared_exact` / `empirical` / `typed_unavailable` / `BLOCKED` 四态判断 | REQ-014 | FU-CR173-001 只硬阻断 positive empirical claim |
+| SignalBatch boundary | CP2 批准的精确 8 个 mandatory contract slots | REQ-015 | 不是 mailbox/exchange/consumer 实现 |
+
+### 领域对象增量
+
+| Object ID | 对象 | Owner Feature | 关键字段 / 属性 | 状态 | 规则来源 |
+|---|---|---|---|---|---|
+| OBJ-CR172-I-01 | TrialReturnPayloadV1 | FEAT-CR172-I01 | object_kind、family_id、run_id、trial_id、`timestamp`、`simple_return`、return_basis、source_lineage_refs | candidate / validated / unavailable / blocked / sealed | REQ-009、ADR-I-001/004 |
+| OBJ-CR172-I-02 | TrialReturnManifestV1 | FEAT-CR172-I01 | logical_uri、identity triple、row_count、observation_window、content_sha256、producer_contract_version、release_id、seal_status、manifest_sha256 | draft / validated / sealed / blocked | REQ-009/010、ADR-I-002/004 |
+| OBJ-CR172-I-03 | ArtifactSealV1 | FEAT-CR172-I01 | seal_version、logical_uri、content_sha256、manifest_sha256、release_id、sealed_at、evidence_refs | sealed / invalid / superseded-by-selection | ADR-I-004/009 |
+| OBJ-CR172-I-04 | ResearchCanonicalSelection | FEAT-CR172-I01 | logical_uri、content_sha256、release_id、manifest_sha256、selected_at、previous_selection_ref | absent / selected / rolled_back | REQ-010、ADR-I-003/009 |
+| OBJ-CR172-I-05 | ReplicaVerificationReceiptV1 | FEAT-CR172-I02 | expected_release、logical_uri、content/manifest/seal hashes、freshness_result、verified_at、authorization_ref | staging / verified / blocked / stale | REQ-010/012、ADR-I-003/004 |
+| OBJ-CR172-I-06 | MaterializationReceiptV1 | FEAT-CR172-I02 | expected_release、replica_receipt_ref、local_cache_ref、hash_results、materialized_at、authorization_ref | staging / materialized / blocked | REQ-010/012、ADR-I-003/004 |
+| OBJ-CR172-I-07 | ActionAuthorizationRecordV1 | FEAT-CR172-I03 | authorization_id、action_kind、owner、scope_revision/hash、allowed/denied_logical_paths、valid_from/expires_at/revoked_at、approval/evidence refs | missing / active / expired / revoked / scope_mismatch / denied | REQ-011、ADR-I-005 |
+| OBJ-CR172-I-08 | ActionDecisionV1 | FEAT-CR172-I03 | action_kind、authorization_ref、request_scope_hash、logical_path、decision、reason、decided_at | allow / deny / blocked | REQ-011 |
+| OBJ-CR172-I-09 | EmpiricalRDispositionV1 | FEAT-CR172-I03 | classification、trial_ref_set、alignment、method_version/hash、valid_domain、PSD/repair policy、FU status、authorization_ref、reason | declared_exact / empirical / typed_unavailable / blocked | REQ-014、ADR-I-006 |
+| OBJ-CR172-I-10 | DeploymentMappingV1 | FEAT-CR172-I02 | logical_uri、research_path_template、NAS_path_template、execution_path_template | mapped / incomplete / blocked | REQ-010/012 |
+| OBJ-CR172-I-11 | RunPathPolicyV1 | FEAT-CR172-I03 | new_default_template、legacy_readonly_template、migration_authorized | active / compatibility_blocked | REQ-013、ADR-I-007 |
+| OBJ-CR172-I-12 | SignalBatchBoundaryV1 | FEAT-CR172-I03 | exactly 8 slots、forbidden payload classes、deferred refs | boundary_frozen / malformed / deferred | REQ-015、ADR-I-008 |
+
+### 状态机增量
+
+| State Machine ID | 对象 | 状态 | 合法转换 | 非法转换处理 |
+|---|---|---|---|---|
+| SM-CR172-I-01 | TrialReturnPayload/Manifest/Seal/CanonicalSelection | candidate → validated → manifested → sealed → selected；或 unavailable/blocked | 每一步需前序验证与对应 future auth；selection 只在 seal 复验后原子推进 | wrong-kind/missing/unsealed/hash mismatch 不得 selected；不自动 repair |
+| SM-CR172-I-02 | NAS Replica | staging → verified → distributable；或 blocked/stale | sync auth 有效且 expected release/manifest/seal/content/freshness 全部通过 | partial/unversioned/mismatch 不推进 pointer，不覆盖 canonical |
+| SM-CR172-I-03 | Execution Materialization | staging → verified → atomically_materialized → selected_for_local_read；或 blocked | pull auth 有效且 release/manifest/seal/content `4/4` 通过 | staging 不得 runtime；direct-NAS request deny |
+| SM-CR172-I-04 | ActionAuthorizationRecord | missing → active → expired/revoked；active → scope_mismatch/denied per request | 单 action、单 scope/hash、单 path 判定 | partial approval 不扩张；mid-operation revoke 不推进 pointer |
+| SM-CR172-I-05 | EmpiricalRDisposition | unclassified → declared_exact / empirical / typed_unavailable / blocked | classification/provenance/alignment/method/FU/auth 一次显式判定 | declared_exact 不得重标 empirical；blocked 不得静默降级 |
+| SM-CR172-I-06 | RunPathPolicy | new_semantic_default + legacy_readonly → compatibility_blocked / future_migration_authorized | 新 run 只解析 semantic root；migration 需独立 CR | 双默认、legacy write/move/rename/rewrite blocked |
+
+### 业务规则增量
+
+| Rule ID | 规则 | Owner | 影响场景 | 验证入口 |
+|---|---|---|---|---|
+| RULE-CR172-I-01 | trial-return payload 只能是 `timestamp`/`simple_return` per-trial series；wrong-kind `100%` fail-closed | FEAT-CR172-I01 | SC-I01/N02 | schema/source-kind fixture |
+| RULE-CR172-I-02 | `timestamp` non-null、UTC normalized、strictly increasing、unique；`simple_return` finite/non-null/非 NaN/Inf 且 `>= -1.0` | FEAT-CR172-I01 | SC-I01/N04 | column contract fixture |
+| RULE-CR172-I-03 | identity=logical URI+content hash；absolute path 进入 identity=`0` | FEAT-CR172-I01/I02 | SC-B02 | cross-mount identity fixture |
+| RULE-CR172-I-04 | validate→manifest→seal→canonical selection 顺序不可跳过；replica/materialization 不重新 seal | FEAT-CR172-I01/I02 | SC-I01/I02/F02 | lifecycle fixture |
+| RULE-CR172-I-05 | NAS 只 verified replica/backup/distribution；execution runtime direct-NAS/research read=`0` | FEAT-CR172-I02 | SC-I02/A02/B03 | dependency/static guard |
+| RULE-CR172-I-06 | stale/partial/unversioned/hash mismatch replica/materialization pointer advance=`0` | FEAT-CR172-I02 | SC-N03/B03/F02 | failure fixture |
+| RULE-CR172-I-07 | 六类 action 逐项授权/撤销/证据；权限并集=`0`；当前授权/执行=`0/6` | FEAT-CR172-I03 | SC-A02/Q02 | authorization matrix |
+| RULE-CR172-I-08 | pre-v2/source/auth 缺失且无完整性冲突→typed_unavailable；hash/alignment/tamper/unauthorized repair→BLOCKED | FEAT-CR172-I03 | SC-N04/Q02/C02 | disposition fixture |
+| RULE-CR172-I-09 | `FU-CR173-001` 只硬阻断 available effective count / `c1_computable=true`，不阻断 DQ-003 降级设计 | FEAT-CR172-I03 | SC-Q02/C02 | claim-ceiling fixture |
+| RULE-CR172-I-10 | 新 run semantic path 唯一；legacy write/move/rename/rewrite=`0` | FEAT-CR172-I03 | SC-G02 | path boundary fixture |
+| RULE-CR172-I-11 | SignalBatch mandatory slots 精确 `8/8`，extra mandatory=`0`；detailed exchange/intraday 模块/Story/实现=`0` | FEAT-CR172-I03 | SC-S01～S06 | boundary/static fixture |
+| RULE-CR172-I-12 | CP3 只冻结设计；五项高阶 readiness/authorization flag 保持 false | FEAT-CR172-I03 / host | SC-Q02/G01 | CP3/CP8 wording guard |
+
+### CR-172 领域模型自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| payload/manifest/seal/replica/materialization/auth/disposition 对象完备 | PASS | OBJ-CR172-I-01～12 |
+| payload 列名与 CR172 推荐基线一致 | PASS | `timestamp` / `simple_return` |
+| 状态机覆盖 success/failure/recovery | PASS | SM-CR172-I-01～06 |
+| data owner 唯一 | PASS | FEAT-I01/I02/I03 分工 |
+| Signal/v2 未展开实现 | PASS | RULE-I-09/11；deferred refs |
+| 真实动作与 claim ceiling 未放大 | PASS | RULE-I-07/12 |

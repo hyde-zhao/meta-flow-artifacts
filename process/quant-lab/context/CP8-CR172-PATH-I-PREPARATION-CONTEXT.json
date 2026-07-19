@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "packet_type": "release_readiness_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-172",
+  "stage": "CP8_PREPARATION",
+  "profile": "runtime-high-risk-release-readiness",
+  "state_ref": "process/state/STATE.current.json",
+  "current_ref": "process/current/CURRENT.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-172.summary.json",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json"
+  },
+  "budget": {
+    "estimated_tokens": 12500,
+    "max_tokens": 20000,
+    "estimator": "chars_div_4"
+  },
+  "objective": {
+    "summary": "基于 S01-S05 最终独立 CP7 PASS 证据，生成 CR-172 PATH-I 的质量摘要、发布就绪材料、CP8 自动预检和待人工审查稿；不得把 repository-local contract-ready 提升为真实 activation、C1 computable 或 Stage 3 ready。",
+    "non_goals": [
+      "不修改实现、测试、fixture、产品基线、HLD/LLD、Story、CR、STATE、CURRENT 或任何 ledger",
+      "不执行目录创建、真实数据湖/NAS/执行机访问、multi-trial runtime、trial-return 生成、empirical R 计算、信号传输、交易、部署、发布或 Git remote write",
+      "不代替用户批准 CP8，不写 approved_at/approved_by，不关闭 CR-172 activation，不自动恢复 PATH-C/A"
+    ]
+  },
+  "release_semantics": {
+    "recommended_decision": "READY_WITH_RISK",
+    "highest_allowed_positive_claim": "path_i_repository_contract_ready=true",
+    "manual_gate_status": "pending",
+    "cr_lifecycle_after_cp8_if_approved": "PATH-I slice accepted; activation remains deferred and requires a future activation-resume CP2 for PATH-C/A",
+    "must_remain_false": {
+      "stage3_started": false,
+      "stage3_entry_ready": false,
+      "c1_computable": false,
+      "real_data_authorized": false,
+      "multi_trial_runtime_authorized": false,
+      "signal_transport_authorized": false,
+      "path_c_or_a_resumed": false,
+      "public_c1_projection_ready": false,
+      "empirical_r_effective_count_ready": false
+    }
+  },
+  "human_decisions": [
+    {
+      "id": "DQ-CP8-CR172-001",
+      "question": "是否接受 PATH-I repository-local 合同、fixture 和 guard 交付为 READY_WITH_RISK？",
+      "recommendation": "接受；只确认 verified contract-ready。"
+    },
+    {
+      "id": "DQ-CP8-CR172-002",
+      "question": "是否接受 PATH-I 不构成真实 activation，六类真实动作继续 0/6，PATH-C/A 仍需未来 activation-resume CP2？",
+      "recommendation": "接受并维持 deny-default。"
+    },
+    {
+      "id": "DQ-CP8-CR172-003",
+      "question": "是否接受 empirical-R/public C1/真实 adapter/runtime/信号传输作为后续前置或独立 CR，而不并入本次交付？",
+      "recommendation": "接受；正向 effective count/c1_computable 仍以 FU-CR173-001 或其他经批准方法升级为硬前置，DQ-003 typed_unavailable 降级保留。"
+    }
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "reason": "machine_state", "required": true, "estimated_tokens": 1800},
+    {"path": "process/current/CURRENT.json", "mode": "full", "reason": "current_discovery_entry", "required": true, "estimated_tokens": 250},
+    {"path": "process/changes/summaries/CR-172.summary.json", "mode": "full", "reason": "cr_summary", "required": true, "estimated_tokens": 1600},
+    {"path": "process/checks/CP0-CR172.route-plan.json", "mode": "full", "reason": "route_plan", "required": true, "estimated_tokens": 800},
+    {"path": "process/checkpoints/CP5-CR172-ALL-STORIES-LLD-BATCH.md", "mode": "full", "reason": "approved_design_gate", "required": true, "estimated_tokens": 2200},
+    {"path": "process/checks/CP5-CR172-LLD-DESIGN-EVIDENCE.result.json", "mode": "full", "reason": "approved_design_evidence", "required": true, "estimated_tokens": 1800},
+    {"path": "process/checks/CP7-CR172-S01-REVERIFY-1.result.json", "mode": "full", "reason": "final_story_verification", "required": true, "estimated_tokens": 1700},
+    {"path": "process/checks/CP7-CR172-S02-REVERIFY-2.result.json", "mode": "full", "reason": "final_story_verification", "required": true, "estimated_tokens": 1700},
+    {"path": "process/checks/CP7-CR172-S03-REVERIFY-1.result.json", "mode": "full", "reason": "final_story_verification", "required": true, "estimated_tokens": 1700},
+    {"path": "process/checks/CP7-CR172-S04-REVERIFY-1.result.json", "mode": "full", "reason": "final_story_verification", "required": true, "estimated_tokens": 1700},
+    {"path": "process/checks/CP7-CR172-S05-REVERIFY-1.result.json", "mode": "full", "reason": "final_story_verification", "required": true, "estimated_tokens": 1900}
+  ],
+  "allowed_reads": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "reason": "machine_state", "required": true, "estimated_tokens": 1800},
+    {"path": "process/current/CURRENT.json", "mode": "full", "reason": "current_discovery_entry", "required": true, "estimated_tokens": 250},
+    {"path": "process/policies/READ-POLICY.json", "mode": "full", "reason": "read_policy", "required": true, "estimated_tokens": 400},
+    {"path": "process/changes/summaries/CR-172.summary.json", "mode": "full", "reason": "cr_summary", "required": true, "estimated_tokens": 1600},
+    {"path": "process/checks/CP0-CR172.route-plan.json", "mode": "full", "reason": "route_plan", "required": true, "estimated_tokens": 800},
+    {"path": "process/checkpoints/CP5-CR172-ALL-STORIES-LLD-BATCH.md", "mode": "full", "reason": "approved_design_gate", "required": true, "estimated_tokens": 2200},
+    {"path": "process/checks/CP5-CR172-LLD-DESIGN-EVIDENCE.result.json", "mode": "full", "reason": "approved_design_evidence", "required": true, "estimated_tokens": 1800},
+    {"path": "process/checks/CP7-CR172-S01-REVERIFY-1.result.json", "mode": "full", "reason": "final_story_verification", "required": true, "estimated_tokens": 1700},
+    {"path": "process/checks/CP7-CR172-S02-REVERIFY-2.result.json", "mode": "full", "reason": "final_story_verification", "required": true, "estimated_tokens": 1700},
+    {"path": "process/checks/CP7-CR172-S03-REVERIFY-1.result.json", "mode": "full", "reason": "final_story_verification", "required": true, "estimated_tokens": 1700},
+    {"path": "process/checks/CP7-CR172-S04-REVERIFY-1.result.json", "mode": "full", "reason": "final_story_verification", "required": true, "estimated_tokens": 1700},
+    {"path": "process/checks/CP7-CR172-S05-REVERIFY-1.result.json", "mode": "full", "reason": "final_story_verification", "required": true, "estimated_tokens": 1900},
+    {"path": "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7R1.index.json", "mode": "full", "reason": "final_story_evidence", "required": true, "estimated_tokens": 800},
+    {"path": "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP7R2.index.json", "mode": "full", "reason": "final_story_evidence", "required": true, "estimated_tokens": 800},
+    {"path": "process/evidence/CR172-S03-nas-replica-verification.CP7R1.index.json", "mode": "full", "reason": "final_story_evidence", "required": true, "estimated_tokens": 800},
+    {"path": "process/evidence/CR172-S04-execution-cache-materialization.CP7R1.index.json", "mode": "full", "reason": "final_story_evidence", "required": true, "estimated_tokens": 800},
+    {"path": "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.index.json", "mode": "full", "reason": "final_story_evidence", "required": true, "estimated_tokens": 900}
+  ],
+  "read_if_needed": [],
+  "do_not_read_by_default": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/archive/**",
+    "process/discussions/**",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md",
+    "docs/product/**",
+    "docs/design/**",
+    "engine/**",
+    "tests/**"
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/archive/**",
+    "process/discussions/**",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md",
+    "docs/product/**",
+    "docs/design/**",
+    "engine/**",
+    "tests/**"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "read_expansion_log": [],
+  "allowed_write_paths": [
+    "docs/quality/VERIFICATION-REPORT-CR172.md",
+    "docs/quality/TEST-REPORT-CR172.md",
+    "docs/quality/REVIEW-CR172.md",
+    "docs/quality/FIXES-CR172.md",
+    "docs/release/RELEASE-NOTES-CR172.md",
+    "docs/release/DEPLOY-CHECKLIST-CR172.md",
+    "docs/release/ROLLBACK-CR172.md",
+    "docs/release/MIGRATION-CR172.md",
+    "docs/release/FEEDBACK-CR172.md",
+    "process/release/RELEASE-CONTEXT-CR172.yaml",
+    "process/context/CP8-CR172-PATH-I-DELIVERY-CONTEXT.yaml",
+    "process/checks/CP8-CR172-PATH-I-DELIVERY-READINESS.result.json",
+    "process/checks/CP8-CR172-PATH-I-DELIVERY-READINESS.result.summary.md",
+    "process/checkpoints/CP8-CR172-PATH-I-DELIVERY-READINESS.md"
+  ],
+  "forbidden_write_paths": [
+    "engine/**",
+    "tests/**",
+    "docs/product/**",
+    "docs/design/**",
+    "docs/features/**",
+    "process/state/**",
+    "process/current/**",
+    "process/changes/**",
+    "process/stories/**",
+    "process/returns/**",
+    "process/evidence/**",
+    "process/handoffs/**",
+    "process/DEVELOPMENT-PLAN.yaml"
+  ],
+  "acceptance": [
+    "五个 Story 的最终 CP7 decision=PASS，open blocker=0，waiver=0；历史 NEEDS_REWORK finding 必须列为 CLOSED 而非删除",
+    "最终测试事实精确记录：S05 scoped 27/27、S01-S05 combined 154/154；semantic mismatch=0；不得用这些 fixture 测试推导真实 runtime 可用",
+    "六类真实动作 authorized/executed=0/6、0/6；lake/NAS/runtime/network/credential/signal/trading/deploy/Git remote 操作=0",
+    "CP8 auto result decision=PASS、release_decision=READY_WITH_RISK、manual_gate_status=pending、pending_human_decisions=3；不得含 approved_at/approved_by",
+    "人工门禁必须包含 Entry Criteria、Checklist、Exit Criteria、Deliverables、Decision Brief 和待填写人工审查结果",
+    "Release Context 必须区分 delivered、deferred、not-authorized；migration=none，deployment=not-authorized，rollback 只描述 repository-local 合同/代码回退",
+    "三项 CP8 人工决策和九项 false claim 完整呈现；不得关闭 activation，不得自动恢复 PATH-C/A"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_REAL_LAKE_READ_OR_WRITE",
+    "NO_PRODUCTION_WRITE",
+    "NO_NAS_SYNC_OR_WRITE",
+    "NO_EXECUTION_HOST_WRITE",
+    "NO_SIGNAL_TRANSPORT",
+    "NO_TRADING",
+    "NO_DEPLOY",
+    "NO_GIT_REMOTE_WRITE"
+  ]
+}

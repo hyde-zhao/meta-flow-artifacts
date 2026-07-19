@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S03-nas-replica-verification",
+  "status": "needs_rework",
+  "allowed_statuses": [
+    "implemented",
+    "implemented_with_risk",
+    "verified",
+    "verified_with_risk",
+    "partial",
+    "blocked",
+    "needs_design_clarification",
+    "needs_user_decision",
+    "needs_rework",
+    "no_op",
+    "superseded",
+    "waived"
+  ],
+  "touched_files": [
+    {
+      "path": "process/stories/STORY-CR172-S03-nas-replica-verification-VERIFICATION.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/CR172-S03-nas-replica-verification.CP7.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR172-S03-nas-replica-verification.CP7.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S03-VERIFICATION.result.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S03-VERIFICATION.result.summary.md",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "notes": "CP7 只读验证，没有修改实现或设计合同。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py",
+        "result": "pass: 102 passed in 0.61s; failed/skipped=0/0"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s03-cp7-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py tests/research/test_cr172_nas_replica_verification.py",
+        "result": "pass: exit=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null engine/research_artifact_replica.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null tests/research/test_cr172_nas_replica_verification.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S03.CP6.work-packet.json --return process/returns/CR172-S03-nas-replica-verification.CP6.return.json",
+        "result": "pass: Story Return Packet Check OK; one non-blocking expected-path warning"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.json --check-consistency --correlation-profile audit",
+        "result": "pass: CP Result Check OK; non-blocking path/correlation warnings recorded"
+      },
+      {
+        "command": "repository-local stale allow decision negative probe via uv run Python 3.11",
+        "result": "fail: 365-day-old allow reused for preflight and commit produced VERIFIED; stage/persist/CAS=1/1/1"
+      },
+      {
+        "command": "repository-local concurrent-current CAS negative probe via uv run Python 3.11",
+        "result": "pass: POINTER_CONFLICT; concurrent current retained; result.selection=None"
+      }
+    ],
+    "tests": [
+      {
+        "path": "tests/research/test_cr172_nas_replica_verification.py",
+        "passed": 21,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S03 replica verification, receipt, CAS, selected read, recovery and zero-operation guards"
+      },
+      {
+        "path": "tests/research/test_cr172_path_i_governance.py",
+        "passed": 46,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S01 upstream authorization regression"
+      },
+      {
+        "path": "tests/research/test_cr172_trial_return_artifact.py",
+        "passed": 35,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S02 original seal and verifier regression"
+      }
+    ],
+    "skipped": [
+      {
+        "check": "real NAS/lake/network/environment/credential/runtime integration",
+        "reason": "packet explicitly forbids real operations; authorization is absent"
+      },
+      {
+        "check": "S04 implementation or execution",
+        "reason": "S04 remains locked because CP7 decision is NEEDS_REWORK"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-CP7-S03-001",
+      "severity": "BLOCKER",
+      "status": "open",
+      "summary": "commit accepts a stale reused allow decision and cannot prove fresh authorization fail-closed",
+      "owner": "meta-dev",
+      "evidence_ref": "process/stories/STORY-CR172-S03-nas-replica-verification-VERIFICATION.md#findings-table"
+    },
+    {
+      "id": "F-CP7-S03-002",
+      "severity": "REQUIRED",
+      "status": "open",
+      "summary": "durable deterministic concurrent-current CAS regression is missing",
+      "owner": "meta-dev",
+      "evidence_ref": "process/stories/STORY-CR172-S03-nas-replica-verification-VERIFICATION.md#findings-table"
+    }
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "R-CR172-SYNC-REPLICA-STALE",
+      "status": "open_needs_rework",
+      "note": "fresh commit decision is not enforced against stale allow reuse"
+    },
+    {
+      "id": "R-CR172-REAL-OPERATIONS",
+      "status": "not_authorized",
+      "note": "real NAS/network/env/credential/lake/runtime actions remained 0"
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T131000Z0000-314ad6b2"
+  ],
+  "read_expansion_notes": "Host authorized only S03 LLD interface/core-flow/test/rollback sections for fresh-decision and CAS contract adjudication. Canonical Codex meta-qa role was available; Claude fallback was not used.",
+  "workflow_health": {
+    "story_rework_count": 1,
+    "cp_retry_count": 0,
+    "threshold_reached": false,
+    "threshold_route_triggered": false,
+    "reason": "initial CP7 found one implementation blocker"
+  },
+  "dispatch_refs": [
+    "AD-CR172-S03-CP7-META-QA-CRITICAL-20260718T210410+0800",
+    "AD-CR172-S03-CP7-META-QA-CRITICAL-STARTED-20260718T210410+0800",
+    "process/handoffs/CR172-S03-CP7-META-QA-CRITICAL-HANDOFF-2026-07-18.md",
+    "/root/cr172_s03_cp7_meta_qa_critical"
+  ],
+  "next_stage_recommendation": "route_meta_dev_rework_s03_keep_s04_locked"
+}

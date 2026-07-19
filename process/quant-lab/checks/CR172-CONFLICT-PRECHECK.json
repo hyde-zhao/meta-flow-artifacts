@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "check_id": "CR172-CONFLICT-PRECHECK",
+  "checked_at": "2026-07-16T01:55:00+00:00",
+  "candidate_id": "CR-172",
+  "source_goal_ref": "DF-CR171-REAL-EVIDENCE-ACTIVATION",
+  "inputs": [
+    "process/state/STATE.current.json",
+    "process/changes/CR-INDEX.json",
+    "process/state/CR-LEDGER.ndjson",
+    "process/changes/CR-161-FOLLOW-UP-TRACKING-2026-07-10.md",
+    "process/changes/CR-164-FOLLOW-UP-TRACKING-2026-07-12.md",
+    "process/changes/summaries/CR-171.summary.json",
+    "process/plans/CR172-STAGE3-REAL-EVIDENCE-ACTIVATION-PHASE-A-SCOPE-REMEDIATION-2026-07-16.yaml"
+  ],
+  "active_formal_crs_before_start": [],
+  "blocked_formal_crs_before_start": [],
+  "overlapping_execution_locks_before_start": [],
+  "direct_status_conflicts": [
+    {
+      "id": "FU-CR161-010",
+      "before": "active/cp2_pending linked to CR-171",
+      "authoritative_fact": "CR-171 closed/cp8_closed/not_ready",
+      "resolution": "closed_by=CR-171, gate_status=cp8_closed, related_active_cr cleared",
+      "status": "resolved"
+    }
+  ],
+  "source_owner_boundary": {
+    "activation_owner": "data/activation owner to be named at CP2",
+    "effective_trial_owner": "strategy-admission methodology owner",
+    "default_merge_decision": "separate",
+    "joint_approval_required_if_merged": true
+  },
+  "path_governance": {
+    "path_b_is_prerequisite_not_replacement": true,
+    "path_c_default_when_five_fields_are_freezable": true,
+    "path_c_c2_c3_default": "independent_followup_crs",
+    "path_a_requires_explicit_three_producer_risk_acceptance": true
+  },
+  "known_unrelated_legacy_debt": [
+    {
+      "id": "CR-010",
+      "issue": "CR-INDEX contains historical noncanonical lifecycle_status",
+      "overlaps_cr172": false
+    },
+    {
+      "id": "CR-018",
+      "issue": "CR-INDEX contains historical noncanonical lifecycle_status",
+      "overlaps_cr172": false
+    },
+    {
+      "id": "CR-031",
+      "issue": "CR-INDEX contains historical noncanonical lifecycle_status",
+      "overlaps_cr172": false
+    }
+  ],
+  "global_cr_tracking_check": {
+    "command": "uv run --python 3.11 meta-flow check cr-tracking --project-root .",
+    "direct_cr171_fu010_conflict_remaining": false,
+    "exit_code": 1,
+    "reason": "three pre-existing, non-overlapping legacy lifecycle enum errors remain",
+    "blocking_for_cr172": false,
+    "remediation_scope": "separate process-governance cleanup; do not rewrite historical CR semantics inside CR-172"
+  },
+  "global_cr_lifecycle_check": {
+    "command": "uv run --python 3.11 meta-flow cr check --id CR-172 --status active --gate-status cp2_pending --readiness not_ready --goal-ref DF-CR171-REAL-EVIDENCE-ACTIVATION --mode enforce --project-root .",
+    "exit_code": 1,
+    "cr172_specific_error_observed": false,
+    "reason": "全局 CR ledger/index 含大量历史非规范 status、缺 summary_ref 和旧 scope/authz L2 冲突；checker 会扫描全库而非只校验 CR-172",
+    "blocking_for_cr172_cp0_to_cp2": false,
+    "remediation_scope": "独立 process-governance/migration CR；不得在 CR-172 内批量重解释历史 CR"
+  },
+  "decision": "PASS_WITH_KNOWN_UNRELATED_LEGACY_DEBT",
+  "blockers": []
+}

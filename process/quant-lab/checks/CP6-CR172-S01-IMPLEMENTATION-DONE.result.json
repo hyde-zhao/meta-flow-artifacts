@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR172-S01-IMPLEMENTATION-DONE",
+  "profile": "runtime-high-risk-design",
+  "story_id": "CR172-S01-action-authorization-eligibility-governance",
+  "cr_id": "CR-172",
+  "context_ref": "process/context/stories/STORY-CR172-S01.CP6.work-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "dispatch_refs": [
+    "AD-CR172-S01-CP6-META-DEV-20260718T140303+0800"
+  ],
+  "evidence_ref": "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP6.index.json",
+  "items": [
+    {
+      "id": "CP6-ENTRY-01",
+      "category": "entry-criteria",
+      "name": "CP5 design evidence, dev gate, dependency and ownership gates are ready",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance.md#实现执行上下文（implementation_context）",
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-LLD.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Story=dev-ready; design_evidence_confirmed/lld_confirmed/dependencies_satisfied/file_conflict_free are all true; open_items=0."
+    },
+    {
+      "id": "CP6-01",
+      "category": "implementation",
+      "name": "Implementation matches the approved Story and full-LLD contract",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP6.index.json#changed_files",
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-IMPLEMENTATION.md#5-设计契约映射"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Six actions, twelve record fields, six enforcement points, five direct DAG edges and all boundary facets are implemented."
+    },
+    {
+      "id": "CP6-02",
+      "category": "contract-boundary",
+      "name": "Authorization, target, path, claim and no-real-operation boundaries remain fail closed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/path_i_governance.py",
+        "tests/research/test_cr172_path_i_governance.py"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "approved_ledger is unavailable for 6/6 actions; fixture-to-real accepted/side-effect=0/0; five high-order claims remain false."
+    },
+    {
+      "id": "CP6-03",
+      "category": "verification",
+      "name": "Targeted tests, byte-code compilation and diff checks pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP6.index.json#commands",
+        "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP6.index.json#tests"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "pytest=28 passed/0 failed/0 skipped; py_compile=PASS; git diff --check=PASS."
+    },
+    {
+      "id": "CP6-04",
+      "category": "boundary-check",
+      "name": "All touched files are allowed and no forbidden path or unexpected import is present",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR172-S01-action-authorization-eligibility-governance.CP6.return.json#boundary_check",
+        "process/context/stories/STORY-CR172-S01.CP6.work-packet.json#allowed_write_paths"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "allowed_paths_only=true; forbidden_paths_touched=[]; unexpected_imports=[]."
+    },
+    {
+      "id": "CP6-05",
+      "category": "implementation-evidence",
+      "name": "Implementation evidence, Story Return Packet and Evidence Index are complete",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-IMPLEMENTATION.md",
+        "process/returns/CR172-S01-action-authorization-eligibility-governance.CP6.return.json",
+        "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP6.index.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "design_delta_required=false; open_questions=[]; waivers=[]."
+    },
+    {
+      "id": "CP6-DISPATCH-01",
+      "category": "agent-dispatch-evidence",
+      "name": "Real meta-dev subagent dispatch evidence is referenced",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/handoffs/CR172-S01-CP6-META-DEV-HANDOFF-2026-07-18.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "This result does not modify the host-owned dispatch ledger."
+    },
+    {
+      "id": "CP6-EXIT-01",
+      "category": "exit-criteria",
+      "name": "Story implementation is complete and ready for independent CP7 verification",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR172-S01-action-authorization-eligibility-governance.CP6.return.json#next_stage_recommendation"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "No design clarification, implementation failure, real-operation authorization, waiver or blocker remains in CP6 scope."
+    },
+    {
+      "id": "CP6-DELIVERABLES-01",
+      "category": "deliverables",
+      "name": "All eight work-packet deliverable paths are present in the return boundary",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP6.index.json#changed_files"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Production, targeted tests, Story update, IMPLEMENTATION, return, evidence index, result and summary are covered."
+    }
+  ],
+  "entry_criteria": [
+    {
+      "name": "CP5 approved and Story full LLD confirmed",
+      "status": "PASS",
+      "evidence_ref": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-LLD.md"
+    },
+    {
+      "name": "Story dev gate, dependency gate and file ownership gate ready",
+      "status": "PASS",
+      "evidence_ref": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance.md"
+    },
+    {
+      "name": "Story work packet and verification plan available",
+      "status": "PASS",
+      "evidence_ref": "process/context/stories/STORY-CR172-S01.CP6.work-packet.json"
+    }
+  ],
+  "exit_criteria": [
+    {
+      "name": "Approved design contracts are implemented without real-operation scope expansion",
+      "status": "PASS"
+    },
+    {
+      "name": "Targeted tests, compilation and diff checks pass",
+      "status": "PASS"
+    },
+    {
+      "name": "Return Packet, Evidence Index and CP6 implementation evidence are complete",
+      "status": "PASS"
+    }
+  ],
+  "deliverables": [
+    "engine/path_i_governance.py",
+    "tests/research/test_cr172_path_i_governance.py",
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance.md",
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-IMPLEMENTATION.md",
+    "process/returns/CR172-S01-action-authorization-eligibility-governance.CP6.return.json",
+    "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP6.index.json",
+    "process/checks/CP6-CR172-S01-IMPLEMENTATION-DONE.result.json",
+    "process/checks/CP6-CR172-S01-IMPLEMENTATION-DONE.result.summary.md"
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T062345Z0000-cr172s01lld",
+    "RE-20260718T062345Z0000-cr172s01impl"
+  ],
+  "decision": "PASS",
+  "next_route": "CP7",
+  "checked_at": "2026-07-18T14:17:28+08:00",
+  "check_attempt": 1,
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR172-S01.CP6.work-packet.json": "sha256:42837de74112c3240e1102f61b75e6eddf01f2b0c9d3a6ae8392932cc75476d9",
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-LLD.md": "sha256:f7bf520362ecd11bd0ed2381d341678eabaf2079ffadc97778ff2104de4e0f95",
+    "docs/features/path-i-authorization-claim-governance/DESIGN.md": "sha256:6ed8c38795109db351a8a2ee0c8fd05bf66243d5bb65e8026f617de5662f24f3",
+    "docs/features/path-i-authorization-claim-governance/TEST-PLAN.md": "sha256:28e92db229dc4215fdea9c883fd89bf2801812f5cc4308feaeb6fd38df25fa3d"
+  }
+}

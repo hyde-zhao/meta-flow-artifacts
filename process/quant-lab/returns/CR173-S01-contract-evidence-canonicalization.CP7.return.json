@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "story_id": "CR173-S01-contract-evidence-canonicalization",
+  "stage": "CP7",
+  "status": "needs_rework",
+  "source_packet_ref": "process/context/stories/CR173-S01-contract-evidence-canonicalization.CP7.verify-packet.json",
+  "completed_at": "2026-07-17T10:08:19+08:00",
+  "summary": "标准 45 项合同测试通过，但独立对抗审查确认未批准 method、非 typed identity/lineage 与歧义/orphan recovery 三类阻断漏洞；S01 必须回 meta-dev 修复。",
+  "touched_files": [
+    {
+      "path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md",
+      "action": "created",
+      "owner": "meta-qa-critical"
+    },
+    {
+      "path": "process/returns/CR173-S01-contract-evidence-canonicalization.CP7.return.json",
+      "action": "created",
+      "owner": "meta-qa-critical"
+    },
+    {
+      "path": "process/evidence/CR173-S01-contract-evidence-canonicalization.CP7.index.json",
+      "action": "created",
+      "owner": "meta-qa-critical"
+    },
+    {
+      "path": "process/checks/CP7-CR173-S01-VERIFICATION.result.json",
+      "action": "created",
+      "owner": "meta-qa-critical"
+    },
+    {
+      "path": "process/checks/CP7-CR173-S01-VERIFICATION.result.summary.md",
+      "action": "created",
+      "owner": "meta-qa-critical"
+    }
+  ],
+  "contract_changes": {
+    "changed": false,
+    "summary": "验证未修改合同或实现；required findings 均要求按批准 LLD 收紧实现。",
+    "normative_ref": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-LLD.md",
+    "public_contract_change": false
+  },
+  "boundary_check": {
+    "allowed_write_paths_only": true,
+    "forbidden_write_count": 0,
+    "implementation_write_count": 0,
+    "public_production_diff_count": 0,
+    "public_dependency_edge_count": 0,
+    "public_call_count": 0,
+    "real_data_operation_count": 0,
+    "credential_operation_count": 0,
+    "runtime_operation_count": 0,
+    "trading_operation_count": 0,
+    "publish_deploy_operation_count": 0,
+    "git_remote_write_count": 0
+  },
+  "verification_commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py",
+      "status": "PASS",
+      "summary": "45 passed in 0.08s"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s01-cp7-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+      "status": "PASS",
+      "summary": "exit_code=0"
+    },
+    {
+      "command": "git diff --check -- engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+      "status": "PASS",
+      "summary": "exit_code=0"
+    },
+    {
+      "command": "meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR173-S01.CP6.work-packet.json --return process/returns/CR173-S01-contract-evidence-canonicalization.CP6.return.json",
+      "status": "PASS",
+      "summary": "OK；仅有外置 process 路径等价 warning"
+    },
+    {
+      "command": "adversarial: unapproved self-consistent method descriptor",
+      "status": "FAIL",
+      "summary": "UNAPPROVED_METHOD_ACCEPTED True"
+    },
+    {
+      "command": "adversarial: wrong-type family ref/trial ID/input lineage",
+      "status": "FAIL",
+      "summary": "UNTYPED_CONTRACT_ACCEPTED True int int"
+    },
+    {
+      "command": "adversarial: split recovery parent/supersedes",
+      "status": "FAIL",
+      "summary": "SPLIT_RECOVERY_CHAIN_ACCEPTED 3 True"
+    },
+    {
+      "command": "adversarial: orphan recovery in initial AttemptAuditLog",
+      "status": "FAIL",
+      "summary": "ORPHAN_INITIAL_LOG_ACCEPTED 1 True"
+    }
+  ],
+  "verification": {
+    "status": "NEEDS_REWORK",
+    "validation_mode": "mixed",
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py",
+        "result": "PASS",
+        "evidence": "45 passed in 0.08s"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s01-cp7-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+        "result": "PASS",
+        "evidence": "exit_code=0"
+      },
+      {
+        "command": "git diff --check -- engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+        "result": "PASS",
+        "evidence": "exit_code=0"
+      },
+      {
+        "command": "adversarial contract probes (method/type/recovery)",
+        "result": "FAIL",
+        "evidence": "4/4 unsafe acceptance probes reproduced"
+      }
+    ],
+    "tests_passed": 45,
+    "tests_failed": 0,
+    "adversarial_checks_passed": 0,
+    "adversarial_checks_failed": 4,
+    "blocking_findings": 3,
+    "summary": "既有测试全绿，但对抗性 trust/type/recovery 检查暴露 3 个阻断实现缺陷。"
+  },
+  "findings": [
+    {
+      "id": "F-CP7-S01-001",
+      "severity": "HIGH",
+      "blocking": true,
+      "status": "OPEN",
+      "summary": "evidence builder 接受未批准但自洽的 method descriptor",
+      "owner": "meta-dev"
+    },
+    {
+      "id": "F-CP7-S01-002",
+      "severity": "HIGH",
+      "blocking": true,
+      "status": "OPEN",
+      "summary": "typed identity/input lineage 合同未落实运行时类型约束",
+      "owner": "meta-dev"
+    },
+    {
+      "id": "F-CP7-S01-003",
+      "severity": "HIGH",
+      "blocking": true,
+      "status": "OPEN",
+      "summary": "append-only recovery 可形成分叉或 orphan 初始链",
+      "owner": "meta-dev"
+    }
+  ],
+  "evidence_refs": [
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-VERIFICATION.md",
+    "tests/research/test_effective_trial_evidence_contracts.py",
+    "process/returns/CR173-S01-contract-evidence-canonicalization.CP6.return.json",
+    "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6.index.json"
+  ],
+  "risks": [
+    {
+      "id": "R-CR173-RAW-EFFECTIVE-ALIAS",
+      "status": "controlled_but_retest_after_rework"
+    },
+    {
+      "id": "R-CR173-METHOD-NONDETERMINISM",
+      "status": "blocked_by_unapproved_method_trust_bypass"
+    },
+    {
+      "id": "R-CR173-AUDIT-RECOVERY-AMBIGUITY",
+      "status": "open_blocking"
+    }
+  ],
+  "waivers": [],
+  "design_delta_refs": [],
+  "open_questions": [],
+  "next_route": "meta-dev",
+  "next_stage_recommendation": "rework_same_story"
+}

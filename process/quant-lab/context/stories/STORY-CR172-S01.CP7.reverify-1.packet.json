@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_verify_packet",
+  "profile": "runtime-high-risk-design",
+  "project_id": "quant-lab",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S01-action-authorization-eligibility-governance",
+  "story_ref": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance.md",
+  "stage": "CP7",
+  "reverify_attempt": 1,
+  "objective": {
+    "summary": "独立复验 CP6R1 是否关闭 F-CP7-001/002，同时确认原 S01 合同、零真实操作和 claim ceiling 无回归。",
+    "non_goals": ["不修改源码或测试", "不改 HLD/LLD/Feature", "不运行真实数据、NAS、runtime、信号或交易"]
+  },
+  "feature_refs": ["path-i.authorization.claim.governance"],
+  "feature_design_refs": ["docs/features/path-i-authorization-claim-governance/DESIGN.md", "docs/features/path-i-authorization-claim-governance/TEST-PLAN.md"],
+  "feature_context": "原 CP7=NEEDS_REWORK；CP6R1 以单一 decision invariant validator 与 v1 canonical URI fail-closed 做了同 Story 最小修复，开发侧 46/46 PASS。",
+  "feature_contract_summary": "构造期与 consumer guard 双重 invariant；approved-ledger current-v1 hard deny；request/allow/deny/prefix 同一 canonical 表示；非 canonical percent-encoding 全拒绝。",
+  "cr_delta": {
+    "summary": "只复验 S01 两项 blocker 的关闭与回归，不写实现。",
+    "affected_contracts": ["ActionDecisionV1 invariants", "consumer first-side-effect guard", "canonical URI deny-first matching"]
+  },
+  "acceptance": [
+    "F-CP7-001=CLOSED：direct construction/replace/eligible-without-authorized/empty refs/origin-target/guard revalidation 全部 fail-closed",
+    "F-CP7-002=CLOSED：encoded-unreserved/separator/dot/glob/authority 全拒绝；plain allow control 与 deny-first 稳定",
+    "单一 validator 被 constructor+guard 双调用，duplicate invariant truth=0",
+    "46/46 targeted tests PASS，py_compile PASS；CP6R1 return/result consistency OK",
+    "六动作/12 fields/5 edges/4 states/8 signal slots/五项 false claim 数量无回归",
+    "approved-ledger authorized/eligible=0/0 for 6/6；真实操作=0"
+  ],
+  "dependency_inputs": [
+    "process/checks/CP7-CR172-S01-VERIFICATION.result.json",
+    "process/checks/CP6-CR172-S01-REWORK-1.result.json",
+    "process/returns/CR172-S01-action-authorization-eligibility-governance.CP6R1.return.json",
+    "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP6R1.index.json"
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/checks/CP7-CR172-S01-VERIFICATION.result.json", "reason": "original_findings", "required": true, "mode": "full"},
+    {"path": "process/checks/CP6-CR172-S01-REWORK-1.result.json", "reason": "rework_result", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "process/returns/CR172-S01-action-authorization-eligibility-governance.CP6R1.return.json", "reason": "rework_return", "required": true, "mode": "full"},
+    {"path": "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP6R1.index.json", "reason": "rework_evidence", "required": true, "mode": "full"},
+    {"path": "engine/path_i_governance.py", "reason": "verification_target", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_path_i_governance.py", "reason": "verification_tests", "required": true, "mode": "full"},
+    {"path": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md", "reason": "original_finding_detail", "required": false, "mode": "sections"}
+  ],
+  "read_if_needed": [],
+  "allowed_write_paths": [
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md",
+    "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7R1.return.json",
+    "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7R1.index.json",
+    "process/checks/CP7-CR172-S01-REVERIFY-1.result.json",
+    "process/checks/CP7-CR172-S01-REVERIFY-1.result.summary.md"
+  ],
+  "forbidden_write_paths": ["engine/**", "tests/**", "docs/**", "process/archive/**", "process/state/**", "process/current/**", "process/DEVELOPMENT-PLAN.yaml"],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "host_owned_plan"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_verification_truth"},
+    {"path_or_pattern": "process/stories/*-LLD.md", "reason": "no_design_change_and_original_contract_already_verified"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/archive/**", "process/discussions/**", "process/stories/*-LLD.md", "process/stories/*-IMPLEMENTATION.md"],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr172-s01-cp7r1-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py tests/research/test_cr172_path_i_governance.py",
+    "git diff --no-index --check /dev/null engine/path_i_governance.py",
+    "git diff --no-index --check /dev/null tests/research/test_cr172_path_i_governance.py",
+    "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S01.CP6.rework-1.work-packet.json --return process/returns/CR172-S01-action-authorization-eligibility-governance.CP6R1.return.json",
+    "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S01-REWORK-1.result.json --check-consistency --correlation-profile audit"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PRODUCTION_WRITE", "NO_NAS_SYNC_OR_WRITE", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7R1.return.json",
+  "implementation_return_ref": "process/returns/CR172-S01-action-authorization-eligibility-governance.CP6R1.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "runtime-high-risk-design",
+  "parent_context_ref": "process/context/stories/STORY-CR172-S01.CP6.rework-1.work-packet.json",
+  "budget": {"estimated_tokens": 8000, "estimator": "manual_compact", "max_tokens": 18000},
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["runtime-high-risk-design", "architecture-major"]
+  }
+}

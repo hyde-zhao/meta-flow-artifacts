@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR172-S01-VERIFICATION",
+  "profile": "runtime-high-risk-design",
+  "story_id": "CR172-S01-action-authorization-eligibility-governance",
+  "cr_id": "CR-172",
+  "context_ref": "process/context/stories/STORY-CR172-S01.CP7.verify-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "dispatch_refs": [
+    "AD-CR172-S01-CP7-META-QA-CRITICAL-20260718T143559+0800"
+  ],
+  "return_ref": "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7.return.json",
+  "evidence_ref": "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7.index.json",
+  "result_summary_ref": "process/checks/CP7-CR172-S01-VERIFICATION.result.summary.md",
+  "items": [
+    {
+      "id": "CP7-ENTRY-01",
+      "category": "entry-criteria",
+      "name": "Process route, active Story, independent dispatch and CP6 PASS are ready",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/current/CURRENT.json",
+        "process/checks/CP6-CR172-S01-IMPLEMENTATION-DONE.result.json",
+        "process/handoffs/CR172-S01-CP7-META-QA-CRITICAL-HANDOFF-2026-07-18.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CURRENT.health=ok; active context/story match; CP6 decision=PASS; independent meta-qa-critical dispatch is referenced."
+    },
+    {
+      "id": "CP7-01",
+      "category": "automated-verification",
+      "name": "Targeted pytest and py_compile pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#7-自动化验证结果"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "pytest=28 passed/0 failed/0 skipped; py_compile=PASS."
+    },
+    {
+      "id": "CP7-02",
+      "category": "contract-coverage",
+      "name": "Six-action, twelve-field, five-edge, empirical/path/signal/claim and zero-operation inventories are covered",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#4-验证追踪矩阵",
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#5-设计契约验证清单"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "action/record/enforcement=6/6/6; fields=12/12; DAG=6/5; empirical=4/4; Signal=8/8; high claims true=0/5; actual real operations=0."
+    },
+    {
+      "id": "CP7-F-01",
+      "category": "consumer-contract",
+      "name": "Consumer guard revalidates current-v1 hard-deny invariants for caller-constructed or replaced decisions",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#11-问题清单"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "F-CP7-001: ActionDecisionV1/require_action_eligible do not jointly enforce current-v1 approved-ledger, origin-target, bool/reason and non-empty ref invariants."
+    },
+    {
+      "id": "CP7-F-02",
+      "category": "authorization-path",
+      "name": "URI canonicalization and deny/allow prefix matching share one representation",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#11-问题清单"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "F-CP7-002: decoded URI validity and raw prefix comparison do not close percent-encoding semantic equivalence."
+    },
+    {
+      "id": "CP7-03",
+      "category": "structured-evidence",
+      "name": "CP6 return/result are mechanically consumable and CP7 return/evidence/result are produced",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7.index.json",
+        "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7.return.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CP6 return-check/result-check are OK with documented WARN; CP7 evidence paths are within packet allowed writes."
+    },
+    {
+      "id": "CP7-DISPATCH-01",
+      "category": "agent-dispatch-evidence",
+      "name": "Independent meta-qa-critical subagent dispatch evidence is referenced",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/handoffs/CR172-S01-CP7-META-QA-CRITICAL-HANDOFF-2026-07-18.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "dispatch_ref=AD-CR172-S01-CP7-META-QA-CRITICAL-20260718T143559+0800; agent_id=/root/cr172_s01_cp7_meta_qa_critical."
+    },
+    {
+      "id": "CP7-EXIT-01",
+      "category": "exit-criteria",
+      "name": "Story is eligible to transition to verified",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#14-阶段决策"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Two implementation defects require same-Story rework; no design clarification or waiver is needed."
+    },
+    {
+      "id": "CP7-DELIVERABLES-01",
+      "category": "deliverables",
+      "name": "All five verify-packet deliverables are present",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7.return.json#touched_files"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "VERIFICATION, CP7 return, evidence index, result and summary are covered."
+    }
+  ],
+  "entry_criteria": [
+    {
+      "name": "Process route health is confirmed",
+      "status": "PASS",
+      "evidence_ref": "process/current/CURRENT.json"
+    },
+    {
+      "name": "CP6 PASS and implementation evidence are available",
+      "status": "PASS",
+      "evidence_ref": "process/checks/CP6-CR172-S01-IMPLEMENTATION-DONE.result.json"
+    },
+    {
+      "name": "Independent CP7 verify packet and dispatch are active",
+      "status": "PASS",
+      "evidence_ref": "process/context/stories/STORY-CR172-S01.CP7.verify-packet.json"
+    }
+  ],
+  "exit_criteria": [
+    {
+      "name": "Automated targeted tests and syntax checks are reproducible",
+      "status": "PASS"
+    },
+    {
+      "name": "All approved authorization and path fail-closed contracts hold under adversarial review",
+      "status": "FAIL"
+    },
+    {
+      "name": "Story can transition to verified without blocker or waiver",
+      "status": "FAIL"
+    }
+  ],
+  "deliverables": [
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md",
+    "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7.return.json",
+    "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7.index.json",
+    "process/checks/CP7-CR172-S01-VERIFICATION.result.json",
+    "process/checks/CP7-CR172-S01-VERIFICATION.result.summary.md"
+  ],
+  "blockers": [
+    {
+      "id": "F-CP7-001",
+      "severity": "BLOCKER",
+      "owner": "meta-dev",
+      "status": "OPEN",
+      "route": "rework_same_story_then_cp6_cp7",
+      "evidence_ref": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#11-问题清单"
+    },
+    {
+      "id": "F-CP7-002",
+      "severity": "BLOCKER",
+      "owner": "meta-dev",
+      "status": "OPEN",
+      "route": "rework_same_story_then_cp6_cp7",
+      "evidence_ref": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#11-问题清单"
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T063743Z0000-cr172s01cp7lld"
+  ],
+  "decision": "NEEDS_REWORK",
+  "next_route": "meta-dev:rework_same_story_then_CP6_then_independent_CP7",
+  "checked_at": "2026-07-18T14:48:05+08:00",
+  "check_attempt": 1,
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR172-S01.CP7.verify-packet.json": "sha256:322c179e25886c545fede138c5761d1af9412e61838b7138ae1f5121cd7c4413",
+    "process/checks/CP6-CR172-S01-IMPLEMENTATION-DONE.result.json": "sha256:430f5e218e40f41e96e5def95d4017054ad917bb171ec79fb2111d76cc380ed5",
+    "process/returns/CR172-S01-action-authorization-eligibility-governance.CP6.return.json": "sha256:7bef9a264ea104e775974fdb8e6cb0aac5076eeb78ae473dde79f0e7ff714ac7",
+    "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP6.index.json": "sha256:34c63bc5cae9a62362deee6df5524dbda9e43662db273d5a2e3d2c2a87a69dde",
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-LLD.md": "sha256:f7bf520362ecd11bd0ed2381d341678eabaf2079ffadc97778ff2104de4e0f95",
+    "engine/path_i_governance.py": "sha256:a56c88f71d50e6d27b5535f57be71a8fe4e146a05e588d6cb91ee18613064888",
+    "tests/research/test_cr172_path_i_governance.py": "sha256:0cfff7278c35e7826ab65d4475e57f5c77823ac09b52808146cd0b99d0dfe1d5"
+  }
+}

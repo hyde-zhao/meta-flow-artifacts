@@ -1,0 +1,263 @@
+schema_version: "1.0"
+status: awaiting-cp8
+release_artifact_profile: compact
+release_decision: READY_WITH_RISK
+created_at: "2026-07-17T12:30:00+08:00"
+updated_at: "2026-07-17T12:30:00+08:00"
+source_gate: CP8
+cr_id: CR-173
+
+release_scope:
+  current_version: "N/A (offline method unavailable)"
+  target_version: "effective-trial-offline-method-v1.0.0"
+  included_features:
+    - effective-trial-offline-estimator
+  included_stories:
+    - CR173-S01-contract-evidence-canonicalization
+    - CR173-S02-exact-spectral-estimator
+    - CR173-S03-golden-failure-boundary-verification
+  excluded_scope:
+    - public C1 projection or write
+    - real data, provider, lake or NAS access
+    - runtime, trading, simulation, publish or deploy
+    - Stage 3, admission, aggregate orchestration or CR155 promotion
+    - automatic close, resume or approval of CR-172
+  user_visible_changes:
+    - "新增 fixture-only participation-ratio 二阶有效维度估计方法与七字段 standalone typed evidence。"
+    - "无效、缺失、矛盾或篡改输入按 F01-F08 稳定 fail-closed，不以 raw_trial_count 冒充 effective count。"
+  internal_changes:
+    - exact base-10 rational parsing and deterministic fraction-free LDLT PSD validation
+    - canonical hash and append-only audit identity
+    - golden, failure, authorization and public-boundary regression guards
+  breaking_changes: []
+  known_risks:
+    - R-CR173-EXACT-INTEGER-GROWTH
+    - R-CR173-SECOND-ORDER-MODEL-BIAS
+    - R-CR173-PUBLIC-MIGRATION
+
+version_decision:
+  current_version: "N/A"
+  target_version: "v1.0.0"
+  change_type: MINOR
+  compatibility: compatible
+  reason: "首次新增内部 fixture-only 离线方法，不替换或写入既有 public C1 contract。"
+
+quality_summary:
+  cp7_results:
+    - "process/checks/CP7-CR173-S01-REVERIFY-2.result.json: PASS"
+    - "process/checks/CP7-CR173-S02-VERIFICATION.result.json: PASS"
+    - "process/checks/CP7-CR173-S03-REVERIFY-1.result.json: PASS"
+  test_report_path: docs/quality/TEST-REPORT-CR173.md
+  review_path: docs/quality/REVIEW-CR173.md
+  verification_report_path: docs/quality/VERIFICATION-REPORT-CR173.md
+  fixes_path: docs/quality/FIXES-CR173.md
+  blocker_count: 0
+  high_count: 0
+  waiver_count: 0
+  accepted_risk_ids:
+    - R-CR173-EXACT-INTEGER-GROWTH
+    - R-CR173-SECOND-ORDER-MODEL-BIAS
+  unresolved_findings: []
+  closed_findings:
+    - F-CP7-S01-001
+    - F-CP7-S01-002
+    - F-CP7-S01-003
+    - F-CP7-S03-001
+
+fact_diff:
+  source_refs:
+    cr_scope_ref: process/changes/CR-173.md
+    cp2_commitments_ref: process/checks/CP2-CR173-REQUIREMENTS-BASELINE.result.json
+    cp7_alignment_ref: docs/quality/VERIFICATION-REPORT-CR173.md
+    evidence_index_refs:
+      - process/evidence/CR173-S01-contract-evidence-canonicalization.CP7R2.index.json
+      - process/evidence/CR173-S02-exact-spectral-estimator.CP7.index.json
+      - process/evidence/CR173-S03-golden-failure-boundary-verification.CP7R1.index.json
+  items:
+    - promise_ref: REQ-CR173-001
+      promise: "Participation-ratio 二阶 effective dimensionality 与 raw/effective non-alias。"
+      status: EXECUTED_POSITIVE_RESULT
+      decision_impact: READY
+      evidence_refs:
+        - process/evidence/CR173-S02-exact-spectral-estimator.CP7.index.json
+      risk_ref: R-CR173-SECOND-ORDER-MODEL-BIAS
+      notes: "不是 Li-Ji、BH/FWER/Šidák、DSR 或 admission calibration。"
+    - promise_ref: REQ-CR173-002
+      promise: "仅消费 synthetic/fixture/golden-vector canonical correlation input。"
+      status: EXECUTED_POSITIVE_RESULT
+      decision_impact: READY
+      evidence_refs:
+        - process/checks/CP7-CR173-S02-VERIFICATION.result.json
+      risk_ref: ""
+      notes: "real-data/provider/runtime operations=0。"
+    - promise_ref: REQ-CR173-003
+      promise: "F01-F08 typed fail-closed，raw alias=0。"
+      status: EXECUTED_POSITIVE_RESULT
+      decision_impact: READY
+      evidence_refs:
+        - process/evidence/CR173-S03-golden-failure-boundary-verification.CP7R1.index.json
+      risk_ref: ""
+      notes: "8/8 failure classes verified。"
+    - promise_ref: REQ-CR173-004
+      promise: "七字段 standalone typed evidence、provenance 与 audit identity。"
+      status: EXECUTED_POSITIVE_RESULT
+      decision_impact: READY
+      evidence_refs:
+        - process/evidence/CR173-S01-contract-evidence-canonicalization.CP7R2.index.json
+      risk_ref: ""
+      notes: "Forged audit ref accepts=0；findings 已关闭。"
+    - promise_ref: REQ-CR173-005..006
+      promise: "Exact deterministic estimator 与 6/6 golden × 3/3 repeat。"
+      status: EXECUTED_POSITIVE_RESULT
+      decision_impact: READY
+      evidence_refs:
+        - process/evidence/CR173-S02-exact-spectral-estimator.CP7.index.json
+        - process/evidence/CR173-S03-golden-failure-boundary-verification.CP7R1.index.json
+      risk_ref: R-CR173-EXACT-INTEGER-GROWTH
+      notes: "当前 fixture 最大 n=4；无 production SLA。"
+    - promise_ref: REQ-CR173-007
+      promise: "只生成 standalone evidence；public C1 projection/write=0。"
+      status: EXECUTED_POSITIVE_RESULT
+      decision_impact: READY
+      evidence_refs:
+        - process/checks/CP7-CR173-S03-REVERIFY-1.result.json
+      risk_ref: R-CR173-PUBLIC-MIGRATION
+      notes: "public_effective_trial_count_populatable=false；c1_computable=false。"
+    - promise_ref: REQ-CR173-008
+      promise: "Deny-default 授权与 CR-172 恢复边界。"
+      status: EXECUTED_POSITIVE_RESULT
+      decision_impact: READY
+      evidence_refs:
+        - process/evidence/CR173-S03-golden-failure-boundary-verification.CP7R1.index.json
+      risk_ref: ""
+      notes: "CR-172 auto-close/resume/approve=0/0/0。"
+    - promise_ref: DEFERRED-PUBLIC-C1-PROJECTION
+      promise: "Versioned public C1 projection 由独立 owner/CR 审批与迁移。"
+      status: DEFERRED_FOLLOW_UP
+      decision_impact: READY_WITH_RISK
+      evidence_refs:
+        - process/changes/CR-173.md
+      risk_ref: R-CR173-PUBLIC-MIGRATION
+      notes: "CR-173 完成不使 public C1 computable。"
+    - promise_ref: R-CR173-EXACT-INTEGER-GROWTH
+      promise: "真实规模或性能目标出现前重新评估 exact-integer growth。"
+      status: DEFERRED_FOLLOW_UP
+      decision_impact: READY_WITH_RISK
+      evidence_refs:
+        - process/checks/CP7-CR173-S02-VERIFICATION.result.json
+      risk_ref: R-CR173-EXACT-INTEGER-GROWTH
+      notes: "重评触发：CR-172 PATH-C/A 或 real-scale/performance target。"
+  summary:
+    promised_count: 9
+    delivered_count: 7
+    missing_required_count: 0
+    ready_with_risk_count: 2
+    not_ready_count: 0
+  generation_policy:
+    source_of_truth: "CR-173 final CP7 results and evidence indexes"
+    copied_long_text: false
+    allowed_payload: "promise summary, status, decision impact, risk id, evidence path"
+
+affected_surface:
+  platforms:
+    - repository-local Python 3.11 via uv
+  components:
+    - engine/effective_trial_evidence.py
+    - engine/effective_trial_estimator.py
+    - tests/fixtures/effective_trial/golden_vectors_v1.json
+    - CR173 repository-local tests and guards
+  install_scopes: []
+  config_changes: []
+  permission_changes: []
+  migration_required: false
+  external_interfaces: []
+  state_schema_changes: []
+  command_parameter_changes: []
+
+install_validation_summary:
+  commands:
+    - "uv-run pytest via CP7 evidence indexes"
+    - "py_compile and diff-check via CP7 evidence indexes"
+    - "meta-flow workspace check --project-root ."
+    - "meta-flow workspace git-status --project-root ."
+  results:
+    - "S01 60/60 PASS"
+    - "S02 87/87 PASS; exact PSD oracle 854/854"
+    - "S03 124/124 PASS; combined public read-only 379/379 PASS"
+    - "process link health ok"
+    - "source and artifact repositories dirty as expected before CP8; no push/publish executed"
+  log_paths:
+    - process/evidence/CR173-S01-contract-evidence-canonicalization.CP7R2.index.json
+    - process/evidence/CR173-S02-exact-spectral-estimator.CP7.index.json
+    - process/evidence/CR173-S03-golden-failure-boundary-verification.CP7R1.index.json
+  skipped_with_reason:
+    - "install/upgrade/idempotency: N/A; no installer or installed package surface changed"
+    - "production performance: N/A; fixture-only v1 has no production SLA"
+
+release_documents:
+  release_notes:
+    path: docs/release/RELEASE-NOTES-CR173.md
+    status: generated
+    na_reason: ""
+  deploy_checklist:
+    path: docs/release/DEPLOY-CHECKLIST-CR173.md
+    status: generated
+    na_reason: ""
+  rollback:
+    path: docs/release/ROLLBACK-CR173.md
+    status: generated
+    na_reason: ""
+  migration:
+    path: docs/release/MIGRATION-CR173.md
+    status: generated
+    na_reason: ""
+  feedback:
+    path: docs/release/FEEDBACK-CR173.md
+    status: generated
+    na_reason: ""
+
+non_authorized_items:
+  - id: NA-CR173-001
+    operation: "public C1 projection/write or public effective_trial_count population"
+    reason: "Estimator-only split; public contract requires a future versioned projection CR and independent owner approval."
+    required_authorization: "Future public C1 projection CR with schema/trust/migration approval."
+  - id: NA-CR173-002
+    operation: "real lake/NAS/provider/credential read or real computation"
+    reason: "CR-173 is fixture-only and strategy-agnostic."
+    required_authorization: "CR-172 PATH-C/A five-field authorization and owner approval."
+  - id: NA-CR173-003
+    operation: "runtime, trading, simulation, Stage 3, admission or aggregate orchestration"
+    reason: "Outside CR-173 scope and claim ceiling."
+    required_authorization: "Separate runtime/admission/Stage 3 CR and human gate."
+  - id: NA-CR173-004
+    operation: "publish, deploy, Git remote write or external call"
+    reason: "CP8 readiness is not release execution authorization."
+    required_authorization: "Independent explicit release/publish authorization with execution evidence."
+  - id: NA-CR173-005
+    operation: "automatic close, resume or approval of CR-172"
+    reason: "CR-173 only closes one methodology prerequisite; CR-172 still requires 5/5 fields, owner, fresh precheck and reopened CP2."
+    required_authorization: "Host Orchestrator must evaluate all CR-172 recovery prerequisites and reopen its CP2."
+
+follow_up_summary:
+  observation_items:
+    - "Any downstream interpretation as Li-Ji/BH/FWER/Šidák/DSR/admission calibration is a release-blocking misuse."
+    - "Any public C1 write or c1_computable=true before a future projection CR is a release-blocking misuse."
+  feedback_items:
+    - "Exact integer growth becomes actionable when n exceeds fixture scale or a performance target/SLA is proposed."
+  follow_up_candidates:
+    - "Future versioned public C1 projection/migration CR."
+    - "CR-172 PATH-C/A re-evaluation after five-field authorization and owner readiness."
+  risk_acceptance_items:
+    - R-CR173-EXACT-INTEGER-GROWTH
+    - R-CR173-SECOND-ORDER-MODEL-BIAS
+
+token_control:
+  default_read_mode: capsule-first
+  copied_long_text: false
+  allowed_payload: "summary, count, risk id, decision id, evidence path"
+  full_doc_read_triggers:
+    - missing_capsule_field
+    - unreadable_evidence_path
+    - conflicting_conclusion
+    - user_requested_deep_review
+

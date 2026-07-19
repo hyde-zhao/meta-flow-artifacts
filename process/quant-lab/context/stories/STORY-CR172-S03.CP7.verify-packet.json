@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_verify_packet",
+  "profile": "runtime-high-risk-design",
+  "project_id": "quant-lab",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S03-nas-replica-verification",
+  "story_ref": "process/stories/STORY-CR172-S03-nas-replica-verification.md",
+  "stage": "CP7",
+  "objective": {
+    "summary": "独立验证 S03 repository-local replica verification、immutable receipt、CAS distribution selection、selected-replica read 与零真实 NAS 操作边界。",
+    "non_goals": ["不修改源码或测试", "不实现/启动 S04", "不连接真实 NAS/lake/runtime/credential/network", "不改设计合同"]
+  },
+  "feature_refs": ["research-artifact.replica-materialization", "path-i.authorization.claim.governance", "trial-return.artifact.pipeline"],
+  "feature_design_refs": ["docs/features/research-artifact-replica-materialization/DESIGN.md", "docs/features/research-artifact-replica-materialization/TEST-PLAN.md"],
+  "feature_context": "S03 CP6 PASS；开发侧 S03=21/21、S01+S02+S03=102/102。CP7 必须独立验证 S02 verifier/original seal single truth、5/5 receipt、fresh decision、CAS recovery、selected read 与 no-real-NAS 边界。",
+  "feature_contract_summary": "preflight→non-distributable staging→S02 reverify→5/5 receipt→fresh authorization→CAS selection；失败 previous selection 100% 保留。Selected read 仅按 current selection 返回 exact bundle/source selection/receipt，旁路=0。",
+  "cr_delta": {
+    "summary": "只验证 S03 新增模块和测试，不写实现；发现 secondary digest/reseal/verifier facade/real adapter/pointer bypass 均为 blocker。",
+    "affected_contracts": ["ReplicaVerificationReceiptV1", "DistributionSelectionV1", "selected replica read contract", "fixture-only storage port"]
+  },
+  "acceptance": [
+    "original seal/manifest/content/release/freshness=5/5，original_seal_sha256 只来自 S02 verified result；secondary digest/reseal/facade=0/0/0",
+    "partial/stale/unversioned/mismatch/wrong authorization accepted/pointer advance=0/0；port write 前 preflight guard 100%",
+    "staging non_distributable；fresh decision recheck；CAS success 最多一个 pointer；revoke/interruption/CAS failure previous selection preservation=100%",
+    "selected read 仅按 current selection 返回 exact tuple；unselected/staging/path/latest/receipt-only/direct bundle bypass accepted=0",
+    "absolute path/hostname/mount identity/hash=0；path traversal/symlink accepted=0；real NAS/network/env/credential/lake/runtime operations=0",
+    "独立 S03=21/21、S01+S02+S03=102/102、py_compile/whitespace/CP6 return/result consistency PASS；S04 在 CP7 PASS 前锁定"
+  ],
+  "dependency_inputs": [
+    "process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.json",
+    "process/returns/CR172-S03-nas-replica-verification.CP6.return.json",
+    "process/evidence/CR172-S03-nas-replica-verification.CP6.index.json",
+    "process/checks/CP7-CR172-S02-REVERIFY-2.result.json"
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.json", "reason": "implementation_result", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "process/returns/CR172-S03-nas-replica-verification.CP6.return.json", "reason": "implementation_return", "required": true, "mode": "full"},
+    {"path": "process/evidence/CR172-S03-nas-replica-verification.CP6.index.json", "reason": "implementation_evidence", "required": true, "mode": "full"},
+    {"path": "engine/path_i_governance.py", "reason": "upstream_authorization_contract", "required": true, "mode": "full"},
+    {"path": "engine/trial_return_artifact.py", "reason": "upstream_seal_contract", "required": true, "mode": "full"},
+    {"path": "engine/research_artifact_replica.py", "reason": "verification_target", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_path_i_governance.py", "reason": "upstream_regression", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_trial_return_artifact.py", "reason": "upstream_regression", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_nas_replica_verification.py", "reason": "verification_tests", "required": true, "mode": "full"},
+    {"path": "docs/features/research-artifact-replica-materialization/TEST-PLAN.md", "reason": "approved_test_contract", "required": false, "mode": "sections"}
+  ],
+  "read_if_needed": [
+    {"path": "process/stories/STORY-CR172-S03-nas-replica-verification-LLD.md", "reason": "confirmed_design_contract", "trigger": "deep_review_or_contract_conflict", "mode": "sections"}
+  ],
+  "allowed_write_paths": [
+    "process/stories/STORY-CR172-S03-nas-replica-verification-VERIFICATION.md",
+    "process/returns/CR172-S03-nas-replica-verification.CP7.return.json",
+    "process/evidence/CR172-S03-nas-replica-verification.CP7.index.json",
+    "process/checks/CP7-CR172-S03-VERIFICATION.result.json",
+    "process/checks/CP7-CR172-S03-VERIFICATION.result.summary.md"
+  ],
+  "forbidden_write_paths": ["engine/**", "tests/**", "docs/**", "process/archive/**", "process/state/**", "process/current/**", "process/DEVELOPMENT-PLAN.yaml"],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "host_owned_plan"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_verification_truth"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/archive/**", "process/discussions/**", "process/stories/*-LLD.md", "process/stories/*-IMPLEMENTATION.md"],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr172-s03-cp7-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py tests/research/test_cr172_nas_replica_verification.py",
+    "git diff --no-index --check /dev/null engine/research_artifact_replica.py",
+    "git diff --no-index --check /dev/null tests/research/test_cr172_nas_replica_verification.py",
+    "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S03.CP6.work-packet.json --return process/returns/CR172-S03-nas-replica-verification.CP6.return.json",
+    "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.json --check-consistency --correlation-profile audit"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PRODUCTION_WRITE", "NO_NAS_SYNC_OR_WRITE", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR172-S03-nas-replica-verification.CP7.return.json",
+  "implementation_return_ref": "process/returns/CR172-S03-nas-replica-verification.CP6.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "runtime-high-risk-design",
+  "parent_context_ref": "process/context/stories/STORY-CR172-S03.CP6.work-packet.json",
+  "budget": {"estimated_tokens": 12000, "estimator": "manual_compact", "max_tokens": 20000},
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["runtime-high-risk-design", "architecture-major"]
+  }
+}

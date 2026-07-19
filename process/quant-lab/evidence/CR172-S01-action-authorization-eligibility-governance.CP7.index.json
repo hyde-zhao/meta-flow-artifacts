@@ -1,0 +1,110 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7.index.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/checks/CP7-CR172-S01-VERIFICATION.result.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/checks/CP7-CR172-S01-VERIFICATION.result.summary.md"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py",
+      "result": "pass: 28 passed in 0.06s"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s01-cp7-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py tests/research/test_cr172_path_i_governance.py",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check -- engine/path_i_governance.py tests/research/test_cr172_path_i_governance.py",
+      "result": "pass_with_note: targets are untracked"
+    },
+    {
+      "command": "git diff --no-index --check for each untracked target",
+      "result": "pass: no whitespace diagnostics"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S01.CP6.work-packet.json --return process/returns/CR172-S01-action-authorization-eligibility-governance.CP6.return.json",
+      "result": "pass_with_warn"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S01-IMPLEMENTATION-DONE.result.json --check-consistency --correlation-profile audit",
+      "result": "pass_with_warn"
+    },
+    {
+      "command": "repository-local import, operation-symbol and provenance-alias static scans",
+      "result": "pass"
+    },
+    {
+      "command": "caller-constructed/replaced decision invariant contract check",
+      "result": "fail: F-CP7-001 reproduced"
+    },
+    {
+      "command": "logical URI canonicalization and percent-encoding prefix-consistency contract check",
+      "result": "fail: F-CP7-002 reproduced"
+    }
+  ],
+  "cr_id": "CR-172",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR172-S01-action-authorization-eligibility-governance.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CP7-001",
+      "note": "Existing 28 tests do not cover caller construction/replace/empty-ref invariants or canonical path equivalence.",
+      "status": "open_blocking"
+    },
+    {
+      "id": "R-CP7-002",
+      "note": "The packet git diff --check is empty for untracked files; supplemental no-index check found no whitespace diagnostics.",
+      "status": "controlled_non_blocking"
+    },
+    {
+      "id": "R-CR172-RUNTIME-AUTHORIZATION-GAP",
+      "note": "No real adapter or operation was used; current-v1 consumer invariants must be repaired before any downstream claim.",
+      "status": "controlled_by_hard_deny_but_rework_required"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR172-S01-action-authorization-eligibility-governance",
+  "tests": [
+    {
+      "duration_seconds": 0.06,
+      "failed": 0,
+      "passed": 28,
+      "path": "tests/research/test_cr172_path_i_governance.py",
+      "skipped": 0
+    },
+    {
+      "duration_seconds": 0.0,
+      "failed": 1,
+      "passed": 0,
+      "path": "adversarial-contract:F-CP7-001",
+      "skipped": 0
+    },
+    {
+      "duration_seconds": 0.0,
+      "failed": 1,
+      "passed": 0,
+      "path": "adversarial-contract:F-CP7-002",
+      "skipped": 0
+    }
+  ],
+  "waivers": []
+}

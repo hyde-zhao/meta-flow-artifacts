@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "story_id": "CR173-S03-golden-failure-boundary-verification",
+  "cr_id": "CR-173",
+  "stage": "CP6",
+  "status": "implemented",
+  "source_context_ref": "process/context/stories/STORY-CR173-S03.CP6.work-packet.json",
+  "summary": "S03 fixture/QAC/authorization 实现完成；376/376 combined PASS；public production、existing expected 和越权操作均为0。",
+  "touched_files": [
+    {
+      "path": "tests/fixtures/effective_trial/golden_vectors_v1.json",
+      "action": "created",
+      "sha256": "4c47994c89c27802f38cc79616a22cf0d8ff5d545629beb0ae0fa3aab11ad408"
+    },
+    {
+      "path": "tests/research/test_effective_trial_cr173_qac.py",
+      "action": "created",
+      "sha256": "86ae2d8db1ab8b985eed8621d8a279f36f5911ae5f0d0d2f0cba6615a6e3e447"
+    },
+    {
+      "path": "tests/research/test_effective_trial_authorization.py",
+      "action": "created",
+      "sha256": "53fd8be6820e998f58ff590ee09010fe5b289191e0acc98f819b99dd692db2b9"
+    },
+    {
+      "path": "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-IMPLEMENTATION.md",
+      "action": "created",
+      "sha256": "0642156aac679aeb6bfcc2a9c11bd5bab0a4662f2b8eb2a3f104c8b6f04c3239"
+    },
+    {
+      "path": "process/returns/CR173-S03-golden-failure-boundary-verification.CP6.return.json",
+      "action": "created"
+    },
+    {
+      "path": "process/evidence/CR173-S03-golden-failure-boundary-verification.CP6.index.json",
+      "action": "created"
+    },
+    {
+      "path": "process/checks/CP6-CR173-S03-IMPLEMENTATION-DONE.result.json",
+      "action": "created"
+    },
+    {
+      "path": "process/checks/CP6-CR173-S03-IMPLEMENTATION-DONE.result.summary.md",
+      "action": "created"
+    }
+  ],
+  "contract_changes": {
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "normative_design_delta_count": 0,
+    "public_contract_change_count": 0,
+    "runtime_authorization_change_count": 0,
+    "summary": "仅新增 fixture/test verification assets；HLD/ADR/Feature/public C1 合同不变。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "allowed_write_paths_only": true,
+    "forbidden_write_count": 0,
+    "public_production_diff": 0,
+    "public_writes": 0,
+    "existing_expected_edits": 0,
+    "cr173_new_code_public_dependency_edges": 0,
+    "cr173_new_code_public_calls": 0,
+    "non_public_operation_inventory": "9/9",
+    "non_public_nonzero_counters": 0,
+    "real_data_operations": 0,
+    "credential_operations": 0,
+    "runtime_operations": 0,
+    "trading_operations": 0,
+    "publish_deploy_operations": 0,
+    "git_remote_operations": 0
+  },
+  "verification_commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q <CR173 targeted 4 modules>",
+      "exit_code": 0,
+      "result": "121 passed in 0.36s"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q <12 authoritative public regression modules>",
+      "exit_code": 0,
+      "result": "255 passed in 2.17s"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q <targeted + 12 public modules>",
+      "exit_code": 0,
+      "result": "376 passed in 2.06s"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s03-cp6-pycompile uv run --python 3.11 python -m py_compile tests/research/test_effective_trial_cr173_qac.py tests/research/test_effective_trial_authorization.py",
+      "exit_code": 0,
+      "result": "2/2 PASS"
+    },
+    {
+      "command": "git diff --check -- <S03 three assets>",
+      "exit_code": 0,
+      "result": "PASS; whitespace errors=0"
+    }
+  ],
+  "verification": {
+    "status": "PASS",
+    "command_count": 5,
+    "tests_passed": 376,
+    "tests_failed": 0,
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py tests/research/test_effective_trial_estimator.py tests/research/test_effective_trial_cr173_qac.py tests/research/test_effective_trial_authorization.py",
+        "result": "PASS: 121 passed in 0.36s"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q <12 authoritative public regression modules>",
+        "result": "PASS: 255 passed in 2.17s"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q <targeted + 12 public modules>",
+        "result": "PASS: 376 passed in 2.06s"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s03-cp6-pycompile uv run --python 3.11 python -m py_compile tests/research/test_effective_trial_cr173_qac.py tests/research/test_effective_trial_authorization.py",
+        "result": "PASS: 2/2"
+      },
+      {
+        "command": "git diff --check -- tests/fixtures/effective_trial/golden_vectors_v1.json tests/research/test_effective_trial_cr173_qac.py tests/research/test_effective_trial_authorization.py",
+        "result": "PASS: whitespace errors=0"
+      }
+    ],
+    "tests": [
+      {"suite": "CR173-targeted", "passed": 121, "failed": 0},
+      {"suite": "public-read-only-12", "passed": 255, "failed": 0}
+    ],
+    "summary": "121/121 targeted + 255/255 authoritative public read-only；combined 376/376。"
+  },
+  "acceptance": {
+    "golden_classes": "6/6",
+    "repeats_per_class": "3/3",
+    "stable_computation_and_evidence_per_group": "1/1",
+    "external_audits_per_group": "3/3",
+    "failure_classes": "8/8",
+    "returned_basis_comparisons": "8x7/8x7",
+    "evidence_fields": "7/7",
+    "public_read_only_inventory": "12/12",
+    "public_effective_trial_count_populatable": false,
+    "c1_computable": false,
+    "cr172_auto_resume_count": 0,
+    "cr172_auto_close_count": 0
+  },
+  "evidence_refs": [
+    "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-IMPLEMENTATION.md"
+  ],
+  "design_delta_ref": null,
+  "risks": [
+    {
+      "id": "R-CR173-EXACT-INTEGER-GROWTH",
+      "status": "accepted_fixture_only_recheck_before_real_scale"
+    },
+    {
+      "id": "R-CR173-PUBLIC-MIGRATION",
+      "status": "deferred_future_projection_cr"
+    },
+    {
+      "id": "R-CR173-SECOND-ORDER-MODEL-BIAS",
+      "status": "claim_limited_to_effective_dimensionality"
+    }
+  ],
+  "waivers": [],
+  "next_route": "CP7"
+}

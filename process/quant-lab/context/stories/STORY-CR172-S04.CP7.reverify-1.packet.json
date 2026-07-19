@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_verify_packet",
+  "profile": "runtime-high-risk-design",
+  "project_id": "quant-lab",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S04-execution-cache-materialization",
+  "story_ref": "process/stories/STORY-CR172-S04-execution-cache-materialization.md",
+  "stage": "CP7",
+  "reverify_attempt": 1,
+  "objective": {
+    "summary": "独立复验 S04 CP6R1 是否完整关闭 receipt correlation、current-selection resolver 与 credential marker 三项 finding，并确认原 4/4/immutable/fresh/CAS/zero-operation 合同无回归。",
+    "non_goals": ["不修改源码/测试/设计", "不启动 S05", "不执行任何真实 NAS/execution/runtime 操作", "不由实现线程自证最终关闭"]
+  },
+  "feature_refs": ["trial-return.artifact.pipeline", "research-artifact.replica-materialization", "path-i.authorization.claim.governance"],
+  "feature_design_refs": ["docs/features/research-artifact-replica-materialization/DESIGN.md", "docs/features/path-i-authorization-claim-governance/DESIGN.md"],
+  "feature_context": "CP6R1 PASS；S04 19/19、组合 127/127。开发侧报告 receipt 已按 self-hash 独立持久化且 CAS 前 exact-read；resolver 消费 storage current exact selection；五类 credential marker 在 preflight/commit persist/CAS 前拒绝。Workflow health 1/1，若本轮失败先更新 health 再按阈值路由。",
+  "feature_contract_summary": "F-001：selection 引用 receipt 必须确已不可变持久化；same bytes rotated receipt 只能在新 receipt exact-read 成功后推进。F-002：resolver 只接受 storage current exact selection；old/forged/uncommitted=0。F-003：password/passwd/secret/token/credential 在两个 phase、两个 ref 字段均零持久化/零 CAS。原链 S03 data source + S02 verifier once + 4/4 + fresh guard + single CAS + local-only handle 保持不变。",
+  "cr_delta": {"summary": "只读独立验证 CP6R1 两个 owner 文件与机器证据；finding 未全关闭则 S05 继续锁定。", "affected_contracts": ["immutable receipt correlation", "current selected handle capability", "credential-free canonical identity"]},
+  "acceptance": [
+    "F-001=CLOSED：same receipt 幂等、rotated receipt exact persistence、persistence failure/immutable/CAS conflict previous preservation 全部通过；selection receipt readable match=100%",
+    "F-002=CLOSED：old、forged revision/hash、uncommitted、mapping-only、receipt-only accepted=0；storage current exact accepted=1",
+    "F-003=CLOSED：5 markers × 2 phases × 2 ref fields accepted=0/20，persist/CAS=0；canonical marker count=0，合法 opaque refs PASS",
+    "原 S03 selected-read 唯一供数、S02 verifier once、typed non-runtime staging、bytes 4/4、tampered/mismatch 零推进保持 PASS",
+    "immutable/fresh authorization/current replica recheck/single CAS/local-only handle 与零旁路保持 PASS",
+    "独立 S04=19/19、S01-S04=127/127、py_compile、whitespace、CP6R1 Return/Result/hash checks PASS",
+    "源码测试只读且 hash 与 CP6R1 一致；真实操作/forbidden writes/S05 operation=0；只有 PASS 才允许 Host 解锁 S05"
+  ],
+  "dependency_inputs": [
+    "process/checks/CP6-CR172-S04-REWORK-1.result.json",
+    "process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json",
+    "process/evidence/CR172-S04-execution-cache-materialization.CP6R1.index.json",
+    "process/checks/CP7-CR172-S04-VERIFICATION.result.json"
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/checks/CP6-CR172-S04-REWORK-1.result.json", "reason": "rework_result", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "process/state/WORKFLOW-HEALTH.json", "reason": "threshold_guard", "required": true, "mode": "full"},
+    {"path": "process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json", "reason": "rework_return", "required": true, "mode": "full"},
+    {"path": "process/evidence/CR172-S04-execution-cache-materialization.CP6R1.index.json", "reason": "rework_evidence", "required": true, "mode": "full"},
+    {"path": "engine/path_i_governance.py", "reason": "authorization_contract", "required": true, "mode": "full"},
+    {"path": "engine/trial_return_artifact.py", "reason": "verifier_contract", "required": true, "mode": "full"},
+    {"path": "engine/research_artifact_replica.py", "reason": "selected_read_contract", "required": true, "mode": "full"},
+    {"path": "engine/research_artifact_materialization.py", "reason": "reverification_target", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_path_i_governance.py", "reason": "upstream_regression", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_trial_return_artifact.py", "reason": "upstream_regression", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_nas_replica_verification.py", "reason": "upstream_regression", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_execution_materialization.py", "reason": "reverification_tests", "required": true, "mode": "full"},
+    {"path": "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md", "reason": "finding_history", "required": true, "mode": "sections"}
+  ],
+  "read_if_needed": [],
+  "allowed_write_paths": [
+    "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md",
+    "process/returns/CR172-S04-execution-cache-materialization.CP7R1.return.json",
+    "process/evidence/CR172-S04-execution-cache-materialization.CP7R1.index.json",
+    "process/checks/CP7-CR172-S04-REVERIFY-1.result.json",
+    "process/checks/CP7-CR172-S04-REVERIFY-1.result.summary.md"
+  ],
+  "forbidden_write_paths": ["engine/**", "tests/**", "docs/**", "process/archive/**", "process/state/**", "process/current/**", "process/DEVELOPMENT-PLAN.yaml"],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "host_owned_plan"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_verification_truth"},
+    {"path_or_pattern": "process/stories/*-LLD.md", "reason": "packet_contract_sufficient"},
+    {"path_or_pattern": "process/stories/*-IMPLEMENTATION.md", "reason": "consume_return_and_evidence"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/archive/**", "process/discussions/**", "process/stories/*-LLD.md", "process/stories/*-IMPLEMENTATION.md"],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py tests/research/test_cr172_execution_materialization.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr172-s04-cp7r1-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py engine/research_artifact_materialization.py tests/research/test_cr172_execution_materialization.py",
+    "git diff --no-index --check /dev/null engine/research_artifact_materialization.py",
+    "git diff --no-index --check /dev/null tests/research/test_cr172_execution_materialization.py",
+    "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S04.CP6.rework-1.work-packet.json --return process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json",
+    "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S04-REWORK-1.result.json --check-consistency --correlation-profile audit"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PRODUCTION_WRITE", "NO_NAS_SYNC_OR_WRITE", "NO_EXECUTION_HOST_WRITE", "NO_SIGNAL_TRANSPORT", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR172-S04-execution-cache-materialization.CP7R1.return.json",
+  "implementation_return_ref": "process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "runtime-high-risk-design",
+  "parent_context_ref": "process/context/stories/STORY-CR172-S04.CP6.rework-1.work-packet.json",
+  "budget": {"estimated_tokens": 9000, "estimator": "manual_compact", "max_tokens": 18000},
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["runtime-high-risk-design", "architecture-major"]
+  }
+}

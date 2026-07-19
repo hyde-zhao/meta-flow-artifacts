@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "check_id": "CR173-CONFLICT-PRECHECK",
+  "checked_at": "2026-07-16T11:36:00+08:00",
+  "candidate_id": "CR-173",
+  "candidate_source": "FU-CR164-004",
+  "candidate_title": "Effective-Trial Estimation and C1 Computation — Offline Methodology",
+  "scope": "Fresh formal-CR intake conflict precheck for an offline methodology, schema, deterministic golden vectors and consumer projection only; no real data, credential, provider, NAS/lake, runtime, trading, publication or Git remote operation was performed.",
+  "inputs": [
+    "process/state/STATE.current.json",
+    "process/changes/CR-INDEX.json",
+    "process/state/CR-LEDGER.ndjson",
+    "process/changes/CR-164-FOLLOW-UP-TRACKING-2026-07-12.md#FU-CR164-004",
+    "process/changes/CR-172.md#PATH-B-恢复契约",
+    "process/checkpoints/CP2-CR172-REQUIREMENTS-BASELINE.md",
+    "process/checks/CP2-CR172-REQUIREMENTS-BASELINE.result.json"
+  ],
+  "formal_number_check": {
+    "proposed_id": "CR-173",
+    "existing_formal_path_count": 0,
+    "existing_ledger_event_count": 0,
+    "status": "PASS"
+  },
+  "active_or_blocked_formal_crs_before_start": [
+    {
+      "id": "CR-172",
+      "lifecycle_status": "blocked",
+      "gate_status": "cp2_pending",
+      "overlap": [
+        "c1-effective-trial-methodology",
+        "stage3-claim-ceiling"
+      ],
+      "classification": "intentional_prerequisite_overlap_serialized_by_approved_path_b",
+      "resolution": "CR-172 CP2 approved PATH-B; CR-172 activation is blocked/deferred and cannot enter CP3 while CR-173 owns the offline methodology slice.",
+      "user_confirmation_ref": "process/checkpoints/CP2-CR172-REQUIREMENTS-BASELINE.md#人工审查结果",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "CR-032",
+      "index_lifecycle_status": "active",
+      "formal_document_status": "completed-offline",
+      "overlap": [],
+      "classification": "pre_existing_stale_index_pointer_non_overlapping",
+      "resolution": "Do not broaden CR-173 to repair historical CR tracking; retain as known nonblocking process debt.",
+      "status": "NON_BLOCKING"
+    }
+  ],
+  "ownership_boundary": {
+    "methodology_owner": "strategy-admission methodology owner",
+    "activation_and_data_owner": "not part of CR-173",
+    "consumer_owner": "strategy-admission evidence contract owner",
+    "decision": "separate_methodology_cr",
+    "approval_ref": "DQ-CR172-002",
+    "status": "PASS"
+  },
+  "scope_boundary": {
+    "in_scope": [
+      "effective-trial estimation method contract",
+      "non-alias effective-count schema",
+      "deterministic synthetic/fixture golden vectors",
+      "typed_unavailable fail-closed semantics",
+      "C1 consumer projection contract"
+    ],
+    "out_of_scope": [
+      "specific strategy identity",
+      "five-field real-data authorization",
+      "real lake or NAS read/write",
+      "provider or credential access",
+      "real producer binding or computation",
+      "C2/C3/C4 activation",
+      "aggregate, CR155 or mature admission",
+      "runtime, simulation, trading, publish/deploy or Git remote write"
+    ],
+    "raw_alias_allowed": false,
+    "path_b_is_activation_replacement": false,
+    "status": "PASS"
+  },
+  "document_and_owner_lock_check": {
+    "overlapping_active_writer": false,
+    "shared_formal_product_docs_require_meta_pm_single_writer": true,
+    "planned_owner": "meta-pm during requirement-clarification; meta-se after CP2",
+    "status": "PASS"
+  },
+  "tool_conflict_check": {
+    "command": "uv run --python 3.11 meta-flow cr conflicts --id CR-173 --project-root .",
+    "exit_code": 1,
+    "reported_overlap": "CR-173 overlaps blocked CR-172 on c1-effective-trial-methodology and broad impact surfaces",
+    "classification": "expected_and_explicitly_authorized_parent_prerequisite_overlap",
+    "resolution": "The checker is conservative and does not model the approved PATH-B serialization. User approval is recorded in CR-172 CP2; CR-172 is blocked/deferred, its CP3-CP8 are blocked, and CR-173 is the sole active owner of the offline methodology slice.",
+    "status": "RESOLVED_BY_EXPLICIT_USER_CONFIRMATION_AND_SINGLE_WRITER_SERIALIZATION"
+  },
+  "authorization_check": {
+    "user_authorized_formalization": true,
+    "authorization_source": "CR-172 CP2 approval explicitly instructs continuation through PATH-B to the next human gate.",
+    "real_data_authorized": false,
+    "runtime_authorized": false,
+    "write_authorized": false,
+    "git_remote_write_authorized": false,
+    "status": "PASS"
+  },
+  "known_nonblocking_debt": [
+    {
+      "id": "CR-032-STALE-INDEX-POINTER",
+      "reason": "formal document says completed-offline but generated index still reports active",
+      "overlaps_cr173": false,
+      "remediation_scope": "separate process-governance cleanup"
+    }
+  ],
+  "decision": "PASS_WITH_KNOWN_NON_OVERLAPPING_LEGACY_DEBT",
+  "blockers": []
+}

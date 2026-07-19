@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP0",
+  "checkpoint_id": "CP0-CR172-REQUEST-INTAKE",
+  "profile": "runtime-high-risk",
+  "story_id": null,
+  "cr_id": "CR-172",
+  "context_ref": "process/context/CP0-CR172.context.json",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "dispatch_refs": [],
+  "evidence_ref": "process/checks/CR172-CONFLICT-PRECHECK.json",
+  "items": [
+    {
+      "id": "CP0-CR172-01",
+      "category": "workspace",
+      "name": "process 外置路由健康且状态可写",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/.meta-flow-process.yaml", "process/state/STATE.current.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "meta-flow workspace check 返回 ok；state v2 enforce check 通过。"
+    },
+    {
+      "id": "CP0-CR172-02",
+      "category": "state",
+      "name": "FU-CR161-010 与 CR-171 关闭事实同步",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/changes/CR-161-FOLLOW-UP-TRACKING-2026-07-10.md", "process/changes/summaries/CR-171.summary.json", "process/checks/CR172-CONFLICT-PRECHECK.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "FU-CR161-010 已 closed_by CR-171；direct active/closed conflict 已清除。"
+    },
+    {
+      "id": "CP0-CR172-03",
+      "category": "conflict",
+      "name": "正式化前无 active/blocked 重叠 CR",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CR172-CONFLICT-PRECHECK.json", "process/changes/CR-INDEX.json", "process/state/CR-LEDGER.ndjson"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "三条历史 lifecycle 枚举债务与 CR-172 不重叠，已保留为独立治理债务。"
+    },
+    {
+      "id": "CP0-CR172-04",
+      "category": "scope",
+      "name": "PATH-B 完成后的 activation 恢复契约明确",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/changes/CR-172.md#path-b-恢复契约", "process/plans/CR172-STAGE3-REAL-EVIDENCE-ACTIVATION-PHASE-A-SCOPE-REMEDIATION-2026-07-16.yaml"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "PATH-B 是前置而非替代；完成后五字段可冻结时必须恢复 CR-172 并重开 CP2 选择 PATH-C/A。"
+    },
+    {
+      "id": "CP0-CR172-05",
+      "category": "scope",
+      "name": "PATH-C 的 C2/C3 治理形态和总 CR 数明确",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/changes/CR-172.md#路径决策与默认值", "process/plans/CR172-STAGE3-REAL-EVIDENCE-ACTIVATION-PHASE-A-SCOPE-REMEDIATION-2026-07-16.yaml"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "默认 C2/C3 各自独立 runtime-high-risk CR，预计连同 CR-172 共 3 个；改为 slices 需 CP2 明示和六项条件。"
+    },
+    {
+      "id": "CP0-CR172-06",
+      "category": "authorization",
+      "name": "不同 owner 的 joint approval 具有机器审计契约",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/changes/CR-172.md#effective-trial-联合审批契约", "process/state/GATE-LEDGER.ndjson"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "同 revision/hash 双批准；权限取交集；revision 变化使旧批准失效；缺任一批准则拆分。"
+    },
+    {
+      "id": "CP0-CR172-07",
+      "category": "routing",
+      "name": "五字段可冻结时默认推荐 PATH-C",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/changes/CR-172.md#路径决策与默认值", "process/checks/CP0-CR172.route-plan.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "未显式接受 C1-C3 首次 blast radius 时不得选择 PATH-A；五字段不可冻结则 PATH-B。"
+    },
+    {
+      "id": "CP0-CR172-08",
+      "category": "routing",
+      "name": "runtime-high-risk route plan 完整",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP0-CR172.route-plan.json", "process/changes/CR-172.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "CP0/1 自动；CP2/3/5/8 人工；CP4/6/7 自动，未发生治理降级。"
+    },
+    {
+      "id": "CP0-CR172-09",
+      "category": "context",
+      "name": "CP0 context capsule 预算与 archive deny-default 通过",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/context/CP0-CR172.context.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "estimated_tokens=4239 <= 16000；process/archive/** 在 do_not_read_by_default。"
+    },
+    {
+      "id": "CP0-CR172-10",
+      "category": "authorization",
+      "name": "当前推进授权不包含真实数据或 runtime 操作",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/changes/CR-172.md#结构化权限策略", "process/changes/summaries/CR-172.summary.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "仅授权 formal CR、CP0/CP1 preparation 和打开 CP2。"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260716T015847Z0000-e522bd70",
+    "RE-20260716T015847Z0000-290e0fc1"
+  ],
+  "decision": "PASS",
+  "next_route": "CP1",
+  "checked_at": "2026-07-16T01:55:00+00:00"
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "story_id": "CR173-S02-exact-spectral-estimator",
+  "story_ref": "process/stories/STORY-CR173-S02-exact-spectral-estimator.md",
+  "stage": "CP6",
+  "objective": {
+    "summary": "实现只消费 S01 validated contracts 的 exact-rational matrix validator 与 spectral participation-ratio estimator。",
+    "non_goals": ["不估计 empirical matrix", "不接收真实数据", "不修改 S01/public C1", "不提供 production SLA 或 FWER/DSR calibration"]
+  },
+  "feature_refs": ["effective.trial.offline.estimator"],
+  "feature_design_refs": ["docs/features/effective-trial-offline-estimator/DESIGN.md", "docs/features/effective-trial-offline-estimator/TEST-PLAN.md", "docs/features/effective-trial-offline-estimator/TASKS.md"],
+  "feature_context": "S02 在已验证 S01 contract 上实现 exact parser/domain/LDLT/formula/rounding；S03 才负责跨 Story golden 与边界验证。",
+  "feature_contract_summary": "non-canonical token 唯一 F03；有限 exact-rational matrix domain failure 唯一 F04；无 float/tolerance/clamp/random pivot；一次 half-even 与双 [1,n] invariant。",
+  "cr_delta": {
+    "summary": "新增一个 estimator 模块与定向数值测试，不修改 S01 或 public production。",
+    "affected_contracts": ["exact matrix domain", "deterministic exact LDLT", "participation ratio", "once-only rounding"]
+  },
+  "acceptance": [
+    "identity/positive-correlation/fully-correlated/singleton analytic oracle=4/4",
+    "PD/singular PSD/negative pivot/zero-pivot residual coupling=4/4",
+    "float/tolerance/clamp/random pivot=0，F03/F04 overlap=0",
+    "unrounded/rounded [1,n]=2/2，half-even=1 次",
+    "当前 fixture-only 性能边界明确，不宣称 production SLA；真实 activation 前重评 exact integer growth"
+  ],
+  "dependency_inputs": ["process/returns/CR173-S01-contract-evidence-canonicalization.CP7R2.return.json", "process/evidence/CR173-S01-contract-evidence-canonicalization.CP7R2.index.json"],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/stories/STORY-CR173-S02-exact-spectral-estimator.md", "reason": "story_card", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "engine/effective_trial_evidence.py", "reason": "verified_upstream_contract", "required": true, "mode": "full"},
+    {"path": "tests/research/test_effective_trial_evidence_contracts.py", "reason": "upstream_regression_contract", "required": false, "mode": "full"},
+    {"path": "docs/features/effective-trial-offline-estimator/TEST-PLAN.md", "reason": "numeric_test_contract", "required": false, "mode": "sections"}
+  ],
+  "read_if_needed": [
+    {"path": "process/stories/STORY-CR173-S02-exact-spectral-estimator-LLD.md", "reason": "approved_design_contract", "trigger": "full_lld_required_by_policy", "mode": "full"}
+  ],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_implementation_truth"},
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/archive/**", "process/discussions/**", "process/stories/*-LLD.md", "process/stories/*-IMPLEMENTATION.md"],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "allowed_write_paths": [
+    "engine/effective_trial_estimator.py",
+    "tests/research/test_effective_trial_estimator.py",
+    "process/stories/STORY-CR173-S02-exact-spectral-estimator.md",
+    "process/stories/STORY-CR173-S02-exact-spectral-estimator-IMPLEMENTATION.md",
+    "process/returns/CR173-S02-exact-spectral-estimator.CP6.return.json",
+    "process/evidence/CR173-S02-exact-spectral-estimator.CP6.index.json",
+    "process/checks/CP6-CR173-S02-IMPLEMENTATION-DONE.result.json",
+    "process/checks/CP6-CR173-S02-IMPLEMENTATION-DONE.result.summary.md"
+  ],
+  "forbidden_write_paths": ["engine/effective_trial_evidence.py", "tests/research/test_effective_trial_evidence_contracts.py", "engine/experiment_family_lineage.py", "engine/experiment_family_lineage_store.py", "engine/strategy_admission_statistical_gate.py", "engine/statistical_evidence.py", "engine/multiple_testing_evidence.py", "engine/overfit_evidence.py", "engine/cross_strategy_reliability_gates.py", "engine/strategy_admission_package.py", "process/archive/**"],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py tests/research/test_effective_trial_estimator.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr173-s02-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py engine/effective_trial_estimator.py tests/research/test_effective_trial_estimator.py",
+    "git diff --check -- engine/effective_trial_estimator.py tests/research/test_effective_trial_estimator.py"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR173-S02-exact-spectral-estimator.CP6.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "methodology-high",
+  "parent_context_ref": "process/context/CP6-CR173.context.json",
+  "budget": {"estimated_tokens": 8500, "estimator": "manual_compact", "max_tokens": 18000},
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["methodology-high", "architecture-major"]
+  }
+}

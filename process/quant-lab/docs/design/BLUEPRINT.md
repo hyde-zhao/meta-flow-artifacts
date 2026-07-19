@@ -1,6 +1,6 @@
 ---
 status: "draft-current-index"
-version: "1.19"
+version: "1.21"
 source_use_cases: "process/USE-CASES.md"
 source_requirements: "process/REQUIREMENTS.md"
 source_story_backlog: "process/STORY-BACKLOG.md"
@@ -14,7 +14,9 @@ source_hld:
   - "process/docs/design/HLD-CAPACITY-LIQUIDITY-ADV-EVIDENCE-PRODUCER.md"
   - "process/archive/design-cr-docs/HLD-CANONICAL-RELIABILITY-NA-SEMANTICS-ADMISSION.md"
 source_adr: "process/ARCHITECTURE-DECISION.md"
-change: "CR-170"
+change: "CR-172"
+companion_hld_cr172: "docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md"
+companion_adr_cr172: "docs/design/ARCHITECTURE-DECISION-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md"
 companion_hld_cr139: "process/docs/design/HLD-STRATEGY-DATA-FOUNDATION.md"
 companion_adr_cr139: "process/docs/design/ARCHITECTURE-DECISION-STRATEGY-DATA-FOUNDATION.md"
 companion_blueprint_cr168: "process/archive/design-cr-docs/BLUEPRINT-ECONOMIC-COST-IMPACT-EVIDENCE.md"
@@ -61,6 +63,7 @@ archived_previous:
 | 1.18 | 2026-07-14 | host-orchestrator inline meta-se-critical | CR169 companion blueprint 通过 CP3：关联边界冻结为 13 字段 exact match，alpha 后置 FU008，Stage2 历史缺口不由 C4 范围代修。 |
 | 1.19 | 2026-07-15 | host-orchestrator inline meta-se-critical | 登记 CR170 companion blueprint：不新增平行 Feature，把 21-unit canonical N/A policy、five-state decision、admission hardening 和 future-verifier consumer contract 归入 FEAT-14/07/08 现有边界；待 CP3。 |
 | 1.20 | 2026-07-15 | host-orchestrator inline meta-se-critical | 精确化 CR170 CAP-01/04：inventory 增加 baseline path/direction/disposition 与 15/5/1；fixture/test caller 显式 authoring，T3 existing early-return 不重写；待 CP3。 |
+| 1.21 | 2026-07-17 | meta-se-critical | 按 CR-172 PATH-I 增补 trial-return sealed artifact、logical identity、research-local→NAS replica→execution cache、六动作授权、empirical disposition 与 SignalBatch 8-slot boundary；只冻结设计，真实动作仍为 0/6。 |
 
 ## 蓝图定位
 
@@ -345,3 +348,69 @@ archived_previous:
 | 既有合同闭环非新建边界清晰 | PASS | REQ-249、§0 核验、FEAT-06/11/12/14 增量标注既有合同位置 |
 | 运行授权边界未被放大 | PASS | REQ-248、不授权 runtime/NAS/QMT/trading/物理分区迁移/Git remote write |
 | AGA 推荐方案 CP3 已确认 A1/C1/E1 | PASS | DQ-BP-CR139-01..03 状态 confirmed-cp3 |
+
+## CR-172 增量：PATH-I Trial-Return 与跨机部署合同
+
+> 本节承接 `docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md` 和同名 ADR。状态为 `draft-pending-cp3`；只定义产品能力、唯一数据 owner、依赖方向和失败边界，不授权目录创建、runner 修改、真实 lake/NAS、multi-trial、trial-return/R、sync/pull/materialize、signal、migration、trading、deploy 或 Git remote write。
+
+### 能力地图增量
+
+| Capability ID | 能力域 | 用户价值 | 覆盖 REQ / UC | Owner Feature |
+|---|---|---|---|---|
+| CAP-CR172-I-01 | Trial-Return Source & Sealed Artifact | 让未来 native multi-trial 的每个 trial 产生可验证、不可变且不会与 layered returns/metadata/R 混淆的 return artifact | REQ-009、UC-58 | FEAT-CR172-I01 |
+| CAP-CR172-I-02 | Stable Logical Identity | 让同一 artifact 跨主机路径保持 logical URI + content hash 身份，绝对路径只做 deployment mapping | REQ-010、SC-B02 | FEAT-CR172-I01 |
+| CAP-CR172-I-03 | Verified Replica & Immutable Materialization | 让 NAS stale/partial/hash mismatch fail-closed，执行机只消费本地 immutable cache | REQ-010/012、SC-I02/N03/B03/F02 | FEAT-CR172-I02 |
+| CAP-CR172-I-04 | Per-Action Authorization & Claim Guard | 让六类真实动作逐项批准/撤销，并对 empirical R 输出诚实四态 disposition | REQ-011/014、SC-A02/Q02/C02 | FEAT-CR172-I03 |
+| CAP-CR172-I-05 | Path / Signal Scope Containment | 新 run 使用语义路径、legacy 只读；SignalBatch 只保留精确 8-slot boundary | REQ-013/015、SC-G02/S01～S06 | FEAT-CR172-I03 |
+
+### Feature / Epic 边界增量
+
+| Feature ID | 名称 | 负责事项 | 不负责事项 | 拥有数据 / 对象 | 只读数据 | 禁止依赖 |
+|---|---|---|---|---|---|---|
+| FEAT-CR172-I01 | Trial Return Artifact | `trial_portfolio_return_series@v1` schema、manifest、seal、logical identity、research-local immutable versions 与 active selection | multi-trial runtime 实现、NAS/执行机写、empirical R 计算、Signal exchange | TrialReturnPayloadV1、TrialReturnManifestV1、ArtifactSealV1、ResearchCanonicalSelection | future producer lineage refs、ActionDecisionV1 | CR-163 metadata/ref 或 layered_returns 冒充 payload；absolute path identity；未授权 source write |
+| FEAT-CR172-I02 | Replica & Materialization | sealed bundle 的 NAS staging/verify/receipt/distribution pointer 和 execution staging/verify/atomic cache/receipt | 拥有或改写 research canonical、runtime direct-NAS、重新 seal、交易运行 | ReplicaVerificationReceiptV1、MaterializationReceiptV1、deployment mappings | sealed artifact、expected release、ActionDecisionV1 | execution runtime→NAS/research；partial/stale/mismatch pointer advance；NAS canonical promotion |
+| FEAT-CR172-I03 | Authorization & Claim Governance | 六类 ActionAuthorizationRecord/Decision、empirical 四态 disposition、claim ceiling、新/旧路径策略、SignalBatchBoundaryV1 | 生成 return/R/signal、exchange/mailbox/ack/replay/intraday、migration、runtime/trading | ActionAuthorizationRecordV1、ActionDecisionV1、EmpiricalRDispositionV1、RunPathPolicyV1、SignalBatchBoundaryV1 | artifact/receipt refs、FU-CR173-001 status | 权限并集；declared-exact 重标 empirical；Signal detailed scope；legacy rewrite |
+
+数据 owner 唯一性：trial payload/manifest/seal/canonical selection 仅 FEAT-I01 写；replica/materialization receipt 仅 FEAT-I02 写；authorization/claim/path/signal contract 仅 FEAT-I03 写。NAS/执行机 replica 不获得 canonical authority。
+
+### 跨 Feature 流程增量
+
+| Flow ID | 触发 | 参与 Feature | 数据写入 Owner | 失败路径 | 验证入口 |
+|---|---|---|---|---|---|
+| FLOW-CR172-I-00 | 任一 future 真实动作请求 | FEAT-CR172-I01/I02/I03 → FEAT-CR172-I03 Action Guard | FEAT-CR172-I03 | missing/expired/revoked/scope-hash-path mismatch deny；无权限并集 | SC-A02/Q02 |
+| FLOW-CR172-I-01 | future trial candidate | FEAT-CR172-I01 validate → manifest → seal → local selection | FEAT-CR172-I01 | wrong-kind/missing/unsealed/alignment invalid 不推进 selection | SC-I01/N02/N04 |
+| FLOW-CR172-I-02 | authorized replica sync | FEAT-CR172-I01 sealed bundle → FEAT-CR172-I02 NAS staging/verify/receipt | FEAT-CR172-I02 | stale/partial/unversioned/hash mismatch 不推进 distribution pointer | SC-I02/N03/B03/F02 |
+| FLOW-CR172-I-03 | authorized execution materialization | FEAT-CR172-I02 replica → execution staging/verify/atomic cache | FEAT-CR172-I02 | expected release/manifest/seal/content 任一不符，cache pointer 不前移 | SC-I02/A02/F02 |
+| FLOW-CR172-I-04 | future empirical disposition | FEAT-CR172-I01 sealed refs → FEAT-CR172-I03 eligibility guard | FEAT-CR172-I03 | 前置不足 typed_unavailable；完整性/越权 BLOCKED；C1 false | SC-Q02/C02 |
+| FLOW-CR172-I-05 | new run / signal boundary request | FEAT-CR172-I03 path & scope guard | FEAT-CR172-I03 | legacy mutation blocked；detailed signal/intraday routed deferred | SC-G02/S01～S06 |
+
+### 共享能力增量
+
+| Shared ID | 名称 | 使用方 | Owner | 调用方向 | 降级策略 |
+|---|---|---|---|---|---|
+| SH-CR172-I-01 | ArtifactLogicalIdentityV1 | FEAT-CR172-I01/I02/I03、GitHub metadata docs | FEAT-CR172-I01 | payload→manifest/seal→receipt refs | 无法稳定复算 logical URI+hash 时 BLOCKED，不退 absolute path |
+| SH-CR172-I-02 | ActionAuthorizationRecordV1 | FEAT-CR172-I01/I02/I03、项目级 FEAT-07 policy input | FEAT-CR172-I03 | action request→single-action decision | 授权系统不能表达六项时全部 deny，真实动作 0/6 |
+| SH-CR172-I-03 | ExpectedReleaseVerification | FEAT-CR172-I02 replica/materializer | FEAT-CR172-I02 | approved release→manifest/seal/content verify→pointer | 任一 mismatch 保留上一 verified selection |
+| SH-CR172-I-04 | EmpiricalRDispositionV1 | C1 future consumer、FEAT-CR172-I03 | FEAT-CR172-I03 | sealed refs/method status/auth→four-state disposition | pre-v2/missing auth typed_unavailable；integrity conflict BLOCKED |
+| SH-CR172-I-05 | SignalBatchBoundaryV1 | future deferred exchange CR | FEAT-CR172-I03 | contract ref only；无当前 producer/consumer | exact 8/8 slots；detailed module/Story/implementation 0 |
+
+### 待确认边界增量
+
+| Decision ID | 决策类型 | 问题 | 推荐方案 | 备选方案 | 推荐 / 备选优劣 | 影响 / 风险 | 回退 / 切换条件 | 状态 |
+|---|---|---|---|---|---|---|---|---|
+| CP3-DQ-CR172-I-01 | architecture | native sealed pipeline 是否为目标态 | ARCH-A native-first | ARCH-B import-first；ARCH-C typed_unavailable | A lineage 最完整但实现复杂；B provenance 风险；C 最安全但无 positive empirical | source owner、future Story/Feature、用户价值 | native 不可插桩→B；provenance/owner 缺失→C | open-for-cp3 |
+| CP3-DQ-CR172-I-02 | architecture | identity、seal 顺序和三段复制链 | logical URI+hash；validate→manifest→seal→replica→materialize；pointer-only rollback | research-local only、distribution blocked | 推荐兼顾跨机与故障隔离；备选降低交付价值 | integrity、回滚、runtime isolation | 任一校验能力缺失即 blocked；不得 direct-NAS | open-for-cp3 |
+| CP3-DQ-CR172-I-03 | security | 六动作是否保持六 envelope/判定点 | 6/6 独立；当前全 deny | permanent fixture-only | 推荐可逐项归因撤销；备选最安全但无真实链路 | 权限、审计、事故恢复 | 无法安全表达时维持 0/6 | open-for-cp3 |
+| CP3-DQ-CR172-I-04 | risk_acceptance | empirical 四态/v2 前置与 signal ceiling | typed_unavailable 可设计；positive 需 FU；Signal 8-slot only | declared-exact-only / local-signal-only | 推荐保留演进并防 overclaim；备选价值更低 | C1 claim、deferred scope | 完整性冲突 BLOCKED；详细 signal 独立 CR | open-for-cp3 |
+
+### CR-172 蓝图自检
+
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| 每个新增 Feature 有职责、非职责和唯一数据 owner | PASS | FEAT-CR172-I01～I03 |
+| 跨 Feature 流程有写入 owner、失败路径和验证入口 | PASS | FLOW-CR172-I-00～05 |
+| shared contract 有调用方向和降级 | PASS | SH-CR172-I-01～05 |
+| REQ-009～015 与 UC-58 可追踪 | PASS | CAP/FLOW 表；HLD §6 |
+| Signal detailed exchange 未扩张 | PASS | 8-slot only；module/Story/implementation=`0/0/0` |
+| HLD 拆分判定已应用 | PASS | 单 HLD；future Signal/FU/import 各自独立 CR/HLD |
+| 运行授权和 claim ceiling 未放大 | PASS | real action `0/6`；五项 flag=false |

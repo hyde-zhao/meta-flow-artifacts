@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR173-STORY-DAG-PARALLEL-SAFETY",
+  "profile": "standard-code",
+  "story_id": null,
+  "cr_id": "CR-173",
+  "checked_at": "2026-07-16T15:34:41+08:00",
+  "context_ref": "process/context/CP4-CR173.context.json",
+  "route_plan_ref": "process/checks/CP0-CR173.route-plan.json",
+  "dispatch_refs": [
+    "AD-CR173-CP4-META-SE-CRITICAL-20260716T151103+0800",
+    "process/handoffs/CR173-CP4-META-SE-STORY-PLANNING-HANDOFF-2026-07-16.md",
+    "process/handoffs/CR173-CP4-META-SE-STORY-PLANNING-RETURN-SUMMARY.md"
+  ],
+  "items": [
+    {
+      "id": "CP4-CR173-01",
+      "category": "entry",
+      "name": "CP3 architecture and estimator-only split are approved",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checkpoints/CP3-CR173-HLD-REVIEW.md", "process/state/GATE-LEDGER.ndjson"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "DQ-CR173-CP3-001/002 approved; story planning and LLD design are allowed, implementation remains locked."
+    },
+    {
+      "id": "CP4-CR173-02",
+      "category": "feature-design",
+      "name": "One estimator-only Feature has a complete design triplet",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/design/FEATURE-DESIGN-MATRIX.md#cr173-cp4-增量effective-trial-offline-estimator", "docs/features/effective-trial-offline-estimator/DESIGN.md", "docs/features/effective-trial-offline-estimator/TEST-PLAN.md", "docs/features/effective-trial-offline-estimator/TASKS.md"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Feature=1; triplet=3/3; task=12; public projection Feature=0."
+    },
+    {
+      "id": "CP4-CR173-03",
+      "category": "story",
+      "name": "Three Story cards have stable IDs ownership and full-lld policy",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml#cr173_story_planning", "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md", "process/stories/STORY-CR173-S02-exact-spectral-estimator.md", "process/stories/STORY-CR173-S03-golden-failure-boundary-verification.md"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Story=3/3; full-lld=3/3; technical-note/waived=0; card schema=3/3."
+    },
+    {
+      "id": "CP4-CR173-04",
+      "category": "dag",
+      "name": "Scoped Story graph is acyclic and references are valid",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml#cr173_story_planning.dependency_graph"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "nodes=3; typed edges=3; cycles=0; invalid refs=0; isolated nodes=0; order S01→S02→S03."
+    },
+    {
+      "id": "CP4-CR173-05",
+      "category": "parallel-safety",
+      "name": "Three serial Waves have no internal dependency or file conflict",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml#cr173_story_planning.waves", "docs/features/effective-trial-offline-estimator/TASKS.md#依赖所有权与执行顺序"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "One Story per Wave; max parallel LLD/dev/QA=1; same-wave primary conflicts=0."
+    },
+    {
+      "id": "CP4-CR173-06",
+      "category": "file-ownership",
+      "name": "Seven planned primary paths have unique owners and public paths are forbidden",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml#cr173_story_planning.file_ownership_validation", "process/stories/STORY-CR173-S03-golden-failure-boundary-verification.md"],
+      "owner": "meta-se",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "primary=7/7 unique; public production primary paths=0; S03 reads but cannot write S01/S02/public files."
+    },
+    {
+      "id": "CP4-CR173-07",
+      "category": "traceability",
+      "name": "Requirements scenarios and outcomes map completely to Stories",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/design/FEATURE-DESIGN-MATRIX.md#cr173-cp4-增量effective-trial-offline-estimator", "process/DEVELOPMENT-PLAN.yaml#cr173_story_planning"],
+      "owner": "meta-se",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "REQ=8/8; scenarios=8/8; outcomes=4/4; uncovered P0=0."
+    },
+    {
+      "id": "CP4-CR173-08",
+      "category": "scope",
+      "name": "Estimator-only split excludes public C1 projection and activation Stories",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/features/effective-trial-offline-estimator/DESIGN.md#2-feature-边界", "process/handoffs/CR173-CP4-META-SE-STORY-PLANNING-RETURN-SUMMARY.md#8-public-projection-与授权证明"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Public projection Feature/Story/Task=0/0/0; production write/call=0/0; CR172 auto-resume=0."
+    },
+    {
+      "id": "CP4-CR173-09",
+      "category": "authorization",
+      "name": "Planning produced no implementation or external operation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/handoffs/CR173-CP4-META-SE-STORY-PLANNING-RETURN-SUMMARY.md", "process/state/AGENT-DISPATCH-LEDGER.ndjson"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "LLD/source/test/fixture/real/runtime/public-write/remote operations all 0; tasks remain blocked-by-cp5."
+    },
+    {
+      "id": "CP4-CR173-10",
+      "category": "legacy",
+      "name": "Pre-existing global planning and Feature registry debt is isolated",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/handoffs/CR173-CP4-META-SE-STORY-PLANNING-RETURN-SUMMARY.md#7-自检结果", "process/DEVELOPMENT-PLAN.yaml#cr173_story_planning.global_plan_check"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "Global checker retains CR013 invalid-status and historical FEATURE-REGISTRY/schema debt; CR173 scoped YAML/cards/DAG/owners pass independently."
+    }
+  ],
+  "entry_criteria": [
+    {"name": "CP3 approved", "status": "PASS", "evidence_ref": "process/checkpoints/CP3-CR173-HLD-REVIEW.md"},
+    {"name": "CP4 capsule ready", "status": "PASS", "evidence_ref": "process/context/CP4-CR173.context.json"},
+    {"name": "meta-se-critical delegated return complete", "status": "PASS", "evidence_ref": "process/handoffs/CR173-CP4-META-SE-STORY-PLANNING-RETURN-SUMMARY.md"}
+  ],
+  "exit_criteria": [
+    {"name": "Feature matrix and design triplet complete", "status": "PASS"},
+    {"name": "Story DAG coverage and file safety pass", "status": "PASS"},
+    {"name": "Three full-lld evidence paths queued", "status": "PASS"},
+    {"name": "No implementation authorization consumed", "status": "PASS"}
+  ],
+  "deliverables": [
+    "process/context/CP4-CR173.context.json",
+    "docs/design/FEATURE-DESIGN-MATRIX.md",
+    "docs/features/effective-trial-offline-estimator/DESIGN.md",
+    "docs/features/effective-trial-offline-estimator/TEST-PLAN.md",
+    "docs/features/effective-trial-offline-estimator/TASKS.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md",
+    "process/stories/STORY-CR173-S02-exact-spectral-estimator.md",
+    "process/stories/STORY-CR173-S03-golden-failure-boundary-verification.md"
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260716T073831Z0000-1e725637"],
+  "operation_counts": {
+    "lld_created": 0,
+    "source_modified": 0,
+    "test_source_modified": 0,
+    "fixture_modified": 0,
+    "public_c1_projection_story": 0,
+    "public_c1_contract_write": 0,
+    "real_lake_read": 0,
+    "real_lake_write": 0,
+    "credential_read": 0,
+    "provider_fetch": 0,
+    "runtime_operation": 0,
+    "trading_operation": 0,
+    "git_remote_write": 0
+  },
+  "decision": "PASS",
+  "manual_gate_status": null,
+  "next_route": "CP5-design-evidence"
+}

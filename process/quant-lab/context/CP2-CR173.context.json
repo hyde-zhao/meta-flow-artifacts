@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "capsule_id": "CP2-CR173-REQUIREMENT-CONTEXT",
+  "project_id": "quant-lab",
+  "workflow_id": "CR-173",
+  "phase": "requirement-clarification",
+  "checkpoint": "CP2",
+  "capsule_type": "cp2-requirement",
+  "status": "ready",
+  "created_at": "2026-07-16T12:16:00+08:00",
+  "created_by": "host-orchestrator",
+  "source_cr": "CR-173",
+  "stage": "CP2",
+  "profile": "standard-code",
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-173.summary.json",
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "budget": {
+    "estimated_tokens": 7800,
+    "max_tokens": 16000,
+    "estimator": "chars_div_4"
+  },
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "source_of_truth_map": "process/policies/SOURCE-OF-TRUTH-MAP.yaml",
+    "retention_policy": "process/policies/RETENTION-POLICY.json",
+    "artifact_budgets": "process/policies/ARTIFACT-BUDGETS.json"
+  },
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/changes/CR-*.md",
+    "docs/design/**",
+    "process/stories/**",
+    "process/archive/**",
+    "process/discussions/**"
+  ],
+  "token_control": {
+    "read_profile": "compact",
+    "max_source_files": 8,
+    "max_summary_items": 24,
+    "full_doc_read_policy": "only-on-missing-conflict-audit-or-deep-review",
+    "full_doc_read_reason": "",
+    "default_instruction": "先读本 capsule，并且只读取 allowed_reads / must_read；只有缺失、冲突、人工审计或深度评审时才展开完整产品文档，并用 meta-flow context read-log 记录。"
+  },
+  "allowed_reads": [
+    {
+      "path": "process/state/STATE.current.json",
+      "reason": "当前活跃 CR、门禁、风险、权限与下一步",
+      "required": true
+    },
+    {
+      "path": "process/current/CURRENT.json",
+      "reason": "当前 context / checkpoint / handoff 文件系统入口",
+      "required": true
+    },
+    {
+      "path": "process/changes/summaries/CR-173.summary.json",
+      "reason": "CR-173 范围、目标、trait、风险与授权摘要",
+      "required": true
+    },
+    {
+      "path": "process/checks/CP0-CR173-REQUEST-INTAKE.result.json",
+      "reason": "formalization、冲突串行化、route 与 deny-default 入口证据",
+      "required": true
+    },
+    {
+      "path": "process/checks/CP1-CR173-USE-CASE-COMPLETENESS.result.json",
+      "reason": "用户价值、场景与产品基线完整性机器结果",
+      "required": true
+    },
+    {
+      "path": "process/checks/CP2-CR173-REQUIREMENTS-BASELINE.result.json",
+      "reason": "CP2 自动预检机器真相源",
+      "required": true
+    },
+    {
+      "path": "process/checkpoints/CP2-CR173-REQUIREMENTS-BASELINE.md",
+      "reason": "8 项人工决策、Decision Brief 和人工审查结果",
+      "required": true
+    },
+    {
+      "path": "process/handoffs/CR173-CP1-META-PM-RETURN-SUMMARY.md",
+      "reason": "meta-pm 交还计数、边界和验证摘要",
+      "required": true
+    }
+  ],
+  "must_read": [
+    {
+      "path": "process/state/STATE.current.json",
+      "reason": "机器运行态与授权边界",
+      "required": true
+    },
+    {
+      "path": "process/current/CURRENT.json",
+      "reason": "当前审查入口",
+      "required": true
+    },
+    {
+      "path": "process/checks/CP2-CR173-REQUIREMENTS-BASELINE.result.json",
+      "reason": "自动预检 PASS / blocker / metrics / DQ count",
+      "required": true
+    },
+    {
+      "path": "process/checkpoints/CP2-CR173-REQUIREMENTS-BASELINE.md",
+      "reason": "本次人工门禁 Decision Brief",
+      "required": true
+    },
+    {
+      "path": "process/handoffs/CR173-CP1-META-PM-RETURN-SUMMARY.md",
+      "reason": "产品基线增量与未授权项摘要",
+      "required": true
+    }
+  ],
+  "read_if_needed": [
+    {
+      "path": "docs/product/USE-CASES.md",
+      "trigger": "需要审计业务动机、用户痛点、用户旅程或 strategy-agnostic 边界"
+    },
+    {
+      "path": "docs/product/REQUIREMENTS.md",
+      "trigger": "需要审计 REQ/NFR/DQ 原文、备选与切换条件"
+    },
+    {
+      "path": "docs/product/SCENARIOS.yaml",
+      "trigger": "需要审计 8 个 scenario 的 steps/expected 或六类覆盖"
+    },
+    {
+      "path": "docs/product/TEST-MATRIX.md",
+      "trigger": "需要审计 requirement→scenario→matrix 100% 追溯"
+    },
+    {
+      "path": "docs/product/MVP-SCOPE.md",
+      "trigger": "需要审计 In/Out/Deferred、成功指标或真实数据边界"
+    },
+    {
+      "path": "docs/product/STORY-MAP.md",
+      "trigger": "需要确认当前仅有 outcome、正式 Story/DAG/Wave 均为 0"
+    },
+    {
+      "path": "docs/product/RELEASE-SLICES.md",
+      "trigger": "需要审计 CP2→CP8 candidate slice 与 CR172 no-auto-resume"
+    },
+    {
+      "path": "docs/product/BACKLOG.md",
+      "trigger": "需要审计 FU-CR164-004→CR173 生命周期映射"
+    }
+  ],
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "人类摘要 / legacy fallback，不是机器真相源"
+    },
+    {
+      "path_or_pattern": "process/DEVELOPMENT-PLAN.yaml",
+      "reason": "CP2 前没有正式 Story 或开发计划"
+    },
+    {
+      "path_or_pattern": "process/changes/CR-*.md",
+      "reason": "默认读取 CR-173 summary；完整 CR 只在字段冲突或人工深审时展开"
+    },
+    {
+      "path_or_pattern": "docs/design/**",
+      "reason": "CP2 尚未批准，HLD/ADR 尚未授权生成"
+    },
+    {
+      "path_or_pattern": "process/stories/**",
+      "reason": "CP2 前 Story、LLD、实现证据必须为 0"
+    },
+    {
+      "path_or_pattern": "process/archive/**",
+      "reason": "历史归档与当前 CP2 决策无关"
+    },
+    {
+      "path_or_pattern": "process/discussions/**",
+      "reason": "讨论日志只作审计/恢复；默认消费 discussion checkpoint 与正式 Decision Brief"
+    },
+    {
+      "path_or_pattern": "完整会话 transcript",
+      "reason": "不得作为下游默认输入"
+    }
+  ],
+  "key_facts": {
+    "scope_summary": "CR-173 只建立 strategy-agnostic、synthetic/fixture-only 的 effective-trial 方法、7 字段 non-alias evidence、deterministic golden vectors 和 C1 consumer projection；它是 CR-172 PATH-B 前置，不是 activation。",
+    "accepted_decisions": [
+      "CR-172 CP2 已批准 DQ-002=separate_methodology_cr、DQ-004=PATH-B。",
+      "具体策略身份不属于 CR-173；不得要求、推断或冻结 strategy_id/strategy_name。",
+      "raw_trial_count 不能复制、重命名或默认回退为 effective_trial_count。",
+      "CR-173 完成不会自动关闭或恢复 CR-172。"
+    ],
+    "active_constraints": [
+      "CP2 只冻结用户可观察行为、失败语义、schema、determinism、projection ceiling 与恢复边界；具体算法/输入合同留 CP3。",
+      "CP5 前 Story 实现和测试源码修改为 0。",
+      "真实 lake/NAS、credential、provider、producer、runtime、write、trading、publish/deploy 和 Git remote 操作各为 0。",
+      "最高交付 claim 仅为 offline_method_ready；real evidence、Stage 3、admission、aggregate、CR155 均 false。"
+    ],
+    "downstream_tasks": [
+      "用户批准 CP2 后调度 meta-se 进入 CP3 solution-design，比较候选 estimator 方法并冻结输入有效域、方法版本/hash 与 consumer projection。",
+      "用户修改时回到 meta-pm 增量刷新相应产品文档、场景、矩阵和本 Decision Brief。",
+      "用户拒绝时 CR-173 保持 cp2_pending/not_ready，effective_trial_count 继续 typed_unavailable。"
+    ],
+    "traceability": {
+      "requirements": [
+        "REQ-CR173-001..008 (8/8 P0)"
+      ],
+      "use_cases": [
+        "UC-CR173-EFFECTIVE-TRIAL-OFFLINE-METHODOLOGY (1/1)"
+      ],
+      "scenarios": [
+        "SC-CR173-P01/Q01/F01/N01/B01/D01/C01/A01 (8/8)"
+      ],
+      "stories": [],
+      "features": []
+    }
+  },
+  "risks_and_decisions": {
+    "pending_human_decisions": [
+      "DQ-CR173-001 effective-count estimand / non-alias boundary",
+      "DQ-CR173-002 CP3 method and input-contract obligation",
+      "DQ-CR173-003 typed_unavailable / blocked failure semantics",
+      "DQ-CR173-004 seven-field evidence schema and provenance",
+      "DQ-CR173-005 strategy-agnostic boundary",
+      "DQ-CR173-006 6/6 × 3/3 deterministic golden-vector acceptance",
+      "DQ-CR173-007 C1 consumer projection and claim ceiling",
+      "DQ-CR173-008 CR172 recovery and no-runtime relationship"
+    ],
+    "non_authorized_items": [
+      "real lake/NAS/provider/credential read or write",
+      "real producer binding or real strategy computation",
+      "specific strategy identity",
+      "runtime, QMT/broker, simulation, paper/live trading",
+      "aggregate, CR155 promotion, mature admission or Stage 3 readiness",
+      "publish, deploy or Git remote write"
+    ],
+    "risk_acceptance_items": [
+      "R-CR173-RAW-EFFECTIVE-ALIAS: independent schema/provenance and zero alias paths",
+      "R-CR173-METHOD-NONDETERMINISM: version/hash and 3/3 repeat",
+      "R-CR173-CONSUMER-OVERCLAIM: typed_unavailable + projection postcondition",
+      "R-CR173-STRATEGY-COUPLING: strategy-agnostic fixture-only contract",
+      "R-CR173-SCOPE-ESCAPE: deny-default operation counters all zero"
+    ],
+    "open_questions": [
+      "Eight DQ values remain OPEN until this CP2 human gate."
+    ],
+    "n_a_or_waived_items": [
+      "Concrete estimator algorithm and numeric method parameters are N/A at CP2 and must be frozen at CP3; no waiver is granted."
+    ]
+  },
+  "handoff": {
+    "target_agent": "user-human-review",
+    "expected_output": [
+      "approve：接受 DQ-CR173-001..008 的八项推荐值",
+      "修改: <DQ-ID>=<value>：只修改指定决策并触发增量重整",
+      "reject：保持 effective_trial_count typed_unavailable，不进入 CP3"
+    ],
+    "exit_criteria": [
+      "8/8 DQ 均明确批准、修改或拒绝",
+      "claim ceiling 和 no-runtime/no-real-data 边界保持不变",
+      "批准只解锁 CP3 solution-design，不解锁 Story、实现或运行"
+    ],
+    "blocked_if_missing": [
+      "任一 DQ 没有明确值",
+      "要求在 CP2 直接冻结算法但未提供可评审方法决策",
+      "任何真实数据、策略身份、runtime 或 write 授权被隐含加入"
+    ]
+  },
+  "read_expansion_log": [
+    {
+      "at": "2026-07-16T03:50:39+00:00",
+      "actor": "meta-pm",
+      "expanded_to": "eight docs/product baseline documents",
+      "reason": "CR-173 incremental product-baseline update; event refs recorded in CP1/CP2 results"
+    }
+  ],
+  "validation": {
+    "generated_from_sources": [
+      "process/checks/CP0-CR173-REQUEST-INTAKE.result.json",
+      "process/checks/CP1-CR173-USE-CASE-COMPLETENESS.result.json",
+      "process/checks/CP2-CR173-REQUIREMENTS-BASELINE.result.json",
+      "process/handoffs/CR173-CP1-META-PM-RETURN-SUMMARY.md",
+      "process/changes/summaries/CR-173.summary.json"
+    ],
+    "missing_sources": [],
+    "consistency_status": "pass",
+    "notes": [
+      "1 UC / 8 REQ / 8 scenarios / 8 matrix rows / 8 DQ.",
+      "Six mandatory classes=6/6; schema=7/7; golden vectors=6/6 × 3/3.",
+      "Formal Story/Epic/DAG/Wave/LLD/source/test-source and forbidden operations all equal zero."
+    ]
+  }
+}

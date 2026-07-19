@@ -1,0 +1,242 @@
+schema_version: "1.0"
+capsule_id: "CP3-CR172-PATH-I-DESIGN-20260717"
+project_id: "quant-lab"
+workflow_id: "CR-172"
+phase: "solution-design"
+checkpoint: "CP3"
+capsule_type: "cp3-design"
+status: "ready_for_human_gate"
+created_at: "2026-07-17T16:54:09+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-172"
+updated_at: "2026-07-17T17:30:37+08:00"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 16
+  max_summary_items: 32
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: "deep_review"
+  default_instruction: "先读本 capsule；仅在 PATH-I 架构冻结、现有设计增量合并或字段冲突需要时读取 allowed_reads 中的完整正式文档，并将额外扩展写入 read_expansion_log。"
+
+allowed_reads:
+  - path: "process/state/STATE.current.json"
+    reason: "当前阶段、授权边界和下一步"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "当前 context/checkpoint/handoff 指针"
+    required: true
+  - path: "process/changes/summaries/CR-172-TRIAL-RETURN-DEPLOYMENT-DELTA.summary.json"
+    reason: "PATH-I 增量最小真相源"
+    required: true
+  - path: "process/changes/summaries/CR-172.summary.json"
+    reason: "CR-172 当前机器摘要"
+    required: true
+  - path: "process/checkpoints/CP2-CR172-TRIAL-RETURN-DEPLOYMENT-REQUIREMENTS-BASELINE.md"
+    reason: "已批准 DQ-009~015、三个强制边界和不授权项"
+    required: true
+  - path: "process/handoffs/CR172-PATH-I-REVIEW-CORRECTION-R2-RETURN-SUMMARY.md"
+    reason: "correction R2 产品覆盖与验证摘要"
+    required: true
+  - path: "docs/product/USE-CASES.md"
+    reason: "UC-58-CR172 用户旅程与失败边界"
+    required: true
+  - path: "docs/product/REQUIREMENTS.md"
+    reason: "REQ/DQ-CR172-009~015 和阶段守卫"
+    required: true
+  - path: "docs/product/SCENARIOS.yaml"
+    reason: "CR172 27 个 P0 场景和 S01~S06 稳定 ID"
+    required: true
+  - path: "docs/product/TEST-MATRIX.md"
+    reason: "27/27 需求场景覆盖和未来验证入口"
+    required: true
+  - path: "docs/product/STORY-MAP.md"
+    reason: "PATH-I 用户活动和 future PATH-C/A 衔接"
+    required: true
+  - path: "docs/product/MVP-SCOPE.md"
+    reason: "当前 in/out/deferred 与 claim ceiling"
+    required: true
+  - path: "docs/product/RELEASE-SLICES.md"
+    reason: "PATH-I 设计与 fixture 切片"
+    required: false
+  - path: "docs/design/BLUEPRINT.md"
+    reason: "增量写入四组件部署与 PATH-I Feature/数据归属"
+    required: true
+  - path: "docs/design/DOMAIN-MAP.md"
+    reason: "增量写入 trial-return、replica、materialization 与 authorization 领域对象"
+    required: true
+  - path: "docs/design/DEPENDENCY-MAP.md"
+    reason: "增量写入允许/禁止依赖和无环数据流"
+    required: true
+
+must_read:
+  - path: "process/state/STATE.current.json"
+    reason: "机器运行态和未授权边界"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "当前发现入口"
+    required: true
+  - path: "process/changes/summaries/CR-172-TRIAL-RETURN-DEPLOYMENT-DELTA.summary.json"
+    reason: "PATH-I 事实摘要"
+    required: true
+  - path: "process/checkpoints/CP2-CR172-TRIAL-RETURN-DEPLOYMENT-REQUIREMENTS-BASELINE.md"
+    reason: "用户已批准的设计输入"
+    required: true
+  - path: "docs/product/USE-CASES.md"
+    reason: "用户目标和关键场景"
+    required: true
+  - path: "docs/product/REQUIREMENTS.md"
+    reason: "量化设计合同"
+    required: true
+  - path: "docs/product/SCENARIOS.yaml"
+    reason: "正负向和失败恢复场景"
+    required: true
+  - path: "docs/product/TEST-MATRIX.md"
+    reason: "架构可验证性追踪"
+    required: true
+  - path: "docs/product/MVP-SCOPE.md"
+    reason: "范围和阶段 ceiling"
+    required: true
+  - path: "docs/design/BLUEPRINT.md"
+    reason: "现有能力边界的增量合并基线"
+    required: true
+  - path: "docs/design/DOMAIN-MAP.md"
+    reason: "现有领域对象的增量合并基线"
+    required: true
+  - path: "docs/design/DEPENDENCY-MAP.md"
+    reason: "现有依赖方向的增量合并基线"
+    required: true
+
+read_if_needed:
+  - path: "process/changes/CR-172.md"
+    trigger: "summary 与 CP2 approved checkpoint 发生冲突或需审计完整 checkpoint index"
+  - path: "process/baseline/CURRENT-REQUIREMENT-BASELINE.yaml"
+    trigger: "需要核对 CR171/172/173 三层方法、activation、projection 关系"
+  - path: "docs/components/MULTIFACTOR-RESEARCH.md"
+    trigger: "需要核对现有 runner、旧路径和研究产物事实"
+  - path: "engine/mature_multifactor_research.py"
+    trigger: "需要核对旧 DEFAULT_RESEARCH_ROOT、layered_returns 或当前写入点；只读"
+  - path: "engine/experiment_family_lineage.py"
+    trigger: "需要核对 CR-163 lineage metadata/ref 与 trial-return 实体边界；只读"
+  - path: "engine/effective_trial_evidence.py"
+    trigger: "需要核对 CR-173 v1 declared_exact 输入和 public C1 非投影边界；只读"
+  - path: "process/changes/CR-173-FOLLOW-UP-TRACKING-2026-07-17.md"
+    trigger: "需要冻结 FU-CR173-001 的输入/输出衔接但不得实现 v2"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "人类摘要和 legacy fallback"
+  - path_or_pattern: "process/DEVELOPMENT-PLAN.yaml"
+    reason: "CP3 尚未批准，不得提前 Story 规划"
+  - path_or_pattern: "process/stories/**"
+    reason: "CP3 只做 HLD/ADR，不做 LLD 或实现"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不属于当前设计默认输入"
+  - path_or_pattern: "process/discussions/**"
+    reason: "除本轮 CP3 discussion log 外，历史讨论不默认读取"
+  - path_or_pattern: "docs/quality/**"
+    reason: "CP3 只消费产品验证矩阵，不读取历史完整质量报告"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "已批准事实以 checkpoint 和产品基线为准"
+
+key_facts:
+  scope_summary: "PATH-I 只冻结并以未来 repository-local fixture 验证 trial-return instrumentation、稳定 logical URI、研究机 local canonical→NAS verified replica→执行机 local immutable cache、六类逐动作授权和 empirical-R 分类合同；信号只保留执行机本地默认与 8 字段边界。"
+  accepted_decisions:
+    - "DQ-CR172-009~015 已由用户在 CP2 7/7 批准。"
+    - "研究机本地目录是 active canonical；NAS 仅是 verified replica/backup/distribution；执行机 runtime 只消费本地 immutable materialization。"
+    - "新 run 使用 multifactor-strategy-research/{run_id}；legacy stage3_mature_multifactor 只读不迁移。"
+    - "六类真实动作分别授权；当前授权和执行均为 0/6。"
+    - "FU-CR173-001 只阻断 positive empirical effective count/c1_computable；DQ-003 typed_unavailable 降级可继续设计。"
+    - "SignalBatch 只冻结精确 8 字段；物理路径、状态机、ack、idempotency/replay、exchange 与 intraday 全部 deferred。"
+  active_constraints:
+    - "CP3 design-only：目录创建、runner 修改、真实 lake/NAS、runtime、trial-return/R、signal、migration、trading、publish/deploy、Git remote write 全部为 0。"
+    - "logical URI + content hash 是跨机器身份；绝对挂载路径不得进入 canonical identity。"
+    - "replica stale/partial/hash mismatch 和执行机 direct-NAS runtime read 必须 fail-closed。"
+    - "不得把 CR-163 metadata/ref、layered forward returns 或 CR-173 已计算 R envelope 误写成 trial-return source。"
+    - "CP8 最高 path_i_design_ready=true；stage3_entry_ready、c1_computable、real_data_authorized、multi_trial_runtime_authorized、signal_transport_authorized 均 false。"
+  downstream_tasks:
+    - "增量更新 BLUEPRINT.md、DOMAIN-MAP.md、DEPENDENCY-MAP.md，保留既有内容与修订记录。"
+    - "生成 CR-specific PATH-I HLD 和 ARCHITECTURE-DECISION 文档。"
+    - "前置完成 Architecture Gray Areas、advisor table、至少两套候选方案、Use Case trace 与 3 个关键场景模拟。"
+    - "判定 HLD 是否需要拆分；不得把 deferred signal exchange 或 empirical methodology v2 设计偷渡进 PATH-I。"
+    - "生成 CP3 自动预检 result 和 return summary；不得生成 Story/LLD/实现。"
+  traceability:
+    requirements: ["REQ-CR172-009", "REQ-CR172-010", "REQ-CR172-011", "REQ-CR172-012", "REQ-CR172-013", "REQ-CR172-014", "REQ-CR172-015"]
+    use_cases: ["UC-58-CR172"]
+    scenarios: ["SC-CR172-I01~I13", "SC-CR172-S01~S06", "SC-CR172-Q01~Q02"]
+    stories: []
+    features: ["PATH-I trial-return instrumentation", "artifact identity and replica flow", "per-action authorization", "empirical-R disposition", "signal boundary only"]
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "CP3 必须确认 HLD/ADR 中的模块边界、manifest/seal 顺序、授权判定点和 fail-closed 场景；不能重开已批准 CP2 范围。"
+  non_authorized_items:
+    - "任何代码/测试/fixture 实现（需未来 CP5）"
+    - "目录创建、runner 默认值切换或 legacy migration"
+    - "真实 data lake/NAS access、sync/pull/materialize、multi-trial runtime、trial-return/R computation"
+    - "SignalBatch 生成/transport/ack/replay、QMT/trading、publish/deploy、Git remote write"
+  risk_acceptance_items:
+    - "R-CR172-REAL-R-DOMAIN-MISMATCH：positive empirical 由 FU-CR173-001 阻断或 DQ-003 降级。"
+    - "R-CR172-RUNTIME-AUTHORIZATION-GAP：六类动作保持独立且当前 0/6。"
+    - "R-CR172-SYNC-REPLICA-STALE：manifest/hash/atomic materialization 必须设计为 fail-closed。"
+    - "R-CR172-SIGNAL-TRANSFER-AMBIGUITY：PATH-I 只冻结边界，详细交换 deferred。"
+  open_questions:
+    - "Architecture Gray Areas 形成的 CP3 DQ，必须在 CP3 Decision Brief 中由用户确认。"
+  n_a_or_waived_items:
+    - "Story、LLD、source/test implementation、真实环境验证在 CP3 均 N/A；无 waiver。"
+
+handoff:
+  target_agent: "meta-se-critical"
+  expected_output:
+    - "docs/design/BLUEPRINT.md（CR172 增量）"
+    - "docs/design/DOMAIN-MAP.md（CR172 增量）"
+    - "docs/design/DEPENDENCY-MAP.md（CR172 增量）"
+    - "docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md"
+    - "docs/design/ARCHITECTURE-DECISION-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md"
+    - "process/discussions/CP3-CR172-PATH-I-HLD-DISCUSSION-LOG.md"
+    - "process/checks/CP3-CR172-PATH-I-DISCUSSION-CHECKPOINT.json"
+    - "process/checks/CP3-CR172-PATH-I-HLD-CONSISTENCY.result.json"
+    - "process/handoffs/CR172-CP3-META-SE-RETURN-SUMMARY.md"
+  exit_criteria:
+    - "Architecture Gray Areas 3~4 个，advisor table 具备至少两套真实候选与切换条件。"
+    - "REQ-009~015 7/7 和 UC-58 可追溯，至少 3 个关键场景模拟 PASS。"
+    - "四组件数据 owner 唯一，依赖方向无环，禁止 direct-NAS runtime 与 GitHub 数据面扩大。"
+    - "SignalBatch 只保留 8 字段边界；详细 exchange/intraday Story/模块/实现数量为 0。"
+    - "empirical R 三路线和 FU-CR173-001 条件式前置无矛盾。"
+    - "所有真实操作计数为 0；CP3 result PASS 且 blocker=0 才可发起人工门禁。"
+  blocked_if_missing:
+    - "HLD 把 PATH-I 写成真实 runtime activation 或 c1_computable。"
+    - "NAS 被设计为 runtime working canonical，或执行机直接从 NAS/研究机运行。"
+    - "trial-return source 与 CR-163 lineage metadata 或 layered_returns 混淆。"
+    - "详细 signal exchange 或 empirical methodology v2 被纳入当前实现范围。"
+
+read_expansion_log:
+  - at: "2026-07-17T16:54:09+08:00"
+    actor: "host-orchestrator"
+    expanded_to: "CP2 approved checkpoint、CR172 summary、产品基线 CR172 sections 和现有 BLUEPRINT/DOMAIN/DEPENDENCY"
+    reason: "deep_review"
+
+validation:
+  generated_from_sources:
+    - "process/state/STATE.current.json"
+    - "process/checkpoints/CP2-CR172-TRIAL-RETURN-DEPLOYMENT-REQUIREMENTS-BASELINE.md"
+    - "process/changes/summaries/CR-172-TRIAL-RETURN-DEPLOYMENT-DELTA.summary.json"
+    - "process/handoffs/CR172-PATH-I-REVIEW-CORRECTION-R2-RETURN-SUMMARY.md"
+    - "docs/product/USE-CASES.md"
+    - "docs/product/REQUIREMENTS.md"
+    - "docs/product/SCENARIOS.yaml"
+    - "docs/product/TEST-MATRIX.md"
+    - "docs/product/MVP-SCOPE.md"
+  missing_sources: []
+  consistency_status: "pass"
+  final_design_refs:
+    - "docs/design/BLUEPRINT.md#cr-172-增量path-i-trial-return-与跨机部署合同"
+    - "docs/design/DOMAIN-MAP.md#cr-172-增量path-i-trial-return-与部署领域模型"
+    - "docs/design/DEPENDENCY-MAP.md#cr-172-增量path-i-trial-return-与部署依赖边界"
+    - "docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md"
+    - "docs/design/ARCHITECTURE-DECISION-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md"
+  result_ref: "process/checks/CP3-CR172-PATH-I-HLD-CONSISTENCY.result.json"
+  result_summary: "18/18 PASS；REQ 7/7；UC 1/1；simulations 5/5；blocker/waiver=0/0；real actions authorized/executed=0/6/0/6。"
+  notes:
+    - "CP2 approved 仅解锁 CP3；design agent 不拥有人工门禁批准权。"
+    - "本 capsule 是设计输入与读取边界，HLD/ADR 完成后须刷新 validation 和 CP3 Decision Brief。"

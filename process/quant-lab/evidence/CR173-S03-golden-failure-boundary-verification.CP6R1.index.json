@@ -1,0 +1,87 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "action": "modified",
+      "path": "tests/research/test_effective_trial_authorization.py",
+      "sha256": "73ca975a1a38f00b36e285e4a11726fe60c4b32f2699d2e6cee6600a0bc0696c"
+    },
+    {
+      "action": "modified",
+      "path": "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-IMPLEMENTATION.md",
+      "sha256": "0c8fadd306fd38f68402b85c2bdf6592896e293790e50b8e94923cec29953c9d"
+    },
+    {
+      "action": "created",
+      "path": "process/returns/CR173-S03-golden-failure-boundary-verification.CP6R1.return.json"
+    },
+    {
+      "action": "created",
+      "path": "process/evidence/CR173-S03-golden-failure-boundary-verification.CP6R1.index.json"
+    },
+    {
+      "action": "created",
+      "path": "process/checks/CP6-CR173-S03-REWORK-1.result.json"
+    },
+    {
+      "action": "created",
+      "path": "process/checks/CP6-CR173-S03-REWORK-1.result.summary.md"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_authorization.py",
+      "result": "PASS: 9 passed in 0.10s"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q <CR173 targeted 4 modules>",
+      "result": "PASS: 124 passed in 0.32s"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q <targeted + authoritative public 12 modules>",
+      "result": "PASS: 379 passed in 1.83s"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s03-cp6r1-pycompile uv run --python 3.11 python -m py_compile tests/research/test_effective_trial_cr173_qac.py tests/research/test_effective_trial_authorization.py",
+      "result": "PASS: 2/2"
+    },
+    {
+      "command": "git diff --check -- tests/research/test_effective_trial_authorization.py",
+      "result": "PASS: whitespace errors=0"
+    }
+  ],
+  "cr_id": "CR-173",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR173-S03-golden-failure-boundary-verification.CP6R1.return.json",
+  "risks": [
+    {
+      "id": "R-CR173-SCOPE-ESCAPE",
+      "status": "guard_fixed_awaiting_independent_reverify"
+    },
+    {
+      "id": "R-CR173-EXACT-INTEGER-GROWTH",
+      "status": "accepted_fixture_only_recheck_before_real_scale"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR173-S03-golden-failure-boundary-verification",
+  "tests": [
+    {
+      "failed": 0,
+      "passed": 9,
+      "suite": "authorization-adversarial"
+    },
+    {
+      "failed": 0,
+      "passed": 124,
+      "suite": "CR173-targeted"
+    },
+    {
+      "failed": 0,
+      "passed": 379,
+      "suite": "combined-public-read-only"
+    }
+  ],
+  "waivers": []
+}

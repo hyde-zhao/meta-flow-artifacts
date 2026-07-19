@@ -1,0 +1,65 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md",
+    "process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7.return.json",
+    "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7.index.json",
+    "process/checks/CP7-CR172-S05-VERIFICATION.result.json",
+    "process/checks/CP7-CR172-S05-VERIFICATION.result.summary.md"
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_integration.py tests/research/test_cr172_path_i_authorization.py tests/research/test_cr172_path_i_claim_regression.py",
+      "result": "PASS: 27 passed in 0.53s; failed/skipped=0/0"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py tests/research/test_cr172_execution_materialization.py tests/research/test_cr172_path_i_integration.py tests/research/test_cr172_path_i_authorization.py tests/research/test_cr172_path_i_claim_regression.py",
+      "result": "PASS: 154 passed in 0.94s; failed/skipped=0/0"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s05-cp7-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py engine/research_artifact_materialization.py tests/fixtures/cr172_path_i/path_i_fixture.py tests/research/test_cr172_path_i_integration.py tests/research/test_cr172_path_i_authorization.py tests/research/test_cr172_path_i_claim_regression.py",
+      "result": "PASS: exit=0"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null <each of 9 S05 fixture/test assets>",
+      "result": "PASS: expected diff exit=1 for each; whitespace diagnostics=0/9"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S05.CP6.work-packet.json --return process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP6.return.json",
+      "result": "PASS: OK; only expected process-symlink return-path warning"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S05-IMPLEMENTATION-DONE.result.json --check-consistency --correlation-profile audit",
+      "result": "PASS: OK; only input-path/final-attempt/route-plan warnings"
+    },
+    {
+      "command": "independent trace/DAG/single-truth, artifact/authz/claim and failure probes via uv run --python 3.11 python",
+      "result": "FAIL: F-001 req013_contract_binding_exact=false; all non-trace contract, DAG, failure, claim and zero-operation checks pass"
+    }
+  ],
+  "cr_id": "CR-172",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7.return.json",
+  "risks": [
+    {
+      "id": "R-CP7-S05-TRACE-SEMANTIC-MISBINDING",
+      "note": "Exact 15/15 requirement coverage is not established until F-001 is corrected and independently reverified.",
+      "status": "open_blocking"
+    },
+    {
+      "id": "R-CR172-RUNTIME-AUTHORIZATION-GAP",
+      "note": "Repository fixtures do not authorize any real action.",
+      "status": "deferred_not_authorized"
+    },
+    {
+      "id": "R-CR172-REAL-R-DOMAIN-MISMATCH",
+      "note": "Positive empirical-R and effective-count paths remain outside S05.",
+      "status": "deferred"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR172-S05-path-i-integration-claim-zero-operation-verification",
+  "tests": [],
+  "waivers": []
+}

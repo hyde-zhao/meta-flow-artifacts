@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR173-S01-REWORK-2",
+  "story_id": "CR173-S01-contract-evidence-canonicalization",
+  "cr_id": "CR-173",
+  "context_ref": "process/context/stories/STORY-CR173-S01.CP6.rework-2.work-packet.json",
+  "dispatch_refs": [
+    "AD-CR173-S01-CP6R2-META-DEV-DEBUGGER-COMPLETED-20260717T105206+0800"
+  ],
+  "return_packet_ref": "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json",
+  "evidence_ref": "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R2.index.json",
+  "checked_at": "2026-07-17T10:44:49+08:00",
+  "check_attempt": 3,
+  "supersedes_result_ref": "process/checks/CP6-CR173-S01-REWORK-1.result.json",
+  "route_plan_ref": "process/checks/CP0-CR173.route-plan.json",
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR173-S01.CP6.rework-2.work-packet.json": "sha256:85846900d4a2613b931617d460e23e321103d88d61e476fd9607009d4e2534c1",
+    "process/checks/CP7-CR173-S01-REVERIFY-1.result.json": "sha256:0ff23628bfbe7bf3824e119525ac004f061622306d312ecd01cc1c8cf31fd84e",
+    "engine/effective_trial_evidence.py": "sha256:7ff5ebf9bc273375344e40c54903a2e3bc4605cdc8c931fcc97882c0fe84217d",
+    "tests/research/test_effective_trial_evidence_contracts.py": "sha256:1bd059c585e7e477429b6f68a7c172178b7a3a22ae47d9b8546bd316ba495aca",
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md": "sha256:be06cfceee3e945a92ced8fb4b6817df48737329368d0b78a5dd65536bb3f137",
+    "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json": "sha256:bb23c16b74dced962b2518e37a2fb49cf362e88e9fa310527549c5cd1cf2d264",
+    "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R2.index.json": "sha256:8842193f45791522a5d418e4e464256bcc5a467a6bbf5d37e02b7fe92cc77160"
+  },
+  "items": [
+    {
+      "id": "CP6R2-ENTRY-01",
+      "category": "entry",
+      "name": "CP7R1 remaining findings are scoped and reproducible",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP7-CR173-S01-REVERIFY-1.result.json"],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "仅 F-002 bytes fail-closed 与 F-003 forged audit identity 两项。"
+    },
+    {
+      "id": "CP6R2-ENTRY-02",
+      "category": "entry",
+      "name": "Authorized meta-dev-debugger dispatch and write boundary",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["AD-CR173-S01-CP6R2-META-DEV-DEBUGGER-20260717T103847+0800"],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "terminal dispatch 由 Host 在 return 后收口。"
+    },
+    {
+      "id": "CP6R2-CHECK-01",
+      "category": "test",
+      "name": "Original and adversarial contract regression",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R2.index.json#commands"],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "原 53/53 + 新增 7/7 = 60/60 PASS。"
+    },
+    {
+      "id": "CP6R2-CHECK-02",
+      "category": "finding_closure",
+      "name": "F-CP7-S01-002 stable typed failure mapping",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json#finding_closure"],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "family bytes/bytearray→F01，lineage bytes→F02，trial bytes→F06；CanonicalizationError 逸出=0。"
+    },
+    {
+      "id": "CP6R2-CHECK-03",
+      "category": "finding_closure",
+      "name": "F-CP7-S01-003 content-addressed audit identity",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json#finding_closure"],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "constructor/log 双层复算；forged root/recovery/constructor 接受数=0。"
+    },
+    {
+      "id": "CP6R2-CHECK-04",
+      "category": "static",
+      "name": "Syntax and diff hygiene",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R2.index.json#commands"],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "py_compile 2/2；git diff --check PASS。"
+    },
+    {
+      "id": "CP6R2-CHECK-05",
+      "category": "boundary",
+      "name": "Scope and authorization boundary remain intact",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json#boundary_check"],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "S02/public/real/runtime/credential/remote 操作均为 0。"
+    },
+    {
+      "id": "CP6R2-CHECK-06",
+      "category": "design_delta",
+      "name": "Normative design delta",
+      "status": "N/A",
+      "severity": "LOW",
+      "evidence_refs": ["process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json#contract_changes"],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": null,
+      "waiver_ref": null,
+      "notes": "schema/hash domain/identity mapping/claim/authz 变化数=0。"
+    },
+    {
+      "id": "CP6R2-EXIT-01",
+      "category": "exit",
+      "name": "All requested implementation findings are closed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json#finding_closure"],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "F-002/F-003 已实现关闭，等待独立复验。"
+    },
+    {
+      "id": "CP6R2-EXIT-02",
+      "category": "exit",
+      "name": "Story may advance to CP7 reverification",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json"],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "不在 CP6 自行标记 verified；S02 继续锁定至 CP7 PASS。"
+    },
+    {
+      "id": "CP6R2-DELIVERABLE-01",
+      "category": "deliverable",
+      "name": "Implementation evidence captured by Story return",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json"],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "updated"
+    },
+    {
+      "id": "CP6R2-DELIVERABLE-02",
+      "category": "deliverable",
+      "name": "CP6R2 return packet and evidence index",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json",
+        "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R2.index.json"
+      ],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "created and return-check OK"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS",
+  "next_route": "CP7"
+}

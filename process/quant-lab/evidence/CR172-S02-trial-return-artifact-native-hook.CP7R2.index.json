@@ -1,0 +1,98 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "modified",
+      "path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP7R2.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP7R2.index.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/checks/CP7-CR172-S02-REVERIFY-2.result.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/checks/CP7-CR172-S02-REVERIFY-2.result.summary.md"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: 35 passed in 0.43s; failed/skipped=0/0"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: 81 passed in 0.46s; failed/skipped=0/0"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s02-cp7r2-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: exit=0"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null engine/trial_return_artifact.py",
+      "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null tests/research/test_cr172_trial_return_artifact.py",
+      "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S02.CP6.rework-2.work-packet.json --return process/returns/CR172-S02-trial-return-artifact-native-hook.CP6R2.return.json",
+      "result": "pass_with_note: OK; expected-return path warning only"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S02-REWORK-2.result.json --check-consistency --correlation-profile audit",
+      "result": "pass_with_note: OK; input-path/final-attempt warnings only"
+    },
+    {
+      "command": "repository-local independent authorization-ref exact-correlation probe",
+      "result": "pass: direct mismatch 5/5 plus publisher drift 1/1 rejected with call/commit/selection=0/0/0; legal direct/publisher=1/1/1"
+    },
+    {
+      "command": "AST/source contract inventory",
+      "result": "pass: verified guard definition=1; call owner=commit_verified only; publisher direct duplicate=0; binding=13; double port guard=2; Protocol/hasattr=0/0; canonical defs=1/1/1"
+    }
+  ],
+  "cr_id": "CR-172",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR172-S02-trial-return-artifact-native-hook.CP7R2.return.json",
+  "risks": [
+    {
+      "id": "R-CR172-S02-PORT-BINDING",
+      "note": "Nominal capability、exact ordered seal authorization refs、双 guard 与原子提交合同均已独立复验。",
+      "status": "closed"
+    },
+    {
+      "id": "R-CR172-TRIAL-RETURN-SOURCE-ABSENT",
+      "note": "Fixture PASS 不证明或授权真实 native producer。",
+      "status": "design_deferred_fail_closed"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR172-S02-trial-return-artifact-native-hook",
+  "tests": [
+    {
+      "failed": 0,
+      "passed": 35,
+      "path": "tests/research/test_cr172_trial_return_artifact.py",
+      "role": "S02 original contracts plus CP6R1/CP6R2 authorization-ref regressions",
+      "skipped": 0
+    },
+    {
+      "failed": 0,
+      "passed": 46,
+      "path": "tests/research/test_cr172_path_i_governance.py",
+      "role": "S01 upstream regression",
+      "skipped": 0
+    }
+  ],
+  "waivers": []
+}

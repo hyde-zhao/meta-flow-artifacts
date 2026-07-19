@@ -1,0 +1,76 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "operation": "modify",
+      "path": "engine/effective_trial_evidence.py",
+      "purpose": "安全拒绝快照、trial typed gate、audit identity 双层复算"
+    },
+    {
+      "operation": "modify",
+      "path": "tests/research/test_effective_trial_evidence_contracts.py",
+      "purpose": "F-002/F-003 七项对抗回归"
+    },
+    {
+      "operation": "modify",
+      "path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md",
+      "purpose": "回写 CP6R2 验证状态"
+    },
+    {
+      "operation": "modify",
+      "path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-IMPLEMENTATION.md",
+      "purpose": "记录 CP6R2 实现与验证证据"
+    },
+    {
+      "operation": "create",
+      "path": "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json",
+      "purpose": "Story return packet"
+    },
+    {
+      "operation": "create",
+      "path": "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R2.index.json",
+      "purpose": "Evidence index"
+    },
+    {
+      "operation": "create",
+      "path": "process/checks/CP6-CR173-S01-REWORK-2.result.json",
+      "purpose": "CP6R2 machine result"
+    },
+    {
+      "operation": "create",
+      "path": "process/checks/CP6-CR173-S01-REWORK-2.result.summary.md",
+      "purpose": "CP6R2 human summary"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py",
+      "exit_code": 0,
+      "result": "PASS",
+      "summary": "60 passed in 0.11s"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s01-r2-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+      "exit_code": 0,
+      "result": "PASS",
+      "summary": "2/2 modules compiled"
+    },
+    {
+      "command": "git diff --check -- engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+      "exit_code": 0,
+      "result": "PASS",
+      "summary": "whitespace errors=0"
+    }
+  ],
+  "cr_id": "CR-173",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json",
+  "risks": [
+    "F-002/F-003 仍需 meta-qa-critical 独立复验后才可关闭 CP7 blocker"
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR173-S01-contract-evidence-canonicalization",
+  "tests": [],
+  "waivers": []
+}

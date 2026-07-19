@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S03-nas-replica-verification",
+  "status": "implemented",
+  "allowed_statuses": [
+    "implemented",
+    "implemented_with_risk",
+    "verified",
+    "verified_with_risk",
+    "partial",
+    "blocked",
+    "needs_design_clarification",
+    "needs_user_decision",
+    "needs_rework",
+    "no_op",
+    "superseded",
+    "waived"
+  ],
+  "touched_files": [
+    {
+      "path": "engine/research_artifact_replica.py",
+      "change_type": "created"
+    },
+    {
+      "path": "tests/research/test_cr172_nas_replica_verification.py",
+      "change_type": "created"
+    },
+    {
+      "path": "process/stories/STORY-CR172-S03-nas-replica-verification.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/stories/STORY-CR172-S03-nas-replica-verification-IMPLEMENTATION.md",
+      "change_type": "created"
+    },
+    {
+      "path": "process/returns/CR172-S03-nas-replica-verification.CP6.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR172-S03-nas-replica-verification.CP6.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.summary.md",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "notes": "新增 S03 repository-local ReplicaVerificationReceiptV1、DistributionSelectionV1、nominal fixture storage port、CAS publish 与 current-selection exact read contract；完全符合已确认 LLD v1.3，无长期设计变更。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_nas_replica_verification.py",
+        "result": "pass: 21 passed in 0.52s; failed/skipped=0/0"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py",
+        "result": "pass: 102 passed in 0.66s; failed/skipped=0/0"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s03-cp6-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py tests/research/test_cr172_nas_replica_verification.py",
+        "result": "pass: exit=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null engine/research_artifact_replica.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null tests/research/test_cr172_nas_replica_verification.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      }
+    ],
+    "tests": [
+      {
+        "path": "tests/research/test_cr172_nas_replica_verification.py",
+        "passed": 21,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S03 replica verification, receipt, CAS, selected-read, recovery and zero-operation guards"
+      },
+      {
+        "path": "tests/research/test_cr172_path_i_governance.py",
+        "passed": 46,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S01 upstream authorization regression"
+      },
+      {
+        "path": "tests/research/test_cr172_trial_return_artifact.py",
+        "passed": 35,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S02 original seal and verifier regression"
+      }
+    ],
+    "skipped": [
+      {
+        "check": "real lake/NAS/mount/rsync/network/env/credential/runtime/signal/trading/deploy/Git remote integration",
+        "reason": "CP6 packet explicitly forbids these operations; implementation and tests use repository-local typed values plus in-memory fixture port only"
+      },
+      {
+        "check": "S04/S05 implementation or verification",
+        "reason": "S04 remains locked until S03 independent CP7 PASS; S05 is outside this Story"
+      }
+    ]
+  },
+  "findings": [],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "R-CR172-SYNC-REPLICA-STALE",
+      "status": "controlled_repository_fixture",
+      "note": "expected release + canonical source-selection hash、staging reverify、fresh commit decision 与 CAS 已实现；真实 NAS adapter 仍未授权。"
+    },
+    {
+      "id": "R-CR172-NAS-CANONICALITY-CONFLICT",
+      "status": "closed_by_contract",
+      "note": "receipt authority=replica；research canonical mutation API、direct data bypass 与 NAS canonical promotion 均为 0。"
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T123658Z0000-ea17df6d",
+    "RE-20260718T125222Z0000-e53fc96e",
+    "RE-20260718T125222Z0000-55943a08",
+    "RE-20260718T125222Z0000-039c1ad0",
+    "RE-20260718T130005Z0000-15a123a2"
+  ],
+  "read_expansion_notes": "LLD expansion was implementation_contract_detail_required; the three schema refs were only for Return/Evidence/CP result field shapes and S02 business content was not used as S03 implementation input; the final ref authorizes self-check of the just-generated IMPLEMENTATION. Preferred meta-dev role paths were absent; Host approved .claude/agents/meta-dev.md fallback.",
+  "workflow_health": {
+    "story_rework_count": 0,
+    "cp_retry_count": 0,
+    "threshold_reached": false,
+    "threshold_route_triggered": false,
+    "reason": "initial CP6 implementation complete"
+  },
+  "dispatch_refs": [
+    "AD-CR172-S03-CP6-META-DEV-20260718T203356+0800",
+    "AD-CR172-S03-CP6-META-DEV-STARTED-20260718T203356+0800",
+    "AD-CR172-S03-CP6-META-DEV-COMPLETED-20260718T210005+0800",
+    "process/handoffs/CR172-S03-CP6-META-DEV-HANDOFF-2026-07-18.md",
+    "/root/cr172_s03_cp6_meta_dev"
+  ],
+  "next_stage_recommendation": "host_finalize_cp6_then_dispatch_s03_independent_cp7"
+}

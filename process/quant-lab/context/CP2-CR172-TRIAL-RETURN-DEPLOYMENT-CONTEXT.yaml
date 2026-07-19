@@ -1,0 +1,210 @@
+schema_version: "1.0"
+capsule_id: "CP2-CR172-TRIAL-RETURN-DEPLOYMENT-20260717"
+project_id: "quant-lab"
+workflow_id: "CR-172"
+phase: "requirement-clarification"
+checkpoint: "CP2"
+capsule_type: "cp2-requirement"
+status: "ready"
+created_at: "2026-07-17T14:17:39+08:00"
+created_by: "host-orchestrator"
+source_cr: "CR-172"
+
+token_control:
+  read_profile: "compact"
+  max_source_files: 12
+  max_summary_items: 24
+  full_doc_read_policy: "only-on-missing-conflict-audit-or-deep-review"
+  full_doc_read_reason: ""
+  default_instruction: "先读本 capsule；只读取 allowed_reads / must_read。只有缺字段、冲突、人工审计或深度评审时读取完整 CR/组件文档，并记录 read expansion。"
+
+allowed_reads:
+  - path: "process/state/STATE.current.json"
+    reason: "当前阶段、活跃 CR、禁止授权和下一步"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "当前 context/checkpoint/handoff 指针"
+    required: true
+  - path: "process/changes/summaries/CR-172-TRIAL-RETURN-DEPLOYMENT-DELTA.summary.json"
+    reason: "本次需求增量的已核实事实、推荐路径、部署和存储合同"
+    required: true
+  - path: "process/changes/summaries/CR-172.summary.json"
+    reason: "CR-172 当前机器摘要"
+    required: true
+  - path: "docs/product/USE-CASES.md"
+    reason: "增量更新 UC-58 与四组件用户旅程"
+    required: true
+  - path: "docs/product/REQUIREMENTS.md"
+    reason: "保留 REQ-001~008 并追加 009~015"
+    required: true
+  - path: "docs/product/SCENARIOS.yaml"
+    reason: "追加 storage/runtime/deployment 正负向场景"
+    required: true
+  - path: "docs/product/TEST-MATRIX.md"
+    reason: "建立新增场景到需求的覆盖"
+    required: true
+  - path: "docs/product/STORY-MAP.md"
+    reason: "加入 PATH-I 前置用户活动和未来 activation 衔接"
+    required: false
+  - path: "docs/product/MVP-SCOPE.md"
+    reason: "明确当前 in/out/deferred 与不授权项"
+    required: true
+  - path: "docs/product/RELEASE-SLICES.md"
+    reason: "加入 instrumentation-first 切片"
+    required: false
+  - path: "docs/product/BACKLOG.md"
+    reason: "记录 future projection、FU-CR173-001 empirical-R method v2、signal deferred 和 activation resume"
+    required: false
+
+must_read:
+  - path: "process/state/STATE.current.json"
+    reason: "机器运行态与授权边界"
+    required: true
+  - path: "process/current/CURRENT.json"
+    reason: "当前文件发现入口"
+    required: true
+  - path: "process/changes/summaries/CR-172-TRIAL-RETURN-DEPLOYMENT-DELTA.summary.json"
+    reason: "本次变更最小真相源"
+    required: true
+  - path: "docs/product/USE-CASES.md"
+    reason: "保留旧 UC 基线并增量更新"
+    required: true
+  - path: "docs/product/REQUIREMENTS.md"
+    reason: "保留旧 REQ 基线并增量更新"
+    required: true
+  - path: "docs/product/SCENARIOS.yaml"
+    reason: "验证场景机器真相源"
+    required: true
+  - path: "docs/product/TEST-MATRIX.md"
+    reason: "覆盖矩阵"
+    required: true
+  - path: "docs/product/MVP-SCOPE.md"
+    reason: "当前产品范围"
+    required: true
+
+read_if_needed:
+  - path: "process/changes/CR-172.md"
+    trigger: "delta summary 与产品文档发生冲突，或需要人工审计完整文档处理决策"
+  - path: "docs/components/MULTIFACTOR-RESEARCH.md"
+    trigger: "需要核对旧 stage-based 路径是历史事实还是当前默认"
+  - path: "engine/mature_multifactor_research.py"
+    trigger: "需要核对当前 DEFAULT_RESEARCH_ROOT 或 layered_returns 语义"
+  - path: "engine/experiment_family_lineage.py"
+    trigger: "需要核对 lineage 只存 metadata/ref 的对象边界；若文件名不同先 rg 定位"
+  - path: "engine/effective_trial_evidence.py"
+    trigger: "需要核对 CR-173 输入只接受 dependency matrix R"
+
+do_not_read_by_default:
+  - path_or_pattern: "process/STATE.md"
+    reason: "人类摘要与 legacy fallback"
+  - path_or_pattern: "process/DEVELOPMENT-PLAN.yaml"
+    reason: "CP2 前不得进行 Story 分解"
+  - path_or_pattern: "process/changes/CR-*.md"
+    reason: "默认只读当前 delta summary；全文仅按 read_if_needed 展开"
+  - path_or_pattern: "process/stories/**"
+    reason: "本轮不进入设计或实现"
+  - path_or_pattern: "process/archive/**"
+    reason: "历史归档不是产品增量默认输入"
+  - path_or_pattern: "process/discussions/**"
+    reason: "讨论历史只在审计时读取"
+  - path_or_pattern: "docs/design/**"
+    reason: "蓝图与部署拓扑在 CP2 通过后由 meta-se 更新"
+  - path_or_pattern: "完整会话 transcript"
+    reason: "用户输入已事实化到 delta summary"
+
+key_facts:
+  scope_summary: "CR-172 新增 PATH-I：CP3 只冻结 trial-return/R instrumentation、研究机 active canonical、NAS verified replica、执行机 local materialization、stable logical URI、四组件部署与六类授权合同；DQ-015 仅保留信号边界和 8 个最小字段；不授权实现、真实运行或同步。"
+  accepted_decisions:
+    - "原 DQ-001~008 与 PATH-B 历史批准继续有效。"
+    - "CR-173 仅完成 offline methodology，不能解除真实 trial-return/runtime 缺口。"
+    - "新运行不得继续使用 stage3_mature_multifactor 目录名；历史目录保留只读审计。"
+    - "用户指定部署由研究机、执行机（交易机）、NAS、GitHub 四组件组成。"
+    - "研究机本地目录是实际运行与 active canonical；NAS 是同步副本/备份/分发面；执行机按需从 NAS 拉取并校验到本地后消费。"
+    - "交易信号默认由执行机本地生成；PATH-I 只冻结低频/EOD immutable batch 的 8 字段边界，物理路径/七级状态机/ack/idempotency/replay deferred，intraday transport 另立 CR。"
+    - "FU-CR173-001 不阻止 DQ-003 typed_unavailable 降级后的 PATH-C/A 设计，但阻断 empirical effective count available 与 c1_computable=true。"
+  active_constraints:
+    - "real lake/NAS read/write、runtime、R computation、migration、trading、publish、Git remote write 均未授权。"
+    - "lineage identity 使用 logical URI + content hash，不能依赖绝对挂载路径。"
+    - "执行机不得直接从研究机或 NAS 工作路径运行；只消费经 manifest/hash 校验的本地 materialization。"
+    - "SignalBatch 不得携带 credential、account secret 或 broker order command。"
+    - "CP3 不创建目录、不改 runner、不写 NAS、不跑 multi-trial、不传信号；CP5 未来只能单独批准 repository-local code/test/fixture。"
+  downstream_tasks:
+    - "增量更新 UC-58 和产品规划，保留旧基线。"
+    - "追加 REQ/DQ-CR172-009~015。"
+    - "增加 storage/runtime/deployment 正向、负向、边界、权限、失败恢复和 precheck 场景。"
+    - "生成 CP1/CP2 自动预检、Decision Brief 输入和 return summary。"
+    - "把 FU-CR173-001 和两个 signal deferred 衔接写入 BACKLOG/MVP/RELEASE-SLICES，不预创建 signal 正式 CR。"
+  traceability:
+    requirements: ["REQ-CR172-001~008", "REQ-CR172-009~015-pending"]
+    use_cases: ["UC-58-CR172"]
+    scenarios: ["SC-CR172-existing", "SC-CR172-trial-return-deployment-pending"]
+    stories: []
+    features: []
+
+risks_and_decisions:
+  pending_human_decisions:
+    - "DQ-CR172-009 trial-return source"
+    - "DQ-CR172-010 storage/URI contract"
+    - "DQ-CR172-011 split runtime authorization"
+    - "DQ-CR172-012 four-component data ownership"
+    - "DQ-CR172-013 path migration"
+    - "DQ-CR172-014 empirical-R handling"
+    - "DQ-CR172-015 cross-machine signal transfer"
+  non_authorized_items:
+    - "真实 data lake / NAS 读写或同步"
+    - "multi-trial runtime、trial-return 生成、真实 R 计算"
+    - "目录搬迁、历史 rewrite、provider/QMT/trading"
+    - "GitHub remote write / publish / deploy"
+  risk_acceptance_items:
+    - "R-CR172-TRIAL-RETURN-SOURCE-ABSENT"
+    - "R-CR172-RUNTIME-AUTHORIZATION-GAP"
+    - "R-CR172-PATH-IDENTITY-DRIFT"
+    - "R-CR172-NAS-CANONICALITY-CONFLICT（用户已确认 research-local canonical / NAS replica）"
+    - "R-CR172-SYNC-REPLICA-STALE"
+    - "R-CR172-SIGNAL-TRANSFER-AMBIGUITY"
+    - "R-CR172-REAL-R-DOMAIN-MISMATCH（positive empirical result 由 FU-CR173-001 阻断）"
+  open_questions:
+    - "scope-delta CP2 是否批准 PATH-I、research-local→NAS-replica→execution-local、signal-local-on-execution 及三项评审收敛边界。"
+  n_a_or_waived_items:
+    - "本轮不生成 HLD/LLD/Story/implementation；CP2 前 N/A。"
+
+handoff:
+  target_agent: "meta-pm"
+  expected_output:
+    - "增量产品基线 8 个文档"
+    - "CP1/CP2 自动检查真相源"
+    - "CP2 Decision Brief 输入"
+    - "process/handoffs/CR172-TRIAL-RETURN-DEPLOYMENT-META-PM-RETURN-SUMMARY.md"
+  exit_criteria:
+    - "旧 UC/REQ/场景 ID 无删除或覆盖"
+    - "新增 7 项决策具备推荐、备选、影响和回退条件"
+    - "正向/负向/边界/权限/失败恢复/precheck 场景均有覆盖"
+    - "所有真实操作计数为 0，ready_for_design 只由 scope-delta CP2 决定"
+    - "DQ-015 详细 mailbox/state/ack/idempotency 未进入 PATH-I 当前 Story/实现范围"
+    - "empirical R 明确区分 positive v2 prerequisite 与 DQ-003 降级路线"
+  blocked_if_missing:
+    - "trial-return source 与 multi-trial runtime 被误写为既有能力"
+    - "把 NAS replica 误写为 runtime canonical，或执行机未经 hash/manifest 校验直接消费 NAS 文件"
+    - "未区分低频 mailbox 与 intraday signal transport"
+    - "历史 stage3 目录被计划原地迁移或 rewrite"
+
+read_expansion_log:
+  - at: "2026-07-17T14:17:39+08:00"
+    actor: "host-orchestrator"
+    expanded_to: "CR-172、MULTIFACTOR-RESEARCH、BLUEPRINT/DOMAIN/DEPENDENCY、runner/path 与现行运维文档"
+    reason: "deep_review"
+
+validation:
+  generated_from_sources:
+    - "process/changes/CR-172.md"
+    - "process/changes/summaries/CR-172-TRIAL-RETURN-DEPLOYMENT-DELTA.summary.json"
+    - "docs/components/MULTIFACTOR-RESEARCH.md"
+    - "engine/mature_multifactor_research.py"
+    - "engine/research_paths.py"
+    - "README.md"
+    - "docs/USER-MANUAL.md"
+  missing_sources: []
+  consistency_status: "warning"
+  notes:
+    - "用户已确认 local active-canonical + NAS verified replica；CP2/CP3 需冻结数据同步/materialization fail-closed，但 signal 只冻结边界和 8 个最小字段，详细传输失败路径 deferred。"
+    - "PATH-I 评审 correction R2 要求 CP3 design-only、CP5 repository-local、CP7 六动作 0/6 与 CP8 严格 claim ceiling。"

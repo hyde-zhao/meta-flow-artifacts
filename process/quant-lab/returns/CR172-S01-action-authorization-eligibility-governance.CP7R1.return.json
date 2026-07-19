@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "reverify_attempt": 1,
+  "cr_id": "CR-172",
+  "story_id": "CR172-S01-action-authorization-eligibility-governance",
+  "status": "verified",
+  "allowed_statuses": [
+    "implemented",
+    "implemented_with_risk",
+    "verified",
+    "verified_with_risk",
+    "partial",
+    "blocked",
+    "needs_design_clarification",
+    "needs_user_decision",
+    "needs_rework",
+    "no_op",
+    "superseded",
+    "waived"
+  ],
+  "touched_files": [
+    {
+      "path": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7R1.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7R1.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S01-REVERIFY-1.result.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S01-REVERIFY-1.result.summary.md",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py",
+        "result": "pass: 46 passed in 0.08s"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s01-cp7r1-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py tests/research/test_cr172_path_i_governance.py",
+        "result": "pass"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null engine/path_i_governance.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null tests/research/test_cr172_path_i_governance.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S01.CP6.rework-1.work-packet.json --return process/returns/CR172-S01-action-authorization-eligibility-governance.CP6R1.return.json",
+        "result": "pass_with_note: Story Return Packet Check OK; one expected-path warning"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S01-REWORK-1.result.json --check-consistency --correlation-profile audit",
+        "result": "pass_with_note: CP Result Check OK; audit path/final-attempt warnings only"
+      },
+      {
+        "command": "AST inventory for _validate_action_decision_invariants and _canonical_logical_uri",
+        "result": "pass: invariant defs=1 calls=2; canonical defs=1 calls=4; duplicate defs=0"
+      },
+      {
+        "command": "uv run --python 3.11 python .agents/skills/review-artifact-protocol/scripts/validate_review_artifact.py process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md --kind findings",
+        "result": "pass: OK"
+      }
+    ],
+    "tests": [
+      {
+        "path": "tests/research/test_cr172_path_i_governance.py",
+        "passed": 46,
+        "failed": 0,
+        "skipped": 0,
+        "duration_seconds": 0.08,
+        "baseline_tests_retained": 28,
+        "finding_regression_nodes_retained": 18
+      }
+    ],
+    "skipped": [
+      {
+        "check": "real runtime, data lake, NAS, signal transport and trading integration",
+        "reason": "explicitly unauthorized and outside CP7R1 packet scope"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-CP7-001",
+      "status": "closed",
+      "evidence_ref": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#11-问题清单"
+    },
+    {
+      "id": "F-CP7-002",
+      "status": "closed",
+      "evidence_ref": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#11-问题清单"
+    }
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "R-CR172-RUNTIME-AUTHORIZATION-GAP",
+      "status": "design_deferred_fail_closed",
+      "note": "approved_ledger current-v1 remains an unconditional hard deny for all six actions"
+    },
+    {
+      "id": "R-CP7R1-UNTRACKED",
+      "status": "controlled",
+      "note": "both untracked targets passed no-index whitespace checks with zero diagnostics"
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "dispatch_refs": [
+    "AD-CR172-S01-CP7R1-META-QA-CRITICAL-20260718T182054+0800"
+  ],
+  "next_stage_recommendation": "host_transition_story_to_verified_and_continue_dag"
+}

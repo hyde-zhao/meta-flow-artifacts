@@ -1,0 +1,144 @@
+{
+  "affected_product_docs": [
+    "docs/product/USE-CASES.md",
+    "docs/product/REQUIREMENTS.md",
+    "docs/product/SCENARIOS.yaml",
+    "docs/product/TEST-MATRIX.md",
+    "docs/product/STORY-MAP.md",
+    "docs/product/MVP-SCOPE.md",
+    "docs/product/RELEASE-SLICES.md",
+    "docs/product/BACKLOG.md"
+  ],
+  "affected_use_cases": [
+    "UC-CR173-EFFECTIVE-TRIAL-OFFLINE-METHODOLOGY"
+  ],
+  "approval_focus": "scope",
+  "approve_effect": "CP8 已批准 `READY_WITH_RISK`：交付 strategy-agnostic offline estimator、standalone non-alias evidence 与 fixture/golden-vector 验证，且只声明 `offline_method_ready`；不授权 public C1 write、真实数据、runtime、Stage 3 或 admission。",
+  "archive_isolation_review": {
+    "decision": "PASS",
+    "findings": []
+  },
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_REAL_LAKE_READ_OR_WRITE",
+    "NO_PROVIDER_FETCH",
+    "NO_NAS_SYNC_OR_WRITE",
+    "NO_CATALOG_POINTER_WRITE",
+    "NO_RUNTIME",
+    "NO_PRODUCTION_WRITE",
+    "NO_TRADING",
+    "NO_BROKER_WRITE",
+    "NO_EXTERNAL_FRAMEWORK_RUN",
+    "NO_GIT_REMOTE_WRITE"
+  ],
+  "block_story_decomposition_until": "CP3-approved",
+  "conflict_keys": [
+    "c1-effective-trial-methodology",
+    "effective-count-non-alias-schema",
+    "public-c1-projection-boundary",
+    "typed-unavailable-fail-closed",
+    "synthetic-golden-vectors"
+  ],
+  "cp1_review_profile": {
+    "decision": "FULL_CP1_REQUIRED",
+    "profile": "full",
+    "reason": "product baseline docs or product_baseline_refresh_required indicate use-case completeness must be rechecked",
+    "required_checks": [
+      "use_case_completeness",
+      "requirements_traceability",
+      "scenario_coverage",
+      "story_map_alignment",
+      "mvp_scope_alignment"
+    ]
+  },
+  "cr_type": "feature",
+  "decision": "pending",
+  "decision_burden": "high",
+  "evidence_index_ref": "process/archive/CR-173/evidence-index.json",
+  "followup_candidates": [
+    "FU-CR173-001"
+  ],
+  "followup_tracking_ref": "process/changes/CR-173-FOLLOW-UP-TRACKING-2026-07-17.md",
+  "full_ref": "process/changes/CR-173.md",
+  "gate_profile": "standard-code",
+  "gate_status": "cp8_closed",
+  "goal_ref": "DF-CR172-PATH-B-EFFECTIVE-TRIAL",
+  "goal_statement": "以策略无关、纯离线、可复现且 fail-closed 的方法合同估计 sealed-trial 相关结构的二阶 effective dimensionality，并生成不会把 raw_trial_count 冒充 effective count 的 standalone typed evidence。",
+  "governance_dependency_review": {
+    "decision": "PASS",
+    "findings": []
+  },
+  "id": "CR-173",
+  "impact_capability_normalized": [],
+  "impact_capability_refs": [],
+  "impact_capability_resolution": {
+    "kind": "capability",
+    "mode": "audit",
+    "results": [],
+    "summary": {
+      "conflict": 0,
+      "deprecated": 0,
+      "resolved": 0,
+      "unresolved": 0
+    }
+  },
+  "impact_data_refs": [],
+  "impact_feature_refs": [],
+  "impact_module_paths": [],
+  "impact_policy_refs": [],
+  "impact_process_refs": [],
+  "impact_runtime_refs": [],
+  "impact_surface": [
+    "product",
+    "use-cases",
+    "requirements",
+    "scenarios",
+    "scope",
+    "methodology",
+    "architecture",
+    "strategy-admission",
+    "implementation",
+    "verification",
+    "process"
+  ],
+  "not_authorized_by_approve": [
+    "不读取 credential、secret、account、环境变量原文或 provider",
+    "不读取或写入真实 lake/NAS，不修改 catalog/current pointer",
+    "不绑定真实 C1 producer，不执行真实策略或真实数据 computation",
+    "不冻结或推断具体 strategy_id/strategy_name；PATH-B 保持 strategy-agnostic",
+    "不激活 C1/C2/C3/C4，不编排 aggregate，不提升 CR155 或 mature admission",
+    "不执行 QMT、broker、simulation、paper/live trading、publish/deploy 或 Git remote write"
+  ],
+  "product_baseline_refresh_required": true,
+  "readiness": "READY_WITH_RISK",
+  "reject_effect": "FU-CR164-004 保持 candidate，CR-164/CR-172 的 effective_trial_count 继续 typed_unavailable，C1 computable 继续 false。",
+  "remaining_risks": [
+    "R-CR173-RAW-EFFECTIVE-ALIAS",
+    "R-CR173-METHOD-NONDETERMINISM",
+    "R-CR173-CONSUMER-OVERCLAIM",
+    "R-CR173-STRATEGY-COUPLING",
+    "R-CR173-SCOPE-ESCAPE"
+  ],
+  "required_agent": "host-orchestrator",
+  "required_capabilities": [],
+  "required_evidence": [],
+  "required_gate": "CP8",
+  "required_phase": "delivered",
+  "routing_design_ref": "process/checks/CP0-CR173.route-plan.json",
+  "scope_authz_consistency": {
+    "decision": "PASS",
+    "blockers": [],
+    "needs_review": []
+  },
+  "scope_summary": [
+    "实现一条仅面向 synthetic/fixture/golden-vector 的 effective-trial 方法链：从经 CP3 冻结的相关矩阵输入合同计算 sealed-trial 二阶 effective dimensionality，以独立字段、方法版本和 lineage 生成 standalone typed evidence。任何无效输入、方法不可用、版本/lineage 缺失或 evidence mismatch 都返回 typed unavailable，不得回退为 `raw_trial_count` 别名；本 CR 不把结果写入 public C1 consumer。",
+    "本 CR 是 CR-172 PATH-B 的前置，不是 activation 替代。它不需要具体策略身份、不读取真实数据、不绑定真实 producer；其 CP8 成功只表示离线方法合同可用，不能关闭 CR-172 或形成 Stage 3/admission claim。"
+  ],
+  "split_rationale": "方法学 owner、验证标准、回滚边界与 CR-172 的 data/activation 授权 owner 不同；CR-172 CP2 已批准 PATH-B 与 separate_methodology_cr，必须把两类高风险授权分离。",
+  "status": "closed",
+  "title": "Effective-Trial Offline Estimator Methodology",
+  "updated_at": "2026-07-17T08:08:21+00:00",
+  "user_goal_impact": "让策略研究员未来能够区分原始试验次数与相关结构的二阶有效维度，为 multiple-testing/overfit 评估建立相关结构输入基础；本 CR 不提供校正数、public C1 projection、真实策略/数据 activation、admission 或 Stage 3 readiness。",
+  "why_not_merge_with_parent": "CR-164 已关闭且 effective fields 明确保持 typed_unavailable；不得改写已关闭基线。CR-172 activation 同样被 0/5+owner OPEN 阻断，不能吸收离线方法学实现。",
+  "why_not_story_or_task": "当前仍需通过 CP2 冻结用户价值、方法选择边界、输入/输出语义、失败恢复与 claim ceiling，并通过 CP3 证明方法可识别性和公共 C1 边界；这是 methodology-high 的公共方法合同，不是已确认设计下的普通 Story。"
+}

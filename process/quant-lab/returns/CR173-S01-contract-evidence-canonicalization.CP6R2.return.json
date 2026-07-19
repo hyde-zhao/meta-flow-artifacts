@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "story_id": "CR173-S01-contract-evidence-canonicalization",
+  "stage": "CP6",
+  "attempt": 3,
+  "status": "implemented",
+  "work_packet_ref": "process/context/stories/STORY-CR173-S01.CP6.rework-2.work-packet.json",
+  "summary": "CP6 回修 2 关闭 bytes/non-canonical identifier 逸出与 forged audit identity 两个旁路；原 53 项加新增 7 项共 60/60 PASS。",
+  "touched_files": [
+    {
+      "path": "engine/effective_trial_evidence.py",
+      "operation": "modify",
+      "purpose": "安全拒绝快照、trial typed gate、audit identity 双层复算"
+    },
+    {
+      "path": "tests/research/test_effective_trial_evidence_contracts.py",
+      "operation": "modify",
+      "purpose": "F-002/F-003 七项对抗回归"
+    },
+    {
+      "path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md",
+      "operation": "modify",
+      "purpose": "回写 CP6R2 验证状态"
+    },
+    {
+      "path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-IMPLEMENTATION.md",
+      "operation": "modify",
+      "purpose": "记录 CP6R2 实现与验证证据"
+    },
+    {
+      "path": "process/returns/CR173-S01-contract-evidence-canonicalization.CP6R2.return.json",
+      "operation": "create",
+      "purpose": "Story return packet"
+    },
+    {
+      "path": "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6R2.index.json",
+      "operation": "create",
+      "purpose": "Evidence index"
+    },
+    {
+      "path": "process/checks/CP6-CR173-S01-REWORK-2.result.json",
+      "operation": "create",
+      "purpose": "CP6R2 machine result"
+    },
+    {
+      "path": "process/checks/CP6-CR173-S01-REWORK-2.result.summary.md",
+      "operation": "create",
+      "purpose": "CP6R2 human summary"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "allowed_write_paths_only": true,
+    "unexpected_write_paths": [],
+    "forbidden_paths_touched": [],
+    "forbidden_write_paths_touched": [],
+    "unexpected_imports": [],
+    "public_c1_changes": 0,
+    "real_data_operations": 0,
+    "runtime_operations": 0,
+    "credential_operations": 0,
+    "git_remote_operations": 0
+  },
+  "verification_commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "60 passed in 0.11s"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s01-r2-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "2/2 modules compiled"
+    },
+    {
+      "command": "git diff --check -- engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "whitespace errors=0"
+    }
+  ],
+  "verification": {
+    "result": "PASS",
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py",
+        "result": "PASS",
+        "exit_code": 0,
+        "summary": "60 passed in 0.11s"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s01-r2-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+        "result": "PASS",
+        "exit_code": 0,
+        "summary": "2/2 modules compiled"
+      },
+      {
+        "command": "git diff --check -- engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+        "result": "PASS",
+        "exit_code": 0,
+        "summary": "whitespace errors=0"
+      }
+    ],
+    "evidence_refs": [
+      "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-IMPLEMENTATION.md#6-验证结果"
+    ]
+  },
+  "finding_closure": [
+    {
+      "finding_id": "F-CP7-S01-002",
+      "status": "implemented_pending_independent_reverification",
+      "evidence": "family bytes/bytearray、trial bytes、lineage bytes 均稳定映射 F01/F02/F06，未建模异常=0"
+    },
+    {
+      "finding_id": "F-CP7-S01-003",
+      "status": "implemented_pending_independent_reverification",
+      "evidence": "forged root/recovery/constructor audit ref 接受数=0"
+    }
+  ],
+  "design_delta_refs": [],
+  "contract_changes": {
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "既有 LLD 合同实现回修；schema/hash domain/identity mapping/claim/authz 均未改变"
+  },
+  "risks": [
+    "F-002/F-003 仍需 meta-qa-critical 独立复验后才可关闭 CP7 blocker"
+  ],
+  "waivers": [],
+  "next_route": "CP7",
+  "completed_at": "2026-07-17T10:44:49+08:00"
+}

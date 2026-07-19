@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR172-S03-IMPLEMENTATION-DONE",
+  "profile": "runtime-high-risk-design",
+  "story_id": "CR172-S03-nas-replica-verification",
+  "cr_id": "CR-172",
+  "context_ref": "process/context/stories/STORY-CR172-S03.CP6.work-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "dispatch_refs": [
+    "AD-CR172-S03-CP6-META-DEV-20260718T203356+0800"
+  ],
+  "return_ref": "process/returns/CR172-S03-nas-replica-verification.CP6.return.json",
+  "evidence_ref": "process/evidence/CR172-S03-nas-replica-verification.CP6.index.json",
+  "result_summary_ref": "process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.summary.md",
+  "items": [
+    {
+      "id": "CP6-S03-ENTRY-01",
+      "category": "entry-criteria",
+      "name": "Process route health, CP5 design evidence and S01/S02 dependency gates are ready",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/current/CURRENT.json",
+        "process/state/STATE.current.json",
+        "process/context/stories/STORY-CR172-S03.CP6.work-packet.json",
+        "process/stories/STORY-CR172-S03-nas-replica-verification.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CURRENT.health=ok; Story design/dependency/file-conflict gates are all true; implementation starts inside the assigned W3 Story only."
+    },
+    {
+      "id": "CP6-S03-ORIGINAL-SEAL-01",
+      "category": "integrity-contract",
+      "name": "Source and staging reuse the single S02 verifier and preserve the original seal",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/research_artifact_replica.py",
+        "tests/research/test_cr172_nas_replica_verification.py",
+        "process/stories/STORY-CR172-S03-nas-replica-verification-IMPLEMENTATION.md#设计契约映射"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S02 verifier calls=2 per successful publish; 5/5 vector is required; receipt original_seal_sha256 is copied from staged VerifiedTrialReturnBundleV1; S03 seal canonicalizer/digest/reseal/facade=0/0/0/0."
+    },
+    {
+      "id": "CP6-S03-RECEIPT-CAS-01",
+      "category": "atomicity-contract",
+      "name": "Immutable receipt and fresh-decision CAS preserve the previous selection on every controlled failure",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/research_artifact_replica.py",
+        "tests/research/test_cr172_nas_replica_verification.py",
+        "process/evidence/CR172-S03-nas-replica-verification.CP6.index.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "staging=non_distributable; commit rechecks NAS_REPLICA_SYNC; persist/revoke/interruption/CAS failure pointer overwrite=0 and previous preservation=100%; each publish CAS calls<=1."
+    },
+    {
+      "id": "CP6-S03-SELECTED-READ-01",
+      "category": "integration-contract",
+      "name": "Selected-replica read accepts only the current DistributionSelectionV1 exact tuple",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/research_artifact_replica.py",
+        "tests/research/test_cr172_nas_replica_verification.py"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Exact sealed bundle/source selection/receipt tuple=3/3; old/fake/ref-drift selection rejected; path/latest/staging/receipt-only public bypass=0."
+    },
+    {
+      "id": "CP6-S03-AUTH-PATH-01",
+      "category": "authorization-boundary",
+      "name": "Wrong action, origin, target, context, stale source and unsafe mapping fail closed before pointer mutation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "tests/research/test_cr172_nas_replica_verification.py",
+        "process/returns/CR172-S03-nas-replica-verification.CP6.return.json#boundary_check"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "wrong preflight decision variants stage/persist/CAS=0/0/0; traversal/absolute override/real target/structural port accepted=0; physical mapping is outside receipt identity/hash."
+    },
+    {
+      "id": "CP6-S03-REGRESSION-01",
+      "category": "automated-verification",
+      "name": "S01, S02 and S03 targeted tests, compile, whitespace and static guards pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR172-S03-nas-replica-verification.CP6.index.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "S03=21/21; S01+S02+S03=102/102; failed/skipped=0/0; py_compile exit=0; whitespace diagnostics=0/2; real-operation imports and calls=0."
+    },
+    {
+      "id": "CP6-S03-BOUNDARY-01",
+      "category": "file-boundary",
+      "name": "All writes stay inside eight packet paths and S04/S05 remain locked",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR172-S03-nas-replica-verification.CP6.return.json#boundary_check",
+        "process/context/stories/STORY-CR172-S03.CP6.work-packet.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "allowed paths only=true; forbidden files, S01/S02 sources/tests, S04/S05, state/current and docs writes=0; real NAS/network/env/credential operations=0."
+    },
+    {
+      "id": "CP6-S03-DISPATCH-01",
+      "category": "agent-dispatch-evidence",
+      "name": "S03 meta-dev dispatch and started event are recorded for Host terminal correlation",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/handoffs/CR172-S03-CP6-META-DEV-HANDOFF-2026-07-18.md",
+        "process/returns/CR172-S03-nas-replica-verification.CP6.return.json#dispatch_refs"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "dispatch_id=AD-CR172-S03-CP6-META-DEV-20260718T203356+0800; Host appended terminal completed event AD-CR172-S03-CP6-META-DEV-COMPLETED-20260718T210005+0800; started event and agent/thread are recorded in return."
+    },
+    {
+      "id": "CP6-S03-DELIVERABLES-01",
+      "category": "deliverables",
+      "name": "Eight CP6 outputs are present and structured",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S03-nas-replica-verification-IMPLEMENTATION.md",
+        "process/returns/CR172-S03-nas-replica-verification.CP6.return.json",
+        "process/evidence/CR172-S03-nas-replica-verification.CP6.index.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Production contract, tests, Story update, IMPLEMENTATION, return, evidence index, CP6 result and summary are generated; Design Delta=N/A."
+    }
+  ],
+  "entry_criteria": [
+    {
+      "name": "Process route health and active S03 CP6 context are confirmed",
+      "status": "PASS",
+      "evidence_ref": "process/current/CURRENT.json"
+    },
+    {
+      "name": "CP5 design evidence is confirmed and S01/S02 dependencies are satisfied",
+      "status": "PASS",
+      "evidence_ref": "process/stories/STORY-CR172-S03-nas-replica-verification.md"
+    },
+    {
+      "name": "S03 owns two primary files without concurrent conflict",
+      "status": "PASS",
+      "evidence_ref": "process/context/stories/STORY-CR172-S03.CP6.work-packet.json"
+    }
+  ],
+  "exit_criteria": [
+    {
+      "name": "Original seal, manifest, content, release and freshness verification are 5/5",
+      "status": "PASS"
+    },
+    {
+      "name": "Immutable receipt, fresh authorization and one-step CAS are implemented",
+      "status": "PASS"
+    },
+    {
+      "name": "Failure paths preserve the previous distribution selection at 100%",
+      "status": "PASS"
+    },
+    {
+      "name": "Current-selection exact read contract rejects every bypass",
+      "status": "PASS"
+    },
+    {
+      "name": "All 102 targeted tests and static/compile/whitespace checks pass",
+      "status": "PASS"
+    },
+    {
+      "name": "Story is ready for independent CP7 while S04 remains locked",
+      "status": "PASS"
+    }
+  ],
+  "deliverables": [
+    "engine/research_artifact_replica.py",
+    "tests/research/test_cr172_nas_replica_verification.py",
+    "process/stories/STORY-CR172-S03-nas-replica-verification.md",
+    "process/stories/STORY-CR172-S03-nas-replica-verification-IMPLEMENTATION.md",
+    "process/returns/CR172-S03-nas-replica-verification.CP6.return.json",
+    "process/evidence/CR172-S03-nas-replica-verification.CP6.index.json",
+    "process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.json",
+    "process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.summary.md"
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T123658Z0000-ea17df6d",
+    "RE-20260718T125222Z0000-e53fc96e",
+    "RE-20260718T125222Z0000-55943a08",
+    "RE-20260718T125222Z0000-039c1ad0",
+    "RE-20260718T130005Z0000-15a123a2"
+  ],
+  "decision": "PASS",
+  "stop_reason": null,
+  "next_route": "host_finalize_cp6_then_dispatch_s03_independent_cp7",
+  "checked_at": "2026-07-18T21:20:00+08:00",
+  "check_attempt": 1,
+  "workflow_health": {
+    "story_rework_count": 0,
+    "cp_retry_count": 0,
+    "threshold_reached": false,
+    "threshold_route_triggered": false,
+    "reason": "decision=PASS"
+  },
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR172-S03.CP6.work-packet.json": "sha256:f2aad4ee6db90ab2f39fb65bf6f0f2f0f1f9e7a569dfff8fe1dabd9b32aa5148",
+    "engine/research_artifact_replica.py": "sha256:39c8650418a4aaf368f72136bfb1b6569c4f31eaf33d8a1c97c27f614b5f2e29",
+    "tests/research/test_cr172_nas_replica_verification.py": "sha256:3d9d9112c87971bedda8cb575ae31d66221736e32a8798aee8ce496b1dcde7be",
+    "process/stories/STORY-CR172-S03-nas-replica-verification.md": "sha256:31637c243c4d2b64044aee4accb451ef26a487bcc079366705b8b19d4d5a7ab3",
+    "process/returns/CR172-S03-nas-replica-verification.CP6.return.json": "sha256:3a2b4ca38494186648a8af4e9d042042441cf90c0c3036956e27645fe4b39b22",
+    "process/evidence/CR172-S03-nas-replica-verification.CP6.index.json": "sha256:9bd2ebc66eae809426b51465f5a08be90a492f7130742e753ac82584010592c4"
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "project_id": "quant-lab",
+  "stage": "CP0",
+  "profile": "standard-code",
+  "cr_id": "CR-173",
+  "story_id": null,
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-173.summary.json",
+  "route_plan_ref": "process/checks/CP0-CR173.route-plan.json",
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "must_read": [
+    {
+      "path": "process/state/STATE.current.json",
+      "mode": "full",
+      "reason": "machine_state",
+      "required": true,
+      "estimated_tokens": 2600
+    },
+    {
+      "path": "process/current/CURRENT.json",
+      "mode": "full",
+      "reason": "current_entrypoint",
+      "required": true,
+      "estimated_tokens": 300
+    },
+    {
+      "path": "process/policies/READ-POLICY.json",
+      "mode": "full",
+      "reason": "read_policy",
+      "required": true,
+      "estimated_tokens": 400
+    }
+  ],
+  "allowed_reads": [
+    {
+      "path": "process/state/STATE.current.json",
+      "mode": "full",
+      "reason": "lightweight_runtime_state",
+      "required": true,
+      "estimated_tokens": 2600
+    },
+    {
+      "path": "process/current/CURRENT.json",
+      "mode": "full",
+      "reason": "current_discovery_entry",
+      "required": true,
+      "estimated_tokens": 300
+    },
+    {
+      "path": "process/changes/summaries/CR-173.summary.json",
+      "mode": "full",
+      "reason": "current_cr_summary",
+      "required": true,
+      "estimated_tokens": 1800
+    },
+    {
+      "path": "process/checks/CR173-CONFLICT-PRECHECK.json",
+      "mode": "full",
+      "reason": "fresh_conflict_and_authorization_precheck",
+      "required": true,
+      "estimated_tokens": 1400
+    },
+    {
+      "path": "process/checks/CP0-CR173.route-plan.json",
+      "mode": "full",
+      "reason": "checkpoint_route",
+      "required": true,
+      "estimated_tokens": 800
+    }
+  ],
+  "read_if_needed": [
+    {
+      "path": "process/checkpoints/CP2-CR172-REQUIREMENTS-BASELINE.md",
+      "reason": "audit PATH-B approval and eight accepted decisions"
+    }
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/STORY-STATUS.md",
+    "process/changes/*.md",
+    "process/archive/**",
+    "process/discussions/**",
+    "process/stories/*-LLD.md",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/archive/**",
+      "reason": "historical archive is not CP0 default context"
+    },
+    {
+      "path_or_pattern": "process/discussions/**",
+      "reason": "human discussion logs are expanded only for audit or a recorded conflict"
+    },
+    {
+      "path_or_pattern": "process/changes/*.md",
+      "reason": "consume the CR summary by default; log full-document expansion"
+    }
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "must_verify": [],
+  "budget": {
+    "estimated_tokens": 7300,
+    "max_tokens": 16000,
+    "estimator": "chars_div_4"
+  },
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "artifact_budgets": "process/policies/ARTIFACT-BUDGETS.json"
+  }
+}

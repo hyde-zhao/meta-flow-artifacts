@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP5",
+  "checkpoint_id": "CP5-CR173-LLD-DESIGN-EVIDENCE",
+  "cr_id": "CR-173",
+  "checked_at": "2026-07-17T09:33:11+08:00",
+  "context_ref": "process/context/CP5-CR173.context.json",
+  "dispatch_refs": [
+    "AD-CR173-CP5-META-DEV-SPAWN-20260716T154010+0800",
+    "AD-CR173-CP5-META-QA-CRITICAL-SPAWN-20260716T161613+0800",
+    "AD-CR173-CP5-META-SE-CRITICAL-REMEDIATION-20260716T162725+0800",
+    "AD-CR173-CP5-META-DEV-LLD-REMEDIATION-20260716T164817+0800",
+    "AD-CR173-CP5-META-QA-CRITICAL-R2-20260716T170428+0800",
+    "AD-CR173-CP5-META-SE-R2-REMEDIATION-20260716T171214+0800",
+    "AD-CR173-CP5-META-DEV-R2-S03-REMEDIATION-20260716T171214+0800",
+    "AD-CR173-CP5-META-QA-CRITICAL-R3-20260716T172804+0800",
+    "AD-CR173-CP5-META-DEV-POINTER-REFRESH-20260717T092407+0800"
+  ],
+  "route_plan_ref": "process/checks/CP0-CR173.route-plan.json",
+  "human_gate_status": "approved",
+  "human_gate_decision_ref": "process/checkpoints/CP5-CR173-ALL-STORIES-LLD-BATCH.md",
+  "items": [
+    {
+      "id": "CP5-CR173-01",
+      "category": "entry",
+      "name": "CP3 approved and CP4 Story planning PASS",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checkpoints/CP3-CR173-HLD-REVIEW.md", "process/checks/CP4-CR173-STORY-DAG-PARALLEL-SAFETY.result.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "CP3 froze limited participation-ratio claim and estimator-only split; CP4 froze 1 Feature, 3 serial full-LLD Stories and 12 Tasks."
+    },
+    {
+      "id": "CP5-CR173-02",
+      "category": "context",
+      "name": "CP5 capsule is valid and design batch metadata are complete",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/context/CP5-CR173.context.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "context check and CP5 context check OK; expected/completed/confirmed=3/3/3; clarification=0."
+    },
+    {
+      "id": "CP5-CR173-03",
+      "category": "completeness",
+      "name": "Three of three independent full LLDs are approved and confirmed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/context/CP5-CR173.context.json", "process/handoffs/CR173-CP5-META-DEV-LLD-REMEDIATION-RETURN-SUMMARY.md"],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S01/S02 v1.3 and S03 v1.4; lld-check=3/3 OK; confirmed=true and open_items=0 for 3/3; normative pointer-refresh delta=0."
+    },
+    {
+      "id": "CP5-CR173-04",
+      "category": "s01",
+      "name": "S01 freezes standalone contracts canonical identity and attempt audit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S01-contract-evidence-canonicalization-LLD.md"],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Four immutable contracts, seven-field evidence 7/7, stable content-addressed computation ref, seven-item basis, external append-only audit, F01-F08 and recovery A/B are explicit."
+    },
+    {
+      "id": "CP5-CR173-05",
+      "category": "s02",
+      "name": "S02 freezes exact spectral participation-ratio estimator",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S02-exact-spectral-estimator-LLD.md"],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Exact rational parser and LDLT, deterministic pivot total order, q=n^2/sum(Rij^2), double [1,n] invariant and one HALF_EVEN rounding; float/tolerance/clamp=0."
+    },
+    {
+      "id": "CP5-CR173-06",
+      "category": "s03",
+      "name": "S03 freezes independent golden failure boundary and authorization verification",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S03-golden-failure-boundary-verification-LLD.md"],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Golden=6/6x3/3; failure=8/8; field mutation=7/7; returned basis=8x7/8x7; NP=9/9; public paths=8+12; public six metrics are separate."
+    },
+    {
+      "id": "CP5-CR173-07",
+      "category": "independent-review",
+      "name": "Independent meta-qa-critical Round 3 review permits CP5 preparation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP5-CR173-LLD-REVIEW-R3-FINDINGS.md", "process/checks/CP5-CR173-LLD-REVIEW-R3-SUMMARY.md"],
+      "owner": "meta-qa",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "decision=proceed; blocking=0; required=0; historical optional=1. Round 1/2 required findings are closed; the only optional authority-pointer item was closed by pointer-only refresh with normative delta=0."
+    },
+    {
+      "id": "CP5-CR173-08",
+      "category": "interfaces",
+      "name": "Interfaces failures tasks tests and rollback are explicit",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["docs/features/effective-trial-offline-estimator/DESIGN.md", "docs/features/effective-trial-offline-estimator/TEST-PLAN.md", "docs/features/effective-trial-offline-estimator/TASKS.md"],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "T01-T12 map to files, interfaces, fixture oracles, failure routing and rollback; no rollback can create raw/effective alias or public dual truth."
+    },
+    {
+      "id": "CP5-CR173-09",
+      "category": "clarification",
+      "name": "LLD clarification queue has zero unresolved items",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/state/QUESTION-LEDGER.ndjson", "process/context/CP5-CR173.context.json"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "blocking/open clarification=0/0; all three LLDs declare open_items=0."
+    },
+    {
+      "id": "CP5-CR173-10",
+      "category": "authorization",
+      "name": "Design preparation consumed no implementation real runtime public or remote authority",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/context/CP5-CR173.context.json", "process/state/AGENT-DISPATCH-LEDGER.ndjson"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Source/test/fixture changes and native/public test runs=0; credential/provider/real/runtime/trading/publish/deploy/Git remote operations=0."
+    },
+    {
+      "id": "CP5-CR173-11",
+      "category": "claim-ceiling",
+      "name": "Estimator-only and public C1 claim ceilings remain explicit",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/design/HLD-EFFECTIVE-TRIAL-OFFLINE-METHODOLOGY.md", "process/checks/CP5-CR173-LLD-REVIEW-R3-SUMMARY.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "public projection/Gate1 blocker removal/FWER/DSR/admission/Stage3/CR172 resume=false; c1_computable=false; maximum future CP8 claim is offline_method_ready only."
+    },
+    {
+      "id": "CP5-CR173-12",
+      "category": "freshness-closure",
+      "name": "LLD authority pointer freshness is closed by pointer-only refresh",
+      "status": "PASS",
+      "severity": "LOW",
+      "evidence_refs": ["process/checks/CP5-CR173-LLD-REVIEW-R3-FINDINGS.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "All three LLD section 0 pointers now name HLD/Domain/ADR v1.2 and Feature DESIGN/TEST-PLAN/TASKS v0.3. The refresh changed no normative contract."
+    },
+    {
+      "id": "CP5-CR173-13",
+      "category": "legacy",
+      "name": "Inherited global planning and Feature registry debt remains isolated",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/checks/CP4-CR173-STORY-DAG-PARALLEL-SAFETY.result.json", "process/handoffs/CR173-CP4-META-SE-STORY-PLANNING-RETURN-SUMMARY.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "create_followup_candidate",
+      "waiver_ref": null,
+      "notes": "Global checkers retain inherited CR013 invalid status and historical FEATURE-REGISTRY/schema debt; CR173 scoped cards/DAG/owners/LLDs pass."
+    }
+  ],
+  "entry_criteria": [
+    {"name": "CP3 approved and CP4 PASS", "status": "PASS", "evidence_ref": "process/checks/CP4-CR173-STORY-DAG-PARALLEL-SAFETY.result.json"},
+    {"name": "CP5 capsule ready", "status": "PASS", "evidence_ref": "process/context/CP5-CR173.context.json"},
+    {"name": "Three LLD structure checks OK", "status": "PASS", "evidence_ref": "process/context/CP5-CR173.context.json"},
+    {"name": "Independent review blocking and required findings are zero", "status": "PASS", "evidence_ref": "process/checks/CP5-CR173-LLD-REVIEW-R3-SUMMARY.md"}
+  ],
+  "exit_criteria": [
+    {"name": "All three design evidence items ready", "status": "PASS"},
+    {"name": "No blocking clarification or required review finding", "status": "PASS"},
+    {"name": "Authorization and claim ceilings explicit", "status": "PASS"},
+    {"name": "Human decision recorded", "status": "PASS", "evidence_ref": "process/checkpoints/CP5-CR173-ALL-STORIES-LLD-BATCH.md"}
+  ],
+  "deliverables": [
+    "process/context/CP5-CR173.context.json",
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-LLD.md",
+    "process/stories/STORY-CR173-S02-exact-spectral-estimator-LLD.md",
+    "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-LLD.md",
+    "process/checks/CP5-CR173-LLD-REVIEW-R3-FINDINGS.md",
+    "process/checks/CP5-CR173-LLD-REVIEW-R3-SUMMARY.md",
+    "process/checkpoints/CP5-CR173-ALL-STORIES-LLD-BATCH.md"
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260716T073831Z0000-1e725637",
+    "RE-20260716T080348Z0000-f1dda4a4",
+    "RE-20260716T081344Z0000-7291eec0",
+    "RE-20260716T081345Z0000-35e02518",
+    "RE-20260716T081345Z0000-0c907b93"
+  ],
+  "pending_human_decisions": [
+    {
+      "decision_id": "DQ-CP5-CR173-IMPLEMENTATION-CONTRACT",
+      "decision_type": "implementation",
+      "status": "approved",
+      "question": "Approve S01-S03 full LLDs as the CR173 implementation contract?",
+      "recommended_option": "Approved S01 v1.3, S02 v1.3 and S03 v1.4 after pointer-only refresh with normative delta=0.",
+      "source_ref": "process/checkpoints/CP5-CR173-ALL-STORIES-LLD-BATCH.md"
+    },
+    {
+      "decision_id": "DQ-CP5-CR173-WAVES-OWNERSHIP",
+      "decision_type": "implementation",
+      "status": "approved",
+      "question": "Approve the three serial Waves and unique file ownership?",
+      "recommended_option": "Approve S01 to S02 to S03, one Story per Wave, with seven of seven primary paths uniquely owned.",
+      "source_ref": "process/checkpoints/CP5-CR173-ALL-STORIES-LLD-BATCH.md"
+    },
+    {
+      "decision_id": "DQ-CP5-CR173-LOCAL-AUTHORIZATION",
+      "decision_type": "security",
+      "status": "approved",
+      "question": "Authorize only planned repository-local source, test, synthetic fixture edits and local uv validation?",
+      "recommended_option": "Authorize only the seven planned local paths, deterministic synthetic fixtures and local uv-run tests; retain every real, runtime, public-write and remote denial.",
+      "source_ref": "process/checkpoints/CP5-CR173-ALL-STORIES-LLD-BATCH.md"
+    },
+    {
+      "decision_id": "DQ-CP5-CR173-CLAIM-AND-VERIFICATION-BOUNDARY",
+      "decision_type": "risk_acceptance",
+      "status": "approved",
+      "question": "Accept fixture-only verification and the estimator-only claim ceiling for CP6 and CP7?",
+      "recommended_option": "Accept the independent CP7 lane and keep public_effective_trial_count_populatable and c1_computable false; future empirical and public projection work remains separate.",
+      "source_ref": "process/checkpoints/CP5-CR173-ALL-STORIES-LLD-BATCH.md"
+    }
+  ],
+  "manual_gate_status": "approved",
+  "decision": "PASS",
+  "next_route": "CP6"
+}

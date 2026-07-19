@@ -1,0 +1,102 @@
+{
+  "acceptance": [
+    "F-001=CLOSED：SC-CR172-021 / test_req013_is_contract_ready_only 的 requirement binding 精确为 REQ-CR172-013，不再误绑 REQ-CR172-006",
+    "trace test 新增显式语义断言 test_req013_is_contract_ready_only -> REQ-CR172-013，semantic mismatch=0",
+    "REQ-CR172-006 仍由其权威场景覆盖；Requirement/Scenario/Outcome 继续精确 15/15、27/27、11/11，unknown/duplicate/uncovered=0",
+    "S05 scoped=27/27、S01-S05 combined=154/154、failed/skipped=0/0；py_compile 与 whitespace PASS",
+    "只修改 scenario_catalog.json、claim regression test 和六项 CP6R1 Story/机器证据；production modules/upstream tests hash 8/8 不变",
+    "六类真实动作 authorized/executed=0/6、0/6，五项高阶 claim true=0/5；真实 lake/NAS/runtime/network/credential/signal/trading/deploy/Git remote 操作=0"
+  ],
+  "allowed_reads": [
+    {"estimated_tokens": 1600, "mode": "full", "path": "process/state/STATE.current.json", "reason": "runtime_state", "required": true},
+    {"estimated_tokens": 220, "mode": "full", "path": "process/current/CURRENT.json", "reason": "current_discovery_entry", "required": true},
+    {"estimated_tokens": 2300, "mode": "full", "path": "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification.md", "reason": "story_card", "required": true},
+    {"estimated_tokens": 360, "mode": "full", "path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true},
+    {"estimated_tokens": 1600, "mode": "full", "path": "process/changes/summaries/CR-172.summary.json", "reason": "cr_summary", "required": true},
+    {"estimated_tokens": 2800, "mode": "full", "path": "process/checks/CP7-CR172-S05-VERIFICATION.result.json", "reason": "rework_finding_source", "required": true},
+    {"estimated_tokens": 900, "mode": "full", "path": "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7.index.json", "reason": "cp7_evidence_index", "required": true},
+    {"estimated_tokens": 0, "mode": "full", "path": "tests/fixtures/cr172_path_i/scenario_catalog.json", "reason": "rework_target", "required": true},
+    {"estimated_tokens": 0, "mode": "full", "path": "tests/research/test_cr172_path_i_claim_regression.py", "reason": "rework_target", "required": true}
+  ],
+  "allowed_write_paths": [
+    "tests/fixtures/cr172_path_i/scenario_catalog.json",
+    "tests/research/test_cr172_path_i_claim_regression.py",
+    "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification.md",
+    "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-IMPLEMENTATION.md",
+    "process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP6R1.return.json",
+    "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP6R1.index.json",
+    "process/checks/CP6-CR172-S05-REWORK-1.result.json",
+    "process/checks/CP6-CR172-S05-REWORK-1.result.summary.md"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PRODUCTION_WRITE", "NO_NAS_SYNC_OR_WRITE", "NO_EXECUTION_HOST_WRITE", "NO_SIGNAL_TRANSPORT", "NO_TRADING", "NO_DEPLOY", "NO_GIT_REMOTE_WRITE"],
+  "budget": {"estimated_tokens": 7000, "estimator": "chars_div_4", "max_tokens": 14000},
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["architecture-major", "product-redesign", "runtime-high-risk"]
+  },
+  "cr_delta": {
+    "affected_contracts": ["REQ-013 scenario-to-test trace binding", "semantic trace assertion"],
+    "summary": "只关闭 CP7 F-001：修正 catalog 的 REQ-013 精确绑定并增加语义断言；不修改生产合同或扩大测试目标。"
+  },
+  "cr_id": "CR-172",
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/STORY-STATUS.md", "process/changes/*.md", "process/stories/*-LLD.md", "process/stories/*-IMPLEMENTATION.md", "process/archive/**", "process/discussions/**"],
+  "dependency_inputs": [
+    "process/checks/CP6-CR172-S05-IMPLEMENTATION-DONE.result.json",
+    "process/checks/CP7-CR172-S05-VERIFICATION.result.json",
+    "process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7.return.json",
+    "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7.index.json"
+  ],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human summary / legacy fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "rework packet 已承载精确范围"},
+    {"path_or_pattern": "process/changes/*.md", "reason": "默认消费 CR summary"},
+    {"path_or_pattern": "process/stories/*-LLD.md", "reason": "无设计变更，不需重读 LLD"},
+    {"path_or_pattern": "process/stories/*-IMPLEMENTATION.md", "reason": "实现长证据默认经 return/evidence index 消费"},
+    {"path_or_pattern": "process/archive/**", "reason": "冷历史归档默认不读"},
+    {"path_or_pattern": "process/discussions/**", "reason": "讨论记录不作为回修真相源"}
+  ],
+  "expected_return_packet": "process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP6R1.return.json",
+  "feature_contract_summary": "F-001 是纯 trace-fixture/test 缺陷：行为测试已验证 REQ-013 正确语义，但 scenario_catalog 误将该 test 绑定为 REQ-006，且集合测试无法发现。回修只改变该绑定并加入精确语义断言；所有生产合同、artifact 链、授权 DAG 与 claim 行为保持不变。",
+  "feature_design_refs": ["docs/features/path-i-authorization-claim-governance/TEST-PLAN.md", "docs/features/trial-return-artifact-pipeline/TEST-PLAN.md", "docs/features/research-artifact-replica-materialization/TEST-PLAN.md"],
+  "feature_refs": ["trial-return.artifact.pipeline", "research-artifact.replica-materialization", "path-i.authorization.claim.governance"],
+  "forbidden_write_paths": ["engine/**", "tests/fixtures/cr172_path_i/README.md", "tests/fixtures/cr172_path_i/sealed_chain_v1.json", "tests/fixtures/cr172_path_i/failure_mutations_v1.json", "tests/fixtures/cr172_path_i/zero_operation_oracle_v1.json", "tests/fixtures/cr172_path_i/path_i_fixture.py", "tests/research/test_cr172_path_i_integration.py", "tests/research/test_cr172_path_i_authorization.py", "tests/research/test_cr172_path_i_governance.py", "tests/research/test_cr172_trial_return_artifact.py", "tests/research/test_cr172_nas_replica_verification.py", "tests/research/test_cr172_execution_materialization.py", "docs/**", "process/archive/**", "process/state/**", "process/current/**", "process/DEVELOPMENT-PLAN.yaml", "process/changes/**"],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "lld_policy": "full-lld-approved-no-design-delta",
+  "must_read": [
+    {"estimated_tokens": 1600, "mode": "full", "path": "process/state/STATE.current.json", "reason": "machine_state", "required": true},
+    {"estimated_tokens": 220, "mode": "full", "path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true},
+    {"estimated_tokens": 2300, "mode": "full", "path": "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification.md", "reason": "story_card", "required": true},
+    {"estimated_tokens": 360, "mode": "full", "path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true},
+    {"estimated_tokens": 2800, "mode": "full", "path": "process/checks/CP7-CR172-S05-VERIFICATION.result.json", "reason": "blocking_finding", "required": true}
+  ],
+  "objective": {
+    "non_goals": ["不修改任何生产代码或上游测试", "不更改行为合同、场景数量或测试数量", "不借回修实现真实 runtime、Signal、FU-v2 或 public C1", "不执行任何真实 lake/NAS/runtime/trading/deploy/Git remote 操作"],
+    "summary": "最小关闭 S05 CP7 F-001：把 REQ-013 contract-ready 测试绑定回权威 REQ-CR172-013，并新增防止同类误绑的语义断言。"
+  },
+  "packet_type": "story_work_packet",
+  "parent_context_ref": "process/context/stories/STORY-CR172-S05.CP7.verify-packet.json",
+  "profile": "runtime-high-risk-design",
+  "policy_refs": {"authz_policy": "process/policies/AUTHZ-POLICY.json", "gate_profiles": "process/policies/GATE-PROFILES.json", "read_policy": "process/policies/READ-POLICY.json"},
+  "project_id": "quant-lab",
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-172.summary.json",
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "read_if_needed": [],
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "read_expansion_log": [],
+  "risk_profile": "runtime-high-risk-design-minimal-test-rework",
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR172-S05-path-i-integration-claim-zero-operation-verification",
+  "story_ref": "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification.md",
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_integration.py tests/research/test_cr172_path_i_authorization.py tests/research/test_cr172_path_i_claim_regression.py",
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py tests/research/test_cr172_execution_materialization.py tests/research/test_cr172_path_i_integration.py tests/research/test_cr172_path_i_authorization.py tests/research/test_cr172_path_i_claim_regression.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr172-s05-cp6r1-pycompile uv run --python 3.11 python -m py_compile tests/research/test_cr172_path_i_claim_regression.py",
+    "git diff --no-index --check /dev/null tests/fixtures/cr172_path_i/scenario_catalog.json",
+    "git diff --no-index --check /dev/null tests/research/test_cr172_path_i_claim_regression.py",
+    "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S05.CP6.rework-1.work-packet.json --return process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP6R1.return.json",
+    "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S05-REWORK-1.result.json --check-consistency --correlation-profile audit"
+  ]
+}

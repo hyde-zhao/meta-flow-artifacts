@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "cr_id": "CR-172",
+  "delta_id": "CR172-TRIAL-RETURN-DEPLOYMENT-20260717",
+  "status": "pending_cp2",
+  "created_at": "2026-07-17T14:17:39+08:00",
+  "created_by": "host-orchestrator",
+  "source": "user_and_repository_fact_check",
+  "objective": "PATH-I 先冻结并 fixture-验证真实 C1 所需的 trial-return 上游、长期 identity、四组件部署与六类授权合同；不实现真实运行，信号只保留边界和 8 个最小字段。",
+  "verified_facts": [
+    "CR-163 lineage store 只保存 family/trial metadata 与 artifact refs，不保存 trial return series。",
+    "现有 mature multifactor runner 是单次研究运行，不是 multi-trial parameter sweep。",
+    "现有 layered_returns.csv 是因子分层 forward return，不是 trial 级 return series。",
+    "CR-173 v1 消费已计算的 dependency matrix R，不从 raw return series 计算 R。",
+    "CR-172 five-field contract 只覆盖有限数据湖只读范围，不覆盖 multi-trial runtime、研究工作区写、NAS sync 或执行机 pull/materialize。",
+    "用户确认研究机本地目录是数据湖、实验/回测报告和 trial returns 的实际运行路径与 active canonical；NAS 保存同步副本、备份并作为执行机数据分发来源。",
+    "执行机需要离线研究/数据湖对象时，必须从 NAS 拉取并校验到本地目录后再消费，不直接把 NAS 当 runtime 工作盘。",
+    "交易信号默认应由执行机基于批准策略包本地生成；低频/EOD 才可使用 NAS immutable mailbox，intraday 需要独立实时传输能力。"
+  ],
+  "recommended_route": {
+    "current": "PATH-I",
+    "meaning": "design-and-fixture instrumentation-first prerequisite",
+    "activation_after": "只有上游合同、owner、分动作授权、five fields、stable URI、部署映射和 fresh precheck 全部就绪后，才重开 PATH-C/A。",
+    "not_authorized": [
+      "source or test implementation before future CP5 approval",
+      "real lake read",
+      "multi-trial runtime",
+      "trial-return generation",
+      "real R computation",
+      "NAS write/publish/sync/migration",
+      "historical directory rename/rewrite",
+      "GitHub remote write"
+    ]
+  },
+  "path_contract": {
+    "trial_return_logical_uri": "research://experiment-families/{family_id}/runs/{run_id}/trials/{trial_id}/returns/v1/portfolio_returns.parquet",
+    "trial_return_research_path": "${QUANT_LAB_RESEARCH_RUNS_ROOT}/experiment-families/{family_id}/runs/{run_id}/trials/{trial_id}/returns/v1/portfolio_returns.parquet",
+    "trial_return_nas_replica_path": "${NAS_RESEARCH_SYNC_ROOT}/runs/experiment-families/{family_id}/runs/{run_id}/trials/{trial_id}/returns/v1/portfolio_returns.parquet",
+    "trial_return_execution_cache_path": "${EXECUTION_RESEARCH_CACHE_ROOT}/experiment-families/{family_id}/runs/{run_id}/trials/{trial_id}/returns/v1/portfolio_returns.parquet",
+    "new_single_run_default": "${QUANT_LAB_RESEARCH_RUNS_ROOT}/multifactor-strategy-research/{run_id}/",
+    "legacy_single_run_default": "/home/hyde/data/quant-lab/research/runs/stage3_mature_multifactor/{run_id}/",
+    "legacy_policy": "read-only audit reference; no move, rename or manifest rewrite in this delta",
+    "identity_rule": "lineage stores logical URI plus content hash; host absolute mount path is deployment mapping only"
+  },
+  "deployment_components": {
+    "research_machine": "GitHub checkout/uv/runtime workspace and active-canonical local data/research directories; versioned hash/manifest sync to NAS after authorization",
+    "trading_machine": "consume approved package and local materialized data; generate trading signals locally by default; write separate local/trading archive",
+    "nas": "verified replica, backup and cross-machine distribution surface with isolated data-lake, research, package-exchange, conditional signal-exchange and trading-archive zones",
+    "github": "code, schema, docs, manifest/hash/pointer and release metadata only; no real datasets, returns, credentials or account/order payloads"
+  },
+  "pending_decisions": [
+    "DQ-CR172-009",
+    "DQ-CR172-010",
+    "DQ-CR172-011",
+    "DQ-CR172-012",
+    "DQ-CR172-013",
+    "DQ-CR172-014",
+    "DQ-CR172-015"
+  ],
+  "signal_transfer": {
+    "default": "no research-to-execution signal transfer; execution machine generates signals locally from approved strategy package and local data",
+    "low_frequency": "PATH-I only freezes an optional immutable SignalBatch/TargetPositionBatch boundary and 8 minimal fields; it does not design or implement the mailbox",
+    "minimum_fields": ["schema_version", "batch_id", "strategy_id", "strategy_package_hash", "content_sha256", "signature/key_id", "valid_from/valid_until", "sequence_no"],
+    "deferred": "physical mailbox paths, seven-stage state machine, ack, idempotency/replay and transport implementation",
+    "intraday": "out of base four-component topology; requires independent realtime transport CR with mTLS, ordered delivery, ack/replay and failover",
+    "forbidden": "credentials, account secrets and broker order commands are never transported in SignalBatch"
+  },
+  "review_boundaries": {
+    "cp3": "design-only; no directory creation, runner change, NAS write, multi-trial run or signal transfer",
+    "cp5": "future approval may authorize repository-local code/test/fixture only; all six real actions remain unauthorized",
+    "cp7": "six real-action counters must remain 0/6",
+    "cp8_claim_ceiling": {
+      "path_i_design_ready": true,
+      "stage3_entry_ready": false,
+      "c1_computable": false,
+      "real_data_authorized": false,
+      "multi_trial_runtime_authorized": false,
+      "signal_transport_authorized": false
+    }
+  },
+  "follow_up_links": {
+    "FU-CR173-001": "empirical dependency-matrix methodology v2; hard prerequisite for positive empirical effective count/C1 computable, not for DQ-003 degraded design",
+    "DF-CR172-SIGNAL-BATCH-EXCHANGE": "detailed low-frequency mailbox design and implementation",
+    "DF-CR172-INTRADAY-REALTIME-SIGNAL": "independent realtime signal transport"
+  },
+  "product_docs": [
+    "docs/product/USE-CASES.md",
+    "docs/product/REQUIREMENTS.md",
+    "docs/product/SCENARIOS.yaml",
+    "docs/product/TEST-MATRIX.md",
+    "docs/product/STORY-MAP.md",
+    "docs/product/MVP-SCOPE.md",
+    "docs/product/RELEASE-SLICES.md",
+    "docs/product/BACKLOG.md"
+  ],
+  "design_docs_after_cp2": [
+    "docs/design/BLUEPRINT.md",
+    "docs/design/DEPLOYMENT-TOPOLOGY.md",
+    "docs/design/DOMAIN-MAP.md",
+    "docs/design/DEPENDENCY-MAP.md"
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR172-S04-REWORK-1",
+  "profile": "runtime-high-risk-design",
+  "story_id": "CR172-S04-execution-cache-materialization",
+  "cr_id": "CR-172",
+  "context_ref": "process/context/stories/STORY-CR172-S04.CP6.rework-1.work-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "dispatch_refs": [
+    "AD-CR172-S04-CP6R1-META-DEV-20260718T231325+0800"
+  ],
+  "return_ref": "process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json",
+  "evidence_ref": "process/evidence/CR172-S04-execution-cache-materialization.CP6R1.index.json",
+  "implementation_ref": "process/stories/STORY-CR172-S04-execution-cache-materialization-IMPLEMENTATION.md",
+  "result_summary_ref": "process/checks/CP6-CR172-S04-REWORK-1.result.summary.md",
+  "supersedes_result_ref": "process/checks/CP6-CR172-S04-IMPLEMENTATION-DONE.result.json",
+  "items": [
+    {
+      "id": "CP6R1-S04-ENTRY-01",
+      "category": "entry-criteria",
+      "name": "Healthy S04 rework route, authoritative CP6R1 packet, CP7 findings and debugger dispatch are confirmed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/stories/STORY-CR172-S04.CP6.rework-1.work-packet.json",
+        "process/checks/CP7-CR172-S04-VERIFICATION.result.json"
+      ],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "rework_attempt=1; workflow health threshold not reached; S05 remains locked."
+    },
+    {
+      "id": "CP6R1-S04-F001-01",
+      "category": "design-contract",
+      "name": "Selection-referenced receipt is independently immutable and exact-readable before CAS",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/research_artifact_materialization.py",
+        "tests/research/test_cr172_execution_materialization.py#test_cp6r1_f001_receipt_is_exact_readable_before_selection_cas"
+      ],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "same receipt idempotence and rotated receipt exact-read pass; receipt persistence/immutable/CAS failures return no selection/handle and preserve previous current."
+    },
+    {
+      "id": "CP6R1-S04-F002-01",
+      "category": "runtime-boundary",
+      "name": "Public resolver consumes current-selection port capability and requires exact equality",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "engine/research_artifact_materialization.py",
+        "tests/research/test_cr172_execution_materialization.py#test_cp6r1_f002_resolver_requires_current_exact_selection_capability"
+      ],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "old/forged/uncommitted accepted=0/3; current exact accepted=1; mapping and receipt-only capabilities are rejected."
+    },
+    {
+      "id": "CP6R1-S04-F003-01",
+      "category": "security-boundary",
+      "name": "All canonical sensitive evidence markers fail closed before persist and CAS",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "engine/research_artifact_materialization.py",
+        "tests/research/test_cr172_execution_materialization.py#test_cp6r1_f003_all_sensitive_evidence_markers_fail_before_persist"
+      ],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "password/passwd/secret/token/credential across preflight/commit approval/evidence refs accepted=0/20; canonical marker count=0."
+    },
+    {
+      "id": "CP6R1-S04-REGRESSION-01",
+      "category": "automated-verification",
+      "name": "Original and rework tests, S01-S04 regression, compile, whitespace and machine packet checks pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR172-S04-execution-cache-materialization.CP6R1.index.json"
+      ],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "S04 19/19; S01-S04 127/127; compile exit=0; whitespace diagnostics=0/2; Return and Evidence Index checks OK."
+    },
+    {
+      "id": "CP6R1-S04-BOUNDARY-01",
+      "category": "permission-boundary",
+      "name": "Only eight packet write paths changed and all forbidden writes and real operations remain zero",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json#boundary_check"
+      ],
+      "owner": "meta-dev-debugger",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "S01-S03/S05/docs/state/current/plan/ledgers/LLD untouched; real NAS/lake/execution/runtime/network/credential/signal/trading/deploy/Git remote=0."
+    },
+    {
+      "id": "CP6R1-S04-ROUTE-01",
+      "category": "stage-decision",
+      "name": "CP6R1 returns S04 ready for independent CP7R1 verification without unlocking S05",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S04-execution-cache-materialization-IMPLEMENTATION.md#15-cp6r1-最小回修",
+        "process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "F-001/F-002/F-003 are closed_pending_cp7r1; Host owns terminal event, state transition and CP7R1 dispatch."
+    }
+  ],
+  "entry_criteria": [
+    {
+      "name": "Process health, active S04 and CP6R1 rework packet are confirmed",
+      "status": "PASS",
+      "evidence_ref": "process/context/stories/STORY-CR172-S04.CP6.rework-1.work-packet.json"
+    },
+    {
+      "name": "CP7 F-001/F-002/F-003 evidence is available and no design clarification is required",
+      "status": "PASS",
+      "evidence_ref": "process/checks/CP7-CR172-S04-VERIFICATION.result.json"
+    },
+    {
+      "name": "Repository fixture verification is available without real-operation authorization",
+      "status": "PASS",
+      "evidence_ref": "process/context/stories/STORY-CR172-S04.CP6.rework-1.work-packet.json"
+    }
+  ],
+  "exit_criteria": [
+    {
+      "name": "F-001 receipt correlation and all zero-progress failure behavior pass",
+      "status": "PASS"
+    },
+    {
+      "name": "F-002 current exact resolver capability passes and three non-current classes are rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "F-003 five sensitive markers fail before persist/CAS and legal refs regress",
+      "status": "PASS"
+    },
+    {
+      "name": "Original 16 S04 tests, three rework groups and S01-S04 regression pass",
+      "status": "PASS"
+    },
+    {
+      "name": "Compile, whitespace, Return and Evidence Index checks pass",
+      "status": "PASS"
+    },
+    {
+      "name": "No forbidden write, real operation, Design Delta or S05 start occurred",
+      "status": "PASS"
+    }
+  ],
+  "deliverables": [
+    "engine/research_artifact_materialization.py",
+    "tests/research/test_cr172_execution_materialization.py",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization.md",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization-IMPLEMENTATION.md",
+    "process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json",
+    "process/evidence/CR172-S04-execution-cache-materialization.CP6R1.index.json",
+    "process/checks/CP6-CR172-S04-REWORK-1.result.json",
+    "process/checks/CP6-CR172-S04-REWORK-1.result.summary.md"
+  ],
+  "findings": [
+    {
+      "id": "F-001",
+      "severity": "BLOCKER",
+      "status": "CLOSED_PENDING_CP7R1",
+      "blocking": false,
+      "route": "verification_execution"
+    },
+    {
+      "id": "F-002",
+      "severity": "HIGH",
+      "status": "CLOSED_PENDING_CP7R1",
+      "blocking": false,
+      "route": "verification_execution"
+    },
+    {
+      "id": "F-003",
+      "severity": "HIGH",
+      "status": "CLOSED_PENDING_CP7R1",
+      "blocking": false,
+      "route": "verification_execution"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T152754Z0000-5e684dc2"
+  ],
+  "decision": "PASS",
+  "stop_reason": "no_remaining_route",
+  "next_route": "verification_execution",
+  "checked_at": "2026-07-18T23:24:09+08:00",
+  "check_attempt": 2,
+  "workflow_health": {
+    "story_rework_count": 1,
+    "cp_retry_count": 1,
+    "threshold_reached": false,
+    "threshold_route_triggered": false,
+    "reason": "First same-story rework closes all three findings; continue to independent CP7R1."
+  },
+  "zero_operation_evidence": {
+    "real_nas": 0,
+    "real_lake": 0,
+    "execution_host": 0,
+    "runtime": 0,
+    "network": 0,
+    "credential_read": 0,
+    "signal": 0,
+    "trading": 0,
+    "deploy": 0,
+    "git_remote": 0,
+    "s05_operations": 0
+  },
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR172-S04.CP6.rework-1.work-packet.json": "sha256:d7ead431d54fbbe76600b4f2f57d6d223d0d321a4035a9b1b7db8b82f219a39a",
+    "process/checks/CP7-CR172-S04-VERIFICATION.result.json": "sha256:4c1e1391071840754ba129ebf42478bac9e2d4803504beef2abd0d0658665371",
+    "engine/path_i_governance.py": "sha256:bc6abc95a0e660d71fce5567195ef6bff037e0919403b5d400841c579cc82abf",
+    "engine/trial_return_artifact.py": "sha256:923fc5e5baaafea88b6cb98d26de5d95b5d43d848fcf0cd51fc41a1190b645f0",
+    "engine/research_artifact_replica.py": "sha256:533d34f79e6481dd4bb2bcdb45776c186cb6e3f1a1f6994640f3382f6e466026",
+    "engine/research_artifact_materialization.py": "sha256:72541d73cff02bfbd0e20deb19141df63a9ac68389707f97ce4e252d829d008a",
+    "tests/research/test_cr172_execution_materialization.py": "sha256:f58d71fd9f3cd7045d1cf645cea38e62370c0a705efbc3f627ed0f0a32be7049",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization.md": "sha256:4e01fd0f318b21f63eb574bb31cd3df408b48d5454f7458e0b68da3198e36a6a",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization-IMPLEMENTATION.md": "sha256:3c7ce4a9460df81038a2629e50523f0647ea89d7d0d2cbf28aa2a20ce1099996",
+    "process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json": "sha256:033784242e985538b3aaf3ede784673592ccf75dcaee9a547bbb29f3c3930364",
+    "process/evidence/CR172-S04-execution-cache-materialization.CP6R1.index.json": "sha256:0f8fde86dc9b2abfcf077067f0359f9407ba9dfcd5d85b25851700dfb00093a3"
+  }
+}

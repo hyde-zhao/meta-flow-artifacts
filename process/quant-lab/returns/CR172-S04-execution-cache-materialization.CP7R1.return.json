@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP7",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S04-execution-cache-materialization",
+  "status": "verified",
+  "allowed_statuses": [
+    "implemented",
+    "implemented_with_risk",
+    "verified",
+    "verified_with_risk",
+    "partial",
+    "blocked",
+    "needs_design_clarification",
+    "needs_user_decision",
+    "needs_rework",
+    "no_op",
+    "superseded",
+    "waived"
+  ],
+  "touched_files": [
+    {
+      "path": "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md",
+      "change_type": "modified"
+    },
+    {
+      "path": "process/returns/CR172-S04-execution-cache-materialization.CP7R1.return.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/evidence/CR172-S04-execution-cache-materialization.CP7R1.index.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S04-REVERIFY-1.result.json",
+      "change_type": "created"
+    },
+    {
+      "path": "process/checks/CP7-CR172-S04-REVERIFY-1.result.summary.md",
+      "change_type": "created"
+    }
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "notes": "CP7R1 仅独立复验 CP6R1 已交付合同；源码、测试和长期设计均未修改。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_execution_materialization.py",
+        "result": "pass: 19 passed in 0.61s; failed/skipped=0/0"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py tests/research/test_cr172_execution_materialization.py",
+        "result": "pass: 127 passed in 0.96s; failed/skipped=0/0"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s04-cp7r1-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py engine/research_artifact_materialization.py tests/research/test_cr172_execution_materialization.py",
+        "result": "pass: exit=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null engine/research_artifact_materialization.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null tests/research/test_cr172_execution_materialization.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow story return-check --return process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json --project-root .",
+        "result": "pass: OK; only expected symlink/return-path warning"
+      },
+      {
+        "command": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR172-S04-REWORK-1.result.json --project-root . --check-consistency --correlation-profile audit",
+        "result": "pass: OK; only pre-existing INPUT_HASH_PATH_ESCAPE and FINAL_ATTEMPT_UNAVAILABLE warnings"
+      },
+      {
+        "command": "independent synthetic F-001/F-002/F-003 probes via uv run --python 3.11 python",
+        "result": "pass: F-001 exact receipt and zero erroneous advance; F-002 invalid accepted=0/6 and current exact accepted=1/1; F-003 invalid accepted=0/20, persist/CAS=0, canonical marker count=0"
+      }
+    ],
+    "tests": [
+      {
+        "path": "tests/research/test_cr172_execution_materialization.py",
+        "passed": 19,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S04 original 16 regression plus F-001/F-002/F-003 closure groups"
+      },
+      {
+        "path": "tests/research/test_cr172_path_i_governance.py",
+        "passed": 46,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S01 exact authorization regression"
+      },
+      {
+        "path": "tests/research/test_cr172_trial_return_artifact.py",
+        "passed": 35,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S02 verifier regression"
+      },
+      {
+        "path": "tests/research/test_cr172_nas_replica_verification.py",
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S03 selected-read regression"
+      }
+    ],
+    "skipped": [
+      {
+        "check": "real NAS/lake/execution-host/runtime/network/environment/credential/signal/trading/deploy/Git remote integration",
+        "reason": "CP7R1 packet explicitly forbids all real operations; authorization/executed=0"
+      },
+      {
+        "check": "S05",
+        "reason": "S04 CP7R1 only; S05 was not started by this agent"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "severity": "BLOCKER",
+      "status": "CLOSED",
+      "blocking": false,
+      "summary": "Selection-referenced receipt is immutable, self-hash exact-readable before CAS, and same/rotated/failure/conflict paths preserve the exact current selection without erroneous advance.",
+      "evidence_ref": "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md#65-findings-关闭表"
+    },
+    {
+      "id": "F-002",
+      "severity": "HIGH",
+      "status": "CLOSED",
+      "blocking": false,
+      "summary": "Resolver rejects old, forged-revision, forged-hash, uncommitted, mapping-only and receipt-only inputs and accepts only storage current exact selection.",
+      "evidence_ref": "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md#65-findings-关闭表"
+    },
+    {
+      "id": "F-003",
+      "severity": "HIGH",
+      "status": "CLOSED",
+      "blocking": false,
+      "summary": "All 20 sensitive evidence combinations fail before pull/persist/CAS; legal opaque refs pass and canonical marker count is zero.",
+      "evidence_ref": "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md#65-findings-关闭表"
+    }
+  ],
+  "zero_operation_evidence": {
+    "real_nas": 0,
+    "real_lake": 0,
+    "execution_host": 0,
+    "runtime": 0,
+    "network": 0,
+    "credential_read": 0,
+    "signal": 0,
+    "trading": 0,
+    "deploy": 0,
+    "git_remote": 0,
+    "upstream_pointer_mutations": 0,
+    "s05_operations": 0
+  },
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "R-CR172-RUNTIME-AUTHORIZATION-GAP",
+      "status": "not_authorized",
+      "note": "Repository fixture evidence never authorizes real NAS/execution/runtime operations."
+    },
+    {
+      "id": "R-CP7R1-S04-REAL-ADAPTER-UNVERIFIED",
+      "status": "residual_non_blocking",
+      "note": "Pure in-memory fixture does not establish production adapter durability, performance or external failure semantics."
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "read_expansion_notes": "Authoritative packet and its allowed inputs were sufficient; no deny-default LLD or full design document expansion occurred.",
+  "dispatch_refs": [
+    "AD-CR172-S04-CP7R1-META-QA-CRITICAL-20260718T233437+0800"
+  ],
+  "handoff_refs": [
+    "process/handoffs/CR172-S04-CP7R1-META-QA-CRITICAL-HANDOFF-2026-07-18.md"
+  ],
+  "execution_context": {
+    "handoff_id": "HO-CR172-S04-CP7R1-META-QA-CRITICAL-20260718T233144+0800",
+    "agent_thread": "/root/cr172_s04_cp7_meta_qa_critical",
+    "codex_agent_name": "meta-qa-critical",
+    "reasoning_profile": "critical",
+    "dispatch_tool": "followup_task",
+    "started_at": "2026-07-18T23:34:37+08:00",
+    "completed_at": "2026-07-18T23:44:30+08:00"
+  },
+  "next_stage_recommendation": "ready_for_host_terminal_audit_and_story_transition"
+}

@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "story_id": "CR173-S01-contract-evidence-canonicalization",
+  "stage": "CP6",
+  "status": "implemented",
+  "source_packet_ref": "process/context/stories/STORY-CR173-S01.CP6.work-packet.json",
+  "completed_at": "2026-07-17T09:51:11+08:00",
+  "summary": "LLD v1.3 的 immutable contracts、七字段 evidence、canonical bytes/hash、stable computation ref 与外置 append-only audit 已实现，45 项定向测试通过。",
+  "touched_files": [
+    {
+      "path": "engine/effective_trial_evidence.py",
+      "action": "created",
+      "owner": "CR173-S01-contract-evidence-canonicalization"
+    },
+    {
+      "path": "tests/research/test_effective_trial_evidence_contracts.py",
+      "action": "created",
+      "owner": "CR173-S01-contract-evidence-canonicalization"
+    },
+    {
+      "path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md",
+      "action": "updated",
+      "owner": "CR173-S01-contract-evidence-canonicalization"
+    },
+    {
+      "path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-IMPLEMENTATION.md",
+      "action": "created",
+      "owner": "CR173-S01-contract-evidence-canonicalization"
+    },
+    {
+      "path": "process/returns/CR173-S01-contract-evidence-canonicalization.CP6.return.json",
+      "action": "created",
+      "owner": "CR173-S01-contract-evidence-canonicalization"
+    },
+    {
+      "path": "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6.index.json",
+      "action": "created",
+      "owner": "CR173-S01-contract-evidence-canonicalization"
+    },
+    {
+      "path": "process/checks/CP6-CR173-S01-IMPLEMENTATION-DONE.result.json",
+      "action": "created",
+      "owner": "CR173-S01-contract-evidence-canonicalization"
+    },
+    {
+      "path": "process/checks/CP6-CR173-S01-IMPLEMENTATION-DONE.result.summary.md",
+      "action": "created",
+      "owner": "CR173-S01-contract-evidence-canonicalization"
+    }
+  ],
+  "contract_changes": {
+    "changed": true,
+    "summary": "新增 LLD v1.3 批准的 standalone internal contract；public contract change=0。",
+    "normative_ref": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-LLD.md",
+    "public_contract_change": false
+  },
+  "boundary_check": {
+    "allowed_write_paths_only": true,
+    "forbidden_write_count": 0,
+    "public_production_diff_count": 0,
+    "public_dependency_edge_count": 0,
+    "public_call_count": 0,
+    "real_data_operation_count": 0,
+    "credential_operation_count": 0,
+    "runtime_operation_count": 0,
+    "trading_operation_count": 0,
+    "publish_deploy_operation_count": 0,
+    "git_remote_write_count": 0
+  },
+  "verification_commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py",
+      "status": "PASS",
+      "summary": "45 passed in 0.09s"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s01-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+      "status": "PASS",
+      "summary": "exit_code=0"
+    },
+    {
+      "command": "git diff --check -- engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+      "status": "PASS",
+      "summary": "exit_code=0"
+    },
+    {
+      "command": "git diff --name-only -- <8 public production paths>",
+      "status": "PASS",
+      "summary": "output_count=0"
+    }
+  ],
+  "verification": {
+    "status": "PASS",
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py",
+        "result": "PASS",
+        "evidence": "45 passed in 0.09s"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s01-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+        "result": "PASS",
+        "evidence": "exit_code=0"
+      },
+      {
+        "command": "git diff --check -- engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+        "result": "PASS",
+        "evidence": "exit_code=0"
+      },
+      {
+        "command": "git diff --name-only -- <8 public production paths>",
+        "result": "PASS",
+        "evidence": "output_count=0"
+      }
+    ],
+    "tests_passed": 45,
+    "tests_failed": 0,
+    "summary": "定向 pytest、py_compile、git diff --check 全部通过。"
+  },
+  "evidence_refs": [
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-IMPLEMENTATION.md",
+    "tests/research/test_effective_trial_evidence_contracts.py"
+  ],
+  "risks": [
+    {
+      "id": "R-CR173-RAW-EFFECTIVE-ALIAS",
+      "status": "controlled_by_schema_provenance_and_negative_tests"
+    },
+    {
+      "id": "R-CR173-METHOD-NONDETERMINISM",
+      "status": "controlled_at_contract_layer; full_6x3_oracle_deferred_to_S03"
+    }
+  ],
+  "waivers": [],
+  "design_delta_refs": [],
+  "next_route": "CP7",
+  "next_stage_recommendation": "ready_for_cp7"
+}

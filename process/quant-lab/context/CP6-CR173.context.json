@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "context_type": "phase_context",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "checkpoint": "CP6",
+  "phase": "story-execution",
+  "stage": "CP6",
+  "profile": "standard-code",
+  "status": "in_progress",
+  "created_at": "2026-07-17T09:33:11+08:00",
+  "parent_context_ref": "process/context/CP5-CR173.context.json",
+  "route_plan_ref": "process/checks/CP0-CR173.route-plan.json",
+  "approved_gate_ref": "process/checkpoints/CP5-CR173-ALL-STORIES-LLD-BATCH.md",
+  "execution_order": [
+    "CR173-S01-contract-evidence-canonicalization",
+    "CR173-S02-exact-spectral-estimator",
+    "CR173-S03-golden-failure-boundary-verification"
+  ],
+  "active_story": "CR173-S01-contract-evidence-canonicalization",
+  "story_packet_ref": "process/context/stories/STORY-CR173-S01.CP6.work-packet.json",
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-173.summary.json",
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "budget": {
+    "estimated_tokens": 9000,
+    "estimator": "manual_compact",
+    "max_tokens": 14000
+  },
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "agent_skill_contract": "delivery/rules/AGENT-SKILL-CONTRACT.md"
+  },
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_discovery_entry", "required": true, "mode": "full"},
+    {"path": "process/changes/summaries/CR-173.summary.json", "reason": "cr_summary", "required": true, "mode": "full"},
+    {"path": "process/context/stories/STORY-CR173-S01.CP6.work-packet.json", "reason": "active_story_packet", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "process/checkpoints/CP5-CR173-ALL-STORIES-LLD-BATCH.md", "reason": "approved_gate_contract", "required": true, "mode": "compact"},
+    {"path": "docs/features/effective-trial-offline-estimator/DESIGN.md", "reason": "feature_contract", "required": false, "mode": "sections"},
+    {"path": "docs/features/effective-trial-offline-estimator/TEST-PLAN.md", "reason": "test_contract", "required": false, "mode": "sections"}
+  ],
+  "read_if_needed": [
+    {"path": "process/stories/STORY-CR173-S02-exact-spectral-estimator-LLD.md", "reason": "downstream_contract_compatibility", "required": false, "mode": "sections"},
+    {"path": "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-LLD.md", "reason": "downstream_verification_contract", "required": false, "mode": "sections"}
+  ],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_implementation_truth"},
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/archive/**", "process/discussions/**", "docs/quality/**", "docs/release/**"],
+  "full_doc_read_allowed_when": ["capsule_missing", "field_conflict", "human_audit", "deep_review", "schema_validation_failed"],
+  "authorization": {
+    "repository_local_planned_paths": 7,
+    "local_uv_run": true,
+    "synthetic_fixture_only": true,
+    "real_data": false,
+    "public_c1_write": false,
+    "runtime_or_trading": false,
+    "publish_or_deploy": false,
+    "git_remote_write": false
+  },
+  "claim_ceiling": {
+    "offline_method_ready_only": true,
+    "public_effective_trial_count_populatable": false,
+    "c1_computable": false,
+    "stage3_entry_ready": false,
+    "admission_pass": false
+  },
+  "residual_risks": [
+    {
+      "id": "R-CR173-EXACT-INTEGER-GROWTH",
+      "status": "accepted_fixture_only",
+      "control": "当前 golden 最大 n=4，不宣称 production SLA；CR-172 PATH-C/A 或出现真实规模/性能目标前重新设计与压测。"
+    }
+  ]
+}

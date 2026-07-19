@@ -1,0 +1,108 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "modified",
+      "path": "process/stories/STORY-CR172-S04-execution-cache-materialization-VERIFICATION.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/CR172-S04-execution-cache-materialization.CP7R1.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/CR172-S04-execution-cache-materialization.CP7R1.index.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/checks/CP7-CR172-S04-REVERIFY-1.result.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/checks/CP7-CR172-S04-REVERIFY-1.result.summary.md"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_execution_materialization.py",
+      "result": "pass: 19 passed in 0.61s; failed/skipped=0/0"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py tests/research/test_cr172_execution_materialization.py",
+      "result": "pass: 127 passed in 0.96s; failed/skipped=0/0"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s04-cp7r1-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py engine/research_artifact_materialization.py tests/research/test_cr172_execution_materialization.py",
+      "result": "pass: exit=0"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null engine/research_artifact_materialization.py",
+      "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null tests/research/test_cr172_execution_materialization.py",
+      "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow story return-check --return process/returns/CR172-S04-execution-cache-materialization.CP6R1.return.json --project-root .",
+      "result": "pass: OK; only expected symlink/return-path warning"
+    },
+    {
+      "command": "uv run --python 3.11 meta-flow cp result-check --result process/checks/CP6-CR172-S04-REWORK-1.result.json --project-root . --check-consistency --correlation-profile audit",
+      "result": "pass: OK; only pre-existing INPUT_HASH_PATH_ESCAPE and FINAL_ATTEMPT_UNAVAILABLE warnings"
+    },
+    {
+      "command": "independent synthetic F-001/F-002/F-003 probes via uv run --python 3.11 python",
+      "result": "pass: F-001 exact receipt and zero erroneous advance; F-002 invalid accepted=0/6 and current exact accepted=1/1; F-003 invalid accepted=0/20, persist/CAS=0, canonical marker count=0"
+    }
+  ],
+  "cr_id": "CR-172",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR172-S04-execution-cache-materialization.CP7R1.return.json",
+  "risks": [
+    {
+      "id": "R-CR172-RUNTIME-AUTHORIZATION-GAP",
+      "note": "Repository fixture evidence never authorizes real NAS/execution/runtime operations.",
+      "status": "not_authorized"
+    },
+    {
+      "id": "R-CP7R1-S04-REAL-ADAPTER-UNVERIFIED",
+      "note": "Pure in-memory fixture does not establish production adapter durability, performance or external failure semantics.",
+      "status": "residual_non_blocking"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP7",
+  "story_id": "CR172-S04-execution-cache-materialization",
+  "tests": [
+    {
+      "failed": 0,
+      "passed": 19,
+      "path": "tests/research/test_cr172_execution_materialization.py",
+      "role": "S04 original 16 regression plus F-001/F-002/F-003 closure groups",
+      "skipped": 0
+    },
+    {
+      "failed": 0,
+      "passed": 46,
+      "path": "tests/research/test_cr172_path_i_governance.py",
+      "role": "S01 exact authorization regression",
+      "skipped": 0
+    },
+    {
+      "failed": 0,
+      "passed": 35,
+      "path": "tests/research/test_cr172_trial_return_artifact.py",
+      "role": "S02 verifier regression",
+      "skipped": 0
+    },
+    {
+      "failed": 0,
+      "passed": 27,
+      "path": "tests/research/test_cr172_nas_replica_verification.py",
+      "role": "S03 selected-read regression",
+      "skipped": 0
+    }
+  ],
+  "waivers": []
+}

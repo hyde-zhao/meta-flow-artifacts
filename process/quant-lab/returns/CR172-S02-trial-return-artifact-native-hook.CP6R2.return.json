@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "rework_attempt": 2,
+  "cr_id": "CR-172",
+  "story_id": "CR172-S02-trial-return-artifact-native-hook",
+  "status": "implemented",
+  "allowed_statuses": [
+    "implemented",
+    "implemented_with_risk",
+    "verified",
+    "verified_with_risk",
+    "partial",
+    "blocked",
+    "needs_design_clarification",
+    "needs_user_decision",
+    "needs_rework",
+    "no_op",
+    "superseded",
+    "waived"
+  ],
+  "touched_files": [
+    {"path": "engine/trial_return_artifact.py", "change_type": "modified"},
+    {"path": "tests/research/test_cr172_trial_return_artifact.py", "change_type": "modified"},
+    {"path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook.md", "change_type": "modified"},
+    {"path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-IMPLEMENTATION.md", "change_type": "modified"},
+    {"path": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP6R2.return.json", "change_type": "created"},
+    {"path": "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP6R2.index.json", "change_type": "created"},
+    {"path": "process/checks/CP6-CR172-S02-REWORK-2.result.json", "change_type": "created"},
+    {"path": "process/checks/CP6-CR172-S02-REWORK-2.result.summary.md", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "notes": "只在既有 verified-to-port binding guard 增加 seal authorization_evidence_refs 与 capability approval/evidence refs 的有序精确等值校验；public 3/3+3/3、schema、seal、verifier 和端口接口均不变。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: 35 passed, 0 failed, 0 skipped"
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: 81 passed, 0 failed, 0 skipped"
+      },
+      {
+        "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s02-cp6r2-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: exit=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null engine/trial_return_artifact.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "git diff --no-index --check /dev/null tests/research/test_cr172_trial_return_artifact.py",
+        "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+      },
+      {
+        "command": "authorization-evidence exact-correlation conformance inventory",
+        "result": "pass: exact ordered tuple equality=2/2; approval/evidence/swapped/extra/missing blocked=5/5; direct and publisher call/commit/selection mutation=0/0/0"
+      }
+    ],
+    "tests": [
+      {
+        "path": "tests/research/test_cr172_trial_return_artifact.py",
+        "passed": 35,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S02 original contracts, CP6R1 regressions and CP6R2 authorization-ref exact-correlation regressions"
+      },
+      {
+        "path": "tests/research/test_cr172_path_i_governance.py",
+        "passed": 46,
+        "failed": 0,
+        "skipped": 0,
+        "role": "S01 upstream regression"
+      }
+    ],
+    "skipped": [
+      {
+        "check": "real runner, lineage, lake, NAS, runtime, credentials, R, signal, trading, deploy and remote integration",
+        "reason": "CP6R2 packet 明确禁止；回修只使用 repository-local nominal in-memory port"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "F-CR172-S02-CP7-001",
+      "status": "fully_closed_pending_cp7r2",
+      "evidence_ref": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-IMPLEMENTATION.md#13-cp6r2-authorization-evidence-binding-回修"
+    }
+  ],
+  "open_questions": [],
+  "risks": [
+    {
+      "id": "R-CR172-S02-PORT-BINDING",
+      "status": "closed_in_implementation_pending_cp7r2",
+      "note": "Nominal capability、verified seal authorization refs exact correlation、双 guard 与原子提交后置条件均已实现。"
+    },
+    {
+      "id": "R-CR172-TRIAL-RETURN-SOURCE-ABSENT",
+      "status": "design_deferred_fail_closed",
+      "note": "Fixture PASS 仍不证明真实 native producer。"
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T115408Z0000-5f2e6a64"
+  ],
+  "dispatch_refs": [
+    "AD-CR172-S02-CP6R2-META-DEV-20260718T200537+0800",
+    "AD-CR172-S02-CP6R2-META-DEV-STARTED-20260718T200537+0800",
+    "/root/cr172_s02_cp6_meta_dev"
+  ],
+  "next_stage_recommendation": "host_dispatch_meta_qa_for_cp7r2"
+}

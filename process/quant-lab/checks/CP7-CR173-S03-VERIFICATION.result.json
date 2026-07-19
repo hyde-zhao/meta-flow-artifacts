@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR173-S03-VERIFICATION",
+  "profile": "standard-code",
+  "story_id": "CR173-S03-golden-failure-boundary-verification",
+  "cr_id": "CR-173",
+  "context_ref": "process/context/stories/STORY-CR173-S03.CP7.verify-packet.json",
+  "dispatch_refs": [
+    "AD-CR173-S03-CP7-META-QA-CRITICAL-COMPLETED-20260717T120225+0800"
+  ],
+  "return_packet_ref": "process/returns/CR173-S03-golden-failure-boundary-verification.CP7.return.json",
+  "evidence_ref": "process/evidence/CR173-S03-golden-failure-boundary-verification.CP7.index.json",
+  "checked_at": "2026-07-17T11:58:27+08:00",
+  "check_attempt": 1,
+  "route_plan_ref": "process/checks/CP0-CR173.route-plan.json",
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR173-S03.CP7.verify-packet.json": "sha256:d5f81d514a31bf10848ba93f4fd8d1ace4e482783119011fa1abcb96ef837719",
+    "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-LLD.md": "sha256:f80ad32938275210a5cea3e5fa544304cd464a785cd028248de7b5cf0701dcf8",
+    "process/checks/CP6-CR173-S03-IMPLEMENTATION-DONE.result.json": "sha256:5268fdf10eeba96643db7fce75213aa793c56fa9b824585925b1f2d1f68456e8",
+    "process/returns/CR173-S03-golden-failure-boundary-verification.CP6.return.json": "sha256:11bea6acd1c3ed849384aa76c9b28f1eef60ccb50db2c3ec565e4e528ccb0614",
+    "process/evidence/CR173-S03-golden-failure-boundary-verification.CP6.index.json": "sha256:ea981a6a12bf737a2ea8c9c8c27a25a2fd888176087a6c1aba5964d8a7d5ba59",
+    "tests/fixtures/effective_trial/golden_vectors_v1.json": "sha256:4c47994c89c27802f38cc79616a22cf0d8ff5d545629beb0ae0fa3aab11ad408",
+    "tests/research/test_effective_trial_cr173_qac.py": "sha256:86ae2d8db1ab8b985eed8621d8a279f36f5911ae5f0d0d2f0cba6615a6e3e447",
+    "tests/research/test_effective_trial_authorization.py": "sha256:53fd8be6820e998f58ff590ee09010fe5b289191e0acc98f819b99dd692db2b9",
+    "engine/effective_trial_evidence.py": "sha256:7ff5ebf9bc273375344e40c54903a2e3bc4605cdc8c931fcc97882c0fe84217d",
+    "engine/effective_trial_estimator.py": "sha256:fbdd1835883ca554fd9185826107efc3efb96ae646bb3b9cc93d80795e0b1f72",
+    "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md": "sha256:78656cd741f0bee6fd7b208c28efed4b45bcfbe6b1291c42c71f0fab204bf892",
+    "process/returns/CR173-S03-golden-failure-boundary-verification.CP7.return.json": "sha256:bcc8689d06778aa2144b2bdd0732fa236a121fd1fb2c649c0dbe3c7b84a13eb7",
+    "process/evidence/CR173-S03-golden-failure-boundary-verification.CP7.index.json": "sha256:7f13d034d3c16fc317eb2c5d95dc12fded71713e63aca777ea80ddf922578fac"
+  },
+  "items": [
+    {
+      "id": "CP7-S03-ENTRY-01",
+      "category": "entry",
+      "name": "CP6 PASS、独立 QA dispatch 与 fixture-only 授权成立",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-CR173-S03-IMPLEMENTATION-DONE.result.json",
+        "AD-CR173-S03-CP7-META-QA-CRITICAL-20260717T115246+0800"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "process health=ok；真实数据/runtime/credential/remote 授权=0。"
+    },
+    {
+      "id": "CP7-S03-01",
+      "category": "tests",
+      "name": "Targeted 与 12 个 public read-only 回归组合通过",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md#6-自动化与静态执行证据"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "combined=376/376；pycompile=2/2；whitespace errors=0。"
+    },
+    {
+      "id": "CP7-S03-02",
+      "category": "oracle",
+      "name": "Fixture raw/expected 隔离且 expected oracle 不进入 estimator/finalizer",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md#5-oraclefailure-与-recovery-审查"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "expected execution input=0；6/6×3/3；computation/evidence=1/1、audit=3/3。"
+    },
+    {
+      "id": "CP7-S03-03",
+      "category": "failure",
+      "name": "F01-F08、七字段 mutation 与 F03/F04 precedence fail-closed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md#5-oraclefailure-与-recovery-审查"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "F01-F08=8/8；returned basis=8×7；delete=7/7；F03 的 F04/estimator call=0/0。"
+    },
+    {
+      "id": "CP7-S03-04",
+      "category": "recovery",
+      "name": "Append-only audit identity 与 recovery A/B linkage",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md#5-oraclefailure-与-recovery-审查"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "旧 attempt 覆盖=0；B parent/supersedes→A；same-failure audit append-only。"
+    },
+    {
+      "id": "CP7-S03-05",
+      "category": "public-boundary",
+      "name": "8 个 production 与 12 个 expected 路径未修改，current public C1 不改善",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md#8-公共边界与-claim-ceiling"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "8+12 git modified=0；12/12 regression PASS 只证明 unavailable/worst-state 未改善。"
+    },
+    {
+      "id": "CP7-S03-06",
+      "category": "authorization",
+      "name": "Authorization guard 必须检测真实越权并避免普通字符串/replace 误报",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md#f-cp7-s03-001--high--blocking--authorization-ast-guard-可被真实越权形态简单绕过"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "普通字符串/replace 不误报；但 urllib/subprocess/os.replace/os.environ/git/public alias 6 类真实形态全部假阴性。"
+    },
+    {
+      "id": "CP7-S03-07",
+      "category": "claim",
+      "name": "Public C1 与 CR-172 claim ceiling 保持 false/zero",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR173-S03-golden-failure-boundary-verification.CP7.return.json#acceptance"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "public_effective_trial_count_populatable=false；c1_computable=false；CR172 auto resume/close=0/0。"
+    },
+    {
+      "id": "CP7-S03-08",
+      "category": "evidence",
+      "name": "Verification report、return packet 与 evidence index 已生成",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR173-S03-golden-failure-boundary-verification.CP7.return.json",
+        "process/evidence/CR173-S03-golden-failure-boundary-verification.CP7.index.json"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "allowed write paths only=true；waiver=0；design delta=0。"
+    },
+    {
+      "id": "CP7-S03-EXIT-01",
+      "category": "exit",
+      "name": "无 blocking verification finding",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR173-S03-golden-failure-boundary-verification.CP7.return.json#findings"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "blocking findings=1。"
+    },
+    {
+      "id": "CP7-S03-EXIT-02",
+      "category": "exit",
+      "name": "Story 可进入 verified 并解锁 CP8",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md#10-路由"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "S03 不得 verified；CR-173 不得进入 CP8。"
+    }
+  ],
+  "blockers": [
+    "F-CP7-S03-001"
+  ],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260717T035453Z0000-c03q1101"
+  ],
+  "decision": "NEEDS_REWORK",
+  "stop_reason": "needs_rework",
+  "next_route": "meta-dev"
+}

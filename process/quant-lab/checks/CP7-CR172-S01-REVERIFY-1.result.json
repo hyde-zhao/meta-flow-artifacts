@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR172-S01-REVERIFY-1",
+  "profile": "runtime-high-risk-design",
+  "story_id": "CR172-S01-action-authorization-eligibility-governance",
+  "cr_id": "CR-172",
+  "context_ref": "process/context/stories/STORY-CR172-S01.CP7.reverify-1.packet.json",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "dispatch_refs": [
+    "AD-CR172-S01-CP7R1-META-QA-CRITICAL-20260718T182054+0800"
+  ],
+  "return_ref": "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7R1.return.json",
+  "evidence_ref": "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7R1.index.json",
+  "result_summary_ref": "process/checks/CP7-CR172-S01-REVERIFY-1.result.summary.md",
+  "items": [
+    {
+      "id": "CP7R1-ENTRY-01",
+      "category": "entry-criteria",
+      "name": "Process route, active Story, CP6R1 PASS and independent dispatch are ready",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/current/CURRENT.json",
+        "process/checks/CP6-CR172-S01-REWORK-1.result.json",
+        "process/context/stories/STORY-CR172-S01.CP7.reverify-1.packet.json"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CURRENT.health=ok; active Story/context match; CP6R1 decision=PASS; meta-qa-critical dispatch is active."
+    },
+    {
+      "id": "CP7R1-F-001",
+      "category": "consumer-contract",
+      "name": "F-CP7-001 single decision invariant validator closes constructor and consumer bypasses",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#11-问题清单",
+        "tests/research/test_cr172_path_i_governance.py"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "validator defs=1, calls=constructor+guard, duplicate defs=0; direct/replace/eligible-without-authorized/empty refs/origin-target/guard hostile regressions pass."
+    },
+    {
+      "id": "CP7R1-F-002",
+      "category": "authorization-path",
+      "name": "F-CP7-002 canonical URI representation closes percent-encoding equivalence",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#11-问题清单",
+        "tests/research/test_cr172_path_i_governance.py"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "request/allow/deny/prefix share one canonical source; encoded unreserved/separator/dot/glob/authority are rejected; plain allow and deny-first controls pass."
+    },
+    {
+      "id": "CP7R1-VERIFY-01",
+      "category": "automated-verification",
+      "name": "Targeted pytest, py_compile and untracked-aware whitespace checks pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7R1.index.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "pytest=46 passed/0 failed/0 skipped in 0.08s; py_compile exit=0; both no-index checks produced zero whitespace diagnostics."
+    },
+    {
+      "id": "CP7R1-REGRESSION-01",
+      "category": "contract-coverage",
+      "name": "Six actions, twelve fields, five edges, empirical/path/signal/claim ceilings and zero-operation surface have no regression",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#4-验证追踪矩阵",
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#5-设计契约验证清单"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "action/record/enforcement=6/6/6; fields=12; DAG edges=5; empirical states=4; signal slots=8; high claims true=0/5; approved-ledger real authorization/execution=0/0 for 6/6; real operations=0."
+    },
+    {
+      "id": "CP7R1-STRUCTURED-01",
+      "category": "structured-evidence",
+      "name": "CP6R1 return/result consistency and CP7R1 review/return/evidence/result structure are consumable",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7R1.return.json",
+        "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7R1.index.json",
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "CP6R1 return-check/result-check and CP7R1 review validator/return-check/basic result-check are OK; audit correlation requires Host to append the successful terminal dispatch event after this return."
+    },
+    {
+      "id": "CP7R1-DISPATCH-01",
+      "category": "agent-dispatch-evidence",
+      "name": "Independent meta-qa-critical dispatch is referenced",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/handoffs/CR172-S01-CP7R1-META-QA-CRITICAL-HANDOFF-2026-07-18.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "dispatch_ref=AD-CR172-S01-CP7R1-META-QA-CRITICAL-20260718T182054+0800; agent_id=/root/cr172_s01_cp7r1_meta_qa_critical; Host appends terminal completed event after return."
+    },
+    {
+      "id": "CP7R1-EXIT-01",
+      "category": "exit-criteria",
+      "name": "Both prior blockers are closed and the Story is eligible to transition to verified",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md#14-阶段决策"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "F-CP7-001=CLOSED; F-CP7-002=CLOSED; new blockers=0; waivers=0; open questions=0."
+    },
+    {
+      "id": "CP7R1-DELIVERABLES-01",
+      "category": "deliverables",
+      "name": "All five reverify-packet deliverables are present",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7R1.return.json#touched_files"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "VERIFICATION, CP7R1 return, evidence index, result and summary are within packet allowed writes."
+    }
+  ],
+  "entry_criteria": [
+    {
+      "name": "Process route health and active Story/context are confirmed",
+      "status": "PASS",
+      "evidence_ref": "process/current/CURRENT.json"
+    },
+    {
+      "name": "CP6R1 PASS and implementation return/evidence are available",
+      "status": "PASS",
+      "evidence_ref": "process/checks/CP6-CR172-S01-REWORK-1.result.json"
+    },
+    {
+      "name": "Independent CP7R1 packet and dispatch are active",
+      "status": "PASS",
+      "evidence_ref": "process/context/stories/STORY-CR172-S01.CP7.reverify-1.packet.json"
+    }
+  ],
+  "exit_criteria": [
+    {
+      "name": "F-CP7-001 single invariant validator contract is closed",
+      "status": "PASS"
+    },
+    {
+      "name": "F-CP7-002 canonical representation contract is closed",
+      "status": "PASS"
+    },
+    {
+      "name": "Automated checks, baseline contracts and zero-operation boundaries have no regression",
+      "status": "PASS"
+    },
+    {
+      "name": "Story can transition to verified without blocker or waiver",
+      "status": "PASS"
+    }
+  ],
+  "deliverables": [
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md",
+    "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7R1.return.json",
+    "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7R1.index.json",
+    "process/checks/CP7-CR172-S01-REVERIFY-1.result.json",
+    "process/checks/CP7-CR172-S01-REVERIFY-1.result.summary.md"
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "host_transition_story_to_verified_and_continue_story_dag",
+  "checked_at": "2026-07-18T18:29:15+08:00",
+  "check_attempt": 2,
+  "reverify_attempt": 1,
+  "supersedes_result_ref": "process/checks/CP7-CR172-S01-VERIFICATION.result.json",
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR172-S01.CP7.reverify-1.packet.json": "sha256:50cf6de331d4e42b0ff43641e67393835ddbf4c5781842fb80fe34f5dddaefb9",
+    "process/checks/CP6-CR172-S01-REWORK-1.result.json": "sha256:b47024e686beae297c29075ff8ca1b97dd4337060c7ad97729c4345d3d78b071",
+    "process/returns/CR172-S01-action-authorization-eligibility-governance.CP6R1.return.json": "sha256:7f558a8efca5e0917097afe8175b0192ea15edaa04291b4a26aab3cf8d8325c3",
+    "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP6R1.index.json": "sha256:2d9a074844e60bd13b5e8850c58c17223677fb2aa738fc8dff303d3f170b5429",
+    "engine/path_i_governance.py": "sha256:bc6abc95a0e660d71fce5567195ef6bff037e0919403b5d400841c579cc82abf",
+    "tests/research/test_cr172_path_i_governance.py": "sha256:ef4284860453c55a0b9a59357b13a5343ad88c488d5a7ac3fec63ab732de12f9",
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-VERIFICATION.md": "sha256:52e4700bffe574fbbfd07413123336df1e43db9d1bcc0821b5fc1ed4b3f280ad",
+    "process/returns/CR172-S01-action-authorization-eligibility-governance.CP7R1.return.json": "sha256:3a9c6d79be35312a14b8f1a6db511043ad43aa767def58c8b9c97898df09895d",
+    "process/evidence/CR172-S01-action-authorization-eligibility-governance.CP7R1.index.json": "sha256:8c8d6f2b7330af7223c89c6faa2c09f49960599f3d0321c39a592f6fe2e996d7"
+  }
+}

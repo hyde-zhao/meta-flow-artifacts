@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP5",
+  "checkpoint_id": "CP5-CR172-LLD-R2-CROSS-CONTRACT-CORRELATION",
+  "profile": "runtime-high-risk-design",
+  "story_id": null,
+  "cr_id": "CR-172",
+  "checked_at": "2026-07-18T11:53:36+08:00",
+  "context_ref": "process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "dispatch_refs": [
+    "AD-CR172-CP5-LLD-R2-BATCH-A-20260718T113848+0800",
+    "AD-CR172-CP5-LLD-R2-BATCH-B-20260718T113848+0800",
+    "AD-CR172-CP5-LLD-R2-BATCH-C-20260718T113848+0800"
+  ],
+  "items": [
+    {
+      "id": "CP5-CR172-R2-01",
+      "category": "design-evidence",
+      "name": "Five full LLD R2 artifacts pass structural validation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-LLD.md", "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-LLD.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "full-lld/lld_version/status/confirmed/open_items=5/5,1.1/1.1,ready-for-review,false,0; lld-check PASS=5/5."
+    },
+    {
+      "id": "CP5-CR172-R2-02",
+      "category": "authorization",
+      "name": "S01 origin and target binding preserves the 12-field approval record",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-LLD.md"],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "approval fields=12/12; decision origin enum=2/2; target kind enum=2/2; fixture+real accepted/side-effect=0/0."
+    },
+    {
+      "id": "CP5-CR172-R2-03",
+      "category": "return-semantics",
+      "name": "S02 is a pure fixture contract and does not alias the current forward-label proxy",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-LLD.md"],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "runner/lineage planned diffs=0/0; S02 primary paths=2; forward proxy accepted as trial-return/R/count=0/0/0."
+    },
+    {
+      "id": "CP5-CR172-R2-04",
+      "category": "integration-contract",
+      "name": "S02 and S03 share one exact sealed-bundle verifier contract",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-LLD.md", "process/stories/STORY-CR172-S03-nas-replica-verification-LLD.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "ActionDecisionV1, ActionScopeContextV1, SealedTrialReturnBundleV1, ResearchCanonicalSelectionV1, VerifiedTrialReturnBundleV1, verify_sealed_trial_return_bundle and original_seal_sha256 are present in both LLDs 7/7; S03 secondary canonicalizer/digest/re-seal=0/0/0."
+    },
+    {
+      "id": "CP5-CR172-R2-05",
+      "category": "replica-materialization",
+      "name": "S03 to S04 preserves verified origin target and original seal digest",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR172-S03-nas-replica-verification-LLD.md", "process/stories/STORY-CR172-S04-execution-cache-materialization-LLD.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "S04 consumes ReplicaVerificationReceiptV1 and DistributionSelectionV1; no new seal digest; fixture origin/target remains fail-closed; test IDs total/unique/duplicate=16/16/0."
+    },
+    {
+      "id": "CP5-CR172-R2-06",
+      "category": "failure-recovery",
+      "name": "Partial lineage failure no longer promises impossible rollback",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-LLD.md", "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-LLD.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "state=partial_lineage_blocked_audit; erase/fake rollback/canonical selection advance=0/0/0; atomicity claim=0."
+    },
+    {
+      "id": "CP5-CR172-R2-07",
+      "category": "traceability",
+      "name": "S05 independently preserves coverage and claim boundaries",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-LLD.md"],
+      "owner": "meta-dev",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "REQ/scenario/outcome=15/15,27/27,11/11; production/native-hook capability=0; six real actions authorized/executed=0/6,0/6; five higher claims false."
+    },
+    {
+      "id": "CP5-CR172-R2-08",
+      "category": "scope",
+      "name": "R2 design work performed no implementation or real operation",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/handoffs/CR172-CP5-LLD-R2-BATCH-A-META-DEV-RETURN-SUMMARY.md", "process/handoffs/CR172-CP5-LLD-R2-BATCH-B-META-DEV-RETURN-SUMMARY.md", "process/handoffs/CR172-CP5-LLD-R2-BATCH-C-META-DEV-RETURN-SUMMARY.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "source/test/fixture implementation=0/0/0; real operations=0; git diff --check PASS."
+    }
+  ],
+  "entry_criteria": [
+    {"name": "Architecture correction R2 PASS", "status": "PASS", "evidence_ref": "process/checks/CP4-CR172-PATH-I-SOURCE-FACT-SCOPE-CORRECTION-R2.result.json"},
+    {"name": "Five LLD R2 returns received", "status": "PASS", "evidence_ref": "process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml"}
+  ],
+  "exit_criteria": [
+    {"name": "All five LLDs pass structure check", "status": "PASS"},
+    {"name": "Cross-Story public contracts correlate without aliases", "status": "PASS"},
+    {"name": "R1 blocking and required findings are addressed for independent R2 review", "status": "PASS"},
+    {"name": "No implementation or real authorization occurred", "status": "PASS"}
+  ],
+  "deliverables": [
+    "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-LLD.md",
+    "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-LLD.md",
+    "process/stories/STORY-CR172-S03-nas-replica-verification-LLD.md",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization-LLD.md",
+    "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-LLD.md"
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T035505Z0000-8fad99ce",
+    "RE-20260718T035505Z0000-c55679a7",
+    "RE-20260718T035505Z0000-0bf31d96",
+    "RE-20260718T035506Z0000-3eab9d50",
+    "RE-20260718T035506Z0000-6e6c1019"
+  ],
+  "operation_counts": {
+    "lld_files": 5,
+    "lld_check_pass": 5,
+    "shared_contract_symbols": 7,
+    "shared_contract_symbol_misses": 0,
+    "s04_test_ids_total": 16,
+    "s04_test_ids_unique": 16,
+    "s04_test_id_duplicates": 0,
+    "source_modified": 0,
+    "test_source_modified": 0,
+    "fixture_modified": 0,
+    "six_actions_authorized": 0,
+    "six_actions_executed": 0,
+    "real_operations": 0
+  },
+  "decision": "PASS",
+  "manual_gate_status": null,
+  "next_route": "CP5-independent-review-R2"
+}

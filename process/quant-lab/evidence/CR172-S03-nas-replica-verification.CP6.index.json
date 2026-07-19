@@ -1,0 +1,101 @@
+{
+  "artifacts": [],
+  "changed_files": [
+    {
+      "change_type": "created",
+      "path": "engine/research_artifact_replica.py"
+    },
+    {
+      "change_type": "created",
+      "path": "tests/research/test_cr172_nas_replica_verification.py"
+    },
+    {
+      "change_type": "modified",
+      "path": "process/stories/STORY-CR172-S03-nas-replica-verification.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/stories/STORY-CR172-S03-nas-replica-verification-IMPLEMENTATION.md"
+    },
+    {
+      "change_type": "created",
+      "path": "process/returns/CR172-S03-nas-replica-verification.CP6.return.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/evidence/CR172-S03-nas-replica-verification.CP6.index.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.json"
+    },
+    {
+      "change_type": "created",
+      "path": "process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.summary.md"
+    }
+  ],
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_nas_replica_verification.py",
+      "result": "pass: 21 passed in 0.52s; failed/skipped=0/0"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py",
+      "result": "pass: 102 passed in 0.66s; failed/skipped=0/0"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s03-cp6-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py tests/research/test_cr172_nas_replica_verification.py",
+      "result": "pass: exit=0"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null engine/research_artifact_replica.py",
+      "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+    },
+    {
+      "command": "git diff --no-index --check /dev/null tests/research/test_cr172_nas_replica_verification.py",
+      "result": "pass: exit=1 expected diff; whitespace diagnostics=0"
+    }
+  ],
+  "cr_id": "CR-172",
+  "design_delta_ref": null,
+  "return_ref": "/home/hyde/workspace/meta-flow-artifacts/process/quant-lab/returns/CR172-S03-nas-replica-verification.CP6.return.json",
+  "risks": [
+    {
+      "id": "R-CR172-SYNC-REPLICA-STALE",
+      "note": "expected release + canonical source-selection hash、staging reverify、fresh commit decision 与 CAS 已实现；真实 NAS adapter 仍未授权。",
+      "status": "controlled_repository_fixture"
+    },
+    {
+      "id": "R-CR172-NAS-CANONICALITY-CONFLICT",
+      "note": "receipt authority=replica；research canonical mutation API、direct data bypass 与 NAS canonical promotion 均为 0。",
+      "status": "closed_by_contract"
+    }
+  ],
+  "schema_version": 1,
+  "stage": "CP6",
+  "story_id": "CR172-S03-nas-replica-verification",
+  "tests": [
+    {
+      "failed": 0,
+      "passed": 21,
+      "path": "tests/research/test_cr172_nas_replica_verification.py",
+      "role": "S03 replica verification, receipt, CAS, selected-read, recovery and zero-operation guards",
+      "skipped": 0
+    },
+    {
+      "failed": 0,
+      "passed": 46,
+      "path": "tests/research/test_cr172_path_i_governance.py",
+      "role": "S01 upstream authorization regression",
+      "skipped": 0
+    },
+    {
+      "failed": 0,
+      "passed": 35,
+      "path": "tests/research/test_cr172_trial_return_artifact.py",
+      "role": "S02 original seal and verifier regression",
+      "skipped": 0
+    }
+  ],
+  "waivers": []
+}

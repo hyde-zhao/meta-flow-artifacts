@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR173-S03-REVERIFY-1",
+  "profile": "standard-code",
+  "story_id": "CR173-S03-golden-failure-boundary-verification",
+  "cr_id": "CR-173",
+  "context_ref": "process/context/stories/STORY-CR173-S03.CP7.reverify-1.packet.json",
+  "dispatch_refs": ["AD-CR173-S03-CP7R1-META-QA-CRITICAL-CORRELATED-20260717T122008+0800"],
+  "return_packet_ref": "process/returns/CR173-S03-golden-failure-boundary-verification.CP7R1.return.json",
+  "evidence_ref": "process/evidence/CR173-S03-golden-failure-boundary-verification.CP7R1.index.json",
+  "checked_at": "2026-07-17T12:16:51+08:00",
+  "check_attempt": 2,
+  "supersedes_result_ref": "process/checks/CP7-CR173-S03-VERIFICATION.result.json",
+  "route_plan_ref": "process/checks/CP0-CR173.route-plan.json",
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR173-S03.CP7.reverify-1.packet.json": "sha256:187eb705d7e2a6a780e5b14600f4e6331f2f8c2eec043c76d6fcf0db174be7fd",
+    "process/checks/CP7-CR173-S03-VERIFICATION.result.json": "sha256:f691eb512b82a187b689f18fd021e74af25add04a0fcbece03deb2c9c063ccaf",
+    "process/checks/CP6-CR173-S03-REWORK-1.result.json": "sha256:2557211864114e686b3be6349208fcf38c465ffc5366026225dd82ec389d7dbf",
+    "process/returns/CR173-S03-golden-failure-boundary-verification.CP6R1.return.json": "sha256:44e533095c4f90e890b0a4f75689ed42d1a67bce14a94a85df4c761effc9d7cd",
+    "process/evidence/CR173-S03-golden-failure-boundary-verification.CP6R1.index.json": "sha256:764bade21096a1f41c54c8e6627cc8c617b35533132996e49c282d63cc32124e",
+    "tests/research/test_effective_trial_authorization.py": "sha256:73ca975a1a38f00b36e285e4a11726fe60c4b32f2699d2e6cee6600a0bc0696c",
+    "tests/research/test_effective_trial_cr173_qac.py": "sha256:86ae2d8db1ab8b985eed8621d8a279f36f5911ae5f0d0d2f0cba6615a6e3e447",
+    "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md": "sha256:781bc8c727d1d136d5e380265787722e4177013e592cc10478d6d6c4c08928b6",
+    "process/returns/CR173-S03-golden-failure-boundary-verification.CP7R1.return.json": "sha256:99ea28fe2fdffee68d50c6ca83ab7c15e376c2df32692b3bab551b59199dbe2b",
+    "process/evidence/CR173-S03-golden-failure-boundary-verification.CP7R1.index.json": "sha256:e3464dbef8c89a18f0527bb8d70584914df392aa2c6bb0d759c3e7f39704910e"
+  },
+  "items": [
+    {
+      "id": "CP7R1-S03-ENTRY-01", "category": "entry", "name": "CP6R1 PASS 与独立复验 dispatch 可用", "status": "PASS", "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP6-CR173-S03-REWORK-1.result.json", "AD-CR173-S03-CP7R1-META-QA-CRITICAL-20260717T121300+0800"],
+      "owner": "meta-qa-critical", "route_on_fail": "block_release", "waiver_ref": null, "notes": "仅执行 repository-local 静态/pytest 复验。"
+    },
+    {
+      "id": "CP7R1-S03-01", "category": "authorization", "name": "原始越权绕过全部被唯一分类", "status": "PASS", "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md#13-回修设计与对抗性审查"],
+      "owner": "meta-qa-critical", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "os.environ/urllib/os.replace/subprocess/git/public alias 全部命中。"
+    },
+    {
+      "id": "CP7R1-S03-02", "category": "authorization", "name": "相邻 operation 与 public alias 无同因旁路", "status": "PASS", "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md#13-回修设计与对抗性审查"],
+      "owner": "meta-qa-critical", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "operation 13/13 唯一分类；public alias 2/2 dependency/call 非零；false negative=0。"
+    },
+    {
+      "id": "CP7R1-S03-03", "category": "authorization", "name": "危险字符串、str.replace 与 read-only I/O 不误报", "status": "PASS", "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md#13-回修设计与对抗性审查"],
+      "owner": "meta-qa-critical", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "NP/public/write false positive=0。"
+    },
+    {
+      "id": "CP7R1-S03-04", "category": "tests", "name": "Authorization、targeted 与 public read-only 回归通过", "status": "PASS", "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md#14-自动化与边界证据"],
+      "owner": "meta-qa-critical", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "9/9、124/124、379/379；pycompile=2/2；diff PASS。"
+    },
+    {
+      "id": "CP7R1-S03-05", "category": "boundary", "name": "Production/public/expected 路径与 claim ceiling 不变", "status": "PASS", "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md#16-claim-ceiling-与剩余风险"],
+      "owner": "meta-qa-critical", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "8 production+12 expected 修改0；public populatable/c1 computable=false/false；CR172 auto=0/0。"
+    },
+    {
+      "id": "CP7R1-S03-06", "category": "finding", "name": "F-CP7-S03-001 关闭", "status": "PASS", "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md#f-cp7-s03-001--closed"],
+      "owner": "meta-qa-critical", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "false negative=0；false positive=0；blocking finding=0。"
+    },
+    {
+      "id": "CP7R1-S03-EXIT-01", "category": "exit", "name": "S03 可标记 verified 并进入 release readiness", "status": "PASS", "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/CR173-S03-golden-failure-boundary-verification.CP7R1.return.json", "process/evidence/CR173-S03-golden-failure-boundary-verification.CP7R1.index.json"],
+      "owner": "host-orchestrator", "route_on_fail": "rework_same_story", "waiver_ref": null, "notes": "blocker=0；waiver=0；next=CP8 preparation。"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "CR173-RELEASE-READINESS-CP8-PREPARATION"
+}

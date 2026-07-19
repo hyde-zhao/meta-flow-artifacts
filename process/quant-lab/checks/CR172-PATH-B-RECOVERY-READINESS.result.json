@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "check_id": "CR172-PATH-B-RECOVERY-READINESS",
+  "checked_at": "2026-07-17T12:44:35+08:00",
+  "cr_id": "CR-172",
+  "selected_prior_path": "PATH-B",
+  "items": [
+    {
+      "id": "REC-CR172-001",
+      "name": "CR-173 offline methodology prerequisite closed",
+      "status": "PASS",
+      "evidence_ref": "process/changes/summaries/CR-173.summary.json",
+      "notes": "closed/cp8_closed/READY_WITH_RISK; offline_method_ready only"
+    },
+    {
+      "id": "REC-CR172-002",
+      "name": "Five-field authorization contract is concrete and complete",
+      "status": "BLOCKED",
+      "evidence_ref": "process/checkpoints/CP2-CR172-REQUIREMENTS-BASELINE.md",
+      "observed": "0/5",
+      "required": "5/5"
+    },
+    {
+      "id": "REC-CR172-003",
+      "name": "Auditable data owner identity is frozen",
+      "status": "BLOCKED",
+      "evidence_ref": "process/checks/CP2-CR172-REQUIREMENTS-BASELINE.result.json",
+      "observed": "OPEN",
+      "required": "named owner approval bound to one scope revision/hash"
+    },
+    {
+      "id": "REC-CR172-004",
+      "name": "Fresh conflict precheck",
+      "status": "PASS",
+      "evidence_ref": "process/checks/CR172-PATH-B-RECOVERY-CONFLICT-PRECHECK-2026-07-17.json"
+    },
+    {
+      "id": "REC-CR172-005",
+      "name": "Real R compatibility with CR-173 v1 declared_exact domain",
+      "status": "DEFERRED_REQUIRED",
+      "evidence_ref": "process/changes/CR-172.md#path-b-恢复契约",
+      "blocks_cp2_reopen": false,
+      "blocks_positive_effective_count_and_c1_computable": true,
+      "fallback": "method version upgrade, authorized future activation CR, or DQ-CR172-003 typed_unavailable"
+    }
+  ],
+  "counts": {
+    "pass": 2,
+    "blocked": 2,
+    "deferred_required": 1
+  },
+  "decision": "BLOCKED",
+  "stop_reason": "authorization_required",
+  "remaining_unlock_conditions": [
+    "data_release",
+    "datasets",
+    "date_range",
+    "read_identity",
+    "output_directory",
+    "data_owner_identity_and_same_revision_hash_approval"
+  ],
+  "next_route_after_unlock": "restore requirement-clarification and reopen CR-172 CP2; choose PATH-C by default or PATH-A only with explicit three-producer blast-radius acceptance",
+  "not_authorized": [
+    "credential or environment secret read",
+    "provider fetch",
+    "real lake or NAS read/write",
+    "C1/C2/C3 producer binding or computation",
+    "runtime or trading",
+    "public C1 projection",
+    "Stage 3 or admission claim",
+    "publish/deploy or Git remote write"
+  ]
+}

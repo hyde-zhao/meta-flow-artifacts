@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_verify_packet",
+  "profile": "runtime-high-risk-design",
+  "project_id": "quant-lab",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S02-trial-return-artifact-native-hook",
+  "story_ref": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook.md",
+  "stage": "CP7",
+  "reverify_attempt": 1,
+  "objective": {
+    "summary": "独立复验 CP6R1 是否关闭 F-CR172-S02-CP7-001，同时确认 S02 exact artifact、单一 verifier、失败关闭和零真实操作合同无回归。",
+    "non_goals": ["不修改源码或测试", "不改 HLD/ADR/Feature/LLD", "不启动 S03", "不连接真实 runner、lineage、lake、NAS、runtime、credential 或 trading"]
+  },
+  "feature_refs": ["trial-return.artifact.pipeline", "path-i.authorization.claim.governance"],
+  "feature_design_refs": ["docs/features/trial-return-artifact-pipeline/DESIGN.md", "docs/features/trial-return-artifact-pipeline/TEST-PLAN.md"],
+  "feature_context": "S02 CP6R1 PASS；开发侧报告 exact nominal repository fixture port、immutable capability binding、candidate 前/commit 前双 guard 和模块自有原子 commit。CP7R1 必须独立证明 finding 关闭，不能依赖开发声明。",
+  "feature_contract_summary": "任意结构兼容/未绑定/绑定漂移 port 在首次调用前拒绝；合法 port 绑定 decision/context/identity/URI/capability；success commit=1，受控 failure selection advance=0；原 2/2、15/15、8/8、3/3+3/3、1/1/1 合同不变。",
+  "cr_delta": {
+    "summary": "只复验 S02 CP6R1 owner 文件和结构化证据，不写实现；F-CR172-S02-CP7-001 未 CLOSED 时继续 NEEDS_REWORK。",
+    "affected_contracts": ["nominal repository fixture port binding", "pre-side-effect capability guard", "atomic fixture commit failure closure"]
+  },
+  "acceptance": [
+    "F-CR172-S02-CP7-001=CLOSED：Protocol/hasattr/duck-typed acceptance=0/0/0；未绑定结构端口 called/retained/selection advance=0/0/0",
+    "port capability 对 origin/target/scope revision+hash/release/run/family/logical URI/authorization refs 完整绑定；13/13 单字段 drift 与构建期间 drift 全部在端口调用前拒绝",
+    "合法 port success call/commit/selection=1/1/1；None/已有 selection 的受控失败 advance=0/0，原 selection 保留=100%",
+    "独立 S02=29/29、S01+S02=75/75 PASS，py_compile/whitespace/CP6R1 return/result consistency PASS",
+    "payload/manifest/seal/public/seal truth=2/2、15/15、8/8、3/3+3/3、1/1/1，无 secondary digest/reseal/verifier facade",
+    "forbidden source changes/直接真实操作=0；S03 在 CP7R1 PASS 前保持锁定"
+  ],
+  "dependency_inputs": [
+    "process/checks/CP6-CR172-S02-REWORK-1.result.json",
+    "process/returns/CR172-S02-trial-return-artifact-native-hook.CP6R1.return.json",
+    "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP6R1.index.json",
+    "process/checks/CP7-CR172-S02-VERIFICATION.result.json"
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/checks/CP6-CR172-S02-REWORK-1.result.json", "reason": "rework_result", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP6R1.return.json", "reason": "rework_return", "required": true, "mode": "full"},
+    {"path": "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP6R1.index.json", "reason": "rework_evidence", "required": true, "mode": "full"},
+    {"path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md", "reason": "original_finding", "required": true, "mode": "sections"},
+    {"path": "engine/path_i_governance.py", "reason": "upstream_contract", "required": true, "mode": "full"},
+    {"path": "engine/trial_return_artifact.py", "reason": "reverification_target", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_path_i_governance.py", "reason": "upstream_regression", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_trial_return_artifact.py", "reason": "reverification_tests", "required": true, "mode": "full"},
+    {"path": "docs/features/trial-return-artifact-pipeline/TEST-PLAN.md", "reason": "approved_test_contract", "required": false, "mode": "sections"}
+  ],
+  "read_if_needed": [
+    {"path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-LLD.md", "reason": "confirmed_design_contract", "trigger": "contract_conflict", "mode": "sections"}
+  ],
+  "allowed_write_paths": [
+    "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-VERIFICATION.md",
+    "process/returns/CR172-S02-trial-return-artifact-native-hook.CP7R1.return.json",
+    "process/evidence/CR172-S02-trial-return-artifact-native-hook.CP7R1.index.json",
+    "process/checks/CP7-CR172-S02-REVERIFY-1.result.json",
+    "process/checks/CP7-CR172-S02-REVERIFY-1.result.summary.md"
+  ],
+  "forbidden_write_paths": ["engine/**", "tests/**", "docs/**", "process/archive/**", "process/state/**", "process/current/**", "process/DEVELOPMENT-PLAN.yaml"],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "host_owned_plan"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_verification_truth"}
+  ],
+  "denied_default_reads": ["process/STATE.md", "process/DEVELOPMENT-PLAN.yaml", "process/archive/**", "process/discussions/**", "process/stories/*-LLD.md", "process/stories/*-IMPLEMENTATION.md"],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr172-s02-cp7r1-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py tests/research/test_cr172_trial_return_artifact.py",
+    "git diff --no-index --check /dev/null engine/trial_return_artifact.py",
+    "git diff --no-index --check /dev/null tests/research/test_cr172_trial_return_artifact.py",
+    "uv run --python 3.11 meta-flow story return-check --project-root . --packet process/context/stories/STORY-CR172-S02.CP6.rework-1.work-packet.json --return process/returns/CR172-S02-trial-return-artifact-native-hook.CP6R1.return.json",
+    "uv run --python 3.11 meta-flow cp result-check --project-root . --result process/checks/CP6-CR172-S02-REWORK-1.result.json --check-consistency --correlation-profile audit"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PRODUCTION_WRITE", "NO_NAS_SYNC_OR_WRITE", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP7R1.return.json",
+  "implementation_return_ref": "process/returns/CR172-S02-trial-return-artifact-native-hook.CP6R1.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "runtime-high-risk-design",
+  "parent_context_ref": "process/context/stories/STORY-CR172-S02.CP6.rework-1.work-packet.json",
+  "budget": {"estimated_tokens": 9000, "estimator": "manual_compact", "max_tokens": 18000},
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["runtime-high-risk-design", "architecture-major"]
+  }
+}

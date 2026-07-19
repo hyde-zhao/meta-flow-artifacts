@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP3",
+  "checkpoint_id": "CP3-CR172-PATH-I-DISCUSSION",
+  "cr_id": "CR-172",
+  "phase": "solution-design",
+  "status": "ready_for_host_cp3_review_correction_acceptance",
+  "owner": "meta-se-critical",
+  "context_ref": "process/context/CP3-CR172-PATH-I-DESIGN-CONTEXT.yaml",
+  "discussion_ref": "process/discussions/CP3-CR172-PATH-I-HLD-DISCUSSION-LOG.md",
+  "handoff_ref": "process/handoffs/CR172-CP3-META-SE-CRITICAL-HANDOFF-2026-07-17.md",
+  "architecture_gray_areas": {
+    "required": 4,
+    "completed": 4,
+    "ids": [
+      "AGA-CR172-I-01",
+      "AGA-CR172-I-02",
+      "AGA-CR172-I-03",
+      "AGA-CR172-I-04"
+    ]
+  },
+  "advisor_discussion": {
+    "format": "table-first",
+    "columns": [
+      "Option",
+      "Pros",
+      "Cons",
+      "Impact Surface",
+      "Recommendation",
+      "Assumptions / When to switch"
+    ],
+    "analysis_lenses": [
+      "lane-product",
+      "lane-architecture",
+      "lane-quality",
+      "lane-docs-check"
+    ],
+    "separate_reviewer_dispatch_count": 0,
+    "dispatch_note": "本任务未请求额外 reviewer subagent；四个 lane 名称仅表示 meta-se-critical 的显式分析视角，不表示伪造的独立调度。"
+  },
+  "candidate_architectures": [
+    {
+      "id": "ARCH-A",
+      "name": "Native Sealed Artifact Pipeline",
+      "recommendation": "selected"
+    },
+    {
+      "id": "ARCH-B",
+      "name": "Import-first Sealed Artifact Pipeline",
+      "recommendation": "conditional-alternative"
+    },
+    {
+      "id": "ARCH-C",
+      "name": "Contract-only / Distribution Blocked",
+      "recommendation": "safe-fallback"
+    }
+  ],
+  "selected_option": "ARCH-A",
+  "hld_split_decision": {
+    "decision": "single-hld",
+    "reason": "manifest/seal/replica/materialization/authorization/empirical disposition 共用同一 artifact identity 和 failure boundary；SignalBatch 仅 8-slot contract boundary，独立模块、状态机、Story 和实现均为 0。",
+    "future_split_triggers": [
+      "DF-CR172-SIGNAL-BATCH-EXCHANGE becomes active",
+      "DF-CR172-INTRADAY-REALTIME-SIGNAL becomes active",
+      "FU-CR173-001 becomes active",
+      "external empirical-R import contract becomes active"
+    ]
+  },
+  "decision_items": [
+    "CP3-DQ-CR172-I-01",
+    "CP3-DQ-CR172-I-02",
+    "CP3-DQ-CR172-I-03",
+    "CP3-DQ-CR172-I-04"
+  ],
+  "blocking_questions": [],
+  "deferred_items": [
+    "DF-CR172-SIGNAL-BATCH-EXCHANGE",
+    "DF-CR172-INTRADAY-REALTIME-SIGNAL",
+    "FU-CR173-001",
+    "external empirical-R import contract",
+    "historical path migration"
+  ],
+  "signal_boundary": {
+    "required_slots": 8,
+    "covered_slots": 8,
+    "extra_mandatory_slots": 0,
+    "detailed_exchange_module_count": 0,
+    "story_count": 0,
+    "implementation_count": 0
+  },
+  "authorization_ceiling": {
+    "real_action_authorized": 0,
+    "real_action_total": 6,
+    "real_action_executed": 0,
+    "stage3_entry_ready": false,
+    "c1_computable": false,
+    "real_data_authorized": false,
+    "multi_trial_runtime_authorized": false,
+    "signal_transport_authorized": false
+  },
+  "review_correction_r1": {
+    "status": "PASS",
+    "required": 3,
+    "completed": 3,
+    "items": [
+      {
+        "id": "CORR-CR172-CP3-R1-01",
+        "status": "PASS",
+        "decision_ref": "ADR-CR172-I-010",
+        "notes": "ReturnDefinitionV1 由 CP3 architecture owner 冻结；v1 canonical payload 恰好为 timestamp/simple_return 两列，CP5 silent field addition=0。"
+      },
+      {
+        "id": "CORR-CR172-CP3-R1-02",
+        "status": "PASS",
+        "decision_ref": "DO-CR172-CP5-001",
+        "notes": "CP5 必须证明唯一 producer integration point 和 6/6 设计义务；否则 NEEDS_DESIGN_CLARIFICATION 或 Spike/ARCH-B。"
+      },
+      {
+        "id": "CORR-CR172-CP3-R1-03",
+        "status": "PASS",
+        "decision_ref": "ADR-CR172-I-005",
+        "notes": "六 record 独立审批/撤销，动作执行资格按显式 DAG 判定；runtime own-auth/no-data-read 时 eligible=false。"
+      }
+    ],
+    "action_prerequisite_dag": [
+      "data_lake_read->multi_trial_runtime_and_workspace_write",
+      "multi_trial_runtime_and_workspace_write->trial_return_generation",
+      "trial_return_generation->empirical_R_computation",
+      "trial_return_generation->nas_replica_sync",
+      "nas_replica_sync->execution_pull_verify_materialize"
+    ],
+    "negative_simulation": {
+      "id": "SIM-CR172-I-06",
+      "status": "PASS",
+      "runtime_authorization": "approved",
+      "data_lake_read": "deny_or_missing_or_expired",
+      "eligible_to_execute": false,
+      "runner_launch": 0,
+      "workspace_create_or_write": 0,
+      "pointer_advance": 0
+    },
+    "original_cp3_decision_items_changed": 0,
+    "scope_expansion": 0,
+    "real_actions_authorized": "0/6",
+    "real_actions_executed": "0/6",
+    "result_ref": "process/checks/CP3-CR172-PATH-I-HLD-REVIEW-CORRECTION-R1.result.json"
+  },
+  "read_expansion_log": [
+    {
+      "reason": "deep_review",
+      "scope": "capsule allowed_reads 中的 CP2 approved checkpoint、CR172 产品基线相关段落与 BLUEPRINT/DOMAIN-MAP/DEPENDENCY-MAP",
+      "result": "REQ-009~015 7/7 设计输入和增量合并基线已核对；未读取 do_not_read_by_default 内容。"
+    }
+  ],
+  "resumption": {
+    "next_step": "host_orchestrator_backfill_cp3_review_correction_and_continue",
+    "required_refs": [
+      "process/discussions/CP3-CR172-PATH-I-HLD-DISCUSSION-LOG.md",
+      "process/context/CP3-CR172-PATH-I-DESIGN-CONTEXT.yaml"
+    ]
+  },
+  "created_at": "2026-07-17T17:10:54+08:00",
+  "updated_at": "2026-07-18T10:09:00+08:00"
+}

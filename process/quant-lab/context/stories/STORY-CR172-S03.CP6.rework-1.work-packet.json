@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-172",
+  "story_id": "CR172-S03-nas-replica-verification",
+  "story_ref": "process/stories/STORY-CR172-S03-nas-replica-verification.md",
+  "stage": "CP6",
+  "rework_attempt": 1,
+  "objective": {
+    "summary": "在同一 S03 内关闭 F-CP7-S03-001，并完成 F-CP7-S03-002：把预检授权判定的新鲜度证据固化到 preflight，commit 必须消费严格晚于预检的重新判定结果；补齐并发 current CAS 的确定性回归。",
+    "non_goals": [
+      "不改变 S01 授权动作、scope/context 或 eligibility 公共合同",
+      "不改变 S02 seal、verified bundle 或 verifier 单一真相源",
+      "不修改 S04/S05、HLD、ADR、Feature 或 LLD",
+      "不连接真实 NAS、network、lake、runtime、credential、signal、trading 或 Git remote"
+    ]
+  },
+  "feature_refs": [
+    "research-artifact.replica-materialization",
+    "path-i.authorization.claim.governance"
+  ],
+  "feature_design_refs": [
+    "docs/features/research-artifact-replica-materialization/DESIGN.md",
+    "docs/features/research-artifact-replica-materialization/TEST-PLAN.md",
+    "docs/features/path-i-authorization-claim-governance/DESIGN.md"
+  ],
+  "feature_context": "CP7 判定 implementation rework，不需要设计澄清。现有 receipt、S02 verifier 双调用、original seal、selected-read 与 CAS 实现均通过；唯一 blocker 是 preflight 没有保留可比较的授权判定新鲜度，因而 commit 无法拒绝复用或更旧的 allow decision。并发 current 行为已通过独立探针，仅缺正式回归。Workflow health 本 Story rework/retry=1/1，未超过默认阈值。",
+  "feature_contract_summary": "ReplicaPreflightV1 必须保留预检判定的可比较身份/新鲜度证据；commit decision 必须在 action/context/origin/target 与预检绑定一致的前提下，evaluated_at 严格晚于 preflight decision。相同、等时或更早判定，以及 expired/revoked 判定，必须在 stage/persist/CAS/selection mutation 前 fail closed。并发 current 前进时 CAS 只调用一次、返回 POINTER_CONFLICT、selection=None，并保留并发 writer 的 current。",
+  "cr_delta": {
+    "summary": "只修复 S03 fresh commit authorization guard 并补 deterministic concurrent-current CAS 测试；不改变长期设计或真实授权面。",
+    "affected_contracts": [
+      "replica preflight-to-commit authorization freshness",
+      "distribution pointer compare-and-swap recovery regression"
+    ]
+  },
+  "acceptance": [
+    "F-CP7-S03-001 fully_closed_pending_cp7r1：ReplicaPreflightV1 保留可比较的预检 decision freshness/identity，commit decision evaluated_at 必须严格晚于预检；同一、等时或更早 decision 全部 fail closed",
+    "reused、equal-time、older、expired、revoked 五类负向路径在任何 stage/persist/CAS/selection mutation 前拒绝，计数均为 0",
+    "合法 fresh decision 仍保持 source/staging verifier 各一次、receipt persist 一次、CAS 最多一次、selection 成功",
+    "F-CP7-S03-002 完成：确定性模拟另一 writer 在 expected previous 后推进 current；结果 POINTER_CONFLICT、selection=None、CAS=1，并保留 concurrent current",
+    "S03 scoped 与 S01+S02+S03 全量回归、py_compile、whitespace、return/result checks PASS；设计差异、forbidden touch、真实操作均为 0",
+    "若 CP7R1 再次 NEEDS_REWORK，先更新 workflow health；只有计数超过阈值才停止自动回修并升级设计澄清或人工仲裁"
+  ],
+  "dependency_inputs": [
+    "process/checks/CP7-CR172-S03-VERIFICATION.result.json",
+    "process/stories/STORY-CR172-S03-nas-replica-verification-VERIFICATION.md",
+    "process/returns/CR172-S03-nas-replica-verification.CP7.return.json",
+    "process/evidence/CR172-S03-nas-replica-verification.CP7.index.json",
+    "RE-20260718T131000Z0000-314ad6b2"
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/checks/CP7-CR172-S03-VERIFICATION.result.json", "reason": "rework_findings", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "engine/research_artifact_replica.py", "reason": "rework_target", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_nas_replica_verification.py", "reason": "regression_target", "required": true, "mode": "full"},
+    {"path": "engine/path_i_governance.py", "reason": "authorization_contract", "required": true, "mode": "full"},
+    {"path": "engine/trial_return_artifact.py", "reason": "verified_bundle_contract", "required": true, "mode": "full"},
+    {"path": "tests/research/test_cr172_path_i_governance.py", "reason": "upstream_regression", "required": false, "mode": "full"},
+    {"path": "tests/research/test_cr172_trial_return_artifact.py", "reason": "upstream_regression", "required": false, "mode": "full"},
+    {"path": "process/stories/STORY-CR172-S03-nas-replica-verification-VERIFICATION.md", "reason": "finding_detail", "required": true, "mode": "sections"},
+    {"path": "process/returns/CR172-S03-nas-replica-verification.CP7.return.json", "reason": "verification_return", "required": true, "mode": "full"},
+    {"path": "process/evidence/CR172-S03-nas-replica-verification.CP7.index.json", "reason": "verification_evidence", "required": true, "mode": "full"}
+  ],
+  "read_if_needed": [],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "long_plan_not_rework_truth"},
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_rework_truth"},
+    {"path_or_pattern": "process/stories/*-LLD.md", "reason": "approved_design_already_summarized_in_packet"}
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/archive/**",
+    "process/discussions/**",
+    "process/stories/*-LLD.md"
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "allowed_write_paths": [
+    "engine/research_artifact_replica.py",
+    "tests/research/test_cr172_nas_replica_verification.py",
+    "process/stories/STORY-CR172-S03-nas-replica-verification.md",
+    "process/stories/STORY-CR172-S03-nas-replica-verification-IMPLEMENTATION.md",
+    "process/returns/CR172-S03-nas-replica-verification.CP6R1.return.json",
+    "process/evidence/CR172-S03-nas-replica-verification.CP6R1.index.json",
+    "process/checks/CP6-CR172-S03-REWORK-1.result.json",
+    "process/checks/CP6-CR172-S03-REWORK-1.result.summary.md"
+  ],
+  "forbidden_write_paths": [
+    "engine/path_i_governance.py",
+    "engine/trial_return_artifact.py",
+    "tests/research/test_cr172_path_i_governance.py",
+    "tests/research/test_cr172_trial_return_artifact.py",
+    "engine/research_artifact_materialization.py",
+    "tests/research/test_cr172_execution_materialization.py",
+    "tests/research/test_cr172_path_i_integration.py",
+    "tests/research/test_cr172_path_i_authorization.py",
+    "tests/research/test_cr172_path_i_claim_regression.py",
+    "tests/fixtures/cr172_path_i/**",
+    "engine/mature_multifactor_research.py",
+    "engine/experiment_family_lineage.py",
+    "engine/effective_trial_evidence.py",
+    "engine/effective_trial_estimator.py",
+    "docs/**",
+    "process/archive/**",
+    "process/state/**",
+    "process/current/**",
+    "process/DEVELOPMENT-PLAN.yaml"
+  ],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr172-s03-cp6r1-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py tests/research/test_cr172_nas_replica_verification.py",
+    "git diff --no-index --check /dev/null engine/research_artifact_replica.py",
+    "git diff --no-index --check /dev/null tests/research/test_cr172_nas_replica_verification.py"
+  ],
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "NO_RUNTIME",
+    "NO_REAL_LAKE_READ_OR_WRITE",
+    "NO_PRODUCTION_WRITE",
+    "NO_NAS_SYNC_OR_WRITE",
+    "NO_TRADING",
+    "NO_GIT_REMOTE_WRITE"
+  ],
+  "expected_return_packet": "process/returns/CR172-S03-nas-replica-verification.CP6R1.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "runtime-high-risk-design",
+  "parent_context_ref": "process/context/stories/STORY-CR172-S03.CP7.verify-packet.json",
+  "budget": {"estimated_tokens": 7000, "estimator": "manual_compact", "max_tokens": 15000},
+  "context_sufficiency": {
+    "required_slots": ["objective.summary", "feature_refs", "feature_context", "cr_delta.summary", "acceptance", "dependency_inputs", "allowed_write_paths", "forbidden_write_paths", "verification_plan", "authz_policy_refs", "expected_return_packet"],
+    "strict_profiles": ["runtime-high-risk-design", "architecture-major"]
+  }
+}

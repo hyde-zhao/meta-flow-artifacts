@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR172-S03-VERIFICATION",
+  "profile": "runtime-high-risk-design",
+  "story_id": "CR172-S03-nas-replica-verification",
+  "cr_id": "CR-172",
+  "context_ref": "process/context/stories/STORY-CR172-S03.CP7.verify-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "dispatch_refs": [
+    "AD-CR172-S03-CP7-META-QA-CRITICAL-20260718T210410+0800"
+  ],
+  "return_ref": "process/returns/CR172-S03-nas-replica-verification.CP7.return.json",
+  "evidence_ref": "process/evidence/CR172-S03-nas-replica-verification.CP7.index.json",
+  "result_summary_ref": "process/checks/CP7-CR172-S03-VERIFICATION.result.summary.md",
+  "items": [
+    {
+      "id": "CP7-S03-ENTRY-01",
+      "category": "entry-criteria",
+      "name": "Process route, CP6 result and independent meta-qa-critical dispatch are ready",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/current/CURRENT.json",
+        "process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.json",
+        "AD-CR172-S03-CP7-META-QA-CRITICAL-20260718T210410+0800"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CURRENT.health=ok; CP6 decision=PASS; actual platform subagent task is recorded."
+    },
+    {
+      "id": "CP7-S03-SEAL-RECEIPT-01",
+      "category": "integrity-contract",
+      "name": "S02 verifier/original seal is the single truth and receipt verification is 5/5",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/trial_return_artifact.py",
+        "engine/research_artifact_replica.py",
+        "tests/research/test_cr172_trial_return_artifact.py",
+        "tests/research/test_cr172_nas_replica_verification.py"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "S03 S02 verifier calls=2; secondary seal canonicalizer/digest/reseal/verifier facade=0/0/0/0; original seal is copied from staged VerifiedTrialReturnBundleV1."
+    },
+    {
+      "id": "CP7-S03-FRESH-AUTH-01",
+      "category": "authorization-boundary",
+      "name": "Commit must enforce a freshly re-evaluated authorization decision",
+      "status": "FAIL",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S03-nas-replica-verification-VERIFICATION.md#findings-table",
+        "engine/research_artifact_replica.py"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "F-CP7-S03-001: a 365-day-old allow decision reused at preflight/commit produced VERIFIED and stage/persist/CAS=1/1/1."
+    },
+    {
+      "id": "CP7-S03-CAS-RECOVERY-01",
+      "category": "atomicity-contract",
+      "name": "Single CAS preserves compliant-port current selection on conflict",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/research_artifact_replica.py",
+        "tests/research/test_cr172_nas_replica_verification.py",
+        "process/stories/STORY-CR172-S03-nas-replica-verification-VERIFICATION.md#findings-table"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Independent concurrent-current probe passed. F-CP7-S03-002 requires a durable deterministic regression test."
+    },
+    {
+      "id": "CP7-S03-SELECTED-READ-01",
+      "category": "integration-contract",
+      "name": "Selected read returns only the current exact bundle/source-selection/receipt tuple",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/research_artifact_replica.py",
+        "tests/research/test_cr172_nas_replica_verification.py"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Old/fake/receipt-drift selections are rejected; path/latest/staging/receipt-only/direct bundle public bypass=0."
+    },
+    {
+      "id": "CP7-S03-ZERO-OP-01",
+      "category": "permission-boundary",
+      "name": "No real NAS, network, environment, credential, lake or runtime operation is present or executed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "engine/research_artifact_replica.py",
+        "tests/research/test_cr172_nas_replica_verification.py"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Forbidden import/call surface=0; absolute/traversal/real target accepted=0; all tests use repository-local in-memory fixtures."
+    },
+    {
+      "id": "CP7-S03-REGRESSION-01",
+      "category": "automated-verification",
+      "name": "102 tests, compile, whitespace and CP6 return/result consistency checks complete",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR172-S03-nas-replica-verification.CP7.index.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "102/102; py_compile exit=0; whitespace diagnostics=0/2; CP6 return/result checker=OK with non-blocking warnings."
+    },
+    {
+      "id": "CP7-S03-ROUTE-01",
+      "category": "stage-decision",
+      "name": "Blocking fresh-authorization finding routes to S03 rework and keeps S04 locked",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR172-S03-nas-replica-verification.CP7.return.json",
+        "process/stories/STORY-CR172-S03-nas-replica-verification-VERIFICATION.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "decision=NEEDS_REWORK; Story must not become verified and S04 must not start."
+    }
+  ],
+  "entry_criteria": [
+    {
+      "name": "Process route health and S03 CP7 packet are confirmed",
+      "status": "PASS",
+      "evidence_ref": "process/current/CURRENT.json"
+    },
+    {
+      "name": "S03 CP6 result is PASS and return/evidence are readable",
+      "status": "PASS",
+      "evidence_ref": "process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.json"
+    },
+    {
+      "name": "Independent meta-qa-critical dispatch is recorded",
+      "status": "PASS",
+      "evidence_ref": "AD-CR172-S03-CP7-META-QA-CRITICAL-20260718T210410+0800"
+    }
+  ],
+  "exit_criteria": [
+    {
+      "name": "Original seal/verifier single truth and 5/5 receipt are proven",
+      "status": "PASS"
+    },
+    {
+      "name": "Fresh authorization fails closed at commit",
+      "status": "FAIL"
+    },
+    {
+      "name": "CAS recovery and selected exact read are proven",
+      "status": "PASS"
+    },
+    {
+      "name": "No real operation surface is present or executed",
+      "status": "PASS"
+    },
+    {
+      "name": "All packet verification commands pass",
+      "status": "PASS"
+    },
+    {
+      "name": "S04 remains locked until a future CP7 PASS",
+      "status": "PASS"
+    }
+  ],
+  "deliverables": [
+    "process/stories/STORY-CR172-S03-nas-replica-verification-VERIFICATION.md",
+    "process/returns/CR172-S03-nas-replica-verification.CP7.return.json",
+    "process/evidence/CR172-S03-nas-replica-verification.CP7.index.json",
+    "process/checks/CP7-CR172-S03-VERIFICATION.result.json",
+    "process/checks/CP7-CR172-S03-VERIFICATION.result.summary.md"
+  ],
+  "blockers": [
+    {
+      "id": "F-CP7-S03-001",
+      "owner": "meta-dev",
+      "route": "rework_same_story",
+      "evidence_ref": "process/stories/STORY-CR172-S03-nas-replica-verification-VERIFICATION.md#findings-table"
+    }
+  ],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T131000Z0000-314ad6b2"
+  ],
+  "decision": "NEEDS_REWORK",
+  "stop_reason": "needs_rework",
+  "next_route": "route_meta_dev_rework_s03_keep_s04_locked",
+  "checked_at": "2026-07-18T21:14:11+08:00",
+  "check_attempt": 1,
+  "workflow_health": {
+    "story_rework_count": 1,
+    "cp_retry_count": 0,
+    "threshold_reached": false,
+    "threshold_route_triggered": false,
+    "reason": "one implementation blocker"
+  },
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR172-S03.CP7.verify-packet.json": "sha256:4724196eb93930b2e91a5e0b1c0b11989891cb7742d6b8e0f10e5b56da51f2fb",
+    "process/checks/CP6-CR172-S03-IMPLEMENTATION-DONE.result.json": "sha256:e82a63df8bf43f774d2d77a696051ed2b1ecc24e31f0c94d0727377d1c3a7998",
+    "process/returns/CR172-S03-nas-replica-verification.CP6.return.json": "sha256:3a2b4ca38494186648a8af4e9d042042441cf90c0c3036956e27645fe4b39b22",
+    "process/evidence/CR172-S03-nas-replica-verification.CP6.index.json": "sha256:9bd2ebc66eae809426b51465f5a08be90a492f7130742e753ac82584010592c4",
+    "engine/path_i_governance.py": "sha256:bc6abc95a0e660d71fce5567195ef6bff037e0919403b5d400841c579cc82abf",
+    "engine/trial_return_artifact.py": "sha256:923fc5e5baaafea88b6cb98d26de5d95b5d43d848fcf0cd51fc41a1190b645f0",
+    "engine/research_artifact_replica.py": "sha256:39c8650418a4aaf368f72136bfb1b6569c4f31eaf33d8a1c97c27f614b5f2e29",
+    "tests/research/test_cr172_path_i_governance.py": "sha256:ef4284860453c55a0b9a59357b13a5343ad88c488d5a7ac3fec63ab732de12f9",
+    "tests/research/test_cr172_trial_return_artifact.py": "sha256:4497e7b03920e239df752031b1564c09ef16c73687aa455485c6571d5b346969",
+    "tests/research/test_cr172_nas_replica_verification.py": "sha256:3d9d9112c87971bedda8cb575ae31d66221736e32a8798aee8ce496b1dcde7be"
+  }
+}

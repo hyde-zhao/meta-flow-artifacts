@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "rework_attempt": 1,
+  "cr_id": "CR-172",
+  "story_id": "CR172-S03-nas-replica-verification",
+  "status": "implemented",
+  "allowed_statuses": ["implemented", "implemented_with_risk", "verified", "verified_with_risk", "partial", "blocked", "needs_design_clarification", "needs_user_decision", "needs_rework", "no_op", "superseded", "waived"],
+  "touched_files": [
+    {"path": "engine/research_artifact_replica.py", "change_type": "modified"},
+    {"path": "tests/research/test_cr172_nas_replica_verification.py", "change_type": "modified"},
+    {"path": "process/stories/STORY-CR172-S03-nas-replica-verification.md", "change_type": "modified"},
+    {"path": "process/stories/STORY-CR172-S03-nas-replica-verification-IMPLEMENTATION.md", "change_type": "modified"},
+    {"path": "process/returns/CR172-S03-nas-replica-verification.CP6R1.return.json", "change_type": "created"},
+    {"path": "process/evidence/CR172-S03-nas-replica-verification.CP6R1.index.json", "change_type": "created"},
+    {"path": "process/checks/CP6-CR172-S03-REWORK-1.result.json", "change_type": "created"},
+    {"path": "process/checks/CP6-CR172-S03-REWORK-1.result.summary.md", "change_type": "created"}
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "data_contract_changed": true,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "notes": "ReplicaPreflightV1 新增 typed preflight_decision freshness/identity evidence，并新增稳定 COMMIT_DECISION_NOT_FRESH reason；变更完全位于已批准 S03 fresh commit contract 内，长期设计差异=0。"
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {"command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_nas_replica_verification.py", "result": "pass: 27 passed in 0.53s; failed/skipped=0/0"},
+      {"command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_cr172_path_i_governance.py tests/research/test_cr172_trial_return_artifact.py tests/research/test_cr172_nas_replica_verification.py", "result": "pass: 108 passed in 0.65s; failed/skipped=0/0"},
+      {"command": "PYTHONPYCACHEPREFIX=/tmp/cr172-s03-cp6r1-pycompile uv run --python 3.11 python -m py_compile engine/path_i_governance.py engine/trial_return_artifact.py engine/research_artifact_replica.py tests/research/test_cr172_nas_replica_verification.py", "result": "pass: exit=0"},
+      {"command": "git diff --no-index --check /dev/null engine/research_artifact_replica.py", "result": "pass: exit=1 expected diff; whitespace diagnostics=0"},
+      {"command": "git diff --no-index --check /dev/null tests/research/test_cr172_nas_replica_verification.py", "result": "pass: exit=1 expected diff; whitespace diagnostics=0"}
+    ],
+    "tests": [
+      {"path": "tests/research/test_cr172_nas_replica_verification.py", "passed": 27, "failed": 0, "skipped": 0, "role": "S03 fresh-decision, concurrent-current CAS and original contract regression"},
+      {"path": "tests/research/test_cr172_path_i_governance.py", "passed": 46, "failed": 0, "skipped": 0, "role": "S01 upstream authorization regression"},
+      {"path": "tests/research/test_cr172_trial_return_artifact.py", "passed": 35, "failed": 0, "skipped": 0, "role": "S02 original seal and verifier regression"}
+    ],
+    "skipped": [
+      {"check": "real NAS/lake/runtime/network/env/credential/signal/trading/deploy/Git remote", "reason": "packet explicitly forbids real operations; executed=0"},
+      {"check": "S04/S05", "reason": "S04 remains locked until S03 CP7R1 PASS; S05 is outside this rework"}
+    ]
+  },
+  "findings": [
+    {"id": "F-CP7-S03-001", "severity": "BLOCKER", "status": "closed_pending_cp7r1", "summary": "preflight stores the first typed decision and publish/commit reject reused, equal-time or older decisions before mutation", "owner": "meta-qa-critical", "evidence_ref": "tests/research/test_cr172_nas_replica_verification.py"},
+    {"id": "F-CP7-S03-002", "severity": "REQUIRED", "status": "closed_pending_cp7r1", "summary": "deterministic concurrent-current CAS regression preserves other writer current with POINTER_CONFLICT and one CAS", "owner": "meta-qa-critical", "evidence_ref": "tests/research/test_cr172_nas_replica_verification.py"}
+  ],
+  "open_questions": [],
+  "risks": [
+    {"id": "R-CR172-SYNC-REPLICA-STALE", "status": "implementation_closed_pending_cp7r1", "note": "strictly newer evaluated_at and exact binding now fail closed before staging; independent reverify remains"},
+    {"id": "R-CR172-REAL-OPERATIONS", "status": "not_authorized", "note": "real NAS/network/env/credential/lake/runtime actions remained 0"}
+  ],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260718T133648Z0000-9cfbb30b",
+    "RE-20260718T133648Z0000-8df8ffc3"
+  ],
+  "read_expansion_notes": "Host authorized only final-self-check reads of the two S03 process write targets; LLD/HLD/ADR/Feature long documents and S04/S05 were not read.",
+  "workflow_health": {
+    "story_rework_count": 1,
+    "cp_retry_count": 1,
+    "threshold_reached": false,
+    "threshold_route_triggered": false,
+    "reason": "CP6R1 implementation passed; CP7R1 pending"
+  },
+  "dispatch_refs": [
+    "AD-CR172-S03-CP6R1-META-DEV-20260718T213237+0800",
+    "AD-CR172-S03-CP6R1-META-DEV-STARTED-20260718T213237+0800",
+    "AD-CR172-S03-CP6R1-META-DEV-COMPLETED-20260718T214243+0800",
+    "process/handoffs/CR172-S03-CP6R1-META-DEV-HANDOFF-2026-07-18.md",
+    "/root/cr172_s03_cp6_meta_dev"
+  ],
+  "next_stage_recommendation": "host_finalize_cp6r1_then_dispatch_s03_cp7r1_keep_s04_locked"
+}

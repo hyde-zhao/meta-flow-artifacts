@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "stage": "CP2",
+  "profile": "runtime-high-risk",
+  "project_id": "quant-lab",
+  "cr_id": "CR-172",
+  "story_id": null,
+  "status": "ready",
+  "created_at": "2026-07-16T10:28:00+08:00",
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-172.summary.json",
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "allowed_reads": [
+    {
+      "estimated_tokens": 1800,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "lightweight_runtime_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 300,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_discovery_entry",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1400,
+      "mode": "full",
+      "path": "process/changes/summaries/CR-172.summary.json",
+      "reason": "current_cr_summary",
+      "required": true
+    },
+    {
+      "estimated_tokens": 1700,
+      "mode": "full",
+      "path": "process/checks/CP0-CR172-REQUEST-INTAKE.result.json",
+      "reason": "cp0_machine_truth",
+      "required": true
+    },
+    {
+      "estimated_tokens": 2200,
+      "mode": "full",
+      "path": "process/checks/CP1-CR172-USE-CASE-COMPLETENESS.result.json",
+      "reason": "cp1_machine_truth",
+      "required": true
+    },
+    {
+      "estimated_tokens": 2500,
+      "mode": "full",
+      "path": "process/checks/CP2-CR172-REQUIREMENTS-BASELINE.result.json",
+      "reason": "cp2_auto_precheck",
+      "required": true
+    },
+    {
+      "estimated_tokens": 3100,
+      "mode": "full",
+      "path": "process/handoffs/CR172-CP2-META-PM-UC-REMEDIATION-RETURN-SUMMARY.md",
+      "reason": "delegated_use_case_business_angle_remediation_return",
+      "required": true
+    },
+    {
+      "estimated_tokens": 4900,
+      "mode": "full",
+      "path": "process/checkpoints/CP2-CR172-REQUIREMENTS-BASELINE.md",
+      "reason": "human_gate_decision_brief",
+      "required": true
+    }
+  ],
+  "budget": {
+    "estimated_tokens": 17900,
+    "estimator": "chars_div_4",
+    "max_tokens": 20000
+  },
+  "must_read": [
+    {
+      "estimated_tokens": 1800,
+      "mode": "full",
+      "path": "process/state/STATE.current.json",
+      "reason": "machine_state",
+      "required": true
+    },
+    {
+      "estimated_tokens": 300,
+      "mode": "full",
+      "path": "process/current/CURRENT.json",
+      "reason": "current_entrypoint",
+      "required": true
+    },
+    {
+      "estimated_tokens": 400,
+      "mode": "full",
+      "path": "process/policies/READ-POLICY.json",
+      "reason": "read_policy",
+      "required": true
+    }
+  ],
+  "read_if_needed": [
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "docs/product/USE-CASES.md",
+      "reason": "human audit or field conflict only; log expansion first"
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "docs/product/REQUIREMENTS.md",
+      "reason": "human audit or field conflict only; log expansion first"
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "docs/product/SCENARIOS.yaml",
+      "reason": "human audit or coverage conflict only; log expansion first"
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "docs/product/TEST-MATRIX.md",
+      "reason": "human audit or coverage conflict only; log expansion first"
+    },
+    {
+      "estimated_tokens": 0,
+      "mode": "full",
+      "path": "docs/product/MVP-SCOPE.md",
+      "reason": "human audit or scope conflict only; log expansion first"
+    }
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/archive/**",
+    "process/discussions/**",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/stories/**",
+    "docs/design/**",
+    "docs/quality/**"
+  ],
+  "do_not_read_by_default": [
+    {
+      "path_or_pattern": "process/archive/**",
+      "reason": "historical archive is not required for the CP2 decision"
+    },
+    {
+      "path_or_pattern": "process/discussions/**",
+      "reason": "discussion history is summarized in the CP1 return and checkpoint"
+    },
+    {
+      "path_or_pattern": "process/STATE.md",
+      "reason": "human summary and legacy fallback only"
+    },
+    {
+      "path_or_pattern": "process/stories/**",
+      "reason": "Story and design evidence do not exist before CP2 approval"
+    },
+    {
+      "path_or_pattern": "docs/design/**",
+      "reason": "solution design is downstream of this gate"
+    }
+  ],
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "policy_refs": {
+    "artifact_budgets": "process/policies/ARTIFACT-BUDGETS.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json",
+    "read_policy": "process/policies/READ-POLICY.json"
+  },
+  "decision_summary": {
+    "human_decisions": 8,
+    "approved_decisions": 0,
+    "prior_review_result": "changes_requested",
+    "business_angle_fields": "4/4",
+    "confirmed_sgq": "2/2",
+    "current_safe_path": "PATH-B",
+    "path_when_five_fields_and_owner_are_frozen": "PATH-C",
+    "path_a_requires_explicit_three_producer_risk_acceptance": true,
+    "ready_for_design": false
+  },
+  "business_anchor": {
+    "business_motivation_present": true,
+    "user_pain_present": true,
+    "usage_value_present": true,
+    "business_trigger_step_present": true,
+    "primary_value": "Use future C1 real typed evidence to evaluate strategy X multiple-testing and overfit risk and provide evidence for a later mature StrategyAdmissionPackage.",
+    "claim_limit": "C1 evidence does not itself imply admission PASS/PASS_WITH_RISK, Stage 3 entry-ready or aggregate completion.",
+    "remediation_return_ref": "process/handoffs/CR172-CP2-META-PM-UC-REMEDIATION-RETURN-SUMMARY.md"
+  },
+  "five_field_status": {
+    "finite_values_present": "0/5",
+    "authorized_data_owner_identity": "OPEN",
+    "data_release": "OPEN",
+    "datasets": "OPEN",
+    "date_range": "OPEN",
+    "read_identity": "OPEN",
+    "output_directory": "OPEN",
+    "inference_forbidden": true,
+    "output_directory_is_write_authorization": false
+  },
+  "claim_ceiling": {
+    "stage3_started": false,
+    "stage3_entry_ready": false,
+    "mature_admission_pass": false,
+    "aggregate_orchestration_implemented": false,
+    "cr155_promoted": false,
+    "c4_compatible": false,
+    "historical_evidence_revalidated": false,
+    "fu006_independent_evidence_complete": false
+  },
+  "authorization_assertions": {
+    "cp3_solution_design": false,
+    "real_lake_read": false,
+    "credentials": false,
+    "provider_fetch": false,
+    "lake_or_nas_write": false,
+    "catalog_or_current_pointer_write": false,
+    "real_computation_or_runtime": false,
+    "aggregate_orchestration": false,
+    "cr155_promotion": false,
+    "trading": false,
+    "git_remote_write": false
+  },
+  "next_human_gate": {
+    "checkpoint": "CP2",
+    "checkpoint_ref": "process/checkpoints/CP2-CR172-REQUIREMENTS-BASELINE.md",
+    "launch_message_ref": "process/checks/CP2-CR172-HUMAN-GATE-LAUNCH-MESSAGE.md",
+    "stop_reason": "required_human_gate"
+  },
+  "updated_at": "2026-07-16T11:04:35+08:00",
+  "relaunch_reason": "UC-58 business-angle remediation completed and CP1/CP2 automatic checks passed."
+}

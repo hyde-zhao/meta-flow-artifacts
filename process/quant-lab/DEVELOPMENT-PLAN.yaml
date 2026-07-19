@@ -1,18 +1,18 @@
 project_id: "local_backtest"
-version: "1.12"
-status: "cr170-closed-ready-with-risk"
+version: "1.13"
+status: "cr173-story-plan-cp4-recommended-pass-pending-host-check"
 confirmed: true
 confirmed_by: "user"
 confirmed_at: "2026-07-15T16:39:36+08:00"
 created_at: "2026-05-14"
 created_by: "meta-se"
-last_updated: "2026-07-15T14:40:00+08:00"
+last_updated: "2026-07-16T15:20:41+08:00"
 source_hld: "process/HLD.md"
 companion_hld: "process/HLD-DATA-LAKE.md"
 source_adr: "process/ARCHITECTURE-DECISION.md"
 story_backlog: "process/STORY-BACKLOG.md"
 story_management_truth_source: "process/DEVELOPMENT-PLAN.yaml"
-active_change: ""
+active_change: "CR-173"
 secondary_change: ""
 cr004_status: "draft-pending-cp4"
 cr004_confirmed: false
@@ -8062,3 +8062,411 @@ cr170_story_planning:
   pre_existing_plan_check_failure:
     status: "recorded-unrelated"
     details: "Canonical global plan-check retains inherited CR013 legacy status debt. CR170 scoped plan has four nodes, six typed edges, four serial Waves, 20/20 scenarios, valid refs and no within-wave file conflict."
+
+cr173_story_planning:
+  change_id: "CR-173"
+  title: "Effective-Trial Offline Estimator Methodology"
+  boundary: "estimator-only"
+  status: "cp5-approved-story-execution"
+  cp3_review: "process/checkpoints/CP3-CR173-HLD-REVIEW.md"
+  cp4_result: "process/checks/CP4-CR173-STORY-DAG-PARALLEL-SAFETY.result.json"
+  cp5_batch:
+    id: "CP5-CR173-ALL-STORIES-LLD-BATCH"
+    design_evidence_required: 3
+    required_level: "full-lld"
+    status: "approved"
+    human_gate: "required"
+    approved_by: "user"
+    approved_at: "2026-07-17T09:33:11+08:00"
+  feature_design_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md#cr173-cp4-增量effective-trial-offline-estimator"
+  feature_design_refs:
+    - "docs/features/effective-trial-offline-estimator/DESIGN.md"
+    - "docs/features/effective-trial-offline-estimator/TEST-PLAN.md"
+    - "docs/features/effective-trial-offline-estimator/TASKS.md"
+  feature_count: 1
+  story_count: 3
+  wave_count: 3
+  task_count: 12
+  lld_policy_summary:
+    full_lld: 3
+    technical_note: 0
+    waived: 0
+    actual_lld_files_created: 3
+  public_projection_scope:
+    feature_count: 0
+    story_count: 0
+    task_count: 0
+    production_file_write_count: 0
+    production_call_count: 0
+    disposition: "deferred-to-future-versioned-projection-cr"
+  authorization_boundary:
+    story_planning_and_design_docs_allowed: true
+    lld_creation_allowed: true
+    implementation_allowed_before_cp5_approval: false
+    test_or_fixture_implementation_allowed_before_cp5_approval: false
+    repository_local_fixture_implementation_authorized_after_cp5_approval: true
+    public_c1_projection_or_write_allowed: false
+    real_data_or_empirical_matrix_allowed: false
+    strategy_identity_or_real_producer_binding_allowed: false
+    provider_lake_nas_credential_allowed: false
+    runtime_trading_external_operation_allowed: false
+    publish_deploy_allowed: false
+    catalog_store_registry_write_allowed: false
+    git_remote_write_allowed: false
+    cr172_auto_resume_or_close_allowed: false
+  parallel_policy:
+    max_parallel_lld: 1
+    max_parallel_dev: 1
+    max_parallel_qa: 1
+    lld_rule: "Three full LLDs may be drafted only after Host CP4 PASS; S02 consumes S01 contract and S03 consumes S01/S02 contracts, so the safe order is serial."
+    dev_rule: "S01 -> S02 -> S03; contract then exact estimator then cross-story golden/authorization verification."
+    same_wave_file_conflicts_allowed: 0
+  waves:
+    - id: "CR173-W1-CONTRACT-EVIDENCE"
+      stories: ["CR173-S01-contract-evidence-canonicalization"]
+      depends_on: []
+      parallel: false
+    - id: "CR173-W2-EXACT-ESTIMATOR"
+      stories: ["CR173-S02-exact-spectral-estimator"]
+      depends_on: ["CR173-W1-CONTRACT-EVIDENCE"]
+      parallel: false
+    - id: "CR173-W3-GOLDEN-BOUNDARY"
+      stories: ["CR173-S03-golden-failure-boundary-verification"]
+      depends_on: ["CR173-W1-CONTRACT-EVIDENCE", "CR173-W2-EXACT-ESTIMATOR"]
+      parallel: false
+  stories:
+    - id: "CR173-S01-contract-evidence-canonicalization"
+      card: "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md"
+      title: "Effective-trial input, evidence, and canonicalization contracts"
+      status: "cp6-in-progress"
+      wave: "CR173-W1-CONTRACT-EVIDENCE"
+      depends_on: []
+      dependency_types: []
+      lld_policy: "full-lld"
+      design_evidence_path: "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-LLD.md"
+      design_evidence_status: "approved-v1.3"
+      feature_design_refs:
+        - "docs/features/effective-trial-offline-estimator/DESIGN.md"
+        - "docs/features/effective-trial-offline-estimator/TEST-PLAN.md"
+        - "docs/features/effective-trial-offline-estimator/TASKS.md"
+      requirements: ["REQ-CR173-001", "REQ-CR173-002", "REQ-CR173-003", "REQ-CR173-004", "REQ-CR173-005", "REQ-CR173-007"]
+      scenarios: ["SC-CR173-Q01", "SC-CR173-F01", "SC-CR173-N01", "SC-CR173-B01", "SC-CR173-C01"]
+      primary_files:
+        - "engine/effective_trial_evidence.py"
+        - "tests/research/test_effective_trial_evidence_contracts.py"
+      read_only_files:
+        - "engine/experiment_family_lineage.py"
+      forbidden_files:
+        - "engine/experiment_family_lineage.py"
+        - "engine/experiment_family_lineage_store.py"
+        - "engine/strategy_admission_statistical_gate.py"
+        - "engine/statistical_evidence.py"
+        - "engine/multiple_testing_evidence.py"
+        - "engine/overfit_evidence.py"
+        - "engine/cross_strategy_reliability_gates.py"
+        - "engine/strategy_admission_package.py"
+      acceptance_criteria_count: 5
+      failure_route: "contract ambiguity -> NEEDS_DESIGN_CLARIFICATION; implementation/test failure -> NEEDS_REWORK; public path touch -> BLOCKED"
+      task_count: 4
+    - id: "CR173-S02-exact-spectral-estimator"
+      card: "process/stories/STORY-CR173-S02-exact-spectral-estimator.md"
+      title: "Exact-rational spectral participation-ratio estimator"
+      status: "lld-approved-blocked-by-s01"
+      wave: "CR173-W2-EXACT-ESTIMATOR"
+      depends_on: ["CR173-S01-contract-evidence-canonicalization"]
+      dependency_types: ["contract"]
+      lld_policy: "full-lld"
+      design_evidence_path: "process/stories/STORY-CR173-S02-exact-spectral-estimator-LLD.md"
+      design_evidence_status: "approved-v1.3"
+      feature_design_refs:
+        - "docs/features/effective-trial-offline-estimator/DESIGN.md"
+        - "docs/features/effective-trial-offline-estimator/TEST-PLAN.md"
+        - "docs/features/effective-trial-offline-estimator/TASKS.md"
+      requirements: ["REQ-CR173-001", "REQ-CR173-002", "REQ-CR173-003", "REQ-CR173-005", "REQ-CR173-006"]
+      scenarios: ["SC-CR173-P01", "SC-CR173-Q01", "SC-CR173-F01", "SC-CR173-B01", "SC-CR173-D01"]
+      primary_files:
+        - "engine/effective_trial_estimator.py"
+        - "tests/research/test_effective_trial_estimator.py"
+      read_only_files:
+        - "engine/effective_trial_evidence.py"
+      forbidden_files:
+        - "engine/experiment_family_lineage.py"
+        - "engine/experiment_family_lineage_store.py"
+        - "engine/strategy_admission_statistical_gate.py"
+        - "engine/statistical_evidence.py"
+        - "engine/multiple_testing_evidence.py"
+        - "engine/overfit_evidence.py"
+        - "engine/cross_strategy_reliability_gates.py"
+        - "engine/strategy_admission_package.py"
+      acceptance_criteria_count: 5
+      failure_route: "non-unique exact algorithm -> NEEDS_DESIGN_CLARIFICATION; numeric defect -> NEEDS_REWORK; float/tolerance/clamp/public touch -> BLOCKED"
+      task_count: 4
+    - id: "CR173-S03-golden-failure-boundary-verification"
+      card: "process/stories/STORY-CR173-S03-golden-failure-boundary-verification.md"
+      title: "Golden-vector, failure-recovery, and public-boundary verification"
+      status: "lld-approved-blocked-by-s01-s02"
+      wave: "CR173-W3-GOLDEN-BOUNDARY"
+      depends_on: ["CR173-S01-contract-evidence-canonicalization", "CR173-S02-exact-spectral-estimator"]
+      dependency_types: ["runtime", "runtime"]
+      lld_policy: "full-lld"
+      design_evidence_path: "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-LLD.md"
+      design_evidence_status: "approved-v1.4"
+      feature_design_refs:
+        - "docs/features/effective-trial-offline-estimator/DESIGN.md"
+        - "docs/features/effective-trial-offline-estimator/TEST-PLAN.md"
+        - "docs/features/effective-trial-offline-estimator/TASKS.md"
+      requirements: ["REQ-CR173-003", "REQ-CR173-004", "REQ-CR173-005", "REQ-CR173-006", "REQ-CR173-007", "REQ-CR173-008"]
+      scenarios: ["SC-CR173-F01", "SC-CR173-N01", "SC-CR173-B01", "SC-CR173-D01", "SC-CR173-C01", "SC-CR173-A01"]
+      primary_files:
+        - "tests/fixtures/effective_trial/"
+        - "tests/research/test_effective_trial_cr173_qac.py"
+        - "tests/research/test_effective_trial_authorization.py"
+      read_only_files:
+        - "engine/effective_trial_evidence.py"
+        - "engine/effective_trial_estimator.py"
+        - "engine/experiment_family_lineage.py"
+        - "engine/experiment_family_lineage_store.py"
+        - "engine/strategy_admission_statistical_gate.py"
+        - "engine/statistical_evidence.py"
+        - "engine/multiple_testing_evidence.py"
+        - "engine/overfit_evidence.py"
+        - "engine/cross_strategy_reliability_gates.py"
+        - "engine/strategy_admission_package.py"
+      forbidden_files:
+        - "engine/effective_trial_evidence.py"
+        - "engine/effective_trial_estimator.py"
+        - "engine/experiment_family_lineage.py"
+        - "engine/experiment_family_lineage_store.py"
+        - "engine/strategy_admission_statistical_gate.py"
+        - "engine/statistical_evidence.py"
+        - "engine/multiple_testing_evidence.py"
+        - "engine/overfit_evidence.py"
+        - "engine/cross_strategy_reliability_gates.py"
+        - "engine/strategy_admission_package.py"
+      acceptance_criteria_count: 7
+      failure_route: "upstream defect -> NEEDS_REWORK; public contract required -> NEEDS_DESIGN_CLARIFICATION/future CR; any forbidden counter or production diff -> BLOCKED"
+      task_count: 4
+  dependency_graph:
+    nodes:
+      - "CR173-S01-contract-evidence-canonicalization"
+      - "CR173-S02-exact-spectral-estimator"
+      - "CR173-S03-golden-failure-boundary-verification"
+    edges:
+      - ["CR173-S01-contract-evidence-canonicalization", "CR173-S02-exact-spectral-estimator", "contract"]
+      - ["CR173-S01-contract-evidence-canonicalization", "CR173-S03-golden-failure-boundary-verification", "runtime"]
+      - ["CR173-S02-exact-spectral-estimator", "CR173-S03-golden-failure-boundary-verification", "runtime"]
+  requirement_coverage:
+    total: 8
+    covered: 8
+    uncovered: []
+    ids: ["REQ-CR173-001", "REQ-CR173-002", "REQ-CR173-003", "REQ-CR173-004", "REQ-CR173-005", "REQ-CR173-006", "REQ-CR173-007", "REQ-CR173-008"]
+  scenario_coverage:
+    total: 8
+    covered: 8
+    uncovered: []
+    ids: ["SC-CR173-P01", "SC-CR173-Q01", "SC-CR173-F01", "SC-CR173-N01", "SC-CR173-B01", "SC-CR173-D01", "SC-CR173-C01", "SC-CR173-A01"]
+  outcome_coverage:
+    total: 4
+    covered: 4
+    uncovered: []
+    ids: ["CR173-O01", "CR173-O02", "CR173-O03", "CR173-O04"]
+  file_ownership_validation:
+    primary_paths: 7
+    duplicate_primary_paths: []
+    same_wave_primary_conflicts: []
+    public_production_primary_paths: []
+    conclusion: "PASS"
+  dag_validation_result:
+    cycles: []
+    invalid_references: []
+    isolated_nodes: []
+    parallel_internal_dependencies: 0
+    file_conflicts_within_parallel_wave: 0
+    conclusion: "PASS"
+    merge_order: "S01 -> S02 -> S03"
+  cp4_recommendation:
+    recommendation: "PASS"
+    blocker_count: 0
+    owner: "host-orchestrator"
+    formal_result_created_by_meta_se: true
+    cp5_gate_launched: true
+  global_plan_check:
+    status: "fail-inherited-unrelated"
+    details: "Canonical `meta-flow story plan-check` still fails only on four inherited CR013 `draft-pending-cp4` legacy statuses and emits pre-existing legacy-ref warnings. CR173 scoped YAML parses, has 3 valid nodes/3 edges, 8/8 REQ, 8/8 SC, unique primary owners and no same-wave conflict; inherited debt is preserved and is not a CR173 blocker."
+  global_feature_trace_check:
+    status: "fail-inherited-unrelated"
+    details: "Canonical story-to-feature/design-ownership checks fail because repository-wide `docs/design/FEATURE-REGISTRY.yaml` is absent and many historical Story cards have legacy refs/schema debt. CR173 cards expose feature_refs=effective.trial.offline.estimator, feature_reference_ids=FEAT-173-01, feature_design_refs=3/3 and scalar lld_policy=full-lld with detail; scoped schema checks pass."
+
+cr172_path_i_story_planning:
+  change_id: "CR-172"
+  title: "PATH-I Trial-Return Contract/Fixture and Cross-Machine Deployment Contracts"
+  boundary: "repository-local-contract-and-fixture-only"
+  status: "cp5-approved-story-execution"
+  cp3_review: "process/checkpoints/CP3-CR172-PATH-I-HLD-REVIEW.md"
+  cp4_result: "process/checks/CP4-CR172-PATH-I-STORY-DAG-PARALLEL-SAFETY.result.json"
+  feature_design_matrix: "docs/design/FEATURE-DESIGN-MATRIX.md#cr172-path-i-cp4-增量trial-return-与跨机部署合同"
+  feature_design_refs:
+    - "docs/features/trial-return-artifact-pipeline/DESIGN.md"
+    - "docs/features/trial-return-artifact-pipeline/TEST-PLAN.md"
+    - "docs/features/trial-return-artifact-pipeline/TASKS.md"
+    - "docs/features/research-artifact-replica-materialization/DESIGN.md"
+    - "docs/features/research-artifact-replica-materialization/TEST-PLAN.md"
+    - "docs/features/research-artifact-replica-materialization/TASKS.md"
+    - "docs/features/path-i-authorization-claim-governance/DESIGN.md"
+    - "docs/features/path-i-authorization-claim-governance/TEST-PLAN.md"
+    - "docs/features/path-i-authorization-claim-governance/TASKS.md"
+  feature_count: 3
+  story_count: 5
+  wave_count: 5
+  task_count: 20
+  lld_policy_summary: {full_lld: 5, technical_note: 0, waived: 0, actual_lld_files_created: 5}
+  cp5_batch: {id: "CP5-CR172-ALL-STORIES-LLD-BATCH", design_evidence_required: 5, required_level: "full-lld", status: "approved", human_gate: "required", approved_by: "user", approved_at: "2026-07-18T13:49:27+08:00", auto_result: "PASS", independent_review: "proceed", blocking: 0, required: 0, optional: 0, remediation: "pointer/action-kind/test-plan references corrected; normative delta=0"}
+  deferred_scope_counts:
+    signal_detailed_exchange_story: 0
+    intraday_signal_story: 0
+    fu_cr173_001_v2_story: 0
+    external_import_activation_story: 0
+    real_runtime_or_migration_story: 0
+  authorization_boundary:
+    story_planning_and_feature_design_allowed: true
+    lld_creation_allowed_in_this_handoff: false
+    implementation_or_test_creation_allowed: true
+    repository_local_implementation_requires_cp5: true
+    real_data_lake_or_nas_allowed: false
+    multi_trial_runtime_or_trial_return_generation_allowed: false
+    empirical_r_or_signal_transport_allowed: false
+    migration_trading_publish_deploy_allowed: false
+    git_remote_write_allowed: false
+    six_actions_authorized: 0
+    six_actions_executed: 0
+    approved_ledger_v1_authorized: false
+    approved_ledger_v1_eligible: false
+    approved_ledger_v1_reason: "APPROVED_LEDGER_ADAPTER_UNAVAILABLE"
+    evidence_kind_provenance_alias_count: 0
+    req013_status: "contract_ready/runtime_enforcement_deferred"
+    req013_runtime_path_enforcement_count: 0
+    req013_runtime_default_switch_count: 0
+  native_producer_disposition:
+    status: "deferred-to-independent-runtime-high-risk-prerequisite-cr"
+    current_identifiable_period_return_producer_count: 0
+    existing_runner_hook_count: 0
+    existing_runner_diff_count: 0
+    forward_label_proxy_accepted_as_trial_return: 0
+    lineage_partial_success_state: "partial_lineage_blocked_audit"
+    lineage_partial_success_canonical_advance: 0
+    future_prerequisites: ["observation interval endpoints", "holdings/weights", "transaction costs", "return basis", "non-overlap/alignment", "atomic lineage or correction/supersession", "RunPathDecisionV1 before launch/workspace first side effect", "new default=1 and legacy write=0 evidence"]
+    source_touch_inventory_coverage: "100%"
+    file_owner_inventory_coverage: "100%"
+  parallel_policy:
+    max_parallel_lld: 3
+    max_parallel_dev: 1
+    max_parallel_qa: 1
+    lld_rule: "All five are full-lld. LLD drafting may use at most three isolated writers because every lld_gate requires only an upstream contract already declared in the approved Story/Feature inputs and every LLD evidence_path is disjoint; host performs a serial S01->S02->S03->S04->S05 cross-LLD contract-correlation audit before CP5. Development and QA remain strictly serial."
+    dev_rule: "S01 -> S02 -> S03 -> S04 -> S05."
+    same_wave_file_conflicts_allowed: 0
+  waves:
+    - {id: "CR172-W1-GOVERNANCE-CONTRACT", stories: ["CR172-S01-action-authorization-eligibility-governance"], depends_on: [], parallel: false}
+    - {id: "CR172-W2-TRIAL-RETURN-HOOK", stories: ["CR172-S02-trial-return-artifact-native-hook"], depends_on: ["CR172-W1-GOVERNANCE-CONTRACT"], parallel: false}
+    - {id: "CR172-W3-NAS-REPLICA", stories: ["CR172-S03-nas-replica-verification"], depends_on: ["CR172-W1-GOVERNANCE-CONTRACT", "CR172-W2-TRIAL-RETURN-HOOK"], parallel: false}
+    - {id: "CR172-W4-EXECUTION-MATERIALIZATION", stories: ["CR172-S04-execution-cache-materialization"], depends_on: ["CR172-W1-GOVERNANCE-CONTRACT", "CR172-W2-TRIAL-RETURN-HOOK", "CR172-W3-NAS-REPLICA"], parallel: false}
+    - {id: "CR172-W5-INTEGRATED-VERIFICATION", stories: ["CR172-S05-path-i-integration-claim-zero-operation-verification"], depends_on: ["CR172-W1-GOVERNANCE-CONTRACT", "CR172-W2-TRIAL-RETURN-HOOK", "CR172-W3-NAS-REPLICA", "CR172-W4-EXECUTION-MATERIALIZATION"], parallel: false}
+  stories:
+    - id: "CR172-S01-action-authorization-eligibility-governance"
+      card: "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance.md"
+      status: "verified"
+      wave: "CR172-W1-GOVERNANCE-CONTRACT"
+      depends_on: []
+      dependency_types: []
+      lld_policy: "full-lld"
+      design_evidence_path: "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-LLD.md"
+      design_evidence_status: "approved-v1.3"
+      feature_reference_ids: ["FEAT-CR172-I03"]
+      primary_files: ["engine/path_i_governance.py", "tests/research/test_cr172_path_i_governance.py"]
+      requirements: ["REQ-CR172-001", "REQ-CR172-002", "REQ-CR172-003", "REQ-CR172-004", "REQ-CR172-005", "REQ-CR172-006", "REQ-CR172-007", "REQ-CR172-008", "REQ-CR172-011", "REQ-CR172-013", "REQ-CR172-014", "REQ-CR172-015"]
+      scenarios: ["SC-CR172-P01", "SC-CR172-P02", "SC-CR172-N01", "SC-CR172-B01", "SC-CR172-F01", "SC-CR172-Q01", "SC-CR172-A01", "SC-CR172-G01", "SC-CR172-A02", "SC-CR172-Q02", "SC-CR172-G02", "SC-CR172-C02", "SC-CR172-S01", "SC-CR172-S02", "SC-CR172-S03", "SC-CR172-S04", "SC-CR172-S05", "SC-CR172-S06"]
+      acceptance_criteria_count: 6
+      task_count: 4
+    - id: "CR172-S02-trial-return-artifact-native-hook"
+      card: "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook.md"
+      status: "verified"
+      wave: "CR172-W2-TRIAL-RETURN-HOOK"
+      depends_on: ["CR172-S01-action-authorization-eligibility-governance"]
+      dependency_types: ["contract"]
+      lld_policy: "full-lld"
+      design_evidence_path: "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-LLD.md"
+      design_evidence_status: "approved-v1.3"
+      feature_reference_ids: ["FEAT-CR172-I01", "FEAT-CR172-I03"]
+      primary_files: ["engine/trial_return_artifact.py", "tests/research/test_cr172_trial_return_artifact.py"]
+      requirements: ["REQ-CR172-009", "REQ-CR172-011", "REQ-CR172-013", "REQ-CR172-014"]
+      scenarios: ["SC-CR172-I01", "SC-CR172-N02", "SC-CR172-N04", "SC-CR172-B02", "SC-CR172-G02", "SC-CR172-Q02"]
+      acceptance_criteria_count: 6
+      task_count: 4
+    - id: "CR172-S03-nas-replica-verification"
+      card: "process/stories/STORY-CR172-S03-nas-replica-verification.md"
+      status: "verified"
+      wave: "CR172-W3-NAS-REPLICA"
+      depends_on: ["CR172-S01-action-authorization-eligibility-governance", "CR172-S02-trial-return-artifact-native-hook"]
+      dependency_types: ["contract", "contract"]
+      lld_policy: "full-lld"
+      design_evidence_path: "process/stories/STORY-CR172-S03-nas-replica-verification-LLD.md"
+      design_evidence_status: "approved-v1.3"
+      feature_reference_ids: ["FEAT-CR172-I01", "FEAT-CR172-I02", "FEAT-CR172-I03"]
+      primary_files: ["engine/research_artifact_replica.py", "tests/research/test_cr172_nas_replica_verification.py"]
+      requirements: ["REQ-CR172-010", "REQ-CR172-011", "REQ-CR172-012"]
+      scenarios: ["SC-CR172-I02", "SC-CR172-N03", "SC-CR172-B02", "SC-CR172-B03", "SC-CR172-A02", "SC-CR172-F02"]
+      acceptance_criteria_count: 5
+      task_count: 4
+    - id: "CR172-S04-execution-cache-materialization"
+      card: "process/stories/STORY-CR172-S04-execution-cache-materialization.md"
+      status: "verified"
+      wave: "CR172-W4-EXECUTION-MATERIALIZATION"
+      depends_on: ["CR172-S01-action-authorization-eligibility-governance", "CR172-S02-trial-return-artifact-native-hook", "CR172-S03-nas-replica-verification"]
+      dependency_types: ["contract", "verifier-library", "runtime-selection"]
+      lld_policy: "full-lld"
+      design_evidence_path: "process/stories/STORY-CR172-S04-execution-cache-materialization-LLD.md"
+      design_evidence_status: "approved-v1.3"
+      feature_reference_ids: ["FEAT-CR172-I01", "FEAT-CR172-I02", "FEAT-CR172-I03"]
+      primary_files: ["engine/research_artifact_materialization.py", "tests/research/test_cr172_execution_materialization.py"]
+      requirements: ["REQ-CR172-010", "REQ-CR172-011", "REQ-CR172-012"]
+      scenarios: ["SC-CR172-I02", "SC-CR172-N03", "SC-CR172-B02", "SC-CR172-B03", "SC-CR172-A02", "SC-CR172-F02"]
+      acceptance_criteria_count: 5
+      task_count: 4
+    - id: "CR172-S05-path-i-integration-claim-zero-operation-verification"
+      card: "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification.md"
+      status: "verified"
+      wave: "CR172-W5-INTEGRATED-VERIFICATION"
+      depends_on: ["CR172-S01-action-authorization-eligibility-governance", "CR172-S02-trial-return-artifact-native-hook", "CR172-S03-nas-replica-verification", "CR172-S04-execution-cache-materialization"]
+      dependency_types: ["runtime", "runtime", "runtime", "runtime"]
+      lld_policy: "full-lld"
+      design_evidence_path: "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-LLD.md"
+      design_evidence_status: "approved-v1.3"
+      feature_reference_ids: ["FEAT-CR172-I01", "FEAT-CR172-I02", "FEAT-CR172-I03"]
+      primary_files: ["tests/fixtures/cr172_path_i/", "tests/research/test_cr172_path_i_integration.py", "tests/research/test_cr172_path_i_authorization.py", "tests/research/test_cr172_path_i_claim_regression.py"]
+      requirements: ["REQ-CR172-001", "REQ-CR172-002", "REQ-CR172-003", "REQ-CR172-004", "REQ-CR172-005", "REQ-CR172-006", "REQ-CR172-007", "REQ-CR172-008", "REQ-CR172-009", "REQ-CR172-010", "REQ-CR172-011", "REQ-CR172-012", "REQ-CR172-013", "REQ-CR172-014", "REQ-CR172-015"]
+      scenarios: ["SC-CR172-P01", "SC-CR172-P02", "SC-CR172-N01", "SC-CR172-B01", "SC-CR172-F01", "SC-CR172-Q01", "SC-CR172-A01", "SC-CR172-G01", "SC-CR172-I01", "SC-CR172-I02", "SC-CR172-N02", "SC-CR172-N03", "SC-CR172-N04", "SC-CR172-N05", "SC-CR172-B02", "SC-CR172-B03", "SC-CR172-A02", "SC-CR172-F02", "SC-CR172-Q02", "SC-CR172-G02", "SC-CR172-C02", "SC-CR172-S01", "SC-CR172-S02", "SC-CR172-S03", "SC-CR172-S04", "SC-CR172-S05", "SC-CR172-S06"]
+      acceptance_criteria_count: 7
+      task_count: 4
+  dependency_graph:
+    nodes: ["CR172-S01-action-authorization-eligibility-governance", "CR172-S02-trial-return-artifact-native-hook", "CR172-S03-nas-replica-verification", "CR172-S04-execution-cache-materialization", "CR172-S05-path-i-integration-claim-zero-operation-verification"]
+    edges:
+      - ["CR172-S01-action-authorization-eligibility-governance", "CR172-S02-trial-return-artifact-native-hook", "contract"]
+      - ["CR172-S01-action-authorization-eligibility-governance", "CR172-S03-nas-replica-verification", "contract"]
+      - ["CR172-S02-trial-return-artifact-native-hook", "CR172-S03-nas-replica-verification", "contract"]
+      - ["CR172-S01-action-authorization-eligibility-governance", "CR172-S04-execution-cache-materialization", "contract"]
+      - ["CR172-S02-trial-return-artifact-native-hook", "CR172-S04-execution-cache-materialization", "verifier-library"]
+      - ["CR172-S03-nas-replica-verification", "CR172-S04-execution-cache-materialization", "runtime"]
+      - ["CR172-S01-action-authorization-eligibility-governance", "CR172-S05-path-i-integration-claim-zero-operation-verification", "runtime"]
+      - ["CR172-S02-trial-return-artifact-native-hook", "CR172-S05-path-i-integration-claim-zero-operation-verification", "runtime"]
+      - ["CR172-S03-nas-replica-verification", "CR172-S05-path-i-integration-claim-zero-operation-verification", "runtime"]
+      - ["CR172-S04-execution-cache-materialization", "CR172-S05-path-i-integration-claim-zero-operation-verification", "runtime"]
+  requirement_coverage: {total: 15, covered: 15, uncovered: [], ids: ["REQ-CR172-001", "REQ-CR172-002", "REQ-CR172-003", "REQ-CR172-004", "REQ-CR172-005", "REQ-CR172-006", "REQ-CR172-007", "REQ-CR172-008", "REQ-CR172-009", "REQ-CR172-010", "REQ-CR172-011", "REQ-CR172-012", "REQ-CR172-013", "REQ-CR172-014", "REQ-CR172-015"]}
+  scenario_coverage: {total: 27, covered: 27, uncovered: [], ids: ["SC-CR172-P01", "SC-CR172-P02", "SC-CR172-N01", "SC-CR172-B01", "SC-CR172-F01", "SC-CR172-Q01", "SC-CR172-A01", "SC-CR172-G01", "SC-CR172-I01", "SC-CR172-I02", "SC-CR172-N02", "SC-CR172-N03", "SC-CR172-N04", "SC-CR172-N05", "SC-CR172-B02", "SC-CR172-B03", "SC-CR172-A02", "SC-CR172-F02", "SC-CR172-Q02", "SC-CR172-G02", "SC-CR172-C02", "SC-CR172-S01", "SC-CR172-S02", "SC-CR172-S03", "SC-CR172-S04", "SC-CR172-S05", "SC-CR172-S06"]}
+  outcome_coverage: {total: 11, covered: 11, uncovered: [], ids: ["CR172-O01", "CR172-O02", "CR172-O03", "CR172-O04", "CR172-O05", "CR172-O06", "CR172-O07", "CR172-O08", "CR172-O09", "CR172-O10", "CR172-O11"]}
+  file_ownership_validation:
+    primary_paths: 12
+    duplicate_primary_paths: []
+    same_wave_primary_conflicts: []
+    conclusion: "PASS"
+  dag_validation_result: {cycles: [], invalid_references: [], isolated_nodes: [], parallel_internal_dependencies: 0, file_conflicts_within_parallel_wave: 0, conclusion: "PASS", merge_order: "S01 -> S02 -> S03 -> S04 -> S05"}
+  cp4_recommendation: {recommendation: "PASS", blocker_count: 0, waiver_count: 0, new_human_decision_count: 0, formal_result_created_by_meta_se: true, cp5_gate_launched: true}
+  global_plan_check: {status: "fail-inherited-unrelated", details: "Canonical plan-check fails only on the four inherited CR013 draft-pending-cp4 statuses and historical ref warnings. CR172 scoped YAML/cards/DAG/coverage/owners pass independently; inherited entries are unchanged."}

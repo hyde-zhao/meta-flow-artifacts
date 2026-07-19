@@ -1,0 +1,131 @@
+schema_version: 1
+packet_type: cp8_delivery_context
+project_id: quant-lab
+cr_id: CR-172
+stage: CP8_HUMAN_GATE_PREPARATION
+status: ready_for_human_gate
+release_decision: READY_WITH_RISK
+manual_gate_status: pending
+pending_human_decisions: 3
+release_artifact_profile: full
+created_at: "2026-07-19T01:51:00+08:00"
+
+context_policy:
+  read_profile: compact
+  default_entrypoint: process/release/RELEASE-CONTEXT-CR172.yaml
+  must_read:
+    - process/release/RELEASE-CONTEXT-CR172.yaml
+    - process/checks/CP8-CR172-PATH-I-DELIVERY-READINESS.result.json
+    - process/checkpoints/CP8-CR172-PATH-I-DELIVERY-READINESS.md
+  read_if_needed:
+    - docs/quality/VERIFICATION-REPORT-CR172.md
+    - docs/quality/TEST-REPORT-CR172.md
+    - docs/quality/REVIEW-CR172.md
+    - docs/release/RELEASE-NOTES-CR172.md
+    - docs/release/DEPLOY-CHECKLIST-CR172.md
+    - docs/release/ROLLBACK-CR172.md
+    - docs/release/MIGRATION-CR172.md
+    - docs/release/FEEDBACK-CR172.md
+  do_not_read_by_default:
+    - process/STATE.md
+    - process/DEVELOPMENT-PLAN.yaml
+    - process/changes/*.md
+    - process/stories/*-LLD.md
+    - process/stories/*-IMPLEMENTATION.md
+    - docs/product/**
+    - docs/design/**
+    - engine/**
+    - tests/**
+  full_doc_read_reason_required: true
+
+delivery_summary:
+  highest_allowed_positive_claim: "path_i_repository_contract_ready=true"
+  delivered_story_count: 5
+  cp7_pass_count: 5
+  open_blockers: 0
+  waivers: 0
+  historical_findings_closed: 9
+  scoped_tests: "27/27"
+  combined_tests: "154/154"
+  semantic_mismatch: 0
+  release_documents_ready: 5
+  migration: none
+  deployment: not-authorized
+  source_repository_dirty: true
+  artifact_repository_dirty: true
+  checkpoint_ledger_duplicate_event_ids: 10
+  checkpoint_ledger_extra_conflicting_rows: 12
+  checkpoint_ledger_full_check: PASS_WITH_RISK
+  checkpoint_ledger_final_event_ambiguity: 0
+
+claim_ceiling:
+  path_i_repository_contract_ready: true
+  stage3_started: false
+  stage3_entry_ready: false
+  c1_computable: false
+  real_data_authorized: false
+  multi_trial_runtime_authorized: false
+  signal_transport_authorized: false
+  path_c_or_a_resumed: false
+  public_c1_projection_ready: false
+  empirical_r_effective_count_ready: false
+
+operation_boundary:
+  real_actions_authorized: "0/6"
+  real_actions_executed: "0/6"
+  lake: 0
+  nas: 0
+  runtime: 0
+  network: 0
+  credential: 0
+  signal: 0
+  trading: 0
+  deploy: 0
+  git_remote_write: 0
+
+decision_brief:
+  recommendation: READY_WITH_RISK
+  decision_items:
+    - id: DQ-CP8-CR172-001
+      type: risk_acceptance
+      recommendation: "Accept repository-local contract/fixture/guard delivery as READY_WITH_RISK, including dual-repository dirty state and checkpoint retry event-ID tooling debt; do not claim ledger-wide PASS."
+      alternative: "Keep the slice pending until the generator is fixed and a separately authorized historical ledger migration is verified."
+      rollback: "Return to quality/CP8 preparation; do not accept the slice or rewrite append-only history."
+    - id: DQ-CP8-CR172-002
+      type: risk_acceptance
+      recommendation: "Accept non-activation, six real actions 0/6 and PATH-C/A deferred."
+      alternative: "Reject until a future activation-resume CP2 has real evidence and authorization."
+      rollback: "Keep all nine runtime claims false and CR activation deferred."
+    - id: DQ-CP8-CR172-003
+      type: follow_up_tracking
+      recommendation: "Keep empirical-R/public C1/real adapters/runtime/signal as future prerequisites."
+      alternative: "Return scope to CP2 and expand this CR before delivery."
+      rollback: "Preserve typed_unavailable and do not create positive C1 claims."
+  approve_does_not_authorize:
+    - credential/secret reads
+    - real lake/NAS/execution operations
+    - runtime/trial-return/empirical-R
+    - signal/trading/deploy/publish/live
+    - Git commit/push/remote write
+    - append-only checkpoint ledger rewrite/compaction/migration
+    - CR activation closure or PATH-C/A resume
+
+evidence_refs:
+  cp5: process/checks/CP5-CR172-LLD-DESIGN-EVIDENCE.result.json
+  cp7_results:
+    - process/checks/CP7-CR172-S01-REVERIFY-1.result.json
+    - process/checks/CP7-CR172-S02-REVERIFY-2.result.json
+    - process/checks/CP7-CR172-S03-REVERIFY-1.result.json
+    - process/checks/CP7-CR172-S04-REVERIFY-1.result.json
+    - process/checks/CP7-CR172-S05-REVERIFY-1.result.json
+  release_context: process/release/RELEASE-CONTEXT-CR172.yaml
+  quality_report: docs/quality/VERIFICATION-REPORT-CR172.md
+  review: docs/quality/REVIEW-CR172.md
+
+host_actions_after_return:
+  - append_terminal_dispatch_event
+  - correlate_cp8_result
+  - render_and_append_checkpoint_ledger
+  - set_pending_gate_and_await_user
+  - run_cr_status_sync
+  - generate_and_validate_human_gate_launch_message

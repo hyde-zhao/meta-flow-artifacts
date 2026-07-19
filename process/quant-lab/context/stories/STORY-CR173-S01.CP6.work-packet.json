@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_work_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "story_id": "CR173-S01-contract-evidence-canonicalization",
+  "stage": "CP6",
+  "objective": {
+    "summary": "实现四类 immutable contract、七字段 standalone evidence、canonical decimal/bytes/hash、stable computation ref、七项 attempt basis、外置 append-only audit 与 F01-F08 fail-closed 语义。",
+    "non_goals": [
+      "不实现 S02 estimator 算法",
+      "不修改 public C1/Gate1/DSR/admission 生产文件",
+      "不读取真实数据、凭据、provider、lake/NAS 或 runtime",
+      "不执行 publish/deploy/trading/Git remote write"
+    ]
+  },
+  "feature_refs": ["effective.trial.offline.estimator"],
+  "feature_context": "S01 只建立 estimator-only internal contract；public C1 projection 已拆出，S02/S03 串行依赖本 Story。",
+  "cr_delta": {
+    "summary": "新增一个 standalone evidence 模块和定向合同测试；既有 production 文件修改数为 0。",
+    "affected_contracts": ["seven-field evidence", "canonical attempt basis", "stable computation identity", "external attempt audit", "F01-F08 precedence"]
+  },
+  "acceptance": [
+    "七字段 schema=7/7，缺失输入 present=0",
+    "F01-F08 state/reason 映射=8/8，raw/default/orphan 接受数=0",
+    "canonical representation 唯一且 Decimal-to-float 路径=0",
+    "同 basis 三次执行得到 1 computation ref、1 evidence hash、3 external audit refs",
+    "strategy identity、public dependency/call/diff/write=0"
+  ],
+  "dependency_inputs": [
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-LLD.md",
+    "process/checkpoints/CP5-CR173-ALL-STORIES-LLD-BATCH.md"
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "reason": "machine_state", "required": true, "mode": "full"},
+    {"path": "process/current/CURRENT.json", "reason": "current_entrypoint", "required": true, "mode": "full"},
+    {"path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md", "reason": "story_card", "required": true, "mode": "full"},
+    {"path": "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-LLD.md", "reason": "approved_contract", "required": true, "mode": "full"},
+    {"path": "process/policies/READ-POLICY.json", "reason": "read_policy", "required": true, "mode": "full"}
+  ],
+  "allowed_reads": [
+    {"path": "docs/features/effective-trial-offline-estimator/DESIGN.md", "reason": "feature_contract", "required": false, "mode": "full"},
+    {"path": "docs/features/effective-trial-offline-estimator/TEST-PLAN.md", "reason": "test_contract", "required": false, "mode": "full"},
+    {"path": "engine/experiment_family_lineage.py", "reason": "read_only_public_boundary_audit", "required": false, "mode": "scoped"}
+  ],
+  "read_if_needed": [],
+  "do_not_read_by_default": [
+    {"path_or_pattern": "process/archive/**", "reason": "cold_history"},
+    {"path_or_pattern": "process/discussions/**", "reason": "not_implementation_truth"},
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_fallback"}
+  ],
+  "allowed_write_paths": [
+    "engine/effective_trial_evidence.py",
+    "tests/research/test_effective_trial_evidence_contracts.py",
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization.md",
+    "process/stories/STORY-CR173-S01-contract-evidence-canonicalization-IMPLEMENTATION.md",
+    "process/returns/CR173-S01-contract-evidence-canonicalization.CP6.return.json",
+    "process/evidence/CR173-S01-contract-evidence-canonicalization.CP6.index.json",
+    "process/checks/CP6-CR173-S01-IMPLEMENTATION-DONE.result.json",
+    "process/checks/CP6-CR173-S01-IMPLEMENTATION-DONE.result.summary.md"
+  ],
+  "forbidden_write_paths": [
+    "engine/experiment_family_lineage.py",
+    "engine/experiment_family_lineage_store.py",
+    "engine/strategy_admission_statistical_gate.py",
+    "engine/statistical_evidence.py",
+    "engine/multiple_testing_evidence.py",
+    "engine/overfit_evidence.py",
+    "engine/cross_strategy_reliability_gates.py",
+    "engine/strategy_admission_package.py",
+    "process/archive/**"
+  ],
+  "verification_plan": [
+    "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py",
+    "PYTHONPYCACHEPREFIX=/tmp/cr173-s01-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py",
+    "git diff --check -- engine/effective_trial_evidence.py tests/research/test_effective_trial_evidence_contracts.py"
+  ],
+  "authz_policy_refs": ["NO_CREDENTIAL_READ", "NO_RUNTIME", "NO_REAL_LAKE_READ_OR_WRITE", "NO_PRODUCTION_WRITE", "NO_TRADING", "NO_GIT_REMOTE_WRITE"],
+  "expected_return_packet": "process/returns/CR173-S01-contract-evidence-canonicalization.CP6.return.json",
+  "lld_policy": "full-lld",
+  "risk_profile": "methodology-high",
+  "parent_context_ref": "process/context/CP6-CR173.context.json"
+}

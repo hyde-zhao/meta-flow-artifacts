@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "story_id": "CR173-S02-exact-spectral-estimator",
+  "stage": "CP6",
+  "attempt": 1,
+  "status": "implemented",
+  "work_packet_ref": "process/context/stories/STORY-CR173-S02.CP6.work-packet.json",
+  "summary": "实现 exact-rational matrix domain、deterministic fraction-free LDLT、participation ratio、一次 half-even 与 standalone evidence；S01+S02 targeted regression 87/87 PASS。",
+  "touched_files": [
+    {
+      "path": "engine/effective_trial_estimator.py",
+      "operation": "create",
+      "purpose": "S02 exact-rational validator、PSD proof、formula 与 facade"
+    },
+    {
+      "path": "tests/research/test_effective_trial_estimator.py",
+      "operation": "create",
+      "purpose": "S02 numeric/domain/determinism/authorization unit tests"
+    },
+    {
+      "path": "process/stories/STORY-CR173-S02-exact-spectral-estimator.md",
+      "operation": "modify",
+      "purpose": "回写 CP6 实现与验证就绪状态"
+    },
+    {
+      "path": "process/stories/STORY-CR173-S02-exact-spectral-estimator-IMPLEMENTATION.md",
+      "operation": "create",
+      "purpose": "S02 实现合同映射与 QA 交接"
+    },
+    {
+      "path": "process/returns/CR173-S02-exact-spectral-estimator.CP6.return.json",
+      "operation": "create",
+      "purpose": "CP6 Story return packet"
+    },
+    {
+      "path": "process/evidence/CR173-S02-exact-spectral-estimator.CP6.index.json",
+      "operation": "create",
+      "purpose": "CP6 evidence index"
+    },
+    {
+      "path": "process/checks/CP6-CR173-S02-IMPLEMENTATION-DONE.result.json",
+      "operation": "create",
+      "purpose": "CP6 machine result"
+    },
+    {
+      "path": "process/checks/CP6-CR173-S02-IMPLEMENTATION-DONE.result.summary.md",
+      "operation": "create",
+      "purpose": "CP6 human summary"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "allowed_write_paths_only": true,
+    "unexpected_write_paths": [],
+    "forbidden_paths_touched": [],
+    "forbidden_write_paths_touched": [],
+    "unexpected_imports": [],
+    "public_c1_changes": 0,
+    "public_dependency_edges": 0,
+    "public_calls": 0,
+    "real_data_operations": 0,
+    "runtime_operations": 0,
+    "credential_operations": 0,
+    "git_remote_operations": 0
+  },
+  "verification_commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q tests/research/test_effective_trial_evidence_contracts.py tests/research/test_effective_trial_estimator.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "87 passed in 0.17s"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s02-pycompile uv run --python 3.11 python -m py_compile engine/effective_trial_evidence.py engine/effective_trial_estimator.py tests/research/test_effective_trial_estimator.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "3/3 modules compiled"
+    },
+    {
+      "command": "git diff --check -- engine/effective_trial_estimator.py tests/research/test_effective_trial_estimator.py",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "whitespace errors=0"
+    },
+    {
+      "command": "S02 static public/numeric boundary scan",
+      "result": "PASS",
+      "exit_code": 0,
+      "summary": "public dependency/call=0/0; numpy/scipy/float/random/clamp path=0"
+    }
+  ],
+  "verification": {
+    "result": "PASS",
+    "commands_run": [
+      {
+        "command": "S01+S02 targeted pytest",
+        "result": "PASS",
+        "exit_code": 0,
+        "summary": "87/87"
+      },
+      {
+        "command": "py_compile and diff hygiene",
+        "result": "PASS",
+        "exit_code": 0,
+        "summary": "3/3 compiled; whitespace errors=0"
+      },
+      {
+        "command": "numeric and authorization static checks",
+        "result": "PASS",
+        "exit_code": 0,
+        "summary": "forbidden numeric/public paths=0"
+      }
+    ],
+    "evidence_refs": [
+      "process/stories/STORY-CR173-S02-exact-spectral-estimator-IMPLEMENTATION.md#10-验证结果"
+    ]
+  },
+  "read_expansion_refs": [
+    "RE-20260717T030737Z0000-d255dc00"
+  ],
+  "design_delta_refs": [],
+  "contract_changes": {
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "严格实现 LLD v1.3；HLD/Feature/LLD/S01 normative contract delta=0"
+  },
+  "risks": [
+    "R-CR173-EXACT-INTEGER-GROWTH：当前 fixture 最大 n=4；不声明 production SLA，CR172 PATH-C/A 或真实规模目标前重评",
+    "R-CR173-SECOND-ORDER-MODEL-BIAS：输出仅为二阶相关结构有效维度，不用于 FWER/DSR/admission calibration"
+  ],
+  "waivers": [],
+  "next_route": "CR173-S02-CP7-VERIFICATION",
+  "completed_at": "2026-07-17T11:12:37+08:00"
+}

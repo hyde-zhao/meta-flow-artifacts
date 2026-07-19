@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-CR172-S04-IMPLEMENTATION-DONE",
+  "profile": "runtime-high-risk-design",
+  "story_id": "CR172-S04-execution-cache-materialization",
+  "cr_id": "CR-172",
+  "context_ref": "process/context/stories/STORY-CR172-S04.CP6.work-packet.json",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "dispatch_refs": ["AD-CR172-S04-CP6-META-DEV-20260718T220202+0800"],
+  "return_ref": "process/returns/CR172-S04-execution-cache-materialization.CP6.return.json",
+  "evidence_ref": "process/evidence/CR172-S04-execution-cache-materialization.CP6.index.json",
+  "result_summary_ref": "process/checks/CP6-CR172-S04-IMPLEMENTATION-DONE.result.summary.md",
+  "items": [
+    {
+      "id": "CP6-S04-ENTRY-01",
+      "category": "entry-criteria",
+      "name": "CP5 confirmed, S01/S02/S03 dependencies satisfied and S04 file ownership is conflict-free",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/context/stories/STORY-CR172-S04.CP6.work-packet.json", "process/stories/STORY-CR172-S04-execution-cache-materialization.md"],
+      "owner": "meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Story dev_gate all true; full LLD confirmed=true/open_items=0; read expansion RE-20260718T135844Z0000-fe3e2b3f consumed."
+    },
+    {
+      "id": "CP6-S04-SELECTION-01",
+      "category": "design-contract",
+      "name": "S03 current distribution selection is the only data source and S02 verifier is called exactly once per complete staging candidate",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["engine/research_artifact_materialization.py", "tests/research/test_cr172_execution_materialization.py"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "selected-read/verifier call sites=1/1; typed staging=3/3; bypass-S03/receipt-only/secondary seal digest facade=0/0/0."
+    },
+    {
+      "id": "CP6-S04-INTEGRITY-01",
+      "category": "design-contract",
+      "name": "Expected release, manifest, original seal and content bytes verification is four of four",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["engine/research_artifact_materialization.py", "tests/research/test_cr172_execution_materialization.py#test_t_s04_p01_normal_materialization_exact_types_four_of_four", "tests/research/test_cr172_execution_materialization.py#test_t_s04_f03_tampered_seal_bytes_fail_in_the_single_s02_verifier"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "4/4 required; any mismatch or tampered seal yields cache/receipt/pointer=0/0/0 and no fallback verifier."
+    },
+    {
+      "id": "CP6-S04-ATOMIC-01",
+      "category": "design-contract",
+      "name": "Immutable cache, fresh commit guard and single CAS preserve previous selection on all failure classes",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["engine/research_artifact_materialization.py", "tests/research/test_cr172_execution_materialization.py#test_t_s04_n03_fresh_commit_revoke_and_replica_drift_preserve_pointer", "tests/research/test_cr172_execution_materialization.py#test_t_s04_f02_immutable_and_cas_conflicts_preserve_previous_cache"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "content-addressed version never overwrites; idempotent reuse requires identical bytes; commit decision strictly newer; CAS max=1."
+    },
+    {
+      "id": "CP6-S04-IDENTITY-01",
+      "category": "design-contract",
+      "name": "Receipt and cache selection identity exclude physical paths while runtime boundary exposes only a selected local handle",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["tests/research/test_cr172_execution_materialization.py#test_t_s04_b01_physical_mapping_is_excluded_from_receipt_identity", "tests/research/test_cr172_execution_materialization.py#test_t_s04_b02_only_selected_execution_local_handle_is_resolvable"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "cross-root receipt hash distinct count=1; physical handle bytes in canonical body=0; source_kind fixed to execution_local_immutable_cache."
+    },
+    {
+      "id": "CP6-S04-BOUNDARY-01",
+      "category": "permission-boundary",
+      "name": "Only eight packet outputs are touched and all real operations remain zero",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/returns/CR172-S04-execution-cache-materialization.CP6.return.json#boundary_check", "tests/research/test_cr172_execution_materialization.py#test_t_s04_b03_recovery_dependency_and_zero_real_operation_guard"],
+      "owner": "meta-dev",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "S01/S02/S03/S05/docs/state/current/plan/ledgers untouched; NAS/lake/execution/runtime/network/credential/signal/trading/deploy/Git remote=0."
+    },
+    {
+      "id": "CP6-S04-VERIFICATION-01",
+      "category": "automated-verification",
+      "name": "Sixteen S04 tests, 124 combined regressions, compile, whitespace and machine checks pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/evidence/CR172-S04-execution-cache-materialization.CP6.index.json"],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "16/16 and 124/124; failed/skipped=0/0; test ID duplicate=0; compile exit=0; whitespace diagnostics=0/2; Return/Result checks OK."
+    },
+    {
+      "id": "CP6-S04-ROUTE-01",
+      "category": "stage-decision",
+      "name": "CP6 PASS returns S04 to Host as ready for independent CP7 without starting S05",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/returns/CR172-S04-execution-cache-materialization.CP6.return.json", "process/stories/STORY-CR172-S04-execution-cache-materialization.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Host owns terminal correlation, state transition, CP7 dispatch and later S05 unlock."
+    }
+  ],
+  "entry_criteria": [
+    {"name": "Process route health and active S04 CP6 packet are confirmed", "status": "PASS", "evidence_ref": "process/current/CURRENT.json"},
+    {"name": "CP5 full LLD is confirmed with open items zero", "status": "PASS", "evidence_ref": "process/stories/STORY-CR172-S04-execution-cache-materialization-LLD.md"},
+    {"name": "S01/S02/S03 dependency and ownership gates are satisfied", "status": "PASS", "evidence_ref": "process/context/stories/STORY-CR172-S04.CP6.work-packet.json"}
+  ],
+  "exit_criteria": [
+    {"name": "S03 current selection is the only source and S02 verifier call is exactly once", "status": "PASS"},
+    {"name": "Expected release/manifest/original seal/content verification is four of four", "status": "PASS"},
+    {"name": "Immutable cache and fresh decision/selection guard protect every CAS", "status": "PASS"},
+    {"name": "Only execution-local selected handle can cross the future runtime boundary", "status": "PASS"},
+    {"name": "All 124 regressions and packet checks pass", "status": "PASS"},
+    {"name": "No forbidden write or real operation occurred", "status": "PASS"}
+  ],
+  "deliverables": [
+    "engine/research_artifact_materialization.py",
+    "tests/research/test_cr172_execution_materialization.py",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization.md",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization-IMPLEMENTATION.md",
+    "process/returns/CR172-S04-execution-cache-materialization.CP6.return.json",
+    "process/evidence/CR172-S04-execution-cache-materialization.CP6.index.json",
+    "process/checks/CP6-CR172-S04-IMPLEMENTATION-DONE.result.json",
+    "process/checks/CP6-CR172-S04-IMPLEMENTATION-DONE.result.summary.md"
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260718T135844Z0000-fe3e2b3f"],
+  "decision": "PASS",
+  "stop_reason": null,
+  "next_route": "ready_for_cp7",
+  "checked_at": "2026-07-18T22:28:04+08:00",
+  "check_attempt": 1,
+  "workflow_health": {
+    "story_rework_count": 0,
+    "cp_retry_count": 0,
+    "threshold_reached": false,
+    "threshold_route_triggered": false,
+    "reason": "CP6 first-pass implementation and all scoped checks PASS"
+  },
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR172-S04.CP6.work-packet.json": "sha256:60278e539ded88b9dc6c8545fe55da1711cab11651c64f8b3b74afa9e33f27c0",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization.md": "sha256:c8d2c0b5d29c439330c58f910f53bc3590d568ab08d64b68eba0095f4089ec88",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization-LLD.md": "sha256:f1c79b7c1624035d80a7e0b94306a24064f5447bbca0616b9d598a61594bff85",
+    "engine/path_i_governance.py": "sha256:bc6abc95a0e660d71fce5567195ef6bff037e0919403b5d400841c579cc82abf",
+    "engine/trial_return_artifact.py": "sha256:923fc5e5baaafea88b6cb98d26de5d95b5d43d848fcf0cd51fc41a1190b645f0",
+    "engine/research_artifact_replica.py": "sha256:533d34f79e6481dd4bb2bcdb45776c186cb6e3f1a1f6994640f3382f6e466026",
+    "engine/research_artifact_materialization.py": "sha256:cf7f521582b5c1363700f45226f96d94c1098f0c674738279be10a43e8ad9868",
+    "tests/research/test_cr172_execution_materialization.py": "sha256:b15ed3a92bb4594950f8dbbf0aec78649d75897b3764c4c96ec377697c3739ee",
+    "process/stories/STORY-CR172-S04-execution-cache-materialization-IMPLEMENTATION.md": "sha256:99e126fba686d6aed415c2c0faba87512554d65cd5e9febc445ce94f1aefa504",
+    "process/returns/CR172-S04-execution-cache-materialization.CP6.return.json": "sha256:b44e645ea6b0477aa0e7e60206db6d90615f20500f36e37dd10b285d02f39686",
+    "process/evidence/CR172-S04-execution-cache-materialization.CP6.index.json": "sha256:52d763f29d1c9d0b414c4018b748cb53678011a1ff176589bc2e8ff08e723218"
+  }
+}

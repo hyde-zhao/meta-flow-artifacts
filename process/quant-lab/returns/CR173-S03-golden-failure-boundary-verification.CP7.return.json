@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "story_id": "CR173-S03-golden-failure-boundary-verification",
+  "stage": "CP7",
+  "attempt": 1,
+  "status": "needs_rework",
+  "source_context_ref": "process/context/stories/STORY-CR173-S03.CP7.verify-packet.json",
+  "summary": "Combined 376/376、pycompile 与 diff 均通过，但 authorization AST guard 可被真实 network/subprocess/write/credential/git/public-alias 形态简单绕过；S03 必须回修。",
+  "touched_files": [
+    {
+      "path": "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md",
+      "action": "created",
+      "owner": "meta-qa-critical"
+    },
+    {
+      "path": "process/returns/CR173-S03-golden-failure-boundary-verification.CP7.return.json",
+      "action": "created",
+      "owner": "meta-qa-critical"
+    },
+    {
+      "path": "process/evidence/CR173-S03-golden-failure-boundary-verification.CP7.index.json",
+      "action": "created",
+      "owner": "meta-qa-critical"
+    },
+    {
+      "path": "process/checks/CP7-CR173-S03-VERIFICATION.result.json",
+      "action": "created",
+      "owner": "meta-qa-critical"
+    },
+    {
+      "path": "process/checks/CP7-CR173-S03-VERIFICATION.result.summary.md",
+      "action": "created",
+      "owner": "meta-qa-critical"
+    }
+  ],
+  "contract_changes": {
+    "changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "normative_contract_delta_count": 0,
+    "public_contract_change_count": 0,
+    "summary": "finding 要求实现满足已批准 S03 LLD；不修改 HLD/ADR/Feature/public C1 合同。"
+  },
+  "boundary_check": {
+    "allowed_write_paths_only": true,
+    "forbidden_write_count": 0,
+    "implementation_write_count": 0,
+    "public_production_diff_count": 0,
+    "existing_expected_edit_count": 0,
+    "real_data_operation_count": 0,
+    "credential_operation_count": 0,
+    "runtime_operation_count": 0,
+    "trading_operation_count": 0,
+    "publish_deploy_operation_count": 0,
+    "git_remote_write_count": 0,
+    "guard_false_negative_count": 6,
+    "notes": "当前工程资产未发生越权操作；但 guard 对六类对抗形态返回假阴性。"
+  },
+  "verification_commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_ADDOPTS='-p no:cacheprovider' uv run --python 3.11 pytest -q <CR173 targeted 4 + authoritative public 12 modules>",
+      "status": "PASS",
+      "exit_code": 0,
+      "summary": "376 passed in 1.85s"
+    },
+    {
+      "command": "PYTHONPYCACHEPREFIX=/tmp/cr173-s03-cp7-pycompile uv run --python 3.11 python -m py_compile tests/research/test_effective_trial_cr173_qac.py tests/research/test_effective_trial_authorization.py",
+      "status": "PASS",
+      "exit_code": 0,
+      "summary": "2/2 modules compiled"
+    },
+    {
+      "command": "git diff --check -- tests/fixtures/effective_trial/golden_vectors_v1.json tests/research/test_effective_trial_cr173_qac.py tests/research/test_effective_trial_authorization.py",
+      "status": "PASS",
+      "exit_code": 0,
+      "summary": "whitespace errors=0"
+    },
+    {
+      "command": "git status --short -- <CR173 7 assets + public production 8 + existing expected 12>",
+      "status": "PASS",
+      "exit_code": 0,
+      "summary": "只有 7 个 CR173 新资产；8 production 与 12 expected 均 0 修改"
+    },
+    {
+      "command": "adversarial in-memory AST authorization probe",
+      "status": "FAIL",
+      "exit_code": 1,
+      "summary": "urllib.request/subprocess.run/os.replace/os.environ/public alias 均未命中；NP-01..09=0、public edge/call=0"
+    }
+  ],
+  "verification": {
+    "status": "NEEDS_REWORK",
+    "validation_mode": "mixed",
+    "tests_passed": 376,
+    "tests_failed": 0,
+    "adversarial_checks_passed": 1,
+    "adversarial_checks_failed": 6,
+    "blocking_findings": 1,
+    "commands_run": [
+      {
+        "command": "combined targeted + public read-only pytest",
+        "result": "PASS",
+        "evidence": "376/376"
+      },
+      {
+        "command": "pycompile + diff + path truth",
+        "result": "PASS",
+        "evidence": "compile=2/2；whitespace=0；8+12 modified=0"
+      },
+      {
+        "command": "authorization adversarial probes",
+        "result": "FAIL",
+        "evidence": "ordinary string/replace non-false-positive=1；real bypass variants undetected=6"
+      }
+    ],
+    "summary": "现有套件全部通过，但静态授权 guard 的真实越界检测存在阻断性假阴性。"
+  },
+  "acceptance": {
+    "golden_classes": "6/6",
+    "repeats_per_class": "3/3",
+    "stable_computation_and_evidence_per_group": "1/1",
+    "external_audits_per_group": "3/3",
+    "failure_classes": "8/8",
+    "returned_basis_comparisons": "8x7/8x7",
+    "evidence_fields": "7/7",
+    "public_read_only_inventory": "12/12",
+    "authorization_guard_adversarial": "FAIL",
+    "public_effective_trial_count_populatable": false,
+    "c1_computable": false,
+    "cr172_auto_resume_count": 0,
+    "cr172_auto_close_count": 0
+  },
+  "findings": [
+    {
+      "id": "F-CP7-S03-001",
+      "severity": "HIGH",
+      "blocking": true,
+      "status": "OPEN",
+      "summary": "authorization AST guard 可被真实 network/subprocess/write/credential/git/public-alias 形态简单绕过",
+      "owner": "meta-dev"
+    }
+  ],
+  "evidence_refs": [
+    "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md",
+    "process/returns/CR173-S03-golden-failure-boundary-verification.CP6.return.json",
+    "process/evidence/CR173-S03-golden-failure-boundary-verification.CP6.index.json"
+  ],
+  "read_expansion_refs": [
+    "RE-20260717T035453Z0000-c03q1101"
+  ],
+  "risks": [
+    {
+      "id": "R-CR173-SCOPE-ESCAPE",
+      "status": "open_blocking_guard_false_negative"
+    },
+    {
+      "id": "R-CR173-EXACT-INTEGER-GROWTH",
+      "status": "accepted_fixture_only_recheck_before_real_scale"
+    },
+    {
+      "id": "R-CR173-PUBLIC-MIGRATION",
+      "status": "deferred_future_projection_cr"
+    },
+    {
+      "id": "R-CR173-SECOND-ORDER-MODEL-BIAS",
+      "status": "claim_limited_to_effective_dimensionality"
+    }
+  ],
+  "waivers": [],
+  "design_delta_refs": [],
+  "open_questions": [],
+  "next_route": "meta-dev",
+  "next_stage_recommendation": "rework_same_story",
+  "completed_at": "2026-07-17T11:58:27+08:00"
+}

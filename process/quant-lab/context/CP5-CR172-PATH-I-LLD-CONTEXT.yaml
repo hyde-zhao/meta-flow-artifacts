@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "capsule_id": "CP5-CR172-PATH-I-LLD-20260718",
+  "project_id": "quant-lab",
+  "workflow_id": "CR-172",
+  "cr_id": "CR-172",
+  "stage": "CP5",
+  "checkpoint": "CP5",
+  "phase": "story-planning",
+  "profile": "runtime-high-risk-design",
+  "status": "ready_for_cp5_human_gate",
+  "created_at": "2026-07-18T10:45:00+08:00",
+  "updated_at": "2026-07-18T12:55:01+08:00",
+  "created_by": "host-orchestrator",
+  "state_ref": "process/state/STATE.current.json",
+  "cr_index_ref": "process/changes/CR-INDEX.json",
+  "cr_summary_ref": "process/changes/summaries/CR-172.summary.json",
+  "read_policy_ref": "process/policies/READ-POLICY.json",
+  "required_full_doc_read_log": "process/state/READ-EXPANSION-LEDGER.ndjson",
+  "policy_refs": {
+    "read_policy": "process/policies/READ-POLICY.json",
+    "artifact_budgets": "process/policies/ARTIFACT-BUDGETS.json",
+    "authz_policy": "process/policies/AUTHZ-POLICY.json",
+    "gate_profiles": "process/policies/GATE-PROFILES.json"
+  },
+  "full_doc_read_allowed_when": [
+    "capsule_missing",
+    "field_conflict",
+    "human_audit",
+    "deep_review",
+    "schema_validation_failed"
+  ],
+  "read_profile": "compact",
+  "context_policy": {
+    "capsule_first": true,
+    "read_profile": "compact",
+    "full_doc_read_policy": "only-on-missing-conflict-audit-or-deep-review",
+    "full_doc_read_reason_required": true,
+    "read_expansion_ledger_ref": "process/state/READ-EXPANSION-LEDGER.ndjson"
+  },
+  "budget": {
+    "max_tokens": 22000,
+    "estimated_tokens": 19600,
+    "estimator": "curated-compact-sections"
+  },
+  "allowed_reads": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "reason": "machine_state_and_authorization_boundary", "required": true},
+    {"path": "process/current/CURRENT.json", "mode": "full", "reason": "current_discovery_entry", "required": true},
+    {"path": "process/policies/READ-POLICY.json", "mode": "full", "reason": "read_policy", "required": true},
+    {"path": "process/changes/summaries/CR-172.summary.json", "mode": "full", "reason": "current_cr_summary", "required": true},
+    {"path": "process/checks/CP4-CR172-PATH-I-STORY-DAG-PARALLEL-SAFETY.result.json", "mode": "compact", "reason": "approved_story_dag_coverage_owner_and_scope_input", "required": true},
+    {"path": "docs/features/trial-return-artifact-pipeline/DESIGN.md", "mode": "sections", "reason": "feature_contract_and_unique_native_hook", "required": true},
+    {"path": "docs/features/trial-return-artifact-pipeline/TEST-PLAN.md", "mode": "sections", "reason": "schema_seal_failure_and_hook_tests", "required": true},
+    {"path": "docs/features/trial-return-artifact-pipeline/TASKS.md", "mode": "sections", "reason": "story_task_contract", "required": true},
+    {"path": "docs/features/research-artifact-replica-materialization/DESIGN.md", "mode": "sections", "reason": "replica_and_execution_cache_contract", "required": true},
+    {"path": "docs/features/research-artifact-replica-materialization/TEST-PLAN.md", "mode": "sections", "reason": "replica_materialization_failure_tests", "required": true},
+    {"path": "docs/features/research-artifact-replica-materialization/TASKS.md", "mode": "sections", "reason": "story_task_contract", "required": true},
+    {"path": "docs/features/path-i-authorization-claim-governance/DESIGN.md", "mode": "sections", "reason": "six_action_records_execution_dag_and_claim_contract", "required": true},
+    {"path": "docs/features/path-i-authorization-claim-governance/TEST-PLAN.md", "mode": "sections", "reason": "authorization_and_zero_operation_tests", "required": true},
+    {"path": "docs/features/path-i-authorization-claim-governance/TASKS.md", "mode": "sections", "reason": "story_task_contract", "required": true},
+    {"path": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance.md", "mode": "full", "reason": "s01_lld_source_contract", "required": true},
+    {"path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook.md", "mode": "full", "reason": "s02_lld_source_contract", "required": true},
+    {"path": "process/stories/STORY-CR172-S03-nas-replica-verification.md", "mode": "full", "reason": "s03_lld_source_contract", "required": true},
+    {"path": "process/stories/STORY-CR172-S04-execution-cache-materialization.md", "mode": "full", "reason": "s04_lld_source_contract", "required": true},
+    {"path": "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification.md", "mode": "full", "reason": "s05_lld_source_contract", "required": true}
+  ],
+  "must_read": [
+    {"path": "process/state/STATE.current.json", "mode": "full", "reason": "machine_state", "required": true},
+    {"path": "process/current/CURRENT.json", "mode": "full", "reason": "current_entrypoint", "required": true},
+    {"path": "process/policies/READ-POLICY.json", "mode": "full", "reason": "read_policy", "required": true},
+    {"path": "process/checks/CP4-CR172-PATH-I-STORY-DAG-PARALLEL-SAFETY.result.json", "mode": "compact", "reason": "cp4_approved_design_queue", "required": true}
+  ],
+  "read_if_needed": [
+    {"path": "docs/design/HLD-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md", "mode": "sections", "reason": "deep_contract_or_failure_path_review", "full_doc_read_reason": "deep_review", "required": false},
+    {"path": "docs/design/ARCHITECTURE-DECISION-TRIAL-RETURN-DEPLOYMENT-CONTRACTS.md", "mode": "sections", "reason": "adr_ownership_and_evolution_review", "full_doc_read_reason": "deep_review", "required": false},
+    {"path": "engine/mature_multifactor_research.py", "mode": "scoped-symbol", "reason": "s02_unique_native_hook_source_inventory", "full_doc_read_reason": "deep_review", "required": false},
+    {"path": "engine/experiment_family_lineage.py", "mode": "scoped-symbol", "reason": "lineage_ref_boundary_audit", "full_doc_read_reason": "deep_review", "required": false},
+    {"path": "process/DEVELOPMENT-PLAN.yaml#cr172_path_i_story_planning", "mode": "scoped-section", "reason": "dependency_or_owner_conflict_audit_only", "required": false},
+    {"path": "docs/design/FEATURE-DESIGN-MATRIX.md#cr172-path-i-cp4-增量trial-return-与跨机部署合同", "mode": "scoped-section", "reason": "lld_policy_and_feature_trace_audit", "required": false}
+  ],
+  "do_not_read_by_default": [
+    "docs/design/HLD.md",
+    "docs/design/ARCHITECTURE-DECISION.md",
+    "docs/product/TEST-MATRIX.md",
+    "docs/quality/TEST-REPORT.md",
+    "docs/quality/REVIEW.md",
+    {"path_or_pattern": "process/STATE.md", "reason": "human_summary_legacy_fallback"},
+    {"path_or_pattern": "process/DEVELOPMENT-PLAN.yaml", "reason": "only_scoped_section_if_dependency_audit_is_needed"},
+    {"path_or_pattern": "process/archive/**", "reason": "history_outside_current_cr"},
+    {"path_or_pattern": "process/discussions/**", "reason": "discussion_log_not_default_lld_input"},
+    {"path_or_pattern": "docs/product/TEST-MATRIX.md", "reason": "coverage_is_compacted_in_cp4_result"},
+    {"path_or_pattern": "docs/design/HLD.md", "reason": "global_hld_outside_cr172_scope"},
+    {"path_or_pattern": "docs/design/ARCHITECTURE-DECISION.md", "reason": "global_adr_outside_cr172_scope"},
+    {"path_or_pattern": "docs/quality/TEST-REPORT.md", "reason": "historical_quality_report_not_design_input"},
+    {"path_or_pattern": "docs/quality/REVIEW.md", "reason": "historical_review_not_design_input"},
+    {"path_or_pattern": "process/changes/*.md", "reason": "use_machine_cr_summary_unless_human_audit"},
+    {"path_or_pattern": "process/stories/*-LLD.md", "reason": "agents_write_only_assigned_lld_files"},
+    {"path_or_pattern": "process/stories/*-IMPLEMENTATION.md", "reason": "implementation_is_forbidden_before_cp5_approval"}
+  ],
+  "denied_default_reads": [
+    "process/STATE.md",
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/archive/**",
+    "process/discussions/**",
+    "docs/design/HLD.md",
+    "docs/design/ARCHITECTURE-DECISION.md",
+    "docs/product/TEST-MATRIX.md",
+    "docs/quality/TEST-REPORT.md",
+    "docs/quality/REVIEW.md",
+    "process/changes/*.md",
+    "process/stories/*-LLD.md except assigned evidence_path",
+    "process/stories/*-IMPLEMENTATION.md"
+  ],
+  "read_expansion_log": [
+    {"at": "2026-07-18T10:45:00+08:00", "actor": "host-orchestrator", "expanded_to": "CR172-specific HLD/ADR and scoped producer symbols", "reason": "deep_review_for_full_lld"},
+    {"at": "2026-07-18T11:20:42+08:00", "actor": "host-orchestrator+meta-qa-critical", "expanded_to": "mature runner and append-only lineage scoped symbols", "reason": "independent_review_found_source_fact_conflict"}
+  ],
+  "key_facts": {
+    "return_definition": "trial_portfolio_return_series@v1 canonical payload has exactly timestamp and simple_return; return_basis is explicit manifest metadata; net_return, gross_return and nav require a versioned ADR plus schema bump and may require a separate CR.",
+    "native_producer_disposition": "No identifiable native multi-trial portfolio-period-return producer exists in the current repository. Existing mature runner and lineage diffs are 0/0; forward_label_proxy@v1 is denied as trial-return, empirical-R and effective-count input. A real producer and atomic lineage/correction path are independent high-risk prerequisites.",
+    "fixture_contract_boundary": "This CR implements only repository-local pure contracts and fixture ports. ActionDecisionOriginV1 and ActionScopeContextV1.target_kind make fixture+real accepted/side-effect=0/0; six real actions remain authorized/executed=0/6,0/6.",
+    "seal_truth": "S02 owns canonical_artifact_seal_bytes, canonical_artifact_seal_sha256 and verify_sealed_trial_return_bundle; S03 provides only current selected-replica data and creates no digest or verifier facade; S04 directly calls the S02 verifier-library exactly once per complete candidate.",
+    "authorization_dag": "data_lake_read -> multi_trial_runtime_and_workspace_write -> trial_return_generation -> empirical_R_computation; trial_return_generation -> nas_replica_sync -> execution_pull_verify_materialize. Approval records remain independent; no union.",
+    "claim_ceiling": "PATH-I delivers repository-local contracts and fixture-verifiable guards only; stage3_entry_ready, c1_computable, real_data_authorized, multi_trial_runtime_authorized and signal_transport_authorized remain false."
+  },
+  "independent_review": {
+    "rounds": 4,
+    "final_decision": "proceed",
+    "blocking": 0,
+    "required": 0,
+    "optional": 0,
+    "final_findings_ref": "process/checks/CP5-CR172-LLD-REVIEW-R4-FINDINGS.md",
+    "final_summary_ref": "process/checks/CP5-CR172-LLD-REVIEW-R4-SUMMARY.md",
+    "optional_item": "CLOSED before CP6: five LLD authority pointers now name HLD/ADR v1.4, S01 F-04 uses full action kinds, and S05 I01 TEST-PLAN names v1.2; normative delta=0."
+  },
+  "non_authorized_scope": [
+    "code, test or fixture implementation before CP5 approval",
+    "real data lake or NAS read/write/sync/materialization",
+    "multi-trial runtime, trial-return generation or empirical-R computation",
+    "directory creation outside repository or legacy migration/default switch",
+    "SignalBatch transport/ack/replay, trading, publish/deploy or Git remote write",
+    "FU-CR173-001 empirical method v2 or public C1 positive projection"
+  ],
+  "lld_design_batch": {
+    "batch_id": "CR172-PATH-I-ALL-AFFECTED-STORIES-FULL-LLD",
+    "source": "change",
+    "evidence_type": "five-independent-full-lld",
+    "expected_items": 5,
+    "completed_items": 5,
+    "confirmed_items": 5,
+    "clarification_items": 0,
+    "items": [
+      {"story_id": "CR172-S01-action-authorization-eligibility-governance", "design_evidence_type": "full-lld", "lld_policy_required_level": "full-lld", "evidence_path": "process/stories/STORY-CR172-S01-action-authorization-eligibility-governance-LLD.md", "status": "confirmed_v1.3"},
+      {"story_id": "CR172-S02-trial-return-artifact-native-hook", "design_evidence_type": "full-lld", "lld_policy_required_level": "full-lld", "evidence_path": "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook-LLD.md", "status": "confirmed_v1.3"},
+      {"story_id": "CR172-S03-nas-replica-verification", "design_evidence_type": "full-lld", "lld_policy_required_level": "full-lld", "evidence_path": "process/stories/STORY-CR172-S03-nas-replica-verification-LLD.md", "status": "confirmed_v1.3"},
+      {"story_id": "CR172-S04-execution-cache-materialization", "design_evidence_type": "full-lld", "lld_policy_required_level": "full-lld", "evidence_path": "process/stories/STORY-CR172-S04-execution-cache-materialization-LLD.md", "status": "confirmed_v1.3"},
+      {"story_id": "CR172-S05-path-i-integration-claim-zero-operation-verification", "design_evidence_type": "full-lld", "lld_policy_required_level": "full-lld", "evidence_path": "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-LLD.md", "status": "confirmed_v1.3"}
+    ]
+  },
+  "lld_clarification_queue": {
+    "status": "ready",
+    "active_question_batch": null,
+    "items": []
+  },
+  "dispatch": {
+    "target_role": "meta-dev",
+    "max_parallel_lld": 3,
+    "file_ownership_rule": "each agent writes only assigned LLD files and its return summary; shared plans, story cards, checkpoints, state and ledgers remain host-owned",
+    "exit_criteria": [
+      "five of five full LLD files exist and pass meta-flow story lld-check",
+      "current runner and lineage diffs are 0/0 and forward-label proxy misuse is 0/0/0",
+      "S02-to-S03 exact public types and single seal digest/verifier truth are correlated",
+      "all six real actions remain unauthorized and unexecuted",
+      "clarification queue has no blocking item",
+      "no code, tests, fixtures or real directories are created or modified"
+    ]
+  }
+}

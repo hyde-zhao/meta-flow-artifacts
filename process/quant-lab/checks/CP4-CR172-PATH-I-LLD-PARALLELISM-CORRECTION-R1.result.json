@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP4",
+  "checkpoint_id": "CP4-CR172-PATH-I-LLD-PARALLELISM-CORRECTION-R1",
+  "profile": "runtime-high-risk-design",
+  "story_id": null,
+  "cr_id": "CR-172",
+  "checked_at": "2026-07-18T11:06:00+08:00",
+  "context_ref": "process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml",
+  "route_plan_ref": "process/checks/CP0-CR172.route-plan.json",
+  "dispatch_refs": [
+    "AD-CR172-CP5-LLD-BATCH-A-20260718T104848+0800",
+    "AD-CR172-CP5-LLD-BATCH-B-20260718T104848+0800",
+    "AD-CR172-CP5-LLD-BATCH-C-20260718T104848+0800"
+  ],
+  "items": [
+    {
+      "id": "CP4-CR172-CORR-01",
+      "category": "internal-consistency",
+      "name": "LLD drafting concurrency is separated from serial development and QA Waves",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/DEVELOPMENT-PLAN.yaml#cr172_path_i_story_planning.parallel_policy", "process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml#dispatch"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Corrected max_parallel_lld from 1 to 3; max_parallel_dev/max_parallel_qa remain 1/1. This changes drafting orchestration only, not Story DAG, runtime dependencies, merge order or authorization."
+    },
+    {
+      "id": "CP4-CR172-CORR-02",
+      "category": "dependency",
+      "name": "Every downstream LLD gate consumes an already declared upstream contract",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/stories/STORY-CR172-S01-action-authorization-eligibility-governance.md", "process/stories/STORY-CR172-S02-trial-return-artifact-native-hook.md", "process/stories/STORY-CR172-S03-nas-replica-verification.md", "process/stories/STORY-CR172-S04-execution-cache-materialization.md", "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Contract/runtime LLD gates require declared ActionDecision, sealed bundle, replica receipt and materialization receipt contracts; implementation still waits for upstream merge/evidence."
+    },
+    {
+      "id": "CP4-CR172-CORR-03",
+      "category": "file-ownership",
+      "name": "Parallel LLD writers have disjoint evidence paths and no shared-file write",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml#lld_design_batch", "process/state/AGENT-DISPATCH-LEDGER.ndjson"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "reopen_cp5_design",
+      "waiver_ref": null,
+      "notes": "Five LLD paths are unique 5/5; three return summaries are unique 3/3; Story/Feature/plan/state/ledger/checkpoint writes by LLD agents were 0."
+    },
+    {
+      "id": "CP4-CR172-CORR-04",
+      "category": "scope",
+      "name": "Parallel drafting did not expand implementation or real-operation authority",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/handoffs/CR172-CP5-LLD-BATCH-A-META-DEV-RETURN-SUMMARY.md", "process/handoffs/CR172-CP5-LLD-BATCH-B-META-DEV-RETURN-SUMMARY.md", "process/handoffs/CR172-CP5-LLD-BATCH-C-META-DEV-RETURN-SUMMARY.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Source/test/fixture implementation=0; six real actions authorized/executed=0/6,0/6; development merge and QA remain serial S01->S02->S03->S04->S05."
+    }
+  ],
+  "entry_criteria": [
+    {"name": "Original CP4 result PASS", "status": "PASS", "evidence_ref": "process/checks/CP4-CR172-PATH-I-STORY-DAG-PARALLEL-SAFETY.result.json"},
+    {"name": "Five LLD drafts and three dispatch returns exist", "status": "PASS", "evidence_ref": "process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml"}
+  ],
+  "exit_criteria": [
+    {"name": "LLD drafting concurrency is explicit", "status": "PASS"},
+    {"name": "Development and QA remain serial", "status": "PASS"},
+    {"name": "Cross-LLD contract correlation is required before CP5", "status": "PASS"},
+    {"name": "No scope or authorization expansion occurred", "status": "PASS"}
+  ],
+  "deliverables": [
+    "process/DEVELOPMENT-PLAN.yaml",
+    "process/context/CP5-CR172-PATH-I-LLD-CONTEXT.yaml",
+    "process/checks/CP4-CR172-PATH-I-LLD-PARALLELISM-CORRECTION-R1.result.summary.md"
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": ["RE-20260718T030551Z0000-7269f3fb"],
+  "operation_counts": {
+    "lld_files": 5,
+    "parallel_lld_writers": 3,
+    "shared_lld_write_conflicts": 0,
+    "source_modified": 0,
+    "test_source_modified": 0,
+    "fixture_modified": 0,
+    "six_actions_authorized": 0,
+    "six_actions_executed": 0,
+    "real_operations": 0
+  },
+  "decision": "PASS",
+  "manual_gate_status": null,
+  "next_route": "CP5-cross-lld-correlation-and-independent-review"
+}

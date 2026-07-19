@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "project_id": "quant-lab",
+  "cr_id": "CR-173",
+  "story_id": "CR173-S03-golden-failure-boundary-verification",
+  "stage": "CP7",
+  "attempt": 2,
+  "status": "verified",
+  "source_context_ref": "process/context/stories/STORY-CR173-S03.CP7.reverify-1.packet.json",
+  "summary": "CP7R1 独立复验通过：原绕过与13个相邻operation变体均被唯一分类，2个public alias均命中，safe误报0；authorization 9/9、targeted 124/124、combined 379/379。",
+  "touched_files": [
+    {"path": "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md", "action": "modified", "owner": "meta-qa-critical"},
+    {"path": "process/returns/CR173-S03-golden-failure-boundary-verification.CP7R1.return.json", "action": "created", "owner": "meta-qa-critical"},
+    {"path": "process/evidence/CR173-S03-golden-failure-boundary-verification.CP7R1.index.json", "action": "created", "owner": "meta-qa-critical"},
+    {"path": "process/checks/CP7-CR173-S03-REVERIFY-1.result.json", "action": "created", "owner": "meta-qa-critical"},
+    {"path": "process/checks/CP7-CR173-S03-REVERIFY-1.result.summary.md", "action": "created", "owner": "meta-qa-critical"}
+  ],
+  "contract_changes": {
+    "changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null,
+    "summary": "CP6R1/CP7R1 仅落实批准 S03 LLD 的授权守卫；public/runtime 合同不变。"
+  },
+  "boundary_check": {
+    "allowed_write_paths_only": true,
+    "forbidden_write_count": 0,
+    "implementation_write_count": 0,
+    "public_production_diff_count": 0,
+    "existing_expected_edit_count": 0,
+    "real_data_operation_count": 0,
+    "credential_operation_count": 0,
+    "runtime_operation_count": 0,
+    "git_remote_write_count": 0,
+    "adversarial_false_negative_count": 0,
+    "safe_false_positive_count": 0
+  },
+  "verification_commands": [
+    {"command": "pytest -q tests/research/test_effective_trial_authorization.py", "status": "PASS", "exit_code": 0, "summary": "9 passed in 0.10s"},
+    {"command": "pytest -q <CR173 targeted 4 modules>", "status": "PASS", "exit_code": 0, "summary": "124 passed in 0.31s"},
+    {"command": "pytest -q <targeted + authoritative public 12 modules>", "status": "PASS", "exit_code": 0, "summary": "379 passed in 1.76s"},
+    {"command": "independent adjacent authorization probes", "status": "PASS", "exit_code": 0, "summary": "operation 13/13 unique；public alias 2/2；safe false positive=0"},
+    {"command": "py_compile + git diff --check", "status": "PASS", "exit_code": 0, "summary": "2/2；whitespace errors=0"}
+  ],
+  "verification": {
+    "status": "PASS",
+    "validation_mode": "mixed",
+    "tests_passed": 379,
+    "tests_failed": 0,
+    "independent_operation_variants": 13,
+    "independent_public_alias_variants": 2,
+    "false_negatives": 0,
+    "false_positives": 0,
+    "blocking_findings": 0,
+    "summary": "F-CP7-S03-001 原因及相邻旁路均关闭。"
+  },
+  "acceptance": {
+    "authorization_adversarial": "9/9",
+    "targeted": "124/124",
+    "combined": "379/379",
+    "public_effective_trial_count_populatable": false,
+    "c1_computable": false,
+    "cr172_auto_resume_count": 0,
+    "cr172_auto_close_count": 0
+  },
+  "findings": [
+    {"id": "F-CP7-S03-001", "severity": "HIGH", "blocking": false, "status": "CLOSED", "summary": "authorization AST guard 假阴性已由 alias/qualified-call/argv 语义回修关闭", "owner": "meta-dev"}
+  ],
+  "evidence_refs": [
+    "process/stories/STORY-CR173-S03-golden-failure-boundary-verification-VERIFICATION.md",
+    "process/returns/CR173-S03-golden-failure-boundary-verification.CP6R1.return.json",
+    "process/evidence/CR173-S03-golden-failure-boundary-verification.CP6R1.index.json"
+  ],
+  "read_expansion_refs": [],
+  "risks": [
+    {"id": "R-CR173-SCOPE-ESCAPE", "status": "controlled_by_reverified_ast_guard_and_path_truth"},
+    {"id": "R-CR173-EXACT-INTEGER-GROWTH", "status": "accepted_fixture_only_recheck_before_real_scale"},
+    {"id": "R-CR173-PUBLIC-MIGRATION", "status": "deferred_future_projection_cr"}
+  ],
+  "waivers": [],
+  "design_delta_refs": [],
+  "open_questions": [],
+  "next_route": "CR173-RELEASE-READINESS-CP8-PREPARATION",
+  "completed_at": "2026-07-17T12:16:51+08:00"
+}

@@ -1,0 +1,326 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR172-S05-REVERIFY-1",
+  "profile": "runtime-high-risk-design-independent-reverification",
+  "story_id": "CR172-S05-path-i-integration-claim-zero-operation-verification",
+  "cr_id": "CR-172",
+  "context_ref": "process/context/stories/STORY-CR172-S05.CP7.reverify-1.packet.json",
+  "dispatch_refs": [
+    "AD-CR172-S05-CP7R1-META-QA-CRITICAL-COMPLETED-20260719T012915+0800"
+  ],
+  "return_ref": "process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.return.json",
+  "evidence_ref": "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.index.json",
+  "verification_ref": "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md",
+  "result_summary_ref": "process/checks/CP7-CR172-S05-REVERIFY-1.result.summary.md",
+  "supersedes_result_ref": "process/checks/CP7-CR172-S05-VERIFICATION.result.json",
+  "items": [
+    {
+      "id": "CP7R1-S05-ENTRY-01",
+      "category": "entry-criteria",
+      "name": "Healthy process route, authoritative CP7R1 packet, CP6R1 PASS and independent critical QA dispatch are confirmed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/context/stories/STORY-CR172-S05.CP7.reverify-1.packet.json",
+        "process/checks/CP6-CR172-S05-REWORK-1.result.json"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "CURRENT health=ok; active Story/context exact; source/tests/fixture/design/state/current/change/context/ledgers remain read-only."
+    },
+    {
+      "id": "CP7R1-S05-F001-01",
+      "category": "finding-closure",
+      "name": "F-001 semantic requirement binding is independently closed",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md#142-当前-findings",
+        "tests/fixtures/cr172_path_i/scenario_catalog.json",
+        "tests/research/test_cr172_path_i_claim_regression.py#test_traceability_is_exact_and_total"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "SC-006/test_partial_lineage_never_advances_selection binds only REQ-006; SC-021/test_req013_is_contract_ready_only binds only REQ-013; semantic mismatch=0."
+    },
+    {
+      "id": "CP7R1-S05-TRACE-01",
+      "category": "traceability",
+      "name": "Requirement, scenario and outcome coverage is both count-exact and semantically exact",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md#143-独立语义与追踪探针",
+        "tests/fixtures/cr172_path_i/scenario_catalog.json"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "requirements/scenarios/outcomes/tests=15/27/11/27; unknown/duplicate/uncovered/semantic mismatch=0."
+    },
+    {
+      "id": "CP7R1-S05-CHAIN-01",
+      "category": "contract-integration",
+      "name": "S02-S04 artifact chain, canonical payload, single seal and verifier flow remain exact",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md#145-合同失败恢复与零操作边界",
+        "tests/research/test_cr172_path_i_integration.py"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "payload=2/2; S02 seal bytes/digest/verifier=1/1/1; S03/S04 secondary digest=0/0; S04 verifier=1; trial/stage/pull=1/1/1."
+    },
+    {
+      "id": "CP7R1-S05-AUTHZ-01",
+      "category": "authorization",
+      "name": "Six actions, records, enforcement points and DAG remain fail closed without permission union",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md#145-合同失败恢复与零操作边界",
+        "tests/research/test_cr172_path_i_authorization.py"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "actions/records/enforcement=6/6/6; DAG nodes/edges=6/5; cycle/unknown/permission-union=0/0/0."
+    },
+    {
+      "id": "CP7R1-S05-CALLER-01",
+      "category": "authorization-boundary",
+      "name": "Forward-label and approved-ledger caller self-report remain rejected exactly",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "tests/research/test_cr172_path_i_integration.py#test_forward_label_proxy_is_rejected",
+        "tests/research/test_cr172_path_i_authorization.py#test_approved_ledger_origin_is_unconditionally_denied"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "forward-label accepted=0/0/0; approved-ledger accepted/authorized/eligible=0/0/0."
+    },
+    {
+      "id": "CP7R1-S05-FAILURE-01",
+      "category": "failure-recovery",
+      "name": "Tamper, partial lineage, staging failures and revoke preserve fail-closed state",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md#145-合同失败恢复与零操作边界",
+        "tests/fixtures/cr172_path_i/failure_mutations_v1.json"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Invalid branches accepted=0; selection advance=0; previous preservation=2/2; persist/CAS delta=0/0; revoke authorized/eligible=0/0."
+    },
+    {
+      "id": "CP7R1-S05-CLAIM-01",
+      "category": "claim-ceiling",
+      "name": "REQ-013 split, deferred surfaces, five claims and zero real operations stay below ceiling",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md#145-合同失败恢复与零操作边界",
+        "tests/research/test_cr172_path_i_claim_regression.py"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "REQ-013 behavior=1/0/0/0/1; deferred nonzero=0/12; high claims true=0/5; real action authorized/executed=0/6,0/6."
+    },
+    {
+      "id": "CP7R1-S05-FIXTURE-01",
+      "category": "architecture-boundary",
+      "name": "Repository fixture single-truth boundary remains unchanged",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "tests/fixtures/cr172_path_i/path_i_fixture.py",
+        "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md#144-自动化机器合同与哈希复验"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "Fixture hash equals CP6 baseline; locally redefined production rules, duplicated constants and hash/network imports remain zero."
+    },
+    {
+      "id": "CP7R1-S05-REGRESSION-01",
+      "category": "automated-verification",
+      "name": "Scoped and combined pytest, compile, whitespace, CP6R1 machine checks and hash correlation pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.index.json",
+        "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md#144-自动化机器合同与哈希复验"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "S05=27/27; S01-S05=154/154; failed/skipped=0/0; compile exit=0; whitespace diagnostics=0/2; CP6R1 checkers OK; upstream=8/8, unchanged S05=7/7, CP6R1 delta=2/2."
+    },
+    {
+      "id": "CP7R1-S05-BOUNDARY-01",
+      "category": "operation-boundary",
+      "name": "Only five CP7R1 evidence artifacts are written and all real or forbidden operations remain zero",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.return.json#boundary_check"
+      ],
+      "owner": "meta-qa-critical",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Production/tests/fixture/design/state/current/change/context/ledgers untouched; lake/NAS/runtime/network/credential/signal/trading/deploy/Git remote=0."
+    },
+    {
+      "id": "CP7R1-S05-EXIT-01",
+      "category": "exit-criteria",
+      "name": "All blocking trace, contract, authorization, recovery, claim and boundary criteria pass",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md#146-风险决策与路由"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "F-001=CLOSED/NON-BLOCKING; CP7R1 decision=PASS; only Host may prepare CP8."
+    }
+  ],
+  "entry_criteria": [
+    {
+      "name": "Process route health and active S05 CP7R1 context match",
+      "status": "PASS",
+      "evidence_ref": "process/current/CURRENT.json"
+    },
+    {
+      "name": "CP6R1 implementation result, return and evidence are PASS and consumable",
+      "status": "PASS",
+      "evidence_ref": "process/checks/CP6-CR172-S05-REWORK-1.result.json"
+    },
+    {
+      "name": "Independent meta-qa-critical reverification has no real-operation authorization",
+      "status": "PASS",
+      "evidence_ref": "process/context/stories/STORY-CR172-S05.CP7.reverify-1.packet.json"
+    }
+  ],
+  "exit_criteria": [
+    {
+      "name": "F-001 is closed by exact SC-006/REQ-006 and SC-021/REQ-013 semantic bindings",
+      "status": "PASS"
+    },
+    {
+      "name": "All 15/27/11 trace obligations are count-exact and semantically exact",
+      "status": "PASS"
+    },
+    {
+      "name": "Artifact chain, authorization DAG and all failure paths pass",
+      "status": "PASS"
+    },
+    {
+      "name": "REQ-013 behavior, five claim ceilings, deferred and zero-operation boundaries pass",
+      "status": "PASS"
+    },
+    {
+      "name": "S05 27/27 and S01-S05 154/154 plus compile, whitespace and machine checks pass",
+      "status": "PASS"
+    },
+    {
+      "name": "No forbidden write, real operation, Design Delta or runtime authorization occurred",
+      "status": "PASS"
+    }
+  ],
+  "deliverables": [
+    "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md",
+    "process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.return.json",
+    "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.index.json",
+    "process/checks/CP7-CR172-S05-REVERIFY-1.result.json",
+    "process/checks/CP7-CR172-S05-REVERIFY-1.result.summary.md"
+  ],
+  "findings": [
+    {
+      "id": "F-001",
+      "severity": "BLOCKER",
+      "status": "CLOSED",
+      "blocking": false,
+      "route": "CP8_PREPARATION"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "decision": "PASS",
+  "stop_reason": "required_human_gate",
+  "next_route": "CP8_PREPARATION",
+  "checked_at": "2026-07-19T01:26:57+08:00",
+  "check_attempt": 2,
+  "rework_attempt": 1,
+  "operation_counts": {
+    "requirements_total": 15,
+    "requirements_semantic_mismatch": 0,
+    "scenarios_total": 27,
+    "scenarios_semantic_mismatch": 0,
+    "outcomes_total": 11,
+    "unknown": 0,
+    "duplicate": 0,
+    "uncovered": 0,
+    "actions": 6,
+    "records": 6,
+    "enforcement_points": 6,
+    "dag_nodes": 6,
+    "dag_edges": 5,
+    "dag_cycles": 0,
+    "dag_unknown_refs": 0,
+    "permission_union": 0,
+    "real_action_authorized": 0,
+    "real_action_executed": 0,
+    "high_order_claims_true": 0,
+    "deferred_boundaries_nonzero": 0,
+    "forbidden_write": 0,
+    "network": 0,
+    "credential_read": 0,
+    "signal_transport": 0,
+    "trading": 0,
+    "deploy": 0,
+    "git_remote_write": 0
+  },
+  "input_artifact_hashes": {
+    "process/context/stories/STORY-CR172-S05.CP7.reverify-1.packet.json": "sha256:5ccef55aa9152d2c85c7e3f3bbee4e5aab853881a24341db8143e44cb7515ef3",
+    "process/state/STATE.current.json": "sha256:cb1a9ce9863e1d7e679511a34d34185206781348bc7c795085c950ce337502d7",
+    "process/current/CURRENT.json": "sha256:52a61f0b7616fa79d7b2dc8a4a1af1209e2d9f2f03b2ec56c290fb0f921e1fda",
+    "process/policies/READ-POLICY.json": "sha256:c6206fa94b4b4ffe00dc98b0e73442bd10f6dd5895d6cf84db9659ea870e0e19",
+    "process/changes/summaries/CR-172.summary.json": "sha256:200f69968c1b5478f306e99abd32b052d45f094f3525fd7b590f6228ba2e774a",
+    "process/checks/CP7-CR172-S05-VERIFICATION.result.json": "sha256:e6f54809d95fa0dc4ba6f65c41d8a496db2282008664a552a6850ff7dac0d45d",
+    "process/checks/CP6-CR172-S05-REWORK-1.result.json": "sha256:25b155622b7fc0761568eeb2663813351d8246fa4a08e6d691fbf5b560f95a09",
+    "process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP6R1.return.json": "sha256:185149585a9d347ec5280ee0037f39638bb99d6f806a9c57d870f1f773e5078f",
+    "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP6R1.index.json": "sha256:aa6aae9f14b2efedb2cf9e091446f2d3e887d0df207157bebaa30b176f8adc4f",
+    "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification.md": "sha256:4e86142007a94db8e28235e672267bb9f317d09708100b175be7d06a641008cd",
+    "process/stories/STORY-CR172-S05-path-i-integration-claim-zero-operation-verification-VERIFICATION.md": "sha256:f6df4845fd07786458e8332cdb82e497bd462faa83c4b0a286f520dd2922b8d0",
+    "process/returns/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.return.json": "sha256:529411c0a15be6c9dd8c2e04a7b23751d54345b5f157e6fda497a282cf1826d7",
+    "process/evidence/CR172-S05-path-i-integration-claim-zero-operation-verification.CP7R1.index.json": "sha256:1720eada2b0f9e31a690e036b98924858f9e091d6dc2c9aa7e61189d58d44a15",
+    "engine/path_i_governance.py": "sha256:bc6abc95a0e660d71fce5567195ef6bff037e0919403b5d400841c579cc82abf",
+    "engine/trial_return_artifact.py": "sha256:923fc5e5baaafea88b6cb98d26de5d95b5d43d848fcf0cd51fc41a1190b645f0",
+    "engine/research_artifact_replica.py": "sha256:533d34f79e6481dd4bb2bcdb45776c186cb6e3f1a1f6994640f3382f6e466026",
+    "engine/research_artifact_materialization.py": "sha256:72541d73cff02bfbd0e20deb19141df63a9ac68389707f97ce4e252d829d008a",
+    "tests/research/test_cr172_path_i_governance.py": "sha256:ef4284860453c55a0b9a59357b13a5343ad88c488d5a7ac3fec63ab732de12f9",
+    "tests/research/test_cr172_trial_return_artifact.py": "sha256:4497e7b03920e239df752031b1564c09ef16c73687aa455485c6571d5b346969",
+    "tests/research/test_cr172_nas_replica_verification.py": "sha256:37c25a7a01bf46ba4fe121f25b57f9f95961e7eb155cb7e0eb49452c2621fd9b",
+    "tests/research/test_cr172_execution_materialization.py": "sha256:f58d71fd9f3cd7045d1cf645cea38e62370c0a705efbc3f627ed0f0a32be7049",
+    "tests/fixtures/cr172_path_i/scenario_catalog.json": "sha256:242fbb127626afbacdb1c2ba9167e48f30f373f54932198c72c8777401bafc66",
+    "tests/research/test_cr172_path_i_claim_regression.py": "sha256:c2fffc200a329bbb8845d5416ac599509231ea6ae07190e9c5f8daaa166e5fce",
+    "tests/fixtures/cr172_path_i/sealed_chain_v1.json": "sha256:447d3aab14a81d31c9d6a22111e24344d9fda19949626a5c3975d1e2385c02bc",
+    "tests/fixtures/cr172_path_i/failure_mutations_v1.json": "sha256:daaf4b9c4cb41ed794fe5f989e9cb95dbd40e76ec00bc44997f6f5d7f2f5b9d8",
+    "tests/fixtures/cr172_path_i/zero_operation_oracle_v1.json": "sha256:7c5a6a71c7df4bd4c93e724489ccd3cebfbc04696674f3c2736c2e1164c6a950",
+    "tests/fixtures/cr172_path_i/path_i_fixture.py": "sha256:c16d7c9becbb2620f6116273a40faeaa185158c3c8769697caad7782b7fc1095",
+    "tests/research/test_cr172_path_i_integration.py": "sha256:80e26fcaae41a6e55c5be25f90eec1ee4602b82e59e61f786b685389967e36b4",
+    "tests/research/test_cr172_path_i_authorization.py": "sha256:e95643ac1122b812537263bd485f83d4cfc890cd1ebc27e6c63c867c10b20f56",
+    "tests/fixtures/cr172_path_i/README.md": "sha256:5c8a6f3544f48ca0e989496d6248bf12c5d5b0a5a77e9a9f0726fb63b11e47e6"
+  }
+}
