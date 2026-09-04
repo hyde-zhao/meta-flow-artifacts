@@ -1,63 +1,86 @@
 ---
-review_scope: "CR-030 全部 14 Story 静态代码审查"
-review_mode: "static-only"
-reviewer: "meta-qa (inline-fallback, host-orchestrator)"
-review_date: "2026-07-16T18:00:00+00:00"
-source_cr: "CR-030"
-review_round: "CP7 独立复核整改（2026-07-16）"
+cr_id: CR-037
+title: ptm-te 集成 topo 管理功能 代码/设计评审报告
+version: "1.0"
+review_scope: "CR-037 全部 12 个实现 Story 独立质量评审（对照 CP5 设计证据检查实现偏离合理性）"
+review_mode: "mixed（层A fixture runtime + 平台安装 dry-run）"
+reviewer: "meta-qa (independent, CP7)"
+review_date: "2026-08-05T19:30:00+08:00"
 ---
 
-# ptm-tse CR-030 代码评审报告
+# CR-037 独立质量评审报告（REVIEW）
 
-> 审查模式：静态文本审查 · 审查日期：2026-07-16 · 审查范围：CR-030 全部产物
+> 独立性声明：本评审由 meta-qa 独立完成，未盲信 CP6 result。评审重点：实现是否偏离设计证据、偏离是否合理、是否有安全/安装/隔离风险。
 
----
+## 1. 评审范围
 
-## 修订记录
+- **设计证据基线**：`CR-037-HLD.md` v0.4 + `STORY-CR037-S1..S9-LLD.md`（full-lld）+ P-1/S6/S9/S10 technical-note + S11 waived
+- **实现对象**：skills/topo-planning（6 模块 + CLI + SKILL + 模板）、skills/topo-config（mapper/pool/mapping_validator + 模板 + fixtures）、install.py ×2、agents/ptm-te.md、resource/component-resource-links.yaml、文档
 
-| 版本 | 日期 | 修订人 | 变更要点 |
-|------|------|--------|---------|
-| 1.0 | 2026-07-16 | meta-qa | 初始评审（5 findings：1 HIGH + 2 MEDIUM + 2 LOW） |
-| 2.0 | 2026-07-16 | host-orchestrator | CP7 独立复核整改：全部 findings 已修复，结论升级为 APPROVED |
+## 2. 设计契约符合性总评
 
-## 1. 评审概要
+| 设计契约 | 实现偏离 | 偏离合理性 | 结论 |
+|---|---|---|---|
+| S1 `find_topology_file` 返回 YAML 路径（P0-1） | 增加开发仓库形态路径查找 + PTM_TOPOLOGY_CACHE_DIR 可覆盖 | 合理（兼容安装/开发双形态；环境变量隔离测试） | ✅ 采纳 |
+| S1 parser.py 依赖补齐 | S1 未改 parser.py，由 S8 安装器统一 PYTHONPATH 承担 | 合理（避免越权修改 topo-config，file_ownership 边界正确） | ✅ 采纳 |
+| S2 R4 冲突消歧 | `_disambiguate_alias_by_pool` 优先 hardware_platform 等价类交集（非 OR 逻辑） | 合理（修复 A1500-HU 双命中缺陷） | ✅ 采纳 |
+| S3 `UnifiedPool.links` dict 形态 | LLD 注释写 List[Dict]，实现保留 dict | 合理（对齐 physical_pool.yaml 实际 schema） | ✅ 采纳 |
+| S4 MappingResult 字段位置 | 落在 topo_mapper.py 而非 topology_model.py | 合理（MappingResult 实际定义于 topo_mapper.py） | ✅ 采纳 |
+| S4 `_check_connectivity` 修复同设备对多 link 复用 cable | 增加 `used_ports \| ports_needed` | 合理（修复既有缺陷，per-link 语义正确） | ✅ 采纳 |
+| S5 export 增加 generated_at 参数 | 为 R2 确定性注入 | 合理（可选 kwarg 向后兼容） | ✅ 采纳 |
+| S6 `_supplement_direct_domains` 补充 TG/PC↔DUT p2p 域 | `_compute_broadcast_domains` 仅覆盖 DUT-DUT | 合理（MVP 单 TG 单 DUT 必需适配层） | ✅ 采纳 |
+| S8 同步修改 `script/ptm_team/install.py` | LLD scope 只列 script/install.py | 合理（保持两安装器一致，既有测试要求） | ✅ 采纳 |
+| S9 EnvironmentDeployer 懒加载 | 避免未安装 requests 环境 import 失败 | 合理（纯构造/测试场景可用） | ✅ 采纳 |
 
-| 指标 | 数值 |
-|------|------|
-| 审查文件数 | 21 |
-| 总行数 | ~9300 |
-| Findings 总数 | 0（全部 5 个历史 finding 已修复） |
-| 建议阻断项 | 0 |
+**总评**：全部 10 项实现偏离均为「合理修正 / 边界澄清 / 适配层」，无架构违背；无未记录偏离。
 
-## 2. Findings
+## 3. 关键设计点独立复核
 
-**当前轮次无未修复 finding。**
+| 设计点 | 独立复核 | 结论 |
+|---|---|---|
+| H4 叠加公式（用户 speed_class 优先 + TE 系强制 fiber 丢弃逻辑 copper） | 阅读 `_resolve_per_link_requirement` 源码：逻辑正确，`_logical_topo_link_requirement` 双端点 speed 不一致时不设 speed（保守） | ✅ |
+| include-at-least-one 软约束（soft 分支位于硬剪枝前） | 阅读 `_port_meets_requirement`：`if not strict: return True` 在硬剪枝 return False 之前；post-match `_count_satisfied_links` ≥1 判定 | ✅ |
+| ledger 闭环（allocate 写回 + save_ledger + release） | `_commit_allocation` 只写 used_ports；`_is_port_busy` 消费台账 allocated_to；`release_env` 薄封装 + save_ledger | ✅ |
+| 端口兼容矩阵（GE=copper\|fiber、TE 系=fiber-only） | `PORT_COMPAT_MATRIX` 常量与 S2 limit_parser 同源语义 | ✅ |
+| MVP 边界显式拒绝 | `_validate_mvp_topology` 在 export 前拦截多节点/SW/Mock | ✅ |
 
-### 2.1 历史 Findings（已全部修复）
+## 4. 安全与隔离评审
 
-| ID | 严重度 | 描述 | 状态 | 修复证据 |
-|----|--------|------|:---:|------|
-| F-01 | HIGH | 4 Story 缺 CP6 检查点 | **fixed** | 4 份 CP6 文件已生成（ST-RA-05.2-CLEAN, ST-RA-05.3-ANALYZE, ST-RA-06.1-DETECT, ST-RA-06.2-REFRESH） |
-| F-02 | MEDIUM | itr-ticket-ingestion 缺 Gotchas | **fixed** | SKILL.md §10 Gotchas（10 条：G-ING-01~10） |
-| F-03 | MEDIUM | reverse-analysis 缺 Gotchas | **fixed** | SKILL.md §10 Gotchas（10 条：G-RA-01~10） |
-| F-04 | LOW | STATE 状态不一致 | **fixed** | STATE.current.json 已同步到 phase=release-readiness, pending_gate=CP8 |
-| F-05 | LOW | 禁止规则统计描述不一致 | **fixed** | 不阻断功能，已记录 |
+- **凭据边界（ADR-02）**：模板 8 特征串 0 命中；env-file 导出路径不读 password/token；DeployBridge 只收环境变量名。✅
+- **造数隔离**：install dry-run 打印「排除 tests/__pycache__/*.pyc」（S8-A）；模板副本源为 config 占位模板；fixture 是唯一造数位置。✅
+- **授权分层（S8-E）**：[1.5] 映射/台账占用 = workspace 写（S7 `--authorized` 显式门）；真机下发 = S9 `DeployBridge` 独立 DQ-037-04。✅
+- **危险命令**：新增脚本 grep 扫描 0 命中（rm -rf/sudo/eval/os.system 等）。✅
 
-## 3. 正面发现
+## 5. Findings（按严重度排序）
 
-以下方面质量优秀：
+### Minor-1（建议回修）参考用例 TG 设备组与池 TG 节点关联失败
 
-1. **improvement-tracker Gotchas（22 条）**：覆盖全面，涵盖状态机误用、权限边界、基线语义陷阱和关闭条件误判
-2. **reverse-analysis §8 权限拒绝矩阵**：9 类拒绝场景的结构化表格，每类包含禁止行为、检测逻辑、拒绝响应和例外检查
-3. **allowlist 配置模板**：精确使用 deny-by-default 策略，无通配符
-4. **串行写入链**：三个 SKILL.md 使用 shared_writers frontmatter 声明各 Story 的写入范围，章节隔离清晰
-5. **跨 Feature 领域 owner 注释**：schema.sql 中 analysis_run 和 measure_link 表明确标注逻辑 owner 与物理 DDL 写入方分离
-6. **修订记录完整性**：3 个 SKILL.md 均包含从 v1.0 到当前版本的完整修订链
-7. **itr-ticket-ingestion §10 Gotchas**：10 条覆盖 allowlist 遗漏、快照临时文件残留、WAL 文件 Git 跟踪、事务未提交等常见陷阱
-8. **reverse-analysis §10 Gotchas**：10 条覆盖 evidence_backed 不可自动跃迁、无可信分母降级、escape layer 默认 candidate 等
+- **位置**：`skills/topo-planning/tests/fixtures/devices_direct.yaml`（tg-dut1 组）+ `pool_direct_tg_dut.yaml`（tg-dut1 节点）
+- **现象**：参考用例 CLI dry-run 输出「未匹配 devices.yaml 节点: tg-dut1」
+- **根因**：`devices_direct.yaml` TG 组仅 `tg.host: 10.113.52.253`（无 `tg.api_server`）；池 TG 节点仅 `management.api_server: http://10.113.52.253:8450`（无 `management.host`）。S3-C 关联主键为 api_server（归一化精确匹配），host 兜底需要**池侧** `management.host`；两者均不满足 → 关联失败。
+- **影响**：TG 仍从池数据直接可用（device_type/hardware_platform 池侧已含），映射产物正确；告警仅 cosmetic。参考用例未覆盖「TG api_server 主键关联成功」路径（该路径由 S3 `test_merge_tg_api_server_association` 单测覆盖）。
+- **建议**：修正 `devices_direct.yaml` 的 tg-dut1 组增加 `api_server: "http://10.113.52.253:8450"`（或池节点补 `management.host`），使参考用例演示完整 TG 关联路径。非阻断。
+- **决策类型**：implementation（follow-up candidate）
 
-## 4. 评审结论
+### Minor-2（已知限制）`script/ptm_team/install.py` 未加 `ensure_target_project_templates`
 
-CR-030 全部产物在结构、契约、安全边界、状态机设计和禁止规则方面质量较高。前期发现的 5 个 finding 已全部修复，当前无阻断或高风险项。3/3 Skill Gotchas 已实现（10+10+22 条目），14/14 CP6 检查点均已 PASS，13/13 SCN-RA 场景已全量回写验证结果。
+- **位置**：`script/ptm_team/install.py`（包级兼容入口）
+- **现象**：主安装器 `script/install.py` 具备模板副本生成；`script/ptm_team/install.py` 只扩展了 PTM_TE_SKILLS 5→7 与 copy_skill_tree 裁剪语义，无模板副本生成。
+- **影响**：经包级入口安装时目标项目不会自动生成 `topology/physical_pool.yaml` + `physical_ledger.yaml` 模板副本（用户需手动复制或走主安装器）。
+- **建议**：后续 CR 将 `ensure_target_project_templates` 提取为共享函数并在两入口复用；当前主安装器路径不受影响。非阻断。
+- **决策类型**：implementation（follow-up candidate）
 
-**评审结论**：**APPROVED**（全部 finding 已修复，可推进 CP8 终验）
+### Info-1（状态同步）`STATE.current.json.active_change` 未同步 CR-037
+
+- **现象**：`process/state/STATE.current.json` 的 `active_change` 仍为 "CR-036"。
+- **处理**：交由 host-orchestrator 在 CP8 / CR-037 关闭时通过 `meta-flow cr status-sync` 同步。
+
+## 6. 对 CP6 报告的独立发现对照
+
+- CP6 S10 报告「适配前 28 failed / 适配后 82 passed」：meta-qa 独立复跑确认 topo-config 82 passed / 0 failed，适配未改变断言语义（既有 28 项失败归零，S4 新增 26 全绿）。
+- CP6 S7 报告 `missing_te_port` 断言调整为「TE 约束失败被结构化报告」：meta-qa 复核 `build_failure_report` 仍含 `missing_te_port` 分支（S4 部分匹配 + 链路级 TE 失败场景），CLI 无 TE 池场景下走 `link_constraint_unsatisfied` + 设备级剪枝，属合理覆盖。
+- CP6 S4 报告「修复同设备对多 link 复用 cable 缺陷」：meta-qa 复核改动正确，未回退既有失败基线（全量 271 一致）。
+
+## 7. 结论
+
+**REVIEW 结论：通过（无 Blocker/High/Medium）**。1 项 Minor（参考用例 TG 关联 fixture，建议回修）+ 1 项 Minor（安装器模板副本不对称，后续 CR）+ 1 项 Info（STATE 同步）。全部实现偏离设计证据均合理并有记录。

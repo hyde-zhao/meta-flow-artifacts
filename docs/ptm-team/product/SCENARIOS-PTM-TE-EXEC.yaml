@@ -1,0 +1,496 @@
+status: confirmed
+version: "1.2"
+source_requirements:
+  - docs/product/REQUIREMENTS-PTM-TE-EXEC.md
+source_use_cases:
+  - docs/product/USE-CASES-PTM-TE-EXEC.md
+scenarios:
+  # ===== 正向场景 =====
+  - id: SCN-EX-01
+    title: "TG 设备建模 6 组合全覆盖"
+    type: positive
+    priority: HIGH
+    persona: P-EX-02
+    source_refs: {requirements: [R-F-001, R-F-002, R-F-003], use_cases: [UC-EX-01]}
+    trigger: "测试平台开发者需要在 devices.yaml 中新增 TG 设备"
+    context: "TG 设备需覆盖 2 子类型(ixia-c/trex) × 3 硬件平台(EP/C236/J1900) = 6 组合"
+    preconditions: ["device-management skill 已安装", "devices.yaml 模板可用"]
+    steps:
+      - action: "开发者提供 TG 设备信息（子类型 + 硬件平台 + IP + api_server）"
+        expected: "devices.yaml 新增 tg 块，含 type:TG + host + serial_url + sub_type + hardware_platform + ssh + api_server"
+      - action: "查阅 device-reference.md 确认型号"
+        expected: "6 组合全覆盖，无缺失"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现 fixture 校验"
+
+  - id: SCN-EX-02
+    title: "目录 glob 批量执行用例"
+    type: positive
+    priority: HIGH
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-004, R-F-005, R-F-007, R-F-015], use_cases: [UC-EX-02]}
+    trigger: "测试执行工程师需要运行一个目录下的全部用例"
+    context: "case_runner.py --cases-dir 扫描 .md 文件，从 devices.yaml 取址，预登录后逐用例执行"
+    preconditions: ["devices.yaml 已配置", "op_mapper 已安装", "用例 md 在 cases-dir"]
+    steps:
+      - action: "执行 case_runner.py run --cases-dir cases/upload --devices-yaml devices.yaml --execute --authorized"
+        expected: "全部用例执行完成，每用例输出 result.json，含四态结果和清理记录"
+    evidence_type: runtime
+    automation_status: planned
+    gap_reason: "待 CP5 后实现；需 runtime_authorization"
+
+  - id: SCN-EX-03
+    title: "单用例执行调试"
+    type: positive
+    priority: MEDIUM
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-004], use_cases: [UC-EX-03]}
+    trigger: "测试执行工程师需要运行单个用例进行调试"
+    context: "case_runner.py --case-file 指定单个 .md 文件"
+    preconditions: ["同 SCN-EX-02"]
+    steps:
+      - action: "执行 case_runner.py run --case-file cases/upload/IPv4策略路由-PC-M3-01-02.md"
+        expected: "单用例执行完成，输出 result.json"
+    evidence_type: runtime
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-04
+    title: "dry-run 校验全部用例命令构建"
+    type: positive
+    priority: HIGH
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-006], use_cases: [UC-EX-04]}
+    trigger: "需要在不动设备的情况下校验用例命令构建和参数映射"
+    context: "默认 dry-run 模式，只调用 build_command 不调用 execute_op"
+    preconditions: ["op_mapper 已安装"]
+    steps:
+      - action: "执行 case_runner.py run --cases-dir cases/upload（不加 --execute）"
+        expected: "每步输出构建的 ptm-atomic 命令和校验状态（OK/PARAM_INVALID/OP_NOT_FOUND/VALIDATION_FAILED），不连接设备"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-05
+    title: "ARP 预热自动清理（warming_up + post_op 引擎强制）"
+    type: positive
+    priority: HIGH
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-008], use_cases: [UC-EX-07]}
+    trigger: "用例 step 包含 warming_up: true（ARP 预热探测流）"
+    context: "case_runner 识别 warming_up:true 后，主 op 执行完自动执行 post_op（tg_stop_traffic_stream），即使 md 未写也自动补充"
+    preconditions: ["case_runner 已实现 warming_up/post_op 解析"]
+    steps:
+      - action: "执行含 warming_up:true step 的用例"
+        expected: "主 op(tg_start_traffic_stream) 执行后，post_op(tg_stop_traffic_stream) 自动执行，参数从主 op 继承"
+      - action: "执行 md 未写 post_op 的 warming_up step"
+        expected: "case_runner 自动补充 tg_stop_traffic_stream，使用主 op 的 ports/txport/rxport/name"
+    evidence_type: runtime
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-06
+    title: "fw_logout 登出共享 session"
+    type: positive
+    priority: HIGH
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-016, R-F-017], use_cases: [UC-EX-09]}
+    trigger: "用例执行结束，需要清理 DUT session"
+    context: "case_runner 全部用例结束后调用 fw_logout，op_mapper 映射为 auth logout"
+    preconditions: ["op_mapper 已新增 fw_logout 映射", "共享 session 已建立"]
+    steps:
+      - action: "case_runner 执行结束触发 cleanup"
+        expected: "调用 fw_logout 登出，session 文件清理，result.json 含 logout 状态"
+    evidence_type: runtime
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  # ===== 负向场景 =====
+  - id: SCN-EX-07
+    title: "dry-run 模式拒绝实际写操作"
+    type: negative
+    priority: HIGH
+    persona: P-EX-04
+    source_refs: {requirements: [R-F-006, R-NF-001], use_cases: [UC-EX-04]}
+    trigger: "dry-run 模式下试图执行写操作"
+    context: "dry-run 是默认安全门，不调用 execute_op"
+    preconditions: ["case_runner 默认 dry_run=True"]
+    steps:
+      - action: "dry-run 模式下运行含写操作(config_policy_route)的用例"
+        expected: "只输出构建的命令，不连接设备，不执行写操作，result.json mode=dry-run"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-08
+    title: "未授权 --execute 被拒绝"
+    type: negative
+    priority: HIGH
+    persona: P-EX-04
+    source_refs: {requirements: [R-F-007, R-NF-001], use_cases: [UC-EX-05]}
+    trigger: "使用 --execute 但未加 --authorized"
+    context: "op_mapper execute_op 在 dry_run=False 且 authorized=False 时返回 EXEC_FAILED"
+    preconditions: ["op_mapper 已安装"]
+    steps:
+      - action: "执行 case_runner --execute（不加 --authorized）"
+        expected: "返回 error_type=EXEC_FAILED，reason='dry_run=False 需要 authorized=True'"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-09
+    title: "known_issue 标记的 step 失败输出 KNOWN_FAIL"
+    type: negative
+    priority: HIGH
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-010, R-F-011], use_cases: [UC-EX-06]}
+    trigger: "用例 step 含 known_issue 标记且该 step 执行失败"
+    context: "M4-01-09 STEP-007 删除被引用对象，DUT 行为是阻止删除（符合预期）"
+    preconditions: ["用例 md 已标注 known_issue", "case_runner 已实现 known_issue 解析"]
+    steps:
+      - action: "执行 M4-01-09，STEP-007 fw_delete_object 返回 eBeingReferenced"
+        expected: "该 step 结果为 KNOWN_FAIL（DUT 行为差异，符合异常用例预期），用例 overall 不因 known_issue 降级为 FAIL"
+    evidence_type: runtime
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-10
+    title: "用例 md 格式错误解析失败"
+    type: negative
+    priority: MEDIUM
+    persona: P-EX-02
+    source_refs: {requirements: [R-F-004], use_cases: [UC-EX-02]}
+    trigger: "用例 md 的 case_steps YAML 块格式错误或缺失"
+    context: "parse_steps 解析失败时不应崩溃"
+    preconditions: ["case_runner 已安装"]
+    steps:
+      - action: "执行格式错误的用例 md（如缺失 case_steps 或 YAML 语法错误）"
+        expected: "输出 ERROR 状态和解析失败原因，不崩溃，继续后续用例"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  # ===== 边界场景 =====
+  - id: SCN-EX-11
+    title: "空目录 glob"
+    type: boundary
+    priority: MEDIUM
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-004], use_cases: [UC-EX-02]}
+    trigger: "--cases-dir 指向空目录或无 .md 文件"
+    context: "空目录不应崩溃，应输出提示"
+    preconditions: ["case_runner 已安装"]
+    steps:
+      - action: "执行 case_runner --cases-dir empty_dir"
+        expected: "输出'未找到用例文件'提示，退出码 0"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-12
+    title: "devices.yaml 缺失 tg 块"
+    type: boundary
+    priority: MEDIUM
+    persona: P-EX-02
+    source_refs: {requirements: [R-F-005], use_cases: [UC-EX-02]}
+    trigger: "devices.yaml 无 tg 块但用例含 TG target step"
+    context: "取址失败时应给出明确错误"
+    preconditions: ["devices.yaml 缺失 tg 块"]
+    steps:
+      - action: "执行含 TG step 的用例"
+        expected: "输出错误'tg.api_server 不存在，请检查 devices.yaml'，不崩溃"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-13
+    title: "STATE_INVALID 自动重连"
+    type: boundary
+    priority: MEDIUM
+    persona: P-EX-01
+    source_refs: {requirements: [R-NF-004], use_cases: [UC-EX-05]}
+    trigger: "执行 op 时 session 过期返回 STATE_INVALID"
+    context: "op_mapper 自动重新 login 后重试原命令（最多 1 次）"
+    preconditions: ["共享 session 已过期"]
+    steps:
+      - action: "执行 op 返回 STATE_INVALID"
+        expected: "自动重新 login 后重试原命令，重试成功则 step PASS"
+    evidence_type: runtime
+    automation_status: planned
+    gap_reason: "待 CP5 后实现；需 runtime 环境"
+
+  - id: SCN-EX-14
+    title: "TG ConnectTimeout 递增重试"
+    type: boundary
+    priority: MEDIUM
+    persona: P-EX-01
+    source_refs: {requirements: [R-NF-005], use_cases: [UC-EX-05]}
+    trigger: "TG op 返回 ConnectTimeout"
+    context: "trex-api 高频瞬断，按 15/20/25s 递增重试最多 3 次"
+    preconditions: ["trex-api 服务瞬断"]
+    steps:
+      - action: "TG op 返回 ConnectTimeout"
+        expected: "按 15/20/25s 递增重试最多 3 次，重试成功则 step PASS"
+    evidence_type: runtime
+    automation_status: planned
+    gap_reason: "待 CP5 后实现；需 runtime 环境"
+
+  # ===== 权限场景 =====
+  - id: SCN-EX-15
+    title: "runtime_authorization 审计字段可追溯"
+    type: permission
+    priority: HIGH
+    persona: P-EX-04
+    source_refs: {requirements: [R-NF-002], use_cases: [UC-EX-05]}
+    trigger: "--execute 模式下执行写操作"
+    context: "result.json 必须含 runtime_authorization 审计字段"
+    preconditions: ["--execute --authorized 模式"]
+    steps:
+      - action: "执行 --execute 模式用例"
+        expected: "result.json 含 runtime_authorization(who/scope/authorized_at/reason)，可审计"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  # ===== 失败恢复场景 =====
+  - id: SCN-EX-16
+    title: "逆序清理 mutation ops"
+    type: failure-recovery
+    priority: HIGH
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-015], use_cases: [UC-EX-02]}
+    trigger: "用例执行结束（正常或异常），需要清理已创建的资源"
+    context: "逆序执行清理 op（fw_delete_policy_route / fw_delete_object / tg_stop_traffic_stream）"
+    preconditions: ["用例含 mutation ops", "step-refs 已落盘"]
+    steps:
+      - action: "用例结束后触发 cleanup"
+        expected: "按 step-refs 逆序执行清理 op，清理结果记入 result.json"
+    evidence_type: runtime
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-17
+    title: "幂等容错（对象已存在/流不存在/被引用阻止）"
+    type: failure-recovery
+    priority: HIGH
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-011], use_cases: [UC-EX-06]}
+    trigger: "op 返回特定错误但符合预期状态"
+    context: "对象已存在/流不存在/被引用阻止视为期望状态，不判 FAIL"
+    preconditions: ["case_runner 已实现幂等容错"]
+    steps:
+      - action: "fw_config_object 返回'存在同名'"
+        expected: "视为 PASS（对象已存在），记录 idempotent_note"
+      - action: "tg_stop_traffic_stream 返回 RESOURCE_NOT_FOUND"
+        expected: "视为 PASS（流不存在，已停止）"
+      - action: "fw_delete_object 返回 eBeingReferenced 且 expected_result 含'被阻止'"
+        expected: "视为 PASS（符合异常用例预期）"
+    evidence_type: runtime
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  # ===== 预检场景 =====
+  - id: SCN-EX-18
+    title: "op_mapper 映射表一致性校验"
+    type: precheck
+    priority: HIGH
+    persona: P-EX-02
+    source_refs: {requirements: [R-F-016], use_cases: [UC-EX-08]}
+    trigger: "安装或升级后验证 op_mapper 映射表"
+    context: "op_mapper validate 校验三表一致性和族子命令覆盖"
+    preconditions: ["op_mapper 已安装"]
+    steps:
+      - action: "执行 op_mapper.py validate"
+        expected: "输出 PASS（22 个 op_id 全覆盖，三表一致，含新增 fw_logout）"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-19
+    title: "install.py 安装后重装一致性验证"
+    type: precheck
+    priority: HIGH
+    persona: P-EX-02
+    source_refs: {requirements: [R-F-019, R-NF-003], use_cases: [UC-EX-08]}
+    trigger: "install.py 安装后验证规则和 skill 不丢失"
+    context: "重装后 CLAUDE.md 含规则块 + skills/ 目录存在 + op_mapper validate 通过"
+    preconditions: ["install.py 已执行"]
+    steps:
+      - action: "install.py install ptm-te --component full"
+        expected: ".claude/skills/case-execution/ 存在 + CLAUDE.md 含 ≥4 条新规则 + op_mapper validate PASS"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-20
+    title: "24 用例 ARP 预热批量校验"
+    type: precheck
+    priority: MEDIUM
+    persona: P-EX-02
+    source_refs: {requirements: [R-F-021], use_cases: [UC-EX-07]}
+    trigger: "24 用例 md ARP 预热整改后校验合规性"
+    context: "检查 warming_up:true step 是否有 post_op 或引擎自动补充"
+    preconditions: ["24 用例 md 已整改"]
+    steps:
+      - action: "运行 ARP 预热校验脚本检查 24 用例"
+        expected: "24/24 用例的 warming_up step 均有 post_op 或引擎自动补充标记"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  # ===== 用例结构化场景（v1.1 新增） =====
+  - id: SCN-EX-21
+    title: "按标签精确过滤执行用例"
+    type: positive
+    priority: HIGH
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-004, R-F-025, R-F-026], use_cases: [UC-EX-02]}
+    trigger: "测试执行工程师需要按标签筛选用例执行"
+    context: "case_runner --tag 按 frontmatter tags 列精确过滤"
+    preconditions: ["用例 md 含 frontmatter tags 列", "case_runner 已实现 --tag"]
+    steps:
+      - action: "执行 case_runner.py run --tag 策略路由,P0 --devices-yaml devices.yaml"
+        expected: "返回 tags 同时含'策略路由'和'P0'的用例并执行，非匹配用例跳过"
+      - action: "执行 case_runner.py run --tag 策略路由,P0 --keyword fw_config"
+        expected: "返回同时满足 tag 精确过滤和 keyword 模糊匹配的用例"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-22
+    title: "按关键字模糊匹配执行用例"
+    type: positive
+    priority: HIGH
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-004, R-F-025, R-F-026], use_cases: [UC-EX-02]}
+    trigger: "测试执行工程师需要按关键字模糊匹配用例"
+    context: "case_runner --keyword 按 frontmatter 关键词列子串模糊匹配"
+    preconditions: ["用例 md 含 frontmatter 关键词列", "case_runner 已实现 --keyword"]
+    steps:
+      - action: "执行 case_runner.py run --keyword fw_config_policy_route"
+        expected: "返回关键词列含'fw_config_policy_route'子串的用例并执行"
+      - action: "执行 case_runner.py run --keyword S01"
+        expected: "返回关键词列含'S01'子串的用例并执行"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-23
+    title: "用例目录结构迁移与命名校验"
+    type: positive
+    priority: MEDIUM
+    persona: P-EX-02
+    source_refs: {requirements: [R-F-022, R-F-023, R-F-024, R-F-025], use_cases: [UC-EX-10]}
+    trigger: "24 用例从 cases/upload/ 迁移到三级目录结构"
+    context: "cases/三级(功能模块)/四级(子模块)/五级(用例组)/<编号>-<名称>.md"
+    preconditions: ["目录结构约定已定义", "24 用例待迁移"]
+    steps:
+      - action: "24 用例迁移到 cases/IPv4策略路由/配置管理/策略配置/<编号>-<名称>.md"
+        expected: "24/24 用例路径符合三级结构，文件名符合 <编号>-<名称>.md 命名"
+      - action: "校验 frontmatter 16 列完整"
+        expected: "每用例 frontmatter 含 16 列字段（必填/可选见 DQ-05），tags 列和关键词列已标注"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-24
+    title: "用例名称连字符冲突处理"
+    type: boundary
+    priority: MEDIUM
+    persona: P-EX-02
+    source_refs: {requirements: [R-F-023], use_cases: [UC-EX-10]}
+    trigger: "用例名称含多个连字符（如'创建策略路由-有效参数-策略ID不存在-创建成功'）与文件名分隔符冲突"
+    context: "文件名 <编号>-<名称>.md 中编号与名称之间用单个连字符分隔，名称内部也有连字符"
+    preconditions: ["用例名称含连字符"]
+    steps:
+      - action: "解析文件名 PC-M1-01-01-创建策略路由-有效参数-策略ID不存在-创建成功.md"
+        expected: "以 frontmatter 用例编号列为唯一标识；文件名解析时按编号前缀(PC-M1-01-01)匹配，剩余部分为名称"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-25
+    title: "24 用例全量整改完整性校验"
+    type: precheck
+    priority: MEDIUM
+    persona: P-EX-02
+    source_refs: {requirements: [R-F-021], use_cases: [UC-EX-10]}
+    trigger: "24 用例整改完成后校验完整性"
+    context: "目录迁移+重命名+frontmatter 16 列+tags 标注+ARP 预热校验"
+    preconditions: ["24 用例已整改"]
+    steps:
+      - action: "运行用例整改校验脚本"
+        expected: "24/24 用例：路径符合三级结构 + 文件名符合命名约定 + frontmatter 16 列完整 + tags/关键词列已标注 + warming_up step 有 post_op"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  # ===== 环境文件驱动场景（v1.2 CP3 评审范围扩展） =====
+  - id: SCN-EX-26
+    title: "环境文件解析成功（${ENV.*} 全部解析为物理值）"
+    type: positive
+    priority: HIGH
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-027, R-F-029], use_cases: [UC-EX-11]}
+    trigger: "用例 args 含 ${ENV.*} 占位符且环境文件字段完整"
+    context: "resolve_env_refs 在 build_command 前自动解析 ${ENV.*} 为环境文件中的物理值"
+    preconditions: ["--env-file 指定的环境文件 YAML 格式正确", "用例 args 含 ${ENV.dut.port1} / ${ENV.tg.port1} / ${ENV.tg.url} 等占位符"]
+    steps:
+      - action: "case_runner 加载 --env-file topology-link3.yaml，逐 step 解析 ${ENV.*} 占位符"
+        expected: "所有 ${ENV.*} 替换为环境文件对应字段物理值（如 ${ENV.dut.port1}->GE0_3 / ${ENV.tg.port1}->2_3 / ${ENV.tg.url}->http://10.113.55.170:8000）；测试意图参数（max_loss/object_name/template）保持字面值"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-27
+    title: "占位符解析失败（${ENV.*} 路径不存在 -> VALIDATION_FAILED）"
+    type: negative
+    priority: HIGH
+    persona: P-EX-02
+    source_refs: {requirements: [R-F-027], use_cases: [UC-EX-11]}
+    trigger: "用例 args 含 ${ENV.*} 但环境文件无对应字段"
+    context: "resolve_env_refs 找不到对应字段时返回 VALIDATION_FAILED envelope，不执行 op"
+    preconditions: ["--env-file 指定的环境文件缺少 dut.port1 字段", "用例 args 含 ${ENV.dut.port1}"]
+    steps:
+      - action: "case_runner 解析 ${ENV.dut.port1} 时环境文件无 dut.port1 字段"
+        expected: "返回 VALIDATION_FAILED envelope（reason='${ENV.dut.port1} 在环境文件中未找到'），该 step 不执行 op，不连接设备"
+    evidence_type: static_review
+    automation_status: planned
+    gap_reason: "待 CP5 后实现"
+
+  - id: SCN-EX-28
+    title: "多环境切换（link3->link4，同一用例不改一行）"
+    type: positive
+    priority: HIGH
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-027, R-F-028, R-F-029], use_cases: [UC-EX-11]}
+    trigger: "同一用例需要在 link3 和 link4 两个环境下执行"
+    context: "换环境只需换 --env-file，用例 md 不改一行"
+    preconditions: ["topology-link3.yaml 和 topology-link4.yaml 已就绪", "用例 args 已用 ${ENV.*} 占位符"]
+    steps:
+      - action: "case_runner run --case-file xxx.md --env-file topology-link3.yaml --execute"
+        expected: "用 ${ENV.*} 解析为 link3 环境物理值执行，PASS"
+      - action: "case_runner run --case-file xxx.md --env-file topology-link4.yaml --execute"
+        expected: "同一用例文件不改一行，${ENV.*} 解析为 link4 环境物理值执行，PASS"
+    evidence_type: runtime
+    automation_status: planned
+    gap_reason: "待 CP5 后实现；需 runtime_authorization"
+
+  - id: SCN-EX-29
+    title: "DUT 接口自动预配置 + 用例后清理"
+    type: positive
+    priority: HIGH
+    persona: P-EX-01
+    source_refs: {requirements: [R-F-028], use_cases: [UC-EX-11]}
+    trigger: "case_runner 启动且环境文件含 nodes.dut1.interfaces"
+    context: "login 后自动 fw_update_interface 配 IP，用例结束后逆序清理预配置接口"
+    preconditions: ["环境文件 nodes.dut1.interfaces 含 3 个接口定义", "用例 case_steps 不含 fw_update_interface 预配置步骤"]
+    steps:
+      - action: "case_runner login 后按 nodes.dut1.interfaces 自动执行 3 次 fw_update_interface 配 IP"
+        expected: "3 个接口 IP 配置成功，用例 case_steps 中不需要写 fw_update_interface 预配置"
+      - action: "用例结束后逆序清理预配置接口"
+        expected: "3 个预配置接口逆序清理成功，清理结果记入 result.json"
+    evidence_type: runtime
+    automation_status: planned
+    gap_reason: "待 CP5 后实现；需 runtime_authorization"

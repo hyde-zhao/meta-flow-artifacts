@@ -1,0 +1,260 @@
+# CR-038 工程验证场景（scenario-expansion 产出）
+# 来源：docs/product/USE-CASES-CR-038.md + REQUIREMENTS-CR-038.md
+# 用途：供 meta-qa / verification-execution 消费；含正向/负向/边界/权限/失败恢复/precheck 覆盖
+
+meta:
+  cr_id: CR-038
+  parent_cr: CR-037
+  source_use_cases: [UC-038-01, UC-038-02, UC-038-03, UC-038-04, UC-038-05, UC-038-06]
+  validation_mode: mixed
+  generated_by: scenario-expansion
+
+scenarios:
+  # ---- 正向场景 ----
+  - id: SCN-038-POS-001
+    category: positive
+    name: SW 显式节点映射成功（普通 L2 透传 SW）
+    requirement: R-F-001
+    given: "逻辑拓扑含 node_type=SW 节点，physical_pool 有 SW 候选"
+    when: "执行 topo_mapper 映射"
+    then: "映射结果含 SW 节点 device_mapping status=matched，link_mapping 端点含 SW"
+    n_a_reason: null
+
+  - id: SCN-038-POS-002
+    category: positive
+    name: PPPoE Server SW 识别（role=pppoe-server）
+    requirement: R-F-002
+    given: "逻辑节点 node_type=SW 且 role=pppoe-server"
+    when: "执行映射"
+    then: "device_mapping 保留 role=pppoe-server 标记"
+    n_a_reason: null
+
+  - id: SCN-038-POS-003
+    category: positive
+    name: PPPoE Server 配置生成（H3C 参考）
+    requirement: R-F-003
+    given: "role=pppoe-server SW 节点 + ip pool 段 + virtual-template 编号 + local-user 参数"
+    when: "switch_configurator.configure_pppoe_server 生成配置"
+    then: "输出含 ip pool / pppoe-server bind virtual-template / virtual-template / local-user 完整命令序列"
+    n_a_reason: null
+
+  - id: SCN-038-POS-004
+    category: positive
+    name: PPPoE 命令三厂商覆盖
+    requirement: R-F-004
+    given: "厂商 = h3c / ruijie / huawei"
+    when: "渲染 PPPoE 命令模板"
+    then: "三厂商均产出对应命令模板，无缺失"
+    n_a_reason: null
+
+  - id: SCN-038-POS-005
+    category: positive
+    name: NGFW PPPoE Client 拨号获地址
+    requirement: R-F-005
+    given: "NGFW TE0_8 PPPoE 拨号参数（user/password 占位）"
+    when: "经 ptm-atomic fw_config_pppoe_client 下发"
+    then: "NGFW 接口拨号获 163.0.0.x"
+    n_a_reason: null
+
+  - id: SCN-038-POS-006
+    category: positive
+    name: 环回拓扑 env-file 导出（TG+DUT+SW）
+    requirement: R-F-006
+    given: "TG+DUT+SW 环回拓扑映射结果"
+    when: "exporter 导出 env-file"
+    then: "不报 TOPO_NODE_COUNT_UNSUPPORTED，env-file links 含环回端点对"
+    n_a_reason: null
+
+  - id: SCN-038-POS-007
+    category: positive
+    name: env-file nodes 含 SW 且 port_mapping 不变
+    requirement: R-F-007
+    given: "映射结果含 SW 节点"
+    when: "exporter._build_nodes / _build_port_mapping"
+    then: "nodes 含 sw*（host/brand/role/interfaces），port_mapping 保持 tg/dut 双侧"
+    n_a_reason: null
+
+  - id: SCN-038-POS-008
+    category: positive
+    name: SW 设备 schema 与平台别名可用
+    requirement: R-F-009, R-F-010
+    given: "SW 设备信息（H3C）+ devices.yaml sw 块 + device-reference SW 别名"
+    when: "topo-config 寻址 SW"
+    then: "能经 devices.yaml 解析 SW management + 映射 H3C 命令族"
+    n_a_reason: null
+
+  - id: SCN-038-POS-009
+    category: positive
+    name: PPPoE 链路双向发流 0 丢包
+    requirement: R-F-012
+    given: "PPPoE Server/Client 配置完成 + trex-api 可用 + 真机授权"
+    when: "TG 双向发流（port1↔port2）"
+    then: "tg_verify_traffic_loss loss=0"
+    n_a_reason: null
+
+  - id: SCN-038-POS-010
+    category: positive
+    name: 多实例 TRex 消费/归并/导出
+    requirement: R-F-013, R-F-014, R-F-015
+    given: "TG1 主机并跑两 TRex 实例（GE :8000 / TE :8001），topology 源数据含 trex_instances 汇总块 + 接口级 instance 归属"
+    when: "physical_pool 消费 → pool_merge 归并 → exporter 导出"
+    then: "tg1 节点产出 trex_instance/trex_sync_port/trex_async_port + trex_api_url；逻辑拓扑未声明 trex_instance 时回退单值向后兼容"
+    n_a_reason: null
+
+  - id: SCN-038-POS-011
+    category: positive
+    name: interface_kind 透传 + pppoe 接口不产 ip
+    requirement: R-F-016, R-F-017
+    given: "逻辑拓扑 dut1 接口 interface_kind=pppoe"
+    when: "exporter 导出 env-file"
+    then: "该接口不产 ip 字段且 next_hop=null；默认 physical 时按原逻辑产 ip"
+    n_a_reason: null
+
+  # ---- 负向场景 ----
+  - id: SCN-038-NEG-001
+    category: negative
+    name: SW 无候选映射失败结构化报告
+    requirement: R-NF-002
+    given: "逻辑拓扑含 node_type=SW 但 physical_pool 无 SW 节点"
+    when: "执行映射"
+    then: "输出结构化 reason（无 SW 候选）而非静默跳过"
+    n_a_reason: null
+
+  - id: SCN-038-NEG-002
+    category: negative
+    name: SW 接口不匹配映射失败
+    requirement: R-NF-002
+    given: "SW 逻辑接口与 physical_pool 接口不匹配"
+    when: "执行映射"
+    then: "输出结构化 reason（接口不匹配）"
+    n_a_reason: null
+
+  - id: SCN-038-NEG-003
+    category: negative
+    name: 真机下发未授权被阻断
+    requirement: R-C-003
+    given: "未获 runtime_authorization"
+    when: "尝试 H3C telnet / NGFW web / trex 真机下发"
+    then: "阻断，仅 dry-run 输出 diff"
+    n_a_reason: null
+
+  - id: SCN-038-NEG-004
+    category: negative
+    name: 凭据明文泄漏被拦截
+    requirement: R-C-001
+    given: "配置/产物含凭据"
+    when: "检查产物"
+    then: "全部为 ${ENV_VAR} 占位，无明文凭据"
+    n_a_reason: null
+
+  - id: SCN-038-NEG-005
+    category: negative
+    name: 环回拓扑仍触发 MVP 校验
+    requirement: R-F-006
+    given: "含 SW 的环回拓扑但 exporter 未放宽校验"
+    when: "导出 env-file"
+    then: "若仍报 TOPO_NODE_COUNT_UNSUPPORTED 则判定失败（回归防线）"
+    n_a_reason: null
+
+  # ---- 边界场景 ----
+  - id: SCN-038-BND-001
+    category: boundary
+    name: 单 TG+单 DUT 直连回归无破坏
+    requirement: R-NF-004
+    given: "CR-037 node2_dut1_tg1_linkN 拓扑"
+    when: "执行映射/导出"
+    then: "原行为不变，不引入 SW 逻辑"
+    n_a_reason: null
+
+  - id: SCN-038-BND-002
+    category: boundary
+    name: Mock 虚拟节点仍按虚拟处理
+    requirement: R-F-001
+    given: "逻辑拓扑含 Mock 节点（PC 等）"
+    when: "执行映射"
+    then: "Mock 仍标 virtual，含 Mock 端点 link 标 unmapped"
+    n_a_reason: null
+
+  - id: SCN-038-BND-003
+    category: boundary
+    name: PPPoE 动态地址不进静态 IPAM
+    requirement: R-C-006
+    given: "PPPoE 拨号获 163.0.0.x 动态地址"
+    when: "生成 env-file 静态 IPAM"
+    then: "静态 IPAM 仅覆盖 TG/DUT 静态侧，不含 PPPoE 动态地址"
+    n_a_reason: null
+
+  - id: SCN-038-BND-004
+    category: boundary
+    name: 环回 links 去重/自环检测/闭环完整性校验
+    requirement: R-F-006
+    given: "环回拓扑 links 含重复端点对 / 自环节点 / 非闭环链路"
+    when: "exporter 导出 env-file 前校验 links"
+    then: "去重端点对、检测自环并报错、校验闭环完整性（每节点进出度平衡）"
+    n_a_reason: null
+
+  # ---- 权限场景 ----
+  - id: SCN-038-AUTH-001
+    category: authorization
+    name: 真机下发独立 runtime_authorization
+    requirement: R-C-003
+    given: "dry-run 完成"
+    when: "需真机下发（H3C telnet / NGFW web / trex）"
+    then: "必须独立 runtime_authorization 决策项，CP 批准不隐含"
+    n_a_reason: null
+
+  - id: SCN-038-AUTH-002
+    category: authorization
+    name: GE 实例（GE1_1~4）禁改动
+    requirement: R-C-004
+    given: "交付/验证过程"
+    when: "检查改动范围"
+    then: "GE1_1~4 进程/cfg/wrapper 未被触碰"
+    n_a_reason: null
+
+  # ---- 失败恢复场景 ----
+  - id: SCN-038-REC-001
+    category: failure_recovery
+    name: SW 配置下发幂等 + 台账占用闭环
+    requirement: R-NF-003
+    given: "重复 dry-run 下发"
+    when: "执行台账占用"
+    then: "台账占用不冲突，重复下发不重复占用"
+    n_a_reason: null
+
+  - id: SCN-038-REC-002
+    category: failure_recovery
+    name: SW 配置回滚闭环（Deferred，首版 N/A）
+    requirement: DEF-038-04
+    given: "teardown 撤销 pppoe-server bind / ip pool / local-user"
+    when: "验证回滚"
+    then: "首版不覆盖，CP7 暴露回滚需求时重启"
+    n_a_reason: "DEF-038-04 已延后，首版只做下发 + 台账占用闭环，回滚留待 CP7"
+
+  # ---- precheck 场景 ----
+  - id: SCN-038-PRE-001
+    category: precheck
+    name: ptm-atomic PPPoE op 可用性预检
+    requirement: R-F-005
+    given: "LLD 阶段"
+    when: "核实 ptm-atomic CLI 是否暴露 PPPoE 拨号 op"
+    then: "若缺失则列为跨仓库依赖或映射到可用 op"
+    n_a_reason: null
+
+  - id: SCN-038-PRE-002
+    category: precheck
+    name: physical_pool SW 节点真实接线预检
+    requirement: R-F-001
+    given: "阶段零调研"
+    when: "确认 physical_pool SW1/SW2 已预留 + PPPoE Server SW3 接线"
+    then: "SW 节点可寻址"
+    n_a_reason: null
+
+coverage_summary:
+  positive: 11
+  negative: 5
+  boundary: 4
+  authorization: 2
+  failure_recovery: 2
+  precheck: 2
+  total: 26
