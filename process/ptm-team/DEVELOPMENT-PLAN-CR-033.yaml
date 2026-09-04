@@ -1,0 +1,385 @@
+project_id: "CR-033"
+version: "1.3"
+created_at: "2026-07-28T12:00:00+08:00"
+author: "meta-se"
+story_management_truth_source: "process/DEVELOPMENT-PLAN.yaml"
+source_hld: "docs/design/HLD-PTM-TE-EXEC.md"
+source_feature_matrix: "docs/design/FEATURE-DESIGN-MATRIX-PTM-TE-EXEC.md"
+
+parallel_policy:
+  max_parallel_lld: 3
+  max_parallel_dev: 2
+  max_parallel_qa: 1
+
+waves:
+  - wave: 1
+    name: "P0: TG 建模 + 规则固化 + op_mapper 增强"
+    parallel_lld: true
+    parallel_dev: false
+    stories:
+      - story_id: "ST-EX-01"
+        title: "TG 设备建模（devices.yaml tg 块 + 6 组合 + SKILL.md）"
+        priority: "P0"
+        assignee: null
+        depends_on: []
+        dependency_type: "none"
+        status: "lld-ready"
+        output_files:
+          - "skills/device-management/SKILL.md"
+          - "skills/device-management/reference/device-reference.md"
+          - "skills/device-management/templates/devices.yaml.example"
+          - "skills/device-management/templates/.env.example"
+        file_ownership:
+          - "skills/device-management/SKILL.md#TG 流程段"
+          - "skills/device-management/reference/device-reference.md#TG 6 组合"
+          - "skills/device-management/templates/devices.yaml.example#tg 块"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs: []
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["单 Story 小改，SKILL.md + reference 增量"]
+          rationale: "HLD 已承载边界，Story 内技术说明足够"
+      - story_id: "ST-EX-02"
+        title: "规则固化（install.py ptm-te-workflow 规则块 ≥4 条）"
+        priority: "P0"
+        assignee: null
+        depends_on: []
+        dependency_type: "none"
+        status: "lld-ready"
+        output_files:
+          - "script/ptm_team/install.py"
+        file_ownership:
+          - "script/ptm_team/install.py#render_ptm_te_rule_body"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/rule-fix-and-improvement/DESIGN.md"
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["install.py 规则块增量，模式既有"]
+          rationale: "render_ptm_te_rule_body 既有，新增规则文本"
+      - story_id: "ST-EX-03"
+        title: "TG 路由参数化（op_mapper _build_exec_env 注入 TREX_API_URL）"
+        priority: "P0"
+        assignee: null
+        depends_on: ["ST-EX-01"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "skills/policy-route-execution/scripts/op_mapper.py"
+        file_ownership:
+          - "skills/policy-route-execution/scripts/op_mapper.py#_build_exec_env"
+          - "skills/policy-route-execution/scripts/op_mapper.py#resolve_env_refs"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
+        feature_design_refs: []
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["op_mapper 改动", "TREX_API_URL 注入", "_build_exec_env 签名扩展", "resolve_env_refs + env_topology 参数"]
+          rationale: "op_mapper 是核心映射层，改动需完整 LLD"
+
+  - wave: 2
+    name: "P0: case_runner 核心引擎"
+    parallel_lld: true
+    parallel_dev: false
+    stories:
+      - story_id: "ST-EX-04"
+        title: "case_runner 核心（三入口 + devices.yaml 取址 + case_steps 解析 + --env-file 加载 + case-execution 安装验证）"
+        priority: "P0"
+        assignee: null
+        depends_on: ["ST-EX-03"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "skills/case-execution/SKILL.md"
+          - "skills/case-execution/scripts/case_runner.py"
+          - "script/ptm_team/install.py"
+        file_ownership:
+          - "skills/case-execution/SKILL.md"
+          - "skills/case-execution/scripts/case_runner.py#main"
+          - "skills/case-execution/scripts/case_runner.py#discover_cases"
+          - "skills/case-execution/scripts/case_runner.py#parse_case_file"
+          - "skills/case-execution/scripts/case_runner.py#resolve_addresses"
+          - "script/ptm_team/install.py#PTM_TE_SKILLS"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["新建 case_runner.py", "跨模块 import op_mapper", "三入口 + 取址 + 解析", "case-execution 安装验证（PTM_TE_SKILLS 含 case-execution）", "load_env_file 加载 --env-file"]
+          rationale: "核心引擎，需完整 LLD"
+      - story_id: "ST-EX-05"
+        title: "dry-run 默认门 + --execute 授权门 + runtime_authorization 审计"
+        priority: "P0"
+        assignee: null
+        depends_on: ["ST-EX-04"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#execute_steps"
+          - "skills/case-execution/scripts/case_runner.py#authorize"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["安全边界", "dry-run 默认门", "runtime_authorization 审计"]
+          rationale: "安全相关，需完整 LLD"
+      - story_id: "ST-EX-06"
+        title: "用例清理（逆序清理 mutation ops + step-refs 读取）"
+        priority: "P0"
+        assignee: null
+        depends_on: ["ST-EX-04"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#run_cleanup"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["逆序清理 mutation ops", "step-refs 读取", "回滚逻辑"]
+          rationale: "涉及状态管理和回滚，需完整 LLD"
+      - story_id: "ST-EX-07"
+        title: "fw_logout 会话清理（op_mapper 映射 + case_runner cleanup 登出 + 降级）"
+        priority: "P0"
+        assignee: null
+        depends_on: ["ST-EX-04"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "skills/policy-route-execution/scripts/op_mapper.py"
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/policy-route-execution/scripts/op_mapper.py#OP_ID_TO_SUBCOMMAND.fw_logout"
+          - "skills/policy-route-execution/scripts/op_mapper.py#ARGS_TO_FLAGS.fw_logout"
+          - "skills/policy-route-execution/scripts/op_mapper.py#ROLLBACK_STRATEGY.fw_logout"
+          - "skills/policy-route-execution/scripts/op_mapper.py#EXPECTED_OP_COUNT"
+          - "skills/case-execution/scripts/case_runner.py#cleanup_session"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["op_mapper 新增 fw_logout 映射", "EXPECTED_OP_COUNT 改", "降级逻辑"]
+          rationale: "op_mapper 改动 + 降级策略，需完整 LLD"
+
+  - wave: 3
+    name: "P1: 引擎增强 + 用例结构化"
+    parallel_lld: true
+    parallel_dev: false
+    stories:
+      - story_id: "ST-EX-08"
+        title: "ARP 预热引擎（warming_up/post_op 引擎强制）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-04"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#apply_warming_up"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["warming_up/post_op 引擎强制", "双重保障 ADR-06"]
+          rationale: "引擎核心逻辑，需完整 LLD"
+      - story_id: "ST-EX-09"
+        title: "retry 轮询（retry 字段解析 + 轮询执行）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-04"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#apply_retry"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["retry 字段解析 + 轮询逻辑"]
+          rationale: "逻辑简单，Story 内技术说明足够"
+      - story_id: "ST-EX-10"
+        title: "四态分级（known_issue 标记 + 四态判定）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-04"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#classify_result"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["known_issue 标记 + 四态判定"]
+          rationale: "逻辑简单，Story 内技术说明足够"
+      - story_id: "ST-EX-11"
+        title: "诊断与报告（失败诊断 + 结构化 report.md + 幂等容错记录）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-04", "ST-EX-10"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#generate_report"
+          - "skills/case-execution/scripts/case_runner.py#diagnose_failure"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["失败诊断字段提取", "report.md 模板", "幂等容错记录"]
+          rationale: "涉及错误分析和报告生成，需完整 LLD"
+      - story_id: "ST-EX-12"
+        title: "extract_payload 统一解析（按 op_id 从 envelope 提取字段）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-04"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#extract_payload"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["统一解析函数，按 op_id 提取字段"]
+          rationale: "逻辑简单，Story 内技术说明足够"
+      - story_id: "ST-EX-15"
+        title: "用例结构化约定（目录结构 + 命名 + frontmatter 16 列约定）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-04"]
+        dependency_type: "soft"
+        status: "lld-ready"
+        output_files:
+          - "skills/case-execution/SKILL.md"
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/SKILL.md#用例结构化约定"
+          - "skills/case-execution/scripts/case_runner.py#parse_frontmatter"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["目录结构 + 命名 + frontmatter 16 列约定"]
+          rationale: "约定文档，Story 内技术说明足够"
+      - story_id: "ST-EX-16"
+        title: "标签/关键字执行（--tag 精确过滤 + --keyword 模糊匹配）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-04", "ST-EX-15"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#filter_by_tag"
+          - "skills/case-execution/scripts/case_runner.py#filter_by_keyword"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["--tag 精确过滤 + --keyword 模糊匹配"]
+          rationale: "逻辑简单，Story 内技术说明足够"
+      - story_id: "ST-EX-17"
+        title: "环境解析层 + DUT 接口预配置（env_topology 契约 + ${ENV.*} 解析集成 + DUT 接口自动预配置）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-03", "ST-EX-04"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#build_env_topology"
+          - "skills/case-execution/scripts/case_runner.py#preconfigure_dut_interfaces"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["env_topology 契约（port_mapping/nodes/links）", "${ENV.*} 占位符解析集成", "DUT 接口自动预配置（fw_update_interface）+ 用例后清理", "TREX_API_URL 环境文件优先（devices.yaml fallback）"]
+          rationale: "环境解析层是跨环境执行核心，涉及契约/解析/预配置/清理，需完整 LLD"
+
+  - wave: 4
+    name: "P2-P3: 用例整改 + 消费侧"
+    parallel_lld: true
+    parallel_dev: false
+    stories:
+      - story_id: "ST-EX-13"
+        title: "24 用例全量整改（目录迁移 + 重命名 + frontmatter 16 列 + tags + ARP 预热校验 + ${ENV.*} 引用改写）"
+        priority: "P2"
+        assignee: null
+        depends_on: ["ST-EX-08", "ST-EX-15", "ST-EX-17"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "ptm-te/cases/IPv4策略路由/配置管理/策略配置/*.md"
+          - "ptm-te/cases/IPv4策略路由/配置管理/策略配置/README.md"
+          - "ptm-te/exec_v4.py"
+        file_ownership:
+          - "ptm-te/cases/IPv4策略路由/**/*.md"
+          - "ptm-te/exec_v4.py#废弃标记"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/rule-fix-and-improvement/DESIGN.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["24 用例目录迁移", "重命名", "frontmatter 16 列", "tags", "ARP 预热校验", "${ENV.*} 引用改写"]
+          rationale: "大批量迁移 + 多维度整改，需完整 LLD"
+      - story_id: "ST-EX-14"
+        title: "verify_loss 消费侧提取 tx/rx/loss_ratio"
+        priority: "P3"
+        assignee: null
+        depends_on: ["ST-EX-12"]
+        dependency_type: "hard"
+        status: "lld-ready"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#extract_payload.tg_verify_traffic_loss"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["verify_loss 提取 tx/rx/loss_ratio"]
+          rationale: "逻辑简单，Story 内技术说明足够"

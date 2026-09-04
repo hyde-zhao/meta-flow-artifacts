@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-037",
+  "story_id": "CR037-P1",
+  "story_slug": "physical-pool-template",
+  "status": "ready-for-verification",
+  "agent": "meta-dev",
+  "created_at": "2026-08-05T00:00:00+00:00",
+  "cp_result_ref": "process/checks/CP6-CR037-P1-physical-pool-template-CODING-DONE.md",
+  "evidence_ref": "process/evidence/STORY-CR037-P1.index.json",
+  "implementation_evidence_ref": "process/stories/STORY-CR037-P1.md",
+  "output_files": [
+    {
+      "path": "skills/topo-config/config/physical_pool.yaml",
+      "operation": "modify",
+      "description": "物理池模板：schema + ${PLACEHOLDER} 占位 + YAML 注释指引；保留 FW1/FW2/SW1/SW2/PC1/PC2/TG1 节点与 links 结构；hardware_platform 必填（P-1-B）；不含任何具体型号/IP 特征串（P-1-A）"
+    },
+    {
+      "path": "skills/topo-config/config/physical_ledger.yaml",
+      "operation": "modify",
+      "description": "台账模板：保持 list + port_status: {port: {allocated_to, allocated_vlan}} schema（P0-3）；model 用 ${MODEL} 占位"
+    },
+    {
+      "path": "skills/topo-config/tests/fixtures/physical_pool.sample.yaml",
+      "operation": "create",
+      "description": "测试造数 fixture：hg3250-51/52（DAS-TGFW-A1300-HU, HG3250）+ GE 口 + TE 端口（port3/port4）+ TG1（IXIA-C）；隔离于目标项目"
+    }
+  ],
+  "touched_files": [
+    "skills/topo-config/config/physical_pool.yaml",
+    "skills/topo-config/config/physical_ledger.yaml",
+    "skills/topo-config/tests/fixtures/physical_pool.sample.yaml"
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "tests": {
+    "command": "uv run --python 3.11 python -m pytest skills/topo-planning/tests/",
+    "summary": "P-1 产物经内联验证脚本（模板 YAML 解析、型号特征串 case-sensitive 精确断言、台账 schema 兼容、PhysicalPool 加载模板不破坏）全部通过；togo-config 现有加载逻辑（physical_pool._build_index/get_free_ports）不破坏"
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 python - 内联验证（P-1-A 型号特征串断言 / P-1-B hardware_platform 必填 / 台账 list+port_status / PhysicalPool.load 模板）",
+        "result": "pass"
+      }
+    ],
+    "tests": []
+  },
+  "deviations_from_lld": [
+    "模板 links 使用 block 形式（flow mapping 与 ${...} 大括号冲突导致 YAML 解析失败）",
+    "模板注释中的示例 IP 移除，避免携带安装环境特征"
+  ],
+  "open_questions": [],
+  "risks": [],
+  "waivers": [],
+  "handoff": {
+    "target_stage": "CP7",
+    "next_agent": "meta-qa",
+    "verification_entry": "验证模板不含具体型号/IP 特征串（case-sensitive）、台账 list+port_status schema 兼容 physical_pool.py、fixture 可被 parser.py 正常加载",
+    "notes": [
+      "真实目标项目数据由 S8 install 生成不含造数的模板副本",
+      "fixture 是唯一允许含造数型号（DAS-TGFW-A1300-HU/HG3250/hg3250）的位置"
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-037",
+  "story_id": "CR037-S8",
+  "story_slug": "ptm-te-integration-install",
+  "status": "ready-for-verification",
+  "agent": "meta-dev",
+  "created_at": "2026-08-05T00:00:00+00:00",
+  "cp_result_ref": "process/checks/CP6-CR037-S8-ptm-te-integration-install-CODING-DONE.md",
+  "evidence_ref": "process/evidence/STORY-CR037-S8.index.json",
+  "implementation_evidence_ref": "process/stories/STORY-CR037-S8.md",
+  "output_files": [
+    {
+      "path": "script/install.py",
+      "operation": "modify",
+      "description": "PTM_TE_SKILLS 5→7（增 topo-config + topo-planning）；copy_skill_tree 过滤复制（S8-A：排除 tests/__pycache__/*.pyc）；新增 ensure_target_project_templates + _ensure_gitignore_rule + _assert_p1_template_placeholderized（P1-8 + Minor-2）；install_agent 接线 ptm-te 模板副本生成"
+    },
+    {
+      "path": "script/ptm_team/install.py",
+      "operation": "modify",
+      "description": "保持一致性扩展：PTM_TE_SKILLS 5→7 + copy_skill_tree 同一裁剪语义（两 install.py 一致，既有测试要求）"
+    },
+    {
+      "path": "agents/ptm-te.md",
+      "operation": "modify",
+      "description": "编排 [1.5] 拓扑映射（E1）+ topo_id 双源提取（E2）+ [7] release 挂接（P1-7）+ 关联 Skill 增 topo-config/topo-planning + 运行时工作目录 + 修订记录 v1.9"
+    },
+    {
+      "path": "resource/component-resource-links.yaml",
+      "operation": "modify",
+      "description": "新增 ptm-te 组件 → network-topology tgfw-topo-collection（required，S8-C/FR12）"
+    },
+    {
+      "path": "tests/test_install_templates.py",
+      "operation": "create",
+      "description": "16 个 pytest 单元测试（对齐 LLD §10 清单）"
+    },
+    {
+      "path": "tests/test_install_mapping.py",
+      "operation": "modify",
+      "description": "test_ptm_te_skills_consistent 断言更新为 7 个 skill（CR-037 需求变更）"
+    }
+  ],
+  "touched_files": [
+    "script/install.py",
+    "script/ptm_team/install.py",
+    "agents/ptm-te.md",
+    "resource/component-resource-links.yaml",
+    "tests/test_install_templates.py",
+    "tests/test_install_mapping.py"
+  ],
+  "test_results": {
+    "command": "uv run --python 3.11 python -m pytest tests/test_install_templates.py tests/test_install_mapping.py",
+    "passed": 16,
+    "failed": 0,
+    "note": "test_install_templates.py 16 passed + test_install_mapping.py 全绿（含更新断言）"
+  },
+  "install_dry_run": {
+    "command": "uv run --python 3.11 python script/install.py install claude --agent ptm-te --dry-run",
+    "result": "pass",
+    "note": "7 个 skills + 模板副本 DryRun + .gitignore DryRun + network-topology resource（tgfw-topo-collection）关联安装"
+  },
+  "design_delta_refs": [],
+  "deviations": [
+    "同步修改 script/ptm_team/install.py（LLD scope 只列 script/install.py）：保持两 install.py 一致（既有测试 test_ptm_te_skills_consistent 断言一致）+ S8-A 造数隔离承诺在两安装路径成立",
+    "test_install_mapping.py::test_ptm_te_skills_consistent 断言更新为 7 个 skill（CR-037 需求变更驱动的测试基线更新）"
+  ],
+  "risks": [
+    "ptm_team/install.py 未加 ensure_target_project_templates（模板副本生成仅在主安装器 script/install.py；ptm_team/install.py 为包级兼容入口）"
+  ]
+}

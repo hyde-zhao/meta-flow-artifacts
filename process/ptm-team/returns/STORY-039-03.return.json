@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "story_id": "STORY-039-03",
+  "story_slug": "g5-sw3-family-backport",
+  "canonical_story_id": "STORY-039-03",
+  "cr_id": "CR-039",
+  "stage": "CP6",
+  "status": "implemented",
+  "executed_by": "meta-dev",
+  "executed_at": "2026-08-19T00:00:00+00:00",
+  "wave": 3,
+  "design_evidence_ref": "process/stories/STORY-039-03.md#技术说明",
+  "design_evidence_type": "technical-note",
+  "design_evidence_confirmed": true,
+  "implementation_doc": "process/stories/STORY-039-03-IMPLEMENTATION.md",
+  "touched_files": [
+    {
+      "path": "skills/policy-route-execution/scripts/op_mapper.py",
+      "operation": "modified",
+      "blocks_changed": [
+        {
+          "block": "OP_ID_TO_SUBCOMMAND 表尾",
+          "change": "新增 sw3_sync_pppoe_route: (\"sw3\", \"sync-pppoe-route\")（CR-046 固化，telnet 旁路非 ptm-atomic）"
+        },
+        {
+          "block": "ARGS_TO_FLAGS 表尾",
+          "change": "新增 vpn_instance -> --vpn-instance（形式 flag，实际不走 ptm-atomic，仅为过四表一致性校验）"
+        },
+        {
+          "block": "REQUIRED_FLAGS 表尾",
+          "change": "新增 sw3_sync_pppoe_route: []（vpn_instance 有默认值 hyde，非必填）"
+        },
+        {
+          "block": "ROLLBACK_STRATEGY 表尾",
+          "change": "新增 type=irreversible（修复性同步 SW3 默认路由下一跳，回滚即回退到过期下一跳，无意义）"
+        },
+        {
+          "block": "OP_METADATA 表尾",
+          "change": "新增 side_effect=state_mutation / rollback=irreversible / idempotent=True"
+        },
+        {
+          "block": "EXPECTED_OP_COUNT（L1060 附近）",
+          "change": "44 -> 45；注释 42（CR-043 基准）+ 2（CR-044 service-pool）+ 1（CR-046 sw3）= 45"
+        },
+        {
+          "block": "execute_op sw3 旁路（resolve_env_refs 后）",
+          "change": "family==\"sw3\" 分派 _execute_sw3_op，不经 resolve_step_refs/build_command/subprocess（避免生成非法 ptm-atomic 命令）"
+        },
+        {
+          "block": "sw3 执行段三函数（execute_op 后整段插入 239 行）",
+          "change": "_execute_sw3_op（定位 SW 节点->dry-run 计划->授权校验->SW3_PASSWORD 环境变量解析->telnet 同步默认路由下一跳）+ _exec_sw3_telnet（telnetlib 惰性导入，H3C 大小写不敏感登录匹配，screen-length 0 关分页，不打印密码不落日志）+ _parse_sw3_pppoe_route（/32 Direct VA -> client IP；0.0.0.0/0 -> default_next_hop）；与工作区逐行 diff 一致"
+        },
+        {
+          "block": "validate_mapping_consistency [5j]",
+          "change": "CR-046 sw3 族子命令校验：expected_sw3_actions={\"sync-pppoe-route\"}（[5i] tg 之后）"
+        }
+      ],
+      "untouched_blocks": [
+        "G1 区块（_query_static_route_id + handle_rollback 静态路由分支，W1）、G4 区块（next_hop_a 分支 + 10 类文案，W2），零回退",
+        "tg 族 9 op 映射 / BOOL_MUTEX_FLAGS / resolve_env_refs 10 类分支 / handle_rollback 主流程",
+        "map_intent 逻辑意图映射、CLI 入口"
+      ]
+    },
+    {
+      "path": "skills/case-execution/scripts/case_runner.py",
+      "operation": "modified",
+      "blocks_changed": [
+        {
+          "block": "import 区（L48-58）",
+          "change": "from op_mapper import 块新增 map_op_id_to_subcommand"
+        },
+        {
+          "block": "_build_sw3_dry_run_envelope（_build_dry_run_envelope 之后新增）",
+          "change": "sw3 dry-run envelope：error 透传 / success -> status=dry_run, data.command=计划 dict（非 ptm-atomic 命令）"
+        },
+        {
+          "block": "dry-run 分支 _dry_run_fn（[3] dry-run 默认门）",
+          "change": "family==\"sw3\" -> execute_op(dry_run=True, authorized=False) 获取命令计划 -> _build_sw3_dry_run_envelope 包装；build_command 之前旁路"
+        }
+      ],
+      "excluded_blocks": [
+        "CR-047 post_delay 精细排除（DQ-039-05=B）：工作区 _parse_post_delay（L114-133）与 time.sleep(OP_INTERVAL_SEC + post_delay)（L2509-2511）未回源；grep post_delay|_parse_post_delay 零命中"
+      ]
+    },
+    {
+      "path": "tests/test_tg_op_mapping.py",
+      "operation": "modified",
+      "blocks_changed": [
+        "L159 类 docstring 44->45；test_pass_44_ops -> test_pass_45_ops（断言 45）",
+        "test_expected_op_count_is_44 -> test_expected_op_count_is_45（len + 常量双断言 45）",
+        "新增 Cr046Sw3FamilyOpMappingTests（8 用例）+ Cr046Sw3DryRunEnvelopeTests（3 用例，含 post_delay 零残留源码断言）"
+      ],
+      "test_method": "static-only + dry-run 单测（sw3 dry-run 返回命令计划不连设备；仅 mock.patch.dict 移除 SW3_PASSWORD；无 subprocess mock）"
+    },
+    {
+      "path": "tests/test_op_mapper_pppoe_client.py",
+      "operation": "modified",
+      "blocks_changed": [
+        "BackwardCompatTests::test_expected_op_count 断言 44->45（docstring 同步 + CR-046 变更注释）"
+      ],
+      "rationale": "最小计数载体同步（偏离记录 1）：该断言为 EXPECTED_OP_COUNT 载体，44->45 变更后必然回归；按 SM-039-01 单测断言一致 + merge_owner 最终一致性职责做最小同步，未触碰该文件其他 STORY-038-05 断言"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "allowed_write_paths": [
+      "skills/policy-route-execution/scripts/op_mapper.py",
+      "skills/case-execution/scripts/case_runner.py",
+      "tests/test_tg_op_mapping.py",
+      "tests/test_op_mapper_pppoe_client.py（计数载体最小同步，见偏离记录）",
+      "process/stories/STORY-039-03.md",
+      "process/stories/STORY-039-03-IMPLEMENTATION.md",
+      "process/returns/STORY-039-03.return.json",
+      "process/DEV-LOG.md"
+    ],
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "forbidden_paths_respected": [
+      "tests/test_op_mapper_rollback.py / tests/test_op_mapper_next_hop_a.py（W1/W2 测试，未触碰）",
+      "skills/case-execution/SKILL.md 与 docs/ptm-te/op-coverage-matrix.md（STORY-039-04/W1 产物，未触碰）",
+      "skills/case-execution/templates/env-file.pppoe-sw3.next_hop_a.example.yaml（W1 产物，未触碰）",
+      "REQUIREMENTS.md / HLD.md / ARCHITECTURE-DECISION.md / process/DEVELOPMENT-PLAN.yaml"
+    ],
+    "note": "以 canonical 当前工作区（含 W1 G1 + W2 G4 区块）为基底逐块合并（非整文件覆盖）；sw3 执行段 239 行与工作区 diff 逐行一致；六处映射/旁路/[5j]/case_runner 三块 grep-A4 diff 全部一致"
+  },
+  "verification": {
+    "validation_mode": "static-only + dry-run",
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest tests/test_tg_op_mapping.py tests/test_op_mapper_rollback.py tests/test_op_mapper_next_hop_a.py -x",
+        "result": "85 passed（tg_op_mapping 47 含新增 sw3 11；rollback + next_hop_a 38 不回归）"
+      },
+      {
+        "command": "uv run --python 3.11 pytest tests/test_env_unsupported.py tests/test_op_mapper_pppoe_client.py",
+        "result": "26 passed（含 pppoe_client 计数载体 45 断言）"
+      },
+      {
+        "command": "uv run --python 3.11 pytest tests/ -q",
+        "result": "244 passed + 2 failed（存量失败：test_cr018_p2 GATE-4 脚本问题；git stash 对拍确认改动前同样失败，与本 Story 无关）"
+      },
+      {
+        "command": "validate_mapping_consistency() standalone",
+        "result": "passed=True, mismatches=[]；EXPECTED_OP_COUNT=45；len(OP_ID_TO_SUBCOMMAND)=45；sw3 map=('sw3','sync-pppoe-route')"
+      },
+      {
+        "command": "uv run --python 3.11 python -m py_compile op_mapper.py case_runner.py",
+        "result": "通过"
+      },
+      {
+        "command": "grep -n \"post_delay\\|_parse_post_delay\" skills/case-execution/scripts/case_runner.py",
+        "result": "零命中（exit=1；CR-047 精细排除验证；另有单测 test_case_runner_no_post_delay_backport 源码级守护）"
+      },
+      {
+        "command": "diff 逐块对拍工作区 /home/hyde/projects/ptm-te-manaul/.claude/skills/{policy-route-execution,case-execution}/scripts/{op_mapper,case_runner}.py",
+        "result": "sw3 执行段 239 行逐行一致（SW3-BLOCK-IDENTICAL）；六处映射条目/execute_op 旁路/[5j]/import/_build_sw3_dry_run_envelope/dry-run sw3 分支全部 IDENTICAL"
+      }
+    ],
+    "uncovered": [
+      "真机 SW3 telnet 同步端到端（H3C 登录/路由表实查/undo+ip route-static 下发）：CR-039 static-only，DQ-039-04 不授权真机（RA-039-02 台账承接）",
+      "telnetlib py>=3.13 不可用分支（仓内 uv 锁 3.11，无 3.13 环境）",
+      "sw3 经 case_runner execute_steps 全链路 dry-run（retry/step-refs mock 落盘）：单测覆盖 envelope 构建与 execute_op(dry_run=True) 两侧"
+    ]
+  },
+  "evidence_refs": [
+    "process/stories/STORY-039-03-IMPLEMENTATION.md",
+    "process/stories/STORY-039-03.md#技术说明",
+    "process/changes/CR-046.md（sw3 追溯档案，canonical 回源锚点）",
+    "process/DEV-LOG.md#STORY-039-03"
+  ],
+  "contract_changes": {
+    "design_delta_required": false,
+    "design_delta_type": "none",
+    "rationale": "无长期 Feature DESIGN / ADR / HLD 修改；technical-note 契约（六处映射 + 执行段三函数 + validate [5j] + case_runner sw3 envelope + EXPECTED_OP_COUNT=45 四处一致 + post_delay 精细排除）逐条落实。有意偏离 3 处（IMPLEMENTATION.md 偏离记录）：(1) test_op_mapper_pppoe_client.py 计数载体 44->45 最小同步（SM-039-01 必然要求）；(2) dry-run 成功 envelope error_type 断言按工作区实际行为取空串而非 NONE（真相源优先）；(3) 工作区行号漂移（CR-047 post_delta 改动致 case_runner 锚点行号偏移），回源按内容块定位"
+  },
+  "task_completion": {
+    "AI-1-diff-audit": { "status": "done", "output": "确认改动集 = op_mapper 六处映射 + execute_op 旁路 + sw3 执行段 239 行 + validate [5j] + EXPECTED_OP_COUNT 45；case_runner import + envelope + dry-run 分支；不引入 post_delay" },
+    "AI-2-op-mapper-backport": { "status": "done", "output": "逐块回源；sw3 执行段与六处映射与工作区 diff 逐行一致；telnetlib 惰性导入 + runtime_auth 审计块已含" },
+    "AI-3-case-runner-backport": { "status": "done", "output": "import + _build_sw3_dry_run_envelope + dry-run sw3 分支三块回源；post_delay 零引入（grep 零命中 + 单测守护）" },
+    "AI-4-unit-tests": { "status": "done", "output": "test_tg_op_mapping.py 44->45 三处更新 + 新增 11 用例（六处映射/dry-run 计划/失败路径/SW3_PASSWORD/envelope/post_delay）" },
+    "AI-5-pytest-validate": { "status": "done", "output": "指定三件套 85 passed；validate_mapping_consistency PASS；全量 244 passed（2 存量失败与本 Story 无关）" },
+    "AI-6-grep-post-delay": { "status": "done", "output": "grep post_delay|_parse_post_delay 零命中；IMPLEMENTATION.md 记录 G6 M9 归属（DQ-039-04 承接）与 sw3 用例样例来源（工作区 node3_dut1_tg1_sw1_pppoe_link3）" }
+  },
+  "acceptance_criteria_coverage": {
+    "SM-039-01": { "status": "covered", "location": "op_mapper.py EXPECTED_OP_COUNT=45 + validate_mapping_consistency PASS + test_pass_45_ops / test_expected_op_count_is_45 / test_sw3_six_mappings + SKILL.md Gotcha#8（W1 已落 45）——四处载体一致" },
+    "SM-039-04": { "status": "covered", "location": "test_execute_op_sw3_dry_run_returns_plan + test_envelope_success_wraps_plan（data 为 telnet 命令计划 dict，非 ptm-atomic 命令，status=dry_run）" },
+    "sw3-six-mappings": { "status": "covered", "location": "test_sw3_six_mappings（OP_ID_TO_SUBCOMMAND/ARGS_TO_FLAGS/REQUIRED_FLAGS/ROLLBACK_STRATEGY/OP_METADATA/EXPECTED_OP_COUNT 六项断言）" },
+    "post-delay-zero-residue": { "status": "covered", "location": "grep 零命中 + test_case_runner_no_post_delay_backport 源码断言" },
+    "SW3_PASSWORD-env-behavior": { "status": "covered", "location": "test_execute_op_sw3_password_env_missing_param_invalid（未设置 -> PARAM_INVALID，reason 含 SW3_PASSWORD）+ test_execute_op_sw3_execute_unauthorized_exec_failed（未授权 -> EXEC_FAILED）" }
+  },
+  "notes": [
+    "op_mapper.py 三波写入全部完成（W1 G1 + W2 G4 + W3 G5），本 Story 为 merge_owner 最终态；validate_mapping_consistency 为最终一致性收口",
+    "test_cr018_p2 两个失败为存量问题（GATE-4 脚本，git stash 对拍确认改动前即失败），CP7 勿计入本 Story 缺陷",
+    "CR-047 post_delay 排除项已按 DQ-039-05=B 记入 STORY-039-04 BACKLOG（W1 落档），后续对拍以 canonical 为真相源"
+  ],
+  "story_status_after": "dev-complete（待 CP6）"
+}

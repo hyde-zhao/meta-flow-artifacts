@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "story_id": "STORY-056-06",
+  "cr_id": "CR-056",
+  "stage": "CP6",
+  "return_ref": "process/returns/STORY-056-06-ledger-subcommand-CP6.return.json",
+  "changed_files": [
+    "skills/case-execution/scripts/case_ledger.py",
+    "process/stories/STORY-056-06-ledger-subcommand-IMPLEMENTATION.md",
+    "process/checks/CP6-STORY-056-06-ledger-subcommand-CODING-DONE.md",
+    "process/checks/CP6-STORY-056-06-ledger-subcommand.result.json"
+  ],
+  "install_copy_files": [],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 python -m py_compile skills/case-execution/scripts/case_ledger.py skills/case-execution/scripts/case_runner.py",
+      "result": "PASS"
+    },
+    {
+      "command": "uv run --python 3.12 python -m py_compile skills/case-execution/scripts/case_ledger.py",
+      "result": "PASS"
+    },
+    {
+      "command": "uv run --python 3.11 --with pytest --with pyyaml pytest skills/case-execution/tests/ -q",
+      "result": "88 passed（既有套件零回归）"
+    },
+    {
+      "command": "uv run --python 3.11 --with pyyaml python /tmp/smoke_cr056_06.py",
+      "result": "29 pass / 0 fail（A 全量视图 13 / B --mark 过滤 4 / C --out splice 9 / D 无 PyYAML 1 / E 只读边界 2；脚本与 fixture 均在 /tmp 不落仓库）"
+    },
+    {
+      "command": "uv run --python 3.11 --with pyyaml python /tmp/smoke_cr056_05.py 与 /tmp/smoke_cr056_04.py",
+      "result": "55 pass / 0 fail 与 70 pass / 0 fail（前序 Story 冒烟回归零破坏）"
+    },
+    {
+      "command": "main(['ledger', '--cases-root', '/home/hyde/projects/ptm-te-manaul/cases'])（真实环境只读探针）",
+      "result": "rc=0 正常产出空台账骨架视图；台账与用例 md 零写入"
+    },
+    {
+      "command": "git status --porcelain + git diff --stat skills/case-execution/scripts/case_runner.py",
+      "result": "工程资产仅 case_ledger.py（untracked 新文件内修改）；case_runner.py diff 维持 056-04 的 +678/-7（本 Story 零改动）；exec_task.py/init_cases_repo.py/install.py 零触碰"
+    }
+  ],
+  "smoke_evidence_refs": {
+    "method": "交互冒烟（/tmp 不落仓库）经 case_runner.main(['ledger', ...]) 端到端（覆盖 056-04 委托分支）+ 台账/md 前后逐字节只读比对",
+    "fixture": "/tmp/cr056-06-smoke/cases：台账 11 条目（debug×2/verify×1/verify_fail×2/accept×6 遍布 cicd 4 档，mark_history 含 rounds=3 与 rounds=None 两种验收证据形态，first_submitted_at 5 例）+ 4 类漂移夹具（mark 漂移/指纹失配（台账记篡改前指纹）/文件缺失/台账无登记）+ tde 设计源与 README（无 frontmatter 应忽略）",
+    "key_assertions": [
+      "矩阵：accept 行 3/1/1/1/6、debug 2、verify_fail 2、deprecated 计数 0；--mark accept 过滤后统计范围 6 且矩阵只剩 accept 行数据",
+      "待办 2.1：3 例（A2 达标连续 3 轮 runs/exec-acc、A3 轮数未记录、B1 无打标记录），已提交 CICD 的 A4/A7 不入",
+      "待办 2.2：3 例（A5/B4 verify_fail + A6 cicd_verify_fail）",
+      "漂移 2.3：4 例四类全命中（mark 漂移/指纹失配/用例文件缺失/台账无登记），tde 设计源与 README 不入清单",
+      "first_submitted_at：5 例 + 最早 2026-08-28 + 最近 2026-09-01T11:00 边界正确",
+      "splice：首生成含 frontmatter+marker+人工区模板；二次运行机器区随台账变更重写而人工区自定义内容逐字保留；无 marker 文件拒绝覆盖 exit 3 且内容未变；无 .tmp 残留；父目录自动创建",
+      "降级：exec_task 缺失 → --out exit 5 而 stdout 视图可用；yaml=None 注入 → exit 5 无 traceback；--mark/--cases-root 非法 exit 2",
+      "只读边界：台账与全部用例 md 前后逐字节一致"
+    ]
+  },
+  "safety_assertions": {
+    "no_network": true,
+    "no_device_touch": true,
+    "no_credential_touch": true,
+    "no_cases_repo_write": true,
+    "read_only_aggregation": true,
+    "smoke_in_tmp_only": true,
+    "no_traceback_escape": true
+  },
+  "open_decision_refs": [
+    "GAP-STORY-056-06-01（marker 共用提示 / 同号多文件首见路径 / 稳定轮以证据列承载，non-blocking-open）",
+    "缺口反馈 #1：resolve_evidence_rounds mode 过滤已在 056-05 函数内实现（协调者'双口径'前提不符），供销项"
+  ]
+}

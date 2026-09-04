@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR037-DELIVERY-READINESS",
+  "profile": "compact-release",
+  "story_id": null,
+  "cr_id": "CR-037",
+  "context_ref": "process/context/CP8-CR037-DELIVERY-CONTEXT.yaml",
+  "release_context_ref": "process/release/RELEASE-CONTEXT-CR-037.yaml",
+  "dispatch_refs": ["ADE-CR037-META-QA-001"],
+  "evidence_ref": "process/checks/CP7-CR037.result.json",
+  "checked_at": "2026-08-05T20:10:00+08:00",
+  "checker_provenance": {
+    "checker_name": "meta-qa",
+    "checker_version": "meta-flow",
+    "invocation": "CP8 release-readiness for CR-037 (meta-qa subagent, capsule-first)",
+    "generated_by": "meta-qa subagent",
+    "fallback_used": false,
+    "fallback_reason": null,
+    "fallback_review_ref": null
+  },
+  "items": [
+    {
+      "id": "CP8-037-01",
+      "category": "verification",
+      "name": "All CR-037 Stories have valid CP7 verification evidence (12/12)",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["process/checks/CP7-CR037.result.json", "docs/quality/VERIFICATION-REPORT.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "12 Story return packets + evidence index; 271 passed / 0 failed independent re-run; layer A 8 criteria + 3 special + Minor-4 all pass."
+    },
+    {
+      "id": "CP8-037-02",
+      "category": "installation",
+      "name": "install dry-run passes (7 skills + template copies without fixtures + gitignore + resource)",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/quality/VERIFICATION-REPORT.md#9", "script/install.py"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "install claude --agent ptm-te --dry-run OK; ensure_target_project_templates idempotent; copy_skill_tree strips tests/."
+    },
+    {
+      "id": "CP8-037-03",
+      "category": "release",
+      "name": "Release context capsule and compact release documents complete",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": ["process/release/RELEASE-CONTEXT-CR-037.yaml", "docs/release/RELEASE-NOTES.md", "docs/release/DEPLOY-CHECKLIST.md", "docs/release/ROLLBACK.md", "docs/release/MIGRATION.md", "docs/release/FEEDBACK.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "compact profile; release_decision=READY_WITH_RISK; all 5 docs generated with real content."
+    },
+    {
+      "id": "CP8-037-04",
+      "category": "risk",
+      "name": "R1 layer-B real-pool unverified (P-2) accepted via waiver W-CR037-01 until 2026-08-12",
+      "status": "WAIVED",
+      "severity": "HIGH",
+      "evidence_refs": ["process/checks/CP7-CR037.result.json#waivers", "docs/quality/VERIFICATION-REPORT.md#12"],
+      "owner": "user",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": "W-CR037-01",
+      "notes": "Not a false PASS: CP8-DQ-037-R1 asks for explicit risk acceptance; layer-B recheck triggered when P-2 real data ready."
+    },
+    {
+      "id": "CP8-037-05",
+      "category": "runtime",
+      "name": "R2 --execute real-device deployment remains not_authorized (DQ-037-04)",
+      "status": "N/A",
+      "severity": "HIGH",
+      "evidence_refs": ["process/changes/CR-037.md#DQ-037-04", "docs/quality/VERIFICATION-REPORT.md#12"],
+      "owner": "user",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Cannot be waived; separate DQ-037-04 runtime_authorization required. CP8-DQ-037-R2 records as not_authorized; S10 only fixture dry-run (0 real-device writes)."
+    },
+    {
+      "id": "CP8-037-06",
+      "category": "risk",
+      "name": "R3 MVP boundary (single TG + single DUT) is a scope decision with follow-up",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": ["process/changes/CR-037-HLD.md#1.3"],
+      "owner": "user",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "TOPO_NODE_COUNT_UNSUPPORTED explicit; multi-node extension listed as CR-037-FU-R3."
+    },
+    {
+      "id": "CP8-037-07",
+      "category": "coverage",
+      "name": "Follow-up tracking ledger covers R4/R5 + M1/M2/I1 (6 candidates)",
+      "status": "PASS",
+      "severity": "LOW",
+      "evidence_refs": ["process/changes/CR-037-FOLLOW-UP-TRACKING-2026-08-05.md", "docs/quality/FIXES.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "No candidate promoted to active CR; user decides promotion."
+    }
+  ],
+  "blockers": [],
+  "waivers": [
+    {
+      "waiver_id": "W-CR037-01",
+      "applies_to": {"checkpoint": "CP8-CR037-DELIVERY-READINESS", "check_item_id": "CP8-037-04"},
+      "item": "层B 目标项目真实池映射（HLD §11 准则 9）",
+      "reason": "P-2 topology/physical_pool.yaml 未填写真实数据；记录未验证风险，不阻断 fixture 结论",
+      "scope": "层A fixture 验证不受影响；层B 待 P-2 就绪后补验",
+      "expires_at": "2026-08-12",
+      "approval_ref": "CP8-DQ-037-R1（风险接受候选，待用户确认）",
+      "forces_release_status": "READY_WITH_RISK",
+      "risk_refs": ["docs/quality/VERIFICATION-REPORT.md#R1"]
+    }
+  ],
+  "read_expansion_refs": [
+    "RE-20260805T121500Z0000-metaqa-cr037-crdoc",
+    "RE-20260805T121500Z0000-metaqa-cr037-hld",
+    "RE-20260805T121500Z0000-metaqa-cr037-fu"
+  ],
+  "decision": "PASS",
+  "release_decision": "READY_WITH_RISK",
+  "next_route": "human_gate",
+  "unauthorized_scope": [
+    "R2 --execute 真机下发（DQ-037-04 独立 runtime_authorization，不可 waive）",
+    "真实运行环境验证（层B P-2 目标项目真实池）",
+    "NGFW Web API / trex-api 外部接口实时调用",
+    "生产凭据读取 / 生产数据写入 / publish / live",
+    "git push / commit（除非用户明确要求）"
+  ]
+}

@@ -1,13 +1,10 @@
----
-project_id: "ptm-team"
-version: "1.0"
-created_at: "2026-07-16"
-source_cr: "CR-030"
+project_id: "CR-033"
+version: "1.3"
+created_at: "2026-07-28T12:00:00+08:00"
+author: "meta-se"
 story_management_truth_source: "process/DEVELOPMENT-PLAN.yaml"
-created_by: "meta-se"
-total_waves: 4
-total_stories: 14
----
+source_hld: "docs/design/HLD-PTM-TE-EXEC.md"
+source_feature_matrix: "docs/design/FEATURE-DESIGN-MATRIX-PTM-TE-EXEC.md"
 
 parallel_policy:
   max_parallel_lld: 3
@@ -16,437 +13,373 @@ parallel_policy:
 
 waves:
   - wave: 1
-    name: "INGESTION 基础"
-    description: "ITR 受控摄取、清洗、SQLite schema 和失败保护"
+    name: "P0: TG 建模 + 规则固化 + op_mapper 增强"
     parallel_lld: true
-    parallel_dev: true
-    depends_on_waves: []
+    parallel_dev: false
     stories:
-      - story_id: "ST-RA-INGEST-DB"
-        title: "SQLite 数据库 schema 与 DAO 层"
+      - story_id: "ST-EX-01"
+        title: "TG 设备建模（devices.yaml tg 块 + 6 组合 + SKILL.md）"
         priority: "P0"
-        assignee: "F-020"
-        status: "implemented"
+        assignee: null
         depends_on: []
         dependency_type: "none"
+        status: "done"
         output_files:
-          - "data/schema.sql"
-          - "data/dao.py"
-          - "data/.gitignore"
+          - "skills/device-management/SKILL.md"
+          - "skills/device-management/reference/device-reference.md"
+          - "skills/device-management/templates/devices.yaml.example"
+          - "skills/device-management/templates/.env.example"
         file_ownership:
-          owner_feature: "FEAT-RA-INGESTION"
-          exclusive: true
-        feature_design_refs:
-          - "docs/features/feat-ra-ingestion/DESIGN.md"
-          - "docs/features/feat-ra-ingestion/TASKS.md"
-        lld_policy:
-          required_level: "full-lld"
-          trigger_reasons:
-            - "data-model"
-            - "migration"
-          rationale: "SQLite schema 是跨 Feature 共享的唯一数据 owner，DDL 和 DAO 接口需完整 LLD"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
-
-      - story_id: "ST-RA-05.1-INGEST"
-        title: "ITR 问题单受控摄取与原始快照保存"
-        priority: "P0"
-        assignee: "F-020"
-        status: "implemented"
-        depends_on:
-          - "ST-RA-INGEST-DB"
-        dependency_type: "hard"
-        dependency_note: "必须先取得 ST-RA-INGEST-DB 的 schema/DAO 和受限存储初始化；该 Story 不得修改 data/.gitignore"
-        output_files:
-          - "skills/itr-ticket-ingestion/SKILL.md"
-          - "skills/itr-ticket-ingestion/templates/batch-manifest.yaml"
-        file_ownership:
-          owner_feature: "FEAT-RA-INGESTION"
-          shared_with: ["ST-RA-05.2-CLEAN", "ST-NRA-03", "ST-RA-06.1-DETECT"]
-          exclusive: false
-          write_section: "HTTP ingestion, snapshot, allowlist"
-        feature_design_refs:
-          - "docs/features/feat-ra-ingestion/DESIGN.md"
-          - "docs/features/feat-ra-ingestion/TASKS.md"
-        lld_policy:
-          required_level: "full-lld"
-          trigger_reasons:
-            - "external-interface"
-            - "security"
-            - "data-model"
-          rationale: "外部 HTTP 接口、allowlist 安全策略、原始快照存储"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
-
-      - story_id: "ST-RA-05.2-CLEAN"
-        title: "字段映射、清洗与质量报告"
-        priority: "P0"
-        assignee: "F-020"
-        status: "implemented"
-        depends_on:
-          - "ST-RA-05.1-INGEST"
-        dependency_type: "hard"
-        dependency_note: "需要摄取接口完成以获取原始数据"
-        output_files:
-          - "skills/itr-ticket-ingestion/SKILL.md"
-          - "skills/itr-ticket-ingestion/templates/quality-report.yaml"
-        file_ownership:
-          owner_feature: "FEAT-RA-INGESTION"
-          shared_with: ["ST-RA-05.1-INGEST", "ST-NRA-03", "ST-RA-06.1-DETECT"]
-          exclusive: false
-          write_section: "field mapping, cleaning, quality report"
-        feature_design_refs:
-          - "docs/features/feat-ra-ingestion/DESIGN.md"
-          - "docs/features/feat-ra-ingestion/TASKS.md"
-        lld_policy:
-          required_level: "full-lld"
-          trigger_reasons:
-            - "data-model"
-            - "cross-module-contract"
-          rationale: "IngestionQualityReport 是分析的前置契约，字段映射需完整 LLD"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
-
-      - story_id: "ST-NRA-03"
-        title: "摄取失败保护（异常/冲突/保存失败）"
-        priority: "P0"
-        assignee: "F-020"
-        status: "implemented"
-        depends_on:
-          - "ST-RA-05.1-INGEST"
-          - "ST-RA-05.2-CLEAN"
-        dependency_type: "hard"
-        dependency_note: "依赖正向摄取的失败路径设计"
-        output_files:
-          - "skills/itr-ticket-ingestion/SKILL.md"
-        file_ownership:
-          owner_feature: "FEAT-RA-INGESTION"
-          shared_with: ["ST-RA-05.1-INGEST", "ST-RA-05.2-CLEAN", "ST-RA-06.1-DETECT"]
-          exclusive: false
-          write_section: "failure handling"
-        feature_design_refs:
-          - "docs/features/feat-ra-ingestion/DESIGN.md"
+          - "skills/device-management/SKILL.md#TG 流程段"
+          - "skills/device-management/reference/device-reference.md#TG 6 组合"
+          - "skills/device-management/templates/devices.yaml.example#tg 块"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs: []
         lld_policy:
           required_level: "technical-note"
-          trigger_reasons: []
-          rationale: "负向场景，正向 Story 的 LLD 已覆盖失败路径设计"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
+          trigger_reasons: ["单 Story 小改，SKILL.md + reference 增量"]
+          rationale: "HLD 已承载边界，Story 内技术说明足够"
+      - story_id: "ST-EX-02"
+        title: "规则固化（install.py ptm-te-workflow 规则块 ≥4 条）"
+        priority: "P0"
+        assignee: null
+        depends_on: []
+        dependency_type: "none"
+        status: "done"
+        output_files:
+          - "script/ptm_team/install.py"
+        file_ownership:
+          - "script/ptm_team/install.py#render_ptm_te_rule_body"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/rule-fix-and-improvement/DESIGN.md"
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["install.py 规则块增量，模式既有"]
+          rationale: "render_ptm_te_rule_body 既有，新增规则文本"
+      - story_id: "ST-EX-03"
+        title: "TG 路由参数化（op_mapper _build_exec_env 注入 TREX_API_URL）"
+        priority: "P0"
+        assignee: null
+        depends_on: ["ST-EX-01"]
+        dependency_type: "hard"
+        status: "done"
+        output_files:
+          - "skills/policy-route-execution/scripts/op_mapper.py"
+        file_ownership:
+          - "skills/policy-route-execution/scripts/op_mapper.py#_build_exec_env"
+          - "skills/policy-route-execution/scripts/op_mapper.py#resolve_env_refs"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
+        feature_design_refs: []
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["op_mapper 改动", "TREX_API_URL 注入", "_build_exec_env 签名扩展", "resolve_env_refs + env_topology 参数"]
+          rationale: "op_mapper 是核心映射层，改动需完整 LLD"
 
   - wave: 2
-    name: "S1 分析引擎 + S2 变更检测"
-    description: "资格检查、六维分析引擎、S1 分析管线、安全边界 + S2 变更检测"
+    name: "P0: case_runner 核心引擎"
     parallel_lld: true
-    parallel_dev: true
-    depends_on_waves: [1]
+    parallel_dev: false
     stories:
-      - story_id: "ST-RA-01"
-        title: "资格检查与可信输入建立"
+      - story_id: "ST-EX-04"
+        title: "case_runner 核心（三入口 + devices.yaml 取址 + case_steps 解析 + --env-file 加载 + case-execution 安装验证）"
         priority: "P0"
-        assignee: "F-021"
-        status: "implemented"
-        depends_on:
-          - "ST-RA-INGEST-DB"
+        assignee: null
+        depends_on: ["ST-EX-03"]
         dependency_type: "hard"
-        dependency_note: "需要 SQLite schema 完成以读取 ticket 数据"
+        status: "done"
         output_files:
-          - "skills/reverse-analysis/SKILL.md"
-          - "agents/ptm-tse.md"
+          - "skills/case-execution/SKILL.md"
+          - "skills/case-execution/scripts/case_runner.py"
+          - "script/ptm_team/install.py"
         file_ownership:
-          owner_feature: "FEAT-RA-ANALYSIS"
-          shared_with: ["ST-RA-02", "ST-RA-05.3-ANALYZE", "ST-NRA-01", "ST-NRA-02", "ST-RA-06.2-REFRESH"]
-          exclusive: false
-          write_section: "qualification, eligibility, evidence"
+          - "skills/case-execution/SKILL.md"
+          - "skills/case-execution/scripts/case_runner.py#main"
+          - "skills/case-execution/scripts/case_runner.py#discover_cases"
+          - "skills/case-execution/scripts/case_runner.py#parse_case_file"
+          - "skills/case-execution/scripts/case_runner.py#resolve_addresses"
+          - "script/ptm_team/install.py#PTM_TE_SKILLS"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
         feature_design_refs:
-          - "docs/features/feat-ra-analysis/DESIGN.md"
-          - "docs/features/feat-ra-analysis/TASKS.md"
+          - "docs/features/case-execution/DESIGN.md"
         lld_policy:
           required_level: "full-lld"
-          trigger_reasons:
-            - "cross-module-contract"
-            - "security"
-          rationale: "资格规则、证据阈值、越权拒绝逻辑；跨 INGESTION 读取"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
-
-      - story_id: "ST-RA-02"
-        title: "六维分析引擎（reverse-analysis Skill 核心）"
+          trigger_reasons: ["新建 case_runner.py", "跨模块 import op_mapper", "三入口 + 取址 + 解析", "case-execution 安装验证（PTM_TE_SKILLS 含 case-execution）", "load_env_file 加载 --env-file"]
+          rationale: "核心引擎，需完整 LLD"
+      - story_id: "ST-EX-05"
+        title: "dry-run 默认门 + --execute 授权门 + runtime_authorization 审计"
         priority: "P0"
-        assignee: "F-021"
-        status: "implemented"
-        depends_on:
-          - "ST-RA-01"
-        dependency_type: "soft"
-        dependency_note: "需要资格检查完成"
+        assignee: null
+        depends_on: ["ST-EX-04"]
+        dependency_type: "hard"
+        status: "done"
         output_files:
-          - "skills/reverse-analysis/SKILL.md"
-          - "skills/reverse-analysis/templates/ra-report.yaml"
-          - "skills/reverse-analysis/templates/metric-definition.yaml"
+          - "skills/case-execution/scripts/case_runner.py"
         file_ownership:
-          owner_feature: "FEAT-RA-ANALYSIS"
-          shared_with: ["ST-RA-01", "ST-RA-05.3-ANALYZE", "ST-NRA-01", "ST-NRA-02", "ST-RA-06.2-REFRESH"]
-          exclusive: false
-          write_section: "six-dimension engine, root-cause state machine"
+          - "skills/case-execution/scripts/case_runner.py#execute_steps"
+          - "skills/case-execution/scripts/case_runner.py#authorize"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
         feature_design_refs:
-          - "docs/features/feat-ra-analysis/DESIGN.md"
-          - "docs/features/feat-ra-analysis/TASKS.md"
+          - "docs/features/case-execution/DESIGN.md"
         lld_policy:
           required_level: "full-lld"
-          trigger_reasons:
-            - "data-model"
-            - "cross-module-contract"
-          rationale: "六维分析核心引擎、根因四层状态机、MetricDefinition 契约"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
-
-      - story_id: "ST-RA-05.3-ANALYZE"
-        title: "S1 逐单与批量分析管线"
+          trigger_reasons: ["安全边界", "dry-run 默认门", "runtime_authorization 审计"]
+          rationale: "安全相关，需完整 LLD"
+      - story_id: "ST-EX-06"
+        title: "用例清理（逆序清理 mutation ops + step-refs 读取）"
         priority: "P0"
-        assignee: "F-021"
-        status: "implemented"
-        depends_on:
-          - "ST-RA-02"
-          - "ST-RA-05.2-CLEAN"
+        assignee: null
+        depends_on: ["ST-EX-04"]
         dependency_type: "hard"
-        dependency_note: "需要分析引擎 + 清洗后数据"
+        status: "done"
         output_files:
-          - "skills/reverse-analysis/SKILL.md"
-          - "skills/reverse-analysis/templates/analysis-run-manifest.yaml"
+          - "skills/case-execution/scripts/case_runner.py"
         file_ownership:
-          owner_feature: "FEAT-RA-ANALYSIS"
-          shared_with: ["ST-RA-01", "ST-RA-02", "ST-NRA-01", "ST-NRA-02", "ST-RA-06.2-REFRESH"]
-          exclusive: false
-          write_section: "S1 pipeline, AnalysisRunManifest"
+          - "skills/case-execution/scripts/case_runner.py#run_cleanup"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
         feature_design_refs:
-          - "docs/features/feat-ra-analysis/DESIGN.md"
-          - "docs/features/feat-ra-analysis/TASKS.md"
+          - "docs/features/case-execution/DESIGN.md"
         lld_policy:
           required_level: "full-lld"
-          trigger_reasons:
-            - "cross-module-contract"
-            - "data-model"
-          rationale: "SQLite 读取契约、analysis_run 管理、报告模板"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
-
-      - story_id: "ST-NRA-01"
-        title: "证据不足保护（拒绝虚假根因）"
+          trigger_reasons: ["逆序清理 mutation ops", "step-refs 读取", "回滚逻辑"]
+          rationale: "涉及状态管理和回滚，需完整 LLD"
+      - story_id: "ST-EX-07"
+        title: "fw_logout 会话清理（op_mapper 映射 + case_runner cleanup 登出 + 降级）"
         priority: "P0"
-        assignee: "F-021"
-        status: "implemented"
-        depends_on:
-          - "ST-RA-01"
+        assignee: null
+        depends_on: ["ST-EX-04"]
         dependency_type: "hard"
-        dependency_note: "依赖资格检查的阈值逻辑"
+        status: "done"
         output_files:
-          - "skills/reverse-analysis/SKILL.md"
+          - "skills/policy-route-execution/scripts/op_mapper.py"
+          - "skills/case-execution/scripts/case_runner.py"
         file_ownership:
-          owner_feature: "FEAT-RA-ANALYSIS"
-          shared_with: ["ST-RA-01", "ST-RA-02", "ST-RA-05.3-ANALYZE", "ST-NRA-02", "ST-RA-06.2-REFRESH"]
-          exclusive: false
-          write_section: "evidence threshold guard"
+          - "skills/policy-route-execution/scripts/op_mapper.py#OP_ID_TO_SUBCOMMAND.fw_logout"
+          - "skills/policy-route-execution/scripts/op_mapper.py#ARGS_TO_FLAGS.fw_logout"
+          - "skills/policy-route-execution/scripts/op_mapper.py#ROLLBACK_STRATEGY.fw_logout"
+          - "skills/policy-route-execution/scripts/op_mapper.py#EXPECTED_OP_COUNT"
+          - "skills/case-execution/scripts/case_runner.py#cleanup_session"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
         feature_design_refs:
-          - "docs/features/feat-ra-analysis/DESIGN.md"
-        lld_policy:
-          required_level: "technical-note"
-          trigger_reasons: []
-          rationale: "负向场景，正向 Story LLD 覆盖阈值逻辑"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
-
-      - story_id: "ST-NRA-02"
-        title: "权限边界拒绝（外部访问/生产操作）"
-        priority: "P0"
-        assignee: "F-021"
-        status: "implemented"
-        depends_on:
-          - "ST-RA-01"
-        dependency_type: "hard"
-        dependency_note: "依赖资格检查的权限边界"
-        output_files:
-          - "skills/reverse-analysis/SKILL.md"
-        file_ownership:
-          owner_feature: "FEAT-RA-ANALYSIS"
-          shared_with: ["ST-RA-01", "ST-RA-02", "ST-RA-05.3-ANALYZE", "ST-NRA-01", "ST-RA-06.2-REFRESH"]
-          exclusive: false
-          write_section: "deny-by-default, permission denial"
-        feature_design_refs:
-          - "docs/features/feat-ra-analysis/DESIGN.md"
-        lld_policy:
-          required_level: "technical-note"
-          trigger_reasons: []
-          rationale: "deny-by-default 拒绝逻辑，正向 Story LLD 覆盖"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
-
-      - story_id: "ST-RA-06.1-DETECT"
-        title: "变更检测、合并与版本历史（S2）"
-        priority: "P0"
-        assignee: "F-020"
-        status: "implemented"
-        depends_on:
-          - "ST-NRA-03"
-          - "ST-RA-INGEST-DB"
-        dependency_type: "hard"
-        dependency_note: "需要正向摄取完成 + SQLite schema"
-        output_files:
-          - "skills/itr-ticket-ingestion/SKILL.md"
-        file_ownership:
-          owner_feature: "FEAT-RA-INGESTION"
-          shared_with: ["ST-RA-05.1-INGEST", "ST-RA-05.2-CLEAN", "ST-NRA-03"]
-          exclusive: false
-          write_section: "change detection, merge, version history"
-        feature_design_refs:
-          - "docs/features/feat-ra-ingestion/DESIGN.md"
-          - "docs/features/feat-ra-ingestion/TASKS.md"
+          - "docs/features/case-execution/DESIGN.md"
         lld_policy:
           required_level: "full-lld"
-          trigger_reasons:
-            - "data-model"
-            - "cross-module-contract"
-          rationale: "变更检测算法、冲突队列、ticket_version 写入"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
+          trigger_reasons: ["op_mapper 新增 fw_logout 映射", "EXPECTED_OP_COUNT 改", "降级逻辑"]
+          rationale: "op_mapper 改动 + 降级策略，需完整 LLD"
 
   - wave: 3
-    name: "改进治理 + 闭环跟踪 + S2 增量重算"
-    description: "CA/PA 批准、改进输入、行动项、有效性、关闭 + S2 增量重算和差异报告"
+    name: "P1: 引擎增强 + 用例结构化"
     parallel_lld: true
     parallel_dev: false
-    depends_on_waves: [2]
     stories:
-      - story_id: "ST-RA-03"
-        title: "改进输入治理（improvement-tracker CA/PA 侧）"
-        priority: "P0"
-        assignee: "F-022"
-        status: "implemented"
-        depends_on:
-          - "ST-RA-05.3-ANALYZE"
-        dependency_type: "hard"
-        dependency_note: "需要分析结论以生成 CA/PA 草案"
-        output_files:
-          - "skills/improvement-tracker/SKILL.md"
-          - "skills/improvement-tracker/templates/capa-proposal.yaml"
-          - "skills/improvement-tracker/templates/approved-input.yaml"
-        file_ownership:
-          owner_feature: "FEAT-RA-IMPROVEMENT"
-          shared_with: ["ST-RA-04", "ST-RA-06.3-TRACK"]
-          exclusive: false
-          write_section: "CA/PA creation, approval gate, approved input"
-        feature_design_refs:
-          - "docs/features/feat-ra-improvement/DESIGN.md"
-          - "docs/features/feat-ra-improvement/TASKS.md"
-        lld_policy:
-          required_level: "full-lld"
-          trigger_reasons:
-            - "cross-module-contract"
-            - "security"
-            - "permission"
-          rationale: "CA/PA 批准门、Approved Improvement Input 契约"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
-
-      - story_id: "ST-RA-04"
-        title: "闭环跟踪与有效性决策"
+      - story_id: "ST-EX-08"
+        title: "ARP 预热引擎（warming_up/post_op 引擎强制）"
         priority: "P1"
-        assignee: "F-023"
-        status: "implemented"
-        depends_on:
-          - "ST-RA-03"
+        assignee: null
+        depends_on: ["ST-EX-04"]
         dependency_type: "hard"
-        dependency_note: "需要 Approved Input 作为跟踪基础"
+        status: "done"
         output_files:
-          - "skills/improvement-tracker/SKILL.md"
-          - "skills/improvement-tracker/templates/action-item.yaml"
-          - "skills/improvement-tracker/templates/effectiveness-check.yaml"
-          - "skills/improvement-tracker/templates/closure-decision.yaml"
+          - "skills/case-execution/scripts/case_runner.py"
         file_ownership:
-          owner_feature: "FEAT-RA-TRACKING"
-          shared_with: ["ST-RA-03", "ST-RA-06.3-TRACK"]
-          exclusive: false
-          write_section: "action items, effectiveness, closure"
+          - "skills/case-execution/scripts/case_runner.py#apply_warming_up"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
         feature_design_refs:
-          - "docs/features/feat-ra-tracking/DESIGN.md"
-          - "docs/features/feat-ra-tracking/TASKS.md"
+          - "docs/features/case-execution/DESIGN.md"
         lld_policy:
           required_level: "full-lld"
-          trigger_reasons:
-            - "cross-module-contract"
-            - "concurrency"
-          rationale: "行动项状态机、关闭条件、观察窗逻辑"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
-
-      - story_id: "ST-RA-06.2-REFRESH"
-        title: "S2 增量重算、差异报告"
-        priority: "P0"
-        assignee: "F-021"
-        status: "implemented"
-        depends_on:
-          - "ST-RA-05.3-ANALYZE"
-          - "ST-RA-06.1-DETECT"
-        dependency_type: "hard"
-        dependency_note: "需要 S1 分析管线 + S2 变更检测完成"
-        output_files:
-          - "skills/reverse-analysis/SKILL.md"
-        file_ownership:
-          owner_feature: "FEAT-RA-ANALYSIS"
-          shared_with: ["ST-RA-01", "ST-RA-02", "ST-RA-05.3-ANALYZE", "ST-NRA-01", "ST-NRA-02"]
-          exclusive: false
-          write_section: "S2 incremental recompute, comparison"
-        feature_design_refs:
-          - "docs/features/feat-ra-analysis/DESIGN.md"
-          - "docs/features/feat-ra-analysis/TASKS.md"
-        lld_policy:
-          required_level: "full-lld"
-          trigger_reasons:
-            - "cross-module-contract"
-            - "data-model"
-          rationale: "增量重算策略、环比同比口径、差异报告"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
-
-  - wave: 4
-    name: "S2 措施基线管理"
-    description: "S2 措施基线刷新提示"
-    parallel_lld: true
-    parallel_dev: false
-    depends_on_waves: [2, 3]
-    stories:
-      - story_id: "ST-RA-06.3-TRACK"
-        title: "措施基线管理与刷新提示"
+          trigger_reasons: ["warming_up/post_op 引擎强制", "双重保障 ADR-06"]
+          rationale: "引擎核心逻辑，需完整 LLD"
+      - story_id: "ST-EX-09"
+        title: "retry 轮询（retry 字段解析 + 轮询执行）"
         priority: "P1"
-        assignee: "F-023"
-        status: "implemented"
-        depends_on:
-          - "ST-RA-04"
-          - "ST-RA-06.1-DETECT"
+        assignee: null
+        depends_on: ["ST-EX-04"]
         dependency_type: "hard"
-        dependency_note: "需要跟踪模型（Wave 3）+ S2 变更检测完成（Wave 2）"
+        status: "done"
         output_files:
-          - "skills/improvement-tracker/SKILL.md"
-          - "skills/improvement-tracker/templates/measure-baseline.yaml"
+          - "skills/case-execution/scripts/case_runner.py"
         file_ownership:
-          owner_feature: "FEAT-RA-TRACKING"
-          shared_with: ["ST-RA-03", "ST-RA-04"]
-          exclusive: false
-          write_section: "MeasureBaseline, refresh hints"
+          - "skills/case-execution/scripts/case_runner.py#apply_retry"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
         feature_design_refs:
-          - "docs/features/feat-ra-tracking/DESIGN.md"
-          - "docs/features/feat-ra-tracking/TASKS.md"
+          - "docs/features/case-execution/DESIGN.md"
         lld_policy:
           required_level: "technical-note"
-          trigger_reasons: []
-          rationale: "MeasureBaseline 管理 + 刷新提示；逻辑相对独立"
-        lld_gate: "CP5"
-        dev_gate: "CP5-confirmed"
+          trigger_reasons: ["retry 字段解析 + 轮询逻辑"]
+          rationale: "逻辑简单，Story 内技术说明足够"
+      - story_id: "ST-EX-10"
+        title: "四态分级（known_issue 标记 + 四态判定）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-04"]
+        dependency_type: "hard"
+        status: "done"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#classify_result"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["known_issue 标记 + 四态判定"]
+          rationale: "逻辑简单，Story 内技术说明足够"
+      - story_id: "ST-EX-11"
+        title: "诊断与报告（失败诊断 + 结构化 report.md + 幂等容错记录）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-04", "ST-EX-10"]
+        dependency_type: "hard"
+        status: "done"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#generate_report"
+          - "skills/case-execution/scripts/case_runner.py#diagnose_failure"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["失败诊断字段提取", "report.md 模板", "幂等容错记录"]
+          rationale: "涉及错误分析和报告生成，需完整 LLD"
+      - story_id: "ST-EX-12"
+        title: "extract_payload 统一解析（按 op_id 从 envelope 提取字段）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-04"]
+        dependency_type: "hard"
+        status: "done"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#extract_payload"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["统一解析函数，按 op_id 提取字段"]
+          rationale: "逻辑简单，Story 内技术说明足够"
+      - story_id: "ST-EX-15"
+        title: "用例结构化约定（目录结构 + 命名 + frontmatter 16 列约定）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-04"]
+        dependency_type: "soft"
+        status: "done"
+        output_files:
+          - "skills/case-execution/SKILL.md"
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/SKILL.md#用例结构化约定"
+          - "skills/case-execution/scripts/case_runner.py#parse_frontmatter"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["目录结构 + 命名 + frontmatter 16 列约定"]
+          rationale: "约定文档，Story 内技术说明足够"
+      - story_id: "ST-EX-16"
+        title: "标签/关键字执行（--tag 精确过滤 + --keyword 模糊匹配）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-04", "ST-EX-15"]
+        dependency_type: "hard"
+        status: "done"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#filter_by_tag"
+          - "skills/case-execution/scripts/case_runner.py#filter_by_keyword"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["--tag 精确过滤 + --keyword 模糊匹配"]
+          rationale: "逻辑简单，Story 内技术说明足够"
+      - story_id: "ST-EX-17"
+        title: "环境解析层 + DUT 接口预配置（env_topology 契约 + ${ENV.*} 解析集成 + DUT 接口自动预配置）"
+        priority: "P1"
+        assignee: null
+        depends_on: ["ST-EX-03", "ST-EX-04"]
+        dependency_type: "hard"
+        status: "done"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#build_env_topology"
+          - "skills/case-execution/scripts/case_runner.py#preconfigure_dut_interfaces"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["env_topology 契约（port_mapping/nodes/links）", "${ENV.*} 占位符解析集成", "DUT 接口自动预配置（fw_update_interface）+ 用例后清理", "TREX_API_URL 环境文件优先（devices.yaml fallback）"]
+          rationale: "环境解析层是跨环境执行核心，涉及契约/解析/预配置/清理，需完整 LLD"
 
-story_summary:
-  total: 14
-  full_lld: 10
-  technical_note: 4
-  waived: 0
-  wave_1_count: 4
-  wave_2_count: 6
-  wave_3_count: 3
-  wave_4_count: 1
+  - wave: 4
+    name: "P2-P3: 用例整改 + 消费侧"
+    parallel_lld: true
+    parallel_dev: false
+    stories:
+      - story_id: "ST-EX-13"
+        title: "24 用例全量整改（目录迁移 + 重命名 + frontmatter 16 列 + tags + ARP 预热校验 + ${ENV.*} 引用改写）"
+        priority: "P2"
+        assignee: null
+        depends_on: ["ST-EX-08", "ST-EX-15", "ST-EX-17"]
+        dependency_type: "hard"
+        status: "done"
+        output_files:
+          - "ptm-te/cases/IPv4策略路由/配置管理/策略配置/*.md"
+          - "ptm-te/cases/IPv4策略路由/配置管理/策略配置/README.md"
+          - "ptm-te/exec_v4.py"
+        file_ownership:
+          - "ptm-te/cases/IPv4策略路由/**/*.md"
+          - "ptm-te/exec_v4.py#废弃标记"
+        lld_gate: "full-lld"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/rule-fix-and-improvement/DESIGN.md"
+        lld_policy:
+          required_level: "full-lld"
+          trigger_reasons: ["24 用例目录迁移", "重命名", "frontmatter 16 列", "tags", "ARP 预热校验", "${ENV.*} 引用改写"]
+          rationale: "大批量迁移 + 多维度整改，需完整 LLD"
+      - story_id: "ST-EX-14"
+        title: "verify_loss 消费侧提取 tx/rx/loss_ratio"
+        priority: "P3"
+        assignee: null
+        depends_on: ["ST-EX-12"]
+        dependency_type: "hard"
+        status: "done"
+        output_files:
+          - "skills/case-execution/scripts/case_runner.py"
+        file_ownership:
+          - "skills/case-execution/scripts/case_runner.py#extract_payload.tg_verify_traffic_loss"
+        lld_gate: "technical-note"
+        dev_gate: "cp5-approved"
+        feature_design_refs:
+          - "docs/features/case-execution/DESIGN.md"
+        lld_policy:
+          required_level: "technical-note"
+          trigger_reasons: ["verify_loss 提取 tx/rx/loss_ratio"]
+          rationale: "逻辑简单，Story 内技术说明足够"

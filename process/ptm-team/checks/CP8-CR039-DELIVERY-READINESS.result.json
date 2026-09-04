@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR039-DELIVERY-READINESS",
+  "cr_id": "CR-039",
+  "profile": "compact-release",
+  "story_id": "STORY-039-01,STORY-039-02,STORY-039-03,STORY-039-04",
+  "context_ref": "process/release/RELEASE-CONTEXT-CR-039.yaml",
+  "release_context_ref": "process/release/RELEASE-CONTEXT-CR-039.yaml",
+  "evidence_ref": "docs/quality/VERIFICATION-REPORT.md",
+  "dispatch_refs": [
+    "ADE-CR039-META-QA-001",
+    "ADE-CR039-META-QA-002"
+  ],
+  "checked_at": "2026-08-19T15:10:00+08:00",
+  "checker_provenance": {
+    "checker_name": "meta-qa",
+    "checker_version": "meta-flow 0.4.0",
+    "invocation": "CP8 delivery-readiness for CR-039 (meta-qa release-readiness, capsule-first：消费 CP7 result / VERIFICATION-REPORT / CP2 决策 / BACKLOG 摘要，不回读完整 HLD / LLD / diff)",
+    "generated_by": "meta-qa (release-readiness, subagent dispatch ADE-CR039-META-QA-002)",
+    "fallback_used": false,
+    "fallback_reason": null,
+    "fallback_review_ref": null
+  },
+  "items": [
+    {
+      "id": "CP8-039-01",
+      "category": "verification",
+      "name": "CR-039 全部 4 Story 持有有效 CP7 验证证据（PASS_WITH_RISK，无 NEEDS_REWORK/BLOCKED）",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP7-CR039.result.json",
+        "docs/quality/VERIFICATION-REPORT.md",
+        "process/returns/STORY-039-01.return.json",
+        "process/returns/STORY-039-02.return.json",
+        "process/returns/STORY-039-03.return.json",
+        "process/returns/STORY-039-04.return.json"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "4/4 verified（CP7 PASS_WITH_RISK）：SM-039-01~05 全 PASS（独立复跑三件套 85 passed + 全量 244 passed，2 处 test_cr018_p2 存量失败经 stash 对拍确认与本 CR 无关）；4 return packet + 4 IMPLEMENTATION.md 证据链完整。"
+    },
+    {
+      "id": "CP8-039-02",
+      "category": "release",
+      "name": "RELEASE-CONTEXT 胶囊 + compact 发布五件套齐备",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR-039.yaml",
+        "docs/release/RELEASE-NOTES.md",
+        "docs/release/DEPLOY-CHECKLIST.md",
+        "docs/release/ROLLBACK.md",
+        "docs/release/MIGRATION.md",
+        "docs/release/FEEDBACK.md"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "release_artifact_profile=compact；release_decision=READY_WITH_RISK（建议，待 CP8 人工门禁终值确认）。胶囊只含摘要/计数/风险 ID/决策 ID/证据路径，未复制上游全文。"
+    },
+    {
+      "id": "CP8-039-03",
+      "category": "risk",
+      "name": "R-1~R-5 风险分流完成并汇入 CP8 Decision Brief 输入",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP7-CR039.result.json",
+        "process/changes/CR-039-FOLLOW-UP-TRACKING-2026-08-19.md",
+        "process/BACKLOG-CR-039.md"
+      ],
+      "owner": "user",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "R-1 risk_acceptance+follow_up（真机回归时跟踪 CR-039-FU-R1）/ R-2 runtime_authorization（独立发起，本 CR 不授权）/ R-3/R-4/R-5 follow_up_candidate。R-1/R-3/R-4/R-5 需 CP8 人工确认风险接受（CP8-DQ-039-RISK）。"
+    },
+    {
+      "id": "CP8-039-04",
+      "category": "runtime",
+      "name": "不授权项声明完整：真机三不授权 + 凭据 + CR-047（approve 不隐含）",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR-039.yaml",
+        "process/checkpoints/CP2-CR039.md",
+        "docs/quality/VERIFICATION-REPORT.md"
+      ],
+      "owner": "user",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "不可 waive：trex 发流 / SSH 重启 trex-stl-te / sw3 telnet 实连为独立 runtime_authorization（DQ-039-04）；凭据明文落盘/生产凭据读取不授权（SW3_PASSWORD 环境变量，ADR-02）；CR-047 post_delay 回源不授权（DQ-039-05=B，台账候选）。CP7/CP8 全程未执行、未假装通过。"
+    },
+    {
+      "id": "CP8-039-05",
+      "category": "coverage",
+      "name": "Follow-up 台账覆盖 9 candidate + 1 closed（BL-039-01/02、R-1/R-3/R-4/R-5、P-1、DEF-039-02/03）",
+      "status": "PASS",
+      "severity": "LOW",
+      "evidence_refs": [
+        "process/changes/CR-039-FOLLOW-UP-TRACKING-2026-08-19.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "9 candidate 不占执行锁；BL-039-06 文档核对已随 CP7 关闭；无 candidate 升级为 active CR，用户决定推进时才创建正式 CR 文件。"
+    },
+    {
+      "id": "CP8-039-06",
+      "category": "documentation",
+      "name": "文档锁判定：README / USER-MANUAL 增量 N/A（无新增安装脚本与用户流程）",
+      "status": "N/A",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "skills/case-execution/SKILL.md",
+        "docs/ptm-te/op-coverage-matrix.md",
+        "docs/release/RELEASE-NOTES.md"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "判定理由：本 CR 为代码回源，未新增安装脚本、未改变安装链路与用户操作流程；面向用户的行为契约变化（Gotcha#8 计数 45、占位符第 10 类、sw3 旁路）已随 STORY-039-04 落地在 SKILL.md 与 op-coverage-matrix，并由 CP7-039-03/07/09 核验；发布说明承载交付内容。若用户要求 README/USER-MANUAL 增量补记回源内容，可转 meta-doc 小任务（follow-up 可选，不阻断）。"
+    },
+    {
+      "id": "CP8-039-07",
+      "category": "installation",
+      "name": "安装/升级/幂等矩阵：无安装脚本变更，复用既有链路（N/A）",
+      "status": "N/A",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/release/RELEASE-CONTEXT-CR-039.yaml",
+        "docs/release/DEPLOY-CHECKLIST.md"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "N/A 理由：改动对象为 canonical 源 skill 私有脚本与仓库文档，script/install.py 与 PTM_TE_SKILLS 清单零改动、pyproject/uv.lock 零改动（无依赖变更）；部署动作仅为 git 提交/合入 + 按需重装（见 DEPLOY-CHECKLIST），无 INSTALL-MANIFEST 交付对象。"
+    },
+    {
+      "id": "CP8-039-08",
+      "category": "quality",
+      "name": "存量失败 P-1（test_cr018_p2 GATE-4 ×2）已分流，不属本 CR 缺陷",
+      "status": "PASS",
+      "severity": "LOW",
+      "evidence_refs": [
+        "tests/test_cr018_p2.py",
+        "docs/quality/VERIFICATION-REPORT.md",
+        "process/changes/CR-039-FOLLOW-UP-TRACKING-2026-08-19.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "meta-qa 独立 git stash 对拍确认基线（无本 CR 改动）同样 2 failed，与本 CR 无关；已列 follow-up 台账 CR-039-FU-P1（candidate，用户决定修复时另行跟踪）。"
+    }
+  ],
+  "fact_diff": [
+    {
+      "promise_ref": "SM-039-01",
+      "promise": "EXPECTED_OP_COUNT=45 四处载体一致（代码常量 + validate 三表 + 单测断言 + SKILL.md Gotcha#8）",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["process/checks/CP7-CR039.result.json", "docs/quality/VERIFICATION-REPORT.md"]
+    },
+    {
+      "promise_ref": "SM-039-02",
+      "promise": "G1 静态路由回滚 verify 兜底四分支单测（含 data.vals 双形态扩展）",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["tests/test_op_mapper_rollback.py", "docs/quality/VERIFICATION-REPORT.md"]
+    },
+    {
+      "promise_ref": "SM-039-03",
+      "promise": "G4 ${ENV.dut.next_hop_a} 第 10 类占位符解析单测（6 用例）",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["tests/test_op_mapper_next_hop_a.py", "docs/quality/VERIFICATION-REPORT.md"]
+    },
+    {
+      "promise_ref": "SM-039-04",
+      "promise": "sw3 dry-run envelope 单测 + post_delay 零残留（DQ-039-05=B 精细排除）",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["tests/test_tg_op_mapping.py", "skills/case-execution/scripts/case_runner.py", "docs/quality/VERIFICATION-REPORT.md"]
+    },
+    {
+      "promise_ref": "SM-039-05",
+      "promise": "CR-043/044/046 追溯档案 + SKILL.md 修订记录 v1.7/v1.8（DQ-039-03=B）",
+      "status": "EXECUTED_POSITIVE_RESULT",
+      "decision_impact": "READY",
+      "evidence_refs": ["process/changes/CR-043.md", "process/changes/CR-044.md", "process/changes/CR-046.md", "skills/case-execution/SKILL.md"]
+    },
+    {
+      "promise_ref": "DQ-039-04",
+      "promise": "真机验证不授权（static-only 等价验证），真机回归独立 runtime_authorization",
+      "status": "NOT_APPLICABLE",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/checkpoints/CP2-CR039.md", "docs/quality/VERIFICATION-REPORT.md"]
+    },
+    {
+      "promise_ref": "R-1",
+      "promise": "G1 真机大路由表 verify 超时/歧义/分页>100 未覆盖 -> 风险接受 + 真机回归候选跟踪",
+      "status": "DEFERRED_FOLLOW_UP",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/changes/CR-039-FOLLOW-UP-TRACKING-2026-08-19.md"]
+    },
+    {
+      "promise_ref": "R-2",
+      "promise": "sw3 telnet 端到端真机未验证 -> 独立 runtime_authorization，本 CR 不授权",
+      "status": "DEFERRED_FOLLOW_UP",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/changes/CR-039-FOLLOW-UP-TRACKING-2026-08-19.md"]
+    },
+    {
+      "promise_ref": "R-3",
+      "promise": "telnetlib py>=3.13 分支无环境验证 -> 升级 Python 时回归",
+      "status": "DEFERRED_FOLLOW_UP",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/changes/CR-039-FOLLOW-UP-TRACKING-2026-08-19.md"]
+    },
+    {
+      "promise_ref": "R-4",
+      "promise": "sw3 经 case_runner execute_steps 全链路 dry-run 未单测 -> follow-up 补齐",
+      "status": "DEFERRED_FOLLOW_UP",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/changes/CR-039-FOLLOW-UP-TRACKING-2026-08-19.md"]
+    },
+    {
+      "promise_ref": "R-5",
+      "promise": "工作区 2 处 KNOWN_FAIL 流量回退未追验 -> 用户决定（可并入真机回归）",
+      "status": "DEFERRED_FOLLOW_UP",
+      "decision_impact": "READY_WITH_RISK",
+      "evidence_refs": ["process/changes/CR-039-FOLLOW-UP-TRACKING-2026-08-19.md", "process/BACKLOG-CR-039.md"]
+    },
+    {
+      "promise_ref": "P-1",
+      "promise": "全量测试基线（244 passed + 2 failed 为存量，非本 CR 引入）",
+      "status": "EXECUTED_NEGATIVE_RESULT",
+      "decision_impact": "NO_IMPACT",
+      "evidence_refs": ["tests/test_cr018_p2.py", "docs/quality/VERIFICATION-REPORT.md", "process/changes/CR-039-FOLLOW-UP-TRACKING-2026-08-19.md"]
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260819T062123Z0000-c69b90ec"
+  ],
+  "decision": "PASS",
+  "release_decision": "READY_WITH_RISK",
+  "next_route": "human_gate",
+  "unauthorized_scope": [
+    "trex 真机发流（独立 runtime_authorization，DQ-039-04）",
+    "SSH 重启 trex-stl-te（独立 runtime_authorization）",
+    "sw3 telnet 真机实连：H3C 登录 / undo + ip route-static 下发（独立 runtime_authorization）",
+    "生产凭据读取 / 凭据明文落盘（sw3 密码仅 SW3_PASSWORD 环境变量，ADR-02）",
+    "CR-047 post_delay 回源（DQ-039-05=B，独立 CR，本 CP8 不启动）",
+    "git push / commit（除非用户明确要求；CR-039 改动当前在工作区未提交）",
+    "publish / live 发布动作（RELEASED/FAILED 需独立真实发布授权与执行证据）"
+  ],
+  "next_route_notes": "CP8 自动预检 PASS + release_decision=READY_WITH_RISK：可请求 host-orchestrator 发起 CP8 人工门禁。人工决策项：① CP8-DQ-039-RISK（R-1/R-3/R-4/R-5 风险接受与 follow-up 分流确认）；② CP8-DQ-039-RUNTIME（真机三不授权重申，不授权）；③ CP8-DQ-039-047（CR-047 台账候选不升级）；④ CP8-DQ-039-DOC（README/USER-MANUAL 判定 N/A 或转 meta-doc 可选增量）。"
+}

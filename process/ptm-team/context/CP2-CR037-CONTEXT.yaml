@@ -1,0 +1,44 @@
+schema_version: "1"
+capsule_id: "CP2-CR037"
+project_id: "ptm-team"
+cr_id: "CR-037"
+stage: "CP2"
+status: "pending_user_decision"
+created_at: "2026-08-05T00:00:00+08:00"
+read_profile: "compact"
+
+must_read:
+  - "process/changes/CR-037.md"
+  - "process/checkpoints/CP2-CR037.md"
+  - "process/changes/summaries/CR-037.summary.json"
+
+read_if_needed:
+  - "resource/network-topology/topology-collection.md"
+  - "skills/topo-config/SKILL.md"
+  - "skills/case-execution/SKILL.md"
+  - "skills/device-management/reference/device-reference.md"
+
+do_not_read_by_default:
+  - "process/STATE.md"
+  - "process/DEVELOPMENT-PLAN.yaml"
+  - "process/discussions/**"
+  - "process/archive/**"
+
+key_facts:
+  scope: "ptm-te 集成 topo 管理：逻辑 topo → 物理 topo 映射（topo-limit 约束），产物 env-file，可选真机下发"
+  architecture: "三层文件结构：层1 模板（ptm-team）/ 层2 共享资源（~/.ptm-team/resource/network-topology）/ 层3 目标项目真实数据（topology/physical_pool.yaml + devices.yaml）"
+  modules: "topo-planning skill（新建：topology_collection/limit_parser/pool_merge/exporter）+ topo-config 引擎增强（per-link 约束/hardware_platform）"
+  constraints: "端口兼容矩阵：GE=copper|fiber，TE/XTE/QTE=fiber-only；TE 口以物理池实际接线为准，不硬造；映射失败直接反馈不兜底"
+  decisions: ["DQ-037-01 接线假设（hg3250-51↔SW1, hg3250-52↔SW2）", "DQ-037-02 平台别名=海光3250(HG3250)", "DQ-037-04 --execute 独立 runtime_authorization"]
+  validation: "mixed：映射 dry-run 可验证；真机下发需独立授权"
+
+non_authorized_items:
+  - "真实设备配置写入（--execute 真机下发）"
+  - "凭据读取与明文存储"
+  - "外部接口调用、生产数据写入"
+
+risks_and_decisions:
+  risks:
+    - "物理池无 TE 口时 TE 约束映射失败（预期行为，结构化反馈）"
+    - "DQ-037-01 接线假设与真实组网不符导致映射偏差（回退：更新 physical_pool.yaml）"
+  runtime_condition: "DQ-037-04 独立 runtime_authorization 后执行真机下发"

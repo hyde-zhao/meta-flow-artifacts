@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-STORY-056-02-te-path-rule-block-sync",
+  "cr_id": "CR-056",
+  "story_id": "STORY-056-02",
+  "story_slug": "te-path-rule-block-sync",
+  "wave": 1,
+  "status": "PASS",
+  "design_evidence_type": "technical-note",
+  "context_ref": "process/HLD-CR-056.md",
+  "implementation_ref": "process/stories/STORY-056-02-te-path-rule-block-sync-IMPLEMENTATION.md",
+  "return_packet_ref": "process/returns/STORY-056-02-te-path-rule-block-sync-CP6.return.json",
+  "evidence_ref": "process/evidence/STORY-056-02-te-path-rule-block-sync-CP6.index.json",
+  "checked_at": "2026-09-03T11:40:00Z",
+  "checker_provenance": {
+    "checker_name": "meta-dev",
+    "checker_version": "meta-flow 1.0.0",
+    "invocation": "CP6 coding-done self-check for STORY-056-02（install.py 渲染器断言 + pytest 回归 + 三副本一致性 diff + 连带影响面核对）",
+    "generated_by": "meta-dev (subagent dispatch, canonical_role=meta-dev)",
+    "fallback_used": false,
+    "fallback_reason": null,
+    "fallback_review_ref": null
+  },
+  "items": [
+    {
+      "id": "CP6-056-02-01",
+      "category": "implementation-object",
+      "name": "实现对象清单可追溯（10 项，含外部项目 5 个安装副本）",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-STORY-056-02-te-path-rule-block-sync-CODING-DONE.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "对象 1~10 逐项列文件与变更；forbidden case_runner.py 零触碰"
+    },
+    {
+      "id": "CP6-056-02-02",
+      "category": "design-contract",
+      "name": "规则 4 修订 + 新增规则 14~17 与 HLD-CR-056 §8 逐字一致",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-STORY-056-02-te-path-rule-block-sync-CODING-DONE.md",
+        "process/HLD-CR-056.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "渲染输出断言：规则 ID 1..17；规则 4/14/15/16/17 全文比对通过"
+    },
+    {
+      "id": "CP6-056-02-03",
+      "category": "design-contract",
+      "name": "规则块版本 v=1.1.0（ptm-te-workflow）/ v=1.0.0（ptm-tde-workflow 不变）",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "script/ptm_team/install.py"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "RULE_BLOCK_VERSIONS registry + managed_block_markers 按块取版本；三份副本 header 实测 v=1.1.0"
+    },
+    {
+      "id": "CP6-056-02-04",
+      "category": "verification",
+      "name": "三副本一致性：规则块正文（te/CLAUDE ≡ manaul/CLAUDE；manaul/AGENTS 仅平台标签句差异）+ agent 三副本正文一致",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/evidence/STORY-056-02-te-path-rule-block-sync-CP6.index.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "副本 frontmatter 逐字节保留（diff 0 行）；managed 行刷新 commit=ad89670 generated=2026-09-03T11:24:08Z"
+    },
+    {
+      "id": "CP6-056-02-05",
+      "category": "verification",
+      "name": "既有测试回归 tests/test_install_mapping.py",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "tests/test_install_mapping.py"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "uv run --python 3.11 pytest -q → 10 passed"
+    },
+    {
+      "id": "CP6-056-02-06",
+      "category": "boundary",
+      "name": "无连带影响与越权写入（托管块外内容不变 / tde 块不变 / 外部项目改动面 == 5 个目标文件 / 设计对象零触碰）",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-STORY-056-02-te-path-rule-block-sync-CODING-DONE.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "find -newermt 实测；REQUIREMENTS/HLD/ADR/MVP-SCOPE/BLUEPRINT 零触碰"
+    },
+    {
+      "id": "CP6-056-02-07",
+      "category": "coverage",
+      "name": "未覆盖项显式留痕（.codex/agents/ptm-te.toml 未刷新等 5 项）",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP6-STORY-056-02-te-path-rule-block-sync-CODING-DONE.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": ".codex toml 不在本 Story 三副本声明面，已作为设计缺口反馈上报 host-orchestrator，建议 STORY-056-07 收口"
+    },
+    {
+      "id": "CP6-056-02-08",
+      "category": "dispatch",
+      "name": "Agent Dispatch Evidence 存在",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP6-STORY-056-02-te-path-rule-block-sync-CODING-DONE.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "subagent（Claude Code Task）真实调度；ledger agent_id/thread_id 由 host-orchestrator 回填"
+    }
+  ],
+  "summary": {
+    "total": 8,
+    "pass": 8,
+    "fail": 0,
+    "na": 0,
+    "conclusion": "PASS",
+    "next_action": "ready-for-verification（交 host-orchestrator 拉起 meta-qa CP7）"
+  },
+  "decision": "PASS",
+  "dispatch_refs": [
+    "ADE-CR056-META-DEV-001"
+  ],
+  "waivers": [],
+  "blockers": []
+}

@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-038",
+  "story_id": "STORY-038-10",
+  "story_slug": "trex-bidirectional-traffic",
+  "status": "ready-for-verification",
+  "agent": "meta-dev",
+  "created_at": "2026-08-15T00:00:00+00:00",
+  "cp_result_ref": "process/checks/CP6-STORY-038-10-trex-bidirectional-traffic-CODING-DONE.md",
+  "evidence_ref": "process/evidence/STORY-038-10.index.json",
+  "implementation_evidence_ref": null,
+  "output_files": [
+    {
+      "path": "skills/trex-traffic/tests/bidirectional_traffic.py",
+      "operation": "create",
+      "description": "trex 双向发流验证资产（dry-run 优先）：load_yaml / validate_env_file（tg/dut/sw 键 + tg1 多实例四字段 trex_instance/trex_sync_port/trex_async_port/trex_api_url）/ validate_traffic_template / load_traffic_template / build_bidirectional_plan（forward port1→port2 + reverse port2→port1）/ dry_run / CLI（--execute 显式拒绝，不发流）"
+    },
+    {
+      "path": "skills/trex-traffic/tests/fixtures/loopback_env_file.yaml",
+      "operation": "create",
+      "description": "PPPoE 环回 env-file fixture（S06/S13 exporter 产物形态）：tg1 多实例字段（TE/0/0/3/0/0/4/8451）+ 2 臂 port1/port2 + dut1 pppoe（ip=null/next_hop=null）+ sw1 pppoe-server"
+    },
+    {
+      "path": "skills/trex-traffic/tests/fixtures/bidirectional_traffic_template.yaml",
+      "operation": "create",
+      "description": "双向发流参数 fixture：traffic_template（udp/count/100pps/count=100/max_loss=0）+ streams forward(port1→port2)/reverse(port2→port1)"
+    },
+    {
+      "path": "skills/trex-traffic/tests/test_bidirectional_traffic.py",
+      "operation": "create",
+      "description": "24 个单测：dry-run 自检 + 双向 plan + tg 命令序列 + 多实例字段缺失（parametrize）+ env-file 结构错误 + fixture 结构错误 + CLI 成功/execute 拒绝"
+    }
+  ],
+  "touched_files": [
+    "skills/trex-traffic/tests/bidirectional_traffic.py",
+    "skills/trex-traffic/tests/fixtures/loopback_env_file.yaml",
+    "skills/trex-traffic/tests/fixtures/bidirectional_traffic_template.yaml",
+    "skills/trex-traffic/tests/test_bidirectional_traffic.py"
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "public_api_summary": "新增独立验证资产，不修改 trex-traffic skill 现有 src/trex_api/cli.py / SKILL.md 等公开入口；脚本为 tests/ 下独立模块，无公开 API 变更",
+    "data_contract_changed": false,
+    "data_contract_summary": "不修改 env-file 顶层 schema（metadata/port_mapping/nodes/links）；脚本只读消费 S06/S13 env-file（tg/dut/sw 键 + tg1 多实例字段）与自建 fixture，不新增 ${ENV.*} 占位或 env-file 字段",
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest skills/trex-traffic/tests/",
+        "result": "pass",
+        "passed": 24
+      },
+      {
+        "command": "uv run --python 3.11 python skills/trex-traffic/tests/bidirectional_traffic.py --env-file skills/trex-traffic/tests/fixtures/loopback_env_file.yaml --fixture skills/trex-traffic/tests/fixtures/bidirectional_traffic_template.yaml",
+        "result": "pass",
+        "passed": 1
+      },
+      {
+        "command": "uv run --python 3.11 python skills/trex-traffic/tests/bidirectional_traffic.py --env-file skills/trex-traffic/tests/fixtures/loopback_env_file.yaml --fixture skills/trex-traffic/tests/fixtures/bidirectional_traffic_template.yaml --execute",
+        "result": "pass",
+        "passed": 1
+      }
+    ],
+    "tests": [
+      "test_dry_run_valid_loopback",
+      "test_plan_tg_commands_sequence",
+      "test_missing_multi_instance_field[trex_instance]",
+      "test_missing_multi_instance_field[trex_sync_port]",
+      "test_missing_multi_instance_field[trex_async_port]",
+      "test_missing_multi_instance_field[trex_api_url]",
+      "test_missing_all_multi_instance_fields",
+      "test_missing_tg1",
+      "test_missing_dut1",
+      "test_missing_top_level_key",
+      "test_tg1_interfaces_missing",
+      "test_port_mapping_incomplete",
+      "test_interfaces_mismatch",
+      "test_not_loopback_single_port",
+      "test_not_executable_degraded",
+      "test_env_file_not_found",
+      "test_fixture_not_found",
+      "test_fixture_missing_traffic_template",
+      "test_fixture_missing_streams",
+      "test_fixture_port_key_invalid",
+      "test_fixture_tx_eq_rx",
+      "test_cli_dry_run_success",
+      "test_cli_execute_rejected",
+      "test_cli_missing_multi_instance"
+    ]
+  },
+  "deviations_from_lld": [],
+  "open_questions": [],
+  "risks": [
+    "trex 真机发流为独立 runtime_authorization，本 Story 只产出 dry-run 验证资产，不承担 loss 结论（SCN-038-POS-009 由 meta-qa CP7 执行）",
+    "port_mapping.tg 为 env-file 物理 TG 端口标识（如 1/1/1）；TRex 逻辑端口（trex_port，如 2_3）映射由 CP7 真机侧解析，dry-run 不校验该映射",
+    "tg_config_interface（TG 接口 IP/网关配置）为 CP7 配置步骤，dry-run 命令序列未含该步（plan.notes 已标注）",
+    "fixture/env-file 均为脱敏样例；真实 env-file 由 meta-qa 在 CP7 用 S06/S13 实际产物替换"
+  ],
+  "waivers": [],
+  "handoff": {
+    "target_stage": "CP7",
+    "next_agent": "meta-qa",
+    "verification_entry": "uv run --python 3.11 pytest skills/trex-traffic/tests/ -v",
+    "notes": [
+      "SCN-038-POS-009（双向发流 loss=0）由 meta-qa CP7 执行真机发流（独立 runtime_authorization）；本 Story 交付可执行 dry-run 脚本 + fixture 作为验证入口",
+      "dry-run 自检：env-file 结构校验 + fixture 加载 PASS；缺 tg1 多实例字段（trex_instance/trex_sync_port/trex_async_port/trex_api_url）→ ENV_FILE_TG1_MULTI_INSTANCE_MISSING 结构化报错，不发流",
+      "--execute 显式拒绝（EXECUTE_NOT_AUTHORIZED），脚本默认 dry-run 不发真实流量；GE1_1~4 实例禁改动，仅操作 TE 实例与 TE2_1~4 端口（脚本不真机下发，无端口操作）"
+    ]
+  }
+}

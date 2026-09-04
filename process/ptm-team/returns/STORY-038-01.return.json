@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-038",
+  "story_id": "STORY-038-01",
+  "story_slug": "sw-explicit-mapping",
+  "status": "ready-for-verification",
+  "agent": "meta-dev",
+  "created_at": "2026-08-15T00:00:00+00:00",
+  "cp_result_ref": "process/checks/CP6-STORY-038-01-sw-explicit-mapping-CODING-DONE.md",
+  "evidence_ref": "process/evidence/STORY-038-01.index.json",
+  "implementation_evidence_ref": "process/stories/STORY-038-01-sw-explicit-mapping-IMPLEMENTATION.md",
+  "output_files": [
+    {
+      "path": "skills/topo-config/src/topo_mapper.py",
+      "operation": "modify",
+      "description": "__init__ 增 explicit_sw_reserved/_candidates；新增 _compute_explicit_sw_reserved、_build_unmapped_reason；match() 回填状态；_try_l2_pass_through 增 reserved 跳过；_build_result 接入结构化 reason（R-F-001/002/018 + R-NF-002）"
+    },
+    {
+      "path": "skills/topo-config/tests/test_topo_mapper_sw.py",
+      "operation": "create",
+      "description": "8 个单测（POS-001/002、NEG-001/002、BND-002、R-F-018 direct/end-to-end/顺序无关、R-NF-004）"
+    },
+    {
+      "path": "skills/topo-config/tests/fixtures/sw_explicit.sample.yaml",
+      "operation": "create",
+      "description": "显式 SW 物理池造数 fixture（TG1/dut1/SW1/SW2/SW3 + 5 环 + 第二条透传路径）"
+    }
+  ],
+  "touched_files": [
+    "skills/topo-config/src/topo_mapper.py",
+    "skills/topo-config/tests/test_topo_mapper_sw.py",
+    "skills/topo-config/tests/fixtures/sw_explicit.sample.yaml"
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "public_api_summary": "match() 签名与返回 schema 不变；新增 _compute_explicit_sw_reserved/_build_unmapped_reason 为私有方法，无公开 API 变更",
+    "data_contract_changed": false,
+    "data_contract_summary": "不新增数据 schema；仅内部实例状态 explicit_sw_reserved（set）/_candidates 回填",
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest skills/topo-config/tests/test_topo_mapper_sw.py -v",
+        "result": "pass",
+        "passed": 8
+      },
+      {
+        "command": "uv run --python 3.11 pytest skills/topo-config/tests/ --ignore=test_physical_pool_pppoe.py --ignore=test_commands_pppoe.py",
+        "result": "pass",
+        "passed": 90
+      }
+    ],
+    "tests": [
+      "test_explicit_sw_matched_and_role",
+      "test_sw_no_candidate_reason",
+      "test_sw_interface_mismatch_reason",
+      "test_mock_still_virtual",
+      "test_explicit_sw_reserved_excludes_passthrough",
+      "test_explicit_sw_reserved_end_to_end",
+      "test_explicit_sw_reserved_order_invariance",
+      "test_cr037_node2_regression"
+    ],
+    "note": "CP6 全量 134 passed/1 failed，唯一失败项 test_physical_pool_pppoe.py::test_password_cipher_huawei_cipher_ok 属并发 Story（S03 密码 cipher 中间态，非本 Story 所有权）；CP7 meta-qa 复跑：test_topo_mapper_sw.py 8 passed + 全量 340 passed/0 failed（已随 S03 完成收敛）"
+  },
+  "deviations_from_lld": [],
+  "open_questions": [],
+  "risks": [
+    "explicit_sw_reserved 保守保留语义（ADR-CR038-01）：显式 SW 匹配失败时其候选不释放回自动透传池，真机极端场景可能过度保守导致整体失败（备选见 LLD §9）",
+    "_build_unmapped_reason 分类 4/5 边界依赖 _candidates 与 assignment 的确定性，由 test_explicit_sw_reserved_order_invariance 守护"
+  ],
+  "waivers": [],
+  "handoff": {
+    "target_stage": "CP7",
+    "next_agent": "meta-qa",
+    "verification_entry": "uv run --python 3.11 pytest skills/topo-config/tests/test_topo_mapper_sw.py -v",
+    "notes": [
+      "DeviceMapping.role（pppoe-server / l2-pass-through）传递 + MappingResult schema 不变（下游 switch_configurator 消费契约）",
+      "CP6 全量含 1 个并发 Story 失败项（S03 pppoe 密码 cipher 中间态），勿归因本 Story；CP7 已 340/0 收敛"
+    ]
+  }
+}

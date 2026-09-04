@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-STORY-056-01-cases-repo-init",
+  "cr_id": "CR-056",
+  "story_id": "STORY-056-01",
+  "story_slug": "cases-repo-init",
+  "wave": 1,
+  "status": "PASS",
+  "design_evidence_type": "technical-note",
+  "context_ref": "process/HLD-CR-056.md",
+  "implementation_ref": "process/stories/STORY-056-01-cases-repo-init-IMPLEMENTATION.md",
+  "return_packet_ref": "process/returns/STORY-056-01-cases-repo-init-CP6.return.json",
+  "evidence_ref": "process/evidence/STORY-056-01-cases-repo-init-CP6.index.json",
+  "checked_at": "2026-09-03T13:10:00Z",
+  "revision": "r2（NEEDS_REWORK 增量收口：向上发现 git 仓库 / mode=repo-subdir；真实对齐经用户 symlink 方案已达成）",
+  "checker_provenance": {
+    "checker_name": "meta-dev",
+    "checker_version": "meta-flow 1.0.0",
+    "invocation": "CP6 coding-done self-check for STORY-056-01（r1：20 例 mock 单测 + 86 例回归 + py_compile + 沙箱真 git 七分支实测 + 真实 cases 两次执行零副作用校验；r2：+2 例 repo-subdir 单测 + 88 例回归 + 真实 symlink 环境 repo-subdir 幂等两轮验证与仓库状态零变化核对）",
+    "generated_by": "meta-dev (subagent dispatch, canonical_role=meta-dev)",
+    "fallback_used": false,
+    "fallback_reason": null,
+    "fallback_review_ref": null
+  },
+  "items": [
+    {
+      "id": "CP6-056-01-01",
+      "category": "implementation-object",
+      "name": "实现对象清单可追溯（真相源脚本 + 分发副本 + 20 例单测 + 过程证据）",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-056-01-cases-repo-init-IMPLEMENTATION.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "分发副本 diff 逐字节一致；forbidden ptm-te-manaul/cases/tde/** 零触碰（314 内容文件校验和前后一致）"
+    },
+    {
+      "id": "CP6-056-01-02",
+      "category": "design-contract",
+      "name": "HLD §5.2 执行序 7 步逐条落地（含 G-1 连通判据、G-2 树失配 abort、幂等/降级/补齐分支）",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/checks/CP6-STORY-056-01-cases-repo-init-CODING-DONE.md",
+        "process/HLD-CR-056.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "实现加强 4 项（幂等需 HEAD 已落地 / git init -b / diff 前 add -A / abort 还原暂存）已留痕于设计缺口反馈 3/4，不改变对外契约"
+    },
+    {
+      "id": "CP6-056-01-03",
+      "category": "verification",
+      "name": "py_compile + 新增 22 例单测（r1 20 + r2 2）+ case-execution 全套 88 例回归",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "skills/case-execution/tests/test_cr056_init_cases_repo.py",
+        "process/evidence/STORY-056-01-cases-repo-init-CP6.index.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "uv run --python 3.11 pytest；mock subprocess，不真跑 ssh 与 git switch；沙箱另做真 git 七分支实测"
+    },
+    {
+      "id": "CP6-056-01-04",
+      "category": "verification",
+      "name": "真实执行初始化（连通探测 → mode=linked 对齐 74073e6 或降级 local-only）",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-056-01-cases-repo-init-IMPLEMENTATION.md",
+        "process/state/QUESTION-LEDGER.ndjson"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "r2 收口：用户拍板并落地 symlink 方案（ptm-te-manaul/cases → /home/hyde/projects/ptm-cases/cases，.git 在 ptm-cases 根，HEAD=main 74073e6 已对齐 origin）；真实运行 exit 0 mode=repo-subdir already-initialized，二次运行输出逐字节一致，ptm-cases 仓库 HEAD/porcelain/origin 未变；LCQ-STORY-056-01-01 resolved"
+    },
+    {
+      "id": "CP6-056-01-05",
+      "category": "boundary",
+      "name": "安全边界（永不 push/force/改 remote、不触凭据、无 traceback）+ 设计对象零触碰",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "skills/case-execution/tests/test_cr056_init_cases_repo.py",
+        "process/checks/CP6-STORY-056-01-cases-repo-init-CODING-DONE.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "token 级禁令断言全场景；GIT_TERMINAL_PROMPT=0 + ssh BatchMode；HLD/REQUIREMENTS/ADR 零修改"
+    },
+    {
+      "id": "CP6-056-01-06",
+      "category": "coverage",
+      "name": "未覆盖项显式留痕（真实 linked/local-only 未达成 + 半初始化态风险提示）",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-056-01-cases-repo-init-IMPLEMENTATION.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "决策前禁止对 cases commit/push/merge（unborn main 半初始化态）；cleanup 口径 rm -rf cases/.git 已提供"
+    },
+    {
+      "id": "CP6-056-01-07",
+      "category": "dispatch",
+      "name": "Agent Dispatch Evidence 存在",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/state/AGENT-DISPATCH-LEDGER.ndjson"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "ADE-CR056-META-DEV-002（Claude Code Task 真实调度）；platform agent_id/thread_id 由 host-orchestrator 回填"
+    },
+    {
+      "id": "CP6-056-01-08",
+      "category": "design-contract",
+      "name": "（r2 增量）幂等前置「向上发现 git 仓库」：rev-parse --show-toplevel 支持 cases-dir 为仓库内子目录 → already-initialized mode=repo-subdir exit 0 零副作用；origin 不符 / 上级仓库无 origin → abort；未发现仓库走原 init 流程",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "skills/case-execution/scripts/init_cases_repo.py",
+        "skills/case-execution/tests/test_cr056_init_cases_repo.py"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "真实 symlink 环境运行 exit 0：repo_root=/home/hyde/projects/ptm-cases / cases_count=312 / warnings=[]；单测 test_repo_subdir_already_initialized_zero_side_effects（只读白名单 + 零变更动作断言）；新增保护：上级仓库未配置 origin 时 abort（不自动为非本脚本创建的仓库添加 remote）"
+    },
+    {
+      "id": "CP6-056-01-09",
+      "category": "design-contract",
+      "name": "（r2 增量）已对齐仓库树状态预检：跳过 diff/switch；status --porcelain 非空且涉及 cases 下文件 → WARNING 提交前检查（不阻塞），其他路径不告警",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "skills/case-execution/tests/test_cr056_init_cases_repo.py"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "test_repo_subdir_dirty_status_warning_non_blocking（cases 前缀命中告警 / docs 路径不告警）；porcelain 前缀按 realpath(cases_dir) 与 toplevel 换算，正确处理 symlink；真实环境工作树干净（porcelain=0）无告警"
+    }
+  ],
+  "summary": {
+    "total": 9,
+    "pass": 9,
+    "fail": 0,
+    "na": 0,
+    "conclusion": "PASS",
+    "next_action": "ready-for-verification（交 host-orchestrator 拉起 meta-qa CP7；LCQ-STORY-056-01-01 已随用户 symlink 方案 resolved）"
+  },
+  "decision": "PASS",
+  "dispatch_refs": [
+    "ADE-CR056-META-DEV-002"
+  ],
+  "waivers": [],
+  "blockers": []
+}

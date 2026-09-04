@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-038",
+  "story_id": "STORY-038-07",
+  "story_slug": "case-runner-sw",
+  "status": "ready-for-verification",
+  "agent": "meta-dev",
+  "created_at": "2026-08-15T00:00:00+00:00",
+  "cp_result_ref": "process/checks/CP6-STORY-038-07-case-runner-sw-CODING-DONE.md",
+  "evidence_ref": "process/evidence/STORY-038-07.index.json",
+  "implementation_evidence_ref": null,
+  "output_files": [
+    {
+      "path": "skills/case-execution/scripts/case_runner.py",
+      "operation": "modify",
+      "description": "提取 _PRIMARY_NODE_IDS=(\"tg1\",\"dut1\") 主实例必填键常量；load_env_file docstring + return 前注释、build_env_topology 循环改常量并注释 swN 读取容忍（R-F-008）。行为不变，tg1/dut1 主实例校验不破坏"
+    },
+    {
+      "path": "skills/case-execution/tests/test_env_file_sw.py",
+      "operation": "create",
+      "description": "10 个单测：POS-007 容忍 sw1/多 swN/swN 结构不完整 + tg1/dut1 缺失/缺 interfaces 回归 + 无 swN 行为不变（R-NF-004）"
+    }
+  ],
+  "touched_files": [
+    "skills/case-execution/scripts/case_runner.py",
+    "skills/case-execution/tests/test_env_file_sw.py"
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "public_api_summary": "模块级 load_env_file/build_env_topology 签名与行为不变；仅新增私有常量 _PRIMARY_NODE_IDS + swN 容忍注释，无公开 API 变更",
+    "data_contract_changed": false,
+    "data_contract_summary": "env-file 顶层 schema 不变；nodes 中额外 swN 节点（sw1/sw2/...）读取容忍，tg1/dut1 主实例键语义不变",
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest skills/case-execution/tests/",
+        "result": "pass",
+        "passed": 10
+      },
+      {
+        "command": "uv run --python 3.11 pytest tests/test_topo_plan_cr037.py tests/test_resolve_addresses.py tests/test_tg_dry_run.py tests/test_config_once_skip.py",
+        "result": "pass",
+        "passed": 55
+      }
+    ],
+    "tests": [
+      "test_load_env_file_tolerates_single_sw",
+      "test_load_env_file_tolerates_multi_sw",
+      "test_sw_incomplete_structure_tolerated",
+      "test_tg1_missing_still_rejected",
+      "test_dut1_missing_still_rejected",
+      "test_tg1_interfaces_missing_still_rejected",
+      "test_no_sw_unchanged"
+    ]
+  },
+  "deviations_from_lld": [
+    "现状 load_env_file/build_env_topology 已天然容忍 swN 节点（仅遍历 tg1/dut1），技术说明要求的行为已满足；本 Story 以提取 _PRIMARY_NODE_IDS 常量 + 显式注释将 swN 容忍契约固化，并新增单测锁定，不引入任何新校验失败，行为零变化"
+  ],
+  "open_questions": [],
+  "risks": [
+    "swN 容忍依赖 build_env_topology 仅遍历 _PRIMARY_NODE_IDS 的实现约定；若未来改为全量遍历 nodes 校验，需保留 swN 跳过语义（常量已显式隔离 tg1/dut1 与 swN 边界）",
+    "本 Story 仅解析层放宽，不覆盖 --execute 真机执行路径的 swN 消费（无 swN 占位，DQ-038-02）"
+  ],
+  "waivers": [],
+  "handoff": {
+    "target_stage": "CP7",
+    "next_agent": "meta-qa",
+    "verification_entry": "uv run --python 3.11 pytest skills/case-execution/tests/ -v",
+    "notes": [
+      "SCN-038-POS-007（case_runner 容忍 swN）与 tg1/dut1 主实例校验不破坏（CR-037 回归）为 CP7 重点场景",
+      "本 Story 为解析层契约兼容，无凭据/真机/网络写；实现为加性常量 + 注释，行为零变化",
+      "回归基线：tests/test_topo_plan_cr037.py 中 load_env_file 契约测试全绿，证明 tg1/dut1 校验未破坏"
+    ]
+  }
+}

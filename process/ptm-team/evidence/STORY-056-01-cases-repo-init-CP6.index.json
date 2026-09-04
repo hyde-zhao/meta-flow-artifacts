@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "story_id": "STORY-056-01",
+  "cr_id": "CR-056",
+  "stage": "CP6",
+  "return_ref": "process/returns/STORY-056-01-cases-repo-init-CP6.return.json",
+  "changed_files": [
+    "skills/case-execution/scripts/init_cases_repo.py",
+    "skills/case-execution/tests/test_cr056_init_cases_repo.py",
+    "process/stories/STORY-056-01-cases-repo-init-IMPLEMENTATION.md",
+    "process/checks/CP6-STORY-056-01-cases-repo-init-CODING-DONE.md",
+    "process/checks/CP6-STORY-056-01-cases-repo-init.result.json"
+  ],
+  "install_copy_files": [
+    "/home/hyde/projects/ptm-te-manaul/scripts/init_cases_repo.py"
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 python -m py_compile skills/case-execution/scripts/init_cases_repo.py",
+      "result": "PASS"
+    },
+    {
+      "command": "uv run --python 3.11 pytest skills/case-execution/tests/test_cr056_init_cases_repo.py -q",
+      "result": "22 passed（r1 20 + r2 repo-subdir 2 例）"
+    },
+    {
+      "command": "uv run --python 3.11 pytest skills/case-execution/tests/ -q",
+      "result": "88 passed（含 CR-053/CR-049 既有套件回归）"
+    },
+    {
+      "command": "python init_cases_repo.py --cases-dir /home/hyde/projects/ptm-te-manaul/cases --remote git@10.113.53.21:tgfw/tgfw-ptm/ptm-cases.git --json（r1，symlink 方案落地前）",
+      "result": "exit 2 abort：工作区与 origin/main 树不一致（远端根布局不同，设计内安全行为）；两次运行（真相源 + 分发副本）确定性一致，314 内容文件 sha256 校验和前后一致"
+    },
+    {
+      "command": "python init_cases_repo.py --cases-dir /home/hyde/projects/ptm-te-manaul/cases --remote git@10.113.53.21:tgfw/tgfw-ptm/ptm-cases.git --json（r2，用户 symlink 方案落地后，真相源与分发副本各跑一次）",
+      "result": "两轮均 exit 0 mode=repo-subdir already-initialized：repo_root=/home/hyde/projects/ptm-cases，commit=74073e633be4...，cases_count=312，warnings=[]；两轮输出 diff 为空；ptm-cases 仓库 HEAD/porcelain(0)/origin 实测未变"
+    },
+    {
+      "command": "ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=accept-new -T git@10.113.53.21",
+      "result": "输出含 'Welcome to GitLab, @zhaohaibo!' → 连通（判据为输出，非 exit code）"
+    },
+    {
+      "command": "git ls-remote git@10.113.53.21:tgfw/tgfw-ptm/ptm-cases.git",
+      "result": "仅 refs/heads/main = 74073e633be4aec0bc8ba0ef296c50267b5d228c"
+    },
+    {
+      "command": "git hash-object（本地 314 文件） vs git -c core.quotepath=false ls-tree -r origin/main",
+      "result": "远端 cases/** 314 文件与本地 te/+tde/ blob 逐字节一致（0 差异）；远端根另有 .gitignore/README.md/docs/execution-guide.md"
+    },
+    {
+      "command": "diff skills/case-execution/scripts/init_cases_repo.py /home/hyde/projects/ptm-te-manaul/scripts/init_cases_repo.py",
+      "result": "逐字节一致"
+    }
+  ],
+  "sandbox_e2e_refs": {
+    "method": "合成 bare 远端 + 逐字节一致工作区（/tmp/cr056sandbox），真 git 实测（非 mock）",
+    "branches_verified": [
+      "linked 全流程成功（switch -c main origin/main / status 干净 / 自动 upstream）",
+      "幂等二次运行 exit 0 零副作用（HEAD/status/branch 前后一致）",
+      "local-only 降级（commit 文案逐字一致，不 fetch 不 remote add）",
+      "origin 不符 abort 不改 remote",
+      "半初始化（origin 匹配 + unborn HEAD）补齐",
+      "树失配 abort 不 switch 且恢复暂存",
+      "非 SSH 形态远端跳过探测直接 fetch"
+    ]
+  },
+  "safety_assertions": {
+    "no_push": true,
+    "no_force": true,
+    "no_remote_modify": true,
+    "no_credential_touch": true,
+    "no_traceback": true,
+    "cases_content_zero_side_effect": true
+  },
+  "open_decision_refs": [
+    "LCQ-STORY-056-01-01（r2 resolved：用户 symlink 方案落地并实测对齐）"
+  ],
+  "increment_r2_scope": "仅改 skills/case-execution/scripts/init_cases_repo.py 与 skills/case-execution/tests/test_cr056_init_cases_repo.py（NEEDS_REWORK 增量指令边界内）"
+}

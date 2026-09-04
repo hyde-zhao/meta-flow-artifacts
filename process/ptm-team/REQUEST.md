@@ -1,61 +1,68 @@
 ---
-request_id: "MFQ-001"
-version: "2.0"
+request_id: "REQ-PTM-TE-EXEC-001"
+version: "1.0"
 status: "active"
-submitted_at: "2026-04-24T10:11:30+08:00"
+submitted_at: "2026-07-28T08:35:00+08:00"
 submitted_by: "user"
-source: "user-direct-redesign-request + meta-flow-format-update"
-target_artifact_type: "agent"
+source: "user-direct-request + ptm-te-17-case-execution-retrospective"
+target_artifact_type: "skill"
 governance_mode: "conditional"
-review_policy: "light"
+review_policy: "standard"
+active_cr: "CR-033"
 ---
 
 ## 来源上下文
 
 | 字段 | 当前值 | 说明 |
 |---|---|---|
-| `target_artifact_type` | `agent` | 当前交付对象仍是供用户直接调用的 `ptm-tde` Agent |
-| `governance_mode` | `conditional` | 工作流默认连续推进，但在关键对象上停留等待用户确认 |
-| `review_policy` | `light` | 采用关键节点确认，不要求全程重度评审 |
-| `source` | `user-direct-redesign-request + meta-flow-format-update` | 原始立项请求保持不变，本轮额外同步 meta-flow 文档格式 |
+| `target_artifact_type` | `skill` | 交付对象为 ptm-te 工作流的 device-management 扩展与新建 case-execution skill |
+| `governance_mode` | `conditional` | standard 工作流，CP2/CP3/CP5/CP8 关键人工门禁停留确认 |
+| `review_policy` | `standard` | 多 Story + 架构 + 规则，不可 fast-lane |
+| `active_cr` | `CR-033` | 统一目标包 parent CR |
+| `source` | `user-direct-request +  retrospective` | 三个需求 + 17 用例执行复盘 12 条改进 |
 
 ## 用户目标
 
-基于更新后的开发流程，对 ptm-tde 工作流进行从头重新设计与更新。允许参考仓库内现有 Agent、Skill、脚本、文档和历史流程工件，但这些内容仅作为输入材料，新的工作流边界、阶段、检查点、设计对象与交付方式都需要重新定义。
+为 ptm-te 建立 TG 设备建模、case-execution 用例执行引擎与执行流程整改的统一能力，消除 exec_v4.py 硬编码与重装回退风险。
+
+## 三个需求
+
+1. **TG 设备建模**：设备管理技能添加 TG 类型设备（type:TG，含 ip 地址、串口地址，子类型 ixia-c/trex，硬件平台 EP/C236/J1900）。
+2. **case-execution 用例执行引擎**：添加用例执行 skill 或 tool / 命令行，参考 `/home/hyde/projects/ptm-te` 的 exec_v4.py 执行脚本，可参考 pytest/robot 框架理念。
+3. **12 条执行改进整改**：基于单用例到 17 用例全量执行踩坑复盘，按投入产出比排序的 12 条改进，全量分期落地。
 
 ## 核心范围（In Scope）
 
-1. 重新定义 ptm-tde 的阶段模型、状态写回规则、人工检查点和回退机制。
-2. 重新梳理工作流中的 Agent / Skill 分工、输入输出契约和编排边界。
-3. 重新评估运行态目录、确认稿目录、交付目录及平台安装映射。
-4. 从头重建 use cases、requirements、HLD、story plan 和验证/交付链路。
-5. 保留现有仓库实现与历史文档作为参考样本，但不直接继承其正式结论。
+1. devices.yaml 新增 `tg` 块（type:TG + host + serial_url + sub_type + hardware_platform + ssh + api_server），6 种组合。
+2. 新建 `skills/case-execution/`（SKILL.md + `scripts/case_runner.py` 兼 argparse CLI，op_mapper 模式），三入口零代码新增用例。
+3. 全量 12 条改进 P0→P3 落地（含 fw_logout op、24 用例 ARP 预热整改、envelope 统一解析、失败诊断、结构化报告、known_issue 四态）。
+4. 承接 CR-032 批次B（exec_v4.py 代码改造）。
 
 ## 明确排除（Out of Scope）
 
-- 沿用旧版确认稿作为当前正式结论
-- 跳过检查点直接进入实现
-- 把历史流程工件直接视为新流程模板
+- 改 ptm-atomic CLI 本体
+- 引入 pytest / robot / 外部 eval 框架
+- 为 devices.yaml 引入 pydantic
+- HTML 报告（进 BACKLOG）
+- 改 traffic-skill / ngfw-install skill
 
 ## 交付预期
 
 | 交付项 | 说明 |
 |---|---|
-| 工作流设计基线 | 一套重新规划后的 ptm-tde 工作流设计基线 |
-| 正式对象 | 与新流程一致的 `USE-CASES / REQUIREMENTS / HLD / STORY-BACKLOG / DEVELOPMENT-PLAN` |
-| 安装与验证策略 | 与新流程一致的安装、验证和交付策略 |
-| 治理机制 | 可支持后续实现与增量变更管理的状态机和检查点机制 |
+| TG 设备模型 | devices.yaml tg 块 + SKILL.md + device-reference.md 6 组合对照 |
+| case-execution skill | SKILL.md + case_runner.py，复用 op_mapper，硬编码全参数化 |
+| 规则固化 | install.py ptm-te-workflow 规则块 ≥4 条新规则 |
+| 12 条改进 | 12/12 落地，结果四态分级，重装不丢失 |
 
 ## 补充约束
 
-1. 本次按“从头设计”处理，旧版确认稿不得直接视为已确认输入。
-2. 现有仓库内容可作为参考样例，但新流程必须显式说明哪些内容保留、哪些内容淘汰。
-3. 多平台安装能力、`.input/` / `.output/` 隔离规则、变更管理能力仍需在新流程中重新评估。
-4. 新流程必须保留可审计的状态推进、history 记录和人工检查点机制。
+1. 本 CR 为 standard 模式，CP2 需求/场景/范围基线门未通过前不得输出正式设计对象。
+2. 跨仓库：exec_v4.py + 24 用例 md 在 `/home/hyde/projects/ptm-te/`（workspace），需明确目标路由。
+3. 设备 `--execute` 写操作须先取得 runtime_authorization 确认（设计通过不等于运行授权）。
 
 ## 变更记录
 
 | 版本 | 变更摘要 | 处理人 | 时间 |
 |---|---|---|---|
-| 1.0 | 建立“从头重新设计”请求基线，冻结旧流程结论。 | meta-po | 2026-04-23T17:05:18+08:00 |
-| 2.0 | 按更新后的 meta-flow 补齐上下文字段、范围/排除结构和交付表格式。 | meta-po | 2026-04-24T10:11:30+08:00 |
+| 1.0 | 建立 CR-033 三需求原始请求基线（TG建模 + case-execution + 12条改进）。 | host-orchestrator | 2026-07-28T08:35:00+08:00 |

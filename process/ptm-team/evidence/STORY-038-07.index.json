@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "story_id": "STORY-038-07",
+  "story_slug": "case-runner-sw",
+  "cr_id": "CR-038",
+  "stage": "CP6",
+  "return_ref": "process/returns/STORY-038-07.return.json",
+  "changed_files": [
+    "skills/case-execution/scripts/case_runner.py",
+    "skills/case-execution/tests/test_env_file_sw.py"
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest skills/case-execution/tests/",
+      "result": "pass",
+      "passed": 10
+    },
+    {
+      "command": "uv run --python 3.11 pytest tests/test_topo_plan_cr037.py tests/test_resolve_addresses.py tests/test_tg_dry_run.py tests/test_config_once_skip.py",
+      "result": "pass",
+      "passed": 55
+    }
+  ],
+  "tests": [
+    "test_load_env_file_tolerates_single_sw",
+    "test_load_env_file_tolerates_multi_sw",
+    "test_sw_incomplete_structure_tolerated",
+    "test_tg1_missing_still_rejected",
+    "test_dut1_missing_still_rejected",
+    "test_tg1_interfaces_missing_still_rejected",
+    "test_no_sw_unchanged"
+  ],
+  "artifacts": [
+    "skills/case-execution/scripts/case_runner.py",
+    "skills/case-execution/tests/test_env_file_sw.py"
+  ],
+  "risks": [
+    "swN 容忍依赖 build_env_topology 仅遍历 _PRIMARY_NODE_IDS 的实现约定（常量显式隔离 tg1/dut1 与 swN 边界）",
+    "仅解析层放宽，不覆盖 --execute 真机执行路径的 swN 消费（无 swN 占位，DQ-038-02）"
+  ],
+  "waivers": [],
+  "design_delta_ref": null
+}

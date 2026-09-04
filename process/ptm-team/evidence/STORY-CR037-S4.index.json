@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "story_id": "CR037-S4",
+  "cr_id": "CR-037",
+  "stage": "CP6",
+  "return_ref": "process/returns/STORY-CR037-S4.return.json",
+  "changed_files": [
+    "skills/topo-config/src/topo_mapper.py",
+    "skills/topo-config/src/physical_pool.py",
+    "skills/topo-config/src/mapping_validator.py",
+    "skills/topo-config/tests/test_topo_mapper_s4.py",
+    "skills/topo-config/tests/fixtures/pool_te.sample.yaml",
+    "skills/topo-config/tests/fixtures/ledger_te.sample.yaml",
+    "skills/topo-config/tests/fixtures/ledger_allocated.sample.yaml",
+    "skills/topo-config/tests/fixtures/pool_no_te.sample.yaml"
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 python -m pytest skills/topo-config/tests/test_topo_mapper_s4.py",
+      "result": "pass",
+      "passed": 26
+    },
+    {
+      "command": "uv run --python 3.11 python -m pytest skills/topo-config/tests/ skills/topo-planning/tests/",
+      "result": "pass_with_baseline",
+      "note": "失败清单与基线逐条一致，无新增回归"
+    }
+  ],
+  "tests": [
+    "test_per_link_te_constraint_matches",
+    "test_per_link_te_constraint_no_te",
+    "test_global_requirement_backward_compat",
+    "test_hardware_platform_equiv_class",
+    "test_hardware_platform_no_candidate",
+    "test_device_types_list",
+    "test_port_compat_matrix_constants",
+    "test_port_compat_matrix_ge_fiber",
+    "test_port_compat_matrix_te_fiber_only",
+    "test_h4_te_copper_unsatisfiable",
+    "test_h4_logic_floor_applies",
+    "test_include_at_least_one_soft_constraint",
+    "test_include_at_least_one_zero",
+    "test_include_at_least_one_soft_not_hardcut",
+    "test_from_pool_data_construction",
+    "test_ledger_allocate_on_success",
+    "test_ledger_cross_use_busy",
+    "test_ledger_release",
+    "test_ledger_release_persist",
+    "test_ledger_allocated_fixture",
+    "test_release_env_wrapper",
+    "test_empty_limit_backward_compat",
+    "test_mapping_result_per_link_requirements",
+    "test_validator_r2_per_link",
+    "test_validator_r2_unconstrained_recorded",
+    "test_validator_r2_include_at_least_one"
+  ],
+  "artifacts": [
+    "skills/topo-config/src/topo_mapper.py",
+    "skills/topo-config/src/physical_pool.py",
+    "skills/topo-config/src/mapping_validator.py",
+    "skills/topo-config/tests/test_topo_mapper_s4.py",
+    "skills/topo-config/tests/fixtures/pool_te.sample.yaml",
+    "skills/topo-config/tests/fixtures/ledger_te.sample.yaml",
+    "skills/topo-config/tests/fixtures/ledger_allocated.sample.yaml",
+    "skills/topo-config/tests/fixtures/pool_no_te.sample.yaml"
+  ],
+  "risks": [
+    "同设备对多 link 复用 cable 缺陷修复可能改变部分既有用例端口分配"
+  ],
+  "waivers": [],
+  "design_delta_ref": null
+}

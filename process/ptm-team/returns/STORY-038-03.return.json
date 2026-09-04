@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-038",
+  "story_id": "STORY-038-03",
+  "story_slug": "pppoe-server-commands",
+  "status": "ready-for-verification",
+  "agent": "meta-dev",
+  "created_at": "2026-08-15T00:00:00+00:00",
+  "cp_result_ref": "process/checks/CP6-STORY-038-03-pppoe-server-commands-CODING-DONE.md",
+  "evidence_ref": "process/evidence/STORY-038-03.index.json",
+  "implementation_evidence_ref": "process/stories/STORY-038-03-pppoe-server-commands-IMPLEMENTATION.md",
+  "output_files": [
+    {
+      "path": "skills/topo-config/src/commands.py",
+      "operation": "modify",
+      "description": "三厂商 COMMANDS 新增 'pppoe' 五族键（enable_server/ip_pool/local_user/virtual_template/bind_interface 嵌套模板）+ PPPOE_COMMAND_KEYS + has_pppoe_commands"
+    },
+    {
+      "path": "skills/topo-config/src/physical_pool.py",
+      "operation": "modify",
+      "description": "新增 get_pppoe_server / validate_pppoe_server / _validate_password_cipher + 7 个凭据/字段校验正则常量"
+    },
+    {
+      "path": "skills/topo-config/config/physical_pool.yaml",
+      "operation": "modify",
+      "description": "新增 SW3 示例节点（role=pppoe-server + pppoe_server 块，password_cipher 用 ${ENV_*} 占位）"
+    },
+    {
+      "path": "skills/topo-config/tests/test_commands_pppoe.py",
+      "operation": "create",
+      "description": "16 个命令族单测（五族键/diff/能力探测/向后兼容）"
+    },
+    {
+      "path": "skills/topo-config/tests/test_physical_pool_pppoe.py",
+      "operation": "create",
+      "description": "29 个数据源+校验单测（get/validate/凭据占位密文）"
+    },
+    {
+      "path": "skills/topo-config/tests/fixtures/pool_pppoe_server.yaml",
+      "operation": "create",
+      "description": "pppoe_server 测试造数 fixture（合成占位密文，无真实凭据）"
+    }
+  ],
+  "touched_files": [
+    "skills/topo-config/src/commands.py",
+    "skills/topo-config/src/physical_pool.py",
+    "skills/topo-config/config/physical_pool.yaml",
+    "skills/topo-config/tests/test_commands_pppoe.py",
+    "skills/topo-config/tests/test_physical_pool_pppoe.py",
+    "skills/topo-config/tests/fixtures/pool_pppoe_server.yaml"
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "public_api_summary": "新增 PhysicalPool.get_pppoe_server / validate_pppoe_server / _validate_password_cipher 与 commands.has_pppoe_commands；COMMANDS[vendor]['pppoe'] 新增嵌套键。get_commands 签名/返回语义不变（仍返回完整 COMMANDS[brand]，含 pppoe）",
+    "data_contract_changed": true,
+    "data_contract_summary": "physical_pool.yaml SW 节点新增 pppoe_server 块 schema（ip_pool_name/ip_pool_subnet/ip_pool_gateway/virtual_template/authentication/local_users[]）",
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest skills/topo-config/tests/test_commands_pppoe.py skills/topo-config/tests/test_physical_pool_pppoe.py",
+        "result": "pass",
+        "passed": 45
+      },
+      {
+        "command": "uv run --python 3.11 pytest skills/topo-config/tests/",
+        "result": "pass",
+        "passed": 135
+      }
+    ],
+    "tests": [
+      "test_commands_pppoe_five_keys[h3c]",
+      "test_commands_pppoe_five_keys[ruijie]",
+      "test_commands_pppoe_five_keys[huawei]",
+      "test_commands_pppoe_h3c_reference_text",
+      "test_commands_pppoe_three_vendor_diff",
+      "test_commands_pppoe_dryrun_template_nonempty[ruijie]",
+      "test_commands_pppoe_dryrun_template_nonempty[huawei]",
+      "test_has_pppoe_commands_true[h3c]",
+      "test_has_pppoe_commands_true[ruijie]",
+      "test_has_pppoe_commands_true[huawei]",
+      "test_has_pppoe_commands_false",
+      "test_has_pppoe_commands_case_insensitive",
+      "test_get_commands_backward_compat",
+      "test_get_commands_unknown_still_raises",
+      "test_get_pppoe_server_present",
+      "test_get_pppoe_server_absent_no_block",
+      "test_get_pppoe_server_absent_no_node",
+      "test_get_pppoe_server_single_source",
+      "test_validate_pppoe_server_ok",
+      "test_validate_pppoe_server_invalid_type",
+      "test_validate_pppoe_server_incomplete",
+      "test_validate_pppoe_server_subnet_invalid",
+      "test_validate_pppoe_server_gateway_invalid",
+      "test_validate_pppoe_server_virtual_template_invalid",
+      "test_validate_pppoe_server_auth_invalid",
+      "test_validate_pppoe_server_local_users_empty",
+      "test_validate_pppoe_server_username_invalid",
+      "test_validate_pppoe_server_plaintext_password",
+      "test_validate_pppoe_server_malformed_placeholder",
+      "test_password_cipher_env_placeholder_ok",
+      "test_password_cipher_h3c_cipher_ok",
+      "test_password_cipher_huawei_cipher_ok",
+      "test_password_cipher_ruijie_cipher_ok",
+      "test_password_cipher_plaintext_rejected",
+      "test_password_cipher_malformed_placeholder_rejected",
+      "test_password_cipher_not_reversed"
+    ]
+  },
+  "deviations_from_lld": [
+    "LLD §10.1 Huawei 密文正则未转义 ^：实现按语义意图转义为 %\\^%#（Python re 中 ^ 中段为行首锚点），不影响语义"
+  ],
+  "open_questions": [
+    "Q-038-002（H3C 真机 PPPoE 命令与参考命令族差异，non-blocking-open）",
+    "LCQ-STORY-038-03-01（设备 cipher 密文前缀 allowlist 精确性，non-blocking）"
+  ],
+  "risks": [
+    "ruijie/huawei 命令为 dry-run 模板未经真机验证（Q-038-002）",
+    "设备 cipher 前缀 allowlist 为保守白名单（LCQ-STORY-038-03-01）"
+  ],
+  "waivers": [],
+  "handoff": {
+    "target_stage": "CP7",
+    "next_agent": "meta-qa",
+    "verification_entry": "uv run --python 3.11 pytest skills/topo-config/tests/test_commands_pppoe.py skills/topo-config/tests/test_physical_pool_pppoe.py -v",
+    "notes": [
+      "physical_pool.py 本 Story 为首次写入方，只新增 pppoe_server 读取/校验三方法；trex_instances 由 STORY-038-13（merge_owner）后续合并",
+      "命令序列组装（_build_pppoe_server_commands）与真机下发归 STORY-038-04 + 独立 runtime_authorization，不在本 Story 范围"
+    ]
+  }
+}

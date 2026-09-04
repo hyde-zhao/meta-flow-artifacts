@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-038",
+  "story_id": "STORY-038-02",
+  "story_slug": "sw-pool-merge",
+  "status": "ready-for-verification",
+  "agent": "meta-dev",
+  "created_at": "2026-08-15T00:00:00+00:00",
+  "cp_result_ref": "process/checks/CP6-STORY-038-02-sw-pool-merge-CODING-DONE.md",
+  "evidence_ref": "process/evidence/STORY-038-02.index.json",
+  "implementation_evidence_ref": null,
+  "output_files": [
+    {
+      "path": "skills/topo-planning/src/pool_merge.py",
+      "operation": "modify",
+      "description": "_merge_sw_pc 精确 switch/client 块匹配回填 device_type/hardware_platform；_resolve_ledger 限定 DUT 平台等价类解析；主循环 unmatched 判定简化（R-F-011）"
+    },
+    {
+      "path": "skills/topo-planning/tests/test_pool_merge_sw.py",
+      "operation": "create",
+      "description": "6 个 SW 归并台账映射单测（switch 块回填/无块不阻断/精确匹配/台账一致性/无重复占用/不触发 DUT 解析）"
+    }
+  ],
+  "touched_files": [
+    "skills/topo-planning/src/pool_merge.py",
+    "skills/topo-planning/tests/test_pool_merge_sw.py"
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "public_api_summary": "_merge_sw_pc/_resolve_ledger 为私有函数，签名不变，仅扩展内部分支，无公开 API 变更",
+    "data_contract_changed": false,
+    "data_contract_summary": "不新增 UnifiedNode/UnifiedInterface 字段（多实例 trex_instances/instance 由 STORY-038-13 后续合并）",
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest skills/topo-planning/tests/test_pool_merge_sw.py -v",
+        "result": "pass",
+        "passed": 6
+      },
+      {
+        "command": "uv run --python 3.11 pytest skills/topo-planning/tests/",
+        "result": "pass",
+        "passed": 147
+      }
+    ],
+    "tests": [
+      "test_sw_merge_switch_block_backfill",
+      "test_sw_merge_no_switch_block_not_blocking",
+      "test_sw_merge_precise_switch_block_only",
+      "test_sw_ledger_mapping_r_f_011",
+      "test_sw_ledger_port_allocation_no_duplicate",
+      "test_sw_no_dut_hardware_platform_resolution"
+    ],
+    "note": "CP6 dry-run 归并 diff 核对：SW1 device_type=ruijie-B/source=merged；SW2/PC1/PC2 unmatched；TG/DUT/FW 归并与 CR-037 基线一致。CP7 meta-qa 复跑：test_pool_merge_sw.py 6 passed + 全量 340 passed/0 failed"
+  },
+  "deviations_from_lld": [],
+  "open_questions": [
+    "LCQ-CR038-DOC-SW-BLOCK-NAMING（R-F-009 device_groups.sw 措辞 vs 实现 switch 块命名差异，non-blocking-open，回写走 CR）"
+  ],
+  "risks": [
+    "台账映射只读关联 physical_ledger，不新增 production 写入；_resolve_ledger 不交叉校验 ledger.model 与 device_type（SW 硬件平台别名映射属 R-F-010/S09 范围）",
+    "switch 块不含 hardware_platform 时 SW 节点 hardware_platform 保持 None（按技术说明不阻断）"
+  ],
+  "waivers": [],
+  "handoff": {
+    "target_stage": "CP7",
+    "next_agent": "meta-qa",
+    "verification_entry": "uv run --python 3.11 pytest skills/topo-planning/tests/test_pool_merge_sw.py -v",
+    "notes": [
+      "核对 SW 节点归并后 device_type/hardware_platform/ledger_model/ledger_status/port_status 与 physical_ledger 一致、无重复占用（R-F-011）",
+      "pool_merge.py 与 S13 串行（S13 为 merge_owner），本 Story 为 W1 首次写入方，仅写 _merge_sw_pc/_resolve_ledger SW 补丁"
+    ]
+  }
+}

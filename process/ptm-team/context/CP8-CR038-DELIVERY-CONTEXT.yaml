@@ -1,0 +1,68 @@
+---
+context_id: CP8-CR038
+cr_id: CR-038
+stage: CP8-delivery
+created_at: "2026-08-15T08:00:00+00:00"
+owner: host-orchestrator
+release_decision: READY_WITH_RISK
+release_artifact_profile: compact
+read_profile: compact
+story_scope: 13 个实现 Story（S01-S13，全部 verified）
+---
+
+# CP8-CR038 交付上下文胶囊
+
+## 1. 输入引用（CP7 结论 + release + 文档 + 台账）
+
+- CP7 结论：13/13 Story `verified`，**PASS_WITH_RISK**，无 NEEDS_REWORK/BLOCKED/NEEDS_DESIGN_CLARIFICATION
+- 测试复跑：核心组 340 passed + 外围组 127 passed + S07 回归 55 passed（与 CP6 记录一致）
+- 证据链：`process/returns/STORY-038-*.return.json` ×13 + `process/evidence/STORY-038-*.index.json` ×13（完整）
+- release：`process/release/RELEASE-CONTEXT-CR-038.yaml`（READY_WITH_RISK，compact）+ `docs/release/` 五件套
+- 文档：`docs/ptm-te/README.md`、`docs/USER-MANUAL.md`、`docs/ptm-te/执行指导.md`（[1.6] PPPoE 章节）
+- 后续台账：`process/changes/CR-038-FOLLOW-UP-TRACKING-2026-08-15.md`（9 项 candidate）
+
+## 2. 允许读取集合
+
+- must_read: 本 capsule、`process/release/RELEASE-CONTEXT-CR-038.yaml`、CP7 各 Story 检查摘要、`process/checks/CP8-CR038-DELIVERY-READINESS.result.json`
+- read_if_needed: `process/checkpoints/CP8-CR038.md`（Decision Brief）、follow-up 台账
+- do_not_read_by_default: 完整 HLD/ADR/蓝图全文、完整 TEST-MATRIX、完整 VERIFICATION-REPORT、完整 diff
+
+## 3. 风险 ID（8 项，详情见 RELEASE-CONTEXT）
+
+| 风险 ID | 等级 | 状态 |
+|---|---|---|
+| CR038-R-AUTHZ | 中 | not_authorized（真机三不授权） |
+| CR038-R-RF009 | 中 | scope-decision（命名回写走 CR） |
+| CR038-R-OPEN0602 | 中 | follow_up（ip_plan SW VLAN） |
+| CR038-R-S04 | 中 | risk_acceptance（待真机） |
+| CR038-R-S01 | 低 | follow_up（explicit_sw_reserved 保守） |
+| CR038-R-DRYRUN | 低 | follow_up（ruijie/huawei dry-run 未真机） |
+| CR038-R-S13 | 低 | follow_up（instances schema 复核） |
+| CR038-R-PPPOEOP | 低 | follow_up（ptm-atomic op 扩展） |
+
+## 4. 待决策 ID（CP8 新增，详见 Decision Brief）
+
+- CP8-DQ-038-RUNTIME（runtime_authorization，blocking）— 真机三不授权不授权确认
+- CP8-DQ-038-RF009（scope）— R-F-009 命名口径回写走 CR
+- CP8-DQ-038-S04（risk_acceptance）— S04 virtual-template IP 待真机
+- CP8-DQ-038-FU（follow_up_tracking）— 9 项台账确认
+
+## 5. 不授权项（独立展示，不得把 READY_WITH_RISK 误读为运行授权）
+
+1. H3C telnet 真机下发（S03/S04）
+2. trex 真机发流 loss=0 最终判定（S10/S13）
+3. `--execute` 真机执行（S07/DQ-038-02）
+4. DUT PPPoE Client 真机拨号（S05）
+5. 生产凭据读取 / 生产数据写入 / publish / live
+6. git push / commit（除非用户明确要求）
+
+## 6. 证据路径
+
+- CP7 检查：`process/checks/CP7-STORY-038-*-VERIFICATION-DONE.md` ×13
+- 质量报告：`docs/quality/TEST-STRATEGY.md` + `VERIFICATION-REPORT.md` + `VERIFICATION-REPORT-SECONDARY.md`
+- 发布产物：`docs/release/`（RELEASE-NOTES/DEPLOY-CHECKLIST/ROLLBACK/MIGRATION/FEEDBACK）
+
+## 7. 交接
+
+- 下一动作：host-orchestrator 发起 CP8 人工终验（human_gate=required），用户 approve → 关闭 CR-038 + 9 项候选进台账 + 真机不授权项保留独立 runtime_authorization
+- 关闭后：代码改动留在工作区（未提交），用户决定 commit/push

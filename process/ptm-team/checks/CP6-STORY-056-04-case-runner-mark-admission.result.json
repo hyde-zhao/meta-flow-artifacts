@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP6",
+  "checkpoint_id": "CP6-STORY-056-04-case-runner-mark-admission",
+  "cr_id": "CR-056",
+  "story_id": "STORY-056-04",
+  "story_slug": "case-runner-mark-admission",
+  "wave": 2,
+  "status": "PASS",
+  "design_evidence_type": "technical-note",
+  "context_ref": "process/HLD-CR-056.md",
+  "implementation_ref": "process/stories/STORY-056-04-case-runner-mark-admission-IMPLEMENTATION.md",
+  "return_packet_ref": "process/returns/STORY-056-04-case-runner-mark-admission-CP6.return.json",
+  "evidence_ref": "process/evidence/STORY-056-04-case-runner-mark-admission-CP6.index.json",
+  "checked_at": "2026-09-03T22:10:00Z",
+  "checker_provenance": {
+    "checker_name": "meta-dev",
+    "checker_version": "meta-flow 1.0.0",
+    "invocation": "CP6 coding-done self-check for STORY-056-04（HLD §7.2 C-1~C-8 锚点映射 + 冒烟 69 断言 + 真实 te 库只读校验 + py_compile 双版本 + 回归 88 passed）",
+    "generated_by": "meta-dev (subagent dispatch, canonical_role=meta-dev)",
+    "fallback_used": false,
+    "fallback_reason": null,
+    "fallback_review_ref": null
+  },
+  "items": [
+    {
+      "id": "CP6-056-04-01",
+      "category": "implementation-object",
+      "name": "实现对象清单可追溯（6 项，工程资产仅 case_runner.py，越权零改动）",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-056-04-case-runner-mark-admission-IMPLEMENTATION.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "case_ledger.py（forbidden，只 import 不改）/exec_task.py/init_cases_repo.py/install.py 零改动；工作树其余 modified 为 Wave 1 前序 Story 未提交改动；ptm-te-manaul/ptm-cases 零写入（312 用例只读解析）"
+    },
+    {
+      "id": "CP6-056-04-02",
+      "category": "design-contract",
+      "name": "C-1 常量 + C-2 parse_frontmatter [3c]/[3d]/[3e]（枚举/不变式读点 G-13/缺省口径/早退分支键形状）",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "skills/case-execution/scripts/case_runner.py",
+        "process/stories/STORY-056-04-case-runner-mark-admission-IMPLEMENTATION.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "冒烟 A1~A11 全过；真实 te 库 312 md 只读解析 311 用例 0 error、mark 全缺省 debug（G-01 前置口径）；16 列+tags/legacy 标签解析零破坏"
+    },
+    {
+      "id": "CP6-056-04-03",
+      "category": "design-contract",
+      "name": "C-3 filter_by_mark/filter_by_cicd_mark（in 并集/none→cicd_mark is None/空列表透传）",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "skills/case-execution/scripts/case_runner.py"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "冒烟 B1~B6 全过；G-12 圈选面（多选并集）/写入面（单值）区分已写入 docstring"
+    },
+    {
+      "id": "CP6-056-04-04",
+      "category": "design-contract",
+      "name": "C-4/C-5 run 准入（5 新参数 + 参数级快速失败 exit 2 + 默认池/显式池 + cmo 子集排除 + 过滤链叠加 + 无 --role 零变化）",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-056-04-case-runner-mark-admission-IMPLEMENTATION.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "冒烟 C1~C11/D1~D13 全过：feature·acceptance、factory --mark verify_fail/deprecated、cmo --mark accept、factory --cicd-mark、cmo --cicd-mark cicd_verify_fail/none 均 exit 2；--run-scope 显式覆盖角色推导（G-11 正交）D13 验证；跨域圈选拒绝对齐 §4.4 规则 2（G-8 措辞冲突已入设计缺口反馈 #1）"
+    },
+    {
+      "id": "CP6-056-04-05",
+      "category": "design-contract",
+      "name": "C-6 冻结校验（台账向上定位/加载/LEDGER_MISSING fail-closed/CASE_MARK_STALE 固定话术 G-6 可区分/local WARNING 放行/dry-run 生效）",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "process/stories/STORY-056-04-case-runner-mark-admission-IMPLEMENTATION.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "冒烟 E1~E14 全过：E1 篡改正文 + --role factory dry-run → CASE_MARK_STALE 阻塞 rc=1（真实构造，未 mock）；E6/E7 local WARNING 放行且 fingerprint_ok=False 留审计；E10/E13 factory/cicd 台账缺失 exit 2；校验位于 execute 判定与环境检查之前"
+    },
+    {
+      "id": "CP6-056-04-06",
+      "category": "design-contract",
+      "name": "C-7 result.json 审计（case.case_state 三态快照 + run 级 mark_admission 语境 + 既有字段兼容）",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "skills/case-execution/scripts/case_runner.py"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "仅新增键；generate_report/exec_task.build_case_records 按键消费不受影响（88 例回归佐证）；mark_admission 顶层语境为任务清单外增量，已在设计缺口反馈 #3 留痕待 host-orchestrator 认可"
+    },
+    {
+      "id": "CP6-056-04-07",
+      "category": "design-contract",
+      "name": "C-8 mark/ledger/archive-check 子命令 parser + 委托（validate/exec-report 同层，无需启动校验/设备配置，模块缺失 exit 5）",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "skills/case-execution/scripts/case_runner.py"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "冒烟 F1~F6 全过；mark parser 参数面 = HLD §7.3 全参数；ledger --mark 按 list 适配 cmd_ledger 校验；cmd_mark/cmd_ledger/cmd_archive_check 实体归 056-05/06/08"
+    },
+    {
+      "id": "CP6-056-04-08",
+      "category": "boundary",
+      "name": "任务清单外增量的最小化与留痕（deprecated 吸收态不执行 G-8/G-06、mark_admission 语境、跨域圈选口径）",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/stories/STORY-056-04-case-runner-mark-admission-IMPLEMENTATION.md"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "三项增量均为 HLD 已定义但任务锚点未列的 run 准入语义，且无其他 Story 承接；全部在设计缺口反馈 #1~#3 显式留痕，可一行回退"
+    },
+    {
+      "id": "CP6-056-04-09",
+      "category": "verification",
+      "name": "py_compile 双版本 + 既有测试回归零破坏 + 真实 te 库只读校验",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/evidence/STORY-056-04-case-runner-mark-admission-CP6.index.json"
+      ],
+      "owner": "meta-dev",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "3.11/3.12 py_compile PASS（3.12 SyntaxWarning 为既有 docstring \\d 转义，非本 Story 引入）；pytest 88 passed（056-01/03 基线一致）；te 库 312 md 全量 parse 0 error"
+    },
+    {
+      "id": "CP6-056-04-10",
+      "category": "dispatch",
+      "name": "Agent Dispatch Evidence 存在",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "process/checks/CP6-STORY-056-04-case-runner-mark-admission-CODING-DONE.md"
+      ],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "meta-dev subagent 真实调度；agent_id/thread_id 由 host-orchestrator 回填"
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "pass": 10,
+    "fail": 0,
+    "na": 0,
+    "conclusion": "PASS",
+    "next_action": "ready-for-verification（交 host-orchestrator 拉起 meta-qa CP7；STORY-056-05 可按 same-file-serial 接力）"
+  },
+  "decision": "PASS",
+  "dispatch_refs": [
+    "ADE-CR056-META-DEV-STORY-056-04（agent_id/thread_id 由 host-orchestrator 回填）"
+  ],
+  "waivers": [],
+  "blockers": []
+}

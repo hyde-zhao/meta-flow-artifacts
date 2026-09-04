@@ -1,75 +1,74 @@
----
-checkpoint_id: "CP4"
-checkpoint_name: "Story 拆解与并行安全门"
-type: "auto_precheck"
-status: "WAIVED"
-owner: "meta-se"
-created_at: "2026-06-08T02:30:00+08:00"
-checked_at: "2026-06-08T02:30:00+08:00"
-target:
-  phase: "story-planning"
-  artifacts:
-    - "process/STORY-BACKLOG.md"
-    - "process/DEVELOPMENT-PLAN.yaml"
-    - "process/STORY-STATUS.md"
----
+# CP4 自动预检 — Story DAG / 并行安全（CR-038）
 
-# CP4 Story 拆解与并行安全门 自动预检结果
+> 本文件为 CP4 自动预检结果（machine checkpoint），非人工门禁。摘要、风险与开放项由 host-orchestrator 汇入 CP5 Decision Brief。
+
+- 检查时间：2026-08-15
+- 检查对象：`process/DEVELOPMENT-PLAN-CR-038.yaml`（status=active，13 Story / 4 Wave）
+- 真相源：`process/DEVELOPMENT-PLAN-CR-038.yaml` + `docs/design/FEATURE-DESIGN-MATRIX-CR-038.md`
 
 ## Entry Criteria
 
-| 条目 | 状态 | 证据 | 说明 |
-|---|---|---|---|
-| CP3 通过 | PASS | 4 个 CR 级 CP3 全部 approved | CR 级 HLD 已确认 |
-| Feature 设计矩阵存在 | N/A | FEATURE-DESIGN-MATRIX.md 待 P2 创建 | 六 Agent 蓝图已覆盖 Feature 边界 |
-| 必要 Feature 设计已处理 | WAIVED | CR 级 Story LLD 已覆盖所有目标 Story | gate_inheritance |
-| Story 计划存在 | PASS | `process/STORY-BACKLOG.md`、`process/DEVELOPMENT-PLAN.yaml` | 已从 ptm-tde 迁移 |
-| 依赖信息存在 | PASS | Story 卡片中 `depends_on`、依赖类型和文件所有权已填写 | CR 级验证已通过 |
+| 条件 | 结果 |
+|---|---|
+| `docs/design/HLD-CR-038.md` confirmed=true（CP3 approve） | PASS |
+| FEATURE-DESIGN-MATRIX 已生成（active） | PASS |
+| 13 张 Story 卡片已生成（status=lld-ready） | PASS |
+| 3 个 required Feature 已产出 DESIGN/TEST-PLAN/TASKS | PASS |
 
 ## Checklist
 
-| # | 检查项 | 状态 | 证据 | 处理意见 |
-|---|---|---|---|---|
-| 1 | Story 覆盖需求 | PASS | 23 个 Story 覆盖 28 条需求 | CR 级验证 |
-| 2 | Story 粒度合理 | PASS | 单 Story 可独立开发验证 | CR 级验证 |
-| 3 | AC 明确 | PASS | 每个 Story 有可验证 AC | CR 级验证 |
-| 4 | INVEST 基本满足 | PASS | CR 级 DAG 验证已通过 | CR 级验证 |
-| 5 | 依赖关系完整 | PASS | `depends_on` 标清 | CR 级验证 |
-| 6 | 依赖类型明确 | PASS | contract/runtime/file-conflict 已分类 | CR 级验证 |
-| 7 | DAG 无环 | PASS | 无循环依赖 | CR 级验证 |
-| 8 | 关键路径识别 | PASS | Wave 调度已规划 | CR 级验证 |
-| 9 | 文件所有权明确 | PASS | primary/shared/merge_owner/forbidden 已定义 | CR 级验证 |
-| 10 | 并行计划合理 | PASS | lld_ready/dev_ready 可解释 | CR 级验证 |
-| 11 | Wave 不是硬门 | PASS | 实际以 DAG 和 gate 为准 | CR 级验证 |
-| 12 | QA 策略同步 | PASS | CP7 验证均已 PASS | CR 级验证 |
-| 13 | Feature 设计矩阵完整 | N/A | 待 P2 创建，蓝图已覆盖 | 不影响 ptm-tde 已交付事实 |
-| 14 | required Feature 设计就绪 | N/A | 同上 | 同上 |
-| 15 | Story 设计引用完整 | PASS | feature_design_refs 已填写 | CR 级验证 |
-| 16 | LLD 策略明确 | PASS | full-lld/technical-note/waived 已分级 | CR 级验证 |
+| 检查项 | 结果 | 证据 |
+|---|---|---|
+| DAG 无环（depends_on 无循环） | PASS | 脚本 DFS 校验，13 节点 0 环 |
+| Wave 依赖方向（依赖落在更早 Wave） | PASS | 所有 depends_on 指向更小 wave 序号 |
+| 文件所有权无未串行化冲突 | PASS | pool_merge.py(S02→S13)、physical_pool.py(S03→S13)、exporter.py(S06→S13) 均通过 S13 硬依赖串行 |
+| 并行 Story 输出文件不冲突 | PASS | 无同一 Wave 内两 Story 写同一文件 |
+| feature_design_refs 覆盖全部 Story | PASS | 3 required Feature 全部引用；waived E4/E5 显式空 ref + N/A 理由 |
+| lld_policy 覆盖全部 Story 且合规 | PASS | full-lld×5 / technical-note×5 / waived×3；无 batch-lld |
+| 高风险标记禁用 batch-lld | PASS | security/credential（S03 cipher 密文）用 full-lld，无 batch-lld |
+| 并行策略声明 | PASS | max_parallel_lld=3 / dev=3 / qa=2 |
+
+## lld_policy 分布
+
+| required_level | 数量 | Story |
+|---|---|---|
+| full-lld | 5 | 01 / 03 / 05 / 06 / 13 |
+| technical-note | 5 | 02 / 04 / 07 / 10 / 11 |
+| waived | 3 | 08 / 09 / 12 |
+| batch-lld | 0 | —（无低风险同质共享实现面 Story 群） |
+
+## 共享文件串行化明细
+
+| 文件 | 写入方 | 串行方式 |
+|---|---|---|
+| skills/topo-planning/src/pool_merge.py | S02(W1) → S13(W3) | S13 depends_on S02（hard） |
+| skills/topo-config/src/physical_pool.py | S03(W1) → S13(W3) | S13 depends_on S03（hard） |
+| skills/topo-planning/src/exporter.py | S06(W2) → S13(W3) | S13 depends_on S06（hard） |
+
+## 风险与开放项（汇入 CP5）
+
+| 项 | 说明 |
+|---|---|
+| Q-038-001 | ptm-atomic PPPoE op 是否已暴露（RA-038-001），S05 full-lld 三选一闭环，不阻塞 DAG |
+| Q-038-002 | H3C 真机 PPPoE 命令与参考命令族差异，dry-run diff + 真机独立授权核对 |
+| 无新增用户决策项 | 实现层决策 FD-CR038-01~04 已确定性落地于 Feature DESIGN |
 
 ## Exit Criteria
 
-| 条目 | 状态 | 证据 | 说明 |
-|---|---|---|---|
-| DAG 校验通过 | PASS | 无循环依赖 | CR 级 DAG 验证 |
-| 文件冲突可控 | PASS | 未处理冲突=0 | CR 级文件所有权验证 |
-| 首批队列可计算 | PASS | lld_ready 可解释 | CR 级验证 |
-| CP5 汇总就绪 | PASS | CP5 batch 已全部 approved | 汇入 CP5 Decision Brief |
+| 条件 | 结果 |
+|---|---|
+| DAG 无环 + 无文件冲突 + lld_policy 合规 | PASS |
+| 不阻塞全量设计证据写作（CP5 前） | 是 |
 
 ## Deliverables
 
-| 交付物 | 路径 | 状态 | 说明 |
-|---|---|---|---|
-| FEATURE-DESIGN-MATRIX | `docs/design/FEATURE-DESIGN-MATRIX.md` | N/A | P2 待创建 |
-| Feature DESIGN/TEST-PLAN/TASKS | `docs/features/` | N/A | P2 待创建 |
-| STORY-BACKLOG | `process/STORY-BACKLOG.md` | PASS | 已迁移 |
-| DEVELOPMENT-PLAN | `process/DEVELOPMENT-PLAN.yaml` | PASS | 已迁移 |
-| Story 卡片 | `process/stories/STORY-*.md` | PASS | 约 30 个 |
-| STORY-STATUS | `process/STORY-STATUS.md` | PASS | 已迁移 |
+- `process/DEVELOPMENT-PLAN-CR-038.yaml`（active）
+- `docs/design/FEATURE-DESIGN-MATRIX-CR-038.md`（active）
+- `process/stories/STORY-038-01.md` ~ `STORY-038-13.md`（lld-ready）
+- `docs/features/cr038-sw-mapping/{DESIGN,TEST-PLAN,TASKS}.md`
+- `docs/features/cr038-pppoe-config/{DESIGN,TEST-PLAN,TASKS}.md`
+- `docs/features/cr038-loopback-envfile/{DESIGN,TEST-PLAN,TASKS}.md`
 
 ## 结论
 
-- 结论：`PASS`（Story 拆解与并行安全在 CR 级验证中已通过，项目级 FEATURE-DESIGN-MATRIX 待 P2）
-- 阻断项：无
-- 豁免项：FEATURE-DESIGN-MATRIX.md 和 docs/features/ 待 P2 补充（不影响 ptm-tde 已交付事实）
-- 下一步：CP5 全量 LLD 可实现性门（CR 级已全部 approved）
+**CP4 自动预检 PASS**。13 Story / 4 Wave 依赖无环、文件所有权串行化、lld_policy 合规。交还 host-orchestrator 计算覆盖全部 13 个目标 Story 的 LLD 证据队列（full-lld×5 分轮 + technical-note×5 卡片内补齐 + waived×3 理由核验）。

@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "story_id": "STORY-038-13",
+  "story_slug": "multi-instance-trex",
+  "cr_id": "CR-038",
+  "stage": "CP6",
+  "return_ref": "process/returns/STORY-038-13.return.json",
+  "changed_files": [
+    "skills/topo-config/src/topology_model.py",
+    "skills/topo-config/src/parser.py",
+    "skills/topo-config/src/physical_pool.py",
+    "skills/topo-planning/src/pool_merge.py",
+    "skills/topo-planning/src/exporter.py",
+    "skills/topo-config/tests/test_trex_multi_instance.py",
+    "skills/topo-planning/tests/test_pool_merge_trex.py",
+    "skills/topo-planning/tests/test_exporter_trex.py",
+    "skills/topo-config/tests/fixtures/pool_trex_multi_instance.yaml",
+    "skills/topo-planning/tests/fixtures/pool_merge/devices_trex_multi.yaml",
+    "skills/topo-planning/tests/fixtures/pool_trex_multi.yaml"
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest skills/topo-config/tests/ skills/topo-planning/tests/",
+      "result": "pass",
+      "passed": 340
+    }
+  ],
+  "tests": [
+    "test_get_trex_instances_present",
+    "test_get_trex_instances_absent",
+    "test_get_trex_instances_non_dict",
+    "test_get_trex_instance_of_port_hit",
+    "test_get_trex_instance_of_port_miss",
+    "test_get_free_ports_passthrough",
+    "test_interface_info_interface_kind_default",
+    "test_node_info_trex_instance_default",
+    "test_parser_interface_kind",
+    "test_parser_trex_instance",
+    "test_merge_tg_trex_instances",
+    "test_merge_tg_instances_pool_priority",
+    "test_merge_tg_no_trex_instances",
+    "test_merge_trex_instances_non_dict",
+    "test_resolve_env_resolved",
+    "test_resolve_env_unresolved",
+    "test_resolve_env_non_placeholder",
+    "test_resolve_env_credential_refused",
+    "test_to_pool_node_serializes_instances",
+    "test_to_pool_node_no_instances",
+    "test_resolve_tg_instance_declared",
+    "test_resolve_tg_instance_single_fallback",
+    "test_resolve_tg_instance_ambiguous",
+    "test_resolve_tg_instance_not_found",
+    "test_resolve_tg_instance_node2_fallback",
+    "test_build_nodes_multi_instance",
+    "test_build_nodes_node2_no_new_keys",
+    "test_interface_kind_pppoe_no_ip",
+    "test_interface_kind_physical_ip_checked",
+    "test_interface_kind_constructor_passthrough"
+  ],
+  "artifacts": [
+    "skills/topo-config/src/topology_model.py",
+    "skills/topo-config/src/parser.py",
+    "skills/topo-config/src/physical_pool.py",
+    "skills/topo-planning/src/pool_merge.py",
+    "skills/topo-planning/src/exporter.py",
+    "skills/topo-config/tests/test_trex_multi_instance.py",
+    "skills/topo-planning/tests/test_pool_merge_trex.py",
+    "skills/topo-planning/tests/test_exporter_trex.py",
+    "skills/topo-config/tests/fixtures/pool_trex_multi_instance.yaml",
+    "skills/topo-planning/tests/fixtures/pool_merge/devices_trex_multi.yaml",
+    "skills/topo-planning/tests/fixtures/pool_trex_multi.yaml"
+  ],
+  "risks": [
+    "compute_ip_plan 对含 SW 拓扑抛 IP_PLAN_SW_VLAN_MISSING（单测手构 ip_plan 隔离，OPEN-06-02）",
+    "三 shared 文件后续改动需 merge_owner 协调",
+    "devices.yaml instances 补充块 schema 按默认方案 A 实现，正式固化待集成期复核",
+    "多实例真机下发不属本 Story（独立 runtime_authorization）"
+  ],
+  "waivers": [],
+  "design_delta_ref": null
+}

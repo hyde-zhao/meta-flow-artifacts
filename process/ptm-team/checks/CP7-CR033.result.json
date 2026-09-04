@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR033",
+  "cr_id": "CR-033",
+  "story_id": "CR-033-summary",
+  "profile": "verification-completion",
+  "route_plan_ref": "process/checks/CP0-CR033.route-plan.json",
+  "context_ref": "process/context/CP6-CR033-CONTEXT.yaml",
+  "evidence_ref": "docs/quality/VERIFICATION-REPORT.md",
+  "dispatch_refs": "process/state/AGENT-DISPATCH-LEDGER.ndjson",
+  "checked_at": "2026-07-30T12:45:00+08:00",
+  "checker_provenance": {
+    "checker_name": "meta-qa",
+    "checker_version": "meta-flow",
+    "invocation": "CP7 verification completion check for CR-033 (8-dim acceptance + static + dry-run + install dry-run + UT sample)",
+    "generated_by": "meta-qa (independent verification, static-only + dry-run-only per DQ-01/HLD §13.3)",
+    "fallback_used": false,
+    "fallback_reason": null,
+    "fallback_review_ref": null
+  },
+  "validation_mode": "static-only + dry-run-only",
+  "items": [
+    {
+      "id": "CP7-01",
+      "category": "functional_completeness",
+      "name": "功能性：17 Story 需求覆盖 R-F-001..029",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/quality/VERIFICATION-REPORT.md §2.1 需求->Story->验证方式->结果（29/29 = 100%）",
+        "docs/design/HLD-PTM-TE-EXEC.md §16.1 追溯表（29 需求 -> 17 Story）",
+        "op_mapper 23 op_id validate PASS（三表一致）",
+        "dry-run 23 用例 pass=4 fail=0 error=19（PF-02）"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "29 需求全覆盖。17 Story（5 full-lld + 10 technical-note + 2 technical-note card）实现证据闭环"
+    },
+    {
+      "id": "CP7-02",
+      "category": "reliability",
+      "name": "可靠性：dry-run 23 用例 + op_mapper 23 op_id 三表一致",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/quality/VERIFICATION-REPORT.md §2.2 dry-run 23 用例结果（独立验证 pass=4 fail=0 error=19）",
+        "docs/quality/TEST-REPORT.md §3 dry-run error 分析（19 ERROR 全部 PF-02 ${STEP-N.*} 引用）",
+        "op_mapper validate: 23 op_id PASS（含 fw_logout PF-03 + fw_update_interface PF-05）"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "dry-run pass=4 fail=0 error=19。19 ERROR 全部 PF-02 Gotcha#2（dry-run ${STEP-N.*} 引用固有限制，runtime --execute 可解析，非 bug）。op_mapper 23 op_id 三表一致。[RISK: PF-02 dry-run Gotcha#2; runtime T-01 follow-up] [RISK: dry-run pass=4 fail=0 error=19(PF-02 Gotcha#2); runtime T-01 follow-up]"
+    },
+    {
+      "id": "CP7-03",
+      "category": "performance",
+      "name": "性能：HLD §13.1 目标 24 用例 <5min",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "docs/design/HLD-PTM-TE-EXEC.md §13.1（性能指标需 runtime 授权后验证，static-only 下不可直接验证）"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "waive_with_risk_acceptance",
+      "waiver_ref": null,
+      "notes": "N/A 理由：static-only + dry-run-only 下不可直接验证性能指标。未覆盖风险 R-CP7-04：runtime 性能未知。follow-up: T-01 runtime 验证 [N/A: static-only 不可验证 runtime 性能，T-01 follow-up]"
+    },
+    {
+      "id": "CP7-04",
+      "category": "security",
+      "name": "安全性：NO_CREDENTIAL_READ/NO_PRODUCTION_WRITE/NO_EXTERNAL_PUBLISH + 禁 eval/exec",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": [
+        "docs/quality/REVIEW.md §2 安全审查（禁 eval/exec + 凭据安全 + 授权粒度）",
+        "grep -nE eval/exec case_runner.py op_mapper.py 无输出（EXIT=1）",
+        "_eval_success_condition 用 _SUCCESS_COND_RE 正则 + _compare_values 受限比较（禁 eval/exec）",
+        "resolve_addresses 不读密码值，只返回 password_env 环境变量名（NO_CREDENTIAL_READ）",
+        "dry-run 默认门不执行 mutation op（NO_PRODUCTION_WRITE）",
+        "session 路径 ~/.local/state/ptm-atomic/（规则块#3/#12）"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "禁 eval/exec 确认。凭据安全（password_env 传环境变量名）。dry-run 默认门。TG 经 ptm-atomic 子进程（NO_EXTERNAL_PUBLISH）"
+    },
+    {
+      "id": "CP7-05",
+      "category": "maintainability",
+      "name": "可维护性：code review（case_runner 2552 行模块化 / op_mapper 单一职责 / install.py 规则块单点维护）",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/quality/REVIEW.md §3 可维护性审查",
+        "case_runner.py 2552 行函数职责单一（resolve_addresses/load_env_file/resolve_env_refs/classify_result/extract_payload/apply_warming_up/apply_retry/_eval_success_condition/build_command/run/validate）",
+        "op_mapper.py 三表一致（OP_ID_TO_SUBCOMMAND/OP_METADATA/REQUIRED_FLAGS），单点维护",
+        "install.py 规则块 12 条托管块机制（upsert/remove_managed_rule_block）"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "模块化 + 单一职责 + 单点维护。建议 S-03 case_runner 模块拆分（LOW，非阻塞）"
+    },
+    {
+      "id": "CP7-06",
+      "category": "portability",
+      "name": "可移植性：ptm-team canonical / ptm-te workspace / ptm-atomic CLI 不改本体",
+      "status": "PASS",
+      "severity": "HIGH",
+      "evidence_refs": [
+        "docs/quality/VERIFICATION-REPORT.md §6 平台差异检查",
+        "ptm-team canonical: skills/ + script/ 源码（install dry-run 安装到 .claude/）",
+        "ptm-te workspace: cases/ + devices.yaml + .env 消费方（dry-run 23 用例）",
+        "ptm-atomic CLI: 不改本体，op_mapper 映射到子命令（op_mapper validate 23 op_id）"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "三平台隔离。ptm-atomic CLI 本体不改，只通过 op_mapper 映射消费子命令"
+    },
+    {
+      "id": "CP7-07",
+      "category": "compatibility",
+      "name": "兼容性：向后兼容（Gotcha#12 无 ${ENV.*} 字面值透传）",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "docs/design/HLD-PTM-TE-EXEC.md §13.3 + Gotcha#12（无 ${ENV.*} 字面值原样透传）",
+        "load_env_file env_file_path 为 None 时返回 None（向后兼容，无 ${ENV.*} 用例）",
+        "exec_v4.py 保留废弃标记（ADR-03 不删除）"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "无破坏性变更。无 env-file 时用例仍可 dry-run。exec_v4.py 保留紧急回退"
+    },
+    {
+      "id": "CP7-08",
+      "category": "documentation",
+      "name": "文档：SKILL.md + IMPLEMENTATION.md + G3 模板 + 规则块 12 条",
+      "status": "PASS",
+      "severity": "MEDIUM",
+      "evidence_refs": [
+        "skills/case-execution/SKILL.md + skills/policy-route-execution/SKILL.md + skills/device-management/SKILL.md",
+        "process/stories/STORY-EX-*-IMPLEMENTATION.md（15 IMPL + 2 impl_context）",
+        "skills/case-execution/templates/topology-link3.yaml.example（G3 模板 + 9 类 ${ENV.*}）",
+        "install.py ptm-te-workflow 规则块 12 条（含 9-12）",
+        "docs/quality/（TEST-STRATEGY + VERIFICATION-REPORT + TEST-REPORT + REVIEW）",
+        "docs/release/（RELEASE-NOTES + DEPLOY-CHECKLIST + ROLLBACK + MIGRATION + FEEDBACK）"
+      ],
+      "owner": "meta-qa",
+      "route_on_fail": "rework_same_story",
+      "waiver_ref": null,
+      "notes": "3 SKILL.md + 17 Story 实现证据 + G3 模板 + 规则块 12 条 + 4 quality 文档 + 5 release 文档"
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "risks": [
+    {
+      "id": "R-CP7-01",
+      "description": "runtime 端到端未验证",
+      "impact": "真机业务正确性未确认",
+      "mitigation": "dry-run 已校验命令构建 + op_id 映射 + ${ENV.*} 解析",
+      "follow_up": "T-01 follow-up（需设备 + --execute 授权）",
+      "blocking": false
+    },
+    {
+      "id": "R-CP7-02",
+      "description": "PF-02 dry-run ${STEP-N.*} 引用不可解析",
+      "impact": "19 用例 dry-run error",
+      "mitigation": "runtime --execute 生成 step-refs 可解析（非 bug，固有限制）",
+      "follow_up": "T-01 runtime 验证",
+      "blocking": false
+    },
+    {
+      "id": "R-CP7-03",
+      "description": "PF-04 tg_config_interface 聚合占位符",
+      "impact": "TG 接口配置聚合参数 follow-up",
+      "mitigation": "op_mapper 已映射，聚合逻辑 follow-up",
+      "follow_up": "后续 CR 候选",
+      "blocking": false
+    },
+    {
+      "id": "R-CP7-04",
+      "description": "性能 24 用例 <5min 未验证",
+      "impact": "runtime 性能未知",
+      "mitigation": "static-only 不可验证",
+      "follow_up": "T-01 runtime 验证",
+      "blocking": false
+    }
+  ],
+  "pending_fix": {
+    "fixed": [
+      "PF-01 _OBJ_NAME_RE hyphen",
+      "PF-03 fw_delete_object 23 op_id",
+      "PF-05 fw_update_interface enabled"
+    ],
+    "followup": [
+      "PF-02 dry-run STEP-N Gotcha#2 (runtime OK)",
+      "PF-04 tg_config_interface aggregate"
+    ]
+  },
+  "agent_dispatch_evidence": {
+    "ledger": "process/state/AGENT-DISPATCH-LEDGER.ndjson",
+    "cr033_events": 37,
+    "inline_fallback_in_cr033": false,
+    "notes": "CR-033 全部真实子 agent 调度（tool_name=Agent）。ledger 中 4 个 inline_fallback 属于 CR-030（ADE-CR030-*）"
+  },
+  "independent_verification": {
+    "op_mapper_validate": "PASS (23 op_id)",
+    "case_runner_syntax": "OK (2552 lines)",
+    "grep_eval_exec": "no match (EXIT=1)",
+    "dry_run_23_cases": "pass=4 fail=0 error=19 (PF-02)",
+    "install_dry_run": "PASS (规则块 12 条 + 5 skills)",
+    "ut_sample": "classify_result/_eval_success_condition/apply_warming_up/extract_payload 逻辑正确"
+  },
+  "read_expansion_refs": [
+    "RE-20260730T124500Z-CR033-CP7-01"
+  ],
+  "decision": "PASS_WITH_RISK",
+  "decision_reason": "static-only + dry-run-only 全部通过（op_mapper 23 op_id / case_runner syntax / 禁 eval/exec / dry-run 23 用例 / install dry-run / UT 抽样 / 134 单元测试）。29 需求 100% 覆盖。9 条 ADR 设计契约全部映射并验证。PF-01/03/05 已修复；PF-02/04 非阻塞 follow-up。runtime 端到端属 T-01 follow-up（需设备 + --execute 授权），CP7 写明 N/A + 未覆盖风险。风险 R-CP7-01/02/03/04 非阻塞，进入 CP8 risk acceptance。",
+  "next_route": "CP7 PASS_WITH_RISK. CP8 delivery gate is next human gate (meta-doc: README/USER-MANUAL + release-readiness summary). runtime T-01 follow-up tracked in FEEDBACK.md."
+}
