@@ -1,88 +1,94 @@
-# RELEASE-CONTEXT.yaml — ptm-tde v1.0 发布上下文胶囊
-# 生成日期: 2026-06-08
-# 遵循 CP8 capsule-first 原则：只含摘要、计数、风险 ID、决策 ID 和证据路径
-# 不得包含完整文档内容、全文 diff 或完整会话 transcript
+# RELEASE-CONTEXT.yaml — 当前活动发布上下文胶囊（CR-038）
+# 生成日期: 2026-08-15
+# 本文件为「当前活动发布」轻量胶囊；CR-038 完整胶囊见 RELEASE-CONTEXT-CR-038.yaml。
+# 遵循 CP8 capsule-first 原则：只含摘要、计数、风险 ID、决策 ID 和证据路径；
+# 不复制完整 HLD / TEST-MATRIX / TEST-REPORT / REVIEW / diff 正文。
 
 release:
-  agent: "ptm-tde"
-  version: "v1.0"
-  release_date: "2026-06-06"
-  release_decision: "READY"
+  agent: "ptm-te"
+  cr: "CR-038"
+  parent_cr: "CR-037"
+  title: "ptm-te 集成 PPPoE 链路规划能力（SW 节点映射 + PPPoE Server/Client 配置 + 环回拓扑 + 多实例 TRex）"
+  version: "CR-038"
+  release_date: "2026-08-15"
+  release_decision: "READY_WITH_RISK"
   release_artifact_profile: "compact"
   profile_reason: >
-    standard 模式交付，无真实运行/凭据/外部接口运行时授权需求。
-    发布产物按 compact profile：RELEASE-NOTES + DEPLOY-CHECKLIST 为必须；
-    ROLLBACK/MIGRATION/FEEDBACK 按需或 N/A。
+    纯代码 + 数据模型 + 文档 + prompt 交付，无新增安装脚本（复用 CR-037 install 链路）；
+    validation_mode=mixed；真机 not_authorized。compact profile。
+  full_capsule: "process/release/RELEASE-CONTEXT-CR-038.yaml"
+  cp8_release_decision_scope: >
+    READY_WITH_RISK 仅表示交付就绪，不等于授权真实执行；RELEASED/FAILED 需独立真实发布授权。
 
 scope:
-  delivered_crs: 7
-  total_stories: 23
-  total_product_files: ~40
-  baseline_commit: "350b1b9"
-  cr_list:
-    - "CR-010: 三阶段框架改造（结构层，6 Stories）"
-    - "CR-011: KYM 阶段改造（内容层，4 Stories）"
-    - "CR-012: MFQ 阶段改造（扩展范围，8 Stories）"
-    - "CR-013: PPDCS 阶段改造（4 Stories）"
-    - "CR-015: AskUserQuestion 交互增强（fast-lane）"
-    - "CR-016: 原子操作消费缺口修复"
-    - "CR-017: 因子库发现缺口修复"
+  delivered_crs: 1
+  total_stories: 13
+  story_groups:
+    core: { stories: 6, tests_passed: 340 }
+    peripheral: { stories: 7, tests_passed: 127 }
+    s07_regression: { tests_passed: 55 }
 
 quality:
-  cp3_pass_rate: "4/4 CR 级 CP3 自动预检 PASS"
-  cp5_pass_rate: "4/4 CR 级 CP5 batch approved"
-  cp6_pass_rate: "约 28/28 Story CP6 PASS"
-  cp7_pass_rate: "约 12/12 全局/Story CP7 PASS"
-  cp8_pass_rate: "4/4 CR 级 CP8 自动预检 PASS"
+  cp7_result: "PASS_WITH_RISK（13/13 verified，无 NEEDS_REWORK/BLOCKED/NEEDS_DESIGN_CLARIFICATION）"
   blocking_defects: 0
   high_risk_open: 0
+  medium_risk_open: 4
+  low_risk_open: 4
 
 risk_ids:
-  accepted:
-    - "RA-01: CP0-CP5 gate_inheritance（用户接受，回退条件：发现基线问题时发起 CR 回溯）"
-    - "RA-02: 低风险 Story 缺少独立 IMPLEMENTATION.md（CR 级 CP6 已覆盖）"
+  - "CR038-R-AUTHZ: not_authorized — 真机三不授权（H3C telnet/trex 发流/--execute/DUT 拨号）"
+  - "CR038-R-RF009: scope-decision — R-F-009 命名口径 device_groups.sw vs switch 块"
+  - "CR038-R-OPEN0602: follow_up — OPEN-06-02 ip_plan SW VLAN 完整端到端"
+  - "CR038-R-S04: risk_acceptance — S04 virtual-template IP/bind_interface 待真机"
+  - "CR038-R-S01: follow_up — explicit_sw_reserved 保守保留（ADR-CR038-01 备选）"
+  - "CR038-R-DRYRUN: follow_up — ruijie/huawei dry-run 模板未真机验证"
+  - "CR038-R-S13: follow_up — devices.yaml instances schema 固化待复核"
+  - "CR038-R-PPPOEOP: follow_up — ptm-atomic PPPoE op 扩展台账候选"
 
 decision_ids:
-  cp8:
-    - "CP8-DQ-01: CR-011 交付就绪确认 → approved"
-    - "CP8-DQ-02: CR-011 后续台账 → approved"
-    - "CP8-DQ-01-CR-015: CR-015 交付就绪确认 → approved"
-    - "CP8-DQ-02-CR-015: CR-015 Codex 整改 → approved"
-  cp0:
-    - "CR016-DQ-01/02/03/04: 全部 approved"
-    - "CR017-DQ-01/02/03: 全部 approved"
-
-non_authorized:
-  - "真实运行环境验证"
-  - "生产凭据/密钥"
-  - "外部接口实时调用"
-  - "publish/live 发布动作"
-
-follow_up:
-  candidates: 3
-  spike_candidates: 1
-  tracking_files:
-    - "process/changes/CR-011-FOLLOW-UP-TRACKING-2026-06-02.md"
-    - "process/changes/CR-015-FOLLOW-UP-TRACKING-2026-06-04.md"
+  - "DQ-038-01: scope — PPPoE Server 建模（approved）"
+  - "DQ-038-02: architecture — SW env-file 契约表达（approved）"
+  - "DQ-038-03: scope — PPPoE Client 归属（approved）"
+  - "DQ-038-04: runtime_authorization — 真机下发独立授权（not_authorized）"
+  - "CP8-DQ-038-RUNTIME: runtime_authorization — 真机三不授权不授权"
+  - "CP8-DQ-038-RF009: scope — R-F-009 命名口径回写（走 CR）"
+  - "CP8-DQ-038-OPEN0602: follow_up_tracking — OPEN-06-02 后续 Story/CR"
+  - "CP8-DQ-038-S04: risk_acceptance — S04 待真机确认"
+  - "CP8-DQ-038-PPPOEOP: follow_up_tracking — ptm-atomic op 扩展台账"
 
 evidence:
   capsule: "process/context/CP8-DELIVERY-CONTEXT.yaml"
-  cp8_auto:
-    - "process/checks/CP8-DELIVERY-READINESS-CR-011.md"
-    - "process/checks/CP8-DELIVERY-READINESS-CR-015.md"
-    - "process/checks/CP8-DELIVERY-READINESS-CR-016.md"
-    - "process/checks/CP8-DELIVERY-READINESS-CR-017.md"
-  cp8_manual:
-    - "process/checkpoints/CP8-DELIVERY-READINESS-CR-011.md"
-    - "process/checkpoints/CP8-DELIVERY-READINESS-CR-015.md"
-    - "process/checkpoints/CP8-DELIVERY-READINESS-CR-017-CR-016.md"
-  state: "process/STATE.md"
-  cr_index: "process/changes/CR-INDEX.yaml"
+  cp7_verification:
+    - "process/checks/CP7-STORY-038-*-VERIFICATION-DONE.md（13/13）"
+  quality_reports:
+    - "docs/quality/TEST-STRATEGY.md"
+    - "docs/quality/VERIFICATION-REPORT.md"
+    - "docs/quality/VERIFICATION-REPORT-SECONDARY.md"
+    - "docs/quality/TEST-REPORT.md"
+    - "docs/quality/REVIEW.md"
+    - "docs/quality/FIXES.md"
+  return_packets: >
+    process/returns/STORY-038-*.return.json + process/evidence/STORY-038-*.index.json
+    （7/13 已就绪；S01/S02/S05/S08/S09/S12 回填中，CP8 前复核）
+  release_docs:
+    - "docs/release/RELEASE-NOTES.md"
+    - "docs/release/DEPLOY-CHECKLIST.md"
+    - "docs/release/ROLLBACK.md"
+    - "docs/release/MIGRATION.md"
+    - "docs/release/FEEDBACK.md"
 
 install_verification:
   status: "n/a"
-  reason: "ptm-tde 作为 Claude Code Agent/Skill 集合，通过文件复制安装到目标项目；不需要独立安装脚本验证"
+  reason: "CR-038 无新增安装脚本，安装/卸载链路复用 CR-037（script/install.py + script/ptm_team/install.py），无独立 INSTALL-MANIFEST 或安装脚本验证"
 
 migration_compatibility:
   status: "n/a"
-  reason: "ptm-tde v1.0 是首次正式交付，无前置版本需迁移兼容"
+  reason: "CR-038 无破坏性数据迁移；devices.yaml 新增 sw 设备块为加性 schema 扩展，既有 firewall/tg 块不变"
+
+unauthorized_scope:
+  - "真机三不授权：H3C telnet 下发 / trex 发流 / --execute 执行 / DUT PPPoE 拨号"
+  - "NGFW Web API / trex-api 外部接口实时调用"
+  - "生产凭据读取 / 生产数据写入 / 真机配置下发"
+  - "publish / live 发布动作"
+  - "git push / commit（除非用户明确要求）"
+  - "REQUIREMENTS / HLD / ADR / 蓝图三件套修改（R-F-009 回写须另走 CR）"

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_cp6_work_packet",
+  "stage": "CP6",
+  "story_id": "STORY-039-04",
+  "story_slug": "docs-and-traceability",
+  "cr_id": "CR-039",
+  "project_id": "ptm-team",
+  "wave": 1,
+  "story_ref": "process/stories/STORY-039-04.md",
+  "design_evidence_ref": "process/stories/STORY-039-04.md#技术说明",
+  "design_evidence_type": "technical-note",
+  "design_evidence_confirmed": true,
+  "expected_return_packet": "process/returns/STORY-039-04.return.json",
+  "objective": {
+    "summary": "文档与追溯：SKILL.md Gotcha#8 40->45 + 修订记录 v1.7/v1.8 + op-coverage-matrix sw3 旁路章节（total/mapped 不变）+ CR-043/044/046 正式变更单 + BACKLOG-CR-039（CR-047 post_delay 待回源）+ env-file 样例（无凭据明文）。",
+    "non_goals": [
+      "不修改任何代码文件（op_mapper.py / case_runner.py / 单测）",
+      "不引入真实凭据明文（password_env=SW3_PASSWORD 环境变量引用）",
+      "op-coverage-matrix total=124/mapped=21 计数不变（DQ-039-02 两套口径）"
+    ]
+  },
+  "allowed_write_paths": [
+    "skills/case-execution/SKILL.md",
+    "docs/ptm-te/op-coverage-matrix.md",
+    "process/changes/CR-043.md",
+    "process/changes/CR-044.md",
+    "process/changes/CR-046.md",
+    "process/BACKLOG-CR-039.md",
+    "skills/case-execution/templates/env-file.pppoe-sw3.next_hop_a.example.yaml",
+    "process/stories/STORY-039-04.md",
+    "process/stories/STORY-039-04-IMPLEMENTATION.md",
+    "process/returns/STORY-039-04.return.json",
+    "process/context/stories/STORY-039-04.CP6.work-packet.json",
+    "process/DEV-LOG.md"
+  ],
+  "forbidden_write_paths": [
+    "skills/policy-route-execution/scripts/op_mapper.py",
+    "skills/case-execution/scripts/case_runner.py",
+    "tests/",
+    "process/checkpoints/",
+    "process/handoffs/"
+  ],
+  "verification_plan": [
+    {
+      "method": "static-assert",
+      "command": "grep -n 'EXPECTED_OP_COUNT' skills/case-execution/SKILL.md | grep 45",
+      "expected": "Gotcha#8 = 45（显式算式 40+2+2+1）"
+    },
+    {
+      "method": "static-assert",
+      "command": "grep -n 'total\\|mapped' docs/ptm-te/op-coverage-matrix.md",
+      "expected": "total=124 / mapped=21 / unmapped=97 不变；sw3 旁路章节存在"
+    },
+    {
+      "method": "yaml-parse",
+      "command": "python -c \"import yaml; yaml.safe_load(open('skills/case-execution/templates/env-file.pppoe-sw3.next_hop_a.example.yaml'))\"",
+      "expected": "YAML 解析 PASS；无凭据明文（仅 password_env 引用）"
+    }
+  ],
+  "allowed_reads": [
+    { "path": "process/stories/STORY-039-04.md", "required": true, "reason": "story acceptance + technical-note 设计证据" },
+    { "path": "process/DEVELOPMENT-PLAN-CR-039.yaml", "required": true, "reason": "文件所有权 + security_constraints" },
+    { "path": "skills/case-execution/SKILL.md", "required": true, "reason": "Gotcha#8 回写对象" },
+    { "path": "docs/ptm-te/op-coverage-matrix.md", "required": true, "reason": "sw3 旁路章节对象" },
+    { "path": "/home/hyde/projects/ptm-te-manaul/", "required": true, "reason": "工作区参考（SKILL.md v1.7 / env 文件样例来源，只读）" }
+  ],
+  "do_not_read_by_default": [
+    { "path_or_pattern": "process/STATE.md", "reason": "人类摘要 fallback" },
+    { "path_or_pattern": "process/archive/**", "reason": "归档" }
+  ]
+}

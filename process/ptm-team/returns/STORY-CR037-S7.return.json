@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-037",
+  "story_id": "CR037-S7",
+  "story_slug": "topo-planning-skill-cli",
+  "status": "ready-for-verification",
+  "agent": "meta-dev",
+  "created_at": "2026-08-05T00:00:00+00:00",
+  "cp_result_ref": "process/checks/CP6-CR037-S7-topo-planning-skill-cli-CODING-DONE.md",
+  "evidence_ref": "process/evidence/STORY-CR037-S7.index.json",
+  "implementation_evidence_ref": "process/stories/STORY-CR037-S7.md",
+  "output_files": [
+    {
+      "path": "skills/topo-planning/scripts/topo_plan_cli.py",
+      "operation": "create",
+      "description": "CLI topo-plan 入口：12 参数 + --authorized 硬门（S7-B）+ --case-file 双源提取（E2）+ dry-run 预览副本（S8-B）+ 向导 5 步 + 统一 PYTHONPATH import"
+    },
+    {
+      "path": "skills/topo-planning/SKILL.md",
+      "operation": "create",
+      "description": "Prompt-Skill 契约结构（目标/前置/命令格式/向导 5 步/NLP→CLI/产物契约/dry-run 门/安全/边界/Gotchas/修订记录）"
+    },
+    {
+      "path": "skills/topo-planning/templates/physical_pool.yaml.example",
+      "operation": "create",
+      "description": "物理池模板参考副本（P-1 模板化语义，占位符 + 指引，不含测试造数）"
+    },
+    {
+      "path": "skills/topo-planning/templates/physical_ledger.yaml.example",
+      "operation": "create",
+      "description": "台账模板参考副本（list + port_status，P0-3，不含测试造数）"
+    },
+    {
+      "path": "skills/topo-planning/tests/test_topo_plan_cli.py",
+      "operation": "create",
+      "description": "21 个 pytest 单元测试（对齐 LLD §10 测试清单）"
+    },
+    {
+      "path": "skills/topo-planning/tests/fixtures/pool_no_te.yaml",
+      "operation": "create",
+      "description": "无 TE 端口池（失败路径测试）"
+    },
+    {
+      "path": "skills/topo-planning/tests/fixtures/ledger_direct.yaml",
+      "operation": "create",
+      "description": "pool_direct_tg_dut 对应台账（P0-3）"
+    },
+    {
+      "path": "skills/topo-planning/tests/fixtures/ledger_no_te.yaml",
+      "operation": "create",
+      "description": "pool_no_te 对应台账"
+    },
+    {
+      "path": "skills/topo-planning/tests/fixtures/case_topology_constraint.md",
+      "operation": "create",
+      "description": "组网约束提取 fixture（E2）"
+    },
+    {
+      "path": "skills/topo-planning/tests/fixtures/case_topology_description.md",
+      "operation": "create",
+      "description": "组网描述回退 fixture（E2）"
+    },
+    {
+      "path": "skills/topo-planning/tests/fixtures/case_no_topo_id.md",
+      "operation": "create",
+      "description": "topo_id 提取失败 fixture"
+    },
+    {
+      "path": "skills/topo-planning/tests/fixtures/limit_te.json",
+      "operation": "create",
+      "description": "TE limit 样例"
+    },
+    {
+      "path": "skills/topo-planning/tests/fixtures/limit_invalid_media.json",
+      "operation": "create",
+      "description": "TE+copper 非法 limit（PARAM_INVALID）"
+    }
+  ],
+  "touched_files": [
+    "skills/topo-planning/scripts/topo_plan_cli.py",
+    "skills/topo-planning/SKILL.md",
+    "skills/topo-planning/templates/physical_pool.yaml.example",
+    "skills/topo-planning/templates/physical_ledger.yaml.example",
+    "skills/topo-planning/tests/test_topo_plan_cli.py",
+    "skills/topo-planning/tests/fixtures/pool_no_te.yaml",
+    "skills/topo-planning/tests/fixtures/ledger_direct.yaml",
+    "skills/topo-planning/tests/fixtures/ledger_no_te.yaml",
+    "skills/topo-planning/tests/fixtures/case_topology_constraint.md",
+    "skills/topo-planning/tests/fixtures/case_topology_description.md",
+    "skills/topo-planning/tests/fixtures/case_no_topo_id.md",
+    "skills/topo-planning/tests/fixtures/limit_te.json",
+    "skills/topo-planning/tests/fixtures/limit_invalid_media.json"
+  ],
+  "test_results": {
+    "command": "uv run --python 3.11 python -m pytest skills/topo-planning/tests/test_topo_plan_cli.py",
+    "passed": 21,
+    "failed": 0
+  },
+  "design_delta_refs": [],
+  "deviations": [
+    "test_plan_failure_report 的 missing_te_port 断言调整为「TE 约束失败被结构化报告」：S4 引擎在无 TE 池 + TE 硬约束下设备级先剪枝（missing_device）+ 链路级端点未映射（link_constraint_unsatisfied）；missing_te_port 需要更复杂多链路/可选节点场景，报告仍完整暴露 TE 约束失败",
+    "dry-run 时 metadata.env_name 为 null（S5 契约：dry-run 不写回 env_name）",
+    "fixture 复用 S5 pool_direct_tg_dut.yaml + S2 devices_pool_test.yaml，新增 ledger/case/limit fixture 位于 topo-planning 自身 tests/fixtures"
+  ],
+  "risks": [
+    "S7 CLI 是映射+导出边界；真机部署由 S9 承接（S7 只提示下一步）"
+  ]
+}

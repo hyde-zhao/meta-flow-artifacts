@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP8",
+  "checkpoint_id": "CP8-CR032-BATCH-A",
+  "cr_id": "CR-032",
+  "story_id": null,
+  "profile": "docs-lite",
+  "route_plan_ref": null,
+  "context_ref": null,
+  "evidence_ref": "docs/ptm-te/执行指导.md",
+  "dispatch_refs": [],
+  "checked_at": "2026-07-28T08:30:00Z",
+  "checker_provenance": {
+    "checker_name": "host-orchestrator",
+    "checker_version": "meta-flow",
+    "invocation": "CR-032 batch-A delivery recognition precheck",
+    "generated_by": "host-orchestrator inline",
+    "fallback_used": false,
+    "fallback_reason": null,
+    "fallback_review_ref": null
+  },
+  "items": [
+    {
+      "id": "CP8-CR032-01",
+      "category": "scope",
+      "name": "Batch-A deliverables (reinstall preflight checklist, ptm-atomic version lock, DQ-01 authorization granularity) are merged into main",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/ptm-te/README.md", "docs/ptm-te/执行指导.md", "script/ptm_team/install.py", "skills/trex-traffic/SKILL.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Batch-A commit efcc247 (4 files, +49/-2) is contained in main and in working branch zhaohaibo. Docs + install.py rule block + manifest field only."
+    },
+    {
+      "id": "CP8-CR032-02",
+      "category": "scope",
+      "name": "Batch-B exec_v4.py code rework is out of this CR's close scope and is transferred to CR-033",
+      "status": "N/A",
+      "severity": "BLOCKER",
+      "evidence_refs": ["docs/ptm-te/执行指导.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "require_user_decision",
+      "waiver_ref": null,
+      "notes": "Batch-A commit efcc247 touched only docs/install.py/manifest, proving no exec_v4.py code change. Batch-B (exec_v4.py argparse/report/preflight) is absorbed into parent CR-033 (TG device modeling + case-execution + 12 improvements). Not delivered here, does not block batch-A close."
+    },
+    {
+      "id": "CP8-CR032-03",
+      "category": "security",
+      "name": "Batch-A introduced no device write operation or runtime authorization",
+      "status": "PASS",
+      "severity": "BLOCKER",
+      "evidence_refs": ["script/ptm_team/install.py", "docs/ptm-te/执行指导.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "escalate_runtime_high_risk",
+      "waiver_ref": null,
+      "notes": "Batch-A is docs/field/manifest only (commit efcc247). No --execute device write, no ptm-atomic reinstall execution, no exec_v4.py code change."
+    },
+    {
+      "id": "CP8-CR032-04",
+      "category": "release",
+      "name": "Runtime and installation verification are not part of this docs-lite batch-A close",
+      "status": "N/A",
+      "severity": "HIGH",
+      "evidence_refs": ["docs/ptm-te/README.md"],
+      "owner": "host-orchestrator",
+      "route_on_fail": "block_release",
+      "waiver_ref": null,
+      "notes": "Docs-lite fast-lane; runtime/install verification N/A for batch-A documentation deliverables."
+    }
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [],
+  "decision": "PASS",
+  "next_route": "CP8 required human delivery confirmation (batch-A); batch-B transferred to CR-033"
+}

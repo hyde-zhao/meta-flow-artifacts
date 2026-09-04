@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-056",
+  "story_id": "STORY-056-04",
+  "story_slug": "case-runner-mark-admission",
+  "wave": 2,
+  "status": "implemented",
+  "touched_files": [
+    "skills/case-execution/scripts/case_runner.py",
+    "process/stories/STORY-056-04-case-runner-mark-admission-IMPLEMENTATION.md",
+    "process/checks/CP6-STORY-056-04-case-runner-mark-admission-CODING-DONE.md",
+    "process/checks/CP6-STORY-056-04-case-runner-mark-admission.result.json",
+    "process/returns/STORY-056-04-case-runner-mark-admission-CP6.return.json",
+    "process/evidence/STORY-056-04-case-runner-mark-admission-CP6.index.json",
+    "DEV-LOG.md",
+    "process/DEVELOPMENT-PLAN-CR-056.yaml"
+  ],
+  "workspace_artifacts": {
+    "cases_repo_side_effect": "none（ptm-te-manaul/cases 与 ptm-cases 仓库零写入；312 个 te 用例 md 仅只读解析校验；台账写路径归 STORY-056-05）",
+    "module_surface": "case_runner.py 新增/修改：常量 _FM_MARK_KEY/_FM_CICD_MARK_KEY + case_ledger 值域导入（降级门控）；parse_frontmatter [3c]/[3d]/[3e]；filter_by_mark/filter_by_cicd_mark；_split_csv/_validate_role_pool_args/describe_role_pool/apply_role_pool/_resolve_ledger_root/_case_state_snapshot/_case_mark_stale_record；run parser --mark/--cicd-mark/--role/--scene/--run-scope；main() [0-pre]/[0-pre2] 前置、过滤链扩展、执行循环冻结校验与 case_state、result_json.mark_admission、mark/ledger/archive-check parser+委托"
+  },
+  "verification_summary": {
+    "smoke_assertions": "69 pass / 0 fail（A parse 11 + B filter 6 + C role 准入 11 + D 过滤链/零变化 13 + E 冻结校验 14 + F 子命令委托 6 + G 辅助函数 8；临时脚本 /tmp/smoke_cr056_04.py 不落仓库）",
+    "py_compile": "PASS（Python 3.11 与 3.12 双版本；3.12 SyntaxWarning 为既有 docstring 转义，非本 Story 引入）",
+    "regression": "88 passed（skills/case-execution/tests/ 全套，与 056-01/056-03 基线一致，零回归；无 --role 行为零变化由 D1/D3 + 既有套件双重佐证）",
+    "unit_tests_note": "正式 pytest 文件 N/A（后置 STORY-056-07 收口，CR-056 Story 拆解明确）；冒烟 69 断言即 run 准入/冻结校验部分用例蓝本",
+    "real_repo_readonly_check": "ptm-te-manaul/cases/te 312 个 md 全量 parse_frontmatter：311 用例 0 error、mark 全缺省 debug、cicd_mark 全 None（1 个 README.md 非 case 文件按既有语义判 frontmatter 缺失）"
+  },
+  "design_deviation_refs": [
+    "任务锚点外增量 ①：deprecated 吸收态被显式圈选仍不执行（HLD G-8/G-06 验收准则，任务 C-1~C-8 未列、无其他 Story 承接）→ 执行循环记 ERROR error_type=CASE_MARK_DEPRECATED，dry-run 同样生效",
+    "任务锚点外增量 ②：result.json 顶层 mark_admission {role,scene,run_scope,mark_filter,cicd_mark_filter,ledger_root}（case_state 的审计语境，口径同 runtime_authorization）",
+    "跨域圈选口径：--role 模式下跨域圈选参数一律 exit 2（对齐 HLD §4.4 规则 2 示例）；G-8 '--mark accept,cicd_accept' 为 v0.7 前单字段残留措辞，该表达仅在无 --role 模式成立",
+    "台账根定位口径：_resolve_ledger_root 自 --cases-dir/--case-file 目录向上最多 2 级精确匹配 case_ledger.yaml（HLD 未对 run 路径显式定义，§7.3 上溯语义的对齐实现）"
+  ],
+  "open_decision": {
+    "id": "GAP-STORY-056-04-01",
+    "status": "non-blocking-open",
+    "question": "三项任务锚点外增量（deprecated 卡口 / mark_admission 语境 / 跨域圈选拒绝）是否认可归属本 Story",
+    "recommendation": "认可（均为 HLD 已定义或派生自既有审计口径的 run 准入语义，无其他 Story 承接；每项均可独立一行回退）",
+    "blocks_lld": false,
+    "follow_up_refs": [
+      "process/stories/STORY-056-04-case-runner-mark-admission-IMPLEMENTATION.md §设计缺口反馈",
+      "STORY-056-07（文档与回归收口需把 deprecated 卡口与跨域圈选口径写进用户可见文档）"
+    ]
+  },
+  "design_delta_refs": [],
+  "handoff": {
+    "qa_entry": "uv run --python 3.11 --with pytest --with pyyaml pytest skills/case-execution/tests/ -q（88 passed 基线）+ 冒烟重放 uv run --python 3.11 --with pyyaml python /tmp/smoke_cr056_04.py（69 断言，fixture 由脚本自建于 /tmp/cr056-04-smoke）；验证对象 = parse_frontmatter 新键与校验、filter 两函数、role 场景池准入（参数级 exit 2 + 池圈选）、冻结校验三态（CASE_MARK_STALE 阻塞 / local WARNING 放行 / LEDGER_MISSING 阻塞）、子命令委托退出码、无 --role 零变化",
+    "qa_risk_notes": "① 冒烟全部 dry-run，--execute 真实路径的冻结校验逻辑与 dry-run 共用同一前置代码（校验位于 execute 判定前），未做真机验证；② run-scope 默认 None 经角色推导，result.json.mark_admission.run_scope 才是生效值，审计时勿读 argparse 原始值；③ 056-03 遗留灰区 LCQ-STORY-056-03-01（dry-run 轮计入验收轮数）在本 Story 路径不涉及，仍归 056-05；④ cmd_mark/cmd_ledger/cmd_archive_check 仍为骨架（返回 5），CP7 不应期待子命令端到端行为（056-05/06/08 交付）",
+    "orchestrator_actions": "回填 dispatch agent_id/thread_id；对设计缺口反馈 #1~#3（G-8 措辞修订、deprecated 卡口归属、mark_admission 认可）择机批量确认（均不阻塞）；拉起 STORY-056-05（same-file-serial）或 meta-qa CP7"
+  }
+}

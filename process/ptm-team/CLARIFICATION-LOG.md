@@ -1,9 +1,93 @@
 ---
 status: active
-current_round: 15
-total_rounds: 15
+current_round: 16
+total_rounds: 16
 ready_for_design: false
 source: ".meta-workflow/process/CLARIFICATION-LOG.md"
+---
+
+## 调研发现（2026-08-18）——CR-039 工作区已验证代码回源 canonical（G1 静态路由回滚兜底 + G4 next_hop_a 占位符 + G5 sw3 族）
+
+> 本段为 meta-pm 阶段零快速调研，服务于 CR-039（ptm-te-manaul 工作区已验证代码回源 ptm-team canonical 源）。核对基准：canonical `/home/hyde/projects/ptm-team` vs 工作区 `/home/hyde/projects/ptm-te-manaul/.claude/skills/`。
+
+### 现有可复用资源
+
+| 来源 | 调研发现 | 对本需求的价值 |
+|------|---------|---------------|
+| canonical `op_mapper.py` L705-707 | `fw_config_static_route` 仅注释声明「id_source=None，回滚 id 经 step-refs 或 verify 查询兜底」，**无实现** | G1 落点：实现 `_query_static_route_id` + `handle_rollback` 静态路由分支 |
+| canonical `op_mapper.py` L652-653 | acl-policy 已有 `id_source=query`（query_op=fw_verify_acl_policy，match=name）先例 | G1 verify 兜底有同类先例可参照（但 static_route 未采用 query 声明） |
+| canonical `op_mapper.py` L1455-1464 | 9 类 `${ENV.*}` 占位符表，`dut.next_hop` 分支已存在 | G4 落点：新增第 10 类 `dut.next_hop_a` 分支 |
+| canonical env 加载层（case_runner L674/L715/L721） | CR-038 R-F-008 已支持 swN 节点读取容忍（`_PRIMARY_NODE_IDS` 仅 tg1/dut1） | G5 前置：env 层无需改动，只需补 sw3 op 执行旁路 |
+| canonical `test_tg_op_mapping.py` L167/L396 | 断言 `EXPECTED_OP_COUNT == 44` | 回源后需改 45 + 补 sw3 断言 |
+| 工作区用例 M8-01-09 L204 / M2-02-07 L205 | 各含 1 个 `sw3_sync_pppoe_route` 步骤 | G5 实测载体（sw3 族 op 真实被用例消费） |
+
+### 平台能力约束
+
+| 约束项 | 说明 |
+|--------|------|
+| 工作区非 git 仓库 | ptm-te-manaul 是运行工作区，改动未同步 canonical；本 CR 做回源 |
+| 用例 md 不迁入 canonical | 工作区 105 个用例在 `cases/`，按既有约定用例不入库；canonical 只回源代码/skill 定义/env-file |
+| sw3 走 telnet 旁路（非 ptm-atomic） | `_execute_sw3_op`/`_exec_sw3_telnet` 用 telnetlib 直连 SW，真机操作必须独立 runtime_authorization |
+| 验证模式 | CR-039 声明 `validation_mode=static-only`：单测对拍 + dry-run（工作区已 26/28 step PASS 实测） |
+
+### 对需求的初步影响
+
+1. **G1 兜底实现 = 无条件 verify**：工作区 `handle_rollback` 对 `fw_config_static_route` 直接走 `_query_static_route_id`，**跳过 decl/step-refs 优先路径**（非"缺失时兜底"）。DQ-039-01 需按此事实细化。
+2. **G4 扩展 ADR-09 占位符契约**：新增第 10 类 `${ENV.dut.next_hop_a}` → `nodes.dut1.next_hop_a`（80.0.0.2，GW-A 策略路由下一跳1）。M9-03-07 用例引用。
+3. **G5 六处映射 + 执行旁路 + dry-run envelope**：`EXPECTED_OP_COUNT` 44→45；canonical `test_tg_op_mapping.py` 断言需同步；`op-coverage-matrix` 需新增 sw3 旁路章节（total/mapped 不变）。
+4. **CR-047 post_delay 缺口（新增 DQ-039-05）**：工作区 `case_runner.py` 含 CR-047 `_parse_post_delay` + `time.sleep(OP_INTERVAL_SEC + post_delay)`，**canonical 无 CR-047 变更单且 CR-039 未覆盖**。需用户决定并入本 CR 回源还是独立 CR。
+5. **追溯补记**：canonical 代码有 CR-043（op_mapper L79-82/L529-530）、CR-044（L114-117）标注，但**无正式变更单**；CR-046 完全零记录；SKILL.md 修订记录止于 v1.6（CR-041）。
+
+### 未决问题（待 CP2 澄清，由 host-orchestrator 统一发起）
+
+| ID | 决策类型 | 问题 | 推荐方案摘要 |
+|----|---------|------|-------------|
+| DQ-039-01 | scope | G1 回滚 verify 兜底与 step-refs 优先级 | 保持无条件 verify（与工作区一致） |
+| DQ-039-02 | scope | `EXPECTED_OP_COUNT=45` 校验口径 | 三表 + 单测 + SKILL.md + op-coverage-matrix 旁路章节同步 |
+| DQ-039-03 | scope | CR-043/044/046 追溯补记范围 | 补正式变更单 + SKILL.md 修订记录 v1.7/v1.8 |
+| DQ-039-04 | runtime_authorization | 真机验证授权 | 仅审计记录，不授权（沿用 CR-038 模式） |
+| DQ-039-05 | scope | CR-047 post_delay 是否并入本 CR | 待用户决定：并入回源或独立 CR |
+
+---
+
+---
+
+## 调研发现（2026-08-15）——CR-038 PPPoE 链路规划能力
+
+> 本段为 meta-pm 阶段零快速调研，服务于 CR-038（ptm-te 集成 PPPoE 链路规划能力）。
+
+### 现有可复用资源
+
+| 来源 | 调研发现 | 对本需求的价值 |
+|------|---------|---------------|
+| `topo_mapper.py` `_build_candidates`/`_build_result`/`_is_mock` | 已支持 `node_type=SW` 匹配（`pool.get_devices_by_type(['SW'])`）；Mock 节点跳过硬编码 | SW 显式节点映射可直接复用，无需新增匹配类型 |
+| `physical_pool.yaml` | 已预留 `node_type: SW` 节点（SW1/SW2）+ `${DEVICE_TYPE_SW}` 占位，含 management + interfaces | PPPoE Server SW 建模直接改 `node_type=SW` |
+| `switch_configurator.py` / `commands.py` | 已覆盖 VLAN/VRF/接口 IP/路由三厂商命令，含 `ip binding vpn-instance`（VRF） | PPPoE 命令族新增复用命令模板框架 |
+| `exporter.py` `compute_ip_plan` | 已有 `_topology_has_sw()` 检查 + `IP_PLAN_SW_VLAN_MISSING` | SW 参与 IP 规划已有前置检查可复用 |
+| CR-037 HLD §1.3 | 明确「单 TG+单 DUT 直连 MVP 边界，后续 CR 扩展」 | 本 CR 兑现其承诺，MVP 边界放宽有依据 |
+
+### 平台能力约束
+
+| 约束项 | 说明 |
+|--------|------|
+| ptm-atomic CLI 本体边界 | CR-033/037 均不改 ptm-atomic 本体；PPPoE 拨号 op 是否已暴露需 LLD 核实，缺失则列跨仓库依赖 |
+| `${ENV.*}` 9 类占位符硬契约（ADR-09） | 全为 tg/dut 类；SW 需扩展契约，但需权衡是否破坏 case-execution 零适配 |
+| 真机下发约束 | 默认 dry-run；H3C telnet / NGFW web / trex 真机下发为独立 runtime_authorization |
+| GE 实例保护 | GE1_1~4 正在测试，禁止改动进程/cfg/wrapper |
+
+### 对需求的初步影响
+
+1. **PPPoE Server 应建模为真实 SW 节点**（`node_type=SW, role=pppoe-server`），而非 Mock + 映射期替换（DQ-038-01）。
+2. **SW 进 env-file nodes 但不进 port_mapping**，不新增 `${ENV.sw.*}`（保持 case-execution 零适配，DQ-038-02）。
+3. **PPPoE Client 归属 ptm-atomic 原子操作**（执行层），非 factor-library（设计层，DQ-038-03）。
+4. **真机下发沿用 DQ-037-04 独立 runtime_authorization 模式**（DQ-038-04）。
+
+### 未决问题（待 CP2 澄清）
+
+- SGQ-038-01：PPPoE 动态地址池 vs 静态 IPAM + SW IP/VLAN 归属。
+- SGQ-038-02：环回 links 方向性。
+- SGQ-038-03：PPPoE Server 是否强制 VRF。
+
 ---
 
 ---
@@ -749,3 +833,80 @@ source: ".meta-workflow/process/CLARIFICATION-LOG.md"
 - `docs/ptm-te/USE-CASES.md` 需要新增物理用例执行和失败定位场景。
 - `docs/ptm-te/DESIGN.md` 需要补充执行与定位模块、关键流程、Use Case traceability 和自审结果。
 - 该纠偏不改变此前问题单回归结论，但扩大 ptm-te scoped draft 的覆盖范围。
+
+---
+
+## CR-033 调研发现（2026-07-28）
+
+### 现有可复用资源
+
+| 资源 | 路径 | 复用方式 |
+|------|------|---------|
+| op_mapper.py | `skills/policy-route-execution/scripts/op_mapper.py`（1983 行） | case-execution 直接复用 `execute_op()` / `build_command()` / `handle_rollback()` / `resolve_step_refs()`；不重写映射层。已覆盖 21 个 op_id（auth 1 + policy-route 7 + operation-log 1 + object 1 + interface 5 + tg 6） |
+| device-management SKILL.md | `skills/device-management/SKILL.md` | 扩展：新增 `type:TG` 设备块、TG 流程、`TG_SSH_PASSWORD` 环境变量、6 组合型号对照；不改连接逻辑 |
+| trex-traffic SKILL.md | `skills/trex-traffic/SKILL.md` | 不改：TG 接口/模板/发流/校验/停止能力已就绪；case-execution 通过 op_mapper 调用 |
+| exec_v4.py（workspace） | `/home/hyde/projects/ptm-te/exec_v4.py`（473 行） | 参考执行脚本：借鉴 parse_steps / run_case / run_cleanup / ensure_login / exec_op_with_retry 逻辑；迁移后废弃 |
+| 24 用例 md（workspace） | `/home/hyde/projects/ptm-te/cases/upload/*.md` | case_runner 三入口直接消费；含 case_steps YAML 块、warming_up/post_op/retry 字段 |
+
+### exec_v4.py 硬编码清单（CR-033 消除目标）
+
+| 硬编码项 | 行号 | 替代方案 |
+|---------|------|---------|
+| `OP_MAPPER` 绝对路径 | L16 | case_runner 与 op_mapper 同树部署，相对路径或 sys.path |
+| `UPLOAD_DIR` 绝对路径 | L17 | CLI `--cases-dir` 参数化 |
+| `RUNS_DIR` 绝对路径 | L18 | CLI `--runs-dir` 参数化 |
+| `DUT_URL` 硬编码 IP | L21 | 从 `devices.yaml` firewall.host 读取 |
+| `TG_URL` 硬编码 IP:port | L22 | 从 `devices.yaml` tg.api_server 读取 |
+| `ALL_CASES` 17 用例硬编码列表 | L24-42 | 目录 glob / 文件列表 / 单用例三入口 |
+| `BATCHES` 硬编码批次 | L44-48 | CLI `--batch-size` 或按目录分组 |
+| `SHARED_SESSION` 硬编码路径 | L20 | `--session-dir` 参数化 |
+
+### exec_v4.py 缺失能力（CR-033 补齐目标）
+
+| 缺失项 | 现状 | 目标 |
+|--------|------|------|
+| `warming_up` 字段 | exec_v4 不解析，probe 流和正式流同等对待 | case_runner 识别 `warming_up: true`，执行后自动跑 `post_op` 清理 |
+| `post_op` 字段 | exec_v4 不解析 | case_runner 在主 op 后执行 post_op（如 stop_traffic_stream） |
+| `retry` 字段 | exec_v4 不解析，固定 30s 重试 1 次 | case_runner 按 `retry.interval` / `max_attempts` / `success_condition` 轮询 |
+| `known_issue` 字段 | exec_v4 不解析 | case_runner 识别 known_issue 标记，输出 KNOWN_FAIL 四态 |
+| `fw_logout` op | op_mapper 无此 op（只有 login） | 新增 `fw_logout` op + case_runner cleanup 登出 |
+| `extract_payload` 统一解析 | exec_v4 手动 `extract_hitcount` 硬编码字段名 | `extract_payload(op_id, envelope)` 统一提取 |
+| 结果分级 | exec_v4 只有 PASS/FAIL 二态 | PASS / FAIL / KNOWN_FAIL / ERROR 四态 |
+| dry-run 默认门 | exec_v4 默认 `--execute --authorized` | case_runner 默认 dry-run，`--execute` 授权门 |
+
+### op_mapper.py 现有能力（不重写，仅扩展）
+
+| 能力 | 函数 | 说明 |
+|------|------|------|
+| op_id -> CLI 子命令映射 | `map_op_id_to_subcommand()` | 21 个 op_id，6 族 |
+| args -> CLI flag 映射 | `map_args_to_flags()` | 含 list 序列化（interfaces -> JSON, ports -> 逗号串） |
+| required flag 校验 | `_check_required_flags()` | 缺失抛 ValueError |
+| 参数合法性预检 | `validate_args()` | 占位符 / 对象名 / IP 格式 |
+| 命令构建 | `build_command()` | dry_run 默认 True，authorized 控制门 |
+| 执行 + 解析 | `execute_op()` | subprocess + envelope 解析 + STATE_INVALID 重连 |
+| 步骤间引用 | `resolve_step_refs()` | `${STEP-N.id}` / `${STEP-N.<field>}` 插值 |
+| 回滚清理 | `handle_rollback()` | 5 策略：inverse_op / restore_snapshot / irreversible / manual_required / none |
+| 映射表自检 | `validate_mapping_consistency()` | 三表一致性 + 族子命令校验 |
+
+### op_mapper.py 扩展点（CR-033 #1 / #4）
+
+| 扩展点 | 说明 |
+|--------|------|
+| `_build_exec_env()` 注入 `TREX_API_URL` | #1 落点：对 `tg_*` op 从 `devices.yaml` tg.api_server 注入 `TREX_API_URL` 环境变量（不改 ptm-atomic 本体） |
+| 新增 `fw_logout` op | #4 落点：OP_ID_TO_SUBCOMMAND 加 `fw_logout -> (auth, logout)`，ARGS_TO_FLAGS / ROLLBACK_STRATEGY / OP_METADATA 同步 |
+
+### 平台能力约束
+
+- ptm-te workspace（`/home/hyde/projects/ptm-te/`）是运行环境，不是 git 仓库
+- ptm-team（`/home/hyde/projects/ptm-team/`）是 canonical 源仓库
+- 跨仓库：case-execution skill 源在 ptm-team `skills/case-execution/`，安装后回填到 ptm-te `.claude/skills/case-execution/`
+- 24 用例 md 在 ptm-te `cases/upload/`，不迁入 ptm-team
+- `devices.yaml` 在 ptm-te workspace，是运行时数据，不入库
+
+### 对需求的初步影响
+
+1. case_runner.py 必须支持三入口（目录 glob / 文件列表 / 单用例），消除 ALL_CASES 硬编码
+2. DUT/TG 地址必须从 `devices.yaml` + 拓扑 yml 读取，消除 DUT_URL/TG_URL 硬编码
+3. case_runner 必须解析 `warming_up`/`post_op`/`retry`/`known_issue` 四个字段，exec_v4 完全不解析
+4. ARP 预热（warming_up + post_op）在 24 用例中已大量使用（M3-01-02 STEP-007、M4-01-09 STEP-009 等），case_runner 必须支持
+5. known_issue 四态分级需要明确 DUT 行为差异（M4-01-09 对象被引用阻止删除）与脚本 bug 的判定规则

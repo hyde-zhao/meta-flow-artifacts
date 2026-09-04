@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_cp6_work_packet",
+  "stage": "CP6",
+  "story_id": "STORY-039-01",
+  "story_slug": "g1-static-route-rollback-verify",
+  "cr_id": "CR-039",
+  "project_id": "ptm-team",
+  "wave": 1,
+  "story_ref": "process/stories/STORY-039-01.md",
+  "design_evidence_ref": "process/stories/STORY-039-01.md#技术说明",
+  "design_evidence_type": "technical-note",
+  "design_evidence_confirmed": true,
+  "expected_return_packet": "process/returns/STORY-039-01.return.json",
+  "objective": {
+    "summary": "G1 静态路由回滚 verify 兜底回源：_query_static_route_id + handle_rollback 静态路由分支（DQ-039-01 方案 A：无条件 verify 优先，放弃 step-refs fallback）+ 四分支单测。",
+    "non_goals": [
+      "不触碰 G4 resolve_env_refs 区块（STORY-039-02）",
+      "不触碰 G5 sw3 族区块（STORY-039-03）",
+      "不修改 EXPECTED_OP_COUNT（44->45 归 STORY-039-03）",
+      "不修改 case_runner.py / SKILL.md / op-coverage-matrix.md / CR 档案",
+      "无真机执行（CR-039 static-only，DQ-039-04 不授权）"
+    ]
+  },
+  "allowed_write_paths": [
+    "skills/policy-route-execution/scripts/op_mapper.py",
+    "tests/test_op_mapper_rollback.py",
+    "process/stories/STORY-039-01.md",
+    "process/stories/STORY-039-01-IMPLEMENTATION.md",
+    "process/returns/STORY-039-01.return.json",
+    "process/context/stories/STORY-039-01.CP6.work-packet.json",
+    "process/DEV-LOG.md"
+  ],
+  "forbidden_write_paths": [
+    "skills/case-execution/scripts/case_runner.py",
+    "skills/case-execution/SKILL.md",
+    "docs/ptm-te/op-coverage-matrix.md",
+    "process/checkpoints/CP2-CR039.md",
+    "process/checks/CP3-CR039-HLD-NA.md",
+    "process/checks/CP3-CR039.result.json",
+    "process/handoffs/requirement-clarification-meta-pm-RETURN-SUMMARY-CR039.md",
+    "process/handoffs/solution-design-meta-se-RETURN-SUMMARY-CR039.md",
+    "process/changes/CR-043.md",
+    "process/changes/CR-044.md",
+    "process/changes/CR-046.md",
+    "process/BACKLOG-CR-039.md"
+  ],
+  "verification_plan": [
+    {
+      "method": "unit-test",
+      "command": "uv run --python 3.11 pytest tests/test_op_mapper_rollback.py -x",
+      "expected": "全部通过（含 SM-039-02 四分支）"
+    },
+    {
+      "method": "regression",
+      "command": "uv run --python 3.11 pytest tests/test_tg_op_mapping.py tests/test_op_mapper_pppoe_client.py",
+      "expected": "validate_mapping_consistency 不回归，EXPECTED_OP_COUNT=44"
+    }
+  ],
+  "allowed_reads": [
+    { "path": "process/stories/STORY-039-01.md", "required": true, "reason": "story acceptance + technical-note 设计证据" },
+    { "path": "process/DEVELOPMENT-PLAN-CR-039.yaml", "required": true, "reason": "文件所有权 + security_constraints" },
+    { "path": "skills/policy-route-execution/scripts/op_mapper.py", "required": true, "reason": "canonical 实现对象" },
+    { "path": "tests/test_op_mapper_rollback.py", "required": true, "reason": "单测扩展对象" },
+    { "path": "/home/hyde/projects/ptm-te-manaul/.claude/skills/policy-route-execution/scripts/op_mapper.py", "required": true, "reason": "工作区回源参考（只读）" }
+  ],
+  "do_not_read_by_default": [
+    { "path_or_pattern": "process/STATE.md", "reason": "人类摘要 fallback" },
+    { "path_or_pattern": "process/archive/**", "reason": "归档" }
+  ]
+}

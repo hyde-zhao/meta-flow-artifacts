@@ -1,0 +1,47 @@
+schema_version: "1"
+capsule_id: "CP5-CR037"
+project_id: "ptm-team"
+cr_id: "CR-037"
+stage: "CP5"
+status: "pending_user_decision"
+created_at: "2026-08-05T00:00:00+08:00"
+read_profile: "compact"
+
+must_read:
+  - "process/checkpoints/CP5-CR037.md"
+  - "process/changes/CR-037-HLD.md"
+  - "process/DEVELOPMENT-PLAN-CR-037.yaml"
+
+read_if_needed:
+  - "process/stories/STORY-CR037-*-LLD.md"
+  - "process/stories/STORY-CR037-P1.md"
+  - "process/stories/STORY-CR037-S6.md"
+  - "process/stories/STORY-CR037-S9.md"
+  - "process/stories/STORY-CR037-S10.md"
+  - "process/stories/STORY-CR037-S11.md"
+  - "process/checks/CP5-CR037-*-LLD-IMPLEMENTABILITY.md"
+
+do_not_read_by_default:
+  - "process/STATE.md"
+  - "process/discussions/**（除 CP3-HLD-DISCUSSION-LOG-CR037）"
+  - "process/archive/**"
+
+key_facts:
+  design_evidence_count: "14 份（P-1 technical-note + S1/S2/S3/S4/S5/S7/S8 full-lld + S6/S9/S10 technical-note + S11 waived）"
+  lld_check: "全部 PASS（meta-dev 逐份校验）"
+  open_items:
+    - "O-S3-01：S3 依赖 P-1 物理池模板 schema，实现时对齐 UnifiedPool 数据类（agent 默认处理）"
+    - "S10 层 B（目标项目真实数据）依赖 P-2，未就绪时标注未验证风险"
+  decisions: "待决策 0（设计证据批量确认，无新增人工取舍）"
+  validation: "mixed：层A fixture 必达；真机下发需 DQ-037-04 独立授权"
+
+non_authorized_items:
+  - "真实设备配置写入（--execute 真机下发）"
+  - "凭据读取与明文存储"
+  - "外部接口调用、生产数据写入"
+
+risks_and_decisions:
+  risks:
+    - "物理池无 TE 口时 TE 约束映射失败（预期行为，结构化反馈）"
+    - "P-2（目标项目真实数据）未就绪影响层 B 验证（标注风险，不阻断 fixture 结论）"
+  runtime_condition: "DQ-037-04 独立 runtime_authorization 后执行真机下发"

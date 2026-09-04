@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-038",
+  "story_id": "STORY-038-12",
+  "story_slug": "topology-collection-pppoe",
+  "status": "ready-for-verification",
+  "agent": "meta-dev",
+  "created_at": "2026-08-15T00:00:00+00:00",
+  "cp_result_ref": "process/checks/CP6-STORY-038-12-topology-collection-pppoe-CODING-DONE.md",
+  "evidence_ref": "process/evidence/STORY-038-12.index.json",
+  "implementation_evidence_ref": null,
+  "output_files": [
+    {
+      "path": "resource/network-topology/topology-collection.md",
+      "operation": "modify",
+      "description": "node3_dut1_tg1_pppoe_link4 场景 pppoe 节点 node_type Mock→SW、删 sub_type: pppoe-server、role: pppoe-server 保留；注释 + Mermaid 子图样式更新（R-F-001 建模）"
+    }
+  ],
+  "touched_files": [
+    "resource/network-topology/topology-collection.md"
+  ],
+  "contract_changes": {
+    "public_api_changed": false,
+    "public_api_summary": "文档建模回填，无代码 API；topology-collection.md node3 场景 pppoe 节点 node_type Mock→SW",
+    "data_contract_changed": false,
+    "data_contract_summary": "无新数据契约；仅建模标记回填（node_type=SW + role=pppoe-server），拓扑结构（link 数量/endpoints/连接关系）未变",
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [],
+    "tests": [],
+    "note": "waived 文档建模回填（validation_context=review + 集成 dry-run），无代码单测（N/A review）。git diff 仅 7 行（3 处建模标记），link1/link2/link3 endpoints 与 tg1↔dut1↔pppoe↔tg1 连接关系未改，YAML 结构合法。CP7 meta-qa 复核：review + git diff 通过"
+  },
+  "deviations_from_lld": [],
+  "open_questions": [],
+  "risks": [
+    "pppoe 节点未补充 SW 特有属性（vendor/vlan_mode 等），范围外（R-F-001 仅建模标记回填）"
+  ],
+  "waivers": [],
+  "handoff": {
+    "target_stage": "CP7",
+    "next_agent": "meta-qa",
+    "verification_entry": "人工核对 topology-collection.md node3 场景 pppoe 节点 node_type=SW + role=pppoe-server + git diff 拓扑结构未变",
+    "notes": [
+      "与 STORY-038-01 topo_mapper 的 node_type=SW 显式匹配语义一致（test_topo_mapper_sw.py:110 node_type='SW', role='pppoe-server'，无 sub_type）",
+      "node_type=SW 后 _is_mock 不再跳过，转显式 SW 匹配；_build_result matched 分支 role=pppoe-server 保留"
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "story_id": "STORY-038-03",
+  "story_slug": "pppoe-server-commands",
+  "cr_id": "CR-038",
+  "stage": "CP6",
+  "return_ref": "process/returns/STORY-038-03.return.json",
+  "changed_files": [
+    "skills/topo-config/src/commands.py",
+    "skills/topo-config/src/physical_pool.py",
+    "skills/topo-config/config/physical_pool.yaml",
+    "skills/topo-config/tests/test_commands_pppoe.py",
+    "skills/topo-config/tests/test_physical_pool_pppoe.py",
+    "skills/topo-config/tests/fixtures/pool_pppoe_server.yaml"
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest skills/topo-config/tests/test_commands_pppoe.py skills/topo-config/tests/test_physical_pool_pppoe.py",
+      "result": "pass",
+      "passed": 45
+    },
+    {
+      "command": "uv run --python 3.11 pytest skills/topo-config/tests/",
+      "result": "pass",
+      "passed": 135
+    }
+  ],
+  "tests": [
+    "test_commands_pppoe_five_keys",
+    "test_commands_pppoe_h3c_reference_text",
+    "test_commands_pppoe_three_vendor_diff",
+    "test_commands_pppoe_dryrun_template_nonempty",
+    "test_has_pppoe_commands_true",
+    "test_has_pppoe_commands_false",
+    "test_get_commands_backward_compat",
+    "test_get_pppoe_server_present",
+    "test_get_pppoe_server_absent_no_block",
+    "test_get_pppoe_server_single_source",
+    "test_validate_pppoe_server_ok",
+    "test_validate_pppoe_server_incomplete",
+    "test_validate_pppoe_server_subnet_invalid",
+    "test_validate_pppoe_server_gateway_invalid",
+    "test_validate_pppoe_server_virtual_template_invalid",
+    "test_validate_pppoe_server_auth_invalid",
+    "test_validate_pppoe_server_local_users_empty",
+    "test_validate_pppoe_server_plaintext_password",
+    "test_validate_pppoe_server_malformed_placeholder",
+    "test_password_cipher_env_placeholder_ok",
+    "test_password_cipher_h3c_cipher_ok",
+    "test_password_cipher_huawei_cipher_ok",
+    "test_password_cipher_ruijie_cipher_ok",
+    "test_password_cipher_plaintext_rejected",
+    "test_password_cipher_not_reversed"
+  ],
+  "artifacts": [
+    "skills/topo-config/src/commands.py",
+    "skills/topo-config/src/physical_pool.py",
+    "skills/topo-config/config/physical_pool.yaml",
+    "skills/topo-config/tests/test_commands_pppoe.py",
+    "skills/topo-config/tests/test_physical_pool_pppoe.py",
+    "skills/topo-config/tests/fixtures/pool_pppoe_server.yaml"
+  ],
+  "risks": [
+    "ruijie/huawei 命令为 dry-run 模板未经真机验证（Q-038-002）",
+    "设备 cipher 前缀 allowlist 为保守白名单（LCQ-STORY-038-03-01）"
+  ],
+  "waivers": [],
+  "design_delta_ref": null
+}

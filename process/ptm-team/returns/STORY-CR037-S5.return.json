@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-037",
+  "story_id": "CR037-S5",
+  "story_slug": "exporter",
+  "status": "ready-for-verification",
+  "agent": "meta-dev",
+  "created_at": "2026-08-05T00:00:00+00:00",
+  "cp_result_ref": "process/checks/CP6-CR037-S5-exporter-CODING-DONE.md",
+  "evidence_ref": "process/evidence/STORY-CR037-S5.index.json",
+  "implementation_evidence_ref": "process/stories/STORY-CR037-S5.md",
+  "output_files": [
+    {
+      "path": "skills/topo-planning/src/exporter.py",
+      "operation": "create",
+      "description": "env-file 导出 + 命名 + link 数一致性 + 凭据禁止 + 失败报告 + MVP 边界 + IP 规划接入 + compute_ip_plan（S6 同文件）+ CLI main()"
+    },
+    {
+      "path": "skills/topo-planning/tests/test_exporter.py",
+      "operation": "create",
+      "description": "36 个 pytest 单元测试（S5 + S6）"
+    },
+    {
+      "path": "skills/topo-planning/tests/fixtures/pool_direct_tg_dut.yaml",
+      "operation": "create",
+      "description": "单 TG + 单 DUT 直连 3 链路池（MVP 边界内）"
+    },
+    {
+      "path": "skills/topo-planning/tests/fixtures/pool_sw.sample.yaml",
+      "operation": "create",
+      "description": "单 SW 双端口连接 TG/DUT 池（S6 SW 拓扑测试）"
+    }
+  ],
+  "touched_files": [
+    "skills/topo-planning/src/exporter.py",
+    "skills/topo-planning/tests/test_exporter.py",
+    "skills/topo-planning/tests/fixtures/pool_direct_tg_dut.yaml",
+    "skills/topo-planning/tests/fixtures/pool_sw.sample.yaml"
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "public_api_summary": "新增 skills/topo-planning/src/exporter.py：export_env_file / EnvFileExporter / build_failure_report / render_failure_report / write_report / compute_ip_plan / _descriptive_name / ExporterError（S5+S6 统一入口，S7 CLI / S8 编排消费）",
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 python -m pytest skills/topo-planning/tests/test_exporter.py",
+        "result": "pass",
+        "passed": 36
+      },
+      {
+        "command": "uv run --python 3.11 python -m pytest skills/topo-config/tests/ skills/topo-planning/tests/",
+        "result": "pass_with_baseline",
+        "note": "topo-planning 全部 112 passed（S1 14 + S2 41 + S3 21 + exporter 36）；topo-config 失败清单与基线逐条一致，无新增回归"
+      }
+    ],
+    "tests": [
+      "test_export_full_env_file",
+      "test_export_port_quoted",
+      "test_export_tg_api_server",
+      "test_export_dut_host",
+      "test_export_no_credentials",
+      "test_export_placeholder_contract",
+      "test_export_link_count_ok",
+      "test_export_link_count_mismatch",
+      "test_mock_link_excluded",
+      "test_l2_transparent_link_not_counted",
+      "test_export_ip_plan_rendered",
+      "test_export_ip_plan_missing_rejected",
+      "test_export_ip_plan_degraded_flag",
+      "test_export_ip_plan_incomplete",
+      "test_export_ip_plan_authoritative_schema",
+      "test_multinode_topology_rejected",
+      "test_sw_topology_rejected",
+      "test_mock_topology_rejected",
+      "test_mvp_single_dut_passes",
+      "test_export_deterministic_ignore_generated_at",
+      "test_export_deterministic_inject_generated_at",
+      "test_failure_report_missing_device",
+      "test_failure_report_missing_te",
+      "test_failure_report_link_constraint",
+      "test_report_out_write",
+      "test_render_failure_report_human_readable",
+      "test_output_custom_path",
+      "test_output_descriptive_name",
+      "test_load_env_file_accepts_export",
+      "test_compute_ip_plan_auto",
+      "test_compute_ip_plan_preset",
+      "test_compute_ip_plan_capacity_exceeded",
+      "test_compute_ip_plan_sw_vlan_missing",
+      "test_compute_ip_plan_sw_vlan_provided",
+      "test_compute_ip_plan_sw_l2_domain_missing",
+      "test_compute_ip_plan_authoritative_schema"
+    ]
+  },
+  "deviations_from_lld": [
+    "export_env_file 增加 generated_at 可选参数（R2 确定性注入）",
+    "compute_ip_plan 增加 _supplement_direct_domains 补充 TG/PC↔DUT 直连 p2p 域（_compute_broadcast_domains 仅覆盖 DUT-DUT）",
+    "广播域 gateway=None 清洗为 {}（IPAM.plan 对 None 崩溃防护）",
+    "_quote_port 仅强制 str，不做额外转义（yaml.safe_dump 自动加引号）",
+    "CLI 逻辑 topo 支持 topo_id 或 YAML 路径（find_topology_file 解析）"
+  ],
+  "open_questions": [],
+  "risks": [
+    "MVP 边界（R1）当前仅支持单 TG + 单 DUT 直连；多节点/SW/Mock 拓扑显式 TOPO_NODE_COUNT_UNSUPPORTED，多节点 env-file 支持留待后续 CR"
+  ],
+  "waivers": [],
+  "handoff": {
+    "target_stage": "CP7",
+    "next_agent": "meta-qa",
+    "verification_entry": "export_env_file → load_env_file/build_env_topology + resolve_env_refs 9 类占位符；compute_ip_plan → export_env_file → resolve_env_refs 解析 IP 不抛 ValueError；失败报告 --report-out JSON + 人读",
+    "notes": [
+      "S5 依赖 S4 MappingResult（per_link_requirements/allocated_env/auto_inserted_switch）",
+      "S6 在 exporter.py 内完成（compute_ip_plan），S7 CLI / S8 编排先经 VlanIsolator 生成 vlan_assign 再传入（SW 拓扑）",
+      "默认命名 topology/topology.yaml（CR-034 缺口2 统一环境文件路径），描述性名经 --output 显式使用"
+    ]
+  }
+}

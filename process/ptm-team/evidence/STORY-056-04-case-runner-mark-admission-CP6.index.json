@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "story_id": "STORY-056-04",
+  "cr_id": "CR-056",
+  "stage": "CP6",
+  "return_ref": "process/returns/STORY-056-04-case-runner-mark-admission-CP6.return.json",
+  "changed_files": [
+    "skills/case-execution/scripts/case_runner.py",
+    "process/stories/STORY-056-04-case-runner-mark-admission-IMPLEMENTATION.md",
+    "process/checks/CP6-STORY-056-04-case-runner-mark-admission-CODING-DONE.md",
+    "process/checks/CP6-STORY-056-04-case-runner-mark-admission.result.json"
+  ],
+  "install_copy_files": [],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 python -m py_compile skills/case-execution/scripts/case_runner.py skills/case-execution/scripts/case_ledger.py",
+      "result": "PASS"
+    },
+    {
+      "command": "uv run --python 3.12 python -m py_compile skills/case-execution/scripts/case_runner.py skills/case-execution/scripts/case_ledger.py",
+      "result": "PASS（3.12 SyntaxWarning 为既有 _extract_topo_constraint docstring 转义，非本 Story 引入）"
+    },
+    {
+      "command": "uv run --python 3.11 --with pytest --with pyyaml pytest skills/case-execution/tests/ -q",
+      "result": "88 passed（既有套件零回归，与 056-01/056-03 基线一致）"
+    },
+    {
+      "command": "uv run --python 3.11 --with pyyaml python /tmp/smoke_cr056_04.py",
+      "result": "69 pass / 0 fail（A parse 11 + B filter 6 + C role 准入 11 + D 过滤链/零变化 13 + E 冻结校验 14 + F 子命令委托 6 + G 辅助函数 8；脚本不落仓库，fixture 自建于 /tmp/cr056-04-smoke）"
+    },
+    {
+      "command": "parse_frontmatter 全量只读扫描 ptm-te-manaul/cases/te（真实用例库）",
+      "result": "312 个 md：311 用例 0 error、mark 全缺省 debug、cicd_mark 全 None（1 个 README.md 非 case 文件判 frontmatter 缺失，不入池）；零写入"
+    },
+    {
+      "command": "git status --porcelain + git diff --stat skills/case-execution/scripts/case_runner.py",
+      "result": "工程资产仅 case_runner.py（+678/-7）；case_ledger.py/exec_task.py/init_cases_repo.py/install.py 零改动；工作树其余 modified 为 Wave 1 前序 Story 未提交改动"
+    }
+  ],
+  "smoke_evidence_refs": {
+    "method": "交互冒烟（临时脚本 /tmp，不落仓库；正式 pytest 由 STORY-056-07 收口）+ dry-run 端到端（真实 main() 路径，无真实设备、无 --execute）",
+    "fixture": "/tmp/cr056-04-smoke/：cases/（台账根，case_ledger.save_ledger 构造 3 条目真实指纹）+ cases/te/demo/（3 条 16 列+tags+mark/cicd_mark 用例）+ env.yaml/devices.yaml（取形 test_cr049_topo_compat fixture，dry-run 可达 PASS）+ noledger/te/（无台账树）",
+    "key_assertions": [
+      "parse：mark/cicd_mark 非法枚举报错（A6/A7）；不变式 cicd_mark⇒mark=accept 报错（A8）；accept+cicd_accept 并存合法（A9）；缺省 debug/None（A3/A4）；早退分支键形状一致（A10）；16 列+tags/legacy 标签零破坏（A2/A11）",
+      "filter：--mark in 并集 / --cicd-mark none→is None / 多值并集 / 空列表透传（B1~B6）",
+      "role 准入 exit 2：feature·acceptance、factory --mark verify_fail/deprecated、cmo --mark accept（跨域）、factory --cicd-mark（跨域）、cmo --cicd-mark cicd_verify_fail/none、无 role 值域非法（C1~C10）；合法组合放行（C11）",
+      "过滤链：无 --role 3 例全跑且 mark_admission.role=None/scope=local（D1/D3 零变化）；--mark accept 1 例；--cicd-mark none 2 例；--mark×--keyword AND（D4~D7）；factory/feature/cmo 默认池与 scope 推导（D8~D12）；--run-scope 显式覆盖推导（D13，G-11）",
+      "冻结校验（dry-run 生效）：篡改正文+--role factory → CASE_MARK_STALE 阻塞 rc=1、error_type/reason 固定话术、case_state.fingerprint_ok=False（E1~E5，真实构造未 mock）；local 场景同失配 WARNING 放行 rc=0 且留审计（E6~E8）；还原后恢复（E9）；台账缺失 factory/cicd exit 2 LEDGER_MISSING、local 放行 fingerprint_ok=None（E10~E13）；_resolve_ledger_root 向上命中（E14）",
+      "子命令委托：mark --set 值域非法 2 / 骨架 5 / feature·acceptance 拦截 2；ledger 骨架 5 / --cases-root 非法 2；archive-check 占位 5（F1~F6）"
+    ]
+  },
+  "safety_assertions": {
+    "no_network": true,
+    "no_device_touch": true,
+    "no_credential_touch": true,
+    "no_cases_repo_write": true,
+    "case_ledger_import_only": true,
+    "no_traceback_escape": true
+  },
+  "open_decision_refs": [
+    "GAP-STORY-056-04-01（deprecated 卡口 / mark_admission 语境 / 跨域圈选拒绝三项锚点外增量归属认可，non-blocking-open）",
+    "LCQ-STORY-056-03-01（dry-run PASS 计入验收轮数，056-03 遗留，本 Story 路径不涉及）"
+  ]
+}

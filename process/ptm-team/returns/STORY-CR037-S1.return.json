@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-037",
+  "story_id": "CR037-S1",
+  "story_slug": "topology-collection",
+  "status": "ready-for-verification",
+  "agent": "meta-dev",
+  "created_at": "2026-08-05T00:00:00+00:00",
+  "cp_result_ref": "process/checks/CP6-CR037-S1-topology-collection-CODING-DONE.md",
+  "evidence_ref": "process/evidence/STORY-CR037-S1.index.json",
+  "implementation_evidence_ref": "process/stories/STORY-CR037-S1.md",
+  "output_files": [
+    {
+      "path": "skills/topo-planning/src/topology_collection.py",
+      "operation": "create",
+      "description": "collection.md 解析 + find_topology_file(topo_id)→str（YAML 文件路径）+ _load_index（P0-2）+ derive_min_ports + list_topologies + 模糊搜索 + mtime 缓存"
+    },
+    {
+      "path": "skills/topo-planning/tests/test_topology_collection.py",
+      "operation": "create",
+      "description": "14 个单元测试（正常路径/错误路径/模糊搜索/缓存）"
+    },
+    {
+      "path": "skills/topo-planning/tests/fixtures/fixture_collection_broken.md",
+      "operation": "create",
+      "description": "YAML 语法错误 fixture"
+    },
+    {
+      "path": "skills/topo-planning/tests/fixtures/fixture_index_no_ptm_te.yaml",
+      "operation": "create",
+      "description": "compatible_consumers 不含 ptm-te fixture"
+    },
+    {
+      "path": "skills/topo-planning/tests/fixtures/fixture_index_missing_collection.yaml",
+      "operation": "create",
+      "description": "缺 tgfw-topo-collection 条目 fixture"
+    }
+  ],
+  "touched_files": [
+    "skills/topo-planning/src/topology_collection.py",
+    "skills/topo-planning/src/__init__.py",
+    "skills/topo-planning/tests/test_topology_collection.py",
+    "skills/topo-planning/tests/fixtures/fixture_collection_broken.md",
+    "skills/topo-planning/tests/fixtures/fixture_index_no_ptm_te.yaml",
+    "skills/topo-planning/tests/fixtures/fixture_index_missing_collection.yaml"
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "public_api_summary": "新增 skills/topo-planning/src/topology_collection.py 的 find_topology_file / list_topologies / derive_min_ports / _parse_collection_md / _load_index",
+    "data_contract_changed": false,
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 python -m pytest skills/topo-planning/tests/test_topology_collection.py",
+        "result": "pass",
+        "passed": 14
+      }
+    ],
+    "tests": [
+      "test_find_existing_topo",
+      "test_derive_min_ports",
+      "test_derive_min_ports_explicit",
+      "test_all_12_topos",
+      "test_list_topologies_returns_12",
+      "test_data_shape_distribution",
+      "test_cache_hit",
+      "test_find_nonexistent_topo",
+      "test_missing_collection_md",
+      "test_missing_collection_entry",
+      "test_compatible_consumers_check",
+      "test_yaml_parse_error",
+      "test_fuzzy_suggestion",
+      "test_fuzzy_suggestion_in_find"
+    ]
+  },
+  "deviations_from_lld": [
+    "_locate_collection_md 显式路径严格使用（不再回退默认路径）",
+    "路径查找增加开发仓库形态（回溯到仓库根 resource/network-topology/）",
+    "缓存目录支持 PTM_TOPOLOGY_CACHE_DIR 环境变量覆盖",
+    "parser.py 未修改（S8 安装器统一 PYTHONPATH 承担；S1 保证模块独立可用 + 返回路径契约正确）"
+  ],
+  "open_questions": [],
+  "risks": [],
+  "waivers": [],
+  "handoff": {
+    "target_stage": "CP7",
+    "next_agent": "meta-qa",
+    "verification_entry": "find_topology_file(topo_id) 对全部 12 个拓扑返回 YAML 文件路径，且路径可被 parser.py detect_topology_format + _parse_yaml_topology 消费；_load_index 校验 tgfw-topo-collection compatible_consumers 含 ptm-te",
+    "notes": [
+      "真实 collection.md / index.yaml 位于仓库根 resource/network-topology/（共享只读）",
+      "S10 将验证 parser.parse_topology(topo_id=...) 完整链路"
+    ]
+  }
+}

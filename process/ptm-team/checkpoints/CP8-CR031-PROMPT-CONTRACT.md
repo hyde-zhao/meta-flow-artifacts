@@ -2,11 +2,11 @@
 checkpoint_id: "CP8-CR031-PROMPT-CONTRACT"
 checkpoint_name: "提示词契约交付就绪"
 type: "auto_then_manual"
-status: "pending"
+status: "approved"
 owner: "host-orchestrator"
 created_at: "2026-07-17T08:25:00Z"
-reviewed_by: ""
-reviewed_at: ""
+reviewed_by: "zhaohaibo"
+reviewed_at: "2026-07-28T08:25:15Z"
 auto_check_result: "process/checks/CP8-CR031-PROMPT-CONTRACT.result.json"
 target:
   phase: "documentation"
@@ -91,7 +91,7 @@ target:
 | 条目 | 审查结果 | 证据 | 审查意见 |
 |---|---|---|---|
 | 自动预检无未豁免失败 | PASS | CP8 result | 可发起人工终验。 |
-| 用户终验确认 | pending | 本文件 | `approve` 后关闭提示词交付。 |
+| 用户终验确认 | PASS | 本文件 | 用户已 approve（2026-07-28），关闭提示词交付。 |
 
 ## Deliverables
 
@@ -106,4 +106,9 @@ target:
 
 ## 人工审查结果
 
-待用户确认。回复 `approve` 接受提示词交付并关闭 CR-031；回复 `修改: <具体修改点>` 保持门禁 pending 并按指定内容调整。
+**approve**（zhaohaibo，2026-07-28T08:25:15Z）
+
+接受四份提示词契约静态交付与源码根未跟踪工件清理结果，关闭 CR-031。
+
+- 自动预检 PASS（0 阻断），Checklist 6/6 PASS，readiness READY。
+- approve 不授权：读写 `/home/hyde/projects/ptm-tse/data/`、ITR 请求、凭据读取、外部写入、生产操作、发布。

@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-038",
+  "story_id": "STORY-038-05",
+  "story_slug": "pppoe-client-op",
+  "status": "ready-for-verification",
+  "agent": "meta-dev",
+  "created_at": "2026-08-15T00:00:00+00:00",
+  "cp_result_ref": "process/checks/CP6-STORY-038-05-pppoe-client-op-CODING-DONE.md",
+  "evidence_ref": "process/evidence/STORY-038-05.index.json",
+  "implementation_evidence_ref": "process/stories/STORY-038-05-pppoe-client-op-IMPLEMENTATION.md",
+  "output_files": [
+    {
+      "path": "skills/policy-route-execution/scripts/op_mapper.py",
+      "operation": "modify",
+      "description": "新增 INTENT_TO_OP/UNAVAILABLE_OPS/PPPOE_CLIENT_MANUAL_STEPS/_CIPHER_PREFIXES/_SECRET_KEYS 常量 + _probe_op_availability/_assert_no_plaintext_secret/_build_manual_steps/map_intent 函数；现有 26 op 四表与既有函数签名不变"
+    },
+    {
+      "path": "tests/test_op_mapper_pppoe_client.py",
+      "operation": "create",
+      "description": "17 个单测（op 映射/op 缺失三选一/凭据占位/cipher 前缀/向后兼容/异常）"
+    }
+  ],
+  "touched_files": [
+    "skills/policy-route-execution/scripts/op_mapper.py",
+    "tests/test_op_mapper_pppoe_client.py"
+  ],
+  "contract_changes": {
+    "public_api_changed": true,
+    "public_api_summary": "新增 map_intent 核心入口 + _probe_op_availability/_assert_no_plaintext_secret/_build_manual_steps 私有函数；现有 26 op 四表与既有函数签名不变",
+    "data_contract_changed": false,
+    "data_contract_summary": "不新增数据 schema；仅新增模块级常量 INTENT_TO_OP/UNAVAILABLE_OPS/PPPOE_CLIENT_MANUAL_STEPS/_CIPHER_PREFIXES/_SECRET_KEYS",
+    "design_delta_required": false,
+    "design_delta_ref": null
+  },
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "forbidden_paths_touched": [],
+    "unexpected_imports": []
+  },
+  "verification": {
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest tests/test_op_mapper_pppoe_client.py tests/test_op_mapper_rollback.py tests/test_step_refs.py tests/test_tg_op_mapping.py",
+        "result": "pass",
+        "passed": 93
+      }
+    ],
+    "tests": [
+      "test_pos_005_map_returns_degraded_envelope",
+      "test_ra_001_missing_writes_reason",
+      "test_abort_raises_op_not_found_with_reason",
+      "test_unknown_intent_raises",
+      "test_invalid_fallback_raises_value_error",
+      "test_pos_005_atomic_when_op_mapped",
+      "test_ra_001_available_writes_reason",
+      "test_pre_001_snapshot_path",
+      "test_pre_001_mapped_path",
+      "test_unknown_path",
+      "test_plaintext_password_rejected",
+      "test_env_placeholder_accepted",
+      "test_cipher_prefix_accepted",
+      "test_password_env_plaintext_rejected",
+      "test_expected_op_count",
+      "test_mapping_consistency",
+      "test_pppoe_not_in_existing_tables"
+    ],
+    "note": "93 passed = 新增 17 例 + 回归 76 例；validate_mapping_consistency().passed==True，EXPECTED_OP_COUNT==26。CP7 meta-qa 复跑：test_op_mapper_pppoe_client.py 17/17 + 回归 76 PASS"
+  },
+  "deviations_from_lld": [
+    "LLD §10.1 cipher 密文「非 ${ENV_*} 但非空 → 通过」与「明显明文 → 抛」表述歧义：实现按 LCQ-STORY-038-03-01 方案 A 收敛为保守密文前缀 allowlist（${ENV_*} + H3C $c$3$ / Huawei %^%# / Ruijie $1$/$5$/$6$），其余非空值判明文拒绝，与 S03 一致"
+  ],
+  "open_questions": [
+    "OPEN-038-05-01（ptm-atomic op 扩展后切原子化，跨仓库 follow-up）"
+  ],
+  "risks": [
+    "DUT PPPoE Client 真机拨号（获 163.0.0.x）N/A，独立 runtime_authorization，不在本 Story 验证范围",
+    "编排层 manual_steps 消费分支属调用方（ptm-te 编排/case_runner），本 Story 边界外"
+  ],
+  "waivers": [],
+  "handoff": {
+    "target_stage": "CP7",
+    "next_agent": "meta-qa",
+    "verification_entry": "uv run --python 3.11 pytest tests/test_op_mapper_pppoe_client.py -v",
+    "notes": [
+      "三选一结论：默认 (c) atomic-skip + 登记 (b) 外部依赖 follow-up；(a) 为 ptm-atomic 补 op 后自动激活路径",
+      "map_intent 签名/返回结构与 LLD §3.1/3.2 一致；无明文凭据落盘（_assert_no_plaintext_secret + ${ENV_*} 占位）"
+    ]
+  }
+}

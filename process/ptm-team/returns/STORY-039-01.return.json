@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "story_id": "STORY-039-01",
+  "story_slug": "g1-static-route-rollback-verify",
+  "canonical_story_id": "STORY-039-01",
+  "cr_id": "CR-039",
+  "stage": "CP6",
+  "status": "implemented",
+  "executed_by": "meta-dev",
+  "executed_at": "2026-08-19T00:00:00+00:00",
+  "wave": 1,
+  "design_evidence_ref": "process/stories/STORY-039-01.md#技术说明",
+  "design_evidence_type": "technical-note",
+  "design_evidence_confirmed": true,
+  "implementation_doc": "process/stories/STORY-039-01-IMPLEMENTATION.md",
+  "touched_files": [
+    {
+      "path": "skills/policy-route-execution/scripts/op_mapper.py",
+      "operation": "modified",
+      "blocks_changed": [
+        {
+          "block": "ROLLBACK_STRATEGY 注释（L705-707）",
+          "change": "语义更新：『step-refs 或 verify 查询兜底』->『无条件 verify 查询获取；匹配失败即 EXEC_FAILED，无 step-refs fallback（DQ-039-01 方案 A）』"
+        },
+        {
+          "block": "_query_static_route_id（新增 L2340-2395）",
+          "change": "dst_network 必填；route_type 默认 ipv4；经 execute_op(fw_verify_static_route, page=1/size=100, dry_run=False) 查询；vals 取 data.response.vals 或 data.vals；next_hop_addr 含 ${ 占位符时跳过匹配；多路由取首个非空 id；无匹配返回 None"
+        },
+        {
+          "block": "handle_rollback inverse_op 分支（L2448-2478）",
+          "change": "op_id==fw_config_static_route 时无条件优先 _query_static_route_id（DQ-039-01 方案 A，放弃 step-refs fallback）；rid None 返回 EXEC_FAILED envelope（reason 含 dst_network 与『无法清理』）；匹配则 execute_op(fw_delete_static_route, {id: rid})，透传 env_topology/tg_api_server"
+        }
+      ],
+      "untouched_blocks": [
+        "EXPECTED_OP_COUNT（L1060，仍 44，44->45 归 STORY-039-03）",
+        "G4 区块 resolve_env_refs（归 STORY-039-02）",
+        "G5 sw3 族区块（归 STORY-039-03）",
+        "INTENT_TO_OP / ARGS_TO_FLAGS 等 dict"
+      ]
+    },
+    {
+      "path": "tests/test_op_mapper_rollback.py",
+      "operation": "modified",
+      "blocks_added": [
+        "HandleRollbackStaticRouteVerifyTests 四分支：有匹配返回路由 id / 多路由 next_hop_addr 消歧 / 无匹配 EXEC_FAILED / next_hop_addr 占位符跳过匹配",
+        "扩展：test_vals_direct_data_shape（data.vals 无 response 包装形态）"
+      ],
+      "test_method": "mock execute_op（static-only，无真机，符合 CR-039 security_constraints）"
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "allowed_write_paths": [
+      "skills/policy-route-execution/scripts/op_mapper.py",
+      "tests/test_op_mapper_rollback.py",
+      "process/stories/STORY-039-01.md",
+      "process/stories/STORY-039-01-IMPLEMENTATION.md",
+      "process/returns/STORY-039-01.return.json",
+      "process/DEV-LOG.md"
+    ],
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "forbidden_paths_respected": [
+      "process/checkpoints/CP2-CR039.md",
+      "process/checks/CP3-CR039-HLD-NA.md",
+      "process/checks/CP3-CR039.result.json",
+      "process/handoffs/requirement-clarification-meta-pm-RETURN-SUMMARY-CR039.md",
+      "process/handoffs/solution-design-meta-se-RETURN-SUMMARY-CR039.md",
+      "skills/case-execution/scripts/case_runner.py",
+      "skills/case-execution/SKILL.md（工作区改动属并行 STORY-039-04，本线程未触碰）",
+      "docs/ptm-te/op-coverage-matrix.md",
+      "REQUIREMENTS.md / HLD.md / ARCHITECTURE-DECISION.md"
+    ],
+    "note": "以 canonical HEAD 为基底逐块合并（非整文件覆盖）；git diff 审计确认仅 G1 三处区块改动，G4/G5/EXPECTED_OP_COUNT/dict 无 diff"
+  },
+  "verification": {
+    "validation_mode": "static-only",
+    "commands_run": [
+      {
+        "command": "uv run --python 3.11 pytest tests/test_op_mapper_rollback.py -x",
+        "result": "32 passed（原 27 + 新增 5；SM-039-02 四分支 + EXEC_FAILED envelope 断言 + data.vals 形态）"
+      },
+      {
+        "command": "uv run --python 3.11 pytest tests/test_tg_op_mapping.py tests/test_op_mapper_pppoe_client.py",
+        "result": "55 passed；validate_mapping_consistency 不回归，EXPECTED_OP_COUNT=44"
+      },
+      {
+        "command": "uv run --python 3.11 python -m py_compile skills/policy-route-execution/scripts/op_mapper.py",
+        "result": "通过"
+      },
+      {
+        "command": "git diff skills/policy-route-execution/scripts/op_mapper.py（逐块对拍工作区 L2618-2671 / L2729-2754）",
+        "result": "handle_rollback 静态路由分支逐行一致；_query_static_route_id 逻辑（剔注释）逐行一致；未触碰 G4/G5/EXPECTED_OP_COUNT"
+      }
+    ],
+    "uncovered": [
+      "真机 verify 查询超时 / 大路由表分页 >100 条（CR-039 static-only，DQ-039-04 不授权真机；RA-039-01 缓解：next_hop_addr 消歧 + 单测，真机超时按 DQ-039-01 备选 B 重评不静默改）"
+    ]
+  },
+  "evidence_refs": [
+    "process/stories/STORY-039-01-IMPLEMENTATION.md",
+    "process/stories/STORY-039-01.md#技术说明",
+    "process/DEV-LOG.md#STORY-039-01"
+  ],
+  "contract_changes": {
+    "design_delta_required": false,
+    "design_delta_type": "none",
+    "rationale": "无长期 Feature DESIGN / ADR / HLD 修改；technical-note 全部契约逐条落实，无偏离（仅 handle_rollback 分支前导注释比工作区多 2 行 DQ-039-01/CR-039 归属标注，注释级）"
+  },
+  "task_completion": {
+    "AI-1-diff-audit": { "status": "done", "output": "确认改动集 = _query_static_route_id + handle_rollback 静态路由分支 + L705-707 注释" },
+    "AI-2-blockwise-backport": { "status": "done", "output": "逐块回源 canonical op_mapper.py，逐行 diff 对拍工作区一致" },
+    "AI-3-unit-tests": { "status": "done", "output": "HandleRollbackStaticRouteVerifyTests 四分支 + EXEC_FAILED envelope 断言 + data.vals 扩展" },
+    "AI-4-pytest-pass": { "status": "done", "output": "32 passed" },
+    "AI-5-parity-check": { "status": "done", "output": "四分支单测即对拍载体，行为与工作区 26/28 step PASS 实测基线一致" }
+  },
+  "acceptance_criteria_coverage": {
+    "SM-039-02": { "status": "covered", "location": "tests/test_op_mapper_rollback.py::HandleRollbackStaticRouteVerifyTests 四分支" },
+    "mapping-consistency": { "status": "covered", "location": "EXPECTED_OP_COUNT=44 不回归（55 passed 回归测试）" },
+    "workspace-parity": { "status": "covered", "location": "无条件 verify -> fw_delete_static_route --id；未匹配 EXEC_FAILED；逐行 diff 对拍" }
+  },
+  "notes": [
+    "G6 M9 归属（T-3 台账项）已在 IMPLEMENTATION.md 补记留痕：归属 STORY-039-04 承载",
+    "sw3 用例样例来源（工作区 CR-046 node3_dut1_tg1_sw1_pppoe_link3）已在 IMPLEMENTATION.md 留痕，归 STORY-039-03/04 消费"
+  ],
+  "story_status_after": "dev-complete（待 CP6）"
+}

@@ -1,0 +1,85 @@
+{
+  "cr_id": "CR-047",
+  "story_id": "STORY-047-01",
+  "stage": "CP6",
+  "schema_version": 1,
+  "changed_files": [
+    {
+      "path": "skills/case-execution/scripts/case_runner.py",
+      "operation": "modified",
+      "blocks_changed": [
+        {
+          "block": "_parse_post_delay（新增，L114-133，OP_INTERVAL_SEC/CASE_INTERVAL_SEC 常量之后）",
+          "change": "step 级 post_delay 解析：None/空串/非法->0.0；int/float/纯数字串按秒；ms 后缀除 1000；s 后缀直取；负数透传；与工作区参考 L117-136 逐字一致"
+        },
+        {
+          "block": "execute_steps 主循环睡眠行（L2437-2440，idx < n - 1 分支）",
+          "change": "time.sleep(OP_INTERVAL_SEC + _parse_post_delay(step.get(\"post_delay\"))) + CR-047 用途注释；grep _parse_post_delay 全文恰 2 处命中"
+        }
+      ],
+      "untouched_blocks": [
+        "rollback 清理循环 run_cleanup（L2535-2536，i > 0 分支，纯 OP_INTERVAL_SEC）",
+        "OP_INTERVAL_SEC=2 / CASE_INTERVAL_SEC=8 常量"
+      ]
+    },
+    {
+      "path": "tests/test_case_runner_post_delay.py",
+      "operation": "added",
+      "blocks_added": [
+        "ParsePostDelayTests 7 用例（解析边界：None/int/float/纯数字串/5s/ 3S /500ms/1ms/空串/纯空白串/abc/5x/s/负数透传）",
+        "ExecuteStepsPostDelayTests 4 用例（sleep 叠加 5.0 且最后一步不睡 / 无 post_delay 现状守护 sleep=OP_INTERVAL_SEC / dry-run 零 sleep / rollback 源级守护）"
+      ],
+      "test_method": "mock execute_op / build_command + mock.patch.object(cr.time, \"sleep\")（static-only）"
+    },
+    {
+      "path": "tests/test_tg_op_mapping.py",
+      "operation": "modified",
+      "blocks_changed": [
+        {
+          "block": "post_delay 源码守护单测（原 L622-626）",
+          "change": "test_case_runner_no_post_delay_backport（assertNotIn 零残留）-> test_case_runner_post_delay_backported（def 定义 + _parse_post_delay( 恰 2 命中 + run_cleanup 段零命中）"
+        }
+      ]
+    },
+    {
+      "path": "skills/case-execution/SKILL.md",
+      "operation": "modified",
+      "blocks_changed": [
+        {
+          "block": "转换规则表（retry/known_issue 行之后）",
+          "change": "新增『step 执行后延迟』行：post_delay: \"5s\" / \"500ms\" / 纯数字（秒），叠加 OP_INTERVAL_SEC，仅 --execute 生效，None/非法按 0（DQ-047-01=A）"
+        },
+        {
+          "block": "修订记录表",
+          "change": "追加 v1.9（2026-08-19，meta-dev（CR-047））"
+        }
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "command": "uv run pytest tests/test_case_runner_post_delay.py tests/test_tg_op_mapping.py -q",
+      "result": "58 passed in 0.20s（新增 11 用例 + 守护反转全绿）"
+    },
+    {
+      "command": "uv run pytest tests/ -q",
+      "result": "2 failed, 255 passed, 8 subtests passed in 13.79s；2 失败均为 test_cr018_p2 存量（P-1 台账），无新增失败"
+    },
+    {
+      "command": "grep -n \"_parse_post_delay\" skills/case-execution/scripts/case_runner.py",
+      "result": "L114 定义 + L2440 execute_steps 调用，恰 2 处；rollback L2535 纯 OP_INTERVAL_SEC"
+    }
+  ],
+  "test_output": {
+    "targeted": "58 passed in 0.20s",
+    "full_suite": "2 failed（test_cr018_p2 存量 x2）, 255 passed, 8 subtests passed in 13.79s",
+    "new_test_count": 11
+  },
+  "return_ref": "process/returns/STORY-047-01.return.json",
+  "design_delta_ref": null,
+  "risks": [
+    "RA-047-01：负数 post_delay 透传（OPI-047-01，clamp 记 BACKLOG deferred），单测 test_parse_post_delay_negative_passthrough 锁定语义"
+  ],
+  "waivers": [],
+  "artifacts": []
+}

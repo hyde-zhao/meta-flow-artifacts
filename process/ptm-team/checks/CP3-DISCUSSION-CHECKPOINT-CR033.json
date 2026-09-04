@@ -1,0 +1,86 @@
+{
+  "cr_id": "CR-033",
+  "phase": "solution-design",
+  "discussion_type": "CP3-architecture-gray-areas",
+  "status": "resolved",
+  "created_at": "2026-07-28T11:00:00+08:00",
+  "resolved_at": "2026-07-28T12:30:00+08:00",
+  "agent_role": "meta-se",
+  "delegated_interaction": true,
+  "gray_areas": [
+    {
+      "id": "AGA-01",
+      "title": "case-execution skill 与 op_mapper 职责边界（编排层 vs 映射层集成方式）",
+      "options": ["A: case_runner.py 直接 import op_mapper 模块", "B: case_runner.py 通过 subprocess 调用 op_mapper CLI"],
+      "recommendation": "A",
+      "impact_surface": ["case_runner.py / op_mapper.py 模块边界", "跨 skill import 路径"],
+      "user_confirmation_required": false,
+      "status": "resolved-by-recommendation",
+      "rationale": "同仓库直接 import 性能好且复用 envelope 解析；subprocess 是 exec_v4.py 历史包袱"
+    },
+    {
+      "id": "AGA-02",
+      "title": "devices.yaml tg 块与 traffic-skill 拓扑的数据归属（TG 地址/接口数据源）",
+      "options": [
+        "A: devices.yaml 只存 TG 元数据，接口拓扑留 traffic-skill topology yaml",
+        "B: devices.yaml 同时存 TG 接口拓扑",
+        "C: traffic-skill topology yaml 作为唯一 TG 数据源（与 R-F-001 冲突）"
+      ],
+      "recommendation": "A",
+      "impact_surface": ["devices.yaml schema", "case_runner 取址逻辑", "op_mapper TREX_API_URL 注入源", "case_runner --topology-yaml 参数"],
+      "user_confirmation_required": true,
+      "status": "resolved",
+      "user_answer": "A",
+      "confirmed_at": "2026-07-28T12:30:00+08:00",
+      "rationale": "与 firewall 块对称；traffic-skill topology yaml 已有 type:TG + interfaces；R-F-005 验收要求从 tg.api_server 取址；case_runner 需 --topology-yaml 参数指定拓扑文件路径"
+    },
+    {
+      "id": "AGA-03",
+      "title": "frontmatter 16 列与 case_steps YAML 字段映射（冗余字段处理）",
+      "options": [
+        "A: frontmatter 测试步骤/预期结果列留空",
+        "B: frontmatter 不含测试步骤/预期结果（与 DQ-05 冲突）",
+        "C: frontmatter 摘要 + case_runner 忽略冗余列"
+      ],
+      "recommendation": "C",
+      "impact_surface": ["case_runner 解析逻辑", "用例校验脚本"],
+      "user_confirmation_required": false,
+      "status": "resolved-by-recommendation",
+      "rationale": "DQ-05 确认 16 列不能删；case_steps YAML 是执行真相源；frontmatter 这两列仅作摘要"
+    },
+    {
+      "id": "AGA-04",
+      "title": "envelope 统一解析 extract_payload 的抽象位置",
+      "options": [
+        "A: 放在 case_runner.py（消费侧）",
+        "B: 放在 op_mapper.py（映射层）",
+        "C: 放在新模块 envelope_utils.py"
+      ],
+      "recommendation": "A",
+      "impact_surface": ["case_runner.py 代码组织"],
+      "user_confirmation_required": false,
+      "status": "resolved-by-recommendation",
+      "rationale": "extract_payload 是消费侧逻辑；op_mapper 职责是映射+执行不负责解释 envelope；当前只有 case_runner 一个消费者"
+    }
+  ],
+  "user_confirmations": [
+    {
+      "id": "AGAQ-01",
+      "gray_area_id": "AGA-02",
+      "question": "TG 设备数据归属：devices.yaml 只存 TG 元数据（推荐 A），还是同时存接口拓扑（B）？",
+      "recommendation": "A",
+      "options": ["A", "B", "C"],
+      "user_answer": "A",
+      "status": "resolved",
+      "confirmed_at": "2026-07-28T12:30:00+08:00",
+      "confirmation_notes": "devices.yaml 只存 TG 元数据，接口拓扑留 traffic-skill topology yaml；case_runner 需 --topology-yaml 参数指定拓扑文件路径"
+    }
+  ],
+  "discussion_log_ref": "process/discussions/CP3-HLD-DISCUSSION-LOG-CR033.md",
+  "deferred_options": [
+    {"id": "DEF-AGA-01", "content": "case_runner 独立部署模式（subprocess）", "restart_condition": "case_runner 需部署到无 op_mapper 的环境"},
+    {"id": "DEF-AGA-02", "content": "devices.yaml 含 TG 接口拓扑（方案 B）", "restart_condition": "traffic-skill topology yaml 废弃"},
+    {"id": "DEF-AGA-03", "content": "frontmatter 摘要与 case_steps 强一致校验", "restart_condition": "用户要求摘要与详细步骤一致"},
+    {"id": "DEF-AGA-04", "content": "envelope_utils.py 独立模块", "restart_condition": "出现 ≥2 个 envelope 消费者"}
+  ]
+}

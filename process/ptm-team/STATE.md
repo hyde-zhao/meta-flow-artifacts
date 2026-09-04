@@ -1,13 +1,13 @@
 # Current Meta Flow State
 
 Project: ptm-team
-Workflow mode: fast-lane
-Phase: documentation
+Workflow mode: standard
+Phase: init
 Blocked: false
-Active CR: CR-031
-Active Story: none
-Pending gate: CP8
-Next action: Review process/checkpoints/CP8-CR031-PROMPT-CONTRACT.md and approve or request changes. Do not perform installed-project runtime actions in this CR.
+Active CR: CR-051
+Active Story: STORY-047-01
+Pending gate: none
+Next action: Review CP0 bootstrap readiness for CR-051, then launch the first human gate.
 
 Refs:
 - state: process/state/STATE.current.json
@@ -20,7 +20,7 @@ Refs:
 - Run ledger: process/state/RUN-LEDGER.ndjson
 - Read expansion ledger: process/state/READ-EXPANSION-LEDGER.ndjson
 - routing: process/.meta-flow-process.yaml
-- active context: process/context/CP8-CR031-PROMPT-CONTRACT.context.json
+- active context: process/context/CP0-CR051.context.json
 
 Policy refs:
 - NO_CREDENTIAL_READ
@@ -29,10 +29,11 @@ Policy refs:
 - NO_EXTERNAL_PUBLISH
 
 Open risks:
-- RISK-CR030-01
-- RISK-CR030-02
-- RISK-CR030-03
+- CR038-R-AUTHZ(真机三不授权,not_authorized,独立runtime_authorization)
+- CR038-R-RF009(命名口径,scope走CR,CR-038-FU-RF009)
+- CR038-R-OPEN0602(ip_plan SW VLAN,follow_up)
+- CR038-R-S04(virtual-template待真机,risk_acceptance)
 
-Updated at: 2026-07-17T08:30:00+00:00
+Updated at: 2026-09-01T08:15:38+00:00
 
 <!-- generated-by: meta-flow state render -->

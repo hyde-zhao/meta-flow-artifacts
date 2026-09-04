@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "story_id": "STORY-038-04",
+  "story_slug": "pppoe-server-deploy",
+  "cr_id": "CR-038",
+  "stage": "CP6",
+  "return_ref": "process/returns/STORY-038-04.return.json",
+  "changed_files": [
+    "skills/topo-config/src/switch_configurator.py",
+    "skills/topo-config/tests/test_switch_configurator_pppoe.py",
+    "skills/topo-config/tests/fixtures/ledger_pppoe_server.yaml"
+  ],
+  "commands": [
+    {
+      "command": "uv run --python 3.11 pytest skills/topo-config/tests/test_switch_configurator_pppoe.py",
+      "result": "pass",
+      "passed": 15
+    },
+    {
+      "command": "uv run --python 3.11 pytest skills/topo-config/tests/",
+      "result": "pass",
+      "passed": 150
+    }
+  ],
+  "tests": [
+    "test_configure_pppoe_server_h3c_dry_run_commands",
+    "test_configure_pppoe_server_from_pool_reads_block",
+    "test_configure_pppoe_server_idempotent_skip_pool_and_user",
+    "test_configure_pppoe_server_idempotent_partial",
+    "test_configure_pppoe_server_idempotent_none_creates_all",
+    "test_configure_pppoe_server_missing_block_from_pool",
+    "test_configure_pppoe_server_missing_block_no_pool",
+    "test_configure_pppoe_server_incomplete_block",
+    "test_configure_pppoe_server_non_dict_block",
+    "test_configure_pppoe_server_vendor_unsupported",
+    "test_configure_pppoe_server_non_h3c_real_deploy_denied",
+    "test_configure_pppoe_server_h3c_real_deploy_not_connected",
+    "test_configure_pppoe_server_password_cipher_not_reversed",
+    "test_configure_pppoe_server_three_vendor_rendered_diff"
+  ],
+  "artifacts": [
+    "skills/topo-config/src/switch_configurator.py",
+    "skills/topo-config/tests/test_switch_configurator_pppoe.py",
+    "skills/topo-config/tests/fixtures/ledger_pppoe_server.yaml"
+  ],
+  "risks": [
+    "virtual-template IP 复用 ip_pool_gateway（schema 无独立 server-ip 字段）",
+    "bind_interface 未指定绑定物理接口（供人工核对 diff）",
+    "ruijie/huawei 命令为 dry-run 模板未经真机验证（R-NF-001）"
+  ],
+  "waivers": [],
+  "design_delta_ref": null
+}

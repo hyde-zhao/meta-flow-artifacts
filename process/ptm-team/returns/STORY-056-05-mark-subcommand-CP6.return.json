@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "stage": "CP6",
+  "cr_id": "CR-056",
+  "story_id": "STORY-056-05",
+  "story_slug": "mark-subcommand",
+  "wave": 2,
+  "status": "implemented",
+  "touched_files": [
+    "skills/case-execution/scripts/case_ledger.py",
+    "process/stories/STORY-056-05-mark-subcommand-IMPLEMENTATION.md",
+    "process/checks/CP6-STORY-056-05-mark-subcommand-CODING-DONE.md",
+    "process/checks/CP6-STORY-056-05-mark-subcommand.result.json",
+    "process/returns/STORY-056-05-mark-subcommand-CP6.return.json",
+    "process/evidence/STORY-056-05-mark-subcommand-CP6.index.json",
+    "DEV-LOG.md",
+    "process/DEVELOPMENT-PLAN-CR-056.yaml"
+  ],
+  "workspace_artifacts": {
+    "cases_repo_side_effect": "none（真实 ptm-cases 仓库与 312 条用例零触碰；git commit 行为验证全部在 /tmp/cr056-05-smoke 临时 git init 仓库内，未 push 未 force）",
+    "module_surface": "case_ledger.py：cmd_mark 骨架 → 实体（[P0] 参数校验 → [P1] cases_root 定位+台账加载 → [P2] 圈选 → [P3] 逐用例六步判定与写面 → [P4] 摘要表）+ 私有辅助 10 个（_split_csv/_resolve_ledger_root/_iter_case_files/_extract_case_id/_entry_path/_frontmatter_set_line/_evidence_runs_and_id/_evidence_container_has_execute_case/_git_commit_mark/_mark_transition_desc）+ resolve_evidence_rounds mode 过滤（LCQ-STORY-056-03-01 定案落地）"
+  },
+  "verification_summary": {
+    "smoke_assertions": "55 pass / 0 fail（P0 参数校验 7 + 正例链 A/B/D/E/F/G 17 + 反例 C 4 + 自环/漂移 H 3 + 批量圈选 I 4 + no-commit/非 git/建档 J 4 + 降级 K 2 + resolve 单元级 L 5；/tmp/smoke_cr056_05.py 不落仓库，断言数 > 任务要求 30）",
+    "py_compile": "PASS（Python 3.11 与 3.12 双版本）",
+    "regression": "88 passed（skills/case-execution/tests/ 全套零回归）+ 056-04 冒烟回归 70 pass / 0 fail（F2 过渡断言随 cmd_mark 实体化更新为'缺目标 exit 2'，新增 F2b 实体化端到端探针）",
+    "unit_tests_note": "正式 pytest 文件 N/A（后置 STORY-056-07 收口）；冒烟 55 断言即 mark 子命令部分用例蓝本",
+    "git_commit_artifact_check": "临时仓库 git log 实测：逐用例独立 commit 'mark(case): <case_id> <旧>→<new>'（双域串）、commit 恰含 <md> + cases/case_ledger.yaml 两文件、--no-commit 零新 commit、非 git 目录 WARNING 降级、全程无 push/force"
+  },
+  "design_deviation_refs": [
+    "圈选辅助本地化：协调者指令'复用 case_runner 的 filter_by_mark/filter_by_cicd_mark + _split_csv'存在循环 import（case_runner 顶层 import case_ledger）与 op_mapper 耦合问题 → case_ledger 本地对齐实现（语义逐字一致 + 注释标明来源），见设计缺口反馈 #1",
+    "LCQ-STORY-056-03-01 落地偏差：协调者指令称'case_ledger 已按定案实现'，实测 056-03 代码未过滤 mode（灰区留痕原样）→ 本 Story 在自身写入范围落地（仅 mode=execute 计入连续 PASS 且打断连续），见设计缺口反馈 #2",
+    "同值自环预判跳过：HLD validate_transition 判自环非法，按 056-03 设计缺口 #5 建议实现为'跳过（无状态变化）'行而非失败项（rc 0，无 commit）",
+    "--rounds 语义：台账 mark_history 审计声明值（验收类边缺省记 MARK_STABLE_ROUNDS），不降低 resolve_evidence_rounds 硬门槛（DQ-056-02 N=3 固定）"
+  ],
+  "open_decision": {
+    "id": "GAP-STORY-056-05-01",
+    "status": "non-blocking-open",
+    "question": "① 圈选纯函数本地化取舍（vs 下沉 case_ledger 由 case_runner 反向消费）；② 摘要表失败行仅 stdout（stderr 只承载 WARNING，失败感知依赖 rc）；③ 台账 path 派生依赖 cases_root 目录名为 cases",
+    "recommendation": "维持现状（本地化解耦最优；stdout 单一真相源 + rc 分级；目录名口径与 symlink 方案天然一致并在 056-07 文档提示）；三项均可后续 CR 调整",
+    "blocks_lld": false,
+    "follow_up_refs": [
+      "process/stories/STORY-056-05-mark-subcommand-IMPLEMENTATION.md §设计缺口反馈",
+      "STORY-056-07（文档收口提示 --cases-root 应指向 cases 目录）"
+    ]
+  },
+  "design_delta_refs": [],
+  "handoff": {
+    "qa_entry": "uv run --python 3.11 --with pytest --with pyyaml pytest skills/case-execution/tests/ -q（88 passed 基线）+ 冒烟重放 /tmp/smoke_cr056_05.py（55 断言，fixture 自建含临时 git 仓库）+ /tmp/smoke_cr056_04.py（70 断言回归）；验证对象 = 六步内部动作逐条、EVIDENCE_REQUIRED 三边与 LCQ mode 过滤、双写顺序与连带清除、git commit 产物与降级、批量部分失败 rc、圈选口径、无 PyYAML exit 5",
+    "qa_risk_notes": "① git commit 依赖操作者身份，缺失时降级 WARNING（打标仍成功），审计完整性依赖台账 mark_history.by；② --evidence 相对路径按 CWD 解析（runs/<exec-id> 与 case_runner --runs-dir 缺省一致），建议操作卡用绝对路径或从 runs 父目录执行；③ _frontmatter_set_line 与指纹共用 _FRONTMATTER_RE，首行带尾随空格等非规范 frontmatter 判'缺 frontmatter'失败而非错写（存量 312 用例实测无此形态）；④ 摘要表在 stdout，stderr 只有 WARNING——自动化消费请以退出码为准",
+    "orchestrator_actions": "回填 dispatch agent_id/thread_id；LCQ-STORY-056-03-01 建议记为 RESOLVED（定案 2026-09-03 + 实现 STORY-056-05）；GAP-STORY-056-05-01 三项择机确认（均不阻塞）；拉起 STORY-056-06（same-file-serial）或 meta-qa CP7；补记 DEV-LOG 056-03 条目已由本 Story 代执行（一行），请复核"
+  }
+}

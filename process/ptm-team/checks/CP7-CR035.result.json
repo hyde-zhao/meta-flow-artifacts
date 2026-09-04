@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "checkpoint": "CP7",
+  "checkpoint_id": "CP7-CR035",
+  "cr_id": "CR-035",
+  "story_id": "CR-035-summary",
+  "profile": "architecture-major",
+  "context_ref": "process/context/CP7-CR035.context.json",
+  "evidence_ref": "process/changes/CR-035.md",
+  "route_plan_ref": "process/checks/CP0-CR035.route-plan.json",
+  "dispatch_refs": ["DISPATCH-CR035-CP6-meta-dev-001", "DISPATCH-CR035-CP7-meta-qa-001"],
+  "checked_at": "2026-07-31T11:45:00+08:00",
+  "checker_provenance": {
+    "checker_name": "meta-qa",
+    "checker_version": "meta-flow",
+    "invocation": "CP7 verification-execution + quality-review for CR-035 (meta-qa subagent a0fa2085057b9f75d, independent re-run)",
+    "generated_by": "meta-qa subagent",
+    "fallback_used": false,
+    "fallback_reason": null,
+    "fallback_review_ref": null
+  },
+  "items": [
+    {"id": "CP7-035-01", "category": "verification_repro", "name": "validate 26 op_id 三表一致（独立复跑）", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["skills/case-execution/scripts/case_runner.py validate"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "ValidationResult: PASS (26 op_id)"},
+    {"id": "CP7-035-02", "category": "verification_repro", "name": "pytest CR-035 三文件（独立复跑，--with pyyaml）", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["tests/test_tg_op_mapping.py", "tests/test_config_once_skip.py", "tests/test_tg_dry_run.py"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "60 passed（带 --with pyyaml；CP6 的 6 skipped 是 PyYAML 未安装，非条件用例，meta-qa 校正）"},
+    {"id": "CP7-035-03", "category": "verification_repro", "name": "全量回归（独立复跑，3 预存 FAIL 非 CR-035 回归）", "status": "PASS", "severity": "HIGH", "evidence_refs": ["tests/"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "135 passed, 6 skipped, 3 failed；git stash 验证 3 FAIL 预存（test_cr018_p2 x2 + test_install_mapping x1，CR-018/CR-033 遗留）"},
+    {"id": "CP7-035-04", "category": "verification_repro", "name": "dry-run CLI 端到端（独立 fixture 复跑）", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["skills/case-execution/scripts/case_runner.py run --dry-run"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "result.json tg_port_ownership 6 字段：tg_user_id=dev1-7dba / acquire_ok=True（P0）/ acquire_record=release_record=None / config_once_skip_count=0；2 个 tg_config_interface 均 env_status=dry_run（DQ-035-06 不 skip 真实 main 链验证）"},
+    {"id": "CP7-035-05", "category": "design_contract", "name": "P0 acquire_ok 初始 True（grep L2421 + 测试）", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["skills/case-execution/scripts/case_runner.py:2421", "tests/test_tg_dry_run.py#test_dry_run_acquire_ok_stays_true"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "acquire_ok=True 初始（L2421）+ 测试双重验证"},
+    {"id": "CP7-035-06", "category": "design_contract", "name": "DQ-035-06 config-once skip and not dry_run 守卫（L1536-1538）", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["skills/case-execution/scripts/case_runner.py:1536", "tests/test_config_once_skip.py#test_config_once_dry_run_not_skip"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "and not dry_run 守卫 L1536-1538 + dry-run CLI main 链验证"},
+    {"id": "CP7-035-07", "category": "design_contract", "name": "AGA-1/3/4 + DQ-035-01/02/05 设计契约（8 项全 PASS）", "status": "PASS", "severity": "BLOCKER", "evidence_refs": ["skills/case-execution/scripts/case_runner.py", "skills/policy-route-execution/scripts/op_mapper.py"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "AGA-1 tg_run_ctx dict+None（L2428/L1464）/ AGA-3 单标志 / AGA-4 失败不置（L1667-1668）/ DQ-035-01 force_config 重置（L1624-1627）/ DQ-035-02 dev{ip}-{hash4}+uuid（L1417-1429/L2315）/ DQ-035-05 verify_ownership 注册（op_mapper L99）"},
+    {"id": "CP7-035-08", "category": "quality_dimension", "name": "8 维度验收（ISTQB/ISO 25010）", "status": "PASS", "severity": "HIGH", "evidence_refs": ["docs/quality/REVIEW.md"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "功能/可靠/性能/可维护/可移植/安全/兼容/文档 8 维度全 PASS"},
+    {"id": "CP7-035-09", "category": "coverage", "name": "TEST-MATRIX / HLD §6.1 判断表覆盖", "status": "PASS", "severity": "HIGH", "evidence_refs": ["docs/quality/TEST-REPORT.md"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "36 新增用例覆盖 HLD §6.1 判断表 5 分支 + §6.2 dry-run vs --execute；FU-02 关闭"},
+    {"id": "CP7-035-10", "category": "risk", "name": "RISK-CR035-PREEXISTING-TEST-FAIL（3 预存 FAIL，低）", "status": "PASS", "severity": "MEDIUM", "evidence_refs": ["tests/"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "test_cr018_p2 x2 + test_install_mapping x1，git stash 验证非 CR-035 回归，建议独立 hotfix；风险登记 CP8"},
+    {"id": "CP7-035-11", "category": "risk", "name": "RISK-CR035-RUNTIME-NA（真实 --execute 未覆盖，中）", "status": "PASS", "severity": "HIGH", "evidence_refs": ["docs/quality/VERIFICATION-REPORT.md"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "validation_mode=static-only + dry-run-only；真实 acquire/config/release/skip 行为经 mock + dry-run 验证；CP7 N/A runtime 理由 + 未覆盖风险 + 证据已写明；建议后续真实环境验证（FU-01）"},
+    {"id": "CP7-035-12", "category": "risk", "name": "RISK-CR035-CONCURRENT-RUN（tg_user_id 同秒并发碰撞，低）", "status": "PASS", "severity": "LOW", "evidence_refs": ["skills/case-execution/scripts/case_runner.py"], "owner": "meta-qa", "route_on_fail": "require_user_decision", "waiver_ref": null, "notes": "run_id 加 uuid 后缀缓解；极端同秒并发 acquire 失败中断（期望行为 DQ-035-03）"}
+  ],
+  "blockers": [],
+  "waivers": [],
+  "read_expansion_refs": [
+    "RE-20260731T055106Z0000-398bb846"
+  ],
+  "decision": "PASS_WITH_RISK",
+  "next_route": "CP8 human gate (release-readiness, human_gate=required) - 3 risks to be accepted/registered"
+}

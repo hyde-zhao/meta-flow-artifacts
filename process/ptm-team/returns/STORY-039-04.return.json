@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "packet_type": "story_return_packet",
+  "story_id": "STORY-039-04",
+  "story_slug": "docs-and-traceability",
+  "canonical_story_id": "STORY-039-04",
+  "cr_id": "CR-039",
+  "stage": "CP6",
+  "status": "implemented",
+  "executed_by": "meta-dev",
+  "executed_at": "2026-08-19T00:00:00+00:00",
+  "wave": 1,
+  "design_evidence_ref": "process/stories/STORY-039-04.md#技术说明",
+  "design_evidence_type": "technical-note",
+  "design_evidence_confirmed": true,
+  "implementation_doc": "process/stories/STORY-039-04-IMPLEMENTATION.md",
+  "touched_files": [
+    {
+      "path": "skills/case-execution/SKILL.md",
+      "operation": "modified",
+      "blocks_changed": [
+        {
+          "block": "Gotcha#8 EXPECTED_OP_COUNT",
+          "change": "40 -> 45（40+CR-043 object update/verify +2 +CR-044 service-pool config/delete +2 +CR-046 sw3_sync_pppoe_route +1=45，显式算式写入）"
+        },
+        {
+          "block": "修订记录",
+          "change": "补 v1.7（对齐工作区 CR-046 sw3 族文本，44->45，注明 canonical 由 CR-039 追溯补记）+ v1.8（CR-043/044/046 来源行 + 档案路径 + DQ 口径）"
+        }
+      ]
+    },
+    {
+      "path": "docs/ptm-te/op-coverage-matrix.md",
+      "operation": "modified",
+      "blocks_changed": [
+        {
+          "block": "sw3 族旁路章节（新增）",
+          "change": "「sw3 族（telnet 旁路，不计入 ptm-atomic atoms 映射）」章节，含 DQ-039-02 两套口径说明（EXPECTED_OP_COUNT 为 op 数口径、本矩阵为 atoms 覆盖口径）；修订记录 v1.3；total=124 / mapped=21 / unmapped=97 计数不变"
+        }
+      ]
+    },
+    {
+      "path": "process/changes/CR-043.md",
+      "operation": "created",
+      "blocks_added": [
+        "object update/verify（+2）追溯补记档案：背景（canonical 代码标注 L79-82/L239-249/L528-529/L1059）、变更内容、验证方式、来源、Checkpoint Index（标注追溯补记，由 CR-039 CP5 覆盖）、与 CR-039 关系"
+      ]
+    },
+    {
+      "path": "process/changes/CR-044.md",
+      "operation": "created",
+      "blocks_added": [
+        "service-pool config/delete（+2）追溯补记档案：canonical 代码标注 L114-117/L422-430/L552-554/L736-746/L998-1005"
+      ]
+    },
+    {
+      "path": "process/changes/CR-046.md",
+      "operation": "created",
+      "blocks_added": [
+        "sw3_sync_pppoe_route（+1，telnet 旁路）追溯补记档案：canonical 代码回源锚点指向工作区行号（由 STORY-039-03 落码），status=active；含 SW3_PASSWORD 凭据约束与 CR-038「SW3」命名澄清"
+      ]
+    },
+    {
+      "path": "process/BACKLOG-CR-039.md",
+      "operation": "created",
+      "blocks_added": [
+        "BL-039-01 CR-047 post_delay 独立回源候选（DQ-039-05=B，排除行 _parse_post_delay L114-133 + 睡眠改动 L2511 实测锚点/卡片原写 L2437-2440 双标注）+ 真机回归候选 + DEF-039-02/03 + 旁路章节核对项"
+      ]
+    },
+    {
+      "path": "skills/case-execution/templates/env-file.pppoe-sw3.next_hop_a.example.yaml",
+      "operation": "created",
+      "blocks_added": [
+        "PPPoE + SW3 旁路 + 双下一跳 env-file 样例：nodes.dut1.next_hop_a=80.0.0.2（策略路由 A 下一跳 1 GW-A）+ sw1 节点（node_type=SW/role=pppoe_server/host/username/password_env=SW3_PASSWORD）；来源注明两个工作区 yml；无凭据明文"
+      ]
+    },
+    {
+      "path": "process/stories/STORY-039-04.md",
+      "operation": "modified",
+      "blocks_changed": [
+        {
+          "block": "frontmatter + 技术说明确认状态",
+          "change": "status: planned -> dev-complete；技术说明 CP5 确认状态更新为已确认"
+        }
+      ]
+    }
+  ],
+  "boundary_check": {
+    "allowed_paths_only": true,
+    "allowed_write_paths": [
+      "skills/case-execution/SKILL.md",
+      "docs/ptm-te/op-coverage-matrix.md",
+      "process/changes/CR-043.md",
+      "process/changes/CR-044.md",
+      "process/changes/CR-046.md",
+      "process/BACKLOG-CR-039.md",
+      "skills/case-execution/templates/env-file.pppoe-sw3.next_hop_a.example.yaml",
+      "process/stories/STORY-039-04.md",
+      "process/stories/STORY-039-04-IMPLEMENTATION.md",
+      "process/returns/STORY-039-04.return.json",
+      "process/DEV-LOG.md"
+    ],
+    "forbidden_paths_touched": [],
+    "unexpected_imports": [],
+    "forbidden_paths_respected": [
+      "skills/policy-route-execution/scripts/op_mapper.py（工作区现存改动属 STORY-039-01/G1 与后续 W2/W3，本线程零触碰）",
+      "skills/case-execution/scripts/case_runner.py（属 STORY-039-03/W3）",
+      "tests/ 全部测试文件",
+      "REQUIREMENTS.md / HLD.md / ARCHITECTURE-DECISION.md"
+    ],
+    "note": "code_files_touched=[]，code_zero_touch_confirmed=true：本 Story 未修改任何代码文件，git 中代码改动均为并行 Story 产物"
+  },
+  "verification": {
+    "validation_mode": "static-only + review-only",
+    "commands_run": [
+      {
+        "command": "grep 'EXPECTED_OP_COUNT' skills/case-execution/SKILL.md",
+        "result": "Gotcha#8 = 45（正则断言 PASS，显式算式 40+2+2+1）"
+      },
+      {
+        "command": "grep 'v1.7\\|v1.8' skills/case-execution/SKILL.md",
+        "result": "修订记录 v1.7/v1.8 存在（PASS）"
+      },
+      {
+        "command": "grep 'total\\|mapped' docs/ptm-te/op-coverage-matrix.md",
+        "result": "total=124 / mapped=21 / unmapped=97 计数不变 + sw3 旁路章节存在（PASS）"
+      },
+      {
+        "command": "ls process/changes/CR-043.md process/changes/CR-044.md process/changes/CR-046.md process/BACKLOG-CR-039.md",
+        "result": "四份档案存在且非空（PASS）"
+      },
+      {
+        "command": "python -c \"import yaml; yaml.safe_load(open('skills/case-execution/templates/env-file.pppoe-sw3.next_hop_a.example.yaml'))\"",
+        "result": "YAML 解析 PASS；next_hop_a/SW 节点契约字段断言 PASS；无明文密码正则 PASS（仅 password_env=SW3_PASSWORD 引用）"
+      }
+    ],
+    "uncovered": [
+      "已知计划内中间态：canonical 代码 EXPECTED_OP_COUNT 当前=44（G5 未回源，属 STORY-039-03/W3）；SKILL.md=45 为 DQ-039-02 锁定的文档先行基线，SM-039-01 终验以 STORY-039-03 回源后代码=45 为准（CP7 勿在 W3 前误判 FAIL）",
+      "真机 SW3 旁路端到端（CR-039 static-only，DQ-039-04 不授权）"
+    ]
+  },
+  "evidence_refs": [
+    "process/stories/STORY-039-04-IMPLEMENTATION.md",
+    "process/stories/STORY-039-04.md#技术说明",
+    "process/DEV-LOG.md#STORY-039-04"
+  ],
+  "contract_changes": {
+    "design_delta_required": false,
+    "design_delta_type": "none",
+    "rationale": "无长期 Feature DESIGN / ADR / HLD 修改。DQ-039-02 已履行（文档侧 45；op-coverage-matrix total/mapped 不变，两套口径说明落地）；DQ-039-03 已履行（CR-043/044/046 档案 + SKILL.md 修订记录来源行）；DQ-039-05 已履行（BACKLOG BL-039-01 记录 CR-047 排除行）；G6 M9 归属已在 IMPLEMENTATION.md 补记留痕（T-3 台账项）"
+  },
+  "task_completion": {
+    "skill-md-rewrite": { "status": "done", "output": "Gotcha#8 40->45 + 修订记录 v1.7/v1.8" },
+    "op-coverage-sw3-section": { "status": "done", "output": "sw3 旁路章节新增，total/mapped 计数不变断言 PASS" },
+    "cr-043-044-046-archives": { "status": "done", "output": "三份最小追溯档案创建" },
+    "backlog-and-env-sample": { "status": "done", "output": "BACKLOG-CR-039（BL-039-01）+ env-file 样例（无凭据明文）" }
+  },
+  "acceptance_criteria_coverage": {
+    "SM-039-01-doc-side": { "status": "covered", "location": "skills/case-execution/SKILL.md Gotcha#8=45（代码侧终验由 STORY-039-03 落地）" },
+    "SM-039-05": { "status": "covered", "location": "CR-043/044/046 档案 + SKILL.md 修订记录 v1.7/v1.8" },
+    "op-coverage-no-count-change": { "status": "covered", "location": "docs/ptm-te/op-coverage-matrix.md total=124/mapped=21 断言 PASS" },
+    "cr047-backlog": { "status": "covered", "location": "process/BACKLOG-CR-039.md BL-039-01（排除行双标注）" }
+  },
+  "notes": [
+    "偏离（1 处，行号级）：工作区 case_runner post_delay 睡眠改动行号 Story 卡片写 L2437-2440，实测定位 L2511（行号漂移）；BACKLOG BL-039-01 双标注，不影响排除语义",
+    "G6 M9 归属：T-3 台账项，用例侧跟踪，环境字段承载已落样例，不阻塞 CR 门禁",
+    "W3 提示：STORY-039-03 完成 G5 回源后代码=45，SM-039-01 终验以彼时为准"
+  ],
+  "story_status_after": "dev-complete（待 CP6）"
+}

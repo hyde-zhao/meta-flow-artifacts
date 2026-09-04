@@ -1,69 +1,48 @@
 {
-  "workflow_id": "WF-PTM-TEAM-20260520-001",
-  "change_id": "CR-011",
-  "phase": "solution-design",
-  "discussion_round": 6,
-  "created_at": "2026-06-02T00:00:00+08:00",
-  "updated_at": "2026-06-02T03:44:00+08:00",
-  "architecture_gray_areas": [
+  "cr_id": "CR-038",
+  "stage": "CP3",
+  "checkpoint_type": "discussion-recovery",
+  "generated_at": "2026-08-15",
+  "discussion_log": "process/discussions/CP3-HLD-DISCUSSION-LOG.md",
+  "gray_areas": [
     {
-      "id": "AGA-01",
-      "title": "kym Skill 归属形态",
-      "options": ["independent-skill", "merged-into-feature-parser"],
-      "recommendation": "independent-skill",
-      "status": "resolved",
-      "resolved_at": "2026-06-02T03:44:00+08:00",
-      "resolution": "方案A: kym 作为独立 Skill"
+      "id": "AGA-038-01",
+      "topic": "显式 SW 节点 vs 自动 L2 透传优先级与互斥",
+      "requirement": "R-F-018",
+      "decision_level": "agent_default",
+      "recommendation": "预计算 explicit_sw_reserved 集，从自动透传候选池剔除",
+      "alternatives": ["仅跳过已分配 SW（依赖排序）", "显式 SW 强制前置阶段"],
+      "status": "resolved-by-agent-default"
     },
     {
-      "id": "AGA-02",
-      "title": "启发式探索框架设计",
-      "options": ["preset-dimensions-plus-extension", "fully-user-customizable", "reference-only"],
-      "recommendation": "preset-dimensions-plus-extension",
-      "status": "resolved",
-      "resolved_at": "2026-06-02T03:44:00+08:00",
-      "resolution": "方案A: CIDTESTD 8 维度预设+扩展"
+      "id": "AGA-038-02",
+      "topic": "多实例 TRex 数据契约（physical_pool + pool_merge + exporter）",
+      "requirement": "R-F-013/014/015",
+      "decision_level": "agent_default",
+      "recommendation": "physical_pool trex_instances 汇总块 + 接口级 instance，pool 侧为准按 name 合并",
+      "alternatives": ["devices.yaml tg.instances 唯一源", "每实例独立 TG 节点"],
+      "status": "resolved-by-agent-default"
     },
     {
-      "id": "AGA-03",
-      "title": "Gate 自检 vs 人工确认划分边界",
-      "options": ["existence-auto-semantic-manual", "all-manual", "dual-layer"],
-      "recommendation": "existence-auto-semantic-manual",
-      "status": "resolved",
-      "resolved_at": "2026-06-02T03:44:00+08:00",
-      "resolution": "方案A: 保持当前分类"
+      "id": "AGA-038-03",
+      "topic": "PPPoE 数据源 schema + 命令族",
+      "requirement": "R-F-019/003/004",
+      "decision_level": "agent_default",
+      "recommendation": "physical_pool SW 节点 pppoe_server 块 + 三厂商命令模板",
+      "alternatives": ["devices.yaml 独立 pppoe 块", "独立 pppoe.yaml 配置"],
+      "status": "resolved-by-agent-default"
     },
     {
-      "id": "AGA-04",
-      "title": "路径迁移范围边界",
-      "options": ["strict-kym-plus-doc-examples", "output-paths-only", "all-skills-at-once"],
-      "recommendation": "strict-kym-plus-doc-examples",
-      "status": "resolved",
-      "resolved_at": "2026-06-02T03:44:00+08:00",
-      "resolution": "方案A: 严格KYM边界"
+      "id": "AGA-038-04",
+      "topic": "环回拓扑 env-file 放行规则",
+      "requirement": "R-F-006/007/016/017",
+      "decision_level": "agent_default",
+      "recommendation": "放宽为 1 TG + 1 DUT + N SW，links 去重/自环/闭环校验 + interface_kind 透传",
+      "alternatives": ["任意节点组合全放行", "独立环回导出器"],
+      "status": "resolved-by-agent-default"
     }
   ],
-  "forward_looking_decisions": {
-    "tsp": {
-      "implementation": "deferred-to-CR-012",
-      "design_in_hld": "complete-with-draft-annotation"
-    },
-    "cae_r": {
-      "implementation": "deferred-to-CR-012-or-013",
-      "design_in_hld": "complete-with-draft-annotation",
-      "evolution_path": "progressive-superset"
-    },
-    "factor_format": {
-      "implementation": "deferred-to-future-CR",
-      "strategy": "progressive-compatible",
-      "new_fields": ["factor_type", "tags"]
-    },
-    "tracking_chain": {
-      "implementation": "deferred-to-CR-012",
-      "current_action": "annotation-only"
-    }
-  },
-  "deferred_options": [],
-  "next_action": "hld_drafting",
-  "hld_output": "process/HLD-CR-011.md"
+  "new_user_decisions": 0,
+  "ask_user_question_triggered": false,
+  "reason_no_user_decision": "CP2 已锁定 7 项方向性/范围/架构决策；本 CP3 灰区均为实现层确定性落地，归 agent 默认处理"
 }

@@ -1,0 +1,141 @@
+{
+  "affected_product_docs": [],
+  "affected_use_cases": [],
+  "approval_focus": "",
+  "approve_effect": "",
+  "archive_isolation_review": {
+    "decision": "PASS",
+    "findings": []
+  },
+  "authz_policy_refs": [
+    "NO_CREDENTIAL_READ",
+    "ITR_READ_GET_ONLY",
+    "NO_PRODUCTION_WRITE",
+    "NO_EXTERNAL_PUBLISH"
+  ],
+  "block_story_decomposition_until": "",
+  "conflict_keys": [],
+  "cp1_review_profile": {
+    "decision": "STANDARD_CP1_REVIEW",
+    "profile": "standard",
+    "reason": "CR may affect product behavior but does not provide enough evidence for lightweight CP1",
+    "required_checks": [
+      "use_case_completeness",
+      "requirements_traceability",
+      "scenario_coverage",
+      "story_map_alignment",
+      "mvp_scope_alignment"
+    ]
+  },
+  "cr_type": "feature",
+  "decision": "pending",
+  "decision_burden": "",
+  "evidence_index_ref": "process/archive/CR-056/evidence-index.json",
+  "followup_candidates": [],
+  "full_ref": "process/changes/CR-056.md",
+  "gate_profile": "standard",
+  "gate_status": "open",
+  "goal_ref": "",
+  "goal_statement": "",
+  "governance_dependency_review": {
+    "decision": "PASS",
+    "findings": []
+  },
+  "id": "CR-056",
+  "impact_capability_normalized": [],
+  "impact_capability_refs": [
+    "case-execution"
+  ],
+  "impact_capability_resolution": {
+    "kind": "capability",
+    "mode": "audit",
+    "results": [
+      {
+        "candidates": [],
+        "canonical_id": "",
+        "code": "E_REGISTRY_MISSING",
+        "deprecated_by": "",
+        "input_ref": "case-execution",
+        "kind": "capability",
+        "message": "capability registry missing: docs/design/CAPABILITY-REGISTRY.yaml",
+        "severity": "BLOCKED",
+        "source": "",
+        "status": "unresolved"
+      }
+    ],
+    "summary": {
+      "conflict": 0,
+      "deprecated": 0,
+      "resolved": 0,
+      "unresolved": 1
+    }
+  },
+  "impact_data_refs": [
+    "cases/case_ledger.yaml（用例库内新增台账）",
+    "ptm-te-manaul/cases/te/**（312 条可执行原子用例）",
+    "ptm-te-manaul/cases/tde/**（2 份 ptm-tde 设计源，只读）"
+  ],
+  "impact_feature_refs": [],
+  "impact_module_paths": [
+    "skills/case-execution/scripts/case_runner.py",
+    "skills/case-execution/scripts/case_ledger.py",
+    "skills/case-execution/scripts/archive_check.py",
+    "skills/case-execution/scripts/init_cases_repo.py",
+    "skills/case-execution/SKILL.md",
+    "agents/ptm-te.md",
+    "script/ptm_team/install.py"
+  ],
+  "impact_policy_refs": [
+    "ptm-te-workflow",
+    "ST-EX-15",
+    "ST-EX-16",
+    "R-F-024",
+    "R-F-025",
+    "DQ-01"
+  ],
+  "impact_process_refs": [
+    "process/HLD-CR-056.md",
+    "process/DEVELOPMENT-PLAN-CR-056.yaml"
+  ],
+  "impact_runtime_refs": [],
+  "impact_surface": [
+    "skill-definition",
+    "agent-prompt",
+    "workspace",
+    "case-repo"
+  ],
+  "not_authorized_by_approve": [
+    "credentials / secret / account read（devices.yaml 凭据、FW_WEB_PASSWORD 等一律不触碰）",
+    "runtime / SaaS / production write；真实设备执行不在本 CR 范围（case_runner 改动全部经单测 + dry-run 验证）",
+    "trading / live / publish"
+  ],
+  "product_baseline_refresh_required": false,
+  "readiness": "ready",
+  "reject_effect": "",
+  "remaining_risks": [],
+  "required_agent": "",
+  "required_capabilities": [],
+  "required_evidence": [
+    "admission_package",
+    "rerun_consistency"
+  ],
+  "required_gate": "",
+  "required_phase": "",
+  "routing_design_ref": "",
+  "scope_authz_consistency": {
+    "blockers": [],
+    "decision": "PASS",
+    "needs_review": []
+  },
+  "scope_summary": [
+    "用户指令为 ptm-te 增加不同执行场景（本地 / 自动化工厂 / CICD），不同场景通过 `mark` 选取用例；同时将 ptm-te 工作目录 `ptm-te-manaul/cases` 关联远端 `git@10.113.53.21:tgfw/tgfw-ptm/ptm-cases.git`（初始化时检查 GitLab 连通性，连通则自动完成配置），目录树区分 `tde`（设计源）与 `te`（可执行用例），ptm-te 生成的用例一律落 `te/`。",
+    "**契约边界**：`case-lifecycle-tracking-design.md`（ptm-te-manaul/docs/，2026-09-03 草稿）是本 CR 的输入基线，其决策结论（§一 mark 不占 tags、§二 6 态状态机、§三 台账、§四 准入矩阵）已收编进 `process/HLD-CR-056.md`，原草稿保持原位不动。"
+  ],
+  "split_rationale": "",
+  "status": "closed",
+  "title": "ptm-te 执行场景化：mark 生命周期选例 + 用例库 git 关联 ptm-cases + tde/te 目录树",
+  "updated_at": "2026-09-04T01:13:29+00:00",
+  "user_goal_impact": "",
+  "why_not_merge_with_parent": "",
+  "why_not_story_or_task": ""
+}
